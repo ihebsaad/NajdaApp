@@ -79,7 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    eSolutions
+                    Najda Assistance
                 </div>
 
                 <div class="links">
