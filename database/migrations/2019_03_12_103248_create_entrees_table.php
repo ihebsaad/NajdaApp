@@ -16,19 +16,14 @@ class CreateEntreesTable extends Migration
         Schema::create('entrees', function (Blueprint $table) {
             $table->increments('id');
 			$table->string('de', 100);
-			$table->string('sujet', 200);
+			$table->string('sujet', 100);
 			$table->text('contenu');
 			$table->integer('status');
 			$table->string('type');
 			$table->dateTime('heure');
             $table->timestamps();
 			
-			
 
-
-heure : datetime 
-
-type: varchar
         });
     }
 
