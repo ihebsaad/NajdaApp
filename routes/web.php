@@ -16,3 +16,5 @@ Route::get('/', function () {
 });
 Route::get('/demo', 'DemoController@index');
 Route::post('/demo/fetch', 'DemoController@fetch')->name('demo.fetch');
+
+Route::resource('/entrees','EntreesController');
