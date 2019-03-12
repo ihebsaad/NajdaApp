@@ -1,0 +1,42 @@
+.bg-grey {
+    background-color: grey;
+}
+.content{min-height: 820px;}
+footer{background-color: black;color:white;
+}
+.folders{background-color: antiquewhite;height:70px;padding-left:20px;padding-right:20px;}
+.menu-trigger{float:right;margin-right:20px;width:45px;    -webkit-appearance: none!important;}
+.navbar{background-color:#cccccc;height:80px!important;}
+.navbar-toggler{cursor:pointer;}
+/***  Folders **/
+.MultiCarousel { float: left; overflow: hidden; padding: 2px; width: 100%; position:relative; }
+.MultiCarousel .MultiCarousel-inner { transition: 1s ease all; float: left; }
+.MultiCarousel .MultiCarousel-inner .item { float: left;}
+.MultiCarousel .MultiCarousel-inner .item > div { text-align: center; padding:5px; margin:5px 5px 5px 5px; background:#f1f1f1; color:#666;border:2px solid white;}
+.MultiCarousel .leftLst, .MultiCarousel .rightLst { position:absolute; border-radius:50%;/*top:calc(50% - 20px);*/ line-height: inherit;cursor:pointer;}
+.MultiCarousel .leftLst { left:0; }
+.MultiCarousel .rightLst { right:0; }
+.MultiCarousel .leftLst.over, .MultiCarousel .rightLst.over { pointer-events: none; background:#ccc; }
+.pad15{font-size:13px;padding-top:10px;}
+/*****/
+
+.dot {
+    margin-top:4px;
+    height: 30px;
+    width: 30px;
+    padding:5px 5px 5px 5px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.left {background-color: #CEF6EC;padding:0px 0px 0px 0px;}
+.right{background-color: #CEF6EC;padding:0;}
+
+ .ulnotifs li, .ulrappels li, .ulactions li{
+    padding: 10px 10px 10px 10px;
+    border-bottom: 1px solid black;
+     list-style: none;
+}
+.left  ul{padding-inline-start:30px;padding-right:15px;}
+.right  ul{padding-inline-start:25px;padding-right:10px;padding-right:30px;}
