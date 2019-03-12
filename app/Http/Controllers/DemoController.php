@@ -13,6 +13,7 @@ class DemoController extends Controller
     function index()
     {
 
+	//  $countries = DB::table('apps_countries')->pluck('id', 'country_name');;
 	  $countries = DB::table('apps_countries')->select('id', 'country_name')->get();
 
         return view('demo', ['countries' => $countries]);
