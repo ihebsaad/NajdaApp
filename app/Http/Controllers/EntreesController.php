@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Entree ;
 class EntreesController extends Controller
 {
     /**
@@ -14,6 +14,8 @@ class EntreesController extends Controller
     public function index()
     {
         //
+        return view('entrees.index');
+
     }
 
     /**
@@ -23,7 +25,7 @@ class EntreesController extends Controller
      */
     public function create()
     {
-        //
+        return view('entrees.create');
     }
 
     /**
@@ -34,8 +36,32 @@ class EntreesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $entree = new Entree([
+            'emetteur' => $request->get('emetteur'),
+            'sujet' => $request->get('sujet'),
+            'contenu'=> $request->get('contenu'),
+
+        ]);
+
+        $entree->save();
+        return redirect('/entrees')->with('success', 'Entry has been added');
+
     }
+
+    public function saving(Request $request)
+    {
+        $entree = new Entree([
+            'emetteur' => $request->get('emetteur'),
+            'sujet' => $request->get('sujet'),
+            'contenu'=> $request->get('contenu'),
+
+        ]);
+
+        $entree->save();
+        return redirect('/entrees')->with('success', 'Entry has been added');
+
+    }
+
 
     /**
      * Display the specified resource.

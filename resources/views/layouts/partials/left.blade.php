@@ -34,9 +34,7 @@
 			<li>Rappel 7</li>
 			<li>Rappel 8</li>
 			<li>Rappel 9</li>
-			<!--@foreach( $countries as $country)
-				<li id="{{$country->id}}" > {{$country->country_name}}</li>
-			@endforeach -->
+
  		</ul>
 	</div>
 </div>

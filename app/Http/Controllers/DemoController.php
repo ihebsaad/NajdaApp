@@ -34,7 +34,7 @@ class DemoController extends Controller
      if ($c < 7)
       {
        $output .= '
-       <li><a href="#">'.$row->country_name.'</a><span style="float:right;font-size:10px;color:#000000;margin-right:10px;"> Dossier <span></li>
+       <li class="search"><a href="#">'.$row->country_name.'</a><span style="float:right;font-size:10px;color:#000000;margin-right:10px;"> Dossier <span></li>
        ';
       }
       }

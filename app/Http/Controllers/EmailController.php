@@ -69,7 +69,7 @@ class EmailController extends Controller
 
 
 
-        return view('index', ['paginator'=>$paginator]);
+        return view('emails.index', ['paginator'=>$paginator]);
     }
 
 
@@ -154,7 +154,7 @@ class EmailController extends Controller
         echo  '   </tbody>    </table>';
 
 
-        return view('inbox', ['paginator'=>$paginator,'aMessage'=>$aMessage]);
+        return view('emails.inbox', ['paginator'=>$paginator,'aMessage'=>$aMessage]);
 
     } /// end inbox
 

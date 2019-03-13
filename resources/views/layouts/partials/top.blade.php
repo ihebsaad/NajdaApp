@@ -101,7 +101,7 @@
             {                $('#countryList').fadeOut();
             }
         });
-        $(document).on('click', 'li', function(){
+        $(document).on('click', 'li .search', function(){
             $('#country_name').val($(this).text());
             $('#countryList').fadeOut();
         });

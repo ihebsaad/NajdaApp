@@ -18,6 +18,8 @@ Route::get('/demo', 'DemoController@index');
 Route::post('/demo/fetch', 'DemoController@fetch')->name('demo.fetch');
 
 Route::resource('/entrees','EntreesController');
+Route::post('/entrees/saving','EntreesController@saving')->name('entrees.saving');
 
 Route::get('/emails', 'EmailController@index');
 Route::get('/emails/inbox', 'EmailController@inbox');
+
