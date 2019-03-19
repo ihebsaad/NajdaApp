@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Entree extends Model
+class Dossier extends Model
 {
     //
-    protected $fillable = ['emetteur','sujet','contenu','nb_attach','reception','type','dossier','statut','updated_at'];
+    protected $fillable = ['ref','type','affecte'];
 
     public function getDateFormat()
     {

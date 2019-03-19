@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Entree ;
+use App\Dossier ;
 class EntreesController extends Controller
 {
     /**
@@ -18,6 +19,14 @@ class EntreesController extends Controller
 
     }
 
+    public function boite()
+    {
+        $entrees = Entree::all();
+
+        return view('entrees.boite', compact('entrees'));
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -28,16 +37,12 @@ class EntreesController extends Controller
         return view('entrees.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function store(Request $request)
     {
         $entree = new Entree([
-            'emetteur' => $request->get('emetteur'),
+            'destinataire' => $request->get('destinataire'),
             'sujet' => $request->get('sujet'),
             'contenu'=> $request->get('contenu'),
 
@@ -63,48 +68,55 @@ class EntreesController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+
+    public function view($id)
     {
-        //
+
+        $entree = Entree::find($id);
+        return view('entrees.view', compact('entree'));
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+    public function show($id)
+    {
+
+        $entree = Entree::find($id);
+        return view('entrees.show', compact('entree'));
+
+    }
+
     public function edit($id)
     {
         //
+        $entrees = Entree::find($id);
+
+        return view('entrees.edit', compact('entree'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function update(Request $request, $id)
     {
-        //
-    }
+       /* $request->validate([
+            'share_name'=>'required',
+            'share_price'=> 'required|integer',
+            'share_qty' => 'required|integer'
+        ]);
+        */
+        $entree = Entree::find($id);
+       // $entree->titre = $request->get('titre');
+        //$entree->share_price = $request->get('share_price');
+       // $entree->share_qty = $request->get('share_qty');
+        $entree->save();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+        return redirect('/entrees')->with('success', '  has been updated');    }
+
+
     public function destroy($id)
     {
-        //
-    }
+        $entree = Entree::find($id);
+        $entree->delete();
+
+        return redirect('/entrees')->with('success', '  has been deleted Successfully');    }
 }
