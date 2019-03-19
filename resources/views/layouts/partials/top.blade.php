@@ -11,7 +11,7 @@
                 </div>
 
            {{ csrf_field() }}
-        </div><div class="col-sm-2 col-md-2 col-lg-2 "></div><div class="col-sm-1 col-md-1 col-lg-1"></div><div class="col-sm-1 col-md-1 col-lg-1"><img class="menu-trigger" src="{{ URL::asset('resources/assets/img/menu-black.png') }}" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation"/></div>     
+        </div><div class="col-sm-2 col-md-2 col-lg-2 ">pause</div><div class="col-sm-1 col-md-1 col-lg-1"></div><div class="col-sm-1 col-md-1 col-lg-1"><img class="menu-trigger" src="{{ URL::asset('resources/assets/img/menu-black.png') }}" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation"/></div>     
       </div></div>
 
 <style>
