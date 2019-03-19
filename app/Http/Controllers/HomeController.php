@@ -13,6 +13,4 @@ class HomeController extends Controller
     {
         return view('najda');
     }
-    function test ()
-    {}
 }
