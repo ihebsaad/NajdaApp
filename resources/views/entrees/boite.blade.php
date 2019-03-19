@@ -28,10 +28,9 @@
                     <td>{{$entree->id}}</td>
                     <td>{{$entree->emetteur}}</td>
                     <td>{{$entree->reception}}</td>
-                     <td><a href="{{action('EntreesController@view', $entree['id'])}}" >{{$entree->sujet}}</a></td>
+                     <td><a href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a></td>
 
                     <td>{{$entree->nb_attach}}</td>
-
 
                 </tr>
             @endforeach
