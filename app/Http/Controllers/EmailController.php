@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
-
+ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use DB;
 use Webklex\IMAP\Client;
@@ -19,6 +19,7 @@ class EmailController extends Controller
 
     function index()
     {
+        Log::info('opening emails index');
 
         //     $oClient = Client::account('default');
         //       $oClient->connect();
@@ -29,7 +30,7 @@ class EmailController extends Controller
             'encryption'    => 'ssl',
             'validate_cert' => true,
             'username'      => 'test@enterpriseesolutions.com',
-            'password'      => 'I-saad2014',
+            'password'      => 'I-saad14',
             'protocol'      => 'imap'
         ]);
 
@@ -214,6 +215,19 @@ class EmailController extends Controller
                     ]);
 
                     $entree->save();
+             //      $id= response()->json(array('success' => true, 'last_insert_id' => $entree->id), 200);
+ //$id='100';
+                    $id=$entree->id;
+                    $aAttachment = $oMessage->getAttachments();
+
+                    $aAttachment->each(function ($oAttachment) use ($id){
+                        /** @var \Webklex\IMAP\Attachment $oAttachment */
+                        if (!file_exists("C:/Emails/".$id)) {
+                            mkdir("C:/Emails/".$id, 0777, true);
+                        }
+                        $oAttachment->save("C:/Emails/".$id);
+                    });
+
                 } else {
                 // error
                 echo 'error';

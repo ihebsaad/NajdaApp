@@ -19,6 +19,7 @@
                 <td>Emetteur</td>
                 <td>Date</td>
                 <td>Sujet</td>
+                <td>Type</td>
                  <td>Attachements</td>
              </tr>
             </thead>
@@ -27,9 +28,10 @@
                 <tr>
                     <td>{{$entree->id}}</td>
                     <td>{{$entree->emetteur}}</td>
-                    <td>{{$entree->reception}}</td>
+                    <td><?php echo  date('d/m/Y', strtotime($entree->reception)) ; ?></td>
                      <td><a href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a></td>
 
+                    <td>{{$entree->type}}</td>
                     <td>{{$entree->nb_attach}}</td>
 
                 </tr>

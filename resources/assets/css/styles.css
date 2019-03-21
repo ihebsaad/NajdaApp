@@ -40,3 +40,4 @@ footer{background-color: black;color:white;
 }
 .left  ul{padding-inline-start:30px;padding-right:15px;}
 .right  ul{padding-inline-start:25px;padding-right:10px;padding-right:30px;}
+input [type="button"]{cursor:pointer;}

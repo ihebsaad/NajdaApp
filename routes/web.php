@@ -14,6 +14,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+/** Demo page */
 Route::get('/demo', 'DemoController@index');
 Route::post('/demo/fetch', 'DemoController@fetch')->name('demo.fetch');
 
@@ -29,12 +30,9 @@ Route::get('/entrees/show/{id}', 'EntreesController@show');
 
 /*** Emails **/
 
-
 Route::post('/emails/send','EmailController@send');
 Route::get('/emails/sending','EmailController@sending');
 Route::get('/emails', 'EmailController@index');
-
-
 Route::get('/emails/inbox', 'EmailController@inbox');
 Route::get('/emails/check', 'EmailController@check');
 Route::get('/emails/folder/{foldername}', 'EmailController@folder');
@@ -48,6 +46,9 @@ Route::resource('/dossiers','DossiersController');
 Route::post('/dossiers/saving','DossiersController@saving')->name('dossiers.saving');
 Route::get('/dossiers/view/{id}', 'DossiersController@view');
 
+/**** LOGS  ****/
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+Route::get('errors', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@errors');
 
 
 

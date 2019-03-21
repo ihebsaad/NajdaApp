@@ -88,6 +88,7 @@
                     <a href="{{ url('/emails/check') }}"  >Synchronisation</a>
                     <a href="{{ url('/emails/disp') }}" >Dispatching</a>
                     <a href="{{ url('/emails/sending') }}" >Envoyer un email</a>
+                    <a href="{{ url('/logs') }}" >Historique</a>
                  </div>
             </div>
         </div>

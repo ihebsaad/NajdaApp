@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
+
 use Illuminate\Http\Request;
 use App\Entree ;
 use App\Dossier ;
@@ -21,6 +23,8 @@ class EntreesController extends Controller
 
     public function boite()
     {
+        Log::info('Accès à la boite des entrées - utilisateur: Mounir Tounsi');
+
         $entrees = Entree::all();
 
         return view('entrees.boite', compact('entrees'));
