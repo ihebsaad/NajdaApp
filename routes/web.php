@@ -49,41 +49,4 @@ Route::get('/dossiers/view/{id}', 'DossiersController@view');
 /**** LOGS  ****/
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('errors', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@errors');
-
-
-
-Route::get('/welcomeemail0', function () {
-
-
-    Mail::send('emails.test', [], function ($message) {
-        $message->to('ihebsaad@gmail.com', 'iheb')->subject('Welcome!')
-           // ->from('iheb@enterpriseesolutions.com', 'Houba')
-         ;
-    });
-
-/*
-    Mail::send('emails.test', [], function ($message) {
-        $message
-           // ->from('iheb@enterpriseesolutions.com', 'Houba')
-            ->to('ihebsaad@gmail.com', 'iheb')
-            ->subject('From laravel with ❤');
-    });
-*/
-    // return redirect()->back();
-});
-
-
-
-
-Route::get('/welcomeemail', function () {
-
-    Mail::send('emails.send', [], function ($message) {
-        $message
-          //  ->from('iheb@enterpriseesolutions.com', 'Houba')
-            ->to('ihebsaad@gmail.com', 'iheb')
-            ->subject('From SparkPost with ❤');
-    });
-
-    // return redirect()->back();
-});
-
+ 
