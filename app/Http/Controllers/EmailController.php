@@ -221,11 +221,12 @@ class EmailController extends Controller
                     $aAttachment = $oMessage->getAttachments();
 
                     $aAttachment->each(function ($oAttachment) use ($id){
+                        $path= storage_path().'/Emails/';
                         /** @var \Webklex\IMAP\Attachment $oAttachment */
-                        if (!file_exists("C:/Emails/".$id)) {
-                            mkdir("C:/Emails/".$id, 0777, true);
+                        if (!file_exists($path.$id)) {
+                            mkdir($path.$id, 0777, true);
                         }
-                        $oAttachment->save("C:/Emails/".$id);
+                        $oAttachment->save($path.$id);
                     });
 
                 } else {
