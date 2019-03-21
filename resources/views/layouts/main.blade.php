@@ -25,6 +25,7 @@
     <link href="{{ URL::asset('public/css/custom_css/additional.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ URL::asset('public/css/custom_css/nestable_list.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('public/css/custom_css/owl.carousel.min.css') }}" rel="stylesheet">
+    <link href="{{ URL::asset('public/css/custom_css/alertmessage.css') }}" rel="stylesheet">
 
     <!-- end of global css -->
     <!--page level css-->
@@ -109,19 +110,148 @@
     <div class="row" style="margin-top:110px;">
         <div class="carousel-wrap">
           <div class="owl-carousel">
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
+            <div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3 class="cutlongtext">19N00013</h3>
+                    <p class="cutlongtext">DJEDAIED Hamad</p>
+                </div>
+                </a>
+            </div>
+            <div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3  class="cutlongtext" desc="19N00079">19N00079</h3>
+                    <p  class="cutlongtext" desc="FRARA Emad">FRARA Emad</p>
+                </div>
+                </a>
+            </div>
+            <div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3  class="cutlongtext">19N00082</h3>
+                    <p  class="cutlongtext">BOUFALGA Kameleddine</p>
+                </div>
+                </a>
+            </div><div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3 class="cutlongtext">19N00195</h3>
+                    <p class="cutlongtext">EL GHADIR Amal Zineb</p>
+                </div>
+                </a>
+            </div><div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3 class="cutlongtext">19N00237</h3>
+                    <p class="cutlongtext">COOK Valerie</p>
+                </div>
+                </a>
+            </div><div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3 class="cutlongtext">19N00256</h3>
+                    <p class="cutlongtext">KHALIL Elia</p>
+                </div>
+                </a>
+            </div><div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3 class="cutlongtext">19N00266</h3>
+                    <p class="cutlongtext">MUELLER Arnold Alexander</p>
+                </div>
+                </a>
+            </div><div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3 class="cutlongtext">19N00013</h3>
+                    <p class="cutlongtext">DJEDAIED Hamad</p>
+                </div>
+                </a>
+            </div>
+            <div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3  class="cutlongtext" desc="19N00079">19N00079</h3>
+                    <p  class="cutlongtext" desc="FRARA Emad">FRARA Emad</p>
+                </div>
+                </a>
+            </div>
+            <div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3  class="cutlongtext">19N00082</h3>
+                    <p  class="cutlongtext">BOUFALGA Kameleddine</p>
+                </div>
+                </a>
+            </div><div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3 class="cutlongtext">19N00195</h3>
+                    <p class="cutlongtext">EL GHADIR Amal Zineb</p>
+                </div>
+                </a>
+            </div><div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3 class="cutlongtext">19N00013</h3>
+                    <p class="cutlongtext">DJEDAIED Hamad</p>
+                </div>
+                </a>
+            </div>
+            <div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3  class="cutlongtext" desc="19N00079">19N00079</h3>
+                    <p  class="cutlongtext" desc="FRARA Emad">FRARA Emad</p>
+                </div>
+                </a>
+            </div>
+            <div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3  class="cutlongtext">19N00082</h3>
+                    <p  class="cutlongtext">BOUFALGA Kameleddine</p>
+                </div>
+                </a>
+            </div><div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3 class="cutlongtext">19N00195</h3>
+                    <p class="cutlongtext">EL GHADIR Amal Zineb</p>
+                </div>
+                </a>
+            </div><div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3 class="cutlongtext">19N00013</h3>
+                    <p class="cutlongtext">DJEDAIED Hamad</p>
+                </div>
+                </a>
+            </div>
+            <div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3  class="cutlongtext" desc="19N00079">19N00079</h3>
+                    <p  class="cutlongtext" desc="FRARA Emad">FRARA Emad</p>
+                </div>
+                </a>
+            </div>
+            <div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3  class="cutlongtext">19N00082</h3>
+                    <p  class="cutlongtext">BOUFALGA Kameleddine</p>
+                </div>
+                </a>
+            </div><div class="item">
+                <a class="dossieritem" href="#">
+                <div class="dossiercr well well-gc well-sm" >
+                    <h3 class="cutlongtext">19N00195</h3>
+                    <p class="cutlongtext">EL GHADIR Amal Zineb</p>
+                </div>
+                </a>
+            </div>
           </div>
         </div>
     </div>
