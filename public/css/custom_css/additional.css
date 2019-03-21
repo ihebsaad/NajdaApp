@@ -11,20 +11,44 @@
 .tab-nav > li > a::after { background: #21527d none repeat scroll 0% 0%; color: #fff; }
 
 /* carousel dossiers */
-.wrapper-dossiers{
-  width:100%;
-  padding-top: 20px;
-  text-align:center;
+.carousel-wrap {
+  margin: 0px auto;
+  margin-bottom: 10px;
+  padding: 0 1%;
+  width: 80%;
+  position: relative;
 }
-.carousel{
-  width:90%;
-  margin:0px auto;
+
+/* fix blank or flashing items on carousel */
+.owl-carousel .item {
+  position: relative;
+  z-index: 100; 
+  -webkit-backface-visibility: hidden; 
 }
-.slick-slide{
-  margin:10px;
+
+/* end fix */
+.owl-nav > div {
+  margin-top: -26px;
+  position: absolute;
+  top: 50%;
+  color: #cdcbcd;
+}
+
+.owl-nav i {
+  font-size: 52px;
+}
+
+.owl-nav .owl-prev {
+  left: -30px;
+}
+
+.owl-nav .owl-next {
+  right: -30px;
 }
 
 
+
+/* Time display */
 .time{
 /*position: absolute;*/
   top: 34px;

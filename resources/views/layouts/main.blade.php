@@ -24,6 +24,7 @@
     <link href="{{ URL::asset('public/css/custom_css/fixed_layout.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ URL::asset('public/css/custom_css/additional.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ URL::asset('public/css/custom_css/nestable_list.css') }}" rel="stylesheet">
+    <link href="{{ URL::asset('public/css/custom_css/owl.carousel.min.css') }}" rel="stylesheet">
 
     <!-- end of global css -->
     <!--page level css-->
@@ -105,8 +106,27 @@
     </div>
 
     </header>
-    
-    <div class="content row" style="margin-top:120px;">
+    <div class="row" style="margin-top:110px;">
+        <div class="carousel-wrap">
+          <div class="owl-carousel">
+            <div class="item">testing</br><a href="#">test</a></div>
+            <div class="item">testing</br><a href="#">test</a></div>
+            <div class="item">testing</br><a href="#">test</a></div>
+            <div class="item">testing</br><a href="#">test</a></div>
+            <div class="item">testing</br><a href="#">test</a></div>
+            <div class="item">testing</br><a href="#">test</a></div>
+            <div class="item">testing</br><a href="#">test</a></div>
+            <div class="item">testing</br><a href="#">test</a></div>
+            <div class="item">testing</br><a href="#">test</a></div>
+            <div class="item">testing</br><a href="#">test</a></div>
+            <div class="item">testing</br><a href="#">test</a></div>
+            <div class="item">testing</br><a href="#">test</a></div>
+            <div class="item">testing</br><a href="#">test</a></div>
+          </div>
+        </div>
+    </div>
+
+    <div class="content row">
         <!-- Left side column. contains the logo and sidebar -->
         <div class="column col-lg-3"> 
            
@@ -139,19 +159,19 @@
                                                     <div class="dd3-content">Item 14</div>
                                                 <ol class="dd-list"><li class="dd-item dd3-item" data-id="15"><button data-action="collapse" type="button">Collapse</button><button data-action="expand" type="button" style="display: none;">Expand</button>
                                                     <div class="dd-handle dd3-handle"></div>
-                                                    <div class="dd3-content">Item 15</div>
+                                                    <div class="dd3-content">19N00131 - GHANIA Miloud</div>
                                                     <ol class="dd-list">
                                                         <li class="dd-item dd3-item" data-id="16">
                                                             <div class="dd-handle dd3-handle"></div>
-                                                            <div class="dd3-content">Item 16</div>
+                                                            <div class="dd3-content">Email</div>
                                                         </li>
                                                         <li class="dd-item dd3-item" data-id="17">
                                                             <div class="dd-handle dd3-handle"></div>
-                                                            <div class="dd3-content">Item 17</div>
+                                                            <div class="dd3-content">Tel</div>
                                                         </li>
                                                         <li class="dd-item dd3-item" data-id="18">
                                                             <div class="dd-handle dd3-handle"></div>
-                                                            <div class="dd3-content">Item 18</div>
+                                                            <div class="dd3-content">FAX</div>
                                                         </li>
                                                     </ol>
                                                 </li></ol></li>
@@ -213,7 +233,7 @@
     <!-- global js -->
     <script src="{{  URL::asset('public/js/jquery-1.11.1.min.js') }}" type="text/javascript"></script>
     
-    <script src="{{  URL::asset('public/js/jquery-ui/jquery.ui.min.js') }}" type="text/javascript"></script>
+    <!--<script src="{{  URL::asset('public/js/jquery-ui/jquery.ui.min.js') }}" type="text/javascript"></script>-->
 
     <script src="{{  URL::asset('public/js/bootstrap.min.js') }}" type="text/javascript"></script>
     <script src="{{  URL::asset('public/js/custom_js/app.js') }}" type="text/javascript"></script>
@@ -221,6 +241,8 @@
     <script src="{{  URL::asset('public/js/jquery-slimscroll/js/jquery.slimscroll.min.js') }}" type="text/javascript"></script>
     <script src="{{  URL::asset('public/js/custom_js/rightside_bar.js') }}" type="text/javascript"></script>
     <script src="{{  URL::asset('public/js/custom_js/fixed_layout.js') }}" type="text/javascript"></script>
+    <script src="{{  URL::asset('public/js/custom_js/owl.carousel.min.js') }}" type="text/javascript"></script>
+
     <script type="text/javascript">
         var language = window.navigator.language;
         if (language.length > 2) {
@@ -285,6 +307,29 @@
    <!--<script src="{{ asset('assets/js/custom_js/nestable.js') }}" type="text/javascript"></script>-->
    <script type="text/javascript">$(function() {
         $('#nestable_list_3').nestable();
+        $('.owl-carousel').owlCarousel({
+          loop: true,
+          margin: 20,
+          nav: true,
+          navText: [
+            "<i class='fa fa-caret-left'></i>",
+            "<i class='fa fa-caret-right'></i>"
+          ],
+          autoplay: true,
+          autoplayHoverPause: true,
+          responsive: {
+            0: {
+              items: 1
+            },
+            1440: {
+              items: 7
+            },
+            1700: {
+              items: 10
+            }
+          }
+        })
+        
     });</script>
     <!-- end page level js -->
 </body>
