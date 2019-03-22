@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Dossier ;
+
 class HomeController extends Controller
 {
-    //for create controller - php artisan make:controller AutocompleteController
-
+    
     function index()
     {
-        return view('najda');
+        $dossiers = Dossier::get();
+        return view('najda', ['dossiers' => $dossiers]);
     }
 }

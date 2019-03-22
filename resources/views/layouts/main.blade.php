@@ -110,150 +110,19 @@
     <div class="row" style="margin-top:110px;">
         <div class="carousel-wrap">
           <div class="owl-carousel">
+            @foreach ($dossiers as $i) 
             <div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3 class="cutlongtext">19N00013</h3>
-                    <p class="cutlongtext">DJEDAIED Hamad</p>
-                </div>
+                <a class="dossieritem" href="#" id="{{ $i->id }}"" >
+                    <div class="dossiercr well well-gc well-sm" >
+                        <h3 class="cutlongtext">{{ $i->ref }}</h3>
+                        <p class="cutlongtext">{!!$i->abonnee!!}</p>
+                    </div>
                 </a>
             </div>
-            <div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3  class="cutlongtext" desc="19N00079">19N00079</h3>
-                    <p  class="cutlongtext" desc="FRARA Emad">FRARA Emad</p>
-                </div>
-                </a>
-            </div>
-            <div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3  class="cutlongtext">19N00082</h3>
-                    <p  class="cutlongtext">BOUFALGA Kameleddine</p>
-                </div>
-                </a>
-            </div><div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3 class="cutlongtext">19N00195</h3>
-                    <p class="cutlongtext">EL GHADIR Amal Zineb</p>
-                </div>
-                </a>
-            </div><div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3 class="cutlongtext">19N00237</h3>
-                    <p class="cutlongtext">COOK Valerie</p>
-                </div>
-                </a>
-            </div><div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3 class="cutlongtext">19N00256</h3>
-                    <p class="cutlongtext">KHALIL Elia</p>
-                </div>
-                </a>
-            </div><div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3 class="cutlongtext">19N00266</h3>
-                    <p class="cutlongtext">MUELLER Arnold Alexander</p>
-                </div>
-                </a>
-            </div><div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3 class="cutlongtext">19N00013</h3>
-                    <p class="cutlongtext">DJEDAIED Hamad</p>
-                </div>
-                </a>
-            </div>
-            <div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3  class="cutlongtext" desc="19N00079">19N00079</h3>
-                    <p  class="cutlongtext" desc="FRARA Emad">FRARA Emad</p>
-                </div>
-                </a>
-            </div>
-            <div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3  class="cutlongtext">19N00082</h3>
-                    <p  class="cutlongtext">BOUFALGA Kameleddine</p>
-                </div>
-                </a>
-            </div><div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3 class="cutlongtext">19N00195</h3>
-                    <p class="cutlongtext">EL GHADIR Amal Zineb</p>
-                </div>
-                </a>
-            </div><div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3 class="cutlongtext">19N00013</h3>
-                    <p class="cutlongtext">DJEDAIED Hamad</p>
-                </div>
-                </a>
-            </div>
-            <div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3  class="cutlongtext" desc="19N00079">19N00079</h3>
-                    <p  class="cutlongtext" desc="FRARA Emad">FRARA Emad</p>
-                </div>
-                </a>
-            </div>
-            <div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3  class="cutlongtext">19N00082</h3>
-                    <p  class="cutlongtext">BOUFALGA Kameleddine</p>
-                </div>
-                </a>
-            </div><div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3 class="cutlongtext">19N00195</h3>
-                    <p class="cutlongtext">EL GHADIR Amal Zineb</p>
-                </div>
-                </a>
-            </div><div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3 class="cutlongtext">19N00013</h3>
-                    <p class="cutlongtext">DJEDAIED Hamad</p>
-                </div>
-                </a>
-            </div>
-            <div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3  class="cutlongtext" desc="19N00079">19N00079</h3>
-                    <p  class="cutlongtext" desc="FRARA Emad">FRARA Emad</p>
-                </div>
-                </a>
-            </div>
-            <div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3  class="cutlongtext">19N00082</h3>
-                    <p  class="cutlongtext">BOUFALGA Kameleddine</p>
-                </div>
-                </a>
-            </div><div class="item">
-                <a class="dossieritem" href="#">
-                <div class="dossiercr well well-gc well-sm" >
-                    <h3 class="cutlongtext">19N00195</h3>
-                    <p class="cutlongtext">EL GHADIR Amal Zineb</p>
-                </div>
-                </a>
-            </div>
+            @endforeach
           </div>
         </div>
+        
     </div>
 
     <div class="content row">
