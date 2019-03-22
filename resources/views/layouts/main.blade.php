@@ -279,6 +279,23 @@
                                     </ul>
                                     <div id="NotificationsTabContent" class="tab-content">
                                         <div class="tab-pane fade active in  scrollable-panel" id="notificationstab">
+                                            <div class="row">
+                                               <div class="col-xs-6 col-md-6 align-left"> 
+                                                    <div class="select">
+                                                      <select>
+                                                        <option>Trier par</option>
+                                                        <option>Temps</option>
+                                                        <option>Dossier</option>
+                                                      </select>
+                                                      <div class="select__arrow"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-6 col-md-6 pull-right"> 
+                                                    <a href="#" class="btn btn-default btn-sm btn-responsive" role="button"> </a>
+                                                    <a href="#" class="btn btn-success btn-sm btn-responsive" role="button"> </a>
+                                                    <a href="#" class="btn btn-danger btn-sm btn-responsive" role="button"> </a>
+                                                </div>
+                                            </div>
                                             <div class="dd" id="nestable_list_3">
                                             <ol class="dd-list">
                                                 <li class="dd-item dd3-item" data-id="13">
