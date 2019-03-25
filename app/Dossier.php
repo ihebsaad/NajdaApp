@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Dossier extends Model
 {
     //
-    protected $fillable = ['ref','type','affecte'];
+    protected $fillable = ['id','ref','type','affecte','abonnee'];
 
     public function getDateFormat()
     {

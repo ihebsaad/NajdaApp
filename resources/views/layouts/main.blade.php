@@ -25,6 +25,7 @@
     <link href="{{ URL::asset('public/css/custom_css/additional.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ URL::asset('public/css/custom_css/nestable_list.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('public/css/custom_css/owl.carousel.min.css') }}" rel="stylesheet">
+    <link href="{{ URL::asset('public/css/custom_css/alertmessage.css') }}" rel="stylesheet">
 
     <!-- end of global css -->
     <!--page level css-->
@@ -109,21 +110,19 @@
     <div class="row" style="margin-top:110px;">
         <div class="carousel-wrap">
           <div class="owl-carousel">
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
-            <div class="item">testing</br><a href="#">test</a></div>
+            @foreach ($dossiers as $i) 
+            <div class="item">
+                <a class="dossieritem" href="#" id="{{ $i->id }}"" >
+                    <div class="dossiercr well well-gc well-sm" >
+                        <h3 class="cutlongtext">{{ $i->ref }}</h3>
+                        <p class="cutlongtext">{!!$i->abonnee!!}</p>
+                    </div>
+                </a>
+            </div>
+            @endforeach
           </div>
         </div>
+        
     </div>
 
     <div class="content row">
@@ -149,6 +148,23 @@
                                     </ul>
                                     <div id="NotificationsTabContent" class="tab-content">
                                         <div class="tab-pane fade active in  scrollable-panel" id="notificationstab">
+                                            <div class="row">
+                                               <div class="col-xs-6 col-md-6 align-left"> 
+                                                    <div class="select">
+                                                      <select>
+                                                        <option>Trier par</option>
+                                                        <option>Temps</option>
+                                                        <option>Dossier</option>
+                                                      </select>
+                                                      <div class="select__arrow"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-6 col-md-6 pull-right"> 
+                                                    <a href="#" class="btn btn-default btn-sm btn-responsive" role="button"> </a>
+                                                    <a href="#" class="btn btn-success btn-sm btn-responsive" role="button"> </a>
+                                                    <a href="#" class="btn btn-danger btn-sm btn-responsive" role="button"> </a>
+                                                </div>
+                                            </div>
                                             <div class="dd" id="nestable_list_3">
                                             <ol class="dd-list">
                                                 <li class="dd-item dd3-item" data-id="13">

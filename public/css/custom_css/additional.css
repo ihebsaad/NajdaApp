@@ -1,5 +1,5 @@
 .scrollable-panel {
-  height: 650px;
+  height: 570px;
   overflow-y: auto;
 }
 .nav-tabs { border-bottom: 2px solid #DDD; }
@@ -13,7 +13,6 @@
 /* carousel dossiers */
 .carousel-wrap {
   margin: 0px auto;
-  margin-bottom: 10px;
   padding: 0 1%;
   width: 80%;
   position: relative;
@@ -28,7 +27,7 @@
 
 /* end fix */
 .owl-nav > div {
-  margin-top: -26px;
+  margin-top: -40px;
   position: absolute;
   top: 50%;
   color: #cdcbcd;
@@ -46,6 +45,20 @@
   right: -30px;
 }
 
+.dossieritem {
+  color:#333333;
+}
+.dossieritem : hover{color:#333333!important;}
+
+.dossiercr {
+  background-color: #c5d6eb!important;
+  border: 4px solid #333333;
+  border-radius: 0px!important;
+}
+.cutlongtext {white-space: nowrap;
+width: 120px;
+overflow: hidden;
+text-overflow: ellipsis;}
 
 
 /* Time display */

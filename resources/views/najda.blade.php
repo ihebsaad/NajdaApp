@@ -2,7 +2,6 @@
 
 {{-- Page title --}}
 @section('title')
-    | Najda Assistance
     @parent
 @stop
 

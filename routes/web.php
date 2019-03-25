@@ -19,6 +19,7 @@ Route::post('/demo/fetch', 'DemoController@fetch')->name('demo.fetch');
 
 
 /*** Entrees **/
+/* tous les emails (tous les entrees) dans la base */
 Route::get('/entrees/boite','EntreesController@boite');
 Route::resource('/entrees','EntreesController');
 Route::post('/entrees/saving','EntreesController@saving')->name('entrees.saving');
@@ -30,11 +31,15 @@ Route::get('/entrees/show/{id}', 'EntreesController@show');
 /*** Emails **/
 
 Route::post('/emails/send','EmailController@send');
+/* envoie d'un email */
 Route::get('/emails/sending','EmailController@sending');
 Route::get('/emails', 'EmailController@index');
+/* unreaded emails and not checked */
 Route::get('/emails/inbox', 'EmailController@inbox');
+/* mark as readed and save to database */
 Route::get('/emails/check', 'EmailController@check');
 Route::get('/emails/folder/{foldername}', 'EmailController@folder');
+/* le dispatching */
 Route::get('/emails/disp', 'EmailController@disp');
 Route::get('/emails/test', 'EmailController@test');
 Route::get('/emails/maboite', 'EmailController@maboite');
