@@ -14,6 +14,8 @@
 
 {{-- Page content --}}
 @section('content')
+
+
     <section class="content-header">
                     <!--section starts-->
                     <h1>Fixed Header &amp; Menu</h1>

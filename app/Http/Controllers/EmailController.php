@@ -14,9 +14,6 @@ use Mail;
 class EmailController extends Controller
 {
 
-
-
-
     function index()
     {
         Log::info('opening emails index');
@@ -25,35 +22,20 @@ class EmailController extends Controller
         //       $oClient->connect();
 
         $oClient = new Client([
-            'host'          => 'imap.ionos.com',
-            'port'          => 993,
-            'encryption'    => 'ssl',
+            'host'          =>  env('hostreception'),
+            'port'          =>  env('portreception'),
+        //    'encryption'    => env('encreception'),
             'validate_cert' => true,
-            'username'      => 'test@enterpriseesolutions.com',
-            'password'      => 'I-saad14',
+            'username'      => env('emailreception'),
+            'password'      => env('passreception'),
             'protocol'      => 'imap'
         ]);
 
-        //  I-saad2014
-        /* Alternative by using the Facade
-        $oClient = Webklex\IMAP\Facades\Client::account('default');
-        */
 
 //Connect to the IMAP Server
         $oClient->connect();
 
-//Get all Mailboxes
-        /** @var \Webklex\IMAP\Support\FolderCollection $aFolder */
-        $aFolder = $oClient->getFolders();
         $oFolder = $oClient->getFolder('INBOX');
-
-//Loop through every Mailbox
-        /** @var \Webklex\IMAP\Folder $oFolder */
-//foreach($aFolder as $oFolder){
-
-        //Get all Messages of the current Mailbox $oFolder
-        /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
-        // $aMessage = $oFolder->query()->since('25.02.2019')->limit(10, 2)->get();
 
 
         $aMessage = $oFolder->messages()->all()->get();
@@ -61,12 +43,6 @@ class EmailController extends Controller
      /*   $aMessage = $oFolder->query()->text('tesssst')->get();*/
 
         $paginator = $aMessage->paginate();
-        // $paginator = $oFolder->search()
-        //     ->since(\Carbon::now()->subDays(14))->get()
-        //      ->paginate($perPage = 5, $page = null, $pageName = 'autocomplete.blade');
-        //  $aMessage = $oFolder->messages()->all()->get();
-
-        /** @var \Webklex\IMAP\Message $oMessage */
 
 //}
 
@@ -83,79 +59,124 @@ class EmailController extends Controller
         //       $oClient->connect();
 
         $oClient = new Client([
-            'host'          => 'imap.ionos.com',
-            'port'          => 993,
-            'encryption'    => 'ssl',
+            'host'          =>  env('hostreception'),
+            'port'          =>  env('portreception'),
+         //   'encryption'    => env('encreception'),
             'validate_cert' => true,
-            'username'      => 'test@enterpriseesolutions.com',
-            'password'      => 'I-saad14',
+            'username'      => env('emailreception'),
+            'password'      => env('passreception'),
             'protocol'      => 'imap'
         ]);
 
-        //  I-saad2014
-        /* Alternative by using the Facade
-        $oClient = Webklex\IMAP\Facades\Client::account('default');
-        */
+
 
 //Connect to the IMAP Server
         $oClient->connect();
 
-//Get all Mailboxes
-        /** @var \Webklex\IMAP\Support\FolderCollection $aFolder */
-         $oFolder = $oClient->getFolder($foldername);
-    ///    $oFolder = $oClient->getFolder('test');
-
-//Loop through every Mailbox
-        /** @var \Webklex\IMAP\Folder $oFolder */
-//foreach($aFolder as $oFolder){
-
-        //Get all Messages of the current Mailbox $oFolder
-        /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
-        // $aMessage = $oFolder->query()->since('25.02.2019')->limit(10, 2)->get();
+        $oFolder = $oClient->getFolder($foldername);
 
 
         $aMessage = $oFolder->messages()->all()->get();
-
         // Recherche
         /*   $aMessage = $oFolder->query()->text('tesssst')->get();*/
 
         $paginator = $aMessage->paginate();
-        // $paginator = $oFolder->search()
-        //     ->since(\Carbon::now()->subDays(14))->get()
-        //      ->paginate($perPage = 5, $page = null, $pageName = 'autocomplete.blade');
-        //  $aMessage = $oFolder->messages()->all()->get();
 
-        /** @var \Webklex\IMAP\Message $oMessage */
 
-//}
 
         return view('emails.folder', ['paginator'=>$paginator,'aMessage'=>$aMessage]);
     }
 
+    // voir la liste des emails par dossier
 
-    function inbox()
+    function open( $uid)
     {
+        // lire les informations depuis le compte de l utilisateur (db)
+        $email="test@najda-assistance.com";
+        $pass="esol@2019";
         $oClient = new Client([
-            'host'          => 'imap.ionos.com',
-            'port'          => 993,
-            'encryption'    => 'ssl',
+            'host'          =>  env('hostreception'),
+            'port'          =>  env('portreception'),
+            //   'encryption'    => env('encreception'),
             'validate_cert' => true,
-            'username'      => 'test@enterpriseesolutions.com',
-            'password'      => 'I-saad14',
+            'username'      => env('emailreception'),
+            'password'      => env('passreception'),
             'protocol'      => 'imap'
         ]);
 
-        //  I-saad2014
-        /* Alternative by using the Facade
-        $oClient = Webklex\IMAP\Facades\Client::account('default');
-        */
+
 
 //Connect to the IMAP Server
         $oClient->connect();
 
-//Get all Mailboxes
-        /** @var \Webklex\IMAP\Support\FolderCollection $aFolder */
-        $aFolder = $oClient->getFolders();
+
+        $oFolder = $oClient->getFolder('INBOX');
+        $oMessage = $oFolder->getMessage($uid);
+
+
+        // Recherche
+        /*   $aMessage = $oFolder->query()->text('tesssst')->get();*/
+
+
+
+        return view('emails.open', ['oMessage'=>$oMessage]);
+    }
+
+    function maboite( )
+    {
+        // lire les informations depuis le compte de l utilisateur (db)
+        $email="test@najda-assistance.com";
+        $pass="esol@2109";
+        $oClient = new Client([
+            'host'          =>  env('hostreception'),
+            'port'          =>  env('portreception'),
+        //    'encryption'    => env('encreception'),
+            'validate_cert' => true,
+            'username'      => $email,
+            'password'      => $pass,
+            'protocol'      => 'imap'
+        ]);
+
+
+
+//Connect to the IMAP Server
+        $oClient->connect();
+
+
+        $oFolder = $oClient->getFolder('INBOX');
+
+
+        $aMessage = $oFolder->messages()->all()->limit(5, 1)->get();
+      //  $aMessage = $oFolder->query()->unseen()->get();
+
+        //->limit(10, 2)
+        //->limit(10, 2)
+        // Recherche
+        /*   $aMessage = $oFolder->query()->text('tesssst')->get();*/
+
+        $paginator = $aMessage->paginate();
+
+
+        return view('emails.maboite', ['paginator'=>$paginator,'aMessage'=>$aMessage]);
+    }
+
+    function inbox()
+    {
+        $oClient = new Client([
+            'host'          =>  env('hostreception'),
+            'port'          =>  env('portreception'),
+        //    'encryption'    => env('encreception'),
+            'validate_cert' => true,
+            'username'      => env('emailreception'),
+            'password'      => env('passreception'),
+            'protocol'      => 'imap'
+        ]);
+
+
+//Connect to the IMAP Server
+        $oClient->connect();
+
+
         $oFolder = $oClient->getFolder('INBOX');
         $aMessage = $oFolder->messages()->all()->get();
         $paginator = $aMessage->paginate();
@@ -169,101 +190,89 @@ class EmailController extends Controller
     function check()
     {
 
-
         $oClient = new Client([
-            'host'          => 'imap.ionos.com',
-            'port'          => 993,
-            'encryption'    => 'ssl',
+            'host'          =>  env('hostreception'),
+            'port'          =>  env('portreception'),
+     //       'encryption'    => env('encreception'),
             'validate_cert' => true,
-            'username'      => 'test@enterpriseesolutions.com',
-            'password'      => 'I-saad14',
+            'username'      => env('emailreception'),
+            'password'      => env('passreception'),
             'protocol'      => 'imap'
         ]);
 
-        //  I-saad2014
-        /* Alternative by using the Facade
-        $oClient = Webklex\IMAP\Facades\Client::account('default');
-        */
+
 
 //Connect to the IMAP Server
         $oClient->connect();
         $aFolder = $oClient->getFolders();
+        $storeid=false;$firstid=0;
 
-            //Get all Messages of the current Mailbox $oFolder
-            /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
-            $oFolder = $oClient->getFolder('INBOX');
-            $aMessage = $oFolder->messages()->all()->get();
-            /** @var \Webklex\IMAP\Message $oMessage */
-            foreach ($aMessage as $oMessage) {
-              //  $nbattachs=10;
+        //Get all Messages of the current Mailbox $oFolder
+        /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
+        $oFolder = $oClient->getFolder('INBOX');
+        $aMessage = $oFolder->messages()->all()->get();
+        /** @var \Webklex\IMAP\Message $oMessage */
+        foreach ($aMessage as $oMessage) {
+            //  $nbattachs=10;
 
-                $sujet=$oMessage->getSubject()  ;
-                $nbattachs= intval($oMessage->getAttachments()->count()) ;
-               $contenu= $oMessage->getHTMLBody(true);
-               $from= $oMessage->getFrom()[0]->mail;
-               $date= $oMessage->getDate();
-                //Move the current Message to 'INBOX.read'
-                if ($oMessage->moveToFolder('read') == true) {
+            $sujet=$oMessage->getSubject()  ;
+            $nbattachs= intval($oMessage->getAttachments()->count()) ;
+            $contenu= $oMessage->getHTMLBody(true);
+            $from= $oMessage->getFrom()[0]->mail;
+            $date= $oMessage->getDate();
+            $mailid=$oMessage->getUid();
+
+            //Move the current Message to 'INBOX.read'
+            if ($oMessage->moveToFolder('read') == true) {
                 // message moved
-                    $entree = new Entree([
-                        'emetteur' => $from,
-                        'sujet' => $sujet,
-                        'contenu'=> utf8_encode($contenu) ,
-                       'reception'=> $date,
-                        'nb_attach'=> $nbattachs,
-                        'type'=> 'email',
-                    ]);
+                $entree = new Entree([
+                    'emetteur' => $from,
+                    'sujet' => $sujet,
+                    'contenu'=> utf8_encode($contenu) ,
+                    'reception'=> $date,
+                    'nb_attach'=> $nbattachs,
+                    'type'=> 'email',
+                    'mailid'=> $mailid,
 
-                    $entree->save();
-             //      $id= response()->json(array('success' => true, 'last_insert_id' => $entree->id), 200);
- //$id='100';
-                    $id=$entree->id;
-                    $aAttachment = $oMessage->getAttachments();
+                ]);
 
-                    $aAttachment->each(function ($oAttachment) use ($id){
-                        $path= storage_path().'/Emails/';
-                        /** @var \Webklex\IMAP\Attachment $oAttachment */
-                        if (!file_exists($path.$id)) {
-                            mkdir($path.$id, 0777, true);
-                        }
-                        $oAttachment->save($path.$id);
-                    });
+                $entree->save();
 
-                } else {
+                $id=$entree->id;
+
+                if($storeid==false){
+                    $firstid=$id;
+                    $storeid=true;
+                }
+                $aAttachment = $oMessage->getAttachments();
+
+                $aAttachment->each(function ($oAttachment) use ($id){
+                    $path= storage_path().'/Emails/';
+                    /** @var \Webklex\IMAP\Attachment $oAttachment */
+                    if (!file_exists($path.$id)) {
+                        mkdir($path.$id, 0777, true);
+                    }
+                    $oAttachment->save($path.$id);
+                });
+
+            } else {
                 // error
                 echo 'error';
-                }
-
-
-         //  $aMessage = $oFolder->query()->text('tesssst')->get();
-
-                $dossiers = DB::table('dossiers')->pluck('ref');
-
-                foreach ($dossiers as $ref) {
-                   $data = DB::table('entrees')
-                        ->where('sujet', 'LIKE', "%{$ref}%")
-                        ->orwhere('contenu', 'LIKE', "%{$ref}%")
-                        ->get();
-
-                 //  echo $data ;
-
-/*
-                    Entree::where(function ($query,$ref) {
-                        $query
-                            ->where('sujet', 'LIKE', "%{$ref}%")
-                            ->orWhere('contenu', 'LIKE', "%{$ref}%");
-                    })->where(function ($query) {
-                        $query->where('statut', '=', 0);
-                     });
-                    */
-
-                }
-
-
             }
-         return view('emails.check');
+
+
+        }
+        return $firstid;
+       // return view('emails.check');
 
     } /// end check
+
+
+
+
+
+
+
 
 
     // dispaching des entrees
@@ -348,6 +357,13 @@ class EmailController extends Controller
 
      }
 
+    }// end sed
+
+    function test()
+    {
+        return view('emails.test');
+
     }
 
-}
+
+    }

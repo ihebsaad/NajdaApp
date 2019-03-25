@@ -37,6 +37,8 @@ Route::get('/emails/check', 'EmailController@check');
 Route::get('/emails/folder/{foldername}', 'EmailController@folder');
 Route::get('/emails/disp', 'EmailController@disp');
 Route::get('/emails/test', 'EmailController@test');
+Route::get('/emails/maboite', 'EmailController@maboite');
+Route::get('/emails/open/{id}', 'EmailController@open');
 
 
 

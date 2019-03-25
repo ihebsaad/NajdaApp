@@ -12,5 +12,6 @@
 <!-- Custom styles for this template -->
 
  <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/styles.css') }}" />
+
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" >
 

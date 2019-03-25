@@ -17,7 +17,9 @@ class EntreesController extends Controller
     public function index()
     {
         //
-        return view('entrees.index');
+        $entrees = Entree::all();
+
+        return view('entrees.index', compact('entrees'));
 
     }
 

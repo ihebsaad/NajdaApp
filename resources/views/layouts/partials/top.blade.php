@@ -11,7 +11,7 @@
                 </div>
 
            {{ csrf_field() }}
-        </div><div class="col-sm-2 col-md-2 col-lg-2 ">pause</div><div class="col-sm-1 col-md-1 col-lg-1"></div><div class="col-sm-1 col-md-1 col-lg-1"><img class="menu-trigger" src="{{ URL::asset('resources/assets/img/menu-black.png') }}" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation"/></div>     
+        </div><div class="col-sm-2 col-md-2 col-lg-2 "><span id="test"><a href="#">pause</a></span></div><div class="col-sm-1 col-md-1 col-lg-1"></div><div class="col-sm-1 col-md-1 col-lg-1"><img class="menu-trigger" src="{{ URL::asset('resources/assets/img/menu-black.png') }}" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation"/></div>     
       </div></div>
 
 <style>
@@ -70,11 +70,26 @@
     }
 
 </style>
+
+<!-- include alertify css -->
+
+<link rel="stylesheet" href="{{ URL::asset('resources/assets/css/alertify.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('resources/assets/css/alertify.css') }}">
+
+<!-- include alertify script -->
+<script src="{{ URL::asset('resources/assets/js/alertify.js') }}"></script>
+
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 
+<?php $urlapp=env('APP_URL');
+$urlnotif=$urlapp.'/entrees/show/' ;
+$urlnotif = preg_replace('/\s+/', '', $urlnotif);
+?>
 <script>
+
     $(document).ready(function(){
+
 
         $('#country_name').keyup(function(){
             var query = $(this).val();
@@ -111,6 +126,56 @@
         setInterval(function() {
             $('.Timer').text((new Date - start) / 1000 + " Seconds");
         }, 1000);
+
+
+        function checkemails(){
+            $.ajax({
+                type: "get",
+                url: "http://localhost/najdaapp/emails/check",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log(data);
+                    var id=parseInt((data));
+                    if (id>0)
+                    {
+                         window.showAlert = function(){
+                            alertify.alert('<a href=`<?php print $urlnotif;?>'+id+'`>Voir notification</a>');
+
+                        }
+
+//works with modeless too
+                        alertify.alert().setting('modal', false).set({'label': 'voir ultérieurement!','frameless': true}); ;
+                        window.showAlert();
+                    }
+                    //Send another request in 10 seconds.
+                    setTimeout(function(){
+                        checkemails();
+                    }, 30000);  //30 secds
+                }
+            });
+        }
+
+        function dispatch(){
+            $.ajax({
+                type: "get",
+                url: "http://localhost/najdaapp/emails/disp",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log(data);
+                    //Send another request in 10 seconds.
+                    setTimeout(function(){
+                        dispatch();
+                    }, 60000);
+                }
+            });
+        }
+
+        checkemails();
+        dispatch();
+
+
     });
 </script>
 
@@ -165,3 +230,4 @@
         padding:6px 12px 6px 12px;
     }
 </style>
+

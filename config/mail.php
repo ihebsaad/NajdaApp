@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER', 'smtp'),
+    'driver' => env('MAIL_DRIVER'/*, 'smtp'*/),
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'smtp.gmail.com'),
+    'host' => env('MAIL_HOST'/*, 'smtp.gmail.com'*/),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'saadiheb@gmail.com'),
-        'name' => env('MAIL_FROM_NAME', 'iheb'),
+        'address' => env('MAIL_FROM_ADDRESS'/*, 'saadiheb@gmail.com'*/),
+        'name' => env('MAIL_FROM_NAME'/*, 'iheb'*/),
     ],
 
     /*
@@ -71,7 +71,7 @@ return [
     |
     */
 
-    'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+    'encryption' => env('MAIL_ENCRYPTION'/*, 'tls'*/),
 
     /*
     |--------------------------------------------------------------------------
@@ -84,9 +84,9 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME','saadiheb@gmail.com'),
+    'username' => env('MAIL_USERNAME'/*,'saadiheb@gmail.com'*/),
 
-    'password' => env('MAIL_PASSWORD','ihebssss'),
+    'password' => env('MAIL_PASSWORD'/*,'ihebssss'*/),
 
     /*
     |--------------------------------------------------------------------------
