@@ -74,7 +74,7 @@
 <!-- include alertify css -->
 
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/alertify.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('resources/assets/css/alertify.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('resources/assets/css/alertify-bootstrap.css') }}">
 
 <!-- include alertify script -->
 <script src="{{ URL::asset('resources/assets/js/alertify.js') }}"></script>
@@ -131,7 +131,7 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
         function checkemails(){
             $.ajax({
                 type: "get",
-                url: "http://localhost/najdaapp/emails/check",
+                url: "<?php echo $urlapp; ?>/emails/check",
                 success:function(data)
                 {
                     //console.log the response
@@ -140,12 +140,13 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
                     if (id>0)
                     {
                          window.showAlert = function(){
-                            alertify.alert('<a href=`<?php print $urlnotif;?>'+id+'`>Voir notification</a>');
+                             //       alertify.alert('<a href="<?php // print $urlnotif;?>'+id+'">Voir notification</a>');
+                                    alertify.alert('<a href="http://localhost/najdaapp/entrees/show/'+id+'">Voir notification</a>');
 
                         }
 
 //works with modeless too
-                        alertify.alert().setting('modal', false).set({'label': 'voir ultérieurement!','frameless': true}); ;
+                        alertify.alert().setting('modal', false).set({'label': 'voir ultérieurement!'}).setHeader('<em> Nouvelle Notification</em> '); ; ;
                         window.showAlert();
                     }
                     //Send another request in 10 seconds.
@@ -159,7 +160,7 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
         function dispatch(){
             $.ajax({
                 type: "get",
-                url: "http://localhost/najdaapp/emails/disp",
+                url: "<?php echo $urlapp; ?>/emails/disp",
                 success:function(data)
                 {
                     //console.log the response
