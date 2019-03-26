@@ -162,17 +162,27 @@ class EmailController extends Controller
 
     function inbox()
     {
-        $oClient = new Client([
-            'host'          =>  env('hostreception'),
-            'port'          =>  env('portreception'),
-        //    'encryption'    => env('encreception'),
+     $oClient = new Client([
+            'host'          => 'ssl0.ovh.net',// env('hostreception'),
+            'port'          => '993',// env('portreception'),
+        //    'encryption'    => '',//env('encreception'),
             'validate_cert' => true,
             'username'      => env('emailreception'),
             'password'      => env('passreception'),
             'protocol'      => 'imap'
         ]);
-
-
+ 
+    /*
+        $oClient = new Client([
+            'host'          => 'ssl0.ovh.net',// env('hostreception'),
+            'port'          => '993',// env('portreception'),
+            //    'encryption'    => '',//env('encreception'),
+            'validate_cert' => true,
+            'username'      =>'test@najda-assistance.com',
+            'password'      => 'esol@2109',
+            'protocol'      => 'imap'
+        ]);
+    */
 //Connect to the IMAP Server
         $oClient->connect();
 

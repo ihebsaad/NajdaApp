@@ -42,7 +42,7 @@ return [
     |
     */
 
-    'port' => env('MAIL_PORT', 587),
+    'port' => env('MAIL_PORT'/*, 587*/),
 
     /*
     |--------------------------------------------------------------------------
@@ -116,8 +116,8 @@ return [
         'theme' => 'default',
 
         'paths' => [
-            resource_path('/usr/sbin/sendmail -bs'),
-         //   resource_path('views/vendor/mail'),
+          //  resource_path('/usr/sbin/sendmail -bs'),
+            resource_path('views/vendor/mail'),
         ],
     ],
 
