@@ -1,5 +1,5 @@
 
-@extends('layouts/main')
+@extends('layouts.mainlayout')
 {{-- Page title --}}
 @section('title')
     Ma boîte de réception | Najda Assistance

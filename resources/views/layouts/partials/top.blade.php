@@ -1,234 +1,77 @@
-<div class="collapse bg-grey" id="navbarHeader">
-         <div class="container">
-               <div class="row">
-                Menu ici
-                </div>
-    </div></div><div class="navbar "><div class="row"><div class="col-sm-2 col-md-2 col-lg-2" style="margin-top:-10px;line-height:0.9em;text-align:center;padding-left:15px;font-weight:bold;"><span style="font-size:12px;margin-bottom:5px;"><?php echo date("l"); ?></span><br><span class="dot" style="font-size:18px"><?php echo date("j"); ?></span><br><span style="font-size:12px"><?php echo date("F"); ?></span></div><div style="float:left;" class="col-sm-2 col-md-2 col-lg-2"><span id="myclock">time</span></div><div class="col-sm-4 col-md-4 col-lg-4"><!--<div class="d-flex justify-content-center h-100">-->
-       <div class="searchbar">
-               <input type="text" name="country_name" id="country_name" class="search_input " placeholder="Rechercher .." /><a href="##" class="search_icon"><i class="fa fa-search"></i></a></div>
-                <!--</div>-->
-           <div id="countryList">
+<header class="header">
+        
+        <div class="collapse bg-grey" id="navbarHeader">
+            @include('layouts._top_menu')
+        </div>
+
+    <div class="navbar ">
+      <div class="row">
+        <div class="col-sm-2 col-md-2 col-lg-2" style="">
+           <a href="{{ route('home')}}" class="logo">
+                <!-- Add the class icon to your logo image or logo icon to add the margining -->
+                <img src="{{  URL::asset('public/img/logo.png') }}" alt="logo" />
+            </a>
+        </div>
+        <div class="col-sm-1 col-md-1 col-lg-1" style="">
+          <span  id="ndate" class="date" data-month="" data-year="" style="line-height: 1; padding-top: 13px;">
+                    <p id="njour" style="font-size: 10px; margin-bottom: 0px!important;"></p><span id="numj">13</span>
+           </span>
+        </div>
+
+        <div style="min-width:100px!important;padding-top:15px;padding-left:0px!important" class="col-sm-1 col-md-1 col-lg-1">
+          <div class="time">
+        time</div>
+        </div>
+
+        
+
+        <div class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
+          <a href="#" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;"> 
+                                                <span class="fa fa-fw fa-pause"></span>
+                                                <br>
+                                                Pause
+          </a> 
+        </div>
+        <div class="col-sm-3 col-md-3 col-lg-3" style=" height: 40px!important;padding-top:27px;padding-left:0px ">
+          <form class="search-container">
+            <input type="text" id="search-bar" placeholder="Recherche">
+            <a href="#"><img class="search-icon" src="{{ URL::asset('public/img/search-icon.png') }}"></a>
+                 <div id="countryList">
                 </div>
 
            {{ csrf_field() }}
-        </div><div class="col-sm-2 col-md-2 col-lg-2 "><span id="test"><a href="#">pause</a></span></div><div class="col-sm-1 col-md-1 col-lg-1"></div><div class="col-sm-1 col-md-1 col-lg-1"><img class="menu-trigger" src="{{ URL::asset('resources/assets/img/menu-black.png') }}" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation"/></div>     
-      </div></div>
-
-<style>
-
-    #countryList ul li{
-        min-width:450px;
-    }
-
-    .searchbar{
-        color:white;
-        margin-bottom: auto;
-        margin-top: auto;
-        height: 60px;
-        background-color: #353b48;
-        border-radius: 30px;
-        padding: 10px;
-        cursor: pointer;
-        max-width:500px;
-    }
-
-    .search_input{
-        color: white;
-        border: 0;
-        outline: 0;
-        background: none;
-        /*width: 0;*/
-        caret-color:transparent;
-        line-height: 40px;
-        /*transition: width 0.4s linear;*/
-        cursor: pointer;
-        padding-left:8px;
-
-    }
-
-    .searchbar:hover > .search_input{
-       /* padding: 0 10px;*/
-        width: 400px;
-        caret-color:white;
-        transition: width 0.4s linear;
-    }
-
-    .searchbar:hover > .search_icon{
-        background: white;
-        color: #e74c3c;
-    }
-
-    .search_icon{
-        height: 40px;
-        width: 40px;
-        float: right;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-        color:white;
-    }
-
-</style>
-
-<!-- include alertify css -->
-
-<link rel="stylesheet" href="{{ URL::asset('resources/assets/css/alertify.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('resources/assets/css/alertify-bootstrap.css') }}">
-
-<!-- include alertify script -->
-<script src="{{ URL::asset('resources/assets/js/alertify.js') }}"></script>
-
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+          </form>
+        </div>
+        <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
+          <a href="#" class="btn btn-primary btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;"> 
+              <span class="fa fa-fw fa-phone fa-2x"></span>
+          </a> 
+        </div>
+        <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
+          <a href="{{ route('boite') }}" class="btn btn-danger btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Ma boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;"> 
+              <span class="fa fa-fw fa-envelope fa-2x"></span>
+          </a> 
+        </div>
+        <div class="col-sm-1 col-md-1 col-lg-1">
+          <ul class="nav navbar-nav" style="float: right!important;">
 
 
-<?php $urlapp=env('APP_URL');
-$urlnotif=$urlapp.'/entrees/show/' ;
-$urlnotif = preg_replace('/\s+/', '', $urlnotif);
-?>
-<script>
+                    {{-- User Account --}}
+                    @include('layouts._user_menu')
 
-    $(document).ready(function(){
+                </ul>
+        </div>
 
+        <div class="col-sm-1 col-md-1 col-lg-1">
+         <!-- <img class="menu-trigger" src="{{ URL::asset('resources/assets/img/menu-black.png') }}" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation"/>-->
+          <div class="menu-icon menu-trigger" class="navbar-toggler" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation" alt="Menu de l'application"  style="zoom:60%;float: right!important; padding-top: 28px">
+            <div class="line-1 no-animation"></div>
+            <div class="line-2 no-animation"></div>
+            <div class="line-3 no-animation"></div>
+          </div>
+        </div>
+             
+      </div><!--------------- row -->
+    </div>
 
-        $('#country_name').keyup(function(){
-            var query = $(this).val();
-            if(query != '')
-            {
-                var _token = $('input[name="_token"]').val();
-                $.ajax({
-                    url:"{{ route('demo.fetch') }}",
-                    method:"POST",
-                    data:{query:query, _token:_token},
-                    success:function(data){
-                        $('#countryList').fadeIn();
-                        $('#countryList').html(data);
-                    }
-                });
-            }else{
-                $('#countryList').fadeOut();
-            }
-        });
-
-        $('#country_name').change(function() {
-            var query = $(this).val();
-            if(query != '')
-            {                $('#countryList').fadeOut();
-            }
-        });
-        $(document).on('click', 'li .search', function(){
-            $('#country_name').val($(this).text());
-            $('#countryList').fadeOut();
-        });
-
-        /**** TIME ****/
-        var start = new Date;
-        setInterval(function() {
-            $('.Timer').text((new Date - start) / 1000 + " Seconds");
-        }, 1000);
-
-
-        function checkemails(){
-            $.ajax({
-                type: "get",
-                url: "<?php echo $urlapp; ?>/emails/check",
-                success:function(data)
-                {
-                    //console.log the response
-                    console.log(data);
-                    var id=parseInt((data));
-                    if (id>0)
-                    {
-                         window.showAlert = function(){
-                             //       alertify.alert('<a href="<?php // print $urlnotif;?>'+id+'">Voir notification</a>');
-                                    alertify.alert('<a href="http://localhost/najdaapp/entrees/show/'+id+'">Voir notification</a>');
-
-                        }
-
-//works with modeless too
-                        alertify.alert().setting('modal', false).set({'label': 'voir ultérieurement!'}).setHeader('<em> Nouvelle Notification</em> '); ; ;
-                        window.showAlert();
-                    }
-                    //Send another request in 10 seconds.
-                    setTimeout(function(){
-                        checkemails();
-                    }, 30000);  //30 secds
-                }
-            });
-        }
-
-        function dispatch(){
-            $.ajax({
-                type: "get",
-                url: "<?php echo $urlapp; ?>/emails/disp",
-                success:function(data)
-                {
-                    //console.log the response
-                    console.log(data);
-                    //Send another request in 10 seconds.
-                    setTimeout(function(){
-                        dispatch();
-                    }, 60000);
-                }
-            });
-        }
-
-        checkemails();
-        dispatch();
-
-
-    });
-</script>
-
-<script language="javascript">
-
-    var clock = 0;
-    var interval_msec = 1000;
-
-    // ready
-
-    $(function() {
-        // set timer
-        clock = setTimeout("UpdateClock()", interval_msec);
-    });
-
-    // UpdateClock
-    function UpdateClock(){
-
-        // clear timer
-        clearTimeout(clock);
-
-        var dt_now = new Date();
-        var hh	= dt_now.getHours();
-        var mm	= dt_now.getMinutes();
-        var ss	= dt_now.getSeconds();
-
-        if(hh < 10){
-            hh = "0" + hh;
-        }
-        if(mm < 10){
-            mm = "0" + mm;
-        }
-        if(ss < 10){
-            ss = "0" + ss;
-        }
-        $("#myclock").html( hh + ":" + mm );
-
-        // set timer
-        clock = setTimeout("UpdateClock()", interval_msec);
-
-    }
-</script>
-
-<style type="text/css">
-    #myclock{
-        font-size:30px;
-        color:#ffffff;
-        background-color: black;
-        font-weight: 700;
-        letter-spacing: 2px;
-        border:1px solid #ffffff;
-        padding:6px 12px 6px 12px;
-    }
-</style>
-
+    </header>

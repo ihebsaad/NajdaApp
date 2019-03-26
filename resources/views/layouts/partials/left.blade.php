@@ -1,40 +1,66 @@
 
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-	<li class="nav-item">
-		<a class="nav-link active" id="notifications-tab" data-toggle="tab" href="#notifications" role="tab" aria-controls="notifications" aria-selected="true">Notifications</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" id="rappels-tab" data-toggle="tab" href="#rappels" role="tab" aria-controls="rappels" aria-selected="false">Rappels</a>
-	</li>
-</ul>
+            <div class="panel panel-default"  id="notificationspanel">
+                                <div class="panel-heading" id="headernotifs">
+                                    <h4 class="panel-title">Notifications</h4>
+                                    <span class="pull-right">
+                                       <i class="fa fa-fw clickable fa-chevron-up"></i>
+                                        
+                                    </span>
+                                </div>
+                                <div class="panel-body" style="display: block;">
+                                    <ul class="nav nav-tabs" style="margin-bottom: 15px;">
+                                        <li class="active">
+                                            <a href="#notificationstab" data-toggle="tab">Notifs</a>
+                                        </li>
+                                        <li>
+                                            <a href="#notestab" data-toggle="tab">Notes</a>
+                                        </li>
+                                    </ul>
+                                    <div id="NotificationsTabContent" class="tab-content">
+                                        <div class="tab-pane fade active in  scrollable-panel" id="notificationstab">
+                                            <div class="row" style="width: 99%">
+                                               <div class="col-xs-9 col-md-9 align-left"> 
+                                                    <div class="select">
+                                                      <select>
+                                                        <option>Trier par</option>
+                                                        <option>Temps</option>
+                                                        <option>Dossier</option>
+                                                      </select>
+                                                      <div class="select__arrow"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-1 col-md-1 pull-right"> 
+                                                    <a href="#" class="btn btn-default btn-sm btn-responsive" role="button"> </a>
+                                                </div>
+                                                <div class="col-xs-1 col-md-1 pull-right"> 
+                                                    <a href="#" class="btn btn-success btn-sm btn-responsive" role="button"> </a>
+                                                </div>
+                                                <div class="col-xs-1 col-md-1 pull-right"> 
+                                                    <a href="#" class="btn btn-danger btn-sm btn-responsive" role="button"> </a>
+                                                </div>
+                                            </div>
+                                            <!-- treeview of notifications -->
+                                            <div id="jstree">
+                                                <!-- in this example the tree is populated from inline HTML -->
+                                                <!--<ul>
+                                                  <li >Root node 1
+                                                    <ul>
+                                                      <li id="child_node_1" type="demo">Child node 1</li>
+                                                      <li id="D123" type="foldernotifs">Child node 2</li>
+                                                    </ul>
+                                                  </li>
+                                                  <li>Root node 2</li>
+                                                </ul>
 
-<div class="tab-content" id="myTabContent">
-	<div class="tab-pane fade show active" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
-		<ul class="ulnotifs">
-			<li>Notification 1</li>
-			<li>Notification 2</li>
-			<li>Notification 3</li>
-			<li>Notification 4</li>
-			<li>Notification 5</li>
-			<li>Notification 6</li>
-			<li>Notification 7</li>
-			<li>Notification 8</li>
-			<li>Notification 9</li>
-			<li>Notification 10</li>
-		</ul>
-	</div>
-	<div class="tab-pane fade" id="rappels" role="tabpanel" aria-labelledby="rappels-tab">
-		<ul class="ulrappels">
-			<li>Rappel 1</li>
-			<li>Rappel 2</li>
-			<li>Rappel 3</li>
-			<li>Rappel 4</li>
-			<li>Rappel 5</li>
-			<li>Rappel 6</li>
-			<li>Rappel 7</li>
-			<li>Rappel 8</li>
-			<li>Rappel 9</li>
+                                                <button id="btntree">demo button</button>-->
+                                              </div>
+                                              <div id="jstreefld2">
+                                              </div>
+                                        </div>
+                                        <div class="tab-pane fade  scrollable-panel" id="notestab">
+                                        </div>
+                                    </div>
 
- 		</ul>
-	</div>
-</div>
+                                </div>
+            </div>
+       

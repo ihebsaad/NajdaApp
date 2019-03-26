@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 use Spatie\Searchable\Search;
-
+use App\Dossier ;
 class DemoController extends Controller
 {
     //for create controller - php artisan make:controller AutocompleteController
@@ -16,8 +16,9 @@ class DemoController extends Controller
 
 	//  $countries = DB::table('apps_countries')->pluck('id', 'country_name');;
 	  $countries = DB::table('apps_countries')->select('id', 'country_name')->get();
+    $dossiers = Dossier::get();
 
-        return view('demo', ['countries' => $countries]);
+        return view('demo', ['countries' => $countries,'dossiers' => $dossiers]);
     }
 
     function fetch(Request $request)

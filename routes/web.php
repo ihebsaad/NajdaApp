@@ -11,10 +11,7 @@
 |
 */
  
-Route::get('/', array('as' => 'home','uses' => 'HomeController@index'));
-
-/** Demo page */
-Route::get('/demo', 'DemoController@index');
+Route::get('/', array('as' => 'home','uses' => 'DemoController@index'));
 Route::post('/demo/fetch', 'DemoController@fetch')->name('demo.fetch');
 
 
