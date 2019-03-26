@@ -104,12 +104,12 @@ text-overflow: ellipsis;}
   zoom:110%;
 }
 .date::before {
-  background-color: #a30000;
-  background-image: linear-gradient(top, #a30000, #7e0000);
-  background-image: -o-linear-gradient(top, #a30000, #7e0000);
-  background-image: -ms-linear-gradient(top, #a30000, #7e0000);
-  background-image: -moz-linear-gradient(top, #a30000, #7e0000);
-  background-image: -webkit-linear-gradient(top, #a30000, #7e0000);
+  background-color: #ec5d5d;
+  background-image: linear-gradient(top, #ec5d5d, #e87676);
+  background-image: -o-linear-gradient(top, #ec5d5d, #e87676);
+  background-image: -ms-linear-gradient(top, #ec5d5d, #e87676);
+  background-image: -moz-linear-gradient(top, #ec5d5d, #e87676);
+  background-image: -webkit-linear-gradient(top, #ec5d5d, #e87676);
   /*border-radius: 3px 3px 0 0;*/
   color: #fff;
   content: attr(data-month);
@@ -430,3 +430,6 @@ input#search-bar:focus:-ms-placeholder {
             transform: translate3d(0, 0, 0) rotate(0deg);
   }
 }
+
+.panelciel {border-color: #d3d3d3!important;}
+.panelciel > .panel-heading {background:  #d6eef7!important;border-color: #fff!important;}

@@ -27,7 +27,8 @@ class EntreesController extends Controller
     {
         Log::info('Accès à la boite des entrées - utilisateur: Mounir Tounsi');
 
-        $entrees = Entree::all();
+        //$entrees = Entree::all();
+        $entrees = Entree::paginate(5);
 
         return view('entrees.boite', compact('entrees'));
 

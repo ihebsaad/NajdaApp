@@ -20,7 +20,7 @@ Route::post('/demo/fetch', 'DemoController@fetch')->name('demo.fetch');
 
 /*** Entrees **/
 /* tous les emails (tous les entrees) dans la base */
-Route::get('/entrees/boite','EntreesController@boite');
+Route::get('/entrees/boite', array('as' => 'boite','uses' => 'EntreesController@boite'));
 Route::resource('/entrees','EntreesController');
 Route::post('/entrees/saving','EntreesController@saving')->name('entrees.saving');
 Route::get('/entrees/view/{id}', 'EntreesController@view');
