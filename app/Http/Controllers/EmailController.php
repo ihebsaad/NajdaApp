@@ -387,8 +387,8 @@ class EmailController extends Controller
      if (   Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot) {
             $message
                 ///  ->from('iheb@enterpriseesolutions.com', 'Houba')
-                ->to('ihebsaad@gmail.com', 'iheb')
-               // ->to($to)
+              //  ->to('ihebsaad@gmail.com', 'iheb')
+                ->to($to)
                 ->subject($sujet)
          ->setBody($contenu);
 
