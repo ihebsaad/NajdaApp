@@ -18,8 +18,9 @@ class EntreesController extends Controller
     {
         //
         $entrees = Entree::all();
+        $dossiers = Dossier::all();
 
-        return view('entrees.index', compact('entrees'));
+        return view('entrees.index',['dossiers' => $dossiers], compact('entrees'));
 
     }
 
@@ -29,8 +30,9 @@ class EntreesController extends Controller
 
         //$entrees = Entree::all();
         $entrees = Entree::paginate(5);
+        $dossiers = Dossier::all();
 
-        return view('entrees.boite', compact('entrees'));
+        return view('entrees.boite',['dossiers' => $dossiers], compact('entrees'));
 
     }
 
@@ -40,8 +42,9 @@ class EntreesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        return view('entrees.create');
+    {        $dossiers = Dossier::all();
+
+        return view('entrees.create',['dossiers' => $dossiers]);
     }
 
 
@@ -78,18 +81,20 @@ class EntreesController extends Controller
 
     public function view($id)
     {
+        $dossiers = Dossier::all();
 
         $entree = Entree::find($id);
-        return view('entrees.view', compact('entree'));
+        return view('entrees.view',['dossiers' => $dossiers], compact('entree'));
 
     }
 
 
     public function show($id)
     {
+        $dossiers = Dossier::all();
 
         $entree = Entree::find($id);
-        return view('entrees.show', compact('entree'));
+        return view('entrees.show',['dossiers' => $dossiers], compact('entree'));
 
     }
 
@@ -97,8 +102,9 @@ class EntreesController extends Controller
     {
         //
         $entrees = Entree::find($id);
+        $dossiers = Dossier::all();
 
-        return view('entrees.edit', compact('entree'));
+        return view('entrees.edit',['dossiers' => $dossiers], compact('entree'));
     }
 
 

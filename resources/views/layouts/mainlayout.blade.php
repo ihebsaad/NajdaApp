@@ -6,7 +6,7 @@
 <body>
 @include('layouts.partials.top')
 
-@include('layouts.partials.folders', [$dossiers])
+@include('layouts.partials.folders')
 
 <div class="content row">
 <div class="left column col-lg-3" >

@@ -29,7 +29,9 @@ class DossiersController extends Controller
      */
     public function create()
     {
-        return view('dossiers.create');
+        $dossiers = Dossier::all();
+
+        return view('dossiers.create',['dossiers' => $dossiers]);
     }
 
     /**
@@ -75,9 +77,10 @@ class DossiersController extends Controller
      */
     public function view($id)
     {
+        $dossiers = Dossier::all();
 
         $dossier = Dossier::find($id);
-        return view('dossiers.view', compact('dossier'));
+        return view('dossiers.view',['dossiers' => $dossiers], compact('dossier'));
 
     }
 
@@ -91,8 +94,9 @@ class DossiersController extends Controller
     {
         //
         $dossier = Dossier::find($id);
+        $dossiers = Dossier::all();
 
-        return view('dossiers.edit', compact('dossier'));
+        return view('dossiers.edit',['dossiers' => $dossiers], compact('dossier'));
     }
 
     /**

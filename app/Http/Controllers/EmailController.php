@@ -46,9 +46,10 @@ class EmailController extends Controller
 
 //}
 
+        $dossiers = Dossier::all();
 
 
-        return view('emails.index', ['paginator'=>$paginator]);
+        return view('emails.index', ['paginator'=>$paginator,'dossiers' => $dossiers]);
     }
 
 // voir la liste des emails par dossier
@@ -91,8 +92,9 @@ class EmailController extends Controller
         $paginator = $aMessage->paginate();
 
 
+        $dossiers = Dossier::all();
 
-        return view('emails.folder', ['paginator'=>$paginator,'aMessage'=>$aMessage]);
+        return view('emails.folder', ['paginator'=>$paginator,'aMessage'=>$aMessage,'dossiers' => $dossiers]);
     }
 
     // voir la liste des emails par dossier
@@ -134,9 +136,10 @@ class EmailController extends Controller
         // Recherche
         /*   $aMessage = $oFolder->query()->text('tesssst')->get();*/
 
+        $dossiers = Dossier::all();
 
 
-        return view('emails.open', ['oMessage'=>$oMessage]);
+        return view('emails.open', ['oMessage'=>$oMessage,'dossiers' => $dossiers]);
     }
 
     function maboite( )
@@ -182,9 +185,10 @@ class EmailController extends Controller
         /*   $aMessage = $oFolder->query()->text('tesssst')->get();*/
 
         $paginator = $aMessage->paginate();
+        $dossiers = Dossier::all();
 
 
-        return view('emails.maboite', ['paginator'=>$paginator,'aMessage'=>$aMessage]);
+        return view('emails.maboite', ['paginator'=>$paginator,'aMessage'=>$aMessage,'dossiers' => $dossiers]);
     }
 
     function inbox()
@@ -219,8 +223,9 @@ class EmailController extends Controller
         $aMessage = $oFolder->messages()->all()->get();
         $paginator = $aMessage->paginate();
 
+        $dossiers = Dossier::all();
 
-        return view('emails.inbox', ['paginator'=>$paginator,'aMessage'=>$aMessage]);
+        return view('emails.inbox', ['paginator'=>$paginator,'aMessage'=>$aMessage,'dossiers' => $dossiers]);
 
     } /// end inbox
 
@@ -360,13 +365,15 @@ class EmailController extends Controller
 
         }
 
-        return view('emails.disp');
+        return view('emails.disp',['dossiers' => $dossiers]);
 
     }
 
     public function sending()
     {
-        return view('emails.sending');
+        $dossiers = Dossier::all();
+
+        return view('emails.sending',['dossiers' => $dossiers]);
     }
 
 
@@ -406,8 +413,9 @@ class EmailController extends Controller
     }// end sed
 
     function test()
-    {
-        return view('emails.test');
+    {        $dossiers = Dossier::all();
+
+        return view('emails.test',['dossiers' => $dossiers]);
 
     }
 
