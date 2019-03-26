@@ -162,6 +162,7 @@ class EmailController extends Controller
 
     function inbox()
     {
+        /*
      $oClient = new Client([
             'host'          => 'ssl0.ovh.net',// env('hostreception'),
             'port'          => '993',// env('portreception'),
@@ -171,8 +172,8 @@ class EmailController extends Controller
             'password'      => env('passreception'),
             'protocol'      => 'imap'
         ]);
- 
-    /*
+ */
+
         $oClient = new Client([
             'host'          => 'ssl0.ovh.net',// env('hostreception'),
             'port'          => '993',// env('portreception'),
@@ -182,7 +183,7 @@ class EmailController extends Controller
             'password'      => 'esol@2109',
             'protocol'      => 'imap'
         ]);
-    */
+    
 //Connect to the IMAP Server
         $oClient->connect();
 
