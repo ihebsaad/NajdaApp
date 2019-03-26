@@ -57,7 +57,7 @@ class EmailController extends Controller
 
         //     $oClient = Client::account('default');
         //       $oClient->connect();
-
+/*
         $oClient = new Client([
             'host'          =>  env('hostreception'),
             'port'          =>  env('portreception'),
@@ -68,8 +68,16 @@ class EmailController extends Controller
             'protocol'      => 'imap'
         ]);
 
-
-
+*/
+        $oClient = new Client([
+            'host'          => 'ssl0.ovh.net',// env('hostreception'),
+            'port'          => '993',// env('portreception'),
+            //    'encryption'    => '',//env('encreception'),
+            'validate_cert' => true,
+            'username'      =>'test@najda-assistance.com',
+            'password'      => 'esol@2109',
+            'protocol'      => 'imap'
+        ]);
 //Connect to the IMAP Server
         $oClient->connect();
 
@@ -90,7 +98,7 @@ class EmailController extends Controller
     // voir la liste des emails par dossier
 
     function open( $uid)
-    {
+    {/*
         // lire les informations depuis le compte de l utilisateur (db)
         $email="test@najda-assistance.com";
         $pass="esol@2019";
@@ -104,8 +112,17 @@ class EmailController extends Controller
             'protocol'      => 'imap'
         ]);
 
+*/
 
-
+        $oClient = new Client([
+            'host'          => 'ssl0.ovh.net',// env('hostreception'),
+            'port'          => '993',// env('portreception'),
+            //    'encryption'    => '',//env('encreception'),
+            'validate_cert' => true,
+            'username'      =>'test@najda-assistance.com',
+            'password'      => 'esol@2109',
+            'protocol'      => 'imap'
+        ]);
 //Connect to the IMAP Server
         $oClient->connect();
 
@@ -127,6 +144,7 @@ class EmailController extends Controller
         // lire les informations depuis le compte de l utilisateur (db)
         $email="test@najda-assistance.com";
         $pass="esol@2109";
+        /*
         $oClient = new Client([
             'host'          =>  env('hostreception'),
             'port'          =>  env('portreception'),
@@ -136,7 +154,16 @@ class EmailController extends Controller
             'password'      => $pass,
             'protocol'      => 'imap'
         ]);
-
+*/
+        $oClient = new Client([
+            'host'          => 'ssl0.ovh.net',// env('hostreception'),
+            'port'          => '993',// env('portreception'),
+            //    'encryption'    => '',//env('encreception'),
+            'validate_cert' => true,
+            'username'      =>'test@najda-assistance.com',
+            'password'      => 'esol@2109',
+            'protocol'      => 'imap'
+        ]);
 
 
 //Connect to the IMAP Server
@@ -162,7 +189,7 @@ class EmailController extends Controller
 
     function inbox()
     {
-        /*
+
      $oClient = new Client([
             'host'          => 'ssl0.ovh.net',// env('hostreception'),
             'port'          => '993',// env('portreception'),
@@ -172,8 +199,8 @@ class EmailController extends Controller
             'password'      => env('passreception'),
             'protocol'      => 'imap'
         ]);
- */
 
+/*
         $oClient = new Client([
             'host'          => 'ssl0.ovh.net',// env('hostreception'),
             'port'          => '993',// env('portreception'),
@@ -183,7 +210,7 @@ class EmailController extends Controller
             'password'      => 'esol@2109',
             'protocol'      => 'imap'
         ]);
-    
+*/
 //Connect to the IMAP Server
         $oClient->connect();
 
@@ -200,7 +227,7 @@ class EmailController extends Controller
 
     function check()
     {
-
+/*
         $oClient = new Client([
             'host'          =>  env('hostreception'),
             'port'          =>  env('portreception'),
@@ -210,8 +237,16 @@ class EmailController extends Controller
             'password'      => env('passreception'),
             'protocol'      => 'imap'
         ]);
-
-
+*/
+        $oClient = new Client([
+            'host'          => 'ssl0.ovh.net',// env('hostreception'),
+            'port'          => '993',// env('portreception'),
+            //    'encryption'    => '',//env('encreception'),
+            'validate_cert' => true,
+            'username'      =>'test@najda-assistance.com',
+            'password'      => 'esol@2109',
+            'protocol'      => 'imap'
+        ]);
 
 //Connect to the IMAP Server
         $oClient->connect();
