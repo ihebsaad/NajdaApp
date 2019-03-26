@@ -20,14 +20,13 @@ class EmailController extends Controller
 
         //     $oClient = Client::account('default');
         //       $oClient->connect();
-
         $oClient = new Client([
-            'host'          =>  env('hostreception'),
-            'port'          =>  env('portreception'),
-        //    'encryption'    => env('encreception'),
+            'host'          => 'ssl0.ovh.net',// env('hostreception'),
+            'port'          => '993',// env('portreception'),
+            //    'encryption'    => '',//env('encreception'),
             'validate_cert' => true,
-            'username'      => env('emailreception'),
-            'password'      => env('passreception'),
+            'username'      =>'test@najda-assistance.com',
+            'password'      => 'esol@2109',
             'protocol'      => 'imap'
         ]);
 

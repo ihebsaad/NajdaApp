@@ -94,7 +94,6 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
         function checkemails(){
             $.ajax({
                 type: "get",
-                dataType: "jsonp",
                 url: "<?php echo $urlapp; ?>/emails/check",
                 success:function(data)
                 {
@@ -124,7 +123,6 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
         function dispatch(){
             $.ajax({
                 type: "get",
-                dataType: "jsonp",
                 url: "<?php echo $urlapp; ?>/emails/disp",
                 success:function(data)
                 {
@@ -141,7 +139,6 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
                 function dispatchnow(){
             $.ajax({
                 type: "get",
-                dataType: "jsonp",
                 url: "<?php echo $urlapp; ?>/emails/disp",
                 success:function(data)
                 {
