@@ -97,6 +97,8 @@ use App\Http\Controllers\AttachementsController;
                                             // get attachements info from DB
                                             $attachs = Attachement::get()->where('parent', '=', $entree->id);  
                                           ?>
+                                            @if ($attachs->isEmpty())
+                                                
                                             @for ($i = 1; $i <= $entree->nb_attach; $i++)
                                                 <div class="tab-pane fade in" id="pj<?php echo $i; ?>">
 
@@ -119,7 +121,9 @@ use App\Http\Controllers\AttachementsController;
                                                     
                                                 </div>
                                             @endfor
+                                            @endif
                                         @endif
+
                     </div>
                 </div>
             </div>
