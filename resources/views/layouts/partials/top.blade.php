@@ -1,7 +1,8 @@
 <header class="header">
         
         <div class="collapse bg-grey" id="navbarHeader">
-            @include('layouts._top_menu')
+             @include('layouts.partials._top_menu')
+
         </div>
 
     <div class="navbar ">

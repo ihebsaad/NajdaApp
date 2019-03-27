@@ -432,10 +432,19 @@ class EmailController extends Controller
     }// end sed
 
     function test()
-    {        $dossiers = Dossier::all();
+    {
+      if(\Gate::allows('isAdmin'))
+      {
+          $dossiers = Dossier::all();
 
-        return view('emails.test',['dossiers' => $dossiers]);
+          return view('emails.test', ['dossiers' => $dossiers]);
+       }
+      else {
+          // redirect
+          return redirect('/')->with('success', 'droits insuffisants');
 
+
+      }
     }
 
 

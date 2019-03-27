@@ -14,7 +14,6 @@
 </div>
          <div class="column col-lg-6">
 
-
             <!-- Content -->
             <div class="panel panel-primary">
               <div class="panel-heading">
