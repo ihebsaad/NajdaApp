@@ -179,7 +179,6 @@ return [
         App\Providers\RouteServiceProvider::class,
        // Webklex\IMAP\Providers\LaravelServiceProvider::class,
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
-        Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class,
 
     ],
 
@@ -230,9 +229,6 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        'Activation' => Cartalyst\Sentinel\Laravel\Facades\Activation::class,
-        'Reminder'   => Cartalyst\Sentinel\Laravel\Facades\Reminder::class,
-        'Sentinel'   => Cartalyst\Sentinel\Laravel\Facades\Sentinel::class,
     ],
 
 ];

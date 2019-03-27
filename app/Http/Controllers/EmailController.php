@@ -14,6 +14,11 @@ use Mail;
 
 class EmailController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
 
     function index()
     {
@@ -129,8 +134,9 @@ class EmailController extends Controller
         $oClient->connect();
 
 
-        $oFolder = $oClient->getFolder('INBOX');
-        $oMessage = $oFolder->getMessage($uid);
+        //$oFolder = $oClient->getFolder('INBOX');
+        $oFolder = $oClient->getFolder('test');
+         $oMessage = $oFolder->getMessage($uid);
 
 
         // Recherche
@@ -173,7 +179,8 @@ class EmailController extends Controller
         $oClient->connect();
 
 
-        $oFolder = $oClient->getFolder('INBOX');
+        //$oFolder = $oClient->getFolder('INBOX');
+        $oFolder = $oClient->getFolder('test');
 
 
         $aMessage = $oFolder->messages()->all()->limit(5, 1)->get();

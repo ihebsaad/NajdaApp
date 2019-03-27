@@ -53,3 +53,6 @@ Route::get('/dossiers/view/{id}', 'DossiersController@view');
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('errors', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@errors');
  
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

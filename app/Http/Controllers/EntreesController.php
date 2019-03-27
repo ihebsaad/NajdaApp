@@ -9,6 +9,12 @@ use App\Entree ;
 use App\Dossier ;
 class EntreesController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *

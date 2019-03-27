@@ -4,7 +4,7 @@
     <div class="form-group">
         {{ csrf_field() }}
         <label for="emetteur">emetteur:</label>
-        {{$oMessage->getFrom()[0]->mail }}
+        {{$oMessage->getSender()}}
 
 </div>
 <div class="form-group">
