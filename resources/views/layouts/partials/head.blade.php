@@ -45,7 +45,9 @@
 <!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
 <script src="{{  URL::asset('public/js/jquery-1.11.1.min.js') }}" type="text/javascript"></script>
 
-    <?php $urlapp=env('APP_URL');
+    <?php
+    $urlapp=env('APP_URL');
+    $urlapp='http://localhost/najdaapp';
 $urlnotif=$urlapp.'/entrees/show/' ;
 $urlnotif = preg_replace('/\s+/', '', $urlnotif);
 ?>

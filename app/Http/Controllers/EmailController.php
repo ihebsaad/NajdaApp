@@ -8,6 +8,7 @@ use DB;
 use Webklex\IMAP\Client;
 use App\Entree ;
 use App\Dossier ;
+use App\Attachement ;
 use Mail;
 
 
@@ -302,7 +303,23 @@ class EmailController extends Controller
                     if (!file_exists($path.$id)) {
                         mkdir($path.$id, 0777, true);
                     }
+                    // save in folder
                     $oAttachment->save($path.$id);
+                    // save in DB
+
+                   $path2= $path.$id ;
+                    $type=  $oAttachment->getExtension();
+                    $nom=  $oAttachment->getName();
+                    $attach = new Attachement([
+                        'nom' => $nom,
+                        'type' => $type,
+                         'path'=> $path2,
+                         'parent'=> $id,
+
+                    ]);
+
+                    $attach->save();
+
                 });
 
             } else {
@@ -316,10 +333,6 @@ class EmailController extends Controller
        // return view('emails.check');
 
     } /// end check
-
-
-
-
 
 
 
