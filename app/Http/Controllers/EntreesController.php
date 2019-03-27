@@ -24,12 +24,14 @@ class EntreesController extends Controller
 
     }
 
-    public function boite()
+    
+     public function boite()
     {
         Log::info('Accès à la boite des entrées - utilisateur: Mounir Tounsi');
 
         //$entrees = Entree::all();
-        $entrees = Entree::paginate(5);
+        //$entrees = Entree::paginate(5);
+        $entrees = Entree::orderBy('created_at', 'desc')->paginate(5);
         $dossiers = Dossier::all();
 
         return view('entrees.boite',['dossiers' => $dossiers], compact('entrees'));
