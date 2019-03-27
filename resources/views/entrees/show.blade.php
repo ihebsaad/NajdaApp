@@ -104,7 +104,7 @@ use App\Http\Controllers\AttachementsController;
 
                                                     
                                                     
-                                                    @switch($attachs[$i-1]->type)
+                                                    @switch($attachs[$i]->type)
                                                         @case('docx')
                                                             <iframe src="https://view.officeapps.live.com/op/view.aspx?src={{ URL::asset('storage'.$attachs[$i]->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
                                                             @break
