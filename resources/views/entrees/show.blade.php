@@ -96,7 +96,8 @@ $dossiers = Dossier::get();
                                                     <p>
                                                         It is pj<?php echo $i; ?>.
                                                     </p>
-                                                    <div id="viewer" class="pdf-viewer" data-url="{{ URL::asset('public/img/sample.pdf') }}"></div>
+                                                    <iframe src="https://view.officeapps.live.com/op/view.aspx?src=http://iiswc.org/iiswc2012/sample.doc" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                                                    
                                                 </div>
                                             @endfor
                                         @endif
