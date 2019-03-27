@@ -96,7 +96,21 @@ $dossiers = Dossier::get();
                                                     <p>
                                                         It is pj<?php echo $i; ?>.
                                                     </p>
-                                                    <iframe src="https://view.officeapps.live.com/op/view.aspx?src=http://iiswc.org/iiswc2012/sample.doc" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                                                    @if ($i == 1)
+                                                        <iframe src="https://view.officeapps.live.com/op/view.aspx?src=http://iiswc.org/iiswc2012/sample.doc" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                                                    @endif
+                                                    @if ($i == 2)
+                                                        <iframe src="https://view.officeapps.live.com/op/view.aspx?src=https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                                                    @endif
+                                                    @if ($i == 3)
+                                                        <iframe src="{{ URL::asset('public/img/sample.pdf') }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                                                    @endif
+                                                    @if ($i == 4)
+                                                    <img src="{{ URL::asset('public/img/ecran_03.png') }}" style="width:100%;min-height:640px;"/>
+                                                    @endif
+                                                    @if ($i == 5)
+                                                        <iframe src="https://view.officeapps.live.com/op/view.aspx?src=https://ol.baker.edu/webapps/dur-browserCheck-bb_bb60/samples/sample.xls" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                                                    @endif
                                                     
                                                 </div>
                                             @endfor
