@@ -8,7 +8,6 @@ use App\Dossier ;
 $dossiers = Dossier::get();
 
 use App\Attachement ;
-use App\Http\Controllers\AttachementsController;
 ?>
 {{-- page level styles --}}
 @section('header_styles')
@@ -100,10 +99,6 @@ use App\Http\Controllers\AttachementsController;
                                             @for ($i = 1; $i <= $entree->nb_attach; $i++)
                                                 <div class="tab-pane fade in" id="pj<?php echo $i; ?>">
 
-                                                    <h4><b style="font-size: 13px;">{{ $attachs[$i-1]->nom }}</b></h4>
-
-                                                    
-                                                    
                                                     
                                                     
                                                 </div>
