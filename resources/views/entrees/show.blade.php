@@ -100,10 +100,10 @@ use App\Http\Controllers\AttachementsController;
                                             @for ($i = 1; $i <= $entree->nb_attach; $i++)
                                                 <div class="tab-pane fade in" id="pj<?php echo $i; ?>">
 
-                                                    @php
+                                                    <?php
                                                        $names = array_fetch($attachs, 'name');
                                                        echo $names;
-                                                    @endphp
+                                                    ?>
                                                     
                                                 </div>
                                             @endfor
