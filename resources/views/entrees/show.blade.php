@@ -8,6 +8,7 @@ use App\Dossier ;
 $dossiers = Dossier::get();
 
 use App\Attachement ;
+use App\Http\Controllers\AttachementsController;
 ?>
 {{-- page level styles --}}
 @section('header_styles')
@@ -103,12 +104,9 @@ use App\Attachement ;
 
                                                     
                                                     
-                                                    @switch($attachs[$i]->type)
+                                                    @switch($attachs[$i-1]->type)
                                                         @case('docx')
                                                             <iframe src="https://view.officeapps.live.com/op/view.aspx?src={{ URL::asset('storage'.$attachs[$i]->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
-                                                            <?php
-                                                                echo URL::asset('storage'.$attachs[$i]->path);
-                                                            ?>
                                                             @break
 
                                                         @case('pdf')
