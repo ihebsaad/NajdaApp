@@ -6,11 +6,13 @@
 <?php
 use App\Dossier ;
 $dossiers = Dossier::get();
+
+use App\Attachement ;
+use App\Http\Controllers\AttachementsController;
 ?>
 {{-- page level styles --}}
 @section('header_styles')
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/custom_css/layout_responsive.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/custom_css/bootstrap-pdf-viewer.css') }}">
 @stop
 @section('content')
 
@@ -91,26 +93,32 @@ $dossiers = Dossier::get();
                                             <?php  echo $cont; ?></p>
                                         </div>
                                         @if ($entree->nb_attach > 0)
+                                          <?php
+                                            // get attachements info from DB
+                                            $attachs = Attachement::get()->where('parent', '=', $entree->id);  
+                                          ?>
                                             @for ($i = 1; $i <= $entree->nb_attach; $i++)
                                                 <div class="tab-pane fade in" id="pj<?php echo $i; ?>">
-                                                    <p>
-                                                        It is pj<?php echo $i; ?>.
-                                                    </p>
-                                                    @if ($i == 1)
-                                                        <iframe src="https://view.officeapps.live.com/op/view.aspx?src=http://iiswc.org/iiswc2012/sample.doc" frameborder="0" style="width:100%;min-height:640px;"></iframe>
-                                                    @endif
-                                                    @if ($i == 2)
-                                                        <iframe src="https://view.officeapps.live.com/op/view.aspx?src=https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx" frameborder="0" style="width:100%;min-height:640px;"></iframe>
-                                                    @endif
-                                                    @if ($i == 3)
-                                                        <iframe src="{{ URL::asset('public/img/sample.pdf') }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
-                                                    @endif
-                                                    @if ($i == 4)
-                                                    <img src="{{ URL::asset('public/img/ecran_03.png') }}" style="width:100%;min-height:640px;"/>
-                                                    @endif
-                                                    @if ($i == 5)
-                                                        <iframe src="https://view.officeapps.live.com/op/view.aspx?src=https://ol.baker.edu/webapps/dur-browserCheck-bb_bb60/samples/sample.xls" frameborder="0" style="width:100%;min-height:640px;"></iframe>
-                                                    @endif
+
+                                                    <h4><b style="font-size: 13px;">{{ $attachs[$i-1]->nom }}</b></h4>
+
+                                                    
+                                                    
+                                                    @switch($attachs[$i-1]->type)
+                                                        @case('docx')
+                                                            <iframe src="https://view.officeapps.live.com/op/view.aspx?src={{ URL::asset('storage'.$attachs[$i-1]->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                                                            <?php
+                                                                echo URL::asset('storage'.$attachs[$i-1]->path);
+                                                            ?>
+                                                            @break
+
+                                                        @case('pdf')
+                                                            <iframe src="{{ URL::asset('storage'.$attachs[$i-1]->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                                                            @break
+
+                                                        @default
+                                                            <span>Type de fichier non reconnu ....  <a href="{{ URL::asset('storage'.$attachs[$i-1]->path) }}" download>Télécharger</a> </span>
+                                                    @endswitch
                                                     
                                                 </div>
                                             @endfor
@@ -134,14 +142,7 @@ $dossiers = Dossier::get();
     .invoice{background-color: khaki;padding:1px;}
     label{font-weight:bold;}
 </style>
-<script src="{{  URL::asset('public/js/pdf/pdf.js') }}" type="text/javascript"></script>
-<script src="{{  URL::asset('public/js/pdf/bootstrap-pdf-viewer.js') }}" type="text/javascript"></script>
  <script>
-      var viewer;
-
-      document.addEventListener('DOMContentLoaded', function() {
-        viewer = new PDFViewer($('#viewer'));
-      });
       function comment()
       {
         if ($("#emailcomment").is(":hidden")) 
