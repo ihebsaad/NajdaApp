@@ -307,9 +307,9 @@ class EmailController extends Controller
                     $oAttachment->save($path.$id);
                     // save in DB
 
-                   $path2= $path.$id ;
-                    $type=  $oAttachment->getExtension();
                     $nom=  $oAttachment->getName();
+                   $path2= '/Emails/'.$id.'/'.$nom ;
+                    $type=  $oAttachment->getExtension();
                     $attach = new Attachement([
                         'nom' => $nom,
                         'type' => $type,
