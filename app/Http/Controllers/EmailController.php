@@ -314,7 +314,18 @@ class EmailController extends Controller
                     $oAttachment->save($path.$id);
                     // save in DB
 
-                    $nom=  $oAttachment->getName();
+
+                    $nom = $oAttachment->getName();
+                    /*$attachment_encodage = mb_detect_encoding($oAttachment->getName());
+
+                    if( $attachment_encodage != 'UTF-8')
+                    {
+                        $nom = iconv_mime_decode($nom, 0, "UTF-8");
+                    }*/
+                    $nom = $oMessage->decodeString($oMessage->convertEncoding($nom, $oMessage->getEncoding($nom)), 'UTF-7');
+
+
+
                    $path2= '/Emails/'.$id.'/'.$nom ;
                     $type=  $oAttachment->getExtension();
                     $attach = new Attachement([

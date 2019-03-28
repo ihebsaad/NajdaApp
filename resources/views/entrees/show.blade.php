@@ -103,7 +103,7 @@ use App\Http\Controllers\AttachementsController;
                                             @foreach ($attachs as $att)
                                                 <div class="tab-pane fade in" id="pj<?php echo $i; ?>">
 
-                                                    <h4><b style="font-size: 13px;">{{ $att->nom }}</b></h4>
+                                                    <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
 
                                                     
                                                     
@@ -144,7 +144,7 @@ use App\Http\Controllers\AttachementsController;
                                                             @break
                                                                
                                                         @default
-                                                            <span>Type de fichier non reconnu > <a href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a> <</span>
+                                                            <span>Type de fichier non reconnu ... <a href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a> </span>
                                                     @endswitch
                                                     
                                                 </div>
