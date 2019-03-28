@@ -12,15 +12,15 @@
 <div class="left column col-lg-3" >
 @include('layouts.partials.left')
 </div>
-         <div class="column col-lg-6">
+         <div id="mainc" class="column col-lg-6">
 
             <!-- Content -->
             <div class="panel panel-primary">
               <div class="panel-heading">
                                     <h4 class="panel-title">Bienvenue </h4>
                                     <span class="pull-right">
-                                       <i class="fa fa-fw clickable fa-chevron-up"></i>
-                                        
+                                         <i id="open" class="fa fa-lg   fa-exchange"></i>
+                                         <i style="margin-left:10px" id="close" class="fa fa-lg   fa-close"></i>
                                     </span>
                                 </div>
                 <div class="panel-body" style="display: block;">                
@@ -37,3 +37,4 @@
 @include('layouts.partials.footer-scripts')
 </body>
 </html>
+

@@ -1,4 +1,4 @@
-<div class="row" style="margin-top:20px;">
+<div class="row folders" style="margin-top:20px;">
         <div class="carousel-wrap">
           <div class="owl-carousel">
             @foreach ($dossiers as $i) 

@@ -35,8 +35,9 @@
    <!--<script src="{{ asset('assets/js/custom_js/nestable.js') }}" type="text/javascript"></script>-->
    <script type="text/javascript">$(function() {
         /*$('#nestable_list_3').nestable();*/
+
         $('.owl-carousel').owlCarousel({
-          loop: true,
+          loop: false,
           margin: 20,
           nav: true,
           navText: [
@@ -119,3 +120,36 @@
         
     });</script>
     <!-- end page level js -->
+
+<script>
+
+    $( "#open" ).click(function() {
+        $( ".folders" ).hide( "slow", function() {
+            // Animation complete.
+        });
+        $( ".left" ).hide( "slow", function() {
+            // Animation complete.
+        });
+        $( ".right" ).hide( "slow", function() {
+            // Animation complete.
+        });
+
+        $( "#mainc" ).addClass( "col-lg-12" );
+
+    });
+
+    $( "#close" ).click(function() {
+        $( ".folders" ).show( "slow", function() {
+            // Animation complete.
+        });
+        $( ".left" ).show( "slow", function() {
+            // Animation complete.
+        });
+        $( ".right" ).show( "slow", function() {
+            // Animation complete.
+        });
+        $( "#mainc" ).removeClass( "col-lg-12" );
+
+    });
+
+</script>

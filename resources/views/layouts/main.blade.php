@@ -35,7 +35,7 @@
 <body class="skin-chandra fixed_menu">
     <!-- header logo: style can be found in header-->
     <header class="header">
-        
+
         <div class="collapse bg-grey" id="navbarHeader">
             @include('layouts._top_menu')
         </div>
