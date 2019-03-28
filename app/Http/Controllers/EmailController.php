@@ -322,7 +322,7 @@ class EmailController extends Controller
                     {
                         $nom = iconv_mime_decode($nom, 0, "UTF-8");
                     }*/
-                    $nom = $oMessage->decodeString($oMessage->convertEncoding($nom, $oMessage->getEncoding($nom)), 'UTF-7');
+                   // $nom = $oMessage->decodeString($oMessage->convertEncoding($nom, $oMessage->getEncoding($nom)), 'UTF-7');
 
 
 
