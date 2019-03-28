@@ -316,12 +316,13 @@ class EmailController extends Controller
 
 
                     $nom = $oAttachment->getName();
-                    $attachment_encodage = mb_detect_encoding($oAttachment->getName());
+                    /*$attachment_encodage = mb_detect_encoding($oAttachment->getName());
 
                     if( $attachment_encodage != 'UTF-8')
                     {
                         $nom = iconv_mime_decode($nom, 0, "UTF-8");
-                    }
+                    }*/
+                    $nom = $oMessage->decodeString($oMessage->convertEncoding($nom, $oMessage->getEncoding($nom)), 'UTF-7');
 
 
 
