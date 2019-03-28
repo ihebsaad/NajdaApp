@@ -99,7 +99,7 @@ use App\Http\Controllers\AttachementsController;
                                             
                                           ?>
                                             @if (!empty($attachs) )
-                                            $i=1;
+                                            <?php $i=1; ?>
                                             @foreach ($attachs as $att)
                                                 <div class="tab-pane fade in" id="pj<?php echo $i; ?>">
 
@@ -121,7 +121,7 @@ use App\Http\Controllers\AttachementsController;
                                                     @endswitch
                                                     
                                                 </div>
-                                                $i++;
+                                                <?php $i++; ?>
                                             @endforeach
 
                                             @endif
