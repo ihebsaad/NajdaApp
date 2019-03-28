@@ -52,7 +52,7 @@ $dossiers = Dossier::get();
                                 </div>
                                 <div class="col-sm-4 col-md-4 col-lg-4">
                                     @if (!empty($entree->dossier))
-                                    <button class="btn btn-sm btn-default">REF: {{ $entree->sujet }}</button>
+                                    <button class="btn btn-sm btn-default"><b>REF: {{ $entree->dossier }}</b></button>
                                     @endif
                                 </div>
                             </div>

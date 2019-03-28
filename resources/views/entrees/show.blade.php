@@ -26,7 +26,7 @@ use App\Http\Controllers\AttachementsController;
                         <div class="col-sm-8 col-md-8 col-lg-8" style="padding-right: 0px;">
                             <div class="pull-right" style="margin-top: 0px;">
                                 @if (!empty($entree->dossier))
-                                    <button class="btn btn-sm btn-default">REF: {{ $entree->sujet }}</button>
+                                    <button class="btn btn-sm btn-default"><b>REF: {{ $entree->dossier }}</b></button>
                                 @endif
                                 <a href="#" class="btn btn-primary btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Enregistrer les commentaires et TAGS" > 
                                   <span class="fa fa-fw fa-save"></span> Sauvegarder
