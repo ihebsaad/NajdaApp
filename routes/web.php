@@ -11,9 +11,6 @@
 |
 */
 
-if (env('APP_ENV') === 'production') {
-    URL::forceSchema('https');
-}
 
 Route::get('/', array('as' => 'home','uses' => 'DemoController@index'));
 Route::post('/demo/fetch', 'DemoController@fetch')->name('demo.fetch');
