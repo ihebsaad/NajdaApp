@@ -109,6 +109,25 @@ use App\Http\Controllers\AttachementsController;
                                                     
                                                     @switch($att->type)
                                                         @case('docx')
+                                                        @case('doc')
+                                                        @case('dot')
+                                                        @case('dotx')
+                                                        @case('docm')
+                                                        @case('odt')
+                                                        @case('pot')
+                                                        @case('potm')
+                                                        @case('pps')
+                                                        @case('ppsm')
+                                                        @case('ppt')
+                                                        @case('pptm')
+                                                        @case('pptx')
+                                                        @case('ppsx')
+                                                        @case('odp')
+                                                        @case('xls')
+                                                        @case('xlsx')
+                                                        @case('xlsm')
+                                                        @case('xlsb')
+                                                        @case('ods')
                                                             <iframe src="https://view.officeapps.live.com/op/view.aspx?src={{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
                                                             @break
 
@@ -116,6 +135,14 @@ use App\Http\Controllers\AttachementsController;
                                                             <iframe src="{{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
                                                             @break
 
+                                                        @case('jpg')
+                                                        @case('jpeg')
+                                                        @case('gif')
+                                                        @case('png')
+                                                        @case('bmp')
+                                                            <img src="{{ URL::asset('storage'.$att->path) }}" class="mx-auto d-block"> 
+                                                            @break
+                                                               
                                                         @default
                                                             <span>Type de fichier non reconnu > <a href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a> <</span>
                                                     @endswitch
