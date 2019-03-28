@@ -49,7 +49,7 @@
           </a> 
         </div>
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-          <a href="{{ route('boite') }}" class="btn btn-danger btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Ma boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;"> 
+          <a href="{{ route('boite') }}" class="btn btn-danger btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
               <span class="fa fa-fw fa-envelope fa-2x"></span>
           </a> 
         </div>

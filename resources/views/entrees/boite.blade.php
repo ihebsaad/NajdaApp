@@ -2,7 +2,7 @@
 @extends('layouts.mainlayout')
 {{-- Page title --}}
 @section('title')
-    Ma boîte de réception | Najda Assistance
+    Boîte de réception | Najda Assistance
 @stop
 <?php
 use App\Dossier ;
@@ -26,6 +26,7 @@ $dossiers = Dossier::get();
         .email .stats span i{margin-right:7px; color:#7ecce7;}
         .email .fav-box{position:absolute; right:10px; font-size:15px; top:4px; color:#E74C3C;}
     </style>
+    <a style="float:right;margin-right:20px;margin-bottom:25px;" href="{{action('EmailController@sending')}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un email"  class="fa fa-fw fa-envelope fa-2x"></span></a>
     <div class="uper">
         @if(session()->get('success'))
             <div class="alert alert-success">
@@ -42,7 +43,7 @@ $dossiers = Dossier::get();
                         </a>
                     </div>
                       <div class="media-body pl-3">
-                        <div class="subject">{{$entree->sujet}}<small>{{$entree->emetteur}}</small></div>
+                        <div class="subject"><a  href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a><small>{{$entree->emetteur}}</small></div>
                         <div class="stats">
                             <span><i class="fa fa-fw fa-clock-o"></i><?php echo  date('d/m/Y H:i', strtotime($entree->reception)) ; ?></span>
                             <span><i class="fa fa-fw fa-paperclip"></i><b>({{$entree->nb_attach}})</b> Attachements</span>
