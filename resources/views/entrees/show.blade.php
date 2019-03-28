@@ -99,8 +99,29 @@ use App\Http\Controllers\AttachementsController;
                                             
                                           ?>
                                             @if (!empty($attachs) )
+                                            $i=1;
                                             @foreach ($attachs as $att)
-                                                <h4><b style="font-size: 13px;">{{ $att->nom }}</b></h4>
+                                                <div class="tab-pane fade in" id="pj<?php echo $i; ?>">
+
+                                                    <h4><b style="font-size: 13px;">{{ $att->nom }}</b></h4>
+
+                                                    
+                                                    
+                                                    @switch($att->type)
+                                                        @case('docx')
+                                                            <iframe src="https://view.officeapps.live.com/op/view.aspx?src={{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                                                            @break
+
+                                                        @case('pdf')
+                                                            <iframe src="{{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                                                            @break
+
+                                                        @default
+                                                            <span>Type de fichier non reconnu > <a href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a> <</span>
+                                                    @endswitch
+                                                    
+                                                </div>
+                                                $i++;
                                             @endforeach
 
                                             @endif
