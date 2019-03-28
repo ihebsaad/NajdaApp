@@ -20,11 +20,14 @@ use App\Http\Controllers\AttachementsController;
         <div class="panel-heading" style="">
                 <a data-toggle="collapse" data-parent="#accordion-cat-1" href="#emailhead" class="" aria-expanded="true">
                     <div class="row">
-                        <div class="col-sm-6 col-md-6 col-lg-6"style=" padding-left: 0px; ">
+                        <div class="col-sm-4 col-md-4 col-lg-4"style=" padding-left: 0px; ">
                             <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;">Sujet :</label> {{ $entree->sujet }}</h4>
                         </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6" style="padding-right: 0px;">
+                        <div class="col-sm-8 col-md-8 col-lg-8" style="padding-right: 0px;">
                             <div class="pull-right" style="margin-top: 0px;">
+                                @if (!empty($entree->dossier))
+                                    <button class="btn btn-sm btn-default">REF: {{ $entree->sujet }}</button>
+                                @endif
                                 <a href="#" class="btn btn-primary btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Enregistrer les commentaires et TAGS" > 
                                   <span class="fa fa-fw fa-save"></span> Sauvegarder
                                 </a>
@@ -103,7 +106,7 @@ use App\Http\Controllers\AttachementsController;
                                             @foreach ($attachs as $att)
                                                 <div class="tab-pane fade in" id="pj<?php echo $i; ?>">
 
-                                                    <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
+                                                    <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
 
                                                     
                                                     
@@ -144,7 +147,7 @@ use App\Http\Controllers\AttachementsController;
                                                             @break
                                                                
                                                         @default
-                                                            <span>Type de fichier non reconnu ... <a href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a> </span>
+                                                            <span>Type de fichier non reconnu ... </span>
                                                     @endswitch
                                                     
                                                 </div>

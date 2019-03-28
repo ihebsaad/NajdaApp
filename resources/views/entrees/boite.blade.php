@@ -45,8 +45,17 @@ $dossiers = Dossier::get();
                       <div class="media-body pl-3">
                         <div class="subject"><a  href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a><small style="margin-top:10px;">{{$entree->emetteur}}</small></div>
                         <div class="stats">
-                            <span><i class="fa fa-lg fa-fw fa-clock-o"></i><?php echo  date('d/m/Y H:i', strtotime($entree->reception)) ; ?></span>
-                            <span><i class="fa fa-lg fa-fw fa-paperclip"></i><b>({{$entree->nb_attach}})</b> Attachements</span>
+                            <div class="row">
+                                <div class="col-sm-8 col-md-8 col-lg-8">
+                                    <span><i class="fa fa-fw fa-clock-o"></i><?php echo  date('d/m/Y H:i', strtotime($entree->reception)) ; ?></span>
+                                    <span><i class="fa fa-fw fa-paperclip"></i><b>({{$entree->nb_attach}})</b> Attachements</span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    @if (!empty($entree->dossier))
+                                    <button class="btn btn-sm btn-default">REF: {{ $entree->sujet }}</button>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                       </div>
                 </div>
