@@ -1,9 +1,9 @@
 <div class="container">
           <div class="col-lg-2">
-              <a href="#" class="btn btn-default btn-md btn-responsive" role="button">
+              <a href="{{ route('dossiers') }}" class="btn btn-default btn-md btn-responsive" role="button">
                <span class="fa fa-fw fa-folder"></span>
                <br>
-                    Mes dossiers
+                    Liste des dossiers
               </a>
           </div>
           <div class="col-lg-2">
@@ -32,12 +32,12 @@
     @if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
     <div class="col-lg-1">
 
-        superviseur 1
+        test supe 1
     </div>
 
     <div class="col-lg-1">
 
-        superviseur 2
+        test sup 2
     </div>
     @endif
 
@@ -45,12 +45,12 @@
 
     <div class="col-lg-1">
 
-         admin 1
+         test admin 1
     </div>
 
     <div class="col-lg-1">
 
-         admin 2
+        test admin 2
     </div>
     @endcan
 

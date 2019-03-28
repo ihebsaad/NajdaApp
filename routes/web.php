@@ -46,7 +46,8 @@ Route::get('/emails/open/{id}', 'EmailController@open');
 
 
 /*** Dossiers **/
-Route::resource('/dossiers','DossiersController');
+Route::resource('/dossiers',  'DossiersController');
+Route::get('/dossiers', array('as' => 'dossiers','uses' => 'DossiersController@index'));
 Route::post('/dossiers/saving','DossiersController@saving')->name('dossiers.saving');
 Route::get('/dossiers/view/{id}', 'DossiersController@view');
 
