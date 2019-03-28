@@ -43,7 +43,7 @@ $dossiers = Dossier::get();
                         </a>
                     </div>
                       <div class="media-body pl-3">
-                        <div class="subject"><a  href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a><small>{{$entree->emetteur}}</small></div>
+                        <div class="subject"><a  href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a><small style="margin-top:10px;">{{$entree->emetteur}}</small></div>
                         <div class="stats">
                             <span><i class="fa fa-lg fa-fw fa-clock-o"></i><?php echo  date('d/m/Y H:i', strtotime($entree->reception)) ; ?></span>
                             <span><i class="fa fa-lg fa-fw fa-paperclip"></i><b>({{$entree->nb_attach}})</b> Attachements</span>
