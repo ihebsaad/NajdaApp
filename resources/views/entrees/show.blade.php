@@ -84,7 +84,7 @@ use App\Http\Controllers\AttachementsController;
                     </ul>
                     <div id="myTabContent" class="tab-content" style="padding:10px;padding-top:20px;background: #eee">
                                         <div class="tab-pane fade active in" id="mailcorps">
-                                            <p style="line-height: 25px"><?php  $content= $entree->contenu; ?>
+                                            <p style="line-height: 25px;"><?php  $content= $entree->contenu; ?>
                                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
@@ -140,7 +140,7 @@ use App\Http\Controllers\AttachementsController;
                                                         @case('gif')
                                                         @case('png')
                                                         @case('bmp')
-                                                            <img src="{{ URL::asset('storage'.$att->path) }}" class="mx-auto d-block"> 
+                                                            <img src="{{ URL::asset('storage'.$att->path) }}" class="mx-auto d-block" style="max-width: 100%!important;"> 
                                                             @break
                                                                
                                                         @default
