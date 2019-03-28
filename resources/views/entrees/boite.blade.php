@@ -26,7 +26,7 @@ $dossiers = Dossier::get();
         .email .stats span i{margin-right:7px; color:#7ecce7;}
         .email .fav-box{position:absolute; right:10px; font-size:15px; top:4px; color:#E74C3C;}
     </style>
-    <a style="float:right;margin-right:20px;margin-bottom:25px;" href="{{action('EmailController@sending')}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un email"  class="fa fa-fw fa-envelope fa-2x"></span></a>
+    <a style="float:right;margin-right:20px;margin-bottom:25px;padding:3px 3px 3px 3px;border:1px solid #4fc1e9;" href="{{action('EmailController@sending')}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un email"  class="fa fa-fw fa-envelope fa-2x"></span></a><br>
     <div class="uper">
         @if(session()->get('success'))
             <div class="alert alert-success">
