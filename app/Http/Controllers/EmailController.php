@@ -282,6 +282,8 @@ class EmailController extends Controller
 
             //Move the current Message to 'INBOX.read'
             if ($oMessage->moveToFolder('read') == true) {
+                // get last id
+                $lastid= DB::table('entrees')->order_by('id', 'desc')->first();
                 // message moved
                 $entree = new Entree([
                     'emetteur' => $from,
@@ -339,7 +341,13 @@ class EmailController extends Controller
                     $attach->save();
 
                 });
-
+                // récupérer last id une autre fois pour vérifier l'enregistrement
+                $lastid2= DB::table('entrees')->order_by('id', 'desc')->first();
+                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
+                if($lastid==$lastid2)
+                {
+                    $oMessage->moveToFolder('INBOX') ;
+                }
             } else {
                 // error
                 echo 'error';
