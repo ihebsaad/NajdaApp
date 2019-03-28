@@ -124,9 +124,10 @@
 <script>
 
     $( "#open" ).click(function() {
-        $( ".folders" ).hide( "slow", function() {
+        $(".folders").css("display", "none");
+     /*   $( ".folders" ).hide( "slow", function() {
             // Animation complete.
-        });
+        });*/
         $( ".left" ).hide( "slow", function() {
             // Animation complete.
         });
@@ -139,9 +140,13 @@
     });
 
     $( "#close" ).click(function() {
+        $(".folders").css("display", "inline");
+
+        /*
         $( ".folders" ).show( "slow", function() {
             // Animation complete.
-        });
+        });*/
+
         $( ".left" ).show( "slow", function() {
             // Animation complete.
         });

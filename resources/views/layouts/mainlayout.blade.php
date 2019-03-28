@@ -19,8 +19,8 @@
               <div class="panel-heading">
                                     <h4 class="panel-title">Bienvenue </h4>
                                     <span class="pull-right">
-                                         <i id="open" class="fa fa-lg   fa-exchange"></i>
-                                         <i style="margin-left:10px" id="close" class="fa fa-lg   fa-close"></i>
+                                         <i id="open" class="fa fa-lg   fa-window-maximize"></i>
+                                         <i style="margin-left:20px" id="close" class="fa fa-lg   fa-window-restore"></i>
                                     </span>
                                 </div>
                 <div class="panel-body" style="display: block;">                
