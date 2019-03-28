@@ -326,7 +326,7 @@ class EmailController extends Controller
 
 
                    $path2= '/Emails/'.$id.'/'.$nom ;
-                    $type=  $oAttachment->getMimeType();
+                    $type=  $oAttachment->getExtension();
                     $attach = new Attachement([
                         'nom' => $nom,
                         'type' => $type,
