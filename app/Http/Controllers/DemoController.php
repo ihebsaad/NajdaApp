@@ -10,7 +10,12 @@ use App\Dossier ;
 class DemoController extends Controller
 {
     //for create controller - php artisan make:controller AutocompleteController
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
+    
     function index()
     {
 
