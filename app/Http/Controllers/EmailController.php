@@ -481,7 +481,7 @@ class EmailController extends Controller
             ->setPdf($path )
             ->text();
         $facturation='';
-        $string='applications';
+        $string='sdfsdfsdfsd';
         if(strpos($text,$string)!==false)
         {
             $facturation=$string;
