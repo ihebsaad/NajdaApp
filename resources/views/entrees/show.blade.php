@@ -17,10 +17,10 @@ use App\Http\Controllers\AttachementsController;
 @section('content')
 
 <div class="panel panel-default panelciel " style="">
+
         <div class="panel-heading" style="">
-                <a data-toggle="collapse" data-parent="#accordion-cat-1" href="#emailhead" class="" aria-expanded="true">
                     <div class="row">
-                        <div class="col-sm-4 col-md-4 col-lg-4"style=" padding-left: 0px; ">
+                        <div class="col-sm-4 col-md-4 col-lg-4"style=" padding-left: 0px;color:black;font-weight: bold ">
                             <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;">Sujet :</label> {{ $entree->sujet }}</h4>
                         </div>
                         <div class="col-sm-8 col-md-8 col-lg-8" style="padding-right: 0px;">
@@ -31,7 +31,7 @@ use App\Http\Controllers\AttachementsController;
                                 <a href="#" class="btn btn-primary btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Enregistrer les commentaires et TAGS" > 
                                   <span class="fa fa-fw fa-save"></span> Sauvegarder
                                 </a>
-                                <button class="btn btn-sm btn-default"><i class="fa fa-fw fa-square-o"></i></button>
+                                <button class="btn btn-sm btn-default"><i class="fa fa-fw fa-square"></i></button>
                                 <button class="btn btn-sm btn-default"><i class="fa fa-fw fa-times removepanel clickable"></i></button>
                             </div>
                         </div>
@@ -53,9 +53,9 @@ use App\Http\Controllers\AttachementsController;
             </div>
         </div>
 </div>
-<div class="panel panel-default panelciel " style="">
-        <div class="panel-heading" style="">
-                <a data-toggle="collapse" data-parent="#accordion-cat-1" href="#emailcontent" class="" aria-expanded="true">
+<div class="panel panel-default panelciel " >
+        <div class="panel-heading" style="cursor:pointer" data-toggle="collapse" data-parent="#accordion-cat-1" href="#emailcontent" class="" aria-expanded="true">
+                <a >
                     <div class="row">
                         <div class="col-sm-6 col-md-6 col-lg-6"style=" padding-left: 0px; ">
                             <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;">Contenu</h4>
@@ -85,8 +85,8 @@ use App\Http\Controllers\AttachementsController;
                             @endfor
                         @endif
                     </ul>
-                    <div id="myTabContent" class="tab-content" style="padding:10px;padding-top:20px;background: #eee">
-                                        <div class="tab-pane fade active in" id="mailcorps">
+                    <div id="myTabContent" class="tab-content" style="padding:10px;padding-top:20px;background: #ffffff">
+                                        <div class="tab-pane fade active in" id="mailcorps" style="min-height: 350px;">
                                             <p style="line-height: 25px;"><?php  $content= $entree->contenu; ?>
                                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
@@ -135,6 +135,7 @@ use App\Http\Controllers\AttachementsController;
                                                             @break
 
                                                         @case('pdf')
+                                                    {{$att->facturation}}
                                                             <iframe src="{{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
                                                             @break
 
@@ -193,4 +194,38 @@ use App\Http\Controllers\AttachementsController;
         }
       }
     </script>
+
+<script src="http://code.jquery.com/ui/1.8.0/jquery-ui.min.js"></script>
+<script src="{{ URL::asset('resources/assets/js/spectrum.js') }}"></script>
+<script src="{{ URL::asset('resources/assets/js/jquery.marker.js') }}"></script>
+
+<link rel="stylesheet" href="{{ URL::asset('resources/assets/css/spectrum.css') }}">
+<script>
+
+
+    $( document ).ready(function() {
+
+
+        var target = $('#myTabContent');
+
+        target.marker({
+            //overlap:true,
+            data : function(e, data) {
+                console.log(JSON.stringify(data))
+            },
+            debug : function(e, data) {
+                //	console.log(data)
+            }
+        });
+
+    });
+    $('#data').on('click',   function() {
+
+        target.marker('data');
+
+
+    });
+
+</script>
+
 @endsection

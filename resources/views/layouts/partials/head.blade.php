@@ -57,45 +57,7 @@
 $urlnotif=$urlapp.'/entrees/show/' ;
 $urlnotif = preg_replace('/\s+/', '', $urlnotif);
 ?>
- <script language="javascript">
 
-     var clock = 0;
-     var interval_msec = 1000;
-
-     // ready
-
-     $(function() {
-         // set timer
-         clock = setTimeout("UpdateClock()", interval_msec);
-     });
-
-     // UpdateClock
-     function UpdateClock(){
-
-         // clear timer
-         clearTimeout(clock);
-
-         var dt_now = new Date();
-         var hh	= dt_now.getHours();
-         var mm	= dt_now.getMinutes();
-         var ss	= dt_now.getSeconds();
-
-         if(hh < 10){
-             hh = "0" + hh;
-         }
-         if(mm < 10){
-             mm = "0" + mm;
-         }
-         if(ss < 10){
-             ss = "0" + ss;
-         }
-         $(".time").html( hh + ":" + mm );
-
-         // set timer
-     //    clock = setTimeout("UpdateClock()", interval_msec);
-
-     }
- </script>
 <script>
 
     $(document).ready(function(){

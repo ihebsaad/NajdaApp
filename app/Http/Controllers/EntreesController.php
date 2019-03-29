@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Entree ;
 use App\Dossier ;
+use Spatie\PdfToText\Pdf;
+
 class EntreesController extends Controller
 {
 

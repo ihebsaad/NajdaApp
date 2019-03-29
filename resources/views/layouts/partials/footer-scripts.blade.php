@@ -13,14 +13,12 @@
     <!--<script src="{{  URL::asset('public/js/jquery-ui/jquery.ui.min.js') }}" type="text/javascript"></script>-->
 
     <script src="{{  URL::asset('public/js/bootstrap.min.js') }}" type="text/javascript"></script>
-    <script src="{{  URL::asset('public/js/custom_js/app.js') }}" type="text/javascript"></script>
     <script src="{{  URL::asset('public/js/custom_js/metisMenu.js') }}" type="text/javascript"></script>
     <script src="{{  URL::asset('public/js/jquery-slimscroll/js/jquery.slimscroll.min.js') }}" type="text/javascript"></script>
-    <script src="{{  URL::asset('public/js/custom_js/rightside_bar.js') }}" type="text/javascript"></script>
-    <script src="{{  URL::asset('public/js/custom_js/fixed_layout.js') }}" type="text/javascript"></script>
     <script src="{{  URL::asset('public/js/custom_js/owl.carousel.min.js') }}" type="text/javascript"></script>
     <script src="{{  URL::asset('public/js/custom_js/datetime.js') }}" type="text/javascript"></script>
     <script src="{{  URL::asset('public/js/jstree/jstree.min.js') }}" type="text/javascript"></script>
+
 
     <script type="text/javascript">
         $('.menu-icon').bind('click', function() {
@@ -33,7 +31,8 @@
     @yield('footer_scripts')
    <!--<script src="{{  URL::asset('public/js/nestable-list/jquery.nestable.js') }}"></script>-->
    <!--<script src="{{ asset('assets/js/custom_js/nestable.js') }}" type="text/javascript"></script>-->
-   <script type="text/javascript">$(function() {
+   <script type="text/javascript">
+       $(function() {
         /*$('#nestable_list_3').nestable();*/
 
         $('.owl-carousel').owlCarousel({
@@ -57,8 +56,7 @@
               items: 10
             }
           }
-        })
-
+        });
         $.jstree.defaults.core.themes.variant = "large";
          // 6 create an instance when the DOM is ready
         /*$("#jstree").jstree({

@@ -10,6 +10,7 @@ use App\Entree ;
 use App\Dossier ;
 use App\Attachement ;
 use Mail;
+use Spatie\PdfToText\Pdf;
 
 
 class EmailController extends Controller
@@ -276,14 +277,15 @@ class EmailController extends Controller
             $sujet=$oMessage->getSubject()  ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
-            $from= $oMessage->getFrom()[0]->mail;
+          //  $from= $oMessage->getFrom()[0]->mail;
+            $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
             $mailid=$oMessage->getUid();
 
             //Move the current Message to 'INBOX.read'
             if ($oMessage->moveToFolder('read') == true) {
                 // get last id
-                $lastid= DB::table('entrees')->order_by('id', 'desc')->first();
+                $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
                 // message moved
                 $entree = new Entree([
                     'emetteur' => $from,
@@ -307,7 +309,7 @@ class EmailController extends Controller
                 $aAttachment = $oMessage->getAttachments();
 
                 $aAttachment->each(function ($oAttachment) use ($id){
-                    $path= storage_path().'/Emails/';
+                    $path= storage_path()."\\Emails\\";
                     /** @var \Webklex\IMAP\Attachment $oAttachment */
                     if (!file_exists($path.$id)) {
                         mkdir($path.$id, 0777, true);
@@ -316,25 +318,32 @@ class EmailController extends Controller
                     $oAttachment->save($path.$id);
                     // save in DB
 
-
+                    
                     $nom = $oAttachment->getName();
-                    /*$attachment_encodage = mb_detect_encoding($oAttachment->getName());
 
-                    if( $attachment_encodage != 'UTF-8')
-                    {
-                        $nom = iconv_mime_decode($nom, 0, "UTF-8");
-                    }*/
-                   // $nom = $oMessage->decodeString($oMessage->convertEncoding($nom, $oMessage->getEncoding($nom)), 'UTF-7');
-
-
-
+                // verifier si l'attachement pdf contient des mots de facturation
+/*
+                    $path=$path.$id."\\".$nom;
+                    $path=realpath($path);
+                          $text = (new Pdf())
+                             ->setPdf($path )
+                                ->text();
+                          $facturation='';
+                               $string='applications';
+                                 if(strpos($text,$string)!==false)
+                                 {
+                                     $facturation=$string;
+                                  }
+*/
                    $path2= '/Emails/'.$id.'/'.$nom ;
+
                     $type=  $oAttachment->getExtension();
                     $attach = new Attachement([
                         'nom' => $nom,
                         'type' => $type,
                          'path'=> $path2,
                          'parent'=> $id,
+                  //      'facturation'=> $facturation,
 
                     ]);
 
@@ -342,7 +351,7 @@ class EmailController extends Controller
 
                 });
                 // récupérer last id une autre fois pour vérifier l'enregistrement
-                $lastid2= DB::table('entrees')->order_by('id', 'desc')->first();
+                $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
                 // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
                 if($lastid==$lastid2)
                 {
@@ -359,8 +368,6 @@ class EmailController extends Controller
        // return view('emails.check');
 
     } /// end check
-
-
 
 
 
@@ -452,6 +459,7 @@ class EmailController extends Controller
 
     function test()
     {
+        /*
       if(\Gate::allows('isAdmin'))
       {
           $dossiers = Dossier::all();
@@ -463,7 +471,23 @@ class EmailController extends Controller
           return redirect('/')->with('success', 'droits insuffisants');
 
 
-      }
+      }*/
+
+        $path=storage_path()."\\Emails\\".'50\wordpress.pdf';
+        $path=realpath($path);
+        $text = (new Pdf())
+            ->setPdf($path )
+            ->text();
+        $facturation='';
+        $string='applications';
+        if(strpos($text,$string)!==false)
+        {
+            $facturation=$string;
+            echo  'Facturation'.$facturation;
+        }
+
+        return view('emails.test', ['dossiers' => $dossiers]);
+
     }
 
 

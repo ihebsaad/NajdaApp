@@ -58,7 +58,7 @@
 
 
                     {{-- User Account --}}
-                    @include('layouts._user_menu')
+                    @include('layouts.partials._user_menu')
 
                 </ul>
         </div>

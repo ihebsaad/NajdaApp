@@ -45,6 +45,24 @@ var language = window.navigator.language;
         $('#ndate').attr('data-year',year);
         setInterval(function(){
         myDate = new Date();
+		
+		
+		      var dt_now = new Date();
+         var hh	= dt_now.getHours();
+         var mm	= dt_now.getMinutes();
+         var ss	= dt_now.getSeconds();
+
+         if(hh < 10){
+             hh = "0" + hh;
+         }
+         if(mm < 10){
+             mm = "0" + mm;
+         }
+         if(ss < 10){
+             ss = "0" + ss;
+         }
+      //   $(".time").html( hh + ":" + mm );
+		 
         //+myDate.getDate()
-        $('.time').html(myDate.getHours() + ":" + myDate.getMinutes() + "<b>" + myDate.getSeconds()+"</b>");
+        $('.time').html(hh + ":" + mm + "<b>" + ss +"</b>");
         }, 1000);
