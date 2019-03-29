@@ -145,9 +145,12 @@ text-overflow: ellipsis;}
 }
 
     #countryList ul li{
-        min-width:300px;
+        min-width:280px;
+        padding-bottom: 10px
     }
-
+    #countryList ul li > div > a :hover{ 
+    background: #e8e8e8;
+    }
 .search-container {
   width: 300px;
   /*display: block;*/
