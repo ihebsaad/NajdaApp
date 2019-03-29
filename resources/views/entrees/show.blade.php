@@ -87,7 +87,7 @@ use App\Http\Controllers\AttachementsController;
                     </ul>
                     <div id="myTabContent" class="tab-content" style="padding:10px;padding-top:20px;background: #ffffff">
                                         <div class="tab-pane fade active in" id="mailcorps" style="min-height: 350px;">
-                                            <p style="line-height: 25px;"><?php  $content= $entree->contenu; ?>
+                                            <p id="mailtext" style="line-height: 25px;"><?php  $content= $entree->contenu; ?>
                                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
@@ -195,7 +195,7 @@ use App\Http\Controllers\AttachementsController;
       }
     </script>
 
-<script src="http://code.jquery.com/ui/1.8.0/jquery-ui.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="{{ URL::asset('resources/assets/js/spectrum.js') }}"></script>
 <script src="{{ URL::asset('resources/assets/js/jquery.marker.js') }}"></script>
 
