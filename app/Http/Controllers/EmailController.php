@@ -475,7 +475,7 @@ class EmailController extends Controller
       }*/
 
         $path=storage_path()."/Emails/".'50/wordpress.pdf';
-        echo 'Path : '. $path;
+      //  echo 'Path : '. $path;
         $path=realpath($path);
         $text = (new Pdf())
             ->setPdf($path )
@@ -485,10 +485,10 @@ class EmailController extends Controller
         if(strpos($text,$string)!==false)
         {
             $facturation=$string;
-            echo  'Facturation'.$facturation;
+           // echo  'Facturation'.$facturation;
         }
 
-        return view('emails.test', ['dossiers' => $dossiers]);
+        return view('emails.test', ['dossiers' => $dossiers,'facturation'=>$facturation]);
 
     }
 
