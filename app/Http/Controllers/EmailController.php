@@ -318,7 +318,7 @@ class EmailController extends Controller
                     $oAttachment->save($path.$id);
                     // save in DB
 
-                    
+
                     $nom = $oAttachment->getName();
 
                 // verifier si l'attachement pdf contient des mots de facturation
@@ -474,6 +474,7 @@ class EmailController extends Controller
       }*/
 
         $path=storage_path()."\\Emails\\".'50\wordpress.pdf';
+        echo 'Path : '. $path;
         $path=realpath($path);
         $text = (new Pdf())
             ->setPdf($path )
