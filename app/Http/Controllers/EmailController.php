@@ -459,10 +459,11 @@ class EmailController extends Controller
 
     function test()
     {
+        $dossiers = Dossier::all();
+
         /*
       if(\Gate::allows('isAdmin'))
       {
-          $dossiers = Dossier::all();
 
           return view('emails.test', ['dossiers' => $dossiers]);
        }
@@ -473,7 +474,7 @@ class EmailController extends Controller
 
       }*/
 
-        $path=storage_path()."\\Emails\\".'50\wordpress.pdf';
+        $path=storage_path()."/Emails/".'50/wordpress.pdf';
         echo 'Path : '. $path;
         $path=realpath($path);
         $text = (new Pdf())
