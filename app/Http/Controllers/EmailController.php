@@ -309,7 +309,7 @@ class EmailController extends Controller
                 $aAttachment = $oMessage->getAttachments();
 
                 $aAttachment->each(function ($oAttachment) use ($id){
-                    $path= storage_path()."\\Emails\\";
+                    $path= storage_path()."/Emails/";
                     /** @var \Webklex\IMAP\Attachment $oAttachment */
                     if (!file_exists($path.$id)) {
                         mkdir($path.$id, 0777, true);
@@ -322,19 +322,39 @@ class EmailController extends Controller
                     $nom = $oAttachment->getName();
 
                 // verifier si l'attachement pdf contient des mots de facturation
-/*
-                    $path=$path.$id."\\".$nom;
+                    if ( App::environment() === 'production') {
+
+                    $path=$path.$id."/".$nom;
                     $path=realpath($path);
                           $text = (new Pdf())
                              ->setPdf($path )
                                 ->text();
                           $facturation='';
-                               $string='applications';
-                                 if(strpos($text,$string)!==false)
+
+                                 if(strpos($text,'facturation')!==false)
                                  {
-                                     $facturation=$string;
+                                     $facturation='facturation';
+
                                   }
-*/
+                        if(strpos($text,'invoice')!==false)
+                        {
+                            $facturation=$facturation.' '.'invoice';
+                        }
+
+                        if(strpos($text,'plafond')!==false)
+                        {
+                            $facturation=$facturation.' '.'plafond';
+                        }
+
+                        if(strpos($text,'gop')!==false)
+                        {
+                            $facturation=$facturation.' '.'gop';
+                        }
+
+
+                    }
+
+
                    $path2= '/Emails/'.$id.'/'.$nom ;
 
                     $type=  $oAttachment->getExtension();

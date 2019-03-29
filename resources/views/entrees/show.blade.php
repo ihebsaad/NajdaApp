@@ -135,7 +135,16 @@ use App\Http\Controllers\AttachementsController;
                                                             @break
 
                                                         @case('pdf')
-                                                    {{$att->facturation}}
+                                                    <?php
+
+                                                      $fact=$att->facturation;
+                                                    if ($fact!='')
+                                                    {
+                                                        echo '<span class="pdfotice"> Ce document contient le(s) mots important(s) suivant(s) : '.$fact.'</span>';
+                                                    }
+
+                                                    ?>
+
                                                             <iframe src="{{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
                                                             @break
 
