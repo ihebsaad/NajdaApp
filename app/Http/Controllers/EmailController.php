@@ -352,7 +352,7 @@ class EmailController extends Controller
                         }
 
 
-                    }
+                    } // end if
 
 
                    $path2= '/Emails/'.$id.'/'.$nom ;
@@ -363,7 +363,7 @@ class EmailController extends Controller
                         'type' => $type,
                          'path'=> $path2,
                          'parent'=> $id,
-                  //      'facturation'=> $facturation,
+                         'facturation'=> $facturation,
 
                     ]);
 
