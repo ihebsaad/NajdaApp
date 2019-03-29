@@ -320,8 +320,10 @@ class EmailController extends Controller
 
 
                     $nom = $oAttachment->getName();
+                    $facturation='';
 
-                // verifier si l'attachement pdf contient des mots de facturation
+
+                    // verifier si l'attachement pdf contient des mots de facturation
                     if ( App::environment() === 'production') {
 
                     $path=$path.$id."/".$nom;
@@ -329,7 +331,6 @@ class EmailController extends Controller
                           $text = (new Pdf())
                              ->setPdf($path )
                                 ->text();
-                          $facturation='';
 
                                  if(strpos($text,'facturation')!==false)
                                  {
