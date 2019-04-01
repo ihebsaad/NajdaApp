@@ -300,7 +300,7 @@ class EmailController extends Controller
 
                 $entree->save();
                 // Dispatching
-                disp();
+                $this->disp();
                 $id=$entree->id;
 
                 if($storeid==false){
