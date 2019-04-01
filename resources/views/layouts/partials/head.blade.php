@@ -111,15 +111,10 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
                     var id=parseInt((data));
                     if (id>0)
                     { dispatchnow();
-                         window.showAlert = function(){
-                                    alertify.alert('<a href="<?php  print $urlnotif;?>'+id+'">Voir notification</a>');
-                                   // alertify.alert('<a href="http://localhost/najdaapp/entrees/show/'+id+'">Voir notification</a>');
-
-                        }
-
-//works with modeless too
-                        alertify.alert().setting('modal', false).set({'label': 'voir ultérieurement!'}).setHeader('<em> Nouvelle Notification</em> '); ; ;
-                        window.showAlert();
+                         
+                        $('#jstree').jstree().create_node("<?php  print $urlnotif;?>"+id ,  { "id" : "ajson5", "text" : "new" }, "last", function(){
+                            alert("done");
+                         });
                     }
                     //Send another request in 10 seconds.
                     setTimeout(function(){
