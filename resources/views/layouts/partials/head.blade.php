@@ -52,7 +52,7 @@
 
     if (App::environment('local')) {
         // The environment is local
-        $urlapp='http://localhost/najdaapp';
+        $urlapp='http://localhost:8080/NajdaApp';
     }
 $urlnotif=$urlapp.'/entrees/show/' ;
 $urlnotif = preg_replace('/\s+/', '', $urlnotif);
@@ -111,23 +111,9 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
                     var id=parseInt((data));
                     if (id>0)
                     { 
-                      $('#jstnn').jstree({ 
-                        'core' : {
-                            'check_callback' : function (op, node, par, pos, more) {
-                                  if(more && more.dnd) {
-                                      return more.pos !== "i" && par.id == node.parent;
-                                  }
-                                  return true;
-                              },
-                            'data' : [
-                               { "id" : "nf", "parent" : "#", "text" : "<b>"+id+"</b> (NEW)", "type" : "default" },
-                            ]
-                        },
-                        "types" : {
-                            "default" : { "icon" : "glyphicon glyphicon-folder-open" }
-                        },
-                        "plugins" : ["dnd", "types"]
-                    });
+                      $( ".right" ).hide( "slow", function() {
+                            // Animation complete.
+                        });
                         
                     }
                     //Send another request in 10 seconds.
