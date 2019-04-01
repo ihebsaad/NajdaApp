@@ -111,8 +111,8 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
                     var id=parseInt((data));
                     if (id>0)
                     { 
-                      $('#jstree').jstree().create_node('#' ,  { "id" : "ajson5", "text" : "newly added" }, "last", function(){
-                        alert("done");
+                      $('#jstree').jstree().create_node("<?php  print $urlnotif;?>"+id+"" ,  { "id" : "ajson5", "text" : ""+id+" (new)" }, "last", function(){
+                        $(this).css("background-color", "red");
                      });
                         
                     }
