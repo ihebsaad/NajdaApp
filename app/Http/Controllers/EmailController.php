@@ -12,6 +12,7 @@ use App\Attachement ;
 use Mail;
 use Spatie\PdfToText\Pdf;
 use App;
+Use Redirect;
 
 class EmailController extends Controller
 {
@@ -470,9 +471,45 @@ class EmailController extends Controller
              }
          }
 
-     }) ){
+       /*  // check for failures
+         if (Mail::failures()) {
+             echo 'error';
 
-          redirect('/emails/boite')->with('success', 'Envoyé avec succès ');
+              redirect('/emails/sending')->with('error', 'Non Envoyé ! ');
+         }
+         else{
+
+              redirect('/emails/sending')->with('success', 'Envoyé avec succès ');
+
+         }*/
+
+
+     $urlapp=env('APP_URL');
+
+    if (App::environment('local')) {
+        // The environment is local
+        $urlapp='http://localhost/najdaapp';
+    }
+    $urlsending=$urlapp.'/emails/sending';
+       if (Mail::failures()) {
+         //     echo ('<script> window.location.href = "http://localhost/najdaapp/emails/sending";</script>') ;
+         //    return redirect('http://localhost/najdaapp/emails/sending')->with('fail', ' Echec ! ');
+
+
+         }else{
+           //  return redirect('http://localhost/najdaapp/emails/sending')->with('success', '  Envoyé ! ');
+            echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
+                return redirect($urlsending)->with('success', '  Envoyé ! ');
+
+
+         }
+
+
+     }) ){
+      //   redirect('/emails/sending')->with('success', '  Envoyé ! ');
+
+
+         // return Redirect::back()->with('success', 'Envoyé avec succès ');
 
 
      }

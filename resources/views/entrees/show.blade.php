@@ -237,6 +237,6 @@ use App\Http\Controllers\AttachementsController;
 
 </script>
 <style>
-.pdfnotice{color:red;font-weight: 600;}
+.pdfnotice{color:red;font-weight: 600;margin-top:10px;margin-bottom:10px;}
     </style>
 @endsection

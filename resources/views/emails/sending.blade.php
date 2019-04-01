@@ -1,19 +1,27 @@
 @extends('layouts.mainlayout')
 
 @section('content')
+
+    @if (!empty( Session::get('success') ))
+        <div class="alert alert-success">
+
+        {{ Session::get('success') }}
+        </div>
+
+    @endif
 <form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data">
     <div class="form-group">
         {{ csrf_field() }}
         <label for="emetteur">destinataire:</label>
-        <input id="emetteur" type="text" class="form-control" name="destinataire"/>
+        <input id="emetteur" type="email" class="form-control" name="destinataire" required />
     </div>
     <div class="form-group">
         <label for="sujet">sujet :</label>
-        <input id="sujet" type="text" class="form-control" name="sujet"/>
+        <input id="sujet" type="text" class="form-control" name="sujet" required/>
     </div>
     <div class="form-group">
         <label for="contenu">contenu:</label>
-        <textarea id="contenu" type="text" class="form-control" name="contenu" ></textarea>
+        <textarea style="min-height: 350px;" id="contenu" type="text" class="form-control" name="contenu" required ></textarea>
     </div>
     <div class="form-group form-group-default">
         <label>Attachements</label>
