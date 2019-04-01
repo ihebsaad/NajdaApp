@@ -112,9 +112,8 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
                     if (id>0)
                     { dispatchnow();
                          
-                        $('#jstree').jstree().create_node("#" ,  { "id" : "ajson5", "text" : "new" }, "last", function(){
                             alert("done");
-                         });
+                        
                     }
                     //Send another request in 10 seconds.
                     setTimeout(function(){
