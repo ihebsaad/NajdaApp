@@ -36,8 +36,6 @@
     <!-- end of page level js -->
     <!-- begin page level js -->
     @yield('footer_scripts')
-   <!--<script src="{{  URL::asset('public/js/nestable-list/jquery.nestable.js') }}"></script>-->
-   <!--<script src="{{ asset('assets/js/custom_js/nestable.js') }}" type="text/javascript"></script>-->
    <script type="text/javascript">
        $(function() {
         /*$('#nestable_list_3').nestable();*/
@@ -65,54 +63,27 @@
           }
         });
         $.jstree.defaults.core.themes.variant = "large";
-         // 6 create an instance when the DOM is ready
-        /*$("#jstree").jstree({
-            "types" : {
-              "default" : {
-                "icon" : "glyphicon glyphicon-flash"
-              },
-              "foldernotifs" : {
-                "icon" : "glyphicon glyphicon-ok"
-              }
-            },
-            "plugins" : [ "types" ]
-          });
-
-        // 7 bind to events triggered on the tree
-        $('#jstree').on("changed.jstree", function (e, data) {
-          console.log(data.selected);
-        });
 
         // 8 interact with the tree - either way is OK
-        $('#btntree').on('click', function () {
+        /*$('#btntree').on('click', function () {
           $('#jstree').jstree(true).select_node('child_node_1');
           $('#jstree').jstree('select_node', 'child_node_1');
           $.jstree.reference('#jstree').select_node('child_node_1');
         });*/
         $('#jstree').jstree({ 
             'core' : {
-                'check_callback' : true,
+                'check_callback' : function (op, node, par, pos, more) {
+                      if(more && more.dnd) {
+                          return more.pos !== "i" && par.id == node.parent;
+                      }
+                      return true;
+                  },
                 'data' : [
-                   { "id" : "id-a1", "parent" : "#", "text" : "<b>19N00082</b> (BOUFALGA Kameleddine)", "type" : "default" },
-                   { "id" : "id-aa2", "parent" : "id-a1", "text" : "<span class='cutlongtext'><b>EMAIL</b> V/Réf(Y/Ref): PE281 - N/Réf(O/Ref): 19N00082</span>", "type" : "tremail" },
-                   { "id" : "id-aa3", "parent" : "id-a1", "text" : "Node A3", "type" : "trfax"}
-                ]
-            },
-            "types" : {
-                "default" : { "icon" : "glyphicon glyphicon-folder-open" },
-                "tremail" : { "icon" : "menu-icon fa fa-fw fa-envelope" },
-                "trfax" : { "icon" : "glyphicon glyphicon-print" }
-            },
-            "plugins" : ["dnd", "types"]
-        });
-
-        $('#jstreefld2').jstree({ 
-            'core' : {
-                'check_callback' : true,
-                'data' : [
-                   { "id" : "id-f2a1", "parent" : "#", "text" : "<b>19N00276</b> (TISSIER Marc)", "type" : "default" },
-                   { "id" : "id-f2aa2", "parent" : "id-f2a1", "text" : "<b>EMAIL</b> V/Réf(Y/Ref): PE281 - N/Réf(O/Ref): 19N00082", "type" : "tremail" },
-                   { "id" : "id-f2aa3", "parent" : "id-f2a1", "text" : "<b>EMAIL</b> V/Réf(Y/Ref): PE281 - N/Réf(O/Ref): 19N00082", "type" : "tremail"}
+                   { "id" : "nf-19N00082", "parent" : "#", "text" : "<b>19N00082</b> (BOUFALGA Kameleddine)", "type" : "default" },
+                   { "id" : "id-aa2", "parent" : "nf-19N00082", "text" : "<span class='cutlongtext'><b>EMAIL</b> nouvelle demande 19N00082</span>", "type" : "tremail" },
+                   { "id" : "id-aa3", "parent" : "nf-19N00082", "text" : "<span class='cutlongtext'><b>FAX</b> rapport 19N00082</span>", "type" : "trfax"},
+                   { "id" : "nf-19N00275", "parent" : "#", "text" : "<b>19N00275</b> (FRANCE PILLOIS Maxime)", "type" : "default" },
+                   { "id" : "nf-19N00276", "parent" : "#", "text" : "<b>19N00276</b> (TISSIER Marc)", "type" : "default" },
                 ]
             },
             "types" : {
