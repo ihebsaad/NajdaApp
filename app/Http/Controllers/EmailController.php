@@ -357,13 +357,13 @@ class EmailController extends Controller
                     } // end if
 
 
-                  // $path2= '/Emails/'.$id.'/'.$nom ;
+                   $path2= '/Emails/'.$id.'/'.$nom ;
 
                     $type=  $oAttachment->getExtension();
                     $attach = new Attachement([
                         'nom' => $nom,
                         'type' => $type,
-                     //    'path'=> $path2,
+                        'path'=> $path2,
                          'parent'=> $id,
                          'facturation'=> $facturation,
 
