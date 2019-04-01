@@ -140,7 +140,7 @@ use App\Http\Controllers\AttachementsController;
                                                       $fact=$att->facturation;
                                                     if ($fact!='')
                                                     {
-                                                        echo '<span class="pdfotice"> Ce document contient le(s) mots important(s) suivant(s) : <b>'.$fact.'</b></span>';
+                                                        echo '<span class="pdfnotice"> Ce document contient le(s) mots important(s) suivant(s) : <b>'.$fact.'</b></span>';
                                                     }
 
                                                     ?>
@@ -237,6 +237,6 @@ use App\Http\Controllers\AttachementsController;
 
 </script>
 <style>
-.pdfotice{color:red;font-weight: 600;}
+.pdfnotice{color:red;font-weight: 600;}
     </style>
 @endsection

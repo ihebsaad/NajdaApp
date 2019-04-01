@@ -299,7 +299,8 @@ class EmailController extends Controller
                 ]);
 
                 $entree->save();
-
+                // Dispatching
+                disp();
                 $id=$entree->id;
 
                 if($storeid==false){
