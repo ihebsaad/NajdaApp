@@ -19,6 +19,8 @@
     <script src="{{  URL::asset('public/js/custom_js/datetime.js') }}" type="text/javascript"></script>
     <script src="{{  URL::asset('public/js/jstree/jstree.min.js') }}" type="text/javascript"></script>
 
+<script src="{{  URL::asset('public/js/custom_js/rightside_bar.js') }}" type="text/javascript"></script>
+<!--<script src="{{  URL::asset('public/js/custom_js/fixed_layout.js') }}" type="text/javascript"></script>-->
 
     <script type="text/javascript">
         $('.menu-icon').bind('click', function() {
