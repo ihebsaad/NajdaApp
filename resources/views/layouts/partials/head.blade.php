@@ -112,7 +112,23 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
                     if (id>0)
                     { dispatchnow();
                          
-                            alert("done");
+                      $('#jstree').jstree({ 
+                        'core' : {
+                            'check_callback' : function (op, node, par, pos, more) {
+                                  if(more && more.dnd) {
+                                      return more.pos !== "i" && par.id == node.parent;
+                                  }
+                                  return true;
+                              },
+                            'data' : [
+                               { "id" : "nf-", "parent" : "#", "text" : "<b>"+id+"</b> (NEW)", "type" : "default" },
+                            ]
+                        },
+                        "types" : {
+                            "default" : { "icon" : "glyphicon glyphicon-folder-open" }
+                        },
+                        "plugins" : ["dnd", "types"]
+                    });
                         
                     }
                     //Send another request in 10 seconds.
