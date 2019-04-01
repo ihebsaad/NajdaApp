@@ -14,6 +14,7 @@
 
 Route::get('/', array('as' => 'home','uses' => 'DemoController@index'));
 Route::post('/demo/fetch', 'DemoController@fetch')->name('demo.fetch');
+Route::post('/home/fetch', 'HomeController@fetch')->name('home.fetch');
 
 
 /*** Entrees **/

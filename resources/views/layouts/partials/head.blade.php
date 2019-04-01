@@ -69,7 +69,7 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
-                    url:"{{ route('demo.fetch') }}",
+                    url:"{{ route('home.fetch') }}",
                     method:"POST",
                     data:{query:query, _token:_token},
                     success:function(data){
@@ -129,10 +129,10 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
             });
         }
 
-     /*   function dispatch(){
+        function dispatch(){
             $.ajax({
                 type: "get",
-                url: "<?php // echo $urlapp; ?>/emails/disp",
+                url: "<?php echo $urlapp; ?>/emails/disp",
                 success:function(data)
                 {
                     //console.log the response
@@ -148,7 +148,7 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
                 function dispatchnow(){
             $.ajax({
                 type: "get",
-                url: "<?php // echo $urlapp; ?>/emails/disp",
+                url: "<?php echo $urlapp; ?>/emails/disp",
                 success:function(data)
                 {
                     //console.log the response
@@ -157,7 +157,7 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
                 }
             });
         }
-*/
+
         checkemails();
        // dispatch();
 
