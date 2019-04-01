@@ -110,9 +110,8 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
                     console.log(data);
                     var id=parseInt((data));
                     if (id>0)
-                    { dispatchnow();
-                         
-                      $('#jstree').jstree({ 
+                    { 
+                      $('#jstnn').jstree({ 
                         'core' : {
                             'check_callback' : function (op, node, par, pos, more) {
                                   if(more && more.dnd) {
@@ -121,7 +120,7 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
                                   return true;
                               },
                             'data' : [
-                               { "id" : "nf-", "parent" : "#", "text" : "<b>"+id+"</b> (NEW)", "type" : "default" },
+                               { "id" : "nf", "parent" : "#", "text" : "<b>"+id+"</b> (NEW)", "type" : "default" },
                             ]
                         },
                         "types" : {
