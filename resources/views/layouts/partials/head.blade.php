@@ -52,7 +52,7 @@
 
     if (App::environment('local')) {
         // The environment is local
-        $urlapp='http://localhost:8080/NajdaApp';
+        $urlapp='http://localhost/najdaapp';
     }
 $urlnotif=$urlapp.'/entrees/show/' ;
 $urlnotif = preg_replace('/\s+/', '', $urlnotif);
@@ -111,9 +111,9 @@ $urlnotif = preg_replace('/\s+/', '', $urlnotif);
                     var id=parseInt((data));
                     if (id>0)
                     { 
-                      $( ".right" ).hide( "slow", function() {
-                            // Animation complete.
-                        });
+                      $('#jstree').jstree().create_node('#' ,  { "id" : "ajson5", "text" : "newly added" }, "last", function(){
+                        alert("done");
+                     });
                         
                     }
                     //Send another request in 10 seconds.
