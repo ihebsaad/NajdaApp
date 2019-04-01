@@ -13,6 +13,9 @@ use Mail;
 use Spatie\PdfToText\Pdf;
 use App;
 Use Redirect;
+use App\Envoye ;
+
+use Illuminate\Support\Facades\Auth;
 
 class EmailController extends Controller
 {
@@ -448,22 +451,26 @@ class EmailController extends Controller
     function send (Request $request)
     {
         $to = $request->get('destinataire');
+        $cc = $request->get('cc');
+        $cci = $request->get('cci');
         $sujet = $request->get('sujet');
         $contenu = $request->get('contenu');
         $files = $request->file('files');
        $tot= count($_FILES['files']['name']);
 
-     if (   Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot) {
+     if (   Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci) {
             $message
                 ///  ->from('iheb@enterpriseesolutions.com', 'Houba')
               //  ->to('ihebsaad@gmail.com', 'iheb')
                 ->to($to)
+                ->cc($cc)
+                ->bcc($cci)
                 ->subject($sujet)
          ->setBody($contenu);
+         $count=0;
 
          if(isset($files )) {
-
-             foreach($files as $file) {
+             foreach($files as $file) {$count++;
                  $message->attach($file->getRealPath(), array(
                          'as' => $file->getClientOriginalName(), // If you want you can chnage original name to custom name
                          'mime' => $file->getMimeType())
@@ -497,7 +504,24 @@ class EmailController extends Controller
 
 
          }else{
-           //  return redirect('http://localhost/najdaapp/emails/sending')->with('success', '  Envoyé ! ');
+// save email sent
+
+           $par=Auth::id();
+           $envoye = new Envoye([
+               'emetteur' => 'test@najda-assistance.com', //env('emailenvoi')
+               'destinataire' => $to,
+               'par'=> $par,
+               'sujet'=> $sujet,
+               'contenu'=> $contenu,
+               'attachements'=> $count,
+               'cc'=> $cc,
+               'cci'=> $cci,
+               'statut'=> 1,
+
+           ]);
+
+           $envoye->save();
+
             echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
                 return redirect($urlsending)->with('success', '  Envoyé ! ');
 
