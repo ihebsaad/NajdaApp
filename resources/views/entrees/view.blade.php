@@ -12,7 +12,7 @@
 </div>
 <div class="form-group">
     <label for="contenu">contenu:</label>
-    <textarea id="contenu" type="text" class="form-control" name="contenu">
+    <textarea  type="text" class="form-control" name="contenu">
         {{ $entree->contenu }}
     </textarea>
 </div>

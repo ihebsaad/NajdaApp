@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Entree ;
 use App\Dossier ;
+use DB;
+
 
 class DossiersController extends Controller
 {
@@ -50,8 +52,8 @@ class DossiersController extends Controller
     public function store(Request $request)
     {
         $dossier = new Dossier([
-             'ref' => $request->get('ref'),
-             'type' => $request->get('type'),
+             'ref' =>trim( $request->get('ref')),
+             'type' => trim($request->get('type')),
              'affecte'=> $request->get('affecte'),
 
         ]);

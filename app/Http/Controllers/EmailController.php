@@ -22,6 +22,7 @@ class EmailController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
     }
 
 
@@ -292,8 +293,8 @@ class EmailController extends Controller
                 $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
                 // message moved
                 $entree = new Entree([
-                    'emetteur' => $from,
-                    'sujet' => $sujet,
+                    'emetteur' => trim($from),
+                    'sujet' => trim($sujet),
                     'contenu'=> utf8_encode($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -458,15 +459,14 @@ class EmailController extends Controller
         $files = $request->file('files');
        $tot= count($_FILES['files']['name']);
 
+
      if (   Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci) {
             $message
-                ///  ->from('iheb@enterpriseesolutions.com', 'Houba')
-              //  ->to('ihebsaad@gmail.com', 'iheb')
                 ->to($to)
-                ->cc($cc)
-                ->bcc($cci)
+              ->cc($cc  ?: [])
+                ->bcc($cci ?: [])
                 ->subject($sujet)
-         ->setBody($contenu);
+         ->setBody($contenu, 'text/html');
          $count=0;
 
          if(isset($files )) {
@@ -478,17 +478,6 @@ class EmailController extends Controller
              }
          }
 
-       /*  // check for failures
-         if (Mail::failures()) {
-             echo 'error';
-
-              redirect('/emails/sending')->with('error', 'Non Envoyé ! ');
-         }
-         else{
-
-              redirect('/emails/sending')->with('success', 'Envoyé avec succès ');
-
-         }*/
 
 
      $urlapp=env('APP_URL');

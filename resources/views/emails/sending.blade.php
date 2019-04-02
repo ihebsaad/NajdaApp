@@ -3,21 +3,61 @@
 @section('content')
     <link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
 
-    @if (!empty( Session::get('success') ))
-        <div class="alert alert-success">
-
-        {{ Session::get('success') }}
+    <div class="row">
+        <div class="col-sm-3 col-md-3">
+            <?php use \App\Http\Controllers\EnvoyesController;     ?>
+            <div class="panel">
+                <div class="panel-body pan">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li class="active">
+                            <a  href="{{ route('emails.sending') }}">
+                                <span class="badge pull-right"></span>
+                                <i class="fa fa-inbox fa-fw mrs"></i>
+                                Rédiger un email
+                            </a>
+                        </li>
+                        <li class=" ">
+                            <a   href="{{ route('boite') }}">
+                                <span class="badge pull-right"></span>
+                                <i class="fa fa-envelope-square fa-fw mrs"></i>
+                                Boite de réception
+                            </a>
+                        </li>
+                        <li class="">
+                            <a   href="{{ route('envoyes') }}">
+                                <i class="fa fa-paper-plane fa-fw mrs"></i>
+                                Envoyées
+                            </a>
+                        </li>
+                        <li>
+                            <a   href="{{ route('envoyes.brouillons') }}">
+                                <span class="badge badge-orange pull-right"><?php echo EnvoyesController::countbrouillons(); ?></span>
+                                <i class="fa fa-edit fa-fw mrs"></i>
+                                Brouillons
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
+        <div class="col-lg-9 ">
 
-    @endif
 <form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data">
     <div class="form-group">
         {{ csrf_field() }}
-        <label for="emetteur">destinataire:</label>
-        <input id="emetteur" type="email" class="form-control" name="destinataire" required />
-    </div>
-    <div class="form-group">
+        <label for="destinataire">destinataire:</label>
         <div class="row">
+        <div class="col-md-10">
+            <input id="destinataire" type="email" class="form-control" name="destinataire" required />
+        </div>
+            <div class="col-md-2">
+                <i id="emailso" onclick="visibilite('autres')" class="fa fa-lg fa-arrow-circle-down" style="margin-right:10px"></i>
+
+            </div>
+        </div>
+    </div>
+    <div class="form-group" style="margin-top:10px;">
+        <div id="autres" class="row"  style="display:none " >
             <div class="col-md-1">
                 <label for="cc">CC :</label>
             </div>
@@ -46,15 +86,32 @@
 
     <div class="form-group form-group-default">
         <label>Attachements</label>
-        <input id="file" type="file" name="files[]"   multiple>
+        <input class="btn btn-success fileinput-button" id="file" type="file" name="files[]"   multiple>
     </div>
 
-    <button  type="submit"  class="btn btn-primary">Envoyer</button>
+    <button  type="submit"  class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
+    <a id="broullion"   disabled class="btn btn-md btn-success btn_margin_top"><i class="fa fa-archive" aria-hidden="true"></i> Brouillon</a>
  </form>
 
+        </div>
+    </div>
 
 <script type="text/javascript">
+
+    function visibilite(divId)
+    {
+        //divPrecedent.style.display='none';
+        divPrecedent=document.getElementById(divId);
+        if(divPrecedent.style.display==='none')
+        {divPrecedent.style.display='block';	 }
+        else
+        {divPrecedent.style.display='none';     }
+    }
+
     $(document).ready(function(){
+
+
+
         $('#file').change(function(){
             var fp = $("#file");
             var lg = fp[0].files.length; // get length
@@ -71,8 +128,58 @@
                 }
             }
         });
-    });
+
+        // activation bouton Brouillon
+        $('#destinataire').change(function() {
+            var destinataire = $('#destinataire').val();
+
+            if ( destinataire != '') {
+                 $('#broullion').removeAttr('disabled');
+            }
+            else {
+                 $('#broullion').attr("disabled","disabled");
+
+            }
+            });
+        $('#sujet').change(function() {
+            var sujet = $('#sujet').val();
+
+            if ( sujet != '') {
+                $('#broullion').removeAttr('disabled');
+            }
+            else {
+                $('#broullion').attr("disabled","disabled");
+
+            }
+        });
+            // ajax save as draft
+        $('#broullion').click(function(){
+            var destinataire = $('#destinataire').val();
+            var cc = $('#cc').val();
+            var cci = $('#cci').val();
+            var sujet = $('#sujet').val();
+            var contenu = $('#contenu').val();
+             if ( (contenu != ''))
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('envoyes.saving') }}",
+                    method:"POST",
+                    data:{destinataire:destinataire,sujet:sujet,contenu:contenu,cc:cc,cci:cci, _token:_token},
+                    success:function(data){
+                        alert('Brouillon enregistré ');
+
+                    }
+                });
+            }else{
+                alert('ERROR');
+            }
+        });
+
+
+     });
 </script>
 
 
 @endsection
+

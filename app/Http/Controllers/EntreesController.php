@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Entree ;
 use App\Dossier ;
 use Spatie\PdfToText\Pdf;
+use DB;
 
 class EntreesController extends Controller
 {
@@ -62,9 +63,9 @@ class EntreesController extends Controller
     public function store(Request $request)
     {
         $entree = new Entree([
-            'destinataire' => $request->get('destinataire'),
-            'sujet' => $request->get('sujet'),
-            'contenu'=> $request->get('contenu'),
+            'destinataire' => trim($request->get('destinataire')),
+            'sujet' => trim($request->get('sujet')),
+            'contenu'=>trim( $request->get('contenu')),
 
         ]);
 
@@ -76,9 +77,9 @@ class EntreesController extends Controller
     public function saving(Request $request)
     {
         $entree = new Entree([
-            'emetteur' => $request->get('emetteur'),
-            'sujet' => $request->get('sujet'),
-            'contenu'=> $request->get('contenu'),
+            'emetteur' => trim($request->get('emetteur')),
+            'sujet' => trim($request->get('sujet')),
+            'contenu'=> trim($request->get('contenu')),
 
         ]);
 

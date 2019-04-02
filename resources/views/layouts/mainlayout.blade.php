@@ -13,7 +13,13 @@
 @include('layouts.partials.left')
 </div>
          <div id="mainc" class="column col-lg-6">
+    @if (!empty( Session::get('success') ))
+        <div class="alert alert-success">
 
+        {{ Session::get('success') }}
+        </div>
+
+    @endif
             <!-- Content -->
             <div class="panel panel-primary">
               <div class="panel-heading">

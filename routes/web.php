@@ -31,7 +31,7 @@ Route::get('/entrees/show/{id}', 'EntreesController@show');
 
 Route::post('/emails/send','EmailController@send');
 /* envoie d'un email */
-Route::get('/emails/sending','EmailController@sending');
+Route::get('/emails/sending','EmailController@sending')->name('emails.sending');
 Route::get('/emails', 'EmailController@index');
 /* unreaded emails and not checked */
 Route::get('/emails/inbox', 'EmailController@inbox');
@@ -44,6 +44,15 @@ Route::get('/emails/test', 'EmailController@test');
 Route::get('/emails/maboite', 'EmailController@maboite');
 Route::get('/emails/open/{id}', 'EmailController@open');
 
+
+
+/*** Envoyes : Email envoyées et brouillons  **/
+//Route::resource('/envoyes',  'EnvoyesController');
+Route::get('/envoyes', array('as' => 'envoyes','uses' => 'EnvoyesController@index'));
+Route::post('/envoyes/saving','EnvoyesController@saving')->name('envoyes.saving');
+Route::get('/envoyes/view/{id}', 'EnvoyesController@view');
+Route::get('/envoyes/show/{id}', 'EnvoyesController@show');
+Route::get('/envoyes/brouillons', 'EnvoyesController@brouillons')->name('envoyes.brouillons');
 
 
 /*** Dossiers **/
