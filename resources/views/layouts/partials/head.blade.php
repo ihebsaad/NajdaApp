@@ -1,7 +1,8 @@
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="eSolutions">
- 
+ <link rel="shortcut icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
+ <link rel="icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
     <meta charset="UTF-8">
     <title>
         @section('title')

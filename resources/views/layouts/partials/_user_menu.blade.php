@@ -31,7 +31,7 @@
             </a>
             </div>
             <div class="pull-right">
-                <a href="#">
+                <a   href="{{ route('logout') }}">
                     <i class="fa fa-fw fa-sign-out"></i>
                     Se déconnecter
                 </a>
