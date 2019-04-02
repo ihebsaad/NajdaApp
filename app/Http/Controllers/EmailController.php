@@ -16,6 +16,8 @@ Use Redirect;
 use App\Envoye ;
 
 use Illuminate\Support\Facades\Auth;
+use Twilio\Rest\Client as Client2;
+
 
 class EmailController extends Controller
 {
@@ -546,21 +548,25 @@ class EmailController extends Controller
 
       }*/
 
-        $path=storage_path()."/Emails/".'50/wordpress.pdf';
-      //  echo 'Path : '. $path;
-        $path=realpath($path);
-        $text = (new Pdf())
-            ->setPdf($path )
-            ->text();
-        $facturation='';
-        $string='sdfsdfsdfsd';
-        if(strpos($text,$string)!==false)
-        {
-            $facturation=$string;
-           // echo  'Facturation'.$facturation;
-        }
 
-        return view('emails.test', ['dossiers' => $dossiers,'facturation'=>$facturation]);
+// Your Account SID and Auth Token from twilio.com/console
+$sid = 'ACa8d667427a2a2d4dfa58e23851804943';
+$token = 'a0257ac989f3f41bc81cbc3bf22ec18f';
+$client = new Client2($sid, $token);
+
+// Use the client to do fun stuff like send text messages!
+$client->messages->create(
+// the number you'd like to send the message to
+    '+21654076876',
+    array(
+        // A Twilio phone number you purchased at twilio.com/console
+        'from' => '+15017250604',
+        // the body of the text message you'd like to send
+        'body' => 'Hey haythem! this is a test from twilio!'
+    )
+);
+
+        return view('emails.test', ['dossiers' => $dossiers]);
 
     }
 
