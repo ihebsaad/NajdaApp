@@ -14,7 +14,7 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer(['entrees.view','entrees.show','entrees.boite','emails.sending','home','boite','emails.inbox','envoyes','envoyes.view','envoyes.show','envoyes.brouillons','dossiers','dossiers.saving','dossiers.view'],'App\Http\ViewComposers\varforallComposer');
+        View::composer(['entrees.view','entrees.show','entrees.boite','emails.sending','home','boite','emails.inbox','envoyes','envoyes.view','envoyes.show','envoyes.brouillons','dossiers','dossiers.saving','dossiers.view','demo.test'],'App\Http\ViewComposers\varforallComposer');
     }
 
     /**
