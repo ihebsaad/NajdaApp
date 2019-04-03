@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use DB;
 use Spatie\Searchable\Search;
 use App\Dossier ;
+use App\Entree ;
 
 use Illuminate\Support\Facades\Auth;
 use Twilio\Rest\Client as Client2;
