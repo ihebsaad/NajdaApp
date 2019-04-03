@@ -83,11 +83,11 @@
                         </textarea>
                  </div>
 
-                <div class="form-group form-group-default">
+            <!--    <div class="form-group form-group-default">
                     <label>Attachements</label>
-                    <input class="btn btn-success fileinput-button" id="file" type="file" name="files[]"   multiple>
+                    <input class="btn btn-danger fileinput-button" id="file" type="file" name="files[]"   multiple>
                 </div>
-
+-->
              </form>
 
         </div>

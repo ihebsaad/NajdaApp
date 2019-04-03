@@ -59,13 +59,13 @@
     <div class="form-group" style="margin-top:10px;">
         <div id="autres" class="row"  style="display:none " >
             <div class="col-md-1">
-                <label for="cc">CC :</label>
+                <label for="cc">CC:</label>
             </div>
             <div class="col-md-4">
                 <input id="cc" type="text" class="form-control" name="cc"  />
             </div>
          <div class="col-md-1">
-            <label for="cci">CCI :</label>
+            <label for="cci">CCI:</label>
         </div>
         <div class="col-md-4">
             <input id="cci" type="text" class="form-control" name="cci"  />
@@ -86,7 +86,7 @@
 
     <div class="form-group form-group-default">
         <label>Attachements</label>
-        <input class="btn btn-success fileinput-button" id="file" type="file" name="files[]"   multiple>
+        <input class="btn btn-danger fileinput-button" id="file" type="file" name="files[]"   multiple>
     </div>
 
     <button  type="submit"  class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>

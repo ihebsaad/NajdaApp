@@ -88,7 +88,7 @@
 
                 <div class="form-group form-group-default">
                     <label>Attachements</label>
-                    <input id="file" type="file" name="files[]"   multiple>
+                    <input id="file" type="file" name="files[]" class="btn btn-danger fileinput-button"  multiple>
                 </div>
 
 				
