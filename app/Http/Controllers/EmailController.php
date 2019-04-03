@@ -16,7 +16,7 @@ Use Redirect;
 use App\Envoye ;
 
 use Illuminate\Support\Facades\Auth;
-use Twilio\Rest\Client as Client2;
+use Twilio\Rest\Client as Clien2t;
 use Twilio\Twiml;
 
 
@@ -536,6 +536,19 @@ class EmailController extends Controller
     {
         $dossiers = Dossier::all();
 
+
+        $entree = new Entree([
+            'emetteur' => 'sms',
+            'sujet' => 'sms',
+            'contenu'=> 'sms content' ,
+          //  'reception'=> $date,
+          //  'nb_attach'=> $nbattachs,
+            'type'=> 'sms',
+           'mailid'=> rand(50, 30000),
+
+        ]);
+        $entree->save();
+
         /*
       if(\Gate::allows('isAdmin'))
       {
@@ -555,14 +568,16 @@ class EmailController extends Controller
         // SENDING
 
 // Your Account SID and Auth Token from twilio.com/console
-$sid = 'ACa8d667427a2a2d4dfa58e23851804943';
-$token = 'a0257ac989f3f41bc81cbc3bf22ec18f';
 
 //test cred
         $sid = 'ACcd91fcfa5db064d6822d015be0c27a76';
         $token = 'a03a42703b75a79cb1cd370bc8b00926';
- 
-        $client = new Client2($sid, $token);
+        // global test num  +15005550006
+
+        //live cred
+$sid = 'ACa8d667427a2a2d4dfa58e23851804943';
+$token = 'a0257ac989f3f41bc81cbc3bf22ec18f';
+$client = new Client2($sid, $token);
 
 // Use the client to do fun stuff like send text messages!
 $client->messages->create(
@@ -570,7 +585,7 @@ $client->messages->create(
     '+21650658586',
     array(
         // A Twilio phone number you purchased at twilio.com/console
-        'from' => '+15005550006',
+        'from' => '+13342316588',
         // the body of the text message you'd like to send
         'body' => 'Hey iheb! this is a test from twilio!'
     )
