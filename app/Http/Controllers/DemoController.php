@@ -9,7 +9,7 @@ use Spatie\Searchable\Search;
 use App\Dossier ;
 
 use Illuminate\Support\Facades\Auth;
-use Twilio\Rest\Client as Clien2t;
+use Twilio\Rest\Client as Client2;
 use Twilio\Twiml;
 
 
