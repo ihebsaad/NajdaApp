@@ -16,7 +16,7 @@ Route::post('logout', 'AuthController@logout');
 
 Route::get('/', array('as' => 'home','uses' => 'HomeController@index'));
 Route::post('/home/fetch', 'HomeController@fetch')->name('home.fetch');
-Route::post('/demo/test', 'DemoController@test')->name('demo.test');
+Route::get('/demo/test', 'DemoController@test')->name('demo.test');
 
 
 /*** Entrees **/
