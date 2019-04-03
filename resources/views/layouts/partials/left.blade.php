@@ -57,7 +57,7 @@
                                                  @php
                                                     {{
                                                       //print_r($notifications);
-                                                      foreach ($notifications as $ntf) {
+                                                      /*foreach ($notifications as $ntf) {
                                                         echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']."<ul>";
                                                         foreach ($ntf as $n) {
                                                           
@@ -77,7 +77,7 @@
                                                         }
                                                         echo '</ul>'; 
                                                       }
-                                                      echo '</li>'; 
+                                                      echo '</li>'; */
                                                     }}
                                                   @endphp
                                               </ul>
