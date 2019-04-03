@@ -41,6 +41,7 @@
                                             </div>
                                             <!-- treeview of notifications -->
                                             <div id="jstree">
+                                              <ul>
                                                 <!-- in this example the tree is populated from inline HTML -->
                                                 <!--<ul>
                                                   <li >Root node 1
@@ -53,9 +54,35 @@
                                                 </ul>
 
                                                 <button id="btntree">demo button</button>-->
+                                                 @php
+                                                    {{
+                                                      //print_r($notifications);
+                                                      foreach ($notifications as $ntf) {
+                                                        echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']."<ul>";
+                                                        foreach ($ntf as $n) {
+                                                          
+                                                          switch ($n['type']) {
+                                                              case "email":
+                                                                  echo '<li rel="tremail" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                  break;
+                                                              case "fax":
+                                                                  echo '<li rel="trfax" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                  break;
+                                                              case "tel":
+                                                                  echo '<li rel="trfax" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                  break;
+                                                              default:
+                                                                  echo '<li rel="tremail" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>'; 
+                                                          }
+                                                        }
+                                                        echo '</ul>'; 
+                                                      }
+                                                      echo '</li>'; 
+                                                    }}
+                                                  @endphp
+                                              </ul>
                                               </div>
-                                              <div id="jstreefld2">
-                                              </div>
+                                                 
                                         </div>
                                         <div class="tab-pane fade  scrollable-panel" id="notestab">
                                         </div>

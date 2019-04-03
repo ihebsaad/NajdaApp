@@ -22,11 +22,6 @@
 <script src="{{  URL::asset('public/js/custom_js/rightside_bar.js') }}" type="text/javascript"></script>
 <!--<script src="{{  URL::asset('public/js/custom_js/fixed_layout.js') }}" type="text/javascript"></script>-->
 
-
-<script  src="{{ asset('public/js/summernote.min.js') }}"  type="text/javascript"></script>
-<script src="{{  URL::asset('public/js/custom_js/compose.js') }}" type="text/javascript"></script>
-
-
     <script type="text/javascript">
         $('.menu-icon').bind('click', function() {
           $(this).toggleClass('active');
@@ -78,13 +73,6 @@
                       }
                       return true;
                   },
-                'data' : [
-                   { "id" : "nf-19N00082", "parent" : "#", "text" : "<b>19N00082</b> (BOUFALGA Kameleddine)", "type" : "default" },
-                   { "id" : "id-aa2", "parent" : "nf-19N00082", "text" : "<span class='cutlongtext'><b>EMAIL</b> nouvelle demande 19N00082</span>", "type" : "tremail" },
-                   { "id" : "id-aa3", "parent" : "nf-19N00082", "text" : "<span class='cutlongtext'><b>FAX</b> rapport 19N00082</span>", "type" : "trfax"},
-                   { "id" : "nf-19N00275", "parent" : "#", "text" : "<b>19N00275</b> (FRANCE PILLOIS Maxime)", "type" : "default" },
-                   { "id" : "nf-19N00276", "parent" : "#", "text" : "<b>19N00276</b> (TISSIER Marc)", "type" : "default" },
-                ]
             },
             "types" : {
                 "default" : { "icon" : "glyphicon glyphicon-folder-open" },
@@ -92,6 +80,13 @@
                 "trfax" : { "icon" : "glyphicon glyphicon-print" }
             },
             "plugins" : ["dnd", "types"]
+        }).bind("select_node.jstree", function (e, data) {
+          var href = data.node.a_attr.href;
+          var parentId = data.node.a_attr.parent_id;
+          if(href == '#')
+          return '';
+
+          window.open(href,'_self');
         });
         
     });</script>

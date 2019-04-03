@@ -1,3 +1,4 @@
+#jstree li[rel="tremail"] > a.jstree-anchor > i, #jstree li[rel="trfax"] > a.jstree-anchor > i {display: none;}
 .scrollable-panel {
   height: 570px;
   overflow-y: auto;
