@@ -567,7 +567,7 @@ class EmailController extends Controller
         // Your Account SID and Auth Token from twilio.com/console
         $sid = 'ACaa5ce5753047f8399d2d3226bfdc4eb7';
         $token = 'ba7e3af173bcd22f27a6ea248ec30be7';
-        $client = new Client($sid, $token);
+        $client = new Client2($sid, $token);
 
 // Use the client to do fun stuff like send text messages!
         $client->messages->create(
