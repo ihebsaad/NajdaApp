@@ -3,6 +3,6 @@
 
 @section('content')
 
-    {{$facturation}}
 
-    @endsection
+
+ @endsection
