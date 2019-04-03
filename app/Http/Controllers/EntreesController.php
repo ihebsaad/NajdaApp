@@ -27,8 +27,9 @@ class EntreesController extends Controller
     {
         //
         $entrees = Entree::all();
+        $dossiers = Dossier::all();
 
-        return view('entrees.index',[compact('entrees')]);
+        return view('entrees.index',['dossiers' => $dossiers], compact('entrees'));
 
     }
 
