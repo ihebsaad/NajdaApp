@@ -16,7 +16,7 @@ Use Redirect;
 use App\Envoye ;
 
 use Illuminate\Support\Facades\Auth;
-use Twilio\Rest\Client as Clien2t;
+use Twilio\Rest\Client as Client2;
 use Twilio\Twiml;
 
 
