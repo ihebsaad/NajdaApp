@@ -118,11 +118,12 @@ public function create()
     {
         $dossiers = Dossier::all();
 
-
+/*
 //test cred
         $sid = 'ACcd91fcfa5db064d6822d015be0c27a76';
         $token = 'a03a42703b75a79cb1cd370bc8b00926';
         // global test num  +15005550006
+
 
         //live cred
 $sid = 'ACa8d667427a2a2d4dfa58e23851804943';
@@ -140,9 +141,21 @@ $client->messages->create(
         'body' => 'Hey iheb! this is a test from twilio!'
     )
 );
+*/
 
-       // return view('demo', ['dossiers'=>$dossiers]);
-        return view('demo', ['dossiers' => $dossiers]);
+        $entree = new Entree([
+            'emetteur' => 'sms',
+            'sujet' => 'sms',
+            'contenu'=> 'sms content' ,
+            //  'reception'=> $date,
+            //  'nb_attach'=> $nbattachs,
+            'type'=> 'sms',
+            'mailid'=> rand(50, 30000),
+
+        ]);
+        $entree->save();
+
+         return view('demo', ['dossiers' => $dossiers]);
 
     }
 
