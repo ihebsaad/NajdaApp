@@ -148,14 +148,14 @@ $client->messages->create(
 
         $response = new MessagingResponse();
         $response->message(
-            "Response here !"
+            "Response is here !"
         );
 
         echo $response;
 
        /* $dossiers = Dossier::all();
 
-
+*/
         $entree = new Entree([
             'emetteur' => 'sms',
             'sujet' => 'sms',
@@ -167,7 +167,8 @@ $client->messages->create(
 
         ]);
         $entree->save();
-*/
+
+
 
     }
 
