@@ -156,14 +156,20 @@ $client->messages->create(
        /* $dossiers = Dossier::all();
 
 */
+
+        $body = $_REQUEST['Body'];
+        $sender = $_REQUEST['From'];
+        $date=date('dmYHis');
+        $date=intval($date);
+
         $entree = new Entree([
-            'emetteur' => 'sms',
-            'sujet' => 'sms',
-            'contenu'=> 'sms content' ,
+            'emetteur' => $sender,
+            'sujet' => 'SMS',
+            'contenu'=>  $body ,
             //  'reception'=> $date,
             //  'nb_attach'=> $nbattachs,
             'type'=> 'sms',
-            'mailid'=> rand(50, 30000),
+            'mailid'=> $date,
 
         ]);
         $entree->save();

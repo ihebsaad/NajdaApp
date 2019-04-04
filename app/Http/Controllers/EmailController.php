@@ -577,7 +577,7 @@ class EmailController extends Controller
                 // A Twilio phone number you purchased at twilio.com/console
                 'from' => '+14804473614',
                 // the body of the text message you'd like to send
-                'body' => 'Hey iheb! this is a new message'
+                'body' => 'Hey iheb! test message avec enregistrement dans la base'
             )
         );
 
