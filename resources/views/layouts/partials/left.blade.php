@@ -64,7 +64,8 @@
                                                     {{
                                                       //print_r($notifications);
                                                       foreach ($notifications as $ntf) {
-                                                        echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']."<ul>";
+                                                        if (!empty($ntf[0]['dossier']))
+                                                        {echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']."<ul>";}
                                                         foreach ($ntf as $n) {
                                                           
                                                           switch ($n['type']) {
@@ -81,9 +82,9 @@
                                                                   echo '<li rel="tremail" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>'; 
                                                           }
                                                         }
-                                                        echo '</ul>'; 
+                                                        if (!empty($ntf[0]['dossier'])) {echo '</ul>'; }
                                                       }
-                                                      echo '</li>';
+                                                      if (!empty($ntf[0]['dossier'])) {echo '</li>';}
                                                     }}
                                                   @endphp
                                                 @endisset
