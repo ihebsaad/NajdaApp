@@ -1,11 +1,14 @@
 
- <?php header('content-type: text/xml');
+@extends('layouts.mainlayout')
 
- ?>
- <Response>
-     <Message>
-         Thank you for your message :)
-     </Message>
- </Response>
+@section('content')
+
+            <div class="row">
+                <br><br>
+                <h1>Demo</h1>
+
+            </div>
+
+@endsection
 
 

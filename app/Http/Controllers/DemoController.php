@@ -12,6 +12,7 @@ use App\Entree ;
 use Illuminate\Support\Facades\Auth;
 use Twilio\Rest\Client as Client2;
 use Twilio\Twiml;
+use Twilio\TwiML\MessagingResponse;
 
 
 class DemoController extends Controller
@@ -117,7 +118,7 @@ public function create()
 
     function test()
     {
-        $dossiers = Dossier::all();
+
 
 /*
 //test cred
@@ -143,6 +144,17 @@ $client->messages->create(
     )
 );
 */
+        header("content-type: text/xml");
+
+        $response = new MessagingResponse();
+        $response->message(
+            "Response here !"
+        );
+
+        echo $response;
+
+        $dossiers = Dossier::all();
+
 
         $entree = new Entree([
             'emetteur' => 'sms',
@@ -156,7 +168,6 @@ $client->messages->create(
         ]);
         $entree->save();
 
-         return view('demo', ['dossiers' => $dossiers]);
 
     }
 

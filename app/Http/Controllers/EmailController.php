@@ -583,7 +583,6 @@ class EmailController extends Controller
 
 
 
-
         /*
                 // SENDING
 
