@@ -626,4 +626,42 @@ class EmailController extends Controller
     }
 
 
+
+    function sendsms(Request $request)
+    {
+        $to = trim($request->get('destinataire'));
+        $message = trim( $request->get('message'));
+
+        // Your Account SID and Auth Token from twilio.com/console
+        $sid = 'ACaa5ce5753047f8399d2d3226bfdc4eb7';
+        $token = 'ba7e3af173bcd22f27a6ea248ec30be7';
+        $client = new Client2($sid, $token);
+
+// Use the client to do fun stuff like send text messages!
+        $client->messages->create(
+        // the number you'd like to send the message to
+            $to,
+            array(
+                // A Twilio phone number you purchased at twilio.com/console
+                'from' => '+14804473614',
+                // the body of the text message you'd like to send
+                'body' => $message
+            )
+        );
+
+
+        return redirect('/emails.sms')->with('success', 'SMS Envoyé !');
+
+    }
+
+    function sms( )
+    {
+
+        $dossiers = Dossier::all();
+
+        return view('emails.sms', ['dossiers' => $dossiers]);
+
+    }
+
+
     }

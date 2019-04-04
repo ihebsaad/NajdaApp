@@ -8,6 +8,7 @@ use Spatie\Searchable\Search;
 use App\Dossier ;
 use Illuminate\Support\Facades\Auth;
 
+
 class HomeController extends Controller
 {
     /**
