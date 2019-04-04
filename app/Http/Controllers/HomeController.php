@@ -28,8 +28,8 @@ class HomeController extends Controller
     {
 
         //  $countries = DB::table('apps_countries')->pluck('id', 'country_name');;
-        $countries = DB::table('apps_countries')->select('id', 'country_name')->get();
         $dossiers = Dossier::get();
+        $countries = DB::table('apps_countries')->select('id', 'country_name')->get();
 
         return view('home', ['countries' => $countries,'dossiers' => $dossiers]);
      }

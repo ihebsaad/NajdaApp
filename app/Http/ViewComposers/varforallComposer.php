@@ -40,5 +40,6 @@ Class varforallComposer
 	    // Sharing is caring
       $view->with('notifications',$result);
       $view->with('dossiers',$dossiers);
+      $view->with('testvar',['1','2','3']);
 	}
 }
