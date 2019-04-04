@@ -47,7 +47,7 @@ Route::get('/emails/disp', 'EmailController@disp');
 
 Route::get('/emails/test', 'EmailController@test');
 Route::get('/emails/sms', 'EmailController@sms');
-Route::get('/emails/sendsms', 'EmailController@sendsms');
+Route::post('/emails/sendsms', 'EmailController@sendsms')->name('emails.sendsms');
 Route::get('/emails/maboite', 'EmailController@maboite');
 Route::get('/emails/open/{id}', 'EmailController@open');
 

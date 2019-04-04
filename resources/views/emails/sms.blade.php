@@ -1,9 +1,7 @@
 @extends('layouts.mainlayout')
 
 @section('content')
-    <form method="post" action="{{action('EmailController@sendsms')}}"  enctype="multipart/form-data">
-        {{ csrf_field() }}
-
+    <form method="post" action="{{action('EmailController@sendsms')}}" >
     <div class="form-group">
         {{ csrf_field() }}
         <label for="destinataire">Destinataire:</label>
@@ -17,7 +15,6 @@
     </textarea>
     </div>
         <div class="form-group">
-
         <button  type="submit"  class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
         </div>
 
