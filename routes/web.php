@@ -16,7 +16,7 @@ Route::post('logout', 'AuthController@logout');
 
 Route::get('/', array('as' => 'home','uses' => 'HomeController@index'));
 Route::post('/demo/fetch', 'DemoController@fetch')->name('demo.fetch');
-Route::get('/demo/test/{Body}{From}', 'DemoController@test')->name('demo.test');
+Route::get('/demo/test/{Body}/{From}', 'DemoController@test')->name('demo.test');
 Route::post('/home/fetch', 'HomeController@fetch')->name('home.fetch');
 
 
