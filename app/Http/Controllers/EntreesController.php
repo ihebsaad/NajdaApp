@@ -36,16 +36,27 @@ class EntreesController extends Controller
     
      public function boite()
     {
-        Log::info('Accès à la boite des entrées - utilisateur: Mounir Tounsi');
+       // Log::info('Accès à la boite des entrées - utilisateur: Mounir Tounsi');
 
-        //$entrees = Entree::all();
-        //$entrees = Entree::paginate(5);
-        $entrees = Entree::orderBy('created_at', 'desc')->paginate(5);
+        $entrees = Entree::orderBy('created_at', 'desc')->where('statut','<','2')->paginate(10);
         $dossiers = Dossier::all();
 
         return view('entrees.boite',['dossiers' => $dossiers], compact('entrees'));
 
     }
+
+
+    public function archive()
+    {
+        // Log::info('Accès à la boite des entrées - utilisateur: Mounir Tounsi');
+
+        $entrees = Entree::orderBy('created_at', 'desc')->where('statut','=','3')->paginate(10);
+        $dossiers = Dossier::all();
+
+        return view('entrees.archive',['dossiers' => $dossiers], compact('entrees'));
+
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -134,13 +145,24 @@ class EntreesController extends Controller
        // $entree->share_qty = $request->get('share_qty');
         $entree->save();
 
-        return redirect('/entrees')->with('success', '  has been updated');    }
+        return redirect('/entrees')->with('success', '  has been updated');
+    }
 
+
+    public function archiver( $id)
+    {
+
+        $entree = Entree::find($id);
+         $entree->statut = 3;  // 3 = archivé
+          $entree->save();
+
+        return redirect('/entrees/boite')->with('success', '  Archivé avec succès');
+    }
 
     public function destroy($id)
     {
         $entree = Entree::find($id);
         $entree->delete();
 
-        return redirect('/entrees')->with('success', '  has been deleted Successfully');    }
+        return redirect('/entrees/boite')->with('success', '  Supprimé avec succès');    }
 }

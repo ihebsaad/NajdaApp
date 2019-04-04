@@ -443,6 +443,7 @@ class EmailController extends Controller
           }
 
 
+
         }
 
         return view('emails.disp',['dossiers' => $dossiers]);
