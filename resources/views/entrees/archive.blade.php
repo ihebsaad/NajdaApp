@@ -74,7 +74,7 @@ $dossiers = Dossier::get();
         </div>
         <div class="col-lg-9 ">
             <div class="row">
-                <div class="col-md-8"><H2> Boîte de réception</H2></div>
+                <div class="col-md-8"><H2> Archive </H2></div>
                 <div class="col-md-2"><a data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  style="float:right;margin-right:20px;margin-bottom:25px;padding:3px 3px 3px 3px;border:1px solid #4fc1e9;" href="{{action('EmailController@sms')}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un SMS"  class="fa fa-fw fa-sms fa-2x"></span></a><br></div>
                 <div class="col-md-2"><a data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" style="float:right;margin-right:20px;margin-bottom:25px;padding:3px 3px 3px 3px;border:1px solid #4fc1e9;" href="{{action('EmailController@sending')}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un email"  class="fa fa-fw fa-envelope-open fa-2x"></span></a>
                 </div>
