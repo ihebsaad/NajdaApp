@@ -94,7 +94,7 @@ class EnvoyesController extends Controller
             'statut'=> 1,
             'attachements'=> 0,
             'par'=> $par,
-
+            'type'=>'email'
         ]);
 
         $envoye->save();

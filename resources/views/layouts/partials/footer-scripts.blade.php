@@ -22,6 +22,9 @@
 <script src="{{  URL::asset('public/js/custom_js/rightside_bar.js') }}" type="text/javascript"></script>
 <!--<script src="{{  URL::asset('public/js/custom_js/fixed_layout.js') }}" type="text/javascript"></script>-->
 
+<script  src="{{ asset('public/js/summernote.min.js') }}"  type="text/javascript"></script>
+<script src="{{  URL::asset('public/js/custom_js/compose.js') }}" type="text/javascript"></script>
+
     <script type="text/javascript">
         $('.menu-icon').bind('click', function() {
           $(this).toggleClass('active');

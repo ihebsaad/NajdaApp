@@ -509,6 +509,7 @@ class EmailController extends Controller
                'cc'=> $cc,
                'cci'=> $cci,
                'statut'=> 1,
+               'type'=> 'email',
 
            ]);
 
@@ -637,20 +638,35 @@ class EmailController extends Controller
         $token = 'ba7e3af173bcd22f27a6ea248ec30be7';
         $client = new Client2($sid, $token);
 
+        $from='+14804473614';
+
 // Use the client to do fun stuff like send text messages!
         $client->messages->create(
         // the number you'd like to send the message to
             $to,
             array(
                 // A Twilio phone number you purchased at twilio.com/console
-                'from' => '+14804473614',
+                'from' => $from,
                 // the body of the text message you'd like to send
                 'body' => $message
             )
         );
 
+        $par=Auth::id();
 
-        return redirect('/emails.sms')->with('success', 'SMS Envoyé !');
+        $envoye = new Envoye([
+            'emetteur' => $from,
+            'destinataire' => $to,
+            'sujet' => 'SMS',
+            'contenu'=> $message,
+            'statut'=> 1,
+             'par'=> $par,
+            'type'=>'sms'
+        ]);
+
+        $envoye->save();
+
+        return redirect('/emails/sms')->with('success', 'SMS Envoyé !');
 
     }
 

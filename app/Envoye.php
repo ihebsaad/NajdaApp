@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Envoye extends Model
 {
     //
-    protected $fillable = ['emetteur','sujet','contenu','destinataire','attachements' ,'par','statut','cc','cci' ];
+    protected $fillable = ['emetteur','sujet','contenu','destinataire','attachements' ,'par','statut','cc','cci','type' ];
 
   //  protected $dateFormat = 'Y-m-d H:i';
 
