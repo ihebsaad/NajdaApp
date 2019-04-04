@@ -55,6 +55,13 @@
                                 Brouillons
                             </a>
                         </li>
+                        <li class="">
+                            <a   href="{{ route('entrees.archive') }}">
+                                <span class="badge badge-orange pull-right"></span>
+                                <i class="fa fa-archive fa-fw mrs"></i>
+                                Archive
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

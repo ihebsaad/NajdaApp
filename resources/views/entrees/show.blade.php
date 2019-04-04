@@ -21,12 +21,12 @@ use App\Http\Controllers\AttachementsController;
         <div class="panel-heading" style="">
                     <div class="row">
                         <div class="col-sm-4 col-md-4 col-lg-4"style=" padding-left: 0px;color:black;font-weight: bold ">
-                            <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;">Sujet :</label> {{ $entree->sujet }}</h4>
+                            <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;">Sujet :</label>  {{ $entree['sujet'] }}</h4>
                         </div>
                         <div class="col-sm-8 col-md-8 col-lg-8" style="padding-right: 0px;">
                             <div class="pull-right" style="margin-top: 0px;">
                                 @if (!empty($entree->dossier))
-                                    <button class="btn btn-sm btn-default"><b>REF: {{ $entree->dossier }}</b></button>
+                                    <button class="btn btn-sm btn-default"><b>REF: {{ $entree['dossier']   }}</b></button>
                                 @endif
                                 <a href="#" class="btn btn-primary btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Enregistrer les commentaires et TAGS" > 
                                   <span class="fa fa-fw fa-save"></span> Sauvegarder
@@ -44,10 +44,10 @@ use App\Http\Controllers\AttachementsController;
             <div class="panel-body">
                 <div class="row">
                         <div class="col-sm-6 col-md-6 col-lg-6"style=" padding-left: 0px; ">
-                            <span><b>Emetteur: </b>{{$entree->emetteur}}</span>
+                            <span><b>Emetteur: </b>{{ $entree['emetteur']  }}</span>
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6 " style="padding-right: 0px;">
-                            <span class="pull-right"><b>Date: </b><?php echo  date('d/m/Y H:i', strtotime($entree->reception)) ; ?></span>
+                            <span class="pull-right"><b>Date: </b><?php echo  date('d/m/Y H:i', strtotime( $entree['reception']  )) ; ?></span>
                         </div>
                 </div>
             </div>
@@ -77,8 +77,8 @@ use App\Http\Controllers\AttachementsController;
                         <li class="active" >
                             <a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps du mail</a>
                         </li>
-                        @if ($entree->nb_attach > 0)
-                            @for ($i = 1; $i <= $entree->nb_attach; $i++)
+                        @if ( $entree['nb_attach']   > 0)
+                            @for ($i = 1; $i <= $entree['nb_attach'] ; $i++)
                                 <li>
                                     <a href="#pj<?php echo $i; ?>" data-toggle="tab" aria-expanded="false">PJ<?php echo $i; ?></a>
                                 </li>
@@ -87,7 +87,7 @@ use App\Http\Controllers\AttachementsController;
                     </ul>
                     <div id="myTabContent" class="tab-content" style="padding:10px;padding-top:20px;background: #ffffff">
                                         <div class="tab-pane fade active in" id="mailcorps" style="min-height: 350px;">
-                                            <p id="mailtext" style="line-height: 25px;"><?php  $content= $entree->contenu; ?>
+                                            <p id="mailtext" style="line-height: 25px;"><?php  $content= $entree['contenu'] ; ?>
                                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
@@ -95,10 +95,10 @@ use App\Http\Controllers\AttachementsController;
                                             <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
                                             <?php  echo $cont; ?></p>
                                         </div>
-                                        @if ($entree->nb_attach > 0)
+                                        @if ($entree['nb_attach']  > 0)
                                           <?php
                                             // get attachements info from DB
-                                            $attachs = Attachement::get()->where('parent', '=', $entree->id);  
+                                            $attachs = Attachement::get()->where('parent', '=', $entree['id'] );
                                             
                                           ?>
                                             @if (!empty($attachs) )
