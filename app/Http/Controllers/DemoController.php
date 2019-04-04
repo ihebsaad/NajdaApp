@@ -153,7 +153,7 @@ $client->messages->create(
 
         echo $response;
 
-        $dossiers = Dossier::all();
+       /* $dossiers = Dossier::all();
 
 
         $entree = new Entree([
@@ -167,7 +167,7 @@ $client->messages->create(
 
         ]);
         $entree->save();
-
+*/
 
     }
 
