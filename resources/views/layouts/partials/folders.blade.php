@@ -1,3 +1,4 @@
+@isset ($dossiers)
 <div class="row folders" style="margin-top:20px;">
         <div class="carousel-wrap">
           <div class="owl-carousel">
@@ -14,3 +15,4 @@
           </div>
         </div>
     </div>
+@endisset

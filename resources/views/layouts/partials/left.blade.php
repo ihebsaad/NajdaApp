@@ -39,6 +39,11 @@
                                                     <a href="#" class="btn btn-danger btn-sm btn-responsive" role="button"> </a>
                                                 </div>
                                             </div>
+                                            @isset ($testvar)
+                                            @php
+                                            {{ print_r($testvar); }}
+                                            @endphp
+                                            @endisset
                                             <!-- treeview of notifications -->
                                             <div id="jstree">
                                               <ul>
