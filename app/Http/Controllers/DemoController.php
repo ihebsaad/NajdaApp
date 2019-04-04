@@ -156,10 +156,12 @@ $client->messages->create(
        /* $dossiers = Dossier::all();
 
 */
+        $sender='';
+        $body='';
+        if (isset($_REQUEST['Body'])){$body = $_REQUEST['Body'];}
+        if (isset($_REQUEST['From'])){$sender = $_REQUEST['From'];}
 
-        $body = $_REQUEST['Body'];
-        $sender = $_REQUEST['From'];
-        $date=date('dmYHis');
+         $date=date('dmYHis');
         $date=intval($date);
 
         $entree = new Entree([
