@@ -67,18 +67,14 @@ $dossiers = Dossier::get();
         </div>
         <div class="col-lg-9 ">
             <div class="row">
-                <div class="col-md-9"><H2> Boîte de réception</H2></div>
-                <div class="col-md-3"><a data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un email" style="float:right;margin-right:20px;margin-bottom:25px;padding:3px 3px 3px 3px;border:1px solid #4fc1e9;" href="{{action('EmailController@sending')}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un email"  class="fa fa-fw fa-envelope fa-2x"></span></a><br>
+                <div class="col-md-8"><H2> Boîte de réception</H2></div>
+                <div class="col-md-2"><a data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  style="float:right;margin-right:20px;margin-bottom:25px;padding:3px 3px 3px 3px;border:1px solid #4fc1e9;" href="{{action('EmailController@sms')}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un SMS"  class="fa fa-fw fa-sms fa-2x"></span></a><br></div>
+                <div class="col-md-2"><a data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" style="float:right;margin-right:20px;margin-bottom:25px;padding:3px 3px 3px 3px;border:1px solid #4fc1e9;" href="{{action('EmailController@sending')}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un email"  class="fa fa-fw fa-envelope-open fa-2x"></span></a>
                 </div>
             </div>
      <div class="uper">
-        @if(session()->get('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
-            </div><br />
-        @endif
 
-            @foreach($entrees as $entree)
+               @foreach($entrees as $entree)
                 <div class="email">
                     <div class="fav-box">
                         <a href="{{action('EntreesController@show', $entree['id'])}}" class="btn btn-sm btn-primary btn-responsive">
@@ -87,12 +83,13 @@ $dossiers = Dossier::get();
                         </a>
                     </div>
                       <div class="media-body pl-3">
-                        <div class="subject"><a  href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a><small style="margin-top:10px;">{{$entree->emetteur}}</small></div>
+                          <div class="subject"><?php if($entree->type=="email") {?><i class="fa  fa-envelope"></i><?php }?><?php if($entree->type=="sms") {?><i class="fa fa-lg fa-sms"></i><?php }?>
+                            <a  href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a><small style="margin-top:10px;">{{$entree->emetteur}}</small></div>
                         <div class="stats">
                             <div class="row">
                                 <div class="col-sm-8 col-md-8 col-lg-8">
-                                    <span><i class="fa fa-fw fa-clock-o"></i><?php echo  date('d/m/Y H:i', strtotime($entree->reception)) ; ?></span>
-                                    <span><i class="fa fa-fw fa-paperclip"></i><b>({{$entree->nb_attach}})</b> Attachements</span>
+                                    <span><i class="fa fa-fw fa-clock-o"></i><?php if($entree->type=="email") {echo  date('d/m/Y H:i', strtotime($entree->reception)) ;}else {echo  date('d/m/Y H:i', strtotime($entree->created_at)) ;} ?></span>
+                                    <?php if($entree->type=="email") {?> <span><i class="fa fa-fw fa-paperclip"></i><b>({{$entree->nb_attach}})</b> Attachements</span><?php }?>
                                 </div>
                                 <div class="col-sm-4 col-md-4 col-lg-4">
                                     @if (!empty($entree->dossier))

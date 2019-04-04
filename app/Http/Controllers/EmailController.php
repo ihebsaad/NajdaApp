@@ -295,7 +295,9 @@ class EmailController extends Controller
                 // get last id
                 $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
                 // message moved
-                $entree = new Entree([
+
+                if(  strpos($sujet,'Undelivered Mail Returned' )==false){
+                 $entree = new Entree([
                     'emetteur' => trim($from),
                     'sujet' => trim($sujet),
                     'contenu'=> utf8_encode($contenu) ,
@@ -387,6 +389,9 @@ class EmailController extends Controller
                 {
                     $oMessage->moveToFolder('INBOX') ;
                 }
+
+                } // check undelivered message
+
             } else {
                 // error
                 echo 'error';

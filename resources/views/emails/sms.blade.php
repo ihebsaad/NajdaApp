@@ -1,6 +1,7 @@
 @extends('layouts.mainlayout')
 
 @section('content')
+    <h2>Envoyer un SMS</h2>
     <form method="post" action="{{action('EmailController@sendsms')}}" >
     <div class="form-group">
         {{ csrf_field() }}
