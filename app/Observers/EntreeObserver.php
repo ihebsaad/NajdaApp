@@ -11,8 +11,8 @@ class EntreeObserver
 {
      public function created(Entree $entree)
 	 {
-	     dd('bonjour');
-	//	Auth::user()->notify(new Notif_Suivi_Doss($entree));
+	  //   dd('kbs');
+		Auth::user()->notify(new Notif_Suivi_Doss($entree));
 		 
 	 }
 
