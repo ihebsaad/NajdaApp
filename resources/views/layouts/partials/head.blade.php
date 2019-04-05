@@ -56,7 +56,7 @@
         $urlapp='http://localhost/najdaapp';
     }
 $urlnotif=$urlapp.'/entrees/show/' ;
-$urlnotif = preg_replace('/\s+/', '', $urlnotif);
+//$urlnotif = preg_replace('/\s+/', '', $urlnotif);
 ?>
 
 <script>
