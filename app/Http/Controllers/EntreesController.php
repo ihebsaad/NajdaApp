@@ -121,6 +121,7 @@ class EntreesController extends Controller
 
         $entree = Entree::find($id);
         $entree->viewed=1;
+        $entree->save();
 
         return view('entrees.show',['dossiers' => $dossiers], compact('entree'));
 
