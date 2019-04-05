@@ -31,7 +31,8 @@ $dossiers = Dossier::get();
     <div class="row">
         <div class="col-sm-3 col-md-3">
             <?php use \App\Http\Controllers\EnvoyesController;     ?>
-            <div class="panel">
+            <?php use \App\Http\Controllers\EntreesController;     ?>
+                <div class="panel">
                 <div class="panel-body pan">
                     <ul class="nav nav-pills nav-stacked">
                         <li >
@@ -50,6 +51,7 @@ $dossiers = Dossier::get();
                         </li>
                         <li class="">
                             <a   href="{{ route('envoyes') }}">
+                                <span class="badge pull-right"><?php  echo EnvoyesController::countenvoyes(); ?></span>
                                 <i class="fa fa-paper-plane fa-fw mrs"></i>
                                 Envoyées
                             </a>
@@ -63,12 +65,13 @@ $dossiers = Dossier::get();
                         </li>
                         <li class="active">
                             <a   href="{{ route('entrees.archive') }}">
-                                <span class="badge badge-orange pull-right"><?php echo EnvoyesController::countbrouillons(); ?></span>
-                                <i class="fa fa-edit fa-fw mrs"></i>
+                                <span class="badge badge-orange pull-right"><?php echo EntreesController::countarchives(); ?></span>
+                                <i class="fa fa-archive fa-fw mrs"></i>
                                 Archive
                             </a>
                         </li>
                     </ul>
+
                 </div>
             </div>
         </div>
@@ -84,11 +87,7 @@ $dossiers = Dossier::get();
                 @foreach($entrees as $entree)
                     <div class="email">
                         <div class="fav-box">
-                            <a href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-sm btn-warning btn-responsive">
-                                <i class="fa fa-lg fa-fw fa-archive"></i>
-
-                            </a>
-                            <a href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-sm btn-danger btn-responsive">
+                            <a href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-sm btn-danger btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Supprimer">
                                 <i class="fa fa-lg fa-fw fa-trash-alt"></i>
 
                             </a>

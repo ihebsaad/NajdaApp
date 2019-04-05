@@ -5,7 +5,7 @@
      <div class="row">
         <div class="col-sm-3 col-md-3">
             <?php use \App\Http\Controllers\EnvoyesController;     ?>
-            <div class="panel">
+            <?php use \App\Http\Controllers\EntreesController;     ?>            <div class="panel">
                 <div class="panel-body pan">
                     <ul class="nav nav-pills nav-stacked">
                         <li >
@@ -15,7 +15,7 @@
                                 Rédiger un email
                             </a>
                         </li>
-                        <li class=" ">
+                        <li class="">
                             <a   href="{{ route('boite') }}">
                                 <span class="badge pull-right"></span>
                                 <i class="fa fa-envelope-square fa-fw mrs"></i>
@@ -24,6 +24,7 @@
                         </li>
                         <li class="active">
                             <a   href="{{ route('envoyes') }}">
+                                <span class="badge pull-right"><?php  echo EnvoyesController::countenvoyes(); ?></span>
                                 <i class="fa fa-paper-plane fa-fw mrs"></i>
                                 Envoyées
                             </a>
@@ -35,7 +36,15 @@
                                 Brouillons
                             </a>
                         </li>
+                        <li class="">
+                            <a   href="{{ route('entrees.archive') }}">
+                                <span class="badge badge-orange pull-right"><?php echo EntreesController::countarchives(); ?></span>
+                                <i class="fa fa-archive fa-fw mrs"></i>
+                                Archive
+                            </a>
+                        </li>
                     </ul>
+
                 </div>
             </div>
         </div>

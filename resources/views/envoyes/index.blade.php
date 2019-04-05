@@ -25,7 +25,7 @@
     <div class="row">
         <div class="col-sm-3 col-md-3">
             <?php use \App\Http\Controllers\EnvoyesController;     ?>
-            <div class="panel">
+            <?php use \App\Http\Controllers\EntreesController;     ?>            <div class="panel">
                 <div class="panel-body pan">
                     <ul class="nav nav-pills nav-stacked">
                         <li >
@@ -35,7 +35,7 @@
                                 Rédiger un email
                             </a>
                         </li>
-                        <li class=" ">
+                        <li class="actie">
                             <a   href="{{ route('boite') }}">
                                 <span class="badge pull-right"></span>
                                 <i class="fa fa-envelope-square fa-fw mrs"></i>
@@ -44,11 +44,12 @@
                         </li>
                         <li class="active">
                             <a   href="{{ route('envoyes') }}">
+                                <span class="badge pull-right"><?php  echo EnvoyesController::countenvoyes(); ?></span>
                                 <i class="fa fa-paper-plane fa-fw mrs"></i>
                                 Envoyées
                             </a>
                         </li>
-                        <li>
+                        <li class="">
                             <a   href="{{ route('envoyes.brouillons') }}">
                                 <span class="badge badge-orange pull-right"><?php echo EnvoyesController::countbrouillons(); ?></span>
                                 <i class="fa fa-edit fa-fw mrs"></i>
@@ -57,7 +58,7 @@
                         </li>
                         <li class="">
                             <a   href="{{ route('entrees.archive') }}">
-                                <span class="badge badge-orange pull-right"></span>
+                                <span class="badge badge-orange pull-right"><?php echo EntreesController::countarchives(); ?></span>
                                 <i class="fa fa-archive fa-fw mrs"></i>
                                 Archive
                             </a>
@@ -80,13 +81,17 @@
         @foreach($envoyes as $envoye)
             <div class="email">
                 <div class="fav-box">
-                    <a href="{{action('EnvoyesController@view', $envoye['id'])}}" class="btn btn-sm btn-primary btn-responsive">
-                        <i class="fa fa-lg fa-fw fa-eye"></i>
-                        Ouvrir
+                    <a href="{{action('EnvoyesController@destroy', $envoye['id'])}}" class="btn btn-sm btn-danger btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Supprimer">
+                        <i class="fa fa-lg fa-fw fa-trash-alt"></i>
+
                     </a>
                 </div>
                 <div class="media-body pl-3">
-                    <div class="subject"><a  href="{{action('EnvoyesController@view', $envoye['id'])}}" >{{$envoye->sujet}}</a><small style="margin-top:10px;">{{$envoye->destinataire}}</small></div>
+                    <div class="subject">
+                            <?php if($envoye->type=="email") {?><i class="fa  fa-envelope"></i><?php }?><?php if($envoye->type=="sms") {?><i class="fa fa-lg fa-sms"></i><?php }?><?php if($envoye->type=="whatsapp") {?><i class="fa fa-lg fa-whatsapp"></i><?php }?>
+                            <?php if($envoye->type=="tel") {?><i class="fa fa-lg fa-phone-square"></i><?php }?><?php if($envoye->type=="fax") {?><i class="fa fa-lg fa-fax"></i><?php }?><?php if($envoye->type=="rendu") {?><i class="fa fa-lg fa-file-sound-o"></i><?php }?>
+
+                        <a  href="{{action('EnvoyesController@view', $envoye['id'])}}" >{{$envoye->sujet}}</a><small style="margin-top:10px;">{{$envoye->destinataire}}</small></div>
                     <div class="stats">
                         <div class="row">
                             <div class="col-sm-8 col-md-8 col-lg-8">

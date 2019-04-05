@@ -63,6 +63,7 @@ Route::get('/envoyes', array('as' => 'envoyes','uses' => 'EnvoyesController@inde
 Route::post('/envoyes/saving','EnvoyesController@saving')->name('envoyes.saving');
 Route::get('/envoyes/view/{id}', 'EnvoyesController@view');
 Route::get('/envoyes/show/{id}', 'EnvoyesController@show');
+Route::get('/envoyes/destroy/{id}', 'EnvoyesController@destroy');
 Route::get('/envoyes/brouillons', 'EnvoyesController@brouillons')->name('envoyes.brouillons');
 
 

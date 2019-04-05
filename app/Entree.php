@@ -9,7 +9,7 @@ class Entree extends Model
     //
     protected $fillable = ['emetteur','sujet','contenu','nb_attach','reception','type','dossier','statut','updated_at','mailid','affecte','notif'];
 
-   /*protected $dateFormat = 'Y-m-d H:i';
+  /* protected $dateFormat = 'Y-m-d H:i';
 
     public function getDateFormat()
     {

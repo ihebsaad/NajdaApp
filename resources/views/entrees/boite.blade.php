@@ -61,7 +61,8 @@ $envoyeC = Envoye::get();
                         </li>
                         <li class="">
                             <a   href="{{ route('envoyes') }}">
-                                <i class="fa fa-paper-plane fa-fw mrs"><?php  echo EnvoyesController::countenvoyes(); ?></i>
+                                <span class="badge pull-right"><?php  echo EnvoyesController::countenvoyes(); ?></span>
+                                <i class="fa fa-paper-plane fa-fw mrs"></i>
                                 Envoyées
                             </a>
                         </li>
@@ -95,17 +96,18 @@ $envoyeC = Envoye::get();
                @foreach($entrees as $entree)
                 <div class="email">
                     <div class="fav-box">
-                        <a href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-sm btn-warning btn-responsive">
+                        <a href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-sm btn-warning btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Archiver" >
                             <i class="fa fa-lg fa-fw fa-archive"></i>
 
                         </a>
-                        <a href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-sm btn-danger btn-responsive">
+                        <a href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-sm btn-danger btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Supprimer">
                             <i class="fa fa-lg fa-fw fa-trash-alt"></i>
 
                         </a>
                     </div>
                       <div class="media-body pl-3">
-                          <div class="subject"><?php if($entree->type=="email") {?><i class="fa  fa-envelope"></i><?php }?><?php if($entree->type=="sms") {?><i class="fa fa-lg fa-sms"></i><?php }?>
+                          <div class="subject"><?php if($entree->type=="email") {?><i class="fa  fa-envelope"></i><?php }?><?php if($entree->type=="sms") {?><i class="fa fa-lg fa-sms"></i><?php }?><?php if($entree->type=="whatsapp") {?><i class="fa fa-lg fa-whatsapp"></i><?php }?>
+                              <?php if($entree->type=="tel") {?><i class="fa fa-lg fa-phone-square"></i><?php }?><?php if($entree->type=="fax") {?><i class="fa fa-lg fa-fax"></i><?php }?><?php if($entree->type=="rendu") {?><i class="fa fa-lg fa-file-sound-o"></i><?php }?>
                             <a  href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a><small style="margin-top:10px;">{{$entree->emetteur}}</small></div>
                         <div class="stats">
                             <div class="row">
