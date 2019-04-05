@@ -25,6 +25,8 @@ class EntreesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    // Statut entrées : 3 = archivé= | 1
     public function index()
     {
         //

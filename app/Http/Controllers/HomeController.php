@@ -39,7 +39,7 @@ class HomeController extends Controller
         $nnotifs = array();
         foreach ($notifications as $i) {
           $notifc = json_decode($i->data, true);
-          $entreeid = $notifc['correspondance']['id'];
+          $entreeid = $notifc['Entree']['id'];
           $notifentree = DB::table('entrees')->where('id','=', $entreeid)->get()->toArray();
           $row = array();
           $row['id'] = $entreeid;
