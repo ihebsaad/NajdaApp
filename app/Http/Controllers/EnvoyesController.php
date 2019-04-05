@@ -103,6 +103,29 @@ class EnvoyesController extends Controller
     }
 
 
+
+    public function savingBR(Request $request)
+    {
+        $par=Auth::id();
+
+        $envoye = new Envoye([
+            'emetteur' => 'test@najda-assistance.com', //env('emailenvoi')
+            'destinataire' => trim ($request->get('destinataire')),
+            'sujet' => trim ($request->get('sujet')),
+            'contenu'=> trim ($request->get('contenu')),
+            'cc'=> trim ($request->get('cc')),
+            'cci'=> trim ($request->get('cci')),
+            'statut'=> 0,
+            'attachements'=> 0,
+            'par'=> $par,
+            'type'=>'email'
+        ]);
+
+        $envoye->save();
+        // return redirect('/envoyes')->with('success', 'enregistré avec succès');
+
+    }
+
     /**
      * Display the specified resource.
      *

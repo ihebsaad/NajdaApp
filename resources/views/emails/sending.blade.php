@@ -172,11 +172,11 @@
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
-                    url:"{{ route('envoyes.saving') }}",
+                    url:"{{ route('envoyes.savingBR') }}",
                     method:"POST",
                     data:{destinataire:destinataire,sujet:sujet,contenu:contenu,cc:cc,cci:cci, _token:_token},
                     success:function(data){
-                        alert('Brouillon enregistré ');
+                   ////     alert('Brouillon enregistré ');
 
                     }
                 });

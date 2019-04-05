@@ -61,6 +61,7 @@ Route::get('/emails/open/{id}', 'EmailController@open');
 //Route::resource('/envoyes',  'EnvoyesController');
 Route::get('/envoyes', array('as' => 'envoyes','uses' => 'EnvoyesController@index'));
 Route::post('/envoyes/saving','EnvoyesController@saving')->name('envoyes.saving');
+Route::post('/envoyes/savingBR','EnvoyesController@savingBR')->name('envoyes.savingBR');
 Route::get('/envoyes/view/{id}', 'EnvoyesController@view');
 Route::get('/envoyes/show/{id}', 'EnvoyesController@show');
 Route::get('/envoyes/destroy/{id}', 'EnvoyesController@destroy');
