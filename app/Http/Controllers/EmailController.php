@@ -304,7 +304,8 @@ class EmailController extends Controller
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
                     'type'=> 'email',
-                    'mailid'=> $mailid,
+                     'mailid'=> $mailid,
+                     'viewed'=>0,
 
                 ]);
 

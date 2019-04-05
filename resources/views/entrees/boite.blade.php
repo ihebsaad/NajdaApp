@@ -29,7 +29,7 @@ $envoyeC = Envoye::get();
         }
         .email {background:#ececec; position:relative; margin-bottom:15px; padding:5px; border-style: solid!important; border-color: #cccccc; border-width: 1px!important;}
         .email-body{border:1px solid #bcbcbc; border-left:0; height:136px;}
-        .email .subject{float:left; width:100%; font-size:15px;font-weight:600; color:#00a7e2;}
+        .email .subject{float:left; width:100%; font-size:15px;font-weight:normal; color:#00a7e2;}
         .email .subject small{display:block; font-size:14px; color:#232323;}
         .email .stats{float:left; width:100%; margin-top:10px;}
         .email .stats span{float:left; margin-right:10px; font-size:14px;}
@@ -108,7 +108,7 @@ $envoyeC = Envoye::get();
                       <div class="media-body pl-3">
                           <div class="subject"><?php if($entree->type=="email") {?><i class="fa  fa-envelope"></i><?php }?><?php if($entree->type=="sms") {?><i class="fa fa-lg fa-sms"></i><?php }?><?php if($entree->type=="whatsapp") {?><i class="fa fa-lg fa-whatsapp"></i><?php }?>
                               <?php if($entree->type=="tel") {?><i class="fa fa-lg fa-phone-square"></i><?php }?><?php if($entree->type=="fax") {?><i class="fa fa-lg fa-fax"></i><?php }?><?php if($entree->type=="rendu") {?><i class="fa fa-lg fa-file-sound-o"></i><?php }?>
-                            <a  href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a><small style="margin-top:10px;">{{$entree->emetteur}}</small></div>
+                              <a <?php if($entree['viewed']==false) {echo 'style="font-weight:800;font-size:16px;"' ;} ?>  href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a><small style="margin-top:10px;">{{$entree->emetteur}}</small></div>
                         <div class="stats">
                             <div class="row">
                                 <div class="col-sm-8 col-md-8 col-lg-8">

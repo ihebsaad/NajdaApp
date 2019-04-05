@@ -26,7 +26,7 @@ class EntreesController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    // Statut entrées : 3 = archivé= | 1
+    // Statut entrées :    3 = archivé= | 1 = affecté à un dossier |
     public function index()
     {
         //
@@ -120,6 +120,8 @@ class EntreesController extends Controller
         $dossiers = Dossier::all();
 
         $entree = Entree::find($id);
+        $entree->viewed=1;
+
         return view('entrees.show',['dossiers' => $dossiers], compact('entree'));
 
     }
