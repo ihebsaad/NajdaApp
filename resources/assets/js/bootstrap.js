@@ -29,7 +29,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * a simple convenience so we don't have to attach every token manually.
  */
 
-let token = document.head.querySelector('meta[name="csrf-token"]');
+//let token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
@@ -43,7 +43,7 @@ if (token) {
  * allows your team to easily build robust real-time web applications.
  */
 
- import Echo from 'laravel-echo'
+ // import Echo from 'laravel-echo'
 
  window.Pusher = require('pusher-js');
 
