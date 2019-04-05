@@ -5,8 +5,18 @@
     Boîte de réception | Najda Assistance
 @stop
 <?php
+        /*
 use App\Dossier ;
 $dossiers = Dossier::get();
+
+
+use App\Entree ;
+$entreesC = Entree::get();
+
+        */
+use App\Envoye ;
+$envoyeC = Envoye::get();
+
 ?>
 {{-- page level styles --}}
 @section('header_styles')
@@ -31,6 +41,7 @@ $dossiers = Dossier::get();
     <div class="row">
         <div class="col-sm-3 col-md-3">
             <?php use \App\Http\Controllers\EnvoyesController;     ?>
+            <?php use \App\Http\Controllers\EntreesController;     ?>
             <div class="panel">
                 <div class="panel-body pan">
                     <ul class="nav nav-pills nav-stacked">
@@ -50,7 +61,7 @@ $dossiers = Dossier::get();
                         </li>
                         <li class="">
                             <a   href="{{ route('envoyes') }}">
-                                <i class="fa fa-paper-plane fa-fw mrs"></i>
+                                <i class="fa fa-paper-plane fa-fw mrs"><?php  echo EnvoyesController::countenvoyes(); ?></i>
                                 Envoyées
                             </a>
                         </li>
@@ -63,7 +74,7 @@ $dossiers = Dossier::get();
                         </li>
                         <li class="">
                             <a   href="{{ route('entrees.archive') }}">
-                                <span class="badge badge-orange pull-right"></span>
+                                <span class="badge badge-orange pull-right"><?php echo EntreesController::countarchives(); ?></span>
                                 <i class="fa fa-archive fa-fw mrs"></i>
                                 Archive
                             </a>

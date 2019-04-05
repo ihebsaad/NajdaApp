@@ -192,4 +192,17 @@ class EnvoyesController extends Controller
         return $count;
 
     }
+
+    public static function countenvoyes()
+    {
+        $par=Auth::id();
+
+        $count = DB::table('envoyes')
+            ->where('statut','=',1)
+            ->where('par','=',$par)
+            ->count();
+
+        return $count;
+
+    }
 }

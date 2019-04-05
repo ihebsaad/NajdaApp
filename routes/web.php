@@ -50,6 +50,8 @@ Route::get('/emails/disp', 'EmailController@disp');
 Route::get('/emails/test', 'EmailController@test');
 Route::get('/emails/sms', 'EmailController@sms');
 Route::post('/emails/sendsms', 'EmailController@sendsms')->name('emails.sendsms');
+Route::get('/emails/whatsapp', 'EmailController@whatsapp');
+Route::post('/emails/sendwhatsapp', 'EmailController@sendwhatsapp')->name('emails.sendwhatsapp');
 Route::get('/emails/maboite', 'EmailController@maboite');
 Route::get('/emails/open/{id}', 'EmailController@open');
 

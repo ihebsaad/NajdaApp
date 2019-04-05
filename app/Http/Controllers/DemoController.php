@@ -146,13 +146,13 @@ $client->messages->create(
 */
         header("content-type: text/xml");
 
-        $response = new MessagingResponse();
+     /*  $response = new MessagingResponse();
         $response->message(
             "Response is here !"
         );
 
         echo $response;
-
+*/
        /* $dossiers = Dossier::all();
 
 */

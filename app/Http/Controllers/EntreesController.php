@@ -9,6 +9,8 @@ use App\Entree ;
 use App\Dossier ;
 use Spatie\PdfToText\Pdf;
 use DB;
+use Illuminate\Support\Facades\Auth;
+
 
 class EntreesController extends Controller
 {
@@ -164,5 +166,19 @@ class EntreesController extends Controller
         $entree = Entree::find($id);
         $entree->delete();
 
-        return redirect('/entrees/boite')->with('success', '  Supprimé avec succès');    }
+        return redirect('/entrees/boite')->with('success', '  Supprimé avec succès');
+    }
+
+    public static function countarchives()
+    {
+        $par=Auth::id();
+
+        $count = DB::table('entrees')
+            ->where('statut','=',3)
+          //  ->where('par','=',$par)
+            ->count();
+
+        return $count;
+
+    }
 }

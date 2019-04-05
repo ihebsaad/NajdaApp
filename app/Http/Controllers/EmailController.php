@@ -686,4 +686,53 @@ class EmailController extends Controller
     }
 
 
+
+    function sendwhatsapp(Request $request)
+    {
+        $to = trim($request->get('destinataire'));
+        $message = trim( $request->get('message'));
+
+        // Your Account SID and Auth Token from twilio.com/console
+        $sid = 'ACaa5ce5753047f8399d2d3226bfdc4eb7';
+        $token = 'ba7e3af173bcd22f27a6ea248ec30be7';
+        $twliio = new Client2($sid, $token);
+
+
+
+        $message = $twliio->messages
+            ->create('whatsapp:'.$to, // to
+                array(
+                    "from" => "whatsapp:+14155238886",
+                    "body" => $message
+                )
+            );
+
+        $par=Auth::id();
+
+        $envoye = new Envoye([
+            'emetteur' => 'WhatsApp',
+            'destinataire' => $to,
+            'sujet' => 'Whatsapp',
+            'contenu'=> $message,
+            'statut'=> 1,
+            'par'=> $par,
+            'type'=>'whatsapp'
+        ]);
+
+        $envoye->save();
+
+        return redirect('/emails/sendwhatsapp')->with('success', 'SMS Whatsapp Envoyé !');
+
     }
+
+    function whatsapp( )
+    {
+
+        $dossiers = Dossier::all();
+
+        return view('emails.whatsapp', ['dossiers' => $dossiers]);
+
+    }
+
+
+}
