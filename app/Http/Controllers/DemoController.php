@@ -157,20 +157,27 @@ $client->messages->create(
 
 */
         $sender='';
-        $body='';
+        $body='';$sujet='';
         if (isset($_REQUEST['Body'])){$body = $_REQUEST['Body'];}
         if (isset($_REQUEST['From'])){$sender = $_REQUEST['From'];}
 
          $date=date('dmYHis');
         $date=intval($date);
+        $len = strlen($sender);
+
+        if(! strpos($sender,'whatsapp:' ))
+        {$sujet='whatsapp';
+        }
+        else{$sujet='sms';}
+
 
         $entree = new Entree([
             'emetteur' => $sender,
-            'sujet' => 'SMS',
+            'sujet' => $sujet,
             'contenu'=>  $body ,
             //  'reception'=> $date,
             //  'nb_attach'=> $nbattachs,
-            'type'=> 'sms',
+            'type'=> $sujet,
             'mailid'=> $date,
 
         ]);
