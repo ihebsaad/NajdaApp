@@ -135,7 +135,7 @@
 
 <script>
 
-
+/*
  
    // var userId = $('meta[name="userId"]').attr('content')
    Echo.private('App.User.{{Auth::id()}}').notification((notification) => {
@@ -150,4 +150,6 @@
 
           // alert (this.notifications);
         });
+
+        */
   </script>
