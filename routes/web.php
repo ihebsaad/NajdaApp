@@ -11,7 +11,8 @@
 |
 */
 
-//Auth::routes();
+
+Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -29,11 +30,13 @@ $this->post('register', 'Auth\RegisterController@register');
 // Password Reset Routes...
 $this->get('password/request', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 $this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-$this->get('password/reset', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-$this->get('password/reset/', 'Auth\ResetPasswordController@showResetForm');
-$this->get('password/reset/{token}', 'Auth\ResetPasswordController@reset');
+//$this->post('password/reset', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+/////$this->post('password/reset/', 'Auth\ResetPasswordController@showResetForm');
+//$this->get('password/reset/{token}', 'Auth\ResetPasswordController@reset');
 
 //Route::post('logout', 'AuthController@logout');
+$this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+$this->post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
 
 Route::get('/', array('as' => 'home','uses' => 'HomeController@index'));
 Route::post('/demo/fetch', 'DemoController@fetch')->name('demo.fetch');
@@ -42,6 +45,7 @@ Route::get('/demo/test/', 'DemoController@test')->name('demo.test');
 Route::put('/demo/test/', 'DemoController@test')->name('demo.test');
 Route::post('/demo/test/', 'DemoController@test')->name('demo.test');
 Route::post('/home/fetch', 'HomeController@fetch')->name('home.fetch');
+
 
 
 /*** Entrees **/
