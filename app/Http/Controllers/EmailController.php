@@ -724,7 +724,7 @@ class EmailController extends Controller
 
         $envoye->save();
 
-        return redirect('/emails/sendwhatsapp')->with('success', 'SMS Whatsapp Envoyé !');
+        return redirect('/emails/whatsapp')->with('success', 'SMS Whatsapp Envoyé !');
 
     }
 
