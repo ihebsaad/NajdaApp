@@ -97,7 +97,7 @@
         <label>Attachements</label>
         <input class="btn btn-danger fileinput-button" id="file" type="file" name="files[]"   multiple>
     </div>
-    {!! NoCaptcha::renderJs() !!}
+    {!! NoCaptcha::display() !!}
 
     <button  type="submit"  class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
     <a id="broullion"   disabled class="btn btn-md btn-success btn_margin_top"><i class="fa fa-archive" aria-hidden="true"></i> Brouillon</a>
@@ -190,6 +190,14 @@
      });
 </script>
 
+    <script type="text/javascript">
+        var onloadCallback = function() {
+            console.log("grecaptcha is ready!");
+        };
+    </script>
 
+     <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+            async defer>
+    </script>
 @endsection
 
