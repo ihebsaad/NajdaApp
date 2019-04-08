@@ -282,7 +282,7 @@ class EmailController extends Controller
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=$oMessage->getSubject()  ;
+            $sujet=strval($oMessage->getSubject())  ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
           //  $from= $oMessage->getFrom()[0]->mail;
@@ -296,7 +296,7 @@ class EmailController extends Controller
                 $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
                 // message moved
 
-                if(( strpos($sujet,'Undelivered Mail Returned' )===false)  && ( strpos($sujet,'[SPAM]' )===false) && ( strpos($sujet,'Mail delivery failed :' )===false) ){
+                if(( ! strpos($sujet,'Undelivered Mail Returned' ))  && ( ! strpos($sujet,'[SPAM]' )) && ( ! strpos($sujet,'Mail delivery failed :' )) ){
                  $entree = new Entree([
                     'emetteur' => trim($from),
                     'sujet' => trim($sujet),
