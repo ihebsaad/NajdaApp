@@ -24,8 +24,6 @@
                     <td>{{$dossier->type}}</td>
                     <td>{{$dossier->affecte}}</td>
 
- 
-
                 </tr>
             @endforeach
             </tbody>
