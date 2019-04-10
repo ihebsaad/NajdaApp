@@ -55,9 +55,13 @@ class HomeController extends Controller
         // group notifications by ref dossier
         $result = array();
         foreach ($nnotifs as $element) {
-             $result[$element['dossier']][] = $element;
+            if (isset($element['dossier']))
+            { $result[$element['dossier']][] = $element; }
+            else
+            {
+              $result[null][] = $element;
+            }
         }
-
         return view('home', ['countries' => $countries,'dossiers' => $dossiers,'notifications'=>$result]);
      }
 

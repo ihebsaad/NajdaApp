@@ -68,19 +68,33 @@
                                                         {echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']."<ul>";}
                                                         foreach ($ntf as $n) {
                                                           
-                                                          switch ($n['type']) {
-                                                              case "email":
-                                                                  echo '<li rel="tremail" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>'; 
-                                                                  break;
-                                                              case "fax":
-                                                                  echo '<li rel="trfax" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>'; 
-                                                                  break;
-                                                              case "tel":
-                                                                  echo '<li rel="trfax" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>'; 
-                                                                  break;
-                                                              default:
-                                                                  echo '<li rel="tremail" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>'; 
+                                                          if (isset ($n['type']) )
+                                                          {  
+                                                            switch ($n['type']) {
+                                                                case "email":
+                                                                    echo '<li rel="tremail" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    break;
+                                                                case "fax":
+                                                                    echo '<li rel="trfax" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    break;
+                                                                case "tel":
+                                                                    echo '<li rel="trfax" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    break;
+                                                                case "sms":
+                                                                    echo '<li rel="trfax" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    break;
+                                                                case "whatsapp":
+                                                                    echo '<li rel="trfax" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fab fa-whatsapp"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    break;
+                                                                default:
+                                                                    echo '<li rel="tremail" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>'; 
+                                                            }
                                                           }
+                                                          else
+                                                            {
+                                                              echo '<li rel="tremail" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>';
+                                                            }
+
                                                         }
                                                         if (!empty($ntf[0]['dossier'])) {echo '</ul>'; }
                                                       }
