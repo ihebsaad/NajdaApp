@@ -1,6 +1,8 @@
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="eSolutions">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<meta name="userId" content="{{ Auth::check() ? Auth::user()->id : '' }}">
  <link rel="shortcut icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
  <link rel="icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
     <meta charset="UTF-8">
@@ -10,6 +12,8 @@
         @show
     </title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+      <!-- CSRF Token -->
+    
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -47,7 +51,7 @@
 
 <!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
 <script src="{{  URL::asset('public/js/jquery-1.11.1.min.js') }}" type="text/javascript"></script>
-<!--<script src="{{  URL::asset('public/js/app.js') }}" type="text/javascript"></script>-->
+<script src="{{  URL::asset('public/js/app.js') }}" type="text/javascript"></script>
     <?php
     $urlapp=env('APP_URL');
 

@@ -156,7 +156,7 @@ window.Pusher = __webpack_require__(7);
 
 window.Echo = new __WEBPACK_IMPORTED_MODULE_0_laravel_echo__["a" /* default */]({
   broadcaster: 'pusher',
-  key: 'your-pusher-key'
+  key: '10f2013ac245ed0bfe45'
 });
 
 /***/ }),
