@@ -13,6 +13,16 @@
 @include('layouts.partials.left')
 </div>
          <div id="mainc" class="column col-lg-6">
+         @if ($errors->any())
+             <div class="alert alert-danger">
+                 <ul>
+                     @foreach ($errors->all() as $error)
+                         <li>{{ $error }}</li>
+                     @endforeach
+                 </ul>
+             </div><br />
+         @endif
+
     @if (!empty( Session::get('success') ))
         <div class="alert alert-success">
 
@@ -20,6 +30,7 @@
         </div>
 
     @endif
+
             <!-- Content -->
             <div class="panel panel-primary">
               <div class="panel-heading">

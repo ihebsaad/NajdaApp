@@ -28,10 +28,18 @@ class UsersController extends Controller
     {
         $dossiers = User::all();
 
-      //  $users = Users::orderBy('created_at', 'desc')->paginate(10);
-         $users = User::orderBy('id', 'asc')->paginate(10);
-         return view('users.index',['dossiers' => $dossiers], compact('users'));
-    }
+        if(\Gate::allows('isAdmin'))
+        {
+
+            $users = User::orderBy('id', 'asc')->paginate(10);
+            return view('users.index',['dossiers' => $dossiers], compact('users'));        }
+        else {
+            // redirect
+            return redirect('/')->with('success', 'droits insuffisants');
+
+        }
+
+     }
 
  
  
@@ -42,10 +50,18 @@ class UsersController extends Controller
      */
     public function create()
     {
-        $users = User::all();
         $dossiers = Dossier::all();
 
-        return view('users.create',['dossiers' => $dossiers]);
+        if(\Gate::allows('isAdmin'))
+        {
+            return view('users.create',['dossiers' => $dossiers]);
+
+        }
+        else {
+            // redirect
+            return redirect('/')->with('success', 'droits insuffisants');
+
+        }
     }
 
 
@@ -97,7 +113,7 @@ class UsersController extends Controller
         $dossiers = Dossier::all();
 
         $user = User::find($id);
-        return view('users.view',['dossiers' => $dossiers], compact('user'));
+        return view('users.view',['dossiers' => $dossiers], compact('user','id'));
 
     }
 
@@ -113,7 +129,7 @@ class UsersController extends Controller
 
         $user = User::find($id);
 
-        return view('dossiers.edit',['dossiers' => $dossiers], compact('user'));
+        return view('dossiers.edit',['dossiers' => $dossiers], compact('user','id'));
     }
 
     /**
@@ -131,9 +147,34 @@ class UsersController extends Controller
             'share_qty' => 'required|integer'
         ]);
         */
+      /*  $user = User::find($id);
+      $user->name = $request->get('name');
+         $user->email = $request->get('email');
+         $user->type_user = $request->get('type_user');
+*/
+
         $user = User::find($id);
 
+      /*  $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+         ]);
+        */
+ /*       $data = $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+        ]);*/
+
+      if( ($request->get('name'))!=null) { $user->name = $request->get('name');}
+      if( ($request->get('email'))!=null) { $user->email = $request->get('email');}
+      if( ($request->get('user_type'))!=null) { $user->user_type = $request->get('user_type');}
+     //   $user->email = $request->get('email');
+      //  $user->user_type = $request->get('user_type');
+
+        //$data['id'] = $id;
         $user->save();
+
 
         return redirect('/users')->with('success', ' mise à jour avec succès');    }
 
