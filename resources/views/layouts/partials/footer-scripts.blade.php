@@ -135,19 +135,21 @@
 
 <script>
 
-    Echo.private('App.User.{{Auth::id()}}').notification(
-        (notification) => {
-        // Echo.private('kbs').listen('CorrespondanceCreated',(e) => {
-        // Echo.private('kbs.{{Auth::id()}}').listen('CorrespondanceCreated',(e) => {
-        alert(JSON.stringify(notification));
-            //alert ("bonjour");
+
+
+   // var userId = $('meta[name="userId"]').attr('content')
+   Echo.private('App.User.{{Auth::id()}}').notification((notification) )=> {
+         // Echo.private('kbs').listen('CorrespondanceCreated',(e) => {
+            // Echo.private('kbs.{{Auth::id()}}').listen('CorrespondanceCreated',(e) => {
+       // alert(JSON.stringify(notification));
+         alert ("bonjour");
 
            // console.log(e);
            //this.notifications = notification.data.correspondance.dossier;
           // this.notifications.push(notification.data.correspondance.dossier);
 
           // alert (this.notifications);
-        });
+        };
 
         
   </script>

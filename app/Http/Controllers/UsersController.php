@@ -9,7 +9,7 @@ use App\Dossier ;
 use DB;
 
 
-class DossiersController extends Controller
+class UsersController extends Controller
 {
 
 
@@ -25,8 +25,8 @@ class DossiersController extends Controller
      */
     public function index()
     {
-         $dossiers = Dossier::orderBy('created_at', 'desc')->paginate(5);
-        return view('dossiers.index', compact('dossiers'));
+         $users = Users::orderBy('created_at', 'desc')->paginate(10);
+        return view('users.index', compact('dossiers'));
     }
 
  
@@ -38,9 +38,9 @@ class DossiersController extends Controller
      */
     public function create()
     {
-        $dossiers = Dossier::all();
+        $users = User::all();
 
-        return view('dossiers.create',['dossiers' => $dossiers]);
+        return view('users.create',['dossiers' => $dossiers]);
     }
 
     /**
@@ -51,7 +51,7 @@ class DossiersController extends Controller
      */
     public function store(Request $request)
     {
-        $dossier = new Dossier([
+        $user = new Dossier([
              'ref' =>trim( $request->get('ref')),
              'type' => trim($request->get('type')),
              'affecte'=> $request->get('affecte'),
