@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
-use App\Entree ;use App\Dossier ;
+use App\Entree ;
+use App\Dossier ;
 use App\User ;
 use DB;
 
@@ -27,8 +28,9 @@ class UsersController extends Controller
     {
         $dossiers = User::all();
 
-        $users = Users::orderBy('created_at', 'desc')->paginate(10);
-        return view('users.index',['dossiers' => $dossiers], compact('dossiers'));
+      //  $users = Users::orderBy('created_at', 'desc')->paginate(10);
+         $users = User::orderBy('id', 'asc')->paginate(10);
+         return view('users.index',['dossiers' => $dossiers], compact('users'));
     }
 
  
@@ -69,18 +71,20 @@ class UsersController extends Controller
 
     }
 
-    public function saving(array $data)
+    public function saving(Request $request)
     {
-          User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
-		
-        return redirect('/users')->with('success', ' ajouté avec succès');
- 
-    }
+        $user = new User([
+               'name' => $request->get('name'),
+                'email' => $request->get('email'),
+               'user_type'=> $request->get('user_type'),
+               'password'=>  bcrypt($request->get('password')),
 
+        ]);
+
+        $user->save();
+        return redirect('/users')->with('success', ' ajouté avec succès');
+
+    }
 
     /**
      * Display the specified resource.

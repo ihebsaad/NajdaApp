@@ -107,8 +107,10 @@ Route::get('/dossiers/view/{id}', 'DossiersController@view');
 /*** Users **/
 Route::resource('/users',  'UsersController');
 Route::get('/users', array('as' => 'users','uses' => 'UsersController@index'));
+Route::get('/users/create','UsersController@create')->name('users.create');
 Route::post('/users/saving','UsersController@saving')->name('users.saving');
 Route::get('/users/view/{id}', 'UsersController@view');
+Route::get('/users/destroy/{id}', 'UsersController@destroy');
 
 
 /**** LOGS  ****/

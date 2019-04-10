@@ -1,9 +1,9 @@
-@extends('layouts.login')
+@extends('layouts.mainlayout')
 
 @section('content')
 
 
-                    <form class="form-horizontal" method="POST" action="{{ route('users.add') }}">
+                    <form class="form-horizontal" method="POST" action="{{ route('users.saving') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -49,12 +49,16 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirmation </label>
+                            <label for="Role" class="col-md-4 control-label">Rôle</label>
 
                             <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                            </div>
+                                <select  name="user_type">
+                                    <option value="user">Simple</option>
+                                    <option  value="admin">Admin</option>
+                                </select>
+                             </div>
                         </div>
+
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
