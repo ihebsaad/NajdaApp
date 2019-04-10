@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
-use App\Entree ;
-use App\Dossier ;
+use App\Entree ;use App\Dossier ;
+use App\User ;
 use DB;
 
 
@@ -25,8 +25,10 @@ class UsersController extends Controller
      */
     public function index()
     {
-         $users = Users::orderBy('created_at', 'desc')->paginate(10);
-        return view('users.index', compact('dossiers'));
+        $dossiers = User::all();
+
+        $users = Users::orderBy('created_at', 'desc')->paginate(10);
+        return view('users.index',['dossiers' => $dossiers], compact('dossiers'));
     }
 
  
@@ -39,42 +41,44 @@ class UsersController extends Controller
     public function create()
     {
         $users = User::all();
+        $dossiers = Dossier::all();
 
         return view('users.create',['dossiers' => $dossiers]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+	 
+	     protected function validator(array $data)
     {
-        $user = new Dossier([
-             'ref' =>trim( $request->get('ref')),
-             'type' => trim($request->get('type')),
-             'affecte'=> $request->get('affecte'),
-
+        return Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
         ]);
-
-        $dossier->save();
-        return redirect('/dossiers')->with('success', '  has been added');
+    }
+	
+    public function store(array $data)
+    {
+        User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+		
+        return redirect('/users')->with('success', ' ajouté avec succès');
 
     }
 
-    public function saving(Request $request)
+    public function saving(array $data)
     {
-        $dossier = new Dossier([
-       //     'emetteur' => $request->get('emetteur'),
-        //    'sujet' => $request->get('sujet'),
-        //    'contenu'=> $request->get('contenu'),
-
+          User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
         ]);
-
-        $dossier->save();
-        return redirect('/dossiers')->with('success', 'Entry has been added');
-
+		
+        return redirect('/users')->with('success', ' ajouté avec succès');
+ 
     }
 
 
@@ -88,8 +92,8 @@ class UsersController extends Controller
     {
         $dossiers = Dossier::all();
 
-        $dossier = Dossier::find($id);
-        return view('dossiers.view',['dossiers' => $dossiers], compact('dossier'));
+        $user = User::find($id);
+        return view('users.view',['dossiers' => $dossiers], compact('user'));
 
     }
 
@@ -101,11 +105,11 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        //
-        $dossier = Dossier::find($id);
         $dossiers = Dossier::all();
 
-        return view('dossiers.edit',['dossiers' => $dossiers], compact('dossier'));
+        $user = User::find($id);
+
+        return view('dossiers.edit',['dossiers' => $dossiers], compact('user'));
     }
 
     /**
@@ -123,13 +127,11 @@ class UsersController extends Controller
             'share_qty' => 'required|integer'
         ]);
         */
-        $dossier = Dossier::find($id);
-       // $dossier->titre = $request->get('titre');
-        //$dossier->share_price = $request->get('share_price');
-       // $dossier->share_qty = $request->get('share_qty');
-        $dossier->save();
+        $user = User::find($id);
 
-        return redirect('/dossiers')->with('success', '  has been updated');    }
+        $user->save();
+
+        return redirect('/users')->with('success', ' mise à jour avec succès');    }
 
     /**
      * Remove the specified resource from storage.
@@ -139,8 +141,8 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        $dossier = Dossier::find($id);
-        $dossier->delete();
+        $user = User::find($id);
+        $user->delete();
 
-        return redirect('/dossiers')->with('success', '  has been deleted Successfully');    }
+        return redirect('/users')->with('success', '  supprimé avec succès');    }
 }

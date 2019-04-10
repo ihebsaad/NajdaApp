@@ -333,22 +333,23 @@ class EmailController extends Controller
 
                     $nom = $oAttachment->getName();
                     $facturation='';
+                    $type=  $oAttachment->getExtension();
 
-
-                    // verifier si l'attachement pdf contient des mots de facturation
+                     // verifier si l'attachement pdf contient des mots de facturation
                     if ( App::environment() === 'production') {
 
+                        if ($type=='pdf')
+                        {
                     $path=$path.$id."/".$nom;
                     $path=realpath($path);
                           $text = (new Pdf())
                              ->setPdf($path )
                                 ->text();
 
-                                 if(strpos($text,'facturation')!==false)
-                                 {
+                        if(strpos($text,'facturation')!==false)
+                         {
                                      $facturation='facturation';
-
-                                  }
+                         }
                         if(strpos($text,'invoice')!==false)
                         {
                             $facturation=$facturation.' '.'invoice';
@@ -365,12 +366,12 @@ class EmailController extends Controller
                         }
 
 
-                    } // end if
+                      } // end if pdf
+                    } // end if  production
 
 
                    $path2= '/Emails/'.$id.'/'.$nom ;
 
-                    $type=  $oAttachment->getExtension();
                     $attach = new Attachement([
                         'nom' => $nom,
                         'type' => $type,

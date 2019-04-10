@@ -103,6 +103,14 @@ Route::get('/dossiers', array('as' => 'dossiers','uses' => 'DossiersController@i
 Route::post('/dossiers/saving','DossiersController@saving')->name('dossiers.saving');
 Route::get('/dossiers/view/{id}', 'DossiersController@view');
 
+
+/*** Users **/
+Route::resource('/users',  'UsersController');
+Route::get('/users', array('as' => 'users','uses' => 'UsersController@index'));
+Route::post('/users/saving','UsersController@saving')->name('users.saving');
+Route::get('/users/view/{id}', 'UsersController@view');
+
+
 /**** LOGS  ****/
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('errors', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@errors');
