@@ -137,9 +137,8 @@
 
 
 
-    var userId=1;
-        //= $('meta[name="userId"]').attr('content')
-   Echo.private('App.User.'+userId).notification(  (notification) => {
+   // var userId = $('meta[name="userId"]').attr('content')
+   Echo.private('App.User.{{Auth::id()}}').notification(  (notification) => {
        // alert(JSON.stringify(notification));
          alert ("bonjour");
 
