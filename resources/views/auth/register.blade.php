@@ -1,14 +1,15 @@
 @extends('layouts.login')
 
 @section('content')
-<!--<div class="container">-->
+<div class="container">
+<!--
 <div class="background-container">
 <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1231630/moon2.png" alt="">
 <div class="stars"></div>
 <div class="twinkling"></div>
 <div class="clouds"></div>
- 
-</div>
+
+</div>-->
    <div class="row" style="margin-top:10%;">
         <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-default">
@@ -80,9 +81,71 @@
             </div>
         </div>
     </div>
+</div>
+<div class="bg"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
 @endsection
 
 <style>
+
+
+    html {
+        height:100%;
+    }
+
+    body {
+        margin:0;
+    }
+
+    .bg {
+        animation:slide 3s ease-in-out infinite alternate;
+        background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
+        bottom:0;
+        left:-50%;
+        opacity:.5;
+        position:fixed;
+        right:-50%;
+        top:0;
+        z-index:-1;
+    }
+
+    .bg2 {
+        animation-direction:alternate-reverse;
+        animation-duration:20s;
+    }
+
+    .bg3 {
+        animation-duration:25s;
+    }
+
+    .content {
+        background-color:rgba(255,255,255,.8);
+        border-radius:.25em;
+        box-shadow:0 0 .25em rgba(0,0,0,.25);
+        box-sizing:border-box;
+        left:50%;
+        padding:10vmin;
+        position:fixed;
+        text-align:center;
+        top:50%;
+        transform:translate(-50%, -50%);
+    }
+
+    h1 {
+        font-family:monospace;
+    }
+
+    @keyframes slide {
+        0% {
+            transform:translateX(-25%);
+        }
+        100% {
+            transform:translateX(25%);
+        }
+    }
+
+/*
 @keyframes move-background {
   from {
     -webkit-transform: translate3d(0px, 0px, 0px);
@@ -171,5 +234,5 @@ img {
   z-index: 3;
   right: 20px;
 }
-
+*/
 </style>

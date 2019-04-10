@@ -4,7 +4,9 @@
 
 @section('content')
 <div class="container">
-    <div class="row" style="margin-top:15%;">
+    <div class="row" style="margin-top:8%;">
+        <center><img style="margin-bottom:30px;"  class="img-circle" width="100" src="{{ asset('public/img/najda.png') }}"></img></center>
+
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default ">
                 <div class="panel-heading  icon2" style="color:white;font-weight:800;font-size:20px"><center>Connexion</center></div>
