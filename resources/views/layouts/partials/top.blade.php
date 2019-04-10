@@ -26,7 +26,7 @@
 
         
 
-        <div class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
+        <div id="dpause" class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
           <a href="#" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;"> 
                                                 <span class="fa fa-fw fa-pause"></span>
                                                 <br>
