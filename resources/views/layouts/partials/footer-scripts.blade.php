@@ -139,8 +139,8 @@
 
    // var userId = $('meta[name="userId"]').attr('content')
    Echo.private('App.User.{{Auth::id()}}').notification(  (notification) => {
-       // alert(JSON.stringify(notification));
-         alert ("bonjour");
+        alert(JSON.stringify(notification));
+       //  alert ("bonjour");
 
            // console.log(e);
            //this.notifications = notification.data.correspondance.dossier;
