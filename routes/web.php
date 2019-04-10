@@ -35,8 +35,12 @@ $this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 //$this->get('password/reset/{token}', 'Auth\ResetPasswordController@reset');
 
 //Route::post('logout', 'AuthController@logout');
-$this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+///$this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+///$this->post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
+
 $this->post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
+$this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');;
+
 
 Route::get('/', array('as' => 'home','uses' => 'HomeController@index'));
 Route::post('/demo/fetch', 'DemoController@fetch')->name('demo.fetch');
