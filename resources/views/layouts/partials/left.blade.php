@@ -68,8 +68,10 @@
                                                         {echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']."<ul>";}
                                                         foreach ($ntf as $n) {
                                                           
-                                                          if (isset ($n['type']) )
-                                                          {  
+                                                          if (!isset ($n['type']) )
+                                                          {  $n['type'] = 'default'; }
+                                                          if (!isset ($n['sujet']) )
+                                                            {  $n['sujet'] = ' '; }
                                                             switch ($n['type']) {
                                                                 case "email":
                                                                     echo '<li rel="tremail" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>'; 
@@ -89,11 +91,7 @@
                                                                 default:
                                                                     echo '<li rel="tremail" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>'; 
                                                             }
-                                                          }
-                                                          else
-                                                            {
-                                                              echo '<li rel="tremail" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>';
-                                                            }
+
 
                                                         }
                                                         if (!empty($ntf[0]['dossier'])) {echo '</ul>'; }
