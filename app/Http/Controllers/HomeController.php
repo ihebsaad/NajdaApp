@@ -59,7 +59,7 @@ class HomeController extends Controller
             { $result[$element['dossier']][] = $element; }
             else
             {
-              $result[$element[null]][] = $element;
+              $result[null][] = $element;
             }
         }
         print_r($result);
