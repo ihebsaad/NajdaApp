@@ -80,13 +80,13 @@
                                                                     echo '<li rel="trfax" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>'; 
                                                                     break;
                                                                 case "tel":
-                                                                    echo '<li rel="trfax" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    echo '<li rel="trtel" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>'; 
                                                                     break;
                                                                 case "sms":
-                                                                    echo '<li rel="trfax" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    echo '<li rel="trsms" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span> '.$n['sujet'].'</span></a></li>'; 
                                                                     break;
                                                                 case "whatsapp":
-                                                                    echo '<li rel="trfax" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fab fa-whatsapp"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    echo '<li rel="trwp" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fab fa-whatsapp"></span> '.$n['sujet'].'</span></a></li>'; 
                                                                     break;
                                                                 default:
                                                                     echo '<li rel="tremail" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>'; 

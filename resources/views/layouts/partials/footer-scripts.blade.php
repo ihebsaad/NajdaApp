@@ -29,6 +29,7 @@
         $('.menu-icon').bind('click', function() {
           $(this).toggleClass('active');
           $(this).find('div').removeClass('no-animation');
+
         });
     </script>
     <!-- end of page level js -->
@@ -80,7 +81,10 @@
             "types" : {
                 "default" : { "icon" : "glyphicon glyphicon-folder-open" },
                 "tremail" : { "icon" : "menu-icon fa fa-fw fa-envelope" },
-                "trfax" : { "icon" : "glyphicon glyphicon-print" }
+                "trfax" : { "icon" : "glyphicon glyphicon-print" },
+                "trtel" : { "icon" : "menu-icon fa fa-fw fa-phone" },
+                "trsms" : { "icon" : "menu-icon fas fa-sms" },
+                "trwp" : { "icon" : "menu-icon fab fa-whatsapp" },
             },
             "plugins" : ["dnd", "types"]
         }).bind("select_node.jstree", function (e, data) {
@@ -91,12 +95,17 @@
 
           window.open(href,'_self');
         });
+
         
     });</script>
     <!-- end page level js -->
 
 <script>
-
+    /*$( "#dpause" ).click(function() {
+      $('#jstree').jstree().create_node("#prt_19N00276" ,  { "id" : "ajson5", "text" : "notif (new)" , "type" : "tremail"}, "last", function(){
+        $("#ajson5").css("background-color", "red");
+      });
+    });*/
     $( "#open" ).click(function() {
         $(".folders").css("display", "none");
      /*   $( ".folders" ).hide( "slow", function() {
@@ -134,12 +143,18 @@
 </script>
 
 <script>
-
-
+/*var jsnt = '{"data":{"entree":{"sujet":"blabla", "type":"email", "id":"identree"}},"id":"idnotif","type": "typenotif"}';
+var parsed = JSON.parse(jsnt);
+alert(parsed['data']['entree']['type']);
+console.log(parsed);*/
 
    // var userId = $('meta[name="userId"]').attr('content')
    Echo.private('App.User.{{Auth::id()}}').notification(  (notification) => {
-        alert(JSON.stringify(notification));
+        //alert(JSON.stringify(notification));
+        var jsnt = JSON.stringify(notification);
+        var parsed = JSON.parse(jsnt);
+        alert("l'ID: "+parsed['data']['entree']['id']+" le sujet: "+parsed['data']['entree']['sujet']);
+
        //  alert ("bonjour");
 
            // console.log(e);
