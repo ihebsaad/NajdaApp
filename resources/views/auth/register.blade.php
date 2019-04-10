@@ -12,6 +12,7 @@
 </div>-->
    <div class="row" style="margin-top:10%;">
         <div class="col-md-6 col-md-offset-3">
+            <center><a href="{{ config('app.url') }}"><img style="margin-bottom:30px;"  class="img-circle" width="100" src="{{ asset('public/img/najda.png') }}"></img></a></center>
             <div class="panel panel-default">
                 <div class="panel-heading  icon2" style="color:white;font-weight:800;font-size:20px"><center>Inscription</center></div>
 

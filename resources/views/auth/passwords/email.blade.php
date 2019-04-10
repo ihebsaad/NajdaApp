@@ -5,10 +5,10 @@
     <div class="row"  style="margin-top:5%">
 
         <div class="col-md-8 col-md-offset-2">
-            <center><img style="margin-bottom:30px;"  class="img-circle" width="100" src="{{ asset('public/img/najda.png') }}"></img></center>
+            <center><a href="{{ config('app.url') }}"><img style="margin-bottom:30px;"  class="img-circle" width="100" src="{{ asset('public/img/najda.png') }}"></img></a></center>
 
             <div class="panel panel-default">
-                <div class="panel-heading" style="font-weight:800;font-size:20px;text-align:center;">Réinitialiser le mot de passe
+                <div class="panel-heading" style="color:black;font-weight:800;font-size:20px;text-align:center;">Réinitialiser le mot de passe
                 </div>
 
                 <div class="panel-body">
