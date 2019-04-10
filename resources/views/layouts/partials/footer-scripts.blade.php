@@ -156,6 +156,7 @@ console.log(parsed);*/
         //alert("l'ID: "+parsed['data']['entree']['id']+" le sujet: "+parsed['data']['entree']['sujet']);
         $('#jstree').jstree().create_node("#" ,  { "id" : parsed['data']['entree']['id'], "text" : parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "last", function(){
           $("#"+parsed['data']['entree']['id']).css("background-color", "red");
+          $('#jstree').jstree('select_node', parsed['data']['entree']['id']);
         });
 
        //  alert ("bonjour");
