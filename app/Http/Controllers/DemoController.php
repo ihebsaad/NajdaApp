@@ -84,8 +84,6 @@ class DemoController extends Controller
 
 
 
-
-
       $output = '<ul class="dropdown-menu" style="padding:10px;display:block; position:relative; top:-65px">';
       $c=0;
       foreach($data as $row)
@@ -165,7 +163,7 @@ $client->messages->create(
         $date=intval($date);
         $len = strlen($sender);
 
-        if(! strpos($sender,'whatsapp:' ))
+        if(strpos($sender,'whatsapp:' )!==false)
         {$sujet='whatsapp';
         }
         else{$sujet='sms';}

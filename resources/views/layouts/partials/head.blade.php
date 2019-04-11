@@ -100,11 +100,11 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
 
 
-/*
+
         function checkemails(){
             $.ajax({
                 type: "get",
-                url: "<?php /// echo $urlapp; ?>/emails/check",
+                url: "<?php echo $urlapp; ?>/emails/check",
                 success:function(data)
                 {
                     //console.log the response
@@ -112,12 +112,10 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     var id=parseInt((data));
                     if (id>0)
                     {
-                  //    $('#jstree').jstree().create_node("<?php //  print $urlnotif;?>"+id+"" ,  { "id" : "ajson5", "text" : ""+id+" (new)" }, "last", function(){
-                       // $(this).css("background-color", "red");
-                    // });
+    
 
                         window.showAlert = function(){
-                                   alertify.alert('<a href="<?php ///print $urlnotif;?>'+id+'">Voir notification</a>');
+                                   alertify.alert('<a href="<?php print $urlnotif;?>'+id+'">Voir notification</a>');
                           //  alertify.alert('<a href="http://localhost/najdaapp/entrees/show/'+id+'">Voir notification</a>');
 
                         }
@@ -134,7 +132,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 }
             });
         }
-*/
+
         function dispatch(){
             $.ajax({
                 type: "get",
