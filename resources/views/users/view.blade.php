@@ -1,6 +1,7 @@
 @extends('layouts.mainlayout')
 
 @section('content')
+    <div class="container">
     <form class="form-horizontal" method="POST"  action="{{action('UsersController@update', $id)}}" >
         {{ csrf_field() }}
 
@@ -18,7 +19,7 @@
     <input id="type" type="text" class="form-control" name="email"  value={{ $user->email }} />
 </div>
 <div class="form-group">
-    <label for="user_type">Role :</label>
+    <label for="user_type">Rôle :</label>
      <select  name="user_type"   >
         <option value="user"  <?php if($user->user_type=='user') {echo'selected';}?> >Simple</option>
         <option  value="admin"  <?php if($user->user_type=='admin') {echo'selected';}?>  >Admin</option>
@@ -35,6 +36,6 @@
     </form>
 
 
-
+</div>
 	
 @endsection

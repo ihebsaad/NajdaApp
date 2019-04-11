@@ -98,17 +98,13 @@ $urlnotif=$urlapp.'/entrees/show/' ;
             $('#countryList').fadeOut();
         });
 
-        /**** TIME ****/
-    /*    var start = new Date;
-        setInterval(function() {
-            $('.Timer').text((new Date - start) / 1000 + " Seconds");
-        }, 1000);
-*/
 
+
+/*
         function checkemails(){
             $.ajax({
                 type: "get",
-                url: "<?php echo $urlapp; ?>/emails/check",
+                url: "<?php /// echo $urlapp; ?>/emails/check",
                 success:function(data)
                 {
                     //console.log the response
@@ -121,7 +117,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     // });
 
                         window.showAlert = function(){
-                                   alertify.alert('<a href="<?php  print $urlnotif;?>'+id+'">Voir notification</a>');
+                                   alertify.alert('<a href="<?php ///print $urlnotif;?>'+id+'">Voir notification</a>');
                           //  alertify.alert('<a href="http://localhost/najdaapp/entrees/show/'+id+'">Voir notification</a>');
 
                         }
@@ -138,7 +134,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 }
             });
         }
-
+*/
         function dispatch(){
             $.ajax({
                 type: "get",
