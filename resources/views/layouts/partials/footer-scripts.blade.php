@@ -151,21 +151,16 @@ console.log(parsed);*/
    // var userId = $('meta[name="userId"]').attr('content')
    Echo.private('App.User.{{Auth::id()}}').notification(  (notification) => {
         //alert(JSON.stringify(notification));
+        // extraction du contenu de la notification en format json
         var jsnt = JSON.stringify(notification);
         var parsed = JSON.parse(jsnt);
         //alert("l'ID: "+parsed['data']['entree']['id']+" le sujet: "+parsed['data']['entree']['sujet']);
+        // ajout de la nouvelle node
         $('#jstree').jstree().create_node("#" ,  { "id" : parsed['data']['entree']['id'], "text" : parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "last", function(){
           $("#"+parsed['data']['entree']['id']).css("background-color", "red");
-          $('#jstree').jstree('select_node', parsed['data']['entree']['id']);
+          //$('#jstree').jstree('select_node', parsed['data']['entree']['id']);
         });
 
-       //  alert ("bonjour");
-
-           // console.log(e);
-           //this.notifications = notification.data.correspondance.dossier;
-          // this.notifications.push(notification.data.correspondance.dossier);
-
-          // alert (this.notifications);
         });
 
         

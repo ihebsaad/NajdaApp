@@ -297,7 +297,24 @@ class EmailController extends Controller
                 // message moved
 
                 if(( ! strpos($sujet,'Undelivered Mail Returned' ))  && ( ! strpos($sujet,'[SPAM]' )) && ( ! strpos($sujet,'Mail delivery failed :' )) ){
-                 $entree = new Entree([
+                 
+
+        // dispatch
+        $dossiers = DB::table('dossiers')->pluck('ref');
+        $refdossier='';
+        $statut = 0;
+        foreach ($dossiers as $ref) {
+
+                if (   (strpos($sujet, $ref )!==false) || (strpos($contenu, $ref )!==false)    )
+                {
+                    $refdossier = $ref;
+                    $statut = 1;
+                    break;
+                }
+
+        }
+
+                $entree = new Entree([
                     'emetteur' => trim($from),
                     'sujet' => trim($sujet),
                     'contenu'=> utf8_encode($contenu) ,
@@ -306,12 +323,18 @@ class EmailController extends Controller
                     'type'=> 'email',
                      'mailid'=> $mailid,
                      'viewed'=>0,
+                     'dossier'=>$refdossier,
+                     'statut'=>$statut,
 
                 ]);
 
+
+
+
+
                 $entree->save();
                 // Dispatching
-                $this->disp();
+                //$this->disp();
                 $id=$entree->id;
 
                 if($storeid==false){
@@ -352,17 +375,17 @@ class EmailController extends Controller
                          }
                         if(strpos($text,'invoice')!==false)
                         {
-                            $facturation=$facturation.' '.'invoice';
+                            $facturation=$facturation.' , '.'invoice';
                         }
 
                         if(strpos($text,'plafond')!==false)
                         {
-                            $facturation=$facturation.' '.'plafond';
+                            $facturation=$facturation.' , '.'plafond';
                         }
 
                         if(strpos($text,'gop')!==false)
                         {
-                            $facturation=$facturation.' '.'gop';
+                            $facturation=$facturation.' , '.'gop';
                         }
 
 
