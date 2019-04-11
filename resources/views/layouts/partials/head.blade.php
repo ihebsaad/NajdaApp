@@ -112,7 +112,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     var id=parseInt((data));
                     if (id>0)
                     {
-    
+
 
                         window.showAlert = function(){
                                    alertify.alert('<a href="<?php print $urlnotif;?>'+id+'">Voir notification</a>');
