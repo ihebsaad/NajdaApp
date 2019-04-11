@@ -24,6 +24,8 @@
 
 <script  src="{{ asset('public/js/summernote.min.js') }}"  type="text/javascript"></script>
 <script src="{{  URL::asset('public/js/custom_js/compose.js') }}" type="text/javascript"></script>
+<script src="{{ asset('public/js/push.min.js') }}"></script>
+<script src="{{ asset('public/js/serviceWorker.min.js') }}"></script>
 
     <script type="text/javascript">
         $('.menu-icon').bind('click', function() {
@@ -150,23 +152,62 @@ console.log(parsed);*/
 
    // var userId = $('meta[name="userId"]').attr('content')
    Echo.private('App.User.{{Auth::id()}}').notification(  (notification) => {
-        //alert(JSON.stringify(notification));
+        
+        // notification desktop
+
+            Push.config({
+            serviceWorker: "{{ asset('public/js/serviceWorker.min.js') }}", // Sets a                      custom service worker script
+              fallback: function(payload) {
+            // Code that executes on browsers with no notification support
+             // "payload" is an object containing the 
+            // title, body, tag, and icon of the notification 
+             }
+           });
+
+         Push.create("Notification Nejda", {
+
+          body: "Nouvelle Notification",
+          icon: "{{ asset('public/img/nejda.jpg') }}",
+          timeout: 5000,
+       
+          onClick: function(){
+          window.focus();
+          this.close();
+         }
+         
+        });
+
         // extraction du contenu de la notification en format json
         var jsnt = JSON.stringify(notification);
         var parsed = JSON.parse(jsnt);
         //alert("l'ID: "+parsed['data']['entree']['id']+" le sujet: "+parsed['data']['entree']['sujet']);
-        // ajout de la nouvelle node
-        $('#jstree').jstree().create_node("#" ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['dossier'] +" || "+parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "first", function(){
-          //$("#"+parsed['data']['entree']['id']).css("background-color", "red");
-          $( "#"+parsed['data']['entree']['id'] ).animate({
-            opacity: 0.25,
-            left: "+=50",
-            height: "toggle"
-          }, 5000, function() {
-            // Animation complete.
+        // verifier si la notification est dispatche
+        if ((typeof parsed['data']['entree']['dossier'] == "undefined") && (parsed['data']['entree']['dossier'] !== null))
+        {
+          // verifier si le dossier exist dans la liste des notifications
+          if( $("#prt_"+parsed['data']['entree']['dossier']).length ) 
+          {
+            // ajout nouvelle notification sous son dossier
+            $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "inside", function(){
+            });
+
+          }
+        }
+        else
+        {  
+          // ajout de la nouvelle node (notification non dispatche)
+          $('#jstree').jstree().create_node("#" ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['dossier'] +" || "+parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "first", function(){
+            //$("#"+parsed['data']['entree']['id']).css("background-color", "red");
+            $( "#"+parsed['data']['entree']['id'] ).animate({
+              opacity: 0.25,
+              left: "+=50",
+              height: "toggle"
+            }, 5000, function() {
+              // Animation complete.
+            });
+            //$('#jstree').jstree('select_node', parsed['data']['entree']['id']);
           });
-          //$('#jstree').jstree('select_node', parsed['data']['entree']['id']);
-        });
+        }
 
         });
 
