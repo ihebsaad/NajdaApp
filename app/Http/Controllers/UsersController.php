@@ -8,6 +8,7 @@ use App\Entree ;
 use App\Dossier ;
 use App\User ;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 
 class UsersController extends Controller
@@ -115,6 +116,15 @@ class UsersController extends Controller
         $user = User::find($id);
         return view('users.view',['dossiers' => $dossiers], compact('user','id'));
 
+    }
+
+    public function profile($id)
+    {
+        if(  Auth::id() ==$id )
+        {   $dossiers = Dossier::all();
+         $user = User::find($id);
+        return view('users.profile',['dossiers' => $dossiers], compact('user','id'));
+        }
     }
 
     /**

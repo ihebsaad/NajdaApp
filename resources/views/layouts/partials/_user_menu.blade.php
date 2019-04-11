@@ -1,41 +1,41 @@
 <li class="dropdown user user-menu">
     <a href="#" class="dropdown-toggle padding-user" data-toggle="dropdown">
 
-            <img src="{{   URL::asset('public/img/qvLWCpbhZp.jpg') }}" alt="img"
-                 class="img-circle img-responsive pull-left" height="100" width="100" style="width: 60px; height: 60px;" />
+         <i  style="color:#b6cce7" class="fas fa-user-circle fa-5x myuser"></i>
 
-        <div class="riot">
-        </div>
+
     </a>
     <ul class="dropdown-menu">
         <!-- User image -->
         <li class="user-header">
-                <img src="{{   URL::asset('public/img/qvLWCpbhZp.jpg') }}" alt="img"
-                     class="img-circle img-bor"/>
-            <p>Agent Najda</p>
+            <i style="color:white" class="far fa-user  fa-3x"></i><br>
+           <?php $user = auth()->user();
+                $name=$user->name;
+                $iduser=$user->id;
+            ?>
+
+            <p><?php echo $name; ?></p>
         </li>
-        <li role="presentation"></li>
-        <li>
-            <a href="#">
-                <i class="fa fa-fw fa-user"></i>
+        <li style="margin-top:8px">
+            <a href="{{ route('profile',$iduser) }}">
+                <i class="fas fa-fw fa-lg fa-id-badge"></i>
                 Mon profil
             </a>
         </li>
         <li role="presentation" class="divider"></li>
-        <!-- Menu Footer-->
-        <li class="user-footer">
-            <div class="pull-left">
-            <a href="#">
-                <i class="fa fa-fw fa-retweet"></i>
-                Rôles
+         <li style="margin-bottom:8px">
+            <a href="{{ route('logout') }}">
+                <i class="fas fa-fw fa-lg fa-id-badge"></i>
+                Déconnexion
             </a>
-            </div>
-            <div class="pull-right">
-                <a   href="{{ route('logout') }}">
-                    <i class="fa fa-fw fa-sign-out"></i>
-                    Se déconnecter
-                </a>
-            </div>
         </li>
+
     </ul>
 </li>
+
+<style>
+   /* .myuser:hover{color:black;}*/
+   .navbar-nav>.user-menu>.dropdown-menu>li.user-header
+   {width:160px!important;height:90px!important;}
+   .dropdown-menu li a :hover{background-color: transparent;color:white;}
+</style>

@@ -15,7 +15,7 @@
                 <td>ID</td>
                 <td>Nom</td>
                 <td>Email</td>
-                <td>Role</td>
+                <td>Rôle</td>
               </tr>
             </thead>
             <tbody>

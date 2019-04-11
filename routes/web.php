@@ -110,6 +110,7 @@ Route::get('/users', array('as' => 'users','uses' => 'UsersController@index'));
 Route::get('/users/create','UsersController@create')->name('users.create');
 Route::post('/users/saving','UsersController@saving')->name('users.saving');
 Route::get('/users/view/{id}', 'UsersController@view');
+Route::get('/users/profile/{id}', 'UsersController@profile')->name('profile');
 Route::get('/users/destroy/{id}', 'UsersController@destroy');
 //Route::get('/edit/{id}','UsersController@edit');
 Route::post('/edit/{id}','UsersController@update');
