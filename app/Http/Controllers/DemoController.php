@@ -178,9 +178,17 @@ $client->messages->create(
             'type'=> $sujet,
             'mailid'=> $date,
 
+            
+
+            'nb_attach'=>0,
+            'reception'=>$date,
+             'dossier'=>'',
+            'statut'=>0
+
         ]);
         $entree->save();
 
+        protected $fillable = ['emetteur','sujet','contenu','nb_attach','reception','type','dossier','statut','updated_at','mailid','affecte','notif','viewed'];
 
 
     }
