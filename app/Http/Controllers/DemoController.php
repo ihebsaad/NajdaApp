@@ -178,13 +178,13 @@ $client->messages->create(
             'type'=> $sujet,
             'mailid'=> $date,
 
-            
 
+/*
             'nb_attach'=>0,
             'reception'=>$date,
              'dossier'=>'',
             'statut'=>0
-
+*/
         ]);
         $entree->save();
 
