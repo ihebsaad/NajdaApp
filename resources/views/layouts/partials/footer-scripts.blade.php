@@ -182,7 +182,7 @@ console.log(parsed);*/
         var parsed = JSON.parse(jsnt);
         //alert("l'ID: "+parsed['data']['entree']['id']+" le sujet: "+parsed['data']['entree']['sujet']);
         // verifier si la notification est dispatche
-        if ((typeof parsed['data']['entree']['dossier'] == "undefined") && (parsed['data']['entree']['dossier'] !== null))
+        if ((typeof parsed['data']['entree']['dossier'] !== "undefined") && (parsed['data']['entree']['dossier'] !== null))
         {
           // verifier si le dossier exist dans la liste des notifications
           if( $("#prt_"+parsed['data']['entree']['dossier']).length ) 
