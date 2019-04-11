@@ -157,6 +157,31 @@ console.log(parsed);*/
         var jsnt = JSON.stringify(notification);
         var parsed = JSON.parse(jsnt);
         //alert("l'ID: "+parsed['data']['entree']['id']+" le sujet: "+parsed['data']['entree']['sujet']);
+        //attribuer type selon type recu
+        var typee = "tremail";
+        if ((typeof parsed['data']['entree']['type'] !== "undefined") && (parsed['data']['entree']['type'] !== null) && (parsed['data']['entree']['type'] !== ''))
+                {
+                switch(parsed['data']['entree']['type']) {
+                  case "email":
+                    typee = "tremail";
+                    break;
+                  case "fax":
+                    typee = "trfax";
+                    break;
+                  case "sms":
+                    typee = "trsms";
+                    break;
+
+                  case "sms":
+                    typee = "trsms";
+                    break;
+                  case "whatsapp":
+                    typee = "trwp";
+                    break;
+                  default:
+                    typee = "tremail";
+                }
+              }
         // verifier si la notification est dispatche
         if ((typeof parsed['data']['entree']['dossier'] !== "undefined") && (parsed['data']['entree']['dossier'] !== null) && (parsed['data']['entree']['dossier'] !== ''))
         {
@@ -164,7 +189,7 @@ console.log(parsed);*/
           if( $("#prt_"+parsed['data']['entree']['dossier']).length ) 
           {
             // ajout nouvelle notification sous son dossier
-            $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['type'] +" || "+parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "inside", function(){
+            $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['sujet'] , "type" : typee}, "inside", function(){
             });
 
           }
@@ -175,7 +200,7 @@ console.log(parsed);*/
             $('#jstree').jstree().create_node("#" ,  { "id" : "prt_"+parsed['data']['entree']['dossier'], "text" :parsed['data']['entree']['dossier'] , "type" : "default"}, "first", function(){
             });
             // ajout nouvelle notification sous son dossier
-            $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['type'] +" || "+parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "inside", function(){
+            $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['sujet'] , "type" : typee}, "inside", function(){
             });
 
           }
@@ -183,7 +208,7 @@ console.log(parsed);*/
         else
         {  
           // ajout de la nouvelle node (notification non dispatche)
-          $('#jstree').jstree().create_node("#" ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['type'] +" || "+parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "first", function(){
+          $('#jstree').jstree().create_node("#" ,  { "id" : parsed['data']['entree']['id'], "text" :"<a href='www.google.com>"+parsed['data']['entree']['sujet']+"</a>" , "type" : typee}, "first", function(){
             //$("#"+parsed['data']['entree']['id']).css("background-color", "red");
             $( "#"+parsed['data']['entree']['id'] ).animate({
               opacity: 0.25,
@@ -196,7 +221,7 @@ console.log(parsed);*/
           });
         }
 
-        
+
         // notification desktop
 
             Push.config({
