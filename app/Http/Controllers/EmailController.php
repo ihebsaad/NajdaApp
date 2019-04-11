@@ -296,7 +296,7 @@ class EmailController extends Controller
                 $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
                 // message moved
 
-                if((   strpos($sujet,'Undelivered Mail Returned' )!==false)   && (  strpos($sujet,'Mail delivery failed :' )!==false) ){
+                if ( ! ((   strpos($sujet,'Undelivered Mail Returned' )!==false)   || (  strpos($sujet,'Mail delivery failed :' )!==false) )){
                  
 
         // dispatch
