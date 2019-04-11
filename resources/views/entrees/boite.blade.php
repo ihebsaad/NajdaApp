@@ -109,7 +109,7 @@ $envoyeC = Envoye::get();
                       <div class="media-body pl-3">
                           <div class="subject"><?php if($entree->type=="email") {?><i class="fa  fa-envelope"></i><?php }?><?php if($entree->type=="sms") {?><i class="fa fa-lg fa-sms"></i><?php }?><?php if($entree->type=="whatsapp") {?><i class="fa-lg fab fa-whatsapp"></i><?php }?>
                               <?php if($entree->type=="tel") {?><i class="fa fa-lg fa-phone-square"></i><?php }?><?php if($entree->type=="fax") {?><i class="fa fa-lg fa-fax"></i><?php }?><?php if($entree->type=="rendu") {?><i class="fa fa-lg fa-file-sound-o"></i><?php }?>
-                              <a <?php if($entree['viewed']==false) {echo 'style="font-weight:800;font-size:16px;"' ;} ?>  href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a><small style="margin-top:10px;">{{$entree->emetteur}}</small></div>
+                              <a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:16px;"' ;} ?>  href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a><small style="margin-top:10px;">{{$entree->emetteur}}</small></div>
                         <div class="stats">
                             <div class="row">
                                 <div class="col-sm-8 col-md-8 col-lg-8">
