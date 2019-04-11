@@ -188,7 +188,7 @@ console.log(parsed);*/
           if( $("#prt_"+parsed['data']['entree']['dossier']).length ) 
           {
             // ajout nouvelle notification sous son dossier
-            $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "inside", function(){
+            $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['type'] +" || "+parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "inside", function(){
             });
 
           }
@@ -196,7 +196,7 @@ console.log(parsed);*/
         else
         {  
           // ajout de la nouvelle node (notification non dispatche)
-          $('#jstree').jstree().create_node("#" ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['dossier'] +" || "+parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "first", function(){
+          $('#jstree').jstree().create_node("#" ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['type'] +" || "+parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "first", function(){
             //$("#"+parsed['data']['entree']['id']).css("background-color", "red");
             $( "#"+parsed['data']['entree']['id'] ).animate({
               opacity: 0.25,
