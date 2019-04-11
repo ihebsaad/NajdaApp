@@ -1,57 +1,82 @@
 <div class="container">
-          <div class="col-lg-2">
-              <a href="{{ route('dossiers') }}" class="btn btn-default btn-md btn-responsive" role="button">
-               <span class="fa fa-fw fa-folder"></span>
+    <div class="row">
+          <div class="col-md-3">
+              <a href="{{ route('dossiers') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+               <span class="fa fa-lg fa-fw fa-folder"></span>
                <br>
                     Liste des dossiers
               </a>
           </div>
-          <div class="col-lg-2">
-              <a href="#" class="btn btn-default btn-md btn-responsive" role="button">
-               <span class="fa fa-fw fa-phone"></span>
+          <div class="col-md-3">
+              <a href="#" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+               <span class="fa fa-lg  fa-fw fa-phone"></span>
                <br>
                     Mes enregistrements
               </a>
           </div>
-          <div class="col-lg-2">
-              <a href="#" class="btn btn-default btn-md btn-responsive" role="button">
-               <span class="fa fa-fw fa-users"></span>
+          <div class="col-md-3">
+              <a href="#" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+               <span class="fa fa-lg fa-fw fa-user-md"></span>
                <br>
                     Les prestataires 
               </a>
           </div>
-          <div class="col-lg-2">
-              <a href="#" class="btn btn-default btn-md btn-responsive" role="button">
-               <span class="fa fa-fw fa-inbox"></span>
+          <div class="col-md-3">
+              <a href="#" class="btn btn-default btn-md btn-responsive menu-item" role="button">
+               <span class="fa fa-lg fa-fw fa-inbox"></span>
                <br>
                     Ma boîte de réception
               </a>
           </div>
 
-
-    @if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
-    <div class="col-lg-1">
-
-        test supe 1
     </div>
 
-    <div class="col-lg-1">
+    <div class="row">
 
-        test sup 2
+    @if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
+
+
+     <div class="col-md-3">
+         <a href="{{ route('users') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+             <span class="fa fa-lg fa-fw fa-address-card"></span>
+             <br>
+             Abonnées
+         </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{{ route('users') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+            <span class="fa fa-lg fa-fw fa-ambulance"></span>
+            <br>
+            Prestations
+        </a>
     </div>
     @endif
 
     @can('isAdmin')
 
-    <div class="col-lg-1">
-
-         test admin 1
+    <div class="col-md-3">
+        <a href="{{ route('users') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+            <span class="fa fa-lg fa-fw fa-users"></span>
+            <br>
+        Utilisateurs
+        </a>
     </div>
 
-    <div class="col-lg-1">
-
-        test admin 2
+    <div class="col-md-3">
+        <a href="{{ route('logs') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+            <span class="fa fa-lg fa-fw fa-history"></span>
+            <br>
+        Historique
+        </a>
     </div>
+
+
     @endcan
+    </div>
 
 </div>
+
+<style>
+    .menu-item{background-color: #4fc1e9!important;color:white!important;min-width:165px!important;margin-bottom:5px;margin-top:5px;}
+</style>

@@ -117,16 +117,13 @@ class DossiersController extends Controller
      */
     public function update(Request $request, $id)
     {
-       /* $request->validate([
-            'share_name'=>'required',
-            'share_price'=> 'required|integer',
-            'share_qty' => 'required|integer'
-        ]);
-        */
+
         $dossier = Dossier::find($id);
-       // $dossier->titre = $request->get('titre');
-        //$dossier->share_price = $request->get('share_price');
-       // $dossier->share_qty = $request->get('share_qty');
+
+        if( ($request->get('ref'))!=null) { $dossier->name = $request->get('ref');}
+        if( ($request->get('type'))!=null) { $dossier->email = $request->get('type');}
+        if( ($request->get('affecte'))!=null) { $dossier->user_type = $request->get('affecte');}
+
         $dossier->save();
 
         return redirect('/dossiers')->with('success', '  has been updated');    }

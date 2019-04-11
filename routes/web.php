@@ -115,6 +115,6 @@ Route::get('/users/destroy/{id}', 'UsersController@destroy');
 Route::post('/edit/{id}','UsersController@update');
 
 /**** LOGS  ****/
-Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs');;
 Route::get('errors', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@errors');
  
