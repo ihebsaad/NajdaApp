@@ -25,7 +25,6 @@
 <script  src="{{ asset('public/js/summernote.min.js') }}"  type="text/javascript"></script>
 <script src="{{  URL::asset('public/js/custom_js/compose.js') }}" type="text/javascript"></script>
 <script src="{{ asset('public/js/push.min.js') }}"></script>
-<script src="{{ asset('public/js/serviceWorker.min.js') }}"></script>
 
     <script type="text/javascript">
         $('.menu-icon').bind('click', function() {
@@ -167,7 +166,7 @@ console.log(parsed);*/
          Push.create("Notification Nejda", {
 
           body: "Nouvelle Notification",
-          icon: "{{ asset('public/img/nejda.jpg') }}",
+          icon: "{{ asset('public/img/najda.png') }}",
           timeout: 5000,
        
           onClick: function(){
@@ -187,6 +186,17 @@ console.log(parsed);*/
           // verifier si le dossier exist dans la liste des notifications
           if( $("#prt_"+parsed['data']['entree']['dossier']).length ) 
           {
+            // ajout nouvelle notification sous son dossier
+            $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['type'] +" || "+parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "inside", function(){
+            });
+
+          }
+          else
+          {
+            // cas dossier nest pas dans la liste des notifications
+            // ajout node dossier
+            $('#jstree').jstree().create_node("#" ,  { "id" : "prt_"+parsed['data']['entree']['dossier'], "text" :parsed['data']['entree']['dossier'] , "type" : "default"}, "first", function(){
+            });
             // ajout nouvelle notification sous son dossier
             $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['type'] +" || "+parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "inside", function(){
             });
