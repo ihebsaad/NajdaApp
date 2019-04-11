@@ -152,36 +152,13 @@ console.log(parsed);*/
    // var userId = $('meta[name="userId"]').attr('content')
    Echo.private('App.User.{{Auth::id()}}').notification(  (notification) => {
         
-        // notification desktop
-
-            Push.config({
-            serviceWorker: "{{ asset('public/js/serviceWorker.min.js') }}", // Sets a                      custom service worker script
-              fallback: function(payload) {
-            // Code that executes on browsers with no notification support
-             // "payload" is an object containing the 
-            // title, body, tag, and icon of the notification 
-             }
-           });
-
-         Push.create("Notification Nejda", {
-
-          body: "Nouvelle Notification",
-          icon: "{{ asset('public/img/najda.png') }}",
-          timeout: 5000,
-       
-          onClick: function(){
-          window.focus();
-          this.close();
-         }
-         
-        });
 
         // extraction du contenu de la notification en format json
         var jsnt = JSON.stringify(notification);
         var parsed = JSON.parse(jsnt);
         //alert("l'ID: "+parsed['data']['entree']['id']+" le sujet: "+parsed['data']['entree']['sujet']);
         // verifier si la notification est dispatche
-        if ((typeof parsed['data']['entree']['dossier'] !== "undefined") && (parsed['data']['entree']['dossier'] !== null))
+        if ((typeof parsed['data']['entree']['dossier'] !== "undefined") && (parsed['data']['entree']['dossier'] !== null) && (parsed['data']['entree']['dossier'] !== ''))
         {
           // verifier si le dossier exist dans la liste des notifications
           if( $("#prt_"+parsed['data']['entree']['dossier']).length ) 
@@ -218,6 +195,31 @@ console.log(parsed);*/
             //$('#jstree').jstree('select_node', parsed['data']['entree']['id']);
           });
         }
+
+        
+        // notification desktop
+
+            Push.config({
+            serviceWorker: "{{ asset('public/js/serviceWorker.min.js') }}", // Sets a                      custom service worker script
+              fallback: function(payload) {
+            // Code that executes on browsers with no notification support
+             // "payload" is an object containing the 
+            // title, body, tag, and icon of the notification 
+             }
+           });
+
+         Push.create("Nouvelle "+parsed['data']['entree']['type'], {
+
+          body: parsed['data']['entree']['sujet'],
+          icon: "{{ asset('public/img/najda.png') }}",
+          timeout: 5000,
+       
+          onClick: function(){
+          window.focus();
+          this.close();
+         }
+         
+        });
 
         });
 
