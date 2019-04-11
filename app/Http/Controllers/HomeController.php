@@ -7,7 +7,7 @@ use DB;
 use Spatie\Searchable\Search;
 use App\Dossier ;
 use Illuminate\Support\Facades\Auth;
-
+use App\TypeAction;
 
 class HomeController extends Controller
 {
@@ -30,7 +30,9 @@ class HomeController extends Controller
     {
 
         //  $countries = DB::table('apps_countries')->pluck('id', 'country_name');;
+         $typesactions=TypeAction::get();
         $dossiers = Dossier::get();
+        $actions=null;
         $countries = DB::table('apps_countries')->select('id', 'country_name')->get();
         $iduser = Auth::id();
         $notifications = DB::table('notifications')->where('notifiable_id','=', $iduser)->where('read_at', '=', null)->get()->toArray();
@@ -62,7 +64,7 @@ class HomeController extends Controller
               $result[null][] = $element;
             }
         }
-        return view('home', ['countries' => $countries,'dossiers' => $dossiers,'notifications'=>$result]);
+        return view('home', ['countries' => $countries,'typesactions'=>$typesactions,'actions'=>$actions,'dossiers' => $dossiers,'notifications'=>$result]);
      }
 
     function fetch(Request $request)
