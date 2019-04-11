@@ -156,7 +156,7 @@ console.log(parsed);*/
         var parsed = JSON.parse(jsnt);
         //alert("l'ID: "+parsed['data']['entree']['id']+" le sujet: "+parsed['data']['entree']['sujet']);
         // ajout de la nouvelle node
-        $('#jstree').jstree().create_node("#" ,  { "id" : parsed['data']['entree']['id'], "text" : parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "first", function(){
+        $('#jstree').jstree().create_node("#" ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['dossier'] +" || "+parsed['data']['entree']['sujet'] , "type" : parsed['data']['entree']['type']}, "first", function(){
           //$("#"+parsed['data']['entree']['id']).css("background-color", "red");
           $( "#"+parsed['data']['entree']['id'] ).animate({
             opacity: 0.25,
