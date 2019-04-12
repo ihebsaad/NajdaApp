@@ -199,7 +199,7 @@ console.log(parsed);*/
             $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['sujet'] , "type" : typee, "a_attr":{"href":"{{ asset('entrees/show/') }}"+"/"+parsed['data']['entree']['id']}}, "inside", function(){
               // animation de nouvelle notification
               setInterval(function(){
-                $("#ajson5").toggleClass("newnotif");
+                $("#"+parsed['data']['entree']['id']).toggleClass("newnotif");
              },400);
             }).bind("select_node.jstree", function (e, data) {
                  var href = data.node.a_attr.href;
@@ -219,7 +219,7 @@ console.log(parsed);*/
               $('#jstree').jstree().open_node("#prt_"+parsed['data']['entree']['dossier']);
               // animation de nouvelle notification
               setInterval(function(){
-                $("#ajson5").toggleClass("newnotif");
+                $("#"+parsed['data']['entree']['id']).toggleClass("newnotif");
              },400);
             }).bind("select_node.jstree", function (e, data) {
                  var href = data.node.a_attr.href;
@@ -234,7 +234,7 @@ console.log(parsed);*/
           $('#jstree').jstree().create_node("#" ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['sujet'] , "type" : typee, "a_attr":{"href":"{{ asset('entrees/show/') }}"+"/"+parsed['data']['entree']['id']}}, "first", function(){
             // animation de nouvelle notification
               setInterval(function(){
-                $("#ajson5").toggleClass("newnotif");
+                $("#"+parsed['data']['entree']['id']).toggleClass("newnotif");
              },400);
           }).bind("select_node.jstree", function (e, data) {
                  var href = data.node.a_attr.href;
