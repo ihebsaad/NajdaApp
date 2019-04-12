@@ -102,17 +102,7 @@
     <!-- end page level js -->
 
 <script>
-    /*$( "#dpause" ).click(function() {
-      $('#jstree').jstree().create_node("#" ,  { "id" : "ajson5", "text" : "notif (new)" , "type" : "tremail", "a_attr":{"href":"www.google.com"}}, "first", function(){
-       // $("#ajson5").fadeIn(150).fadeOut(150).fadeIn(150).fadeOut(150).fadeIn(150).fadeOut(150).fadeIn(150).fadeOut(150).fadeIn(150).fadeOut(150).fadeIn(150);  li#j1_2 > a.jstree-anchor
-      setInterval(function(){
-          $("#ajson5").toggleClass("newnotif");
-       },400);
-      }).bind("select_node.jstree", function (e, data) {
-           var href = data.node.a_attr.href;
-           document.location.href = href;
-      });
-    });*/
+
     $( "#open" ).click(function() {
         $(".folders").css("display", "none");
      /*   $( ".folders" ).hide( "slow", function() {
@@ -201,6 +191,10 @@ console.log(parsed);*/
               setInterval(function(){
                 $("#"+parsed['data']['entree']['id']).toggleClass("newnotif");
              },400);
+            // scroll vers lemplacement de la notification
+            $('#notificationstab').scrollTop(
+                $("#"+parsed['data']['entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
+            );
             }).bind("select_node.jstree", function (e, data) {
                  var href = data.node.a_attr.href;
                  document.location.href = href;
@@ -221,6 +215,10 @@ console.log(parsed);*/
               setInterval(function(){
                 $("#"+parsed['data']['entree']['id']).toggleClass("newnotif");
              },400);
+             // scroll vers lemplacement de la notification
+            $('#notificationstab').scrollTop(
+                $("#"+parsed['data']['entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
+            );
             }).bind("select_node.jstree", function (e, data) {
                  var href = data.node.a_attr.href;
                  document.location.href = href;
@@ -236,6 +234,10 @@ console.log(parsed);*/
               setInterval(function(){
                 $("#"+parsed['data']['entree']['id']).toggleClass("newnotif");
              },400);
+             // scroll vers lemplacement de la notification
+            $('#notificationstab').scrollTop(
+                $("#"+parsed['data']['entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
+            );
           }).bind("select_node.jstree", function (e, data) {
                  var href = data.node.a_attr.href;
                  document.location.href = href;
