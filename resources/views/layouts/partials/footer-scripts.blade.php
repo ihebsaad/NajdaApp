@@ -103,8 +103,11 @@
 
 <script>
     /*$( "#dpause" ).click(function() {
-      $('#jstree').jstree().create_node("#prt_19N00276" ,  { "id" : "ajson5", "text" : "notif (new)" , "type" : "tremail"}, "last", function(){
-        $("#ajson5").css("background-color", "red");
+      $('#jstree').jstree().create_node("#" ,  { "id" : "ajson5", "text" : "notif (new)" , "type" : "tremail", "a_attr":{"href":"www.google.com"}}, "first", function(){
+        
+      }).bind("select_node.jstree", function (e, data) {
+           var href = data.node.a_attr.href;
+           document.location.href = href;
       });
     });*/
     $( "#open" ).click(function() {
@@ -144,6 +147,7 @@
 </script>
 
 <script>
+          
 /*var jsnt = '{"data":{"entree":{"sujet":"blabla", "type":"email", "id":"identree"}},"id":"idnotif","type": "typenotif"}';
 var parsed = JSON.parse(jsnt);
 alert(parsed['data']['entree']['type']);
@@ -189,7 +193,10 @@ console.log(parsed);*/
           if( $("#prt_"+parsed['data']['entree']['dossier']).length ) 
           {
             // ajout nouvelle notification sous son dossier
-            $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['sujet'] , "type" : typee}, "inside", function(){
+            $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['sujet'] , "type" : typee, "a_attr":{"href":"{{ asset('entrees/show/') }}"+"/"+parsed['data']['entree']['id']}}, "inside", function(){
+            }).bind("select_node.jstree", function (e, data) {
+                 var href = data.node.a_attr.href;
+                 document.location.href = href;
             });
 
           }
@@ -200,7 +207,10 @@ console.log(parsed);*/
             $('#jstree').jstree().create_node("#" ,  { "id" : "prt_"+parsed['data']['entree']['dossier'], "text" :parsed['data']['entree']['dossier'] , "type" : "default"}, "first", function(){
             });
             // ajout nouvelle notification sous son dossier
-            $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['sujet'] , "type" : typee}, "inside", function(){
+            $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['sujet'] , "type" : typee, "a_attr":{"href":"{{ asset('entrees/show/') }}"+"/"+parsed['data']['entree']['id']}}, "inside", function(){
+            }).bind("select_node.jstree", function (e, data) {
+                 var href = data.node.a_attr.href;
+                 document.location.href = href;
             });
 
           }
@@ -208,16 +218,19 @@ console.log(parsed);*/
         else
         {  
           // ajout de la nouvelle node (notification non dispatche)
-          $('#jstree').jstree().create_node("#" ,  { "id" : parsed['data']['entree']['id'], "text" :"<a href='www.google.com>"+parsed['data']['entree']['sujet']+"</a>" , "type" : typee}, "first", function(){
+          $('#jstree').jstree().create_node("#" ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['sujet'] , "type" : typee, "a_attr":{"href":"{{ asset('entrees/show/') }}"+"/"+parsed['data']['entree']['id']}}, "first", function(){
             //$("#"+parsed['data']['entree']['id']).css("background-color", "red");
-            $( "#"+parsed['data']['entree']['id'] ).animate({
+            /*$( "#"+parsed['data']['entree']['id'] ).animate({
               opacity: 0.25,
               left: "+=50",
               height: "toggle"
             }, 5000, function() {
               // Animation complete.
-            });
+            });*/
             //$('#jstree').jstree('select_node', parsed['data']['entree']['id']);
+          }).bind("select_node.jstree", function (e, data) {
+                 var href = data.node.a_attr.href;
+                 document.location.href = href;
           });
         }
 
