@@ -87,10 +87,12 @@
                 </div>
                 <div class="form-group ">
                     <label for="contenu">contenu:</label>
-                         <textarea   style="min-height: 280px;"   type="text"  class=" form-control" placeholder="Contenu de l'email ici" name="contenu" required >
-                            {{ $envoye->contenu }}
-                        </textarea>
-                 </div>
+                <div class="form-control" style="min-height:200px">
+                  <?php $contenu= $envoye['contenu'];echo $contenu;?>
+
+                </div>
+
+                </div>
 
             <!--    <div class="form-group form-group-default">
                     <label>Attachements</label>

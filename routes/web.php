@@ -54,6 +54,8 @@ Route::get('/entrees/boite', array('as' => 'boite','uses' => 'EntreesController@
 Route::post('/entrees/saving','EntreesController@saving')->name('entrees.saving');
 Route::get('/entrees/view/{id}', 'EntreesController@view');
 Route::get('/entrees/show/{id}', 'EntreesController@show');
+Route::get('/entrees/pdf/{id}', 'EntreesController@pdf');
+Route::get('/entrees/export_pdf/{id}', 'EntreesController@export_pdf');
 Route::get('/entrees/destroy/{id}', 'EntreesController@destroy');
 Route::get('/entrees/archiver/{id}', 'EntreesController@archiver');
 Route::get('/entrees/archive/', 'EntreesController@archive')->name('entrees.archive');

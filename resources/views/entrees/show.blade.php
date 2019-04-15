@@ -47,7 +47,7 @@ use App\Http\Controllers\AttachementsController;
                             <span><b>Emetteur: </b>{{ $entree['emetteur']  }}</span>
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6 " style="padding-right: 0px;">
-                            <span class="pull-right"><b>Date: </b><?php echo  date('d/m/Y H:i', strtotime( $entree['reception']  )) ; ?></span>
+                            <span class="pull-right"><b>Date: </b><?php if ($entree['type']=='email'){echo  date('d/m/Y H:i', strtotime( $entree['reception']  )) ; }else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }?></span>
                         </div>
                 </div>
             </div>

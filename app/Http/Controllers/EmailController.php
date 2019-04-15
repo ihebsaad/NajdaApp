@@ -14,7 +14,7 @@ use Spatie\PdfToText\Pdf;
 use App;
 Use Redirect;
 use App\Envoye ;
-
+use PDF as PDF2;
 use Illuminate\Support\Facades\Auth;
 use Twilio\Rest\Client as Client2;
 use Twilio\Twiml;
@@ -545,6 +545,8 @@ class EmailController extends Controller
            ]);
 
            $envoye->save();
+           $id=$envoye->id;
+           $this->export_pdf_send($id);
 
             echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
                 return redirect($urlsending)->with('success', '  Envoyé ! ');
@@ -562,8 +564,28 @@ class EmailController extends Controller
 
      }
 
-    }// end sed
+    }// end send
 
+
+
+    public function export_pdf_send($id)
+    {
+        // Fetch all customers from database
+        $envoye = Envoye::find($id);
+         // Send data to the view using loadView function of PDF facade
+        $pdf = PDF2::loadView('entrees.pdfsend', ['envoye' => $envoye])->setPaper('a4', '');
+
+        $path= storage_path()."/Envoyes/";
+
+        if (!file_exists($path.$id)) {
+            mkdir($path.$id, 0777, true);
+        }
+
+        // If you want to store the generated pdf to the server then you can use the store function
+        $pdf->save($path.$id.'/envoi.pdf');
+        // Finally, you can download the file using download function
+        //    return $pdf->download('reception.pdf');
+    }
     function test()
     {
         $dossiers = Dossier::all();

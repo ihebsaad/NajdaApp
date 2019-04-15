@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Entree ;
 use App\Dossier ;
-use Spatie\PdfToText\Pdf;
-use DB;
+ use DB;
 use Illuminate\Support\Facades\Auth;
 
+use PDF;
 
 class EntreesController extends Controller
 {
@@ -122,7 +122,7 @@ class EntreesController extends Controller
         $entree = Entree::find($id);
         $entree->viewed=1;
         $entree->save();
-
+       $this->export_pdf($id);
         return view('entrees.show',['dossiers' => $dossiers], compact('entree'));
 
     }
@@ -140,12 +140,8 @@ class EntreesController extends Controller
 
     public function update(Request $request, $id)
     {
-       /* $request->validate([
-            'share_name'=>'required',
-            'share_price'=> 'required|integer',
-            'share_qty' => 'required|integer'
-        ]);
-        */
+
+
         $entree = Entree::find($id);
        // $entree->titre = $request->get('titre');
         //$entree->share_price = $request->get('share_price');
@@ -186,4 +182,36 @@ class EntreesController extends Controller
         return $count;
 
     }
+
+
+    public function export_pdf($id)
+    {
+        // Fetch all customers from database
+        $data  = Entree::find($id);
+        $entree = Entree::find($id);
+          compact('entree');
+        // Send data to the view using loadView function of PDF facade
+        $pdf = PDF::loadView('entrees.pdf', ['entree' => $entree])->setPaper('a4', '');
+
+        $path= storage_path()."/Emails/";
+
+        if (!file_exists($path.$id)) {
+            mkdir($path.$id, 0777, true);
+        }
+
+        // If you want to store the generated pdf to the server then you can use the store function
+        $pdf->save($path.$id.'/reception.pdf');
+        // Finally, you can download the file using download function
+     //    return $pdf->download('reception.pdf');
+    }
+
+
+
+    public function pdf($id)
+    {
+        $entree = Entree::find($id);
+        return view('entrees.pdf', ['entree' => $entree], compact('entree'));
+
+    }
+
 }

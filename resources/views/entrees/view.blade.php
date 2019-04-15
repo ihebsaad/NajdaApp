@@ -12,10 +12,13 @@
 </div>
 <div class="form-group">
     <label for="contenu">contenu:</label>
-    <textarea  type="text" class="form-control" name="contenu">
-        {{ $entree->contenu }}
-    </textarea>
-</div>
+    <div class="form-control" style="min-height:200px">
+
+    <?php $contenu= $entree['contenu'];echo $contenu;?>
+    </div>
+
+
+ </div>
 <div class="form-group">
      <label for="date">date:</label>
     <?php echo  date('d/m/Y', strtotime($entree->reception)) ; ?>

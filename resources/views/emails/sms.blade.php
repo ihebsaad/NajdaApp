@@ -6,7 +6,7 @@
     <div class="form-group">
         {{ csrf_field() }}
         <label for="destinataire">Destinataire:</label>
-        <input id="destinataire" type="text" class="form-control" name="destinataire"    />
+        <input id="destinataire" type="text" class="form-control" name="destinataire"     />
     </div>
 
     <div class="form-group">

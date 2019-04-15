@@ -183,6 +183,8 @@ return [
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
         // Captcha
         Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
+        //pdf
+        Barryvdh\DomPDF\ServiceProvider::class,
 
     ],
 
@@ -234,6 +236,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         // captcha
         'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
+        // PDF
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 

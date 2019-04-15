@@ -8,6 +8,7 @@ use App\Envoye ;
 use App\Dossier ;
 use Illuminate\Support\Facades\Auth;
 use DB;
+use PDF;
 
 
 class EnvoyesController extends Controller
@@ -76,6 +77,8 @@ class EnvoyesController extends Controller
         ]);
 	*/
       //  $envoye->save();
+      //  $this->export_pdf_send();
+
         return redirect('/envoyes')->with('success', '   ');
 
     }
@@ -98,7 +101,8 @@ class EnvoyesController extends Controller
         ]);
 
         $envoye->save();
-       // return redirect('/envoyes')->with('success', 'enregistré avec succès');
+ 
+        // return redirect('/envoyes')->with('success', 'enregistré avec succès');
 
     }
 
@@ -228,4 +232,8 @@ class EnvoyesController extends Controller
         return $count;
 
     }
+
+
+
 }
+
