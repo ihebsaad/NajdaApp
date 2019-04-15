@@ -195,7 +195,8 @@ console.log(parsed);*/
             $('#notificationstab').scrollTop(
                 $("#"+parsed['data']['entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
             );
-            }).bind("select_node.jstree", function (e, data) {
+            });
+            $('#jstree').bind("select_node.jstree", function (e, data) {
                  var href = data.node.a_attr.href;
                  document.location.href = href;
             });
@@ -219,7 +220,8 @@ console.log(parsed);*/
             $('#notificationstab').scrollTop(
                 $("#"+parsed['data']['entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
             );
-            }).bind("select_node.jstree", function (e, data) {
+            });
+            $('#jstree').bind("select_node.jstree", function (e, data) {
                  var href = data.node.a_attr.href;
                  document.location.href = href;
             });
@@ -238,10 +240,11 @@ console.log(parsed);*/
             $('#notificationstab').scrollTop(
                 $("#"+parsed['data']['entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
             );
-          }).bind("select_node.jstree", function (e, data) {
+          });
+            $('#jstree').bind("select_node.jstree", function (e, data) {
                  var href = data.node.a_attr.href;
                  document.location.href = href;
-          });
+            });
         }
 
 
