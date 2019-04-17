@@ -127,14 +127,17 @@ Route::get('docgen', function () {
 		$arrfile = Template_doc::where('id', '=', 1)->first();
 		//print_r($arrfile);
 		$file=public_path($arrfile['path']);
+		if (file_exists($file)) {
 
 			setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
 			$datees = strftime("%d %B %Y".", "."%H:%M"); 
+
+			$refdoss = '00N00001'
 			
 			$array = array(
 				'[N_ABONNEE]' => 'Ben Foulen',
 				'[P_ABONNEE]' => 'Flen',
-				'[NREF_DOSSIER]' => '00N00001',
+				'[NREF_DOSSIER]' => $refdoss,
 				'[DATE_PREST]' => '10/01/2020',
 				'[LIEU_DED]' => 'Tunis',
 				'[TYPEVE_IMMAT]' => 'Mercedes 125-4568',
@@ -144,8 +147,10 @@ Route::get('docgen', function () {
 				'[DATE_HEURE]' => $datees,
 			);
 
-			$name_file = 'test.doc';
+			$name_file = 'PC_Dedouannement_'.$refdoss.'.doc';
 			
 			return WordTemplate::export($file, $array, $name_file);
+		}
+		else {return 'fichier template non existant';}
 	});
  
