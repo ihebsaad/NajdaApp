@@ -132,7 +132,7 @@ Route::get('docgen', function () {
 			setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
 			$datees = strftime("%d %B %Y".", "."%H:%M"); 
 
-			$refdoss = '00N00001'
+			$refdoss = '00N00001';
 			
 			$array = array(
 				'[N_ABONNEE]' => 'Ben Foulen',
