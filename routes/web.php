@@ -10,7 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+use App\Template_doc ;
 
 Auth::routes();
 
@@ -120,4 +120,35 @@ Route::post('/edit/{id}','UsersController@update');
 /**** LOGS  ****/
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs');;
 Route::get('errors', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@errors');
+
+/*** Generate doc ***/
+Route::get('docgen', function () {
+		//$file = public_path('rtf_templates\PC_Dedouannement.rtf');
+		$arrfile = Template_doc::where('id', '=', 1)->first();
+		//print_r($arrfile);
+		$file=public_path($arrfile['path']);
+		if (file_exists($file)) {
+
+			setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
+			$datees = strftime("%d %B %Y".", "."%H:%M"); 
+			
+			$array = array(
+				'[N_ABONNEE]' => 'Ben Foulen',
+				'[P_ABONNEE]' => 'Flen',
+				'[NREF_DOSSIER]' => '00N00001',
+				'[DATE_PREST]' => '10/01/2020',
+				'[LIEU_DED]' => 'Tunis',
+				'[TYPEVE_IMMAT]' => 'Mercedes 125-4568',
+				'[LIEU_IMMOB]' => 'Tunis',
+				'[LTA]' => 'ExLTA',
+				'[CORD_VOL]' => '001VOL100120',
+				'[DATE_HEURE]' => $datees,
+			);
+
+			$name_file = 'test.doc';
+			
+			return WordTemplate::export($file, $array, $name_file);
+		}
+		else {return 'fichier template non existant';}
+	});
  
