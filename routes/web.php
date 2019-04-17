@@ -127,7 +127,6 @@ Route::get('docgen', function () {
 		$arrfile = Template_doc::where('id', '=', 1)->first();
 		//print_r($arrfile);
 		$file=public_path($arrfile['path']);
-		if (file_exists($file)) {
 
 			setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
 			$datees = strftime("%d %B %Y".", "."%H:%M"); 
@@ -148,7 +147,5 @@ Route::get('docgen', function () {
 			$name_file = 'test.doc';
 			
 			return WordTemplate::export($file, $array, $name_file);
-		}
-		else {return 'fichier template non existant';}
 	});
  
