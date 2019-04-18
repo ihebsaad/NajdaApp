@@ -62,7 +62,7 @@ class HomeController extends Controller
               $result[null][] = $element;
             }
         }
-        return view('home', ['countries' => $countries]);
+        return view('home', ['countries' => $countries,'dossiers' => $dossiers,'notifications'=>$result]);
      }
 
     function fetch(Request $request)
