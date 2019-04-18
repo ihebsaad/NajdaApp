@@ -185,6 +185,8 @@ return [
         Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
         //pdf
         Barryvdh\DomPDF\ServiceProvider::class,
+        // global vars
+        App\Providers\GlobalsVServiceProvider::class
 
     ],
 
