@@ -124,7 +124,7 @@ Route::get('errors', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@errors')
 /*** Generate doc ***/
 Route::get('docgen', function () {
 		//$file = public_path('rtf_templates\PC_Dedouannement.rtf');
-		$arrfile = Template_doc::where('id', '=', 1)->first();
+		$arrfile = Template_doc::where('nom', 'like', 'PC_Dedouannement')->first();
 		//print_r($arrfile);
 		$file=public_path($arrfile['path']);
 		if (file_exists($file)) {
