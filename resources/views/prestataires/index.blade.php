@@ -11,21 +11,19 @@
             <thead>
             <tr>
                 <td>ID</td>
-                <td>Ref</td>
-                <td>type</td>
-                <td>Agent</td>
+                <td>Nom</td>
+                <td>Spécialité</td>
+                <td>Type</td>
               </tr>
             </thead>
             <tbody>
-            @foreach($dossiers as $dossier)
+            @foreach($prestataires as $prestataire)
                 <tr>
-                    <td>{{$dossier->id}}</td>
-                     <td><a href="{{action('DossiersController@view', $dossier['id'])}}" >{{$dossier->reference_medic}}</a></td>
-                    <td>{{$dossier->type_dossier}}</td>
-                    <td>{{$dossier->affecte}}</td>
-
+                    <td>{{$prestataire->id}}</td>
+                     <td><a href="{{action('PrestatairesController@view', $prestataire['id'])}}" >{{$prestataire->nom}}</a></td>
+                    <td>{{$prestataire->specialite}}</td>
+                    <td>{{$prestataire->typepres}}</td>
  
-
                 </tr>
             @endforeach
             </tbody>

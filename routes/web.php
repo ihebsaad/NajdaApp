@@ -103,7 +103,22 @@ Route::get('/envoyes/brouillons', 'EnvoyesController@brouillons')->name('envoyes
 Route::resource('/dossiers',  'DossiersController');
 Route::get('/dossiers', array('as' => 'dossiers','uses' => 'DossiersController@index'));
 Route::post('/dossiers/saving','DossiersController@saving')->name('dossiers.saving');
+Route::post('/dossiers/updating','DossiersController@updating')->name('dossiers.updating');
 Route::get('/dossiers/view/{id}', 'DossiersController@view');
+
+
+/*** Prestataires **/
+Route::resource('/prestataires',  'PrestatairesController');
+Route::get('/prestataires', array('as' => 'prestataires','uses' => 'PrestatairesController@index'));
+ Route::post('/prestataires/saving','PrestatairesController@saving')->name('prestataires.saving');
+ Route::post('/prestataires/updating','PrestatairesController@updating')->name('prestataires.updating');
+Route::get('/prestataires/view/{id}', 'PrestatairesController@view');
+
+/*** Notes **/
+Route::resource('/notes',  'NotesController');
+Route::get('/notes', array('as' => 'notes','uses' => 'NotesController@index'));
+Route::post('/notes/updating','NotesController@updating')->name('notes.updating');
+Route::get('/notes/view/{id}', 'NotesController@view');
 
 
 /*** Users **/

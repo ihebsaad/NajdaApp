@@ -9,7 +9,7 @@ use App\Dossier ;
 use DB;
 
 
-class DossiersController extends Controller
+class NotesController extends Controller
 {
 
 
@@ -25,8 +25,8 @@ class DossiersController extends Controller
      */
     public function index()
     {
-         $dossiers = Dossier::orderBy('created_at', 'desc')->paginate(5);
-        return view('dossiers.index', compact('dossiers'));
+         $notes = Note::orderBy('created_at', 'desc')->paginate(5);
+        return view('notes.index',['dossiers' => $dossiers], compact('notes'));
     }
 
  
@@ -40,7 +40,7 @@ class DossiersController extends Controller
     {
         $dossiers = Dossier::all();
 
-        return view('dossiers.create',['dossiers' => $dossiers]);
+        return view('notes.create',['dossiers' => $dossiers]);
     }
 
     /**
@@ -51,29 +51,29 @@ class DossiersController extends Controller
      */
     public function store(Request $request)
     {
-        $dossier = new Dossier([
+        $note = new Note([
              'ref' =>trim( $request->get('ref')),
              'type' => trim($request->get('type')),
-             'affecte'=> $request->get('affecte'),
+             'par'=> $request->get('par'),
 
         ]);
 
         $dossier->save();
-        return redirect('/dossiers')->with('success', '  has been added');
+        return redirect('/notes')->with('success', ' ajouté avec succès');
 
     }
 
     public function saving(Request $request)
     {
-        $dossier = new Dossier([
+        $note = new Note([
        //     'emetteur' => $request->get('emetteur'),
         //    'sujet' => $request->get('sujet'),
         //    'contenu'=> $request->get('contenu'),
 
         ]);
 
-        $dossier->save();
-        return redirect('/dossiers')->with('success', 'Entry has been added');
+        $note->save();
+        return redirect('/notes')->with('success', 'ajouté avec succès');
 
     }
 
@@ -85,7 +85,7 @@ class DossiersController extends Controller
        $val= $request->get('val');
       //  $dossier = Dossier::find($id);
        // $dossier->$champ =   $val;
-        Dossier::where('id', $id)->update(array($champ => $val));
+        Note::where('id', $id)->update(array($champ => $val));
 
       //  $dossier->save();
 
@@ -103,8 +103,8 @@ class DossiersController extends Controller
     {
         $dossiers = Dossier::all();
 
-       $dossier = Dossier::find($id);
-        return view('dossiers.view',['dossiers' => $dossiers], compact('dossier'));
+       $note = Note::find($id);
+        return view('notes.view',['dossiers' => $dossiers], compact('note'));
 
     }
 
@@ -117,10 +117,10 @@ class DossiersController extends Controller
     public function edit($id)
     {
         //
-        $dossier = Dossier::find($id);
+        $note = Note::find($id);
         $dossiers = Dossier::all();
 
-        return view('dossiers.edit',['dossiers' => $dossiers], compact('dossier'));
+        return view('notes.edit',['dossiers' => $dossiers], compact('note'));
     }
 
     /**
@@ -133,15 +133,15 @@ class DossiersController extends Controller
     public function update(Request $request, $id)
     {
 
-        $dossier = Dossier::find($id);
+        $note = Notes::find($id);
 
-        if( ($request->get('ref'))!=null) { $dossier->name = $request->get('ref');}
-        if( ($request->get('type'))!=null) { $dossier->email = $request->get('type');}
-        if( ($request->get('affecte'))!=null) { $dossier->user_type = $request->get('affecte');}
+       // if( ($request->get('ref'))!=null) { $note->name = $request->get('ref');}
+       // if( ($request->get('type'))!=null) { $note->email = $request->get('type');}
+       // if( ($request->get('affecte'))!=null) { $note->user_type = $request->get('affecte');}
 
-        $dossier->save();
+        $note->save();
 
-        return redirect('/dossiers')->with('success', '  has been updated');    }
+        return redirect('/notes')->with('success', 'mise à jour avec succès');    }
 
     /**
      * Remove the specified resource from storage.
@@ -151,8 +151,8 @@ class DossiersController extends Controller
      */
     public function destroy($id)
     {
-        $dossier = Dossier::find($id);
-        $dossier->delete();
+        $note = Note::find($id);
+        $note->delete();
 
-        return redirect('/dossiers')->with('success', '  has been deleted Successfully');    }
+        return redirect('/notes')->with('success', '  Supprimé avec succès');    }
 }

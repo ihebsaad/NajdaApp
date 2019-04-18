@@ -21,20 +21,17 @@
                     </ul>
                 </div><br />
             @endif
-            <form method="post" action="{{ route('dossiers.store') }}">
+            <form method="post" action="{{ route('notes.store') }}">
                 <div class="form-group">
                      {{ csrf_field() }}
-                    <label for="ref">Ref:</label>
-                    <input id="ref" type="text" class="form-control" name="reference_medic"/>
+                    <label for="ref">contenu:</label>
+                    <input id="ref" type="text" class="form-control" name="contenu"/>
                 </div>
                 <div class="form-group">
                     <label for="type">type :</label>
-                    <input id="type" type="text" class="form-control" name="type_dossier"/>
+                    <input id="type" type="text" class="form-control" name="type"/>
                 </div>
-                <div class="form-group">
-                    <label for="affecte">affecte:</label>
-                    <input id="affecte" type="text" class="form-control" name="affecte"/>
-                </div>
+ 
                 <button  type="submit"  class="btn btn-primary">Ajouter</button>
                 <button id="add"  class="btn btn-primary">Ajax Add</button>
             </form>
@@ -50,24 +47,20 @@
     $(document).ready(function(){
 
         $('#add').click(function(){
-            var ref = $('#ref').val();
+            var contenu = $('#contenu').val();
             var type = $('#type').val();
-            var affecte = $('#affecte').val();
-            if ((emetteur != '')&&(sujet != '')&&(contenu != ''))
-            {
+ 
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
-                    url:"{{ route('dossiers.saving') }}",
+                    url:"{{ route('notes.saving') }}",
                     method:"POST",
-                    data:{ref:ref,type:type,affecte:affecte, _token:_token},
+                    data:{contenu:contenu,type:type, _token:_token},
                     success:function(data){
                         alert('Added successfully');
 
                     }
                 });
-            }else{
-            alert('ERROR');
-            }
+    
         });
 
 

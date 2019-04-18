@@ -6,10 +6,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Entree ;
 use App\Dossier ;
+use App\Prestataire ;
 use DB;
 
 
-class DossiersController extends Controller
+class PrestatairesController extends Controller
 {
 
 
@@ -25,8 +26,10 @@ class DossiersController extends Controller
      */
     public function index()
     {
-         $dossiers = Dossier::orderBy('created_at', 'desc')->paginate(5);
-        return view('dossiers.index', compact('dossiers'));
+        $dossiers = Dossier::all();
+
+        $prestataires = Prestataire::orderBy('created_at', 'desc')->paginate(5);
+        return view('prestataires.index',['dossiers' => $dossiers], compact('prestataires'));
     }
 
  
@@ -40,7 +43,7 @@ class DossiersController extends Controller
     {
         $dossiers = Dossier::all();
 
-        return view('dossiers.create',['dossiers' => $dossiers]);
+        return view('prestataires.create',['dossiers' => $dossiers]);
     }
 
     /**
@@ -51,41 +54,44 @@ class DossiersController extends Controller
      */
     public function store(Request $request)
     {
-        $dossier = new Dossier([
-             'ref' =>trim( $request->get('ref')),
-             'type' => trim($request->get('type')),
-             'affecte'=> $request->get('affecte'),
+        $prestataire = new Prestataire([
+             'nom' =>trim( $request->get('nom')),
+             'typepres' => trim($request->get('typepres')),
+            // 'par'=> $request->get('par'),
 
         ]);
 
-        $dossier->save();
-        return redirect('/dossiers')->with('success', '  has been added');
+        $prestataire->save();
+        return redirect('/prestataires')->with('success', ' ajouté avec succès');
 
     }
 
     public function saving(Request $request)
     {
-        $dossier = new Dossier([
-       //     'emetteur' => $request->get('emetteur'),
-        //    'sujet' => $request->get('sujet'),
-        //    'contenu'=> $request->get('contenu'),
+        if( ($request->get('nom'))!=null) {
 
-        ]);
+            $prestataire = new Prestataire([
+                'nom' => $request->get('nom'),
+                'typepres' => $request->get('typepres'),
 
-        $dossier->save();
-        return redirect('/dossiers')->with('success', 'Entry has been added');
+            ]);
+            $prestataire->save();
+
+        }
+
+       // return redirect('/prestataires')->with('success', 'ajouté avec succès');
 
     }
 
     public function updating(Request $request)
     {
 
-        $id= $request->get('dossier');
+        $id= $request->get('prestataire');
         $champ= strval($request->get('champ'));
        $val= $request->get('val');
       //  $dossier = Dossier::find($id);
        // $dossier->$champ =   $val;
-        Dossier::where('id', $id)->update(array($champ => $val));
+        Prestataire::where('id', $id)->update(array($champ => $val));
 
       //  $dossier->save();
 
@@ -103,8 +109,8 @@ class DossiersController extends Controller
     {
         $dossiers = Dossier::all();
 
-       $dossier = Dossier::find($id);
-        return view('dossiers.view',['dossiers' => $dossiers], compact('dossier'));
+       $prestataire = Prestataire::find($id);
+        return view('prestataires.view',['dossiers' => $dossiers], compact('prestataire'));
 
     }
 
@@ -117,10 +123,10 @@ class DossiersController extends Controller
     public function edit($id)
     {
         //
-        $dossier = Dossier::find($id);
+        $prestataire = Prestataire::find($id);
         $dossiers = Dossier::all();
 
-        return view('dossiers.edit',['dossiers' => $dossiers], compact('dossier'));
+        return view('prestataires.edit',['dossiers' => $dossiers], compact('prestataire'));
     }
 
     /**
@@ -133,15 +139,15 @@ class DossiersController extends Controller
     public function update(Request $request, $id)
     {
 
-        $dossier = Dossier::find($id);
+        $prestataire = Prestataires::find($id);
 
-        if( ($request->get('ref'))!=null) { $dossier->name = $request->get('ref');}
-        if( ($request->get('type'))!=null) { $dossier->email = $request->get('type');}
-        if( ($request->get('affecte'))!=null) { $dossier->user_type = $request->get('affecte');}
+       // if( ($request->get('ref'))!=null) { $prestataire->name = $request->get('ref');}
+       // if( ($request->get('type'))!=null) { $prestataire->email = $request->get('type');}
+       // if( ($request->get('affecte'))!=null) { $prestataire->user_type = $request->get('affecte');}
 
-        $dossier->save();
+        $prestataire->save();
 
-        return redirect('/dossiers')->with('success', '  has been updated');    }
+        return redirect('/prestataires')->with('success', 'mise à jour avec succès');    }
 
     /**
      * Remove the specified resource from storage.
@@ -151,8 +157,8 @@ class DossiersController extends Controller
      */
     public function destroy($id)
     {
-        $dossier = Dossier::find($id);
-        $dossier->delete();
+        $prestataire = Prestataire::find($id);
+        $prestataire->delete();
 
-        return redirect('/dossiers')->with('success', '  has been deleted Successfully');    }
+        return redirect('/prestataires')->with('success', '  Supprimé avec succès');    }
 }

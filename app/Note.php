@@ -2,7 +2,7 @@
 
 namespace App;
 use Illuminate\Database\Eloquent\Model;
-class Dossier extends Model
+class Note extends Model
 
 {
     protected $fillable = ['id', 'affecte',

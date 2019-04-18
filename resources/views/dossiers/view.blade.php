@@ -3,24 +3,16 @@
 @section('content')
 <div class="form-group">
      {{ csrf_field() }}
-    <label for="ref">ref:</label>
-    <input id="ref" type="text" class="form-control" name="ref"  value={{ $dossier->ref }} />
-</div>
-<div class="form-group">
-    <label for="type">type :</label>
-    <input id="type" type="text" class="form-control" name="type"  value={{ $dossier->type }} />
-</div>
+
 <div class="form-group">
     <label for="affecte">Agent :</label>
-    <input id="affecte" type="text" class="form-control" name="affecte"  value={{ $dossier->affecte }} />
+    <input id="affecte" type="text" class="form-control" name="affecte" style="width:100px" value={{ $dossier->affecte }} />
 </div> 
-
- 
 
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab_dossier">
                                     <form id="updatedossform">
-                                        <input type="hidden" name="iddossupdate" id="iddossupdate" value="37301">
+                                        <input type="hidden" name="iddossupdate" id="iddossupdate" value={{ $dossier->id }}>
                                         <div class="row form">
                                             <div class="col-md-12">
                                                 <div class="tab-content">
@@ -43,7 +35,7 @@
                                                                                         <label for="inputError" class="control-label">Nom abonné * </label>
 
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="subscriber_name" name="subscriber_name" class="form-control">
+                                                                                            <input onchange="changing(this)" type="text" id="subscriber_name" name="subscriber_name" class="form-control" value={{ $dossier->subscriber_name }}  >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -52,7 +44,7 @@
                                                                                         <label for="inputError" class="control-label">Prénom *</label>
 
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="subscriber_lastname" name="subscriber_lastname" class="form-control">
+                                                                                            <input onchange="changing(this)" type="text" id="subscriber_lastname" name="subscriber_lastname" class="form-control"  value={{ $dossier->subscriber_lastname }} >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -61,7 +53,7 @@
                                                                                         <label for="inputError" class="control-label">Adresse étranger</label>
 
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="adresse_etranger" name="adresse_etranger" class="form-control">
+                                                                                            <input onchange="changing(this)" type="text" id="adresse_etranger" name="adresse_etranger" class="form-control"   value={{ $dossier->adresse_etranger }} >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -73,7 +65,7 @@
                                                                                         <label for="inputError" class="control-label">Bénéficaire </label>
 
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="beneficiaire" name="beneficiaire" class="form-control">
+                                                                                            <input onchange="changing(this)" type="text" id="beneficiaire" name="beneficiaire" class="form-control"   value={{ $dossier->beneficiaire }} >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -82,7 +74,7 @@
                                                                                         <label for="inputError" class="control-label">Prénom Bénéficaire</label>
 
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="prenom_benef" name="prenom_benef" class="form-control">
+                                                                                            <input onchange="changing(this)" type="text" id="prenom_benef" name="prenom_benef" class="form-control"   value={{ $dossier->prenom_benef }} >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -91,7 +83,7 @@
                                                                                         <label for="inputError" class="control-label">Tel mobile 1</label>
 
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="subscriber_phone_cell" name="subscriber_phone_cell" class="form-control">
+                                                                                            <input onchange="changing(this)" type="text" id="subscriber_phone_cell" name="subscriber_phone_cell" class="form-control"  value={{ $dossier->subscriber_phone_cell }}  >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -103,7 +95,7 @@
                                                                                         <label for="inputError" class="control-label">Tel mobile 2</label>
 
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="subscriber_phone_domicile" name="subscriber_phone_domicile" class="form-control">
+                                                                                            <input onchange="changing(this)" type="text" id="subscriber_phone_domicile" name="subscriber_phone_domicile" class="form-control"   value={{ $dossier->subscriber_phone_domicile }} >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -112,7 +104,7 @@
                                                                                         <label for="inputError" class="control-label">Tel Autre </label>
 
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="subscriber_phone_home" name="subscriber_phone_home" class="form-control">
+                                                                                            <input onchange="changing(this)" type="text" id="subscriber_phone_home" name="subscriber_phone_home" class="form-control"   value={{ $dossier->subscriber_phone_home }} >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -121,7 +113,7 @@
                                                                                         <label for="inputError" class="control-label">Tel autre 2</label>
 
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="subscriber_phone_4" name="subscriber_phone_4" class="form-control">
+                                                                                            <input onchange="changing(this)" type="text" id="subscriber_phone_4" name="subscriber_phone_4" class="form-control"   value={{ $dossier->subscriber_phone_4 }} >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -133,7 +125,7 @@
                                                                                         <label for="inputError" class="control-label">To </label>
 
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="to" name="to" class="form-control">
+                                                                                            <input onchange="changing(this)" type="text" id="to" name="to" class="form-control"   value={{ $dossier->to }} >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -142,7 +134,7 @@
                                                                                         <label for="inputError" class="control-label">Guide</label>
 
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="to_guide" name="to_guide" class="form-control">
+                                                                                            <input onchange="changing(this)"  type="text" id="to_guide" name="to_guide" class="form-control"   value={{ $dossier->to_guide }} >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -151,7 +143,7 @@
                                                                                         <label for="inputError" class="control-label">Tel </label>
 
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="to_phone" name="to_phone" class="form-control">
+                                                                                            <input onchange="changing(this)"  type="text" id="to_phone" name="to_phone" class="form-control"   value={{ $dossier->to_phone }} >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -162,14 +154,14 @@
                                                                                 <div class="col-md-4">
                                                                                     <div class="form-group">
                                                                                         <label for="inputError" class="control-label">Date arrivée </label>
-                                                                                        <input data-format="dd-MM-yyyy hh:mm:ss" placeholder="jj-mm-aaaa" class="form-control datepicker-default form-control" name="initial_arrival_date" id="initial_arrival_date" type="text">
+                                                                                        <input onchange="changing(this)"  data-format="dd-MM-yyyy hh:mm:ss" placeholder="jj-mm-aaaa" class="form-control datepicker-default form-control" name="initial_arrival_date" id="initial_arrival_date" type="text"   value={{ $dossier->initial_arrival_date }} >
                                                                                     </div>
 
                                                                                 </div>
                                                                                 <div class="col-md-4">
                                                                                     <div class="form-group">
                                                                                         <label for="inputError" class="control-label">Départ prévu</label>
-                                                                                        <input data-format="dd-MM-yyyy hh:mm:ss" placeholder="jj-mm-aaaa" class="form-control datepicker-default form-control" name="departure" id="departure" type="text">
+                                                                                        <input onchange="changing(this)"  data-format="dd-MM-yyyy hh:mm:ss" placeholder="jj-mm-aaaa" class="form-control datepicker-default form-control" name="departure" id="departure" type="text"   value={{ $dossier->departure }} >
                                                                                     </div>
 
                                                                                 </div>
@@ -178,7 +170,7 @@
                                                                                         <label for="inputError" class="control-label">Destination </label>
 
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="destination" name="destination" class="form-control">
+                                                                                            <input onchange="changing(this)" type="text" id="destination" name="destination" class="form-control"   value={{ $dossier->destination }} >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -190,7 +182,7 @@
                                                                                         <label for="inputError" class="control-label">Adresse Tunisie </label>
 
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="subscriber_local_address" name="subscriber_local_address" class="form-control">
+                                                                                            <input onchange="changing(this)"  type="text" id="subscriber_local_address" name="subscriber_local_address" class="form-control"   value={{ $dossier->subscriber_local_address }} >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -199,7 +191,7 @@
                                                                                         <label for="inputError" class="control-label">Chambre</label>
 
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="subscriber_local_address_ch" name="subscriber_local_address_ch" class="form-control">
+                                                                                            <input onchange="changing(this)"  type="text" id="subscriber_local_address_ch" name="subscriber_local_address_ch" class="form-control"   value={{ $dossier->subscriber_local_address_ch }} >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -207,7 +199,7 @@
                                                                                     <div class="form-group">
                                                                                         <label for="inputError" class="control-label">Tel Chambre</label>
                                                                                         <div class="input-group-control">
-                                                                                            <input type="text" id="tel_chambre" name="tel_chambre" class="form-control">
+                                                                                            <input onchange="changing(this)" type="text" id="tel_chambre" name="tel_chambre" class="form-control"   value={{ $dossier->tel_chambre }} >
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -215,10 +207,10 @@
                                                                                     <div class="form-group">
                                                                                         <label for="inputError" class="control-label">Mail</label>
                                                                                         <div class="input-group-control">
-                                                                                            <input type="email" id="mail_abonne" name="mail_abonne" class="form-control" placeholder="mail_1">
+                                                                                            <input onchange="changing(this)" type="email" id="mail_abonne" name="mail_abonne" class="form-control" placeholder="mail_1"   value={{ $dossier->mail_abonne }} >
 
                                                                                         </div><br>
-                                                                                        <span id="email1"><input type="text" name="email1" class="form-control" id="subscriber_mail2" placeholder="mail_2"><br><span id="email2"><input type="text" name="email2" class="form-control" id="subscriber_mail3" placeholder="mail_3"></span></span>
+                                                                                        <span id="subscriber_mail2"><input onchange="changing(this)"  type="text" name="email1" class="form-control" id="email1" placeholder="mail_2"   value={{ $dossier->email1 }} ><br><span id="subscriber_mail3"><input onchange="changing(this)"  type="text" name="email2" class="form-control" id="email2" placeholder="mail_3"   value={{ $dossier->email2 }} ></span></span>
                                                                                     </div>
 
                                                                                 </div>
@@ -246,10 +238,10 @@
                                                                         <div class="col-md-6">
                                                                             <div class="form-group">
                                                                                 <label>Type de dossier</label>
-                                                                                <select id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
-                                                                                    <option value="Medical">Medical</option>
-                                                                                    <option value="Technique">Technique</option>
-                                                                                    <option value="Mixte">Mixte</option>
+                                                                                <select  onchange="changing(this);location.reload();"  id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
+                                                                                    <option <?php if ($dossier->type_dossier =='Medical'){echo 'selected="selected"';} ?> value="Medical">Medical</option>
+                                                                                    <option <?php if ($dossier->type_dossier =='Technique'){echo 'selected="selected"';} ?> value="Technique">Technique</option>
+                                                                                    <option <?php if ($dossier->type_dossier =='Mixte'){echo 'selected="selected"';} ?> value="Mixte">Mixte</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
@@ -257,14 +249,14 @@
                                                                             <div class="form-group">
                                                                                 <label>Affecté à </label>
                                                                                 <select id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single" readonly="readonly">
-                                                                                    <option value="Najda">Najda</option>
-                                                                                    <option value="VAT">VAT</option>
-                                                                                    <option value="MEDIC">MEDIC</option>
-                                                                                    <option value="Transport MEDIC">Transport MEDIC</option>
-                                                                                    <option value="Transport VAT">Transport VAT</option>
-                                                                                    <option value="Medic International">Medic International</option>
-                                                                                    <option value="Najda TPA">Najda TPA</option>
-                                                                                    <option value="Transport Najda">Transport Najda</option>
+                                                                                    <option <?php if ($dossier->type_affectation =='Najda'){echo 'selected="selected"';} ?> value="Najda">Najda</option>
+                                                                                    <option <?php if ($dossier->type_affectation =='VAT'){echo 'selected="selected"';} ?> value="VAT">VAT</option>
+                                                                                    <option <?php if ($dossier->type_affectation =='MEDIC'){echo 'selected="selected"';} ?> value="MEDIC">MEDIC</option>
+                                                                                    <option <?php if ($dossier->type_affectation =='Transport MEDIC'){echo 'selected="selected"';} ?> value="Transport MEDIC">Transport MEDIC</option>
+                                                                                    <option <?php if ($dossier->type_affectation =='Transport VAT'){echo 'selected="selected"';} ?> value="Transport VAT">Transport VAT</option>
+                                                                                    <option <?php if ($dossier->type_affectation =='Medic International'){echo 'selected="selected"';} ?> value="Medic International">Medic International</option>
+                                                                                    <option <?php if ($dossier->type_affectation =='Najda TPA'){echo 'selected="selected"';} ?> value="Najda TPA">Najda TPA</option>
+                                                                                    <option <?php if ($dossier->type_affectation =='Transport Najda'){echo 'selected="selected"';} ?> value="Transport Najda">Transport Najda</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
@@ -275,7 +267,7 @@
                                                                                 <label for="inputError" class="control-label">Statut</label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" value="En cours" id="current_status" name="current_status" class="form-control" disabled="">
+                                                                                    <input type="text" value="En cours" id="current_status" name="current_status" class="form-control" disabled=""  value={{ $dossier->current_status }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -284,7 +276,7 @@
                                                                                 <label for="inputError" class="control-label">Ouvert le </label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" value="" id="opened_by_date" name="" class="form-control" disabled="">
+                                                                                    <input onchange="changing(this)" type="text" value="" id="opened_by_date" name="" class="form-control" disabled=""  value={{ $dossier->opened_by_date }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -295,7 +287,7 @@
                                                                                 <label for="inputError" class="control-label">Réf Dossier</label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text1" id="reference_medic" name="reference_medic" class="form-control" disabled="">
+                                                                                    <input onchange="changing(this)" type="text1" id="reference_medic" name="reference_medic" class="form-control" disabled=""   value={{ $dossier->referance_medic }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -304,17 +296,17 @@
                                                                         <div class="col-md-6">
                                                                             <div class="form-group">
                                                                                 <label for="complexite"> Degré de complexité</label>
-                                                                                <select class="form-control" name="complexite" id="complexite">
-                                                                                    <option value="1">1</option>
-                                                                                    <option value="2">2</option>
-                                                                                    <option value="3">3</option>
+                                                                                <select onchange="changing(this)" class="form-control" name="complexite" id="complexite"  >
+                                                                                    <option <?php if ($dossier['complexite'] ==1){echo 'selected="selected"';}?> value="1">1</option>
+                                                                                    <option <?php if ($dossier['complexite'] ==2){echo 'selected="selected"';}?>value="2">2</option>
+                                                                                    <option <?php if ($dossier['complexite'] ==3){echo 'selected="selected"';}?>value="3">3</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-6">
                                                                             <div class="form-group">
                                                                                 <label for="complexite"> Montant total des prestations</label>
-                                                                                <input type="text" readonly="readonly" class="form-control" name="montant_tot" id="montant_tot">
+                                                                                <input onchange="changing(this)" type="text" readonly="readonly" class="form-control" name="montant_tot" id="montant_tot"   value={{ $dossier->montant_tot }} >
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -340,7 +332,10 @@
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
                                                                             <label>Client </label>
-                                                                            <select id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"><option value="0">Sélectionner..... </option><option value="87">ACI Global</option><option value="82">ADAC Ambulance Services</option><option value="201">AFRIC ASSISTANCE &amp; SERVICES</option><option value="187">Afrique Assistance</option><option value="90">Aide Barcelona </option><option value="237">Allianz Care Helpline Libya</option><option value="67">ALLIANZ GLOBAL ASSISTANCE  Switzerland (AGA)</option><option value="212">ALLIANZ GLOBAL ASSISTANCE Australia (AGA)</option><option value="19">ALLIANZ GLOBAL ASSISTANCE Belgium (AGA)</option><option value="70">ALLIANZ GLOBAL ASSISTANCE Canada (AGA)</option><option value="115">ALLIANZ GLOBAL ASSISTANCE China (AGA)</option><option value="147">ALLIANZ GLOBAL ASSISTANCE Germany (AGA)</option><option value="21">ALLIANZ GLOBAL ASSISTANCE Italia (AGA)</option><option value="20">ALLIANZ GLOBAL ASSISTANCE Spain (AGA)</option><option value="211">ALLIANZ GLOBAL ASSISTANCE Turkey (AGA)</option><option value="30">ALLIANZ GLOBAL ASSISTANCE UK (AGA)</option><option value="143">ALLIANZ GLOBAL ASSISTANCE USA (AGA)</option><option value="85">ALLIANZ WOLRDWIDE PARTNERS Portugal (AWP)</option><option value="170">ALLIANZ WORLDWIDE CARE</option><option value="17">ALLIANZ WORLDWIDE PARTNERS France (AWP) </option><option value="28">ALLIANZ WORLDWIDE PARTNERS Greece (AWP)</option><option value="31">ALLIANZ WORLDWIDE PARTNERS Netherlands (AWP)</option><option value="29">ALLIANZ WORLDWIDE PARTNERS Poland (AWP)</option><option value="99">ALLIANZ WORLDWIDE PARTNERS Tchequie (AWP)</option><option value="16">almeda GmbH</option><option value="164">Alpine Air Ambulance</option><option value="61">Ambassade d'Allemagne à Tunis</option><option value="14">ANWB</option><option value="216">APO (Amilcar Petroleum Operations S.A)</option><option value="96">Apollo HCA</option><option value="137">ARAG, Compañía Internacional de Seguros y Reasegur</option><option value="158">ARIA Assistance UK</option><option value="40">ASB ASSISTANCE</option><option value="128">ASIAN MEDICAL ASSISTANCE (ARC)</option><option value="183">Assist Card Argentina</option><option value="160">Assist Card Korea</option><option value="79">Assist Card Spain</option><option value="41">ASSISTANCE INTERNATIONAL UK</option><option value="43">ASSURE ASSISTANCE</option><option value="134">ATHENS ASSISTANCE</option><option value="167">Augsburg Air Ambulance</option><option value="110">AXA ASSISTANCE CZ</option><option value="8">AXA ASSISTANCE DEUTSCHLAND</option><option value="5">AXA ASSISTANCE FRANCE</option><option value="208">AXA ASSISTANCE MAROC</option><option value="6">AXA ASSISTANCE UK</option><option value="7">AXA ASSISTANCE USA</option><option value="98">AXA Mauritius</option><option value="186">AXA Travel Insurance (AI &amp; EI)</option><option value="229">Blue Dot Indonesia</option><option value="109">Bupa Global Assistance (Denmark)</option><option value="171">C3 Médical</option><option value="153">CALL ASSISTANCE 24 s.r.o.</option><option value="182">Call Us Assistance International (Axa Autriche)</option><option value="50">CEGA ASSISTANCE</option><option value="154">Clinique Elyousr</option><option value="63">Clinique Essalem</option><option value="64">Clinique La Corniche</option><option value="65">Clinique Les Oliviers</option><option value="62">CORIS Tunisie</option><option value="161">Customer Care PTY Ltd</option><option value="93">Customer Care Solutions</option><option value="146">DRF Luftrettung (DRF Stiftung Luftrettung Gemeinnü</option><option value="140">DRK Assistance (German Red Cross)</option><option value="162">DUALEX</option><option value="9">DZ ASSISTANCE</option><option value="231">Egypt In-Touch Assistance Co</option><option value="234">EMA Group Oy aka Euro-Center Helsinki</option><option value="168">Emergency Assistance Facilities UK</option><option value="176">Euro Union Assistance GmbH (Auto-Club Europa Euro-</option><option value="39">EURO-ALARM DANEMARK</option><option value="22">EUROCENTER Afrique du sud</option><option value="190">EUROCENTER MADRID</option><option value="11">EUROCENTER PRAGUE</option><option value="95">EuroCross Assistance Bulgaria</option><option value="198">EuroCross Assistance Czech Republic</option><option value="55">Eurocross Assistance Netherlands</option><option value="56">Eurocross International Assistance Polska</option><option value="46">EUROP ASSISTANCE AUTRICHE</option><option value="37">EUROP ASSISTANCE FRANCE</option><option value="74">EUROP ASSISTANCE HONGRIE</option><option value="44">EUROP ASSISTANCE ITALIE</option><option value="38">EUROP ASSISTANCE UK</option><option value="84">FAI rent-a-jet AG</option><option value="145">Fidelia Assistance</option><option value="2">FILASSISTANCE</option><option value="107">FLYMEX</option><option value="121">Global Doctor Alarm Center</option><option value="45">GLOBAL VOYAGER ASSISTANCE</option><option value="138">Globemedltd ICSC</option><option value="197">GOBBO Quality Assistance</option><option value="188">Healix International</option><option value="220">IKE Assistência Brasil</option><option value="108">IMA BENELUX</option><option value="24">IMA France (INTER MUTUELLES ASSISTANCE) </option><option value="172">IMA Iberica</option><option value="235">IMA MarocAssistance</option><option value="18">IMA Servizi SRL (Italia)</option><option value="104">IMA UK Assistance Ltd</option><option value="224">IMG Global Response (only for ALC products)</option><option value="223">IMG Global Response, Ltd (except ALC products)</option><option value="114">INTANA GLOBAL</option><option value="151">International SOS Emergency Services (Deutschland)</option><option value="112">International SOS Genève</option><option value="73">International SOS Paris</option><option value="174">IPA Alger</option><option value="214">IPA Athens</option><option value="126">IPA Bruxelles</option><option value="103">IPA ESPAÑA</option><option value="94">IPA Geneva</option><option value="130">IPA Lisbonne Portugal</option><option value="149">IPA Polska</option><option value="150">IPA Roma</option><option value="228">ISAS Inter Secours Assistance Maroc</option><option value="155">Luxembourg Air Ambulance / EAA European Air Ambula</option><option value="159">MALTESER Service Center</option><option value="47">MARM ASSISTANCE</option><option value="106">MD Medicus Assistance Service GmbH</option><option value="113">meda gmbh; InternationaleR Flugkoordination</option><option value="71">Medevasan</option><option value="209">Medic' International</option><option value="58">Medic' Multiservices</option><option value="230">Medical Flight Service</option><option value="13">MEDICALL AG</option><option value="185">MEDILINK (Assistance Cases)</option><option value="207">Medilink TPA divers</option><option value="191">Mideast Assistance International S.A.R.L (Lebanon)</option><option value="68">MONDIAL ASSISTANCE Austria</option><option value="213">MONDIAL ASSISTANCE Brazil</option><option value="210">MONDIAL ASSISTANCE Ireland</option><option value="165">MONDIAL ASSISTANCE Russia</option><option value="181">MSO (Medical Services Organisation South Africa)</option><option value="173">MULTI ASSISTANCE INTERNATIONALE</option><option value="166">MUTAS</option><option value="1">MUTUAIDE ASSISTANCE</option><option value="202">NAJDA ASSISTANCE</option><option value="144">NETCARE</option><option value="12">Nobis Filodiretto (International Care Company s.r.</option><option value="226">Nosok (Yemen)</option><option value="129">OMV Tunesien Production GmbH</option><option value="83">ON CALL INTERNATIONAL</option><option value="66">Opteven Assistance</option><option value="116">PA Resources</option><option value="193">PAS Pronto Assistance Servizi S.c.r.l.</option><option value="60">Privé</option><option value="80">PRO-JET Ambulance</option><option value="133">QBE Atlasz</option><option value="175">Racc Medical Service</option><option value="35">RACE ASISTENCIA</option><option value="196">Rede Nacional de Assistencia</option><option value="101">Rega Swiss Air Ambulance</option><option value="48">REMED ASSISTANCE</option><option value="217">ROLAND Assistance</option><option value="33">SAHAM ASSISTANCE</option><option value="125">Sanitrans - SAA International Assistance Srl</option><option value="157">SAROST</option><option value="118">SEREPT</option><option value="233">SESAME SANTE</option><option value="184">Seven Corners</option><option value="97">SHELL</option><option value="232">SMEDI</option><option value="100">SOS International Amsterdam</option><option value="127">SOS International Danemark (SOS Dansk Autohjaelp)</option><option value="218">SOS International Finland</option><option value="163">SOS International Norvege</option><option value="219">SOS International Suede</option><option value="139">STORM Ventures International</option><option value="236">SWAN International Assistance</option><option value="227">TBS</option><option value="225">THF</option><option value="169">THYNA PETROLEUM SERVICES (TPS)</option><option value="215">TMS</option><option value="52">TOURING CLUB BELGIQUE</option><option value="51">TOURING CLUB SUISSE</option><option value="92">Tyrolair TAA</option><option value="4">VAB S.A.</option><option value="59">Voyages Assistance Tunisie (VAT)</option><option value="36">WORLDWIDE ASSISTANCE</option><option value="122">WTP ASSIST</option><option value="34">ÖAMTC - Schutzbriefverrechnung</option></select>
+                                                                            <select id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"><option value="0">Sélectionner..... </option>
+                                                                                <option value="87">ACI Global</option><option value="82">ADAC Ambulance Services</option>
+                                                                                <option value="201">AFRIC ASSISTANCE &amp; SERVICES</option>
+                                                                                <option value="187">Afrique Assistance</option><option value="90">Aide Barcelona </option><option value="237">Allianz Care Helpline Libya</option><option value="67">ALLIANZ GLOBAL ASSISTANCE  Switzerland (AGA)</option><option value="212">ALLIANZ GLOBAL ASSISTANCE Australia (AGA)</option><option value="19">ALLIANZ GLOBAL ASSISTANCE Belgium (AGA)</option><option value="70">ALLIANZ GLOBAL ASSISTANCE Canada (AGA)</option><option value="115">ALLIANZ GLOBAL ASSISTANCE China (AGA)</option><option value="147">ALLIANZ GLOBAL ASSISTANCE Germany (AGA)</option><option value="21">ALLIANZ GLOBAL ASSISTANCE Italia (AGA)</option><option value="20">ALLIANZ GLOBAL ASSISTANCE Spain (AGA)</option><option value="211">ALLIANZ GLOBAL ASSISTANCE Turkey (AGA)</option><option value="30">ALLIANZ GLOBAL ASSISTANCE UK (AGA)</option><option value="143">ALLIANZ GLOBAL ASSISTANCE USA (AGA)</option><option value="85">ALLIANZ WOLRDWIDE PARTNERS Portugal (AWP)</option><option value="170">ALLIANZ WORLDWIDE CARE</option><option value="17">ALLIANZ WORLDWIDE PARTNERS France (AWP) </option><option value="28">ALLIANZ WORLDWIDE PARTNERS Greece (AWP)</option><option value="31">ALLIANZ WORLDWIDE PARTNERS Netherlands (AWP)</option><option value="29">ALLIANZ WORLDWIDE PARTNERS Poland (AWP)</option><option value="99">ALLIANZ WORLDWIDE PARTNERS Tchequie (AWP)</option><option value="16">almeda GmbH</option><option value="164">Alpine Air Ambulance</option><option value="61">Ambassade d'Allemagne à Tunis</option><option value="14">ANWB</option><option value="216">APO (Amilcar Petroleum Operations S.A)</option><option value="96">Apollo HCA</option><option value="137">ARAG, Compañía Internacional de Seguros y Reasegur</option><option value="158">ARIA Assistance UK</option><option value="40">ASB ASSISTANCE</option><option value="128">ASIAN MEDICAL ASSISTANCE (ARC)</option><option value="183">Assist Card Argentina</option><option value="160">Assist Card Korea</option><option value="79">Assist Card Spain</option><option value="41">ASSISTANCE INTERNATIONAL UK</option><option value="43">ASSURE ASSISTANCE</option><option value="134">ATHENS ASSISTANCE</option><option value="167">Augsburg Air Ambulance</option><option value="110">AXA ASSISTANCE CZ</option><option value="8">AXA ASSISTANCE DEUTSCHLAND</option><option value="5">AXA ASSISTANCE FRANCE</option><option value="208">AXA ASSISTANCE MAROC</option><option value="6">AXA ASSISTANCE UK</option><option value="7">AXA ASSISTANCE USA</option><option value="98">AXA Mauritius</option><option value="186">AXA Travel Insurance (AI &amp; EI)</option><option value="229">Blue Dot Indonesia</option><option value="109">Bupa Global Assistance (Denmark)</option><option value="171">C3 Médical</option><option value="153">CALL ASSISTANCE 24 s.r.o.</option><option value="182">Call Us Assistance International (Axa Autriche)</option><option value="50">CEGA ASSISTANCE</option><option value="154">Clinique Elyousr</option><option value="63">Clinique Essalem</option><option value="64">Clinique La Corniche</option><option value="65">Clinique Les Oliviers</option><option value="62">CORIS Tunisie</option><option value="161">Customer Care PTY Ltd</option><option value="93">Customer Care Solutions</option><option value="146">DRF Luftrettung (DRF Stiftung Luftrettung Gemeinnü</option><option value="140">DRK Assistance (German Red Cross)</option><option value="162">DUALEX</option><option value="9">DZ ASSISTANCE</option><option value="231">Egypt In-Touch Assistance Co</option><option value="234">EMA Group Oy aka Euro-Center Helsinki</option><option value="168">Emergency Assistance Facilities UK</option><option value="176">Euro Union Assistance GmbH (Auto-Club Europa Euro-</option><option value="39">EURO-ALARM DANEMARK</option><option value="22">EUROCENTER Afrique du sud</option><option value="190">EUROCENTER MADRID</option><option value="11">EUROCENTER PRAGUE</option><option value="95">EuroCross Assistance Bulgaria</option><option value="198">EuroCross Assistance Czech Republic</option><option value="55">Eurocross Assistance Netherlands</option><option value="56">Eurocross International Assistance Polska</option><option value="46">EUROP ASSISTANCE AUTRICHE</option><option value="37">EUROP ASSISTANCE FRANCE</option><option value="74">EUROP ASSISTANCE HONGRIE</option><option value="44">EUROP ASSISTANCE ITALIE</option><option value="38">EUROP ASSISTANCE UK</option><option value="84">FAI rent-a-jet AG</option><option value="145">Fidelia Assistance</option><option value="2">FILASSISTANCE</option><option value="107">FLYMEX</option><option value="121">Global Doctor Alarm Center</option><option value="45">GLOBAL VOYAGER ASSISTANCE</option><option value="138">Globemedltd ICSC</option><option value="197">GOBBO Quality Assistance</option><option value="188">Healix International</option><option value="220">IKE Assistência Brasil</option><option value="108">IMA BENELUX</option><option value="24">IMA France (INTER MUTUELLES ASSISTANCE) </option><option value="172">IMA Iberica</option><option value="235">IMA MarocAssistance</option><option value="18">IMA Servizi SRL (Italia)</option><option value="104">IMA UK Assistance Ltd</option><option value="224">IMG Global Response (only for ALC products)</option><option value="223">IMG Global Response, Ltd (except ALC products)</option><option value="114">INTANA GLOBAL</option><option value="151">International SOS Emergency Services (Deutschland)</option><option value="112">International SOS Genève</option><option value="73">International SOS Paris</option><option value="174">IPA Alger</option><option value="214">IPA Athens</option><option value="126">IPA Bruxelles</option><option value="103">IPA ESPAÑA</option><option value="94">IPA Geneva</option><option value="130">IPA Lisbonne Portugal</option><option value="149">IPA Polska</option><option value="150">IPA Roma</option><option value="228">ISAS Inter Secours Assistance Maroc</option><option value="155">Luxembourg Air Ambulance / EAA European Air Ambula</option><option value="159">MALTESER Service Center</option><option value="47">MARM ASSISTANCE</option><option value="106">MD Medicus Assistance Service GmbH</option><option value="113">meda gmbh; InternationaleR Flugkoordination</option><option value="71">Medevasan</option><option value="209">Medic' International</option><option value="58">Medic' Multiservices</option><option value="230">Medical Flight Service</option><option value="13">MEDICALL AG</option><option value="185">MEDILINK (Assistance Cases)</option><option value="207">Medilink TPA divers</option><option value="191">Mideast Assistance International S.A.R.L (Lebanon)</option><option value="68">MONDIAL ASSISTANCE Austria</option><option value="213">MONDIAL ASSISTANCE Brazil</option><option value="210">MONDIAL ASSISTANCE Ireland</option><option value="165">MONDIAL ASSISTANCE Russia</option><option value="181">MSO (Medical Services Organisation South Africa)</option><option value="173">MULTI ASSISTANCE INTERNATIONALE</option><option value="166">MUTAS</option><option value="1">MUTUAIDE ASSISTANCE</option><option value="202">NAJDA ASSISTANCE</option><option value="144">NETCARE</option><option value="12">Nobis Filodiretto (International Care Company s.r.</option><option value="226">Nosok (Yemen)</option><option value="129">OMV Tunesien Production GmbH</option><option value="83">ON CALL INTERNATIONAL</option><option value="66">Opteven Assistance</option><option value="116">PA Resources</option><option value="193">PAS Pronto Assistance Servizi S.c.r.l.</option><option value="60">Privé</option><option value="80">PRO-JET Ambulance</option><option value="133">QBE Atlasz</option><option value="175">Racc Medical Service</option><option value="35">RACE ASISTENCIA</option><option value="196">Rede Nacional de Assistencia</option><option value="101">Rega Swiss Air Ambulance</option><option value="48">REMED ASSISTANCE</option><option value="217">ROLAND Assistance</option><option value="33">SAHAM ASSISTANCE</option><option value="125">Sanitrans - SAA International Assistance Srl</option><option value="157">SAROST</option><option value="118">SEREPT</option><option value="233">SESAME SANTE</option><option value="184">Seven Corners</option><option value="97">SHELL</option><option value="232">SMEDI</option><option value="100">SOS International Amsterdam</option><option value="127">SOS International Danemark (SOS Dansk Autohjaelp)</option><option value="218">SOS International Finland</option><option value="163">SOS International Norvege</option><option value="219">SOS International Suede</option><option value="139">STORM Ventures International</option><option value="236">SWAN International Assistance</option><option value="227">TBS</option><option value="225">THF</option><option value="169">THYNA PETROLEUM SERVICES (TPS)</option><option value="215">TMS</option><option value="52">TOURING CLUB BELGIQUE</option><option value="51">TOURING CLUB SUISSE</option><option value="92">Tyrolair TAA</option><option value="4">VAB S.A.</option><option value="59">Voyages Assistance Tunisie (VAT)</option><option value="36">WORLDWIDE ASSISTANCE</option><option value="122">WTP ASSIST</option><option value="34">ÖAMTC - Schutzbriefverrechnung</option></select>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6">
@@ -348,7 +343,7 @@
                                                                             <label for="inputError" class="control-label">Référence *</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input type="text" id="reference_customer" name="reference_customer" class="form-control">
+                                                                                <input onchange="changing(this)" type="text" id="reference_customer" name="reference_customer" class="form-control"   value={{ $dossier->reference_customer }} >
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -360,7 +355,7 @@
                                                                             <label for="inputError" class="control-label">Telephone </label>
 
                                                                             <div class="input-group-control">
-                                                                                <input type="text" id="tel" name="tel" class="form-control" readonly="">
+                                                                                <input onchange="changing(this)"  type="text" id="tel" name="tel" class="form-control" readonly=""   value={{ $dossier->tel }} >
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -369,7 +364,7 @@
                                                                             <label for="inputError" class="control-label">Fax</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input type="text" id="fax" name="fax" class="form-control" readonly="">
+                                                                                <input onchange="changing(this)"  type="text" id="fax" name="fax" class="form-control" readonly=""   value={{ $dossier->fax }} >
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -381,7 +376,7 @@
                                                                             <label for="inputError" class="control-label">Adresse de facturation (si différente) </label>
 
                                                                             <div class="input-group-control">
-                                                                                <input type="text" id="adresse_facturation" name="adresse_facturation" class="form-control">
+                                                                                <input onchange="changing(this)" type="text" id="adresse_facturation" name="adresse_facturation" class="form-control"   value={{ $dossier->adresse_facturation }} >
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -390,7 +385,7 @@
                                                                             <label for="inputError" class="control-label">Mail</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input type="text" id="mail" name="mail" class="form-control" readonly="">
+                                                                                <input onchange="changing(this)" type="text" id="mail" name="mail" class="form-control" readonly=""   value={{ $dossier->mail }} >
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -401,12 +396,12 @@
                                                                         <div class="form-group">
 
                                                                             <label for="franchise" class=""> Franchise &nbsp;&nbsp;
-                                                                                <div class="radio" id="uniform-franchise"><span><input type="radio" name="franchise" id="franchise" value="1"></span></div> Oui
+                                                                                <div class="radio" id="uniform-franchise"><span><input onclick="changing(this)" type="radio" name="franchise" id="franchise" value="1" <?php if ($dossier->franchise ==1){echo 'checked';} ?>></span></div> Oui
                                                                             </label>
 
                                                                             <label for="nonfranchise" class="">
 
-                                                                                <div class="radio" id="uniform-nonfranchise"><span class="checked"><input type="radio" name="franchise" id="nonfranchise" value="0" checked="checked"></span></div> Non
+                                                                                <div class="radio" id="uniform-nonfranchise"><span class="checked"><input onclick="disabling('franchise')" type="radio" name="franchise" id="nonfranchise" value="0"  <?php if ($dossier->franchise ==0){echo 'checked';} ?> ></span></div> Non
                                                                             </label>
 
                                                                         </div>
@@ -419,7 +414,7 @@
                                                                             </label>
 
                                                                             <div class="input-group-control">
-                                                                                <input type="text" id="montant_franchise" name="montant_franchise" class="form-control" style="width: 100px;" placeholder="Montant">
+                                                                                <input onchange="changing(this)"  type="text" id="montant_franchise" name="montant_franchise" class="form-control" style="width: 100px;" placeholder="Montant"   value={{ $dossier->montant_franchise }} >
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -429,7 +424,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
-                                                    <div class="panel panel-success" id="medical" style="display: block;">
+                                                    <div class="panel panel-success" id="medical" style=" <?php if ($dossier->type_dossier =='Technique'){echo 'display:none';}?>;">
                                                         <div class="panel-heading">
                                                             <h4 class="panel-title">
                                                                 <a class="accordion-toggle" data-toggle="collapse">
@@ -442,9 +437,9 @@
                                                                     <div class="row">
                                                                         <div class="col-md-6">
                                                                             <div class="form-group">
-                                                                                <label for="is_hospitalized" class="radio-inline"> Hospitalisé
-                                                                                    <div class="radio" id="uniform-is_hospitalized"><span><input type="radio" name="is_hospitalized" id="is_hospitalized" value="1"></span></div> Oui
-                                                                                </label> <label for="nonis_hospitalized" class="radio-inline"> <div class="radio" id="uniform-nonis_hospitalized"><span class="checked"><input type="radio" name="is_hospitalized" id="nonis_hospitalized" value="0" checked="checked"></span></div> Non
+                                                                                <label for="is_hospitalized" class=""> Hospitalisé
+                                                                                    <div class="radio" id="uniform-is_hospitalized"><span><input onclick="changing(this)"  type="radio" name="is_hospitalized" id="is_hospitalized" value="1" <?php if ($dossier->is_hospitalized ==1){echo 'checked';} ?> ></span></div> Oui
+                                                                                </label> <label for="nonis_hospitalized" class=""> <div class="radio" id="uniform-nonis_hospitalized"><span class=""><input onclick="disabling('is_hospitalized')" type="radio" name="is_hospitalized" id="nonis_hospitalized" value="0"  <?php if ($dossier->is_hospitalized ==0){echo 'checked';} ?>  ></span></div> Non
                                                                                 </label>
                                                                             </div>
                                                                         </div>
@@ -456,7 +451,7 @@
                                                                                 <label for="inputError" class="control-label">Adresse Hopital </label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="hospital_address" name="hospital_address" class="form-control">
+                                                                                    <input onchange="changing(this)"  type="text" id="hospital_address" name="hospital_address" class="form-control"   value={{ $dossier->hospital_address }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -465,7 +460,7 @@
                                                                                 <label for="inputError" class="control-label">Ch</label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="hospital_ch" name="hospital_ch" class="form-control">
+                                                                                    <input onchange="changing(this)"  type="text" id="hospital_ch" name="hospital_ch" class="form-control"   value={{ $dossier->hospital_ch }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -474,7 +469,7 @@
                                                                                 <label for="inputError" class="control-label">Tel </label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="hospital_phone" name="hospital_phone" class="form-control">
+                                                                                    <input onchange="changing(this)"  type="text" id="hospital_phone" name="hospital_phone" class="form-control"   value={{ $dossier->hospital_phone }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -483,7 +478,7 @@
                                                                                 <label for="inputError" class="control-label">Médecin Traitant </label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="medecin_traitant" name="medecin_traitant" class="form-control">
+                                                                                    <input onchange="changing(this)"  type="text" id="medecin_traitant" name="medecin_traitant" class="form-control"   value={{ $dossier->medecin_traitant }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -495,7 +490,7 @@
                                                                                 <label for="inputError" class="control-label">Adresse Hopital2 </label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="hospital_address2" name="hospital_address2" class="form-control">
+                                                                                    <input onchange="changing(this)" type="text" id="hospital_address2" name="hospital_address2" class="form-control"   value={{ $dossier->hospital_address2 }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -504,7 +499,7 @@
                                                                                 <label for="inputError" class="control-label">Ch2</label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="hospital_ch2" name="hospital_ch2" class="form-control">
+                                                                                    <input onchange="changing(this)" type="text" id="hospital_ch2" name="hospital_ch2" class="form-control"   value={{ $dossier->hospital_ch2 }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -513,7 +508,7 @@
                                                                                 <label for="inputError" class="control-label">Tel2 </label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="hospital_phone2" name="hospital_phone2" class="form-control">
+                                                                                    <input onchange="changing(this)" type="text" id="hospital_phone2" name="hospital_phone2" class="form-control"   value={{ $dossier->hospital_phone2 }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -522,7 +517,7 @@
                                                                                 <label for="inputError" class="control-label">Médecin Traitant2 </label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="medecin_traitant2" name="medecin_traitant2" class="form-control">
+                                                                                    <input onchange="changing(this)" type="text" id="medecin_traitant2" name="medecin_traitant2" class="form-control" value={{ $dossier->medecin_traitant2 }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -534,7 +529,7 @@
                                                                                 <label for="inputError" class="control-label">Adresse Hopital3 </label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="hospital_address3" name="hospital_address3" class="form-control">
+                                                                                    <input onchange="changing(this)"  type="text" id="hospital_address3" name="hospital_address3" class="form-control"  value={{ $dossier->hospital_address3 }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -543,7 +538,7 @@
                                                                                 <label for="inputError" class="control-label">Ch3</label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="hospital_ch3" name="hospital_ch3" class="form-control">
+                                                                                    <input onchange="changing(this)" type="text" id="hospital_ch3" name="hospital_ch3" class="form-control"  value={{ $dossier->hospital_ch3 }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -552,7 +547,7 @@
                                                                                 <label for="inputError" class="control-label">Tel3 </label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="hospital_phone3" name="hospital_phone3" class="form-control">
+                                                                                    <input onchange="changing(this)"  type="text" id="hospital_phone3" name="hospital_phone3" class="form-control"  value={{ $dossier->hospital_phone3 }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -561,7 +556,7 @@
                                                                                 <label for="inputError" class="control-label">Médecin Traitant3 </label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="medecin_traitant3" name="medecin_traitant3" class="form-control">
+                                                                                    <input onchange="changing(this)" type="text" id="medecin_traitant3" name="medecin_traitant3" class="form-control"   value={{ $dossier->medecin_traitant3 }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -571,7 +566,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="panel panel-success" id="technique" style="display: none;">
+                                                    <div class="panel panel-success " id="technique" style=" <?php if ($dossier->type_dossier =='Medical'){echo 'display:none';}?>;"">
                                                         <div class="panel-heading">
                                                             <h4 class="panel-title">
                                                                 <a class="accordion-toggle" data-toggle="collapse">
@@ -588,7 +583,7 @@
                                                                                 <label for="inputError" class="control-label"> Type et marque du véhicule</label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="vehicule_type" name="vehicule_type" class="form-control">
+                                                                                    <input onchange="changing(this)" type="text" id="vehicule_type" name="vehicule_type" class="form-control"   value={{ $dossier->vehicule_type }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -597,7 +592,7 @@
                                                                                 <label for="inputError" class="control-label">Immatriculation</label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="vehicule_immatriculation" name="vehicule_immatriculation" class="form-control">
+                                                                                    <input onchange="changing(this)"  type="text" id="vehicule_immatriculation" name="vehicule_immatriculation" class="form-control"   value={{ $dossier->vehicule_immatriculation }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -606,7 +601,7 @@
                                                                                 <label for="inputError" class="control-label">Lieu d'immobilisation </label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="lieu_immobilisation" name="lieu_immobilisation" class="form-control">
+                                                                                    <input onchange="changing(this)" type="text" id="lieu_immobilisation" name="lieu_immobilisation" class="form-control"   value={{ $dossier->lieu_immobilisation }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -618,7 +613,7 @@
                                                                                 <label for="inputError" class="control-label"> Adresse véhicule</label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="vehicule_address" name="vehicule_address" class="form-control">
+                                                                                    <input onchange="changing(this)" type="text" id="vehicule_address" name="vehicule_address" class="form-control"   value={{ $dossier->vehicule_address }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -627,8 +622,8 @@
                                                                                 <label for="inputError" class="control-label">Adresse véhicule2</label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="vehicule_address2" name="vehicule_address2" class="form-control">
-                                                                                </div>
+                                                                                    <input onchange="changing(this)"  type="text" id="vehicule_address2" name="vehicule_address2" class="form-control"   value={{ $dossier->vehicule_address2 }}>
+                                                                                            </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-4">
@@ -636,7 +631,7 @@
                                                                                 <label for="inputError" class="control-label">Tel </label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input type="text" id="vehicule_phone" name="vehicule_phone" class="form-control">
+                                                                                    <input onchange="changing(this)"  type="text" id="vehicule_phone" name="vehicule_phone" class="form-control"   value={{ $dossier->vehicule_phone }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -661,7 +656,7 @@
                                                                         <div class="col-md-12">
                                                                             <div class="form-group form-md-line-input form-md-floating-label">
                                                                                 <label for="form_control_1">Observation dossier<span class="required"> * </span></label>
-                                                                                <textarea rows="3" class="form-control" name="observation" id="observation"></textarea>
+                                                                                <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation" id="observation">  {{ $dossier->observation }} </textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -673,17 +668,44 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
-                                                <div class="form-actions right">
+                                             <!--   <div class="form-actions right">
                                                     <button type="button" id="editDos" class="btn btn-sm btn-info">Enregistrer</button>
-                                                </div>
+                                                </div>-->
                                             </div>
                                         </div>
                                     </form>
                                 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <!--
                                 <div class="tab-pane" id="tab_prestations">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+
                                             <div class="portlet light">
                                                 <div class="portlet-title">
                                                     <div class="caption">
@@ -742,7 +764,7 @@
                                                     </table></div><div class="row"><div class="col-md-5 col-sm-12"><div class="dataTables_info" id="pres_ajax_info" role="status" aria-live="polite">Affichage de l'élément 1 à 1 sur 1 éléments</div></div><div class="col-md-7 col-sm-12"><div class="dataTables_paginate paging_simple_numbers" id="pres_ajax_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="pres_ajax" tabindex="0" id="pres_ajax_previous"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#">Précédent</a></li><li class="paginate_button active" aria-controls="pres_ajax" tabindex="0"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#">1</a></li><li class="paginate_button next disabled" aria-controls="pres_ajax" tabindex="0" id="pres_ajax_next"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#">Suivant</a></li></ul></div></div></div></div>
                                                 </div>
                                             </div>
-                                            <!-- END EXAMPLE TABLE PORTLET-->
+
                                         </div>
                                     </div>
                                 </div>
@@ -768,6 +790,8 @@
                                                                             </div>
 
                                 </div>
+
+
                                 <div class="tab-pane" id="tab_rappels">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -834,7 +858,7 @@
                                                     </table></div><div class="row"><div class="col-md-5 col-sm-12"><div class="dataTables_info" id="table_reminders_info" role="status" aria-live="polite">Affichage de l'élément 0 à 0 sur 0 élément</div></div><div class="col-md-7 col-sm-12"><div class="dataTables_paginate paging_simple_numbers" id="table_reminders_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="table_reminders" tabindex="0" id="table_reminders_previous"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#">Précédent</a></li><li class="paginate_button next disabled" aria-controls="table_reminders" tabindex="0" id="table_reminders_next"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#">Suivant</a></li></ul></div></div></div></div>
                                                 </div>
                                             </div>
-                                            <!-- END EXAMPLE TABLE PORTLET-->
+
                                         </div>
                                     </div>
                                 </div>
@@ -892,7 +916,7 @@
                                                     </table></div><div class="row"><div class="col-md-5 col-sm-5"><div class="dataTables_info" id="cr_ajax_info" role="status" aria-live="polite">Affichage de l'élement 0 à 0 sur 0 éléments</div></div><div class="col-md-7 col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="cr_ajax_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="cr_ajax" tabindex="0" id="cr_ajax_previous"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-left"></i></a></li><li class="paginate_button next disabled" aria-controls="cr_ajax" tabindex="0" id="cr_ajax_next"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-right"></i></a></li></ul></div></div></div></div>
                                                 </div>
                                             </div>
-                                            <!-- END EXAMPLE TABLE PORTLET-->
+
                                         </div>
                                     </div>
                                 </div>
@@ -954,7 +978,7 @@
                                                     </table></div><div class="row"><div class="col-md-5 col-sm-5"><div class="dataTables_info" id="attach_ajax_info" role="status" aria-live="polite">Affichage de l'élement 1 à 1 sur 1 éléments</div></div><div class="col-md-7 col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="attach_ajax_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="attach_ajax" tabindex="0" id="attach_ajax_previous"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-left"></i></a></li><li class="paginate_button active" aria-controls="attach_ajax" tabindex="0"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#">1</a></li><li class="paginate_button next disabled" aria-controls="attach_ajax" tabindex="0" id="attach_ajax_next"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-right"></i></a></li></ul></div></div></div></div>
                                                 </div>
                                             </div>
-                                            <!-- END EXAMPLE TABLE PORTLET-->
+
                                         </div>
                                     </div>
                                 </div>
@@ -1012,7 +1036,7 @@
                                                     </table></div><div class="row"><div class="col-md-5 col-sm-5"><div class="dataTables_info" id="medic_ajax_info" role="status" aria-live="polite">Affichage de l'élement 1 à 1 sur 1 éléments</div></div><div class="col-md-7 col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="medic_ajax_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="medic_ajax" tabindex="0" id="medic_ajax_previous"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-left"></i></a></li><li class="paginate_button active" aria-controls="medic_ajax" tabindex="0"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#">1</a></li><li class="paginate_button next disabled" aria-controls="medic_ajax" tabindex="0" id="medic_ajax_next"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-right"></i></a></li></ul></div></div></div></div>
                                                 </div>
                                             </div>
-                                            <!-- END EXAMPLE TABLE PORTLET-->
+
                                         </div>
                                     </div>
                                 </div>
@@ -1070,7 +1094,7 @@
                                                     </table></div><div class="row"><div class="col-md-5 col-sm-5"><div class="dataTables_info" id="medici_ajax_info" role="status" aria-live="polite">Affichage de l'élement 0 à 0 sur 0 éléments</div></div><div class="col-md-7 col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="medici_ajax_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="medici_ajax" tabindex="0" id="medici_ajax_previous"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-left"></i></a></li><li class="paginate_button next disabled" aria-controls="medici_ajax" tabindex="0" id="medici_ajax_next"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-right"></i></a></li></ul></div></div></div></div>
                                                 </div>
                                             </div>
-                                            <!-- END EXAMPLE TABLE PORTLET-->
+
                                         </div>
                                     </div>
                                 </div>
@@ -1084,7 +1108,7 @@
                                                         <span class="caption-subject bold uppercase"> Liste des transports VAT</span>
                                                     </div>
                                                     <div class="actions">
-                                                        <!-- a href="javascript:;" class="btn btn-circle btn-default" id="addPrestation"><i class="fa fa-plus"></i> Ajouter </a -->
+
                                                     </div>
                                                 </div>
                                                 <div class="portlet-body">
@@ -1239,6 +1263,83 @@
                                         </div>
                                     </div>
                                 </div>
+
+
+
+
+                                -->
                             </div>
+</div>
 	
 @endsection
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+
+<script>
+
+    function changing(elm) {
+        var champ=elm.id;
+
+        var val =document.getElementById(champ).value;
+        //  var type = $('#type').val();
+        var dossier = $('#iddossupdate').val();
+         //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('dossiers.updating') }}",
+            method: "POST",
+            data: {dossier: dossier , champ:champ ,val:val, _token: _token},
+            success: function (data) {
+                $('#'+champ).animate({
+                    opacity: '0.3',
+                });
+                $('#'+champ).animate({
+                    opacity: '1',
+                });
+
+            }
+        });
+        // } else {
+
+        // }
+    }
+
+    function disabling(elm) {
+        var champ=elm;
+
+        var val =0;
+        //  var type = $('#type').val();
+        var dossier = $('#iddossupdate').val();
+        //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('dossiers.updating') }}",
+            method: "POST",
+            data: {dossier: dossier , champ:champ ,val:val, _token: _token},
+            success: function (data) {
+                if (elm=='franchise'){
+                $('#nonfranchise').animate({
+                    opacity: '0.3',
+                });
+                $('#nonfranchise').animate({
+                    opacity: '1',
+                });
+                }
+
+                if (elm=='is_hospitalized'){
+                    $('#nonis_hospitalized').animate({
+                        opacity: '0.3',
+                    });
+                    $('#nonis_hospitalized').animate({
+                        opacity: '1',
+                    });
+                }
+            }
+        });
+        // } else {
+
+        // }
+    }
+
+</script>

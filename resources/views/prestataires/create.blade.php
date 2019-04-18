@@ -21,20 +21,18 @@
                     </ul>
                 </div><br />
             @endif
-            <form method="post" action="{{ route('dossiers.store') }}">
+            <form method="post" action="{{ route('prestataires.store') }}">
                 <div class="form-group">
                      {{ csrf_field() }}
-                    <label for="ref">Ref:</label>
-                    <input id="ref" type="text" class="form-control" name="reference_medic"/>
+                    <label for="nom">Nom:</label>
+                    <input id="nom" type="text" class="form-control" name="nom"/>
                 </div>
                 <div class="form-group">
                     <label for="type">type :</label>
-                    <input id="type" type="text" class="form-control" name="type_dossier"/>
+                    <input id="typepres" type="text" class="form-control" name="typepres"/>
                 </div>
-                <div class="form-group">
-                    <label for="affecte">affecte:</label>
-                    <input id="affecte" type="text" class="form-control" name="affecte"/>
-                </div>
+
+
                 <button  type="submit"  class="btn btn-primary">Ajouter</button>
                 <button id="add"  class="btn btn-primary">Ajax Add</button>
             </form>
@@ -50,27 +48,24 @@
     $(document).ready(function(){
 
         $('#add').click(function(){
-            var ref = $('#ref').val();
-            var type = $('#type').val();
-            var affecte = $('#affecte').val();
-            if ((emetteur != '')&&(sujet != '')&&(contenu != ''))
+            var nom = $('#nom').val();
+            var typepres = $('#typepres').val();
+             if ((nom != '')&&(type != ''))
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
-                    url:"{{ route('dossiers.saving') }}",
+                    url:"{{ route('prestataires.saving') }}",
                     method:"POST",
-                    data:{ref:ref,type:type,affecte:affecte, _token:_token},
+                    data:{nom:nom,type:type, _token:_token},
                     success:function(data){
                         alert('Added successfully');
 
                     }
                 });
             }else{
-            alert('ERROR');
+                alert('ERROR');
             }
         });
-
-
 
 
 

@@ -133,34 +133,8 @@ $urlnotif=$urlapp.'/entrees/show/' ;
             });
         }
 
-        function dispatch(){
-            $.ajax({
-                type: "get",
-                url: "<?php echo $urlapp; ?>/emails/disp",
-                success:function(data)
-                {
-                    //console.log the response
-                    console.log(data);
-                    //Send another request in 10 seconds.
-                    setTimeout(function(){
-                        dispatch();
-                    }, 60000);
-                }
-            });
-        }
 
-                function dispatchnow(){
-            $.ajax({
-                type: "get",
-                url: "<?php echo $urlapp; ?>/emails/disp",
-                success:function(data)
-                {
-                    //console.log the response
-                    console.log(data);
-            
-                }
-            });
-        }
+
 
         checkemails();
        // dispatch();
