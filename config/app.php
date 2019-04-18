@@ -186,7 +186,7 @@ return [
         //pdf
         Barryvdh\DomPDF\ServiceProvider::class,
         // global vars
-        App\Providers\GlobalsVServiceProvider::class
+        //App\Providers\GlobalsVServiceProvider::class
 
     ],
 
