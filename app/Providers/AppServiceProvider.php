@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
          
         
         // definir les variables globales
-         view()->composer('*', function ($view) {
+         /*view()->composer('*', function ($view) {
             $dossiers = Dossier::get();
             $countries = DB::table('apps_countries')->select('id', 'country_name')->get();
             $iduser = Auth::id();
@@ -63,7 +63,7 @@ class AppServiceProvider extends ServiceProvider
             View::share('countries', $countries);
             View::share('dossiers', $dossiers);
             View::share('notifications', $result);
-         });
+         });*/
     }
 
     /**
