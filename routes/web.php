@@ -51,6 +51,7 @@ Route::post('/home/fetch', 'HomeController@fetch')->name('home.fetch');
 /*** Entrees **/
 /* tous les emails (tous les entrees) dans la base */
 Route::get('/entrees/boite', array('as' => 'boite','uses' => 'EntreesController@boite'));
+Route::get('/entrees/',  'EntreesController@index');
 Route::post('/entrees/saving','EntreesController@saving')->name('entrees.saving');
 Route::get('/entrees/view/{id}', 'EntreesController@view');
 Route::get('/entrees/show/{id}', 'EntreesController@show');
@@ -113,6 +114,15 @@ Route::get('/prestataires', array('as' => 'prestataires','uses' => 'Prestataires
  Route::post('/prestataires/saving','PrestatairesController@saving')->name('prestataires.saving');
  Route::post('/prestataires/updating','PrestatairesController@updating')->name('prestataires.updating');
 Route::get('/prestataires/view/{id}', 'PrestatairesController@view');
+
+
+/*** Prestataires **/
+Route::resource('/prestations',  'PrestationsController');
+Route::get('/prestations', array('as' => 'prestations','uses' => 'PrestationsController@index'));
+ Route::post('/prestations/saving','PrestatairesController@saving')->name('PrestationsController.saving');
+ Route::post('/prestations/updating','PrestatairesController@updating')->name('PrestationsController.updating');
+Route::get('/prestations/view/{id}', 'PrestationsController@view');
+
 
 /*** Notes **/
 Route::resource('/notes',  'NotesController');

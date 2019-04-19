@@ -3,11 +3,12 @@
 @section('content')
 <div class="form-group">
      {{ csrf_field() }}
-
+<!--
 <div class="form-group">
     <label for="affecte">Agent :</label>
-    <input id="affecte" type="text" class="form-control" name="affecte" style="width:100px" value={{ $dossier->affecte }} />
-</div> 
+    <input id="affecte" type="text" class="form-control" name="affecte" style="width:100px" value={{ $dossier->created_by }} />
+</div>
+-->
 
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab_dossier">
@@ -207,10 +208,12 @@
                                                                                     <div class="form-group">
                                                                                         <label for="inputError" class="control-label">Mail</label>
                                                                                         <div class="input-group-control">
-                                                                                            <input onchange="changing(this)" type="email" id="mail_abonne" name="mail_abonne" class="form-control" placeholder="mail_1"   value={{ $dossier->mail_abonne }} >
-
+                                                                                            <input onchange="changing(this)" type="email" id="subscriber_mail1" name="subscriber_mail1" class="form-control" placeholder="mail 1"   value={{ $dossier->subscriber_mail1 }} >
                                                                                         </div><br>
-                                                                                        <span id="subscriber_mail2"><input onchange="changing(this)"  type="text" name="email1" class="form-control" id="email1" placeholder="mail_2"   value={{ $dossier->email1 }} ><br><span id="subscriber_mail3"><input onchange="changing(this)"  type="text" name="email2" class="form-control" id="email2" placeholder="mail_3"   value={{ $dossier->email2 }} ></span></span>
+                                                                                        <span id="mail2">
+                                                                                            <input onchange="changing(this)"  type="text" name="email1" class="form-control" id="subscriber_mail2" placeholder="mail 2"   value={{ $dossier->subscriber_mail2 }} ><br>
+                                                                                            <span id="mail3">
+                                                                                                <input onchange="changing(this)"  type="text" name="subscriber_mail3" class="form-control" id="subscriber_mail3" placeholder="mail 3"   value={{ $dossier->subscriber_mail3 }} ></span></span>
                                                                                     </div>
 
                                                                                 </div>

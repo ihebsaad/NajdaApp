@@ -15,7 +15,7 @@
               </a>
           </div>
           <div class="col-md-3">
-              <a href="#" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+              <a href="{{ route('prestataires') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                <span class="fa fa-lg fa-fw fa-user-md"></span>
                <br>
                     Les prestataires 
@@ -45,7 +45,7 @@
     </div>
 
     <div class="col-md-3">
-        <a href="{{ route('users') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+        <a href="{{ route('prestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
             <span class="fa fa-lg fa-fw fa-ambulance"></span>
             <br>
             Prestations

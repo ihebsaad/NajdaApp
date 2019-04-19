@@ -6,42 +6,43 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/rowReorder.bootstrap.css') }}" />-->
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
 
-
-
 @section('content')
+
+
     <style>
         .uper {
             margin-top: 10px;
         }
     </style>
     <div class="uper">
-        @if(session()->get('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
-            </div><br />
-        @endif
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
             <tr id="headtable">
-                <th style="width:30%">Emetteur</th>
-                <th style="width:20%">Date</th>
-                <th style="width:30%">Sujet</th>
-                <th style="width:20%">Type</th>
-            </tr>
+                <th style="width:35%">Dossier</th>
+                <th style="width:25%">Prestataire</th>
+                <th style="width:10%">Type</th>
+                <th style="width:20%">Prix</th>
+             </tr>
             <tr>
-                 <th>Emetteur</th>
-                <th>Date</th>
-                <th>Sujet</th>
-                <th>Type</th>
+                <th style="width:35%">Dossier</th>
+                <th style="width:25%">Prestataire</th>
+                <th   style="width:10%">Type</th>
+                <th style="width:20%">Prix</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($entrees as $entree)
+            @foreach($prestations as $prestation)
+                <?php
+
+
+                ?>
+
                 <tr>
-                     <td>{{$entree->emetteur}}</td>
-                    <td><?php echo  date('d/m/Y', strtotime($entree->reception)) ; ?></td>
-                    <td><a href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a></td>
-                    <td>{{$entree->type}}</td>
+                    <td style="width:35%"><a href="{{action('PrestationsController@view', $prestation['id'])}}" >{{$prestation->dossier_id}}</a></td>
+                    <td style="width:25%">{{$prestation->prestataire_id}}</td>
+                    <td style="width:10%;"  >{{$prestation->type_prestations_id}}</td>
+                    <td style="width:20%">{{$prestation->price}}</td>
+
                 </tr>
             @endforeach
             </tbody>
@@ -68,7 +69,7 @@
     <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/pdfmake.js') }}" ></script>
     <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/vfs_fonts.js') }}" ></script>
 
-<style>.searchfield{width:100px;}</style>
+    <style>.searchfield{width:100px;}</style>
 
 
     <script type="text/javascript">
@@ -77,7 +78,6 @@
 
             $('#mytable thead tr:eq(1) th').each( function () {
                 var title = $('#mytable thead tr:eq(0) th').eq( $(this).index() ).text();
-              //  $(this).html( '<input class="searchfield" type="text" placeholder="'+title+'" />' );
                 $(this).html( '<input class="searchfield" type="text"   />' );
             } );
 

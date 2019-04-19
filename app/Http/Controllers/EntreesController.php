@@ -30,7 +30,7 @@ class EntreesController extends Controller
     public function index()
     {
         //
-        $entrees = Entree::all();
+        $entrees = Entree::orderBy('created_at', 'desc')->where('statut','<','2')->paginate(10000000);
         $dossiers = Dossier::all();
 
         return view('entrees.index',['dossiers' => $dossiers], compact('entrees'));

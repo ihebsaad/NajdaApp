@@ -25,7 +25,7 @@ class DossiersController extends Controller
      */
     public function index()
     {
-         $dossiers = Dossier::orderBy('created_at', 'desc')->paginate(5);
+         $dossiers = Dossier::orderBy('created_at', 'desc')->paginate(10000000);
         return view('dossiers.index', compact('dossiers'));
     }
 

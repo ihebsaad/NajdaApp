@@ -7,11 +7,12 @@ use Illuminate\Http\Request;
 use App\Entree ;
 use App\Dossier ;
 use App\Prestataire ;
+use App\Prestation ;
 use App\Ville ;
 use DB;
 
 
-class PrestatairesController extends Controller
+class PrestationsController extends Controller
 {
 
 
@@ -30,8 +31,8 @@ class PrestatairesController extends Controller
         $dossiers = Dossier::all();
         $villes = Ville::all();
 
-        $prestataires = Prestataire::orderBy('created_at', 'desc')->paginate(10000000);
-        return view('prestataires.index',['dossiers' => $dossiers,'villes' => $villes], compact('prestataires'));
+        $prestations = Prestation::orderBy('id', 'desc')->paginate(10000000);
+        return view('prestations.index',['dossiers' => $dossiers,'villes' => $villes], compact('prestations'));
     }
 
  
@@ -45,7 +46,7 @@ class PrestatairesController extends Controller
     {
         $dossiers = Dossier::all();
 
-        return view('prestataires.create',['dossiers' => $dossiers]);
+        return view('prestations.create',['dossiers' => $dossiers]);
     }
 
     /**
@@ -56,15 +57,15 @@ class PrestatairesController extends Controller
      */
     public function store(Request $request)
     {
-        $prestataire = new Prestataire([
+        $prestations = new Prestation([
              'nom' =>trim( $request->get('nom')),
              'typepres' => trim($request->get('typepres')),
             // 'par'=> $request->get('par'),
 
         ]);
 
-        $prestataire->save();
-        return redirect('/prestataires')->with('success', ' ajouté avec succès');
+        $prestations->save();
+        return redirect('/prestations')->with('success', ' ajouté avec succès');
 
     }
 
@@ -72,28 +73,28 @@ class PrestatairesController extends Controller
     {
         if( ($request->get('nom'))!=null) {
 
-            $prestataire = new Prestataire([
+            $prestations = new Prestation([
                 'nom' => $request->get('nom'),
                 'typepres' => $request->get('typepres'),
 
             ]);
-            $prestataire->save();
+            $prestations->save();
 
         }
 
-       // return redirect('/prestataires')->with('success', 'ajouté avec succès');
+       // return redirect('/prestations')->with('success', 'ajouté avec succès');
 
     }
 
     public function updating(Request $request)
     {
 
-        $id= $request->get('prestataire');
+        $id= $request->get('prestations');
         $champ= strval($request->get('champ'));
        $val= $request->get('val');
       //  $dossier = Dossier::find($id);
        // $dossier->$champ =   $val;
-        Prestataire::where('id', $id)->update(array($champ => $val));
+        Prestation::where('id', $id)->update(array($champ => $val));
 
       //  $dossier->save();
 
@@ -112,8 +113,8 @@ class PrestatairesController extends Controller
         $dossiers = Dossier::all();
         $villes = DB::table('cities')->select('id', 'name')->get();
 
-        $prestataire = Prestataire::find($id);
-        return view('prestataires.view',['dossiers' => $dossiers,'villes'=>$villes], compact('prestataire'));
+        $prestations = Prestation::find($id);
+        return view('prestations.view',['dossiers' => $dossiers,'villes'=>$villes], compact('prestations'));
 
     }
 
@@ -126,10 +127,10 @@ class PrestatairesController extends Controller
     public function edit($id)
     {
         //
-        $prestataire = Prestataire::find($id);
+        $prestations = Prestation::find($id);
         $dossiers = Dossier::all();
 
-        return view('prestataires.edit',['dossiers' => $dossiers], compact('prestataire'));
+        return view('prestations.edit',['dossiers' => $dossiers], compact('prestations'));
     }
 
     /**
@@ -142,15 +143,15 @@ class PrestatairesController extends Controller
     public function update(Request $request, $id)
     {
 
-        $prestataire = Prestataires::find($id);
+        $prestations = Prestations::find($id);
 
-       // if( ($request->get('ref'))!=null) { $prestataire->name = $request->get('ref');}
-       // if( ($request->get('type'))!=null) { $prestataire->email = $request->get('type');}
-       // if( ($request->get('affecte'))!=null) { $prestataire->user_type = $request->get('affecte');}
+       // if( ($request->get('ref'))!=null) { $prestations->name = $request->get('ref');}
+       // if( ($request->get('type'))!=null) { $prestations->email = $request->get('type');}
+       // if( ($request->get('affecte'))!=null) { $prestations->user_type = $request->get('affecte');}
 
-        $prestataire->save();
+        $prestations->save();
 
-        return redirect('/prestataires')->with('success', 'mise à jour avec succès');    }
+        return redirect('/prestations')->with('success', 'mise à jour avec succès');    }
 
     /**
      * Remove the specified resource from storage.
@@ -160,20 +161,14 @@ class PrestatairesController extends Controller
      */
     public function destroy($id)
     {
-        $prestataire = Prestataire::find($id);
-        $prestataire->delete();
+        $prestations = Prestation::find($id);
+        $prestations->delete();
 
-        return redirect('/prestataires')->with('success', '  Supprimé avec succès');
+        return redirect('/prestations')->with('success', '  Supprimé avec succès');
     }
 
-    public static function VilleById($id)
-    {
-     // $ville='';
-        $ville = Ville::find($id);
-
-        return $ville['name'];
-
-    }
+ 
+ 
 
 
 }

@@ -7,27 +7,28 @@ class Prestataire extends Model
 {
     protected $fillable = ['id', 'par','updated_at' , 'created_at',
 
-'nom',
+'name',
 'specialite',
-'observation',
-'priorite',
+'observation_prestataire',
+'ordre',
 'typepres',
-'gouvernorat',
 'ville',
+'ville_id',
 'adresse',
 'fax',
-'mobile',
-'mobile2',
-'telephone',
-'telephone2',
-'email',
-'email2',
-'email3',
-'email4',
-'email5',
+'phone_cell',
+'phone_cell2',
+'phone_home',
+'phone_home2',
+'mail',
+'mail2',
+'mail3',
+'mail4',
+'mail5',
 'annule'
 
     ];
+
 /*
     protected $dateFormat = 'Y-m-d H:i';
 
