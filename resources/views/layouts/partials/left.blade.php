@@ -39,11 +39,10 @@
                                                     <a href="#" class="btn btn-danger btn-sm btn-responsive" role="button"> </a>
                                                 </div>
                                             </div>
-                                            @isset ($testvar)
                                             @php
-                                            {{ print_r($testvar); }}
+                                            {{ //print_r(config('commondata.dossiers')); 
+                                            }}
                                             @endphp
-                                            @endisset
                                             <!-- treeview of notifications -->
                                             <div id="jstree">
                                               <ul>
@@ -59,10 +58,44 @@
                                                 </ul>
 
                                                 <button id="btntree">demo button</button>-->
-                                                @isset ($notifications)
                                                  @php
                                                     {{
-                                                      //print_r($notifications);
+                                                      //session()->put('authuserid',Auth::id());
+                                                      //$notifications = config('commondata.notifications');
+                                                      $notificationns = DB::table('notifications')->where('notifiable_id','=', Auth::id() )->where('read_at', '=', null)->get()->toArray();
+            
+                                                      // extraire les informations de l'entree à travers id trouvé dans la notification
+                                                      $nnotifs = array();
+                                                      foreach ($notificationns as $i) {
+                                                        $notifc = json_decode($i->data, true);
+                                                        $entreeid = $notifc['Entree']['id'];
+                                                        $notifentree = DB::table('entrees')->where('id','=', $entreeid)->get()->toArray();
+                                                        $row = array();
+                                                        $row['id'] = $entreeid;
+                                                        foreach ($notifentree as $ni) {
+                                                          $row['sujet'] = $ni->sujet;
+                                                          $row['type'] = $ni->type;
+                                                          $row['dossier'] = $ni->dossier;
+                                                          $row['type'] = $ni->type;
+                                                        }
+                                                        $nnotifs[] = $row;
+                                                      }
+
+                                                      // group notifications by ref dossier
+                                                      $result = array();
+                                                      foreach ($nnotifs as $element) {
+                                                          if (isset($element['dossier']))
+                                                          { $result[$element['dossier']][] = $element; }
+                                                          else
+                                                          {
+                                                            $result[null][] = $element;
+                                                          }
+                                                      } 
+                                                      $notifications = $result;
+
+
+
+
                                                       foreach ($notifications as $ntf) {
                                                         if (!empty($ntf[0]['dossier']))
                                                         {echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']."<ul>";}
@@ -99,7 +132,6 @@
                                                       if (!empty($ntf[0]['dossier'])) {echo '</li>';}
                                                     }}
                                                   @endphp
-                                                @endisset
                                               </ul>
                                               </div>
                                                  
