@@ -116,15 +116,15 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     if (id>0)
                     {
 
-
+                        /*
+                        // popup new notification
                         window.showAlert = function(){
                                    alertify.alert('<a href="<?php print $urlnotif;?>'+id+'">Voir notification</a>');
-                          //  alertify.alert('<a href="http://localhost/najdaapp/entrees/show/'+id+'">Voir notification</a>');
 
                         }
 
                         alertify.alert().setting('modal', false).set({'label': 'voir ultérieurement!'}).setHeader('<em> Nouvelle Notification</em> '); ; ;
-                        window.showAlert();
+                        window.showAlert();*/
 
 
                     }
