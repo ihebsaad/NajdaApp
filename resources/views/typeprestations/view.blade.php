@@ -46,29 +46,12 @@
                                 </select>
                             </div>
                         </div>
-                        <style>.tags{font-size: 13px;}</style>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Type prestation *</label>
-                           <div class="row form-group">
-                               @foreach($relations as $prest  )
-                                   @foreach($typesprestations as $aKey  )
-                                         @if($prest->type_prestation_id==$aKey->id)
-                                           <?php echo '<span class="tags" id="type'.$aKey->id.'" >'.$aKey->name.' <a onclick="removeprest(this)" id="prest'.$aKey->id.'" href="javascript:"> <i class="fas fa-times-circle "></i> </a></span><br>' ; ?>
-                                       @endif
-                                   @endforeach
-                               @endforeach
 
-                           </div>
-                                <select   id="typepres" name="typepres[]" multiple="multiple" class="form-control select2-offscreen" tabindex="-1" value={{ $prestataire->typepres }}>
-
-                                    @foreach($relations as $prest  )
-                                        @foreach($typesprestations as $aKey  )
-                                             <option   onclick="createtypeprest('tpr<?php echo $aKey->id; ?>')"            value="{{$aKey->id}}" @if($prest->type_prestation_id==$aKey->id)selected="selected"@endif     >{{$aKey->name}}</option>
-                                         @endforeach
-                                    @endforeach
-
-                                </select>
+                                <select onchange="changing(this)" id="typepres" name="typepres[]" multiple="multiple" class="form-control select2-offscreen" tabindex="-1" value={{ $prestataire->typepres }}>
+                                    </select>
                             </div>
                         </div>
 
@@ -94,18 +77,17 @@
 
                                 <input onchange="changing(this)" type="text" class="form-control input" name="ville" id="ville" value="{{ $prestataire->ville }}">
 
-                                <script>
-                                    var placesAutocomplete = places({
-                                        appId: 'plCFMZRCP0KR',
-                                        apiKey: 'aafa6174d8fa956cd4789056c04735e1',
-                                        container: document.querySelector('#ville')
-                                    });
-                                </script>
                                 <?php    }?>
                             </div>
                         </div>
 
-
+                        <script>
+                            var placesAutocomplete = places({
+                                appId: 'plCFMZRCP0KR',
+                                apiKey: 'aafa6174d8fa956cd4789056c04735e1',
+                                container: document.querySelector('#ville')
+                            });
+                        </script>
 
                     </div>
 
@@ -178,7 +160,7 @@
                                         </span>
                                     </span>
                                 </span>
-
+                                
                             </div>
                         </div>
 
@@ -190,7 +172,7 @@
                             </div>
                                 <div class="radio-list">
                                     <div class="col-md-3">
-                                    <label for="annule" class="">
+                                    <label for="actif" class="">
                                         <div class="radio" id="uniform-actif"><span class="checked">
                                                 <input  onclick="changing(this)" type="radio" name="annule" id="annule" value="0"   <?php if ($prestataire->annule ==0){echo 'checked';} ?>></span></div> Oui
                                     </label>
@@ -276,60 +258,5 @@
 
         // }
     }
-
-
-
-
-
-    function removeprest(elm) {
-
-        var id= elm.id;
-        var typeprest= id.slice(5);
-        var prestataire = $('#idpres').val();
-
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url: "{{ route('prestataires.removetypeprest') }}",
-            method: "POST",
-            data: {prestataire: prestataire , typeprest:typeprest ,  _token: _token},
-            success: function (data) {
-                $('#type'+typeprest).hide( "slow", function() {
-                    // Animation complete.
-                });
-
-
-            }
-        });
-
-    }
-
-
-    function createtypeprest(id) {
-
-         var typeprest= id.slice(3);
-
-
-        var prestataire = $('#idpres').val();
-
-
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url: "{{ route('prestataires.createtypeprest') }}",
-            method: "POST",
-            data: {prestataire: prestataire , typeprest:typeprest ,  _token: _token},
-            success: function (data) {
-
-                location.reload();
-
-
-            }
-        });
-
-
-    }
-
-
-
-
 
 </script>

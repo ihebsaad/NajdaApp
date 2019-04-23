@@ -8,12 +8,12 @@ use App\Entree ;
 use App\Dossier ;
 use App\Prestataire ;
 use App\Prestation ;
-use App\TypePrestation ;
+use App\ClientGroupe ;
 use App\Ville ;
 use DB;
 
 
-class PrestationsController extends Controller
+class ClientGroupesController extends Controller
 {
 
 
@@ -32,8 +32,8 @@ class PrestationsController extends Controller
         $dossiers = Dossier::all();
         $villes = Ville::all();
 
-        $prestations = Prestation::orderBy('created_at', 'desc')->paginate(10000000);
-        return view('prestations.index',['dossiers' => $dossiers,'villes' => $villes], compact('prestations'));
+        $clientgroupes = ClientGroupe::orderBy('id', 'desc')->paginate(10000000);
+        return view('clientgroupes.index',['dossiers' => $dossiers,'villes' => $villes], compact('clientgroupes'));
     }
 
  
@@ -47,7 +47,7 @@ class PrestationsController extends Controller
     {
         $dossiers = Dossier::all();
 
-        return view('prestations.create',['dossiers' => $dossiers]);
+        return view('clientgroupes.create',['dossiers' => $dossiers]);
     }
 
     /**
@@ -58,15 +58,15 @@ class PrestationsController extends Controller
      */
     public function store(Request $request)
     {
-        $prestations = new Prestation([
+        $clientgroupes = new ClientGroupe([
              'nom' =>trim( $request->get('nom')),
              'typepres' => trim($request->get('typepres')),
             // 'par'=> $request->get('par'),
 
         ]);
 
-        $prestations->save();
-        return redirect('/prestations')->with('success', ' ajouté avec succès');
+        $clientgroupes->save();
+        return redirect('/clientgroupes')->with('success', ' ajouté avec succès');
 
     }
 
@@ -74,28 +74,28 @@ class PrestationsController extends Controller
     {
         if( ($request->get('nom'))!=null) {
 
-            $prestations = new Prestation([
+            $clientgroupes = new ClientGroupe([
                 'nom' => $request->get('nom'),
                 'typepres' => $request->get('typepres'),
 
             ]);
-            $prestations->save();
+            $clientgroupes->save();
 
         }
 
-       // return redirect('/prestations')->with('success', 'ajouté avec succès');
+       // return redirect('/clientgroupes')->with('success', 'ajouté avec succès');
 
     }
 
     public function updating(Request $request)
     {
 
-        $id= $request->get('prestations');
+        $id= $request->get('clientgroupe');
         $champ= strval($request->get('champ'));
        $val= $request->get('val');
       //  $dossier = Dossier::find($id);
        // $dossier->$champ =   $val;
-        Prestation::where('id', $id)->update(array($champ => $val));
+        ClientGroupe::where('id', $id)->update(array($champ => $val));
 
       //  $dossier->save();
 
@@ -114,8 +114,8 @@ class PrestationsController extends Controller
         $dossiers = Dossier::all();
         $villes = DB::table('cities')->select('id', 'name')->get();
 
-        $prestations = Prestation::find($id);
-        return view('prestations.view',['dossiers' => $dossiers,'villes'=>$villes], compact('prestations'));
+        $clientgroupe = ClientGroupe::find($id);
+        return view('clientgroupes.view',['dossiers' => $dossiers,'villes'=>$villes], compact('clientgroupe'));
 
     }
 
@@ -128,10 +128,10 @@ class PrestationsController extends Controller
     public function edit($id)
     {
         //
-        $prestations = Prestation::find($id);
+        $clientgroupes = ClientGroupe::find($id);
         $dossiers = Dossier::all();
 
-        return view('prestations.edit',['dossiers' => $dossiers], compact('prestations'));
+        return view('clientgroupes.edit',['dossiers' => $dossiers], compact('clientgroupes'));
     }
 
     /**
@@ -144,15 +144,15 @@ class PrestationsController extends Controller
     public function update(Request $request, $id)
     {
 
-        $prestations = Prestations::find($id);
+        $clientgroupes = ClientGroupes::find($id);
 
-       // if( ($request->get('ref'))!=null) { $prestations->name = $request->get('ref');}
-       // if( ($request->get('type'))!=null) { $prestations->email = $request->get('type');}
-       // if( ($request->get('affecte'))!=null) { $prestations->user_type = $request->get('affecte');}
+       // if( ($request->get('ref'))!=null) { $clientgroupes->name = $request->get('ref');}
+       // if( ($request->get('type'))!=null) { $clientgroupes->email = $request->get('type');}
+       // if( ($request->get('affecte'))!=null) { $clientgroupes->user_type = $request->get('affecte');}
 
-        $prestations->save();
+        $clientgroupes->save();
 
-        return redirect('/prestations')->with('success', 'mise à jour avec succès');    }
+        return redirect('/clientgroupes')->with('success', 'mise à jour avec succès');    }
 
     /**
      * Remove the specified resource from storage.
@@ -162,10 +162,10 @@ class PrestationsController extends Controller
      */
     public function destroy($id)
     {
-        $prestations = Prestation::find($id);
-        $prestations->delete();
+        $clientgroupes = ClientGroupe::find($id);
+        $clientgroupes->delete();
 
-        return redirect('/prestations')->with('success', '  Supprimé avec succès');
+        return redirect('/clientgroupes')->with('success', '  Supprimé avec succès');
     }
 
  

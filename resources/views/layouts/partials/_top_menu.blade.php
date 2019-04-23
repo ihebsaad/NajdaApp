@@ -37,10 +37,10 @@
 
 
      <div class="col-md-3">
-         <a href="{{ route('users') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-             <span class="fa fa-lg fa-fw fa-address-card"></span>
+         <a href="{{ route('typeprestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+             <span class="fas fa-lg   fa-clinic-medical"></span>
              <br>
-             Abonnées
+             Types de prestations
          </a>
     </div>
 
@@ -73,6 +73,49 @@
 
 
     @endcan
+    </div>
+
+
+
+    <div class="row">
+
+        @can('isAdmin')
+
+            <div class="col-md-3">
+                <a href="{{ route('clients') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="fas fa-lg   fa-hotel"></span>
+                    <br>
+                    Clients
+                </a>
+            </div>
+
+            <div class="col-md-3">
+                <a href="{{ route('clientgroupes') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="   fas fa-lg fa-fw fa-city"></span>
+                    <br>
+                    Groupes
+                </a>
+            </div>
+
+
+            <div class="col-md-3">
+                <a href="{{ route('users') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="fa fa-lg fa-fw fa-users"></span>
+                    <br>
+
+                </a>
+            </div>
+
+            <div class="col-md-3">
+                <a href="{{ route('logs') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="fa fa-lg fa-fw fa-history"></span>
+                    <br>
+
+                </a>
+            </div>
+
+
+        @endcan
     </div>
 
 </div>

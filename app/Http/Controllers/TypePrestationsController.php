@@ -13,7 +13,7 @@ use App\Ville ;
 use DB;
 
 
-class PrestationsController extends Controller
+class TypePrestationsController extends Controller
 {
 
 
@@ -32,8 +32,8 @@ class PrestationsController extends Controller
         $dossiers = Dossier::all();
         $villes = Ville::all();
 
-        $prestations = Prestation::orderBy('created_at', 'desc')->paginate(10000000);
-        return view('prestations.index',['dossiers' => $dossiers,'villes' => $villes], compact('prestations'));
+        $typeprestations = TypePrestation::orderBy('id', 'desc')->paginate(10000000);
+        return view('typeprestations.index',['dossiers' => $dossiers,'villes' => $villes], compact('typeprestations'));
     }
 
  
@@ -47,7 +47,7 @@ class PrestationsController extends Controller
     {
         $dossiers = Dossier::all();
 
-        return view('prestations.create',['dossiers' => $dossiers]);
+        return view('typeprestations.create',['dossiers' => $dossiers]);
     }
 
     /**
@@ -58,15 +58,15 @@ class PrestationsController extends Controller
      */
     public function store(Request $request)
     {
-        $prestations = new Prestation([
+        $typeprestations = new TypePrestation([
              'nom' =>trim( $request->get('nom')),
              'typepres' => trim($request->get('typepres')),
             // 'par'=> $request->get('par'),
 
         ]);
 
-        $prestations->save();
-        return redirect('/prestations')->with('success', ' ajouté avec succès');
+        $typeprestations->save();
+        return redirect('/typeprestations')->with('success', ' ajouté avec succès');
 
     }
 
@@ -74,28 +74,28 @@ class PrestationsController extends Controller
     {
         if( ($request->get('nom'))!=null) {
 
-            $prestations = new Prestation([
+            $typeprestations = new TypePrestation([
                 'nom' => $request->get('nom'),
                 'typepres' => $request->get('typepres'),
 
             ]);
-            $prestations->save();
+            $typeprestations->save();
 
         }
 
-       // return redirect('/prestations')->with('success', 'ajouté avec succès');
+       // return redirect('/typeprestations')->with('success', 'ajouté avec succès');
 
     }
 
     public function updating(Request $request)
     {
 
-        $id= $request->get('prestations');
+        $id= $request->get('typeprestations');
         $champ= strval($request->get('champ'));
        $val= $request->get('val');
       //  $dossier = Dossier::find($id);
        // $dossier->$champ =   $val;
-        Prestation::where('id', $id)->update(array($champ => $val));
+        TypePrestation::where('id', $id)->update(array($champ => $val));
 
       //  $dossier->save();
 
@@ -114,8 +114,8 @@ class PrestationsController extends Controller
         $dossiers = Dossier::all();
         $villes = DB::table('cities')->select('id', 'name')->get();
 
-        $prestations = Prestation::find($id);
-        return view('prestations.view',['dossiers' => $dossiers,'villes'=>$villes], compact('prestations'));
+        $typeprestations = TypePrestation::find($id);
+        return view('typeprestations.view',['dossiers' => $dossiers,'villes'=>$villes], compact('typeprestations'));
 
     }
 
@@ -128,10 +128,10 @@ class PrestationsController extends Controller
     public function edit($id)
     {
         //
-        $prestations = Prestation::find($id);
+        $typeprestations = TypePrestation::find($id);
         $dossiers = Dossier::all();
 
-        return view('prestations.edit',['dossiers' => $dossiers], compact('prestations'));
+        return view('typeprestations.edit',['dossiers' => $dossiers], compact('typeprestations'));
     }
 
     /**
@@ -144,15 +144,15 @@ class PrestationsController extends Controller
     public function update(Request $request, $id)
     {
 
-        $prestations = Prestations::find($id);
+        $typeprestations = TypePrestations::find($id);
 
-       // if( ($request->get('ref'))!=null) { $prestations->name = $request->get('ref');}
-       // if( ($request->get('type'))!=null) { $prestations->email = $request->get('type');}
-       // if( ($request->get('affecte'))!=null) { $prestations->user_type = $request->get('affecte');}
+       // if( ($request->get('ref'))!=null) { $typeprestations->name = $request->get('ref');}
+       // if( ($request->get('type'))!=null) { $typeprestations->email = $request->get('type');}
+       // if( ($request->get('affecte'))!=null) { $typeprestations->user_type = $request->get('affecte');}
 
-        $prestations->save();
+        $typeprestations->save();
 
-        return redirect('/prestations')->with('success', 'mise à jour avec succès');    }
+        return redirect('/typeprestations')->with('success', 'mise à jour avec succès');    }
 
     /**
      * Remove the specified resource from storage.
@@ -162,10 +162,10 @@ class PrestationsController extends Controller
      */
     public function destroy($id)
     {
-        $prestations = Prestation::find($id);
-        $prestations->delete();
+        $typeprestations = TypePrestation::find($id);
+        $typeprestations->delete();
 
-        return redirect('/prestations')->with('success', '  Supprimé avec succès');
+        return redirect('/typeprestations')->with('success', '  Supprimé avec succès');
     }
 
  

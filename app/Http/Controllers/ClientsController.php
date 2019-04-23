@@ -1,18 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\ClientGroupe;
 use App\TypePrestation;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
 use App\Entree ;
 use App\Dossier ;
-use App\Prestataire ;
+use App\Client ;
 use App\Ville ;
 use DB;
 
 
-class PrestatairesController extends Controller
+class ClientsController extends Controller
 {
 
 
@@ -31,8 +32,8 @@ class PrestatairesController extends Controller
         $dossiers = Dossier::all();
         $villes = Ville::all();
 
-        $prestataires = Prestataire::orderBy('created_at', 'desc')->paginate(10000000);
-        return view('prestataires.index',['dossiers' => $dossiers,'villes' => $villes], compact('prestataires'));
+        $clients = Client::orderBy('created_at', 'desc')->paginate(10000000);
+        return view('clients.index',['dossiers' => $dossiers,'villes' => $villes], compact('clients'));
     }
 
  
@@ -46,7 +47,7 @@ class PrestatairesController extends Controller
     {
         $dossiers = Dossier::all();
 
-        return view('prestataires.create',['dossiers' => $dossiers]);
+        return view('clients.create',['dossiers' => $dossiers]);
     }
 
     /**
@@ -57,15 +58,15 @@ class PrestatairesController extends Controller
      */
     public function store(Request $request)
     {
-        $prestataire = new Prestataire([
+        $client = new Client([
              'nom' =>trim( $request->get('nom')),
              'typepres' => trim($request->get('typepres')),
             // 'par'=> $request->get('par'),
 
         ]);
 
-        $prestataire->save();
-        return redirect('/prestataires')->with('success', ' ajouté avec succès');
+        $client->save();
+        return redirect('/clients')->with('success', ' ajouté avec succès');
 
     }
 
@@ -73,32 +74,30 @@ class PrestatairesController extends Controller
     {
         if( ($request->get('nom'))!=null) {
 
-            $prestataire = new Prestataire([
+            $client = new Client([
                 'nom' => $request->get('nom'),
                 'typepres' => $request->get('typepres'),
 
             ]);
-            $prestataire->save();
+            $client->save();
 
         }
 
-       // return redirect('/prestataires')->with('success', 'ajouté avec succès');
+       // return redirect('/clients')->with('success', 'ajouté avec succès');
 
     }
 
     public function updating(Request $request)
     {
 
-        $id= $request->get('prestataire');
+        $id= $request->get('client');
         $champ= strval($request->get('champ'));
        $val= $request->get('val');
       //  $dossier = Dossier::find($id);
        // $dossier->$champ =   $val;
-        Prestataire::where('id', $id)->update(array($champ => $val));
+        Client::where('id', $id)->update(array($champ => $val));
 
-      //  $dossier->save();
 
-     ///   return redirect('/dossiers')->with('success', 'Entry has been added');
 
     }
 
@@ -111,14 +110,10 @@ class PrestatairesController extends Controller
     public function view($id)
     {
         $dossiers = Dossier::all();
-        $typesprestations = TypePrestation::all();
-        $villes = DB::table('cities')->select('id', 'name')->get();
-        $relations = DB::table('prestataires_type_prestations')->select('type_prestation_id')
-            ->where('prestataire_id','=',$id)
-            ->get();
+        $groupes = DB::table('client_groupes')->select('id', 'label')->get();
 
-        $prestataire = Prestataire::find($id);
-        return view('prestataires.view',['dossiers' => $dossiers,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations], compact('prestataire'));
+        $client = Client::find($id);
+        return view('clients.view',['dossiers' => $dossiers,'groupes'=>$groupes], compact('client'));
 
     }
 
@@ -131,10 +126,10 @@ class PrestatairesController extends Controller
     public function edit($id)
     {
         //
-        $prestataire = Prestataire::find($id);
+        $client = Client::find($id);
         $dossiers = Dossier::all();
 
-        return view('prestataires.edit',['dossiers' => $dossiers], compact('prestataire'));
+        return view('clients.edit',['dossiers' => $dossiers], compact('client'));
     }
 
     /**
@@ -147,15 +142,15 @@ class PrestatairesController extends Controller
     public function update(Request $request, $id)
     {
 
-        $prestataire = Prestataires::find($id);
+        $client = Clients::find($id);
 
-       // if( ($request->get('ref'))!=null) { $prestataire->name = $request->get('ref');}
-       // if( ($request->get('type'))!=null) { $prestataire->email = $request->get('type');}
-       // if( ($request->get('affecte'))!=null) { $prestataire->user_type = $request->get('affecte');}
+       // if( ($request->get('ref'))!=null) { $client->name = $request->get('ref');}
+       // if( ($request->get('type'))!=null) { $client->email = $request->get('type');}
+       // if( ($request->get('affecte'))!=null) { $client->user_type = $request->get('affecte');}
 
-        $prestataire->save();
+        $client->save();
 
-        return redirect('/prestataires')->with('success', 'mise à jour avec succès');    }
+        return redirect('/clients')->with('success', 'mise à jour avec succès');    }
 
     /**
      * Remove the specified resource from storage.
@@ -165,30 +160,29 @@ class PrestatairesController extends Controller
      */
     public function destroy($id)
     {
-        $prestataire = Prestataire::find($id);
-        $prestataire->delete();
+        $client = Client::find($id);
+        $client->delete();
 
-        return redirect('/prestataires')->with('success', '  Supprimé avec succès');
+        return redirect('/clients')->with('success', '  Supprimé avec succès');
     }
 
-    public static function VilleById($id)
+    public static function GroupeById($id)
     {
-     // $ville='';
-        $ville = Ville::find($id);
+         $groupe = ClientGroupe::find($id);
 
-        return $ville['name'];
+        return $groupe['label'];
 
     }
 
     public  function removetypeprest(Request $request)
     {
-        $prestataire= $request->get('prestataire');
+        $client= $request->get('client');
         $typeprest= $request->get('typeprest');
 
 
-        DB::table('prestataires_type_prestations')
+        DB::table('clients_type_prestations')
             ->where([
-                ['prestataire_id', '=', $prestataire],
+                ['client_id', '=', $client],
                 ['type_prestation_id', '=', $typeprest],
             ])->delete();
 
@@ -198,12 +192,12 @@ class PrestatairesController extends Controller
 
     public  function createtypeprest(Request $request)
     {
-        $prestataire= $request->get('prestataire');
+        $client= $request->get('client');
         $typeprest= $request->get('typeprest');
 
 
-        DB::table('prestataires_type_prestations')->insert(
-            ['prestataire_id' => $prestataire,
+        DB::table('clients_type_prestations')->insert(
+            ['client_id' => $client,
                 'type_prestation_id' => $typeprest]
         );
 
