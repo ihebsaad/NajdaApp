@@ -139,17 +139,16 @@ Route::get('/prestataires/view/{id}', 'PrestatairesController@view');
 /*** Prestations **/
 Route::resource('/prestations',  'PrestationsController');
 Route::get('/prestations', array('as' => 'prestations','uses' => 'PrestationsController@index'));
- Route::post('/prestations/saving','PrestatairesController@saving')->name('PrestationsController.saving');
- Route::post('/prestations/updating','PrestatairesController@updating')->name('PrestationsController.updating');
+ Route::post('/prestations/saving','PrestatairesController@saving')->name('prestations.saving');
+ Route::post('/prestations/updating','PrestatairesController@updating')->name('prestations.updating');
 Route::get('/prestations/view/{id}', 'PrestationsController@view');
 
 /*** Type Prestations  **/
-Route::resource('/typeprestations',  'TypePrestationsController');
+//Route::resource('/typeprestations',  'TypePrestationsController');
 Route::get('/typeprestations', array('as' => 'typeprestations','uses' => 'TypePrestationsController@index'));
- Route::post('/typeprestations/saving','TypePrestationsController@saving')->name('TypePrestationsController.saving');
- Route::post('/typeprestations/updating','TypePrestationsController@updating')->name('TypePrestationsController.updating');
+ Route::post('/typeprestations/saving','TypePrestationsController@saving')->name('typeprestations.saving');
+Route::post('/typeprestations/updating','TypePrestationsController@updating')->name('typeprestations.updating');;
 Route::get('/typeprestations/view/{id}', 'TypePrestationsController@view');
-
 
 /*** Notes **/
 Route::resource('/notes',  'NotesController');
@@ -159,6 +158,7 @@ Route::get('/notes/view/{id}', 'NotesController@view');
 
 
 /*** Users **/
+
 //Route::resource('/users',  'UsersController');
 Route::get('/users', array('as' => 'users','uses' => 'UsersController@index'));
 Route::get('/users/create','UsersController@create')->name('users.create');

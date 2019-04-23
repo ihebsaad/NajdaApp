@@ -90,7 +90,7 @@ class TypePrestationsController extends Controller
     public function updating(Request $request)
     {
 
-        $id= $request->get('typeprestations');
+        $id= $request->get('typeprestation');
         $champ= strval($request->get('champ'));
        $val= $request->get('val');
       //  $dossier = Dossier::find($id);
@@ -114,8 +114,8 @@ class TypePrestationsController extends Controller
         $dossiers = Dossier::all();
         $villes = DB::table('cities')->select('id', 'name')->get();
 
-        $typeprestations = TypePrestation::find($id);
-        return view('typeprestations.view',['dossiers' => $dossiers,'villes'=>$villes], compact('typeprestations'));
+        $typeprestation = TypePrestation::find($id);
+        return view('typeprestations.view',['dossiers' => $dossiers,'villes'=>$villes], compact('typeprestation'));
 
     }
 

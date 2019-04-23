@@ -1,7 +1,11 @@
 @extends('layouts.mainlayout')
 
 @section('content')
-<div class="form-group">
+
+    <div class="portlet box grey">
+        <div class="modal-header">Prestations</div>
+    </div>
+    <div class="form-group">
      {{ csrf_field() }}
 
 <div class="modal-body">
@@ -77,17 +81,20 @@
 
                                 <input onchange="changing(this)" type="text" class="form-control input" name="ville" id="ville" value="{{ $prestataire->ville }}">
 
+
+                                <script>
+                                    var placesAutocomplete = places({
+                                        appId: 'plCFMZRCP0KR',
+                                        apiKey: 'aafa6174d8fa956cd4789056c04735e1',
+                                        container: document.querySelector('#ville')
+                                    });
+                                </script>
+
                                 <?php    }?>
                             </div>
                         </div>
 
-                        <script>
-                            var placesAutocomplete = places({
-                                appId: 'plCFMZRCP0KR',
-                                apiKey: 'aafa6174d8fa956cd4789056c04735e1',
-                                container: document.querySelector('#ville')
-                            });
-                        </script>
+
 
                     </div>
 

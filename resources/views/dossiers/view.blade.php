@@ -1,6 +1,9 @@
 @extends('layouts.mainlayout')
 
 @section('content')
+    <div class="portlet box grey">
+        <div class="modal-header">Dossier</div>
+    </div>
 <div class="form-group">
      {{ csrf_field() }}
 
@@ -284,7 +287,7 @@
                                                                                 <label for="inputError" class="control-label">Réf Dossier</label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <input onchange="changing(this)" type="text1" id="reference_medic" name="reference_medic" class="form-control" disabled=""   value={{ $dossier->referance_medic }} >
+                                                                                    <input  type="text" id="reference_medic" name="reference_medic" class="form-control" disabled=""   value={{ $dossier->reference_medic }} >
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -349,7 +352,7 @@
                                                                             <label for="inputError" class="control-label">Référence *</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="reference_medic" name="reference_medic" class="form-control"   value="{{ $dossier->reference_medic }}" >
+                                                                                <input   type="text" id="customer" name="customer_id" class="form-control"   value="{{ $dossier->customer_id }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>

@@ -2,6 +2,9 @@
 
 @section('content')
 
+    <div class="portlet box grey">
+        <div class="modal-header">Profil</div>
+    </div>
 
         <div class="row">
  

@@ -14,8 +14,11 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
 
 @section('content')
-
+    <?php use \App\Http\Controllers\DossiersController;     ?>
     <div class="uper">
+        <div class="portlet box grey">
+            <div class="modal-header">Dossiers</div>
+        </div>
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead >
             <tr id="headtable">
@@ -35,8 +38,10 @@
             @foreach($dossiers as $dossier)
                 <tr>
                      <td style="width:20%"><a href="{{action('DossiersController@view', $dossier['id'])}}" >{{$dossier->reference_medic}}</a></td>
-                    <td style="width:25%"> {{$dossier->customer_id}} </td>
-                    <td style="width:30%"><?php echo $dossier['subscriber_name'] .' '.$dossier['subscriber_lastname'] ;?></td>
+                    <td style="width:25%">
+                        <?php $customer_id= $dossier['customer_id']; echo '<small>'. DossiersController::ClientById($customer_id).'</small>';?>
+                    </td>
+                    <td style="width:30%"><?php echo '<small>'.$dossier['subscriber_name'] .' '.$dossier['subscriber_lastname'] .'</small>';?></td>
                     <td style="width:15%"> {{$dossier->current_status}} </td>
 
                     </td>

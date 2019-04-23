@@ -15,6 +15,9 @@
         }
     </style>
     <div class="uper">
+        <div class="portlet box grey">
+            <div class="modal-header">Prestations</div>
+        </div>
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
             <tr id="headtable">

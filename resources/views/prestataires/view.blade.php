@@ -1,7 +1,10 @@
 @extends('layouts.mainlayout')
 
 @section('content')
-<div class="form-group">
+    <div class="portlet box grey">
+        <div class="modal-header">Prestataire</div>
+    </div>
+    <div class="form-group">
      {{ csrf_field() }}
 
 <div class="modal-body">

@@ -47,8 +47,6 @@
 
 @endsection
 
-<script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
-
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 

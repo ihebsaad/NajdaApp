@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Entree ;
 use App\Dossier ;
+use App\Client ;
 use DB;
 
 
@@ -156,5 +157,17 @@ class DossiersController extends Controller
         $dossier = Dossier::find($id);
         $dossier->delete();
 
-        return redirect('/dossiers')->with('success', '  has been deleted Successfully');    }
+        return redirect('/dossiers')->with('success', '  has been deleted Successfully');
+    }
+
+
+    public static function ClientById($id)
+    {
+        $client = Client::find($id);
+
+        return $client['name'];
+
+    }
+
 }
+

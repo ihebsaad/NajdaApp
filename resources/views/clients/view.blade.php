@@ -8,7 +8,7 @@
 
     <form id="addclientform">
         <div class="portlet box grey">
-            <div class="modal-header">Ajouter Client</div>
+            <div class="modal-header">Client</div>
         </div>
         <div class="modal-body">
 
@@ -392,8 +392,7 @@
 
 @endsection
 
-<script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+ <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 
 <script>

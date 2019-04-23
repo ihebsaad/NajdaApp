@@ -2,6 +2,9 @@
 
 @section('content')
     <div class=" " style="padding:8px 8px 8px 8px">
+        <div class="portlet box grey">
+            <div class="modal-header">Utilisateur</div>
+        </div>
     <form class="form-horizontal" method="POST"  action="{{action('UsersController@update', $id)}}" >
         {{ csrf_field() }}
 

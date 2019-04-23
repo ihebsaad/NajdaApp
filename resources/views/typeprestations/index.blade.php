@@ -16,6 +16,9 @@
         .no-sort input{display:none;}
     </style>
     <div class="uper">
+         <div class="portlet box grey">
+            <div class="modal-header">Types de prestations</div>
+        </div>
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
             <tr id="headtable">
@@ -42,8 +45,8 @@
                 ?>
 
                 <tr>
-                    <td  ><a href="{{action('TypePrestationsController@view', $typeprestation['id'])}}" >{{$typeprestation->id}}</a></td>
-                    <td  >{{$typeprestation->name}}</td>
+                    <td  >{{$typeprestation->id}}</td>
+                    <td  ><a href="{{action('TypePrestationsController@view', $typeprestation['id'])}}" >{{$typeprestation->name}}</a></td>
                     <td  ><?php echo $type;?></td>
                      <td    > </td>
  
