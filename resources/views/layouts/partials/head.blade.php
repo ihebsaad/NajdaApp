@@ -33,7 +33,10 @@
     <link href="{{ URL::asset('public/css/custom_css/owl.carousel.min.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('public/css/custom_css/alertmessage.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('public/js/jstree/themes/default/style.min.css') }}" rel="stylesheet">
-    <!-- end of global css -->
+
+ <link href="{{ URL::asset('public/css/datepicker.css') }}" rel="stylesheet">
+
+ <!-- end of global css -->
      <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/styles.css') }}" />
  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 

@@ -6,8 +6,9 @@
             <div class="item">
                 <a class="dossieritem" href="#" id="{{ $i->id }}" >
                     <div class="dossiercr well well-gc well-sm" >
-                        <h3 class="cutlongtext">{{ $i->reference_medic }}</h3>
-                        <p class="cutlongtext">{!!$i->subscriber_name!!}</p>
+                        <h3 class="cutlongtext" style="font-size:20px!important">{{ $i->reference_medic }}</h3>
+                        <p class="cutlongtext" style="font-size:70%"> {!!$i->subscriber_name!!} <br>
+                        {!!$i->subscriber_lastname!!}</p>
                     </div>
                 </a>
             </div>

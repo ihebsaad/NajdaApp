@@ -104,7 +104,9 @@ class DossiersController extends Controller
         $dossiers = Dossier::all();
 
        $dossier = Dossier::find($id);
-        return view('dossiers.view',['dossiers' => $dossiers], compact('dossier'));
+        $clients = DB::table('clients')->select('id', 'name')->get();
+
+        return view('dossiers.view',['dossiers' => $dossiers,'clients'=>$clients], compact('dossier'));
 
     }
 
