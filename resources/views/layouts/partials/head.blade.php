@@ -119,7 +119,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                         /*
                         // popup new notification
                         window.showAlert = function(){
-                                   alertify.alert('<a href="<?php print $urlnotif;?>'+id+'">Voir notification</a>');
+                                   alertify.alert('<a href="<?php //print $urlnotif;?>'+id+'">Voir notification</a>');
 
                         }
 
