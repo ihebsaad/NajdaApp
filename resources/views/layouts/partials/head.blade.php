@@ -112,22 +112,6 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 {
                     //console.log the response
                     console.log(data);
-                    var id=parseInt((data));
-                    if (id>0)
-                    {
-
-                        
-                        // popup new notification
-                        window.showAlert = function(){
-                                   alertify.alert('<a href="<?php print $urlnotif;?>'+id+'">Voir notification</a>');
-
-                        }
-
-                        alertify.alert().setting('modal', false).set({'label': 'voir ultérieurement!'}).setHeader('<em> Nouvelle Notification</em> '); ; ;
-                        window.showAlert();
-
-
-                    }
                     //Send another request in 10 seconds.
                     setTimeout(function(){
                         checkemails();

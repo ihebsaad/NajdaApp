@@ -300,7 +300,7 @@ class EmailController extends Controller
                  
 
         // dispatch
-        $dossiers = DB::table('dossiers')->pluck('ref');
+        $dossiers = DB::table('dossiers')->pluck('reference_medic');
         $refdossier='';
         $statut = 0;
         foreach ($dossiers as $ref) {
@@ -437,7 +437,7 @@ class EmailController extends Controller
 
         //  $aMessage = $oFolder->query()->text('tesssst')->get();
 
-        $dossiers = DB::table('dossiers')->pluck('ref');
+        $dossiers = DB::table('dossiers')->pluck('reference_medic');
 
         foreach ($dossiers as $ref) {
 
