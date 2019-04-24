@@ -155,6 +155,34 @@ Route::resource('/notes',  'NotesController');
 Route::get('/notes', array('as' => 'notes','uses' => 'NotesController@index'));
 Route::post('/notes/updating','NotesController@updating')->name('notes.updating');
 Route::get('/notes/view/{id}', 'NotesController@view');
+ 
+/*** Actions**/
+Route::resource('/actions',  'ActionController');
+Route::get('/actions', array('as' => 'actions','uses' => 'ActionController@index'));
+Route::post('/actions/saving','ActionController@saving')->name('actions.saving');
+Route::post('/actions/store','ActionController@store')->name('actions.store');
+Route::get('/actions/view/{id}', 'ActionController@view');
+Route::get('/action/workflow/{dossid}/{id}', 'ActionController@getWorkflow');
+Route::post('/action/updateworkflow/{dossid}/{id}', 'ActionController@updateWorkflow');
+
+/*** SousAction**/
+Route::resource('/sousactions',  'SousActionController');
+Route::get('/sousactions', array('as' => 'actions','uses' => 'SousActionController@index'));
+Route::post('/sousactions/saving','SousActionController@saving')->name('sousactions.saving');
+Route::get('/sousactions/view/{id}', 'SousActionController@view');
+
+/*** TypeAction**/
+Route::resource('/typesactions',  'TypeActionController');
+Route::get('/typesactions', array('as' => 'actions','uses' => 'TypeActionController@index'));
+Route::post('/typesactions/saving','TypeActionController@saving')->name('typeactions.saving');
+Route::get('/typesactions/view/{id}', 'TypeActionController@view');
+
+/*** EtapeTypeAction**/
+/*Route::resource('/etapestypesactions',  'EtapesTypeActionController');
+Route::get('/etapestypesactions', array('as' => 'actions','uses' => 'EtapesTypeActionController@index'));
+Route::post('/etapestypesactions/saving','EtapesTypeActionController@saving')->name('etapestypesactions.saving');
+Route::get('/etapestypesactions/view/{id}', 'EtapesTypeActionController@view');*/
+
 
 
 /*** Users **/

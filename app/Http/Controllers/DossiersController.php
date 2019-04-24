@@ -8,6 +8,7 @@ use App\Entree ;
 use App\Dossier ;
 use App\Client ;
 use DB;
+use App\TypeAction;
 
 
 class DossiersController extends Controller
@@ -103,11 +104,13 @@ class DossiersController extends Controller
     public function view($id)
     {
         $dossiers = Dossier::all();
+        $typesactions=TypeAction::get();
+        $actions=Dossier::find($id)->actions;
 
        $dossier = Dossier::find($id);
         $clients = DB::table('clients')->select('id', 'name')->get();
 
-        return view('dossiers.view',['dossiers' => $dossiers,'clients'=>$clients], compact('dossier'));
+        return view('dossiers.view',['dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions], compact('dossier'));
 
     }
 
