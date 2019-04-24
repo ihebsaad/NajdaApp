@@ -113,12 +113,12 @@ class DossiersController extends Controller
 
         $prestations =   Prestation::where('dossier_id', $id)->get();
         /*** SAVE DOSSIER ID dans ENTREE  ou bien changer ici  ****/
-       //// $ref=$this->RefDossierById($id);
-        /// $entrees =   Entree::where('dossier', $ref)->get();
+        $ref=$this->RefDossierById($id);
+          $entrees =   Entree::where('dossier', $ref)->get();
         //  $entrees =   Entree::all();
 
 
-        return view('dossiers.view',[/*'entrees'=>$entrees,*/'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions], compact('dossier'));
+        return view('dossiers.view',['entrees'=>$entrees,'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions], compact('dossier'));
 
     }
 
