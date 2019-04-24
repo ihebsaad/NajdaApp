@@ -74,12 +74,12 @@
 
 
              <div class="row text-center">
-                                     <h3>Créer une nouvelle action</h3>
+                                     <h4>Créer une nouvelle action</h4>
 
 
                                       
         <div class="card-header">
-            Ajouter
+          
         </div>
         <div class="card-body">
             @if ($errors->any())
@@ -137,7 +137,7 @@
                                      <h3>Action libre</h3>
                                    <a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#basicModal">créer nouveau type d'action </a>
                                    </div> 
-                                            allo
+                                         
                                     </div>
                                     </div>
 
