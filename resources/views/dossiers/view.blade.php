@@ -1335,7 +1335,7 @@
                              <div class="stats">
                                  <div class="row">
                                      <div class="col-sm-8 col-md-8 col-lg-8">
-                                         <span><i class="fa fa-fw fa-clock-o"></i><?php if($entree->type=="email") {echo   $entree->reception  ;}else {echo  $entree->created_at ;} ?></span>
+                                         <span><i class="fa fa-fw fa-clock-o"></i><?php if($entree->type=="email") {echo   $entree->reception  ;}else {echo date('d/m/Y H:i', strtotime($entree->created_at))  ;} ?></span>
                                          <?php if($entree->type=="email") {?> <span><i class="fa fa-fw fa-paperclip"></i><b>({{$entree->nb_attach}})</b> Attachements</span><?php }?>
                                      </div>
                                      <div class="col-sm-4 col-md-4 col-lg-4">
