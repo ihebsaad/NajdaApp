@@ -1,5 +1,10 @@
 @extends('layouts.mainlayout')
 
+
+<link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
+<link rel="stylesheet" href="{{ asset('public/css/timeline.css') }}" type="text/css">
+
+
 @section('content')
 
 
@@ -1350,8 +1355,60 @@
 
 
 
+                     <section id="cd-timeline" class="cd-container">
+
+                         @if($entrees)
+                             @foreach($entrees as $entree)
+
+                         <div class="cd-timeline-block">
+                             <div class="cd-timeline-img cd-movie">
+                                 <?php if($entree->type=="email") {?>
+
+                                     <img  src="{{ asset('public/img/phone.png') }}"  width="60" height="60">
+
+                                     <?php }?><?php if($entree->type=="sms") {?>
+                                     <img  src="{{ asset('public/img/sms.png') }}"  width="60" height="60">
+                                     <?php }?>
+                                     <?php if($entree->type=="whatsapp") {?>
+                                     <img  src="{{ asset('public/img/whatsapp.png') }}"  width="60" height="60">
+
+                                     <?php }?>
+                                 <?php if($entree->type=="tel") {?>
+                                     <img  src="{{ asset('public/img/phone.png') }}"  width="60" height="60">
+
+                                     <?php }?>
+
+                                     <?php if($entree->type=="fax") {?>
+                                     <img  src="{{ asset('public/img/fax.png') }}"  width="60" height="60">
+                                     <?php }?>
+
+                                     <?php if($entree->type=="rendu") {?>
+                                     <img  src="{{ asset('public/img/rendu.png') }}"  width="60" height="60">
+                                     <?php }?>
+
+                             </div>
+                             <div class="cd-timeline-content">
+                                 <h2>{{$entree->emetteur}}</h2>
+                                 <p>
+                                     {{$entree->sujet}}
+                                 </p>
+                                 <?php if($entree->type=="email") {?> <span><i class="fa fa-fw fa-paperclip"></i><b>({{$entree->nb_attach}})</b> Attachements</span><?php }?>
+
+                                  <a class="btn btn-md btn-success" href="{{action('EntreesController@show', $entree['id'])}}"> Voir les détails</a>
+                                 <span class="cd-date">
+                                <i class="fa fa-fw fa-clock-o"></i><?php if($entree->type=="email") {echo   $entree->reception  ;}else {echo date('d/m/Y H:i', strtotime($entree->created_at))  ;} ?>
+
+                                 </span>
+                             </div>
+                             <!-- cd-timeline-content -->
+                         </div>
+                         <!-- cd-timeline-block -->
+
+                             @endforeach
+                         @endif
 
 
+                     </section>
 
 
              </div>
@@ -1474,3 +1531,14 @@
 
 
 </script>
+
+
+
+
+
+@section('footer_scripts')
+
+    <script src="{{  URL::asset('public/js/vertical-timeline/main.js') }}" type="text/javascript"></script>
+    <script src="{{  URL::asset('public/js/vertical-timeline/modernizr.js') }}" type="text/javascript"></script>
+
+@stop
