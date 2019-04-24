@@ -5,6 +5,7 @@
 <!--   <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/colReorder.bootstrap.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/rowReorder.bootstrap.css') }}" />-->
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
+<?php use \App\Http\Controllers\PrestationsController;     ?>
 
 @section('content')
 
@@ -35,16 +36,21 @@
             </thead>
             <tbody>
             @foreach($prestations as $prestation)
-                <?php
-
-
-                ?>
+            <?php $dossid= $prestation['dossier_id'];?>
 
                 <tr>
-                    <td style="width:35%"><a href="{{action('PrestationsController@view', $prestation['id'])}}" >{{$prestation->dossier_id}}</a></td>
-                    <td style="width:25%">{{$prestation->prestataire_id}}</td>
-                    <td style="width:10%;"  >{{$prestation->type_prestations_id}}</td>
-                    <td style="width:20%">{{$prestation->price}}</td>
+                    <td style="width:35%"><a href="{{action('PrestationsController@view', $prestation['id'])}}" >
+                    <?php  echo PrestationsController::DossierById($dossid);  ?>
+                        </a></td>
+                    <td style="width:25%">
+                         <?php $prest= $prestation['prestataire_id'];
+                        echo PrestationsController::PrestataireById($prest);  ?>
+                    </td>
+                    <td style="width:10%;">
+                        <?php $typeprest= $prestation['type_prestations_id'];
+                        echo PrestationsController::TypePrestationById($typeprest);  ?>
+                    </td>
+                     <td style="width:20%">{{$prestation->price}}</td>
 
                 </tr>
             @endforeach

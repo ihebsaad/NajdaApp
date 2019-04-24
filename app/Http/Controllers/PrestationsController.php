@@ -168,9 +168,34 @@ class PrestationsController extends Controller
         return redirect('/prestations')->with('success', '  Supprimé avec succès');
     }
 
- 
- 
+    public static function DossierById($id)
+    {
+        $dossier = Dossier::find($id);
 
+
+        if (isset($dossier['reference_medic'])) {
+            return $dossier['reference_medic'];
+        }else{return '';}
+    }
+
+
+    public static function PrestataireById($id)
+    {
+        $prestataire = Prestataire::find($id);
+        if (isset($prestataire['name'])) {
+            return $prestataire['name'];
+        }else{return '';}
+
+    }
+
+    public static function TypePrestationById($id)
+    {
+        $typeprestation = TypePrestation::find($id);
+        if (isset($typeprestation['name'])) {
+            return $typeprestation['name'];
+        }else{return '';}
+
+    }
 
 }
 

@@ -7,11 +7,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
 
 @section('content')
-    <?php use \App\Http\Controllers\ClientsController;
-
-
-
-    ?>
+    <?php use \App\Http\Controllers\ClientsController;     ?>
     <style>
         .uper {
             margin-top: 10px;
@@ -46,11 +42,10 @@
             <?php   $listen=array(0=>'',-1=>'All',1=>'Assistance / Assurance',2=>'Avionneur',3=>'Pétrolier / apparenté',4=>'Clinique',5=>'Agence de voyage / Hôtel');
             ?>
             @foreach($clients as $client)
- 
 
                 <tr>
                     <td style="width:20%"><a href="{{action('ClientsController@view', $client['id'])}}" >{{$client->name}}</a></td>
-                    <td style="width:15%"><?php $groupeid= $client['groupe']; echo ClientsController::GroupeById($groupeid)?> </td>
+                    <td style="width:15%"><?php $groupeid= $client['groupe']; echo ClientsController::GroupeById($groupeid);?> </td>
                     <td style="width:15%"><small>{{$client->pays}}</small></td>
                     <td style="width:20%">
 <?php  $nature = $client['nature'];
