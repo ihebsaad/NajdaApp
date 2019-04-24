@@ -1,69 +1,69 @@
  <!-- Content -->
-            <div class="panel panel-danger">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Actions</h4>
-                                    <span class="pull-right">
-                                       <i class="fa fa-fw clickable fa-chevron-up"></i>
-                                        
-                                    </span>
-                                </div>
+<div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Actions</h4>
+                        <span class="pull-right">
+                           <i class="fa fa-fw clickable fa-chevron-up"></i>
+                            
+                        </span>
+                    </div>
 
 
-                               <div class="panel-body scrollable-panel" style="display: block;">
-                                    
+                   <div class="panel-body scrollable-panel" style="display: block;">
+                        
 
-                                    <div class="panel-body" style="display: block;">
-                                        <?php use \App\Http\Controllers\ActionController;
-                                            $typesactions= ActionController::ListeTypeActions();
-
-
-                                          if (isset( $dossier)){
-                                              $actions=$dossier->actions;
-                                        ?>
-                              @if ($actions)
-
-                                    <ul class="nav nav-tabs" style="margin-bottom: 15px;">
-                                        <li class="active">
-                                            <a href="#actionstab" data-toggle="tab">Actions</a>
-                                        </li>
-                                        <li>
-                                            <a href="#newactiontab" data-toggle="tab">Nouvelle action</a>
-                                        </li>
-                                    </ul>
-                                    <div id="ActionsTabContent" class="tab-content">
-                                        <div class="tab-pane fade active in  scrollable-panel" id="actionstab">
-
-                                           
-                                            <!-- treeview of notifications -->
-                                            <div id="accordionkbs">
-
-<style scoped>
- 
-.panel-heading.active {
-  background-color: #ffd051;
-}
-</style>
-<?php if (isset( $act)){$currentaction=$act->id ;}else{$currentaction=0;} ?>
-      <div class="accordion panel-group" id="accordion">
-        @foreach ($actions as $action)
-        <div class="panel panel-default">
-          <div class="panel-heading <?php if($action->id ==$currentaction){echo 'active';}?>">
-            <h4 class="panel-title">
-              <a  href="{{url('action/workflow/'.$dossier->id.'/'.$action->id)}}">
-               {{$action->titre}}
-              </a>
-            </h4>
-          </div><!-- /.panel-heading -->
-         <!--<div id="collapse{{$action->id}}" class="panel-collapse collapse">
-            <div class="panel-body">
-              <p>{{$action->descrip}}</p>
-            </div>
-          </div> -->
-        </div>
-       @endforeach
+                        <div class="panel-body" style="display: block;">
+                            <?php use \App\Http\Controllers\ActionController;
+                                $typesactions= ActionController::ListeTypeActions();
 
 
-      </div>
+                              if (isset( $dossier)){
+                                  $actions=$dossier->actions;
+                            ?>
+                  @if ($actions)
+
+                        <ul class="nav nav-tabs" style="margin-bottom: 15px;">
+                            <li class="active">
+                                <a href="#actionstab" data-toggle="tab">Actions</a>
+                            </li>
+                            <li>
+                                <a href="#newactiontab" data-toggle="tab">Nouvelle action</a>
+                            </li>
+                        </ul>
+                        <div id="ActionsTabContent" class="tab-content">
+                            <div class="tab-pane fade active in  scrollable-panel" id="actionstab">
+
+                               
+                                <!-- treeview of notifications -->
+                                <div id="accordionkbs">
+
+                                <style scoped>
+                               
+                              .panel-heading.active {
+                                background-color: #ffd051;
+                              }
+                              </style>
+                              <?php if (isset( $act)){$currentaction=$act->id ;}else{$currentaction=0;} ?>
+                                    <div class="accordion panel-group" id="accordion">
+                                      @foreach ($actions as $action)
+                                      <div class="panel panel-default">
+                                        <div class="panel-heading <?php if($action->id ==$currentaction){echo 'active';}?>">
+                                          <h4 class="panel-title">
+                                            <a  href="{{url('action/workflow/'.$dossier->id.'/'.$action->id)}}">
+                                             {{$action->titre}}
+                                            </a>
+                                          </h4>
+                                        </div><!-- /.panel-heading -->
+                                       <!--<div id="collapse{{$action->id}}" class="panel-collapse collapse">
+                                          <div class="panel-body">
+                                            <p>{{$action->descrip}}</p>
+                                          </div>
+                                        </div> -->
+                                      </div>
+                                     @endforeach
+
+
+                                    </div>
 
 
                                               </div>
@@ -73,79 +73,77 @@
 
 
 
-             <div class="row text-center">
-                                     <h4>Créer une nouvelle action</h4>
+                                   <div class="row text-center">
+                                                           <h4>Créer une nouvelle action</h4>
 
+                                                            
+                              <div class="card-header">
+                                
+                              </div>
+                              <div class="card-body">
+                                  @if ($errors->any())
+                                      <div class="alert alert-danger">
+                                          <ul>
+                                              @foreach ($errors->all() as $error)
+                                                  <li>{{ $error }}</li>
+                                              @endforeach
+                                          </ul>
+                                      </div><br />
+                                  @endif
+                                  <form method="post" action="{{ route('actions.store') }}">
+                                      <div class="form-group">
+                                           {{ csrf_field() }}
+                                         <label  style="display: inline-block;  text-align: left; width: 40px;">titre:</label>
+                                         <input id="titre" type="text" class="form-control" style="width:95%;  text-align: right !important;" name="titre"/>
+                                      </div>
 
-                                      
-        <div class="card-header">
-          
-        </div>
-        <div class="card-body">
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div><br />
-            @endif
-            <form method="post" action="{{ route('actions.store') }}">
-                <div class="form-group">
-                     {{ csrf_field() }}
-                   <label  style="display: inline-block;  text-align: left; width: 40px;">titre:</label>
-                   <input id="titre" type="text" class="form-control" style="width:95%;  text-align: right !important;" name="titre"/>
-                </div>
+                                      <div class="form-group">
+                                          <label for="descrip" style="display: inline-block;  text-align: right; width: 40px;">Description:</label>
+                                          <input id="descrip" type="text" class="form-control" style="width:95%;  text-align: right;" name="descrip"/>
+                                      </div>
+                                      <div class="form-group">
+                                       <label for="datedeb" style="display: inline-block;  text-align: right; width: 40px;">Date début:</label>
+                                          <input id="datedeb" type="datetime-local" value="2018-02-25T19:24:23" class="form-control" style="width:95%;  text-align: right;" name="datedeb"/>
+                                      </div>
+                                      <div class="form-group">
+                                       <!--<label for="datefin" style="display: inline-block;  text-align: right; width: 40px;">Date fin:</label>
+                                          <input id="datefin" type="text" class="form-control" style="width:95%;  text-align: right;" name="datefin"/>
+                                      </div>-->
+                                      <div class="form-group">
+                                       <label for="typeact" style="display: inline-block;  text-align: right; width: 40px;">Type action:</label>
+                                          <select id="typeact" type="text" class="form-control" style="width:95%;  text-align: right;" name="typeact"/> 
 
-                <div class="form-group">
-                    <label for="descrip" style="display: inline-block;  text-align: right; width: 40px;">Description:</label>
-                    <input id="descrip" type="text" class="form-control" style="width:95%;  text-align: right;" name="descrip"/>
-                </div>
-                <div class="form-group">
-                 <label for="datedeb" style="display: inline-block;  text-align: right; width: 40px;">Date début:</label>
-                    <input id="datedeb" type="datetime-local" value="2018-02-25T19:24:23" class="form-control" style="width:95%;  text-align: right;" name="datedeb"/>
-                </div>
-                <div class="form-group">
-                 <!--<label for="datefin" style="display: inline-block;  text-align: right; width: 40px;">Date fin:</label>
-                    <input id="datefin" type="text" class="form-control" style="width:95%;  text-align: right;" name="datefin"/>
-                </div>-->
-                <div class="form-group">
-                 <label for="typeact" style="display: inline-block;  text-align: right; width: 40px;">Type action:</label>
-                    <select id="typeact" type="text" class="form-control" style="width:95%;  text-align: right;" name="typeact"/> 
-
-                                   @foreach($typesactions as $tyaction)
-                                        <option value="{{ $tyaction->id }}">{{ $tyaction->nom_type_action }}</option>
-                                    @endforeach
-                </select>
-                </div>
-                 <div class="form-group">
-                    
-                    <input id="dossier" type="hidden" class="form-control" value="{{$dossier->id}}" name="dossier"/>
-                </div>
-                <button  type="submit"  class="btn btn-primary">Ajouter</button>
-               <!-- <button id="add"  class="btn btn-primary">Ajax Add</button>-->
-            </form>
-         </div>   
+                                                         @foreach($typesactions as $tyaction)
+                                                              <option value="{{ $tyaction->id }}">{{ $tyaction->nom_type_action }}</option>
+                                                          @endforeach
+                                      </select>
+                                      </div>
+                                       <div class="form-group">
+                                          
+                                          <input id="dossier" type="hidden" class="form-control" value="{{$dossier->id}}" name="dossier"/>
+                                      </div>
+                                      <button  type="submit"  class="btn btn-primary">Ajouter</button>
+                                     <!-- <button id="add"  class="btn btn-primary">Ajax Add</button>-->
+                                  </form>
+                               </div>   
 
 
 
                                    </div>
 
 
-                                    <div class="row text-center">
-                                     <h3>Action libre</h3>
-                                   <a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#basicModal">créer nouveau type d'action </a>
-                                   </div> 
+               <div class="row text-center">
+                  <h4>Action libre</h4>
+                   <a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#basicModal">créer nouveau type d'action </a>
+               </div> 
                                          
-                                    </div>
-                                    </div>
+              </div>
+              </div>
 
 
- @endif
+                    @endif
 
-                                        <?php        }
-                                            ?>
+                        <?php } ?>
                                 </div>
 
                      
@@ -174,7 +172,7 @@
                                     </div>
              </div>
              <div class="modal-footer">
-             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+             <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
              <button type="button" class="btn btn-primary">Enregister</button>
              </div>
                  </div>
@@ -209,7 +207,7 @@
 
 
 
-  <script>
+  <!--<script>
 $(document).ready(function() {
   $('.panel-collapse').on('show.bs.collapse', function () {
     $(this).siblings('.panel-heading').addClass('active');
@@ -219,7 +217,7 @@ $(document).ready(function() {
     $(this).siblings('.panel-heading').removeClass('active');
   });
 });
-</script>
+</script>-->
 
 
 <!--<script>
@@ -239,7 +237,7 @@ $(document).ready(function () {
 
 
 
-<script>
+<!--<script>
 
   // Get the container element
 var btnContainer = document.getElementById("accordion");
@@ -261,4 +259,4 @@ for (var i = 0; i < btns.length; i++) {
     this.className += " active";
   });
 }
-</script>
+</script>-->
