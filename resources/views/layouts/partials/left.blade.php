@@ -72,11 +72,12 @@
                                                         $notifentree = DB::table('entrees')->where('id','=', $entreeid)->get()->toArray();
                                                         $row = array();
                                                         $row['id'] = $entreeid;
+                                                        //print_r($notifc) ;
+                                                        $row['read_at']= $i->read_at;
                                                         foreach ($notifentree as $ni) {
                                                           $row['sujet'] = $ni->sujet;
                                                           $row['type'] = $ni->type;
                                                           $row['dossier'] = $ni->dossier;
-                                                          $row['type'] = $ni->type;
                                                         }
                                                         $nnotifs[] = $row;
                                                       }
@@ -103,26 +104,34 @@
                                                           
                                                           if (!isset ($n['type']) )
                                                           {  $n['type'] = 'default'; }
+
+                                                           
+                                                            if ((empty($n['read_at']))||(is_null($n['read_at'])))
+                                                              { $newnotif=" class='newnotif'" ;}
+                                                            else
+                                                              {$newnotif="" ;}
+
                                                           if (!isset ($n['sujet']) )
                                                             {  $n['sujet'] = ' '; }
+
                                                             switch ($n['type']) {
                                                                 case "email":
-                                                                    echo '<li rel="tremail" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    echo '<li rel="tremail" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>'; 
                                                                     break;
                                                                 case "fax":
-                                                                    echo '<li rel="trfax" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    echo '<li rel="trfax" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>'; 
                                                                     break;
                                                                 case "tel":
-                                                                    echo '<li rel="trtel" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    echo '<li rel="trtel" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>'; 
                                                                     break;
                                                                 case "sms":
-                                                                    echo '<li rel="trsms" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    echo '<li rel="trsms" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span> '.$n['sujet'].'</span></a></li>'; 
                                                                     break;
                                                                 case "whatsapp":
-                                                                    echo '<li rel="trwp" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fab fa-whatsapp"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    echo '<li rel="trwp" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fab fa-whatsapp"></span> '.$n['sujet'].'</span></a></li>'; 
                                                                     break;
                                                                 default:
-                                                                    echo '<li rel="tremail" ><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>'; 
+                                                                    echo '<li rel="tremail" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>'; 
                                                             }
 
 

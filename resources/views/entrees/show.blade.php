@@ -5,10 +5,12 @@
 @stop
 <?php
 use App\Dossier ;
+use App\Notification ;
 $dossiers = Dossier::get();
 
 use App\Attachement ;
 use App\Http\Controllers\AttachementsController;
+use App\Http\Controllers\NotificationsController;
 ?>
 {{-- page level styles --}}
 @section('header_styles')
@@ -48,6 +50,17 @@ use App\Http\Controllers\AttachementsController;
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6 " style="padding-right: 0px;">
                             <span class="pull-right"><b>Date: </b><?php if ($entree['type']=='email'){echo  date('d/m/Y H:i', strtotime( $entree['reception']  )) ; }else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }?></span>
+                            <?php 
+                                // verifier si l'entree possede de notification et la marque comme lu
+                                $identr=$entree['id'];
+                                $havenotif=NotificationsController::havenotification($identr);
+                                if ($havenotif)
+                                {
+                                    // marker comme lu avec la date courante
+                                    $date = date('Y-m-d g:i:s');
+                                    Notification::where('id', $havenotif)->update(array('read_at' => $date));
+                                }
+                            ?>
                         </div>
                 </div>
             </div>
