@@ -13,7 +13,13 @@
                                     
 
                                     <div class="panel-body" style="display: block;">
-                              
+                                        <?php use \App\Http\Controllers\ActionController;
+                                            $typesactions= ActionController::ListeTypeActions();
+
+
+                                          if (isset( $dossier)){
+                                              $actions=$dossier->actions;
+                                        ?>
                               @if ($actions)
 
                                     <ul class="nav nav-tabs" style="margin-bottom: 15px;">
@@ -26,27 +32,7 @@
                                     </ul>
                                     <div id="ActionsTabContent" class="tab-content">
                                         <div class="tab-pane fade active in  scrollable-panel" id="actionstab">
-                                           <!-- <div class="row" style="width: 99%">
-                                               <div class="col-xs-9 col-md-9 align-left"> 
-                                                    <div class="select">
-                                                      <select>
-                                                        <option>Trier par</option>
-                                                        <option>Temps</option>
-                                                        <option>Dossier</option>
-                                                      </select>
-                                                      <div class="select__arrow"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-1 col-md-1 pull-right"> 
-                                                    <a href="#" class="btn btn-default btn-sm btn-responsive" role="button"> </a>
-                                                </div>
-                                                <div class="col-xs-1 col-md-1 pull-right"> 
-                                                    <a href="#" class="btn btn-success btn-sm btn-responsive" role="button"> </a>
-                                                </div>
-                                                <div class="col-xs-1 col-md-1 pull-right"> 
-                                                    <a href="#" class="btn btn-danger btn-sm btn-responsive" role="button"> </a>
-                                                </div>
-                                            </div>-->
+
                                            
                                             <!-- treeview of notifications -->
                                             <div id="accordionkbs">
@@ -76,41 +62,12 @@
         </div>
        @endforeach
 
-       <!-- <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                Action 2
-              </a>
-            </h4>
-          </div>
-          <div id="collapseTwo" class="panel-collapse collapse">
-            <div class="panel-body">
-              <p>détails action 2</p>
-            </div>
-          </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                Action 3
-              </a>
-            </h4>
-          </div>
-          <div id="collapseThree" class="panel-collapse collapse">
-            <div class="panel-body">
-              <p>détails action 3</p>
-            </div>
-          </div>
-        </div>-->
+
       </div>
-   
 
 
-                                             accordian
                                               </div>
-                                                 
+
                                         </div>
                                         <div class="tab-pane fade  scrollable-panel" id="newactiontab">
 
@@ -186,6 +143,9 @@
 
 
  @endif
+
+                                        <?php        }
+                                            ?>
                                 </div>
 
                      

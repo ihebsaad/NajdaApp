@@ -1313,39 +1313,6 @@
 
 
 
-                 @foreach($entrees as $entree)
-                     <div class="email">
-                         <div class="fav-box">
-                             <a href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-sm btn-warning btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Archiver" >
-                                 <i class="fa fa-lg fa-fw fa-archive"></i>
-
-                             </a>
-                             <a href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-sm btn-danger btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Supprimer">
-                                 <i class="fa fa-lg fa-fw fa-trash-alt"></i>
-
-                             </a>
-                         </div>
-                         <div class="media-body pl-3">
-                             <div class="subject"><?php if($entree->type=="email") {?><i class="fa  fa-envelope"></i><?php }?><?php if($entree->type=="sms") {?><i class="fa fa-lg fa-sms"></i><?php }?><?php if($entree->type=="whatsapp") {?><i class="fa-lg fab fa-whatsapp"></i><?php }?>
-                                 <?php if($entree->type=="tel") {?><i class="fa fa-lg fa-phone-square"></i><?php }?><?php if($entree->type=="fax") {?><i class="fa fa-lg fa-fax"></i><?php }?><?php if($entree->type=="rendu") {?><i class="fa fa-lg fa-file-sound-o"></i><?php }?>
-                                 <a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:16px;"' ;} ?>  href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a><small style="margin-top:10px;">{{$entree->emetteur}}</small></div>
-                             <div class="stats">
-                                 <div class="row">
-                                     <div class="col-sm-8 col-md-8 col-lg-8">
-                                         <span><i class="fa fa-fw fa-clock-o"></i><?php if($entree->type=="email") {echo  date('d/m/Y H:i', strtotime($entree->reception)) ;}else {echo  date('d/m/Y H:i', strtotime($entree->created_at)) ;} ?></span>
-                                         <?php if($entree->type=="email") {?> <span><i class="fa fa-fw fa-paperclip"></i><b>({{$entree->nb_attach}})</b> Attachements</span><?php }?>
-                                     </div>
-                                     <div class="col-sm-4 col-md-4 col-lg-4">
-                                         @if (!empty($entree->dossier))
-                                             <button class="btn btn-sm btn-default"><b>REF: {{ $entree->dossier }}</b></button>
-                                         @endif
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                 @endforeach
-
 
 
 

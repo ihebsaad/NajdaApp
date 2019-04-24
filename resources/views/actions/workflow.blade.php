@@ -35,7 +35,7 @@
                         <input  type="hidden"  name="sousaction<?php echo($i+1) ?>"  value="{{$sactions->id}}" /> 
                         <div class="col-md-1"><input  type="checkbox"  name="check<?php echo($i+1) ?>"   /> </div>
                         <br><br>
-                       <div class="col-md-5"> <textarea style="background-color: #ffffcc; width: 70%; "name="commenta<?php echo($i+1)?>"> ajouter commentaire !</textarea></div>
+                       <div class="col-md-5"> <textarea style="background-color: #ffffcc; width: 100%;height:60px; "name="commenta<?php echo($i+1)?>"> ajouter un commentaire !</textarea></div>
                         @endif
                    </div>
 

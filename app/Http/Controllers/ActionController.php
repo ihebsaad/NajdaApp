@@ -288,4 +288,19 @@ class ActionController extends Controller
         return redirect('/actions')->with('success', '  has been deleted Successfully');  
 
      }
+
+    public static function ListeTypeActions( )
+    {
+        $typeactions=TypeAction::all();
+        return $typeactions;
+
+    }
+
+
+
+
+
+
+
+
 }

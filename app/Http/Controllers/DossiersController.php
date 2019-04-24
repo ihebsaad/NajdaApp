@@ -9,6 +9,7 @@ use App\Dossier ;
 use App\Client ;
 use DB;
 use App\TypeAction;
+use App\Prestation;
 
 
 class DossiersController extends Controller
@@ -105,12 +106,19 @@ class DossiersController extends Controller
     {
         $dossiers = Dossier::all();
         $typesactions=TypeAction::get();
-        $actions=Dossier::find($id)->actions;
+      $actions=Dossier::find($id)->actions;
 
        $dossier = Dossier::find($id);
         $clients = DB::table('clients')->select('id', 'name')->get();
 
-        return view('dossiers.view',['dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions], compact('dossier'));
+        $prestations =   Prestation::where('dossier_id', $id)->get();
+        /*** SAVE DOSSIER ID dans ENTREE  ou bien changer ici  ****/
+       //// $ref=$this->RefDossierById($id);
+        /// $entrees =   Entree::where('dossier', $ref)->get();
+        //  $entrees =   Entree::all();
+
+
+        return view('dossiers.view',[/*'entrees'=>$entrees,*/'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions], compact('dossier'));
 
     }
 
@@ -163,6 +171,15 @@ class DossiersController extends Controller
         return redirect('/dossiers')->with('success', '  has been deleted Successfully');
     }
 
+
+    public static function RefDossierById($id)
+    {
+        $dossier = Dossier::find($id);
+        if (isset($dossier['reference_medic'])) {
+            return $dossier['reference_medic'];
+        }else{return '';}
+
+    }
 
     public static function ClientById($id)
     {
