@@ -13,7 +13,7 @@
           <div class="owl-carousel">
             @foreach ($dossiers as $i) 
             <div class="item">
-                <a class="dossieritem" href="#" id="{{ $i->id }}" >
+                <a class="dossieritem" href="{{url('dossiers/view/'.$i->id )}}" id="{{ $i->id }}" >
                     <div class="dossiercr well well-gc well-sm <?php if($i->id ==$currentdoss){echo 'actived';}?>  " >
                         <h3 class="cutlongtext" style="font-size:20px!important">{{ $i->reference_medic }}</h3>
                         <p class="cutlongtext" style="font-size:70%"> {!!$i->subscriber_name!!} <br>

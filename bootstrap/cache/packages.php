@@ -46,6 +46,17 @@
       0 => 'Carbon\\Laravel\\ServiceProvider',
     ),
   ),
+  'novay/laravel-word-template' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Novay\\WordTemplate\\WordTemplateServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'WordTemplate' => 'Novay\\WordTemplate\\Facade',
+    ),
+  ),
   'rap2hpoutre/laravel-log-viewer' => 
   array (
     'providers' => 
