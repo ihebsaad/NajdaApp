@@ -24,7 +24,6 @@
 
 <script  src="{{ asset('public/js/summernote.min.js') }}"  type="text/javascript"></script>
 <script src="{{  URL::asset('public/js/custom_js/compose.js') }}" type="text/javascript"></script>
-<script src="{{ asset('public/js/push.min.js') }}"></script>
 
 
 <!----- Datepicker ------->
@@ -214,7 +213,7 @@ console.log(parsed);*/
                 }
               }
         // verifier si la notification est dispatche
-        if ((typeof parsed['data']['entree']['dossier'] !== "undefined") && (parsed['data']['entree']['dossier'] !== null) && (parsed['data']['entree']['dossier'] !== ''))
+        if ((typeof parsed['data']['entree']['dossier'] !== "undefined") && (parsed['data']['entree']['dossier'] !== null))
         {
           // verifier si le dossier exist dans la liste des notifications
           if( $("#prt_"+parsed['data']['entree']['dossier']).length ) 

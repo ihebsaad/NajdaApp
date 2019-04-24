@@ -79,4 +79,9 @@ class Dossier extends Model
         return 'Y-m-d H:i:s.u';
     }
 */
+ public function actions()
+    {
+        return $this->hasMany('App\Action','dossier');
+    }
+    
 }

@@ -1,3 +1,12 @@
+<style>
+ 
+  .actived {
+  background-color: #ffd051!important;color:red;
+}
+</style>
+<?php if (isset( $dossier)){$currentdoss=$dossier->id ;
+}else{$currentdoss=0;} ?>
+
 @isset ($dossiers)
 <div class="row folders" style="margin-top:20px;">
         <div class="carousel-wrap">
@@ -5,7 +14,7 @@
             @foreach ($dossiers as $i) 
             <div class="item">
                 <a class="dossieritem" href="#" id="{{ $i->id }}" >
-                    <div class="dossiercr well well-gc well-sm" >
+                    <div class="dossiercr well well-gc well-sm <?php if($i->id ==$currentdoss){echo 'actived';}?>  " >
                         <h3 class="cutlongtext" style="font-size:20px!important">{{ $i->reference_medic }}</h3>
                         <p class="cutlongtext" style="font-size:70%"> {!!$i->subscriber_name!!} <br>
                         {!!$i->subscriber_lastname!!}</p>
