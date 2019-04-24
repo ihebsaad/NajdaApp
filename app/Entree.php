@@ -13,6 +13,6 @@ class Entree extends Model
 
     public function getDateFormat()
     {
-        return 'Y-m-d H:i';
+        return 'Y-m-d H:i:s.u';
     }
 }
