@@ -5,8 +5,13 @@
 }
 </style>
 <?php if (isset( $dossier)){$currentdoss=$dossier->id ;
-}else{$currentdoss=0;} ?>
+}else{$currentdoss=0;}
 
+  use \App\Http\Controllers\DossiersController;
+$dossiers= DossiersController:: ListeDossiers();
+
+
+?>
 @isset ($dossiers)
 <div class="row folders" style="margin-top:20px;">
         <div class="carousel-wrap">

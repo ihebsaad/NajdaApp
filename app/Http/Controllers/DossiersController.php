@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
 use App\Entree ;
+use App\Envoye ;
 use App\Dossier ;
 use App\Client ;
 use DB;
@@ -115,10 +116,11 @@ class DossiersController extends Controller
         /*** SAVE DOSSIER ID dans ENTREE  ou bien changer ici  ****/
         $ref=$this->RefDossierById($id);
           $entrees =   Entree::where('dossier', $ref)->get();
+          $envoyes =   Envoye::where('dossier', $ref)->get();
         //  $entrees =   Entree::all();
 
 
-        return view('dossiers.view',['entrees'=>$entrees,'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions], compact('dossier'));
+        return view('dossiers.view',['entrees'=>$entrees,'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions,'envoyes'=>$envoyes], compact('dossier'));
 
     }
 
@@ -186,6 +188,15 @@ class DossiersController extends Controller
         $client = Client::find($id);
 
         return $client['name'];
+
+    }
+
+
+    public  static function ListeDossiers()
+    {
+        $dossiers = Dossier::all();
+
+        return $dossiers;
 
     }
 
