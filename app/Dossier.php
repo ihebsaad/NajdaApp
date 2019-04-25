@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class Dossier extends Model
 
 {
-    protected $fillable = ['id', 'created_by','updated_at','deleted_at','created_at',
+    protected $fillable = ['id', 'created_by', 'affecte',
 
 
 'subscriber_name',

@@ -17,7 +17,12 @@
     <?php use \App\Http\Controllers\DossiersController;     ?>
     <div class="uper">
         <div class="portlet box grey">
-            <div class="modal-header">Dossiers</div>
+            <div class="row">
+                <div class="col-lg-8">Dossiers</div>
+                <div class="col-lg-4">
+                    <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
+                </div>
+            </div>
         </div>
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead >
@@ -53,6 +58,82 @@
             </tbody>
         </table>
     </div>
+
+
+
+    <?php use \App\Http\Controllers\UsersController;
+    $users=UsersController::ListeUsers();
+
+    $CurrentUser = auth()->user();
+
+    $iduser=$CurrentUser->id;
+
+    ?>
+    <!-- Modal -->
+    <div class="modal fade" id="createfolder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Créer un nouveau dossier</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+                        <form method="post" >
+                            {{ csrf_field() }}
+
+                            <div class="form-group">
+                                <label for="type">Type :</label>
+                                <select   id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
+                                    <option   value="Medical">Medical</option>
+                                    <option   value="Technique">Technique</option>
+                                    <option   value="Mixte">Mixte</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="type">Affecté à :</label>
+                                <select id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single" readonly="readonly">
+                                    <option  value="Najda">Najda</option>
+                                    <option   value="VAT">VAT</option>
+                                    <option  value="MEDIC">MEDIC</option>
+                                    <option   value="Transport MEDIC">Transport MEDIC</option>
+                                    <option   value="Transport VAT">Transport VAT</option>
+                                    <option  value="Medic International">Medic International</option>
+                                    <option   value="Najda TPA">Najda TPA</option>
+                                    <option   value="Transport Najda">Transport Najda</option>
+                                </select>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="affecte">Agent:</label>
+                                <select   id="affecte" name="affecte"   class="form-control js-example-placeholder-single">
+                                    @foreach($users as $user  )
+                                        <option
+                                                @if($user->id==$iduser)selected="selected"@endif
+
+                                        value="{{$user->id}}">{{$user->name}}</option>
+
+                                    @endforeach
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" id="add" class="btn btn-primary">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
 @endsection
 
 
@@ -137,6 +218,34 @@
                     .draw();
             });
         });
+
+
+
+
+        $('#add').click(function(){
+            var type_dossier = $('#type_dossier').val();
+            var type_affectation = $('#type_affectation').val();
+            var affecte = $('#affecte').val();
+            if ((type_dossier != '')&&(type_affectation != '')&&(affecte != ''))
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('dossiers.saving') }}",
+                    method:"POST",
+                    data:{type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
+                    success:function(data){
+
+                        //   alert('Added successfully');
+                        window.location =data;
+
+
+                    }
+                });
+            }else{
+                // alert('ERROR');
+            }
+        });
+
 
 
 

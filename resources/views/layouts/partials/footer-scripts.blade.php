@@ -25,7 +25,6 @@
 <script  src="{{ asset('public/js/summernote.min.js') }}"  type="text/javascript"></script>
 <script src="{{  URL::asset('public/js/custom_js/compose.js') }}" type="text/javascript"></script>
 
-
 <!----- Datepicker ------->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -45,14 +44,14 @@
         /*$('#nestable_list_3').nestable();*/
 
         $('.owl-carousel').owlCarousel({
-          loop: false,
+          loop: true,
           margin: 20,
           nav: true,
           navText: [
             "<i class='fa fa-caret-left'></i>",
             "<i class='fa fa-caret-right'></i>"
           ],
-          autoplay: true,
+          autoplay: false,
           autoplayHoverPause: true,
           responsive: {
             0: {

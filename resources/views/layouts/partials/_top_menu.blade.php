@@ -7,13 +7,13 @@
                     Liste des dossiers
               </a>
           </div>
-          <div class="col-md-3">
+        <!-- <div class="col-md-3">
               <a href="#" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                <span class="fa fa-lg  fa-fw fa-phone"></span>
                <br>
                     Mes enregistrements
               </a>
-          </div>
+          </div>-->
           <div class="col-md-3">
               <a href="{{ route('prestataires') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                <span class="fa fa-lg fa-fw fa-user-md"></span>
@@ -21,14 +21,14 @@
                     Les prestataires 
               </a>
           </div>
-          <div class="col-md-3">
+        <!--  <div class="col-md-3">
               <a href="#" class="btn btn-default btn-md btn-responsive menu-item" role="button">
                <span class="fa fa-lg fa-fw fa-inbox"></span>
                <br>
                     Ma boîte de réception
               </a>
           </div>
-
+-->
     </div>
 
     <div class="row">
@@ -44,7 +44,7 @@
          </a>
     </div>
 
-    <div class="col-md-3">
+   <div class="col-md-3">
         <a href="{{ route('prestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
             <span class="fa fa-lg fa-fw fa-ambulance"></span>
             <br>
@@ -97,9 +97,9 @@
                 </a>
             </div>
 
-
+<!--
             <div class="col-md-3">
-                <a href="{{ route('users') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                <a href="#" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="fa fa-lg fa-fw fa-users"></span>
                     <br>
 
@@ -107,13 +107,13 @@
             </div>
 
             <div class="col-md-3">
-                <a href="{{ route('logs') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                <a href="#" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="fa fa-lg fa-fw fa-history"></span>
                     <br>
 
                 </a>
             </div>
-
+-->
 
         @endcan
     </div>

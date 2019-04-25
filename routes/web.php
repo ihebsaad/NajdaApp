@@ -105,7 +105,7 @@ Route::resource('/dossiers',  'DossiersController');
 Route::get('/dossiers', array('as' => 'dossiers','uses' => 'DossiersController@index'));
 Route::post('/dossiers/saving','DossiersController@saving')->name('dossiers.saving');
 Route::post('/dossiers/updating','DossiersController@updating')->name('dossiers.updating');
-Route::get('/dossiers/view/{id}', 'DossiersController@view');
+Route::get('/dossiers/view/{id}', 'DossiersController@view')->name('dossiers.view');
 
 
 /*** Clients **/

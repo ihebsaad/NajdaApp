@@ -199,5 +199,17 @@ class UsersController extends Controller
         $user = User::find($id);
         $user->delete();
 
-        return redirect('/users')->with('success', '  supprimé avec succès');    }
+        return redirect('/users')->with('success', '  supprimé avec succès');
+    }
+
+
+
+
+    public  static function ListeUsers()
+    {
+        $users = DB::table('users')->select('id', 'name')->get();
+
+        return $users;
+
+    }
 }

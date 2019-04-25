@@ -19,17 +19,17 @@
                     <ul class="nav  nav-tabs">
                         <li class=" nav-item active">
                             <a class="nav-link active show" href="#tab1" data-toggle="tab"  >
-                                Détails de dossier
+                                <i class="fas a-lg fa-folder-alt"></i>  Détails de dossier
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#tab2" data-toggle="tab">
-                                Echanges
+                               <i class="fas a-lg fa-exchange-alt"></i>  Echanges
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#tab3" data-toggle="tab">
-                                Prestations
+                                <i class="fas fa-lg  fa-ambulance"></i>  Prestations
                             </a>
                         </li>
 
@@ -366,7 +366,7 @@
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label>Client </label>
-                                                                <select onchange="changing(this)" id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"   value="{{ $dossier->customer_id }}" >
+                                                                <select onchange="changing(this);location.reload()" id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"   value="{{ $dossier->customer_id }}" >
                                                                     <option value="0">Sélectionner..... </option>
 
                                                                     @foreach($clients as $cl  )
@@ -386,7 +386,7 @@
                                                                 <label for="inputError" class="control-label">Référence *</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input   type="text" id="customer" name="customer_id" class="form-control"   value="{{ $dossier->customer_id }}" >
+                                                                    <input  readonly type="text" id="customer" name="customer_id" class="form-control"   value="{{ $dossier->customer_id }}" >
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1296,10 +1296,10 @@
 
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item active">
-                        <a class="nav-link active" id="rec-tab" data-toggle="tab" href="#rec" role="tab" aria-controls="rec" aria-selected="true">Réception</a>
+                        <a class="nav-link active" id="rec-tab" data-toggle="tab" href="#rec" role="tab" aria-controls="rec" aria-selected="true"><i class="fas a-lg fa-level-down-alt"></i>  Réception</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="env-tab" data-toggle="tab" href="#env" role="tab" aria-controls="env" aria-selected="false">Envois</a>
+                        <a class="nav-link" id="env-tab" data-toggle="tab" href="#env" role="tab" aria-controls="env" aria-selected="false">Envois  <i class="fas a-lg fa-level-up-alt"></i></a>
                     </li>
 
                 </ul>
@@ -1520,7 +1520,7 @@
         var _token = $('input[name="_token"]').val();
         $.ajax({
             url: "{{ route('dossiers.updating') }}",
-            method: "POST",
+            method: "GET",
             data: {dossier: dossier , champ:champ ,val:val, _token: _token},
             success: function (data) {
                 if (elm=='franchise'){

@@ -18,8 +18,9 @@ use PDF as PDF2;
 use Illuminate\Support\Facades\Auth;
 use Twilio\Rest\Client as Client2;
 use Twilio\Twiml;
-
-
+use App\Notifications\Notif_Suivi_Doss;
+ use Notification;
+use Auth as auth2 ;
 class EmailController extends Controller
 {
     public function __construct()
@@ -330,14 +331,14 @@ class EmailController extends Controller
 
 
 
-
-
                 $entree->save();
                 // Dispatching
                 //$this->disp();
                 $id=$entree->id;
 
-                if($storeid==false){
+                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
+
+                    if($storeid==false){
                     $firstid=$id;
                     $storeid=true;
                 }

@@ -1,14 +1,37 @@
 @extends('layouts.mainlayout')
 
 @section('content')
-    <div class="portlet box grey">
-        <div class="modal-header">Prestataire</div>
+
+    <section class="content form_layouts">
+
+        <div class="container-fluid">
+    <div class="row" style="margin-top:10px">
+        <div class="col-lg-12">
+            <ul class="nav  nav-tabs">
+                <li class=" nav-item active">
+                    <a class="nav-link active show" href="#tab1" data-toggle="tab"  >
+                        <i class="fas fa-lg fa-user-md"></i>  Détails du Prestataire
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#tab2" data-toggle="tab">
+                        <i class="fas fa-lg fa-ambulance"></i>  Prestations
+                    </a>
+                </li>
+
+
+            </ul>
+
+        </div>
     </div>
+
+    <div class="tab-content mar-top">
+        <div id="tab1" class="tab-pane fade active  in">
+
     <div class="form-group">
      {{ csrf_field() }}
 
-<div class="modal-body">
-    <form id="updateform">
+     <form id="updateform">
 
                     <div class="row">
                         <div class="col-md-6">
@@ -210,10 +233,57 @@
                      </div>
                     <input type="hidden" id="idpres" class="form-control"   value={{ $prestataire->id }}>
     </form>
-                </div>	 
+
 
   </div>
 
+        </div>
+    </div>
+
+
+    <div id="tab2" class="tab-pane fade in">
+
+    <table class="table table-striped" id="mytable" style="width:100%">
+        <thead>
+        <tr id="headtable">
+            <th style="width:35%">Dossier</th>
+            <th style="width:25%">Prestataire</th>
+            <th style="width:10%">Type</th>
+            <th style="width:20%">Prix</th>
+        </tr>
+        <tr>
+            <th style="width:35%">Dossier</th>
+            <th style="width:25%">Prestataire</th>
+            <th   style="width:10%">Type</th>
+            <th style="width:20%">Prix</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($prestations as $prestation)
+            <?php $dossid= $prestation['dossier_id'];?>
+
+            <tr>
+                <td style="width:35%"><a href="{{action('PrestationsController@view', $prestation['id'])}}" >
+                        <?php  echo PrestationsController::DossierById($dossid);  ?>
+                    </a></td>
+                <td style="width:25%">
+                    <?php $prest= $prestation['prestataire_id'];
+                    echo PrestationsController::PrestataireById($prest);  ?>
+                </td>
+                <td style="width:10%;">
+                    <?php $typeprest= $prestation['type_prestations_id'];
+                    echo PrestationsController::TypePrestationById($typeprest);  ?>
+                </td>
+                <td style="width:20%">{{$prestation->price}}</td>
+
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+
+    </div>
+
+        </div>
 @endsection
 
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>

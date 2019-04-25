@@ -69,16 +69,71 @@ class DossiersController extends Controller
 
     public function saving(Request $request)
     {
+        $reference_medic = '';
+        $type_affectation = $request->get('type_affectation');
+        $annee = date('y');
+
+
+        if ($type_affectation == 'Najda') {
+            $maxid = $this->GetMaxIdBytype('Najda');
+            $reference_medic = $annee . 'N' . sprintf("%'.04d\n", $maxid+1);
+        }
+        if ($type_affectation == 'VAT') {
+            $maxid = $this->GetMaxIdBytype('VAT');
+            $reference_medic = $annee . 'V' . sprintf("%'.04d\n", $maxid+1);
+
+        }
+        if ($type_affectation == 'MEDIC') {
+            $maxid = $this->GetMaxIdBytype('MEDIC');
+            $reference_medic = $annee . 'M' . sprintf("%'.04d\n", $maxid+1);
+
+        }
+        if ($type_affectation == 'Transport MEDIC') {
+            $maxid = $this->GetMaxIdBytype('Transport MEDIC');
+            $reference_medic = $annee . 'TM' . sprintf("%'.04d\n", $maxid+1);
+
+        }
+        if ($type_affectation == 'Transport VAT') {
+            $maxid = $this->GetMaxIdBytype('Transport VAT');
+            $reference_medic = $annee . 'TV' . sprintf("%'.04d\n", $maxid+1);
+
+        }
+        if ($type_affectation == 'Medic International') {
+            $maxid = $this->GetMaxIdBytype('Medic International');
+            $reference_medic = $annee . 'MI' . sprintf("%'.04d\n", $maxid+1);
+
+        }
+        if ($type_affectation == 'Najda TPA') {
+            $maxid = $this->GetMaxIdBytype('Najda TPA');
+            $reference_medic = $annee . 'TPA' . sprintf("%'.04d\n", $maxid+1);
+
+        }
+        if ($type_affectation == 'Transport Najda') {
+            $maxid = $this->GetMaxIdBytype('Transport Najda');
+            $reference_medic = $annee . 'TN' . sprintf("%'.04d\n", $maxid+1);
+
+        }
+
+
+     ///   if ($this->CheckRefExiste($reference_medic) === 0) {
         $dossier = new Dossier([
-       //     'emetteur' => $request->get('emetteur'),
-        //    'sujet' => $request->get('sujet'),
-        //    'contenu'=> $request->get('contenu'),
+            'type_dossier' => $request->get('type_dossier'),
+            'type_affectation' => $type_affectation,
+            'affecte' => $request->get('affecte'),
+            'reference_medic' => $reference_medic,
 
         ]);
+        if ($dossier->save())
+        { $iddoss=$dossier->id;
 
-        $dossier->save();
-        return redirect('/dossiers')->with('success', 'Entry has been added');
+            return url('/dossiers/view/'.$iddoss)/*->with('success', 'Dossier Créé avec succès')*/;
+           // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
+           //  return  $iddoss;
+           }
 
+         else {
+             return url('/dossiers');
+            }
     }
 
     public function updating(Request $request)
@@ -180,6 +235,27 @@ class DossiersController extends Controller
         if (isset($dossier['reference_medic'])) {
             return $dossier['reference_medic'];
         }else{return '';}
+
+    }
+
+    public static function CheckRefExiste($ref)
+    {
+        $number =  Dossier::where('reference_medic', $ref)->count('id');
+
+        return $number;
+
+
+    }
+
+    public static function GetMaxIdBytype($type)
+    {
+        $annee=date('y');
+        $maxid =  Dossier::where('type_affectation', $type)
+            ->where('type_affectation','like', $annee.'%')
+             ->max('id');
+
+             return intval($maxid+1);
+
 
     }
 

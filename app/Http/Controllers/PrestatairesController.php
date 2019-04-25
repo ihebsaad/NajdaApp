@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Entree ;
 use App\Dossier ;
 use App\Prestataire ;
+use App\Prestation ;
 use App\Ville ;
 use DB;
 
@@ -118,7 +119,9 @@ class PrestatairesController extends Controller
             ->get();
 
         $prestataire = Prestataire::find($id);
-        return view('prestataires.view',['dossiers' => $dossiers,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations], compact('prestataire'));
+        $prestations =   Prestation::where('prestataire_id', $id)->get();
+
+        return view('prestataires.view',['dossiers' => $dossiers,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'prestations'=>$prestations], compact('prestataire'));
 
     }
 

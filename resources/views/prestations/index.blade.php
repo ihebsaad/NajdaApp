@@ -9,7 +9,6 @@
 
 @section('content')
 
-
     <style>
         .uper {
             margin-top: 10px;
