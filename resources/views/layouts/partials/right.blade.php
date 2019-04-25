@@ -1,4 +1,56 @@
  <!-- Content -->
+
+ <style>
+/* Style The Dropdown Button */
+.dropbtn {
+  /*background-color: #4CAF50;*/
+  background-color: white;
+  color: black;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+   right: 0;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+  background-color: #3e8e41;
+}
+</style>
+
 <div class="panel panel-danger">
                     <div class="panel-heading">
                         <h4 class="panel-title">Actions</h4>
@@ -18,7 +70,7 @@
 
 
                               if (isset( $dossier)){
-                                  $actions=$dossier->actions;
+                                  $actions=$dossier->activeActions;
                             ?>
                   @if ($actions)
 
@@ -45,7 +97,29 @@
                               </style>
                               <?php if (isset( $act)){$currentaction=$act->id ;}else{$currentaction=0;} ?>
                                     <div class="accordion panel-group" id="accordion">
+                                 @if (!$actions->isEmpty())
+                                  <div class="row">
+
+                                <div class="col-md-4" >
+                                  
+                                </div>
+                               
+                                    <div class="col-md-8">
+                                  <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#toutesactions">États de toutes les actions</button> 
+                                  </div>
+
+                                  </div>
+                                  <br>
+                                   <div class="row">
+                                    <div class="col-md-10" >
+                                    <h4 >les actions actives : </h4>
+                                   </div>
+                                   </div>
+                                    <br>                             
+                                  @endif
                                       @foreach ($actions as $action)
+                                      <div class="row" style="padding-bottom: 3px;">
+                                      <div class="col-md-8">
                                       <div class="panel panel-default">
                                         <div class="panel-heading <?php if($action->id ==$currentaction){echo 'active';}?>">
                                           <h4 class="panel-title">
@@ -60,6 +134,24 @@
                                           </div>
                                         </div> -->
                                       </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                       <form>
+
+                                            <div class="dropdown">
+                                              <button class="dropbtn"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+                                              <div class="dropdown-content">
+                                                <a href="{{url('action/RendreInactive/'.$action->id.'/'.$dossier->id)}}">Rendre Inactive</a>
+                                                <a href="{{url('action/RendreAchevee/'.$action->id.'/'.$dossier->id)}}">Rendre Achevée</a>
+                                          
+                                              </div>
+                                            </div>
+                                                                                 
+
+                                      </form>
+                                    </div>
+                                    </div>
+
                                      @endforeach
 
 
@@ -90,7 +182,7 @@
                                           </ul>
                                       </div><br />
                                   @endif
-                                  <form method="post" action="{{ route('actions.store') }}">
+                                  <form  method="post" action="{{ route('actions.store') }}">
                                       <div class="form-group">
                                            {{ csrf_field() }}
                                          <label  style="display: inline-block;  text-align: left; width: 40px;">titre:</label>
@@ -102,8 +194,10 @@
                                           <input id="descrip" type="text" class="form-control" style="width:95%;  text-align: right;" name="descrip"/>
                                       </div>
                                       <div class="form-group">
-                                       <label for="datedeb" style="display: inline-block;  text-align: right; width: 40px;">Date début:</label>
-                                          <input id="datedeb" type="datetime-local" value="2018-02-25T19:24:23" class="form-control" style="width:95%;  text-align: right;" name="datedeb"/>
+                                        <?php $da= date('Y-m-d\TH:m'); ?>
+
+                                      <label for="datedeb" style="display: inline-block;  text-align: right; width: 40px;">Date début:</label>
+                                <input id="datedeb" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:95%;  text-align: right;" name="datedeb"/>
                                       </div>
                                       <div class="form-group">
                                        <!--<label for="datefin" style="display: inline-block;  text-align: right; width: 40px;">Date fin:</label>
@@ -134,7 +228,7 @@
 
                <div class="row text-center">
                   <h4>Action libre</h4>
-                   <a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#basicModal">créer nouveau type d'action </a>
+                   <a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#NouveauType">créer nouveau type d'action </a>
                </div> 
                                          
               </div>
@@ -155,7 +249,7 @@
 
 <!-- modal pour creer un nouveau type d'action--> 
 
-            <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+            <div class="modal fade" id="NouveauType" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
              <div class="modal-dialog">
              <div class="modal-content">
              <div class="modal-header">
@@ -178,6 +272,128 @@
                  </div>
              </div>
             </div>
+
+
+
+            <!-- Modal pour toutes les actions -->
+
+
+           <style>
+
+              .results tr[visible='false'],
+              .no-result{
+                    display:none;
+                  }
+
+                  .results tr[visible='true']{
+                    display:table-row;
+                  }
+
+                  .counter{
+                    padding:8px; 
+                    color:#ccc;
+                  }
+          </style>
+
+              <div id="toutesactions" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">États de toutes les actions de dossier courant</h4>
+                    </div>
+                    <div class="modal-body">
+                      <p>
+                             <div class="form-group pull-right">
+                              <input type="text" class="search form-control" placeholder="Recherhe">
+                          </div>
+                          <span class="counter pull-right"></span>
+                          <table class="table table-hover table-bordered results">
+                            <thead>
+                              <tr>
+                                <th>#</th>
+                                <th class="col-md-5 col-xs-5">Nom de l'action</th>
+                                <th class="col-md-5 col-xs-5">Date création</th>
+                                <th class="col-md-4 col-xs-4">État</th>
+                                <th class="col-md-3 col-xs-3">Modifier état</th>
+                              </tr>
+                              <tr class="warning no-result">
+                                <td colspan="4"><i class="fa fa-warning"></i> Pas de résultats</td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <?php  if (isset( $dossier)){
+                                  $acts=$dossier->actions; $u=1; ?>
+                               @foreach ($acts as $ac)
+                              <tr>
+                                <th scope="row"><?php echo $u ?></th>
+                                <td>{{$ac->titre}}</td>
+                                <td>{{$ac->date_deb}}</td>
+                                <td>{{$ac->statut_courant}}</td>
+                                <td> 
+                                  <div class="dropdown">
+                                              <button class="dropbtn"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+                                              <div class="dropdown-content">
+                                                <a href="#">Rendre Active</a>
+                                                <a href="#">Rendre Inactive</a>
+                                                <a href="#">Rendre Achevée</a>
+                                          
+                                              </div>
+                                            </div>
+
+                                          </td>
+                              </tr>
+                                <?php  $u++ ; ?>
+                              @endforeach
+                            <?php } ?>
+                            </tbody>
+                          </table>
+                      </p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+             <!--  re -->
+              <script>
+
+                  $(document).ready(function() {
+                    $(".search").keyup(function () {
+                      var searchTerm = $(".search").val();
+                      var listItem = $('.results tbody').children('tr');
+                      var searchSplit = searchTerm.replace(/ /g, "'):containsi('")
+                      
+                    $.extend($.expr[':'], {'containsi': function(elem, i, match, array){
+                          return (elem.textContent || elem.innerText || '').toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
+                      }
+                    });
+                      
+                    $(".results tbody tr").not(":containsi('" + searchSplit + "')").each(function(e){
+                      $(this).attr('visible','false');
+                    });
+
+                    $(".results tbody tr:containsi('" + searchSplit + "')").each(function(e){
+                      $(this).attr('visible','true');
+                    });
+
+                    var jobCount = $('.results tbody tr[visible="true"]').length;
+                      $('.counter').text(jobCount + ' résultat(s)');
+
+                    if(jobCount == '0') {$('.no-result').show();}
+                      else {$('.no-result').hide();}
+                        });
+                  });
+
+              </script>
+
+
+              <!--  fin modal -->
 
  <script type="text/javascript">
      $(document).ready(function(){
@@ -205,6 +421,42 @@
 });
 </script>
 
+
+<!-- mettre à jour le workflow par ajax-->
+<script>
+$("#workflowform input:checkbox").change(function() {
+    var ischecked= $(this).is(':checked');
+    if(!ischecked)
+    alert('uncheckd ' + $(this).val());
+    else
+    {
+      //alert('checkd ');
+
+     // $("#workflowform").submit(function(e){ // On sélectionne le formulaire par son identifiant
+        // e.preventDefault(); // Le navigateur ne peut pas envoyer le formulaire
+
+         var donnees = $("#workflowform").serialize(); // On créer une variable content le formulaire sérialisé
+       // alert (donnees);
+           $.ajax({
+
+               url : '{{URL('/action/updateworkflow/')}}',
+               type : 'POST',
+               data : donnees,
+               success: function(retour){
+               
+                  //alert(JSON.stringify(retour))   ;
+                  location.reload();
+            }
+
+              //...
+
+           });
+
+            //});
+
+    }
+});
+</script>
 
 
   <!--<script>

@@ -79,9 +79,14 @@ class Dossier extends Model
         return 'Y-m-d H:i:s.u';
     }
 */
+ public function activeActions()
+    {
+        return $this->hasMany('App\Action','dossier')->where('statut_courant','Active');
+    }
+
+
  public function actions()
     {
         return $this->hasMany('App\Action','dossier');
     }
-    
 }

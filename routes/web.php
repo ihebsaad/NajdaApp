@@ -163,7 +163,10 @@ Route::post('/actions/saving','ActionController@saving')->name('actions.saving')
 Route::post('/actions/store','ActionController@store')->name('actions.store');
 Route::get('/actions/view/{id}', 'ActionController@view');
 Route::get('/action/workflow/{dossid}/{id}', 'ActionController@getWorkflow');
-Route::post('/action/updateworkflow/{dossid}/{id}', 'ActionController@updateWorkflow');
+Route::post('/action/updateworkflow/', 'ActionController@updateWorkflow');
+//Route::post('/action/updateworkflow/{dossid}/{id}', 'ActionController@updateWorkflow');
+Route::get('/action/RendreInactive/{id}/{dossid}', 'ActionController@RendreInactive');
+Route::get('/action/RendreAchevee/{id}/{dossid}', 'ActionController@RendreAchevee');
 
 /*** SousAction**/
 Route::resource('/sousactions',  'SousActionController');

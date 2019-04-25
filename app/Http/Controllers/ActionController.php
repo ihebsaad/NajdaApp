@@ -50,20 +50,21 @@ class ActionController extends Controller
        // return view('actions.workflow', compact('sousactions'));
     }
 
-     public function updateWorkflow(Request $request,$dossid,$id)
+   //  public function updateWorkflow(Request $request,$dossid,$id)
+     public function updateWorkflow(Request $request)
     {
 
          $dossiers = Dossier::all();
-         $dossier = Dossier::find($dossid);
+        // //$dossier = Dossier::find($dossid);
          $typesactions=TypeAction::get();
 
-         $act= Action::find($id);
+         ////$act= Action::find($id);
         // $dossier = $action->dossier;
-         $sousactions = $act->sousactions;
+        //// $sousactions = $act->sousactions;
 
        //  $actions=$dossier->actions;
 
-         $actions=Dossier::find($dossid)->actions;
+        //// $actions=Dossier::find($dossid)->actions;
 
 
             //$x = array_search ('english', $request->all());
@@ -71,6 +72,8 @@ class ActionController extends Controller
 
 
          $input = $request->all();
+
+         // return response()->json($input);
 
 
 
@@ -130,6 +133,22 @@ class ActionController extends Controller
         return view('actions.create',['actions' => $actions]);
     }
 
+     public function RendreInactive($id,$dossid)
+    {
+         Action::where('id',$id)
+            ->update(['statut_courant'=>'Inactive']);
+           
+            return redirect('dossiers/view/'.$dossid);
+    }
+
+    public function RendreAchevee($id,$dossid)
+    {
+        Action::where('id',$id)
+            ->update(['statut_courant'=>'Achevée']);
+
+        return  redirect('dossiers/view/'.$dossid);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -144,6 +163,7 @@ class ActionController extends Controller
              'date_deb'=> trim($request->get('datedeb')),
              'type_action' =>trim($request->get('typeact')),
              'dossier' => trim($request->get('dossier')),
+             'statut_courant' => 'Active',
         ]);
 
        $action->save();
@@ -153,11 +173,11 @@ class ActionController extends Controller
         //$type_act=DB::table('type_actions')->where('id', $request->get('typeact'));
         $type_act=TypeAction::find($request->get('typeact'));
 
-       // dd($type_act->getAttributes());
+       //dd($type_act->getAttributes());
 
          $attributes = array_keys($type_act->getOriginal());
          $valeurs = array_values($type_act->getOriginal());
-        // dd($attributes);
+        // dd($valeurs);
 
         // echo($attributes[1]);
         // echo($valeurs[1]);
@@ -173,7 +193,7 @@ class ActionController extends Controller
              'descrip' => trim($valeurs[1]),
              'ordre'=> trim($valeurs[$k+1]),
              'realisee'=> false,
-            
+                          
                   ]); 
                   
                   $sousaction->save();

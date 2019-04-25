@@ -15,7 +15,7 @@
                 <div style="background-color: #ABF8F8;padding:15px 15px 15px 15px" >
 
                     @if(!$sousactions->isEmpty())
-                    <form method="post" action="{{url('action/updateworkflow/'.$dossier->id.'/'.$act->id)}}}}">
+                    <form  id="workflowform" method="post" action="{{url('action/updateworkflow/'.$dossier->id.'/'.$act->id)}}}}">
                       {{ csrf_field() }}
                       <input id="rr" type="hidden"  name="id_action"  value="{{$act->id}}" /> 
                         <?php $i = 0;
@@ -50,7 +50,7 @@
                          <br />
                          <?php $i++ ?>
                         @endforeach
-                     <center><button  id="EnrWorkf" type="submit"  class="btn btn-primary ">Enregister</button></center>
+            <!-- <center><button  id="EnrWorkf" type="submit"  class="btn btn-primary ">Enregister</button></center>-->
                     </form>
                   @endif
                 </div><br />
@@ -76,13 +76,11 @@
     </div>
 @endsection
 
-<script>
 
-var enregi= 0;
 
-jQuery.on("click", )
 
-</script>
+
+
 
 
 

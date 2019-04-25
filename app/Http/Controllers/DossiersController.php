@@ -162,7 +162,7 @@ class DossiersController extends Controller
     {
         $dossiers = Dossier::all();
         $typesactions=TypeAction::get();
-      $actions=Dossier::find($id)->actions;
+        $actions=Dossier::find($id)->activeActions;
 
        $dossier = Dossier::find($id);
         $clients = DB::table('clients')->select('id', 'name')->get();
