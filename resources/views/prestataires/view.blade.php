@@ -2,6 +2,12 @@
 
 @section('content')
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+    <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.1/select2.min.js"></script>-->
+
+
     <section class="content form_layouts">
 
         <div class="container-fluid">
@@ -70,43 +76,72 @@
                                 </select>
                             </div>
                         </div>
+                        <!--
                         <style>.tags{font-size: 13px;}</style>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Type prestation *</label>
                            <div class="row form-group">
-                               @foreach($relations as $prest  )
+                           {{--    @foreach($relations as $prest  )
                                    @foreach($typesprestations as $aKey  )
                                          @if($prest->type_prestation_id==$aKey->id)
                                            <?php echo '<span class="tags" id="type'.$aKey->id.'" >'.$aKey->name.' <a onclick="removeprest(this)" id="prest'.$aKey->id.'" href="javascript:"> <i class="fas fa-times-circle "></i> </a></span><br>' ; ?>
                                        @endif
                                    @endforeach
-                               @endforeach
-
+                               @endforeach --}}
                            </div>
+
                                 <select   id="typepres" name="typepres[]" multiple="multiple" class="form-control select2-offscreen" tabindex="-1" value={{ $prestataire->typepres }}>
 
-                                    @foreach($relations as $prest  )
+                                  {{--  @foreach($relations as $prest  )
                                         @foreach($typesprestations as $aKey  )
-                                             <option   onclick="createtypeprest('tpr<?php echo $aKey->id; ?>')"            value="{{$aKey->id}}" @if($prest->type_prestation_id==$aKey->id)selected="selected"@endif     >{{$aKey->name}}</option>
+                                             <option   onclick="createtypeprest('tpr<?php echo $aKey->id; ?>')"  value="{{$aKey->id}}" @if($prest->type_prestation_id==$aKey->id)selected="selected"@endif     >{{$aKey->name}}</option>
                                          @endforeach
-                                    @endforeach
+                                    @endforeach  --}}
 
                                 </select>
                             </div>
                         </div>
+                        -->
+                        <div class="form-group  ">
+                            <label>Type de prestations</label>
+                                 <div class="col-md-6">
+                                    <select class="itemName form-control col-lg-6" style="" name="itemName"  multiple  id="typeprest">
+                                        <option></option>
+                                        @foreach($relations as $prest  )
+                                            @foreach($typesprestations as $aKey)
+                                                <option  @if($prest->type_prestation_id==$aKey->id)selected="selected"@endif    onclick="createtypeprest('tpr<?php echo $aKey->id; ?>')"  value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
+                                            @endforeach
+                                        @endforeach
 
+                                    </select>
+
+                                </div>
+                        </div>
                     </div>
 
+
                     <div class="row">
+                             <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Gouvernorat de couverture</label>
+                                    <select class="form-control col-lg-6" style="" name="gouv"  multiple  id="gouvcouv">
+                                        <option></option>
+                                        @foreach($relationsgv as $Rgv  )
+                                            @foreach($gouvernorats as $aKeyG)
+                                                <option  @if($Rgv->citie_id==$aKeyG->id)selected="selected"@endif    value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
+                                            @endforeach
+                                        @endforeach
 
+                                    </select>
+                                </div>
+                             </div>
 
-                        <div class="col-md-10">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label>Ville du siège social</label><br>
 
                                 <?php
-
 
                                 if ($prestataire->ville_id >0)
                                     {
@@ -238,10 +273,7 @@
                     <input type="hidden" id="idpres" class="form-control"   value={{ $prestataire->id }}>
     </form>
 
-
-
         </div>
-
 
     <div id="tab02" class="tab-pane fade   " style="padding-top:30px">
 
@@ -286,10 +318,11 @@
     </div>
 
         </div>
+
+    </section>
  @endsection
 
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
-
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
@@ -363,7 +396,7 @@
 
 
 
-
+/*
 
     function removeprest(elm) {
 
@@ -373,7 +406,7 @@
 
         var _token = $('input[name="_token"]').val();
         $.ajax({
-            url: "{{ route('prestataires.removetypeprest') }}",
+            url: "{{-- route('prestataires.removetypeprest') --}}",
             method: "POST",
             data: {prestataire: prestataire , typeprest:typeprest ,  _token: _token},
             success: function (data) {
@@ -398,7 +431,7 @@
 
         var _token = $('input[name="_token"]').val();
         $.ajax({
-            url: "{{ route('prestataires.createtypeprest') }}",
+            url: "{{-- route('prestataires.createtypeprest') --}}",
             method: "POST",
             data: {prestataire: prestataire , typeprest:typeprest ,  _token: _token},
             success: function (data) {
@@ -411,6 +444,241 @@
 
 
     }
+    */
+
+    $(function () {
+        $('.itemName').select2({
+            filter: true,
+        language: {
+            noResults: function () {
+                return 'Pas de résultats';
+            }
+        }
+
+        });
+
+
+        var $topo = $('.itemName');
+
+        var valArray = ($topo.val()) ? $topo.val() : [];
+
+        $topo.change(function() {
+            var val = $(this).val(),
+                numVals = (val) ? val.length : 0,
+                changes;
+            if (numVals != valArray.length) {
+                var longerSet, shortSet;
+                (numVals > valArray.length) ? longerSet = val : longerSet = valArray;
+                (numVals > valArray.length) ? shortSet = valArray : shortSet = val;
+                //create array of values that changed - either added or removed
+                changes = $.grep(longerSet, function(n) {
+                    return $.inArray(n, shortSet) == -1;
+                });
+
+                Updating(changes, (numVals > valArray.length) ? 'selected' : 'removed');
+
+            }else{
+                // if change event occurs and previous array length same as new value array : items are removed and added at same time
+                Updating( valArray, 'removed');
+                Updating( val, 'selected');
+            }
+            valArray = (val) ? val : [];
+        });
+
+
+
+        function Updating(array, type) {
+            $.each(array, function(i, item) {
+
+                if (type=="selected"){
+
+
+                    var prestataire = $('#idpres').val();
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                        url: "{{ route('prestataires.createtypeprest') }}",
+                        method: "POST",
+                        data: {prestataire: prestataire , typeprest:item ,  _token: _token},
+                        success: function () {
+                            $('.select2-selection').animate({
+                                opacity: '0.3',
+                            });
+                            $('.select2-selection').animate({
+                                opacity: '1',
+                            });
+
+                        }
+                    });
+
+                }
+
+                if (type=="removed"){
+
+                     var prestataire = $('#idpres').val();
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                        url: "{{ route('prestataires.removetypeprest') }}",
+                        method: "POST",
+                        data: {prestataire: prestataire , typeprest:item ,  _token: _token},
+                        success: function () {
+                            $( ".select2-selection--multiple" ).hide( "slow", function() {
+                                // Animation complete.
+                            });
+                            $( ".select2-selection--multiple" ).show( "slow", function() {
+                                // Animation complete.
+                            });
+                        }
+                    });
+
+                }
+
+            });
+        } // updating
+
+
+
+
+
+
+        $('#gouvcouv').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+
+        });
+
+
+
+        var $gouv = $('#gouvcouv');
+
+        var valArray = ($gouv.val()) ? $gouv.val() : [];
+
+        $gouv.change(function() {
+            var val = $(this).val(),
+                numVals = (val) ? val.length : 0,
+                changes;
+            if (numVals != valArray.length) {
+                var longerSet, shortSet;
+                (numVals > valArray.length) ? longerSet = val : longerSet = valArray;
+                (numVals > valArray.length) ? shortSet = valArray : shortSet = val;
+                //create array of values that changed - either added or removed
+                changes = $.grep(longerSet, function(n) {
+                    return $.inArray(n, shortSet) == -1;
+                });
+
+                UpdatingG(changes, (numVals > valArray.length) ? 'selected' : 'removed');
+
+            }else{
+                // if change event occurs and previous array length same as new value array : items are removed and added at same time
+                UpdatingG( valArray, 'removed');
+                UpdatingG( val, 'selected');
+            }
+            valArray = (val) ? val : [];
+        });
+
+
+
+        function UpdatingG(array, type) {
+            $.each(array, function(i, item) {
+
+                if (type=="selected"){
+
+
+                    var prestataire = $('#idpres').val();
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                        url: "{{ route('prestataires.createcitieprest') }}",
+                        method: "POST",
+                        data: {prestataire: prestataire , citie:item ,  _token: _token},
+                        success: function () {
+                            $('.select2-selection').animate({
+                                opacity: '0.3',
+                            });
+                            $('.select2-selection').animate({
+                                opacity: '1',
+                            });
+
+                        }
+                    });
+
+                }
+
+                if (type=="removed"){
+
+                    var prestataire = $('#idpres').val();
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                        url: "{{ route('prestataires.removecitieprest') }}",
+                        method: "POST",
+                        data: {prestataire: prestataire , citie:item ,  _token: _token},
+                        success: function () {
+                            $( ".select2-selection--multiple" ).hide( "slow", function() {
+                                // Animation complete.
+                            });
+                            $( ".select2-selection--multiple" ).show( "slow", function() {
+                                // Animation complete.
+                            });
+                        }
+                    });
+
+                }
+
+            });
+        } // updating
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    });
+
+
+
+
+
+/*
+    $(function () {
+        $('.itemName').select2({
+            filter: true,
+
+            ajax: {
+                url: "{{-- route('emails.fetch') --}}",
+                delay: 250,
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (attachements) {
+                            return {
+                                text: attachements.nom,
+                                id: attachements.id
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+    });
+
+
+*/
+
+
 
 
 

@@ -95,14 +95,16 @@
 
     <div class="form-group form-group-default">
         <label>Attachements de dossier</label>
-        <form class="search-container">
-            <input type="text" id="search-bar" placeholder="Recherche">
-            <a href="#"><img class="search-icon" src="{{ URL::asset('public/img/search-icon.png') }}"></a>
-            <div id="countryList">
+        <div class="row">
+            <div class="col-md-10">
+        <select class="itemName form-control col-lg-6" style="" name="itemName"  multiple>
+            <option></option>
+            @foreach($attachements as $attach)
+                <option value="<?php echo $attach->id;?>"> <?php echo $attach->nom;?></option>
+            @endforeach
+        </select>
             </div>
-
-            {{ csrf_field() }}
-        </form>
+        </div>
      </div>
 
     <div class="form-group form-group-default">
@@ -117,6 +119,10 @@
 
         </div>
     </div>
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
 <script type="text/javascript">
 
@@ -197,39 +203,17 @@
             }
         });
 
-
-       /****  Recherche des attachements */
-
-        $('#search').keyup(function(){
-            var query = $(this).val();
-            if(query != '')
-            {
-                var _token = $('input[name="_token"]').val();
-                $.ajax({
-                    url:"{{ route('home.fetch') }}",
-                    method:"POST",
-                    data:{query:query, _token:_token},
-                    success:function(data){
-                        $('#List').fadeIn();
-                        $('#List').html(data);
-                    }
-                });
-            }else{
-                $('#List').fadeOut();
+        $('.itemName').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
             }
         });
 
-        $('#search').change(function() {
-            var query = $(this).val();
-            if(query != '')
-            {
-                $('#List').fadeOut();
-            }
-        });
-        $(document).on('click', 'li .search', function(){
-            $('#search').val($(this).text());
-            $('#List').fadeOut();
-        });
+
+
 
 
      });

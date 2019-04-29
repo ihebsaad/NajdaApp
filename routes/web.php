@@ -132,8 +132,10 @@ Route::resource('/prestataires',  'PrestatairesController');
 Route::get('/prestataires', array('as' => 'prestataires','uses' => 'PrestatairesController@index'));
  Route::post('/prestataires/saving','PrestatairesController@saving')->name('prestataires.saving');
  Route::post('/prestataires/updating','PrestatairesController@updating')->name('prestataires.updating');
- Route::post('/prestataires/removetypeprest','PrestatairesController@removetypeprest')->name('prestataires.removetypeprest');
- Route::post('/prestataires/createtypeprest','PrestatairesController@createtypeprest')->name('prestataires.createtypeprest');
+Route::post('/prestataires/removetypeprest','PrestatairesController@removetypeprest')->name('prestataires.removetypeprest');
+Route::post('/prestataires/createtypeprest','PrestatairesController@createtypeprest')->name('prestataires.createtypeprest');
+Route::post('/prestataires/removecitieprest','PrestatairesController@removecitieprest')->name('prestataires.removecitieprest');
+Route::post('/prestataires/createcitieprest','PrestatairesController@createcitieprest')->name('prestataires.createcitieprest');
 Route::get('/prestataires/view/{id}', 'PrestatairesController@view');
 
 

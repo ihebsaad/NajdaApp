@@ -816,4 +816,47 @@ class EmailController extends Controller
     }
 
 
+    /*
+           $('.itemName').select2({
+               placeholder: 'Sélectionner',
+               ajax: {
+                   url: "{{ route('emails.fetch') }}",
+                   delay: 250,
+                   processResults: function (data) {
+                       return {
+                           results:  $.map(data, function (attachements) {
+                               return {
+                                   text: attachements.nom,
+                                   id: attachements.id
+                               }
+                           })
+                       };
+                   },
+                   cache: true
+               }
+           });
+
+
+
+    public function fetch(Request $request)
+    {
+
+        $data = [];
+
+        if($request->has('q')){
+            $search = $request->q;
+
+
+            $data = DB::table("apps_countries")
+                ->select("id","country_name")
+                ->where('country_name','LIKE',"%$search%")
+                ->get();
+        }
+
+
+        return response()->json($data);
+    }
+
+    */
+
 }

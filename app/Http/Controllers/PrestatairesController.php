@@ -115,6 +115,11 @@ class PrestatairesController extends Controller
         $typesprestations = TypePrestation::all();
       // $villes = DB::table('cities')->select('id', 'name')->get();
         $villes = Ville::all();
+        $gouvernorats = DB::table('cities')->get();
+
+        $relationsgv = DB::table('cities_prestataires')->select('citie_id')
+            ->where('prestataire_id','=',$id)
+            ->get();
 
         $relations = DB::table('prestataires_type_prestations')->select('type_prestation_id')
             ->where('prestataire_id','=',$id)
@@ -123,7 +128,7 @@ class PrestatairesController extends Controller
         $prestataire = Prestataire::find($id);
         $prestations =   Prestation::where('prestataire_id', $id)->get();
 
-        return view('prestataires.view',['dossiers' => $dossiers,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'prestations'=>$prestations], compact('prestataire'));
+        return view('prestataires.view',['gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,',dossiers' => $dossiers,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'prestations'=>$prestations], compact('prestataire'));
 
     }
 
@@ -217,6 +222,37 @@ class PrestatairesController extends Controller
     }
 
 
+
+    public  function removecitieprest(Request $request)
+    {
+        $prestataire= $request->get('prestataire');
+        $citie= $request->get('citie');
+
+
+        DB::table('cities_prestataires')
+            ->where([
+                ['prestataire_id', '=', $prestataire],
+                ['citie_id', '=', $citie],
+            ])->delete();
+
+
+
+    }
+
+    public  function createcitieprest(Request $request)
+    {
+        $prestataire= $request->get('prestataire');
+        $citie= $request->get('citie');
+
+
+        DB::table('cities_prestataires')->insert(
+            ['prestataire_id' => $prestataire,
+                'citie_id' => $citie]
+        );
+
+
+
+    }
 
 
 
