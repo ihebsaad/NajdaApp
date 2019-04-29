@@ -17,7 +17,7 @@ class Entree extends Model
         return $this->hasMany('App\Attachement');
     }
 
-   protected $dateFormat = 'Y-m-d H:i';
+  // protected $dateFormat = 'Y-m-d H:i';
 /*
     public function getDateFormat()
     {
