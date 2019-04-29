@@ -7,14 +7,14 @@
         <div class="container-fluid">
     <div class="row" style="margin-top:10px">
         <div class="col-lg-12">
-            <ul class="nav  nav-tabs">
+            <ul id="tabs" class="nav  nav-tabs"  data-tabs="tabs">
                 <li class=" nav-item active">
-                    <a class="nav-link active show" href="#tab1" data-toggle="tab"  >
+                    <a class="nav-link active   " href="#tab01" data-toggle="tab" onclick="showinfos();" >
                         <i class="fas fa-lg fa-user-md"></i>  Détails du Prestataire
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#tab2" data-toggle="tab">
+                    <a class="nav-link" href="#tab02" data-toggle="tab"  onclick="hideinfos();">
                         <i class="fas fa-lg fa-ambulance"></i>  Prestations
                     </a>
                 </li>
@@ -25,13 +25,11 @@
         </div>
     </div>
 
-    <div class="tab-content mar-top">
-        <div id="tab1" class="tab-pane fade active  in">
+            <div id="tab01" class="tab-pane fade active in    "  style="padding-top:30px">
 
-    <div class="form-group">
-     {{ csrf_field() }}
 
      <form id="updateform">
+         {{ csrf_field() }}
 
                     <div class="row">
                         <div class="col-md-6">
@@ -107,11 +105,17 @@
                             <div class="form-group">
                                 <label>Ville du siège social</label><br>
 
-                                <?php if ($prestataire->ville_id >0)
-                                    {
-                                        $villeid=$prestataire->ville_id ;
+                                <?php
 
-                                        echo '<label style="font-weight:bold">'. $villes[$villeid]->name .'</label>';
+
+                                if ($prestataire->ville_id >0)
+                                    {
+
+                                        $villeid=intval($prestataire['ville_id']);
+                                        if (isset($villes[$villeid]['name']) ){$nomv=$villes[$villeid]['name'];}
+                                        else{$nomv=$prestataire['ville'];}
+
+                                        echo '<label style="font-weight:bold">'. $nomv .'</label>';
 
                                         ?>
 
@@ -151,7 +155,7 @@
                         </div>
 
                     </div>
-        
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -235,13 +239,11 @@
     </form>
 
 
-  </div>
 
         </div>
-    </div>
 
 
-    <div id="tab2" class="tab-pane fade in">
+    <div id="tab02" class="tab-pane fade   " style="padding-top:30px">
 
     <table class="table table-striped" id="mytable" style="width:100%">
         <thead>
@@ -284,7 +286,7 @@
     </div>
 
         </div>
-@endsection
+ @endsection
 
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
 
@@ -294,7 +296,16 @@
 
 <script>
 
-    function changing(elm) {
+
+    function hideinfos() {
+        $('#tab01').css('display','none');
+    }
+
+    function showinfos() {
+        $('#tab01').css('display','block');
+    }
+
+        function changing(elm) {
         var champ=elm.id;
 
         var val =document.getElementById(champ).value;

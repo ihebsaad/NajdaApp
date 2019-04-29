@@ -68,6 +68,7 @@ Route::get('/entrees/archive/', 'EntreesController@archive')->name('entrees.arch
 Route::post('/emails/send','EmailController@send');
 /* envoie d'un email */
 Route::get('/emails/sending','EmailController@sending')->name('emails.sending');
+Route::get('/emails/envoimail/{id}','EmailController@envoimail')->name('emails.envoimail');
 Route::get('/emails', 'EmailController@index');
 /* unreaded emails and not checked */
 Route::get('/emails/inbox', 'EmailController@inbox');

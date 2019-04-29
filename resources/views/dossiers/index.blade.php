@@ -27,13 +27,13 @@
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead >
             <tr id="headtable">
-                <th style="width:20%">Référance</th>
+                <th style="width:20%">Référence</th>
                 <th style="width:25%">Client</th>
                 <th style="width:30%">Abonné</th>
                 <th style="width:15%">Etat</th>
               </tr>
             <tr>
-                <th style="width:20%">Référance</th>
+                <th style="width:20%">Référence</th>
                 <th style="width:25%">Client</th>
                 <th style="width:30%">Abonné</th>
                 <th style="width:15%">Etat</th>

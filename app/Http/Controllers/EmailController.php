@@ -330,7 +330,6 @@ class EmailController extends Controller
                 ]);
 
 
-
                 $entree->save();
                 // Dispatching
                 //$this->disp();
@@ -401,7 +400,9 @@ class EmailController extends Controller
                         'type' => $type,
                         'path'=> $path2,
                          'parent'=> $id,
-                         'facturation'=> $facturation,
+                         'entree_id'=> $id,
+                        'facturation'=> $facturation,
+                        'boite'=> 0,  // 0 = reception, 1 = envoi
 
                     ]);
 
@@ -472,7 +473,7 @@ class EmailController extends Controller
 
         }
 
-        return view('emails.disp',['dossiers' => $dossiers]);
+        return view('emails.disp');
 
     }
 
@@ -480,9 +481,39 @@ class EmailController extends Controller
     {
         $dossiers = Dossier::all();
 
-        return view('emails.sending',['dossiers' => $dossiers]);
+        return view('emails.sending');
     }
 
+    public function envoimail($id)
+    {
+
+        $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
+        $entrees =   Entree::where('dossier', $ref)->get();
+        $envoyes =   Envoye::where('dossier', $ref)->get();
+
+        $identr=array();
+        $idenv=array();
+        foreach ($entrees as $entr)
+        {
+            array_push($identr,$entr->id );
+
+        }
+
+        foreach ($envoyes as $env)
+        {
+            array_push($idenv,$env->id );
+
+        }
+
+
+        $attachements= DB::table('attachements')
+            ->whereIn('entree_id',$identr )
+            ->orWhereIn('envoye_id',$idenv )
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('emails.envoimail',['attachements'=>$attachements]);
+    }
 
     function send (Request $request)
     {

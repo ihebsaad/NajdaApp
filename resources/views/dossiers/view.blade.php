@@ -4,12 +4,13 @@
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
 <link rel="stylesheet" href="{{ asset('public/css/timeline.css') }}" type="text/css">
 
-
 @section('content')
 
-
-
-
+<div class="row">
+    <div class="col-md-8"></div>
+    <div class="col-md-2"><a data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" style="float:right;margin-right:20px;margin-bottom:25px;padding:3px 3px 3px 3px;border:1px solid #4fc1e9;" href="{{action('EmailController@envoimail',$dossier->id)}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un email"  class="fa fa-fw fa-envelope-open fa-2x"></span></a>
+    </div>
+</div>
     <section class="content form_layouts">
 
         <div class="container-fluid">
@@ -19,7 +20,7 @@
                     <ul class="nav  nav-tabs">
                         <li class=" nav-item active">
                             <a class="nav-link active show" href="#tab1" data-toggle="tab"  >
-                                <i class="fas a-lg fa-folder-alt"></i>  Détails de dossier
+                                <i class="fas fa-lg fa-folder-open"></i>  Détails de dossier
                             </a>
                         </li>
                         <li class="nav-item">
@@ -32,7 +33,11 @@
                                 <i class="fas fa-lg  fa-ambulance"></i>  Prestations
                             </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tab4" data-toggle="tab">
+                                <i class="fas  fa-lg fa-file-archive"></i>  Attachements
+                            </a>
+                        </li>
                     </ul>
 
                 </div>
@@ -1466,7 +1471,74 @@
 
             </div>
 
-        </div>
+            <div id="tab4" class="tab-pane fade">
+
+                <table class="table table-striped" id="mytable" style="width:100%;margin-top:15px;">
+                    <thead>
+                    <tr id="headtable">
+                        <th style="width:10%">Date</th>
+                        <th style="width:20%">Titre</th>
+                        <th style="width:30%">Description</th>
+                        <th style="width:10%">type</th>
+                        <th style="width:10%">Boite</th>
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                      @foreach($attachements as $attach)
+
+                        <tr>
+
+                            <td style="width:10%;text-align:center"><small><?php echo $attach->created_at;?></small></td>
+                            <td style="width:20%;text-align:center"><small><?php echo $attach->nom;?></small></td>
+                            <td style="width:20%;text-align:center"><small><?php echo $attach->path;?></small></td>
+                            <td style="width:10%;text-align:center"><small><?php
+                                    $type= $attach->type;
+
+                                    switch ($type) {
+
+                                        case 'pdf':
+                                        echo '<i class="far fa-2X fa-file-pdf"></i>';
+                                            break;
+                                        case 'txt':
+                                            echo '<i class="far fa-2X fa-file-alt"></i>';
+                                            break;
+                                        case 'png':
+                                            echo '<i class="far fa-2X fa-file-image"></i>';
+                                            break;
+                                        case 'jpg':
+                                            echo '<i class="far fa-2X fa-file-image"></i>';
+                                            break;
+                                        case 'doc':
+                                            echo '<i class="far fa-2X  fa-file-word"></i>';
+                                            break;
+                                        case 'docx':
+                                        echo '<i class="far fa-2X fa-file-word"></i>';
+                                        break;
+                                        case 'xls':
+                                            echo '<i class="far fa-2X fa-file-excel"></i>';
+                                            break;
+                                        case 'xls':
+                                            echo '<i class="far fa-2X fa-file-excel"></i>';
+                                            break;
+                                        default:
+                                            echo '<i class="far fa-2X  fa-file"></i>';
+                                    }
+
+
+                                    ?></small></td>
+                            <td style="width:10%"><small><?php if ($attach->boite>0) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';}else{echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}?></small></td>
+
+                        </tr>
+                    @endforeach
+
+                    </tbody>
+                </table>
+
+
+            </div>
+
+            </div>
 
     </section>
 

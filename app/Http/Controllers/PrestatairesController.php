@@ -113,7 +113,9 @@ class PrestatairesController extends Controller
     {
         $dossiers = Dossier::all();
         $typesprestations = TypePrestation::all();
-        $villes = DB::table('cities')->select('id', 'name')->get();
+      // $villes = DB::table('cities')->select('id', 'name')->get();
+        $villes = Ville::all();
+
         $relations = DB::table('prestataires_type_prestations')->select('type_prestation_id')
             ->where('prestataire_id','=',$id)
             ->get();

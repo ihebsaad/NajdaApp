@@ -158,26 +158,59 @@ class DossiersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+
     public function view($id)
     {
         $dossiers = Dossier::all();
         $typesactions=TypeAction::get();
         $actions=Dossier::find($id)->activeActions;
 
-       $dossier = Dossier::find($id);
+        $dossier = Dossier::find($id);
         $clients = DB::table('clients')->select('id', 'name')->get();
 
         $prestations =   Prestation::where('dossier_id', $id)->get();
-        /*** SAVE DOSSIER ID dans ENTREE  ou bien changer ici  ****/
+
         $ref=$this->RefDossierById($id);
-          $entrees =   Entree::where('dossier', $ref)->get();
-          $envoyes =   Envoye::where('dossier', $ref)->get();
+        $entrees =   Entree::where('dossier', $ref)->get();
+
+        $envoyes =   Envoye::where('dossier', $ref)->get();
+
+
+        $identr=array();
+        $idenv=array();
+        foreach ($entrees as $entr)
+        {
+            //  $attaches= Attachement::where('entree_id',$entr->id)->get();
+            //  $attaches= DB::table('attachements')->where('entree_id',$entr->id)->get();
+
+            //$tab =  Entree::find($entr->id)->attachements;
+            array_push($identr,$entr->id );
+
+        }
+
+        foreach ($envoyes as $env)
+        {
+            //   $attaches= DB::table('attachements')->where('envoye_id',$env->id)->get();
+
+            // $tab =  Envoye::find($env->id)->attachements;
+            //array_push($attachements,$attaches );
+            array_push($idenv,$env->id );
+
+
+        }
+        $attachements= DB::table('attachements')
+            ->whereIn('entree_id',$identr )
+            ->orWhereIn('envoye_id',$idenv )
+            ->orderBy('created_at', 'desc')
+            ->get();
         //  $entrees =   Entree::all();
 
 
-        return view('dossiers.view',['entrees'=>$entrees,'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions,'envoyes'=>$envoyes], compact('dossier'));
+        return view('dossiers.view',['attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions,'envoyes'=>$envoyes], compact('dossier'));
 
     }
+
 
     /**
      * Show the form for editing the specified resource.
