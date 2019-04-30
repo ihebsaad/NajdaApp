@@ -119,6 +119,15 @@ Route::get('/clients/view/{id}', 'ClientsController@view');
 
 
 
+/*** Cities  Gouvernorats  **/
+Route::resource('/cities',  'CitiesController');
+Route::get('/cities', array('as' => 'cities','uses' => 'CitiesController@index'));
+Route::post('/cities/saving','CitiesController@saving')->name('cities.saving');
+Route::post('/cities/updating','CitiesController@updating')->name('cities.updating');
+Route::get('/cities/view/{id}', 'CitiesController@view');
+
+
+
 /*** Groupes Clients **/
 Route::resource('/clientgroupes',  'ClientGroupesController');
 Route::get('/clientgroupes', array('as' => 'clientgroupes','uses' => 'ClientGroupesController@index'));
@@ -199,9 +208,13 @@ Route::get('/users/create','UsersController@create')->name('users.create');
 Route::post('/users/saving','UsersController@saving')->name('users.saving');
 Route::get('/users/view/{id}', 'UsersController@view');
 Route::get('/users/profile/{id}', 'UsersController@profile')->name('profile');
+Route::post('/users/createuserrole', 'UsersController@createuserrole')->name('users.createuserrole');
+Route::post('/users/removeuserrole', 'UsersController@removeuserrole')->name('users.removeuserrole');
+
 Route::get('/users/destroy/{id}', 'UsersController@destroy');
 //Route::get('/edit/{id}','UsersController@edit');
 Route::post('/edit/{id}','UsersController@update');
+
 
 /**** LOGS  ****/
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs');;

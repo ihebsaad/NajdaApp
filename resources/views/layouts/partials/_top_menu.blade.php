@@ -91,21 +91,21 @@
 
             <div class="col-md-3">
                 <a href="{{ route('clientgroupes') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-                    <span class="   fas fa-lg fa-fw fa-city"></span>
+                    <span class=" fas fa-industry "></span>
                     <br>
                     Groupes
                 </a>
             </div>
 
-<!--
-            <div class="col-md-3">
-                <a href="#" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-                    <span class="fa fa-lg fa-fw fa-users"></span>
-                    <br>
 
+            <div class="col-md-3">
+                <a href="{{ route('cities') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="   fas fa-lg fa-fw fa-city"></span>
+                    <br>
+                Gouvernorats
                 </a>
             </div>
-
+<!--
             <div class="col-md-3">
                 <a href="#" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="fa fa-lg fa-fw fa-history"></span>

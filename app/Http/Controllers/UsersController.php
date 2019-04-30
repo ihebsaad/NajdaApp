@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Entree ;
 use App\Dossier ;
 use App\User ;
+use App\Role ;
 use DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -111,10 +112,17 @@ class UsersController extends Controller
      */
     public function view($id)
     {
-        $dossiers = Dossier::all();
+        $roles = Role::all();
 
         $user = User::find($id);
-        return view('users.view',['dossiers' => $dossiers], compact('user','id'));
+
+        $rolesusers = DB::table('roles_users')->select('role_id')
+            ->where('user_id','=',$id)
+            ->get();
+
+        //$roles = DB::table('roles')->get();
+
+        return view('users.view',['rolesusers' => $rolesusers,'roles' => $roles], compact('user','id'));
 
     }
 
@@ -210,6 +218,37 @@ class UsersController extends Controller
         $users = DB::table('users')->select('id', 'name')->get();
 
         return $users;
+
+    }
+
+
+
+    public  function removeuserrole(Request $request)
+    {
+        $user= $request->get('user');
+        $role= $request->get('role');
+
+        DB::table('roles_users')
+            ->where([
+                ['user_id', '=', $user],
+                ['role_id', '=', $role],
+            ])->delete();
+
+
+
+    }
+
+    public  function createuserrole(Request $request)
+    {
+        $user= $request->get('user');
+        $role= $request->get('role');
+
+        DB::table('roles_users')->insert(
+            ['user_id' => $user,
+            'role_id' => $role]
+        );
+
+
 
     }
 }
