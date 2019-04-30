@@ -70,14 +70,15 @@ use App\Http\Controllers\NotificationsController;
         </div>
 </div>
 <div class="panel panel-default panelciel " >
-        <div class="panel-heading" style="cursor:pointer" data-toggle="collapse" data-parent="#accordion-cat-1" href="#emailcontent" class="" aria-expanded="true">
+        <!--<div class="panel-heading" style="cursor:pointer" data-toggle="collapse" data-parent="#accordion-cat-1" href="#emailcontent" class="" aria-expanded="true">-->
+        <div class="panel-heading" data-parent="#accordion-cat-1" href="#emailcontent" class="">
                 <a >
                     <div class="row">
                         <div class="col-sm-6 col-md-6 col-lg-6"style=" padding-left: 0px; ">
                             <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;">Contenu</h4>
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6" style="padding-right: 0px;">
-                            <div class="pull-right" style="margin-top: 0px;">
+                            <div class="pull-right" style="margin-top: 0px;z-index: 10">
                                 <a href="#" class="btn btn-info btn-sm btn-responsive" role="button" onclick="comment();"> 
                                   <span class="fa fa-fw fa-tags"></span> Commentaire & TAG
                                 </a>
@@ -199,7 +200,7 @@ use App\Http\Controllers\NotificationsController;
 </div>
 
 <style>
-    .invoice{background-color: khaki;padding:1px;}
+    .invoice{background-color: #fad9da;padding:1px;}
     label{font-weight:bold;}
 </style>
  <script>
@@ -357,14 +358,18 @@ $urlapp='http://localhost/najdaapp';
         target.marker({
             //overlap:true,
             data : function(e, data) {
-                console.log(JSON.stringify(data))
+               // console.log(JSON.stringify(data))
             },
             debug : function(e, data) {
-                //	console.log(data)
+                	//console.log(JSON.stringify(data))
             }
         });
 
+         //  var data= target.marker(data);
+
+
     });
+
     $('#data').on('click',   function() {
 
         target.marker('data');

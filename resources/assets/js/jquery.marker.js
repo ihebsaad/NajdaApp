@@ -13,6 +13,8 @@
         var class_active = 'marker-active';
         var attr_unqName = 'data-unique-name';
         var attr_order = 'data-order';
+
+        var clickedmrktxt ='';
         
 	    $.widget('ds.marker', {
 	    	
@@ -23,7 +25,8 @@
 				overlap : false,
 				colorPicker : true,
 				style : {
-				   'background' : 'rgba(249, 255, 0, 0.2)',
+				   'background' : 'rgba(255, 249, 192, 1)',
+				   'font-weight' : 'bold'
 				},
 				activeRemove : true,
 				caseSensitive : true,
@@ -219,8 +222,17 @@
 				var marker_click = function marker_click(e) {
 					
 					e.stopPropagation();
+					var unqName = $(e.target).attr(attr_unqName);
+					var $_target = $('.' + class_default + '[' + attr_unqName + '="' + unqName + '"]');
+	        		var temp = {
+        				'text'	: $($_target).text(),
+	        		}
+	        		//data.push(temp);
+	        		clickedmrktxt = temp['text'];
+					alert(clickedmrktxt);
 					
-					_that._callback('click', e);
+					
+					/*_that._callback('click', e);
 					
 					if (_that.options.colorPicker == true) {
 						var unqName = $(e.target).attr(attr_unqName);
@@ -256,7 +268,7 @@
 							'top' : e.pageY,	
 							'left' : e.pageX
 						});
-					};
+					};*/
 				};
 				
 				_that.element.on('contextmenu', that_contextmenu);
