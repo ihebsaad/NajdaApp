@@ -304,7 +304,7 @@ console.log(parsed);*/
           onClick: function(){
          // window.focus();
          // this.close();
-              window.location ='https://najdaapp.enterpriseesolutions.com/entrees/boite';
+              window.location ='https://najdaapp.enterpriseesolutions.com/entrees/show/'+parsed['data']['entree']['id'];
 
           }
          
