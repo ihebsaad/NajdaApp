@@ -22,9 +22,15 @@
         }
     </style>
     <div class="uper">
-         <div class="portlet box grey">
-            <div class="modal-header">Prestataires</div>
+        <div class="portlet box grey">
+            <div class="row">
+                <div class="col-lg-8">Prestataires</div>
+                <div class="col-lg-4">
+                    <button id="addprest" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Créer un Prestataire</b></button>
+                </div>
+            </div>
         </div>
+
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
             <tr id="headtable">
@@ -73,6 +79,68 @@
             </tbody>
         </table>
     </div>
+
+
+
+
+
+
+
+
+    <?php use \App\Http\Controllers\UsersController;
+    $users=UsersController::ListeUsers();
+
+    $CurrentUser = auth()->user();
+
+    $iduser=$CurrentUser->id;
+
+    ?>
+    <!-- Modal -->
+    <div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Créer un nouveau Prestataire</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+                        <form method="post" >
+                            {{ csrf_field() }}
+
+                            <div class="form-group">
+                                <label for="type">Nom :</label>
+                                <select   id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
+                                    <option   value="Medical">Medical</option>
+                                    <option   value="Technique">Technique</option>
+                                    <option   value="Mixte">Mixte</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="type">Spécialité :</label>
+
+                            </div>
+
+
+                        </form>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" id="add" class="btn btn-primary">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
 @endsection
 
 
@@ -155,6 +223,44 @@
                         .draw();
                 });
             });
+
+
+
+
+
+
+            $('#add').click(function(){
+                var type_dossier = $('#type_dossier').val();
+                var type_affectation = $('#type_affectation').val();
+                var affecte = $('#affecte').val();
+                if ((type_dossier != '')&&(type_affectation != '')&&(affecte != ''))
+                {
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('prestataires.saving') }}",
+                        method:"POST",
+                        data:{type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
+                        success:function(data){
+
+                            //   alert('Added successfully');
+                            window.location =data;
+
+
+                        }
+                    });
+                }else{
+                    // alert('ERROR');
+                }
+            });
+
+
+
+
+
+
+
+
+
 
 
 

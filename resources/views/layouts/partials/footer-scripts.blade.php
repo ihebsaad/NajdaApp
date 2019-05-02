@@ -29,6 +29,10 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+<!----- Push ------->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/push.js/1.0.5/push.js"></script>
+
+
     <script type="text/javascript">
         $('.menu-icon').bind('click', function() {
           $(this).toggleClass('active');
@@ -281,16 +285,16 @@ console.log(parsed);*/
 
 
         // notification desktop
-
+/*
             Push.config({
-            serviceWorker: "{{ asset('public/js/serviceWorker.min.js') }}", // Sets a                      custom service worker script
+            serviceWorker: "{{--asset('public/js/serviceWorker.min.js') --}}", // Sets a                      custom service worker script
               fallback: function(payload) {
             // Code that executes on browsers with no notification support
              // "payload" is an object containing the 
             // title, body, tag, and icon of the notification 
              }
            });
-
+*/
          Push.create("Nouvelle "+parsed['data']['entree']['type'], {
 
           body: parsed['data']['entree']['sujet'],
