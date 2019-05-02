@@ -190,6 +190,61 @@ class PrestatairesController extends Controller
 
     }
 
+    public static function NomPrestatireById($id)
+    {
+        $prestataire = Prestataire::find($id);
+        if (isset($prestataire['name'])) {
+            return $prestataire['name'];
+        }else{return '';}
+
+    }
+
+    public static function SpecialitePrestatireById($id)
+    {
+        $prestataire = Prestataire::find($id);
+        if (isset($prestataire['specialite'])) {
+            return $prestataire['specialite'];
+        }else{return '';}
+
+    }
+
+    public static function MobilePrestatireById($id)
+    {
+        $prestataire = Prestataire::find($id);
+        if (isset($prestataire['phone_cell'])) {
+            return $prestataire['phone_cell'];
+        }else{return '';}
+
+    }
+
+    public static function TelPrestatireById($id)
+    {
+        $prestataire = Prestataire::find($id);
+        if (isset($prestataire['phone_home'])) {
+            return $prestataire['phone_home'];
+        }else{return '';}
+
+    }
+
+    public static function FaxPrestatireById($id)
+    {
+        $prestataire = Prestataire::find($id);
+        if (isset($prestataire['fax'])) {
+            return $prestataire['fax'];
+        }else{return '';}
+
+    }
+
+
+    public static function AdressePrestatireById($id)
+    {
+        $prestataire = Prestataire::find($id);
+        if (isset($prestataire['adresse'])) {
+            return $prestataire['adresse'];
+        }else{return '';}
+
+    }
+
     public  function removetypeprest(Request $request)
     {
         $prestataire= $request->get('prestataire');

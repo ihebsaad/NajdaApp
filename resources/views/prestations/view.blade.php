@@ -2,149 +2,78 @@
 
 @section('content')
 
-    Pas encore terminée  ******
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+
 
     <div class="form-group">
      {{ csrf_field() }}
 
              <form id="addpresform" novalidate="novalidate">
 
-                        <input id="idprestation" name="idprestation" type="hidden" value="68356">
-                        <div class="form-group">
-                            <label class="control-label">Type de prestation <span class="required" aria-required="true"> * </span></label>
-                            <div class="select2-container form-control" id="s2id_pres_type"><a href="javascript:void(0)" class="select2-choice" tabindex="-1">   <span class="select2-chosen" id="select2-chosen-10">Frais médicaux</span><abbr class="select2-search-choice-close"></abbr>   <span class="select2-arrow" role="presentation"><b role="presentation"></b></span></a><label for="s2id_autogen10" class="select2-offscreen"></label><input class="select2-focusser select2-offscreen" type="text" aria-haspopup="true" role="button" aria-labelledby="select2-chosen-10" id="s2id_autogen10"></div><select name="pres_type" id="pres_type" class="form-control select2-offscreen" data-required="1" required="" tabindex="-1" title="" aria-required="true">
-                                <option value="" selected=""></option>
-                                <option value="51">Abandon de véhicule</option>
-                                <option value="12">Accompagnement Médical</option>
-                                <option value="14">Accompagnement non-médical</option>
-                                <option value="13">Accompagnement Paramédical</option>
-                                <option value="16">Agence de voyage</option>
-                                <option value="4">Ambulances</option>
-                                <option value="70">Appartements en location</option>
-                                <option value="48">Apuration de passeport</option>
-                                <option value="38">Assistance au port</option>
-                                <option value="24">Assistance Douane</option>
-                                <option value="29">Autres</option>
-                                <option value="28">Avance de fonds</option>
-                                <option value="27">Avocat</option>
-                                <option value="19">Billetterie aérienne</option>
-                                <option value="20">Billetterie maritime</option>
-                                <option value="36">Cabinet médical consultation</option>
-                                <option value="63">Centre de Dialyse</option>
-                                <option value="6">Centre d’imagerie médicale</option>
-                                <option value="8">Clinique</option>
-                                <option value="3">Concessionnaire</option>
-                                <option value="46">Contrôle de facture de frais médicaux</option>
-                                <option value="26">Correspondant</option>
-                                <option value="33">Correspondant étranger</option>
-                                <option value="35">Couverture médicale</option>
-                                <option value="57">Couveuse</option>
-                                <option value="44">Dentiste</option>
-                                <option value="47">Dépannage</option>
-                                <option value="55">Déplacement</option>
-                                <option value="21">EVASAN</option>
-                                <option value="23">Expertise auto</option>
-                                <option value="56">Extracteur d'oxygène</option>
-                                <option value="34">Frais médicaux</option>
-                                <option value="22">Garages</option>
-                                <option value="30">Gardiennage</option>
-                                <option value="9">Hôpital</option>
-                                <option value="18">Hôtel</option>
-                                <option value="45">Infirmier (soins)</option>
-                                <option value="61">Kinésitherapeute/Physiothérapeute</option>
-                                <option value="7">Laboratoire d’analyses</option>
-                                <option value="17">Location de voitures</option>
-                                <option value="41">Lot ADL</option>
-                                <option value="42">Lot ADL renforcé</option>
-                                <option value="43">Lot complet evasan</option>
-                                <option value="53">Matériel médical - location</option>
-                                <option value="10">Matériel médical - vente</option>
-                                <option value="15">Médecin traitant</option>
-                                <option value="37">Médecin transporteur</option>
-                                <option value="67">Médecin transporteur pédiatrique</option>
-                                <option value="66">Médecin transporteur réa</option>
-                                <option value="60">Opticien</option>
-                                <option value="64">Pharmacie</option>
-                                <option value="32">Pompes funèbres</option>
-                                <option value="54">Remorquage et transfert de personnes</option>
-                                <option value="58">Respirateur spécial Elysée</option>
-                                <option value="65">Super poids lourd</option>
-                                <option value="2">Taxi</option>
-                                <option value="69">Traduction non médicale</option>
-                                <option value="52">Traduction rapport médical</option>
-                                <option value="40">Transitaire</option>
-                                <option value="71">Transport sous assistance</option>
-                                <option value="5">Visite médicale</option>
-                                <option value="68">Visite pédiatrique</option>
-                                <option value="39">VSL</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Gouvernorat</label>
-                            <div class="select2-container form-control" id="s2id_pres_city"><a href="javascript:void(0)" class="select2-choice" tabindex="-1">   <span class="select2-chosen" id="select2-chosen-11">Tous</span><abbr class="select2-search-choice-close"></abbr>   <span class="select2-arrow" role="presentation"><b role="presentation"></b></span></a><label for="s2id_autogen11" class="select2-offscreen"></label><input class="select2-focusser select2-offscreen" type="text" aria-haspopup="true" role="button" aria-labelledby="select2-chosen-11" id="s2id_autogen11"><div class="select2-drop select2-display-none select2-with-searchbox">   <div class="select2-search">       <label for="s2id_autogen11_search" class="select2-offscreen"></label>       <input type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="select2-input" role="combobox" aria-expanded="true" aria-autocomplete="list" aria-owns="select2-results-11" id="s2id_autogen11_search" placeholder="">   </div>   <ul class="select2-results" role="listbox" id="select2-results-11">   </ul></div></div><select name="pres_city" id="pres_city" class="form-control select2-offscreen" tabindex="-1" title="">
-                                <option value="0">Tous</option>
-                                <option value="2">ARIANA</option>
-                                <option value="3">MANOUBA</option>
-                                <option value="4">BEN AROUS</option>
-                                <option value="5">BIZERTE</option>
-                                <option value="6">NABEUL</option>
-                                <option value="7">ZAGHOUAN</option>
-                                <option value="8">SOUSSE</option>
-                                <option value="9">MONASTIR</option>
-                                <option value="10">MAHDIA</option>
-                                <option value="11">SFAX</option>
-                                <option value="12">GABES</option>
-                                <option value="13">GAFSA</option>
-                                <option value="14">TOZEUR</option>
-                                <option value="15">KEBILI</option>
-                                <option value="17">MEDENINE</option>
-                                <option value="18">KAIROUAN</option>
-                                <option value="20">KASSERINE</option>
-                                <option value="21">BEJA</option>
-                                <option value="22">JENDOUBA</option>
-                                <option value="23">LE KEF</option>
-                                <option value="24">SILIANA</option>
-                                <option value="25">SIDI BOUZID</option>
-                                <option value="26">TUNIS</option>
-                                <option value="27">TATAOUINE</option>
-                                <option value="28">International</option>
-                                <option value="32">Autoroute Sousse Sfax</option>
-                                <option value="33">Autoroute Sousse Tunis</option>
-                                <option value="34">Autoroute Tunis Bizerte</option>
-                                <option value="36">ALL</option>
-                                <option value="39">BEJTUN (AUT)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Prestataire</label>
-                            <input type="hidden" name="pres_id" id="pres_id" data-required="1" required="" aria-required="true" value="53">
-                            <input type="hidden" name="is_forced" id="is_forced" value="0">
-                            <div class="input-group" style="display:none" id="all_pres_div">
-                                <span class="input-group-addon btn green font-white" onclick="unForceSelectPres()">
-                                    Retour
-                                </span>
-                                <div class="select2-container form-control" id="s2id_all_pres_id"><a href="javascript:void(0)" class="select2-choice" tabindex="-1">   <span class="select2-chosen" id="select2-chosen-8">&nbsp;</span><abbr class="select2-search-choice-close"></abbr>   <span class="select2-arrow" role="presentation"><b role="presentation"></b></span></a><label for="s2id_autogen8" class="select2-offscreen"></label><input class="select2-focusser select2-offscreen" type="text" aria-haspopup="true" role="button" aria-labelledby="select2-chosen-8" id="s2id_autogen8"><div class="select2-drop select2-display-none select2-with-searchbox">   <div class="select2-search">       <label for="s2id_autogen8_search" class="select2-offscreen"></label>       <input type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="select2-input" role="combobox" aria-expanded="true" aria-autocomplete="list" aria-owns="select2-results-8" id="s2id_autogen8_search" placeholder="">   </div>   <ul class="select2-results" role="listbox" id="select2-results-8">   </ul></div></div><select class="form-control select2-offscreen" id="all_pres_id" tabindex="-1" title="">
-                                </select>
+                        <input id="idprestation" name="idprestation" type="hidden" value="{{$prestation->id}}">
+                 <div class="row" >
+                 <div class="form-group col-md-6  ">
+                     <label>Type de prestation</label><br>
+                     <?php use \App\Http\Controllers\PrestationsController;
+                      use \App\Http\Controllers\PrestatairesController;     ?>
+
+                     <h3><?php echo PrestationsController::TypePrestationById ($prestation->type_prestations_id); ?></h3>
+
+                  </div>
+
+                </div>
+
+                 <!--  <div class="form-group">
+                     <label class="control-label">Prestataire</label>
+                     <input type="hidden" name="pres_id" id="pres_id" data-required="1" required="" aria-required="true" value="53">
+                     <input type="hidden" name="is_forced" id="is_forced" value="0">
+                     <div class="input-group" style="display:none" id="all_pres_div">
+                         <span class="input-group-addon btn green font-white" onclick="unForceSelectPres()">
+                             Retour
+                         </span>
+                         <div class="select2-container form-control" id="s2id_all_pres_id"><a href="javascript:void(0)" class="select2-choice" tabindex="-1">   <span class="select2-chosen" id="select2-chosen-8">&nbsp;</span><abbr class="select2-search-choice-close"></abbr>   <span class="select2-arrow" role="presentation"><b role="presentation"></b></span></a><label for="s2id_autogen8" class="select2-offscreen"></label><input class="select2-focusser select2-offscreen" type="text" aria-haspopup="true" role="button" aria-labelledby="select2-chosen-8" id="s2id_autogen8"><div class="select2-drop select2-display-none select2-with-searchbox">   <div class="select2-search">       <label for="s2id_autogen8_search" class="select2-offscreen"></label>       <input type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="select2-input" role="combobox" aria-expanded="true" aria-autocomplete="list" aria-owns="select2-results-8" id="s2id_autogen8_search" placeholder="">   </div>   <ul class="select2-results" role="listbox" id="select2-results-8">   </ul></div></div><select class="form-control select2-offscreen" id="all_pres_id" tabindex="-1" title="">
+                         </select>
+                     </div>
+
+                     <div class="col-md-12" style="" id="autoPressDiv">
+                         <div class="well">
+                             <address id="autoPressFound">
+                                 <strong id="autoPresName">Clinique Cardio-Vasculaire</strong><br>
+                                 <i class="fa fa-envelope"></i> <span id="autoPresAddress"></span><br>
+                                 <i class="fa fa-phone"></i> <span id="autoPresPhone">71908000</span><br>
+                                 <i class="fa fa-mobile"></i> <span id="autoPresCell">50846277- 58573530  Lilia</span><br>
+                             </address>
+                             <address id="autoPressNotFound" style="display:none">
+                                 <strong>Aucun prestataire disponible. Cliquez pour recommencer.</strong>
+                             </address>
+                             <p>
+                                 <button type="button" class="btn btn-xs green" onclick="selectNewPres();"><i class="fa fa-refresh" style="cursor:pointer"></i> Sélectionner le suivant</button>
+                                 <button type="button" class="btn btn-xs yellow-lemon" onclick="forceSelectPres();"><i class="fa fa-check" style="cursor:pointer"></i> Sélection manuelle</button>
+                             </p>
+                         </div>
+                     </div>
+              --->
+                        <div class="prestataire form-group">
+                            <div class="row">
+                            <label>Prestataire</label><br>
+                            </div>
+                            <div class="row" style="margin-top:10px;margin-bottom: 20px">
+                                <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-user-md"></span> <?php echo PrestatairesController::NomPrestatireById($prestation->prestataire_id); ?></div>
+                                <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-ambulance"></span> <?php echo PrestatairesController::SpecialitePrestatireById($prestation->prestataire_id); ?></div>
+                                <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-map-marker"></span> <?php echo PrestatairesController::AdressePrestatireById($prestation->prestataire_id); ?></div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-phone"></span> <?php echo PrestatairesController::TelPrestatireById($prestation->prestataire_id); ?></div>
+                                <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-mobile"></span> <?php echo PrestatairesController::MobilePrestatireById($prestation->prestataire_id); ?></div>
+                                <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-fax"></span> <?php echo PrestatairesController::FaxPrestatireById($prestation->prestataire_id); ?></div>
+
                             </div>
 
 
-                            <div class="col-md-12" style="" id="autoPressDiv">
-                                <div class="well">
-                                    <address id="autoPressFound">
-                                        <strong id="autoPresName">Clinique Cardio-Vasculaire</strong><br>
-                                        <i class="fa fa-envelope"></i> <span id="autoPresAddress"></span><br>
-                                        <i class="fa fa-phone"></i> <span id="autoPresPhone">71908000</span><br>
-                                        <i class="fa fa-mobile"></i> <span id="autoPresCell">50846277- 58573530  Lilia</span><br>
-                                    </address>
-                                    <address id="autoPressNotFound" style="display:none">
-                                        <strong>Aucun prestataire disponible. Cliquez pour recommencer.</strong>
-                                    </address>
-                                    <p>
-                                        <button type="button" class="btn btn-xs green" onclick="selectNewPres();"><i class="fa fa-refresh" style="cursor:pointer"></i> Sélectionner le suivant</button>
-                                        <button type="button" class="btn btn-xs yellow-lemon" onclick="forceSelectPres();"><i class="fa fa-check" style="cursor:pointer"></i> Sélection manuelle</button>
-                                    </p>
-                                </div>
-                            </div>
                         </div>
                         <div class="form-group" id="authDiv" style="display:none">
                             <label class="control-label"><i class="icon-user-following"></i> Autorisé par</label>
@@ -159,22 +88,22 @@
                         </div -->
                         <div class="form-group">
                             <label class="control-label">Date de prestation <span class="required" aria-required="true"> * </span></label>
-                            <input class="form-control" name="pres_date" id="pres_date" data-required="1" required="" aria-required="true">
+                            <input value="{{$prestation->date_prestation}}" class="form-control datepicker-default" name="date_prestation" id="date_prestation" data-required="1" required="" aria-required="true">
                         </div>
                         <div class="form-group">
                             <label>Prix</label>
-                            <input class="form-control" name="pres_cost" id="pres_cost">
+                            <input onchange="changing(this)" value="{{$prestation->price}}" class="form-control" name="price" id="price">
                         </div>
                         <div class="form-group">
                             <label>Marge du prix</label>
-                            <input class="form-control" name="pres_margin" id="pres_margin">
+                            <input  onchange="changing(this)" value="{{$prestation->marge}}" class="form-control" name="marge" id="marge">
                         </div>
                         <div class="form-group">
                             <div class="checkbox-list">
                                 <label>
-                                    <div class="checker" id="uniform-pres_parv"><span><input type="checkbox" name="pres_parv" id="pres_parv" value="1"></span></div> Parvenue </label>
+                                    <div class="checker" id="annules"><span><input  onchange="changing(this)" id="annule"  <?php if ($prestation->annule ==1){echo 'checked';} ?> type="checkbox" name="pres_parv" value="1"  ></span></div> Parvenue </label>
                                 <label>
-                                    <div class="checker" id="uniform-pres_fact"><span><input type="checkbox" name="pres_fact" id="pres_fact" value="1"></span></div> Facturée au client </label>
+                                    <div class="checker" id="price_invoiceds"><span><input onchange="changing(this)"  id="price_invoiced"  <?php if ($prestation->price_invoiced ==1){echo 'checked';} ?>  type="checkbox" name="pres_fact"  value="1" ></span></div> Facturée au client </label>
                                 <label>
                                 </label></div>
                         </div>
@@ -1513,19 +1442,43 @@
 
 
 <script>
+    $(function () {
+
+        $('#gouvcouv').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+
+        });
+
+        $('#typeprest').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+
+        });
+
+    });
+
 
     function changing(elm) {
         var champ=elm.id;
 
         var val =document.getElementById(champ).value;
         //  var type = $('#type').val();
-        var prestataire = $('#idpres').val();
+        var prestation = $('#idprestation').val();
          //if ( (val != '')) {
         var _token = $('input[name="_token"]').val();
         $.ajax({
-            url: "{{ route('prestataires.updating') }}",
+            url: "{{ route('prestations.updating') }}",
             method: "POST",
-            data: {prestataire: prestataire , champ:champ ,val:val, _token: _token},
+            data: {prestation: prestation , champ:champ ,val:val, _token: _token},
             success: function (data) {
                 $('#'+champ).animate({
                     opacity: '0.3',
@@ -1533,35 +1486,6 @@
                 $('#'+champ).animate({
                     opacity: '1',
                 });
-
-            }
-        });
-        // } else {
-
-        // }
-    }
-
-    function disabling(elm) {
-        var champ=elm;
-
-        var val =1;
-         var prestataire = $('#idpres').val();
-        //if ( (val != '')) {
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url: "{{ route('prestataires.updating') }}",
-            method: "POST",
-            data: {prestataire: prestataire , champ:champ ,val:val, _token: _token},
-            success: function (data) {
-                if (elm=='annule'){
-                $('#nonactif').animate({
-                    opacity: '0.3',
-                });
-                $('#nonactif').animate({
-                    opacity: '1',
-                });
-                }
-
 
             }
         });

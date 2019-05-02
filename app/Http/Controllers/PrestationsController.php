@@ -45,9 +45,11 @@ class PrestationsController extends Controller
      */
     public function create()
     {
-        $dossiers = Dossier::all();
 
-        return view('prestations.create',['dossiers' => $dossiers]);
+        $typesprestations = TypePrestation::all();
+         $gouvernorats = DB::table('cities')->get();
+
+        return view('prestations.create',['typesprestations' => $typesprestations,'gouvernorats' => $gouvernorats]);
     }
 
     /**
@@ -90,11 +92,11 @@ class PrestationsController extends Controller
     public function updating(Request $request)
     {
 
-        $id= $request->get('prestations');
+        $id= $request->get('prestation');
         $champ= strval($request->get('champ'));
        $val= $request->get('val');
-      //  $dossier = Dossier::find($id);
-       // $dossier->$champ =   $val;
+
+
         Prestation::where('id', $id)->update(array($champ => $val));
 
       //  $dossier->save();
@@ -114,8 +116,14 @@ class PrestationsController extends Controller
         $dossiers = Dossier::all();
         $villes = DB::table('cities')->select('id', 'name')->get();
 
-        $prestations = Prestation::find($id);
-        return view('prestations.view',['dossiers' => $dossiers,'villes'=>$villes], compact('prestations'));
+        $prestation = Prestation::find($id);
+
+        $typesprestations = TypePrestation::all();
+        // $villes = DB::table('cities')->select('id', 'name')->get();
+        $villes = Ville::all();
+        $gouvernorats = DB::table('cities')->get();
+
+        return view('prestations.view',['typesprestations'=>$typesprestations,'gouvernorats' => $gouvernorats,'villes'=>$villes], compact('prestation'));
 
     }
 
@@ -130,6 +138,7 @@ class PrestationsController extends Controller
         //
         $prestations = Prestation::find($id);
         $dossiers = Dossier::all();
+
 
         return view('prestations.edit',['dossiers' => $dossiers], compact('prestations'));
     }
