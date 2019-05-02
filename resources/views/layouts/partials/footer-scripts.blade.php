@@ -285,16 +285,16 @@ console.log(parsed);*/
 
 
         // notification desktop
-/*
+
             Push.config({
-            serviceWorker: "{{--asset('public/js/serviceWorker.min.js') --}}", // Sets a                      custom service worker script
+            serviceWorker: "{{asset('public/js/serviceWorker.min.js') }}", // Sets a                      custom service worker script
               fallback: function(payload) {
             // Code that executes on browsers with no notification support
              // "payload" is an object containing the 
             // title, body, tag, and icon of the notification 
              }
            });
-*/
+
          Push.create("Nouvelle "+parsed['data']['entree']['type'], {
 
           body: parsed['data']['entree']['sujet'],
