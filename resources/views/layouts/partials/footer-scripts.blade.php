@@ -302,9 +302,11 @@ console.log(parsed);*/
           timeout: 5000,
        
           onClick: function(){
-          window.focus();
-          this.close();
-         }
+         // window.focus();
+         // this.close();
+              window.location ='https://najdaapp.enterpriseesolutions.com/entrees/boite';
+
+          }
          
         });
 
