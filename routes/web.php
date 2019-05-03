@@ -225,6 +225,7 @@ Route::get('errors', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@errors')
 
 /**** TAGS  ****/
 Route::post('/tags/addnew','TagsController@addnew')->name('tags.addnew');
+Route::post('/tags/deletetag','TagsController@deletetag')->name('tags.deletetag');
 
 /*** Generate doc ***/
 Route::get('docgen', function () {

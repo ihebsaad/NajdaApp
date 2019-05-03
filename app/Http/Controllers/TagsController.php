@@ -40,4 +40,26 @@ class TagsController extends Controller
         $tags = Tag::where('entree','=',$identree)->get();
         return $tags;
     }
+    public static function deletetag(Request $request)
+    {
+        // ajout dune tag pour une entree
+        //print_r($request);
+        if ($request->get('titre') != null)
+        {       
+                $identree = $request->get('entree');
+                $tagtitre = $request->get('titre');
+                $matchThese = ['entree' => $identree, 'titre' => $tagtitre];
+                $tagtodel = Tag::where($matchThese)->first();
+                
+                if ($tagtodel->delete())
+                { 
+        
+                    return url('/entrees/show/'.$identree);
+                   }
+        
+                 else {
+                     return url('home');
+                    }
+        }
+    }
 }

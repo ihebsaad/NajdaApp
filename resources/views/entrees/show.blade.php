@@ -85,7 +85,7 @@ use App\Http\Controllers\TagsController;
                                 <a id="commenttag" href="#" class="btn btn-info btn-sm btn-responsive" role="button" onclick="comment();"> 
                                   <span class="fa fa-fw fa-tags"></span> Commentaire & TAG
                                 </a>
-                                <a id="emailcontent" href="#" class="btn btn-primary btn-sm btn-responsive" style="display:none" role="button" onclick="comment();"> 
+                                <a id="emailcontent" href="#" class="btn btn-info btn-sm btn-responsive" style="display:none" role="button" onclick="comment();"> 
                                   <span class="fa fa-fw fa-arrow-left"></span> Retour
                                 </a>
                             </div>
@@ -233,6 +233,7 @@ use App\Http\Controllers\TagsController;
                                                     {{ csrf_field() }}
                                                     <input id="entreeid" type="hidden" name="entree" value="<?php echo $entree['id']; ?>" />
                                                     <input id="urladdtag" type="hidden" name="urladdtag" value="{{ route('tags.addnew') }}" />
+                                                    <input id="urldeletetag" type="hidden" name="urldeletetag" value="{{ route('tags.deletetag') }}" />
                                                   </ul>
                                                   <input type="hidden" name="country-blacklist" value="<?php echo $listtag; ?>" data-allowed-tags="[{&quot;id&quot;:&quot;GOP&quot;,&quot;name&quot;:&quot;Garantie de paiement&quot;},{&quot;id&quot;:&quot;FR&quot;,&quot;name&quot;:&quot;Franchise&quot;},{&quot;id&quot;:&quot;TT&quot;,&quot;name&quot;:&quot;tag de test&quot;}]">
                                                 </div>

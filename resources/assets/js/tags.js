@@ -16,6 +16,43 @@ var idTagger = function(selector) {
   }
 
   $idTagger.names.on('click', '.tag-editor-delete', function() { // delete entry
+    var urldeltag = $('input[name="urldeletetag"]').val();
+    var entree = $('input[name="entree"]').val();
+    var _token = $('input[name="_token"]').val();
+    var titre = "tag de test";
+    //alert($(this).parent().data('id'));
+    switch($(this).parent().data('id')) {
+      case "GOP":
+        titre = "Garantie de paiement";
+        break;
+      case "FR":
+        titre = "Franchise";
+        break;
+      case "TT":
+        titre = "tag de test";
+        break;
+      default:
+        titre = "tag de test";
+    }
+    if (entree != '')
+            {
+
+                $.ajax({
+                    url:urldeltag,
+                    method:"POST",
+                    data:{entree:entree,titre:titre, _token:_token},
+                    success:function(data){
+                        //alert('Added successfully');
+                    }
+                    ,
+                    fail: function(xhr, textStatus, errorThrown){
+                       alert('Erreur lors de suppression de tag');
+                    }
+                });
+            }
+    else{
+        alert('ERROR url tag delete');
+    }
     var $this = $(this).parent(),
         ids = $idTagger.field.val().split(','),
         idx = ids.indexOf($this.data('id'));
