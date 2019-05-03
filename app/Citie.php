@@ -6,7 +6,7 @@ class Citie extends Model
 
 {
 	
-  protected $fillable = [ 
+  protected $fillable = [
  'name'
      ];
  

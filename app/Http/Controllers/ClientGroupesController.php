@@ -72,18 +72,22 @@ class ClientGroupesController extends Controller
 
     public function saving(Request $request)
     {
-        if( ($request->get('nom'))!=null) {
+        if( ($request->get('label'))!=null) {
 
-            $clientgroupes = new ClientGroupe([
-                'nom' => $request->get('nom'),
-                'typepres' => $request->get('typepres'),
+            $clientgroupe = new ClientGroupe([
+                'label' => $request->get('label')
 
             ]);
-            $clientgroupes->save();
+            if ($clientgroupe->save())
+            { $id=$clientgroupe->id;
 
+                return url('/clientgroupes/view/'.$id)/*->with('success', 'Dossier Créé avec succès')*/;
+              }
+
+            else {
+                return url('/clientgroupes');
+            }
         }
-
-       // return redirect('/clientgroupes')->with('success', 'ajouté avec succès');
 
     }
 

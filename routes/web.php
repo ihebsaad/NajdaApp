@@ -114,6 +114,8 @@ Route::resource('/clients',  'ClientsController');
 Route::get('/clients', array('as' => 'clients','uses' => 'ClientsController@index'));
 Route::post('/clients/saving','ClientsController@saving')->name('clients.saving');
 Route::post('/clients/updating','ClientsController@updating')->name('clients.updating');
+Route::post('/clients/updatingnature','ClientsController@updatingnature')->name('clients.updatingnature');
+Route::post('/clients/removenature','ClientsController@removenature')->name('clients.removenature');
 Route::get('/clients/view/{id}', 'ClientsController@view');
 
 

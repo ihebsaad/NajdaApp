@@ -108,11 +108,21 @@
                                  <div class="col-md-6">
                                     <select class="itemName form-control col-lg-6" style="" name="itemName"  multiple  id="typeprest">
                                         <option></option>
-                                        @foreach($relations as $prest  )
+                                        <?php if ( count($relations) > 0 ) {?>
+
+                                    @foreach($relations as $prest  )
                                             @foreach($typesprestations as $aKey)
                                                 <option  @if($prest->type_prestation_id==$aKey->id)selected="selected"@endif    onclick="createtypeprest('tpr<?php echo $aKey->id; ?>')"  value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
                                             @endforeach
                                         @endforeach
+
+                                        <?php
+                                        } else { ?>
+                                        @foreach($typesprestations as $aKey)
+                                            <option    onclick="createtypeprest('tpr<?php echo $aKey->id; ?>')"  value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
+                                        @endforeach
+
+                                          <?php }  ?>
 
                                     </select>
 
@@ -127,12 +137,23 @@
                                     <label>Gouvernorat de couverture</label>
                                     <select class="form-control col-lg-6" style="" name="gouv"  multiple  id="gouvcouv">
                                         <option></option>
-                                        @foreach($relationsgv as $Rgv  )
+
+                                        <?php if ( count($relationsgv) > 0 ) {?>
+
+                                    @foreach($relationsgv as $Rgv  )
                                             @foreach($gouvernorats as $aKeyG)
                                                 <option  @if($Rgv->citie_id==$aKeyG->id)selected="selected"@endif    value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
                                             @endforeach
                                         @endforeach
 
+                                        <?php
+                                        } else { ?>
+
+                                        @foreach($gouvernorats as $aKeyG)
+                                            <option     value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
+                                        @endforeach
+
+                                       <?php }  ?>
                                     </select>
                                 </div>
                              </div>

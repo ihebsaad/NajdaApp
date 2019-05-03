@@ -24,8 +24,8 @@
     <div class="uper">
         <div class="portlet box grey">
             <div class="row">
-                <div class="col-lg-8">Prestataires</div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">Prestataires</div>
+                <div class="col-lg-6">
                     <button id="addprest" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Créer un Prestataire</b></button>
                 </div>
             </div>
@@ -85,8 +85,6 @@
 
 
 
-
-
     <?php use \App\Http\Controllers\UsersController;
     $users=UsersController::ListeUsers();
 
@@ -111,16 +109,13 @@
 
                             <div class="form-group">
                                 <label for="type">Nom :</label>
-                                <select   id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
-                                    <option   value="Medical">Medical</option>
-                                    <option   value="Technique">Technique</option>
-                                    <option   value="Mixte">Mixte</option>
-                                </select>
+                            <input class="form-control" type="text" id="nom" />
+
                             </div>
 
                             <div class="form-group">
                                 <label for="type">Spécialité :</label>
-
+                                <input class="form-control" type="text" id="specialite" />
                             </div>
 
 
@@ -226,20 +221,16 @@
 
 
 
-
-
-
             $('#add').click(function(){
-                var type_dossier = $('#type_dossier').val();
-                var type_affectation = $('#type_affectation').val();
-                var affecte = $('#affecte').val();
-                if ((type_dossier != '')&&(type_affectation != '')&&(affecte != ''))
+                var nom = $('#nom').val();
+                 var specialite = $('#specialite').val();
+                if ((nom != '')&&(specialite != '') )
                 {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
                         url:"{{ route('prestataires.saving') }}",
                         method:"POST",
-                        data:{type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
+                        data:{nom:nom,specialite:specialite, _token:_token},
                         success:function(data){
 
                             //   alert('Added successfully');
@@ -252,11 +243,6 @@
                     // alert('ERROR');
                 }
             });
-
-
-
-
-
 
 
 

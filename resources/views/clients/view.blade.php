@@ -1,7 +1,13 @@
 @extends('layouts.mainlayout')
 
 @section('content')
-<div class="form-group">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+
+
+    <div class="form-group">
      {{ csrf_field() }}
 
 <div class="modal-body">
@@ -26,7 +32,7 @@
                             <div class="col-md-3">
                                 <label for="annule" class="">
                                     <div class="radio" id="uniform-actif"><span  >
-                                                <input  onclick="changing(this)" type="radio" name="annule" id="annule" value="0"   <?php if ($client->annule ==0){echo 'checked';} ?>></span></div> Oui
+                                      <input  onclick="changing(this)" type="radio" name="annule" id="annule" value="0"   <?php if ($client->annule ==0){echo 'checked';} ?>></span></div> Oui
                                 </label>
                             </div>
                             <div class="col-md-3">
@@ -92,18 +98,19 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-10">
                     <div class="form-group">
                         <label>Nature</label>
-                        <div class="select2-container select2-container-multi form-control" id="s2id_nature"><ul class="select2-choices">  <li class="select2-search-field">    <label for="s2id_autogen1" class="select2-offscreen"></label>    <input type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="select2-input" id="s2id_autogen1" style="width: 20px;" placeholder="">  </li></ul><div class="select2-drop select2-drop-multi select2-display-none">   <ul class="select2-results">   <li class="select2-no-results">No matches found</li><li class="select2-no-results">No matches found</li></ul></div></div>
-                        <select class="form-control select2-offscreen" name="nature[]" id="nature" multiple="" tabindex="-1">
-                            <option value="1">Assistance / Assurance</option>
-                            <option value="2">Avionneur</option>
-                            <option value="3">Pétrolier / apparenté</option>
-                            <option value="4">Clinique</option>
-                            <option value="5">Agence de voyage / Hôtel</option>
+
+                        <select   class="form-control select2-offscreen" name="nature[]" id="nature" multiple="" tabindex="-1">
+                            <option <?php   if(strpos($client->nature ,'1')!==false) {echo 'selected="selected"';} ?> value="1">Assistance / Assurance</option>
+                            <option <?php   if(strpos($client->nature ,'2')!==false) {echo 'selected="selected"';} ?>value="2">Avionneur</option>
+                            <option <?php   if(strpos($client->nature ,'3')!==false) {echo 'selected="selected"';} ?>value="3">Pétrolier / apparenté</option>
+                            <option <?php   if(strpos($client->nature ,'4')!==false) {echo 'selected="selected"';} ?>value="4">Clinique</option>
+                            <option <?php   if(strpos($client->nature ,'5')!==false) {echo 'selected="selected"';} ?>value="5">Agence de voyage / Hôtel</option>
                         </select>
-                    </div>
+
+                </div>
                 </div>
             </div>
             <div class="row">
@@ -397,6 +404,109 @@
 
 <script>
 
+    $(function () {
+
+        $('#nature').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+
+        });
+
+
+        var $gouv = $('#nature');
+
+        var valArray = ($gouv.val()) ? $gouv.val() : [];
+
+        $gouv.change(function() {
+            var val = $(this).val(),
+                numVals = (val) ? val.length : 0,
+                changes;
+            if (numVals != valArray.length) {
+                var longerSet, shortSet;
+                (numVals > valArray.length) ? longerSet = val : longerSet = valArray;
+                (numVals > valArray.length) ? shortSet = valArray : shortSet = val;
+                //create array of values that changed - either added or removed
+                changes = $.grep(longerSet, function(n) {
+                    return $.inArray(n, shortSet) == -1;
+                });
+
+                UpdatingG(changes, (numVals > valArray.length) ? 'selected' : 'removed');
+
+            }else{
+                // if change event occurs and previous array length same as new value array : items are removed and added at same time
+                UpdatingG( valArray, 'removed');
+                UpdatingG( val, 'selected');
+            }
+            valArray = (val) ? val : [];
+        });
+
+
+
+        function UpdatingG(array, type) {
+            $.each(array, function(i, item) {
+
+                if (type=="selected"){
+
+
+                    var client = $('#idcl').val();
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                        url: "{{ route('clients.updatingnature') }}",
+                        method: "POST",
+                        data: {client: client ,champ:'nature', val:item ,  _token: _token},
+                        success: function () {
+                            $('.select2-selection').animate({
+                                opacity: '0.3',
+                            });
+                            $('.select2-selection').animate({
+                                opacity: '1',
+                            });
+
+                        }
+                    });
+
+                }
+
+                if (type=="removed"){
+
+                    var client = $('#idcl').val();
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                        url: "{{ route('clients.removenature') }}",
+                        method: "POST",
+                        data: {client: client ,champ:'nature', val:item ,  _token: _token},
+                        success: function () {
+                            $( ".select2-selection--multiple" ).hide( "slow", function() {
+                                // Animation complete.
+                            });
+                            $( ".select2-selection--multiple" ).show( "slow", function() {
+                                // Animation complete.
+                            });
+                        }
+                    });
+
+                }
+
+            });
+        } // updating
+
+
+
+
+
+
+
+
+
+
+    });
+
     function changing(elm) {
         var champ=elm.id;
 
@@ -420,6 +530,12 @@
         });
 
     }
+
+
+
+
+
+
 
     function disabling(elm) {
         var champ=elm;

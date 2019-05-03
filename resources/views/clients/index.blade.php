@@ -16,7 +16,12 @@
     </style>
     <div class="uper">
         <div class="portlet box grey">
-            <div class="modal-header">Clients</div>
+            <div class="row">
+                <div class="col-lg-8">Client</div>
+                <div class="col-lg-4">
+                    <button id="addclient" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter un Client</b></button>
+                </div>
+            </div>
         </div>
 
         <table class="table table-striped" id="mytable" style="width:100%">
@@ -72,6 +77,71 @@
             </tbody>
         </table>
     </div>
+
+
+
+
+
+
+
+    <?php use \App\Http\Controllers\UsersController;
+    $users=UsersController::ListeUsers();
+
+    $CurrentUser = auth()->user();
+
+    $iduser=$CurrentUser->id;
+
+    ?>
+    <!-- Modal -->
+    <div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ajouter un nouveau Client</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+                        <form method="post" >
+                            {{ csrf_field() }}
+
+                            <div class="form-group">
+                                <label for="type">Nom :</label>
+                                <input class="form-control" type="text" id="name" />
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="type">Pays :</label>
+                                <input class="form-control" type="text" id="pays" />
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" id="add" class="btn btn-primary">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @endsection
 
 
@@ -154,6 +224,38 @@
                         .draw();
                 });
             });
+
+
+
+
+
+
+            $('#add').click(function(){
+                var name = $('#name').val();
+                var pays = $('#pays').val();
+                if ((name != '')&&(pays != '') )
+                {
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('clients.saving') }}",
+                        method:"POST",
+                        data:{name:name,pays:pays, _token:_token},
+                        success:function(data){
+
+                            //   alert('Added successfully');
+                            window.location =data;
+
+
+                        }
+                    });
+                }else{
+                    // alert('ERROR');
+                }
+            });
+
+
+
+
 
 
 

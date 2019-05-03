@@ -70,20 +70,25 @@ class CitiesController extends Controller
 
     }
 
+
     public function saving(Request $request)
     {
-        if( ($request->get('nom'))!=null) {
+        if( ($request->get('name'))!=null) {
 
-            $cities = new Citie([
-                'nom' => $request->get('nom'),
-                'typepres' => $request->get('typepres'),
+            $citie = new Citie([
+                'name' => $request->get('name')
 
             ]);
-            $cities->save();
+            if ($citie->save())
+            { $id=$citie->id;
 
+                return url('/cities/view/'.$id)/*->with('success', 'Dossier Créé avec succès')*/;
+            }
+
+            else {
+                return url('/cities');
+            }
         }
-
-       // return redirect('/cities')->with('success', 'ajouté avec succès');
 
     }
 

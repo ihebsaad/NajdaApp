@@ -95,7 +95,7 @@ class EnvoyesController extends Controller
             'cc'=> trim ($request->get('cc')),
             'cci'=> trim ($request->get('cci')),
             'statut'=> 1,
-            'attachements'=> 0,
+            'nb_attach'=> 0,
             'par'=> $par,
             'type'=>'email'
         ]);
@@ -120,7 +120,7 @@ class EnvoyesController extends Controller
             'cc'=> trim ($request->get('cc')),
             'cci'=> trim ($request->get('cci')),
             'statut'=> 0,
-            'attachements'=> 0,
+            'nb_attach'=> 0,
             'par'=> $par,
             'type'=>'email'
         ]);

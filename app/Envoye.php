@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Envoye extends Model
 {
     //
-    protected $fillable = ['emetteur','sujet','contenu','destinataire','attachements' ,'par','statut','cc','cci','type' ];
-
+    protected $fillable = ['emetteur','sujet','contenu','destinataire','nb_attach' ,'par','statut','cc','cci','type','reception','boite' ];
+// boite = 0 reception , 1 = envoi
     public function attachements()
     {
         return $this->hasMany('App\Attachement');

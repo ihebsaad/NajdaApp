@@ -72,18 +72,22 @@ class TypePrestationsController extends Controller
 
     public function saving(Request $request)
     {
-        if( ($request->get('nom'))!=null) {
+        if( ($request->get('name'))!=null) {
 
-            $typeprestations = new TypePrestation([
-                'nom' => $request->get('nom'),
-                'typepres' => $request->get('typepres'),
+            $typeprestation = new TypePrestation([
+                'name' => $request->get('name')
 
             ]);
-            $typeprestations->save();
+            if ($typeprestation->save())
+            { $id=$typeprestation->id;
 
+                return url('/typeprestations/view/'.$id)/*->with('success', 'Dossier Créé avec succès')*/;
+            }
+
+            else {
+                return url('/typeprestations');
+            }
         }
-
-       // return redirect('/typeprestations')->with('success', 'ajouté avec succès');
 
     }
 

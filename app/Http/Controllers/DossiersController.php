@@ -11,6 +11,8 @@ use App\Client ;
 use DB;
 use App\TypeAction;
 use App\Prestation;
+use App\TypePrestation;
+use App\Citie;
 
 
 class DossiersController extends Controller
@@ -166,6 +168,10 @@ class DossiersController extends Controller
         $typesactions=TypeAction::get();
         $actions=Dossier::find($id)->activeActions;
 
+        $typesprestations = TypePrestation::all();
+ //        $villes = Ville::all();
+        $gouvernorats = DB::table('cities')->get();
+
         $dossier = Dossier::find($id);
         $clients = DB::table('clients')->select('id', 'name')->get();
 
@@ -175,6 +181,24 @@ class DossiersController extends Controller
         $entrees =   Entree::where('dossier', $ref)->get();
 
         $envoyes =   Envoye::where('dossier', $ref)->get();
+
+        $entrees1 =   Entree::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach')->orderBy('reception', 'desc')->get();
+      ///  $entrees1 =$entrees1->sortBy('reception');
+        $envoyes1 =   Envoye::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach')->orderBy('reception', 'desc')->get();
+      ///  $envoyes1 =$envoyes1->sortBy('reception');
+
+        $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());
+
+
+
+            // Sort the array
+        usort($communins, function  ($element1, $element2) {
+            $datetime1 = strtotime($element1['reception']);
+            $datetime2 = strtotime($element2['reception']);
+            return $datetime1 - $datetime2;
+        }
+
+            );
 
 
         $identr=array();
@@ -197,8 +221,8 @@ class DossiersController extends Controller
             //array_push($attachements,$attaches );
             array_push($idenv,$env->id );
 
-
         }
+
         $attachements= DB::table('attachements')
             ->whereIn('entree_id',$identr )
             ->orWhereIn('envoye_id',$idenv )
@@ -207,7 +231,7 @@ class DossiersController extends Controller
         //  $entrees =   Entree::all();
 
 
-        return view('dossiers.view',['attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions,'envoyes'=>$envoyes], compact('dossier'));
+        return view('dossiers.view',['entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions,'envoyes'=>$envoyes], compact('dossier'));
 
     }
 
@@ -308,6 +332,10 @@ class DossiersController extends Controller
         return $dossiers;
 
     }
+
+
+
+
 
 }
 

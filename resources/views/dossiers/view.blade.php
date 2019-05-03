@@ -1,6 +1,5 @@
 @extends('layouts.mainlayout')
 
-
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
 <link rel="stylesheet" href="{{ asset('public/css/timeline.css') }}" type="text/css">
 
@@ -1301,15 +1300,105 @@
 
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item active">
-                        <a class="nav-link active" id="rec-tab" data-toggle="tab" href="#rec" role="tab" aria-controls="rec" aria-selected="true"><i class="fas a-lg fa-level-down-alt"></i>  Réception</a>
+                        <a class="nav-link active" id="tous-tab" data-toggle="tab" href="#tous" role="tab" aria-controls="tous" aria-selected="false">Tous  <i class="fa  a-lg fa-exchange-alt "></i></a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link " id="rec-tab" data-toggle="tab" href="#rec" role="tab" aria-controls="rec" aria-selected="true"><i class="fas a-lg fa-level-down-alt"></i>  Réception</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="env-tab" data-toggle="tab" href="#env" role="tab" aria-controls="env" aria-selected="false">Envois  <i class="fas a-lg fa-level-up-alt"></i></a>
                     </li>
 
+
                 </ul>
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade  active in" id="rec" role="tabpanel" aria-labelledby="rec-tab">
+
+
+                    <div class="tab-pane fade  active in" id="tous" role="tabpanel" aria-labelledby="tous-tab">
+
+
+                        <br>
+
+                        <section id="timeline">
+
+
+
+                            <?php //echo 'Envoyes '.json_encode($envoyes) ?>
+
+                            @if($communins)
+                            @foreach($communins as $communin)
+
+                            <article>
+                                <div class="inner  <?php if ($communin['boite']==1){echo 'sent ';}?>">
+                                <span class="date">
+
+                                 <?php if($communin['type']=="email") {?>
+
+                                    <img  src="{{ asset('public/img/mail.png') }}"  width="60" height="60">
+
+                                    <?php }?><?php if($communin['type']=="sms") {?>
+                                    <img  src="{{ asset('public/img/sms.png') }}"  width="60" height="60">
+                                    <?php }?>
+                                    <?php if($communin['type']=="whatsapp") {?>
+                                    <img  src="{{ asset('public/img/whatsapp.png') }}"  width="60" height="60">
+
+                                    <?php }?>
+                                    <?php if($communin['type']=="tel") {?>
+                                    <img  src="{{ asset('public/img/phone.png') }}"  width="60" height="60">
+
+                                    <?php }?>
+
+                                    <?php if($communin['type']=="fax") {?>
+                                    <img  src="{{ asset('public/img/fax.png') }}"  width="60" height="60">
+                                    <?php }?>
+
+                                    <?php if($communin['type']=="rendu") {?>
+                                    <img  src="{{ asset('public/img/rendu.png') }}"  width="60" height="60">
+                                    <?php }?>
+                                </span>
+                                    <h2><?php echo $communin['sujet']; ?></h2><br>
+                                    <p style="text-align:center">
+
+                                        <?php if ($communin['boite']==0)
+                                        {  echo '<span style="font-size:16px"><B>Emetteur: </B>'. $communin['emetteur'].'</span>';
+                                        }
+                                        ?>
+
+
+                                        <span class="cd-date">
+                                                <i class="fa fa-fw fa-clock-o"></i>
+                                            <?php echo /* date('d/m/Y H:i',*/ ($communin['reception'])/*) */; ?><br>
+
+                                        </span>
+                                        <?php if($communin['type']=="email") {
+                                        ?> <span><i class="fa fa-fw fa-paperclip"></i>(<?php echo $communin['nb_attach'];?>) Attachements</span><br>
+                                        <?php }  ?>
+
+                                        <?php
+                                        if ($communin['boite']==1)
+                                        {
+                                        ?>
+                                        <a class="btn btn-md btn-success" href="{{action('EnvoyesController@view', $communin['id'])}}"> Voir les détails</a><br>
+
+                                        <?php
+                                        }
+                                        else { ?>
+                                        <a class="btn btn-md btn-success" href="{{action('EntreesController@show', $communin['id'])}}"> Voir les détails</a><br>
+
+                                        <?php } ?>
+
+                                    </p>
+                                </div>
+                            </article>
+
+                            @endforeach
+                            @endif
+
+                        </section>
+                    </div>
+
+
+                    <div class="tab-pane fade " id="rec" role="tabpanel" aria-labelledby="rec-tab">
 
 
                         <section id="cd-timeline" class="cd-container">
@@ -1371,6 +1460,7 @@
                     <div class="tab-pane fade" id="env" role="tabpanel" aria-labelledby="env-tab">
 
                         <br>
+
                         <section id="cd-timeline2" class="cd-container">
 
                             @if($envoyes)
@@ -1424,11 +1514,12 @@
                             @endif
 
                         </section>
+
                     </div>
 
-                </div>
 
 
+                    </div>
 
 
             </div><!-- Tab2 : Timeline-->
@@ -1436,6 +1527,7 @@
 
             <div id="tab3" class="tab-pane fade">
                 <?php use \App\Http\Controllers\PrestationsController;     ?>
+                    <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addpres" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une Prestation</b></button>
 
                 <table class="table table-striped" id="mytable" style="width:100%;margin-top:15px;">
                     <thead>
@@ -1546,15 +1638,160 @@
 
 
 
+
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+
+<?php use \App\Http\Controllers\UsersController;
+$users=UsersController::ListeUsers();
+
+$CurrentUser = auth()->user();
+
+$iduser=$CurrentUser->id;
+
+?>
+<!-- Modal -->
+<div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ajouter un nouveau Client</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+
+
+                    <div class="form-group">
+                        {{ csrf_field() }}
+
+                        <form id="addpresform" novalidate="novalidate">
+
+                            <input id="idprestation" name="idprestation" type="hidden" value="68356">
+                            <div class="form-group " >
+                                <label>Type de prestations</label>
+                                <div class=" row  ">
+                                    <select class="itemName form-control col-lg-12  " style="width:400px" name="itemName"    id="typeprest">
+                                        <option></option>
+                                        @foreach($typesprestations as $aKey)
+                                            <option     value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
+                                        @endforeach
+
+                                    </select>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group ">
+                                    <label>Gouvernorat de couverture</label>
+                                    <div class="row">
+                                    <select class="form-control  col-lg-12 " style="width:400px" name="gouv"    id="gouvcouv">
+                                        <option></option>
+                                        @foreach($gouvernorats as $aKeyG)
+                                            <option      value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
+                                        @endforeach
+
+                                    </select>
+                                    </div>
+                                </div>
+                            <div class="form-group">
+                                <label class="control-label">Prestataire</label>
+                                <input type="hidden" name="pres_id" id="pres_id" data-required="1" required="" aria-required="true" value="53">
+                                <input type="hidden" name="is_forced" id="is_forced" value="0">
+                                <div class="input-group" style="display:none" id="all_pres_div">
+                                <span class="input-group-addon btn green font-white" onclick="unForceSelectPres()">
+                                    Retour
+                                </span>
+                                    <div class="select2-container form-control" id="s2id_all_pres_id"><a href="javascript:void(0)" class="select2-choice" tabindex="-1">   <span class="select2-chosen" id="select2-chosen-8">&nbsp;</span><abbr class="select2-search-choice-close"></abbr>   <span class="select2-arrow" role="presentation"><b role="presentation"></b></span></a><label for="s2id_autogen8" class="select2-offscreen"></label><input class="select2-focusser select2-offscreen" type="text" aria-haspopup="true" role="button" aria-labelledby="select2-chosen-8" id="s2id_autogen8"><div class="select2-drop select2-display-none select2-with-searchbox">   <div class="select2-search">       <label for="s2id_autogen8_search" class="select2-offscreen"></label>       <input type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="select2-input" role="combobox" aria-expanded="true" aria-autocomplete="list" aria-owns="select2-results-8" id="s2id_autogen8_search" placeholder="">   </div>   <ul class="select2-results" role="listbox" id="select2-results-8">   </ul></div></div><select class="form-control select2-offscreen" id="all_pres_id" tabindex="-1" title="">
+                                    </select>
+                                </div>
+
+
+                                <div class="col-md-12" style="" id="autoPressDiv">
+                                    <div class="well">
+                                        <address id="autoPressFound">
+                                            <strong id="autoPresName">Clinique Cardio-Vasculaire</strong><br>
+                                            <i class="fa fa-envelope"></i> <span id="autoPresAddress"></span><br>
+                                            <i class="fa fa-phone"></i> <span id="autoPresPhone">71908000</span><br>
+                                            <i class="fa fa-mobile"></i> <span id="autoPresCell">50846277- 58573530  Lilia</span><br>
+                                        </address>
+                                        <address id="autoPressNotFound" style="display:none">
+                                            <strong>Aucun prestataire disponible. Cliquez pour recommencer.</strong>
+                                        </address>
+                                        <p>
+                                            <button type="button" class="btn btn-xs green" onclick="selectNewPres();"><i class="fa fa-refresh" style="cursor:pointer"></i> Sélectionner le suivant</button>
+                                            <button type="button" class="btn btn-xs yellow-lemon" onclick="forceSelectPres();"><i class="fa fa-check" style="cursor:pointer"></i> Sélection manuelle</button>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                                 <input type="hidden" id="par" value="<?php echo $iduser;?>">
+
+
+                            <div class="form-group">
+                                <label class="control-label">Date de prestation <span class="required" aria-required="true"> * </span></label>
+                                <input value='<?php echo date('d/m/Y'); ?>' class="form-control datepicker-default" name="pres_date" id="pres_date" data-required="1" required="" aria-required="true">
+                            </div>
+
+                        </form>
+                    </div>
+
+
+
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" id="add" class="btn btn-primary">Ajouter</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 
 <script>
+    /*
+    $(function () {
 
+    $('.itemName').select2({
+        filter: true,
+        language: {
+            noResults: function () {
+                return 'Pas de résultats';
+            }
+        }
 
+    });
 
+    $('#gouvcouv').select2({
+        filter: true,
+        language: {
+            noResults: function () {
+                return 'Pas de résultats';
+            }
+        }
+
+    });
+
+    }); // $ function
+
+*/
     function changing(elm) {
         var champ=elm.id;
 
@@ -1624,13 +1861,160 @@
 </script>
 
 
+<style>
+
+    section#timeline {
+        width: 80%;
+        margin: 20px auto;
+        position: relative;
+    }
+    section#timeline:before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 50%;
+        top: 0;
+        margin: 0 0 0 -1px;
+        width: 2px;
+        height: 100%;
+        background: rgba(255,255,255,0.2);
+    }
+    section#timeline article {
+        width: 100%;
+        margin: 0 0 20px 0;
+        position: relative;
+    }
+    section#timeline article:after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+    section#timeline article div.inner {
+        width: 40%;
+        float: left;
+        margin: 5px 0 0 0;
+        border-radius: 6px;
+    }
+    section#timeline article div.inner span.date {
+        display: block;
+        width: 60px;
+        height: 50px;
+        padding: 5px 0;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        margin: 0 0 0 -32px;
+        border-radius: 100%;
+        font-size: 12px;
+        font-weight: 900;
+        text-transform: uppercase;
+        background: white;
+       /* background: #25303B;
+        color: rgba(255,255,255,0.5);
+        border: 2px solid rgba(255,255,255,0.2);
+        box-shadow: 0 0 0 7px #25303B;*/
+    }
+    section#timeline article div.inner span.date span {
+        display: block;
+        text-align: center;
+    }
+    section#timeline article div.inner span.date span.day {
+        font-size: 10px;
+    }
+    section#timeline article div.inner span.date span.month {
+        font-size: 18px;
+    }
+    section#timeline article div.inner span.date span.year {
+        font-size: 10px;
+    }
+    section#timeline article div.inner h2 {
+        padding: 15px;
+        margin: 0;
+        color: #fff;
+        font-size: 20px;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+        border-radius: 6px 6px 0 0;
+        position: relative;
+    }
+    section#timeline article div.inner h2:after {
+        content: '';
+        position: absolute;
+        top: 20px;
+        right: -5px;
+        width: 10px;
+        height: 10px;
+        -webkit-transform: rotate(-45deg);
+    }
+    section#timeline article div.inner p {
+        padding: 15px;
+        margin: 0;
+        font-size: 14px;
+        background: #fff;
+        color: #656565;
+        border-radius: 0 0 6px 6px;
+    }
 
 
+    section#timeline article:nth-child(2n+2) div.inner {
+        /* float: right;*/
+    }
+    section#timeline article:nth-child(2n+2) div.inner h2:after {
+        /*left: -5px;*/
+    }
+
+
+    section#timeline  article div.inner.sent {
+        float: right;
+    }
+    section#timeline article div.inner.sent h2:after {
+        left: -5px;
+    }
+
+
+    section#timeline article  div.inner h2 {
+        background: #e74c3c;
+    }
+    section#timeline article  div.inner h2:after {
+        background: #e74c3c;
+    }
+
+
+    section#timeline article:nth-child(1) div.inner h2 {
+        background: #e74c3c;
+    }
+    section#timeline article:nth-child(1) div.inner h2:after {
+        background: #e74c3c;
+    }
+    section#timeline article:nth-child(2) div.inner h2 {
+        background: #2ecc71;
+    }
+    section#timeline article:nth-child(2) div.inner h2:after {
+        background: #2ecc71;
+    }
+    section#timeline article:nth-child(3) div.inner h2 {
+        background: #e67e22;
+    }
+    section#timeline article:nth-child(3) div.inner h2:after {
+        background: #e67e22;
+    }
+    section#timeline article:nth-child(4) div.inner h2 {
+        background: #1abc9c;
+    }
+    section#timeline article:nth-child(4) div.inner h2:after {
+        background: #1abc9c;
+    }
+    section#timeline article:nth-child(5) div.inner h2 {
+        background: #9b59b6;
+    }
+    section#timeline article:nth-child(5) div.inner h2:after {
+        background: #9b59b6;
+    }
+</style>
 
 @section('footer_scripts')
 
-    <script src="{{  URL::asset('public/js/vertical-timeline/main.js') }}" type="text/javascript"></script>
-    <script src="{{  URL::asset('public/js/vertical-timeline/modernizr.js') }}" type="text/javascript"></script>
+
 
 @stop
 

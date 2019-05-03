@@ -72,15 +72,24 @@ class ClientsController extends Controller
 
     public function saving(Request $request)
     {
-        if( ($request->get('nom'))!=null) {
+        if( ($request->get('name'))!=null) {
 
             $client = new Client([
-                'nom' => $request->get('nom'),
-                'typepres' => $request->get('typepres'),
+                'name' => $request->get('name'),
+                'pays' => $request->get('pays'),
 
             ]);
-            $client->save();
+            if ($client->save())
+            { $id=$client->id;
 
+                return url('/clients/view/'.$id)/*->with('success', 'Dossier Créé avec succès')*/;
+                // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
+                //  return  $iddoss;
+            }
+
+            else {
+                return url('/clients');
+            }
         }
 
        // return redirect('/clients')->with('success', 'ajouté avec succès');
@@ -98,6 +107,42 @@ class ClientsController extends Controller
         Client::where('id', $id)->update(array($champ => $val));
 
 
+
+    }
+
+    public function updatingnature(Request $request)
+    {
+
+        $id= $request->get('client');
+        $champ= strval($request->get('champ'));
+        $val= $request->get('val');
+
+
+        $nature=$this->NatureById($id);
+        if ($nature !=''){
+            Client::where('id', $id)->update(array($champ => $nature.$val));
+        }
+        else{
+            Client::where('id', $id)->update(array($champ => $val));
+        }
+
+
+    }
+
+
+    public function removenature(Request $request)
+    {
+
+        $id= $request->get('client');
+        $champ= strval($request->get('champ'));
+        $val= $request->get('val');
+
+        $nature=$this->NatureById($id);
+        $newnature=str_replace($val,"",$nature);
+        $newnature=str_replace(',,',",",$newnature);
+       // Client::where('id', $id)->update(array('nature' => $newnature));
+
+        Client::where('id', $id)->update(array('nature'=> trim($newnature,',')));
 
     }
 
@@ -205,6 +250,15 @@ class ClientsController extends Controller
 
     }
 
+
+    public static function NatureById($id)
+    {
+        $client = Client::find($id);
+        if (isset($client['nature'])) {
+            return $client['nature'].',';
+        }else{return '';}
+
+    }
 
 
 

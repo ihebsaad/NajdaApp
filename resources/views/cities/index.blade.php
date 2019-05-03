@@ -16,6 +16,16 @@
         .no-sort input{display:none;}
     </style>
     <div class="uper">
+
+        <div class="portlet box grey">
+            <div class="row">
+                <div class="col-lg-6">Gouvernorats</div>
+                <div class="col-lg-6">
+                    <button id="addgr" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter un Gouvernorat</b></button>
+                </div>
+            </div>
+        </div>
+
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
             <tr id="headtable">
@@ -43,6 +53,53 @@
             </tbody>
         </table>
     </div>
+
+
+
+
+
+    <?php use \App\Http\Controllers\UsersController;
+    $users=UsersController::ListeUsers();
+
+    $CurrentUser = auth()->user();
+
+    $iduser=$CurrentUser->id;
+
+    ?>
+    <!-- Modal -->
+    <div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ajouter un Gouvernorat</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+                        <form method="post" >
+                            {{ csrf_field() }}
+
+                            <div class="form-group">
+                                <label for="type">Nom :</label>
+                                <input class="form-control" type="text" id="name" />
+
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" id="add" class="btn btn-primary">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 @endsection
 
 
@@ -126,6 +183,30 @@
                 });
             });
 
+
+
+
+            $('#add').click(function(){
+                var name = $('#name').val();
+                if ((name != '')  )
+                {
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('cities.saving') }}",
+                        method:"POST",
+                        data:{name:name, _token:_token},
+                        success:function(data){
+
+                            //   alert('Added successfully');
+                            window.location =data;
+
+
+                        }
+                    });
+                }else{
+                    // alert('ERROR');
+                }
+            });
 
 
         });

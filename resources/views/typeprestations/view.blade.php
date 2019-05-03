@@ -13,7 +13,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Nom *</label>
-                                <input onchange="changing(this)" type="text" class="form-control input" name="name" id="name"  value={{ $typeprestation->name }}>
+                                <input onchange="changing(this)" type="text" class="form-control input" name="name" id="name"  value="{{ $typeprestation->name }}">
                             </div>
                         </div>
 
@@ -21,7 +21,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Type</label>
-                                <select onchange="changing(this)" id="type" name="type" class="form-control"   value={{ $typeprestation->type }}>
+                                <select onchange="changing(this)" id="type" name="type" class="form-control"   value="{{ $typeprestation->type }}">
 
                                     <option <?php if ($typeprestation->type =='0'){echo 'selected="selected"';} ?> value="0">Indéterminé</option>
                                     <option  <?php if ($typeprestation->type =='1'){echo 'selected="selected"';} ?>value="1">Technique</option>
@@ -32,7 +32,7 @@
                         </div>
                     </div>
 
-                    <input type="hidden" id="idtp" class="form-control"   value={{ $typeprestation->id }}>
+                    <input type="hidden" id="idtp" class="form-control"   value="{{ $typeprestation->id }}">
              </div>
 
     </form>

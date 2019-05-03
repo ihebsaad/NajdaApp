@@ -76,14 +76,22 @@ class PrestatairesController extends Controller
 
             $prestataire = new Prestataire([
                 'nom' => $request->get('nom'),
-                'typepres' => $request->get('typepres'),
+                'specialite' => $request->get('specialite'),
 
             ]);
-            $prestataire->save();
+
+            if ($prestataire->save())
+            { $id=$prestataire->id;
+
+                return url('/prestataires/view/'.$id)/*->with('success', ' Créé avec succès')*/;
+             }
+
+            else {
+                return url('/prestataires');
+            }
 
         }
 
-       // return redirect('/prestataires')->with('success', 'ajouté avec succès');
 
     }
 
