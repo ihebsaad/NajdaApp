@@ -4,6 +4,7 @@
     @parent
 @stop
 <?php
+use App\Tag ;
 use App\Dossier ;
 use App\Notification ;
 $dossiers = Dossier::get();
@@ -11,6 +12,7 @@ $dossiers = Dossier::get();
 use App\Attachement ;
 use App\Http\Controllers\AttachementsController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\TagsController;
 ?>
 {{-- page level styles --}}
 @section('header_styles')
@@ -80,8 +82,11 @@ use App\Http\Controllers\NotificationsController;
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6" style="padding-right: 0px;">
                             <div class="pull-right" style="margin-top: 0px;z-index: 10">
-                                <a href="#" class="btn btn-info btn-sm btn-responsive" role="button" onclick="comment();"> 
+                                <a id="commenttag" href="#" class="btn btn-info btn-sm btn-responsive" role="button" onclick="comment();"> 
                                   <span class="fa fa-fw fa-tags"></span> Commentaire & TAG
+                                </a>
+                                <a id="emailcontent" href="#" class="btn btn-primary btn-sm btn-responsive" style="display:none" role="button" onclick="comment();"> 
+                                  <span class="fa fa-fw fa-arrow-left"></span> Retour
                                 </a>
                             </div>
                         </div>
@@ -192,16 +197,44 @@ use App\Http\Controllers\NotificationsController;
                 <div class="row"style="padding:10px;padding-top:20px;background: #eee">
                     <div class="form-group">
                         <form method="post">
-                                            <div class="col-md-6">
+                                            <div class="col-md-10">
                                                 <textarea id="message" name="message" rows="7" class="form-control resize_vertical" placeholder="Entrez votre commentaire"></textarea>
+                                            </br><label style="padding-bottom: 10px;color: #8a8a8a;">Les TAGS:</label></br>
                                                 <div id="taglist" class="form-token-tags">
                                                   <ul class="tag-editor">
-                                                    <!--<li data-id="TN"><div class="tag-editor-spacer">&nbsp;</div><div class="tag-editor-tag">Tunisia</div><div class="tag-editor-delete"><i></i></div></li>-->
+                                                   <?php 
+                                                        // affichage des tags relié au notification courante
+                                                        $tags=TagsController::entreetags($entree['id']);
+                                                        if (! empty($tags))
+                                                        {   
+                                                            $abbrevtag = "";
+                                                            $listtag="";
+                                                            foreach ($tags as $tag) {
+                                                                switch ($tag['titre']) {
+                                                                        case "Garantie de paiement":
+                                                                            $abbrevtag = "GOP";
+                                                                            $listtag .=",GOP";
+                                                                            break;
+                                                                        case "Franchise":
+                                                                            $abbrevtag = "FR";
+                                                                            $listtag .=",FR";
+                                                                            break;
+                                                                        case "tag de test":
+                                                                            $abbrevtag = "TT";
+                                                                            $listtag .=",TT";
+                                                                            break;
+                                                                    }
+                                                                echo '<li data-id="'.$abbrevtag.'"><div class="tag-editor-spacer">&nbsp;</div><div class="tag-editor-tag">'.$tag["titre"].'</div><div class="tag-editor-delete"><i></i></div></li>';
+                                                                                                           
+                                                            }
+                                                        }
+                                                                    
+                                                           ?>
                                                     {{ csrf_field() }}
                                                     <input id="entreeid" type="hidden" name="entree" value="<?php echo $entree['id']; ?>" />
                                                     <input id="urladdtag" type="hidden" name="urladdtag" value="{{ route('tags.addnew') }}" />
                                                   </ul>
-                                                  <input type="hidden" name="country-blacklist" value="" data-allowed-tags="[{&quot;id&quot;:&quot;GOP&quot;,&quot;name&quot;:&quot;Garantie de paiement&quot;},{&quot;id&quot;:&quot;FR&quot;,&quot;name&quot;:&quot;Franchise&quot;},{&quot;id&quot;:&quot;TT&quot;,&quot;name&quot;:&quot;tag de test&quot;}]">
+                                                  <input type="hidden" name="country-blacklist" value="<?php echo $listtag; ?>" data-allowed-tags="[{&quot;id&quot;:&quot;GOP&quot;,&quot;name&quot;:&quot;Garantie de paiement&quot;},{&quot;id&quot;:&quot;FR&quot;,&quot;name&quot;:&quot;Franchise&quot;},{&quot;id&quot;:&quot;TT&quot;,&quot;name&quot;:&quot;tag de test&quot;}]">
                                                 </div>
                                             </div>
                                         </form>
@@ -223,12 +256,18 @@ use App\Http\Controllers\NotificationsController;
                 $("#emailnpj").hide();
                 $("#emailcomment").show();
 
+                $("#commenttag").hide();
+                $("#emailcontent").show();
+
             }
         else
         {
             
             $("#emailcomment").hide();
             $("#emailnpj").show();
+
+            $("#commenttag").show();
+            $("#emailcontent").hide();
         }
       }
     </script>

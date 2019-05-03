@@ -4,7 +4,8 @@
   background-color: #ffd051!important;color:red;
 }
 </style>
-<?php if (isset( $dossier)){$currentdoss=$dossier->id ;
+<?php if (isset( $dossier)){
+  $currentdoss=$dossier->id ;
 }else{$currentdoss=0;}
 
   use \App\Http\Controllers\DossiersController;
