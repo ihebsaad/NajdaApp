@@ -15,6 +15,7 @@ use App\Http\Controllers\NotificationsController;
 {{-- page level styles --}}
 @section('header_styles')
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/custom_css/layout_responsive.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('resources/assets/css/tags.css') }}">
 @stop
 @section('content')
 
@@ -190,9 +191,20 @@ use App\Http\Controllers\NotificationsController;
             <div class="panel-body" id="emailcomment" style="display: none">
                 <div class="row"style="padding:10px;padding-top:20px;background: #eee">
                     <div class="form-group">
+                        <form method="post">
                                             <div class="col-md-6">
                                                 <textarea id="message" name="message" rows="7" class="form-control resize_vertical" placeholder="Entrez votre commentaire"></textarea>
+                                                <div id="taglist" class="form-token-tags">
+                                                  <ul class="tag-editor">
+                                                    <!--<li data-id="TN"><div class="tag-editor-spacer">&nbsp;</div><div class="tag-editor-tag">Tunisia</div><div class="tag-editor-delete"><i></i></div></li>-->
+                                                    {{ csrf_field() }}
+                                                    <input id="entreeid" type="hidden" name="entree" value="<?php echo $entree['id']; ?>" />
+                                                    <input id="urladdtag" type="hidden" name="urladdtag" value="{{ route('tags.addnew') }}" />
+                                                  </ul>
+                                                  <input type="hidden" name="country-blacklist" value="" data-allowed-tags="[{&quot;id&quot;:&quot;GOP&quot;,&quot;name&quot;:&quot;Garantie de paiement&quot;},{&quot;id&quot;:&quot;FR&quot;,&quot;name&quot;:&quot;Franchise&quot;},{&quot;id&quot;:&quot;TT&quot;,&quot;name&quot;:&quot;tag de test&quot;}]">
+                                                </div>
                                             </div>
+                                        </form>
                     </div>
                 </div>
             </div>
@@ -304,6 +316,7 @@ $users=UsersController::ListeUsers();
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="{{ URL::asset('resources/assets/js/spectrum.js') }}"></script>
 <script src="{{ URL::asset('resources/assets/js/jquery.marker.js') }}"></script>
+<script src="{{ URL::asset('resources/assets/js/tags.js') }}"></script>
 
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/spectrum.css') }}">
 <?php

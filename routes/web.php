@@ -223,6 +223,9 @@ Route::post('/edit/{id}','UsersController@update');
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs');;
 Route::get('errors', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@errors');
 
+/**** TAGS  ****/
+Route::post('/tags/addnew','TagsController@addnew')->name('tags.addnew');
+
 /*** Generate doc ***/
 Route::get('docgen', function () {
 		//$file = public_path('rtf_templates\PC_Dedouannement.rtf');
