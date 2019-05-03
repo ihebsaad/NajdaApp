@@ -55,7 +55,7 @@
         <div class="col-lg-9 ">
 
 <form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data"   >
-    <input id="dossier" type="email" class="form-control" name="dossier"  value="{{$dossier}}" />
+    <input id="dossier" type="email" class="form-control" name="dossier"  value="{{$doss}}" />
 
     <div class="form-group">
         {{ csrf_field() }}
