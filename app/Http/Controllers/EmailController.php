@@ -523,10 +523,11 @@ class EmailController extends Controller
         $sujet = $request->get('sujet');
         $contenu = $request->get('contenu');
         $files = $request->file('files');
+        $attachs = $request->file('attachs');
        $tot= count($_FILES['files']['name']);
 
 
-     if (   Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci) {
+     if (   Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs) {
             $message
                 ->to($to)
               ->cc($cc  ?: [])
@@ -536,14 +537,31 @@ class EmailController extends Controller
          $count=0;
 
          if(isset($files )) {
-             foreach($files as $file) {$count++;
+             foreach($files as $file) {
+                 $count++;
                  $message->attach($file->getRealPath(), array(
                          'as' => $file->getClientOriginalName(), // If you want you can chnage original name to custom name
                          'mime' => $file->getMimeType())
                  );
+
+           // save external files here
+
              }
          }
+/// attach here
+         if(isset($attachs )) {
+             foreach($attachs as $attach) {
+                 $path=$this->PathattachById($attach);
+                  $fullpath=storage_path().$path;
+                 $message->attach($fullpath->getRealPath(), array(
+                         'as' => $fullpath->getClientOriginalName(), // If you want you can chnage original name to custom name
+                         'mime' => $fullpath->getMimeType())
+                 );
 
+                 // save   files here
+
+             }
+         }
 
 
      $urlapp=env('APP_URL');
@@ -573,6 +591,7 @@ class EmailController extends Controller
                'cci'=> $cci,
                'statut'=> 1,
                'type'=> 'email',
+              // 'reception'=> date('d/m/Y H:i:s'),
 
            ]);
 
@@ -813,6 +832,15 @@ class EmailController extends Controller
 
         return view('emails.whatsapp', ['dossiers' => $dossiers]);
 
+    }
+
+    public static function PathattachById($id)
+    {
+        $attach = Attachement::find($id);
+
+        if (isset($attach['path'])) {
+            return $attach['path'];
+        }else{return '';}
     }
 
 

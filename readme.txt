@@ -1,6 +1,6 @@
 #####    Instructions pour l'installaton de l'application dans un nouveau serveur:
 
-# installation du module n�cessaire pour le package PdftoText
+# installation du module nécessaire pour le package PdftoText
 apt-get install poppler-utils
 
 # log viewer errors

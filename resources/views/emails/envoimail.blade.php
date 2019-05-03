@@ -1,6 +1,8 @@
 @extends('layouts.mainlayout')
 
 @section('content')
+
+
     <link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
 
     <div class="row">
@@ -51,7 +53,7 @@
         </div>
         <div class="col-lg-9 ">
 
-<form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data">
+<form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data" novalidate >
     <div class="form-group">
         {{ csrf_field() }}
         <label for="destinataire">destinataire:</label>
@@ -97,7 +99,7 @@
         <label>Attachements de dossier</label>
         <div class="row">
             <div class="col-md-10">
-        <select class="itemName form-control col-lg-6" style="" name="itemName"  multiple>
+        <select class="itemName form-control col-lg-6" style="" name="attachs[]"  multiple>
             <option></option>
             @foreach($attachements as $attach)
                 <option value="<?php echo $attach->id;?>"> <?php echo $attach->nom;?></option>
@@ -107,11 +109,13 @@
         </div>
      </div>
 
-    <div class="form-group form-group-default">
+    {!! NoCaptcha::display() !!}
+     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+     <div class="form-group form-group-default">
         <label>Attachements Externes</label>
         <input class="btn btn-danger fileinput-button" id="file" type="file" name="files[]"   multiple>
     </div>
-    {!! NoCaptcha::display() !!}
 
     <button  type="submit"  class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
     <a id="broullion"   disabled class="btn btn-md btn-success btn_margin_top"><i class="fa fa-archive" aria-hidden="true"></i> Brouillon</a>
@@ -218,15 +222,15 @@
 
      });
 </script>
-
     <script type="text/javascript">
         var onloadCallback = function() {
             console.log("grecaptcha is ready!");
         };
     </script>
 
-     <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
             async defer>
     </script>
+
 @endsection
 
