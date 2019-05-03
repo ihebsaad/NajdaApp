@@ -35,4 +35,9 @@ class TagsController extends Controller
                     }
         }
     }
+    public static function entreetags($identree)
+    {
+        $tags = Tag::where('entree','=',$identree)->get();
+        return $tags;
+    }
 }

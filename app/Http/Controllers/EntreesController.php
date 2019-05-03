@@ -118,12 +118,15 @@ class EntreesController extends Controller
     public function show($id)
     {
         $dossiers = Dossier::all();
-
         $entree = Entree::find($id);
         $entree->viewed=1;
+        $refdoss = $entree->dossier;
         $entree->save();
        $this->export_pdf($id);
-        return view('entrees.show',['dossiers' => $dossiers], compact('entree'));
+        $dossier = Dossier::where('reference_medic','=',$refdoss)->first();
+        
+        //$dossier=compact($dossier);
+        return view('entrees.show',['dossiers' => $dossiers, 'dossier' => $dossier], compact('entree'));
 
     }
 
