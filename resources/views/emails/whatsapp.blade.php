@@ -2,7 +2,7 @@
 
 @section('content')
     <h2>Envoyer un SMS Whatsapp</h2>
-    <form method="post" action="{{action('EmailController@sendwhatsapp')}}" >
+    <form method="post" action="{{--action('EmailController@sendwhatsapp')--}}" >
     <div class="form-group">
         {{ csrf_field() }}
         <label for="destinataire">Destinataire:</label>

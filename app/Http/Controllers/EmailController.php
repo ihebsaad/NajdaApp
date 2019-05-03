@@ -30,6 +30,7 @@ class EmailController extends Controller
     }
 
 
+
     function index()
     {
         Log::info('opening emails index');
@@ -517,6 +518,11 @@ class EmailController extends Controller
 
     function send (Request $request)
     {
+
+        $request->validate([
+            'g-recaptcha-response' => 'required|captcha'
+        ]);
+        
         $to = $request->get('destinataire');
         $cc = $request->get('cc');
         $cci = $request->get('cci');

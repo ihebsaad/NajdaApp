@@ -164,6 +164,7 @@ class UsersController extends Controller
             'share_price'=> 'required|integer',
             'share_qty' => 'required|integer'
         ]);
+
         */
       /*  $user = User::find($id);
       $user->name = $request->get('name');

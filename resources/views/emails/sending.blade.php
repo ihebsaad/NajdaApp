@@ -51,7 +51,7 @@
         </div>
         <div class="col-lg-9 ">
 
-<form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data">
+<form method="post" action="{{--action('EmailController@send')--}}"  enctype="multipart/form-data">
     <div class="form-group">
         {{ csrf_field() }}
         <label for="destinataire">destinataire:</label>
