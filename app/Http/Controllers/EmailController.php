@@ -513,7 +513,7 @@ class EmailController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('emails.envoimail',['attachements'=>$attachements]);
+        return view('emails.envoimail',['attachements'=>$attachements,'dossier'=>$id]);
     }
 
     function send (Request $request)
@@ -522,7 +522,8 @@ class EmailController extends Controller
         $request->validate([
             'g-recaptcha-response' => 'required|captcha'
         ]);
-        
+
+        $dossier = $request->get('dossier');
         $to = $request->get('destinataire');
         $cc = $request->get('cc');
         $cci = $request->get('cci');
@@ -533,7 +534,7 @@ class EmailController extends Controller
        $tot= count($_FILES['files']['name']);
 
 
-     if (   Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs) {
+     if (   Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs,$dossier) {
             $message
                 ->to($to)
               ->cc($cc  ?: [])
@@ -576,7 +577,7 @@ class EmailController extends Controller
         // The environment is local
         $urlapp='http://localhost/najdaapp';
     }
-    $urlsending=$urlapp.'/emails/sending';
+    $urlsending=$urlapp.'/emails/envoimail/'.$dossier;
        if (Mail::failures()) {
          //     echo ('<script> window.location.href = "http://localhost/najdaapp/emails/sending";</script>') ;
          //    return redirect('http://localhost/najdaapp/emails/sending')->with('fail', ' Echec ! ');

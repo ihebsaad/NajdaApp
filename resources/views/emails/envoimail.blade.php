@@ -8,7 +8,8 @@
     <div class="row">
         <div class="col-sm-3 col-md-3">
             <?php use \App\Http\Controllers\EnvoyesController;     ?>
-            <?php use \App\Http\Controllers\EntreesController;     ?>            <div class="panel">
+            <?php use \App\Http\Controllers\EntreesController;     ?>
+                <div class="panel">
                 <div class="panel-body pan">
                     <ul class="nav nav-pills nav-stacked">
                         <li class="active">
@@ -53,7 +54,9 @@
         </div>
         <div class="col-lg-9 ">
 
-<form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data" novalidate >
+<form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data"   >
+    <input id="dossier" type="email" class="form-control" name="dossier"  value="{{$dossier}}" />
+
     <div class="form-group">
         {{ csrf_field() }}
         <label for="destinataire">destinataire:</label>
