@@ -18,6 +18,7 @@ use App\Http\Controllers\TagsController;
 @section('header_styles')
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/custom_css/layout_responsive.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('resources/assets/css/tags.css') }}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 @stop
 @section('content')
 

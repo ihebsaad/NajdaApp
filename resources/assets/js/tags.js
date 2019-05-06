@@ -21,6 +21,7 @@ var idTagger = function(selector) {
     var _token = $('input[name="_token"]').val();
     var titre = "tag de test";
     //alert($(this).parent().data('id'));
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer cet tag ?")) { 
     switch($(this).parent().data('id')) {
       case "GOP":
         titre = "Garantie de paiement";
@@ -61,6 +62,7 @@ var idTagger = function(selector) {
       ids.splice(idx, 1);
       $idTagger.field.val(ids.join(','));
     }
+  }
   });
 
   $idTagger.obj.on('click', function() { // show and focus on field
