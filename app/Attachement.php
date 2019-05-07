@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Attachement extends Model
 {
     //
-    protected $fillable = ['id','nom','type','entree_id','path','facturation','envoye_id','parent','boite'];
+    protected $fillable = ['id','nom','type','entree_id','path','facturation','envoye_id','parent','boite','dossier'];
 
     public function getDateFormat()
     {

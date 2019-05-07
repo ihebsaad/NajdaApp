@@ -226,6 +226,7 @@ class DossiersController extends Controller
         $attachements= DB::table('attachements')
             ->whereIn('entree_id',$identr )
             ->orWhereIn('envoye_id',$idenv )
+            ->orWhere('dossier','=',$id )
             ->orderBy('created_at', 'desc')
             ->get();
         //  $entrees =   Entree::all();

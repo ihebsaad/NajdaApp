@@ -519,10 +519,10 @@ class EmailController extends Controller
     function send (Request $request)
     {
 
-        $request->validate([
+      /*  $request->validate([
             'g-recaptcha-response' => 'required|captcha'
         ]);
-
+*/
         $doss = $request->get('dossier');
         $to = $request->get('destinataire');
         $cc = $request->get('cc');
@@ -530,11 +530,12 @@ class EmailController extends Controller
         $sujet = $request->get('sujet');
         $contenu = $request->get('contenu');
         $files = $request->file('files');
-        $attachs = $request->file('attachs');
-       $tot= count($_FILES['files']['name']);
+        $attachs = $request->get('attachs');
+        $tot= count($_FILES['files']['name']);
+      //  $tot2= count($attachs);
 
 
-     if (   Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs,$dossier) {
+     if (   Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs,$doss) {
             $message
                 ->to($to)
               ->cc($cc  ?: [])
@@ -546,30 +547,68 @@ class EmailController extends Controller
          if(isset($files )) {
              foreach($files as $file) {
                  $count++;
-                 $message->attach($file->getRealPath(), array(
+                 $path=$file->getRealPath();
+               //  $chemin=$file->Path();
+                 $ext= $file->extension();
+               //  $name=$file->name();
+
+
+                 $message->attach($path, array(
                          'as' => $file->getClientOriginalName(), // If you want you can chnage original name to custom name
                          'mime' => $file->getMimeType())
                  );
 
            // save external files here
 
+                 $attachement = new Attachement([
+
+                    'type'=>$ext,'path' => $path, 'nom' => $file->getClientOriginalName(),'boite'=>1,'dossier'=>$doss
+                 ]);
+
+                 $attachement->save();
+
              }
          }
+
 /// attach here
-         if(isset($attachs )) {
-             foreach($attachs as $attach) {
+///
+
+            if(isset($attachs )) {
+
+                foreach($attachs as $attach) {
                  $path=$this->PathattachById($attach);
                   $fullpath=storage_path().$path;
-                 $message->attach($fullpath->getRealPath(), array(
-                         'as' => $fullpath->getClientOriginalName(), // If you want you can chnage original name to custom name
-                         'mime' => $fullpath->getMimeType())
-                 );
+                    $path_parts = pathinfo($fullpath);
+                  $ext=  $path_parts['extension'];
 
-                 // save   files here
+    $name=basename($fullpath);
+      $mime_content_type=mime_content_type ($fullpath);
+                 $message->attach($fullpath, array(
+                         'as' =>$name,
+                         'mime' => $mime_content_type)
+                );
 
-             }
+              // DB::table('attachements')->insert([
+                   $attachement = new Attachement([
+
+                       'type'=>$ext,'path' => $fullpath, 'nom' => $name,'boite'=>1,'dossier'=>$doss
+               ]);
+                    $attachement->save();
+
+
+            }
          }
 
+
+      //  this works :
+     /*  $path='C:\wamp2\www\najdaapp\storage\Envoyes\19\envoi.pdf';
+        // $fich=$path->getRealPath();
+         $message->attach($path , array(
+                'as' => 'envoi.pdf',
+                 'mime' => 'application/pdf'
+              )
+         );
+*/
 
      $urlapp=env('APP_URL');
 
@@ -613,7 +652,7 @@ class EmailController extends Controller
          }
 
 
-     }) ){
+     })){
       //   redirect('/emails/sending')->with('success', '  Envoyé ! ');
 
 

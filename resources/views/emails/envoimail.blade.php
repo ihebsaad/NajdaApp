@@ -55,7 +55,7 @@
         <div class="col-lg-9 ">
 
 <form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data"   >
-    <input id="dossier" type="email" class="form-control" name="dossier"  value="{{$doss}}" />
+    <input id="dossier" type="hidden" class="form-control" name="dossier"  value="{{$doss}}" />
 
     <div class="form-group">
         {{ csrf_field() }}
@@ -70,6 +70,7 @@
             </div>
         </div>
     </div>
+
     <div class="form-group" style="margin-top:10px;">
         <div id="autres" class="row"  style="display:none " >
             <div class="col-md-1">
@@ -102,7 +103,7 @@
         <label>Attachements de dossier</label>
         <div class="row">
             <div class="col-md-10">
-        <select class="itemName form-control col-lg-6" style="" name="attachs[]"  multiple>
+        <select id="attachs" class="itemName form-control col-lg-6" style="" name="attachs[]"  multiple  value="$('#attachs').val()">
             <option></option>
             @foreach($attachements as $attach)
                 <option value="<?php echo $attach->id;?>"> <?php echo $attach->nom;?></option>
@@ -111,8 +112,9 @@
             </div>
         </div>
      </div>
-
+{{--
     {!! NoCaptcha::display() !!}
+    --}}
      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
      <div class="form-group form-group-default">
@@ -218,7 +220,6 @@
                 }
             }
         });
-
 
 
 

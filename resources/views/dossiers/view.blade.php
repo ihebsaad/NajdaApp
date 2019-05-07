@@ -1568,11 +1568,11 @@
                 <table class="table table-striped" id="mytable" style="width:100%;margin-top:15px;">
                     <thead>
                     <tr id="headtable">
-                        <th style="width:10%">Date</th>
-                        <th style="width:20%">Titre</th>
-                        <th style="width:30%">Description</th>
-                        <th style="width:10%">type</th>
-                        <th style="width:10%">Boite</th>
+                        <th style="">Date</th>
+                        <th style="">Titre</th>
+
+                        <th style="">type</th>
+                        <th style="">Boite</th>
                     </tr>
 
                     </thead>
@@ -1581,10 +1581,10 @@
 
                         <tr>
 
-                            <td style="width:10%;text-align:center"><small><?php echo $attach->created_at;?></small></td>
-                            <td style="width:20%;text-align:center"><small><?php echo $attach->nom;?></small></td>
-                            <td style="width:20%;text-align:center"><small><?php echo $attach->path;?></small></td>
-                            <td style="width:10%;text-align:center"><small><?php
+                            <td style=";"><small><?php echo $attach->created_at;?></small></td>
+                            <td style=";"><small><?php /* if ($attach->dossier!=null) {echo 'Fichier externe';}else{*/ echo $attach->nom; /*}*/ ?></small></td>
+
+                            <td style=";"><small><?php
                                     $type= $attach->type;
 
                                     switch ($type) {
