@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Email;
 use App\Http\Controllers\Controller;
  use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -492,6 +493,9 @@ class EmailController extends Controller
         $entrees =   Entree::where('dossier', $ref)->get();
         $envoyes =   Envoye::where('dossier', $ref)->get();
 
+        $emails =   Email::where('parent', $id)->get();
+
+        $emailsdoss= Dossier::where('parent', $id)->get();
         $identr=array();
         $idenv=array();
         foreach ($entrees as $entr)

@@ -107,6 +107,7 @@ Route::get('/dossiers', array('as' => 'dossiers','uses' => 'DossiersController@i
 Route::post('/dossiers/saving','DossiersController@saving')->name('dossiers.saving');
 Route::post('/dossiers/updating','DossiersController@updating')->name('dossiers.updating');
 Route::get('/dossiers/view/{id}', 'DossiersController@view')->name('dossiers.view');
+Route::post('/dossiers/addemail','DossiersController@addemail')->name('dossiers.addemail');
 
 
 /*** Clients **/

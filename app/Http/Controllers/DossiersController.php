@@ -13,6 +13,7 @@ use App\TypeAction;
 use App\Prestation;
 use App\TypePrestation;
 use App\Citie;
+use App\Email;
 
 
 class DossiersController extends Controller
@@ -140,7 +141,6 @@ class DossiersController extends Controller
 
     public function updating(Request $request)
     {
-
         $id= $request->get('dossier');
         $champ= strval($request->get('champ'));
        $val= $request->get('val');
@@ -154,7 +154,20 @@ class DossiersController extends Controller
 
     }
 
-    /**
+    public function addemail(Request $request)
+    {
+        $parent= $request->get('parent') ;
+        $email = new Email([
+            'champ' => $request->get('champ'),
+            'description' => $request->get('description'),
+            'parent' => $parent ,
+
+        ]);
+        $email->save();
+        return url('/dossiers/view/'.$parent) ;
+    }
+
+        /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -176,6 +189,7 @@ class DossiersController extends Controller
         $clients = DB::table('clients')->select('id', 'name')->get();
 
         $prestations =   Prestation::where('dossier_id', $id)->get();
+        $emails =   Email::where('parent', $id)->get();
 
         $ref=$this->RefDossierById($id);
         $entrees =   Entree::where('dossier', $ref)->get();
@@ -232,7 +246,7 @@ class DossiersController extends Controller
         //  $entrees =   Entree::all();
 
 
-        return view('dossiers.view',['entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions,'envoyes'=>$envoyes], compact('dossier'));
+        return view('dossiers.view',['emails'=>$emails,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions,'envoyes'=>$envoyes], compact('dossier'));
 
     }
 

@@ -37,6 +37,12 @@
                                 <i class="fas  fa-lg fa-file-archive"></i>  Attachements
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tab5" data-toggle="tab">
+                                <i class="fas  fa-lg fa-envelope"></i>  Emails
+                            </a>
+                        </li>
+
                     </ul>
 
                 </div>
@@ -1630,7 +1636,38 @@
 
             </div>
 
+            <div id="tab5" class="tab-pane fade">
+                <div style="">
+                    <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addemail" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createemail"><b><i class="fas fa-plus"></i> Ajouter un email</b></button>
+
+
+                </div>
+                <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
+                    <thead>
+                    <tr id="headtable">
+                        <th style="">Email</th>
+                        <th style="">Description</th>
+                     </tr>
+
+                    </thead>
+                    <tbody>
+                    @foreach($emails as $email)
+                        <tr>
+                            <td style=";"><?php echo $email->champ; ?></td>
+                            <td style=";"><?php echo $email->description; ?></td>
+                        </tr>
+                    @endforeach
+
+                    </tbody>
+                </table>
+
+
             </div>
+
+
+            </div>
+
+
 
     </section>
 
@@ -1758,6 +1795,55 @@ $iduser=$CurrentUser->id;
 </div>
 
 
+<!-- Modal Email-->
+<div class="modal fade" id="createemail" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal2">Ajouter un Email </h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+
+                    <div class="form-group">
+                        {{ csrf_field() }}
+
+                        <form id="addemailform" novalidate="novalidate">
+
+                            <input id="parent" name="parent" type="hidden" value="{{ $dossier->id}}">
+                            <div class="form-group " >
+                                <label for="emaildoss">Email</label>
+                                <div class=" row  ">
+                                    <input class="form-control" type="email" required id="emaildoss"/>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="DescrEmail">Description</label>
+                                <div class="row">
+                                    <input type="text" class="form-control"  id="DescrEmail" />
+
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" id="emailadd" class="btn btn-primary">Ajouter</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 @endsection
@@ -1855,6 +1941,43 @@ $iduser=$CurrentUser->id;
 
         // }
     }
+
+
+
+
+    $(document).ready(function() {
+
+
+    $('#emailadd').click(function(){
+        var parent = $('#parent').val();
+        var champ = $('#emaildoss').val();
+        var description = $('#DescrEmail').val();
+        if ((champ != '') )
+        {
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('dossiers.addemail') }}",
+                method:"POST",
+                data:{parent:parent,champ:champ,description:description, _token:_token},
+                success:function(data){
+
+                    //   alert('Added successfully');
+                    window.location =data;
+
+
+                }
+            });
+        }else{
+            // alert('ERROR');
+        }
+    });
+
+
+    });
+
+
+
+
 
 
 
