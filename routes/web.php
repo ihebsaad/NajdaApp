@@ -60,6 +60,8 @@ Route::get('/entrees/export_pdf/{id}', 'EntreesController@export_pdf');
 Route::get('/entrees/destroy/{id}', 'EntreesController@destroy');
 Route::get('/entrees/archiver/{id}', 'EntreesController@archiver');
 Route::get('/entrees/archive/', 'EntreesController@archive')->name('entrees.archive');
+Route::post('/entrees/savecomment','EntreesController@savecomment')->name('entrees.savecomment');
+
 
 
 
