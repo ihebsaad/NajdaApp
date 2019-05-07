@@ -198,7 +198,7 @@ use App\Http\Controllers\TagsController;
                     <div class="form-group">
                         <form method="post">
                                             <div class="col-md-10">
-                                                <textarea id="message" name="message" rows="7" class="form-control resize_vertical" placeholder="Entrez votre commentaire"></textarea>
+                                                <textarea id="commentuser" name="commentuser" rows="7" class="form-control resize_vertical" placeholder="Entrez votre commentaire">{{ $entree['commentaire']  }}</textarea>
                                             </br><label style="padding-bottom: 10px;color: #8a8a8a;">Les TAGS:</label></br>
                                                 <div id="taglist" class="form-token-tags">
                                                   <ul class="tag-editor">
@@ -428,6 +428,29 @@ $urlapp='http://localhost/najdaapp';
         target.marker('data');
 
 
+    });
+
+    // auto enregistrement de commentaire
+    var timeoutId;  
+    $('#commentuser').keypress(function () {
+        if (timeoutId) clearTimeout(timeoutId);
+        var _token = $('input[name="_token"]').val();
+        var entree = $('input[name="entree"]').val();
+        timeoutId = setTimeout(function () {
+            $.ajax({
+                url: "{{ route('entrees.savecomment') }}",
+                method:"POST",
+                data: { entree: entree, commentaire: $('textarea#commentuser').val(), _token:_token },
+                success:function(data){
+                    $('#commentuser').animate({
+                    opacity: '0.3',
+                    });
+                    $('#commentuser').animate({
+                        opacity: '1',
+                    });
+                }
+            });
+        }, 750);
     });
 
 </script>

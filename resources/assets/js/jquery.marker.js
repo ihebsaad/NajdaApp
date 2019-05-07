@@ -229,7 +229,8 @@
 	        		}
 	        		//data.push(temp);
 	        		clickedmrktxt = temp['text'];
-					alert(clickedmrktxt);
+	        		//$(e.target).css('border-style','dotted');
+					alert(clickedmrktxt+' || '+ $(e.target).attr("class"));
 					
 					
 					/*_that._callback('click', e);

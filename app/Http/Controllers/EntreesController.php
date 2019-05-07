@@ -103,7 +103,20 @@ class EntreesController extends Controller
 
     }
 
+    public function savecomment(Request $request)
+    {
+        if ($request->get('entree') != null)
+        {  
+            $identree = $request->get('entree');
+            $comm  = $request->get('commentaire');
+            //$entree = Entree::where(['id' => $identree])->first();
+            Entree::where('id', $identree)->update(['commentaire' => $comm]);
+            /*$entree->commentaire = $request->get('commentaire');
+            $entree->save();*/
+            return redirect('/entrees')->with('success', 'Entry has been saved');
+        }
 
+    }
 
     public function view($id)
     {
