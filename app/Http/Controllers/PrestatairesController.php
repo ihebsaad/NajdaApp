@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Evaluation;
 use App\TypePrestation;
 use Illuminate\Support\Facades\Log;
 
@@ -49,6 +50,29 @@ class PrestatairesController extends Controller
 
         return view('prestataires.create',['dossiers' => $dossiers]);
     }
+
+
+
+    public function addeval(Request $request)
+    {
+      $prest  =  $request->get('prestataire');
+
+        $eval = new Evaluation([
+            'prestataire' => $prest,
+            'gouv' => $request->get('gouvernorat'),
+            'type_prest' => $request->get('type_prest'),
+            'priorite' => $request->get('priorite'),
+            'disponibilite' => $request->get('disponibilite'),
+            'evaluation' => $request->get('evaluation'),
+
+
+        ]);
+
+       if ($eval->save()){
+        return url('/prestataires/view/'.$prest) ;
+       }
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -136,7 +160,10 @@ class PrestatairesController extends Controller
         $prestataire = Prestataire::find($id);
         $prestations =   Prestation::where('prestataire_id', $id)->get();
 
-        return view('prestataires.view',['gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,',dossiers' => $dossiers,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'prestations'=>$prestations], compact('prestataire'));
+        $evaluations =   Evaluation::where('prestataire', $id)->get();
+
+
+        return view('prestataires.view',['evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,',dossiers' => $dossiers,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'prestations'=>$prestations], compact('prestataire'));
 
     }
 
@@ -252,6 +279,8 @@ class PrestatairesController extends Controller
         }else{return '';}
 
     }
+
+
 
     public  function removetypeprest(Request $request)
     {

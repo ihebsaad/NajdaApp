@@ -151,6 +151,7 @@ Route::post('/prestataires/createtypeprest','PrestatairesController@createtypepr
 Route::post('/prestataires/removecitieprest','PrestatairesController@removecitieprest')->name('prestataires.removecitieprest');
 Route::post('/prestataires/createcitieprest','PrestatairesController@createcitieprest')->name('prestataires.createcitieprest');
 Route::get('/prestataires/view/{id}', 'PrestatairesController@view');
+Route::post('/prestataires/addeval','PrestatairesController@addeval')->name('prestataires.addeval');
 
 
 /*** Prestations **/

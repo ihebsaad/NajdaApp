@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
-use App\Entree ;
+use App\Citie ;
 use App\Dossier ;
 use App\Prestataire ;
 use App\Prestation ;
@@ -204,6 +204,16 @@ class PrestationsController extends Controller
             return $typeprestation['name'];
         }else{return '';}
 
+    }
+
+
+    public static function GouvById($id)
+    {
+        $gouv = Citie::find($id);
+
+        if (isset($gouv['name'])) {
+            return $gouv['name'];
+        }else{return '';}
     }
 
 }

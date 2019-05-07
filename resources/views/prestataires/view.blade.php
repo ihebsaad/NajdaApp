@@ -20,11 +20,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#tab02" data-toggle="tab"  onclick="hideinfos();">
+                    <a class="nav-link" href="#tab02" data-toggle="tab"  onclick=";showinfos2">
                         <i class="fas fa-lg fa-ambulance"></i>  Prestations
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="#tab03" data-toggle="tab"  onclick="hideinfos();hideinfos2();">
+                        <i class="fas fa-lg fa-sort-amount-down"></i>  Priorité
+                    </a>
+                </li>
 
             </ul>
 
@@ -192,7 +196,6 @@
                         </div>
 
 
-
                     </div>
 
 
@@ -298,7 +301,8 @@
 
     <div id="tab02" class="tab-pane fade   " style="padding-top:30px">
 
-    <table class="table table-striped" id="mytable" style="width:100%">
+
+        <table class="table table-striped" id="mytable" style="width:100%">
         <thead>
         <tr id="headtable">
             <th style="width:35%">Dossier</th>
@@ -306,14 +310,16 @@
             <th style="width:10%">Type</th>
             <th style="width:20%">Prix</th>
         </tr>
-        <tr>
+       <!-- <tr>
             <th style="width:35%">Dossier</th>
             <th style="width:25%">Prestataire</th>
             <th   style="width:10%">Type</th>
             <th style="width:20%">Prix</th>
-        </tr>
+        </tr>-->
         </thead>
         <tbody>
+        <?php use \App\Http\Controllers\PrestationsController;     ?>
+
         @foreach($prestations as $prestation)
             <?php $dossid= $prestation['dossier_id'];?>
 
@@ -338,10 +344,120 @@
 
     </div>
 
-        </div>
+            <div id="tab03" class="tab-pane fade   " style="padding-top:30px">
+
+                <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addev" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createeval"><b><i class="fas fa-plus"></i> Ajouter une Priorité</b></button>
+
+                <table class="table table-striped" id="mytable2" style="width:100%">
+                    <thead>
+                    <tr id="headtable">
+                        <th style="text-align: center;width:35%">Gouvernorat</th>
+                        <th style="text-align: center;width:25%">Type</th>
+                        <th style="text-align: center;width:10%">Priorité</th>
+                        <th style="text-align: center;width:10%">Disponibilité</th>
+                        <th style="text-align: center;width:20%">Evaluation</th>
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                @foreach($evaluations as $eval)
+                    <tr>
+                        <td style="text-align: center"> <?php echo PrestationsController::GouvById( $eval['gouv']) ;?> </td>
+                        <td style="text-align: center"> <?php echo PrestationsController::TypePrestationById( $eval['type_prest']) ;?></td>
+                        <td style="text-align: center"> {{$eval->priorite}} </td>
+                        <td style="text-align: center"> {{$eval->disponibilite}} </td>
+                        <td style="text-align: center"> {{$eval->evaluation}} </td>
+                    </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+
+            </div>
+
+            </div>
 
     </section>
- @endsection
+
+
+
+
+    <!-- Modal Evaluation -->
+    <div class="modal fade" id="createeval" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Ajouter une Evaluation </h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="addevalform" novalidate="novalidate">
+
+                                <input id="prestataire_id" name="prestataire" type="hidden" value="{{ $prestataire->id}}">
+                                <div class="form-group " >
+                                    <label>Type de prestations</label>
+                                    <div class=" row  ">
+                                        <select class=" form-control col-lg-12  " style="width:400px" name=""    id="typeprestation">
+                                            <option></option>
+                                            @foreach($typesprestations as $aKey)
+                                                <option     value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group ">
+                                    <label>Gouvernorat de couverture</label>
+                                    <div class="row">
+                                        <select class="form-control  col-lg-12 "  style="width:400px" name="gouv"    id="gouvpr">
+                                            <option></option>
+                                            @foreach($gouvernorats as $aKeyG)
+                                                <option      value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
+                                            @endforeach
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <label>Priorité</label>
+                                    <div class="row">
+                                        <input type="number" step="1" id="prior" max="10" min="0" value="1" />
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <label>Disponibilité</label>
+                                    <div class="row">
+                                        <input type="number" step="1" max="10" min="0" id="disp" value="0"  />
+                                    </div>
+                                </div>
+
+                                <div class="form-group ">
+                                    <label>Evaluation</label>
+                                    <div class="row">
+                                        <input type="number" step="1" max="10" min="0" id="note" value="0"  />
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" id="evaladd" class="btn btn-primary">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+@endsection
 
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
 
@@ -354,11 +470,16 @@
     function hideinfos() {
         $('#tab01').css('display','none');
     }
-
+    function hideinfos2() {
+        $('#tab02').css('display','none');
+    }
     function showinfos() {
         $('#tab01').css('display','block');
     }
 
+    function showinfos2() {
+        $('#tab02').css('display','block');
+    }
         function changing(elm) {
         var champ=elm.id;
 
@@ -561,8 +682,6 @@
 
 
 
-
-
         $('#gouvcouv').select2({
             filter: true,
             language: {
@@ -601,7 +720,6 @@
             }
             valArray = (val) ? val : [];
         });
-
 
 
         function UpdatingG(array, type) {
@@ -660,6 +778,33 @@
 
 
 
+
+        $('#evaladd').click(function(){
+            var prestataire = $('#prestataire_id').val();
+            var type_prest = $('#typeprestation').val();
+            var gouvernorat = $('#gouvpr').val();
+            var priorite = $('#prior').val();
+            var disponibilite = $('#disp').val();
+            var evaluation = $('#note').val();
+            if ((type_prest != '') &&(gouvernorat != '') &&(priorite != '') )
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('prestataires.addeval') }}",
+                    method:"POST",
+                    data:{prestataire:prestataire,type_prest:type_prest,gouvernorat:gouvernorat,priorite:priorite,disponibilite:disponibilite,evaluation:evaluation, _token:_token},
+                    success:function(data){
+
+                        //   alert('Added successfully');
+                        window.location =data;
+
+
+                    }
+                });
+            }else{
+                // alert('ERROR');
+            }
+        });
 
 
 
