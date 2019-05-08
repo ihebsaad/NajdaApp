@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 use App\Email;
 use App\Http\Controllers\Controller;
- use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use DB;
+use Swift_Mailer;
+use Swift_SmtpTransport;
 use Webklex\IMAP\Client;
 use App\Entree ;
 use App\Dossier ;
@@ -495,7 +498,7 @@ class EmailController extends Controller
 
         $emails =   Email::where('parent', $id)->get();
 
-        $emailsdoss= Dossier::where('parent', $id)->get();
+        $emailsdoss= Email::where('parent', $id)->get();
         $identr=array();
         $idenv=array();
         foreach ($entrees as $entr)
@@ -520,6 +523,174 @@ class EmailController extends Controller
         return view('emails.envoimail',['attachements'=>$attachements,'doss'=>$id]);
     }
 
+    public function envoifax($id)
+    {
+
+        $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
+        $entrees =   Entree::where('dossier', $ref)->get();
+        $envoyes =   Envoye::where('dossier', $ref)->get();
+
+
+         $identr=array();
+        $idenv=array();
+        foreach ($entrees as $entr)
+        {
+            array_push($identr,$entr->id );
+
+        }
+
+        foreach ($envoyes as $env)
+        {
+            array_push($idenv,$env->id );
+
+        }
+
+
+        $attachements= DB::table('attachements')
+            ->whereIn('entree_id',$identr )
+            ->orWhereIn('envoye_id',$idenv )
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('emails.envoifax',['attachements'=>$attachements,'doss'=>$id]);
+    }
+
+
+
+    function sendfax (Request $request)
+    {
+
+        /*  $request->validate([
+              'g-recaptcha-response' => 'required|captcha'
+          ]);
+  */
+        $doss = $request->get('dossier');
+
+         $nom = $request->get('nom');
+         $numero = $request->get('numero');
+      //  $contenu = $request->get('contenu');
+        $attachs = $request->get('attachs');
+
+        $to='ihebsaad@gmail.com';
+         $sujet='1234,Najda,najda,'.$nom.'@'.$numero.'';
+        //$sujet=' test';
+
+    /*   config(['mail.username' => 'saadiheb@gmail.com']);
+        config(['mail.password' => 'ihebssss']);
+
+        Config::set('mail.username', 'saadiheb@gmail.com');
+        Config::set('mail.password', 'ihebssss');
+*/
+
+        //$swiftTransport = Swift_SmtpTransport::newInstance(env('MAIL2_HOST'), env('MAIL2_PORT'), env('MAIL2_ENCRYPTION'))
+      /*    $swiftTransport =  new \Swift_SmtpTransport( env('MAIL2_HOST'), env('MAIL2_PORT'), env('MAIL2_ENCRYPTION'));
+        $swiftTransport->setUsername(env('MAIL2_USERNAME' ));
+            $swiftTransport->setPassword(env('MAIL2_PASSWORD' ));
+*/
+      /*  $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', 'tls');
+        $swiftTransport->setUsername('faxnajdassist@najda-assistance.com');
+        $swiftTransport->setPassword('e-solutions2019');
+
+        $swiftMailer = new Swift_Mailer($swiftTransport);
+
+        Mail::setSwiftMailer($swiftMailer);
+*/
+        try{
+          Mail::send([], [], function ($message) use ($to,$sujet,$attachs,$doss) {
+            $message
+                 ->to($to)
+                ->subject($sujet)
+             //   ->setBody($contenu, 'text/html');
+            ->setBody('Fax Najda', 'text/html');
+
+            $count=0;
+
+
+/// attach here
+///
+
+            if(isset($attachs )) {
+
+                foreach($attachs as $attach) {
+                    $count++;
+                    $path=$this->PathattachById($attach);
+                    $fullpath=storage_path().$path;
+                    $path_parts = pathinfo($fullpath);
+                    $ext=  $path_parts['extension'];
+
+                    $name=basename($fullpath);
+                    $mime_content_type=mime_content_type ($fullpath);
+                    $message->attach($fullpath, array(
+                            'as' =>$name,
+                            'mime' => $mime_content_type)
+                    );
+
+                    // DB::table('attachements')->insert([
+                    $attachement = new Attachement([
+
+                        'type'=>$ext,'path' => $fullpath, 'nom' => $name,'boite'=>1,'dossier'=>$doss
+                    ]);
+                    $attachement->save();
+
+
+                }
+            }
+
+
+            $urlapp=env('APP_URL');
+
+            if (App::environment('local')) {
+                // The environment is local
+                $urlapp='http://localhost/najdaapp';
+            }
+            $urlsending=$urlapp.'/emails/envoifax/'.$doss;
+            if (Mail::failures()) {
+                //     echo ('<script> window.location.href = "http://localhost/najdaapp/emails/sending";</script>') ;
+                //    return redirect('http://localhost/najdaapp/emails/sending')->with('fail', ' Echec ! ');
+
+
+            }else{
+// save email sent
+
+                $par=Auth::id();
+                $envoye = new Envoye([
+                    'emetteur' => 'test@najda-assistance.com', //env('emailenvoi')
+                    'destinataire' => $to,
+                    'par'=> $par,
+                    'sujet'=> $sujet,
+                    'contenu'=> '',
+                    'attachements'=> $count,
+                    'statut'=> 1,
+                    'type'=> 'email',
+                    // 'reception'=> date('d/m/Y H:i:s'),
+
+                ]);
+
+                $envoye->save();
+                $id=$envoye->id;
+                $this->export_pdf_send($id);
+
+                echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
+                return redirect($urlsending)->with('success', '  Envoyé ! ');
+
+
+            }
+
+
+          });
+
+} catch (Exception $ex) {
+    // Debug via $ex->getMessage();
+
+    return "We've got errors!";
+
+}
+
+    }// end send
+
+
+
+
     function send (Request $request)
     {
 
@@ -539,7 +710,9 @@ class EmailController extends Controller
       //  $tot2= count($attachs);
 
 
-     if (   Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs,$doss) {
+
+        try{
+            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs,$doss) {
             $message
                 ->to($to)
               ->cc($cc  ?: [])
@@ -580,6 +753,7 @@ class EmailController extends Controller
             if(isset($attachs )) {
 
                 foreach($attachs as $attach) {
+                    $count++;
                  $path=$this->PathattachById($attach);
                   $fullpath=storage_path().$path;
                     $path_parts = pathinfo($fullpath);
@@ -621,13 +795,7 @@ class EmailController extends Controller
         $urlapp='http://localhost/najdaapp';
     }
     $urlsending=$urlapp.'/emails/envoimail/'.$doss;
-       if (Mail::failures()) {
-         //     echo ('<script> window.location.href = "http://localhost/najdaapp/emails/sending";</script>') ;
-         //    return redirect('http://localhost/najdaapp/emails/sending')->with('fail', ' Echec ! ');
 
-
-         }else{
-// save email sent
 
            $par=Auth::id();
            $envoye = new Envoye([
@@ -653,20 +821,15 @@ class EmailController extends Controller
                 return redirect($urlsending)->with('success', '  Envoyé ! ');
 
 
-         }
 
+     });
 
-     })){
-      //   redirect('/emails/sending')->with('success', '  Envoyé ! ');
-
-
-         // return Redirect::back()->with('success', 'Envoyé avec succès ');
-
-
+       } catch (Exception $ex) {
+    // Debug via $ex->getMessage();
+     return "We've got errors!";
      }
 
-    }// end send
-
+}// end send
 
 
     public function export_pdf_send($id)

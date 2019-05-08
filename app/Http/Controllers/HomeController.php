@@ -26,6 +26,12 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function roles()
+    {
+        return view('roles');
+    }
+
     public function index()
     {
 
@@ -114,7 +120,6 @@ class HomeController extends Controller
                       })
                       ->get();
       */
-
 
 
 

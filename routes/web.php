@@ -15,6 +15,7 @@ use App\Template_doc ;
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/roles', 'HomeController@roles')->name('roles');
 
 // Authentication Routes...
 $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
@@ -71,6 +72,7 @@ Route::post('/emails/send','EmailController@send');
 /* envoie d'un email */
 Route::get('/emails/sending','EmailController@sending')->name('emails.sending');
 Route::get('/emails/envoimail/{id}','EmailController@envoimail')->name('emails.envoimail');
+Route::get('/emails/envoifax/{id}','EmailController@envoifax')->name('emails.envoifax');
 Route::get('/emails', 'EmailController@index');
 /* unreaded emails and not checked */
 Route::get('/emails/inbox', 'EmailController@inbox');
@@ -83,6 +85,7 @@ Route::get('/emails/disp', 'EmailController@disp');
 Route::get('/emails/test', 'EmailController@test');
 Route::get('/emails/sms', 'EmailController@sms');
 Route::post('/emails/sendsms', 'EmailController@sendsms')->name('emails.sendsms');
+Route::post('/emails/sendfax', 'EmailController@sendfax')->name('emails.sendfax');
 Route::get('/emails/whatsapp', 'EmailController@whatsapp');
 Route::post('/emails/sendwhatsapp', 'EmailController@sendwhatsapp')->name('emails.sendwhatsapp');
 //Route::put('/emails/sendwhatsapp', 'EmailController@sendwhatsapp')->name('emails.sendwhatsapp');
