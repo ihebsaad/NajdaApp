@@ -189,12 +189,50 @@ Route::post('/action/updateworkflow/', 'ActionController@updateWorkflow');
 //Route::post('/action/updateworkflow/{dossid}/{id}', 'ActionController@updateWorkflow');
 Route::get('/action/RendreInactive/{id}/{dossid}', 'ActionController@RendreInactive');
 Route::get('/action/RendreAchevee/{id}/{dossid}', 'ActionController@RendreAchevee');
+Route::get('/action/getAjaxWorkflow/{id}', 'ActionController@getAjaxWorkflow');
+Route::get('/dossier/action/AnnulerActionCourante/{iddoss}/{idact}/{idsousact}' , 'ActionController@AnnulerActionCourante');
+
+
 
 /*** SousAction**/
 Route::resource('/sousactions',  'SousActionController');
 Route::get('/sousactions', array('as' => 'actions','uses' => 'SousActionController@index'));
 Route::post('/sousactions/saving','SousActionController@saving')->name('sousactions.saving');
 Route::get('/sousactions/view/{id}', 'SousActionController@view');
+Route::get('/dossier/action/Traitementsousaction/{iddoss}/{idact}/{idsousact}', 
+	'SousActionController@Traitementsousaction');
+Route::get('/dossier/action/Traitercommentsousaction/{iddoss}/{idact}/{idsousact}',
+  'SousActionController@Traitercommentsousaction');
+
+Route::post('/dossier/action/TraitercommentsousactionAjax/{iddoss}/{idact}/{idsousact}',
+  'SousActionController@TraitercommentsousactionAjax');
+
+Route::get('dossier/action/EnregistrerEtAllerSuivante/{iddoss}/{idact}/{idsousact}',
+  'SousActionController@EnregistrerEtAllerSuivante');
+
+Route::get('dossier/action/AnnulerEtAllerSuivante/{iddoss}/{idact}/{idsousact}',
+  'SousActionController@AnnulerEtAllersuivante');
+
+Route::get('dossier/action/EnregistrerEtAllerPrecedente/{iddoss}/{idact}/{idsousact}',
+  'SousActionController@EnregistrerEtAllerPrecedente');
+
+Route::get('dossier/action/FinaliserAction/{iddoss}/{idact}/{idsousact}',
+  'SousActionController@FinaliserAction');
+
+Route::get('dossier/action/Reportersousaction/{iddoss}/{idact}/{idsousact}',
+  'SousActionController@Reportersousaction');
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*** TypeAction**/
 Route::resource('/typesactions',  'TypeActionController');

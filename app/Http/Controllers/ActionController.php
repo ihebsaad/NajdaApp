@@ -8,6 +8,7 @@ use App\Action;
 use App\TypeAction;
 use App\SousAction;
 use App\Dossier;
+use auth;
 
 class ActionController extends Controller
 {
@@ -32,11 +33,13 @@ class ActionController extends Controller
     {
 
          $dossiers = Dossier::all();
-         $dossier = Dossier::find($dossid);
+        // $dossier = Dossier::find($dossid);
          $typesactions=TypeAction::get();
 
          $act= Action::find($id);
-        // $dossier = $action->dossier;
+         $dossier = $act->dossier;
+
+        // dd($dossier);
          $sousactions = $act->sousactions;
 
        //  $actions=$dossier->actions;
@@ -120,6 +123,90 @@ class ActionController extends Controller
         
        // return view('actions.workflow', compact('sousactions'));
     }
+
+
+    public function getAjaxWorkflow($id)
+    {
+
+     // $_GET['idw'];
+
+      $actk=Action::find($id);
+
+      $output='';
+
+      if(!$actk->sousactions->isEmpty())
+      {
+                   $output='';
+
+
+                $i = 0;
+                $len = count($actk->sousactions);
+                //$actko=$actk->sousactions->orderBy('ordre','DESC')->get();
+                $actko=SousAction::where('action_id',$id)->orderBy('ordre','ASC')->get();
+                foreach ( $actko as $sactions)
+                    {             
+                   
+                     $output.='<div class="row">' ;
+                        if ($sactions->statut=='Achevée')
+                        {
+
+
+                          $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10">
+                               <input id="emetteur" type="text" name="emetteur" style="width:100% ;background-color:#00FF80; color:black" value="'. $sactions->titre.'" readonly="true" />
+                           </div><div class="col-md-1"></div>' ;
+                       }
+                       else
+                       {
+                         if ($sactions->statut=='Annulée')
+                      
+                        {
+
+                          $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10"><input id="emetteur" type="text" name="emetteur" style="width:100% ;background-color:#BDBDBD; color:black" value="'. $sactions->titre.'" readonly="true" />
+                           </div><div class="col-md-1"></div>' ;
+                       }
+                       else
+                       {
+
+                        if ($sactions->statut=='Active'|| $sactions->realisee==0 )
+                        {
+                            if($sactions->statut=='Active')
+                            {
+
+                              $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10">
+                               <input id="emetteur" type="text" name="emetteur" style="width:100% ; color:black" value="'. $sactions->titre.'" readonly="true" />
+                           </div><div class="col-md-1"><span class="fa fa-asterisk"></span></div>' ;
+                            }
+                            else
+                            {
+
+                            $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10">
+                               <input id="emetteur" type="text" name="emetteur" style="width:100% ; color:black" 
+                               value="'. $sactions->titre.'" readonly="true" />
+                           </div><div class="col-md-1"></div>' ;
+
+                            }
+                        }
+                        }
+
+                      }
+                   $output.='</div>';
+
+                     if ($i!=$len-1) { 
+                     $output.='<div class="row">
+                     <center> <i style="margin-top:10px;margin-bottom: 0px"class="fa fa-2x fa-arrow-down" > </i> </center>
+                     </div>';
+
+                    }        
+                         $output.='<br />';
+                          $i++ ;
+
+                 }
+        
+         }
+
+   return $output;
+
+    }
  
     /**
      * Show the form for creating a new resource.
@@ -157,13 +244,17 @@ class ActionController extends Controller
      */
     public function store(Request $request)
     {
+
+        $dossier=Dossier::where("reference_medic",trim($request->get('dossier')))->first();
         $action = new Action([
              'titre' =>trim( $request->get('titre')),
              'descrip' => trim($request->get('descrip')),
              'date_deb'=> trim($request->get('datedeb')),
              'type_action' =>trim($request->get('typeact')),
-             'dossier' => trim($request->get('dossier')),
+             'dossier_id' => $dossier->id,
              'statut_courant' => 'Active',
+             'realisee'=> 0,
+             'user_id'=>auth::user()->id
         ]);
 
        $action->save();
@@ -177,33 +268,76 @@ class ActionController extends Controller
 
          $attributes = array_keys($type_act->getOriginal());
          $valeurs = array_values($type_act->getOriginal());
-        // dd($valeurs);
+         // dd(count($valeurs));
 
         // echo($attributes[1]);
         // echo($valeurs[1]);
-
-         for ($k=2; $k<=20; $k++)
+           $taille=count($valeurs)-5;
+         for ($k=2; $k<=$taille; $k++)
            {
+             
+            if($k>2)
+            {
+
+
+
            if( $valeurs[$k]!= null)
               {
 
                  $sousaction = new SousAction([
-             'action' =>$action->id,
+             'action_id' =>$action->id,
              'titre' => trim($valeurs[$k]),
-             'descrip' => trim($valeurs[1]),
+             'type_action' => trim($valeurs[1]),
              'ordre'=> trim($valeurs[$k+1]),
+             'descrip' => trim($valeurs[$k+2]),
              'realisee'=> false,
-                          
+             'user_id'=> $action->user_id,
+                                       
                   ]); 
                   
                   $sousaction->save();
 
 
                $k++;
+               $k++;
               }
               else
               {
-              	$k=100;
+              	$k=1000;
+              }
+
+              }
+              else // pour la sauvegarde de date de début de la première sous action
+              {
+
+               if( $valeurs[$k]!= null)
+               {
+
+                 $sousaction = new SousAction([
+             'action_id' =>$action->id,
+             'titre' => trim($valeurs[$k]),
+             'type_action' => trim($valeurs[1]),
+             'ordre'=> trim($valeurs[$k+1]),
+             'descrip' => trim($valeurs[$k+2]),
+             'realisee'=> false,
+             'user_id'=> $action->user_id,
+             'date_deb' => $action->date_deb,
+             'statut'=>'Active'       
+                  ]); 
+                  
+                  $sousaction->save();
+
+
+               $k++;
+               $k++;
+              }
+              else
+              {
+                $k=1000;
+              }
+
+
+
               }
            }
 
@@ -226,6 +360,19 @@ class ActionController extends Controller
 
       return back();
       //  return redirect('/actions')->with('success', '  has been added');
+
+    }
+
+    public function AnnulerActionCourante($iddoss,$idact,$idsousact)
+    {
+
+         $act=Action::find($idact);
+
+         $act->update(['statut_courant'=> "Achevée", 'realisee' => 1]);
+
+         return redirect('dossiers/view/'.$iddoss);
+
+        // return redirect('/dossier/action/Traitementsousaction/'.$iddoss.'/'.$idact.'/'.$sousactSui->id);
 
     }
 

@@ -69,11 +69,14 @@
                                 $typesactions= ActionController::ListeTypeActions();
 
 
-                              if (isset( $dossier)){
-                                  $actions=$dossier->activeActions;
+                             /// if (isset( $dossier)){
+                                 // $actions=$dossier->activeActions;
+
+                               if (true){ 
+                                $actions=Auth::user()->activeActions;
                             ?>
                   @if ($actions)
-
+<!--  début tab -+----------------------------------------------------------------------------------------->
                         <ul id="actiontabs" class="nav nav-tabs" style="margin-bottom: 15px;">
                             <li class="active">
                                 <a href="#actionstab" data-toggle="tab">Actions</a>
@@ -83,7 +86,10 @@
                             </li>
                         </ul>
                         <div id="ActionsTabContent" class="tab-content">
-                            <div class="tab-pane fade active in  scrollable-panel" id="actionstab">
+
+                          <!-- début  actions tab-->
+                          <div class="tab-pane fade active in " id="actionstab">
+                              <!--<div class="tab-pane fade active in  scrollable-panel" id="actionstab">-->
 
                                
                                 <!-- treeview of notifications -->
@@ -92,10 +98,17 @@
                                 <style scoped>
                                
                               .panel-heading.active {
+                                background-color: #00BFFF /*#86B404  #2EFEF7;*/
+                              }
+                              .panel-heading.ColorerActionsCourantes{
                                 background-color: #ffd051;
                               }
+
                               </style>
-                              <?php if (isset( $act)){$currentaction=$act->id ;}else{$currentaction=0;} ?>
+                              <?php if (isset($act)){$currentaction=$act->id;}else{$currentaction=0;} ?>
+
+                              <?php if (isset($dossier)){$dosscourant=$dossier->id ;}else{$dosscourant=0;} ?>
+                                    
                                     <div class="accordion panel-group" id="accordion">
                                  @if (!$actions->isEmpty())
                                   <div class="row">
@@ -105,29 +118,41 @@
                                 </div>
                                
                                     <div class="col-md-8">
-                                  <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#toutesactions">États de toutes les actions</button> 
+                                  <!--<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#toutesactions">États de toutes les actions</button> -->
                                   </div>
 
                                   </div>
                                   <br>
                                    <div class="row">
-                                    <div class="col-md-10" >
-                                    <h4 >les actions actives : </h4>
+                                    <div class="col-md-8" >
+                                    <!--<h4 >les actions actives : </h4>-->
                                    </div>
                                    </div>
                                     <br>                             
                                   @endif
                                       @foreach ($actions as $action)
                                       <div class="row" style="padding-bottom: 3px;">
-                                      <div class="col-md-8">
+                                      <div class="col-md-10">
                                       <div class="panel panel-default">
-                                        <div class="panel-heading <?php if($action->id ==$currentaction){echo 'active';}?>">
-                                          <h4 class="panel-title">
-                                            <a  href="{{url('action/workflow/'.$dossier->id.'/'.$action->id)}}">
-                                             {{$action->titre}}
-                                            </a>
-                                          </h4>
-                                        </div><!-- /.panel-heading -->
+                                        <div class="panel-heading <?php if($action->id ==$currentaction){echo 'active';}
+                                        else {if($action->dossier->id==$dosscourant){echo 'ColorerActionsCourantes' ;}}?>">
+                                         
+                                           <h4 class="panel-title">
+                                              <a data-toggle="collapse" href="#collapse{{$action->id}}">{{$action->dossier->reference_medic}}--{{$action->titre}}</a>
+                                           </h4>
+                                        </div>
+
+                                       <div id="collapse{{$action->id}}" class="panel-collapse collapse">
+                                            <ul class="list-group">
+                                              @foreach($action->activeSousAction as  $sas)
+                                              <li class="list-group-item"><a  href="{{url('dossier/action/Traitementsousaction/'.$action->dossier->id.'/'.$action->id.'/'.$sas->id)}}">{{$sas->titre}} </a></li>
+                                              @endforeach
+                                            </ul>
+                                           <!-- <div class="panel-footer">Footer</div>-->
+                                        </div>
+
+
+                                        <!-- /.panel-heading -->
                                        <!--<div id="collapse{{$action->id}}" class="panel-collapse collapse">
                                           <div class="panel-body">
                                             <p>{{$action->descrip}}</p>
@@ -135,20 +160,20 @@
                                         </div> -->
                                       </div>
                                     </div>
-                                    <div class="col-md-4">
-                                       <form>
-
-                                            <div class="dropdown">
-                                              <button class="dropbtn"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
-                                              <div class="dropdown-content">
-                                                <a href="{{url('action/RendreInactive/'.$action->id.'/'.$dossier->id)}}">Rendre Inactive</a>
-                                                <a href="{{url('action/RendreAchevee/'.$action->id.'/'.$dossier->id)}}">Rendre Achevée</a>
+                                    <div class="col-md-2" >
+                                     
                                           
-                                              </div>
-                                            </div>
-                                                                                 
+                                                <!--<a href="#">Rendre Inactive</a>
+                                                <a href="#">Rendre Achevée</a>-->
+                                            <a class="workflowkbs" id="<?php echo $action->id ?>" style="color:black !important; margin-top: 10px; margin-right: 10px;" data-toggle="modal" data-target="#myworow" title ="Voir Workflow" href="#"><span class="fa fa-2x fa-cogs" style=" margin-top: 10px; margin-right: 20px;" aria-hidden="true"></span>
+                                            </a>
+                                            <input id="workflowh<?php echo $action->id ?>" type="hidden" value="{{$action->titre}}">
 
-                                      </form>
+                                             {{-- <a  style="color:black !important; margin-top: 10px; margin-right: 10px;" title ="Voir Workflow" href="{{url('action/workflow/'.$action->dossier->id.'/'.$action->id)}}"><span class="fa fa-2x fa-cogs" style=" margin-top: 10px; margin-right: 20px;" aria-hidden="true"></span>
+                                            </a>--}}
+                                                                         
+                                        <?php $actk=$action ;?>
+                                     
                                     </div>
                                     </div>
 
@@ -161,7 +186,13 @@
                                               </div>
 
                                         </div>
-                                        <div class="tab-pane fade  scrollable-panel" id="newactiontab">
+
+
+                                    <!-- fin  actions tab---------------------------------------------------------->
+
+                                    <!-- début creation nouvelle actions tab------------------------>
+
+                                    <div class="tab-pane fade  scrollable-panel" id="newactiontab">
 
 
 
@@ -213,8 +244,14 @@
                                       </select>
                                       </div>
                                        <div class="form-group">
+                                          <?php if(isset($dossier)) {  ?>
                                           
-                                          <input id="dossier" type="hidden" class="form-control" value="{{$dossier->id}}" name="dossier"/>
+                                          <input id="dossier" type="hidden" class="form-control" value="{{$dossier->reference_medic}}" name="dossier"/>
+                                          <?php } else {  ?>
+                                             <label for="typeact" style="display: inline-block;  text-align: right; width: 40px;">Réf dossier</label>
+                                           <input id="dossier" type="text" class="form-control" value="" name="dossier"/>
+                                          <?php } ?>
+
                                       </div>
                                       <button  type="submit"  class="btn btn-primary">Ajouter</button>
                                      <!-- <button id="add"  class="btn btn-primary">Ajax Add</button>-->
@@ -226,25 +263,24 @@
                                    </div>
 
 
-               <div class="row text-center">
-                  <h4>Action libre</h4>
-                   <a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#NouveauType">créer nouveau type d'action </a>
-               </div> 
-                                         
-              </div>
-              </div>
-
+                                 <div class="row text-center">
+                                    <h4>Action libre</h4>
+                                     <a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#NouveauType">créer nouveau type d'action </a>
+                                 </div> 
+                                                                   
+                    </div>
+                 </div>
+                               
+                   <!-- fin creation nouvelle actions tab------------------------>        
 
                     @endif
 
-                        <?php } ?>
-                                </div>
+                    <?php } ?>
 
-                     
+ <!--  Fin tab -+----------------------------------------------------------------------------------------->     
+                       </div>
 
-                                   
-
-                                </div>
+                 </div>
             </div>
 
 <!-- modal pour creer un nouveau type d'action--> 
@@ -275,7 +311,7 @@
 
 
 
-            <!-- Modal pour toutes les actions -->
+ <!-- Modal pour toutes les etats actions ------------->
 
 
            <style>
@@ -323,7 +359,7 @@
                                 <td colspan="4"><i class="fa fa-warning"></i> Pas de résultats</td>
                               </tr>
                             </thead>
-                            <tbody>
+                           {{-- <tbody>
                               <?php  if (isset( $dossier)){
                                   $acts=$dossier->actions; $u=1; ?>
                                @foreach ($acts as $ac)
@@ -348,7 +384,7 @@
                                 <?php  $u++ ; ?>
                               @endforeach
                             <?php } ?>
-                            </tbody>
+                            </tbody>--}}
                           </table>
                       </p>
                     </div>
@@ -393,8 +429,40 @@
               </script>
 
 
-              <!--  fin modal -->
+<!-- --------- fin modal ------------------------------------------------------------->
 
+<!------------- Modal workflow ---------------------------------------------------------------- -->
+  <div class="modal fade" id="myworkflow" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 id="titleworkflowmodal" class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+          <p>
+
+  <div id="contenumodalworkflow" style="background-color: #ABF8F8;padding:15px 15px 15px 15px" >
+
+               
+  </div>
+
+
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+<!--fin modal workflow -->
+<!-- pour l'action libre-->
  <script type="text/javascript">
      $(document).ready(function(){
     var maxField = 10; //Input fields increment limitation
@@ -427,7 +495,7 @@
 $("#workflowform input:checkbox").change(function() {
     var ischecked= $(this).is(':checked');
     if(!ischecked)
-    alert('uncheckd ' + $(this).val());
+      alert('uncheckd ' + $(this).val());
     else
     {
       //alert('checkd ');
@@ -457,6 +525,54 @@ $("#workflowform input:checkbox").change(function() {
     }
 });
 </script>
+    <?php
+    $urlapp=env('APP_URL');
+
+    if (App::environment('local')) {
+        // The environment is local
+        $urlapp='http://localhost/NejdaApp';
+    }
+    ?>
+<script>
+
+$(document).ready(function() {
+
+  $('.workflowkbs').on('click', function() {
+
+
+   var idw=$(this).attr("id");
+   //alert(idw);
+   var nomact=$('#workflowh'+idw).attr("value");
+      $("#titleworkflowmodal").empty().append(nomact);//ou la methode html
+
+           $.ajax({
+
+               url: "<?php echo $urlapp; ?>/action/getAjaxWorkflow/"+idw,
+               type : 'GET',
+              // data : 'idw=' + idw,
+               success: function(data){
+               
+              // alert(data);
+
+               //alert(JSON.stringify(data));
+              $('#contenumodalworkflow').html(data);
+
+              $('#myworkflow').modal('show');
+
+                  //alert(JSON.stringify(retour))   ;
+                 // location.reload();
+            }
+
+             
+           });
+
+  })
+
+
+});
+</script>
+
+
 
 
   <!--<script>

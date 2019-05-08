@@ -26,4 +26,32 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+
+    public function actions()
+    {
+        return  $this-> hasMany("App\Action");
+    }
+
+     public function activeActions()
+    {
+        return $this->hasMany('App\Action')->where('statut_courant','Active');
+    }
+
+    public function dossier()
+    {
+
+        return $this->hasMany ("App\Dossier");
+    }
+
+    public function sousactions()
+    {
+        return $this->hasMany('App\SousAction');
+    }
+
+     public function sousactionsTh()
+    {
+        return $this->hasManyThrough('App\SousAction', 'App\Action');
+    }
+   
 }
