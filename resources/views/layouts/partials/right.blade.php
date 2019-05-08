@@ -74,7 +74,7 @@
                             ?>
                   @if ($actions)
 
-                        <ul class="nav nav-tabs" style="margin-bottom: 15px;">
+                        <ul id="actiontabs" class="nav nav-tabs" style="margin-bottom: 15px;">
                             <li class="active">
                                 <a href="#actionstab" data-toggle="tab">Actions</a>
                             </li>

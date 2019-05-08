@@ -230,8 +230,9 @@
 	        		//data.push(temp);
 	        		clickedmrktxt = temp['text'];
 	        		//$(e.target).css('border-style','dotted');
-					alert(clickedmrktxt+' || '+ $(e.target).attr("class"));
-					
+					//alert(clickedmrktxt+' || '+ $(e.target).attr("class"));
+					$('#actiontabs a[href="#newactiontab"]').trigger('click');
+					$('input#titre').val(clickedmrktxt);
 					
 					/*_that._callback('click', e);
 					
