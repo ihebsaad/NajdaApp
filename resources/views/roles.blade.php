@@ -51,15 +51,14 @@
 </body>
 </html>
  <?php
- $urlapp=env('APP_URL');
 
+ $urlapp=env('APP_URL');
+ $urlapp='https://najdaapp.enterpriseesolutions.com/' ;
  if (App::environment('local')) {
      // The environment is local
      $urlapp='http://localhost/najdaapp';
  }
 
- $urlnotif=$urlapp.'/entrees/show/' ;
- //$urlnotif = preg_replace('/\s+/', '', $urlnotif);
  ?>
 
  <script>
