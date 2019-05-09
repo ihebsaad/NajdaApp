@@ -175,7 +175,7 @@ class ActionController extends Controller
 
                                 $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10">
                                <input id="emetteur" type="text" name="emetteur" style="width:100% ; color:black" value="'. $sactions->titre.'" readonly="true" />
-                           </div><div class="col-md-1"> <img  src="https://najdaapp.enterpriseesolutions.com/public/img/spinner.gif"   />   </div>' ;
+                           </div><div class="col-md-1"> <img  src="https://najdaapp.enterpriseesolutions.com/public/img/spinner.gif"  width="30" height="30" />   </div>' ;
                             }
                             else
                             {
