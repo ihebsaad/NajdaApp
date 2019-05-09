@@ -170,12 +170,12 @@ class ActionController extends Controller
                         if ($sactions->statut=='Active'|| $sactions->realisee==0 )
                         {
                             if($sactions->statut=='Active')
-                            {     
+                            {
 
 
                                 $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10">
                                <input id="emetteur" type="text" name="emetteur" style="width:100% ; color:black" value="'. $sactions->titre.'" readonly="true" />
-                           </div><div class="col-md-1"> <img  src="https://najdaapp.enterpriseesolutions.com/public/img/spinner.png"   />   </div>' ;
+                           </div><div class="col-md-1"> <img  src="https://najdaapp.enterpriseesolutions.com/public/img/spinner.gif"   />   </div>' ;
                             }
                             else
                             {
