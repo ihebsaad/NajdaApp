@@ -1384,7 +1384,7 @@
 
                                         <span class="cd-date">
 
-                                            <?php echo date('d/m/Y H:i', ($communin['reception'])) ; ?> <i class="fa fa-fw fa-clock-o"></i>
+                                            <?php echo /*date('d/m/Y H:i', (*/$communin['reception']/*))*/ ; ?> <i class="fa fa-fw fa-clock-o"></i>
 
 
                                         </span>
@@ -1699,7 +1699,7 @@
                             <?php 
                             $pathdoc = storage_path().$doc->emplacement;
                             ?>
-                            <td style=";"><a  href="<?php echo $pathdoc; ?>" class="btn"><i class="fa fa-download"></i> Télécharger</a></td>
+                            <td style=";"><a  href="{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}" ><i class="fa fa-download"></i> Télécharger</a></td>
                         </tr>
                     @endforeach
 
