@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Entree ;
 use App\Envoye ;
 use App\Dossier ;
+use App\Template_doc ;
+use App\Document ;
 use App\Client ;
 use DB;
 use App\TypeAction;
@@ -14,6 +16,7 @@ use App\Prestation;
 use App\TypePrestation;
 use App\Citie;
 use App\Email;
+use WordTemplate;
 
 
 class DossiersController extends Controller
@@ -167,6 +170,53 @@ class DossiersController extends Controller
         return url('/dossiers/view/'.$parent) ;
     }
 
+    public function adddocument(Request $request)
+    {
+        $dossier= $request->get('dossier') ;
+        $arrfile = Template_doc::where('nom', 'like', 'PC_Dedouannement')->first();
+        $infodossier = Dossier::where('id', $dossier)->first();
+        //print_r($arrfile);
+        $file=public_path($arrfile['path']);
+        //if (file_exists($file)) {
+
+            setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
+            $datees = strftime("%d %B %Y".", "."%H:%M"); 
+
+            $refdoss = $infodossier["reference_medic"];
+            
+            $array = array(
+                '[N_ABONNEE]' => $infodossier["subscriber_name"],
+                '[P_ABONNEE]' => $infodossier["subscriber_lastname"],
+                '[NREF_DOSSIER]' => $refdoss,
+                '[DATE_PREST]' => '10/01/2020',
+                '[LIEU_DED]' => 'Tunis',
+                '[TYPEVE_IMMAT]' => 'Mercedes 125-4568',
+                '[LIEU_IMMOB]' => 'Tunis',
+                '[LTA]' => 'ExLTA',
+                '[CORD_VOL]' => '001VOL100120',
+                '[DATE_HEURE]' => $datees,
+            );
+
+            $name_file = 'PC_Dedouannement_'.$refdoss.'.doc';
+            
+         WordTemplate::export($file, $array, '/documents/'.$refdoss.'/'.$name_file);
+          //return WordTemplate::verify($file);
+
+       /* }
+        else {return 'fichier template non existant';}*/
+        
+
+        $doc = new Document([
+            'dossier' => $dossier,
+            'titre' => 'PC_Dedouannement_'.$refdoss,
+            'emplacement' => 'documents/'.$refdoss.'/'.$name_file,
+
+        ]);
+        $doc->save();
+        //redirect()->route('docgen');
+        //return url('/dossiers/view/'.$dossier) ;
+    }
+
         /**
      * Display the specified resource.
      *
@@ -196,9 +246,9 @@ class DossiersController extends Controller
 
         $envoyes =   Envoye::where('dossier', $ref)->get();
 
-        $entrees1 =   Entree::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach')->orderBy('reception', 'desc')->get();
+        $entrees1 =   Entree::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
       ///  $entrees1 =$entrees1->sortBy('reception');
-        $envoyes1 =   Envoye::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach')->orderBy('reception', 'desc')->get();
+        $envoyes1 =   Envoye::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
       ///  $envoyes1 =$envoyes1->sortBy('reception');
 
         $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());
@@ -244,9 +294,9 @@ class DossiersController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
         //  $entrees =   Entree::all();
+        $documents = Document::where('dossier', $id)->get();
 
-
-        return view('dossiers.view',['emails'=>$emails,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions,'envoyes'=>$envoyes], compact('dossier'));
+        return view('dossiers.view',['emails'=>$emails,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
 
     }
 

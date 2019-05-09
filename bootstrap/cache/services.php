@@ -41,6 +41,7 @@
     37 => 'Anhskohbo\\NoCaptcha\\NoCaptchaServiceProvider',
     38 => 'Barryvdh\\DomPDF\\ServiceProvider',
     39 => 'App\\Providers\\CommonDataServiceProvider',
+    40 => 'Novay\\WordTemplate\\WordTemplateServiceProvider',
   ),
   'eager' => 
   array (
@@ -70,6 +71,7 @@
     23 => 'Anhskohbo\\NoCaptcha\\NoCaptchaServiceProvider',
     24 => 'Barryvdh\\DomPDF\\ServiceProvider',
     25 => 'App\\Providers\\CommonDataServiceProvider',
+    26 => 'Novay\\WordTemplate\\WordTemplateServiceProvider',
   ),
   'deferred' => 
   array (

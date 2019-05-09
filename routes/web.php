@@ -113,6 +113,7 @@ Route::post('/dossiers/saving','DossiersController@saving')->name('dossiers.savi
 Route::post('/dossiers/updating','DossiersController@updating')->name('dossiers.updating');
 Route::get('/dossiers/view/{id}', 'DossiersController@view')->name('dossiers.view');
 Route::post('/dossiers/addemail','DossiersController@addemail')->name('dossiers.addemail');
+Route::post('/dossiers/adddocument','DossiersController@adddocument')->name('dossiers.adddocument');
 
 
 /*** Clients **/

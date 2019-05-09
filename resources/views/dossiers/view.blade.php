@@ -43,6 +43,11 @@
                                 <i class="fas  fa-lg fa-envelope"></i>  Emails
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tab6" data-toggle="tab">
+                                <i class="fas fa-lg fa-file-word"></i>  Docs
+                            </a>
+                        </li>
 
                     </ul>
 
@@ -1363,34 +1368,40 @@
                                     <img  src="{{ asset('public/img/rendu.png') }}"  width="60" height="60">
                                     <?php }?>
                                 </span>
-                                    <h2><?php echo $communin['sujet']; ?></h2><br>
-                                    <p style="text-align:center">
+                                    <h2 style="font-size: 16px"><?php echo $communin['sujet']; ?></h2>
+                                    <p >
 
                                         <?php if ($communin['boite']==0)
-                                        {  echo '<span style="font-size:16px"><B>Emetteur: </B>'. $communin['emetteur'].'</span>';
+                                        {  echo '<span class="commsujet" style="font-size:12px"><B>Emetteur: </B>'. $communin['emetteur'].'</span>';
+                                        }
+                                        ?>
+
+                                        <?php if ($communin['commentaire']!=null)
+                                        {  echo '<span style="font-size:12px"><B>Commentaire: </B>'. $communin['commentaire'].'</span>';
                                         }
                                         ?>
 
 
                                         <span class="cd-date">
 
-                                            <?php echo /* date('d/m/Y H:i',*/ ($communin['reception'])/*) */; ?> <i class="fa fa-fw fa-clock-o"></i><br>
+                                            <?php echo date('d/m/Y H:i', ($communin['reception'])) ; ?> <i class="fa fa-fw fa-clock-o"></i>
+
 
                                         </span>
                                         <?php if($communin['type']=="email") {
-                                        ?> <span><i class="fa fa-fw fa-paperclip"></i>(<?php echo $communin['nb_attach'];?>) Attachements</span><br>
+                                        ?> <span style="font-size:12px"><i class="fa fa-fw fa-paperclip"></i>(<?php echo $communin['nb_attach'];?>) Attachements</span><br>
                                         <?php }  ?>
 
                                         <?php
                                         if ($communin['boite']==1)
                                         {
                                         ?>
-                                        <a class="btn btn-md btn-success" href="{{action('EnvoyesController@view', $communin['id'])}}"> Voir les détails</a><br>
+                                        <a class="btn btn-md btn-default" style="margin-top: 10px;" href="{{action('EnvoyesController@view', $communin['id'])}}"> Voir les détails</a><br>
 
                                         <?php
                                         }
                                         else { ?>
-                                        <a class="btn btn-md btn-success" href="{{action('EntreesController@show', $communin['id'])}}"> Voir les détails</a><br>
+                                        <a class="btn btn-md btn-default" style="margin-top: 10px;" href="{{action('EntreesController@show', $communin['id'])}}"> Voir les détails</a><br>
 
                                         <?php } ?>
 
@@ -1665,6 +1676,39 @@
 
             </div>
 
+            <div id="tab6" class="tab-pane fade">
+                <div style="">
+                    <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="adddoc" class="btn btn-md btn-success"   data-toggle="modal" data-target="#generatedoc"><b><i class="fas fa-plus"></i> Générer un document</b></button>
+
+
+                </div>
+                <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
+                    <thead>
+                    <tr id="headtable">
+                        <th style="">Document</th>
+                        <th style="">Description</th>
+                        <th style="">Télécharger</th>
+                     </tr>
+
+                    </thead>
+                    <tbody>
+                    @foreach($documents as $doc)
+                        <tr>
+                            <td style=";"><?php echo $doc->titre; ?></td>
+                            <td style=";"><?php echo $doc->description; ?></td>
+                            <?php 
+                            $pathdoc = storage_path().$doc->emplacement;
+                            ?>
+                            <td style=";"><a  href="<?php echo $pathdoc; ?>" class="btn"><i class="fa fa-download"></i> Télécharger</a></td>
+                        </tr>
+                    @endforeach
+
+                    </tbody>
+                </table>
+
+
+            </div>
+
 
             </div>
 
@@ -1844,7 +1888,55 @@ $iduser=$CurrentUser->id;
         </div>
     </div>
 </div>
+<!-- Modal Document-->
+<div class="modal fade" id="generatedoc" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal2">Générer un document </h5>
 
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+
+                    <div class="form-group">
+                        {{ csrf_field() }}
+
+                        <form id="gendocform" novalidate="novalidate">
+
+                            <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}">
+                            <div class="form-group " >
+                                <label for="emaildoss">Template</label>
+                                <div class=" row  ">
+                                    <select class="form-control" required id="templatedoc">
+                                                    <option>PRISE EN CHARGE DEDOUANNEMENT</option>
+                                                </select>
+                                </div>
+                            </div>
+
+                            <!--<div class="form-group ">
+                                <label for="DescrEmail">Description</label>
+                                <div class="row">
+                                    <input type="text" class="form-control"  id="DescrEmail" />
+
+                                </div>
+                            </div>-->
+
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" id="gendoc" class="btn btn-primary">Générer</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @endsection
@@ -1973,6 +2065,27 @@ $iduser=$CurrentUser->id;
         }
     });
 
+    $('#gendoc').click(function(){
+        var dossier = $('#dossier').val();
+        if ((dossier != '') )
+        {
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('dossiers.adddocument') }}",
+                method:"POST",
+                data:{dossier:dossier, _token:_token},
+                success:function(data){
+
+                    //   alert('Added successfully');
+                    window.location =data;
+
+
+                }
+            });
+        }else{
+            // alert('ERROR');
+        }
+    });
 
     });
 
