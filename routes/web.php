@@ -118,6 +118,7 @@ Route::post('/dossiers/addemail','DossiersController@addemail')->name('dossiers.
 /*** Clients **/
 //Route::resource('/clients',  'ClientsController');
 Route::get('/clients', array('as' => 'clients','uses' => 'ClientsController@index'));
+Route::get('/clients/saving','ClientsController@saving')->name('clients.saving');
 Route::post('/clients/saving','ClientsController@saving')->name('clients.saving');
 Route::post('/clients/updating','ClientsController@updating')->name('clients.updating');
 Route::post('/clients/updatingnature','ClientsController@updatingnature')->name('clients.updatingnature');
