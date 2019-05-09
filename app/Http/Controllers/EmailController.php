@@ -796,7 +796,7 @@ class EmailController extends Controller
         $urlapp='http://localhost/najdaapp';
     }
     $urlsending=$urlapp.'/emails/envoimail/'.$doss;
-
+                $dossier= $this->RefDossierById($doss);////;
 
            $par=Auth::id();
            $envoye = new Envoye([
@@ -810,7 +810,7 @@ class EmailController extends Controller
                'cci'=> $cci,
                'statut'=> 1,
                'type'=> 'email',
-               'dossier'=> $doss
+               'dossier'=> $dossier
               // 'reception'=> date('d/m/Y H:i:s'),
 
            ]);
@@ -1058,6 +1058,14 @@ class EmailController extends Controller
         }else{return '';}
     }
 
+    public static function RefDossierById($id)
+    {
+        $dossier = Dossier::find($id);
+        if (isset($dossier['reference_medic'])) {
+            return $dossier['reference_medic'];
+        }else{return '';}
+
+    }
 
     /*
            $('.itemName').select2({
