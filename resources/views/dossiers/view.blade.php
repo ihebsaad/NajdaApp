@@ -1699,7 +1699,7 @@
                             <?php 
                             $pathdoc = storage_path().$doc->emplacement;
                             ?>
-                            <td style=";"><a  href="{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}" class="btn"><i class="fa fa-download"></i> Télécharger</a></td>
+                            <td style=";"><a  href="{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}" ><i class="fa fa-download"></i> Télécharger</a></td>
                         </tr>
                     @endforeach
 
