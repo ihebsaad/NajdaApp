@@ -1384,7 +1384,7 @@
 
                                         <span class="cd-date">
 
-                                            <?php echo date('d/m/Y H:i', ($communin['reception'])) ; ?> <i class="fa fa-fw fa-clock-o"></i>
+                                            <?php echo /*date('d/m/Y H:i', (*/$communin['reception']/*))*/ ; ?> <i class="fa fa-fw fa-clock-o"></i>
 
 
                                         </span>
