@@ -1373,8 +1373,8 @@
 
 
                                         <span class="cd-date">
-                                                <i class="fa fa-fw fa-clock-o"></i>
-                                            <?php echo /* date('d/m/Y H:i',*/ ($communin['reception'])/*) */; ?><br>
+
+                                            <?php echo /* date('d/m/Y H:i',*/ ($communin['reception'])/*) */; ?> <i class="fa fa-fw fa-clock-o"></i><br>
 
                                         </span>
                                         <?php if($communin['type']=="email") {

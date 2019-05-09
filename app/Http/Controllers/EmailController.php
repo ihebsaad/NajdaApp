@@ -572,6 +572,7 @@ class EmailController extends Controller
         $attachs = $request->get('attachs');
 
         $to='ihebsaad@gmail.com';
+       // $to='envoifax@najda-assistance.com';
          $sujet='1234,Najda,najda,'.$nom.'@'.$numero.'';
         //$sujet=' test';
 
@@ -809,6 +810,7 @@ class EmailController extends Controller
                'cci'=> $cci,
                'statut'=> 1,
                'type'=> 'email',
+               'dossier'=> $doss
               // 'reception'=> date('d/m/Y H:i:s'),
 
            ]);
