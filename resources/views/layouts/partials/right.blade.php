@@ -138,7 +138,7 @@
                                         else {if($action->dossier->id==$dosscourant){echo 'ColorerActionsCourantes' ;}}?>">
                                          
                                            <h4 class="panel-title">
-                                              <a data-toggle="collapse" href="#collapse{{$action->id}}">{{$action->dossier->reference_medic}}--{{$action->titre}}</a>
+                                              <a data-toggle="collapse" href="#collapse{{$action->id}}">{{$action->dossier->reference_medic}}   {{$action->titre}}</a>
                                            </h4>
                                         </div>
 
@@ -148,24 +148,20 @@
                                               <li class="list-group-item"><a  href="{{url('dossier/action/Traitementsousaction/'.$action->dossier->id.'/'.$action->id.'/'.$sas->id)}}">{{$sas->titre}} </a></li>
                                               @endforeach
                                             </ul>
-                                           <!-- <div class="panel-footer">Footer</div>-->
+
                                         </div>
 
 
                                         <!-- /.panel-heading -->
-                                       <!--<div id="collapse{{$action->id}}" class="panel-collapse collapse">
-                                          <div class="panel-body">
-                                            <p>{{$action->descrip}}</p>
-                                          </div>
-                                        </div> -->
+
+
                                       </div>
                                     </div>
                                     <div class="col-md-2" >
                                      
-                                          
-                                                <!--<a href="#">Rendre Inactive</a>
-                                                <a href="#">Rendre Achevée</a>-->
-                                            <a class="workflowkbs" id="<?php echo $action->id ?>" style="color:black !important; margin-top: 10px; margin-right: 10px;" data-toggle="modal" data-target="#myworow" title ="Voir Workflow" href="#"><span class="fa fa-2x fa-cogs" style=" margin-top: 10px; margin-right: 20px;" aria-hidden="true"></span>
+
+
+                                            <a class="workflowkbs" id="<?php echo $action->id ?>" style="color:black !important; margin-top: 10px; margin-right: 10px;" data-toggle="modal" data-target="#myworow" title ="Voir Workflow" href="#"><span class="fa fa-2x fa-tasks" style=" margin-top: 10px; margin-right: 20px;" aria-hidden="true"></span>
                                             </a>
                                             <input id="workflowh<?php echo $action->id ?>" type="hidden" value="{{$action->titre}}">
 
@@ -213,47 +209,57 @@
                                           </ul>
                                       </div><br />
                                   @endif
-                                  <form  method="post" action="{{ route('actions.store') }}">
+                                  <form  method="post" action="{{ route('actions.store') }}" style="padding-top:30px">
                                       <div class="form-group">
                                            {{ csrf_field() }}
-                                         <label  style="display: inline-block;  text-align: left; width: 40px;">titre:</label>
-                                         <input id="titre" type="text" class="form-control" style="width:95%;  text-align: right !important;" name="titre"/>
+                                         <div class="row">
+                                             <div class="col-md-3"> <label  style="display: inline-block;  text-align: left; width: 40px;">titre:</label></div>
+                                             <div class="col-md-9"><input id="titre" type="text" class="form-control" style="width:95%;  text-align: right !important;" name="titre"/></div>
+                                       </div>
                                       </div>
-
                                       <div class="form-group">
-                                          <label for="descrip" style="display: inline-block;  text-align: right; width: 40px;">Description:</label>
-                                          <input id="descrip" type="text" class="form-control" style="width:95%;  text-align: right;" name="descrip"/>
+                                          <div class="row">
+                                              <div class="col-md-3">     <label for="descrip" style="display: inline-block;  text-align: right; width: 40px;">Description:</label></div>
+                                              <div class="col-md-9"><input id="descrip" type="text" class="form-control" style="width:95%;  text-align: right;" name="descrip"/></div>
+                                          </div>
                                       </div>
                                       <div class="form-group">
                                         <?php $da= date('Y-m-d\TH:m'); ?>
 
-                                      <label for="datedeb" style="display: inline-block;  text-align: right; width: 40px;">Date début:</label>
-                                <input id="datedeb" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:95%;  text-align: right;" name="datedeb"/>
+                                            <div class="row">
+                                                <div class="col-md-3">  <label for="datedeb" style="display: inline-block;  text-align: right; width: 40px;">Date début:</label></div>
+                                                <div class="col-md-9"> <input id="datedeb" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:95%;  text-align: right;" name="datedeb"/></div>
+                                            </div>
                                       </div>
-                                      <div class="form-group">
-                                       <!--<label for="datefin" style="display: inline-block;  text-align: right; width: 40px;">Date fin:</label>
-                                          <input id="datefin" type="text" class="form-control" style="width:95%;  text-align: right;" name="datefin"/>
-                                      </div>-->
-                                      <div class="form-group">
-                                       <label for="typeact" style="display: inline-block;  text-align: right; width: 40px;">Type action:</label>
-                                          <select id="typeact" type="text" class="form-control" style="width:95%;  text-align: right;" name="typeact"/> 
 
+                                           <div class="row">
+                                              <div class="col-md-3">
+                                                  <label for="typeact" style="display: inline-block;  text-align: right; width: 40px;">Type action:</label>
+                                              </div>
+                                              <div class="col-md-9">  <select id="typeact" type="text" class="form-control" style="width:95%;  text-align: right;" name="typeact"/>
                                                          @foreach($typesactions as $tyaction)
                                                               <option value="{{ $tyaction->id }}">{{ $tyaction->nom_type_action }}</option>
                                                           @endforeach
                                       </select>
-                                      </div>
-                                       <div class="form-group">
-                                          <?php if(isset($dossier)) {  ?>
+                                              </div>
+                                           </div>
+
+                                      <div class="form-group">
+
+                                           <?php if(isset($dossier)) {  ?>
                                           
                                           <input id="dossier" type="hidden" class="form-control" value="{{$dossier->reference_medic}}" name="dossier"/>
                                           <?php } else {  ?>
-                                             <label for="typeact" style="display: inline-block;  text-align: right; width: 40px;">Réf dossier</label>
-                                           <input id="dossier" type="text" class="form-control" value="" name="dossier"/>
-                                          <?php } ?>
+                                               <div class="row">
+
+                                               <div class="col-md-3">     <label for="typeact" style="display: inline-block;  text-align: right; width: 40px;">Réf dossier</label></div>
+                                                  <div class="col-md-9"> <input id="dossier" type="text" class="form-control" value="" name="dossier"/></div>
+                                               </div>
+
+                                           <?php } ?>
 
                                       </div>
-                                      <button  type="submit"  class="btn btn-primary">Ajouter</button>
+                                       <button  type="submit"  class="btn btn-primary">Ajouter</button>
                                      <!-- <button id="add"  class="btn btn-primary">Ajax Add</button>-->
                                   </form>
                                </div>   
@@ -530,7 +536,9 @@ $("#workflowform input:checkbox").change(function() {
 
     if (App::environment('local')) {
         // The environment is local
-        $urlapp='http://localhost/NejdaApp';
+       // $urlapp='http://localhost/NejdaApp';
+        $urlapp=env('APP_URL');
+
     }
     ?>
 <script>

@@ -152,7 +152,7 @@ class ActionController extends Controller
 
 
                           $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10">
-                               <input id="emetteur" type="text" name="emetteur" style="width:100% ;background-color:#00FF80; color:black" value="'. $sactions->titre.'" readonly="true" />
+                               <input id="emetteur" type="text" name="emetteur" style="padding-left:5px;width:100% ;background-color:#5cb700; color:white" value="'. $sactions->titre.'" readonly="true" />
                            </div><div class="col-md-1"></div>' ;
                        }
                        else
@@ -170,11 +170,12 @@ class ActionController extends Controller
                         if ($sactions->statut=='Active'|| $sactions->realisee==0 )
                         {
                             if($sactions->statut=='Active')
-                            {
+                            {     
 
-                              $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10">
+
+                                $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10">
                                <input id="emetteur" type="text" name="emetteur" style="width:100% ; color:black" value="'. $sactions->titre.'" readonly="true" />
-                           </div><div class="col-md-1"><span class="fa fa-asterisk"></span></div>' ;
+                           </div><div class="col-md-1"> <img  src="https://najdaapp.enterpriseesolutions.com/public/img/spinner.png"   />   </div>' ;
                             }
                             else
                             {

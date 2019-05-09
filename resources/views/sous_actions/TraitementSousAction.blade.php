@@ -46,19 +46,19 @@
     <br>
     <div class="row">
       <div class="col-md-10">
-    <h4>Étapes à réaliser:</h4> 
+    <h3 style="margin-top:15px;">Étapes à réaliser:</h3>
       </div>
 
     <div class="col-md-2">
-    <button title="Reporter la sous-action courante à une date ultérieure" data-toggle="modal" data-target="#ReporterSA"  >
-     <span class="fa fa-3x fa-clock-o"> </span></button>
+    <button class="btn " style="float:right;margin-right:5px;" title="Reporter la sous-action courante à une date ultérieure" data-toggle="modal" data-target="#ReporterSA"  >Reporter<br>
+     <i style="margin-top:8px" class="fa fa-2x fa-history"> </i></button>
    </div>
      </div>
     <br>
-    <p><textarea style="WIDTH: 500px; height:100px;  font-size: 18px;">{{$sousaction->descrip}}</textarea>
+    <p><textarea readonly style="padding:10px 10px 10px 10px ;border:1px solid #00aced;WIDTH: 100%; height:100px;  font-size: 18px;">{{$sousaction->descrip}}</textarea>
     </p>
      <br>
-    <div>
+     <div>
       <h4 id="comenttitle">Vous pouvez ajouter un ou plusieurs commentaires :</h4>
       <br>
 
@@ -72,7 +72,7 @@
              @if($sousaction->comment1)
              <?php $nbcomm++;?>
             <div>
-            <input type="text"  size="70" onchange="changing(this)"  id="comment1" name="comment1" value="<?php echo $sousaction->comment1 ?>"/>
+            <input autocomplete="off"  type="text" style="width:80%"  size="70" onchange="changing(this)"  id="comment1" name="comment1" value="<?php echo $sousaction->comment1 ?>"/>
             <a href="javascript:void(0);" class="com_button" title="Ajouter commentaire"></a>
             </div>
             <br>
@@ -80,7 +80,7 @@
              @if($sousaction->comment2)
              <?php $nbcomm++;?>
             <div>
-            <input type="text"  size="70" onchange="changing(this)"  id="comment2" name="comment2" value="<?php echo $sousaction->comment2 ?>"/>
+            <input autocomplete="off"  type="text"  style="width:80%"  size="70" onchange="changing(this)"  id="comment2" name="comment2" value="<?php echo $sousaction->comment2 ?>"/>
             <a href="javascript:void(0);" class="com_button" title="Ajouter commentaire"></a>
             </div>
              <br>
@@ -88,7 +88,7 @@
              @if($sousaction->comment3)
              <?php $nbcomm++;?>
               <div>
-            <input type="text"  size="70" onchange="changing(this)" id ="comment3" name="comment3" value="<?php echo $sousaction->comment3 ?>"/>
+            <input autocomplete="off" type="text" style="width:80%"  size="70" onchange="changing(this)" id ="comment3" name="comment3" value="<?php echo $sousaction->comment3 ?>"/>
             <a href="javascript:void(0);" class="com_button" title="Ajouter commentaire"></a>
             </div>
              <br>
@@ -97,7 +97,7 @@
         
       <?php if($nbcomm<3){?>
        <div>
-            <input type="text" onchange="changing(this)" size="70" id="field_name[]" name="field_name[]" value=""/>
+            <input autocomplete="off"  type="text" onchange="changing(this)" size="70" style="width:80%" id="field_name[]" name="field_name[]" value=""/>
             <a href="javascript:void(0);" class="com_button" title="Ajouter commentaire"><?php if($nbcomm<=1){ ?><img width="26" height="26" src="{{ asset('public/img/plus.png') }}"/> <?php } ?></a>
       </div> 
     <?php } ?>
@@ -113,14 +113,14 @@
 
       <?php  if(isset($sousaction)) { if($sousaction->ordre < $sousaction->action->sousactions->count()){ ?>
       <div class="col-md-6">
-      <a href="{{ url('dossier/action/EnregistrerEtAllerSuivante/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" class="btn btn-primary"> Marquer la sous-action comme faite et aller à la suivante</a> 
+          <a href="{{ url('dossier/action/EnregistrerEtAllerSuivante/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" class="btn btn-primary"><i class="fa fa-check"></i>  Marquer la sous-action comme faite et <i class="fa fa-close"></i> aller à la suivante</a>
 
       </div>
 
     <?php } else {?>
 
       <div class="col-md-6">
-      <a href="{{ url('dossier/action/FinaliserAction/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" class="btn btn-primary"> Marquer la sous-action comme faite </a> 
+      <a href="{{ url('dossier/action/FinaliserAction/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" class="btn btn-primary"><i class="fa fa-check-circle"></i>   Marquer la sous-action comme faite </a>
 
       </div>
 
@@ -134,7 +134,7 @@
       
       <div class="col-md-5">
         
-         <a class="btn btn-danger" href="{{ url('dossier/action/AnnulerEtAllerSuivante/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" > Annuler la sous-action et aller à la suivante</a> 
+         <a class="btn btn-danger" href="{{ url('dossier/action/AnnulerEtAllerSuivante/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" ><i class="fa fa-close"></i> Annuler la sous-action et <i class="fa fa-arrow-right"></i> aller à la suivante</a>
 
      </div>
 
@@ -144,7 +144,7 @@
 
       <div class="col-md-6">
         <?php  if(isset($sousaction)) { if($sousaction->ordre > 1){ ?>
-         <a class="btn btn-primary" href="{{ url('dossier/action/EnregistrerEtAllerPrecedente/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" >  Aller à la sous-action précédente</a> 
+         <a class="btn btn-primary" href="{{ url('dossier/action/EnregistrerEtAllerPrecedente/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" <i class="fa fa-arrow-left"></i>  Aller à la sous-action précédente</a>
        <?php }}?>
       </div>
       <div class="col-md-1">
@@ -152,7 +152,7 @@
 
       <div class="col-md-5">
 
-        <a class="btn btn-danger" href="{{ url('dossier/action/AnnulerActionCourante/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" >  Annuler l'action courante</a> 
+        <a class="btn btn-danger" href="{{ url('dossier/action/AnnulerActionCourante/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" ><i class="fa fa-close"></i>  Annuler l'action courante</a>
       </div>
      
      </div>
@@ -164,7 +164,7 @@
     var maxField = <?php echo (3-$nbcomm) ?>; //Input fields increment limitation
     var comButton = $('.com_button'); //Add button selector
     var comwrapper = $('.com_wrapper'); //Input field wrapper
-    var comfieldHTML = '<div><br><input type="text" onchange="changing(this)" id="field_name[]" size="70" name="field_name[]" value=""/><a href="javascript:void(0);" class="comremove_button"> <img width="26" height="26" src="{{ asset('public/img/moin.png') }}"/></a><br></div> '; //New input field html 
+    var comfieldHTML = '<div><br><input autocomplete="off"  style="width:80%" size="70" type="text" onchange="changing(this)" id="field_name[]"  name="field_name[]" value=""/><a href="javascript:void(0);" class="comremove_button"> <img width="26" height="26" src="{{ asset('public/img/moin.png') }}"/></a><br></div> '; //New input field html
     var x = 1; //Initial field counter is 1
     
     //Once add button is clicked
