@@ -6,7 +6,7 @@ class Client extends Model
 
 {
 	
-  protected $fillable = ['id', 'created_at','updated_at',
+  protected $fillable = [
 
 'name',
 'groupe',
