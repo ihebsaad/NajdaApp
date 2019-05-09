@@ -152,7 +152,7 @@ class ActionController extends Controller
 
 
                           $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10">
-                               <input id="emetteur" type="text" name="emetteur" style="padding-left:5px;width:100% ;background-color:#5cb700; color:white" value="'. $sactions->titre.'" readonly="true" />
+                               <input id="emetteur" type="text" name="emetteur" style="border:none;padding-left:5px;width:100% ;background-color:#5cb700; color:white" value="'. $sactions->titre.'" readonly="true" />
                            </div><div class="col-md-1"></div>' ;
                        }
                        else
@@ -161,7 +161,7 @@ class ActionController extends Controller
                       
                         {
 
-                          $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10"><input id="emetteur" type="text" name="emetteur" style="width:100% ;background-color:#BDBDBD; color:black" value="'. $sactions->titre.'" readonly="true" />
+                          $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10"><input id="emetteur" type="text" name="emetteur" style="border:none;padding-left:5px;width:100% ;background-color:#BDBDBD; color:black" value="'. $sactions->titre.'" readonly="true" />
                            </div><div class="col-md-1"></div>' ;
                        }
                        else
@@ -174,14 +174,14 @@ class ActionController extends Controller
 
 
                                 $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10">
-                               <input id="emetteur" type="text" name="emetteur" style="width:100% ; color:black" value="'. $sactions->titre.'" readonly="true" />
+                               <input id="emetteur" type="text" name="emetteur" style="border:none;padding-left:5px;width:100% ; color:black" value="'. $sactions->titre.'" readonly="true" />
                            </div><div class="col-md-1"> <img  src="https://najdaapp.enterpriseesolutions.com/public/img/spinner.gif"  width="30" height="30" />   </div>' ;
                             }
                             else
                             {
 
                             $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10">
-                               <input id="emetteur" type="text" name="emetteur" style="width:100% ; color:black" 
+                               <input id="emetteur" type="text" name="emetteur" style="border:none;padding-left:5px;width:100% ; color:black" 
                                value="'. $sactions->titre.'" readonly="true" />
                            </div><div class="col-md-1"></div>' ;
 

@@ -113,7 +113,7 @@
 
       <?php  if(isset($sousaction)) { if($sousaction->ordre < $sousaction->action->sousactions->count()){ ?>
       <div class="col-md-6">
-          <a href="{{ url('dossier/action/EnregistrerEtAllerSuivante/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" class="btn btn-primary"><i class="fa fa-check"></i>  Marquer la sous-action comme faite et <i class="fa fa-close"></i> aller à la suivante</a>
+          <a href="{{ url('dossier/action/EnregistrerEtAllerSuivante/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" class="btn btn-primary"><i class="fa fa-check"></i>  Marquer la sous-action comme faite et <i class="fa fa-arrow-right"></i> aller à la suivante</a>
 
       </div>
 
@@ -144,7 +144,7 @@
 
       <div class="col-md-6">
         <?php  if(isset($sousaction)) { if($sousaction->ordre > 1){ ?>
-         <a class="btn btn-primary" href="{{ url('dossier/action/EnregistrerEtAllerPrecedente/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" <i class="fa fa-arrow-left"></i>  Aller à la sous-action précédente</a>
+         <a class="btn btn-primary" href="{{ url('dossier/action/EnregistrerEtAllerPrecedente/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}"> <i class="fa fa-arrow-left"></i>  Aller à la sous-action précédente</a>
        <?php }}?>
       </div>
       <div class="col-md-1">
