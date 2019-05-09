@@ -17,7 +17,7 @@
     <div class="uper">
         <div class="portlet box grey">
             <div class="row">
-                <div class="col-lg-8">Client</div>
+                <div class="col-lg-8">Clients</div>
                 <div class="col-lg-4">
                     <button id="addclient" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter un Client</b></button>
                 </div>
