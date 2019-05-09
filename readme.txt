@@ -21,3 +21,5 @@ Numero Tel Haythem:(USA) / Envoi
 https://github.com/anhskohbo/no-captcha
 // il faut créer des nouveau clés pour le nom de domaine du client
 
+// generation document du template rtf: veuillez envoyer le fichier "WordTemplate.php" (enregistrer dans l'email) dans le repertoire "NajdaApp\vendor\novay\laravel-word-template\src"
+

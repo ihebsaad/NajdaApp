@@ -188,6 +188,7 @@ return [
         // global vars
         //App\Providers\GlobalsVServiceProvider::class
         App\Providers\CommonDataServiceProvider::class,
+        Novay\WordTemplate\WordTemplateServiceProvider::class,
 
     ],
 
@@ -241,6 +242,7 @@ return [
         'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
         // PDF
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'WordTemplate' => Novay\WordTemplate\Facade::class, 
 
     ],
 

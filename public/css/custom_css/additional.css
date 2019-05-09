@@ -1,3 +1,19 @@
+section#timeline article div.inner p {
+    padding: 15px;
+    margin: 0;
+    font-size: 14px;
+    background: #fff;
+    color: #656565;
+    border: 1px solid #a7a6a6;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+}
+.commsujet {
+  white-space: nowrap;
+  width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;}
+
 .newnotif{
         font-weight:bold;
         color:#999;
