@@ -161,7 +161,7 @@
                                      
 
 
-                                            <a class="workflowkbs" id="<?php echo $action->id ?>" style="color:black !important; margin-top: 10px; margin-right: 10px;" data-toggle="modal" data-target="#myworow" title ="Voir Workflow" href="#"><span class="fa fa-2x fa-tasks" style=" margin-top: 10px; margin-right: 20px;" aria-hidden="true"></span>
+                                            <a class="workflowkbs" id="<?php echo $action->id ?>" style="color:black !important; margin-top: 10px; margin-right: 10px;" data-toggle="modal" data-target="#myworow" title ="Voir Workflow" href="#"><span class="fa fa-2x fa-tasks" style="  margin-right: 20px;" aria-hidden="true"></span>
                                             </a>
                                             <input id="workflowh<?php echo $action->id ?>" type="hidden" value="{{$action->titre}}">
 
@@ -213,30 +213,30 @@
                                       <div class="form-group">
                                            {{ csrf_field() }}
                                          <div class="row">
-                                             <div class="col-md-3"> <label  style="display: inline-block;  text-align: left; width: 40px;">titre:</label></div>
-                                             <div class="col-md-9"><input id="titre" type="text" class="form-control" style="width:95%;  text-align: right !important;" name="titre"/></div>
+                                             <div class="col-md-3" style="padding-top:5px"> <label  style=" ;  text-align: left; width: 40px;">Titre:</label></div>
+                                             <div class="col-md-9"><input id="titre" type="text" class="form-control" style="width:95%;  text-align: left !important;" name="titre"/></div>
                                        </div>
                                       </div>
                                       <div class="form-group">
                                           <div class="row">
-                                              <div class="col-md-3">     <label for="descrip" style="display: inline-block;  text-align: right; width: 40px;">Description:</label></div>
-                                              <div class="col-md-9"><input id="descrip" type="text" class="form-control" style="width:95%;  text-align: right;" name="descrip"/></div>
+                                              <div class="col-md-3" style="padding-top:5px">     <label for="descrip" style="display: inline-block;  text-align: right; width: 40px;">Description</label></div>
+                                              <div class="col-md-9"><input id="descrip" type="text" class="form-control" style="width:95%;  text-align: left;" name="descrip"/></div>
                                           </div>
                                       </div>
                                       <div class="form-group">
                                         <?php $da= date('Y-m-d\TH:m'); ?>
 
                                             <div class="row">
-                                                <div class="col-md-3">  <label for="datedeb" style="display: inline-block;  text-align: right; width: 40px;">Date début:</label></div>
-                                                <div class="col-md-9"> <input id="datedeb" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:95%;  text-align: right;" name="datedeb"/></div>
+                                                <div class="col-md-3" style="padding-top:5px">  <label for="datedeb" style="display: inline-block;  text-align: right; width: 40px;">Date</label></div>
+                                                <div class="col-md-9"> <input id="datedeb" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:95%;  text-align: left;" name="datedeb"/></div>
                                             </div>
                                       </div>
 
                                            <div class="row">
-                                              <div class="col-md-3">
-                                                  <label for="typeact" style="display: inline-block;  text-align: right; width: 40px;">Type action:</label>
+                                              <div class="col-md-3" style="padding-top:5px">
+                                                  <label for="typeact" style="display: inline-block;  text-align: right; width: 40px;">Type</label>
                                               </div>
-                                              <div class="col-md-9">  <select id="typeact" type="text" class="form-control" style="width:95%;  text-align: right;" name="typeact"/>
+                                              <div class="col-md-9">  <select id="typeact" type="text" class="form-control" style="width:95%;  text-align: left;" name="typeact">
                                                          @foreach($typesactions as $tyaction)
                                                               <option value="{{ $tyaction->id }}">{{ $tyaction->nom_type_action }}</option>
                                                           @endforeach
@@ -252,7 +252,7 @@
                                           <?php } else {  ?>
                                                <div class="row">
 
-                                               <div class="col-md-3">     <label for="typeact" style="display: inline-block;  text-align: right; width: 40px;">Réf dossier</label></div>
+                                               <div class="col-md-3" style="padding-top:5px">     <label for="typeact" style="display: inline-block;  text-align: right; width: 40px;">Réf dossier</label></div>
                                                   <div class="col-md-9"> <input id="dossier" type="text" class="form-control" value="" name="dossier"/></div>
                                                </div>
 
@@ -271,7 +271,7 @@
 
                                  <div class="row text-center">
                                     <h4>Action libre</h4>
-                                     <a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#NouveauType">créer nouveau type d'action </a>
+                                     <a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#NouveauType">créer un nouveau type d'action </a>
                                  </div> 
                                                                    
                     </div>
