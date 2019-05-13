@@ -30,7 +30,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-1 col-md-1 pull-right"> 
-                                                    <a href="#" class="btn btn-default btn-sm btn-responsive" role="button"> </a>
+                                                    <a href="#" class="btn btn-default btn-sm btn-responsive" role="button" id='tte'> </a>
                                                 </div>
                                                 <div class="col-xs-1 col-md-1 pull-right"> 
                                                     <a href="#" class="btn btn-success btn-sm btn-responsive" role="button"> </a>
@@ -99,7 +99,20 @@
 
                                                       foreach ($notifications as $ntf) {
                                                         if (!empty($ntf[0]['dossier']))
-                                                        {echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']."<ul>";}
+                                                        {
+                                                          /* changement background dossier actif (le script  annule)
+                                                          {
+                                                          $sactif ='';
+                                                          if (isset($dossier))
+                                                          {
+                                                            if ($ntf[0]['dossier'] === $dossier['reference_medic'])
+                                                              {
+                                                                $sactif =' style="background-color: #ffd051!important;"';
+                                                              }
+                                                            }
+                                                          echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."' ".$sactif.">".$ntf[0]['dossier']."<ul>";
+                                                        }*/
+                                                          echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']."<ul>";}
                                                         foreach ($ntf as $n) {
                                                           
                                                           if (!isset ($n['type']) )
@@ -151,4 +164,16 @@
 
                                 </div>
             </div>
-       
+<?php
+if (isset($dossier))
+{
+?>
+<script type="text/javascript">
+         /*$( document ).ready(function() {
+            // verifier sil existe des notifications pour le dossier courant pour les marquer comme actifs
+            if ($("#prt_{{ $dossier['reference_medic']}}").length > 0) { 
+                $("li#prt_{{ $dossier['reference_medic']}}"+"_anchor").css('background','#ffd051');
+            }
+          });*/
+</script>
+<?php } ?>
