@@ -180,73 +180,67 @@ Route::get('/notes', array('as' => 'notes','uses' => 'NotesController@index'));
 Route::post('/notes/updating','NotesController@updating')->name('notes.updating');
 Route::get('/notes/view/{id}', 'NotesController@view');
  
-/*** Actions**/
-Route::resource('/actions',  'ActionController');
-Route::get('/actions', array('as' => 'actions','uses' => 'ActionController@index'));
-Route::post('/actions/saving','ActionController@saving')->name('actions.saving');
-Route::post('/actions/store','ActionController@store')->name('actions.store');
-Route::get('/actions/view/{id}', 'ActionController@view');
-Route::get('/action/workflow/{dossid}/{id}', 'ActionController@getWorkflow');
-Route::post('/action/updateworkflow/', 'ActionController@updateWorkflow');
-//Route::post('/action/updateworkflow/{dossid}/{id}', 'ActionController@updateWorkflow');
-Route::get('/action/RendreInactive/{id}/{dossid}', 'ActionController@RendreInactive');
-Route::get('/action/RendreAchevee/{id}/{dossid}', 'ActionController@RendreAchevee');
-Route::get('/action/getAjaxWorkflow/{id}', 'ActionController@getAjaxWorkflow');
-Route::get('/dossier/action/AnnulerActionCourante/{iddoss}/{idact}/{idsousact}' , 'ActionController@AnnulerActionCourante');
+/*** Missions**/
+Route::resource('/Missions',  'MissionController');
+Route::get('/Missions', array('as' => 'Missions','uses' => 'MissionController@index'));
+Route::post('/Missions/saving','MissionController@saving')->name('Missions.saving');
+Route::post('/Missions/store','MissionController@store')->name('Missions.store');
+Route::get('/Missions/view/{id}', 'MissionController@view');
+Route::get('/Mission/workflow/{dossid}/{id}', 'MissionController@getWorkflow');
+Route::post('/Mission/updateworkflow/', 'MissionController@updateWorkflow');
+//Route::post('/Mission/updateworkflow/{dossid}/{id}', 'MissionController@updateWorkflow');
+Route::get('/Mission/RendreInactive/{id}/{dossid}', 'MissionController@RendreInactive');
+Route::get('/Mission/RendreAchevee/{id}/{dossid}', 'MissionController@RendreAchevee');
+Route::get('/Mission/getAjaxWorkflow/{id}', 'MissionController@getAjaxWorkflow');
+Route::get('/dossier/Mission/AnnulerMissionCourante/{iddoss}/{idact}/{idsousact}' , 'MissionController@AnnulerMissionCourante');
 
 
 
-/*** SousAction**/
-Route::resource('/sousactions',  'SousActionController');
-Route::get('/sousactions', array('as' => 'actions','uses' => 'SousActionController@index'));
-Route::post('/sousactions/saving','SousActionController@saving')->name('sousactions.saving');
-Route::get('/sousactions/view/{id}', 'SousActionController@view');
-Route::get('/dossier/action/Traitementsousaction/{iddoss}/{idact}/{idsousact}', 
-	'SousActionController@Traitementsousaction');
-Route::get('/dossier/action/Traitercommentsousaction/{iddoss}/{idact}/{idsousact}',
-  'SousActionController@Traitercommentsousaction');
+/*** Action**/
+Route::resource('/Actions',  'ActionController');
+Route::get('/Actions', array('as' => 'actions','uses' => 'ActionController@index'));
+Route::post('/Actions/saving','ActionController@saving')->name('Actions.saving');
+Route::get('/Actions/view/{id}', 'ActionController@view');
+Route::get('/dossier/Mission/TraitementAction/{iddoss}/{idact}/{idsousact}', 
+	'ActionController@TraitementAction');
+Route::get('/dossier/Mission/TraitercommentAction/{iddoss}/{idact}/{idsousact}',
+  'ActionController@TraitercommentAction');
 
-Route::post('/dossier/action/TraitercommentsousactionAjax/{iddoss}/{idact}/{idsousact}',
-  'SousActionController@TraitercommentsousactionAjax');
+Route::post('/dossier/Mission/TraitercommentActionAjax/{iddoss}/{idact}/{idsousact}',
+  'ActionController@TraitercommentActionAjax');
 
-Route::get('dossier/action/EnregistrerEtAllerSuivante/{iddoss}/{idact}/{idsousact}',
-  'SousActionController@EnregistrerEtAllerSuivante');
+Route::get('dossier/Mission/EnregistrerEtAllerSuivante/{iddoss}/{idact}/{idsousact}',
+  'ActionController@EnregistrerEtAllerSuivante');
 
-Route::get('dossier/action/AnnulerEtAllerSuivante/{iddoss}/{idact}/{idsousact}',
-  'SousActionController@AnnulerEtAllersuivante');
+Route::get('dossier/Mission/AnnulerEtAllerSuivante/{iddoss}/{idact}/{idsousact}',
+  'ActionController@AnnulerEtAllersuivante');
 
-Route::get('dossier/action/EnregistrerEtAllerPrecedente/{iddoss}/{idact}/{idsousact}',
-  'SousActionController@EnregistrerEtAllerPrecedente');
+Route::get('dossier/Mission/EnregistrerEtAllerPrecedente/{iddoss}/{idact}/{idsousact}',
+  'ActionController@EnregistrerEtAllerPrecedente');
 
-Route::get('dossier/action/FinaliserAction/{iddoss}/{idact}/{idsousact}',
-  'SousActionController@FinaliserAction');
+Route::get('dossier/Mission/FinaliserMission/{iddoss}/{idact}/{idsousact}',
+  'ActionController@FinaliserMission');
 
-Route::get('dossier/action/Reportersousaction/{iddoss}/{idact}/{idsousact}',
-  'SousActionController@Reportersousaction');
-
-
-
-
+Route::get('dossier/Mission/ReporterAction/{iddoss}/{idact}/{idsousact}',
+  'ActionController@ReporterAction');
 
 
 
 
 
+/*** TypeMission**/
+Route::resource('/typesMissions',  'TypeMissionController');
+Route::get('/typesMissions', array('as' => 'Missions','uses' => 'TypeMissionController@index'));
+Route::post('/typesMissions/saving','TypeMissionController@saving')->name('typeMissions.saving');
+Route::get('/typesMissions/view/{id}', 'TypeMissionController@view');
 
+Route::post('/TypeMissionAutocomplte','TypeMissionController@getTypeMissionAjax')->name('typeMission.autocomplete');
 
-
-
-/*** TypeAction**/
-Route::resource('/typesactions',  'TypeActionController');
-Route::get('/typesactions', array('as' => 'actions','uses' => 'TypeActionController@index'));
-Route::post('/typesactions/saving','TypeActionController@saving')->name('typeactions.saving');
-Route::get('/typesactions/view/{id}', 'TypeActionController@view');
-
-/*** EtapeTypeAction**/
-/*Route::resource('/etapestypesactions',  'EtapesTypeActionController');
-Route::get('/etapestypesactions', array('as' => 'actions','uses' => 'EtapesTypeActionController@index'));
-Route::post('/etapestypesactions/saving','EtapesTypeActionController@saving')->name('etapestypesactions.saving');
-Route::get('/etapestypesactions/view/{id}', 'EtapesTypeActionController@view');*/
+/*** EtapeTypeMission**/
+/*Route::resource('/etapestypesMissions',  'EtapesTypeMissionController');
+Route::get('/etapestypesMissions', array('as' => 'Missions','uses' => 'EtapesTypeMissionController@index'));
+Route::post('/etapestypesMissions/saving','EtapesTypeMissionController@saving')->name('etapestypesMissions.saving');
+Route::get('/etapestypesMissions/view/{id}', 'EtapesTypeMissionController@view');*/
 
 
 

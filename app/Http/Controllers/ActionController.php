@@ -3,17 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Action;
-use App\TypeAction;
-use App\SousAction;
+use App\Mission;
 use App\Dossier;
-use auth;
+use App\TypeMission;
+use Auth;
 
 class ActionController extends Controller
 {
-    //
-     public function __construct()
+    public function __construct()
     {
         $this->middleware('auth');
     }
@@ -25,189 +23,333 @@ class ActionController extends Controller
      */
     public function index()
     {
-         $actions = Action::orderBy('created_at', 'desc')->paginate(5);
-        return view('actions.index', compact('actions'));
+         $Actions = Action::orderBy('created_at', 'desc')->paginate(5);
+        return view('Actions.index', compact('Actions'));
     }
 
-    public function getWorkflow($dossid,$id)
+
+    public function TraitementAction($iddoss,$idact,$idsousact)
     {
 
-         $dossiers = Dossier::all();
-        // $dossier = Dossier::find($dossid);
-         $typesactions=TypeAction::get();
+     $Action=Action::find($idsousact);
 
-         $act= Action::find($id);
-         $dossier = $act->dossier;
 
-        // dd($dossier);
-         $sousactions = $act->sousactions;
+     $act=$Action->Mission;
+     
+          $dossier=$act->dossier;
+     $dossiers=Dossier::all();
+     $typesMissions=TypeMission::get();
+     $Missions=Auth::user()->activeMissions;
+     $Actions=$act->Actions;
+    // dd($dossier);
 
-       //  $actions=$dossier->actions;
+     return view('Actions.TraitementAction',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
 
-         $actions=Dossier::find($dossid)->actions;
+    }
+
+    public function TraitercommentAction(Request $request,$iddoss,$idact,$idsousact)
+    {
+
+        $input = $request->all();
+        // dd($input);
+       //$comment1= $request->
+     
+        $this->enregisterCommentaires($input,$idsousact);
+
+        // $sousaction=SousAction::find($idsousact);
+        return back();
+
+    }
+     public function TraitercommentActionAjax(Request $request,$iddoss,$idact,$idsousact)
+    {
+
+        $input = $request->all();
+        // dd($input);
+       //$comment1= $request->
+     
+        $this->enregisterCommentaires($input,$idsousact);
+
+        // $sousaction=SousAction::find($idsousact);
+        //return back();
+
+    }
+
+    public function EnregistrerEtAllerSuivante( $iddoss,$idact,$idsousact )
+
+    {
+       //$input = $request->all();
+
+      // $this->enregisterCommentaires($input,$idsousact);
+
+      
+
+      $sact=Action::find($idsousact);
+       $order=$sact->ordre;
        
-        return view('actions.workflow',['act'=>$act,'dossiers' => $dossiers,'typesactions'=>$typesactions,'actions'=>$actions, 
-            'sousactions' => $sousactions], compact('dossier'));
+     $sousactSui=Action::where("Mission_id",$idact)->where('ordre',$order+1)->first();
 
-        
-       // return view('actions.workflow', compact('sousactions'));
+     if($sousactSui)
+     {
+
+        $sact->update(['statut'=> "Achevée", 'realisee' => 1]);
+        $sousactSui->update(['statut'=> "Active"]);
+
+        return redirect('/dossier/Mission/TraitementAction/'.$iddoss.'/'.$idact.'/'.$sousactSui->id);
+
+     }
+     else
+    {
+        $sact->update(['statut'=> "Achevée", 'realisee' => 1]);
+        return back();
+
     }
 
-   //  public function updateWorkflow(Request $request,$dossid,$id)
-     public function updateWorkflow(Request $request)
+      
+
+    }
+
+    public function AnnulerEtAllerSuivante ($iddoss,$idact,$idsousact)
+
     {
 
-         $dossiers = Dossier::all();
-        // //$dossier = Dossier::find($dossid);
-         $typesactions=TypeAction::get();
-
-         ////$act= Action::find($id);
-        // $dossier = $action->dossier;
-        //// $sousactions = $act->sousactions;
-
-       //  $actions=$dossier->actions;
-
-        //// $actions=Dossier::find($dossid)->actions;
-
-
-            //$x = array_search ('english', $request->all());
-
-
-
-         $input = $request->all();
-
-         // return response()->json($input);
-
-
-
-           $cles=array_keys ($input);
-           $valeurs=array_values ($input);
-          // $sa = array_search ('sousaction2', $cles);
-      // dd( $input);
-
-        $numUpd=0;
-         $updat= array();
-         $sousact= array();
-         $comment= array();
-         for ($k=0; $k<sizeof($cles); $k++)
-         {
-
-
-         if( strstr($cles[$k], 'check')) { 
-              
-            $indSact=substr($cles[$k], -1);
-            echo (substr($cles[$k], -1)) ;
-            $numUpd++;
-            $updat[]=substr($cles[$k], -1);
-            $sousact[]='sousaction'.$indSact;
-            $comment[]='commenta'.$indSact;
-           } 
-
-         }
-
-       //  dd( $sousact);
-
-         for ($k=0; $k<sizeof($sousact); $k++)
-         {
-            SousAction::where('id',intval( $input[$sousact[$k]]))
-            ->update(['realisee'=>true,'commentaire'=>  $input[$comment[$k]]]);
-         }
-
-         return back();
-
-         //Post::where('id',3)->update(['realisee'=>'Updated title']);
+       $sact=Action::find($idsousact);
+       $order=$sact->ordre;
        
-      /* return view('actions.workflow',['act'=>$act,'dossiers' => $dossiers,'typesactions'=>$typesactions,'actions'=>$actions, 
-            'sousactions' => $sousactions], compact('dossier'));*/
+       $sousactSui=Action::where("Mission_id",$idact)->where('ordre',$order+1)->first();
 
-        
-       // return view('actions.workflow', compact('sousactions'));
+     if($sousactSui)
+     {
+
+        $sact->update(['statut'=> "Annulée", 'realisee' => 0]);
+        $sousactSui->update(['statut'=> "Active"]);
+
+        return redirect('/dossier/Mission/TraitementAction/'.$iddoss.'/'.$idact.'/'.$sousactSui->id);
+
+     }
+     else
+    {
+        $sact->update(['statut'=> "Suspendue", 'realisee' => 0]);
+        return back();
+
     }
 
 
-    public function getAjaxWorkflow($id)
+    }
+
+     public function EnregistrerEtAllerPrecedente( $iddoss,$idact,$idsousact )
+
+    {
+       //$input = $request->all();
+
+      // $this->enregisterCommentaires($input,$idsousact);
+
+      
+
+      $sact=Action::find($idsousact);
+       $order=$sact->ordre;
+    if($order>1) 
     {
 
-     // $_GET['idw'];
+     $sousactSui=Action::where("Mission_id",$idact)->where('ordre',$order-1)->first();
 
-      $actk=Action::find($id);
+     if($sousactSui)
+     {
 
-      $output='';
+        $sact->update(['statut'=> "Null", 'realisee' => 0]);
+        $sousactSui->update(['statut'=> "Active"]);
 
-      if(!$actk->sousactions->isEmpty())
+        return redirect('/dossier/Mission/TraitementAction/'.$iddoss.'/'.$idact.'/'.$sousactSui->id);
+
+     }
+     else
+    {
+        $sact->update(['statut'=> "Achevée", 'realisee' => 1]);
+        return back();
+
+    }
+       }
+       else
+       {
+
+        return back();
+       }
+
+      
+
+    }
+
+    public function FinaliserMission ($iddoss,$idact,$idsousact)
+    {
+
+
+        $sact=Action::find($idsousact);
+        $sact->update(['statut'=> "Achevée", 'realisee' => 1]);
+        $act=Mission::find($idact);
+        $act->update(['statut_courant'=> "Achevée", 'realisee' => 1]);
+        return redirect('dossiers/view/'.$iddoss);
+    }
+
+
+   public function ReporterAction (Request $request,$iddoss,$idact,$idsousact)
+   {
+
+        $sact=Action::find($idsousact);
+        $sact->update(['statut'=> "Suspendue", 'realisee' => 0,'date_report'=>$request->get('datereport')]);
+        $act=Mission::find($idact);
+        $act->update(['statut_courant'=> "Suspendue", 'realisee' => 0]);
+        return redirect('dossiers/view/'.$iddoss);
+
+
+   }
+
+
+    private function enregisterCommentaires ($input,$idsousact)
+    {
+
+       $c1=false;
+      $c2=false;
+      $c3=false;
+
+      if (array_key_exists("comment1",$input))
       {
-                   $output='';
+           $c1=true;
+            Action::where('id',intval($idsousact))
+            ->update(['comment1'=> $input["comment1"]]);
+
+      }
+       if (array_key_exists("comment2",$input))
+      {
+            $c2=true;
+            Action::where('id',intval($idsousact))
+            ->update(['comment2'=>  $input["comment2"]]);
+
+      }
+       if (array_key_exists("comment3",$input))
+      {
+            $c3=true;
+            Action::where('id',intval($idsousact))
+            ->update(['comment3'=>  $input["comment3"]]);
+
+      }
+
+     $entree1=false;
+     $entree2=false;
+
+    if (array_key_exists("field_name",$input))
+      {
+          if (array_key_exists("0",$input["field_name"]))
+            {
+                if(!$c1)
+                {
+                Action::where('id',intval($idsousact))
+                ->update(['comment1'=> $input["field_name"]["0"]]);
+
+                 $c1=true;
+                 $entree1=true;
+                }
+
+                if ( $c1 and ! $c2 and  ! $entree1)
+                {
+                Action::where('id',intval($idsousact))
+                ->update(['comment2'=> $input["field_name"]["0"]]);
+
+                 $c2=true;
+                 $entree2=true;
+
+                }
+
+                 if (  $c1 and  $c2 and ! $c3 and  ! $entree2  )
+                {
+                Action::where('id',intval($idsousact))
+                ->update(['comment3'=> $input["field_name"]["0"]]);
+
+                 $c3=true;
+                }
+             
+          
+            }
+
+             $entree2=false;
+            $entree1=false;
+
+            if (array_key_exists("1",$input["field_name"]))
+            {
+          
 
 
-                $i = 0;
-                $len = count($actk->sousactions);
-                //$actko=$actk->sousactions->orderBy('ordre','DESC')->get();
-                $actko=SousAction::where('action_id',$id)->orderBy('ordre','ASC')->get();
-                foreach ( $actko as $sactions)
-                    {             
-                   
-                     $output.='<div class="row">' ;
-                        if ($sactions->statut=='Achevée')
-                        {
+              if(! $c1)
+                {
+                Action::where('id',intval($idsousact))
+                ->update(['comment1'=> $input["field_name"]["1"]]);
+
+                 $c1=true;
+                 $entree1=true;
+                }
+
+                if (  $c1 and ! $c2 and ! $entree1)
+                {
+                Action::where('id',intval($idsousact))
+                ->update(['comment2'=> $input["field_name"]["1"]]);
+
+                 $c2=true;
+                 $entree2=true;
+                }
+
+                 if (  $c1 and  $c2 and ! $c3 and ! $entree2)
+                {
+                Action::where('id',intval($idsousact))
+                ->update(['comment3'=> $input["field_name"]["1"]]);
+
+                 $c3=true;
+                }
+          
+
+            }
+
+             $entree2=false;
+            $entree1=false;
+            
+            if (array_key_exists("2",$input["field_name"]))
+            {
+          
+               if(!$c1 )
+                {
+                Action::where('id',intval($idsousact))
+                ->update(['comment1'=> $input["field_name"]["2"]]);
+
+                 $c1=true;
+                 $entree1=true;
+                }
+
+                if (  $c1 and  ! $c2 and ! $entree1 )
+                {
+                Action::where('id',intval($idsousact))
+                ->update(['comment2'=> $input["field_name"]["2"]]);
+
+                 $c2=true;
+                 $entree2=true;
+                }
+
+                 if ( $c1 and  $c2 and ! $c3 and ! $entree2)
+                {
+                Action::where('id',intval($idsousact))
+                ->update(['comment3'=> $input["field_name"]["2"]]);
+
+                 $c3=true;
+                }
+            
+          
+
+            }
 
 
-                          $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10">
-                               <input id="emetteur" type="text" name="emetteur" style="border:none;padding-left:5px;width:100% ;background-color:#5cb700; color:white" value="'. $sactions->titre.'" readonly="true" />
-                           </div><div class="col-md-1"></div>' ;
-                       }
-                       else
-                       {
-                         if ($sactions->statut=='Annulée')
-                      
-                        {
 
-                          $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10"><input id="emetteur" type="text" name="emetteur" style="border:none;padding-left:5px;width:100% ;background-color:#BDBDBD; color:black" value="'. $sactions->titre.'" readonly="true" />
-                           </div><div class="col-md-1"></div>' ;
-                       }
-                       else
-                       {
+      }
 
-                        if ($sactions->statut=='Active'|| $sactions->realisee==0 )
-                        {
-                            if($sactions->statut=='Active')
-                            {
-
-
-                                $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10">
-                               <input id="emetteur" type="text" name="emetteur" style="border:none;padding-left:5px;width:100% ; color:black" value="'. $sactions->titre.'" readonly="true" />
-                           </div><div class="col-md-1"> <img  src="https://najdaapp.enterpriseesolutions.com/public/img/spinner.gif"  width="30" height="30" />   </div>' ;
-                            }
-                            else
-                            {
-
-                            $output.='<div class="col-md-1"><span style="font-weight : bold;">'.$sactions->ordre.'-</span></div><div class="col-md-10">
-                               <input id="emetteur" type="text" name="emetteur" style="border:none;padding-left:5px;width:100% ; color:black" 
-                               value="'. $sactions->titre.'" readonly="true" />
-                           </div><div class="col-md-1"></div>' ;
-
-                            }
-                        }
-                        }
-
-                      }
-                   $output.='</div>';
-
-                     if ($i!=$len-1) { 
-                     $output.='<div class="row">
-                     <center> <i style="margin-top:10px;margin-bottom: 0px"class="fa fa-2x fa-arrow-down" > </i> </center>
-                     </div>';
-
-                    }        
-                         $output.='<br />';
-                          $i++ ;
-
-                 }
-        
-         }
-
-   return $output;
 
     }
+
+ 
  
     /**
      * Show the form for creating a new resource.
@@ -216,25 +358,9 @@ class ActionController extends Controller
      */
     public function create()
     {
-        $actions = Action::all();
+        $Actions = Action::all();
 
-        return view('actions.create',['actions' => $actions]);
-    }
-
-     public function RendreInactive($id,$dossid)
-    {
-         Action::where('id',$id)
-            ->update(['statut_courant'=>'Inactive']);
-           
-            return redirect('dossiers/view/'.$dossid);
-    }
-
-    public function RendreAchevee($id,$dossid)
-    {
-        Action::where('id',$id)
-            ->update(['statut_courant'=>'Achevée']);
-
-        return  redirect('dossiers/view/'.$dossid);
+        return view('Actions.create',['Actions' => $Actions]);
     }
 
     /**
@@ -245,149 +371,29 @@ class ActionController extends Controller
      */
     public function store(Request $request)
     {
+        $Action = new Action([
+             'ref' =>trim( $request->get('ref')),
+             'type' => trim($request->get('type')),
+             'affecte'=> $request->get('affecte'),
 
-        $dossier=Dossier::where("reference_medic",trim($request->get('dossier')))->first();
-        $action = new Action([
-             'titre' =>trim( $request->get('titre')),
-             'descrip' => trim($request->get('descrip')),
-             'date_deb'=> trim($request->get('datedeb')),
-             'type_action' =>trim($request->get('typeact')),
-             'dossier_id' => $dossier->id,
-             'statut_courant' => 'Active',
-             'realisee'=> 0,
-             'user_id'=>auth::user()->id
         ]);
 
-       $action->save();
-
-        // charger les étapes de typeaction dans la table sous action
-
-        //$type_act=DB::table('type_actions')->where('id', $request->get('typeact'));
-        $type_act=TypeAction::find($request->get('typeact'));
-
-       //dd($type_act->getAttributes());
-
-         $attributes = array_keys($type_act->getOriginal());
-         $valeurs = array_values($type_act->getOriginal());
-         // dd(count($valeurs));
-
-        // echo($attributes[1]);
-        // echo($valeurs[1]);
-           $taille=count($valeurs)-5;
-         for ($k=2; $k<=$taille; $k++)
-           {
-             
-            if($k>2)
-            {
-
-
-
-           if( $valeurs[$k]!= null)
-              {
-
-                 $sousaction = new SousAction([
-             'action_id' =>$action->id,
-             'titre' => trim($valeurs[$k]),
-             'type_action' => trim($valeurs[1]),
-             'ordre'=> trim($valeurs[$k+1]),
-             'descrip' => trim($valeurs[$k+2]),
-             'realisee'=> false,
-             'user_id'=> $action->user_id,
-                                       
-                  ]); 
-                  
-                  $sousaction->save();
-
-
-               $k++;
-               $k++;
-              }
-              else
-              {
-              	$k=1000;
-              }
-
-              }
-              else // pour la sauvegarde de date de début de la première sous action
-              {
-
-               if( $valeurs[$k]!= null)
-               {
-
-                 $sousaction = new SousAction([
-             'action_id' =>$action->id,
-             'titre' => trim($valeurs[$k]),
-             'type_action' => trim($valeurs[1]),
-             'ordre'=> trim($valeurs[$k+1]),
-             'descrip' => trim($valeurs[$k+2]),
-             'realisee'=> false,
-             'user_id'=> $action->user_id,
-             'date_deb' => $action->date_deb,
-             'statut'=>'Active'       
-                  ]); 
-                  
-                  $sousaction->save();
-
-
-               $k++;
-               $k++;
-              }
-              else
-              {
-                $k=1000;
-              }
-
-
-
-              }
-           }
-
-
-// or    
-//$attributes = array_keys($item->getAttributes());
-      //  var_dump($type_act);
-
-    /*for ($k=1; $k<=20; $k++)
-    {
-      dd( $type_act->fillable[$k]);
-
-    }*/
-      
-
-
-       /* foreach ($type_act as $k)
-
-         	echo($k->etape1);*/
-
-      return back();
-      //  return redirect('/actions')->with('success', '  has been added');
-
-    }
-
-    public function AnnulerActionCourante($iddoss,$idact,$idsousact)
-    {
-
-         $act=Action::find($idact);
-
-         $act->update(['statut_courant'=> "Achevée", 'realisee' => 1]);
-
-         return redirect('dossiers/view/'.$iddoss);
-
-        // return redirect('/dossier/action/Traitementsousaction/'.$iddoss.'/'.$idact.'/'.$sousactSui->id);
+        $Action->save();
+        return redirect('/Actions')->with('success', '  has been added');
 
     }
 
     public function saving(Request $request)
     {
-        $action = new Action([
+        $Action = new Action([
        //     'emetteur' => $request->get('emetteur'),
         //    'sujet' => $request->get('sujet'),
         //    'contenu'=> $request->get('contenu'),
 
         ]);
 
-        $action->save();
-        return redirect('/actions')->with('success', 'Entry has been added');
+        $Action->save();
+        return redirect('/Actions')->with('success', 'Entry has been added');
 
     }
 
@@ -400,10 +406,10 @@ class ActionController extends Controller
      */
     public function view($id)
     {
-        $actions = Action::all();
+        $Actions = Action::all();
 
-        $action = Action::find($id);
-        return view('actions.view',['actions' => $actions], compact('action'));
+        $Action = Action::find($id);
+        return view('Actions.view',['Actions' => $Actions], compact('Action'));
 
     }
 
@@ -416,10 +422,10 @@ class ActionController extends Controller
     public function edit($id)
     {
         //
-        $action = Action::find($id);
-        $actions = Action::all();
+        $Action = Action::find($id);
+        $Actions = Action::all();
 
-        return view('actions.edit',['actions' => $actions], compact('action'));
+        return view('Actions.edit',['Actions' => $Actions], compact('Action'));
     }
 
     /**
@@ -432,15 +438,15 @@ class ActionController extends Controller
     public function update(Request $request, $id)
     {
 
-        $action = Action::find($id);
+        $Action = Action::find($id);
 
-        if( ($request->get('ref'))!=null) { $action->name = $request->get('ref');}
-        if( ($request->get('type'))!=null) { $action->email = $request->get('type');}
-        if( ($request->get('affecte'))!=null) { $action->user_type = $request->get('affecte');}
+        if( ($request->get('ref'))!=null) { $Action->name = $request->get('ref');}
+        if( ($request->get('type'))!=null) { $Action->email = $request->get('type');}
+        if( ($request->get('affecte'))!=null) { $Action->user_type = $request->get('affecte');}
 
-        $action->save();
+        $Action->save();
 
-        return redirect('/actions')->with('success', '  has been updated');    }
+        return redirect('/Actions')->with('success', '  has been updated');    }
 
     /**
      * Remove the specified resource from storage.
@@ -450,25 +456,10 @@ class ActionController extends Controller
      */
     public function destroy($id)
     {
-        $action = Action::find($id);
-        $action->delete();
+        $Action = Action::find($id);
+        $Action->delete();
 
-        return redirect('/actions')->with('success', '  has been deleted Successfully');  
+        return redirect('/Actions')->with('success', '  has been deleted Successfully');  
 
      }
-
-    public static function ListeTypeActions( )
-    {
-        $typeactions=TypeAction::all();
-        return $typeactions;
-
-    }
-
-
-
-
-
-
-
-
 }
