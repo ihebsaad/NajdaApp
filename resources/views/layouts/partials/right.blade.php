@@ -1,5 +1,7 @@
  <!-- Content -->
-
+<!--select css-->
+    <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
  <style>
 /* Style The Dropdown Button */
 .dropbtn {
@@ -49,6 +51,9 @@
 .dropdown:hover .dropbtn {
   background-color: #3e8e41;
 }
+
+/* autocomplete */
+
 </style>
 
 <div class="panel panel-danger">
@@ -84,6 +89,11 @@
                             <li>
                                 <a href="#newMissiontab" data-toggle="tab">Nouvelle Mission</a>
                             </li>
+                            <?php if (\Request::is('entrees/show/*')) { ?>
+                            <li>
+                                <a href="#infostab" data-toggle="tab">Informations</a>
+                            </li>
+                            <?php } ?>
                         </ul>
                         <div id="MissionsTabContent" class="tab-content">
 
@@ -110,7 +120,9 @@
                               <?php if (isset($dossier)){$dosscourant=$dossier->id ;}else{$dosscourant=0;} ?>
                                     
                                     <div class="accordion panel-group" id="accordion">
+
                                  @if (!$Missions->isEmpty())
+
                                   <div class="row">
 
                                 <div class="col-md-4" >
@@ -134,8 +146,10 @@
                                       <div class="row" style="padding-bottom: 3px;">
                                       <div class="col-md-10">
                                       <div class="panel panel-default">
+
                                         <div class="panel-heading <?php if($Mission->id ==$currentMission){echo 'active';}
                                         else {if($Mission->dossier->id==$dosscourant){echo 'ColorerMissionsCourantes' ;}}?>">
+
                                          
                                            <h4 class="panel-title">
                                               <a data-toggle="collapse" href="#collapse{{$Mission->id}}">{{$Mission->dossier->reference_medic}}   {{$Mission->titre}}</a>
@@ -351,6 +365,57 @@
                                  </div> 
                                                                    
                     </div>
+                    <?php if (\Request::is('entrees/show/*')) { ?>
+                     <!-- Informations tab------------------------>
+                     <div class="tab-pane fade  scrollable-panel" id="infostab">
+                      <div class="row text-center">
+                        <div class="col-md-6" >
+                          <button id="btn-atag" class="btn btn-default">Ajouter TAG</button>
+                        </div>
+                        <div class="col-md-6" >
+                          <button id="btn-cmttag" class="btn btn-default">TAG & Commentaire</button>
+                        </div>
+                      </div>    
+                      <div id="ajouttag" style="display:none;margin-top: 30px">
+                           <div class="form-group mar-20">
+                                <label for="tagname" class="control-label" style="padding-right: 20px">TAG</label>
+                                <select id="tagname" class="form-control select2" style="width: 230px">
+                                    <option value="Select">Selectionner</option>
+                                        <option value="Franchise">Franchise (frais médicaux)</option>
+                                        <option value="Plafond">Plafond (frais médicaux)</option>
+                                        <option value="GOPmed">GOP (frais médicaux)</option>
+                                        <option value="PlafondRem">Plafond (remorquage)</option>
+                                        <option value="GOPtn">GOP (toutes natures)</option>
+                                        <option value="RM">RM (rapport médical)</option>
+                                        <option value="RMtraduit">RM (rapport médical) traduit</option>
+                                        <option value="CT">CT (contact technique)</option>
+                                        <option value="DOCasigner">Doc à signer (LE, DAFM, DFM)</option>
+                                        <option value="RE">RE (rapport d’expertise)</option>
+                                        <option value="RDD">RDD</option>
+                                        <option value="DDR">DDR (Décharge de responsabilité)</option>
+                                        <option value="Procuration">Procuration</option>
+                                        <option value="NAF">Mail/Fax d’ouverture (NAF)</option>
+                                        <option value="EAF">Entité à facturer</option>
+                                        <option value="PCFP">Passeport/ CIN + fiche de police</option>
+                                        <option value="CG">Carte grise</option>
+                                        <option value="Dyptique">Dyptique</option>
+                                        <option value="PVpolice">PV de police</option>
+                                        <option value="PVehicule">Photo de véhicule</option>
+                                        <option value="Billet">Billets d’avion/Train</option>
+                                        <option value="MEDIF">MEDIF rempli</option>
+                                </select>
+                            </div>
+                            <div id="champstags" class="form-group mar-20"></div>
+
+                            <input type="text" id="infotag" name="infotag" class="form-control" placeholder="Entrer l'information de TAG" data-bv-field="infotag"></br>
+                            <textarea id="contenutag" name="contenutag" rows="7" class="form-control resize_vertical" placeholder="Entrer le contenu de TAG" data-bv-field="message"></textarea>
+                      </div>   
+                      <div id="cmttag"  style="display:none;margin-top: 30px">
+
+                      </div>                                       
+                    </div>
+                    <?php } ?>
+
                  </div>
                                
                    <!-- fin creation nouvelle Missions tab------------------------>        
@@ -544,7 +609,10 @@
   
 </div>
 <!--fin modal workflow -->
+
 <!-- pour l'Mission libre-->
+
+<script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
  <script type="text/javascript">
      $(document).ready(function(){
     var maxField = 10; //Input fields increment limitation
@@ -568,6 +636,33 @@
         $(this).parent('div').remove(); //Remove field html
         x--; //Decrement field counter
     });
+
+    $('#btn-atag').click(function(){
+      $("#cmttag").hide();
+      $("#ajouttag").show();
+    });  
+    $('#btn-cmttag').click(function(){
+      $("#ajouttag").hide();
+      $("#cmttag").show();
+    }); 
+$("#tagname").select2();
+$('#tagname').change(function(e){
+  if($('#tagname option:selected').val().match(/^(Franchise|Plafond|GOPmed|PlafondRem|GOPtn)$/))
+    { //posséde champs montant
+      if ($('#champstags').html() === "")
+      {
+        
+        $('#champstags').html("<div class='form-group mar-20'><label for='montanttag' class='control-label' style='padding-right: 20px'>Montant</label><input type='text' id='montanttag' class='form-control' style='width: 180px'></div>");
+      }
+    }
+  else
+    {
+      if ($('#champstags').html() !== "")
+      {
+        $('#champstags').html("");
+      }
+    }
+});
 });
 </script>
 
