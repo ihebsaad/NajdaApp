@@ -196,12 +196,14 @@
 
                                         </div>
 
+                                        </div>
+
 
                                     <!-- fin  Missions tab---------------------------------------------------------->
 
 
 
-                 </div>
+                 
                                                                <!-- début creation nouvelle Missions tab------------------------>
 
                                     <div class="tab-pane fade  scrollable-panel" id="newMissiontab">
