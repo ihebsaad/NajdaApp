@@ -302,8 +302,6 @@ class EmailController extends Controller
                 $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
                 // message moved
 
-                if ( ! ((   strpos($sujet,'Undelivered Mail Returned' )!==false)   || (  strpos($sujet,'Mail delivery failed :' )!==false) )){
-                 
 
         // dispatch
         $dossiers = DB::table('dossiers')->pluck('reference_medic');
@@ -317,10 +315,10 @@ class EmailController extends Controller
                     $statut = 1;
                     break;
                 }
-
         }
 
                 $entree = new Entree([
+                    'destinataire' => 'test@najda-assistance.com',
                     'emetteur' => trim($from),
                     'sujet' => trim($sujet),
                     'contenu'=> utf8_encode($contenu) ,
@@ -422,7 +420,7 @@ class EmailController extends Controller
                     $oMessage->moveToFolder('INBOX') ;
                 }
 
-                } // check undelivered message
+
 
             } else {
                 // error
@@ -493,6 +491,8 @@ class EmailController extends Controller
     {
 
         $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
+        $nomabn=app('App\Http\Controllers\DossiersController')->NomAbnDossierById($id);
+        $refdem=app('App\Http\Controllers\DossiersController')->RefDemDossierById($id);
         $entrees =   Entree::where('dossier', $ref)->get();
         $envoyes =   Envoye::where('dossier', $ref)->get();
 
@@ -520,8 +520,45 @@ class EmailController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('emails.envoimail',['attachements'=>$attachements,'doss'=>$id]);
+        return view('emails.envoimail',['attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'refdem'=>$refdem]);
     }
+
+    public function envoimailbr($id)
+    {
+        $envoye =   Envoye::find($id);
+
+       // $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
+        $ref=$envoye['dossier'];
+        $entrees =   Entree::where('dossier', $ref)->get();
+        $envoyes =   Envoye::where('dossier', $ref)->get();
+
+        $emails =   Email::where('parent', $id)->get();
+
+        $emailsdoss= Email::where('parent', $id)->get();
+        $identr=array();
+        $idenv=array();
+        foreach ($entrees as $entr)
+        {
+            array_push($identr,$entr->id );
+
+        }
+
+        foreach ($envoyes as $env)
+        {
+            array_push($idenv,$env->id );
+
+        }
+
+        $attachements= DB::table('attachements')
+            ->whereIn('entree_id',$identr )
+            ->orWhereIn('envoye_id',$idenv )
+            ->orWhere('dossier',$ref )
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('emails.envoimailbr',['attachements'=>$attachements,'envoye'=>$envoye,'doss'=>$id]);
+    }
+
 
     public function envoifax($id)
     {
@@ -606,7 +643,6 @@ class EmailController extends Controller
 
             $count=0;
 
-
 /// attach here
 ///
 
@@ -644,8 +680,10 @@ class EmailController extends Controller
                 // The environment is local
                 $urlapp='http://localhost/najdaapp';
             }
-            $urlsending=$urlapp.'/emails/envoifax/'.$doss;
-            if (Mail::failures()) {
+           // $urlsending=$urlapp.'/emails/envoifax/'.$doss;
+              $urlsending=$urlapp.'/envoyes';
+
+              if (Mail::failures()) {
                 //     echo ('<script> window.location.href = "http://localhost/najdaapp/emails/sending";</script>') ;
                 //    return redirect('http://localhost/najdaapp/emails/sending')->with('fail', ' Echec ! ');
 
@@ -663,6 +701,7 @@ class EmailController extends Controller
                     'attachements'=> $count,
                     'statut'=> 1,
                     'type'=> 'email',
+                    'nb_attach'=> $count,
                     // 'reception'=> date('d/m/Y H:i:s'),
 
                 ]);
@@ -699,6 +738,7 @@ class EmailController extends Controller
             'g-recaptcha-response' => 'required|captcha'
         ]);
 */
+        $envoyeid = $request->get('envoye');
         $doss = $request->get('dossier');
         $to = $request->get('destinataire');
         $cc = $request->get('cc');
@@ -713,7 +753,7 @@ class EmailController extends Controller
 
 
         try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs,$doss) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs,$doss,$envoyeid) {
             $message
                 ->to($to)
               ->cc($cc  ?: [])
@@ -770,7 +810,7 @@ class EmailController extends Controller
               // DB::table('attachements')->insert([
                    $attachement = new Attachement([
 
-                       'type'=>$ext,'path' => $fullpath, 'nom' => $name,'boite'=>1,'dossier'=>$doss
+                       'type'=>$ext,'path' => $fullpath, 'nom' => $name,'boite'=>1,'dossier'=>$doss,'parent'=>$envoyeid
                ]);
                     $attachement->save();
 
@@ -779,15 +819,6 @@ class EmailController extends Controller
          }
 
 
-      //  this works :
-     /*  $path='C:\wamp2\www\najdaapp\storage\Envoyes\19\envoi.pdf';
-        // $fich=$path->getRealPath();
-         $message->attach($path , array(
-                'as' => 'envoi.pdf',
-                 'mime' => 'application/pdf'
-              )
-         );
-*/
 
      $urlapp=env('APP_URL');
 
@@ -795,17 +826,23 @@ class EmailController extends Controller
         // The environment is local
         $urlapp='http://localhost/najdaapp';
     }
-    $urlsending=$urlapp.'/emails/envoimail/'.$doss;
+             //   $urlsending=$urlapp.'/emails/envoimail/'.$doss;
+                $urlsending=$urlapp.'/envoyes';
                 $dossier= $this->RefDossierById($doss);////;
 
            $par=Auth::id();
-           $envoye = new Envoye([
+             //   $envoye
+           Envoye::where('id', $envoyeid)->update(array(
+            //   $champ => $val
+           //));
+
+         //  $envoye = new Envoye([
                'emetteur' => 'test@najda-assistance.com', //env('emailenvoi')
                'destinataire' => $to,
                'par'=> $par,
                'sujet'=> $sujet,
                'contenu'=> $contenu,
-               'attachements'=> $count,
+               'nb_attach'=> $count,
                'cc'=> $cc,
                'cci'=> $cci,
                'statut'=> 1,
@@ -813,16 +850,14 @@ class EmailController extends Controller
                'dossier'=> $dossier
               // 'reception'=> date('d/m/Y H:i:s'),
 
-           ]);
+           ));
 
-           $envoye->save();
-           $id=$envoye->id;
-           $this->export_pdf_send($id);
+          // $envoye->save();
+           //$id=$envoye->id;
+           $this->export_pdf_send($envoyeid);
 
             echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
                 return redirect($urlsending)->with('success', '  Envoyé ! ');
-
-
 
      });
 
@@ -846,12 +881,14 @@ class EmailController extends Controller
         if (!file_exists($path.$id)) {
             mkdir($path.$id, 0777, true);
         }
-
+         $filename=$envoye->description;
+        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
         // If you want to store the generated pdf to the server then you can use the store function
-        $pdf->save($path.$id.'/envoi.pdf');
+        $pdf->save($path.$id.'/'.$name.'.pdf');
         // Finally, you can download the file using download function
         //    return $pdf->download('reception.pdf');
     }
+
     function test()
     {
         $dossiers = Dossier::all();
@@ -999,6 +1036,7 @@ class EmailController extends Controller
         return view('emails.sms', ['dossiers' => $dossiers]);
 
     }
+
 
 
 

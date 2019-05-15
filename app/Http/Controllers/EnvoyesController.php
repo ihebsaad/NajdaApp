@@ -112,20 +112,55 @@ class EnvoyesController extends Controller
     {
         $par=Auth::id();
 
+
+
         $envoye = new Envoye([
             'emetteur' => 'test@najda-assistance.com', //env('emailenvoi')
             'destinataire' => trim ($request->get('destinataire')),
-            'sujet' => trim ($request->get('sujet')),
             'contenu'=> trim ($request->get('contenu')),
             'cc'=> trim ($request->get('cc')),
             'cci'=> trim ($request->get('cci')),
             'statut'=> 0,
             'nb_attach'=> 0,
             'par'=> $par,
-            'type'=>'email'
-        ]);
+            'dossier'=>trim ($request->get('dossier')),
+            'description'=> trim ($request->get('description')),
+            'sujet'=> trim ($request->get('sujet'))
 
+        ]);
         $envoye->save();
+        $idbr=$envoye->id;
+
+        return $idbr ;
+
+
+    }
+
+
+
+    public function updatingbr(Request $request)
+    {
+
+
+        $id =$request->get('envoye');
+        $envoye = Envoye::find($id);
+
+        $envoye->update(array(
+            'emetteur' => 'test@najda-assistance.com', //env('emailenvoi')
+            'destinataire' => trim ($request->get('destinataire')),
+            'contenu'=> trim ($request->get('contenu')),
+            'cc'=> trim ($request->get('cc')),
+            'cci'=> trim ($request->get('cci')),
+            'statut'=> 0,
+            'nb_attach'=> 0,
+
+            'type'=>'email',
+            'dossier'=>trim ($request->get('dossier')),
+            'description'=> trim ($request->get('description'))
+
+        ));
+
+   return $id;
         // return redirect('/envoyes')->with('success', 'enregistré avec succès');
 
     }

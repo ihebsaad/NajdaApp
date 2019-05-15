@@ -132,10 +132,13 @@ class EntreesController extends Controller
     {
         $dossiers = Dossier::all();
         $entree = Entree::find($id);
+        if ($entree->viewed==0 )
+        {
+        $this->export_pdf($id);
         $entree->viewed=1;
+        }
         $refdoss = $entree->dossier;
         $entree->save();
-       $this->export_pdf($id);
         $dossier = Dossier::where('reference_medic','=',$refdoss)->first();
         
         //$dossier=compact($dossier);
@@ -214,9 +217,11 @@ class EntreesController extends Controller
         if (!file_exists($path.$id)) {
             mkdir($path.$id, 0777, true);
         }
+        $filename=$entree->sujet;
+        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', '', $filename);
 
         // If you want to store the generated pdf to the server then you can use the store function
-        $pdf->save($path.$id.'/reception.pdf');
+        $pdf->save($path.$id.'/'.$name.'.pdf');
         // Finally, you can download the file using download function
      //    return $pdf->download('reception.pdf');
     }
@@ -229,5 +234,7 @@ class EntreesController extends Controller
         return view('entrees.pdf', ['entree' => $entree], compact('entree'));
 
     }
+
+
 
 }

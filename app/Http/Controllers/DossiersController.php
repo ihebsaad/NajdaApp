@@ -360,6 +360,24 @@ class DossiersController extends Controller
 
     }
 
+    public static function RefDemDossierById($id)
+    {
+        $dossier = Dossier::find($id);
+        if (isset($dossier['customer'])) {
+            return $dossier['customer'];
+        }else{return '';}
+
+    }
+
+    public static function NomAbnDossierById($id)
+    {
+        $dossier = Dossier::find($id);
+        if (isset($dossier['subscriber_name'])) {
+            return $dossier['subscriber_name'];
+        }else{return '';}
+
+    }
+
     public static function CheckRefExiste($ref)
     {
         $number =  Dossier::where('reference_medic', $ref)->count('id');

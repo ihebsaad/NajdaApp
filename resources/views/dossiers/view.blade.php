@@ -1588,6 +1588,7 @@
                     <tr id="headtable">
                         <th style="">Date</th>
                         <th style="">Titre</th>
+                        <th style="">Description</th>
 
                         <th style="">type</th>
                         <th style="">Boite</th>
@@ -1601,6 +1602,7 @@
 
                             <td style=";"><small><?php echo $attach->created_at;?></small></td>
                             <td style=";"><small><?php /* if ($attach->dossier!=null) {echo 'Fichier externe';}else{*/ echo $attach->nom; /*}*/ ?></small></td>
+                            <td style=";"><small><?php  echo $attach->description;   ?></small></td>
 
                             <td style=";"><small><?php
                                     $type= $attach->type;

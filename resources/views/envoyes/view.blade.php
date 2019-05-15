@@ -85,6 +85,10 @@
                     <label for="sujet">sujet :</label>
                     <input id="sujet" type="text" class="form-control" name="sujet" required value={{ $envoye->sujet }}/>
                 </div>
+                <div class="form-group">
+                    <label for="description">Description :</label>
+                    <input id="description" type="text" class="form-control" name="description" required value={{ $envoye->description }}/>
+                </div>
                 <div class="form-group ">
                     <label for="contenu">contenu:</label>
                 <div class="form-control" style="min-height:200px">

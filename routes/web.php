@@ -57,12 +57,12 @@ Route::post('/entrees/saving','EntreesController@saving')->name('entrees.saving'
 Route::get('/entrees/view/{id}', 'EntreesController@view');
 Route::get('/entrees/show/{id}', 'EntreesController@show');
 Route::get('/entrees/pdf/{id}', 'EntreesController@pdf');
+Route::get('/entrees/sendpdf/{id}', 'EntreesController@sendpdf');
 Route::get('/entrees/export_pdf/{id}', 'EntreesController@export_pdf');
 Route::get('/entrees/destroy/{id}', 'EntreesController@destroy');
 Route::get('/entrees/archiver/{id}', 'EntreesController@archiver');
 Route::get('/entrees/archive/', 'EntreesController@archive')->name('entrees.archive');
 Route::post('/entrees/savecomment','EntreesController@savecomment')->name('entrees.savecomment');
-
 
 
 
@@ -72,6 +72,7 @@ Route::post('/emails/send','EmailController@send');
 /* envoie d'un email */
 Route::get('/emails/sending','EmailController@sending')->name('emails.sending');
 Route::get('/emails/envoimail/{id}','EmailController@envoimail')->name('emails.envoimail');
+Route::get('/emails/envoimailbr/{id}','EmailController@envoimailbr')->name('emails.envoimailbr');
 Route::get('/emails/envoifax/{id}','EmailController@envoifax')->name('emails.envoifax');
 Route::get('/emails', 'EmailController@index');
 /* unreaded emails and not checked */
@@ -100,6 +101,7 @@ Route::get('/emails/open/{id}', 'EmailController@open');
 Route::get('/envoyes', array('as' => 'envoyes','uses' => 'EnvoyesController@index'));
 Route::post('/envoyes/saving','EnvoyesController@saving')->name('envoyes.saving');
 Route::post('/envoyes/savingBR','EnvoyesController@savingBR')->name('envoyes.savingBR');
+Route::post('/envoyes/updatingbr','EnvoyesController@updatingbr')->name('envoyes.updatingbr');
 Route::get('/envoyes/view/{id}', 'EnvoyesController@view');
 Route::get('/envoyes/show/{id}', 'EnvoyesController@show');
 Route::get('/envoyes/destroy/{id}', 'EnvoyesController@destroy');

@@ -92,10 +92,7 @@ $dossiers = Dossier::get();
                                 <i class="fa fa-lg fa-fw fa-trash-alt"></i>
 
                             </a>
-                            <a href="{{action('EntreesController@export_pdf', $entree['id'])}}" class="btn btn-sm btn-warning btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Export Pdf">
-                                <i class="fas fa-lg fa-fw fa-file-pdf"></i>
 
-                            </a>
                         </div>
                         <div class="media-body pl-3">
                             <div class="subject"><?php if($entree->type=="email") {?><i class="fa  fa-envelope"></i><?php }?><?php if($entree->type=="sms") {?><i class="fa fa-lg fa-sms"></i><?php }?>

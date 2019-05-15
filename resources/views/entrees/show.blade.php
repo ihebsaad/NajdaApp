@@ -72,13 +72,14 @@ use App\Http\Controllers\TagsController;
             </div>
         </div>
 </div>
+
 <div class="panel panel-default panelciel " >
         <!--<div class="panel-heading" style="cursor:pointer" data-toggle="collapse" data-parent="#accordion-cat-1" href="#emailcontent" class="" aria-expanded="true">-->
         <div class="panel-heading" data-parent="#accordion-cat-1" href="#emailcontent" class="">
                 <a >
                     <div class="row">
                         <div class="col-sm-6 col-md-6 col-lg-6"style=" padding-left: 0px; ">
-                            <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;">Contenu</h4>
+                            <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;">Contenu</label></h4>
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6" style="padding-right: 0px;">
                             <div class="pull-right" style="margin-top: 0px;z-index: 10">
@@ -93,6 +94,7 @@ use App\Http\Controllers\TagsController;
                     </div>        
                  </a>
         </div>
+
         <div id="emailcontent" class="panel-collapse collapse in" aria-expanded="true" style="">
             <div class="panel-body" id="emailnpj">
                 <div class="row">
@@ -110,7 +112,7 @@ use App\Http\Controllers\TagsController;
                     </ul>
                     <div id="myTabContent" class="tab-content" style="padding:10px;padding-top:20px;background: #ffffff">
                                         <div class="tab-pane fade active in" id="mailcorps" style="min-height: 350px;">
-                                            <p id="mailtext" style="line-height: 25px;"><?php  $content= $entree['contenu'] ; ?>
+                                            <p id="mailtext" style="line-height: 25px;"><?php  $content= utf8_decode($entree['contenu']) ; ?>
                                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
@@ -122,7 +124,7 @@ use App\Http\Controllers\TagsController;
                                           <?php
                                             // get attachements info from DB
                                             $attachs = Attachement::get()->where('parent', '=', $entree['id'] );
-                                            
+
                                           ?>
                                             @if (!empty($attachs) )
                                             <?php $i=1; ?>
@@ -131,7 +133,7 @@ use App\Http\Controllers\TagsController;
 
                                                     <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
 
-                                                    
+
                                                     
                                                     @switch($att->type)
                                                         @case('docx')

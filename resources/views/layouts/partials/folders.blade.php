@@ -8,6 +8,9 @@
   $currentdoss=$dossier->id ;
 }else{$currentdoss=0;}
 
+ if (isset( $doss)){
+    $currentdoss=$doss ;}
+
   use \App\Http\Controllers\DossiersController;
 $dossiers= DossiersController:: ListeDossiers();
 

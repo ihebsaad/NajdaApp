@@ -56,7 +56,17 @@
 
 <form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data"   >
     <input id="dossier" type="hidden" class="form-control" name="dossier"  value="{{$doss}}" />
+    <input id="envoye" type="hidden" class="form-control" name="envoye"  value="" />
+    <input id="brsaved" type="hidden" class="form-control" name="brsaved"  value="0" />
+    <div class="row" >
+    <div class="alert alert-danger alert-dismissible   show" role="alert">
 
+        Si vous avez un fichier à attacher, faites-le maintenant svp avant toute autre action!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    </div>
     <div class="form-group">
         {{ csrf_field() }}
         <label for="destinataire">destinataire:</label>
@@ -90,12 +100,16 @@
 
     <div class="form-group">
         <label for="sujet">sujet :</label>
-        <input id="sujet" type="text" class="form-control" name="sujet" required/>
+        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - Votre Réf(Your Ref): <?php echo $refdem ?> - Notre Réf(Our Ref): <?php echo $ref ?>"/>
+    </div>
+    <div class="form-group">
+        <label for="description">Description :</label>
+        <input id="description" type="text" class="form-control" name="description" required/>
     </div>
     <div class="form-group ">
         <label for="contenu">contenu:</label>
        <div class="editor" >
-        <textarea id="summernote" style="min-height: 280px;" id="contenu" type="text"  class="textarea tex-com" placeholder="Contenu de l'email ici" name="contenu" required ></textarea>
+        <textarea style="min-height: 280px;" id="contenu" type="text"  class="textarea tex-com" placeholder="Contenu de l'email ici" name="contenu" required  ></textarea>
        </div>
     </div>
 
@@ -103,7 +117,7 @@
         <label>Attachements de dossier</label>
         <div class="row">
             <div class="col-md-10">
-        <select id="attachs" class="itemName form-control col-lg-6" style="" name="attachs[]"  multiple  value="$('#attachs').val()">
+        <select id="attachs"  class="itemName form-control col-lg-12" style="" name="attachs[]"  multiple  value="$('#attachs').val()">
             <option></option>
             @foreach($attachements as $attach)
                 <option value="<?php echo $attach->id;?>"> <?php echo $attach->nom;?></option>
@@ -123,7 +137,7 @@
     </div>
 
     <button  type="submit"  class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
-    <a id="broullion"   disabled class="btn btn-md btn-success btn_margin_top"><i class="fa fa-archive" aria-hidden="true"></i> Brouillon</a>
+
  </form>
 
         </div>
@@ -134,7 +148,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
 <script type="text/javascript">
-
     function visibilite(divId)
     {
         //divPrecedent.style.display='none';
@@ -146,6 +159,7 @@
     }
 
     $(document).ready(function(){
+
 
 
         $('#file').change(function(){
@@ -165,52 +179,150 @@
             }
         });
 
-        // activation bouton Brouillon
-        $('#destinataire').change(function() {
-            var destinataire = $('#destinataire').val();
 
-            if ( destinataire != '') {
-                 $('#broullion').removeAttr('disabled');
-            }
-            else {
-                 $('#broullion').attr("disabled","disabled");
 
-            }
-            });
-        $('#sujet').change(function() {
-            var sujet = $('#sujet').val();
 
-            if ( sujet != '') {
-                $('#broullion').removeAttr('disabled');
-            }
-            else {
-                $('#broullion').attr("disabled","disabled");
-
-            }
-        });
             // ajax save as draft
-        $('#broullion').click(function(){
+        $('#description').change(function(){
             var destinataire = $('#destinataire').val();
             var cc = $('#cc').val();
             var cci = $('#cci').val();
             var sujet = $('#sujet').val();
             var contenu = $('#contenu').val();
-             if ( (contenu != ''))
-            {
+            var description = $('#description').val();
+            var brsaved = $('#brsaved').val();
+
+             if ( (brsaved==0) )
+            { alert('create br');
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url:"{{ route('envoyes.savingBR') }}",
                     method:"POST",
-                    data:{destinataire:destinataire,sujet:sujet,contenu:contenu,cc:cc,cci:cci, _token:_token},
+                    data:{description:description,destinataire:destinataire,sujet:sujet,contenu:contenu,cc:cc,cci:cci, _token:_token},
                     success:function(data){
-                   ////     alert('Brouillon enregistré ');
+                     alert('Brouillon enregistré ');
+
+                        document.getElementById('envoye').value=data;
+                        document.getElementById('brsaved').value=1;
 
                     }
                 });
             }else{
-                alert('ERROR');
+
+                 if ( description!='' )
+                 {             var envoye = $('#envoye').val();
+
+                     alert('update br');
+                     var _token = $('input[name="_token"]').val();
+                     $.ajax({
+                         url:"{{ route('envoyes.updatingbr') }}",
+                         method:"POST",
+                         data:{envoye:envoye,description:description,destinataire:destinataire,contenu:contenu,cc:cc,cci:cci, _token:_token},
+                         success:function(data){
+                             alert('Brouillon enregistré ');
+
+                             document.getElementById('envoye').value=data;
+                             document.getElementById('brsaved').value=1;
+
+                         }
+                     });
+
+                 }
+
             }
         });
+
+
+        objTextBox = document.getElementById("contenu");
+        oldValue = objTextBox.value;
+        var somethingChanged = false;
+
+        function track_change()
+        {
+            if(objTextBox.value != oldValue)
+            {
+                oldValue = objTextBox.value;
+                somethingChanged = true;
+                changeeditor();
+            };
+
+            setInterval(function() { track_change()}, 10000);
+
+        }
+
+
+    setInterval(function() { track_change()}, 15000);
+
+        function setcontenu(myValue) {
+            $('#contenu').val(myValue)
+                .trigger('change');
+        }
+
+
+       function changeeditor()
+        {    var destinataire = $('#destinataire').val();
+            var cc = $('#cc').val();
+            var cci = $('#cci').val();
+            var sujet = $('#sujet').val();
+            var contenu = $('#contenu').val();
+            var description = $('#description').val();
+            var brsaved = $('#brsaved').val();
+
+            if ((brsaved == 0)) {
+                alert('content changed');
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: "{{ route('envoyes.savingBR') }}",
+                    method: "POST",
+                    data: {
+                        description: description,
+                        destinataire: destinataire,
+                        sujet: sujet,
+                        contenu: contenu,
+                        cc: cc,
+                        cci: cci,
+                        _token: _token
+                    },
+                    success: function (data) {
+                        alert('Brouillon enregistré ');
+
+                        document.getElementById('envoye').value = data;
+                        document.getElementById('brsaved').value = 1;
+
+                    }
+                });
+            } else {
+
+                //if ( description!='' )
+                //{
+                var envoye = $('#envoye').val();
+
+                alert('updating br');
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: "{{ route('envoyes.updatingbr') }}",
+                    method: "POST",
+                    data: {
+                        description: description,
+                        envoye: envoye,
+                        destinataire: destinataire,
+                        contenu: contenu,
+                        cc: cc,
+                        cci: cci,
+                        _token: _token
+                    },
+                    success: function (data) {
+                        alert('Brouillon enregistré ');
+                        document.getElementById('envoye').value = data;
+                        document.getElementById('brsaved').value = 1;
+                    }
+                });
+
+                //  }
+
+            }
+
+        }
 
         $('.itemName').select2({
             filter: true,
@@ -220,7 +332,6 @@
                 }
             }
         });
-
 
 
 
