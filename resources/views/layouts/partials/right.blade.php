@@ -1,5 +1,7 @@
  <!-- Content -->
-
+<!--select css-->
+    <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
  <style>
 /* Style The Dropdown Button */
 .dropbtn {
@@ -49,11 +51,14 @@
 .dropdown:hover .dropbtn {
   background-color: #3e8e41;
 }
+
+/* autocomplete */
+
 </style>
 
 <div class="panel panel-danger">
                     <div class="panel-heading">
-                        <h4 class="panel-title">Actions</h4>
+                        <h4 class="panel-title">Missions et Informations</h4>
                         <span class="pull-right">
                            <i class="fa fa-fw clickable fa-chevron-up"></i>
                             
@@ -65,31 +70,36 @@
                         
 
                         <div class="panel-body" style="display: block;">
-                            <?php use \App\Http\Controllers\ActionController;
-                                $typesactions= ActionController::ListeTypeActions();
+                            <?php use \App\Http\Controllers\MissionController;
+                                $typesMissions= MissionController::ListeTypeMissions();
 
 
                              /// if (isset( $dossier)){
-                                 // $actions=$dossier->activeActions;
+                                 // $Missions=$dossier->activeMissions;
 
                                if (true){ 
-                                $actions=Auth::user()->activeActions;
+                                $Missions=Auth::user()->activeMissions;
                             ?>
-                  @if ($actions)
+                  @if ($Missions)
 <!--  début tab -+----------------------------------------------------------------------------------------->
                         <ul id="actiontabs" class="nav nav-tabs" style="margin-bottom: 15px;">
                             <li class="active">
-                                <a href="#actionstab" data-toggle="tab">Actions</a>
+                                <a href="#Missionstab" data-toggle="tab">Missions</a>
                             </li>
                             <li>
-                                <a href="#newactiontab" data-toggle="tab">Nouvelle action</a>
+                                <a href="#newMissiontab" data-toggle="tab">Nouvelle Mission</a>
                             </li>
+                            <?php if (\Request::is('entrees/show/*')) { ?>
+                            <li>
+                                <a href="#infostab" data-toggle="tab">Informations</a>
+                            </li>
+                            <?php } ?>
                         </ul>
-                        <div id="ActionsTabContent" class="tab-content">
+                        <div id="MissionsTabContent" class="tab-content">
 
-                          <!-- début  actions tab-->
-                          <div class="tab-pane fade active in " id="actionstab">
-                              <!--<div class="tab-pane fade active in  scrollable-panel" id="actionstab">-->
+                          <!-- début  Missions tab-->
+                          <div class="tab-pane fade active in " id="Missionstab">
+                              <!--<div class="tab-pane fade active in  scrollable-panel" id="Missionstab">-->
 
                                
                                 <!-- treeview of notifications -->
@@ -100,17 +110,19 @@
                               .panel-heading.active {
                                 background-color: #00BFFF /*#86B404  #2EFEF7;*/
                               }
-                              .panel-heading.ColorerActionsCourantes{
+                              .panel-heading.ColorerMissionsCourantes{
                                 background-color: #ffd051;
                               }
 
                               </style>
-                              <?php if (isset($act)){$currentaction=$act->id;}else{$currentaction=0;} ?>
+                              <?php if (isset($act)){$currentMission=$act->id;}else{$currentMission=0;} ?>
 
                               <?php if (isset($dossier)){$dosscourant=$dossier->id ;}else{$dosscourant=0;} ?>
                                     
                                     <div class="accordion panel-group" id="accordion">
-                                 @if (!$actions->isEmpty())
+
+                                 @if (!$Missions->isEmpty())
+
                                   <div class="row">
 
                                 <div class="col-md-4" >
@@ -118,34 +130,36 @@
                                 </div>
                                
                                     <div class="col-md-8">
-                                  <!--<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#toutesactions">États de toutes les actions</button> -->
+                                  <!--<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#toutesMissions">États de toutes les Missions</button> -->
                                   </div>
 
                                   </div>
                                   <br>
                                    <div class="row">
                                     <div class="col-md-8" >
-                                    <!--<h4 >les actions actives : </h4>-->
+                                    <!--<h4 >les Missions actives : </h4>-->
                                    </div>
                                    </div>
                                     <br>                             
                                   @endif
-                                      @foreach ($actions as $action)
+                                      @foreach ($Missions as $Mission)
                                       <div class="row" style="padding-bottom: 3px;">
                                       <div class="col-md-10">
                                       <div class="panel panel-default">
-                                        <div class="panel-heading <?php if($action->id ==$currentaction){echo 'active';}
-                                        else {if($action->dossier->id==$dosscourant){echo 'ColorerActionsCourantes' ;}}?>">
+
+                                        <div class="panel-heading <?php if($Mission->id ==$currentMission){echo 'active';}
+                                        else {if($Mission->dossier->id==$dosscourant){echo 'ColorerMissionsCourantes' ;}}?>">
+
                                          
                                            <h4 class="panel-title">
-                                              <a data-toggle="collapse" href="#collapse{{$action->id}}">{{$action->dossier->reference_medic}}   {{$action->titre}}</a>
+                                              <a data-toggle="collapse" href="#collapse{{$Mission->id}}">{{$Mission->dossier->reference_medic}}   {{$Mission->titre}}</a>
                                            </h4>
                                         </div>
 
-                                       <div id="collapse{{$action->id}}" class="panel-collapse collapse">
+                                       <div id="collapse{{$Mission->id}}" class="panel-collapse collapse in">
                                             <ul class="list-group">
-                                              @foreach($action->activeSousAction as  $sas)
-                                              <li class="list-group-item"><a  href="{{url('dossier/action/Traitementsousaction/'.$action->dossier->id.'/'.$action->id.'/'.$sas->id)}}">{{$sas->titre}} </a></li>
+                                              @foreach($Mission->activeAction as  $sas)
+                                              <li class="list-group-item"><a  href="{{url('dossier/Mission/TraitementAction/'.$Mission->dossier->id.'/'.$Mission->id.'/'.$sas->id)}}">{{$sas->titre}} </a></li>
                                               @endforeach
                                             </ul>
 
@@ -161,39 +175,43 @@
                                      
 
 
-                                            <a class="workflowkbs" id="<?php echo $action->id ?>" style="color:black !important; margin-top: 10px; margin-right: 10px;" data-toggle="modal" data-target="#myworow" title ="Voir Workflow" href="#"><span class="fa fa-2x fa-tasks" style="  margin-right: 20px;" aria-hidden="true"></span>
+                                            <a class="workflowkbs" id="<?php echo $Mission->id ?>" style="color:black !important; margin-top: 10px; margin-right: 10px;" data-toggle="modal" data-target="#myworow" title ="Voir Workflow" href="#"><span class="fa fa-2x fa-tasks" style="  margin-right: 20px;" aria-hidden="true"></span>
                                             </a>
-                                            <input id="workflowh<?php echo $action->id ?>" type="hidden" value="{{$action->titre}}">
+                                            <input id="workflowh<?php echo $Mission->id ?>" type="hidden" value="{{$Mission->titre}}">
 
-                                             {{-- <a  style="color:black !important; margin-top: 10px; margin-right: 10px;" title ="Voir Workflow" href="{{url('action/workflow/'.$action->dossier->id.'/'.$action->id)}}"><span class="fa fa-2x fa-cogs" style=" margin-top: 10px; margin-right: 20px;" aria-hidden="true"></span>
+                                             {{-- <a  style="color:black !important; margin-top: 10px; margin-right: 10px;" title ="Voir Workflow" href="{{url('Mission/workflow/'.$Mission->dossier->id.'/'.$Mission->id)}}"><span class="fa fa-2x fa-cogs" style=" margin-top: 10px; margin-right: 20px;" aria-hidden="true"></span>
                                             </a>--}}
                                                                          
-                                        <?php $actk=$action ;?>
+                                        <?php $actk=$Mission ;?>
                                      
                                     </div>
                                     </div>
 
                                      @endforeach
 
-
-                                    </div>
+                                    
 
 
                                               </div>
 
                                         </div>
 
+                                        </div>
 
-                                    <!-- fin  actions tab---------------------------------------------------------->
 
-                                    <!-- début creation nouvelle actions tab------------------------>
+                                    <!-- fin  Missions tab---------------------------------------------------------->
 
-                                    <div class="tab-pane fade  scrollable-panel" id="newactiontab">
+
+
+                 
+                                                               <!-- début creation nouvelle Missions tab------------------------>
+
+                                    <div class="tab-pane fade  scrollable-panel" id="newMissiontab">
 
 
 
                                    <div class="row text-center">
-                                                           <h4>Créer une nouvelle action</h4>
+                                                           <h4>Créer une nouvelle Mission</h4>
 
                                                             
                               <div class="card-header">
@@ -209,7 +227,7 @@
                                           </ul>
                                       </div><br />
                                   @endif
-                                  <form  method="post" action="{{ route('actions.store') }}" style="padding-top:30px">
+                                  <form  method="post" action="{{ route('Missions.store') }}" style="padding-top:30px">
                                       <div class="form-group">
                                            {{ csrf_field() }}
                                          <div class="row">
@@ -232,17 +250,94 @@
                                             </div>
                                       </div>
 
-                                           <div class="row">
+                                          {{-- <div class="row">
                                               <div class="col-md-3" style="padding-top:5px">
                                                   <label for="typeact" style="display: inline-block;  text-align: right; width: 40px;">Type</label>
                                               </div>
                                               <div class="col-md-9">  <select id="typeact" type="text" class="form-control" style="width:95%;  text-align: left;" name="typeact">
-                                                         @foreach($typesactions as $tyaction)
-                                                              <option value="{{ $tyaction->id }}">{{ $tyaction->nom_type_action }}</option>
+                                                         @foreach($typesMissions as $tyMission)
+                                                              <option value="{{ $tyMission->id }}">{{ $tyMission->nom_type_Mission }}</option>
                                                           @endforeach
-                                      </select>
+                                          </select>
                                               </div>
-                                           </div>
+                                           </div>--}}
+
+                                           <!-- input pour l'autocomplete type Mission -->
+                                          <div class="form-group">
+
+                                                 <div class="row">
+                                                <div class="col-md-3" style="padding-top:5px">  <label for="typeactauto" style="display: inline-block;  text-align: right; width: 40px;">Type:</label></div>
+                                                <div class="col-md-9"> 
+                                                  <input id="typeactauto" type="text" value="" class="form-control" style="width:95%;  text-align: left;" name="typeactauto"/>
+                                                 <div id="listtypeact" style="z-index: 9999;"> </div>
+
+
+                                                 <script> $(document).ready(function(){
+
+                                                     $("#typeactauto").keyup(function(){
+
+                                                      var qy=$(this).val();
+
+                                                      if(qy != ''){
+
+                                                        var _token=$('input[name="_token"]').val();
+
+                                                        $.ajax({
+
+                                                          url:"{{ route('typeMission.autocomplete')}}",
+                                                          method:"POST",
+                                                          data:{qy:qy, _token:_token},
+                                                          success:function(data)
+                                                          {
+
+
+                                                           // alert(data);
+
+                                                           $("#listtypeact").fadeIn();
+                                                            $("#listtypeact").html(data);
+
+                                                          }
+
+
+                                                        });
+
+
+                                                      }
+
+
+
+
+                                                     });
+
+
+                                                    
+                                                 });
+                                                 
+
+
+
+                                                  </script>
+
+                                                  <script>
+                                                     $(document).on('click','.resAutocompTyoeAct',function(){
+
+                                                      //alert("bonjour");
+
+                                                    $("#typeactauto").val($(this).text());
+                                                    $("#listtypeact").fadeOut();
+
+
+                                                     });
+
+
+
+                                                  </script>
+
+                                                </div>
+                                            </div>
+
+                                          </div>
+
 
                                       <div class="form-group">
 
@@ -270,14 +365,62 @@
 
 
                                  <div class="row text-center">
-                                    <h4>Action libre</h4>
-                                     <a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#NouveauType">créer un nouveau type d'action </a>
+                                    <h4>Mission libre</h4>
+                                     <a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#NouveauType">créer un nouveau type de Mission </a>
                                  </div> 
                                                                    
                     </div>
-                 </div>
-                               
-                   <!-- fin creation nouvelle actions tab------------------------>        
+                    <?php if (\Request::is('entrees/show/*')) { ?>
+                     <!-- Informations tab------------------------>
+                     <div class="tab-pane fade  scrollable-panel" id="infostab">
+                      <div class="row text-center">
+                        <div class="col-md-6" >
+                          <button id="btn-atag" class="btn btn-default">Ajouter TAG</button>
+                        </div>
+                        <div class="col-md-6" >
+                          <button id="btn-cmttag" class="btn btn-default">TAG & Commentaire</button>
+                        </div>
+                      </div>    
+                      <div id="ajouttag" style="display:none;margin-top: 30px">
+                           <div class="form-group mar-20">
+                                <label for="tagname" class="control-label" style="padding-right: 20px">TAG</label>
+                                <select id="tagname" class="form-control select2" style="width: 230px">
+                                    <option value="Select">Selectionner</option>
+                                        <option value="Franchise">Franchise (frais médicaux)</option>
+                                        <option value="Plafond">Plafond (frais médicaux)</option>
+                                        <option value="GOPmed">GOP (frais médicaux)</option>
+                                        <option value="PlafondRem">Plafond (remorquage)</option>
+                                        <option value="GOPtn">GOP (toutes natures)</option>
+                                        <option value="RM">RM (rapport médical)</option>
+                                        <option value="RMtraduit">RM (rapport médical) traduit</option>
+                                        <option value="CT">CT (contact technique)</option>
+                                        <option value="DOCasigner">Doc à signer (LE, DAFM, DFM)</option>
+                                        <option value="RE">RE (rapport d’expertise)</option>
+                                        <option value="RDD">RDD</option>
+                                        <option value="DDR">DDR (Décharge de responsabilité)</option>
+                                        <option value="Procuration">Procuration</option>
+                                        <option value="NAF">Mail/Fax d’ouverture (NAF)</option>
+                                        <option value="EAF">Entité à facturer</option>
+                                        <option value="PCFP">Passeport/ CIN + fiche de police</option>
+                                        <option value="CG">Carte grise</option>
+                                        <option value="Dyptique">Dyptique</option>
+                                        <option value="PVpolice">PV de police</option>
+                                        <option value="PVehicule">Photo de véhicule</option>
+                                        <option value="Billet">Billets d’avion/Train</option>
+                                        <option value="MEDIF">MEDIF rempli</option>
+                                </select>
+                            </div>
+                            <div id="champstags" class="form-group mar-20"></div>
+
+                            <input type="text" id="infotag" name="infotag" class="form-control" placeholder="Entrer l'information de TAG" data-bv-field="infotag"></br>
+                            <textarea id="contenutag" name="contenutag" rows="7" class="form-control resize_vertical" placeholder="Entrer le contenu de TAG" data-bv-field="message"></textarea>
+                      </div>   
+                      <div id="cmttag"  style="display:none;margin-top: 30px">
+
+                      </div>                                       
+                    </div>
+                    <?php } ?>    
+                   <!-- fin creation nouvelle Missions tab------------------------>        
 
                     @endif
 
@@ -289,14 +432,14 @@
                  </div>
             </div>
 
-<!-- modal pour creer un nouveau type d'action--> 
+<!-- modal pour creer un nouveau type de Mission--> 
 
             <div class="modal fade" id="NouveauType" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
              <div class="modal-dialog">
              <div class="modal-content">
              <div class="modal-header">
              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-             <h4 class="modal-title" id="myModalLabel">Créer un nouveau type d'action</h4>
+             <h4 class="modal-title" id="myModalLabel">Créer un nouveau type de Mission</h4>
              </div>
              <div class="modal-body">
                <h3>Mettre les étapes en ordre</h3>
@@ -317,7 +460,7 @@
 
 
 
- <!-- Modal pour toutes les etats actions ------------->
+ <!-- Modal pour toutes les etats Missions ------------->
 
 
            <style>
@@ -337,14 +480,14 @@
                   }
           </style>
 
-              <div id="toutesactions" class="modal fade" role="dialog">
+              <div id="toutesMissions" class="modal fade" role="dialog">
                 <div class="modal-dialog">
 
                   <!-- Modal content-->
                   <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      <h4 class="modal-title">États de toutes les actions de dossier courant</h4>
+                      <h4 class="modal-title">États de toutes les Missions de dossier courant</h4>
                     </div>
                     <div class="modal-body">
                       <p>
@@ -356,7 +499,7 @@
                             <thead>
                               <tr>
                                 <th>#</th>
-                                <th class="col-md-5 col-xs-5">Nom de l'action</th>
+                                <th class="col-md-5 col-xs-5">Nom de l'Mission</th>
                                 <th class="col-md-5 col-xs-5">Date création</th>
                                 <th class="col-md-4 col-xs-4">État</th>
                                 <th class="col-md-3 col-xs-3">Modifier état</th>
@@ -367,7 +510,7 @@
                             </thead>
                            {{-- <tbody>
                               <?php  if (isset( $dossier)){
-                                  $acts=$dossier->actions; $u=1; ?>
+                                  $acts=$dossier->Missions; $u=1; ?>
                                @foreach ($acts as $ac)
                               <tr>
                                 <th scope="row"><?php echo $u ?></th>
@@ -468,7 +611,10 @@
   
 </div>
 <!--fin modal workflow -->
-<!-- pour l'action libre-->
+
+<!-- pour l'Mission libre-->
+
+<script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
  <script type="text/javascript">
      $(document).ready(function(){
     var maxField = 10; //Input fields increment limitation
@@ -492,6 +638,33 @@
         $(this).parent('div').remove(); //Remove field html
         x--; //Decrement field counter
     });
+
+    $('#btn-atag').click(function(){
+      $("#cmttag").hide();
+      $("#ajouttag").show();
+    });  
+    $('#btn-cmttag').click(function(){
+      $("#ajouttag").hide();
+      $("#cmttag").show();
+    }); 
+$("#tagname").select2();
+$('#tagname').change(function(e){
+  if($('#tagname option:selected').val().match(/^(Franchise|Plafond|GOPmed|PlafondRem|GOPtn)$/))
+    { //posséde champs montant
+      if ($('#champstags').html() === "")
+      {
+        
+        $('#champstags').html("<div class='form-group mar-20'><label for='montanttag' class='control-label' style='padding-right: 20px'>Montant</label><input type='text' id='montanttag' class='form-control' style='width: 180px'></div>");
+      }
+    }
+  else
+    {
+      if ($('#champstags').html() !== "")
+      {
+        $('#champstags').html("");
+      }
+    }
+});
 });
 </script>
 
@@ -513,7 +686,7 @@ $("#workflowform input:checkbox").change(function() {
        // alert (donnees);
            $.ajax({
 
-               url : '{{URL('/action/updateworkflow/')}}',
+               url : '{{URL('/Mission/updateworkflow/')}}',
                type : 'POST',
                data : donnees,
                success: function(retour){
@@ -536,8 +709,8 @@ $("#workflowform input:checkbox").change(function() {
 
     if (App::environment('local')) {
         // The environment is local
-       // $urlapp='http://localhost/NejdaApp';
-        $urlapp=env('APP_URL');
+        $urlapp='http://localhost/NejdaApp';
+       // $urlapp=env('APP_URL');
 
     }
     ?>
@@ -555,7 +728,7 @@ $(document).ready(function() {
 
            $.ajax({
 
-               url: "<?php echo $urlapp; ?>/action/getAjaxWorkflow/"+idw,
+               url: "<?php echo $urlapp; ?>/Mission/getAjaxWorkflow/"+idw,
                type : 'GET',
               // data : 'idw=' + idw,
                success: function(data){

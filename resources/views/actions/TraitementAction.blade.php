@@ -41,13 +41,22 @@
   <!-- début onglet instructions------------------------------------------------------------------ -->
   <div id="home" class="tab-pane fade in active">
 
-   <!--<form action="{{ url('dossier/action/Traitercommentsousaction/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}">-->
+   <!--<form action="{{ url('dossier/Mission/TraitercommentAction/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}">-->
 
     <br>
     <div class="row">
-      <div class="col-md-10">
+      <div class="col-md-8">
     <h3 style="margin-top:15px;">Étapes à réaliser:</h3>
       </div>
+  
+
+   <div class="col-md-2">
+    <button class="btn " style="float:right;margin-right:5px;" title="creer un Rappel" data-toggle="modal" data-target="#ReporterSA" >Rappel<br>
+     <i style="margin-top:8px" class="fa fa-2x fa-clock"> </i></button>
+   </div>
+
+
+    
 
     <div class="col-md-2">
     <button class="btn " style="float:right;margin-right:5px;" title="Reporter la sous-action courante à une date ultérieure" data-toggle="modal" data-target="#ReporterSA"  >Reporter<br>
@@ -55,40 +64,40 @@
    </div>
      </div>
     <br>
-    <p><textarea readonly style="padding:10px 10px 10px 10px ;border:1px solid #00aced;WIDTH: 100%; height:100px;  font-size: 18px;">{{$sousaction->descrip}}</textarea>
+    <p><textarea readonly style="padding:10px 10px 10px 10px ;border:1px solid #00aced;WIDTH: 100%; height:100px;  font-size: 18px;">{{$Action->descrip}}</textarea>
     </p>
      <br>
      <div>
       <h4 id="comenttitle">Vous pouvez ajouter un ou plusieurs commentaires :</h4>
       <br>
 
-      <form  id="formcoments" action="{{ url('dossier/action/Traitercommentsousaction/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}">
+      <form  id="formcoments" action="{{ url('dossier/Mission/TraitercommentAction/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}">
 
          {{ csrf_field() }}
        <div class="com_wrapper">
         <!-- bloc pour commentaires existants-->
         <?php $nbcomm=0;?>
         
-             @if($sousaction->comment1)
+             @if($Action->comment1)
              <?php $nbcomm++;?>
             <div>
-            <input autocomplete="off"  type="text" style="width:80%"  size="70" onchange="changing(this)"  id="comment1" name="comment1" value="<?php echo $sousaction->comment1 ?>"/>
+            <input autocomplete="off"  type="text" style="width:80%"  size="70" onchange="changing(this)"  id="comment1" name="comment1" value="<?php echo $Action->comment1 ?>"/>
             <a href="javascript:void(0);" class="com_button" title="Ajouter commentaire"></a>
             </div>
             <br>
              @endif
-             @if($sousaction->comment2)
+             @if($Action->comment2)
              <?php $nbcomm++;?>
             <div>
-            <input autocomplete="off"  type="text"  style="width:80%"  size="70" onchange="changing(this)"  id="comment2" name="comment2" value="<?php echo $sousaction->comment2 ?>"/>
+            <input autocomplete="off"  type="text"  style="width:80%"  size="70" onchange="changing(this)"  id="comment2" name="comment2" value="<?php echo $Action->comment2 ?>"/>
             <a href="javascript:void(0);" class="com_button" title="Ajouter commentaire"></a>
             </div>
              <br>
              @endif
-             @if($sousaction->comment3)
+             @if($Action->comment3)
              <?php $nbcomm++;?>
               <div>
-            <input autocomplete="off" type="text" style="width:80%"  size="70" onchange="changing(this)" id ="comment3" name="comment3" value="<?php echo $sousaction->comment3 ?>"/>
+            <input autocomplete="off" type="text" style="width:80%"  size="70" onchange="changing(this)" id ="comment3" name="comment3" value="<?php echo $Action->comment3 ?>"/>
             <a href="javascript:void(0);" class="com_button" title="Ajouter commentaire"></a>
             </div>
              <br>
@@ -111,16 +120,16 @@
     <br><br>
     <div class="row">
 
-      <?php  if(isset($sousaction)) { if($sousaction->ordre < $sousaction->action->sousactions->count()){ ?>
+      <?php  if(isset($Action)) { if($Action->ordre < $Action->Mission->Actions->count()){ ?>
       <div class="col-md-6">
-          <a href="{{ url('dossier/action/EnregistrerEtAllerSuivante/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" class="btn btn-primary"><i class="fa fa-check"></i>  Marquer la sous-action comme faite et <i class="fa fa-arrow-right"></i> aller à la suivante</a>
+          <a href="{{ url('dossier/Mission/EnregistrerEtAllerSuivante/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}" class="btn btn-primary"><i class="fa fa-check"></i>  Marquer la sous-action comme faite et <i class="fa fa-arrow-right"></i> aller à la suivante</a>
 
       </div>
 
     <?php } else {?>
 
       <div class="col-md-6">
-      <a href="{{ url('dossier/action/FinaliserAction/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" class="btn btn-primary"><i class="fa fa-check-circle"></i>   Marquer la sous-action comme faite </a>
+      <a href="{{ url('dossier/Mission/FinaliserMission/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}" class="btn btn-primary"><i class="fa fa-check-circle"></i>   Marquer la sous-action comme faite </a>
 
       </div>
 
@@ -134,7 +143,7 @@
       
       <div class="col-md-5">
         
-         <a class="btn btn-danger" href="{{ url('dossier/action/AnnulerEtAllerSuivante/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" ><i class="fa fa-close"></i> Annuler la sous-action et <i class="fa fa-arrow-right"></i> aller à la suivante</a>
+         <a class="btn btn-danger" href="{{ url('dossier/Mission/AnnulerEtAllerSuivante/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}" ><i class="fa fa-close"></i> Annuler la sous-action et <i class="fa fa-arrow-right"></i> aller à la suivante</a>
 
      </div>
 
@@ -143,8 +152,8 @@
      <div class="row">
 
       <div class="col-md-6">
-        <?php  if(isset($sousaction)) { if($sousaction->ordre > 1){ ?>
-         <a class="btn btn-primary" href="{{ url('dossier/action/EnregistrerEtAllerPrecedente/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}"> <i class="fa fa-arrow-left"></i>  Aller à la sous-action précédente</a>
+        <?php  if(isset($Action)) { if($Action->ordre > 1){ ?>
+         <a class="btn btn-primary" href="{{ url('dossier/Mission/EnregistrerEtAllerPrecedente/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}"> <i class="fa fa-arrow-left"></i>  Aller à la sous-action précédente</a>
        <?php }}?>
       </div>
       <div class="col-md-1">
@@ -152,7 +161,7 @@
 
       <div class="col-md-5">
 
-        <a class="btn btn-danger" href="{{ url('dossier/action/AnnulerActionCourante/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}" ><i class="fa fa-close"></i>  Annuler l'action courante</a>
+        <a class="btn btn-danger" href="{{ url('dossier/Mission/AnnulerMissionCourante/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}" ><i class="fa fa-close"></i>  Annuler la Mission courante</a>
       </div>
      
      </div>
@@ -445,7 +454,7 @@
 
 <!--  les modals -->
 
-<!--  début  modal repoter sousaction (et donc toute l'action)  -->
+<!--  début  modal repoter Action (et donc toute la Mission)  -->
 <style>
 .modal-dialog.kbs { margin-top: 18%; } 
 </style>
@@ -458,9 +467,9 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Reporter la sous action courante à une date ultérieure (Report de toute l'action)</h4>
+        <h4 class="modal-title">Reporter la sous action courante à une date ultérieure (Report de toute la mission)</h4>
       </div>
-      <form   action ="{{ url('dossier/action/Reportersousaction/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}">
+      <form   action ="{{ url('dossier/Mission/ReporterAction/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}">
       <div class="modal-body">
         <p>
       <div class="form-group">
@@ -540,7 +549,7 @@
 <!-- script pour mettre à jour le titre de panel en milieu-->
 
    <script>
-  $("#kbspaneltitle").append('<?php if($sousaction) {  echo 'Action : '.$sousaction->action->titre.' | Sous-action : '.$sousaction->titre.' --- ( '. $sousaction->ordre . ' / '. $sousaction->action->sousactions->count() .')'; }  ?>');
+  $("#kbspaneltitle").append('<?php if($Action) {  echo 'Mission : '.$Action->Mission->titre.' | action : '.$Action->titre.' --- ( '. $Action->ordre . ' / '. $Action->Mission->Actions->count() .')'; }  ?>');
   </script>
 <!-- enregistrer commentaires sans bouton -->
 <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
@@ -555,7 +564,7 @@
         var donnees = $("#formcoments").serialize();
         
         $.ajax({
-            url: "{{ url('dossier/action/TraitercommentsousactionAjax/'.$sousaction->action->dossier->id.'/'.$sousaction->action->id.'/'.$sousaction->id)}}",
+            url: "{{ url('dossier/Mission/TraitercommentActionAjax/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}",
             method: "POST",
             data : donnees,
             success: function (data) {

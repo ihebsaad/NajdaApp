@@ -90,9 +90,11 @@ var idTagger = function(selector) {
         ids.push(ui.item.id);
         $idTagger.field.val(ids.join(',').replace(/^,+|,+$/g, '')); // trim null entries
         
-        $idTagger.entry.before('<li data-id="' + ui.item.id + '"><div class="tag-editor-spacer">&nbsp;</div>' +
-                               '<div class="tag-editor-tag">' + ui.item.label + '</div><div class="tag-editor-delete"><i></i></div></li>');
-        
+        if (ui.item.label === 'Garantie de paiement')
+        {
+          //$('#addgop').modal('show');
+          var montant = prompt("Veuillez entrer le montant:", "");
+        }
             if (entree != '')
             {
             var titre = ui.item.label;
@@ -102,9 +104,9 @@ var idTagger = function(selector) {
                     method:"POST",
                     data:{entree:entree,titre:titre, _token:_token},
                     success:function(data){
-                        //alert('Added successfully');
-                       /*$this.val('Tag Ajouté').prop({ size: 1 + $this.val().length })
-                        .effect('highlight', {}, 1000, function() { $this.val('').prop({ size: 1 + $this.val().length }); });*/
+                        
+                    $idTagger.entry.before('<li data-id="' + ui.item.id + '"><div class="tag-editor-spacer">&nbsp;</div>' +
+                                           '<div class="tag-editor-tag">' + ui.item.label + '</div><div class="tag-editor-delete"><i></i></div></li>');
 
                     }
                     ,

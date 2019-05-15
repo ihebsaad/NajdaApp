@@ -28,14 +28,14 @@ class User extends Authenticatable
     ];
 
 
-    public function actions()
+    public function Missions()
     {
-        return  $this-> hasMany("App\Action");
+        return  $this-> hasMany("App\Mission");
     }
 
-     public function activeActions()
+     public function activeMissions()
     {
-        return $this->hasMany('App\Action')->where('statut_courant','Active');
+        return $this->hasMany('App\Mission')->where('statut_courant','Active');
     }
 
     public function dossier()
@@ -44,14 +44,14 @@ class User extends Authenticatable
         return $this->hasMany ("App\Dossier");
     }
 
-    public function sousactions()
+    public function Actions()
     {
-        return $this->hasMany('App\SousAction');
+        return $this->hasMany('App\Action');
     }
 
-     public function sousactionsTh()
+     public function ActionsTh()
     {
-        return $this->hasManyThrough('App\SousAction', 'App\Action');
+        return $this->hasManyThrough('App\Action', 'App\Action');
     }
    
 }

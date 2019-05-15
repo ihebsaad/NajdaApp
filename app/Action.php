@@ -7,32 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Action extends Model
 {
     //
+    protected $table='actions';
 
     protected $fillable = [
-        'titre', 'descrip', 'date_deb','date_fin', 'statut_courant','realisee', 'dossier_id','type_action', 
-        'user_id','assistant','prestataire','intervenant','created_at','updated_at','deleted_at'
+        'mission_id','type_Mission','titre', 'descrip', 'date_deb','date_fin','date_report', 'ordre', 'realisee','statut','user_id','assistant_id','comment1','comment2','comment3','action_ava','action_apr', 'created_at','updated_at','deleted_at'
     ];
 
-
-public function dossier()
+  public function Mission()
     {
-        return $this->belongsTo('App\Dossier');
+        return $this->belongsTo('App\Mission');
     }
 
- public function typeaction()
-    {
-        return $this->belongsTo('App\TypeAction');
-    }
 
-    public function sousactions()
-    {
-        return $this->hasMany('App\SousAction');
-    }
-
-     public function activeSousAction()
-    {
-        return $this->hasMany('App\SousAction')->where('statut','Active');
-    }
  
-
 }

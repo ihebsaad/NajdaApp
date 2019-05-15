@@ -11,7 +11,7 @@ use App\Template_doc ;
 use App\Document ;
 use App\Client ;
 use DB;
-use App\TypeAction;
+use App\TypeMission;
 use App\Prestation;
 use App\TypePrestation;
 use App\Citie;
@@ -228,8 +228,8 @@ class DossiersController extends Controller
     public function view($id)
     {
         $dossiers = Dossier::all();
-        $typesactions=TypeAction::get();
-        $actions=Dossier::find($id)->activeActions;
+        $typesMissions=TypeMission::get();
+        $Missions=Dossier::find($id)->activeMissions;
 
         $typesprestations = TypePrestation::all();
  //        $villes = Ville::all();
@@ -296,7 +296,7 @@ class DossiersController extends Controller
         //  $entrees =   Entree::all();
         $documents = Document::where('dossier', $id)->get();
 
-        return view('dossiers.view',['emails'=>$emails,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesactions'=>$typesactions,'actions'=>$actions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
+        return view('dossiers.view',['emails'=>$emails,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
 
     }
 
