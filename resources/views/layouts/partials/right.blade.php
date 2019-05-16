@@ -115,6 +115,7 @@ use App\Http\Controllers\TagsController;
                               }
                               .panel-heading.ColorerMissionsCourantes{
                                 background-color: #ffd051;
+                                color: red;
                               }
 
                               </style>
