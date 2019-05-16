@@ -910,7 +910,8 @@ class EmailController extends Controller
 
          //  $envoye = new Envoye([
                'emetteur' => 'test@najda-assistance.com', //env('emailenvoi')
-               'destinataire' => (string)($to),
+               //     'destinataire' => (string)($to),
+                    'destinataire' =>'ihebtest',
                'par'=> $par,
                'sujet'=> $sujet,
                'contenu'=> $contenu,
