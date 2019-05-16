@@ -17,7 +17,6 @@ use App\Http\Controllers\TagsController;
 {{-- page level styles --}}
 @section('header_styles')
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/custom_css/layout_responsive.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('resources/assets/css/tags.css') }}">
 @stop
 @section('content')
 
@@ -36,11 +35,9 @@ use App\Http\Controllers\TagsController;
                                 @if (empty($entree->dossier))
                                         <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
                                  @endif
-                                <a href="#" class="btn btn-primary btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Enregistrer les commentaires et TAGS" > 
-                                  <span class="fa fa-fw fa-save"></span> Sauvegarder
+                                <a href="#" class="btn btn-info btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" > 
+                                  <span class="fa fa-fw fa-check"></span> Traiter
                                 </a>
-                                <button class="btn btn-sm btn-default"><i class="fa fa-fw fa-square"></i></button>
-                                <button class="btn btn-sm btn-default"><i class="fa fa-fw fa-times removepanel clickable"></i></button>
                             </div>
                         </div>
 
@@ -72,29 +69,19 @@ use App\Http\Controllers\TagsController;
             </div>
         </div>
 </div>
-
 <div class="panel panel-default panelciel " >
         <!--<div class="panel-heading" style="cursor:pointer" data-toggle="collapse" data-parent="#accordion-cat-1" href="#emailcontent" class="" aria-expanded="true">-->
         <div class="panel-heading" data-parent="#accordion-cat-1" href="#emailcontent" class="">
                 <a >
                     <div class="row">
                         <div class="col-sm-6 col-md-6 col-lg-6"style=" padding-left: 0px; ">
-                            <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;">Contenu</label></h4>
+                            <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;">Contenu</h4>
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6" style="padding-right: 0px;">
-                            <div class="pull-right" style="margin-top: 0px;z-index: 10">
-                                <a id="commenttag" href="#" class="btn btn-info btn-sm btn-responsive" role="button" onclick="comment();"> 
-                                  <span class="fa fa-fw fa-tags"></span> Commentaire & TAG
-                                </a>
-                                <a id="emailcontent" href="#" class="btn btn-info btn-sm btn-responsive" style="display:none" role="button" onclick="comment();"> 
-                                  <span class="fa fa-fw fa-arrow-left"></span> Retour
-                                </a>
-                            </div>
                         </div>
                     </div>        
                  </a>
         </div>
-
         <div id="emailcontent" class="panel-collapse collapse in" aria-expanded="true" style="">
             <div class="panel-body" id="emailnpj">
                 <div class="row">
@@ -112,7 +99,7 @@ use App\Http\Controllers\TagsController;
                     </ul>
                     <div id="myTabContent" class="tab-content" style="padding:10px;padding-top:20px;background: #ffffff">
                                         <div class="tab-pane fade active in" id="mailcorps" style="min-height: 350px;">
-                                            <p id="mailtext" style="line-height: 25px;"><?php  $content= utf8_decode($entree['contenu']) ; ?>
+                                            <p id="mailtext" style="line-height: 25px;"><?php  $content= $entree['contenu'] ; ?>
                                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
@@ -124,7 +111,7 @@ use App\Http\Controllers\TagsController;
                                           <?php
                                             // get attachements info from DB
                                             $attachs = Attachement::get()->where('parent', '=', $entree['id'] );
-
+                                            
                                           ?>
                                             @if (!empty($attachs) )
                                             <?php $i=1; ?>
@@ -133,7 +120,7 @@ use App\Http\Controllers\TagsController;
 
                                                     <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
 
-
+                                                    
                                                     
                                                     @switch($att->type)
                                                         @case('docx')
@@ -195,55 +182,12 @@ use App\Http\Controllers\TagsController;
                     </div>
                 </div>
             </div>
-            <div class="panel-body" id="emailcomment" style="display: none">
-                <div class="row"style="padding:10px;padding-top:20px;background: #eee">
-                    <div class="form-group">
-                        <form method="post">
-                                            <div class="col-md-10">
-                                                <textarea id="commentuser" name="commentuser" rows="7" class="form-control resize_vertical" placeholder="Entrez votre commentaire">{{ $entree['commentaire']  }}</textarea>
-                                            </br><label style="padding-bottom: 10px;color: #8a8a8a;">Les TAGS:</label></br>
-                                                <div id="taglist" class="form-token-tags">
-                                                  <ul class="tag-editor">
-                                                   <?php 
-                                                        // affichage des tags relié au notification courante
-                                                        $tags=TagsController::entreetags($entree['id']);
-                                                        if (! empty($tags))
-                                                        {   
-                                                            $abbrevtag = "";
-                                                            $listtag="";
-                                                            foreach ($tags as $tag) {
-                                                                switch ($tag['titre']) {
-                                                                        case "Garantie de paiement":
-                                                                            $abbrevtag = "GOP";
-                                                                            $listtag .=",GOP";
-                                                                            break;
-                                                                        case "Franchise":
-                                                                            $abbrevtag = "FR";
-                                                                            $listtag .=",FR";
-                                                                            break;
-                                                                        case "tag de test":
-                                                                            $abbrevtag = "TT";
-                                                                            $listtag .=",TT";
-                                                                            break;
-                                                                    }
-                                                                echo '<li data-id="'.$abbrevtag.'"><div class="tag-editor-spacer">&nbsp;</div><div class="tag-editor-tag">'.$tag["titre"].'</div><div class="tag-editor-delete"><i></i></div></li>';
-                                                                                                           
-                                                            }
-                                                        }
-                                                                    
-                                                           ?>
+                                        <form method="post">
                                                     {{ csrf_field() }}
                                                     <input id="entreeid" type="hidden" name="entree" value="<?php echo $entree['id']; ?>" />
                                                     <input id="urladdtag" type="hidden" name="urladdtag" value="{{ route('tags.addnew') }}" />
                                                     <input id="urldeletetag" type="hidden" name="urldeletetag" value="{{ route('tags.deletetag') }}" />
-                                                  </ul>
-                                                  <input type="hidden" name="country-blacklist" value="<?php echo $listtag; ?>" data-allowed-tags="[{&quot;id&quot;:&quot;GOP&quot;,&quot;name&quot;:&quot;Garantie de paiement&quot;},{&quot;id&quot;:&quot;FR&quot;,&quot;name&quot;:&quot;Franchise&quot;},{&quot;id&quot;:&quot;TT&quot;,&quot;name&quot;:&quot;tag de test&quot;}]">
-                                                </div>
-                                            </div>
                                         </form>
-                    </div>
-                </div>
-            </div>
         </div>
 </div>
 
@@ -251,29 +195,6 @@ use App\Http\Controllers\TagsController;
     .invoice{background-color: #fad9da;padding:1px;}
     label{font-weight:bold;}
 </style>
- <script>
-      function comment()
-      {
-        if ($("#emailcomment").is(":hidden")) 
-            {
-                $("#emailnpj").hide();
-                $("#emailcomment").show();
-
-                $("#commenttag").hide();
-                $("#emailcontent").show();
-
-            }
-        else
-        {
-            
-            $("#emailcomment").hide();
-            $("#emailnpj").show();
-
-            $("#commenttag").show();
-            $("#emailcontent").hide();
-        }
-      }
-    </script>
 
 <style>
 .pdfnotice{color:red;font-weight: 600;margin-top:10px;margin-bottom:10px;}
@@ -358,7 +279,6 @@ $users=UsersController::ListeUsers();
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="{{ URL::asset('resources/assets/js/spectrum.js') }}"></script>
 <script src="{{ URL::asset('resources/assets/js/jquery.marker.js') }}"></script>
-<script src="{{ URL::asset('resources/assets/js/tags.js') }}"></script>
 
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/spectrum.css') }}">
 <?php
@@ -432,28 +352,6 @@ $urlapp='http://localhost/najdaapp';
 
     });
 
-    // auto enregistrement de commentaire
-    var timeoutId;  
-    $('#commentuser').keypress(function () {
-        if (timeoutId) clearTimeout(timeoutId);
-        var _token = $('input[name="_token"]').val();
-        var entree = $('input[name="entree"]').val();
-        timeoutId = setTimeout(function () {
-            $.ajax({
-                url: "{{ route('entrees.savecomment') }}",
-                method:"POST",
-                data: { entree: entree, commentaire: $('textarea#commentuser').val(), _token:_token },
-                success:function(data){
-                    $('#commentuser').animate({
-                    opacity: '0.3',
-                    });
-                    $('#commentuser').animate({
-                        opacity: '1',
-                    });
-                }
-            });
-        }, 750);
-    });
 
 </script>
 
