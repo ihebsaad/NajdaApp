@@ -487,7 +487,7 @@ class EmailController extends Controller
         return view('emails.sending');
     }
 
-    public function envoimail($id)
+    public function envoimail($id,$type)
     {
 
         $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
@@ -496,7 +496,75 @@ class EmailController extends Controller
         $entrees =   Entree::where('dossier', $ref)->get();
         $envoyes =   Envoye::where('dossier', $ref)->get();
 
-        $emails =   Email::where('parent', $id)->get();
+        $listeemails=array();
+
+
+        if($type=='client')
+        {
+        // trouver id client à partir de la référence
+            $cl=app('App\Http\Controllers\DossiersController')->ClientDossierById($id);
+
+            $mail=app('App\Http\Controllers\ClientsController')->ClientChampById('mail',$cl);
+            if($mail!='') { array_push($listeemails,$mail);}
+
+            $mail2=app('App\Http\Controllers\ClientsController')->ClientChampById('mail2',$cl);
+            if($mail2!='') { array_push($listeemails,$mail2);}
+
+            $mail3=app('App\Http\Controllers\ClientsController')->ClientChampById('mail3',$cl);
+            if($mail3!='') { array_push($listeemails,$mail3);}
+
+            $mail4=app('App\Http\Controllers\ClientsController')->ClientChampById('mail4',$cl);
+            if($mail4!='') { array_push($listeemails,$mail4);}
+
+            $mail5=app('App\Http\Controllers\ClientsController')->ClientChampById('mail5',$cl);
+            if($mail5!='') { array_push($listeemails,$mail5);}
+
+            $mail6=app('App\Http\Controllers\ClientsController')->ClientChampById('mail6',$cl);
+            if($mail6!='') { array_push($listeemails,$mail6);}
+
+            $mail7=app('App\Http\Controllers\ClientsController')->ClientChampById('mail7',$cl);
+            if($mail7!='') { array_push($listeemails,$mail7);}
+
+            $mail8=app('App\Http\Controllers\ClientsController')->ClientChampById('mail8',$cl);
+            if($mail8!='') { array_push($listeemails,$mail8);}
+
+            $mail9=app('App\Http\Controllers\ClientsController')->ClientChampById('mail9',$cl);
+            if($mail9!='') { array_push($listeemails,$mail9);}
+
+            $mail10=app('App\Http\Controllers\ClientsController')->ClientChampById('mail10',$cl);
+            if($mail10!='') { array_push($listeemails,$mail10);}
+
+            $gestion_mail1=app('App\Http\Controllers\ClientsController')->ClientChampById('gestion_mail1',$cl);
+            if($gestion_mail1!='') { array_push($listeemails,$gestion_mail1);}
+
+            $gestion_mail2=app('App\Http\Controllers\ClientsController')->ClientChampById('gestion_mail2',$cl);
+            if($gestion_mail2!='') { array_push($listeemails,$gestion_mail2);}
+
+            $qualite_mail1=app('App\Http\Controllers\ClientsController')->ClientChampById('qualite_mail1',$cl);
+            if($qualite_mail1!='') { array_push($listeemails,$qualite_mail1);}
+
+            $qualite_mail2=app('App\Http\Controllers\ClientsController')->ClientChampById('qualite_mail2',$cl);
+            if($qualite_mail2!='') { array_push($listeemails,$qualite_mail2);}
+
+            $reseau_mail1=app('App\Http\Controllers\ClientsController')->ClientChampById('reseau_mail1',$cl);
+            if($reseau_mail1!='') { array_push($listeemails,$reseau_mail1);}
+
+            $reseau_mail2=app('App\Http\Controllers\ClientsController')->ClientChampById('reseau_mail2',$cl);
+            if($reseau_mail2!='') { array_push($listeemails,$reseau_mail2);}
+
+
+         }
+        if($type=='prestataire')
+        {
+            $emails =   Email::where('parent', $id)->get();
+        }
+        if($type=='assure')
+        {
+            $emails =   Email::where('parent', $id)->get();
+
+        }
+
+
 
         $emailsdoss= Email::where('parent', $id)->get();
         $identr=array();
@@ -520,7 +588,7 @@ class EmailController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('emails.envoimail',['attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'refdem'=>$refdem]);
+        return view('emails.envoimail',['attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'refdem'=>$refdem,'listeemails'=>$listeemails]);
     }
 
     public function envoimailbr($id)
@@ -608,35 +676,28 @@ class EmailController extends Controller
       //  $contenu = $request->get('contenu');
         $attachs = $request->get('attachs');
 
-        $to='ihebsaad@gmail.com';
-       // $to='envoifax@najda-assistance.com';
+         $cc='ihebsaad@gmail.com';
+       //  $cc='';
+        //  $to='ihebsaad@gmail.com';
+        $to='envoifax@najda-assistance.com';
          $sujet='1234,Najda,najda,'.$nom.'@'.$numero.'';
-        //$sujet=' test';
 
-    /*   config(['mail.username' => 'saadiheb@gmail.com']);
-        config(['mail.password' => 'ihebssss']);
 
-        Config::set('mail.username', 'saadiheb@gmail.com');
-        Config::set('mail.password', 'ihebssss');
-*/
 
-        //$swiftTransport = Swift_SmtpTransport::newInstance(env('MAIL2_HOST'), env('MAIL2_PORT'), env('MAIL2_ENCRYPTION'))
-      /*    $swiftTransport =  new \Swift_SmtpTransport( env('MAIL2_HOST'), env('MAIL2_PORT'), env('MAIL2_ENCRYPTION'));
-        $swiftTransport->setUsername(env('MAIL2_USERNAME' ));
-            $swiftTransport->setPassword(env('MAIL2_PASSWORD' ));
-*/
-      /*  $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', 'tls');
-        $swiftTransport->setUsername('faxnajdassist@najda-assistance.com');
-        $swiftTransport->setPassword('e-solutions2019');
+       $swiftTransport =  new \Swift_SmtpTransport( 'smtp.gmail.com', '587', 'tls');
+        $swiftTransport->setUsername('najdassist@gmail.com');
+        $swiftTransport->setPassword('nejibgyh9kkq');
 
         $swiftMailer = new Swift_Mailer($swiftTransport);
 
         Mail::setSwiftMailer($swiftMailer);
-*/
+
+
         try{
-          Mail::send([], [], function ($message) use ($to,$sujet,$attachs,$doss) {
+          Mail::send([], [], function ($message) use ($to,$sujet,$attachs,$doss,$cc) {
             $message
                  ->to($to)
+             //   ->cc($cc  ?: [])
                 ->subject($sujet)
              //   ->setBody($contenu, 'text/html');
             ->setBody('Fax Najda', 'text/html');
@@ -695,14 +756,14 @@ class EmailController extends Controller
 
                 $par=Auth::id();
                 $envoye = new Envoye([
-                    'emetteur' => 'test@najda-assistance.com', //env('emailenvoi')
+                    'emetteur' => 'najdassist@gmail.com', //env('emailenvoi')
                     'destinataire' => $to,
                     'par'=> $par,
                     'sujet'=> $sujet,
                     'contenu'=> '',
                     'attachements'=> $count,
                     'statut'=> 1,
-                    'type'=> 'email',
+                    'type'=> 'fax',
                     'nb_attach'=> $count,
                     // 'reception'=> date('d/m/Y H:i:s'),
 
@@ -710,7 +771,7 @@ class EmailController extends Controller
 
                 $envoye->save();
                 $id=$envoye->id;
-                $this->export_pdf_send($id);
+               //// $this->export_pdf_send($id);
 
                 echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
                 return redirect($urlsending)->with('success', '  Envoyé ! ');
@@ -733,11 +794,11 @@ class EmailController extends Controller
 
     function send (Request $request)
     {
-
+/********
         $request->validate([
             'g-recaptcha-response' => 'required|captcha'
         ]);
-
+***********/
         $envoyeid = $request->get('envoye');
         $doss = $request->get('dossier');
         $to = $request->get('destinataire');
@@ -757,7 +818,9 @@ class EmailController extends Controller
 
             }
             }
-        array_push($ccimails,'ihebs001@gmail.com' );
+
+        //  array_push($ccimails,'ihebs001@gmail.com' );
+        //  array_push($ccimails,'medic.multiservices@topnet.tn' );
 
 
         try{

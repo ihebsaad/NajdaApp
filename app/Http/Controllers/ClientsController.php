@@ -261,7 +261,24 @@ class ClientsController extends Controller
     }
 
 
+    public static function ClientChampById($champ,$id)
+    {
+        $client = Client::find($id);
+        if (isset($client[$champ])) {
+            return $client[$champ] ;
+        }else{return '';}
 
+    }
+
+
+    public static function ClientChamp2ById($champ,$id)
+    {
+        $client = Client::find($id);
+        if (isset($client[$champ])) {
+            return $client[$champ].',';
+        }else{return '';}
+
+    }
 
 
 

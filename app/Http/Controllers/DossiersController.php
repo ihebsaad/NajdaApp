@@ -360,6 +360,15 @@ class DossiersController extends Controller
 
     }
 
+    public static function ClientDossierById($id)
+    {
+        $dossier = Dossier::find($id);
+        if (isset($dossier['customer_id'])) {
+            return $dossier['customer_id'];
+        }else{return '';}
+
+    }
+
     public static function RefDemDossierById($id)
     {
         $dossier = Dossier::find($id);

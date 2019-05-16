@@ -4,8 +4,8 @@
 
 
     <link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
-
-    <div class="row">
+    <?php echo 'clients'. json_encode($listeemails);?>
+     <div class="row">
         <div class="col-sm-3 col-md-3">
             <?php use \App\Http\Controllers\EnvoyesController;     ?>
             <?php use \App\Http\Controllers\EntreesController;     ?>
@@ -72,7 +72,14 @@
         <label for="destinataire">destinataire:</label>
         <div class="row">
         <div class="col-md-10">
-            <input id="destinataire" type="email" class="form-control" name="destinataire" required />
+            <select id="destinataire" type="email" class="form-control" name="destinataire" required multiple >
+                <option></option>
+                <option value="ihebsaad@gmail.com">ihebsaad@gmail.com</option>
+                <option value="saadiheb@gmail.com">saadiheb@gmail.com</option>
+            @foreach($listeemails as $email)
+                <option value="<?php echo $email ;?>"> <?php echo $email;?></option>
+            @endforeach
+            </select>
         </div>
             <div class="col-md-2">
                 <i id="emailso" onclick="visibilite('autres')" class="fa fa-lg fa-arrow-circle-down" style="margin-right:10px"></i>
@@ -328,6 +335,15 @@
             }
 
         }
+
+        $('#destinataire').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+        });
 
         $('#attachs').select2({
             filter: true,

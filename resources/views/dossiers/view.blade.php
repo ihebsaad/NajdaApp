@@ -6,9 +6,49 @@
 @section('content')
 
 <div class="row">
-    <div class="col-md-8"></div>
-    <div class="col-md-2"><a data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" style="float:right;margin-right:20px;margin-bottom:25px;padding:3px 3px 3px 3px;border:1px solid #4fc1e9;" href="{{action('EmailController@envoimail',$dossier->id)}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un email"  class="fa fa-fw fa-envelope-open fa-2x"></span></a></div>
-    <div class="col-md-2"><a data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" style="float:right;margin-right:20px;margin-bottom:25px;padding:3px 3px 3px 3px;border:1px solid #4fc1e9;" href="{{action('EmailController@envoifax',$dossier->id)}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un Fax"  class="fa fa-fw fa-fax fa-2x"></span></a>
+
+
+     <div class="col-md-2"><a data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" style="float:right;margin-right:20px;margin-bottom:25px;padding:3px 3px 3px 3px;border:1px solid #4fc1e9;" href="{{action('EmailController@envoifax',$dossier->id)}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un Fax"  class="fa fa-fw fa-fax fa-2x"></span></a>
+    </div>
+
+    <div class="col-md-4">
+    <div class="page-toolbar">
+
+        <div class="btn-group">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope"></i> Email <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'client'])}}" class="sendMail" data-dest="client">
+                            Au client </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'prestataire'])}}" class="sendMail" data-dest="client">
+                            Au Prestataire </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'assure'])}}" class="sendMail" data-dest="client">
+                            A l'assuré </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" id="newfax">
+                    <i class="fa fa-fax"></i> Fax
+                </button>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" id="newcalldossier">
+                    <i class="fa fa-phone"></i> Tél.
+                </button>
+            </div>
+
+        </div>
+    </div>
     </div>
 </div>
     <section class="content form_layouts">
@@ -1384,13 +1424,13 @@
 
                                         <span class="cd-date">
 
-                                            <?php echo /*date('d/m/Y H:i', (*/$communin['reception']/*))*/ ; ?> <i class="fa fa-fw fa-clock-o"></i>
+                                            <?php echo /*date('d/m/Y H:i', (*/$communin['reception']/*))*/ ; ?> <i class="fa fa-fw fa-clock-o"></i><br>
 
 
                                         </span>
                                         <?php if($communin['type']=="email") {
-                                        ?> <span style="font-size:12px"><i class="fa fa-fw fa-paperclip"></i>(<?php echo $communin['nb_attach'];?>) Attachements</span><br>
-                                        <?php }  ?>
+                                            if($communin['nb_attach']>0) { ?> <span style="font-size:12px"><i class="fa fa-fw fa-paperclip"></i>(<?php echo $communin['nb_attach'];?>) Attachements</span><br>
+                                        <?php } } ?>
 
                                         <?php
                                         if ($communin['boite']==1)
@@ -1514,7 +1554,7 @@
                                         <div class="cd-timeline-content">
                                             <h2>{{$envoye->destinataire}}</h2>
                                             <p>
-                                                {{$envoye->sujet}}
+                                                {{$envoye->description}}
                                             </p>
 
                                             <a class="btn btn-md btn-success" href="{{action('EnvoyesController@view', $envoye['id'])}}"> Voir les détails</a>
@@ -1583,15 +1623,15 @@
 
             <div id="tab4" class="tab-pane fade">
 
-                <table class="table table-striped" id="mytable" style="width:100%;margin-top:15px;">
+                <table class="table table-striped" id="mytable" style=" ;margin-top:15px;">
                     <thead>
                     <tr id="headtable">
-                        <th style="">Date</th>
-                        <th style="">Titre</th>
-                        <th style="">Description</th>
+                        <th style="width:15%">Date</th>
+                        <th style="width:30%">Titre</th>
+                        <th style="width:40%">Description</th>
 
-                        <th style="">type</th>
-                        <th style="">Boite</th>
+                        <th style="width:5%">type</th>
+                        <th style="width:10%">Boite</th>
                     </tr>
 
                     </thead>
@@ -1600,11 +1640,11 @@
 
                         <tr>
 
-                            <td style=";"><small><?php echo $attach->created_at;?></small></td>
-                            <td style=";"><small><?php /* if ($attach->dossier!=null) {echo 'Fichier externe';}else{*/ echo $attach->nom; /*}*/ ?></small></td>
-                            <td style=";"><small><?php  echo $attach->description;   ?></small></td>
+                            <td style="width:15%;"><small><?php echo $attach->created_at;?></small></td>
+                            <td style="width:30%;"><small><?php /* if ($attach->dossier!=null) {echo 'Fichier externe';}else{*/ echo $attach->nom; /*}*/ ?></small></td>
+                            <td style="width:40%;"><small><?php  echo $attach->description;   ?></small></td>
 
-                            <td style=";"><small><?php
+                            <td style="width:5%;"><small><?php
                                     $type= $attach->type;
 
                                     switch ($type) {

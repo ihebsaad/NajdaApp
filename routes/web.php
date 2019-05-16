@@ -71,7 +71,7 @@ Route::post('/entrees/savecomment','EntreesController@savecomment')->name('entre
 Route::post('/emails/send','EmailController@send');
 /* envoie d'un email */
 Route::get('/emails/sending','EmailController@sending')->name('emails.sending');
-Route::get('/emails/envoimail/{id}','EmailController@envoimail')->name('emails.envoimail');
+Route::get('/emails/envoimail/{id}/{type}','EmailController@envoimail')->name('emails.envoimail');
 Route::get('/emails/envoimailbr/{id}','EmailController@envoimailbr')->name('emails.envoimailbr');
 Route::get('/emails/envoifax/{id}','EmailController@envoifax')->name('emails.envoifax');
 Route::get('/emails', 'EmailController@index');
