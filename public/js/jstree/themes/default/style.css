@@ -151,7 +151,7 @@
 }
 .vakata-context li > a:hover {
   position: relative;
-  background-color: #e8eff7;
+  background-color: #fff9e7;
   box-shadow: 0 0 2px #0a6aa1;
 }
 .vakata-context li > a.vakata-context-parent {
@@ -164,7 +164,7 @@
 }
 .vakata-context .vakata-context-hover > a {
   position: relative;
-  background-color: #e8eff7;
+  background-color: #fff9e7;
   box-shadow: 0 0 2px #0a6aa1;
 }
 .vakata-context .vakata-context-separator > a,
