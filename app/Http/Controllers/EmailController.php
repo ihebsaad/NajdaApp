@@ -794,11 +794,11 @@ class EmailController extends Controller
 
     function send (Request $request)
     {
-/********
+
         $request->validate([
             'g-recaptcha-response' => 'required|captcha'
         ]);
-***********/
+
         $envoyeid = $request->get('envoye');
         $doss = $request->get('dossier');
         $to = $request->get('destinataire');
