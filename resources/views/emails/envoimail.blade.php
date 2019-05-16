@@ -72,7 +72,7 @@
         <label for="destinataire">destinataire:</label>
         <div class="row">
         <div class="col-md-10">
-            <select id="destinataire" type="email" class="form-control" name="destinataire" required multiple >
+            <select id="destinataire"  class="form-control" name="destinataire[]" required multiple >
                 <option></option>
                 <option value="ihebsaad@gmail.com">ihebsaad@gmail.com</option>
                 <option value="saadiheb@gmail.com">saadiheb@gmail.com</option>
@@ -95,7 +95,7 @@
                 <label for="cc">CC:</label>
                 </div>
                 <div class="col-md-10">
-                <input id="cc" type="text" class="form-control" name="cc"  />
+                <input id="cc" type="text" class="form-control" name="cc[]"  />
                 </div>
             </div>
             <div  class="row"  style="margin-bottom:10px" >
