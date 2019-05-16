@@ -822,6 +822,7 @@ class EmailController extends Controller
         //  array_push($ccimails,'ihebs001@gmail.com' );
         //  array_push($ccimails,'medic.multiservices@topnet.tn' );
 
+        $cc = explode(',', $cc);
 
         try{
             Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails) {
@@ -935,7 +936,7 @@ class EmailController extends Controller
 
        } catch (Exception $ex) {
     // Debug via $ex->getMessage();
-     return "We've got errors!";
+     echo '<script>alert("Erreur !") </script>' ;
      }
 
 }// end send
