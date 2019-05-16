@@ -2307,7 +2307,7 @@
                 <div class="col-md-6 pull-left">
                 </div>
                 <div class="col-md-3 pull-right">
-                    <span><b>Date: </b><?php if ($envoye['type']=='email'){echo  date('d/m/Y H:i', strtotime( $envoye['reception']  )) ; }else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }?></span>
+                    <span><b>Date: </b><?php if ($envoye['type']=='email'){echo  date('d/m/Y H:i', strtotime( $envoye['reception']  )) ; }else {echo  date('d/m/Y H:i', strtotime( $envoye['created_at']  )) ; }?></span>
 
                 </div>
 
