@@ -826,7 +826,7 @@ class EmailController extends Controller
         try{
             Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails) {
             $message
-                ->to($to)
+                ->to($to ?: [])
               ->cc($cc  ?: [])
                 ->bcc($ccimails ?: [])
                 ->subject($sujet)
@@ -931,6 +931,7 @@ class EmailController extends Controller
                 return redirect($urlsending)->with('success', '  Envoyé ! ');
 
      });
+            var_dump( Mail:: failures());
 
        } catch (Exception $ex) {
     // Debug via $ex->getMessage();
