@@ -822,7 +822,7 @@ class EmailController extends Controller
         //  array_push($ccimails,'ihebs001@gmail.com' );
         //  array_push($ccimails,'medic.multiservices@topnet.tn' );
 
-        $cc = explode(',', $cc);
+        $to = explode(',', $to);
 
         try{
             Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails) {
