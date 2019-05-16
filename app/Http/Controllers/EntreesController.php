@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Entree ;
 use App\Dossier ;
+use App\Attachement ;
  use DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -206,7 +207,7 @@ class EntreesController extends Controller
     public function export_pdf($id)
     {
         // Fetch all customers from database
-        $data  = Entree::find($id);
+
         $entree = Entree::find($id);
           compact('entree');
         // Send data to the view using loadView function of PDF facade
@@ -222,8 +223,15 @@ class EntreesController extends Controller
 
         // If you want to store the generated pdf to the server then you can use the store function
         $pdf->save($path.$id.'/'.$name.'.pdf');
-        // Finally, you can download the file using download function
-     //    return $pdf->download('reception.pdf');
+
+        $path2='/Emails/'.$id.'/'.$name.'.pdf';
+
+        $attachement = new Attachement([
+
+            'type'=>'pdf','path' => $path2, 'nom' => $name,'boite'=>0,'entree_id'=>$id,'parent'=>$id,
+        ]);
+        $attachement->save();
+
     }
 
 

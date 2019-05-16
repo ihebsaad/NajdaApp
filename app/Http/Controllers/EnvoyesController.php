@@ -119,7 +119,7 @@ class EnvoyesController extends Controller
             'destinataire' => trim ($request->get('destinataire')),
             'contenu'=> trim ($request->get('contenu')),
             'cc'=> trim ($request->get('cc')),
-            'cci'=> trim ($request->get('cci')),
+          //  'cci'=> trim ($request->get('cci')),
             'statut'=> 0,
             'nb_attach'=> 0,
             'par'=> $par,
@@ -150,7 +150,7 @@ class EnvoyesController extends Controller
             'destinataire' => trim ($request->get('destinataire')),
             'contenu'=> trim ($request->get('contenu')),
             'cc'=> trim ($request->get('cc')),
-            'cci'=> trim ($request->get('cci')),
+           // 'cci'=> trim ($request->get('cci')),
             'statut'=> 0,
             'nb_attach'=> 0,
 

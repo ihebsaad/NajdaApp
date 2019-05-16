@@ -83,19 +83,27 @@
 
     <div class="form-group" style="margin-top:10px;">
         <div id="autres" class="row"  style="display:none " >
-            <div class="col-md-1">
+            <div  class="row"  style="margin-bottom:10px" >
+                <div class="col-md-2">
                 <label for="cc">CC:</label>
-            </div>
-            <div class="col-md-4">
+                </div>
+                <div class="col-md-10">
                 <input id="cc" type="text" class="form-control" name="cc"  />
+                </div>
             </div>
-         <div class="col-md-1">
-            <label for="cci">CCI:</label>
+            <div  class="row"  style="margin-bottom:10px" >
+                <div class="col-md-2">
+                <label for="cci">CCI:</label>
+                </div>
+                <div class="col-md-10">
+            <select id="cci"  style="width:100%"   class="itemName form-control " name="cci[]" multiple  >
+             <option></option>
+            <option value="saadiheb@gmail.com">IHEB 2</option>
+            <option value="ihebs002@gmail.com">IHEB 3</option>
+            </select>
+                </div>
+              </div>
         </div>
-        <div class="col-md-4">
-            <input id="cci" type="text" class="form-control" name="cci"  />
-        </div>
-    </div>
     </div>
 
     <div class="form-group">
@@ -126,9 +134,7 @@
             </div>
         </div>
      </div>
-{{--
     {!! NoCaptcha::display() !!}
-    --}}
      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
      <div class="form-group form-group-default">
@@ -193,14 +199,14 @@
             var brsaved = $('#brsaved').val();
 
              if ( (brsaved==0) )
-            { alert('create br');
+            { //alert('create br');
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url:"{{ route('envoyes.savingBR') }}",
                     method:"POST",
                     data:{description:description,destinataire:destinataire,sujet:sujet,contenu:contenu,cc:cc,cci:cci, _token:_token},
                     success:function(data){
-                     alert('Brouillon enregistré ');
+                  //   alert('Brouillon enregistré ');
 
                         document.getElementById('envoye').value=data;
                         document.getElementById('brsaved').value=1;
@@ -212,14 +218,14 @@
                  if ( description!='' )
                  {             var envoye = $('#envoye').val();
 
-                     alert('update br');
+                   //  alert('update br');
                      var _token = $('input[name="_token"]').val();
                      $.ajax({
                          url:"{{ route('envoyes.updatingbr') }}",
                          method:"POST",
                          data:{envoye:envoye,description:description,destinataire:destinataire,contenu:contenu,cc:cc,cci:cci, _token:_token},
                          success:function(data){
-                             alert('Brouillon enregistré ');
+                        //     alert('Brouillon enregistré ');
 
                              document.getElementById('envoye').value=data;
                              document.getElementById('brsaved').value=1;
@@ -269,7 +275,7 @@
             var brsaved = $('#brsaved').val();
 
             if ((brsaved == 0)) {
-                alert('content changed');
+              //  alert('content changed');
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url: "{{ route('envoyes.savingBR') }}",
@@ -284,7 +290,7 @@
                         _token: _token
                     },
                     success: function (data) {
-                        alert('Brouillon enregistré ');
+                 //       alert('Brouillon enregistré ');
 
                         document.getElementById('envoye').value = data;
                         document.getElementById('brsaved').value = 1;
@@ -296,8 +302,7 @@
                 //if ( description!='' )
                 //{
                 var envoye = $('#envoye').val();
-
-                alert('updating br');
+               // alert('updating br');
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url: "{{ route('envoyes.updatingbr') }}",
@@ -312,7 +317,7 @@
                         _token: _token
                     },
                     success: function (data) {
-                        alert('Brouillon enregistré ');
+                   //     alert('Brouillon enregistré ');
                         document.getElementById('envoye').value = data;
                         document.getElementById('brsaved').value = 1;
                     }
@@ -324,7 +329,7 @@
 
         }
 
-        $('.itemName').select2({
+        $('#attachs').select2({
             filter: true,
             language: {
                 noResults: function () {
@@ -334,6 +339,14 @@
         });
 
 
+        $('#cci').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+        });
 
      });
 </script>

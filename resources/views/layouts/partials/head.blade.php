@@ -115,7 +115,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in 10 seconds.
                     setTimeout(function(){
                         checkemails();
-                    }, 5000);  //5 secds
+                    }, 30000);  //30 secds
                 }
             });
         }

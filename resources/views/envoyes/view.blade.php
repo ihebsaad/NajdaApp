@@ -98,11 +98,28 @@
 
                 </div>
 
-            <!--    <div class="form-group form-group-default">
-                    <label>Attachements</label>
-                    <input class="btn btn-danger fileinput-button" id="file" type="file" name="files[]"   multiple>
-                </div>
--->
+                <?php use App\Attachement ;?>
+
+
+                @if ($envoye['nb_attach']  > 0)
+                    <?php
+                    echo '<br>Attachements :<br>';
+
+                    $attachs = Attachement::get()->where('parent', '=', $envoye['id'] )->where('boite', '=', 1 );
+                    ?>
+
+                @endif
+
+                @if (!empty($attachs) )
+                    <?php $i=1; ?>
+                    @foreach ($attachs as $att)
+                        <div class="tab-pane fade in" id="pj<?php echo $i; ?>">
+
+                            <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a target="_self" style="font-size: 13px;" href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
+
+                        </div>
+                    @endforeach
+                @endif
              </form>
 
         </div>

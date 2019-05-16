@@ -2324,7 +2324,7 @@
                 <div class="row" style="padding-bottom:8px">
 
                     <div class="col-sm-1 col-md-1 col-lg-1" style="padding-left: 0px;;">
-                        <span><b> Subject:</b></span>
+                        <span><b> Sujet:</b></span>
                     </div>
                     <div class="col-sm-11 col-md-11 col-lg-11"style=" padding-left: 0px;color:black;font-weight: bold ">
                         <div   style="padding-left:5px;width:100%;height:25px;border:1px solid grey"   ><?php echo $envoye['sujet'];  ?></div>
@@ -2332,7 +2332,7 @@
                 </div>
                 <div class="row" style="padding-bottom:8px">
                     <div class="col-sm-1 col-md-1 col-lg-1" style=" padding-left: 0px; ">
-                        <span><b>From: </b></span>
+                        <span><b>DE: </b></span>
                     </div>
                     <div class="col-sm-11 col-md-11 col-lg-11 " style="padding-left: 0px;">
                         <div   style="padding-left:5px;width:100%;height:25px;border:1px solid grey"   ><?php echo $envoye['emetteur'];  ?></div>
@@ -2340,7 +2340,7 @@
                 </div>
                 <div class="row" style="padding-bottom:8px">
                     <div class="col-sm-1 col-md-1 col-lg-1" style=" padding-left: 0px; ">
-                        <span><b>To: </b></span>
+                        <span><b>A: </b></span>
                     </div>
                     <div class="col-sm-11 col-md-11 col-lg-11 " style="padding-left: 0px;">
                         <div   style="padding-left:5px;width:100%;height:25px;border:1px solid grey"   ><?php echo $envoye['destinataire'];  ?></div>
@@ -2350,7 +2350,7 @@
             </div>
         </div>
 
-        <div style="border:1px solid #d6eef7; padding:20px 100px 20px 100px; min-height: 400px;"> <?php  $content= $envoye['contenu'] ;
+        <div style="border:1px solid #d6eef7; padding:20px 100px 20px 100px; min-height: 400px!important;"> <?php  $content= $envoye['contenu'] ;
             echo $content ;       ?>
         </div>
 
@@ -2362,7 +2362,8 @@
         <?php
         echo '<br>Attachements :<br>';
 
-        $attachs = Attachement::get()->where('parent', '=', $envoye['id'] );
+
+        $attachs = Attachement::get()->where('parent', '=', $envoye['id'] )->where('boite', '=', 1 );
 
         ?>
     @endif

@@ -663,9 +663,11 @@ class EmailController extends Controller
                     );
 
                     // DB::table('attachements')->insert([
+
+
                     $attachement = new Attachement([
 
-                        'type'=>$ext,'path' => $fullpath, 'nom' => $name,'boite'=>1,'dossier'=>$doss
+                        'type'=>$ext,'path' => $path, 'nom' => $name,'boite'=>1,'dossier'=>$doss
                     ]);
                     $attachement->save();
 
@@ -729,15 +731,13 @@ class EmailController extends Controller
     }// end send
 
 
-
-
     function send (Request $request)
     {
 
-      /*  $request->validate([
+        $request->validate([
             'g-recaptcha-response' => 'required|captcha'
         ]);
-*/
+
         $envoyeid = $request->get('envoye');
         $doss = $request->get('dossier');
         $to = $request->get('destinataire');
@@ -750,14 +750,22 @@ class EmailController extends Controller
         $tot= count($_FILES['files']['name']);
       //  $tot2= count($attachs);
 
+        $ccimails=array();
+        if(isset($cci )) {
+            foreach($cci as $ccimail) {
+                array_push($ccimails,$ccimail );
+
+            }
+            }
+        array_push($ccimails,'ihebs001@gmail.com' );
 
 
         try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs,$doss,$envoyeid) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails) {
             $message
                 ->to($to)
               ->cc($cc  ?: [])
-                ->bcc($cci ?: [])
+                ->bcc($ccimails ?: [])
                 ->subject($sujet)
          ->setBody($contenu, 'text/html');
          $count=0;
@@ -780,7 +788,7 @@ class EmailController extends Controller
 
                  $attachement = new Attachement([
 
-                    'type'=>$ext,'path' => $path, 'nom' => $file->getClientOriginalName(),'boite'=>1,'dossier'=>$doss
+                    'type'=>$ext,'path' => $path, 'nom' => $file->getClientOriginalName(),'boite'=>1,'dossier'=>$doss,'envoye_id'=>$envoyeid
                  ]);
 
                  $attachement->save();
@@ -810,7 +818,7 @@ class EmailController extends Controller
               // DB::table('attachements')->insert([
                    $attachement = new Attachement([
 
-                       'type'=>$ext,'path' => $fullpath, 'nom' => $name,'boite'=>1,'dossier'=>$doss,'parent'=>$envoyeid
+                       'type'=>$ext,'path' => $path, 'nom' => $name,'boite'=>1,'dossier'=>$doss,'parent'=>$envoyeid
                ]);
                     $attachement->save();
 
@@ -844,7 +852,7 @@ class EmailController extends Controller
                'contenu'=> $contenu,
                'nb_attach'=> $count,
                'cc'=> $cc,
-               'cci'=> $cci,
+             //  'cci'=> $cci,
                'statut'=> 1,
                'type'=> 'email',
                'dossier'=> $dossier
@@ -885,8 +893,13 @@ class EmailController extends Controller
         $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
         // If you want to store the generated pdf to the server then you can use the store function
         $pdf->save($path.$id.'/'.$name.'.pdf');
-        // Finally, you can download the file using download function
-        //    return $pdf->download('reception.pdf');
+        $path2='/Envoyes/'.$id.'/'.$name.'.pdf';
+
+        $attachement = new Attachement([
+
+            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>1,'envoye_id'=>$id,'parent'=>$id,
+        ]);
+        $attachement->save();
     }
 
     function test()
