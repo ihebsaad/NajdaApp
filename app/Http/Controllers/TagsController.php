@@ -14,7 +14,7 @@ class TagsController extends Controller
     
     public static function addnew(Request $request)
     {
-        // ajout dune tag pour une entree
+        // ajout dune tag pour une entree 
         //print_r($request);
         if ($request->get('titre') != null)
         {       
