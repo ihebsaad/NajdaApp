@@ -95,7 +95,7 @@
                 <label for="cc">CC:</label>
                 </div>
                 <div class="col-md-10">
-                <input id="cc" type="text" class="form-control" name="cc[]"  />
+                <input id="cc" type="text" class="form-control" name="cc"  />
                 </div>
             </div>
             <div  class="row"  style="margin-bottom:10px" >

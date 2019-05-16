@@ -665,10 +665,10 @@ class EmailController extends Controller
     function sendfax (Request $request)
     {
 
-        /*  $request->validate([
+         $request->validate([
               'g-recaptcha-response' => 'required|captcha'
           ]);
-  */
+  
         $doss = $request->get('dossier');
 
          $nom = $request->get('nom');
@@ -822,16 +822,23 @@ class EmailController extends Controller
         //  array_push($ccimails,'ihebs001@gmail.com' );
         //  array_push($ccimails,'medic.multiservices@topnet.tn' );
 
-        //$to = explode(',', $to);
+       // $to = explode(',', $to);
 
         try{
             Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails) {
             $message
-                ->to($to ?: [])
-              ->cc($cc  ?: [])
+
+              //  ->to('saadiheb@gmail.com')
+             // ->to()
+
+                ->cc($cc  ?: [])
                 ->bcc($ccimails ?: [])
                 ->subject($sujet)
          ->setBody($contenu, 'text/html');
+
+                foreach ($to as $t)
+                {   $message->to($t ); }
+
          $count=0;
 
          if(isset($files )) {
@@ -927,7 +934,7 @@ class EmailController extends Controller
 
           // $envoye->save();
            //$id=$envoye->id;
-           $this->export_pdf_send($envoyeid);
+          if($envoyeid>0){ $this->export_pdf_send($envoyeid);};
 
             echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
                 return redirect($urlsending)->with('success', '  Envoyé ! ');
