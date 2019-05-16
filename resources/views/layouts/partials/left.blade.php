@@ -169,11 +169,11 @@ if (isset($dossier))
 {
 ?>
 <script type="text/javascript">
-         /*$( document ).ready(function() {
+         $( document ).ready(function() {
             // verifier sil existe des notifications pour le dossier courant pour les marquer comme actifs
             if ($("#prt_{{ $dossier['reference_medic']}}").length > 0) { 
-                $("li#prt_{{ $dossier['reference_medic']}}"+"_anchor").css('background','#ffd051');
+               $("li#prt_{{ $dossier['reference_medic']}}").addClass('dossiercourant');
             }
-          });*/
+          });
 </script>
 <?php } ?>

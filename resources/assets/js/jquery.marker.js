@@ -231,7 +231,7 @@
 	        		clickedmrktxt = temp['text'];
 	        		//$(e.target).css('border-style','dotted');
 					//alert(clickedmrktxt+' || '+ $(e.target).attr("class"));
-					$('#actiontabs a[href="#newactiontab"]').trigger('click');
+					$('#actiontabs a[href="#newMissiontab"]').trigger('click');
 					$('input#titre').val(clickedmrktxt);
 					
 					/*_that._callback('click', e);
