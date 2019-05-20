@@ -8,10 +8,8 @@
 <div class="row">
 
 
-     <div class="col-md-2"><a data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" style="float:right;margin-right:20px;margin-bottom:25px;padding:3px 3px 3px 3px;border:1px solid #4fc1e9;" href="{{action('EmailController@envoifax',$dossier->id)}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un Fax"  class="fa fa-fw fa-fax fa-2x"></span></a>
-    </div>
 
-    <div class="col-md-4">
+     <div class="col-md-9 pull-right">
     <div class="page-toolbar">
 
         <div class="btn-group">
@@ -21,15 +19,15 @@
                 </button>
                 <ul class="dropdown-menu pull-right">
                     <li>
-                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'client'])}}" class="sendMail" data-dest="client">
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'client','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
                             Au client </a>
                     </li>
                     <li>
-                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'prestataire'])}}" class="sendMail" data-dest="client">
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
                             Au Prestataire </a>
                     </li>
                     <li>
-                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'assure'])}}" class="sendMail" data-dest="client">
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
                             A l'assuré </a>
                     </li>
 
@@ -38,7 +36,7 @@
 
             <div class="btn-group">
                 <button type="button" class="btn btn-default" id="newfax">
-                    <i class="fa fa-fax"></i> Fax
+                    <a style="color:black" href="{{action('EmailController@envoifax',$dossier->id)}}"> <i class="fa fa-fax"></i> Fax</a>
                 </button>
             </div>
             <div class="btn-group">
@@ -294,16 +292,45 @@
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Mail</label>
+                                                                            <?php if($dossier->subscriber_mail1 !=''){ ?>
                                                                             <div class="input-group-control">
                                                                                 <input onchange="changing(this)" type="email" id="subscriber_mail1" name="subscriber_mail1" class="form-control" placeholder="mail 1"   value={{ $dossier->subscriber_mail1 }} >
-                                                                            </div><br>
-                                                                            <span id="mail2">
-                                                                                            <input onchange="changing(this)"  type="text" name="email1" class="form-control" id="subscriber_mail2" placeholder="mail 2"   value={{ $dossier->subscriber_mail2 }} ><br>
-                                                                                            <span id="mail3">
-                                                                                                <input onchange="changing(this)"  type="text" name="subscriber_mail3" class="form-control" id="subscriber_mail3" placeholder="mail 3"   value={{ $dossier->subscriber_mail3 }} ></span></span>
+                                                                            </div><br> <?php }?>
+                                                                            <?php if($dossier->subscriber_mail2 !=''){ ?>   <input onchange="changing(this)"  type="text" name="email1" class="form-control" id="subscriber_mail2" placeholder="mail 2"   value={{ $dossier->subscriber_mail2 }} ><br><?php }?>
+                                                                            <?php if($dossier->subscriber_mail3 !=''){ ?>   <input onchange="changing(this)"  type="text" name="subscriber_mail3" class="form-control" id="subscriber_mail3" placeholder="mail 3"   value={{ $dossier->subscriber_mail3 }} ><br> <?php }?>
                                                                         </div>
-
                                                                     </div>
+
+                                                                    <div class="row form-group">
+
+                                                                            <div style="">
+                                                                                <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addemail" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createemail"><b><i class="fas fa-plus"></i> Ajouter un email</b></button>
+
+                                                                            </div>
+                                                                            <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;font-size:16px;">
+                                                                                <thead>
+                                                                                <tr id="headtable">
+                                                                                    <th style="">Email</th>
+                                                                                    <th style="">Nom</th>
+                                                                                    <th style="">qualité</th>
+                                                                                    <th style="">Tel</th>
+                                                                                </tr>
+
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                @foreach($emails as $email)
+                                                                                    <tr>
+                                                                                        <td style=";"><?php echo $email->champ; ?></td>
+                                                                                        <td style=";"><?php echo $email->nom; ?></td>
+                                                                                        <td style=";"><?php echo $email->qualite; ?></td>
+                                                                                        <td style=";"><?php echo $email->tel; ?></td>
+                                                                                    </tr>
+                                                                                @endforeach
+
+                                                                                </tbody>
+                                                                            </table>
+
+                                                                        </div>
 
                                                                 </div>
 
@@ -1691,29 +1718,7 @@
             </div>
 
             <div id="tab5" class="tab-pane fade">
-                <div style="">
-                    <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addemail" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createemail"><b><i class="fas fa-plus"></i> Ajouter un email</b></button>
 
-
-                </div>
-                <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
-                    <thead>
-                    <tr id="headtable">
-                        <th style="">Email</th>
-                        <th style="">Description</th>
-                     </tr>
-
-                    </thead>
-                    <tbody>
-                    @foreach($emails as $email)
-                        <tr>
-                            <td style=";"><?php echo $email->champ; ?></td>
-                            <td style=";"><?php echo $email->description; ?></td>
-                        </tr>
-                    @endforeach
-
-                    </tbody>
-                </table>
 
 
             </div>
@@ -1895,9 +1900,9 @@ $iduser=$CurrentUser->id;
 
 
                     <div class="form-group">
-                        {{ csrf_field() }}
 
                         <form id="addemailform" novalidate="novalidate">
+                            {{ csrf_field() }}
 
                             <input id="parent" name="parent" type="hidden" value="{{ $dossier->id}}">
                             <div class="form-group " >
@@ -1909,13 +1914,28 @@ $iduser=$CurrentUser->id;
                             </div>
 
                             <div class="form-group ">
-                                <label for="DescrEmail">Description</label>
+                                <label for="DescrEmail">nom</label>
                                 <div class="row">
                                     <input type="text" class="form-control"  id="DescrEmail" />
 
                                 </div>
                             </div>
 
+                            <div class="form-group ">
+                                <label for="DescrEmail">qualité</label>
+                                <div class="row">
+                                    <input type="text" class="form-control"  id="qualite" />
+
+                                </div>
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="DescrEmail">Tel</label>
+                                <div class="row">
+                                    <input type="text" class="form-control"  id="telmail" />
+
+                                </div>
+                            </div>
                         </form>
                     </div>
 
@@ -2086,14 +2106,16 @@ $iduser=$CurrentUser->id;
     $('#emailadd').click(function(){
         var parent = $('#parent').val();
         var champ = $('#emaildoss').val();
-        var description = $('#DescrEmail').val();
+        var nom = $('#DescrEmail').val();
+        var tel = $('#telmail').val();
+        var qualite = $('#qualite').val();
         if ((champ != '') )
         {
             var _token = $('input[name="_token"]').val();
             $.ajax({
                 url:"{{ route('dossiers.addemail') }}",
                 method:"POST",
-                data:{parent:parent,champ:champ,description:description, _token:_token},
+                data:{parent:parent,champ:champ,nom:nom,tel:tel,qualite:qualite _token:_token},
                 success:function(data){
 
                     //   alert('Added successfully');

@@ -4,12 +4,15 @@
 
 
     <link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
-    <?php echo 'clients'. json_encode($listeemails);?>
+
      <div class="row">
         <div class="col-sm-3 col-md-3">
             <?php use \App\Http\Controllers\EnvoyesController;     ?>
             <?php use \App\Http\Controllers\EntreesController;     ?>
-                <div class="panel">
+            <?php use \App\Http\Controllers\PrestatairesController;     ?>
+            <?php use \App\Http\Controllers\ClientsController;     ?>
+
+                        <div class="panel">
                 <div class="panel-body pan">
                     <ul class="nav nav-pills nav-stacked">
                         <li class="active">
@@ -69,17 +72,37 @@
     </div>
     <div class="form-group">
         {{ csrf_field() }}
-        <label for="destinataire">destinataire:</label>
+        <label for="destinataire">Destinataire:</label>
+        <div class="row">
+            <?php if($type=='client')
+                {?>
+                    <input type="text" readonly class="form-control" value="<?php  echo ClientsController::ClientChampById('name',$refdem) ;?> " />
+               <?php }
+                ?>
+                <?php if($type=='prestataire')
+                {?>
+                <select class="form-control" id="prest"   >
+                    <option ></option>
+                    @foreach($prestataires as $prestat)
+                        <option  <?php  if($prest==$prestat){ echo 'selected="selected" ';}  ?> value="<?php echo $prestat ;?>"> <?php   echo PrestatairesController::ChampById('name',$prestat); ;?></option>
+                    @endforeach
+                </select>
+                <?php }
+                ?>
+        </div>
+        <label for="destinataire">adresse(s):</label>
         <div class="row">
         <div class="col-md-10">
             <select id="destinataire"  class="form-control" name="destinataire[]" required multiple >
                 <option></option>
-                <option value="ihebsaad@gmail.com">ihebsaad@gmail.com</option>
-                <option value="saadiheb@gmail.com">saadiheb@gmail.com</option>
-            @foreach($listeemails as $email)
-                <option value="<?php echo $email ;?>"> <?php echo $email;?></option>
-            @endforeach
-            </select>
+
+
+                @foreach($listeemails as  $mail)
+
+                    <option   value="<?php echo $mail ;?>"> <?php echo $mail;?></option>
+                @endforeach
+
+             </select>
         </div>
             <div class="col-md-2">
                 <i id="emailso" onclick="visibilite('autres')" class="fa fa-lg fa-arrow-circle-down" style="margin-right:10px"></i>
@@ -105,8 +128,8 @@
                 <div class="col-md-10">
             <select id="cci"  style="width:100%"   class="itemName form-control " name="cci[]" multiple  >
              <option></option>
-            <option value="saadiheb@gmail.com">IHEB 2</option>
-            <option value="ihebs002@gmail.com">IHEB 3</option>
+            <option value="saadiheb@gmail.com">IHEB 2(test)</option>
+            <option value="ihebs002@gmail.com">IHEB 3(test)</option>
             </select>
                 </div>
               </div>
@@ -159,8 +182,16 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <?php
+    $urlapp=env('APP_URL');
 
+    if (App::environment('local')) {
+        // The environment is local
+      //  $urlapp='http://localhost/najdaapp';
+    }
+      ?>
 <script type="text/javascript">
+
     function visibilite(divId)
     {
         //divPrecedent.style.display='none';
@@ -173,6 +204,23 @@
 
     $(document).ready(function(){
 
+
+        $("#prest").change(function(){
+          //  prest = $(this).val();
+           var  prest =document.getElementById('prest').value;
+
+            if (prest>0)
+            {
+
+                window.location = '<?php echo $urlapp; ?>/emails/envoimail/<?php echo $doss; ?>/prestataire/'+prest;
+
+            }else{
+                window.location = "<?php echo $urlapp; ?>/emails/envoimail/<?php echo $doss; ?>/prestataire/0";
+
+            }
+
+
+        });
 
 
         $('#file').change(function(){
@@ -259,13 +307,13 @@
                 changeeditor();
             };
 
-            setInterval(function() { track_change()}, 10000);
+              setTimeout(function() { track_change()}, 15000);
 
         }
 
 
-    setInterval(function() { track_change()}, 15000);
-
+       // setTimeout(function() { track_change()}, 15000);
+        track_change();
         function setcontenu(myValue) {
             $('#contenu').val(myValue)
                 .trigger('change');

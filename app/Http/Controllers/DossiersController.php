@@ -162,7 +162,9 @@ class DossiersController extends Controller
         $parent= $request->get('parent') ;
         $email = new Email([
             'champ' => $request->get('champ'),
-            'description' => $request->get('description'),
+            'nom' => $request->get('nom'),
+            'tel' => $request->get('tel'),
+            'qualite' => $request->get('qualite'),
             'parent' => $parent ,
 
         ]);
@@ -372,8 +374,8 @@ class DossiersController extends Controller
     public static function RefDemDossierById($id)
     {
         $dossier = Dossier::find($id);
-        if (isset($dossier['customer'])) {
-            return $dossier['customer'];
+        if (isset($dossier['customer_id'])) {
+            return $dossier['customer_id'];
         }else{return '';}
 
     }
@@ -425,6 +427,15 @@ class DossiersController extends Controller
 
     }
 
+
+    public static function  ChampById($champ,$id)
+    {
+        $doss = Dossier::find($id);
+        if (isset($doss[$champ])) {
+            return $doss[$champ] ;
+        }else{return '';}
+
+    }
 
 
 

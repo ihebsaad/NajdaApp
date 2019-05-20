@@ -250,23 +250,15 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Email </label>
-                                <input onchange="changing(this)"  type="text" id="mail" class="form-control" name="mail" placeholder="Email"  value={{ $prestataire->mail }}>
-                                <br>
-                                <span id="email01">
-                                    <input onchange="changing(this)"  type="text" id="mail2" name="mail2" class="form-control" placeholder="Email2"  value={{ $prestataire->mail2 }}>
-                                    <br>
-                                    <span id="email02">
-                                        <input onchange="changing(this)" type="text" id="mail3"  name="mail3" class="form-control" placeholder="Email3"  value={{ $prestataire->mail3 }}>
-                                        <br>
-                                        <span id="email03">
-                                            <input onchange="changing(this)" type="text" id="mail4" name="mail4" class="form-control" placeholder="Email4"  value={{ $prestataire->mail4 }}>
-                                            <br>
-                                            <span id="email04">
-                                                <input onchange="changing(this)" type="text" id="mail5"  name="email5" class="form-control" placeholder="Email5"  value={{ $prestataire->mail5 }}>
-                                            </span>
-                                        </span>
-                                    </span>
-                                </span>
+                                <?php if($prestataire->mail!=''){ ?><input onchange="changing(this)"  type="text" id="mail" class="form-control" name="mail" placeholder="Email"  value={{ $prestataire->mail }}> <br><?php }?>
+
+                                <?php if($prestataire->mail2!=''){ ?>   <input onchange="changing(this)"  type="text" id="mail2" name="mail2" class="form-control" placeholder="Email2"  value={{ $prestataire->mail2 }}><br> <?php }?>
+
+                                <?php if($prestataire->mail3!=''){ ?>   <input onchange="changing(this)" type="text" id="mail3"  name="mail3" class="form-control" placeholder="Email3"  value={{ $prestataire->mail3 }}><br> <?php }?>
+
+                                <?php if($prestataire->mail4!=''){ ?>   <input onchange="changing(this)" type="text" id="mail4" name="mail4" class="form-control" placeholder="Email4"  value={{ $prestataire->mail4 }}><br> <?php }?>
+
+                                <?php if($prestataire->mail5!=''){ ?>   <input onchange="changing(this)" type="text" id="mail5"  name="email5" class="form-control" placeholder="Email5"  value={{ $prestataire->mail5 }}><br> <?php }?>
 
                             </div>
                         </div>
@@ -274,28 +266,64 @@
 
                         <div class="col-md-6">
                             <div class="row">
-                            <div class="col-md-4">
-                                <label style="padding-top:10px">Actif</label>
-                            </div>
+                                <div class="col-md-4">
+                                    <label style="padding-top:10px">Actif</label>
+                                </div>
                                 <div class="radio-list">
                                     <div class="col-md-3">
-                                    <label for="annule" class="">
-                                        <div class="radio" id="uniform-actif"><span class="checked">
+                                        <label for="annule" class="">
+                                            <div class="radio" id="uniform-actif"><span class="checked">
                                                 <input  onclick="changing(this)" type="radio" name="annule" id="annule" value="0"   <?php if ($prestataire->annule ==0){echo 'checked';} ?>></span></div> Oui
-                                    </label>
+                                        </label>
                                     </div>
                                     <div class="col-md-3">
-                                    <label for="nonactif" class="">
-                                        <div class="radio" id="uniform-nonactif"><span>
+                                        <label for="nonactif" class="">
+                                            <div class="radio" id="uniform-nonactif"><span>
                                                 <input onclick="disabling('annule')" type="radio" name="annule" id="nonactif" value="1"  <?php if ($prestataire->annule ==1){echo 'checked';} ?>></span></div> Non
-                                    </label>
+                                        </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                     </div>
+
+                    </div>
+     </form>
+
+                <div class="row form-group">
+
+                                <div style="">
+                                    <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addemail" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createemail"><b><i class="fas fa-plus"></i> Ajouter un email</b></button>
+
+
+                                </div>
+                                <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;font-size:16px;">
+                                    <thead>
+                                    <tr id="headtable">
+                                        <th style="">Email</th>
+                                        <th style="">Nom</th>
+                                        <th style="">qualité</th>
+                                        <th style="">Tel</th>
+                                    </tr>
+
+                                    </thead>
+                                    <tbody>
+                                    @foreach($emails as $email)
+                                        <tr>
+                                            <td style=";"><?php echo $email->champ; ?></td>
+                                            <td style=";"><?php echo $email->nom; ?></td>
+                                            <td style=";"><?php echo $email->qualite; ?></td>
+                                            <td style=";"><?php echo $email->tel; ?></td>
+                                        </tr>
+                                    @endforeach
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+
+
                     <input type="hidden" id="idpres" class="form-control"   value={{ $prestataire->id }}>
-    </form>
 
         </div>
 
@@ -456,6 +484,71 @@
         </div>
     </div>
 
+
+
+    <!-- Modal Email-->
+    <div class="modal fade" id="createemail" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Ajouter un Email </h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+
+                        <div class="form-group">
+
+                            <form id="addemailform" novalidate="novalidate">
+                                {{ csrf_field() }}
+
+                                <input id="parent" name="parent" type="hidden" value="{{ $prestataire->id}}">
+                                <div class="form-group " >
+                                    <label for="emaildoss">Email</label>
+                                    <div class=" row  ">
+                                        <input class="form-control" type="email" required id="emaildoss"/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group ">
+                                    <label for="DescrEmail">Nom</label>
+                                    <div class="row">
+                                        <input type="text" class="form-control"  id="DescrEmail" />
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group ">
+                                    <label for="DescrEmail">Qualité</label>
+                                    <div class="row">
+                                        <input type="text" class="form-control"  id="qualite" />
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group ">
+                                    <label for="DescrEmail">Tel</label>
+                                    <div class="row">
+                                        <input type="text" class="form-control"  id="telmail" />
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" id="emailadd" class="btn btn-primary">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
 
@@ -680,8 +773,6 @@
         } // updating
 
 
-
-
         $('#gouvcouv').select2({
             filter: true,
             language: {
@@ -691,7 +782,6 @@
             }
 
         });
-
 
 
         var $gouv = $('#gouvcouv');
@@ -773,12 +863,6 @@
         } // updating
 
 
-
-
-
-
-
-
         $('#evaladd').click(function(){
             var prestataire = $('#prestataire_id').val();
             var type_prest = $('#typeprestation').val();
@@ -808,6 +892,31 @@
 
 
 
+        $('#emailadd').click(function(){
+            var parent = $('#parent').val();
+            var champ = $('#emaildoss').val();
+            var nom = $('#DescrEmail').val();
+            var tel = $('#telmail').val();
+            var qualite = $('#qualite').val();
+            if ((champ != '') )
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('prestataires.addemail') }}",
+                    method:"POST",
+                    data:{parent:parent,champ:champ,nom:nom,tel:tel,qualite:qualite, _token:_token},
+                    success:function(data){
+
+                        //   alert('Added successfully');
+                        window.location =data;
+
+
+                    }
+                });
+            }else{
+                // alert('ERROR');
+            }
+        });
 
 
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Email;
 use App\Evaluation;
 use App\TypePrestation;
 use Illuminate\Support\Facades\Log;
@@ -148,6 +149,7 @@ class PrestatairesController extends Controller
       // $villes = DB::table('cities')->select('id', 'name')->get();
         $villes = Ville::all();
         $gouvernorats = DB::table('cities')->get();
+        $emails =   Email::where('parent', $id)->get();
 
         $relationsgv = DB::table('cities_prestataires')->select('citie_id')
             ->where('prestataire_id','=',$id)
@@ -163,7 +165,7 @@ class PrestatairesController extends Controller
         $evaluations =   Evaluation::where('prestataire', $id)->get();
 
 
-        return view('prestataires.view',['evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,',dossiers' => $dossiers,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'prestations'=>$prestations], compact('prestataire'));
+        return view('prestataires.view',['emails'=>$emails,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,',dossiers' => $dossiers,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'prestations'=>$prestations], compact('prestataire'));
 
     }
 
@@ -346,6 +348,40 @@ class PrestatairesController extends Controller
 
     }
 
+
+    public static function ChampById($champ,$id)
+    {
+        $prest = Prestataire::find($id);
+        if (isset($prest[$champ])) {
+            return $prest[$champ] ;
+        }else{return '';}
+
+    }
+
+    public function addemail(Request $request)
+    {
+        $parent= $request->get('parent') ;
+        $email = new Email([
+            'champ' => $request->get('champ'),
+            'nom' => $request->get('nom'),
+            'tel' => $request->get('tel'),
+            'qualite' => $request->get('qualite'),
+            'parent' => $parent ,
+
+        ]);
+        $email->save();
+        return url('/prestataires/view/'.$parent) ;
+    }
+
+   /* public static function IdPrestByMail($mail)
+    {
+        $prest = Prestataire::where('id', $id)->
+        if (isset($prest[$champ])) {
+            return $prest[$champ] ;
+        }else{return '';}
+
+    }
+*/
 
 
 

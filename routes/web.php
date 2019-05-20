@@ -72,16 +72,18 @@ Route::post('/emails/send','EmailController@send');
 /* envoie d'un email */
 Route::get('/emails/sending','EmailController@sending')->name('emails.sending');
 Route::get('/emails/envoimail/{id}/{type}','EmailController@envoimail')->name('emails.envoimail');
+Route::get('/emails/envoimail/{id}/{type}/{prest}','EmailController@envoimail')->name('emails.envoimail');
 Route::get('/emails/envoimailbr/{id}','EmailController@envoimailbr')->name('emails.envoimailbr');
 Route::get('/emails/envoifax/{id}','EmailController@envoifax')->name('emails.envoifax');
+//Route::post('/emails/searchprest','EmailController@searchprest')->name('emails.searchprest');
+Route::get('/emails/searchprest','EmailController@searchprest')->name('emails.searchprest');
 Route::get('/emails', 'EmailController@index');
 /* unreaded emails and not checked */
 Route::get('/emails/inbox', 'EmailController@inbox');
 /* mark as readed and save to database */
 Route::get('/emails/check', 'EmailController@check');
 Route::get('/emails/folder/{foldername}', 'EmailController@folder');
-/* le dispatching */
-Route::get('/emails/disp', 'EmailController@disp');
+
 
 Route::get('/emails/test', 'EmailController@test');
 Route::get('/emails/sms', 'EmailController@sms');
@@ -101,6 +103,7 @@ Route::get('/emails/open/{id}', 'EmailController@open');
 Route::get('/envoyes', array('as' => 'envoyes','uses' => 'EnvoyesController@index'));
 Route::post('/envoyes/saving','EnvoyesController@saving')->name('envoyes.saving');
 Route::post('/envoyes/savingBR','EnvoyesController@savingBR')->name('envoyes.savingBR');
+Route::post('/envoyes/updatingbr','EnvoyesController@updatingbr')->name('envoyes.updatingbr');
 Route::post('/envoyes/updatingbr','EnvoyesController@updatingbr')->name('envoyes.updatingbr');
 Route::get('/envoyes/view/{id}', 'EnvoyesController@view');
 Route::get('/envoyes/show/{id}', 'EnvoyesController@show');
@@ -159,6 +162,7 @@ Route::post('/prestataires/removecitieprest','PrestatairesController@removecitie
 Route::post('/prestataires/createcitieprest','PrestatairesController@createcitieprest')->name('prestataires.createcitieprest');
 Route::get('/prestataires/view/{id}', 'PrestatairesController@view');
 Route::post('/prestataires/addeval','PrestatairesController@addeval')->name('prestataires.addeval');
+Route::post('/prestataires/addemail','PrestatairesController@addemail')->name('prestataires.addemail');
 
 
 /*** Prestations **/

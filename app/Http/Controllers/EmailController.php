@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Email;
 use App\Http\Controllers\Controller;
+use App\Prestation;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -487,9 +488,9 @@ class EmailController extends Controller
         return view('emails.sending');
     }
 
-    public function envoimail($id,$type)
+    public function envoimail($id,$type,$prest=null)
     {
-
+        if (isset($prest)){$prest=$prest;}else{$prest=0;}
         $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
         $nomabn=app('App\Http\Controllers\DossiersController')->NomAbnDossierById($id);
         $refdem=app('App\Http\Controllers\DossiersController')->RefDemDossierById($id);
@@ -497,6 +498,7 @@ class EmailController extends Controller
         $envoyes =   Envoye::where('dossier', $ref)->get();
 
         $listeemails=array();
+        $prestataires=array();
 
 
         if($type=='client')
@@ -556,18 +558,107 @@ class EmailController extends Controller
          }
         if($type=='prestataire')
         {
-            $emails =   Email::where('parent', $id)->get();
-        }
+            $prestataires =   Prestation::where('dossier_id', $id)->pluck('prestataire_id');
+            $prestataires = $prestataires->unique();
+
+           /* $emails=array();
+            foreach ($prestataires as $prest)
+            {    // ajouter la liste des emails from
+            $emails0= Email::where('parent', $prest)->pluck('champ');
+                array_push($emails , $emails0);
+            }
+*/
+
+
+          //  $emails =  Email::where('parent', $prest)->pluck('champ')
+            // $emails =  $emails->unique();
+
+            $listeemails=array();
+
+
+            $mails=array();
+
+
+        if ($prest!='')
+        {
+            $mail = app('App\Http\Controllers\PrestatairesController')->ChampById('mail', $prest);
+            if ($mail != '') {
+                 array_push($mails, $mail);
+            }
+            $mail2 = app('App\Http\Controllers\PrestatairesController')->ChampById('mail2', $prest);
+            if ($mail2 != '') {
+                 array_push($mails, $mail2);
+
+            }
+
+            $mail3 = app('App\Http\Controllers\PrestatairesController')->ChampById('mail3', $prest);
+            if ($mail3 != '') {
+                 array_push($mails, $mail3);
+
+            }
+
+            $mail4 = app('App\Http\Controllers\PrestatairesController')->ChampById('mail4', $prest);
+            if ($mail4 != '') {
+                 array_push($mails, $mail4);
+
+            }
+
+            $mail5 = app('App\Http\Controllers\PrestatairesController')->ChampById('mail5', $prest);
+            if ($mail5 != '') {
+                 array_push($mails, $mail5);
+
+            }
+
+
+            $emails =   Email::where('parent', $prest)->pluck('champ');
+            $emails =  $emails->unique();
+
+            if (count($emails)>0){
+            foreach ( $emails as $m)
+            {
+                array_push($mails,$m);
+
+            }
+
+            }
+            $listeemails=$mails;
+
+        } // if isset
+
+
+        } // prestataire
+
         if($type=='assure')
         {
-            $emails =   Email::where('parent', $id)->get();
+
+            $mail=app('App\Http\Controllers\DossiersController')->ChampById('mail',$id);
+            if($mail!='') { array_push($listeemails,$mail);}
+
+
+            $subscriber_mail1=app('App\Http\Controllers\DossiersController')->ChampById('subscriber_mail1',$id);
+            if($subscriber_mail1!='') { array_push($listeemails,$subscriber_mail1);}
+
+            $subscriber_mail2=app('App\Http\Controllers\DossiersController')->ChampById('subscriber_mail2',$id);
+            if($subscriber_mail2!='') { array_push($listeemails,$subscriber_mail2);}
+
+            $subscriber_mail3=app('App\Http\Controllers\DossiersController')->ChampById('subscriber_mail3',$id);
+            if($subscriber_mail3!='') { array_push($listeemails,$subscriber_mail3);}
+
+            $emails =   Email::where('parent', $id)->pluck('champ');
+            $emails =  $emails->unique();
+
+            if (count($emails)>0){
+                foreach ( $emails as $m)
+                {
+                    array_push($listeemails,$m);
+
+                }
+
+             }
 
         }
 
-
-
-        $emailsdoss= Email::where('parent', $id)->get();
-        $identr=array();
+         $identr=array();
         $idenv=array();
         foreach ($entrees as $entr)
         {
@@ -588,7 +679,7 @@ class EmailController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('emails.envoimail',['attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'refdem'=>$refdem,'listeemails'=>$listeemails]);
+        return view('emails.envoimail',['prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type]);
     }
 
     public function envoimailbr($id)
@@ -668,7 +759,7 @@ class EmailController extends Controller
          $request->validate([
               'g-recaptcha-response' => 'required|captcha'
           ]);
-  
+
         $doss = $request->get('dossier');
 
          $nom = $request->get('nom');
@@ -1188,6 +1279,60 @@ class EmailController extends Controller
         if (isset($dossier['reference_medic'])) {
             return $dossier['reference_medic'];
         }else{return '';}
+
+    }
+
+
+    public function searchprest(Request $request)
+    {
+        if($request->ajax()){
+            $data = DB::table('prestataires')->where('id',$request->prest)->pluck("mail","id")->all();
+           // $data = view('emails.envoimail',compact('listeemails'))->render();
+            return response()->json(['options'=>$data]);
+        }
+        if($request->ajax()){
+            $prest = $request->get('prest');
+
+           // <option></option>
+            $data="";$mails=array();
+            $mail=app('App\Http\Controllers\PrestatairesController')->ChampById('mail',$prest);
+            if($mail!='') {
+                $data.= '<option value="'.$mail.'">'.$mail.'</option>';
+                array_push($mails,$mail);
+            }
+            $mail2=app('App\Http\Controllers\PrestatairesController')->ChampById('mail2',$prest);
+            if($mail2!='') {
+                $data.='<option value="'.$mail2.'">'.$mail2.'</option>';
+                array_push($mails,$mail2);
+
+            }
+
+            $mail3=app('App\Http\Controllers\PrestatairesController')->ChampById('mail3',$prest);
+            if($mail3!='') {
+                $data.='<option value="'.$mail3.'">'.$mail3.'</option>';
+                array_push($mails,$mail3);
+
+            }
+
+            $mail4=app('App\Http\Controllers\PrestatairesController')->ChampById('mail4',$prest);
+            if($mail4!='') {
+                $data.='<option value="'.$mail4.'">'.$mail4.'</option>';
+                array_push($mails,$mail4);
+
+            }
+
+            $mail5=app('App\Http\Controllers\PrestatairesController')->ChampById('mail5',$prest);
+            if($mail5!='') {
+                $data.='<option value="'.$mail5.'">'.$mail5.'</option>';
+                array_push($mails,$mail5);
+
+            }
+
+       //    return ($data) ;
+            return  response()->json(['options'=>$mails]);
+          //  return '50000';
+
+        }
 
     }
 
