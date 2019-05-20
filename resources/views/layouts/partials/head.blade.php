@@ -111,8 +111,24 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 success:function(data)
                 {
                     //console.log the response
-                    console.log(data);
-                    //Send another request in 10 seconds.
+                    console.log('check boite 1'+data);
+                    //Send another request in n seconds.
+                    setTimeout(function(){
+                        checkemails();
+                    }, 30000);  //30 secds
+                }
+            });
+        }
+
+        function checkemails2(){
+            $.ajax({
+                type: "get",
+                url: "<?php echo $urlapp; ?>/emails/checkboite2",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check boite 2'+data);
+                    //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails();
                     }, 30000);  //30 secds
@@ -121,9 +137,8 @@ $urlnotif=$urlapp.'/entrees/show/' ;
         }
 
 
-
-
         checkemails();
+        checkemails2();
        // dispatch();
 
 

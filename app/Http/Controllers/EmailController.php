@@ -333,7 +333,6 @@ class EmailController extends Controller
 
                 ]);
 
-
                 $entree->save();
                 // Dispatching
                 //$this->disp();
@@ -356,7 +355,6 @@ class EmailController extends Controller
                     // save in folder
                     $oAttachment->save($path.$id);
                     // save in DB
-
 
                     $nom = $oAttachment->getName();
                     $facturation='';
@@ -436,50 +434,184 @@ class EmailController extends Controller
     } /// end check
 
 
-
-    // dispaching des entrees
-    function disp()
+    function checkboite2()
     {
+        /*
+                $oClient = new Client([
+                    'host'          =>  env('hostreception'),
+                    'port'          =>  env('portreception'),
+             //       'encryption'    => env('encreception'),
+                    'validate_cert' => true,
+                    'username'      => env('emailreception'),
+                    'password'      => env('passreception'),
+                    'protocol'      => 'imap'
+                ]);
+        */
+        $oClient = new Client([
+            'host'          => 'ssl0.ovh.net',// env('hostreception'),
+            'port'          => '993',// env('portreception'),
+            //    'encryption'    => '',//env('encreception'),
+            'validate_cert' => true,
+            'username'      =>'faxnajdassist@najda-assistance.com',
+            'password'      => 'e-solutions2019',
+            'protocol'      => 'imap'
+        ]);
 
-        //  $aMessage = $oFolder->query()->text('tesssst')->get();
+//Connect to the IMAP Server
+        $oClient->connect();
+        $aFolder = $oClient->getFolders();
+        $storeid=false;$firstid=0;
 
-        $dossiers = DB::table('dossiers')->pluck('reference_medic');
+        //Get all Messages of the current Mailbox $oFolder
+        /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
+        $oFolder = $oClient->getFolder('INBOX');
+        $aMessage = $oFolder->messages()->all()->get();
+        /** @var \Webklex\IMAP\Message $oMessage */
+        foreach ($aMessage as $oMessage) {
+            //  $nbattachs=10;
 
-        foreach ($dossiers as $ref) {
+            $sujet=strval($oMessage->getSubject())  ;
+            $nbattachs= intval($oMessage->getAttachments()->count()) ;
+            $contenu= $oMessage->getHTMLBody(true);
+            //  $from= $oMessage->getFrom()[0]->mail;
+            $from= $oMessage->getSender()[0]->mail;
+            $date= $oMessage->getDate();
+            $mailid=$oMessage->getUid();
+
+            //Move the current Message to 'INBOX.read'
+            if ($oMessage->moveToFolder('read') == true) {
+                // get last id
+                $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
+                // message moved
 
 
-             $data = DB::table('entrees')
-                ->where('statut', '=', 0)
-                ->where('dossier', '=', null)
-                ->where('sujet', 'LIKE', "%{$ref}%")
+                // dispatch
+                $dossiers = DB::table('dossiers')->pluck('reference_medic');
+                $refdossier='';
+                $statut = 0;
+                foreach ($dossiers as $ref) {
 
-                ->orWhere(function($query)  use($ref)
+                    if (   (strpos($sujet, $ref )!==false) || (strpos($contenu, $ref )!==false)    )
+                    {
+                        $refdossier = $ref;
+                        $statut = 1;
+                        break;
+                    }
+                }
+
+                $entree = new Entree([
+                    'destinataire' => 'faxnajdassist@najda-assistance.com',
+                    'emetteur' => trim($from),
+                    'sujet' => trim($sujet),
+                    'contenu'=> utf8_encode($contenu) ,
+                    'reception'=> $date,
+                    'nb_attach'=> $nbattachs,
+                    'type'=> 'email',
+                    'mailid'=> $mailid,
+                    'viewed'=>0,
+                    'dossier'=>$refdossier,
+                    'statut'=>$statut,
+
+                ]);
+
+                $entree->save();
+                $id=$entree->id;
+
+                ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
+
+                if($storeid==false){
+                    $firstid=$id;
+                    $storeid=true;
+                }
+                $aAttachment = $oMessage->getAttachments();
+
+                $aAttachment->each(function ($oAttachment) use ($id){
+                    $path= storage_path()."/Emails/";
+                    /** @var \Webklex\IMAP\Attachment $oAttachment */
+                    if (!file_exists($path.$id)) {
+                        mkdir($path.$id, 0777, true);
+                    }
+                    // save in folder
+                    $oAttachment->save($path.$id);
+                    // save in DB
+
+                    $nom = $oAttachment->getName();
+                    $facturation='';
+                    $type=  $oAttachment->getExtension();
+
+                    // verifier si l'attachement pdf contient des mots de facturation
+                    if ( App::environment() === 'production') {
+
+                        if ($type=='pdf')
+                        {
+                            $path=$path.$id."/".$nom;
+                            $path=realpath($path);
+                            $text = (new Pdf())
+                                ->setPdf($path )
+                                ->text();
+
+                            if(strpos($text,'facturation')!==false)
+                            {
+                                $facturation='facturation';
+                            }
+                            if(strpos($text,'invoice')!==false)
+                            {
+                                $facturation=$facturation.' , '.'invoice';
+                            }
+
+                            if(strpos($text,'plafond')!==false)
+                            {
+                                $facturation=$facturation.' , '.'plafond';
+                            }
+
+                            if(strpos($text,'gop')!==false)
+                            {
+                                $facturation=$facturation.' , '.'gop';
+                            }
+
+
+                        } // end if pdf
+                    } // end if  production
+
+
+                    $path2= '/Emails/'.$id.'/'.$nom ;
+
+                    $attach = new Attachement([
+                        'nom' => $nom,
+                        'type' => $type,
+                        'path'=> $path2,
+                        'parent'=> $id,
+                        'entree_id'=> $id,
+                        'facturation'=> $facturation,
+                        'boite'=> 0,  // 0 = reception, 1 = envoi
+
+                    ]);
+
+                    $attach->save();
+
+                });
+                // récupérer last id une autre fois pour vérifier l'enregistrement
+                $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
+                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
+                if($lastid==$lastid2)
                 {
-                    $query->where('statut', '=', 0)
-                        ->where('dossier', '=', null)
-                         ->where('contenu', 'LIKE', "%{$ref}%");
-                })
-                ->get();
+                    $oMessage->moveToFolder('INBOX') ;
+                }
 
 
-          if(count ($data)>0)
-          {
 
-              $id=$data->pluck('id');
-              $entree = Entree::find($id)->first();
-              $entree->dossier = $ref ;
-              $entree->statut = 1; // 1 dispatché
-              $entree->save();
-
-          }
-
+            } else {
+                // error
+                echo 'error';
+            }
 
 
         }
-
-        return view('emails.disp');
+        return $firstid;
+        // return view('emails.check');
 
     }
+
 
     public function sending()
     {

@@ -93,7 +93,7 @@
         <label for="destinataire">adresse(s):</label>
         <div class="row">
         <div class="col-md-10">
-            <select id="destinataire"  class="form-control" name="destinataire[]" required multiple >
+            <select id="destinataire"  class="form-control" name="destinataire[]"  multiple >
                 <option></option>
 
 

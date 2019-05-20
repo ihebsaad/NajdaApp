@@ -82,6 +82,7 @@ Route::get('/emails', 'EmailController@index');
 Route::get('/emails/inbox', 'EmailController@inbox');
 /* mark as readed and save to database */
 Route::get('/emails/check', 'EmailController@check');
+Route::get('/emails/checkboite2', 'EmailController@checkboite2');
 Route::get('/emails/folder/{foldername}', 'EmailController@folder');
 
 
