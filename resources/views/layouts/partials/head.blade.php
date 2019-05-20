@@ -111,7 +111,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 success:function(data)
                 {
                     //console.log the response
-                    console.log('check boite 1'+data);
+                    console.log('check boite 1:'+data);
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails();
@@ -127,7 +127,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 success:function(data)
                 {
                     //console.log the response
-                    console.log('check boite 2'+data);
+                    console.log('check boite 2: '+data);
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails();
@@ -137,9 +137,24 @@ $urlnotif=$urlapp.'/entrees/show/' ;
         }
 
 
+        function checkfax(){
+            $.ajax({
+                type: "get",
+                url: "<?php echo $urlapp; ?>/emails/checkfax",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check boite fax: '+data);
+                    //Send another request in n seconds.
+                    setTimeout(function(){
+                        checkemails();
+                    }, 30000);  //30 secds
+                }
+            });
+        }
         checkemails();
         checkemails2();
-       // dispatch();
+        checkfax();
 
 
     });

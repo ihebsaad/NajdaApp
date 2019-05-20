@@ -24,10 +24,10 @@ use App\Http\Controllers\TagsController;
 
         <div class="panel-heading" style="">
                     <div class="row">
-                        <div class="col-sm-4 col-md-4 col-lg-4"style=" padding-left: 0px;color:black;font-weight: bold ">
+                        <div class="col-sm-4 col-md-4 col-lg-6"style=" padding-left: 0px;color:black;font-weight: bold ">
                             <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;">Sujet :</label>  {{ $entree['sujet'] }}</h4>
                         </div>
-                        <div class="col-sm-8 col-md-8 col-lg-8" style="padding-right: 0px;">
+                        <div class="col-sm-8 col-md-8 col-lg-6 style="padding-right: 0px;">
                             <div class="pull-right" style="margin-top: 0px;">
                                 @if (!empty($entree->dossier))
                                     <button class="btn btn-sm btn-default"><b>REF: {{ $entree['dossier']   }}</b></button>
@@ -36,7 +36,7 @@ use App\Http\Controllers\TagsController;
                                         <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
                                  @endif
                                 <a href="#" class="btn btn-info btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" > 
-                                  <span class="fa fa-fw fa-check"></span> Traiter
+                                  <span class="fa fa-fw fa-check"></span> Traité
                                 </a>
                             </div>
                         </div>
@@ -75,7 +75,7 @@ use App\Http\Controllers\TagsController;
                 <a >
                     <div class="row">
                         <div class="col-sm-6 col-md-6 col-lg-6"style=" padding-left: 0px; ">
-                            <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;">Contenu</h4>
+                            <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;"><?php if ( $entree['type']=='fax') {echo 'F A X';}else {?>Contenu<?php }?></label></h4>
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6" style="padding-right: 0px;">
                         </div>
@@ -87,7 +87,7 @@ use App\Http\Controllers\TagsController;
                 <div class="row">
                    <ul class="nav nav-pills">
                         <li class="active" >
-                            <a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps du mail</a>
+                            <a href="#mailcorps" data-toggle="tab" aria-expanded="true"><?php if ( $entree['type']=='fax') {echo 'détails';}else {?>Corps du mail<?php }?></a>
                         </li>
                         @if ( $entree['nb_attach']   > 0)
                             @for ($i = 1; $i <= $entree['nb_attach'] ; $i++)

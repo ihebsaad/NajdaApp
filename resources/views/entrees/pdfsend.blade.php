@@ -2350,7 +2350,7 @@
             </div>
         </div>
 
-        <div style="border:1px solid #d6eef7; padding:20px 100px 20px 100px; min-height: 400px!important;"> <?php  $content= $envoye['contenu'] ;
+        <div style="border:1px solid #d6eef7; padding:20px 100px 20px 100px; min-height: 400px!important;"> <?php  $content= utf8_decode($envoye['contenu']) ;
             echo $content ;       ?>
         </div>
 
