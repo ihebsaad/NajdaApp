@@ -11,8 +11,22 @@
 
 
 
-     <div class="col-md-9 pull-right">
-    <div class="page-toolbar">
+     <div class="col-md-6">
+        <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
+        <b>Assigné à:</b> 
+        <?php 
+        $agentname = User::where('id',$dossier->affecte)->first();
+        if ((Gate::check('isAdmin') || Gate::check('isSupervisor')) && !empty ($agentname))
+            { echo '<a href="#" data-toggle="modal" data-target="#attrmodal">';}
+        echo $agentname['name']; 
+        if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
+            { echo '</a>';}
+
+        ?>
+        <?php } ?>
+    </div>
+    <div class="col-md-6" style="text-align: right;padding-right: 35px">
+        <div class="page-toolbar">
 
         <div class="btn-group">
             <div class="btn-group">
@@ -49,20 +63,6 @@
 
         </div>
     </div>
-    </div>
-    <div class="col-md-6" style="text-align: right;padding-right: 35px">
-        <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
-        <b>Assigné à:</b> 
-        <?php 
-        $agentname = User::where('id',$dossier->affecte)->first();
-        if ((Gate::check('isAdmin') || Gate::check('isSupervisor')) && !empty ($agentname))
-            { echo '<a href="#" data-toggle="modal" data-target="#attrmodal">';}
-        echo $agentname['name']; 
-        if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
-            { echo '</a>';}
-
-        ?>
-        <?php } ?>
     </div>
 </div>
     <section class="content form_layouts">
