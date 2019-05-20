@@ -40,7 +40,7 @@
     </label>
 
 <br>
- <button onclick="redirect()" class="btn cust-btn " type="button" id="btn-registration" style="font-size: 20PX;letter-spacing: 1px;width:150px">Entrer</button>
+ <button onclick="redirect()" class="btn cust-btn " type="button" id="btn-primary" style="font-size: 20PX;letter-spacing: 1px;width:150px">Entrer</button>
 </div>
 
 <div class="col-md-3">

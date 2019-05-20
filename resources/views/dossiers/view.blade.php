@@ -55,7 +55,7 @@
         <b>Assigné à:</b> 
         <?php 
         $agentname = User::where('id',$dossier->affecte)->first();
-        if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
+        if ((Gate::check('isAdmin') || Gate::check('isSupervisor')) && !empty ($agentname))
             { echo '<a href="#" data-toggle="modal" data-target="#attrmodal">';}
         echo $agentname['name']; 
         if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
@@ -2015,6 +2015,7 @@ $iduser=$CurrentUser->id;
         </div>
     </div>
 </div>
+<?php if ((Gate::check('isAdmin') || Gate::check('isSupervisor')) && !empty ($agentname)) { ?>
 <!-- Modal attribution dossier-->
 <div class="modal fade" id="attrmodal" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -2028,11 +2029,10 @@ $iduser=$CurrentUser->id;
 
 
                     <div class="form-group">
-                        {{ csrf_field() }}
 
-                        <form id="gendocform" novalidate="novalidate">
-
-                            <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}">
+                        <form  method="post" action="{{ route('dossiers.attribution') }}">
+                            {{ csrf_field() }}
+                            <input id="dossierid" name="dossierid" type="hidden" value="{{ $dossier->id}}">
                             <div class="form-group " >
                                 <div class=" row  ">
                                     <div class="form-group mar-20">
@@ -2052,8 +2052,6 @@ $iduser=$CurrentUser->id;
                                     </div>
                                 </div>
                             </div>
-
-                        </form>
                     </div>
 
 
@@ -2062,11 +2060,13 @@ $iduser=$CurrentUser->id;
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="button" id="attribdoss" class="btn btn-primary">Attribuer</button>
+                <button type="submit" id="attribdoss" class="btn btn-primary">Attribuer</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
+<?php } ?>
 
 @endsection
 

@@ -18,7 +18,8 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            return redirect('/roles');
+           return redirect('/roles');
+            //return redirect()->route('roles');
         }
 
         return $next($request);

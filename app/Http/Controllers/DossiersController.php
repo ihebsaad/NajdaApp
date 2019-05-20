@@ -157,6 +157,17 @@ class DossiersController extends Controller
 
     }
 
+    public function attribution(Request $request)
+    {
+        $id= $request->get('dossierid');
+        $agent= $request->get('agent');
+
+        Dossier::where('id', $id)->update(array('affecte' => $agent));
+
+        return back();
+
+    }
+
     public function addemail(Request $request)
     {
         $parent= $request->get('parent') ;
