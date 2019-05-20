@@ -1,8 +1,10 @@
 @extends('layouts.mainlayout')
-
+<?php use App\User ; ?>
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
 <link rel="stylesheet" href="{{ asset('public/css/timeline.css') }}" type="text/css">
-
+<!--select css-->
+<link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 @section('content')
 
 <div class="row">
@@ -47,6 +49,20 @@
 
         </div>
     </div>
+    </div>
+    <div class="col-md-6" style="text-align: right;padding-right: 35px">
+        <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
+        <b>Assigné à:</b> 
+        <?php 
+        $agentname = User::where('id',$dossier->affecte)->first();
+        if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
+            { echo '<a href="#" data-toggle="modal" data-target="#attrmodal">';}
+        echo $agentname['name']; 
+        if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
+            { echo '</a>';}
+
+        ?>
+        <?php } ?>
     </div>
 </div>
     <section class="content form_layouts">
@@ -1999,12 +2015,63 @@ $iduser=$CurrentUser->id;
         </div>
     </div>
 </div>
+<!-- Modal attribution dossier-->
+<div class="modal fade" id="attrmodal" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal2">Attribution dossier</h5>
 
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+
+                    <div class="form-group">
+                        {{ csrf_field() }}
+
+                        <form id="gendocform" novalidate="novalidate">
+
+                            <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}">
+                            <div class="form-group " >
+                                <div class=" row  ">
+                                    <div class="form-group mar-20">
+                                        <label for="agent" class="control-label" style="padding-right: 20px">Agent</label>
+                                        <select id="agent" name="agent" class="form-control select2" style="width: 230px">
+                                            <option value="Select">Selectionner</option>
+                                            <?php $agents = User::get(); ?>
+                                            @foreach ($agents as $agt)
+                                            @if ($agentname["id"] == $agt["id"])
+                                                <option value={{ $agt["id"] }} selected >{{ $agt["name"] }}</option>
+                                            @else
+                                                <option value={{ $agt["id"] }} >{{ $agt["name"] }}</option>
+                                            @endif
+                                            @endforeach
+                                                
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" id="attribdoss" class="btn btn-primary">Attribuer</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-
+<script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
 
 <script>
     /*
@@ -2102,7 +2169,7 @@ $iduser=$CurrentUser->id;
 
     $(document).ready(function() {
 
-
+    $("#agent").select2();
     $('#emailadd').click(function(){
         var parent = $('#parent').val();
         var champ = $('#emaildoss').val();
