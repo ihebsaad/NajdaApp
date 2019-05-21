@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -29,8 +30,13 @@ protected function authenticated(Request $request, $user)
 /*if ( $user->isAdmin() ) {
     return redirect()->route('dashboard');
 }*/
-
- return redirect('/roles');
+if (\Gate::allows('isAdmin')) {
+ return redirect('/home');
+}
+else
+{
+    return redirect('/roles');
+}
 }
 /**
  * Where to redirect users after login.
