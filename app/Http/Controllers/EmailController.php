@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Boite;
 use App\Email;
 use App\Http\Controllers\Controller;
 use App\Prestation;
@@ -603,6 +604,131 @@ class EmailController extends Controller
 
     }
 
+
+
+    function checkboiteperso()
+    {
+        // get username & password
+        $iduser=Auth::id();
+
+        $boite=app('App\Http\Controllers\UsersController')->ChampById('boite',$iduser);
+        $passboite=app('App\Http\Controllers\UsersController')->ChampById('passboite',$iduser);
+
+        if (($boite !='')&&($passboite!=''))
+        {
+        $oClient = new Client([
+            'host'          => 'ssl0.ovh.net',// env('hostreception'),
+            'port'          => '993',// env('portreception'),
+            //    'encryption'    => '',//env('encreception'),
+            'validate_cert' => true,
+            'username'      => $boite,
+            'password'      => $passboite,
+            'protocol'      => 'imap'
+        ]);
+
+//Connect to the IMAP Server
+        $oClient->connect();
+        $aFolder = $oClient->getFolders();
+        $storeid=false;$firstid=0;
+
+        //Get all Messages of the current Mailbox $oFolder
+        /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
+        $oFolder = $oClient->getFolder('INBOX');
+        $aMessage = $oFolder->messages()->all()->get();
+        /** @var \Webklex\IMAP\Message $oMessage */
+        foreach ($aMessage as $oMessage) {
+            //  $nbattachs=10;
+
+            $sujet=strval($oMessage->getSubject())  ;
+            $nbattachs= intval($oMessage->getAttachments()->count()) ;
+            $contenu= $oMessage->getHTMLBody(true);
+            //  $from= $oMessage->getFrom()[0]->mail;
+            $from= $oMessage->getSender()[0]->mail;
+            $date= $oMessage->getDate();
+            $mailid=$oMessage->getUid();
+
+            //Move the current Message to 'INBOX.read'
+            if ($oMessage->moveToFolder('read') == true) {
+                // get last id
+                $lastid= DB::table('boites')->orderBy('id', 'desc')->first();
+                // message moved
+
+
+                $boite = new Boite([
+
+                    'emetteur' => trim($from),
+                    'sujet' => trim($sujet),
+                    'contenu'=> utf8_encode($contenu) ,
+                    'mailid'=>  $mailid,
+                    'viewed'=>0,
+                    'statut'=>0,
+                    'nb_attach'=>$nbattachs,
+                    'user'=>$iduser,
+                    'reception'=>$date
+
+                ]);
+
+                $boite->save();
+                $id=$boite->id;
+
+                ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
+
+                if($storeid==false){
+                    $firstid=$id;
+                    $storeid=true;
+                }
+                $aAttachment = $oMessage->getAttachments();
+
+                $aAttachment->each(function ($oAttachment) use ($id){
+                    $path= storage_path()."/Boites/";
+                    /** @var \Webklex\IMAP\Attachment $oAttachment */
+                    if (!file_exists($path.$id)) {
+                        mkdir($path.$id, 0777, true);
+                    }
+                    // save in folder
+                    $oAttachment->save($path.$id);
+                    // save in DB
+
+                    $nom = $oAttachment->getName();
+
+                    $type=  $oAttachment->getExtension();
+
+
+
+                    $path2= '/Boites/'.$id.'/'.$nom ;
+
+                    $attach = new Attachement([
+                        'nom' => $nom,
+                        'type' => $type,
+                        'path'=> $path2,
+                        'parent'=> $id,
+
+                        'boite'=> 02,  // 0 = reception, 1 = envoi // 2 personnelle
+
+                    ]);
+
+                    $attach->save();
+
+                });
+                // récupérer last id une autre fois pour vérifier l'enregistrement
+                $lastid2= DB::table('boites')->orderBy('id', 'desc')->first();
+                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
+                if($lastid==$lastid2)
+                {
+                    $oMessage->moveToFolder('INBOX') ;
+                }
+
+            } else {
+                // error
+                echo 'error';
+            }
+
+        }
+        return $firstid;
+        // return view('emails.check');
+        } // endif
+
+    }
 
     function checkfax()
     {

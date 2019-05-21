@@ -21,14 +21,14 @@
                     Les prestataires 
               </a>
           </div>
-        <!--  <div class="col-md-3">
-              <a href="#" class="btn btn-default btn-md btn-responsive menu-item" role="button">
+         <div class="col-md-3">
+              <a href="{{ route('boites') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
                <span class="fa fa-lg fa-fw fa-inbox"></span>
                <br>
                     Ma boîte de réception
               </a>
           </div>
--->
+
     </div>
 
     <div class="row">

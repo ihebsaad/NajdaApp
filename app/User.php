@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','boite','passboite'
     ];
 
     /**
@@ -40,7 +40,6 @@ class User extends Authenticatable
 
     public function dossier()
     {
-
         return $this->hasMany ("App\Dossier");
     }
 

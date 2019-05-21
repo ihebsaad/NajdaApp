@@ -111,7 +111,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 success:function(data)
                 {
                     //console.log the response
-                    console.log('check boite 1:'+data);
+                    console.log('check boite 1 :'+data);
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails();
@@ -127,10 +127,10 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 success:function(data)
                 {
                     //console.log the response
-                    console.log('check boite 2: '+data);
+                    console.log('check boite 2 : '+data);
                     //Send another request in n seconds.
                     setTimeout(function(){
-                        checkemails();
+                        checkemails2();
                     }, 30000);  //30 secds
                 }
             });
@@ -144,16 +144,34 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 success:function(data)
                 {
                     //console.log the response
-                    console.log('check boite fax: '+data);
+                    console.log('check boite fax : '+data);
                     //Send another request in n seconds.
                     setTimeout(function(){
-                        checkemails();
+                        checkfax();
+                    }, 5000);  //30 secds
+                }
+            });
+        }
+
+
+        function checkboite(){
+            $.ajax({
+                type: "get",
+                url: "<?php echo $urlapp; ?>/emails/checkboiteperso",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check boite perso : '+data);
+                    //Send another request in n seconds.
+                    setTimeout(function(){
+                        checkboite();
                     }, 30000);  //30 secds
                 }
             });
         }
-        checkemails();
-        checkemails2();
+         checkemails();
+         checkemails2();
+        checkboite();
         checkfax();
 
 

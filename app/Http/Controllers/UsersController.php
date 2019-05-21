@@ -249,7 +249,33 @@ class UsersController extends Controller
             'role_id' => $role]
         );
 
+    }
 
+    public function updating(Request $request)
+    {
+
+        $id= $request->get('user');
+        $champ= strval($request->get('champ'));
+        $val= $request->get('val');
+        //  $dossier = Dossier::find($id);
+        // $dossier->$champ =   $val;
+        User::where('id', $id)->update(array($champ => $val));
+
+        //  $dossier->save();
+
+        ///   return redirect('/dossiers')->with('success', 'Entry has been added');
 
     }
+
+
+    public static function  ChampById($champ,$id)
+    {
+        $user = User::find($id);
+        if (isset($user[$champ])) {
+            return $user[$champ] ;
+        }else{return '';}
+
+    }
+
+
 }

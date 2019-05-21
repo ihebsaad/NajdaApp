@@ -5,9 +5,7 @@
 @stop
 <?php
 use App\Tag ;
-use App\Dossier ;
-use App\Notification ;
-$dossiers = Dossier::get();
+ use App\Notification ;
 
 use App\Attachement ;
 use App\Http\Controllers\AttachementsController;
@@ -25,19 +23,10 @@ use App\Http\Controllers\TagsController;
         <div class="panel-heading" style="">
                     <div class="row">
                         <div class="col-sm-4 col-md-4 col-lg-6"style=" padding-left: 0px;color:black;font-weight: bold ">
-                            <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;">Sujet :</label>  {{ $entree['sujet'] }}</h4>
+                            <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;">Sujet :</label>  {{ $boite['sujet'] }}</h4>
                         </div>
-                        <div class="col-sm-8 col-md-8 col-lg-6 style="padding-right: 0px;">
+                        <div class="col-sm-8 col-md-8 col-lg-6" style="padding-right: 0px;">
                             <div class="pull-right" style="margin-top: 0px;">
-                                @if (!empty($entree->dossier))
-                                    <button class="btn btn-sm btn-default"><b>REF: {{ $entree['dossier']   }}</b></button>
-                                @endif
-                                @if (empty($entree->dossier))
-                                        <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
-                                 @endif
-                                <a href="#" class="btn btn-info btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" > 
-                                  <span class="fa fa-fw fa-check"></span> Traité
-                                </a>
                             </div>
                         </div>
 
@@ -49,21 +38,11 @@ use App\Http\Controllers\TagsController;
             <div class="panel-body">
                 <div class="row">
                         <div class="col-sm-6 col-md-6 col-lg-6"style=" padding-left: 0px; ">
-                            <span><b>Emetteur: </b>{{ $entree['emetteur']  }}</span>
+                            <span><b>Emetteur: </b>{{ $boite['emetteur']  }}</span>
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6 " style="padding-right: 0px;">
-                            <span class="pull-right"><b>Date: </b><?php if ($entree['type']=='email'){echo  date('d/m/Y H:i', strtotime( $entree['reception']  )) ; }else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }?></span>
-                            <?php 
-                                // verifier si l'entree possede de notification et la marque comme lu
-                                $identr=$entree['id'];
-                                $havenotif=NotificationsController::havenotification($identr);
-                                if ($havenotif)
-                                {
-                                    // marker comme lu avec la date courante
-                                    $date = date('Y-m-d g:i:s');
-                                    Notification::where('id', $havenotif)->update(array('read_at' => $date));
-                                }
-                            ?>
+                            <span class="pull-right"><b>Date: </b> <?php   echo date('d/m/Y H:i', strtotime( $boite['reception']  )) ;  ?></span>
+
                         </div>
                 </div>
             </div>
@@ -75,7 +54,7 @@ use App\Http\Controllers\TagsController;
                 <a >
                     <div class="row">
                         <div class="col-sm-6 col-md-6 col-lg-6"style=" padding-left: 0px; ">
-                            <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;"><?php if ( $entree['type']=='fax') {echo 'F A X';}else {?>Contenu<?php }?></label></h4>
+                            <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;"> Contenu</label></h4>
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6" style="padding-right: 0px;">
                         </div>
@@ -87,10 +66,10 @@ use App\Http\Controllers\TagsController;
                 <div class="row">
                    <ul class="nav nav-pills">
                         <li class="active" >
-                            <a href="#mailcorps" data-toggle="tab" aria-expanded="true"><?php if ( $entree['type']=='fax') {echo 'détails';}else {?>Corps du mail<?php }?></a>
+                            <a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps du mail</a>
                         </li>
-                        @if ( $entree['nb_attach']   > 0)
-                            @for ($i = 1; $i <= $entree['nb_attach'] ; $i++)
+                        @if ( $boite['nb_attach']   > 0)
+                            @for ($i = 1; $i <= $boite['nb_attach'] ; $i++)
                                 <li>
                                     <a href="#pj<?php echo $i; ?>" data-toggle="tab" aria-expanded="false">PJ<?php echo $i; ?></a>
                                 </li>
@@ -99,18 +78,13 @@ use App\Http\Controllers\TagsController;
                     </ul>
                     <div id="myTabContent" class="tab-content" style="padding:10px;padding-top:20px;background: #ffffff">
                                         <div class="tab-pane fade active in" id="mailcorps" style="min-height: 350px;">
-                                            <p id="mailtext" style="line-height: 25px;"><?php  $content= $entree['contenu'] ; ?>
-                                            <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
-                                            <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
-
-                                            <?php  $cont=  str_replace($search,$replace, $content); ?>
-                                            <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
-                                            <?php  echo utf8_decode($cont); ?></p>
+                                            <p id="mailtext" style="line-height: 25px;"><?php  $content= $boite['contenu'] ; ?>
+                                                 <?php  echo utf8_decode($content); ?></p>
                                         </div>
-                                        @if ($entree['nb_attach']  > 0)
+                                        @if ($boite['nb_attach']  > 0)
                                           <?php
                                             // get attachements info from DB
-                                            $attachs = Attachement::get()->where('parent', '=', $entree['id'] );
+                                            $attachs = Attachement::get()->where('parent', '=', $boite['id'] );
                                             
                                           ?>
                                             @if (!empty($attachs) )
@@ -120,8 +94,6 @@ use App\Http\Controllers\TagsController;
 
                                                     <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
 
-                                                    
-                                                    
                                                     @switch($att->type)
                                                         @case('docx')
                                                         @case('doc')
@@ -182,12 +154,7 @@ use App\Http\Controllers\TagsController;
                     </div>
                 </div>
             </div>
-                                        <form method="post">
-                                                    {{ csrf_field() }}
-                                                    <input id="entreeid" type="hidden" name="entree" value="<?php echo $entree['id']; ?>" />
-                                                    <input id="urladdtag" type="hidden" name="urladdtag" value="{{ route('tags.addnew') }}" />
-                                                    <input id="urldeletetag" type="hidden" name="urldeletetag" value="{{ route('tags.deletetag') }}" />
-                                        </form>
+
         </div>
 </div>
 
@@ -210,71 +177,6 @@ $users=UsersController::ListeUsers();
 ?>
 
 
-<!-- Modal -->
-<div class="modal fade" id="createfolder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Créer un nouveau dossier</h5>
-
-            </div>
-            <div class="modal-body">
-                     <div class="card-body">
-
-                        <form method="post" >
-                            {{ csrf_field() }}
-
-                            <div class="form-group">
-                                <label for="type">Type :</label>
-                                <select   id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
-                                    <option   value="Medical">Medical</option>
-                                    <option   value="Technique">Technique</option>
-                                    <option   value="Mixte">Mixte</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="type">Affecté à :</label>
-                            <select id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single" readonly="readonly">
-                                <option  value="Najda">Najda</option>
-                                <option   value="VAT">VAT</option>
-                                <option  value="MEDIC">MEDIC</option>
-                                <option   value="Transport MEDIC">Transport MEDIC</option>
-                                <option   value="Transport VAT">Transport VAT</option>
-                                <option  value="Medic International">Medic International</option>
-                                <option   value="Najda TPA">Najda TPA</option>
-                                <option   value="Transport Najda">Transport Najda</option>
-                            </select>
-                            </div>
-
-
-                            <div class="form-group">
-                                <label for="affecte">Agent:</label>
-                                <select   id="affecte" name="affecte"   class="form-control js-example-placeholder-single">
-                                @foreach($users as $user  )
-                                    <option
-                                     @if($user->id==$iduser)selected="selected"@endif
-
-                                    value="{{$user->id}}">{{$user->name}}</option>
-
-                                @endforeach
-                                </select>
-                            </div>
-                         </form>
-                    </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="button" id="add" class="btn btn-primary">Ajouter</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="{{ URL::asset('resources/assets/js/spectrum.js') }}"></script>
@@ -293,36 +195,6 @@ $urlapp='http://localhost/najdaapp';
 
 
     $( document ).ready(function() {
-
-
-
-        $('#add').click(function(){
-            var type_dossier = $('#type_dossier').val();
-             var type_affectation = $('#type_affectation').val();
-            var affecte = $('#affecte').val();
-            if ((type_dossier != '')&&(type_affectation != '')&&(affecte != ''))
-            {
-                var _token = $('input[name="_token"]').val();
-                $.ajax({
-                    url:"{{ route('dossiers.saving') }}",
-                    method:"POST",
-                    data:{type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
-                    success:function(data){
-
-                     //   alert('Added successfully');
-                        window.location =data;
-
-
-                    }
-                });
-            }else{
-               // alert('ERROR');
-            }
-        });
-
-
-
-
 
 
 
@@ -348,7 +220,6 @@ $urlapp='http://localhost/najdaapp';
     $('#data').on('click',   function() {
 
         target.marker('data');
-
 
     });
 

@@ -84,6 +84,7 @@ Route::get('/emails/inbox', 'EmailController@inbox');
 Route::get('/emails/check', 'EmailController@check');
 Route::get('/emails/checkboite2', 'EmailController@checkboite2');
 Route::get('/emails/checkfax', 'EmailController@checkfax');
+Route::get('/emails/checkboiteperso', 'EmailController@checkboiteperso');
 Route::get('/emails/folder/{foldername}', 'EmailController@folder');
 
 
@@ -97,6 +98,12 @@ Route::post('/emails/sendwhatsapp', 'EmailController@sendwhatsapp')->name('email
 //Route::get('/emails/sendwhatsapp', 'EmailController@sendwhatsapp')->name('emails.sendwhatsapp');
 Route::get('/emails/maboite', 'EmailController@maboite');
 Route::get('/emails/open/{id}', 'EmailController@open');
+
+
+/****** Boite Personnelle ****/
+Route::get('/boites/',  'BoitesController@index')->name('boites');;
+Route::get('/boites/show/{id}', 'BoitesController@show');
+
 
 
 
@@ -259,6 +266,7 @@ Route::get('/etapestypesMissions/view/{id}', 'EtapesTypeMissionController@view')
 Route::get('/users', array('as' => 'users','uses' => 'UsersController@index'));
 Route::get('/users/create','UsersController@create')->name('users.create');
 Route::post('/users/saving','UsersController@saving')->name('users.saving');
+Route::post('/users/updating','UsersController@updating')->name('users.updating');
 Route::get('/users/view/{id}', 'UsersController@view');
 Route::get('/users/profile/{id}', 'UsersController@profile')->name('profile');
 Route::post('/users/createuserrole', 'UsersController@createuserrole')->name('users.createuserrole');

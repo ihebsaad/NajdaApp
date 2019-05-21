@@ -320,7 +320,7 @@
                                                                     <div class="row form-group">
 
                                                                             <div style="">
-                                                                                <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addemail" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createemail"><b><i class="fas fa-plus"></i> Ajouter un email</b></button>
+                                                                                <span style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addemail" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createemail"><b><i class="fas fa-plus"></i> Ajouter un email</b></span>
 
                                                                             </div>
                                                                             <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;font-size:16px;">
@@ -2182,7 +2182,7 @@ $iduser=$CurrentUser->id;
             $.ajax({
                 url:"{{ route('dossiers.addemail') }}",
                 method:"POST",
-                data:{parent:parent,champ:champ,nom:nom,tel:tel,qualite:qualite _token:_token},
+                data:{parent:parent,champ:champ,nom:nom,tel:tel,qualite:qualite, _token:_token},
                 success:function(data){
 
                     //   alert('Added successfully');
