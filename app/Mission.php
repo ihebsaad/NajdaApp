@@ -9,7 +9,7 @@ class Mission extends Model
     //
 
     protected $fillable = [
-        'titre', 'descrip', 'date_deb','date_fin', 'statut_courant','realisee', 'dossier_id','type_Mission', 
+        'titre', 'descrip','commentaire', 'date_deb','date_fin', 'statut_courant','realisee', 'dossier_id','type_Mission', 
         'user_id','assistant','prestataire','intervenant','created_at','updated_at','deleted_at'
     ];
 

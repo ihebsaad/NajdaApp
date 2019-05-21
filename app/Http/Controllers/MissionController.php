@@ -252,6 +252,7 @@ class MissionController extends Controller
          $Mission = new Mission([
              'titre' =>trim( $request->get('titre')),
              'descrip' => trim($request->get('descrip')),
+             'commentaire' => trim($request->get('commentaire')),
              'date_deb'=> trim($request->get('datedeb')),
              'type_Mission' =>$typeMiss->id,
              'dossier_id' => $dossier->id,

@@ -11,34 +11,114 @@
 </div>
 <div class="col-md-6" style="padding:100px 50px 100px 50px">
 
-<h2>Sélectionnez votre rôle pendant cette séance :</h2><br>
+<h2>Sélectionnez votre/vos rôle(s) pendant cette séance :</h2><br>
 
-    <label class="radio">Agent
+    <!--<label class="radio">Agent
         <input type="radio" checked name="is_company">
         <span class="checkround"></span>
-    </label>
+    </label>-->
 
     <label class="check ">Dispatcheur
-        <input type="checkbox" checked="checked" name="is_name">
+        <?php 
+            if (session()->has('disp'))
+            {
+                if (Session::get('disp') == 0)
+                {
+                    echo '<input type="checkbox" name="disp">';
+                }
+                else
+                {
+                    echo '<input type="checkbox" name="disp" checked>';
+                }
+            }
+            else
+            {
+                echo '<input type="checkbox" name="disp">';
+            }
+        ?>
         <span class="checkmark"></span>
     </label>
     <label class="check ">Superviseur Médic
-        <input type="checkbox"  name="is_name">
+        <?php 
+            if (session()->has('supmedic'))
+            {
+                if (Session::get('supmedic') == 0)
+                {
+                    echo '<input type="checkbox" name="supmedic">';
+                }
+                else
+                {
+                    echo '<input type="checkbox" name="supmedic" checked>';
+                }
+            }
+            else
+            {
+                echo '<input type="checkbox" name="supmedic">';
+            }
+        ?>
         <span class="checkmark"></span>
     </label>
     <label class="check ">Superviseur Technique
-        <input type="checkbox"  name="is_name">
+        <?php 
+            if (session()->has('suptech'))
+            {
+                if (Session::get('suptech') == 0)
+                {
+                    echo '<input type="checkbox" name="suptech">';
+                }
+                else
+                {
+                    echo '<input type="checkbox" name="suptech" checked>';
+                }
+            }
+            else
+            {
+                echo '<input type="checkbox" name="suptech">';
+            }
+        ?>
         <span class="checkmark"></span>
     </label>
     <label class="check ">Chargé Transport
-        <input type="checkbox"  name="is_name">
+        <?php 
+            if (session()->has('chrgtr'))
+            {
+                if (Session::get('chrgtr') == 0)
+                {
+                    echo '<input type="checkbox" name="chrgtr">';
+                }
+                else
+                {
+                    echo '<input type="checkbox" name="chrgtr" checked>';
+                }
+            }
+            else
+            {
+                echo '<input type="checkbox" name="chrgtr">';
+            }
+        ?>
         <span class="checkmark"></span>
     </label>
     <label class="check ">Dispatcheur Téléphonique
-        <input type="checkbox"  name="is_name">
+        <?php 
+            if (session()->has('disptel'))
+            {
+                if (Session::get('disptel') == 0)
+                {
+                    echo '<input type="checkbox" name="disptel">';
+                }
+                else
+                {
+                    echo '<input type="checkbox" name="disptel" checked>';
+                }
+            }
+            else
+            {
+                echo '<input type="checkbox" name="disptel">';
+            }
+        ?>
         <span class="checkmark"></span>
     </label>
-
+    {{ csrf_field() }}
 <br>
  <button onclick="redirect()" class="btn cust-btn " type="button" id="btn-primary" style="font-size: 20PX;letter-spacing: 1px;width:150px">Entrer</button>
 </div>
@@ -50,25 +130,45 @@
 </div>
 </body>
 </html>
- <?php
 
- $urlapp=env('APP_URL');
- $urlapp='https://najdaapp.enterpriseesolutions.com/' ;
- if (App::environment('local')) {
-     // The environment is local
-     $urlapp='http://localhost/najdaapp';
- }
-
- ?>
 
  <script>
      function redirect()
      {
-         window.location = '<?php echo $urlapp ; ?>';
+         var _token = $('input[name="_token"]').val();
+         var disp = 0;
+         if ($('input[name="disp"]').is(':checked'))
+         {disp=1;}
+         var supmedic = 0;
+         if ($('input[name="supmedic"]').is(':checked'))
+         {supmedic=1;}
+         var suptech = 0;
+         if ($('input[name="suptech"]').is(':checked'))
+         {suptech=1;}
+         var chrgtr = 0;
+         if ($('input[name="chrgtr"]').is(':checked'))
+         {chrgtr=1;}
+         var disptel = 0;
+         if ($('input[name="disptel"]').is(':checked'))
+         {disptel=1;}
+         var type="agent";
+         //alert(disp +" | "+ dispmedic +" | "+ disptech +" | "+ chrgtr +" | "+disptel+" | "+type);
+            $.ajax({
+                url:"{{ route('users.sessionroles') }}",
+                method:"POST",
+                data:{type:type,disp:disp,supmedic:supmedic,suptech:suptech,chrgtr:chrgtr,disptel:disptel, _token:_token},
+                success:function(data){
+
+                    
+                    window.location = '{{route('home')}}';
+
+
+                }
+            });
      }
  </script>
 <style>
-
+body {font-family: "Open Sans", serif !important;}
 /* The radio */
 .radio {
  
@@ -100,7 +200,7 @@
     height: 20px;
     width: 20px;
     background-color: #fff ;
-    border-color:#f8204f;
+    border-color:#5D9CEC;
     border-style:solid;
     border-width:2px;
      border-radius: 50%;
@@ -131,7 +231,7 @@
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background:#f8204f;
+    background:#20a5ff;
     
  
 }
@@ -166,7 +266,7 @@
     height: 18px;
     width: 18px;
     background-color: #fff ;
-    border-color:#f8204f;
+    border-color:#5D9CEC;
     border-style:solid;
     border-width:2px;
 }
@@ -197,27 +297,25 @@
     width: 5px;
     height: 10px;
     border: solid ;
-    border-color:#f8204f;
+    border-color:#5D9CEC;
     border-width: 0 3px 3px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
-
+.btn{border-radius: 0!important;}
 .cust-btn{
 	margin-bottom: 10px;
-	background-color: #f8204f;
+	background-color: #5D9CEC;
 	border-width: 2px;
-	border-color: #f8204f;
+	border-color: #5D9CEC;
 	color: #fff;
 }
 .cust-btn:hover{
 	
-	border-color: #f8204f;
+	border-color: #5D9CEC;
 	background-color: #fff;
-	color: #f8204f;
-	border-radius: 20px;
-	transform-style: 2s;
+	color: #5D9CEC;
 
 }
 

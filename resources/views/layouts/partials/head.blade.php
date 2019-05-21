@@ -148,7 +148,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkfax();
-                    }, 5000);  //30 secds
+                    }, 30000);  //30 secds
                 }
             });
         }

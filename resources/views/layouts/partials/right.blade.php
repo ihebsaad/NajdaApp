@@ -234,43 +234,11 @@ use App\Http\Controllers\TagsController;
                                   <form  method="post" action="{{ route('Missions.store') }}" style="padding-top:30px">
                                       <div class="form-group">
                                            {{ csrf_field() }}
-                                         <div class="row">
-                                             <div class="col-md-3" style="padding-top:5px"> <label  style=" ;  text-align: left; width: 40px;">Titre:</label></div>
-                                             <div class="col-md-9"><input id="titre" type="text" class="form-control" style="width:95%;  text-align: left !important;" name="titre"/></div>
-                                       </div>
-                                      </div>
-                                      <div class="form-group">
-                                          <div class="row">
-                                              <div class="col-md-3" style="padding-top:5px">     <label for="descrip" style="display: inline-block;  text-align: right; width: 40px;">Description</label></div>
-                                              <div class="col-md-9"><input id="descrip" type="text" class="form-control" style="width:95%;  text-align: left;" name="descrip"/></div>
-                                          </div>
-                                      </div>
-                                      <div class="form-group">
-                                        <?php $da= date('Y-m-d\TH:m'); ?>
-
-                                            <div class="row">
-                                                <div class="col-md-3" style="padding-top:5px">  <label for="datedeb" style="display: inline-block;  text-align: right; width: 40px;">Date</label></div>
-                                                <div class="col-md-9"> <input id="datedeb" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:95%;  text-align: left;" name="datedeb"/></div>
-                                            </div>
-                                      </div>
-
-                                          {{-- <div class="row">
-                                              <div class="col-md-3" style="padding-top:5px">
-                                                  <label for="typeact" style="display: inline-block;  text-align: right; width: 40px;">Type</label>
-                                              </div>
-                                              <div class="col-md-9">  <select id="typeact" type="text" class="form-control" style="width:95%;  text-align: left;" name="typeact">
-                                                         @foreach($typesMissions as $tyMission)
-                                                              <option value="{{ $tyMission->id }}">{{ $tyMission->nom_type_Mission }}</option>
-                                                          @endforeach
-                                          </select>
-                                              </div>
-                                           </div>--}}
-
-                                           <!-- input pour l'autocomplete type Mission -->
+                                        <!-- input pour l'autocomplete type Mission -->
                                           <div class="form-group">
 
-                                                 <div class="row">
-                                                <div class="col-md-3" style="padding-top:5px">  <label for="typeactauto" style="display: inline-block;  text-align: right; width: 40px;">Type:</label></div>
+                                               <div class="row">
+                                                <div class="col-md-3" style="padding-top:5px">  <label for="typeactauto" style="display: inline-block;  text-align: left; width: 55px;">Type:</label></div>
                                                 <div class="col-md-9"> 
                                                   <input id="typeactauto" type="text" value="" class="form-control" style="width:95%;  text-align: left;" name="typeactauto"/>
                                                  <div id="listtypeact" style="z-index: 9999;"> </div>
@@ -341,6 +309,31 @@ use App\Http\Controllers\TagsController;
                                             </div>
 
                                           </div>
+                                         <div class="form-group">
+                                            <?php $da= date('Y-m-d\TH:m'); ?>
+
+                                                <div class="row">
+                                                    <div class="col-md-3" style="padding-top:5px">  <label for="datedeb" style="display: inline-block;  text-align: left; width: 55px;">Date:</label></div>
+                                                    <div class="col-md-9"> <input id="datedeb" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:95%;  text-align: left;" name="datedeb"/></div>
+                                                </div>
+                                         </div>
+                                        <div class="form-group">
+                                          <div class="row">
+                                              <div class="col-md-3" style="padding-top:5px">     <label for="descrip" style="display: inline-block;  text-align: right; width: 55px;">Description:</label></div>
+                                              <div class="col-md-9"><input id="descrip" type="text" class="form-control" style="width:95%;  text-align: left;" name="descrip"/></div>
+                                          </div>
+                                        </div>
+                                         <div class="row">
+                                             <div class="col-md-3" style="padding-top:5px"> <label  style=" ;  text-align: left; width: 55px;">Extrait:</label></div>
+                                             <div class="col-md-9"><input id="titre" type="text" class="form-control" style="width:95%;  text-align: left !important;" name="titre"/></div>
+                                       </div></br>
+                                       <div class="row">
+                                             <div class="col-md-3" style="padding-top:5px"> <label  style=" ;  text-align: left; width: 55px;">Commentaire:</label></div>
+                                             <div class="col-md-9"><textarea id="commentaire" class="form-control" style="width:95%;  text-align: left !important;" name="commentaire"></textarea></div>
+                                       </div>
+                                      </div>
+
+                                           
 
 
                                       <div class="form-group">
@@ -358,7 +351,7 @@ use App\Http\Controllers\TagsController;
                                            <?php } ?>
 
                                       </div>
-                                       <button  type="submit"  class="btn btn-primary">Ajouter</button>
+                                       <button  type="submit"  class="btn btn-success">Ajouter</button>
                                      <!-- <button id="add"  class="btn btn-primary">Ajax Add</button>-->
                                   </form>
                                </div>   
@@ -366,12 +359,6 @@ use App\Http\Controllers\TagsController;
 
 
                                    </div>
-
-
-                                 <div class="row text-center">
-                                    <h4>Mission libre</h4>
-                                     <a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#NouveauType">créer un nouveau type de Mission </a>
-                                 </div> 
                                                                    
                     </div>
                     <?php if (\Request::is('entrees/show/*')) { ?>
