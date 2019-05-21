@@ -23,7 +23,14 @@
             { echo '</a>';}
 
         ?>
-        <?php } ?>
+        <?php }
+        else
+        {
+            if ((Gate::check('isAdmin') || Gate::check('isSupervisor')))
+            {echo '<a href="#" data-toggle="modal" data-target="#attrmodal">Non assigné</a>';}
+            else
+            {echo '<b>Non assigné</b>';} 
+        } ?>
     </div>
     <div class="col-md-6" style="text-align: right;padding-right: 35px">
         <div class="page-toolbar">
@@ -2015,7 +2022,7 @@ $iduser=$CurrentUser->id;
         </div>
     </div>
 </div>
-<?php if ((Gate::check('isAdmin') || Gate::check('isSupervisor')) && !empty ($agentname)) { ?>
+<?php if ((Gate::check('isAdmin') || Gate::check('isSupervisor'))) { ?>
 <!-- Modal attribution dossier-->
 <div class="modal fade" id="attrmodal" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -2029,7 +2036,7 @@ $iduser=$CurrentUser->id;
 
 
                     <div class="form-group">
-
+                        
                         <form  method="post" action="{{ route('dossiers.attribution') }}">
                             {{ csrf_field() }}
                             <input id="dossierid" name="dossierid" type="hidden" value="{{ $dossier->id}}">
@@ -2040,14 +2047,20 @@ $iduser=$CurrentUser->id;
                                         <select id="agent" name="agent" class="form-control select2" style="width: 230px">
                                             <option value="Select">Selectionner</option>
                                             <?php $agents = User::get(); ?>
-                                            @foreach ($agents as $agt)
-                                            @if ($agentname["id"] == $agt["id"])
-                                                <option value={{ $agt["id"] }} selected >{{ $agt["name"] }}</option>
-                                            @else
-                                                <option value={{ $agt["id"] }} >{{ $agt["name"] }}</option>
-                                            @endif
-                                            @endforeach
+                                           
+                                                @foreach ($agents as $agt)
+                                                <?php if (!empty ($agentname)) { ?>
+                                                @if ($agentname["id"] == $agt["id"])
+                                                    <option value={{ $agt["id"] }} selected >{{ $agt["name"] }}</option>
+                                                @else
+                                                    <option value={{ $agt["id"] }} >{{ $agt["name"] }}</option>
+                                                @endif
                                                 
+                                                <?php }
+                                                else
+                                                      {  echo '<option value='.$agt["id"] .' >'.$agt["name"].'</option>';}
+                                                ?>
+                                                @endforeach    
                                         </select>
                                     </div>
                                 </div>
