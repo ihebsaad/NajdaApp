@@ -22,10 +22,16 @@
                 Mon profil
             </a>
         </li>
+        <li style="margin-top:8px">
+            <a href="{{ route('roles') }}">
+                <i class="fas fa-fw fa-lg fa-exchange-alt"></i>
+                Changer de rôle(s)
+            </a>
+        </li>
         <li role="presentation" class="divider"></li>
          <li style="margin-bottom:8px">
             <a href="{{ route('logout') }}">
-                <i class="fas fa-fw fa-lg fa-id-badge"></i>
+                <i class="fas fa-fw fa-lg fa-sign-out-alt"></i>
                 Déconnexion
             </a>
         </li>
@@ -35,7 +41,15 @@
 
 <style>
    /* .myuser:hover{color:black;}*/
+   .dropdown-menu {
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.3)!important;}
+    .dropdown-menu > li > a:hover {
+    background: white!important;
+    color:#a9a9a9;
+}
    .navbar-nav>.user-menu>.dropdown-menu>li.user-header
-   {width:160px!important;height:90px!important;}
+   {height:90px!important;}
+   .navbar-nav > li > .dropdown-menu {
+    left: -98px;}
    .dropdown-menu li a :hover{background-color: transparent;color:white;}
 </style>

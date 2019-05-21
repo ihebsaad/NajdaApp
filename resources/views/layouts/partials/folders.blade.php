@@ -12,15 +12,15 @@
     $currentdoss=$doss ;}
 
   use \App\Http\Controllers\DossiersController;
-$dossiers= DossiersController:: ListeDossiers();
-
+$dossiersaff= DossiersController:: ListeDossiersAffecte();
+//print_r($dossiers);
 
 ?>
-@isset ($dossiers)
+@isset ($dossiersaff)
 <div class="row folders" style="margin-top:20px;">
         <div class="carousel-wrap">
           <div class="owl-carousel">
-            @foreach ($dossiers as $i) 
+            @foreach ($dossiersaff as $i) 
             <div class="item">
                 <a class="dossieritem" href="{{url('dossiers/view/'.$i->id )}}" id="{{ $i->id }}" >
                     <div class="dossiercr well well-gc well-sm <?php if($i->id ==$currentdoss){echo 'actived';}?>  " >

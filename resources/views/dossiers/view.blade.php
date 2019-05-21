@@ -2182,7 +2182,7 @@ $iduser=$CurrentUser->id;
             $.ajax({
                 url:"{{ route('dossiers.addemail') }}",
                 method:"POST",
-                data:{parent:parent,champ:champ,nom:nom,tel:tel,qualite:qualite _token:_token},
+                data:{parent:parent,champ:champ,nom:nom,tel:tel,qualite:qualite,_token:_token},
                 success:function(data){
 
                     //   alert('Added successfully');

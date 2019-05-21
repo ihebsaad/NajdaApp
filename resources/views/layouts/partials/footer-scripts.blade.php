@@ -48,7 +48,7 @@
         /*$('#nestable_list_3').nestable();*/
 
         $('.owl-carousel').owlCarousel({
-          loop: true,
+          loop: false,
           margin: 20,
           nav: true,
           navText: [

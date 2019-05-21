@@ -263,6 +263,7 @@ Route::get('/users/view/{id}', 'UsersController@view');
 Route::get('/users/profile/{id}', 'UsersController@profile')->name('profile');
 Route::post('/users/createuserrole', 'UsersController@createuserrole')->name('users.createuserrole');
 Route::post('/users/removeuserrole', 'UsersController@removeuserrole')->name('users.removeuserrole');
+Route::post('/users/sessionroles', 'UsersController@sessionroles')->name('users.sessionroles');
 
 Route::get('/users/destroy/{id}', 'UsersController@destroy');
 //Route::get('/edit/{id}','UsersController@edit');

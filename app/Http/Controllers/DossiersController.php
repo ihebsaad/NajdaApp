@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 use App\Entree ;
@@ -240,7 +241,6 @@ class DossiersController extends Controller
 
     public function view($id)
     {
-        $dossiers = Dossier::all();
         $typesMissions=TypeMission::get();
         $Missions=Dossier::find($id)->activeMissions;
 
@@ -309,7 +309,7 @@ class DossiersController extends Controller
         //  $entrees =   Entree::all();
         $documents = Document::where('dossier', $id)->get();
 
-        return view('dossiers.view',['emails'=>$emails,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'dossiers' => $dossiers,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
+        return view('dossiers.view',['emails'=>$emails,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
 
     }
 
@@ -433,6 +433,13 @@ class DossiersController extends Controller
     public  static function ListeDossiers()
     {
         $dossiers = Dossier::all();
+
+        return $dossiers;
+
+    }
+    public  static function ListeDossiersAffecte()
+    {
+        $dossiers = Dossier::where('affecte',Auth::id())->get();
 
         return $dossiers;
 

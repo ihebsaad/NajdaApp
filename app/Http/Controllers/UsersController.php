@@ -10,7 +10,7 @@ use App\User ;
 use App\Role ;
 use DB;
 use Illuminate\Support\Facades\Auth;
-
+use Session;
 
 class UsersController extends Controller
 {
@@ -250,6 +250,26 @@ class UsersController extends Controller
         );
 
 
+
+    }
+
+    public  function sessionroles(Request $request)
+    {
+        $typeuser= $request->get('type');
+
+        if ($typeuser == "agent")
+        {
+            $disp = $request->get('disp');
+            Session::put('disp', $disp);
+            $supmedic = $request->get('supmedic');
+            Session::put('supmedic', $supmedic);
+            $suptech = $request->get('suptech');
+            Session::put('suptech', $suptech);
+            $chrgtr = $request->get('chrgtr');
+            Session::put('chrgtr', $chrgtr);
+            $disptel = $request->get('disptel');
+            Session::put('disptel', $disptel);
+        }
 
     }
 }
