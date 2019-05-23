@@ -366,7 +366,7 @@ use App\Http\Controllers\TagsController;
                      <div class="tab-pane fade " id="infostab" style="overflow-x: hidden;">
                       <div class="row text-center">
                         <div class="col-md-6" >
-                          <button id="btn-atag" class="btn btn-default" style="background-color: #A9A9A9">Ajouter TAG</button>
+                          <button id="btn-atag" class="btn btn-default default-hovered" style="background-color: #A9A9A9">Ajouter TAG</button>
                         </div>
                         <div class="col-md-6" >
                           <button id="btn-cmttag" class="btn btn-default">TAG & Commentaire</button>
@@ -404,8 +404,6 @@ use App\Http\Controllers\TagsController;
                                 </select>
                             </div>
                             <div id="champstags" class="form-group mar-20"></div>
-
-                            <input type="text" id="infotag" name="infotag" class="form-control" placeholder="Entrer l'information de TAG" data-bv-field="infotag" style="width: 280px"></br>
                             <textarea id="contenutag" name="contenutag" rows="7" class="form-control resize_vertical" placeholder="Entrer le contenu de TAG" data-bv-field="message" style="width: 280px"></textarea></br>
                             
                              <div class="row text-center">
@@ -420,8 +418,11 @@ use App\Http\Controllers\TagsController;
                             </div> 
                       </div>   
                       <div id="cmttag"  style="display:none;margin-top: 30px">
-                          <label for="commentuser" class="control-label" >Commentaire</label>
-                          <textarea id="commentuser" name="commentuser" rows="7" class="form-control resize_vertical" placeholder="Entrez votre commentaire">{{ $entree['commentaire']  }}</textarea></br>
+                          <div class="row">
+                            <div class="col-md-6"><label for="commentuser" class="control-label" >Commentaire</label></div>
+                            <div class="col-md-3 pull-right"><button id="editbtn" type="button" class="btn btn-info btn-xs" ><i class="fas fa-lock-open"></i> Modifier</button></div>
+                          </div>
+                          <textarea id="commentuser" name="commentuser" rows="7" class="form-control resize_vertical" placeholder="Entrez votre commentaire" readonly >{{ $entree['commentaire']  }}</textarea></br>
                           <!-- affichage des tags -->
                           <label for="accordiontags" class="control-label" >TAGs</label>
                           <div class="accordion panel-group" id="accordiontags">
@@ -449,7 +450,6 @@ use App\Http\Controllers\TagsController;
                                                 ?>
                                               <li class="list-group-item"><b style="color: #c1c1b7">Montant: </b>{{$tag->montant}} </li>
                                               <?php }} ?>
-                                              <li class="list-group-item"><b style="color: #c1c1b7">Information: </b>{{$tag->information}} </li>
                                               <li class="list-group-item"><b style="color: #c1c1b7">Contenu: </b>{{$tag->contenu}} </li>
                                             </ul>
 
@@ -694,12 +694,14 @@ use App\Http\Controllers\TagsController;
     $('#btn-atag').click(function(){
       $("#cmttag").hide();
       $("#ajouttag").show();
-      $('#btn-atag').css('background-color','#A9A9A9');
-      $('#btn-cmttag').css('background-color','#dcdcdc');
+      $('#btn-atag').toggleClass("default-hovered");
+      $('#btn-cmttag').removeClass("default-hovered");
     });  
     $('#btn-cmttag').click(function(){
       $("#ajouttag").hide();
       $("#cmttag").show();
+      $('#btn-cmttag').toggleClass("default-hovered");
+      $('#btn-atag').removeClass("default-hovered");
     }); 
 $("#tagname").select2();
 $('#tagname').change(function(e){
@@ -709,7 +711,24 @@ $('#tagname').change(function(e){
           if ($('#champstags').html() === "")
           {
             
-            $('#champstags').html("<div class='form-group mar-20'><input type='text' id='montanttag'  name='montanttag' class='form-control' style='width: 280px' placeholder='Entrer le montant' required></div>");
+            $('#champstags').html("<div class='row'><div class='col-md-7' style='padding-left: 0px;'><input type='text' id='montanttag'  name='montanttag' class='form-control' style='width: 150px' placeholder='Entrer le montant' required></div><div class='col-md-3'><select name='devise'><option value='TND'>TND</option><option value='USD'>USD</option><option value='EUR'>EUR</option></select></div></div>");
+            // verifier valeur montant si entier
+            $('#montanttag').keyup(function() {
+                var val = $(this).val(), error ="";
+                $('#lblIntegerError').remove();
+                $('#btn-addtag').removeAttr('disabled');
+                if (isNaN(val)) {
+                  error = "le montant doit être numérique";
+                  $('#btn-addtag').prop("disabled",true);
+                }
+                else if (parseInt(val,10) != val || val<= 0) {
+                  error = "le montant doit être supérieure à zero";
+                  $('#btn-addtag').prop("disabled",true);
+                }
+                else {return true;  }
+                $('#montanttag').after('<label style="color:red"  id="lblIntegerError"><br/>'+error+'</label>');
+                return false;
+            });
           }
         }
       else
@@ -721,20 +740,30 @@ $('#tagname').change(function(e){
         }}
 });
 
+
+$('#editbtn').click(function(){
+    if ($('textarea#commentuser').is('[readonly]') )
+      { $('textarea#commentuser').attr('readonly',false);}
+    else
+      {$('textarea#commentuser').attr('readonly',true);}
+});
+
 $('#btn-addtag').click(function(e){
       var entree = $('input[name="entree"]').val();
       var tag = $('select[name=tagname]').val();
       var tagtxt = $('select[name=tagname] option:selected').text();
-      var infotag = $('input[name="infotag"]').val();
       var tagcontent = $('textarea#contenutag').val();
       var _token = $('input[name="_token"]').val();
       var urladdtag = $('input[name="urladdtag"]').val();
-      var montant=null;
+      var montant= null;
+      var devise = null;
       var limontant='';
       if (document.getElementById("montanttag")!=null)
       {
         montant = $('input[name="montanttag"]').val();
-        limontant = '<li class="list-group-item"><b style="color: #c1c1b7">Montant: </b>'+montant+'</li>';
+
+        devise = $('select[name=devise] option:selected').text();
+        limontant = '<li class="list-group-item"><b style="color: #c1c1b7">Montant: </b>'+montant+' '+devise+'</li>';
       }
             if (entree != '')
             {
@@ -742,15 +771,14 @@ $('#btn-addtag').click(function(e){
                 $.ajax({
                     url:urladdtag,
                     method:"POST",
-                    data:{entree:entree,titre:tag,information:infotag,contenu:tagcontent,montant:montant, _token:_token},
+                    data:{entree:entree,titre:tag,contenu:tagcontent,montant:montant,devise:devise, _token:_token},
                     success:function(data){
                         $("#addedsuccess").fadeIn(1500);
                         $("#addedsuccess").fadeOut(1500);
 
                         // ajouter la nouvelle tag dans la section cmttags
-                        $('#accordiontags').append('<div class="row"><div class="col-md-10"><div class="panel panel-default"><div class="panel-heading" ><h4 class="panel-title"><a data-toggle="collapse" href="#collapse'+tag+'">'+tagtxt+'</a></h4></div><div id="collapse'+tag+'" class="panel-collapse collapse"><ul class="list-group">'+limontant+'<li class="list-group-item"><b style="color: #c1c1b7">Information: </b>'+infotag+'</li><li class="list-group-item"><b style="color: #c1c1b7">Contenu: </b>'+tagcontent+'</li></ul></div></div></div></div>');
+                        $('#accordiontags').append('<div class="row"><div class="col-md-10"><div class="panel panel-default"><div class="panel-heading" ><h4 class="panel-title"><a data-toggle="collapse" href="#collapse'+tag+'">'+tagtxt+'</a></h4></div><div id="collapse'+tag+'" class="panel-collapse collapse"><ul class="list-group">'+limontant+'<li class="list-group-item"><b style="color: #c1c1b7">Contenu: </b>'+tagcontent+'</li></ul></div></div></div></div>');
 
-                        $('input[name="infotag"]').val('');
                         $('textarea#contenutag').val('');
                         //document.getElementById('tagname').selectedIndex = -1;
                         //$("#tagname").select2("val", "");

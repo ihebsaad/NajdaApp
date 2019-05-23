@@ -170,7 +170,7 @@ font-size: 12px;
     border-color: #37BC98;
     background: #37BC98 ;
 }
-.btn-default:hover {
+.btn-default:hover, .default-hovered {
     border-color: #A9A9A9;
     background: #A9A9A9 !important;
 }

@@ -13,7 +13,7 @@
 
      <div class="col-md-6">
         <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
-        <b>Assigné à:</b> 
+        <b>Affecté à:</b> 
         <?php 
         $agentname = User::where('id',$dossier->affecte)->first();
         if ((Gate::check('isAdmin') || Gate::check('isSupervisor')) && !empty ($agentname))
@@ -27,9 +27,9 @@
         else
         {
             if ((Gate::check('isAdmin') || Gate::check('isSupervisor')))
-            {echo '<a href="#" data-toggle="modal" data-target="#attrmodal">Non assigné</a>';}
+            {echo '<a href="#" data-toggle="modal" data-target="#attrmodal">Non affecté</a>';}
             else
-            {echo '<b>Non assigné</b>';} 
+            {echo '<b>Non affecté</b>';} 
         } ?>
     </div>
     <div class="col-md-6" style="text-align: right;padding-right: 35px">
@@ -2028,7 +2028,7 @@ $iduser=$CurrentUser->id;
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModal2">Attribution dossier</h5>
+                <h5 class="modal-title" id="exampleModal2">Affectation dossier</h5>
 
             </div>
             <div class="modal-body">
@@ -2073,7 +2073,7 @@ $iduser=$CurrentUser->id;
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="submit" id="attribdoss" class="btn btn-primary">Attribuer</button>
+                <button type="submit" id="attribdoss" class="btn btn-primary">Affecter</button>
             </div>
             </form>
         </div>
