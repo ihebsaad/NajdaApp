@@ -129,22 +129,22 @@
 
                                                             switch ($n['type']) {
                                                                 case "email":
-                                                                    echo '<li rel="tremail" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    echo '<li id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>'; 
                                                                     break;
                                                                 case "fax":
-                                                                    echo '<li rel="trfax" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    echo '<li id="'.$n['id'].'" rel="trfax" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>'; 
                                                                     break;
                                                                 case "tel":
-                                                                    echo '<li rel="trtel" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    echo '<li id="'.$n['id'].'" rel="trtel" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>'; 
                                                                     break;
                                                                 case "sms":
-                                                                    echo '<li rel="trsms" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    echo '<li id="'.$n['id'].'" rel="trsms" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span> '.$n['sujet'].'</span></a></li>'; 
                                                                     break;
                                                                 case "whatsapp":
-                                                                    echo '<li rel="trwp" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fab fa-whatsapp"></span> '.$n['sujet'].'</span></a></li>'; 
+                                                                    echo '<li id="'.$n['id'].'" rel="trwp" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fab fa-whatsapp"></span> '.$n['sujet'].'</span></a></li>'; 
                                                                     break;
                                                                 default:
-                                                                    echo '<li rel="tremail" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>'; 
+                                                                    echo '<li id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>'; 
                                                             }
 
 
@@ -172,11 +172,15 @@ if (isset($dossier))
          $( document ).ready(function() {
             // verifier sil existe des notifications pour le dossier courant pour les marquer comme actifs
             if ($("#prt_{{ $dossier['reference_medic']}}").length > 0) { 
-               $("li#prt_{{ $dossier['reference_medic']}}").addClass('dossiercourant');
+              // $("li#prt_{{ $dossier['reference_medic']}}").addClass('dossiercourant');
                // scroll vers lemplacement de la notification
               $('html, #notificationstab').animate({
                scrollTop: $("#prt_{{ $dossier['reference_medic']}}").offset().top
               }, 1000);
+              // highlight notification courante
+              if ($("li#{{ $entree['id']}}").length > 0) { 
+               $("li#{{ $entree['id']}}").addClass('dossiercourant');
+              }
             }
           });
 </script>
