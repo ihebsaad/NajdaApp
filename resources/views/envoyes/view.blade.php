@@ -49,14 +49,14 @@
             </div>
         </div>
         <div class="col-lg-9 ">
-
+<?php $type= $envoye['type'];?>
             <form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data">
                 <div class="form-group">
                     {{ csrf_field() }}
                     <label for="destinataire">destinataire:</label>
                     <div class="row">
                         <div class="col-md-10">
-                            <input id="destinataire" type="email" class="form-control" name="destinataire" required value={{ $envoye->destinataire }} />
+                            <input id="destinataire" type="email" class="form-control" name="destinataire" required value="{{ $envoye->destinataire }}" />
                         </div>
                         <div class="col-md-2">
                             <i id="emailso" onclick="visibilite('autres')" class="fa fa-lg fa-arrow-circle-down" style="margin-right:10px"></i>
@@ -70,29 +70,30 @@
                             <label for="cc">CC:</label>
                         </div>
                         <div class="col-md-4">
-                            <input id="cc" type="text" class="form-control" name="cc" value={{ $envoye->cc }}  />
+                            <input id="cc" type="text" class="form-control" name="cc" value="{{ $envoye->cc }}"  />
                         </div>
                         <div class="col-md-1">
                             <label for="cci">CCI:</label>
                         </div>
                         <div class="col-md-4">
-                            <input id="cci" type="text" class="form-control" name="cci" value={{ $envoye->cci }}  />
+                            <input id="cci" type="text" class="form-control" name="cci" value="{{ $envoye->cci }}"  />
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="sujet">sujet :</label>
-                    <input id="sujet" type="text" class="form-control" name="sujet" required value={{ $envoye->sujet }}/>
+                    <input id="sujet" type="text" class="form-control" name="sujet" required value="{{ $envoye->sujet }}"/>
                 </div>
                 <div class="form-group">
                     <label for="description">Description :</label>
-                    <input id="description" type="text" class="form-control" name="description" required value={{ $envoye->description }}/>
+                    <input id="description" type="text" class="form-control" name="description" required value="{{ $envoye->description }}" />
                 </div>
                 <div class="form-group ">
                     <label for="contenu">contenu:</label>
-                <div class="form-control" style="min-height:200px">
-                  <?php $contenu= $envoye['contenu'];echo $contenu;?>
+                <div class="form-control" style="overflow:scroll;min-height:200px">
+                  <?php $contenu= $envoye['contenu'];
+                  echo $contenu;?>
 
                 </div>
 
@@ -101,14 +102,13 @@
                 <?php use App\Attachement ;?>
 
 
-                @if ($envoye['nb_attach']  > 0)
-                    <?php
+                     <?php
                     echo '<br>Attachements :<br>';
 
                     $attachs = Attachement::get()->where('parent', '=', $envoye['id'] )->where('boite', '=', 1 );
+                   // echo json_encode($attachs);
                     ?>
 
-                @endif
 
                 @if (!empty($attachs) )
                     <?php $i=1; ?>
@@ -120,6 +120,10 @@
                         </div>
                     @endforeach
                 @endif
+
+
+
+
              </form>
 
         </div>

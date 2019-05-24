@@ -23,3 +23,4 @@ https://github.com/anhskohbo/no-captcha
 
 // generation document du template rtf: veuillez envoyer le fichier "WordTemplate.php" (enregistrer dans l'email) dans le repertoire "NajdaApp\vendor\novay\laravel-word-template\src"
 
+//array_push($ccimails,'medic.multiservices@topnet.tn' );

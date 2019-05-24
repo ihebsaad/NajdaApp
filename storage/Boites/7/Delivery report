@@ -1,0 +1,14 @@
+Reporting-MTA: dns; mo35.mail-out.ovh.net
+X-Postfix-Queue-ID: C0A30215F78
+X-Postfix-Sender: rfc822; faxnajdassist@najda-assistance.com
+Arrival-Date: Thu, 23 May 2019 17:06:17 +0200 (CEST)
+
+Final-Recipient: rfc822; saadih500@gmail.com
+Original-Recipient: rfc822;saadih500@gmail.com
+Action: failed
+Status: 5.1.1
+Remote-MTA: dns; gmail-smtp-in.l.google.com
+Diagnostic-Code: smtp; 550-5.1.1 The email account that you tried to reach does
+    not exist. Please try 550-5.1.1 double-checking the recipient's email
+    address for typos or 550-5.1.1 unnecessary spaces. Learn more at 550 5.1.1
+    https://support.google.com/mail/?p=NoSuchUser t9si20129602wrr.390 - gsmtp

@@ -89,7 +89,8 @@ class EnvoyesController extends Controller
 
         $envoye = new Envoye([
             'emetteur' => 'test@najda-assistance.com', //env('emailenvoi')
-            'destinataire' => trim ($request->get('destinataire')),
+            //'destinataire' => trim ($request->get('destinataire')),
+            'destinataire' => '',
             'sujet' => trim ($request->get('sujet')),
             'contenu'=> trim ($request->get('contenu')),
             'cc'=> trim ($request->get('cc')),
@@ -116,7 +117,8 @@ class EnvoyesController extends Controller
 
         $envoye = new Envoye([
             'emetteur' => 'test@najda-assistance.com', //env('emailenvoi')
-            'destinataire' => trim ($request->get('destinataire')),
+         //   'destinataire' => trim ($request->get('destinataire')),
+            'destinataire' => '',
             'contenu'=> trim ($request->get('contenu')),
             'cc'=> trim ($request->get('cc')),
           //  'cci'=> trim ($request->get('cci')),

@@ -8,13 +8,15 @@
 </div>
 <div class="form-group">
     <label for="sujet">sujet :</label>
-    <input id="sujet" type="text" class="form-control" name="sujet"  value={{ $entree->sujet }} />
+    <input style="overflow:scroll;" id="sujet" type="text" class="form-control" name="sujet"  value="<?php echo  ($entree->sujet);?>"  />
+
 </div>
 <div class="form-group">
     <label for="contenu">contenu:</label>
-    <div class="form-control" style="min-height:200px">
+    <div class="form-control" style="overflow:scroll;min-height:200px">
 
-    <?php $contenu= $entree['contenu'];echo $contenu;?>
+    <?php $contenu= $entree['contenu'];
+    echo ($contenu);  ?>
     </div>
 
 

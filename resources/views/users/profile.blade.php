@@ -31,25 +31,25 @@
                                 <tr>
                                     <td class="text-primary">Nom complet</td>
                                     <td><p class="user_name_max">
-                                            <input id="nom" onchange="changing(this)" type="text" class="form-control" name="name"  value={{ $user->name }} />
+                                            <input id="nom" onchange="changing(this)" type="text" class="form-control" name="name"  value="{{ $user->name }}" />
                                         </p></td>
                                 </tr>
                                 <tr>
                                     <td class="text-primary">Email</td>
-                                    <td> <input id="email" autocomplete="off" onchange="changing(this)" type="email" class="form-control" name="email"  id="email" value={{ $user->email }} />          </td>
+                                    <td> <input id="email" autocomplete="off" onchange="changing(this)" type="email" class="form-control" name="email"  id="email" value="{{ $user->email }}" />          </td>
                                 </tr>
                                 <tr>
                                     <td class="text-primary">Email Boite</td>
-                                    <td> <input id="boite" autocomplete="off" onchange="changing(this)"  type="email" class="form-control" name="boite" id="boite" value={{ $user->boite }} />                  </td>
+                                    <td> <input id="boite" autocomplete="off" onchange="changing(this)"  type="email" class="form-control" name="boite" id="boite" value="{{ $user->boite }}" />                  </td>
                                 </tr>
                                 <tr>
                                     <td class="text-primary">Mote de passe boite</td>
-                                    <td> <input id="passboite" autocomplete="off" onchange="changing(this)"  type="password" class="form-control" name="passboite"  id="passboite" value={{ $user->passboite }} />                                    </td>
+                                    <td> <input id="passboite" autocomplete="off" onchange="changing(this)"   type="password" class="form-control" name="passboite"  id="passboite" value="{{ $user->passboite }}" />                                    </td>
                                 </tr>
                                 @if($user->phone)
                                     <tr>
                                         <td class="text-primary">Tel</td>
-                                        <td>    <input id="tel" onchange="changing(this);"  type="text" class="form-control" name="tel"  id="tel" value={{ $user->phone }} />
+                                        <td>    <input id="tel" onchange="changing(this);"  type="text" class="form-control" name="tel"  id="tel" value="{{ $user->phone }}" />
                                         </td>
                                     </tr>
                                 @endif

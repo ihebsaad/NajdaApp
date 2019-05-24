@@ -373,16 +373,24 @@ class PrestatairesController extends Controller
         return url('/prestataires/view/'.$parent) ;
     }
 
-   /* public static function IdPrestByMail($mail)
-    {
-        $prest = Prestataire::where('id', $id)->
-        if (isset($prest[$champ])) {
-            return $prest[$champ] ;
+    public static function QualiteByEmail($email)
+    { $email=  trim($email) ;
+        $Email = Email::where('champ','=', $email)->first();
+        if (isset($Email['qualite'])) {
+            return $Email['qualite'] ;
         }else{return '';}
 
     }
-*/
 
+    public static function NomByEmail($email)
+    { $email=  trim($email) ;
+         $Email = Email::where('champ', '=', $email)->first();
+
+        if (isset($Email['nom'])) {
+            return $Email['nom'] ;
+        }else{return '';}
+
+    }
 
 
 

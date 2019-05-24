@@ -25,9 +25,9 @@ use App\Http\Controllers\TagsController;
         <div class="panel-heading" style="">
                     <div class="row">
                         <div class="col-sm-4 col-md-4 col-lg-6"style=" padding-left: 0px;color:black;font-weight: bold ">
-                            <h4 class="panel-title"> <label for="sujet" style="font-size: 15px;">Sujet :</label>  {{ $entree['sujet'] }}</h4>
+                            <h4 class="panel-title"> <label for="sujet" style="overflow:hidden;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet']; echo utf8_decode($sujet); ?></h4>
                         </div>
-                        <div class="col-sm-8 col-md-8 col-lg-6 style="padding-right: 0px;">
+                        <div class="col-sm-8 col-md-8 col-lg-6" style="padding-right: 0px;">
                             <div class="pull-right" style="margin-top: 0px;">
                                 @if (!empty($entree->dossier))
                                     <button class="btn btn-sm btn-default"><b>REF: {{ $entree['dossier']   }}</b></button>
@@ -99,13 +99,13 @@ use App\Http\Controllers\TagsController;
                     </ul>
                     <div id="myTabContent" class="tab-content" style="padding:10px;padding-top:20px;background: #ffffff">
                                         <div class="tab-pane fade active in" id="mailcorps" style="min-height: 350px;">
-                                            <p id="mailtext" style="line-height: 25px;"><?php  $content= $entree['contenu'] ; ?>
+                                            <p id="mailtext" style="overflow:scroll;line-height: 25px;"><?php  $content= $entree['contenu'] ; ?>
                                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
                                             <?php  $cont=  str_replace($search,$replace, $content); ?>
                                             <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
-                                            <?php  echo utf8_decode($cont); ?></p>
+                                            <?php  echo $cont; ?></p>
                                         </div>
                                         @if ($entree['nb_attach']  > 0)
                                           <?php

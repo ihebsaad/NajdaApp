@@ -31,7 +31,7 @@ class EntreesController extends Controller
     public function index()
     {
         //
-        $entrees = Entree::orderBy('created_at', 'desc')->where('statut','<','2')->paginate(10000000);
+        $entrees = Entree::orderBy('id', 'desc')->where('statut','<','2')->paginate(10000000);
         $dossiers = Dossier::all();
 
         return view('entrees.index',['dossiers' => $dossiers], compact('entrees'));
@@ -220,6 +220,7 @@ class EntreesController extends Controller
         }
         $filename=$entree->sujet;
         $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', '', $filename);
+        $name='REC - '.$name;
 
         // If you want to store the generated pdf to the server then you can use the store function
         $pdf->save($path.$id.'/'.$name.'.pdf');

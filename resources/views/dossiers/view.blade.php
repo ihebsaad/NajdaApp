@@ -2074,32 +2074,9 @@ $iduser=$CurrentUser->id;
 <script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
 
 <script>
-    /*
-    $(function () {
 
-    $('.itemName').select2({
-        filter: true,
-        language: {
-            noResults: function () {
-                return 'Pas de résultats';
-            }
-        }
 
-    });
 
-    $('#gouvcouv').select2({
-        filter: true,
-        language: {
-            noResults: function () {
-                return 'Pas de résultats';
-            }
-        }
-
-    });
-
-    }); // $ function
-
-*/
     function changing(elm) {
         var champ=elm.id;
 
@@ -2187,7 +2164,6 @@ $iduser=$CurrentUser->id;
 
                     //   alert('Added successfully');
                     window.location =data;
-
 
                 }
             });

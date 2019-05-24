@@ -290,7 +290,8 @@ class EmailController extends Controller
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval($oMessage->getSubject())  ;
+            $sujet=($oMessage->getSubject())  ;
+
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
           //  $from= $oMessage->getFrom()[0]->mail;
@@ -321,8 +322,8 @@ class EmailController extends Controller
 
                 $entree = new Entree([
                     'destinataire' => 'test@najda-assistance.com',
-                    'emetteur' => trim($from),
-                    'sujet' => trim($sujet),
+                    'emetteur' => ($from),
+                    'sujet' =>  ($sujet),
                     'contenu'=> utf8_encode($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -493,8 +494,8 @@ class EmailController extends Controller
 
                 $entree = new Entree([
                     'destinataire' => 'faxnajdassist@najda-assistance.com',
-                    'emetteur' => trim($from),
-                    'sujet' => trim($sujet),
+                    'emetteur' => ($from),
+                    'sujet' =>   $sujet ,
                     'contenu'=> utf8_encode($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -656,8 +657,10 @@ class EmailController extends Controller
 
                 $boite = new Boite([
 
-                    'emetteur' => trim($from),
-                    'sujet' => trim($sujet),
+
+                    'destinataire' =>  'Boite Perso',
+                    'emetteur' =>  ($from),
+                    'sujet' =>  ($sujet),
                     'contenu'=> utf8_encode($contenu) ,
                     'mailid'=>  $mailid,
                     'viewed'=>0,
@@ -786,7 +789,7 @@ class EmailController extends Controller
                 $entree = new Entree([
                     'destinataire' => 'envoifax@najda-assistance.com',
                     'emetteur' => trim($from),
-                    'sujet' => trim($sujet),
+                    'sujet' => utf8_encode($sujet),
                     'contenu'=> utf8_encode($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -1125,14 +1128,12 @@ class EmailController extends Controller
         return view('emails.envoimailbr',['attachements'=>$attachements,'envoye'=>$envoye,'doss'=>$id]);
     }
 
-
     public function envoifax($id)
     {
 
         $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
         $entrees =   Entree::where('dossier', $ref)->get();
         $envoyes =   Envoye::where('dossier', $ref)->get();
-
 
          $identr=array();
         $idenv=array();
@@ -1148,7 +1149,6 @@ class EmailController extends Controller
 
         }
 
-
         $attachements= DB::table('attachements')
             ->whereIn('entree_id',$identr )
             ->orWhereIn('envoye_id',$idenv )
@@ -1157,138 +1157,6 @@ class EmailController extends Controller
 
         return view('emails.envoifax',['attachements'=>$attachements,'doss'=>$id]);
     }
-
-
-
-    function sendfax (Request $request)
-    {
-
-         $request->validate([
-              'g-recaptcha-response' => 'required|captcha'
-          ]);
-
-        $doss = $request->get('dossier');
-
-         $nom = $request->get('nom');
-         $numero = $request->get('numero');
-      //  $contenu = $request->get('contenu');
-        $attachs = $request->get('attachs');
-
-         $cc='ihebsaad@gmail.com';
-       //  $cc='';
-        //  $to='ihebsaad@gmail.com';
-        $to='envoifax@najda-assistance.com';
-         $sujet='1234,Najda,najda,'.$nom.'@'.$numero.'';
-
-
-
-       $swiftTransport =  new \Swift_SmtpTransport( 'smtp.gmail.com', '587', 'tls');
-        $swiftTransport->setUsername('najdassist@gmail.com');
-        $swiftTransport->setPassword('nejibgyh9kkq');
-
-        $swiftMailer = new Swift_Mailer($swiftTransport);
-
-        Mail::setSwiftMailer($swiftMailer);
-
-
-        try{
-          Mail::send([], [], function ($message) use ($to,$sujet,$attachs,$doss,$cc) {
-            $message
-                 ->to($to)
-             //   ->cc($cc  ?: [])
-                ->subject($sujet)
-             //   ->setBody($contenu, 'text/html');
-            ->setBody('Fax Najda', 'text/html');
-
-            $count=0;
-
-/// attach here
-///
-
-            if(isset($attachs )) {
-
-                foreach($attachs as $attach) {
-                    $count++;
-                    $path=$this->PathattachById($attach);
-                    $fullpath=storage_path().$path;
-                    $path_parts = pathinfo($fullpath);
-                    $ext=  $path_parts['extension'];
-
-                    $name=basename($fullpath);
-                    $mime_content_type=mime_content_type ($fullpath);
-                    $message->attach($fullpath, array(
-                            'as' =>$name,
-                            'mime' => $mime_content_type)
-                    );
-
-                    // DB::table('attachements')->insert([
-
-
-                    $attachement = new Attachement([
-
-                        'type'=>$ext,'path' => $path, 'nom' => $name,'boite'=>1,'dossier'=>$doss
-                    ]);
-                    $attachement->save();
-
-
-                }
-            }
-
-
-            $urlapp=env('APP_URL');
-
-            if (App::environment('local')) {
-                // The environment is local
-                $urlapp='http://localhost/najdaapp';
-            }
-           // $urlsending=$urlapp.'/emails/envoifax/'.$doss;
-              $urlsending=$urlapp.'/envoyes';
-
-              if (Mail::failures()) {
-                //     echo ('<script> window.location.href = "http://localhost/najdaapp/emails/sending";</script>') ;
-                //    return redirect('http://localhost/najdaapp/emails/sending')->with('fail', ' Echec ! ');
-
-
-            }else{
-// save email sent
-
-                $par=Auth::id();
-                $envoye = new Envoye([
-                    'emetteur' => 'najdassist@gmail.com', //env('emailenvoi')
-                    'destinataire' => $to,
-                    'par'=> $par,
-                    'sujet'=> $sujet,
-                    'contenu'=> '',
-                    'attachements'=> $count,
-                    'statut'=> 1,
-                    'type'=> 'fax',
-                    'nb_attach'=> $count,
-                    // 'reception'=> date('d/m/Y H:i:s'),
-
-                ]);
-
-                $envoye->save();
-                $id=$envoye->id;
-               //// $this->export_pdf_send($id);
-
-                echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
-                return redirect($urlsending)->with('success', '  Envoyé ! ');
-
-
-            }
-
-
-          });
-
-} catch (Exception $ex) {
-    // Debug via $ex->getMessage();
-
-    return "We've got errors!";
-
-}
-
-    }// end send
-
 
     function send (Request $request)
     {
@@ -1318,6 +1186,7 @@ class EmailController extends Controller
             }
 
         //  array_push($ccimails,'ihebs001@gmail.com' );
+        // ajout de l'addrese de Mr Najib
         //  array_push($ccimails,'medic.multiservices@topnet.tn' );
 
        // $to = explode(',', $to);
@@ -1333,9 +1202,34 @@ class EmailController extends Controller
                 ->bcc($ccimails ?: [])
                 ->subject($sujet)
          ->setBody($contenu, 'text/html');
+                if(isset($to )) {
 
-                foreach ($to as $t)
-                {   $message->to($t ); }
+                    foreach ($to as $t) {
+                        $message->to($t);
+                     }
+               }
+               /********** add nom email  *****************************************************
+                PrestatairesController::NomByEmail( $mail)
+
+               $tos= implode("|",app('App\Http\Controllers\PrestatairesController')->NomByEmail( $to) .' < '.$to.' >');
+
+                *******************/
+               $tos='';
+               if (count($to)>1){
+
+                  // $tos= implode("|",$to .'');
+
+                   foreach ($to as $t2) {
+                       $tos.= app('App\Http\Controllers\PrestatairesController')->NomByEmail( $t2) .' ('.$t2.'); ';
+                   }
+
+
+               }else {
+                  // $tos =  $to[0];
+                 //  $tos =  $to[0];
+                   $tos.= app('App\Http\Controllers\PrestatairesController')->NomByEmail( $to[0]) .' ('.$to[0].'); ';
+
+               }
 
          $count=0;
 
@@ -1396,7 +1290,6 @@ class EmailController extends Controller
          }
 
 
-
      $urlapp=env('APP_URL');
 
     if (App::environment('local')) {
@@ -1408,16 +1301,18 @@ class EmailController extends Controller
                 $dossier= $this->RefDossierById($doss);////;
 
            $par=Auth::id();
-             //   $envoye
+           /// $tos=    implode( ", ", $to );
+
+                //   $envoye
            Envoye::where('id', $envoyeid)->update(array(
             //   $champ => $val
            //));
 
-         //  $envoye = new Envoye([
+                //  $envoye = new Envoye([
                'emetteur' => 'test@najda-assistance.com', //env('emailenvoi')
-               //     'destinataire' => (string)($to),
-                    'destinataire' =>'ihebtest',
-               'par'=> $par,
+                  'destinataire' => $tos,
+            //      'destinataire' =>'iheb test',
+                'par'=> $par,
                'sujet'=> $sujet,
                'contenu'=> $contenu,
                'nb_attach'=> $count,
@@ -1448,6 +1343,138 @@ class EmailController extends Controller
 }// end send
 
 
+
+
+    function sendfax (Request $request)
+    {
+
+                 $request->validate([
+                      'g-recaptcha-response' => 'required|captcha'
+                  ]);
+        
+        $doss = $request->get('dossier');
+
+        $nom = $request->get('nom');
+        $numero = $request->get('numero');
+        //  $contenu = $request->get('contenu');
+        $attachs = $request->get('attachs');
+
+        $cc='ihebsaad@gmail.com';
+        //  $cc='';
+        //  $to='ihebsaad@gmail.com';
+        $to='envoifax@najda-assistance.com';
+        $sujet='1234,Najda,najda,'.$nom.'@'.$numero.'';
+
+
+        $swiftTransport =  new \Swift_SmtpTransport( 'smtp.gmail.com', '587', 'tls');
+        $swiftTransport->setUsername('najdassist@gmail.com');
+        $swiftTransport->setPassword('nejibgyh9kkq');
+
+        $swiftMailer = new Swift_Mailer($swiftTransport);
+
+        Mail::setSwiftMailer($swiftMailer);
+
+
+        try{
+            Mail::send([], [], function ($message) use ($to,$sujet,$attachs,$doss,$cc,$numero) {
+                $message
+                    ->to($to)
+                    //   ->cc($cc  ?: [])
+                    ->subject($sujet)
+                    //   ->setBody($contenu, 'text/html');
+                    ->setBody('Fax Najda', 'text/html');
+
+                $count=0;
+
+/// attach here
+///
+
+                if(isset($attachs )) {
+
+                    foreach($attachs as $attach) {
+                        $count++;
+                        $path=$this->PathattachById($attach);
+                        $fullpath=storage_path().$path;
+                        $path_parts = pathinfo($fullpath);
+                        $ext=  $path_parts['extension'];
+
+                        $name=basename($fullpath);
+                        $mime_content_type=mime_content_type ($fullpath);
+                        $message->attach($fullpath, array(
+                                'as' =>$name,
+                                'mime' => $mime_content_type)
+                        );
+
+                        // DB::table('attachements')->insert([
+
+
+                        $attachement = new Attachement([
+
+                            'type'=>$ext,'path' => $path, 'nom' => $name,'boite'=>1,'dossier'=>$doss
+                        ]);
+                        $attachement->save();
+
+
+                    }
+                }
+
+
+                $urlapp=env('APP_URL');
+
+                if (App::environment('local')) {
+                    // The environment is local
+                    $urlapp='http://localhost/najdaapp';
+                }
+                // $urlsending=$urlapp.'/emails/envoifax/'.$doss;
+                $urlsending=$urlapp.'/envoyes';
+
+                if (Mail::failures()) {
+                    //     echo ('<script> window.location.href = "http://localhost/najdaapp/emails/sending";</script>') ;
+                    //    return redirect('http://localhost/najdaapp/emails/sending')->with('fail', ' Echec ! ');
+
+
+                }else{
+// save email sent
+
+                    $par=Auth::id();
+                    $envoye = new Envoye([
+                        'emetteur' => 'najdassist@gmail.com', //env('emailenvoi')
+                        'destinataire' => $numero .'-'.$doss,
+                        'par'=> $par,
+                        'sujet'=> 'Fax Najda',
+                        'contenu'=> '',
+                        'attachements'=> $count,
+                        'statut'=> 1,
+                        'type'=> 'fax',
+                        'nb_attach'=> $count,
+                        // 'reception'=> date('d/m/Y H:i:s'),
+
+                    ]);
+
+                    $envoye->save();
+                    $id=$envoye->id;
+                    //// $this->export_pdf_send($id);
+
+                    echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
+                    return redirect($urlsending)->with('success', '  Envoyé ! ');
+
+
+                }
+
+
+            });
+
+        } catch (Exception $ex) {
+            // Debug via $ex->getMessage();
+
+            return "We've got errors!";
+
+        }
+
+    }// end send
+
+
+
     public function export_pdf_send($id)
     {
         // Fetch all customers from database
@@ -1462,6 +1489,7 @@ class EmailController extends Controller
         }
          $filename=$envoye->description;
         $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+        $name='ENV - '.$name;
         // If you want to store the generated pdf to the server then you can use the store function
         $pdf->save($path.$id.'/'.$name.'.pdf');
         $path2='/Envoyes/'.$id.'/'.$name.'.pdf';
@@ -1475,36 +1503,8 @@ class EmailController extends Controller
 
     function test()
     {
-        $dossiers = Dossier::all();
 
 /*
-        $entree = new Entree([
-            'emetteur' => 'sms',
-            'sujet' => 'sms',
-            'contenu'=> 'sms content' ,
-          //  'reception'=> $date,
-          //  'nb_attach'=> $nbattachs,
-            'type'=> 'sms',
-           'mailid'=> rand(50, 30000),
-
-        ]);
-        $entree->save();
-*/
-
-        /*
-      if(\Gate::allows('isAdmin'))
-      {
-
-          return view('emails.test', ['dossiers' => $dossiers]);
-       }
-      else {
-          // redirect
-          return redirect('/')->with('success', 'droits insuffisants');
-
-
-      }*/
-
-
         // Your Account SID and Auth Token from twilio.com/console
         $sid = 'ACaa5ce5753047f8399d2d3226bfdc4eb7';
         $token = 'ba7e3af173bcd22f27a6ea248ec30be7';
@@ -1522,47 +1522,12 @@ class EmailController extends Controller
             )
         );
 
+*/
 
 
-        /*
-                // SENDING
-
-        // Your Account SID and Auth Token from twilio.com/console
-
-        //test cred
-                $sid = 'ACcd91fcfa5db064d6822d015be0c27a76';
-                $token = 'a03a42703b75a79cb1cd370bc8b00926';
-                // global test num  +15005550006
-
-                //live cred
-        $sid = 'ACa8d667427a2a2d4dfa58e23851804943';
-        $token = 'a0257ac989f3f41bc81cbc3bf22ec18f';
-        $client = new Client2($sid, $token);
-
-        // Use the client to do fun stuff like send text messages!
-        $client->messages->create(
-        // the number you'd like to send the message to
-            '+21650658586',
-            array(
-                // A Twilio phone number you purchased at twilio.com/console
-                'from' => '+13342316588',
-                // the body of the text message you'd like to send
-                'body' => 'Hey iheb! this is a test from twilio!'
-            )
-        );
-        */
 
 
-// Receive
-
-        /*
-        $response = new Twiml;
-        $response->message("The Robots are coming! Head for the hills!");
-        print $response;
-
-        */
-
-        return view('emails.test', ['dossiers' => $dossiers]);
+        return view('emails.test');
 
     }
 
@@ -1570,7 +1535,7 @@ class EmailController extends Controller
 
     function sendsms(Request $request)
     {
-        $to = trim($request->get('destinataire'));
+/*       $to = trim($request->get('destinataire'));
         $message = trim( $request->get('message'));
 
         // Your Account SID and Auth Token from twilio.com/console
@@ -1607,7 +1572,7 @@ class EmailController extends Controller
         ]);
 
         $envoye->save();
-
+*/
         return redirect('/emails/sms')->with('success', 'SMS Envoyé !');
 
     }
@@ -1626,7 +1591,7 @@ class EmailController extends Controller
 
     function sendwhatsapp(Request $request)
     {
-        $to = trim($request->get('destinataire'));
+/*        $to = trim($request->get('destinataire'));
         $message = trim( $request->get('message'));
 
         // Your Account SID and Auth Token from twilio.com/console
@@ -1657,7 +1622,7 @@ class EmailController extends Controller
         ]);
 
         $envoye->save();
-
+*/
         return redirect('/emails/whatsapp')->with('success', 'SMS Whatsapp Envoyé !');
 
     }

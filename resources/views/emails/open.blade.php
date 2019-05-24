@@ -9,7 +9,8 @@
 </div>
 <div class="form-group">
   <label for="sujet">sujet :</label>
-  {{ $oMessage->getSubject() }}
+  <?php $sujet= $oMessage->getSubject() ;
+  echo utf8_encode($sujet) ;?>
     </div>
     <div class="form-group">
         <label for="contenu">contenu:</label>

@@ -32,7 +32,7 @@
     @endif
 
             <!-- Content -->
-            <div class="panel panel-primary">
+            <div class="panel panel-primary"  style="overflow:hidden">
               <div class="panel-heading">
                                     <h4 id="kbspaneltitle" class="panel-title">  </h4>
                                     <span class="pull-right">

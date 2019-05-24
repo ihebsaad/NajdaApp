@@ -23,25 +23,25 @@
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
             <tr id="headtable">
-                <th style="width:30%">Emetteur</th>
                 <th style="width:20%">Date</th>
-                <th style="width:30%">Sujet</th>
-                <th style="width:20%">Type</th>
+                <th style="width:20%">Emetteur</th>
+                <th style="width:40%">Sujet</th>
+                <th style="width:10%">Type</th>
             </tr>
             <tr>
-                 <th>Emetteur</th>
-                <th>Date</th>
-                <th>Sujet</th>
-                <th>Type</th>
+                <th style="width:20%">Date</th>
+                <th style="width:20%">Emetteur</th>
+                <th style="width:40%">Sujet</th>
+                <th style="width:10%">Type</th>
             </tr>
             </thead>
             <tbody>
             @foreach($entrees as $entree)
                 <tr>
-                     <td>{{$entree->emetteur}}</td>
-                    <td><?php echo  date('d/m/Y', strtotime($entree->reception)) ; ?></td>
-                    <td><a href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a></td>
-                    <td>{{$entree->type}}</td>
+                    <td style="width:20%"><?php echo  date('d/m/Y', strtotime($entree['reception'])) ; ?></td>
+                    <td style="width:20%"><?php echo $entree['emetteur']; ?></td>
+                    <td style="width:40%"><a href="{{action('EntreesController@show', $entree['id'])}}" ><?php echo $entree['sujet'] ; ?></a></td>
+                    <td style="width:10%"><?php echo $entree['type']; ?></td>
                 </tr>
             @endforeach
             </tbody>
@@ -82,6 +82,7 @@
             } );
 
             var table = $('#mytable').DataTable({
+                "aaSorting": [],
                 orderCellsTop: true,
                 dom: 'Bflrtip',
                 responsive:true,

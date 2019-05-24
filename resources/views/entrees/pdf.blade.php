@@ -2292,7 +2292,9 @@
 
 </style>
 
-
+<div class="row" >
+    <small> Archive des emails Najda Assistance - [Réception] </small>
+</div>
 <div class="row" >
     <div class="col-lg-2 " >
     </div>
@@ -2318,15 +2320,7 @@
 
         <div id="emailhead" class="panel-collapse"  style="   ">
             <div class="panel-body">
-                <div class="row" style="padding-bottom:8px">
 
-                    <div class="col-sm-1 col-md-1 col-lg-1" style="padding-left: 0px;;">
-                        <span><b> Sujet:</b></span>
-                    </div>
-                    <div class="col-sm-11 col-md-11 col-lg-11"style=" padding-left: 0px;color:black; ">
-                        <div   style="padding-left:5px;width:100%;height:25px;border:1px solid grey" ><?php echo $entree['sujet'] ; ?></div>
-                    </div>
-                </div>
                 <div class="row" style="padding-bottom:8px">
                     <div class="col-sm-1 col-md-1 col-lg-1" style=" padding-left: 0px; ">
                         <span><b>DE: </b></span>
@@ -2340,15 +2334,23 @@
                         <span><b>A: </b></span>
                     </div>
                     <div class="col-sm-11 col-md-11 col-lg-11 " style="padding-left: 0px;">
-                        <div  style="padding-left:5px;width:100%;height:25px;border:1px solid grey" ><?php echo $entree['destinataire']  ?></div>
+                        <div  style="overflow:hidden;padding-left:5px;width:100%;height:45px;border:1px solid grey" ><?php echo $entree['destinataire']  ?></div>
                     </div>
                 </div>
+                <div class="row" style="padding-bottom:8px">
 
+                    <div class="col-sm-1 col-md-1 col-lg-1" style="padding-left: 0px;;">
+                        <span><b> Sujet:</b></span>
+                    </div>
+                    <div class="col-sm-11 col-md-11 col-lg-11"style=" padding-left: 0px;color:black; ">
+                        <div   style="overflow:hidden;padding-left:5px;width:100%;height:45px;border:1px solid grey" ><?php echo utf8_encode( $entree['sujet'] ); ?></div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div style="border:1px solid #d6eef7; padding:20px 100px 20px 100px; min-height: 400px!important;"> <?php  $content= utf8_decode($entree['contenu']) ;
-            echo $content ;       ?>
+        <div   style="overflow:hidden;border:1px solid #d6eef7; padding:20px 20px 20px 20px; min-height: 400px!important;"> <?php  $content= $entree['contenu'] ;
+            echo utf8_encode($content) ;       ?>
         </div>
 
        <?php use App\Attachement ;?>
@@ -2378,10 +2380,5 @@
 
 
 
-
-
 </div>
-<style>
 
-
-    </style>

@@ -71,20 +71,20 @@
                             <label for="cc">CC:</label>
                         </div>
                         <div class="col-md-4">
-                            <input id="cc" type="text" class="form-control" name="cc" value={{ $envoye->cc }}  />
+                            <input id="cc" type="text" class="form-control" name="cc" value="{{ $envoye->cc }}"  />
                         </div>
                         <div class="col-md-1">
                             <label for="cci">CCI:</label>
                         </div>
                         <div class="col-md-4">
-                            <input id="cci" type="text" class="form-control" name="cci" value={{ $envoye->cci }}  />
+                            <input id="cci" type="text" class="form-control" name="cci" value="{{ $envoye->cci }}"  />
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="sujet">sujet :</label>
-                    <input id="sujet" type="text" class="form-control" name="sujet" required value={{ $envoye->sujet }}/>
+                    <input id="sujet" type="text" class="form-control" name="sujet" required value="{{ $envoye->sujet }}" />
                 </div>
                 <div class="form-group ">
                     <label for="contenu">contenu:</label>

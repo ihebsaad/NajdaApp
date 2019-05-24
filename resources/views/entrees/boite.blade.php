@@ -1,4 +1,4 @@
-
+﻿
 @extends('layouts.mainlayout')
 {{-- Page title --}}
 @section('title')
@@ -87,10 +87,8 @@ $envoyeC = Envoye::get();
         <div class="col-lg-9 ">
             <div class="row">
                 <div class="col-md-6"><H2> Boîte de réception</H2></div>
-                <div class="col-md-2"><a data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  style="float:right;margin-right:20px;margin-bottom:25px;padding:3px 3px 3px 3px;border:1px solid #4fc1e9;" href="{{action('EmailController@whatsapp')}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un Message Whatsapp"  class="fab fa-fw fa-whatsapp fa-2x"></span></a><br></div>
-                <div class="col-md-2"><a data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  style="float:right;margin-right:20px;margin-bottom:25px;padding:3px 3px 3px 3px;border:1px solid #4fc1e9;" href="{{action('EmailController@sms')}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un SMS"  class="fa fa-fw fa-sms fa-2x"></span></a><br></div>
-                <div class="col-md-2"><a data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" style="float:right;margin-right:20px;margin-bottom:25px;padding:3px 3px 3px 3px;border:1px solid #4fc1e9;" href="{{action('EmailController@sending')}}"><span role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer un email"  class="fa fa-fw fa-envelope-open fa-2x"></span></a>
-                </div>
+
+
             </div>
      <div class="uper">
 
@@ -109,7 +107,7 @@ $envoyeC = Envoye::get();
                       <div class="media-body pl-3">
                           <div class="subject"><?php if($entree->type=="email") {?><i class="fa  fa-envelope"></i><?php }?><?php if($entree->type=="sms") {?><i class="fa fa-lg fa-sms"></i><?php }?><?php if($entree->type=="whatsapp") {?><i class="fa-lg fab fa-whatsapp"></i><?php }?>
                               <?php if($entree->type=="tel") {?><i class="fa fa-lg fa-phone-square"></i><?php }?><?php if($entree->type=="fax") {?><i class="fa fa-lg fa-fax"></i><?php }?><?php if($entree->type=="rendu") {?><i class="fa fa-lg fa-file-sound-o"></i><?php }?>
-                              <a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:16px;"' ;} ?>  href="{{action('EntreesController@show', $entree['id'])}}" >{{$entree->sujet}}</a><small style="margin-top:10px;">{{$entree->emetteur}}</small></div>
+                              <a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:16px;"' ;} ?>  href="{{action('EntreesController@show', $entree['id'])}}" ><?php echo  ($entree->sujet); ?></a><small style="margin-top:10px;">{{$entree->emetteur}}</small></div>
                         <div class="stats">
                             <div class="row">
                                 <div class="col-sm-8 col-md-8 col-lg-8">

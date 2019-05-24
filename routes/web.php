@@ -111,7 +111,7 @@ Route::get('/boites/show/{id}', 'BoitesController@show');
 //Route::resource('/envoyes',  'EnvoyesController');
 Route::get('/envoyes', array('as' => 'envoyes','uses' => 'EnvoyesController@index'));
 Route::post('/envoyes/saving','EnvoyesController@saving')->name('envoyes.saving');
-Route::post('/envoyes/savingBR','EnvoyesController@savingBR')->name('envoyes.savingBR');
+Route::post('/envoyes/savingbr','EnvoyesController@savingbr')->name('envoyes.savingbr');
 Route::post('/envoyes/updatingbr','EnvoyesController@updatingbr')->name('envoyes.updatingbr');
 Route::post('/envoyes/updatingbr','EnvoyesController@updatingbr')->name('envoyes.updatingbr');
 Route::get('/envoyes/view/{id}', 'EnvoyesController@view');
