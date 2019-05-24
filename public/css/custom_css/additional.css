@@ -2,6 +2,10 @@
   background-color:#ffd051!important;
   color:red;
 }
+.notifcourant {
+  background-color:#fdba05!important;
+  color:#bd0000;
+}
 section#timeline article div.inner p {
     padding: 15px;
     margin: 0;

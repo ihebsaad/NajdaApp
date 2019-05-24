@@ -13,7 +13,7 @@
 
      <div class="col-md-6">
         <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
-        <b>Assigné à:</b> 
+        <b>Affecté à:</b> 
         <?php 
         $agentname = User::where('id',$dossier->affecte)->first();
         if ((Gate::check('isAdmin') || Gate::check('isSupervisor')) && !empty ($agentname))
@@ -23,7 +23,14 @@
             { echo '</a>';}
 
         ?>
-        <?php } ?>
+        <?php }
+        else
+        {
+            if ((Gate::check('isAdmin') || Gate::check('isSupervisor')))
+            {echo '<a href="#" data-toggle="modal" data-target="#attrmodal">Non affecté</a>';}
+            else
+            {echo '<b>Non affecté</b>';} 
+        } ?>
     </div>
     <div class="col-md-6" style="text-align: right;padding-right: 35px">
         <div class="page-toolbar">
@@ -2015,13 +2022,13 @@ $iduser=$CurrentUser->id;
         </div>
     </div>
 </div>
-<?php if ((Gate::check('isAdmin') || Gate::check('isSupervisor')) && !empty ($agentname)) { ?>
+<?php if ((Gate::check('isAdmin') || Gate::check('isSupervisor'))) { ?>
 <!-- Modal attribution dossier-->
 <div class="modal fade" id="attrmodal" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModal2">Attribution dossier</h5>
+                <h5 class="modal-title" id="exampleModal2">Affectation dossier</h5>
 
             </div>
             <div class="modal-body">
@@ -2029,7 +2036,7 @@ $iduser=$CurrentUser->id;
 
 
                     <div class="form-group">
-
+                        
                         <form  method="post" action="{{ route('dossiers.attribution') }}">
                             {{ csrf_field() }}
                             <input id="dossierid" name="dossierid" type="hidden" value="{{ $dossier->id}}">
@@ -2040,14 +2047,20 @@ $iduser=$CurrentUser->id;
                                         <select id="agent" name="agent" class="form-control select2" style="width: 230px">
                                             <option value="Select">Selectionner</option>
                                             <?php $agents = User::get(); ?>
-                                            @foreach ($agents as $agt)
-                                            @if ($agentname["id"] == $agt["id"])
-                                                <option value={{ $agt["id"] }} selected >{{ $agt["name"] }}</option>
-                                            @else
-                                                <option value={{ $agt["id"] }} >{{ $agt["name"] }}</option>
-                                            @endif
-                                            @endforeach
+                                           
+                                                @foreach ($agents as $agt)
+                                                <?php if (!empty ($agentname)) { ?>
+                                                @if ($agentname["id"] == $agt["id"])
+                                                    <option value={{ $agt["id"] }} selected >{{ $agt["name"] }}</option>
+                                                @else
+                                                    <option value={{ $agt["id"] }} >{{ $agt["name"] }}</option>
+                                                @endif
                                                 
+                                                <?php }
+                                                else
+                                                      {  echo '<option value='.$agt["id"] .' >'.$agt["name"].'</option>';}
+                                                ?>
+                                                @endforeach    
                                         </select>
                                     </div>
                                 </div>
@@ -2060,7 +2073,7 @@ $iduser=$CurrentUser->id;
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="submit" id="attribdoss" class="btn btn-primary">Attribuer</button>
+                <button type="submit" id="attribdoss" class="btn btn-primary">Affecter</button>
             </div>
             </form>
         </div>

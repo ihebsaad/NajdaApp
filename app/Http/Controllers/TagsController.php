@@ -100,9 +100,9 @@ class TagsController extends Controller
                     'abbrev' => $abbrev,
                     'titre' => $titre,
                     'entree' => $identree,
-                    'information' => $request->get('information'),
                     'contenu' => $request->get('contenu'),
-                    'montant' => $request->get('montant')
+                    'montant' => $request->get('montant'),
+                    'devise' => $request->get('devise')
                 ]);
                 if ($tag->save())
                 { 
