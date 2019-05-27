@@ -174,7 +174,16 @@ if (isset($dossier))
               $('html, #notificationstab').animate({
                scrollTop: $("#prt_{{ $dossier['reference_medic']}}").offset().top
               }, 1000);
-              
+              <?php
+                if (isset($entree)) {
+              ?>
+              // highlight notification courante
+              if ($("li#{{ $entree['id']}}").length > 0) { 
+               $("li#{{ $entree['id']}}").addClass('dossiercourant');
+              }
+              <?php
+               } 
+              ?>
             }
           });
 </script>
