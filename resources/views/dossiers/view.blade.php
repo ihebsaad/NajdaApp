@@ -101,7 +101,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#tab5" data-toggle="tab">
-                                <i class="fas  fa-lg fa-envelope"></i>  Emails
+                                <i class="fas  fa-lg fa-cog"></i>  Autres
                             </a>
                         </li>
                         <li class="nav-item">
@@ -825,288 +825,7 @@
                     </div>
 
 
-
-                    <!--
-                                    <div class="tab-pane" id="tab_prestations">
-                                        <div class="row">
-                                            <div class="col-md-12">
-
-                                                <div class="portlet light">
-                                                    <div class="portlet-title">
-                                                        <div class="caption">
-                                                            <i class="icon-list"></i>
-                                                            <span class="caption-subject bold uppercase"> Liste des prestations</span>
-                                                        </div>
-                                                        <div class="actions">
-                                                            <a href="javascript:;" class="btn btn-circle btn-default" id="addPrestation"><i class="fa fa-plus"></i> Ajouter </a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="portlet-body">
-                                                        <div class="table-toolbar">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="btn-group">
-
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                        <div id="pres_ajax_wrapper" class="dataTables_wrapper no-footer"><div class="row"><div class="col-md-12 align-right"><div class="DTTT btn-group"><a class="btn btn-default DTTT_button_print" id="ToolTables_pres_ajax_3" title="View print view"><span>Print</span></a></div></div></div><div class="row"><div class="col-md-6 col-sm-12"><div class="dataTables_length" id="pres_ajax_length"><label>Afficher <select name="pres_ajax_length" aria-controls="pres_ajax" class="form-control input-xsmall input-inline"><option value="50">50</option><option value="-1">All</option></select> éléments</label></div></div><div class="col-md-6 col-sm-12"><div id="pres_ajax_filter" class="dataTables_filter"><label>Rechercher&nbsp;:<input type="search" class="form-control input-small input-inline" placeholder="" aria-controls="pres_ajax"></label></div></div></div><div class="table-scrollable"><table class="table table-striped table-bordered table-hover dataTable no-footer" id="pres_ajax" role="grid" aria-describedby="pres_ajax_info" style="width: 100%;">
-                                                            <thead>
-                                                            <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="pres_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Type de prestation
-                                                                : activer pour trier la colonne par ordre croissant" aria-sort="ascending" style="width: 0px;">
-                                                                    Type de prestation
-                                                                </th><th class="sorting" tabindex="0" aria-controls="pres_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Prestataire
-                                                                : activer pour trier la colonne par ordre croissant" style="width: 0px;">
-                                                                    Prestataire
-                                                                </th><th class="sorting" tabindex="0" aria-controls="pres_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Prix
-                                                                : activer pour trier la colonne par ordre croissant" style="width: 0px;">
-                                                                    Prix
-                                                                </th><th class="sorting" tabindex="0" aria-controls="pres_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Parvenue
-                                                                : activer pour trier la colonne par ordre croissant" style="width: 0px;">
-                                                                    Parvenue
-                                                                </th><th class="sorting" tabindex="0" aria-controls="pres_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Facturée au client
-                                                                : activer pour trier la colonne par ordre croissant" style="width: 0px;">
-                                                                    Facturée au client
-                                                                </th><th class="sorting" tabindex="0" aria-controls="pres_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Actions
-                                                                : activer pour trier la colonne par ordre croissant" style="width: 0px;">
-                                                                    Actions
-                                                                </th></tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                            <tr role="row" class="odd"><td class="sorting_1"><center>Ambulances</center></td><td><center>Medic' Multiservices</center></td><td><center>29d (75% du tarif) déplacement</center></td><td><center><i class="font-red fa fa-times"></i></center></td><td><center><i class="font-green fa fa-check"></i></center></td><td><center><div class="btn-group"><center>
-          <a data-toggle="tooltip" data-original-title="Editer" data-idpres="67959" class="update_link_pres yellow filter-submit margin-bottom"><i class="fa fa-pencil font-yellow-crusta"></i></a>&nbsp;&nbsp;
-          <a data-toggle="tooltip" data-original-title="Annuler" data-idpres="67959" class="delete_link_pres red filter-submit margin-bottom"><i class="fa fa-trash font-red-thunderbird"></i></a>
-          </center></div></center></td></tr></tbody>
-                                                        </table></div><div class="row"><div class="col-md-5 col-sm-12"><div class="dataTables_info" id="pres_ajax_info" role="status" aria-live="polite">Affichage de l'élément 1 à 1 sur 1 éléments</div></div><div class="col-md-7 col-sm-12"><div class="dataTables_paginate paging_simple_numbers" id="pres_ajax_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="pres_ajax" tabindex="0" id="pres_ajax_previous"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#">Précédent</a></li><li class="paginate_button active" aria-controls="pres_ajax" tabindex="0"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#">1</a></li><li class="paginate_button next disabled" aria-controls="pres_ajax" tabindex="0" id="pres_ajax_next"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#">Suivant</a></li></ul></div></div></div></div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="tab_exchange">
-                                        <div class="mt-timeline-2">
-                                            <div class="mt-timeline-line border-grey-steel" style="border-color: #e9edef!important;z-index:0 !important"></div>
-                                            <ul class="mt-container" id="ul_timeline"></ul>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="tab_checklists">
-                                        <h3 class="col-md-10">Checklists</h3>
-                                        <div class="actions col-md-2 text-right">
-                                            <div class="btn-group">
-                                                <a class="add_checklist btn btn-icon-only btn-circle green">
-                                                    <i class="fa fa-plus"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        &nbsp;
-
-                                        <hr>
-                                        <div class="col-md-12">
-                                                                                </div>
-
-                                    </div>
-
-
-                                    <div class="tab-pane" id="tab_rappels">
-                                        <div class="row">
-                                            <div class="col-md-12">
-
-                                                <div class="portlet light">
-                                                    <div class="portlet-title">
-                                                        <div class="caption">
-                                                            <i class="fa fa-bell-o"></i><span class="caption-subject bold uppercase"> Liste Rappels</span>
-                                                        </div>
-                                                        <div class="tools">
-                                                            <button id="add_reminder" data-dossier_ide="37301" class="add_reminder btn btn-circle btn-default"><i class="fa fa-plus"></i> Rappel</button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="portlet-body">
-                                                        <div class="table-toolbar">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="btn-group">
-
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                        <div id="table_reminders_wrapper" class="dataTables_wrapper no-footer"><div class="row"><div class="col-md-12"><div class="DTTT btn-group"><a class="btn btn-default DTTT_button_print" id="ToolTables_table_reminders_3" title="View print view"><span>Print</span></a></div></div></div><div class="row"><div class="col-md-6 col-sm-12"><div class="dataTables_length" id="table_reminders_length"><label>Afficher <select name="table_reminders_length" aria-controls="table_reminders" class="form-control input-xsmall input-inline"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="-1">All</option></select> éléments</label></div></div><div class="col-md-6 col-sm-12"><div id="table_reminders_filter" class="dataTables_filter"><label>Rechercher&nbsp;:<input type="search" class="form-control input-small input-inline" placeholder="" aria-controls="table_reminders"></label></div></div></div><div class="table-scrollable"><table class="table table-striped table-hover dataTable no-footer" id="table_reminders" role="grid" aria-describedby="table_reminders_info" style="width: 100%;">
-                                                            <thead>
-                                                            <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="table_reminders" rowspan="1" colspan="1" aria-label="
-                                                                    Rappel
-                                                                : activer pour trier la colonne par ordre croissant" aria-sort="ascending" style="width: 0px;">
-                                                                    Rappel
-                                                                </th><th class="sorting" tabindex="0" aria-controls="table_reminders" rowspan="1" colspan="1" aria-label="
-                                                                    Dossier
-                                                                : activer pour trier la colonne par ordre croissant" style="width: 0px;">
-                                                                    <center>Dossier</center>
-                                                                </th><th class="sorting" tabindex="0" aria-controls="table_reminders" rowspan="1" colspan="1" aria-label="
-                                                                    Degré d&#39;urgence
-                                                                : activer pour trier la colonne par ordre croissant" style="width: 0px;">
-                                                                    <center>Degré d'urgence</center>
-                                                                </th><th class="sorting" tabindex="0" aria-controls="table_reminders" rowspan="1" colspan="1" aria-label="
-                                                                    Statut
-                                                                : activer pour trier la colonne par ordre croissant" style="width: 0px;">
-                                                                    <center>Statut</center>
-                                                                </th><th class="sorting" tabindex="0" aria-controls="table_reminders" rowspan="1" colspan="1" aria-label="
-                                                                    Heure Rappel
-                                                                : activer pour trier la colonne par ordre croissant" style="width: 0px;">
-                                                                    <center>Heure Rappel</center>
-                                                                </th><th class="sorting" tabindex="0" aria-controls="table_reminders" rowspan="1" colspan="1" aria-label="
-                                                                    Crée Par
-                                                                : activer pour trier la colonne par ordre croissant" style="width: 0px;">
-                                                                    <center>Crée Par</center>
-                                                                </th><th class="sorting" tabindex="0" aria-controls="table_reminders" rowspan="1" colspan="1" aria-label="
-                                                                    Annulé
-                                                                : activer pour trier la colonne par ordre croissant" style="width: 0px;">
-                                                                    <center>Annulé</center>
-                                                                </th><th class="sorting" tabindex="0" aria-controls="table_reminders" rowspan="1" colspan="1" aria-label="
-                                                                    Actions
-                                                                : activer pour trier la colonne par ordre croissant" style="width: 0px;">
-                                                                    <center>Actions</center>
-                                                                </th></tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                            <tr class="odd"><td valign="top" colspan="8" class="dataTables_empty">Aucune donnée disponible dans le tableau</td></tr></tbody>
-                                                        </table></div><div class="row"><div class="col-md-5 col-sm-12"><div class="dataTables_info" id="table_reminders_info" role="status" aria-live="polite">Affichage de l'élément 0 à 0 sur 0 élément</div></div><div class="col-md-7 col-sm-12"><div class="dataTables_paginate paging_simple_numbers" id="table_reminders_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="table_reminders" tabindex="0" id="table_reminders_previous"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#">Précédent</a></li><li class="paginate_button next disabled" aria-controls="table_reminders" tabindex="0" id="table_reminders_next"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#">Suivant</a></li></ul></div></div></div></div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="tab_comptesrendus">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="portlet light">
-                                                    <div class="portlet-title">
-                                                        <div class="caption">
-                                                            <i class="icon-list"></i>
-                                                            <span class="caption-subject bold uppercase"> Liste des comptes rendus</span>
-                                                        </div>
-                                                        <div class="actions">
-                                                            <a href="javascript:;" class="btn btn-circle btn-default" id="addCompteRendu"><i class="fa fa-plus"></i> Ajouter </a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="portlet-body">
-                                                        <div class="table-toolbar">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="btn-group">
-
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                        <div id="cr_ajax_wrapper" class="dataTables_wrapper no-footer"><div class="row"><div class="col-md-6 col-sm-6"><div class="dataTables_length" id="cr_ajax_length"><label>Afficher <select name="cr_ajax_length" aria-controls="cr_ajax" class="form-control input-xsmall input-inline"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> enregistrements</label></div></div><div class="col-md-6 col-sm-6"><div id="cr_ajax_filter" class="dataTables_filter"><label>Rechercher&nbsp;:<input type="search" class="form-control input-small input-inline" placeholder="" aria-controls="cr_ajax"></label></div></div></div><div class="table-scrollable"><table class="table table-striped table-bordered table-hover dataTable no-footer" id="cr_ajax" role="grid" aria-describedby="cr_ajax_info" style="width: 100%;">
-                                                            <thead>
-                                                            <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="cr_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Date &amp;amp; Heure
-                                                                : activer pour trier la colonne par ordre croissant" aria-sort="ascending">
-                                                                    Date &amp; Heure
-                                                                </th><th class="sorting" tabindex="0" aria-controls="cr_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Interlocuteur
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Interlocuteur
-                                                                </th><th class="sorting" tabindex="0" aria-controls="cr_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Signé par
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Signé par
-                                                                </th><th class="sorting" tabindex="0" aria-controls="cr_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Compte rendu
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Compte rendu
-                                                                </th><th class="sorting" tabindex="0" aria-controls="cr_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Média
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Média
-                                                                </th></tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                            <tr class="odd"><td valign="top" colspan="5" class="dataTables_empty">Aucune donnée disponible dans le tableau</td></tr></tbody>
-                                                        </table></div><div class="row"><div class="col-md-5 col-sm-5"><div class="dataTables_info" id="cr_ajax_info" role="status" aria-live="polite">Affichage de l'élement 0 à 0 sur 0 éléments</div></div><div class="col-md-7 col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="cr_ajax_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="cr_ajax" tabindex="0" id="cr_ajax_previous"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-left"></i></a></li><li class="paginate_button next disabled" aria-controls="cr_ajax" tabindex="0" id="cr_ajax_next"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-right"></i></a></li></ul></div></div></div></div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="tab_attachments">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="portlet light">
-                                                    <div class="portlet-title">
-                                                        <div class="caption">
-                                                            <i class="icon-list"></i>
-                                                            <span class="caption-subject bold uppercase"> Liste des pièces jointes</span>
-                                                        </div>
-                                                        <div class="actions">
-                                                            <a href="javascript:;" class="btn btn-circle btn-default" id="addAttachment"><i class="fa fa-plus"></i> Ajouter </a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="portlet-body">
-                                                        <div class="table-toolbar">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="btn-group">
-
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                        <div id="attach_ajax_wrapper" class="dataTables_wrapper no-footer"><div class="row"><div class="col-md-6 col-sm-6"><div class="dataTables_length" id="attach_ajax_length"><label>Afficher <select name="attach_ajax_length" aria-controls="attach_ajax" class="form-control input-xsmall input-inline"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> enregistrements</label></div></div><div class="col-md-6 col-sm-6"><div id="attach_ajax_filter" class="dataTables_filter"><label>Rechercher&nbsp;:<input type="search" class="form-control input-small input-inline" placeholder="" aria-controls="attach_ajax"></label></div></div></div><div class="table-scrollable"><table class="table table-striped table-bordered table-hover dataTable no-footer" id="attach_ajax" role="grid" aria-describedby="attach_ajax_info" style="width: 100%;">
-                                                            <thead>
-                                                            <tr role="row"><th class="sorting_desc" tabindex="0" aria-controls="attach_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Date &amp;amp; Heure
-                                                                : activer pour trier la colonne par ordre croissant" aria-sort="descending">
-                                                                    Date &amp; Heure
-                                                                </th><th class="sorting" tabindex="0" aria-controls="attach_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Description
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Description
-                                                                </th><th class="sorting" tabindex="0" aria-controls="attach_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Titre
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Titre
-                                                                </th><th class="sorting" tabindex="0" aria-controls="attach_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Média
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Média
-                                                                </th><th class="sorting" tabindex="0" aria-controls="attach_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Type
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Type
-                                                                </th><th class="sorting" tabindex="0" aria-controls="attach_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Actions
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Actions
-                                                                </th></tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                            <tr role="row" class="odd"><td class="sorting_1">2019-03-28 11:58:32</td><td>ODM Medic </td><td> <a target="_blank" href="http://197.14.53.86:10080/medic/assets/uploads/odm_medic_20190328_115829.pdf">odm_medic_20190328_115829.pdf</a></td><td>Mail</td><td>Envoyé</td><td><div class="btn-group"><center><a data-idattach="736495" class="update_link_attach yellow filter-submit margin-bottom"><i class="fa fa-pencil font-yellow"></i></a>&nbsp;&nbsp;<a data-idattach="736495" class="delete_link_attach red filter-submit margin-bottom"><i class="fa fa-trash font-red-thunderbird"></i></a></center></div></td></tr></tbody>
-                                                        </table></div><div class="row"><div class="col-md-5 col-sm-5"><div class="dataTables_info" id="attach_ajax_info" role="status" aria-live="polite">Affichage de l'élement 1 à 1 sur 1 éléments</div></div><div class="col-md-7 col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="attach_ajax_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="attach_ajax" tabindex="0" id="attach_ajax_previous"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-left"></i></a></li><li class="paginate_button active" aria-controls="attach_ajax" tabindex="0"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#">1</a></li><li class="paginate_button next disabled" aria-controls="attach_ajax" tabindex="0" id="attach_ajax_next"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-right"></i></a></li></ul></div></div></div></div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
+ <!--
                                     <div class="tab-pane" id="tab_transmedic">
                                         <div class="row">
                                             <div class="col-md-12">
@@ -1459,7 +1178,7 @@
                                     <?php }?>
                                 </span>
                                     <h2 style="font-size: 16px"><?php echo $communin['sujet']; ?></h2>
-                                    <p >
+                                    <p class="overme">
 
                                         <?php if ($communin['boite']==0)
                                         {  echo '<span class="commsujet" style="font-size:12px"><B>Emetteur: </B>'. $communin['emetteur'].'</span>';
@@ -1691,8 +1410,8 @@
                         <tr>
 
                             <td style="width:15%;"><small><?php echo $attach->created_at;?></small></td>
-                            <td style="width:30%;"><small><?php /* if ($attach->dossier!=null) {echo 'Fichier externe';}else{*/ echo $attach->nom; /*}*/ ?></small></td>
-                            <td style="width:40%;"><small><?php  echo $attach->description;   ?></small></td>
+                            <td  class="overme" style="width:30%;"><small><?php /* if ($attach->dossier!=null) {echo 'Fichier externe';}else{*/ echo $attach->nom; /*}*/ ?></small></td>
+                            <td class="overme" style="width:40%;"><small><?php  echo $attach->description;   ?></small></td>
 
                             <td style="width:5%;"><small><?php
                                     $type= $attach->type;
@@ -1818,7 +1537,6 @@ $iduser=$CurrentUser->id;
                 <div class="card-body">
 
 
-
                     <div class="form-group">
                         {{ csrf_field() }}
 
@@ -1851,6 +1569,13 @@ $iduser=$CurrentUser->id;
                                     </select>
                                     </div>
                                 </div>
+
+                            <div class="form-group">
+                                <label class="control-label">Date de prestation <span class="required" aria-required="true"> * </span></label>
+                                <input value='<?php echo date('d/m/Y'); ?>' class="form-control datepicker-default" name="pres_date" id="pres_date" data-required="1" required="" aria-required="true">
+                            </div>
+
+<!--
                             <div class="form-group">
                                 <label class="control-label">Prestataire</label>
                                 <input type="hidden" name="pres_id" id="pres_id" data-required="1" required="" aria-required="true" value="53">
@@ -1883,13 +1608,89 @@ $iduser=$CurrentUser->id;
                                 </div>
                             </div>
 
+---->
+
+                            <div id="myCarousel" class="carousel slide">
+
+                                <div class="carousel-inner">
+                                    <div class="item active">
+                                        <div class="col-md-12" style="" id="autoPressDiv">
+                                            <div class="well">
+                                                <address id="autoPressFound">
+                                                    <strong id="autoPresName">Clinique 1</strong><br>
+                                                    <i class="fa fa-envelope"></i> <span id="autoPresAddress"></span><br>
+                                                    <i class="fa fa-phone"></i> <span id="autoPresPhone">71908000</span><br>
+                                                    <i class="fa fa-mobile"></i> <span id="autoPresCell">50846277- 58573530  Lilia</span><br>
+                                                </address>
+                                                <address id="autoPressNotFound" style="display:none">
+                                                    <strong>Aucun prestataire disponible. Cliquez pour recommencer.</strong>
+                                                </address>
+                                                <p>
+                                                    <button type="button" class="btn btn-xs green" onclick="selectNewPres();"><i class="fa fa-refresh" style="cursor:pointer"></i> Sélectionner le suivant</button>
+                                                    <button type="button" class="btn btn-xs yellow-lemon" onclick="forceSelectPres();"><i class="fa fa-check" style="cursor:pointer"></i> Sélection manuelle</button>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="item">
+
+                                        <div class="col-md-12" style="" id="autoPressDiv">
+                                            <div class="well">
+                                                <address id="autoPressFound">
+                                                    <strong id="autoPresName">Clinique 2</strong><br>
+                                                    <i class="fa fa-envelope"></i> <span id="autoPresAddress"></span><br>
+                                                    <i class="fa fa-phone"></i> <span id="autoPresPhone">71908000</span><br>
+                                                    <i class="fa fa-mobile"></i> <span id="autoPresCell">50846277- 58573530  Lilia</span><br>
+                                                </address>
+                                                <address id="autoPressNotFound" style="display:none">
+                                                    <strong>Aucun prestataire disponible. Cliquez pour recommencer.</strong>
+                                                </address>
+                                                <p>
+                                                    <button type="button" class="btn btn-xs green" onclick="selectNewPres();"><i class="fa fa-refresh" style="cursor:pointer"></i> Sélectionner le suivant</button>
+                                                    <button type="button" class="btn btn-xs yellow-lemon" onclick="forceSelectPres();"><i class="fa fa-check" style="cursor:pointer"></i> Sélection manuelle</button>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="item">
+
+                                        <div class="col-md-12" style="" id="autoPressDiv">
+                                            <div class="well">
+                                                <address id="autoPressFound">
+                                                    <strong id="autoPresName">Clinique 3</strong><br>
+                                                    <i class="fa fa-envelope"></i> <span id="autoPresAddress"></span><br>
+                                                    <i class="fa fa-phone"></i> <span id="autoPresPhone">71908000</span><br>
+                                                    <i class="fa fa-mobile"></i> <span id="autoPresCell">50846277- 58573530  Lilia</span><br>
+                                                </address>
+                                                <address id="autoPressNotFound" style="display:none">
+                                                    <strong>Aucun prestataire disponible. Cliquez pour recommencer.</strong>
+                                                </address>
+                                                <p>
+                                                    <button type="button" class="btn btn-xs green" onclick="selectNewPres();"><i class="fa fa-refresh" style="cursor:pointer"></i> Sélectionner le suivant</button>
+                                                    <button type="button" class="btn btn-xs yellow-lemon" onclick="forceSelectPres();"><i class="fa fa-check" style="cursor:pointer"></i> Sélection manuelle</button>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- Controls -->
+                                <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                    <span class="sr-only">Précedent</span>
+                                </a>
+                                <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+
                                  <input type="hidden" id="par" value="<?php echo $iduser;?>">
 
 
-                            <div class="form-group">
-                                <label class="control-label">Date de prestation <span class="required" aria-required="true"> * </span></label>
-                                <input value='<?php echo date('d/m/Y'); ?>' class="form-control datepicker-default" name="pres_date" id="pres_date" data-required="1" required="" aria-required="true">
-                            </div>
 
                         </form>
                     </div>
@@ -2367,6 +2168,14 @@ $iduser=$CurrentUser->id;
     section#timeline article:nth-child(5) div.inner h2:after {
         background: #9b59b6;
     }
+
+
+    .overme {
+         overflow:hidden;
+        white-space:nowrap;
+        text-overflow: ellipsis;
+        max-width:300px;
+     }
 </style>
 
 @section('footer_scripts')
@@ -2375,3 +2184,23 @@ $iduser=$CurrentUser->id;
 
 @stop
 
+<script>
+    $('#myCarousel').carousel({
+        interval: 10000
+    })
+
+    $('.carousel .item').each(function(){
+        var next = $(this).next();
+        if (!next.length) {
+            next = $(this).siblings(':first');
+        }
+        next.children(':first-child').clone().appendTo($(this));
+
+        if (next.next().length>0) {
+            next.next().children(':first-child').clone().appendTo($(this));
+        }
+        else {
+            $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+        }
+    });
+</script>

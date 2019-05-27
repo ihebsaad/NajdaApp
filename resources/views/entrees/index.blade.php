@@ -40,7 +40,7 @@
                 <tr>
                     <td style="width:20%"><?php echo  date('d/m/Y', strtotime($entree['reception'])) ; ?></td>
                     <td style="width:20%"><?php echo $entree['emetteur']; ?></td>
-                    <td style="width:40%"><a href="{{action('EntreesController@show', $entree['id'])}}" ><?php echo $entree['sujet'] ; ?></a></td>
+                    <td class="overme" style="width:40%"><a href="{{action('EntreesController@show', $entree['id'])}}" ><?php echo $entree['sujet'] ; ?></a></td>
                     <td style="width:10%"><?php echo $entree['type']; ?></td>
                 </tr>
             @endforeach

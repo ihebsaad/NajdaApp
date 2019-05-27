@@ -1351,7 +1351,7 @@ class EmailController extends Controller
                  $request->validate([
                       'g-recaptcha-response' => 'required|captcha'
                   ]);
-        
+
         $doss = $request->get('dossier');
 
         $nom = $request->get('nom');
