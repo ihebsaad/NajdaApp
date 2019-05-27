@@ -100,19 +100,16 @@
                                                       foreach ($notifications as $ntf) {
                                                         if (!empty($ntf[0]['dossier']))
                                                         {
-                                                          /* changement background dossier actif (le script  annule)
-                                                          {
-                                                          $sactif ='';
-                                                          if (isset($dossier))
-                                                          {
-                                                            if ($ntf[0]['dossier'] === $dossier['reference_medic'])
-                                                              {
-                                                                $sactif =' style="background-color: #ffd051!important;"';
-                                                              }
-                                                            }
-                                                          echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."' ".$sactif.">".$ntf[0]['dossier']."<ul>";
-                                                        }*/
-                                                          echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']."<ul>";}
+                                                          // recuperation nom assuré du dossier
+                                                            $search = $ntf[0]['dossier'];
+                                                            $assuree = $dossiers->filter(function($item) use ($search) {
+                                                                return stripos($item['reference_medic'],$search) !== false;
+
+                                                            });
+
+                                                            $nassure =$assuree->first();
+                                                          // fin recuperation nom assuré
+                                                          echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']." | ".$nassure['subscriber_name']." ".$nassure['subscriber_lastname']."<ul>";}
                                                         foreach ($ntf as $n) {
                                                           
                                                           if (!isset ($n['type']) )
@@ -172,15 +169,12 @@ if (isset($dossier))
          $( document ).ready(function() {
             // verifier sil existe des notifications pour le dossier courant pour les marquer comme actifs
             if ($("#prt_{{ $dossier['reference_medic']}}").length > 0) { 
-              // $("li#prt_{{ $dossier['reference_medic']}}").addClass('dossiercourant');
+              // $("li#prt_{{{-- $dossier['reference_medic'] --}}}").addClass('dossiercourant');
                // scroll vers lemplacement de la notification
               $('html, #notificationstab').animate({
                scrollTop: $("#prt_{{ $dossier['reference_medic']}}").offset().top
               }, 1000);
-              // highlight notification courante
-              if ($("li#{{ $entree['id']}}").length > 0) { 
-               $("li#{{ $entree['id']}}").addClass('dossiercourant');
-              }
+              
             }
           });
 </script>
