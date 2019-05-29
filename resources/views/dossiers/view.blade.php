@@ -58,21 +58,29 @@
             </div>
 
             <div class="btn-group">
+                <button type="button" class="btn btn-default" id="sms">
+                    <a style="color:black" href="{{action('EmailController@sms',$dossier->id)}}"> <i class="fas fa-sms"></i> SMS</a>
+                </button>
+            </div>
+
+            <div class="btn-group">
                 <button type="button" class="btn btn-default" id="newfax">
                     <a style="color:black" href="{{action('EmailController@envoifax',$dossier->id)}}"> <i class="fa fa-fax"></i> Fax</a>
                 </button>
             </div>
             <div class="btn-group">
                 <button type="button" class="btn btn-default" id="newcalldossier">
-                    <i class="fa fa-phone"></i> Tél.
+                    <i class="fa fa-phone"></i>
+                    Tél
+
                 </button>
             </div>
-
         </div>
     </div>
     </div>
 </div>
     <section class="content form_layouts">
+
 
         <div class="container-fluid">
 <br>
@@ -1386,8 +1394,6 @@
                     </tbody>
                 </table>
 
-
-
             </div>
 
             <div id="tab4" class="tab-pane fade">
@@ -1456,12 +1462,11 @@
                     </tbody>
                 </table>
 
-
             </div>
 
             <div id="tab5" class="tab-pane fade">
 
-
+<br><br>
 
             </div>
 
@@ -1530,7 +1535,7 @@ $iduser=$CurrentUser->id;
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ajouter un nouveau Client</h5>
+                <h3 class="modal-title" id="exampleModalLabel">Ajouter une Nouvelle prestation</h3>
 
             </div>
             <div class="modal-body">
@@ -1538,9 +1543,9 @@ $iduser=$CurrentUser->id;
 
 
                     <div class="form-group">
-                        {{ csrf_field() }}
 
                         <form id="addpresform" novalidate="novalidate">
+                            {{ csrf_field() }}
 
                             <input id="idprestation" name="idprestation" type="hidden" value="68356">
                             <div class="form-group " >
@@ -1563,140 +1568,62 @@ $iduser=$CurrentUser->id;
                                     <select class="form-control  col-lg-12 " style="width:400px" name="gouv"    id="gouvcouv">
                                         <option></option>
                                         @foreach($gouvernorats as $aKeyG)
-                                            <option      value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
+                                            <option   value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
                                         @endforeach
 
                                     </select>
                                     </div>
                                 </div>
 
+
+
                             <div class="form-group">
-                                <label class="control-label">Date de prestation <span class="required" aria-required="true"> * </span></label>
+                                 <label class="control-label">Date de prestation <span class="required" aria-required="true"> * </span></label>
                                 <input value='<?php echo date('d/m/Y'); ?>' class="form-control datepicker-default" name="pres_date" id="pres_date" data-required="1" required="" aria-required="true">
                             </div>
-
 <!--
-                            <div class="form-group">
-                                <label class="control-label">Prestataire</label>
-                                <input type="hidden" name="pres_id" id="pres_id" data-required="1" required="" aria-required="true" value="53">
-                                <input type="hidden" name="is_forced" id="is_forced" value="0">
-                                <div class="input-group" style="display:none" id="all_pres_div">
-                                <span class="input-group-addon btn green font-white" onclick="unForceSelectPres()">
-                                    Retour
-                                </span>
-                                    <div class="select2-container form-control" id="s2id_all_pres_id"><a href="javascript:void(0)" class="select2-choice" tabindex="-1">   <span class="select2-chosen" id="select2-chosen-8">&nbsp;</span><abbr class="select2-search-choice-close"></abbr>   <span class="select2-arrow" role="presentation"><b role="presentation"></b></span></a><label for="s2id_autogen8" class="select2-offscreen"></label><input class="select2-focusser select2-offscreen" type="text" aria-haspopup="true" role="button" aria-labelledby="select2-chosen-8" id="s2id_autogen8"><div class="select2-drop select2-display-none select2-with-searchbox">   <div class="select2-search">       <label for="s2id_autogen8_search" class="select2-offscreen"></label>       <input type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="select2-input" role="combobox" aria-expanded="true" aria-autocomplete="list" aria-owns="select2-results-8" id="s2id_autogen8_search" placeholder="">   </div>   <ul class="select2-results" role="listbox" id="select2-results-8">   </ul></div></div><select class="form-control select2-offscreen" id="all_pres_id" tabindex="-1" title="">
-                                    </select>
-                                </div>
+                            <div style="align:center;text-align:center">
 
+                                <span style="align:center" id="check" class="btn btn-danger">Chercher des prestataires</span>
 
-                                <div class="col-md-12" style="" id="autoPressDiv">
-                                    <div class="well">
-                                        <address id="autoPressFound">
-                                            <strong id="autoPresName">Clinique Cardio-Vasculaire</strong><br>
-                                            <i class="fa fa-envelope"></i> <span id="autoPresAddress"></span><br>
-                                            <i class="fa fa-phone"></i> <span id="autoPresPhone">71908000</span><br>
-                                            <i class="fa fa-mobile"></i> <span id="autoPresCell">50846277- 58573530  Lilia</span><br>
-                                        </address>
-                                        <address id="autoPressNotFound" style="display:none">
-                                            <strong>Aucun prestataire disponible. Cliquez pour recommencer.</strong>
-                                        </address>
-                                        <p>
-                                            <button type="button" class="btn btn-xs green" onclick="selectNewPres();"><i class="fa fa-refresh" style="cursor:pointer"></i> Sélectionner le suivant</button>
-                                            <button type="button" class="btn btn-xs yellow-lemon" onclick="forceSelectPres();"><i class="fa fa-check" style="cursor:pointer"></i> Sélection manuelle</button>
-                                        </p>
-                                    </div>
-                                </div>
                             </div>
+-->
+                            <div id="data">
 
----->
-
-                            <div id="myCarousel" class="carousel slide">
-
-                                <div class="carousel-inner">
-                                    <div class="item active">
-                                        <div class="col-md-12" style="" id="autoPressDiv">
-                                            <div class="well">
-                                                <address id="autoPressFound">
-                                                    <strong id="autoPresName">Clinique 1</strong><br>
-                                                    <i class="fa fa-envelope"></i> <span id="autoPresAddress"></span><br>
-                                                    <i class="fa fa-phone"></i> <span id="autoPresPhone">71908000</span><br>
-                                                    <i class="fa fa-mobile"></i> <span id="autoPresCell">50846277- 58573530  Lilia</span><br>
-                                                </address>
-                                                <address id="autoPressNotFound" style="display:none">
-                                                    <strong>Aucun prestataire disponible. Cliquez pour recommencer.</strong>
-                                                </address>
-                                                <p>
-                                                    <button type="button" class="btn btn-xs green" onclick="selectNewPres();"><i class="fa fa-refresh" style="cursor:pointer"></i> Sélectionner le suivant</button>
-                                                    <button type="button" class="btn btn-xs yellow-lemon" onclick="forceSelectPres();"><i class="fa fa-check" style="cursor:pointer"></i> Sélection manuelle</button>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="item">
-
-                                        <div class="col-md-12" style="" id="autoPressDiv">
-                                            <div class="well">
-                                                <address id="autoPressFound">
-                                                    <strong id="autoPresName">Clinique 2</strong><br>
-                                                    <i class="fa fa-envelope"></i> <span id="autoPresAddress"></span><br>
-                                                    <i class="fa fa-phone"></i> <span id="autoPresPhone">71908000</span><br>
-                                                    <i class="fa fa-mobile"></i> <span id="autoPresCell">50846277- 58573530  Lilia</span><br>
-                                                </address>
-                                                <address id="autoPressNotFound" style="display:none">
-                                                    <strong>Aucun prestataire disponible. Cliquez pour recommencer.</strong>
-                                                </address>
-                                                <p>
-                                                    <button type="button" class="btn btn-xs green" onclick="selectNewPres();"><i class="fa fa-refresh" style="cursor:pointer"></i> Sélectionner le suivant</button>
-                                                    <button type="button" class="btn btn-xs yellow-lemon" onclick="forceSelectPres();"><i class="fa fa-check" style="cursor:pointer"></i> Sélection manuelle</button>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="item">
-
-                                        <div class="col-md-12" style="" id="autoPressDiv">
-                                            <div class="well">
-                                                <address id="autoPressFound">
-                                                    <strong id="autoPresName">Clinique 3</strong><br>
-                                                    <i class="fa fa-envelope"></i> <span id="autoPresAddress"></span><br>
-                                                    <i class="fa fa-phone"></i> <span id="autoPresPhone">71908000</span><br>
-                                                    <i class="fa fa-mobile"></i> <span id="autoPresCell">50846277- 58573530  Lilia</span><br>
-                                                </address>
-                                                <address id="autoPressNotFound" style="display:none">
-                                                    <strong>Aucun prestataire disponible. Cliquez pour recommencer.</strong>
-                                                </address>
-                                                <p>
-                                                    <button type="button" class="btn btn-xs green" onclick="selectNewPres();"><i class="fa fa-refresh" style="cursor:pointer"></i> Sélectionner le suivant</button>
-                                                    <button type="button" class="btn btn-xs yellow-lemon" onclick="forceSelectPres();"><i class="fa fa-check" style="cursor:pointer"></i> Sélection manuelle</button>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <!-- Controls -->
-                                <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-                                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                    <span class="sr-only">Précedent</span>
-                                </a>
-                                <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                    <span class="sr-only">Next</span>
-                                </a>
                             </div>
+                            <link href="http://demo.chandra-admin.com/assets/vendors/Buttons/css/buttons.css" rel="stylesheet">
+                            <link href="http://demo.chandra-admin.com/assets/vendors/hover/hover.css" rel="stylesheet">
+                            <link href="http://demo.chandra-admin.com/assets/css/custom_css/advbuttons.css" rel="stylesheet">
+                            <a href="#" class="hvr-shrink button button-3d button-success button-rounded" style="display:none;margin-top:40px;margin-bottom:30px" id="choisir"><i class="fa fa-check"></i>  Sélectionner</a>
+                            <button style="display:none;margin-top:50px;margin-bottom:50px" id="showNext" type="button" class="hvr-wobble-horizontal btn btn-lg btn-labeled btn-info">
+                                Suivant
+                                <span class="btn-label" style="left: 13px;">
+                                                    <i class="fa fa-chevron-right"></i>
+                                                </span>
+                            </button>
 
-                                 <input type="hidden" id="par" value="<?php echo $iduser;?>">
+                            <div id="termine" style="display:none;height:120px;align:center;">
+                                <center><br>   Fin de la liste.<br></center>
 
+                                <button style="margin:20px 0px 20px 40px" id="essai2" type="button" class="btn btn-labeled btn-default btn-lg hvr-wobble-to-top-right right1">
+                                                <span class="btn-label">
+                                                    <i class="fa fa-refresh"></i>
+                                                </span>
+                                    Réessayez
+                                </button>
+                            </div>
+                            <input type="hidden" id="selected" value="0">
+                             <input type="hidden" id="par" value="<?php echo $iduser;?>">
+                            <label>Prestataire</label>
 
-
+                            <select style="margin-top:10px;margin-bottom:10px;" disabled id="selectedprest"  class="form-control" value=" ">
+                                <option></option>
+                            @foreach($prestataires as $prest)
+                                <option    value="<?php echo $prest->id;?>"> <?php echo $prest->name;?></option>
+                            @endforeach
+                            </select>
                         </form>
                     </div>
-
-
-
 
 
                 </div>
@@ -1704,7 +1631,7 @@ $iduser=$CurrentUser->id;
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="button" id="add" class="btn btn-primary">Ajouter</button>
+                <button type="button" id="add2" class="btn btn-primary">Ajouter</button>
             </div>
         </div>
     </div>
@@ -1866,6 +1793,7 @@ $iduser=$CurrentUser->id;
                                     </div>
                                 </div>
                             </div>
+                        </form>
                     </div>
 
 
@@ -1876,7 +1804,7 @@ $iduser=$CurrentUser->id;
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 <button type="submit" id="attribdoss" class="btn btn-primary">Affecter</button>
             </div>
-            </form>
+
         </div>
     </div>
 </div>
@@ -1954,7 +1882,6 @@ $iduser=$CurrentUser->id;
 
         // }
     }
-
 
 
 
@@ -2176,6 +2103,10 @@ $iduser=$CurrentUser->id;
         text-overflow: ellipsis;
         max-width:300px;
      }
+
+
+
+
 </style>
 
 @section('footer_scripts')
@@ -2185,22 +2116,167 @@ $iduser=$CurrentUser->id;
 @stop
 
 <script>
-    $('#myCarousel').carousel({
-        interval: 10000
-    })
 
-    $('.carousel .item').each(function(){
-        var next = $(this).next();
-        if (!next.length) {
-            next = $(this).siblings(':first');
-        }
-        next.children(':first-child').clone().appendTo($(this));
 
-        if (next.next().length>0) {
-            next.next().children(':first-child').clone().appendTo($(this));
-        }
-        else {
-            $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
-        }
-    });
+
+ $(function () {
+
+     $("#typeprest").change(function() {
+
+         document.getElementById('termine').style.display = 'none';
+         document.getElementById('showNext').style.display='none';
+         document.getElementById('choisir').style.display='none';
+         document.getElementById('selectedprest').value=0;
+
+     });
+
+         $("#gouvcouv").change(function(){
+     //  prest = $(this).val();
+             document.getElementById('selectedprest').value=0;
+
+             var  type =document.getElementById('typeprest').value;
+             var  gouv =document.getElementById('gouvcouv').value;
+             if((type !="")&&(gouv !=""))
+             {
+     var _token = $('input[name="_token"]').val();
+
+     document.getElementById('termine').style.display = 'none';
+
+     $.ajax({
+         url:"{{ route('dossiers.listepres') }}",
+         method:"post",
+
+         data:{gouv:gouv,type:type, _token:_token},
+         success:function(data){
+
+        //     alert('1'+data);
+             //   alert('Added successfully');
+         // alert('2'+JSON.parse((data)));
+              $('#data').html(data);
+         //window.location =data;
+            console.log(data);
+      ////       data.map((item, i) => console.log('Index:', i, 'Id:', item.id));
+             var  total =document.getElementById('total').value;
+
+            if(parseInt(total)>0)
+            {
+                document.getElementById('showNext').style.display='block';
+             }
+
+         }
+     }); // ajax
+
+             }else{
+                 alert('SVP, Sélectionner le gouvernorat et la spécialité');
+             }
+ }); // change
+
+     $("#choisir").click(function() {
+         //selected= document.getElementById('selected').value;
+         selected=    $("#selected").val();
+         document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
+
+
+     });
+
+
+     $("#essai2").click(function() {
+         document.getElementById('termine').style.display = 'none';
+         document.getElementById('choisir').style.display = 'block';
+         document.getElementById('showNext').style.display = 'block';
+         document.getElementById('item1').style.display = 'block';
+         document.getElementById('selected').value = 1;
+         document.getElementById('selectedprest').value = 0;
+
+
+     });
+
+
+         $("#showNext").click(function() {
+             document.getElementById('selectedprest').value = 0;
+
+             var selected = document.getElementById('selected').value;
+         var total = document.getElementById('total').value;
+         //     alert(selected);
+         //    alert(total);
+         var next = parseInt(selected) + 1;
+         document.getElementById('selected').value = next;
+
+         if ((selected == 0)) {
+             document.getElementById('termine').style.display = 'none';
+             document.getElementById('item1').style.display = 'block';
+             document.getElementById('choisir').style.display = 'block';
+
+             //document.getElementById('selected').value=1;
+             // $("#selected").val('1');
+
+         }
+
+         if ((selected) == (total  )) {//alert("Il n y'a plus de prestataires, Réessayez");
+             document.getElementById('termine').style.display = 'block';
+
+             document.getElementById('item'+(selected)).style.display = 'none';
+             document.getElementById('showNext').style.display = 'none';
+             document.getElementById('choisir').style.display = 'none';
+
+
+         } else {
+
+         if ((selected != 0) && (selected <= total + 1)) {
+             document.getElementById('choisir').style.display = 'block';
+             document.getElementById('termine').style.display = 'none';
+             document.getElementById('item' + selected).style.display = 'none';
+             document.getElementById('item' + next).style.display = 'block';
+
+
+             $("#selected").val(next);
+
+
+
+         }
+     }
+
+         if(next>parseInt(total)+1) {
+             document.getElementById('item' + selected).style.display = 'none';
+         }
+
+
+     });
+
+
+
+
+     $('#add2').click(function(){
+         var prestataire = $('#selectedprest').val();
+         var dossier_id = $('#iddossupdate').val();
+         var typeprest = $('#typeprest').val();
+         alert(prestataire);
+         alert(dossier_id);
+         alert(typeprest);
+
+         //   gouvcouv
+         ///if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
+      ///   {
+             var _token = $('input[name="_token"]').val();
+             $.ajax({
+                 url:"{{ route('prestations.saving') }}",
+                 method:"POST",
+                 data:{prestataire:prestataire,dossier_id:dossier_id,typeprest:typeprest, _token:_token},
+                 success:function(data){
+console.log(data);
+alert(data);
+                  //    window.location =data;
+
+
+                 }
+             });
+       ///  }else{
+             // alert('ERROR');
+        /// }
+     });
+
+
+ }); // $ function
+
+
 </script>

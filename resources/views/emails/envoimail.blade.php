@@ -231,8 +231,9 @@
 
     $(document).ready(function(){
 
-       // $('#modalalert').modal('show');
+    <?php if(  ($type!='prestataire') ||($prest>0) ) {  ?>
         $('#modalalert').modal({show:true});
+     <?php   }?>
 
         $("#prest").change(function(){
           //  prest = $(this).val();
@@ -242,8 +243,7 @@
             {
 
                 window.location = '<?php echo $urlapp; ?>/emails/envoimail/<?php echo $doss; ?>/prestataire/'+prest;
-
-            }else{
+             }else{
                 window.location = "<?php echo $urlapp; ?>/emails/envoimail/<?php echo $doss; ?>/prestataire/0";
 
             }

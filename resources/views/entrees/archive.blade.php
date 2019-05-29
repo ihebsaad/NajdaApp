@@ -35,13 +35,7 @@ $dossiers = Dossier::get();
                 <div class="panel">
                 <div class="panel-body pan">
                     <ul class="nav nav-pills nav-stacked">
-                        <li >
-                            <a  href="{{ route('emails.sending') }}">
-                                <span class="badge pull-right"></span>
-                                <i class="fa fa-inbox fa-fw mrs"></i>
-                                Rédiger un email
-                            </a>
-                        </li>
+
                         <li class="">
                             <a   href="{{ route('boite') }}">
                                 <span class="badge pull-right"></span>
@@ -64,7 +58,7 @@ $dossiers = Dossier::get();
                             </a>
                         </li>
                         <li class="active">
-                            <a   href="{{ route('entrees.archive') }}">
+                            <a   href="#" style="cursor:default">
                                 <span class="badge badge-orange pull-right"><?php echo EntreesController::countarchives(); ?></span>
                                 <i class="fa fa-archive fa-fw mrs"></i>
                                 Archive

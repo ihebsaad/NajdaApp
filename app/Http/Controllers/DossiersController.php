@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Prestataire;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -245,6 +246,7 @@ class DossiersController extends Controller
         $Missions=Dossier::find($id)->activeMissions;
 
         $typesprestations = TypePrestation::all();
+        $prestataires = Prestataire::all();
  //        $villes = Ville::all();
         $gouvernorats = DB::table('cities')->get();
 
@@ -309,7 +311,7 @@ class DossiersController extends Controller
         //  $entrees =   Entree::all();
         $documents = Document::where('dossier', $id)->get();
 
-        return view('dossiers.view',['emails'=>$emails,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
+        return view('dossiers.view',['prestataires'=>$prestataires,'emails'=>$emails,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
 
     }
 
@@ -455,6 +457,86 @@ class DossiersController extends Controller
 
     }
 
+
+    public  static function ListePrestataireCitySpec(Request $request)
+    {
+
+        $gouv = $request->get('gouv');
+        $type = $request->get('type');
+        $liste = DB::table('evaluations')
+            ->where('gouv',$gouv )
+            ->where('type_prest',$type )
+            ->orderBy('priorite', 'asc')
+            ->get();
+
+        $output='';$c=0;
+        foreach ($liste as $row) {
+            $c++;
+
+
+            $prestataire = $row->prestataire;
+            $priorite = $row->priorite;
+
+            $nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
+            $adresse = app('App\Http\Controllers\PrestatairesController')->ChampById('adresse', $prestataire);
+            $tel1 = app('App\Http\Controllers\PrestatairesController')->ChampById('phone_cell', $prestataire);
+            $tel2 = app('App\Http\Controllers\PrestatairesController')->ChampById('phone_cell2', $prestataire);
+            $fixe = app('App\Http\Controllers\PrestatairesController')->ChampById('phone_home', $prestataire);
+
+            $emails = Email::where('parent', $prestataire)->get();
+
+            //   $output.='prestataire : '. $prestataire ;
+
+            /*   $output.='   <div class="item  '.$active.' ">
+                                           <div class="col-md-12" style=""  >
+                                               <div class="well">
+                                                   <address id="autoPressFound">
+                                                       <strong >'.$nom.'</strong><br>
+                                                       <i class="fa fa-map-marker"></i> <span >'.$adresse.'</span><br>
+                                                       <i class="fa fa-phone"></i> <span >'.$fixe.'</span><br>
+                                                       <i class="fa fa-mobile"></i> <span >'.$tel1.' - '.$tel2.'   </span><br>
+                                                   </address>
+                                                   <p>
+                                                       <button type="button" class="btn btn-xs green" onclick="selectNewPres();"><i class="fa fa-refresh" style="cursor:pointer"></i> Sélectionner le suivant</button>
+                                                       <button type="button" class="btn btn-xs yellow-lemon" onclick="forceSelectPres();"><i class="fa fa-check" style="cursor:pointer"></i> Sélection manuelle</button>
+                                                   </p>
+                                               </div>
+                                           </div>
+
+                                       </div>';
+   */
+            $output .= '  <div id="item'.$c . '" style="display:none">
+             
+                                                   <address ><input type="hidden" id="prestataire_id_'.$c.'" value="'.$prestataire.'">
+                                                   <input type="hidden" id="nomprest" value="'.$nom.'">
+                                                    <strong >' . $nom . ' (' . $priorite . ')</strong><br>
+                                                    <i class="fa fa-map-marker"></i> <span >' . $adresse . '</span><br>
+                                                    <i class="fa fa-phone"></i> <span >' . $fixe . '</span><br>
+                                                    <i class="fa fa-mobile"></i> <span >' . $tel1 . ' - ' . $tel2 . '   </span><br>
+                        <table>';
+                             foreach ($emails as $email) {
+
+                                     $output .= ' <tr>
+                                            <td style="padding-right:8px;"><i class="fa fa-envelope"></i> ' . $email->champ . '</td>
+                                            <td style="padding-right:8px;">' . $email->nom . '</td>
+                                            <td style="padding-right:8px;">' . $email->qualite . '</td>
+                                            <td style="padding-right:8px;">' . $email->tel . '</td>
+                                        </tr> ';
+                                        }
+
+                         $output .='</table> </address>                         
+
+             </div> ';
+
+
+        }
+        $output=$output.'<input id="total" type="hidden" value="'.$c.'">  
+                       
+';
+        return  ($output);
+       // return json_encode($liste);
+
+    }
 
 
 

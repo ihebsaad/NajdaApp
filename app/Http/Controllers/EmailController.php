@@ -733,6 +733,94 @@ class EmailController extends Controller
 
     }
 
+    function checksms()
+    {
+
+
+            $oClient = new Client([
+                'host'          => 'ssl0.ovh.net',// env('hostreception'),
+                'port'          => '993',// env('portreception'),
+                //    'encryption'    => '',//env('encreception'),
+                'validate_cert' => true,
+                'username'      => 'sms@najda-assistance.com',
+                'password'      => 'eSolutions-2019!',
+                'protocol'      => 'imap'
+            ]);
+
+
+
+            $oClient->connect();
+
+            $storeid=false;$firstid=0;
+
+            $oFolder = $oClient->getFolder('INBOX');
+            $aMessage = $oFolder->messages()->all()->get();
+
+            foreach ($aMessage as $oMessage) {
+
+
+                $sujet=strval($oMessage->getSubject())  ;
+
+                $contenu= $oMessage->getHTMLBody(true);
+
+                $date= $oMessage->getDate();
+                $mailid=$oMessage->getUid();
+
+                //Move the current Message to 'INBOX.read'
+                if ($oMessage->moveToFolder('read') == true) {
+                    // get last id
+                    $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
+                    // message moved
+
+
+                    $entree = new Entree([
+
+
+                        'destinataire' =>  'SMS Najda',
+                        'emetteur' =>  ($sujet),
+                        'sujet' =>  ($sujet),
+                        'contenu'=> utf8_encode($contenu) ,
+                        'mailid'=>  'sms-'.$mailid,
+                        'viewed'=>0,
+                        'statut'=>0,
+                        'nb_attach'=>0,
+                        'reception'=>$date,
+                        'type'=>'sms'
+
+                    ]);
+
+                    $entree->save();
+                    $id=$entree->id;
+
+                    ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
+
+                    if($storeid==false){
+                        $firstid=$id;
+                        $storeid=true;
+                    }
+
+                    // récupérer last id une autre fois pour vérifier l'enregistrement
+                    $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
+                    // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
+                    if($lastid==$lastid2)
+                    {
+                        $oMessage->moveToFolder('INBOX') ;
+                    }
+
+                } else {
+                    // error
+                    echo 'error';
+                }
+
+            }
+            return $firstid;
+            // return view('emails.check');
+
+
+    }
+
+
+
     function checkfax()
     {
 
@@ -1355,6 +1443,7 @@ class EmailController extends Controller
         $doss = $request->get('dossier');
 
         $nom = $request->get('nom');
+        $description = $request->get('description');
         $numero = $request->get('numero');
         //  $contenu = $request->get('contenu');
         $attachs = $request->get('attachs');
@@ -1376,7 +1465,7 @@ class EmailController extends Controller
 
 
         try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$attachs,$doss,$cc,$numero) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$attachs,$doss,$cc,$numero,$description) {
                 $message
                     ->to($to)
                     //   ->cc($cc  ?: [])
@@ -1447,6 +1536,7 @@ class EmailController extends Controller
                         'statut'=> 1,
                         'type'=> 'fax',
                         'nb_attach'=> $count,
+                        'description'=> $description,
                         // 'reception'=> date('d/m/Y H:i:s'),
 
                     ]);
@@ -1535,58 +1625,72 @@ class EmailController extends Controller
 
     function sendsms(Request $request)
     {
-/*       $to = trim($request->get('destinataire'));
-        $message = trim( $request->get('message'));
+     /*   $request->validate([
+            'g-recaptcha-response' => 'required|captcha'
+        ]);
 
-        // Your Account SID and Auth Token from twilio.com/console
-        $sid = 'ACbc8e777727bd13888701ffab59cd069f';
-        //$sid = 'PN6d89ac7547a9548cbc5a4344ae097a0b';
-        $token = '7b1d67de61c82c6aa10bdf01710f9147';
-        $client = new Client2($sid, $token);
+*/
+        $num = trim($request->get('destinataire'));
+        $contenu = trim( $request->get('message'));
+        $description = trim( $request->get('description'));
+        $doss = trim( $request->get('dossier'));
+        $dossier= $this->RefDossierById($doss);////;
 
-     //   $from='+14804473614';
-        $from='+18479062370';
 
-// Use the client to do fun stuff like send text messages!
-        $client->messages->create(
-        // the number you'd like to send the message to
-            $to,
-            array(
-                // A Twilio phone number you purchased at twilio.com/console
-                'from' => $from,
-                // the body of the text message you'd like to send
-                'body' => $message
-            )
-        );
+        $from='SMS Najda';
 
         $par=Auth::id();
 
+        try{
+            Mail::send([], [], function ($message) use ($contenu,$dossier,$par,$description,$num,$from) {
+                $message
+                      ->to('ihebsaad@gmail.com')
+                   //   ->to('ecom_plus@hotmail.com')
+
+                    ->subject('sms'.$num)
+                    ->setBody($contenu );
+
+
         $envoye = new Envoye([
             'emetteur' => $from,
-            'destinataire' => $to,
-            'sujet' => 'SMS',
-            'contenu'=> $message,
+            'destinataire' => $num,
+            'sujet' => $description,
+            'description' => $description,
+            'contenu'=> $contenu,
             'statut'=> 1,
-             'par'=> $par,
+            'par'=> $par,
+            'dossier'=>$dossier,
             'type'=>'sms'
         ]);
 
         $envoye->save();
-*/
-        return redirect('/emails/sms')->with('success', 'SMS Envoyé !');
 
-    }
+                $urlapp=env('APP_URL');
 
-    function sms( )
+                if (App::environment('local')) {
+                    // The environment is local
+                    $urlapp='http://localhost/najdaapp';
+                }
+                //   $urlsending=$urlapp.'/emails/envoimail/'.$doss;
+                $urlsending=$urlapp.'/envoyes';
+           return redirect($urlsending)->with('success', ' SMS Envoyé ! ');
+
+            });
+
+        } catch (Exception $ex) {
+            // Debug via $ex->getMessage();
+         }
+
+    }// end send
+
+
+    function sms( $id)
     {
 
-        $dossiers = Dossier::all();
 
-        return view('emails.sms', ['dossiers' => $dossiers]);
+        return view('emails.sms', ['doss' => $id]);
 
     }
-
-
 
 
     function sendwhatsapp(Request $request)

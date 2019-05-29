@@ -18,19 +18,28 @@
 
     <div class="form-group">
         {{ csrf_field() }}
-        <label for="destinataire">Destinataire:</label>
+        <label for="description">Description:</label>
         <div class="row">
-        <div class="col-md-10">
-            <input id="destinataire" type="text" class="form-control" name="nom" required />
+            <div class="col-md-10">
+                <input id="description" type="text" class="form-control" name="description" required />
+            </div>
+
+
         </div>
+    </div>
+    <div class="form-group">
+         <label for="destinataire">Destinataire:</label>
+        <div class="row">
+            <div class="col-md-10">
+                <input id="destinataire" type="text" class="form-control" name="nom" required />
+            </div>
 
 
         </div>
     </div>
 
     <div class="form-group">
-        {{ csrf_field() }}
-        <label for="destinataire">Numéro:</label>
+         <label for="destinataire">Numéro:</label>
         <div class="row">
             <div class="col-md-10">
                 <input id="destinataire"  class="form-control" name="numero" required />

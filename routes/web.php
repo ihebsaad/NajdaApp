@@ -84,12 +84,13 @@ Route::get('/emails/inbox', 'EmailController@inbox');
 Route::get('/emails/check', 'EmailController@check');
 Route::get('/emails/checkboite2', 'EmailController@checkboite2');
 Route::get('/emails/checkfax', 'EmailController@checkfax');
+Route::get('/emails/checksms', 'EmailController@checksms');
 Route::get('/emails/checkboiteperso', 'EmailController@checkboiteperso');
 Route::get('/emails/folder/{foldername}', 'EmailController@folder');
 
 
 Route::get('/emails/test', 'EmailController@test');
-Route::get('/emails/sms', 'EmailController@sms');
+Route::get('/emails/sms/{id}', 'EmailController@sms');
 Route::post('/emails/sendsms', 'EmailController@sendsms')->name('emails.sendsms');
 Route::post('/emails/sendfax', 'EmailController@sendfax')->name('emails.sendfax');
 Route::get('/emails/whatsapp', 'EmailController@whatsapp');
@@ -129,6 +130,7 @@ Route::get('/dossiers/view/{id}', 'DossiersController@view')->name('dossiers.vie
 Route::post('/dossiers/addemail','DossiersController@addemail')->name('dossiers.addemail');
 Route::post('/dossiers/adddocument','DossiersController@adddocument')->name('dossiers.adddocument');
 Route::post('/dossiers/attribution','DossiersController@attribution')->name('dossiers.attribution');
+Route::post('/dossiers/listepres','DossiersController@ListePrestataireCitySpec')->name('dossiers.listepres');
 
 
 /*** Clients **/

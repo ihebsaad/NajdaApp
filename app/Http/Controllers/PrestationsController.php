@@ -74,18 +74,24 @@ class PrestationsController extends Controller
 
     public function saving(Request $request)
     {
-        if( ($request->get('nom'))!=null) {
+        $iddoss=$request->get('dossier_id');
+        if( ($request->get('prestataire_id'))!=null) {
 
-            $prestations = new Prestation([
-                'nom' => $request->get('nom'),
-                'typepres' => $request->get('typepres'),
+            $prestation = new Prestation([
+                'prestataire_id' => $request->get('prestataire'),
+                'dossier_id' => $iddoss ,
+                'type_prestations_id' => $request->get('typeprest'),
+            //    'annule' => $request->get('annule'),
 
             ]);
-            $prestations->save();
+            $prestation->save();
 
         }
 
-       // return redirect('/prestations')->with('success', 'ajouté avec succès');
+  //      return url('/dossiers/view/'.$iddoss)/*->with('success', 'Dossier Créé avec succès')*/;
+       return $prestation->id;
+
+        // return redirect('/prestations')->with('success', 'ajouté avec succès');
 
     }
 

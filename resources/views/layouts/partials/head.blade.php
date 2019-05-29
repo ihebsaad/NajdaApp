@@ -102,7 +102,21 @@ $urlnotif=$urlapp.'/entrees/show/' ;
         });
 
 
-
+        function checksms(){
+            $.ajax({
+                type: "get",
+                url: "<?php echo $urlapp; ?>/emails/checksms",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check boite SMS : '+data);
+                    //Send another request in n seconds.
+                    setTimeout(function(){
+                        checksms();
+                    }, 30000);  //30 secds
+                }
+            });
+        }
 
         function checkemails(){
             $.ajax({
@@ -169,8 +183,9 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 }
             });
         }
-         checkemails();
-         checkemails2();
+        checkemails();
+        checkemails2();
+        checksms();
         checkboite();
         checkfax();
 

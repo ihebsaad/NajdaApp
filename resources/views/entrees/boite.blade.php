@@ -45,15 +45,8 @@ $envoyeC = Envoye::get();
             <div class="panel">
                 <div class="panel-body pan">
                     <ul class="nav nav-pills nav-stacked">
-                        <li >
-                            <a  href="{{ route('emails.sending') }}">
-                                <span class="badge pull-right"></span>
-                                <i class="fa fa-inbox fa-fw mrs"></i>
-                                Rédiger un email
-                            </a>
-                        </li>
                         <li class="active">
-                            <a   href="{{ route('boite') }}">
+                            <a   href="#" style="cursor:default">
                                 <span class="badge pull-right"></span>
                                 <i class="fa fa-envelope-square fa-fw mrs"></i>
                                 Boîte de réception

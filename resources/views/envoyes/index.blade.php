@@ -28,13 +28,6 @@
             <?php use \App\Http\Controllers\EntreesController;     ?>            <div class="panel">
                 <div class="panel-body pan">
                     <ul class="nav nav-pills nav-stacked">
-                        <li >
-                            <a  href="{{ route('emails.sending') }}">
-                                <span class="badge pull-right"></span>
-                                <i class="fa fa-inbox fa-fw mrs"></i>
-                                Rédiger un email
-                            </a>
-                        </li>
                         <li class="actie">
                             <a   href="{{ route('boite') }}">
                                 <span class="badge pull-right"></span>
@@ -43,12 +36,12 @@
                             </a>
                         </li>
                         <li class="active">
-                            <a   href="{{ route('envoyes') }}">
-                                <span class="badge pull-right"><?php  echo EnvoyesController::countenvoyes(); ?></span>
+                            <a   href="#" style="cursor:default">
+                            <span class="badge pull-right"><?php  echo EnvoyesController::countenvoyes(); ?></span>
                                 <i class="fa fa-paper-plane fa-fw mrs"></i>
                                 Envoyées
                             </a>
-                        </li>
+                         </li>
                         <li class="">
                             <a   href="{{ route('envoyes.brouillons') }}">
                                 <span class="badge badge-orange pull-right"><?php echo EnvoyesController::countbrouillons(); ?></span>
@@ -88,7 +81,7 @@
                             <?php if($envoye->type=="email") {?><i class="fa  fa-envelope"></i><?php }?><?php if($envoye->type=="sms") {?><i class="fa fa-lg fa-sms"></i><?php }?><?php if($envoye->type=="whatsapp") {?><i class="fa fa-lg fa-whatsapp"></i><?php }?>
                             <?php if($envoye->type=="tel") {?><i class="fa fa-lg fa-phone-square"></i><?php }?><?php if($envoye->type=="fax") {?><i class="fa fa-lg fa-fax"></i><?php }?><?php if($envoye->type=="rendu") {?><i class="fa fa-lg fa-file-sound-o"></i><?php }?>
 
-                                <?php if($envoye->type=="email") { ?><a  href="{{action('EnvoyesController@view', $envoye['id'])}}" >{{$envoye->description}}</a><small style="margin-top:10px;">{{$envoye->destinataire}}</small></div><?php } ?>
+                                <?php if( ($envoye->type=="email") ||($envoye->type=="sms") ){ ?><a  href="{{action('EnvoyesController@view', $envoye['id'])}}" >{{$envoye->description}}</a><small style="margin-top:10px;">{{$envoye->destinataire}}</small></div><?php } ?>
                     <?php if($envoye->type=="fax") { ?><a  href="{{action('EnvoyesController@view', $envoye['id'])}}" > FAX </a><small style="margin-top:10px;">{{$envoye->destinataire}}</small></div><?php } ?>
                     <div class="stats">
                         <div class="row">
