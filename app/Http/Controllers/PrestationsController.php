@@ -119,7 +119,7 @@ class PrestationsController extends Controller
      */
     public function view($id)
     {
-        $dossiers = Dossier::all();
+        $dossiers = app('App\Http\Controllers\DossiersController')->ListeDossiersAffecte();
         $villes = DB::table('cities')->select('id', 'name')->get();
 
         $prestation = Prestation::find($id);
@@ -129,7 +129,7 @@ class PrestationsController extends Controller
         $villes = Ville::all();
         $gouvernorats = DB::table('cities')->get();
 
-        return view('prestations.view',['typesprestations'=>$typesprestations,'gouvernorats' => $gouvernorats,'villes'=>$villes], compact('prestation'));
+        return view('prestations.view',['dossiers'=>$dossiers,'typesprestations'=>$typesprestations,'gouvernorats' => $gouvernorats,'villes'=>$villes], compact('prestation'));
 
     }
 

@@ -15,17 +15,17 @@
         <div class="col-lg-12">
             <ul id="tabs" class="nav  nav-tabs"  data-tabs="tabs">
                 <li class=" nav-item active">
-                    <a class="nav-link active   " href="#tab01" data-toggle="tab" onclick="showinfos();" >
+                    <a class="nav-link active   " href="#tab01" data-toggle="tab" onclick="showinfos();hideinfos2();hideinfos3();" >
                         <i class="fas fa-lg fa-user-md"></i>  Détails du Prestataire
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#tab02" data-toggle="tab"  onclick=";showinfos2">
+                    <a class="nav-link" href="#tab02" data-toggle="tab"  onclick=";showinfos2();hideinfos();hideinfos3();;">
                         <i class="fas fa-lg fa-ambulance"></i>  Prestations
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#tab03" data-toggle="tab"  onclick="hideinfos();hideinfos2();">
+                    <a class="nav-link" href="#tab03" data-toggle="tab"  onclick="showinfos3();hideinfos();hideinfos2();">
                         <i class="fas fa-lg fa-sort-amount-down"></i>  Priorité
                     </a>
                 </li>
@@ -327,7 +327,7 @@
 
         </div>
 
-    <div id="tab02" class="tab-pane fade   " style="padding-top:30px">
+    <div id="tab02" class="tab-pane fade in  " style="padding-top:30px">
 
 
         <table class="table table-striped" id="mytable" style="width:100%">
@@ -372,7 +372,7 @@
 
     </div>
 
-            <div id="tab03" class="tab-pane fade   " style="padding-top:30px">
+            <div id="tab03" class="tab-pane fade in  " style="padding-top:30px">
 
                 <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addev" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createeval"><b><i class="fas fa-plus"></i> Ajouter une Priorité</b></button>
 
@@ -566,6 +566,9 @@
     function hideinfos2() {
         $('#tab02').css('display','none');
     }
+    function hideinfos3() {
+        $('#tab03').css('display','none');
+    }
     function showinfos() {
         $('#tab01').css('display','block');
     }
@@ -573,6 +576,10 @@
     function showinfos2() {
         $('#tab02').css('display','block');
     }
+    function showinfos3() {
+        $('#tab03').css('display','block');
+    }
+
         function changing(elm) {
         var champ=elm.id;
 
