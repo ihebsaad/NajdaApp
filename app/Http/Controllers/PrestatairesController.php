@@ -144,7 +144,9 @@ class PrestatairesController extends Controller
      */
     public function view($id)
     {
-        $dossiers = Dossier::all();
+        //$dossiers = Dossier::all();
+        $dossiers = app('App\Http\Controllers\DossiersController')->ListeDossiersAffecte();
+
         $typesprestations = TypePrestation::all();
       // $villes = DB::table('cities')->select('id', 'name')->get();
         $villes = Ville::all();
@@ -165,7 +167,7 @@ class PrestatairesController extends Controller
         $evaluations =   Evaluation::where('prestataire', $id)->get();
 
 
-        return view('prestataires.view',['emails'=>$emails,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,',dossiers' => $dossiers,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'prestations'=>$prestations], compact('prestataire'));
+        return view('prestataires.view',['emails'=>$emails,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,'dossiers' => $dossiers,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'prestations'=>$prestations], compact('prestataire'));
 
     }
 
