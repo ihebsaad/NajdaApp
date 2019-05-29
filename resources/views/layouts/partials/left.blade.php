@@ -1,5 +1,6 @@
+<?php use \App\Http\Controllers\DossiersController;     ?>
 
-            <div class="panel panel-default"  id="notificationspanel">
+<div class="panel panel-default"  id="notificationspanel">
                                 <div class="panel-heading" id="headernotifs">
                                     <h4 class="panel-title">Notifications</h4>
                                     <span class="pull-right">
@@ -102,14 +103,15 @@
                                                         {
                                                           // recuperation nom assuré du dossier
                                                             $search = $ntf[0]['dossier'];
-                                                            $assuree = $dossiers->filter(function($item) use ($search) {
+                                                            /*$assuree = $dossiers->filter(function($item) use ($search) {
                                                                 return stripos($item['reference_medic'],$search) !== false;
 
-                                                            });
-
-                                                            $nassure =$assuree->first();
+                                                            });*/
+ $iddoss=DossiersController::IdDossierByRef($search);
+ $nassure=DossiersController::FullnameAbnDossierById($iddoss);
+                                                            //$nassure =$assuree->first();
                                                           // fin recuperation nom assuré
-                                                          echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']." | ".$nassure['subscriber_name']." ".$nassure['subscriber_lastname']."<ul>";}
+                                                          echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']." | ".$nassure."<ul>";}
                                                         foreach ($ntf as $n) {
                                                           
                                                           if (!isset ($n['type']) )

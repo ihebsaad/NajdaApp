@@ -366,6 +366,15 @@ class DossiersController extends Controller
         return redirect('/dossiers')->with('success', '  has been deleted Successfully');
     }
 
+    public static function IdDossierByRef($id)
+    {
+        $dossier =  Dossier::where('reference_medic',$id)->first();
+        if (isset($dossier['id'])) {
+            return $dossier['id'];
+        }else{return '';}
+
+    }
+
 
     public static function RefDossierById($id)
     {
@@ -399,6 +408,14 @@ class DossiersController extends Controller
         $dossier = Dossier::find($id);
         if (isset($dossier['subscriber_name'])) {
             return $dossier['subscriber_name'];
+        }else{return '';}
+
+    }
+    public static function FullnameAbnDossierById($id)
+    {
+        $dossier = Dossier::find($id);
+        if (isset($dossier['subscriber_name'])) {
+            return $dossier['subscriber_name'].' '.$dossier['subscriber_lastname'];
         }else{return '';}
 
     }
