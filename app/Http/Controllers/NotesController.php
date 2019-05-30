@@ -187,6 +187,16 @@ class NotesController extends Controller
 
    }
 
+ public function SupprimerNote($id)
+  {
+
+      
+     $note = Note::find($id);
+     $note->delete();
+     return back();
+
+
+  }
 
   public function SupprimerNoteAjax ($id)
   {

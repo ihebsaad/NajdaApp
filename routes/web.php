@@ -201,6 +201,7 @@ Route::post('/Note/store','NotesController@store')->name('Note.store');
 Route::get('/getNotesAjax','NotesController@getNotesAjax');
 Route::get('/getNotesAjaxModal','NotesController@getNotesAjaxModal');
 Route::get('/SupprimerNoteAjax/{id}','NotesController@SupprimerNoteAjax');
+Route::get('/SupprimerNote/{id}','NotesController@SupprimerNote');
 Route::get('/ReporterNote/{id}','NotesController@ReporterNote');
 
 
