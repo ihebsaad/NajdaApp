@@ -197,6 +197,13 @@ Route::resource('/notes',  'NotesController');
 Route::get('/notes', array('as' => 'notes','uses' => 'NotesController@index'));
 Route::post('/notes/updating','NotesController@updating')->name('notes.updating');
 Route::get('/notes/view/{id}', 'NotesController@view');
+Route::post('/Note/store','NotesController@store')->name('Note.store');
+Route::get('/getNotesAjax','NotesController@getNotesAjax');
+Route::get('/getNotesAjaxModal','NotesController@getNotesAjaxModal');
+Route::get('/SupprimerNoteAjax/{id}','NotesController@SupprimerNoteAjax');
+Route::get('/ReporterNote/{id}','NotesController@ReporterNote');
+
+
  
 /*** Missions**/
 Route::resource('/Missions',  'MissionController');
@@ -260,6 +267,13 @@ Route::get('/etapestypesMissions', array('as' => 'Missions','uses' => 'EtapesTyp
 Route::post('/etapestypesMissions/saving','EtapesTypeMissionController@saving')->name('etapestypesMissions.saving');
 Route::get('/etapestypesMissions/view/{id}', 'EtapesTypeMissionController@view');*/
 
+
+
+/*** recherche ***/
+
+Route::post('/RechercheMultiAutocomplete','RechercheController@rechercheMultiAjax')->name('RechercheMulti.autocomplete');
+
+Route::post('/testRechercheMultiAutocomplete','RechercheController@test')->name('RechercheMulti.test');
 
 
 /*** Users **/
