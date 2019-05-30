@@ -121,7 +121,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
         function checkemails(){
             $.ajax({
                 type: "get",
-                url: "<?php/* echo $urlapp; */?>/emails/check",
+                url: "<?php echo $urlapp; ?>/emails/check",
                 success:function(data)
                 {
                     //console.log the response
