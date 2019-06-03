@@ -244,6 +244,15 @@ class EntreesController extends Controller
 
     }
 
+    public static function ChampById($champ,$id)
+    {
+        $entree = Entree::find($id);
+        if (isset($entree[$champ])) {
+            return $entree[$champ] ;
+        }else{return '';}
+
+    }
+
 
 
 }

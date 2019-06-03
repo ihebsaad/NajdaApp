@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Adresse;
 use App\ClientGroupe;
 use App\TypePrestation;
 use Illuminate\Support\Facades\Log;
@@ -96,6 +97,99 @@ class ClientsController extends Controller
 
     }
 
+    public function addressadd(Request $request)
+    {
+        if( ($request->get('champ'))!=null) {
+
+            $parent=$request->get('parent');
+            $adresse = new Adresse([
+                'champ' => $request->get('champ'),
+                'type' => $request->get('type'),
+                'nature' => $request->get('nature'),
+                'remarque' => $request->get('remarque'),
+                'parent' => $parent,
+
+            ]);
+
+            if ($adresse->save())
+            { $id=$adresse->id;
+
+                return url('/clients/view/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;
+                // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
+                //  return  $iddoss;
+            }
+
+            else {
+                return url('/clients');
+            }
+        }
+
+        // return redirect('/clients')->with('success', 'ajouté avec succès');
+
+    }
+
+    public function addressadd2(Request $request)
+    {
+        if( ($request->get('champ'))!=null) {
+
+            $parent=$request->get('parent');
+            $adresse = new Adresse([
+                'champ' => $request->get('champ'),
+                'nom' => $request->get('nom'),
+                'nature' => $request->get('nature'),
+                'parent' => $parent,
+            ]);
+
+            if ($adresse->save())
+            { $id=$adresse->id;
+
+                return url('/clients/view/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;
+                // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
+                //  return  $iddoss;
+            }
+
+            else {
+                return url('/clients');
+            }
+        }
+
+        // return redirect('/clients')->with('success', 'ajouté avec succès');
+
+    }
+
+    public function addressadd3(Request $request)
+    {
+        if( ($request->get('nom'))!=null) {
+
+            $parent=$request->get('parent');
+            $adresse = new Adresse([
+                'nom' => $request->get('nom'),
+                'prenom' => $request->get('prenom'),
+                'fonction' => $request->get('fonction'),
+                'tel' => $request->get('tel'),
+                'mail' => $request->get('email'),
+                'fax' => $request->get('fax'),
+                'remarque' => $request->get('observ'),
+                'nature' => $request->get('nature'),
+                'parent' => $parent,
+            ]);
+
+            if ($adresse->save())
+            { $id=$adresse->id;
+
+                return url('/clients/view/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;
+                // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
+                //  return  $iddoss;
+            }
+
+            else {
+                return url('/clients');
+            }
+        }
+
+        // return redirect('/clients')->with('success', 'ajouté avec succès');
+
+    }
     public function updating(Request $request)
     {
 
@@ -157,8 +251,37 @@ class ClientsController extends Controller
         $dossiers = Dossier::all();
         $groupes = DB::table('client_groupes')->select('id', 'label')->get();
 
+        $countries = DB::table('apps_countries')->select('id', 'country_name')->get();
+
+        $emails =   Adresse::where('nature', 'email')
+            ->where('parent',$id)
+            ->get();
+
+        $tels =   Adresse::where('nature', 'tel')
+            ->where('parent',$id)
+            ->get();
+
+        $faxs =   Adresse::where('nature', 'fax')
+            ->where('parent',$id)
+            ->get();
+
+        $entites =   Adresse::where('nature', 'facturation')
+            ->where('parent',$id)
+            ->get();
+
+
+        $qualites =   Adresse::where('nature', 'qualite')
+            ->where('parent',$id)
+            ->get();
+
+        $reseaux =   Adresse::where('nature', 'reseau')
+            ->where('parent',$id)
+            ->get();
+
+
+
         $client = Client::find($id);
-        return view('clients.view',['dossiers' => $dossiers,'groupes'=>$groupes], compact('client'));
+        return view('clients.view',['dossiers' => $dossiers,'groupes'=>$groupes,'countries'=>$countries,'emails'=>$emails,'tels'=>$tels,'faxs'=>$faxs,'entites'=>$entites,'qualites'=>$qualites ,'reseaux'=>$reseaux], compact('client'));
 
     }
 
@@ -279,6 +402,8 @@ class ClientsController extends Controller
         }else{return '';}
 
     }
+
+
 
 
 

@@ -46,7 +46,7 @@
 
    <div class="col-md-3">
         <a href="{{ route('prestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-            <span class="fa fa-lg fa-fw fa-ambulance"></span>
+            <span class="fas fa-briefcase-medical"></span>
             <br>
             Prestations
         </a>
@@ -118,8 +118,33 @@
         @endcan
     </div>
 
+
+
+    <div class="row">
+
+        @can('isAdmin')
+
+            <div class="col-md-3">
+                <a href="{{ route('personnes') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="fas fa-user-nurse"></span>
+                    <br>
+                    Personnels
+                </a>
+            </div>
+
+            <div class="col-md-3">
+                <a href="{{ route('voitures') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="fa fa-lg fa-fw fa-ambulance"></span>
+                    <br>
+                    Véhicules
+                </a>
+            </div>
+
+        @endcan
+    </div>
+
 </div>
 
-<style>
+    <style>
     .menu-item{background-color: #4fc1e9!important;color:white!important;min-width:165px!important;margin-bottom:5px;margin-top:5px;}
 </style>

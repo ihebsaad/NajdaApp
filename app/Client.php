@@ -47,6 +47,7 @@ class Client extends Model
 'reseau_tel1',
 'reseau_tel2',
 'reseau_fax',
+'reference'
 
     ];
  

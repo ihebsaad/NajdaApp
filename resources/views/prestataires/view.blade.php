@@ -35,28 +35,48 @@
         </div>
     </div>
 
-            <div id="tab01" class="tab-pane fade active in    "  style="padding-top:30px">
-
+ <div id="tab01" class="tab-pane fade active in    "  style="padding-top:30px">
 
      <form id="updateform">
          {{ csrf_field() }}
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="inputError" class="control-label">Civilité</label>
+                                <select onchange="changing(this)"   class="form-control input" name="civilite" id="civilite"  value="{{ $prestataire->civilite }}">
+                                    <option <?php if ($prestataire->civilite ==''){echo 'selected="selected"';} ?>></option>
+                                    <option <?php if ($prestataire->civilite =='Mr'){echo 'selected="selected"';} ?> value="Mr">Mr</option>
+                                    <option <?php if ($prestataire->civilite =='Mme'){echo 'selected="selected"';} ?>value="Mme">Mme</option>
+                                    <option <?php if ($prestataire->civilite =='Mlle'){echo 'selected="selected"';} ?>value="Mlle">Mlle</option>
+                                    <option <?php if ($prestataire->civilite =='Dr'){echo 'selected="selected"';} ?>value="Dr">Dr</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Nom *</label>
                                 <input onchange="changing(this)" type="text" class="form-control input" name="name" id="name"  value={{ $prestataire->name }}>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <div class="form-group">
-                                <div class="form-group">
-                                    <label for="inputError" class="control-label">Spécialité *</label>
-                                    <input onchange="changing(this)" type="text" class="form-control input" name="specialite" id="specialite"  value={{ $prestataire->specialite }}>
-                                </div>
+                                <label for="inputError" class="control-label">Prénom *</label>
+                                <input onchange="changing(this)" type="text" class="form-control input" name="prenom" id="prenom"  value={{ $prestataire->prenom }}>
                             </div>
                         </div>
                     </div>
+         <div class="row">
+
+         <div class="col-md-6">
+             <div class="form-group">
+                 <div class="form-group">
+                     <label for="inputError" class="control-label">Spécialité *</label>
+                     <input onchange="changing(this)" type="text" class="form-control input" name="specialite" id="specialite"  value={{ $prestataire->specialite }}>
+                 </div>
+             </div>
+         </div>
+         </div>
 
                     <div class="row">
                         <div class="col-md-12">
@@ -292,7 +312,7 @@
                 <div class="row form-group">
 
                                 <div style="">
-                                    <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addemail" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createemail"><b><i class="fas fa-plus"></i> Ajouter un email</b></button>
+                                    <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addemail" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createemail"><b><i class="fas fa-plus"></i> Ajouter une adresse email</b></button>
 
 
                                 </div>
@@ -327,7 +347,7 @@
 
         </div>
 
-    <div id="tab02" class="tab-pane fade in  " style="padding-top:30px">
+    <div id="tab02" class="tab-pane fade in  " style="padding-top:30px;display:none;">
 
 
         <table class="table table-striped" id="mytable" style="width:100%">
@@ -491,7 +511,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModal2">Ajouter un Email </h5>
+                    <h5 class="modal-title" id="exampleModal2">Ajouter une adresse Email </h5>
 
                 </div>
                 <div class="modal-body">

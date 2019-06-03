@@ -25,7 +25,10 @@ class Prestataire extends Model
 'mail3',
 'mail4',
 'mail5',
-'annule'
+'annule',
+'prefixe',
+'prenom'
+
 
     ];
 

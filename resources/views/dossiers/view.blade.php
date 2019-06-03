@@ -335,7 +335,7 @@
                                                                     <div class="row form-group">
 
                                                                             <div style="">
-                                                                                <span style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addemail" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createemail"><b><i class="fas fa-plus"></i> Ajouter un email</b></span>
+                                                                                <span style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addemail" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createemail"><b><i class="fas fa-plus"></i> Ajouter une adresse email</b></span>
 
                                                                             </div>
                                                                             <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;font-size:16px;">
@@ -1643,7 +1643,7 @@ $iduser=$CurrentUser->id;
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModal2">Ajouter un Email </h5>
+                <h5 class="modal-title" id="exampleModal2">Ajouter une adresse Email </h5>
 
             </div>
             <div class="modal-body">
@@ -2121,6 +2121,42 @@ $iduser=$CurrentUser->id;
 
  $(function () {
 
+
+     $('#add2').click(function(){
+         var prestataire = $('#selectedprest').val();
+         var dossier_id = $('#iddossupdate').val();
+         var typeprest = $('#typeprest').val();
+         alert(prestataire);
+         alert(dossier_id);
+         alert(typeprest);
+
+         //   gouvcouv
+         ///if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
+         ///   {
+         var _token = $('input[name="_token"]').val();
+         $.ajax({
+             url:"{{ route('prestations.saving') }}",
+             method:"POST",
+             data:{prestataire:prestataire,dossier_id:dossier_id,typeprest:typeprest, _token:_token},
+             success:function(data){
+                 console.log(data);
+                 alert('data : '+data);
+                 //    window.location =data;
+
+             },
+             error: function(jqXHR, textStatus, errorThrown) {
+                 alert('msg : '.jqXHR.status);
+                 alert('msg 2 : '.errorThrown);
+             }
+
+         });
+         ///  }else{
+         // alert('ERROR');
+         /// }
+     });
+
+
+
      $("#typeprest").change(function() {
 
          document.getElementById('termine').style.display = 'none';
@@ -2246,34 +2282,6 @@ $iduser=$CurrentUser->id;
 
 
 
-     $('#add2').click(function(){
-         var prestataire = $('#selectedprest').val();
-         var dossier_id = $('#iddossupdate').val();
-         var typeprest = $('#typeprest').val();
-         alert(prestataire);
-         alert(dossier_id);
-         alert(typeprest);
-
-         //   gouvcouv
-         ///if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
-      ///   {
-             var _token = $('input[name="_token"]').val();
-             $.ajax({
-                 url:"{{ route('prestations.saving') }}",
-                 method:"POST",
-                 data:{prestataire:prestataire,dossier_id:dossier_id,typeprest:typeprest, _token:_token},
-                 success:function(data){
-console.log(data);
-alert(data);
-                  //    window.location =data;
-
-
-                 }
-             });
-       ///  }else{
-             // alert('ERROR');
-        /// }
-     });
 
 
  }); // $ function

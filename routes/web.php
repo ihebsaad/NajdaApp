@@ -87,6 +87,7 @@ Route::get('/emails/checkfax', 'EmailController@checkfax');
 Route::get('/emails/checksms', 'EmailController@checksms');
 Route::get('/emails/checkboiteperso', 'EmailController@checkboiteperso');
 Route::get('/emails/folder/{foldername}', 'EmailController@folder');
+Route::post('/emails/accuse', 'EmailController@accuse')->name('emails.accuse');
 
 
 Route::get('/emails/test', 'EmailController@test');
@@ -104,7 +105,6 @@ Route::get('/emails/open/{id}', 'EmailController@open');
 /****** Boite Personnelle ****/
 Route::get('/boites/',  'BoitesController@index')->name('boites');;
 Route::get('/boites/show/{id}', 'BoitesController@show');
-
 
 
 
@@ -139,19 +139,40 @@ Route::get('/clients', array('as' => 'clients','uses' => 'ClientsController@inde
 Route::get('/clients/saving','ClientsController@saving')->name('clients.saving');
 Route::post('/clients/saving','ClientsController@saving')->name('clients.saving');
 Route::post('/clients/updating','ClientsController@updating')->name('clients.updating');
+Route::post('/clients/addressadd','ClientsController@addressadd')->name('clients.addressadd');
+Route::post('/clients/addressadd2','ClientsController@addressadd2')->name('clients.addressadd2');
+Route::post('/clients/addressadd3','ClientsController@addressadd3')->name('clients.addressadd3');
 Route::post('/clients/updatingnature','ClientsController@updatingnature')->name('clients.updatingnature');
 Route::post('/clients/removenature','ClientsController@removenature')->name('clients.removenature');
 Route::get('/clients/view/{id}', 'ClientsController@view');
 
 
-
-
-/*** Cities  Gouvernorats  **/
+/*** Cities -> Gouvernorats  **/
 Route::resource('/cities',  'CitiesController');
 Route::get('/cities', array('as' => 'cities','uses' => 'CitiesController@index'));
 Route::post('/cities/saving','CitiesController@saving')->name('cities.saving');
 Route::post('/cities/updating','CitiesController@updating')->name('cities.updating');
 Route::get('/cities/view/{id}', 'CitiesController@view');
+
+
+
+/*** Voitures ->Véhicules   **/
+Route::resource('/voitures',  'VoituresController');
+Route::get('/voitures', array('as' => 'voitures','uses' => 'VoituresController@index'));
+Route::post('/voitures/saving','VoituresController@saving')->name('voitures.saving');
+Route::post('/voitures/updating','VoituresController@updating')->name('voitures.updating');
+Route::get('/voitures/view/{id}', 'VoituresController@view');
+
+
+
+/*** personnes -> personnels   **/
+Route::resource('/personnes',  'PersonnesController');
+Route::get('/personnes', array('as' => 'personnes','uses' => 'PersonnesController@index'));
+Route::post('/personnes/saving','PersonnesController@saving')->name('personnes.saving');
+Route::post('/personnes/updating','PersonnesController@updating')->name('personnes.updating');
+Route::get('/personnes/view/{id}', 'PersonnesController@view');
+
+
 
 
 

@@ -500,7 +500,8 @@ class DossiersController extends Controller
             $tel1 = app('App\Http\Controllers\PrestatairesController')->ChampById('phone_cell', $prestataire);
             $tel2 = app('App\Http\Controllers\PrestatairesController')->ChampById('phone_cell2', $prestataire);
             $fixe = app('App\Http\Controllers\PrestatairesController')->ChampById('phone_home', $prestataire);
-            $specialite = app('App\Http\Controllers\PrestatairesController')->ChampById('phone_home', $prestataire);
+            $specialite = app('App\Http\Controllers\PrestatairesController')->ChampById('specialite', $prestataire);
+            $observ = app('App\Http\Controllers\PrestatairesController')->ChampById('observation', $prestataire);
 
             $emails = Email::where('parent', $prestataire)->get();
 
@@ -526,42 +527,25 @@ class DossiersController extends Controller
    */
             $output .= '  <div id="item'.$c . '" style="display:none">
              
-                                                   <address ><input type="hidden" id="prestataire_id_'.$c.'" value="'.$prestataire.'">
-                                                   <input type="hidden" id="nomprest" value="'.$nom.'">
-                                                    <strong >' . $nom . ' (' . $priorite . ')</strong><br>
-                                                    <i class="fa fa-map-marker"></i> <span >' . $adresse . '</span><br>
-                                                    <i class="fa fa-phone"></i> <span >' . $fixe . '</span><br>
-                                                    <i class="fa fa-mobile"></i> <span >' . $tel1 . ' - ' . $tel2 . '   </span><br>
-                                                    
-                                                    
+                                                                          
                              <div class="prestataire form-group">
-                            <div class="row">
-                            <label>Prestataire</label><br>
-                            </div>
+                              <input type="hidden" id="prestataire_id_'.$c.'" value="'.$prestataire.'">
+                             <input type="hidden" id="nomprest" value="'.$nom.'">
                             <div class="row" style="margin-top:10px;margin-bottom: 20px">
-                                <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-user-md"></span> ' . $nom . ' (' . $priorite . ')</div>
-                                <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-ambulance"></span> '.$specialite.'</div>
-                                <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-map-marker"></span>  '.$adresse.'</div>
+                                <div class="col-md-8"><span style="color:grey" class="fa  fa-user-md"></span> <B>' . $nom . ' (' . $priorite . ')</b></div>
+                                <div class="col-md-4"><span style="color:grey" class="fa  fa-ambulance"></span> '.$specialite.'</div>
+                                <div class="col-md-8"><span style="color:grey" class="fa  fa-map-marker"></span>  '.$adresse.'</div>
 
                             </div>
 
                             <div class="row">
-                                <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-phone"></span> ' . $fixe . ' </div>
-                                <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-mobile"></span> ' . $tel1 . ' - ' . $tel2 . '  </div>
-                                <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-fax"></span> <?php echo PrestatairesController::FaxPrestatireById($prestation->prestataire_id); ?></div>
+                                <div class="col-md-6"><span style="color:grey" class="fa fa-phone"></span> ' . $fixe . ' </div>
+                                <div class="col-md-6"><span style="color:grey" class="fa  fa-mobile"></span> ' . $tel1 . ' - ' . $tel2 . '  </div>
+                                <div class="col-md-8"><span style="color:grey" class="fas  fa-clipboard"></span> '.$observ.'</div>
 
                             </div>
-
-
-                        </div>
-                                                    
-                                                    
-                                                    
-                                                    
-                                                    
-                                                    
-                                                    
-                        <table>';
+                        </div>                       
+                        <table style="padding-left:5px">';
                              foreach ($emails as $email) {
 
                                      $output .= ' <tr>

@@ -285,7 +285,6 @@ class PrestatairesController extends Controller
     }
 
 
-
     public  function removetypeprest(Request $request)
     {
         $prestataire= $request->get('prestataire');
@@ -316,7 +315,6 @@ class PrestatairesController extends Controller
 
 
     }
-
 
 
     public  function removecitieprest(Request $request)

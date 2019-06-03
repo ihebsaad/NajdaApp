@@ -1565,6 +1565,76 @@ class EmailController extends Controller
 
 
 
+
+
+    function accuse (Request $request)
+    {
+
+      /*  $request->validate([
+            'g-recaptcha-response' => 'required|captcha'
+        ]);
+*/
+        $entree = $request->get('entree');
+        $refdossier = app('App\Http\Controllers\EntreesController')->ChampById('dossier',$entree);
+        $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+        $clientid = app('App\Http\Controllers\DossiersController')->ClientDossierById($iddossier);
+        $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$clientid);
+
+        $nomabn=app('App\Http\Controllers\DossiersController')->NomAbnDossierById($iddossier);
+
+        $refclient=app('App\Http\Controllers\ClientsController')->ClientChampById('reference',$clientid);
+
+        $to=  app('App\Http\Controllers\EntreesController')->ChampById('emetteur',$entree);
+
+        $sujet=  $nomabn.'  - V/Réf(Y/Ref): '.$refclient .' - N/Réf(O/Ref): '.$refdossier ;
+
+        $signature='Signature';
+
+        if ($langue=='francais'){
+        $contenu='
+Bonjour de <B>Najda</B><br><br>
+Nous avons le plaisir d’accuser bonne réception de votre nouvelle affaire et vous confirmons avoir ouvert un dossier au nom de l’assuré sous notre référence en objet.<br>
+Nous mettons en route les actions nécessaires pour répondre à vos demandes, et revenons vers vous rapidement avec les suites dès que nous avons des résultats à vous communiquer.<br>
+Nous vous rappelons qu’au besoin, vous pouvez nous appeler sur les numéros ci-dessous en signature, dont un numéro alternatif (+33 9) au cas où notre numéro habituel (+216 36) n’aboutirait pas.<br> 
+  ';
+        }else{
+
+        $contenu='
+Hello from <b>Najda</b><br></br>
+We are pleased to acknowledge receipt of your new business and confirm that you have opened a file in the name of the insured under our reference object.<br>
+We take the necessary actions to respond to your requests, and return to you quickly with the suites as soon as we have results to communicate to you.</br>
+We remind you that if necessary, you can call us on the numbers below in signature, including an alternative number (+33 9) in case our usual number (+216 36) does not succeed.</br></br>           
+';
+
+        }
+
+        $contenu=$contenu.'<br><br>'.$signature;
+        try{
+            Mail::send([], [], function ($message) use ($to,$sujet,$contenu) {
+                $message
+
+                      ->to($to)
+
+                    ->subject($sujet)
+                    ->setBody($contenu, 'text/html');
+
+
+
+            });
+
+            var_dump( Mail:: failures());
+
+        } catch (Exception $ex) {
+            // Debug via $ex->getMessage();
+            echo '<script>alert("Erreur !") </script>' ;
+        }
+
+    }// end accuse
+
+
+
+
+
     public function export_pdf_send($id)
     {
         // Fetch all customers from database

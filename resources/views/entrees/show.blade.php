@@ -35,9 +35,14 @@ use App\Http\Controllers\TagsController;
                                 @if (empty($entree->dossier))
                                         <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
                                  @endif
-                                <a href="#" class="btn btn-info btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" > 
+                                <a  href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-info btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
                                   <span class="fa fa-fw fa-check"></span> Traité
                                 </a>
+                                    @if (!empty($entree->dossier))
+                                    <button  id="accuse"   data-toggle="modal" data-target="#sendaccuse" class="btn btn-info btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer l'accusé de reception" >
+                                        <i class="fas fa-mail-bulk"></i> Accusé
+                                    </button>
+                                    @endif
                             </div>
                         </div>
 
@@ -107,7 +112,8 @@ use App\Http\Controllers\TagsController;
                                             <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
                                             <?php  echo $cont; ?></p>
                                         </div>
-                                        @if ($entree['nb_attach']  > 0)
+
+                         @if ($entree['nb_attach']  > 0)
                                           <?php
                                             // get attachements info from DB
                                             $attachs = Attachement::get()->where('parent', '=', $entree['id'] );
@@ -273,6 +279,35 @@ $users=UsersController::ListeUsers();
 </div>
 
 
+<!-- Modal Accusé -->
+<div class="modal fade" id="sendaccuse" tabindex="-1" role="dialog" aria-labelledby="label" aria-hidden="true">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="label">Accusé</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body" style="text-align:center">
+                    <h3>Envoyer un accusé de réception au client</h3><br><br>
+
+                    <form method="post" >
+                        {{ csrf_field() }}
+
+                    </form>
+                    <button style="text-align:center" type="button"  id="sending" class="btn btn-lg  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 
@@ -291,10 +326,7 @@ $urlapp='http://localhost/najdaapp';
 ?>
 <script>
 
-
     $( document ).ready(function() {
-
-
 
         $('#add').click(function(){
             var type_dossier = $('#type_dossier').val();
@@ -320,6 +352,25 @@ $urlapp='http://localhost/najdaapp';
             }
         });
 
+
+        $('#sending').click(function(){
+            var entree = $('#entreeid').val();
+
+
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('emails.accuse') }}",
+                    method:"POST",
+                    data:{entree:entree, _token:_token},
+                    success:function(data){
+
+                        alert('Envoyé !');
+
+
+                    }
+                });
+
+        });
 
 
 
