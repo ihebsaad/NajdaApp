@@ -59,7 +59,7 @@
     
 
     <div class="col-md-2">
-    <button class="btn " style="float:right;margin-right:5px;" title="Reporter la sous-action courante à une date ultérieure" data-toggle="modal" data-target="#ReporterSA"  >Reporter<br>
+    <button class="btn " style="float:right;margin-right:5px;" title="Reporter la sous-action courante à une date ultérieure" data-toggle="modal" data-target="#ReporterSA" >Reporter<br>
      <i style="margin-top:8px" class="fa fa-2x fa-history"> </i></button>
    </div>
      </div>
