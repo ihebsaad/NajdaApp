@@ -185,52 +185,6 @@ class DossiersController extends Controller
         return url('/dossiers/view/'.$parent) ;
     }
 
-    public function adddocument(Request $request)
-    {
-        $dossier= $request->get('dossier') ;
-        $arrfile = Template_doc::where('nom', 'like', 'PC_Dedouannement')->first();
-        $infodossier = Dossier::where('id', $dossier)->first();
-        //print_r($arrfile);
-        $file=public_path($arrfile['path']);
-        //if (file_exists($file)) {
-
-            setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
-            $datees = strftime("%d %B %Y".", "."%H:%M"); 
-
-            $refdoss = $infodossier["reference_medic"];
-            
-            $array = array(
-                '[N_ABONNEE]' => $infodossier["subscriber_name"],
-                '[P_ABONNEE]' => $infodossier["subscriber_lastname"],
-                '[NREF_DOSSIER]' => $refdoss,
-                '[DATE_PREST]' => '10/01/2020',
-                '[LIEU_DED]' => 'Tunis',
-                '[TYPEVE_IMMAT]' => 'Mercedes 125-4568',
-                '[LIEU_IMMOB]' => 'Tunis',
-                '[LTA]' => 'ExLTA',
-                '[CORD_VOL]' => '001VOL100120',
-                '[DATE_HEURE]' => $datees,
-            );
-
-            $name_file = 'PC_Dedouannement_'.$refdoss.'.doc';
-            
-         WordTemplate::export($file, $array, '/documents/'.$refdoss.'/'.$name_file);
-          //return WordTemplate::verify($file);
-
-       /* }
-        else {return 'fichier template non existant';}*/
-        
-
-        $doc = new Document([
-            'dossier' => $dossier,
-            'titre' => 'PC_Dedouannement_'.$refdoss,
-            'emplacement' => 'documents/'.$refdoss.'/'.$name_file,
-
-        ]);
-        $doc->save();
-        //redirect()->route('docgen');
-        //return url('/dossiers/view/'.$dossier) ;
-    }
 
         /**
      * Display the specified resource.

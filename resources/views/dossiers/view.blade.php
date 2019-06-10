@@ -1,5 +1,9 @@
 @extends('layouts.mainlayout')
-<?php use App\User ; ?>
+<?php 
+use App\User ; 
+use App\Template_doc ; 
+
+?>
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
 <link rel="stylesheet" href="{{ asset('public/css/timeline.css') }}" type="text/css">
 <!--select css-->
@@ -1706,7 +1710,7 @@ $iduser=$CurrentUser->id;
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModal2">Générer un document </h5>
+                <h5 class="modal-title" id="exampleModal2">Choisir la template du document </h5>
 
             </div>
             <div class="modal-body">
@@ -1723,18 +1727,16 @@ $iduser=$CurrentUser->id;
                                 <label for="emaildoss">Template</label>
                                 <div class=" row  ">
                                     <select class="form-control" required id="templatedoc">
-                                                    <option>PRISE EN CHARGE DEDOUANNEMENT</option>
-                                                </select>
+                                    <?php
+                                        $templatesd = Template_doc::get();
+                                        $docwithcl = array();
+                                    ?>
+                                        @foreach ($templatesd as $tempdoc)
+                                            <option value={{ $tempdoc["id"] }} >{{ $tempdoc["nom"] }}</option>
+                                        @endforeach
+                                   </select>
                                 </div>
                             </div>
-
-                            <!--<div class="form-group ">
-                                <label for="DescrEmail">Description</label>
-                                <div class="row">
-                                    <input type="text" class="form-control"  id="DescrEmail" />
-
-                                </div>
-                            </div>-->
 
                         </form>
                     </div>
@@ -1745,7 +1747,42 @@ $iduser=$CurrentUser->id;
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="button" id="gendoc" class="btn btn-primary">Générer</button>
+                <button type="button" id="gendoc" class="btn btn-primary">Choisir</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal template html doc-->
+<div class="modal fade" id="templatehtmldoc" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:900px;height: 450px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal2">Veuillez éditer les champs du document</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+
+                    <div class="form-group">
+                        
+
+                        <form id="gendocfromhtml" novalidate="novalidate" method="post" action="{{ route('documents.adddocument') }}">
+                            {{ csrf_field() }}
+                            <input id="dossdoc" name="dossdoc" type="hidden" value="{{ $dossier->id}}">
+                            <input type="hidden" name="templatedocument" id="templatedocument" >
+                            <iframe src="#" id="templatefilled" name="templatefilled" style="width:100%;height:100%">content</iframe>
+
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" id="gendochtml" class="btn btn-primary">Générer</button>
             </div>
         </div>
     </div>
@@ -1793,7 +1830,6 @@ $iduser=$CurrentUser->id;
                                     </div>
                                 </div>
                             </div>
-                        </form>
                     </div>
 
 
@@ -1804,7 +1840,7 @@ $iduser=$CurrentUser->id;
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 <button type="submit" id="attribdoss" class="btn btn-primary">Affecter</button>
             </div>
-
+                        </form>
         </div>
     </div>
 </div>
@@ -1915,17 +1951,103 @@ $iduser=$CurrentUser->id;
 
     $('#gendoc').click(function(){
         var dossier = $('#dossier').val();
+        var tempdoc = $("#templatedoc").val();
+        $("#gendochtml").prop("disabled",false);
         if ((dossier != '') )
         {
             var _token = $('input[name="_token"]').val();
             $.ajax({
-                url:"{{ route('dossiers.adddocument') }}",
+                url:"{{ route('documents.htmlfilled') }}",
                 method:"POST",
-                data:{dossier:dossier, _token:_token},
+                data:{dossier:dossier,template:tempdoc, _token:_token},
                 success:function(data){
 
                     //   alert('Added successfully');
-                    window.location =data;
+                   // window.location =data; hde gendocform and display template filled
+                   $("#generatedoc").modal('hide');
+                   //change html template content
+                   var templateexist = true;
+                   var parsed = JSON.parse(data);
+                   var items = [];
+                   var html_string="";
+                   $.each(parsed, function(i, field){
+                      items.push([ i,field ]);
+                    });
+                   // affichage template dans iframe
+                  $.each(items, function(index, val) {
+
+                        //recuperer la template html du document
+                        if(val[0] ==='templatehtml') 
+                            {
+                                if ((val[1].includes(undefined)) || (!val[1])) 
+                                {
+                                    templateexist = false;
+                                    alert("la template html du document n'est pas bien défini ");
+                                }
+                                else
+                                {    
+                                    html_string= "{{asset('public/') }}"+"/"+val[1];
+
+                                }
+                                
+                            }
+                        //verifier la templte rtf du document
+                        if(val[0] ==='templatertf') 
+                            {
+                                if ((val[1].includes(undefined)) || (!val[1])) 
+                                {
+                                    $("#gendochtml").prop("disabled",true);
+                                    alert("la template rtf du document n'est pas bien défini ");
+                                }
+                                else
+                                {    
+                                    $("#templatedocument").val(tempdoc);
+                                }
+                                
+                            }
+
+                    });
+
+                  if (templateexist)
+                    {
+
+                        // remplissage de la template dans iframe
+                        var numparam = 0;
+                        $.each(items, function(index, val) {
+                            // les champs du document
+                            if ((val[0] !=='templatertf') && (val[0] !=='templatehtml') && (val[0].indexOf("CL_") == -1) )
+                            {
+                                if (numparam == 0)
+                                {
+                                    html_string=html_string+'?';
+                                }
+                                else
+                                {
+                                    html_string=html_string+'&';
+                                }
+
+                                html_string=html_string+val[0]+'='+val[1];
+
+                                numparam ++;
+                            }
+                        });
+
+
+
+                        //chargement du contenu et affichage du preview du document
+                        //alert(html_string);
+                        document.getElementById('templatefilled').src = html_string;
+                        $("#templatehtmldoc").modal('show');
+
+
+                    }
+
+
+                   /*var dd = JSON.stringify(data);
+                   var parsed = JSON.parse(dd);
+                   $('#templatefilled').contents().find('html').html("/"+parsed[0]['templatehtml']);*/
+                  // $("#templatehtmldoc").modal('show');
+                   //alert(data[1]); 
 
 
                 }
@@ -1935,6 +2057,25 @@ $iduser=$CurrentUser->id;
         }
     });
 
+    // generate doc from html templte
+    $('#gendochtml').click(function(){
+        //alert($("#templatedocument").val());
+        //$("#gendocfromhtml").submit();
+        var _token = $('input[name="_token"]').val();
+        var dossier = $('#dossdoc').val();
+        var tempdoc = $("#templatedocument").val();
+        $.ajax({
+                url:"{{ route('documents.adddocument') }}",
+                method:"POST",
+                //'&_token='+_token
+                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc,
+                success:function(data){
+                    //alert(JSON.stringify(data));
+                    //console.log(data);
+                    location.reload();
+                }
+            });
+    });
     });
 
 
