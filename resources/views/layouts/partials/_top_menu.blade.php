@@ -71,6 +71,13 @@
         </a>
     </div>
 
+    <div class="col-md-3">
+                <a href="{{ route('actualites') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="fa fa-lg fa-fw fa-bullhorn"></span>
+                    <br>
+                    Actualités
+                </a>
+    </div>
 
     @endcan
     </div>

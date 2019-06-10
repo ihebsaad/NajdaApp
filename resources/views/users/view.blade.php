@@ -33,17 +33,21 @@
         <option  value="admin"  <?php if($user->user_type=='admin') {echo'selected';}?>  >Admin</option>
     </select>
 </div>
+        <?php use \App\Http\Controllers\UsersController;     ?>
         <div class="form-group  ">
             <label>Rôles</label>
-                 <select class="itemName form-control col-lg-6" style="" name="roles"  multiple  id="roles" value="{{$user->roles}}">
+                  <select class="itemName form-control col-lg-6" style="" name="roles"  multiple  id="roles" value="{{$user->roles}}">
                     <option></option>
-                    <?php if ( count($rolesusers) > 0 ) {?>
-                     @foreach($roles as $aKey)
-                         @foreach($rolesusers as $R  )
-                             <option  @if($R->role_id==$aKey->id)selected="selected"@endif    value="{{$aKey->id}}"> {{ $aKey->nom}}</option>
-                         @endforeach
-                     @endforeach
-                    <?php } else{ ?>
+                    <?php $c=0;if ( count($rolesusers) > 0 ) {
+                     foreach($roles as $aKey){
+                          ?>
+                             <option  <?php if(UsersController::CheckRoleUser($user['id'],$aKey->id)==1){echo 'selected="selected" ';} ?>   value="<?php echo $aKey->id;?>" > <?php echo  $aKey->nom; ?>
+                             </option>
+                     <?php
+
+                      }
+
+                     } else{ ?>
 
                      @foreach($roles as $aKey)
                          <option       value="<?php echo $aKey->id;?>"> <?php echo $aKey->nom;?></option>
@@ -51,10 +55,7 @@
 
                     <?php }  ?>
 
-
                 </select>
-
-
          </div>
 
       <!--  <div class="form-group">

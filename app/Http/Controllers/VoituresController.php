@@ -115,8 +115,10 @@ class VoituresController extends Controller
      */
     public function view($id)
     {
+        $dossiers = Dossier::all();
+
         $voiture = Voiture::find($id);
-        return view('voitures.view', compact('voiture'));
+        return view('voitures.view', compact('voiture'),['dossiers' => $dossiers]);
 
     }
 

@@ -149,12 +149,14 @@
                                 {
                                   // recuperation nom assuré du dossier
                                     $search = $ntf[0]['dossier'];
-                                    $assuree = $dossiers->filter(function($item) use ($search) {
+                                    /*$assuree = $dossiers->filter(function($item) use ($search) {
                                         return stripos($item['reference_medic'],$search) !== false;
 
                                     });
 
-                                    $nassure =$assuree->first();
+                                    $nassure =$assuree->first();*/
+                                    $nassure['subscriber_name'] = "";
+                                    $nassure['subscriber_lastname'] = "";
                                   // fin recuperation nom assuré
                                   echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']." | ".$nassure['subscriber_name']." ".$nassure['subscriber_lastname']."<ul>";}
                                 foreach ($ntf as $n) {

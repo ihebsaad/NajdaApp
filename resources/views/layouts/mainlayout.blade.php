@@ -6,6 +6,7 @@
 <body>
 @include('layouts.partials.top')
 
+@include('layouts.partials.news')
 @include('layouts.partials.folders')
 
 <div class="content row">

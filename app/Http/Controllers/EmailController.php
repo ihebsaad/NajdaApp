@@ -305,7 +305,6 @@ class EmailController extends Controller
                 $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
                 // message moved
 
-
         // dispatch
         $dossiers = DB::table('dossiers')->pluck('reference_medic');
         $refdossier='';
@@ -772,6 +771,20 @@ class EmailController extends Controller
                     $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
                     // message moved
 
+                    $dossiers = DB::table('dossiers')->pluck('reference_medic');
+
+                    $refdossier='';
+                    $statut = 0;
+                    foreach ($dossiers as $ref) {
+
+                        if (   (strpos($sujet, $ref )!==false) || (strpos($contenu, $ref )!==false)    )
+                        {
+                            $refdossier = $ref;
+                            $statut = 1;
+                            break;
+                        }
+                    }
+
 
                     $entree = new Entree([
 
@@ -779,13 +792,15 @@ class EmailController extends Controller
                         'destinataire' =>  'SMS Najda',
                         'emetteur' =>  ($sujet),
                         'sujet' =>  ($sujet),
-                        'contenu'=> utf8_encode($contenu) ,
+                        'contenu'=>  ($contenu) ,
                         'mailid'=>  'sms-'.$mailid,
                         'viewed'=>0,
                         'statut'=>0,
                         'nb_attach'=>0,
                         'reception'=>$date,
-                        'type'=>'sms'
+                        'type'=>'sms',
+                         'dossier'=>$refdossier,
+                         'statut'=>$statut,
 
                     ]);
 
@@ -1707,17 +1722,17 @@ We remind you that if necessary, you can call us on the numbers below in signatu
         $dossier= $this->RefDossierById($doss);////;
 
 
-        $from='SMS Najda';
+        $from='SMS Najda +216 21 433 463';
 
         $par=Auth::id();
 
         try{
             Mail::send([], [], function ($message) use ($contenu,$dossier,$par,$description,$num,$from) {
                 $message
-                      ->to('ihebsaad@gmail.com')
-                   //   ->to('ecom_plus@hotmail.com')
+                     //  ->to('ihebsaad@gmail.com')
+                     ->to('ecom_plus@tcs.com.tn')
 
-                    ->subject('sms'.$num)
+                    ->subject('sms '.$num.' ECOM1')
                     ->setBody($contenu );
 
 
@@ -1743,7 +1758,8 @@ We remind you that if necessary, you can call us on the numbers below in signatu
                 }
                 //   $urlsending=$urlapp.'/emails/envoimail/'.$doss;
                 $urlsending=$urlapp.'/envoyes';
-           return redirect($urlsending)->with('success', ' SMS Envoyé ! ');
+                 echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
+                return redirect($urlsending)->with('success', '  Envoyé ! ');
 
             });
 
@@ -1756,9 +1772,10 @@ We remind you that if necessary, you can call us on the numbers below in signatu
 
     function sms( $id)
     {
+        $dossiers = Dossier::all();
 
 
-        return view('emails.sms', ['doss' => $id]);
+        return view('emails.sms', ['doss' => $id,'dossiers'=>$dossiers]);
 
     }
 

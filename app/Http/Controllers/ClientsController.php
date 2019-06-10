@@ -278,10 +278,14 @@ class ClientsController extends Controller
             ->where('parent',$id)
             ->get();
 
+        $gestions =   Adresse::where('nature', 'gestion')
+            ->where('parent',$id)
+            ->get();
+
 
 
         $client = Client::find($id);
-        return view('clients.view',['dossiers' => $dossiers,'groupes'=>$groupes,'countries'=>$countries,'emails'=>$emails,'tels'=>$tels,'faxs'=>$faxs,'entites'=>$entites,'qualites'=>$qualites ,'reseaux'=>$reseaux], compact('client'));
+        return view('clients.view',['dossiers' => $dossiers,'groupes'=>$groupes,'countries'=>$countries,'emails'=>$emails,'tels'=>$tels,'faxs'=>$faxs,'entites'=>$entites,'qualites'=>$qualites ,'reseaux'=>$reseaux,'gestions'=>$gestions], compact('client'));
 
     }
 

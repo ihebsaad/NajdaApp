@@ -32,7 +32,47 @@
                         </div>
                     </div>
 
-                    <input type="hidden" id="idtp" class="form-control"   value="{{ $typeprestation->id }}">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Complexité</label>
+                                <select onchange="changing(this)" id="complexite" name="complexite" class="form-control"   value="{{ $typeprestation->complexite }}">
+
+                                    <option <?php if ($typeprestation->complexite =='0'){echo 'selected="selected"';} ?> value="0">0</option>
+                                    <option  <?php if ($typeprestation->complexite =='1'){echo 'selected="selected"';} ?>value="1">1</option>
+                                    <option  <?php if ($typeprestation->complexite =='2'){echo 'selected="selected"';} ?>value="2">2</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="padding-top:10px">Actif</label>
+                                    </div>
+                                    <div class="radio-list">
+                                        <div class="col-md-3">
+                                            <label for="annule" class="">
+                                                <div class="radio" id="uniform-actif"><span class="checked">
+                                                <input  onclick="changing(this)" type="radio" name="annule" id="annule" value="0"   <?php if ($typeprestation->annule ==0){echo 'checked';} ?>></span></div> Oui
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="nonactif" class="">
+                                                <div class="radio" id="uniform-nonactif"><span>
+                                                <input onclick="disabling('annule')" type="radio" name="annule" id="nonactif" value="1"  <?php if ($typeprestation->annule ==1){echo 'checked';} ?>></span></div> Non
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                        <input type="hidden" id="idtp" class="form-control"   value="{{ $typeprestation->id }}">
              </div>
 
     </form>

@@ -115,6 +115,7 @@ class UsersController extends Controller
         $roles = Role::all();
 
         $user = User::find($id);
+        $dossiers = Dossier::all();
 
         $rolesusers = DB::table('roles_users')->select('role_id')
             ->where('user_id','=',$id)
@@ -122,7 +123,7 @@ class UsersController extends Controller
 
         //$roles = DB::table('roles')->get();
 
-        return view('users.view',['rolesusers' => $rolesusers,'roles' => $roles], compact('user','id'));
+        return view('users.view',['rolesusers' => $rolesusers,'roles' => $roles,'dossiers'=>$dossiers], compact('user','id'));
 
     }
 
@@ -251,9 +252,19 @@ class UsersController extends Controller
 
     }
 
-    public function updating(Request $request)
+    public static function CheckRoleUser($user,$role)
     {
 
+      $find =   DB::table('roles_users')
+            ->where( ['role_id' => $role  , 'user_id' => $user])
+            ->count();
+
+       return $find  ;
+
+    }
+
+    public function updating(Request $request)
+    {
         $id= $request->get('user');
         $champ= strval($request->get('champ'));
         $val= $request->get('val');

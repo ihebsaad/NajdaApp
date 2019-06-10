@@ -19,18 +19,13 @@
         <div class="modal-body">
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-9">
                     <div class="form-group">
                         <label for="inputError" class="control-label">Nom *</label>
                         <input onchange="changing(this)"  type="text" class="form-control input" name="name" id="name"   value="{{ $client->name }}">
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="inputError" class="control-label">Référence *</label>
-                        <input onchange="changing(this)"  type="text" class="form-control input" name="reference" id="reference"   value="{{ $client->reference }}">
-                    </div>
-                </div>
+
 
             </div>
             <div class="row">
@@ -321,13 +316,13 @@
                                     <h4><i class="fa fa-lg fa-phone"></i>  Numéros de Téléphones</h4>
                                 </div>
                                 <div class="col-md-4">
-                                    <button style="float:right" id="add1" class="btn btn-md btn-success"   data-toggle="modal" data-target="#adding1"><b><i class="fa fa-phone"></i> Ajouter un numéro Tel</b></button>
+                                    <button style="float:right" id="add1" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding1"><b><i class="fa fa-phone"></i> Ajouter un numéro Tel</b></button>
                                 </div>
 
                             </div>
                             <table class="table table-striped"  style="width:100%;margin-top:35px;margin-bottom:35px;font-size:16px;">
                                 <thead>
-                                <tr id="headtable">
+                                <tr class="headtable">
                                     <th style="width:20%">Tel</th>
                                     <th style="width:20%">Type</th>
                                     <th style="width:50%">Remarque</th>
@@ -354,13 +349,13 @@
                                     <h4><i class="fa fa-lg fa-envelope"></i>  Adresses Emails </h4>
                                 </div>
                                 <div class="col-md-4">
-                                    <button style="float:right" id="add2" class="btn btn-md btn-success"   data-toggle="modal" data-target="#adding2"><b><i class="fa fa-envelope"></i> Ajouter une adresse email</b></button>
+                                    <button style="float:right" id="add2" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding2"><b><i class="fa fa-envelope"></i> Ajouter une adresse email</b></button>
                                 </div>
 
                             </div>
                             <table class="table table-striped"  style="width:100%;margin-top:35px;margin-bottom:35px;font-size:16px;">
                                 <thead>
-                                <tr id="headtable">
+                                <tr class="headtable">
                                     <th style="width:20%">Email</th>
                                     <th style="width:20%">Type</th>
                                     <th style="width:50%">Remarque</th>
@@ -386,14 +381,14 @@
                                     <h4><i class="fa fa-lg fa-fax"></i>  Numéros de Fax </h4>
                                 </div>
                                 <div class="col-md-4">
-                                    <button style="float:right" id="add3" class="btn btn-md btn-success"   data-toggle="modal" data-target="#adding3"><b><i class="fa fa-fax"></i> Ajouter un numéro de fax</b></button>
+                                    <button style="float:right" id="add3" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding3"><b><i class="fa fa-fax"></i> Ajouter un numéro de fax</b></button>
                                 </div>
 
                             </div>
 
                             <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
                                 <thead>
-                                <tr id="headtable">
+                                <tr class="headtable">
                                     <th style="width:20%">Tel</th>
                                     <th style="width:20%">Type</th>
                                     <th style="width:50%">Remarque</th>
@@ -514,17 +509,17 @@
 
                             <div class="row">
                                 <div class="col-md-8">
-                                    <h4>Entités de facturations différentes</h4>
+                                    <h5>Entités de facturations différentes</h5>
                                 </div>
                                 <div class="col-md-4">
-                                    <button style="float:right" id="add4" class="btn btn-md btn-success"   data-toggle="modal" data-target="#adding4"><b><i class="fa fa-map-marker"></i> Ajouter une adresse de facturation</b></button>
+                                    <button style="float:right" id="add4" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding4"><b><i class="fa fa-map-marker"></i> Ajouter une adresse de facturation</b></button>
                                 </div>
 
                             </div>
 
                             <table class="table table-striped"  style="width:100%;margin-top:15px;font-size:16px;">
                                 <thead>
-                                <tr id="headtable">
+                                <tr class="headtable">
                                     <th style="width:30%">Entité de facturation</th>
                                     <th style="width:70%">Adresse Posale complète</th>
                                 </tr>
@@ -543,6 +538,43 @@
 
 
 
+
+                            <div class="row" style="margin-top:30px">
+                                <div class="col-md-8">
+                                    <h4><i class="fa fa-lg fa-user"></i>  Responsables Gestion</h4>
+                                </div>
+                                <div class="col-md-4">
+                                    <button style="float:right" id="add7" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding7"><b><i class="fa fa-user"></i> Ajouter un responsable gestion</b></button>
+                                </div>
+
+                            </div>
+
+                            <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
+                                <thead>
+                                <tr class="headtable">
+                                    <th style="width:20%">Nom et Prénom</th>
+                                    <th style="width:20%">Fonction</th>
+                                    <th style="width:50%">Tel</th>
+                                    <th style="width:10%">Fax</th>
+                                    <th style="width:10%">Email</th>
+                                    <th style="width:10%">Observation</th>
+                                </tr>
+
+                                </thead>
+                                <tbody>
+                                @foreach($gestions as $gestion)
+                                    <tr>
+                                        <td style="width:20%;"><?php echo $gestion->nom; ?>  <?php echo $reseau->prenom; ?></td>
+                                        <td style="width:20%;"><?php echo $gestion->fonction; ?></td>
+                                        <td style="width:50%;"><?php echo $gestion->tel; ?></td>
+                                        <td style="width:50%;"><?php echo $gestion->fax; ?></td>
+                                        <td style="width:50%;"><?php echo $gestion->mail; ?></td>
+                                        <td style="width:50%;"><?php echo $gestion->remarque; ?></td>
+                                    </tr>
+                                @endforeach
+
+                                </tbody>
+                            </table>
 
                         </div>
                     </div>
@@ -638,17 +670,17 @@
 
                             <div class="row" style="margin-top:30px">
                                 <div class="col-md-8">
-                                    <h4><i class="fa fa-lg fa-user"></i>  Personnels Qualité</h4>
+                                    <h4><i class="fa fa-lg fa-user"></i>  Responsables Qualité</h4>
                                 </div>
                                 <div class="col-md-4">
-                                    <button style="float:right" id="add5" class="btn btn-md btn-success"   data-toggle="modal" data-target="#adding5"><b><i class="fa fa-user"></i> Ajouter un personnel Qualité</b></button>
+                                    <button style="float:right" id="add5" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding5"><b><i class="fa fa-user"></i> Ajouter un responsable Qualité</b></button>
                                 </div>
 
                             </div>
 
                             <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
                                 <thead>
-                                <tr id="headtable">
+                                <tr class="headtable">
                                     <th style="width:20%">Nom et Prénom</th>
                                     <th style="width:20%">Fonction</th>
                                     <th style="width:50%">Tel</th>
@@ -764,20 +796,19 @@
 
                             </div>
 
-
                             <div class="row" style="margin-top:30px">
                                 <div class="col-md-8">
-                                    <h4><i class="fa fa-lg fa-user"></i>  Personnels Réseau</h4>
+                                    <h5><i class="fa fa-lg fa-user"></i>  Responsables Réseau</h5>
                                 </div>
                                 <div class="col-md-4">
-                                    <button style="float:right" id="add6" class="btn btn-md btn-success"   data-toggle="modal" data-target="#adding6"><b><i class="fa fa-user"></i> Ajouter un personnel Réseau</b></button>
+                                    <button style="float:right" id="add6" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding6"><b><i class="fa fa-user"></i> Ajouter un responsable Réseau</b></button>
                                 </div>
 
                             </div>
 
                             <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
                                 <thead>
-                                <tr id="headtable">
+                                <tr class="headtable">
                                     <th style="width:20%">Nom et Prénom</th>
                                     <th style="width:20%">Fonction</th>
                                     <th style="width:50%">Tel</th>
@@ -1255,6 +1286,103 @@
         </div>
     </div>
 
+
+
+
+    <!-- Modal Reseau -->
+    <div class="modal fade" id="adding7" tabindex="-1" role="dialog" aria-labelledby="exampleModal7" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal7">Ajouter un Personnel Rseau </h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+                        <div class="form-group">
+
+                            <form   id="fggf" name="">
+                                {{ csrf_field() }}
+
+                                <div class="form-group " >
+                                    <label for="adresse">Nom</label>
+                                    <div class=" row  ">
+                                        <input class="form-control" type="text" required id="nomg"/>
+
+                                    </div>
+                                </div>
+                                <div class="form-group " >
+                                    <label for="adresse">Prénom</label>
+                                    <div class=" row  ">
+                                        <input class="form-control" type="text" required id="prenomg"/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group " >
+                                    <label for="adresse">Fonction</label>
+                                    <div class=" row  ">
+                                        <input class="form-control" type="text" required id="fonctiong"/>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group ">
+                                    <label for="code">Tel</label>
+                                    <div class="row">
+                                        <input type="text"   class="form-control"  id="telg" />
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group ">
+                                    <label for="code">Fax</label>
+                                    <div class="row">
+                                        <input type="text"   class="form-control"  id="faxg" />
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group ">
+                                    <label for="code">Email</label>
+                                    <div class="row">
+                                        <input type="text"   class="form-control"  id="emailg" />
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group ">
+                                    <label for="code">Observation</label>
+                                    <div class="row">
+                                        <textarea   class="form-control"  id="remarqueg" ></textarea>
+
+                                    </div>
+                                </div>
+
+                                <input id="nature7" name="nature" type="hidden" value="gestion">
+
+
+
+                            </form>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <span type="button" id="btnaddgestion" class="btn btn-primary">Ajouter</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 @endsection
 
  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -1441,6 +1569,37 @@
 
 
 
+        $('#btnaddgestion').click(function(){
+            var parent = $('#parent').val();
+            var nom = $('#nomg').val();
+            var prenom = $('#prenomg').val();
+            var fonction = $('#fonctiong').val();
+            var tel = $('#telg').val();
+            var email = $('#emailg').val();
+            var fax = $('#faxr').val();
+            var observ = $('#remarqueg').val();
+            var nature = $('#nature7').val();
+            if ((nom != '') )
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('clients.addressadd3') }}",
+                    method:"POST",
+                    data:{parent:parent,nom:nom,prenom:prenom,fonction:fonction,tel:tel,fax:fax,email:email,observ: observ, nature:nature, _token:_token},
+                    success:function(data){
+
+                        //   alert('Added successfully');
+                        window.location =data;
+
+                    }
+                });
+            }else{
+                // alert('ERROR');
+            }
+        });
+
+
+
 
 
         var $gouv = $('#nature');
@@ -1596,3 +1755,6 @@
 
 
 </script>
+<style>.headtable{background-color: grey!important;color:white;}
+    table{margin-bottom:40px;}
+ </style>

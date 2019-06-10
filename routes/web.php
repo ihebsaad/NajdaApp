@@ -155,6 +155,14 @@ Route::post('/cities/updating','CitiesController@updating')->name('cities.updati
 Route::get('/cities/view/{id}', 'CitiesController@view');
 
 
+/*** Actualites   **/
+//Route::resource('/actualites',  'ActualitesController');
+Route::get('/actualites', array('as' => 'actualites','uses' => 'ActualitesController@index'));
+Route::post('/actualites/saving','ActualitesController@saving')->name('actualites.saving');
+Route::post('/actualites/updating','ActualitesController@updating')->name('actualites.updating');
+Route::get('/actualites/view/{id}', 'ActualitesController@view');
+Route::get('/actualites/destroy/{id}', 'ActualitesController@destroy');
+ 
 
 /*** Voitures ->Véhicules   **/
 Route::resource('/voitures',  'VoituresController');
