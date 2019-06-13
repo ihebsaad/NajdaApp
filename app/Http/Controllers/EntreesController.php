@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Parametre;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
@@ -252,6 +253,24 @@ class EntreesController extends Controller
         }else{return '';}
 
     }
+
+    public static function GetParametre($entree)
+    {
+
+         $refdossier = app('App\Http\Controllers\EntreesController')->ChampById('dossier',$entree);
+        $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+        $clientid = app('App\Http\Controllers\DossiersController')->ClientDossierById($iddossier);
+        $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$clientid);
+
+        $message = Parametre::find(1);
+
+        if ($langue=='francais') {
+            return $message['accuse1'];
+        }else{
+            return $message['accuse2'];
+        }
+
+     }
 
 
 

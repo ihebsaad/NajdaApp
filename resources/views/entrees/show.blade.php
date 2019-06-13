@@ -25,7 +25,7 @@ use App\Http\Controllers\TagsController;
         <div class="panel-heading" style="">
                     <div class="row">
                         <div class="col-sm-4 col-md-4 col-lg-6"style=" padding-left: 0px;color:black;font-weight: bold ">
-                            <h4 class="panel-title"> <label for="sujet" style="overflow:hidden;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet']; echo utf8_decode($sujet); ?></h4>
+                            <h4 class="panel-title"> <label for="sujet" style="overflow:hidden;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet']; echo ($sujet); ?></h4>
                         </div>
                         <div class="col-sm-8 col-md-8 col-lg-6" style="padding-right: 0px;">
                             <div class="pull-right" style="margin-top: 0px;">
@@ -35,7 +35,7 @@ use App\Http\Controllers\TagsController;
                                 @if (empty($entree->dossier))
                                         <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
                                  @endif
-                                <a  href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-info btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
+                                <a  href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-info btn-sm btn-responsive traiter" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
                                   <span class="fa fa-fw fa-check"></span> Traité
                                 </a>
                                     @if (!empty($entree->dossier))
@@ -207,6 +207,7 @@ use App\Http\Controllers\TagsController;
     </style>
 
 <?php use \App\Http\Controllers\UsersController;
+use \App\Http\Controllers\EntreesController;
 $users=UsersController::ListeUsers();
 
  $CurrentUser = auth()->user();
@@ -293,9 +294,11 @@ $users=UsersController::ListeUsers();
 
                     <form method="post" >
                         {{ csrf_field() }}
-
+                        <?php $message= EntreesController::GetParametre($entree['id']);
+                      //  echo json_encode($message);?>
+                    <div  style=" width: 540px; height: 450px;" id="message" contenteditable="true" ><?php echo $message   ;?></div>
                     </form>
-                    <button style="text-align:center" type="button"  id="sending" class="btn btn-lg  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
+                    <button style="margin-top:20px;text-align:center" type="button"  id="sending" class="btn btn-lg  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
 
                 </div>
 
@@ -355,13 +358,14 @@ $urlapp='http://localhost/najdaapp';
 
         $('#sending').click(function(){
             var entree = $('#entreeid').val();
+            var message = $('#message').html();
 
 
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url:"{{ route('emails.accuse') }}",
                     method:"POST",
-                    data:{entree:entree, _token:_token},
+                    data:{entree:entree,message:message, _token:_token},
                     success:function(data){
 
                         alert('Envoyé !');
@@ -406,6 +410,13 @@ $urlapp='http://localhost/najdaapp';
 
 </script>
 
+<style>
+  #message {
+
+border: 1px solid #ccc;
+padding: 5px;
+}
+    </style>
 
 
 

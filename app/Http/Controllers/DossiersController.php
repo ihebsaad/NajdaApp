@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Adresse;
 use App\Prestataire;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -62,16 +63,22 @@ class DossiersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
+{
+    $dossier = new Dossier([
+        'ref' =>trim( $request->get('ref')),
+        'type' => trim($request->get('type')),
+        'affecte'=> $request->get('affecte'),
+
+    ]);
+
+    $dossier->save();
+    return redirect('/dossiers')->with('success', '  has been added');
+
+}
+
+    public function show ( )
     {
-        $dossier = new Dossier([
-             'ref' =>trim( $request->get('ref')),
-             'type' => trim($request->get('type')),
-             'affecte'=> $request->get('affecte'),
 
-        ]);
-
-        $dossier->save();
-        return redirect('/dossiers')->with('success', '  has been added');
 
     }
 
@@ -156,6 +163,36 @@ class DossiersController extends Controller
       //  $dossier->save();
 
      ///   return redirect('/dossiers')->with('success', 'Entry has been added');
+
+    }
+    public function updating2(Request $request)
+    {
+
+        $id= $request->get('dossier');
+        //$champ= strval($request->get('champ'));
+        // $val= $request->get('val');
+        //  $dossier = Dossier::find($id);
+        // $dossier->$champ =   $val;
+        Dossier::where('id', $id)->update(array('franchise' => 0));
+
+        //  $dossier->save();
+
+        ///   return redirect('/dossiers')->with('success', 'Entry has been added');
+
+    }
+    public function updating3(Request $request)
+    {
+
+        $id= $request->get('dossier');
+        //$champ= strval($request->get('champ'));
+        // $val= $request->get('val');
+        //  $dossier = Dossier::find($id);
+        // $dossier->$champ =   $val;
+        Dossier::where('id', $id)->update(array('is_hospitalized' => 0));
+
+        //  $dossier->save();
+
+        ///   return redirect('/dossiers')->with('success', 'Entry has been added');
 
     }
 
@@ -251,6 +288,14 @@ class DossiersController extends Controller
         $gouvernorats = DB::table('cities')->get();
 
         $dossier = Dossier::find($id);
+
+        $cl=$this->ChampById('customer_id',$id);
+
+
+        $entite=app('App\Http\Controllers\ClientsController')->ClientChampById('entite',$cl);
+        $adresse=app('App\Http\Controllers\ClientsController')->ClientChampById('adresse',$cl);
+
+
         $clients = DB::table('clients')->select('id', 'name')->get();
 
         $prestations =   Prestation::where('dossier_id', $id)->get();
@@ -268,9 +313,17 @@ class DossiersController extends Controller
 
         $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());
 
+        $phones =   Adresse::where('nature', 'teldoss')
+            ->where('parent',$id)
+            ->get();
+
+        $emailads =   Adresse::where('nature', 'emaildoss')
+            ->where('parent',$id)
+            ->get();
 
 
-            // Sort the array
+
+        // Sort the array
         usort($communins, function  ($element1, $element2) {
             $datetime1 = strtotime($element1['reception']);
             $datetime2 = strtotime($element2['reception']);
@@ -312,7 +365,28 @@ class DossiersController extends Controller
         $documents = Document::where('dossier', $id)->get();
         $dossiers = $this->ListeDossiersAffecte();
 
-        return view('dossiers.view',['dossiers'=>$dossiers,'prestataires'=>$prestataires,'emails'=>$emails,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
+
+        $liste = DB::table('adresses')
+            ->where('parent',$cl )
+            ->where('nature','facturation' )
+            ->get();
+
+
+        $hopitaux = DB::table('prestataires_type_prestations')
+            ->where('type_prestation_id',8 )
+            ->where('type_prestation_id',9 )
+            ->get();
+
+        $traitants = DB::table('prestataires_type_prestations')
+            ->where('type_prestation_id',15 )
+            ->get();
+
+        $hotels = DB::table('prestataires_type_prestations')
+            ->where('type_prestation_id',18 )
+            ->get();
+
+
+        return view('dossiers.view',['hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'prestataires'=>$prestataires,'emails'=>$emails,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
 
     }
 
@@ -569,6 +643,87 @@ class DossiersController extends Controller
        // return json_encode($liste);
 
     }
+
+    public function addressadd(Request $request)
+    {
+        if( ($request->get('email'))!=null) {
+
+            $parent=$request->get('parent');
+            $adresse = new Adresse([
+                'champ' => $request->get('email'),
+                'nom' => $request->get('nom'),
+                'prenom' => $request->get('prenom'),
+                'fonction' => $request->get('fonction'),
+                 'mail' => $request->get('email'),
+                 'remarque' => $request->get('observ'),
+                'nature' => $request->get('nature'),
+                'parent' => $parent,
+            ]);
+
+            if ($adresse->save())
+            {
+
+                return url('/dossiers/view/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;
+                // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
+                //  return  $iddoss;
+            }
+
+            else {
+                return url('/dossiers');
+            }
+        }
+
+        // return redirect('/clients')->with('success', 'ajouté avec succès');
+
+    }
+
+    public function addressadd2(Request $request)
+    {
+        if( ($request->get('tel'))!=null) {
+
+            $parent=$request->get('parent');
+            $adresse = new Adresse([
+                'champ' => $request->get('tel'),
+                'nom' => $request->get('nom'),
+                'prenom' => $request->get('prenom'),
+                'fonction' => $request->get('fonction'),
+                'tel' => $request->get('tel'),
+                'remarque' => $request->get('observ'),
+                'nature' => $request->get('nature'),
+                'parent' => $parent,
+            ]);
+
+            if ($adresse->save())
+            {
+
+                return url('/dossiers/view/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;
+                // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
+                //  return  $iddoss;
+            }
+
+            else {
+                return url('/dossiers');
+            }
+        }
+
+        // return redirect('/clients')->with('success', 'ajouté avec succès');
+
+    }
+
+
+    public function getListe($id)
+    {
+       // customer_id
+
+           $liste = DB::table('adresses')
+               ->where('parent',$id )
+               ->where('nature','facturation' )
+               ->get();
+
+    return ($liste);
+
+    }
+
 
 
 

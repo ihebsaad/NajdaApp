@@ -69,6 +69,19 @@ class Dossier extends Model
 'prixtotal',
 'facture_tot',
 
+'parente',
+'parente2',
+'parente3',
+'beneficiaire2',
+'beneficiaire3',
+'prenom_benef2',
+'prenom_benef3',
+
+        'subscriber_local_address2',
+        'subscriber_local_address3',
+        'hotel',
+        'ville'
+
 
     ];
 /*

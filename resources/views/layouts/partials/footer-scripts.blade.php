@@ -141,6 +141,7 @@
 
     $( "#open" ).click(function() {
         $(".folders").css("display", "none");
+        $(".news").css("display", "none");
      /*   $( ".folders" ).hide( "slow", function() {
             // Animation complete.
         });*/
@@ -157,6 +158,7 @@
 
     $( "#close" ).click(function() {
         $(".folders").css("display", "inline");
+        $(".news").css("display", "inline");
 
         /*
         $( ".folders" ).show( "slow", function() {

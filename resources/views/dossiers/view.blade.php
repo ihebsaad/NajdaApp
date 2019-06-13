@@ -78,6 +78,8 @@
         </div>
     </div>
     </div>
+
+
 </div>
     <section class="content form_layouts">
 
@@ -129,7 +131,87 @@
                         {{ csrf_field() }}
 
                         <form id="updatedossform">
-                            <input type="hidden" name="iddossupdate" id="iddossupdate" value={{ $dossier->id }}>
+                            <input type="hidden" name="iddossupdate" id="iddossupdate" value="{{ $dossier->id }}">
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="inputError" class="control-label">Réf Dossier</label>
+
+                                        <div class="input-group-control">
+                                            <input  type="text" id="reference_medic" name="reference_medic" class="form-control" disabled=""   value="{{ $dossier->reference_medic }}" >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Type de dossier</label>
+                                        <select  onchange="changing(this);location.reload();"  id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
+                                            <option <?php if ($dossier->type_dossier =='Medical'){echo 'selected="selected"';} ?> value="Medical">Medical</option>
+                                            <option <?php if ($dossier->type_dossier =='Technique'){echo 'selected="selected"';} ?> value="Technique">Technique</option>
+                                            <option <?php if ($dossier->type_dossier =='Mixte'){echo 'selected="selected"';} ?> value="Mixte">Mixte</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Affecté à </label>
+                                        <select id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single" readonly="readonly">
+                                            <option <?php if ($dossier->type_affectation =='Najda'){echo 'selected="selected"';} ?> value="Najda">Najda</option>
+                                            <option <?php if ($dossier->type_affectation =='VAT'){echo 'selected="selected"';} ?> value="VAT">VAT</option>
+                                            <option <?php if ($dossier->type_affectation =='MEDIC'){echo 'selected="selected"';} ?> value="MEDIC">MEDIC</option>
+                                            <option <?php if ($dossier->type_affectation =='Transport MEDIC'){echo 'selected="selected"';} ?> value="Transport MEDIC">Transport MEDIC</option>
+                                            <option <?php if ($dossier->type_affectation =='Transport VAT'){echo 'selected="selected"';} ?> value="Transport VAT">Transport VAT</option>
+                                            <option <?php if ($dossier->type_affectation =='Medic International'){echo 'selected="selected"';} ?> value="Medic International">Medic International</option>
+                                            <option <?php if ($dossier->type_affectation =='Najda TPA'){echo 'selected="selected"';} ?> value="Najda TPA">Najda TPA</option>
+                                            <option <?php if ($dossier->type_affectation =='Transport Najda'){echo 'selected="selected"';} ?> value="Transport Najda">Transport Najda</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Client </label>
+                                        <select onchange="changing(this);location.reload();" id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"   value="{{ $dossier->customer_id }}" >
+                                            <option value="0">Sélectionner..... </option>
+
+                                            @foreach($clients as $cl  )
+                                                <option
+                                                        @if($dossier->customer_id==$cl->id)selected="selected"@endif
+
+                                                value="{{$cl->id}}">{{$cl->name}}</option>
+
+                                            @endforeach
+
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="inputError" class="control-label">Référence *</label>
+
+                                        <div class="input-group-control">
+                                            <input    type="text" id="customer" name="reference_customer" class="form-control"   value="{{ $dossier->reference_customer }}" >
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="complexite"> Degré de complexité</label>
+                                        <select onchange="changing(this)" class="form-control" name="complexite" id="complexite"  >
+                                            <option <?php if ($dossier['complexite'] ==1){echo 'selected="selected"';}?> value="1">1</option>
+                                            <option <?php if ($dossier['complexite'] ==2){echo 'selected="selected"';}?>value="2">2</option>
+                                            <option <?php if ($dossier['complexite'] ==3){echo 'selected="selected"';}?>value="3">3</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="row form">
                                 <div class="col-md-12">
                                     <div class="tab-content">
@@ -147,33 +229,25 @@
                                                         <div class="panel-body">
                                                             <div class="col-md-12">
                                                                 <div class="row">
-                                                                    <div class="col-md-4">
+                                                                    <div class="col-md-5">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Nom abonné * </label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="subscriber_name" name="subscriber_name" class="form-control" value={{ $dossier->subscriber_name }}  >
+                                                                                <input onchange="changing(this)" type="text" id="subscriber_name" name="subscriber_name" class="form-control" value="{{ $dossier->subscriber_name }}"  >
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-4">
+                                                                    <div class="col-md-5">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Prénom *</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="subscriber_lastname" name="subscriber_lastname" class="form-control"  value={{ $dossier->subscriber_lastname }} >
+                                                                                <input onchange="changing(this)" type="text" id="subscriber_lastname" name="subscriber_lastname" class="form-control"  value="{{ $dossier->subscriber_lastname }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Adresse étranger</label>
 
-                                                                            <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="adresse_etranger" name="adresse_etranger" class="form-control"   value={{ $dossier->adresse_etranger }} >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
                                                                 </div>
 
                                                                 <div class="row">
@@ -182,7 +256,7 @@
                                                                             <label for="inputError" class="control-label">Bénéficaire </label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="beneficiaire" name="beneficiaire" class="form-control"   value={{ $dossier->beneficiaire }} >
+                                                                                <input onchange="changing(this)" type="text" id="beneficiaire" name="beneficiaire" class="form-control"   value="{{ $dossier->beneficiaire }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -191,49 +265,143 @@
                                                                             <label for="inputError" class="control-label">Prénom Bénéficaire</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="prenom_benef" name="prenom_benef" class="form-control"   value={{ $dossier->prenom_benef }} >
+                                                                                <input onchange="changing(this)" type="text" id="prenom_benef" name="prenom_benef" class="form-control"   value="{{ $dossier->prenom_benef }}" >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group">
+                                                                            <label for="inputError" class="control-label">Parenté </label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input onchange="changing(this)" type="text" id="parente" name="parente" class="form-control"  value="{{ $dossier->parente }}"  >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-1" style="padding-top:30px">
+                                                                        <span title="Afficher le bénéficiaire 2 " style="width:20px" class=" btn-md" id="btn01"><i class="fa fa-plus"></i> <i class="fa fa-minus"></i></span>
+                                                                    </div>
+
+                                                                    </div>
+                                                                <div class="row" id="ben2" <?php if ($dossier->beneficiaire2 =='') { ?> style="display:none" <?php }?>  >
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <label for="inputError" class="control-label">Bénéficaire 2</label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input onchange="changing(this)" type="text" id="beneficiaire2" name="beneficiaire" class="form-control"   value="{{ $dossier->beneficiaire2 }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <label for="inputError" class="control-label">Prénom Bénéficaire 2</label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input onchange="changing(this)" type="text" id="prenom_benef2" name="prenom_benef" class="form-control"   value="{{ $dossier->prenom_benef2 }}" >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group">
+                                                                            <label for="inputError" class="control-label">Parenté </label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input onchange="changing(this)" type="text" id="parente2" name="parente" class="form-control"  value="{{ $dossier->parente2 }}"  >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-1" style="padding-top:30px">
+                                                                        <span title="Afficher le bénéficiaire 3" style="width:20px" class=" btn-md" id="btn02"><i class="fa fa-plus"></i> <i class="fa fa-minus"></i></span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row" id="ben3"  <?php if ($dossier->beneficiaire3 =='') { ?> style="display:none" <?php }?>  >
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <label for="inputError" class="control-label">Bénéficaire 3 </label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input onchange="changing(this)" type="text" id="beneficiaire3" name="beneficiaire" class="form-control"   value="{{ $dossier->beneficiaire3 }}">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <label for="inputError" class="control-label">Prénom Bénéficaire 3</label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input onchange="changing(this)" type="text" id="prenom_benef3" name="prenom_benef" class="form-control"   value="{{ $dossier->prenom_benef3 }}" >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group">
+                                                                            <label for="inputError" class="control-label">Parenté </label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input onchange="changing(this)" type="text" id="parente3" name="parente" class="form-control"  value="{{ $dossier->parente3 }}"  >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div>
+
+                                                                <div class="row">
+
+                                                                    <?php if ($dossier->subscriber_phone_cell !='') { ?>
+
+                                                                    <div class="col-md-3">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Tel mobile 1</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="subscriber_phone_cell" name="subscriber_phone_cell" class="form-control"  value={{ $dossier->subscriber_phone_cell }}  >
+                                                                                <input onchange="changing(this)" type="text" id="subscriber_phone_cell" name="subscriber_phone_cell" class="form-control"  value="{{ $dossier->subscriber_phone_cell }}"  >
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
+                                                                    <?php  } ?>
+                                                                    <?php if ($dossier->subscriber_phone_domicile !='') { ?>
 
-                                                                <div class="row">
-                                                                    <div class="col-md-4">
+                                                                    <div class="col-md-3">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Tel mobile 2</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="subscriber_phone_domicile" name="subscriber_phone_domicile" class="form-control"   value={{ $dossier->subscriber_phone_domicile }} >
+                                                                                <input onchange="changing(this)" type="text" id="subscriber_phone_domicile" name="subscriber_phone_domicile" class="form-control"   value="{{ $dossier->subscriber_phone_domicile }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-4">
+
+                                                                        <?php }?>
+                                                                        <?php if ($dossier->subscriber_phone_home !='') { ?>
+                                                                        <div class="col-md-3">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Tel Autre </label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="subscriber_phone_home" name="subscriber_phone_home" class="form-control"   value={{ $dossier->subscriber_phone_home }} >
+                                                                                <input onchange="changing(this)" type="text" id="subscriber_phone_home" name="subscriber_phone_home" class="form-control"   value="{{ $dossier->subscriber_phone_home }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-4">
+                                                                        <?php }?>
+                                                                        <?php if ($dossier->subscriber_phone_4 !='') { ?>
+
+                                                                        <div class="col-md-3">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Tel autre 2</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="subscriber_phone_4" name="subscriber_phone_4" class="form-control"   value={{ $dossier->subscriber_phone_4 }} >
+                                                                                <input onchange="changing(this)" type="text" id="subscriber_phone_4" name="subscriber_phone_4" class="form-control"   value="{{ $dossier->subscriber_phone_4 }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                        <?php }?>
+
                                                                 </div>
 
                                                                 <div class="row">
@@ -242,7 +410,7 @@
                                                                             <label for="inputError" class="control-label">To </label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="to" name="to" class="form-control"   value={{ $dossier->to }} >
+                                                                                <input onchange="changing(this)" type="text" id="to" name="to" class="form-control"   value="{{ $dossier->to }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -251,19 +419,23 @@
                                                                             <label for="inputError" class="control-label">Guide</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)"  type="text" id="to_guide" name="to_guide" class="form-control"   value={{ $dossier->to_guide }} >
+                                                                                <input onchange="changing(this)"  type="text" id="to_guide" name="to_guide" class="form-control"   value="{{ $dossier->to_guide }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    <?php if ($dossier->to_phone !='') { ?>
+
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Tel </label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)"  type="text" id="to_phone" name="to_phone" class="form-control"   value={{ $dossier->to_phone }} >
+                                                                                <input onchange="changing(this)"  type="text" id="to_phone" name="to_phone" class="form-control"   value="{{ $dossier->to_phone }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    <?php }?>
+
                                                                 </div>
 
 
@@ -271,14 +443,14 @@
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Date arrivée </label>
-                                                                            <input onchange="changing(this)"  data-format="dd-MM-yyyy hh:mm:ss" placeholder="jj-mm-aaaa" class="form-control datepicker-default form-control" name="initial_arrival_date" id="initial_arrival_date" type="text"   value={{ $dossier->initial_arrival_date }} >
+                                                                            <input onchange="changing(this)"  data-format="dd-MM-yyyy hh:mm:ss" placeholder="jj-mm-aaaa" class="form-control datepicker-default form-control" name="initial_arrival_date" id="initial_arrival_date" type="text"   value="{{ $dossier->initial_arrival_date }}" >
                                                                         </div>
 
                                                                     </div>
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Départ prévu</label>
-                                                                            <input onchange="changing(this)"  data-format="dd-MM-yyyy hh:mm:ss" placeholder="jj-mm-aaaa" class="form-control datepicker-default form-control" name="departure" id="departure" type="text"   value={{ $dossier->departure }} >
+                                                                            <input onchange="changing(this)"  data-format="dd-MM-yyyy hh:mm:ss" placeholder="jj-mm-aaaa" class="form-control datepicker-default form-control" name="departure" id="departure" type="text"   value="{{ $dossier->departure }}" >
                                                                         </div>
 
                                                                     </div>
@@ -287,51 +459,123 @@
                                                                             <label for="inputError" class="control-label">Destination </label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="destination" name="destination" class="form-control"   value={{ $dossier->destination }} >
+                                                                                <input onchange="changing(this)" type="text" id="destination" name="destination" class="form-control"   value="{{ $dossier->destination }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                <div class="row">
+                                                                    <div class="form-group col-md-10">
+                                                                        <label for="inputError" class="control-label">Dernière adresse en Tunisie   </label>
+
+                                                                        <div class="input-group-control">
+                                                                            <input onchange="changing(this)"  type="text" id="subscriber_local_address" name="subscriber_local_address" class="form-control"   value="{{ $dossier->subscriber_local_address }}">
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-1" style="padding-top:30px">
+                                                                        <span title="Afficher une autre adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn03"><i class="fa   fa-plus"></i> <i class="fa fa-minus"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row" id="adresse2"   <?php if ($dossier->subscriber_local_address2 =='') {echo 'style="display:none;"';}  ?> >
+                                                                    <div class="form-group col-md-10">
+                                                                        <label for="inputError" class="control-label">Adresse en Tunisie </label>
+
+                                                                        <div class="input-group-control">
+                                                                            <input onchange="changing(this)"  type="text" id="subscriber_local_address2" name="subscriber_local_address2" class="form-control"   value="{{ $dossier->subscriber_local_address2 }}" >
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-1" style="padding-top:30px">
+                                                                        <span style='; ' title="Afficher une autre adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn04"><i class="fa  fa-plus"></i> <i class="fa fa-minus"></i></span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row" id="adresse3"  <?php if ($dossier->subscriber_local_address3 =='') {echo 'style="display:none;"';}  ?> >
+                                                                    <div class="form-group col-md-10">
+                                                                        <label for="inputError" class="control-label">Adresse en Tunisie   </label>
+
+                                                                        <div class="input-group-control">
+                                                                            <input onchange="changing(this)"  type="text" id="subscriber_local_address3" name="subscriber_local_address3" class="form-control"   value="{{ $dossier->subscriber_local_address3 }}" >
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-1">
+                                                                    </div>
+                                                                </div>
 
                                                                 <div class="row">
-                                                                    <div class="col-md-4">
+                                                                    <div class="form-group col-md-10">
+                                                                        <label for="inputError" class="control-label">Adresse étranger</label>
+
+                                                                        <div class="input-group-control">
+                                                                            <input onchange="changing(this)" type="text" id="adresse_etranger" name="adresse_etranger" class="form-control"   value="{{ $dossier->adresse_etranger }}" >
+                                                                        </div>
+                                                                    </div>
+
+                                                                    </div>
+                                                                <div class="row">
+
+                                                                    <div class="col-md-6">
                                                                         <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Adresse Tunisie </label>
+                                                                            <label for="inputError" class="control-label">Ville</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)"  type="text" id="subscriber_local_address" name="subscriber_local_address" class="form-control"   value={{ $dossier->subscriber_local_address }} >
+                                                                                <input onchange="changing(this)"  type="text" autocomplete="off" id="ville" name="ville" class="form-control"   value="{{ $dossier->ville }}" >
+                                                                            </div>
+                                                                            <script>
+                                                                                var placesAutocomplete = places({
+                                                                                    appId: 'plCFMZRCP0KR',
+                                                                                    apiKey: 'aafa6174d8fa956cd4789056c04735e1',
+                                                                                    container: document.querySelector('#ville')
+                                                                                });
+                                                                            </script>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group">
+                                                                            <label for="inputError" class="control-label">Hôtel</label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input onchange="changing(this)"  type="text" id="hotel" name="hotel" class="form-control"   value="{{ $dossier->hotel }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-4">
+
+                                                                </div>
+                                                                    <div class="row">
+
+                                                                    <div class="col-md-6">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Chambre</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)"  type="text" id="subscriber_local_address_ch" name="subscriber_local_address_ch" class="form-control"   value={{ $dossier->subscriber_local_address_ch }} >
+                                                                                <input onchange="changing(this)"  type="text" id="subscriber_local_address_ch" name="subscriber_local_address_ch" class="form-control"   value="{{ $dossier->subscriber_local_address_ch }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-4">
+                                                                    <div class="col-md-6">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Tel Chambre</label>
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="tel_chambre" name="tel_chambre" class="form-control"   value={{ $dossier->tel_chambre }} >
+                                                                                <input onchange="changing(this)" type="text" id="tel_chambre" name="tel_chambre" class="form-control"   value="{{ $dossier->tel_chambre }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Mail</label>
                                                                             <?php if($dossier->subscriber_mail1 !=''){ ?>
+
+                                                                            <label for="inputError" class="control-label">Mail</label>
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="email" id="subscriber_mail1" name="subscriber_mail1" class="form-control" placeholder="mail 1"   value={{ $dossier->subscriber_mail1 }} >
+                                                                                <input onchange="changing(this)" type="email" id="subscriber_mail1" name="subscriber_mail1" class="form-control" placeholder="mail 1"   value="{{ $dossier->subscriber_mail1 }}" >
                                                                             </div><br> <?php }?>
-                                                                            <?php if($dossier->subscriber_mail2 !=''){ ?>   <input onchange="changing(this)"  type="text" name="email1" class="form-control" id="subscriber_mail2" placeholder="mail 2"   value={{ $dossier->subscriber_mail2 }} ><br><?php }?>
-                                                                            <?php if($dossier->subscriber_mail3 !=''){ ?>   <input onchange="changing(this)"  type="text" name="subscriber_mail3" class="form-control" id="subscriber_mail3" placeholder="mail 3"   value={{ $dossier->subscriber_mail3 }} ><br> <?php }?>
+                                                                            <?php if($dossier->subscriber_mail2 !=''){ ?>   <input onchange="changing(this)"  type="text" name="email1" class="form-control" id="subscriber_mail2" placeholder="mail 2"   value="{{ $dossier->subscriber_mail2 }}" ><br><?php }?>
+                                                                            <?php if($dossier->subscriber_mail3 !=''){ ?>   <input onchange="changing(this)"  type="text" name="subscriber_mail3" class="form-control" id="subscriber_mail3" placeholder="mail 3"   value="{{ $dossier->subscriber_mail3 }}" ><br> <?php }?>
                                                                         </div>
                                                                     </div>
-
+<!--
                                                                     <div class="row form-group">
 
                                                                             <div style="">
@@ -349,73 +593,108 @@
 
                                                                                 </thead>
                                                                                 <tbody>
-                                                                                @foreach($emails as $email)
-                                                                                    <tr>
-                                                                                        <td style=";"><?php echo $email->champ; ?></td>
-                                                                                        <td style=";"><?php echo $email->nom; ?></td>
-                                                                                        <td style=";"><?php echo $email->qualite; ?></td>
-                                                                                        <td style=";"><?php echo $email->tel; ?></td>
-                                                                                    </tr>
-                                                                                @endforeach
+
 
                                                                                 </tbody>
                                                                             </table>
 
                                                                         </div>
+-->
+                                                                </div>
+
+
+
+
+                                                                <div class="row" style="margin-top:30px">
+                                                                    <div class="col-md-8">
+                                                                        <h4><i class="fa fa-lg fa-user"></i> Numéros Tels</h4>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <span style="float:right" id="addtel" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding6"><b><i class="fa fa-user"></i> Ajouter un Tel</b></span>
+                                                                    </div>
 
                                                                 </div>
+
+                                                                <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
+                                                                    <thead>
+                                                                    <tr class="headtable">
+                                                                        <th style="width:20%">Nom et Prénom</th>
+                                                                        <th style="width:20%">Qualité</th>
+                                                                        <th style="width:30%">Tel</th>
+                                                                        <th style="width:10%">Remarque</th>
+                                                                    </tr>
+
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    @foreach($phones as $phone)
+                                                                        <tr>
+                                                                            <td style="width:20%;"><?php echo $phone->nom; ?>  <?php echo $phone->prenom; ?></td>
+                                                                            <td style="width:20%;"><?php echo $phone->fonction; ?></td>
+                                                                            <td style="width:50%;"><?php echo $phone->tel; ?></td>
+                                                                             <td style="width:50%;"><?php echo $phone->remarque; ?></td>
+                                                                        </tr>
+                                                                    @endforeach
+
+                                                                    </tbody>
+                                                                </table>
+
+                                                                <div class="row" style="margin-top:30px">
+                                                                    <div class="col-md-8">
+                                                                        <h4><i class="fa fa-lg fa-user"></i> Emails </h4>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <span style="float:right" id="addemail" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding7"><b><i class="fa fa-user"></i> Ajouter une adresse email</b></span>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
+                                                                    <thead>
+                                                                    <tr class="headtable">
+                                                                        <th style="width:20%">Nom et Prénom</th>
+                                                                        <th style="width:20%">Qualité</th>
+                                                                        <th style="width:30%">Email</th>
+                                                                        <th style="width:10%">Remarque</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    @foreach($emailads as $emailad)
+                                                                        <tr>
+                                                                            <td style="width:20%;"><?php echo $emailad->nom; ?>  <?php echo $emailad->prenom; ?></td>
+                                                                            <td style="width:20%;"><?php echo $emailad->fonction; ?></td>
+                                                                            <td style="width:50%;"><?php echo $emailad->mail; ?></td>
+                                                                            <td style="width:50%;"><?php echo $emailad->remarque; ?></td>
+                                                                        </tr>
+                                                                    @endforeach
+
+                                                                    </tbody>
+                                                                </table>
 
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="panel panel-success">
+                                               <!-- <div class="panel panel-success">
                                                     <div class="panel-heading">
                                                         <h4 class="panel-title">
                                                             <a class="accordion-toggle" data-toggle="collapse">
                                                                 Info Dossier</a>
                                                         </h4>
                                                     </div>
-                                                </div>
+                                                </div>-->
                                             </div>
                                             <!--                                    </div>-->
-                                            <div class="panel-collapse collapse in">
+                                           <!-- <div class="panel-collapse collapse in">
                                                 <div class="panel-body">
                                                     <div class="col-md-12">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label>Type de dossier</label>
-                                                                    <select  onchange="changing(this);location.reload();"  id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
-                                                                        <option <?php if ($dossier->type_dossier =='Medical'){echo 'selected="selected"';} ?> value="Medical">Medical</option>
-                                                                        <option <?php if ($dossier->type_dossier =='Technique'){echo 'selected="selected"';} ?> value="Technique">Technique</option>
-                                                                        <option <?php if ($dossier->type_dossier =='Mixte'){echo 'selected="selected"';} ?> value="Mixte">Mixte</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label>Affecté à </label>
-                                                                    <select id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single" readonly="readonly">
-                                                                        <option <?php if ($dossier->type_affectation =='Najda'){echo 'selected="selected"';} ?> value="Najda">Najda</option>
-                                                                        <option <?php if ($dossier->type_affectation =='VAT'){echo 'selected="selected"';} ?> value="VAT">VAT</option>
-                                                                        <option <?php if ($dossier->type_affectation =='MEDIC'){echo 'selected="selected"';} ?> value="MEDIC">MEDIC</option>
-                                                                        <option <?php if ($dossier->type_affectation =='Transport MEDIC'){echo 'selected="selected"';} ?> value="Transport MEDIC">Transport MEDIC</option>
-                                                                        <option <?php if ($dossier->type_affectation =='Transport VAT'){echo 'selected="selected"';} ?> value="Transport VAT">Transport VAT</option>
-                                                                        <option <?php if ($dossier->type_affectation =='Medic International'){echo 'selected="selected"';} ?> value="Medic International">Medic International</option>
-                                                                        <option <?php if ($dossier->type_affectation =='Najda TPA'){echo 'selected="selected"';} ?> value="Najda TPA">Najda TPA</option>
-                                                                        <option <?php if ($dossier->type_affectation =='Transport Najda'){echo 'selected="selected"';} ?> value="Transport Najda">Transport Najda</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="inputError" class="control-label">Statut</label>
 
                                                                     <div class="input-group-control">
-                                                                        <input type="text" value="En cours" id="current_status" name="current_status" class="form-control" disabled=""  value={{ $dossier->current_status }} >
+                                                                        <input type="text" value="En cours" id="current_status" name="current_status" class="form-control" disabled=""  value="{{ $dossier->current_status }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -424,43 +703,26 @@
                                                                     <label for="inputError" class="control-label">Ouvert le </label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)" type="text" value="" id="opened_by_date" name="" class="form-control" disabled=""  value={{ $dossier->opened_by_date }} >
+                                                                        <input onchange="changing(this)" type="text" value="" id="opened_by_date" name="" class="form-control" disabled=""  value="{{ $dossier->opened_by_date }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label for="inputError" class="control-label">Réf Dossier</label>
 
-                                                                    <div class="input-group-control">
-                                                                        <input  type="text" id="reference_medic" name="reference_medic" class="form-control" disabled=""   value={{ $dossier->reference_medic }} >
-                                                                    </div>
-                                                                </div>
-                                                            </div>
                                                         </div>
                                                         <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label for="complexite"> Degré de complexité</label>
-                                                                    <select onchange="changing(this)" class="form-control" name="complexite" id="complexite"  >
-                                                                        <option <?php if ($dossier['complexite'] ==1){echo 'selected="selected"';}?> value="1">1</option>
-                                                                        <option <?php if ($dossier['complexite'] ==2){echo 'selected="selected"';}?>value="2">2</option>
-                                                                        <option <?php if ($dossier['complexite'] ==3){echo 'selected="selected"';}?>value="3">3</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
+
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="complexite"> Montant total des prestations</label>
-                                                                    <input onchange="changing(this)" type="text" readonly="readonly" class="form-control" name="montant_tot" id="montant_tot"   value={{ $dossier->montant_tot }} >
+                                                                    <input onchange="changing(this)" type="text" readonly="readonly" class="form-control" name="montant_tot" id="montant_tot"   value="{{ $dossier->montant_tot }}" >
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>-->
                                         </div>
                                         <!--                                    </div>-->
                                         <div class="col-md-12">
@@ -476,106 +738,81 @@
                                         <div class="panel-collapse collapse in">
                                             <div class="panel-body">
                                                 <div class="col-md-12">
+
+
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label>Client </label>
-                                                                <select onchange="changing(this);location.reload()" id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"   value="{{ $dossier->customer_id }}" >
-                                                                    <option value="0">Sélectionner..... </option>
-
-                                                                    @foreach($clients as $cl  )
-                                                                        <option
-                                                                                @if($dossier->customer_id==$cl->id)selected="selected"@endif
-
-                                                                        value="{{$cl->id}}">{{$cl->name}}</option>
-
-                                                                    @endforeach
-
-
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Référence *</label>
+                                                                <label for="inputError" class="control-label">Adresse de facturation  </label>
 
                                                                 <div class="input-group-control">
-                                                                    <input  readonly type="text" id="customer" name="customer_id" class="form-control"   value="{{ $dossier->customer_id }}" >
+                                                                    <input onchange="changing(this)" type="text" id="adresse_facturation" name="adresse_facturation" class="form-control"   value="{{ $dossier->adresse_facturation }}" >
                                                                 </div>
                                                             </div>
+
                                                         </div>
+
+
+                                                        
                                                     </div>
 
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Telephone </label>
-
-                                                                <div class="input-group-control">
-                                                                    <input onchange="changing(this)"  type="text" id="tel" name="tel" class="form-control" readonly=""   value={{ $dossier->tel }} >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Fax</label>
-
-                                                                <div class="input-group-control">
-                                                                    <input onchange="changing(this)"  type="text" id="fax" name="fax" class="form-control" readonly=""   value={{ $dossier->fax }} >
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                    <div class="row" style="margin-left:30px">
+                                                        <label  style="color:grey"> Entité principale du client :  <b><?php echo $entite; ?></b>     Adresse :  <b><?php echo $adresse; ?></b></label></br><br>
                                                     </div>
 
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Adresse de facturation (si différente) </label>
+                                                    <label style="color:grey">Autres Adresses:</label>
+                                                        <?php foreach ($liste as $l)
+                                                        {
+                                                           echo ' <div class="row" style="margin-left:30px">';
 
-                                                                <div class="input-group-control">
-                                                                    <input onchange="changing(this)" type="text" id="adresse_facturation" name="adresse_facturation" class="form-control"   value={{ $dossier->adresse_facturation }} >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Mail</label>
+                                                            echo '<label style="color:grey">Entité : <b>'. $l->nom.'</b>   Adresse: <b>'.$l->champ.'</b></label>';
+                                                            echo ' </div>';
 
-                                                                <div class="input-group-control">
-                                                                    <input onchange="changing(this)" type="text" id="mail" name="mail" class="form-control" readonly=""   value={{ $dossier->mail }} >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                        }
+                                                        ?>       <br> <br>
+
+
 
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-4">
                                                             <div class="form-group">
 
                                                                 <label for="franchise" class=""> Franchise &nbsp;&nbsp;
-                                                                    <div class="radio" id="uniform-franchise"><span><input onclick="changing(this)" type="radio" name="franchise" id="franchise" value="1" <?php if ($dossier->franchise ==1){echo 'checked';} ?>></span></div> Oui
+                                                                    <div class="radio radio1" id="uniform-franchise"><span><input onclick="changing(this);" type="radio" name="franchise" id="franchise" value="1" <?php if ($dossier->franchise ==1){echo 'checked';} ?>></span></div> Oui
                                                                 </label>
 
                                                                 <label for="nonfranchise" class="">
 
-                                                                    <div class="radio" id="uniform-nonfranchise"><span class="checked"><input onclick="disabling('franchise')" type="radio" name="franchise" id="nonfranchise" value="0"  <?php if ($dossier->franchise ==0){echo 'checked';} ?> ></span></div> Non
+                                                                    <div class="radio radio1" id="uniform-nonfranchise"><span class="checked"><input onclick="disabling('franchise');hidingd();" type="radio" name="franchise" id="nonfranchise" value="0"  <?php if ($dossier->franchise ==0){echo 'checked';} ?> ></span></div> Non
                                                                 </label>
 
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-6">
+
+                                                        <div class="col-md-4"  id="montantfr">
                                                             <div class="form-group">
                                                                 <label class="control-label">Montant Franchise
                                                                 </label>
 
                                                                 <div class="input-group-control">
-                                                                    <input onchange="changing(this)"  type="text" id="montant_franchise" name="montant_franchise" class="form-control" style="width: 100px;" placeholder="Montant"   value={{ $dossier->montant_franchise }} >
+                                                                    <input onchange="changing(this)"  type="text" id="montant_franchise" name="montant_franchise" class="form-control" style="width: 100px;" placeholder="Montant"   value="{{ $dossier->montant_franchise }}" >
                                                                 </div>
                                                             </div>
                                                         </div>
+
+                                                        <div class="col-md-4" id="plafondfr">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Plafond
+                                                                </label>
+
+                                                                <div class="input-group-control">
+                                                                    <input onchange="changing(this)"  type="text" id="plafond" name="plafond" class="form-control" style="width: 100px;" placeholder="Plafond"   value="{{ $dossier->plafond }}" >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -595,8 +832,8 @@
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="is_hospitalized" class=""> Hospitalisé
-                                                                        <div class="radio" id="uniform-is_hospitalized"><span><input onclick="changing(this)"  type="radio" name="is_hospitalized" id="is_hospitalized" value="1" <?php if ($dossier->is_hospitalized ==1){echo 'checked';} ?> ></span></div> Oui
-                                                                    </label> <label for="nonis_hospitalized" class=""> <div class="radio" id="uniform-nonis_hospitalized"><span class=""><input onclick="disabling('is_hospitalized')" type="radio" name="is_hospitalized" id="nonis_hospitalized" value="0"  <?php if ($dossier->is_hospitalized ==0){echo 'checked';} ?>  ></span></div> Non
+                                                                        <div class="radio" id="uniform-is_hospitalized"><span><input onclick="changing(this)"  type="radio" name="is_hospitalized" id="is_hospitalized" value="1" <?php if ($dossier->is_hospitalized ==1){echo 'checked';} ?> ></span></div> Outpatient
+                                                                    </label> <label for="nonis_hospitalized" class=""> <div class="radio" id="uniform-nonis_hospitalized"><span class=""><input onclick="disabling('is_hospitalized')" type="radio" name="is_hospitalized" id="nonis_hospitalized" value="0"  <?php if ($dossier->is_hospitalized ==0){echo 'checked';} ?>  ></span></div> Inpatient
                                                                     </label>
                                                                 </div>
                                                             </div>
@@ -608,16 +845,16 @@
                                                                     <label for="inputError" class="control-label">Adresse Hopital </label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="text" id="hospital_address" name="hospital_address" class="form-control"   value={{ $dossier->hospital_address }} >
+                                                                        <input onchange="changing(this)"  type="text" id="hospital_address" name="hospital_address" class="form-control"   value="{{ $dossier->hospital_address }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-3">
+                                                          <!--  <div class="col-md-3">
                                                                 <div class="form-group">
                                                                     <label for="inputError" class="control-label">Ch</label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="text" id="hospital_ch" name="hospital_ch" class="form-control"   value={{ $dossier->hospital_ch }} >
+                                                                        <input onchange="changing(this)"  type="text" id="hospital_ch" name="hospital_ch" class="form-control"   value="{{ $dossier->hospital_ch }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -626,16 +863,16 @@
                                                                     <label for="inputError" class="control-label">Tel </label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="text" id="hospital_phone" name="hospital_phone" class="form-control"   value={{ $dossier->hospital_phone }} >
+                                                                        <input onchange="changing(this)"  type="text" id="hospital_phone" name="hospital_phone" class="form-control"   value="{{ $dossier->hospital_phone }}" >
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                            </div>-->
                                                             <div class="col-md-3">
                                                                 <div class="form-group">
                                                                     <label for="inputError" class="control-label">Médecin Traitant </label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="text" id="medecin_traitant" name="medecin_traitant" class="form-control"   value={{ $dossier->medecin_traitant }} >
+                                                                        <input onchange="changing(this)"  type="text" id="medecin_traitant" name="medecin_traitant" class="form-control"   value="{{ $dossier->medecin_traitant }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -647,7 +884,7 @@
                                                                     <label for="inputError" class="control-label">Adresse Hopital2 </label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)" type="text" id="hospital_address2" name="hospital_address2" class="form-control"   value={{ $dossier->hospital_address2 }} >
+                                                                        <input onchange="changing(this)" type="text" id="hospital_address2" name="hospital_address2" class="form-control"   value="{{ $dossier->hospital_address2 }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -656,7 +893,7 @@
                                                                     <label for="inputError" class="control-label">Ch2</label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)" type="text" id="hospital_ch2" name="hospital_ch2" class="form-control"   value={{ $dossier->hospital_ch2 }} >
+                                                                        <input onchange="changing(this)" type="text" id="hospital_ch2" name="hospital_ch2" class="form-control"   value="{{ $dossier->hospital_ch2 }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -665,7 +902,7 @@
                                                                     <label for="inputError" class="control-label">Tel2 </label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)" type="text" id="hospital_phone2" name="hospital_phone2" class="form-control"   value={{ $dossier->hospital_phone2 }} >
+                                                                        <input onchange="changing(this)" type="text" id="hospital_phone2" name="hospital_phone2" class="form-control"   value="{{ $dossier->hospital_phone2 }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -674,7 +911,7 @@
                                                                     <label for="inputError" class="control-label">Médecin Traitant2 </label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)" type="text" id="medecin_traitant2" name="medecin_traitant2" class="form-control" value={{ $dossier->medecin_traitant2 }} >
+                                                                        <input onchange="changing(this)" type="text" id="medecin_traitant2" name="medecin_traitant2" class="form-control" value="{{ $dossier->medecin_traitant2 }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -686,7 +923,7 @@
                                                                     <label for="inputError" class="control-label">Adresse Hopital3 </label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="text" id="hospital_address3" name="hospital_address3" class="form-control"  value={{ $dossier->hospital_address3 }} >
+                                                                        <input onchange="changing(this)"  type="text" id="hospital_address3" name="hospital_address3" class="form-control"  value="{{ $dossier->hospital_address3 }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -695,7 +932,7 @@
                                                                     <label for="inputError" class="control-label">Ch3</label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)" type="text" id="hospital_ch3" name="hospital_ch3" class="form-control"  value={{ $dossier->hospital_ch3 }} >
+                                                                        <input onchange="changing(this)" type="text" id="hospital_ch3" name="hospital_ch3" class="form-control"  value="{{ $dossier->hospital_ch3 }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -704,7 +941,7 @@
                                                                     <label for="inputError" class="control-label">Tel3 </label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="text" id="hospital_phone3" name="hospital_phone3" class="form-control"  value={{ $dossier->hospital_phone3 }} >
+                                                                        <input onchange="changing(this)"  type="text" id="hospital_phone3" name="hospital_phone3" class="form-control"  value="{{ $dossier->hospital_phone3 }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -713,7 +950,7 @@
                                                                     <label for="inputError" class="control-label">Médecin Traitant3 </label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)" type="text" id="medecin_traitant3" name="medecin_traitant3" class="form-control"   value={{ $dossier->medecin_traitant3 }} >
+                                                                        <input onchange="changing(this)" type="text" id="medecin_traitant3" name="medecin_traitant3" class="form-control"   value="{{ $dossier->medecin_traitant3 }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -740,7 +977,7 @@
                                                                 <label for="inputError" class="control-label"> Type et marque du véhicule</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input onchange="changing(this)" type="text" id="vehicule_type" name="vehicule_type" class="form-control"   value={{ $dossier->vehicule_type }} >
+                                                                    <input onchange="changing(this)" type="text" id="vehicule_type" name="vehicule_type" class="form-control"   value="{{ $dossier->vehicule_type }}" >
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -749,7 +986,7 @@
                                                                 <label for="inputError" class="control-label">Immatriculation</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input onchange="changing(this)"  type="text" id="vehicule_immatriculation" name="vehicule_immatriculation" class="form-control"   value={{ $dossier->vehicule_immatriculation }} >
+                                                                    <input onchange="changing(this)"  type="text" id="vehicule_immatriculation" name="vehicule_immatriculation" class="form-control"   value="{{ $dossier->vehicule_immatriculation }}" >
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -758,7 +995,7 @@
                                                                 <label for="inputError" class="control-label">Lieu d'immobilisation </label>
 
                                                                 <div class="input-group-control">
-                                                                    <input onchange="changing(this)" type="text" id="lieu_immobilisation" name="lieu_immobilisation" class="form-control"   value={{ $dossier->lieu_immobilisation }} >
+                                                                    <input onchange="changing(this)" type="text" id="lieu_immobilisation" name="lieu_immobilisation" class="form-control"   value="{{ $dossier->lieu_immobilisation }}" >
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -770,7 +1007,7 @@
                                                                 <label for="inputError" class="control-label"> Adresse véhicule</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input onchange="changing(this)" type="text" id="vehicule_address" name="vehicule_address" class="form-control"   value={{ $dossier->vehicule_address }} >
+                                                                    <input onchange="changing(this)" type="text" id="vehicule_address" name="vehicule_address" class="form-control"   value="{{ $dossier->vehicule_address }}" >
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -779,7 +1016,7 @@
                                                                 <label for="inputError" class="control-label">Adresse véhicule2</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input onchange="changing(this)"  type="text" id="vehicule_address2" name="vehicule_address2" class="form-control"   value={{ $dossier->vehicule_address2 }}>
+                                                                    <input onchange="changing(this)"  type="text" id="vehicule_address2" name="vehicule_address2" class="form-control"   value="{{ $dossier->vehicule_address2 }}">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -788,7 +1025,7 @@
                                                                 <label for="inputError" class="control-label">Tel </label>
 
                                                                 <div class="input-group-control">
-                                                                    <input onchange="changing(this)"  type="text" id="vehicule_phone" name="vehicule_phone" class="form-control"   value={{ $dossier->vehicule_phone }} >
+                                                                    <input onchange="changing(this)"  type="text" id="vehicule_phone" name="vehicule_phone" class="form-control"   value="{{ $dossier->vehicule_phone }}" >
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1638,7 +1875,7 @@ $iduser=$CurrentUser->id;
 </div>
 
 
-<!-- Modal Email-->
+<!-- Modal Email
 <div class="modal fade" id="createemail" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -1701,6 +1938,7 @@ $iduser=$CurrentUser->id;
         </div>
     </div>
 </div>
+-->
 <!-- Modal Document-->
 <div class="modal fade" id="generatedoc" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -1808,6 +2046,154 @@ $iduser=$CurrentUser->id;
         </div>
     </div>
 </div>
+
+<!-- Modal Email -->
+<div class="modal fade" id="adding7" tabindex="-1" role="dialog" aria-labelledby="exampleModal7" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal7">Ajouter une adresse Email </h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+                    <div class="form-group">
+
+                        <form   id="fggf" name="">
+                            {{ csrf_field() }}
+
+                            <div class="form-group " >
+                                <label for="adresse">Nom</label>
+                                <div class=" row  ">
+                                    <input class="form-control" type="text" required id="nome"/>
+
+                                </div>
+                            </div>
+                            <div class="form-group " >
+                                <label for="adresse">Prénom</label>
+                                <div class=" row  ">
+                                    <input class="form-control" type="text" required id="prenome"/>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group " >
+                                <label for="adresse">Fonction</label>
+                                <div class=" row  ">
+                                    <input class="form-control" type="text" required id="fonctione"/>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="code">Adresse Email</label>
+                                <div class="row">
+                                    <input type="email"   class="form-control"  id="emaildoss" />
+
+                                </div>
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="code">Remarque</label>
+                                <div class="row">
+                                    <textarea   class="form-control"  id="remarquee" ></textarea>
+
+                                </div>
+                            </div>
+
+                            <input id="natureem" name="nature" type="hidden" value="emaildoss">
+
+
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <span type="button" id="btnaddemail" class="btn btn-primary">Ajouter</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Tel -->
+<div class="modal fade" id="adding6" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" >Ajouter une numéro Tel </h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+                    <div class="form-group">
+
+                        <form   id="fghgf" name="">
+                            {{ csrf_field() }}
+
+                            <div class="form-group " >
+                                <label for="adresse">Nom</label>
+                                <div class=" row  ">
+                                    <input class="form-control" type="text" required id="nomt"/>
+
+                                </div>
+                            </div>
+                            <div class="form-group " >
+                                <label for="adresse">Prénom</label>
+                                <div class=" row  ">
+                                    <input class="form-control" type="text" required id="prenomt"/>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group " >
+                                <label for="adresse">Fonction</label>
+                                <div class=" row  ">
+                                    <input class="form-control" type="text" required id="fonctiont"/>
+
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label for="code">Tel</label>
+                                <div class="row">
+                                    <input type="text"   class="form-control"  id="teldoss" />
+
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label for="code">Remarque</label>
+                                <div class="row">
+                                    <textarea   class="form-control"  id="remarquet" ></textarea>
+
+                                </div>
+                            </div>
+                            <input id="naturetel" name="nature" type="hidden" value="teldoss">
+
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <span type="button" id="btnaddtel" class="btn btn-primary">Ajouter</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 <?php } ?>
 
 @endsection
@@ -1846,17 +2232,17 @@ $iduser=$CurrentUser->id;
         // }
     }
 
+
     function disabling(elm) {
         var champ=elm;
 
         var val =0;
-        //  var type = $('#type').val();
         var dossier = $('#iddossupdate').val();
         //if ( (val != '')) {
         var _token = $('input[name="_token"]').val();
         $.ajax({
             url: "{{ route('dossiers.updating') }}",
-            method: "GET",
+            method: "POST",
             data: {dossier: dossier , champ:champ ,val:val, _token: _token},
             success: function (data) {
                 if (elm=='franchise'){
@@ -1867,7 +2253,6 @@ $iduser=$CurrentUser->id;
                         opacity: '1',
                     });
                 }
-
                 if (elm=='is_hospitalized'){
                     $('#nonis_hospitalized').animate({
                         opacity: '0.3',
@@ -1876,12 +2261,70 @@ $iduser=$CurrentUser->id;
                         opacity: '1',
                     });
                 }
+
+
             }
         });
         // } else {
 
         // }
     }
+/*
+    function disabling(elm) {
+        //var champ=elm;
+champ="franchise";
+        var val =0;
+         var dossier = $('#iddossupdate').val();
+         var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('dossiers.updating2') }}",
+            method: "GET",
+            data: {dossier: dossier ,  _token: _token},
+            success: function (data) {
+
+                $('#nonfranchise').animate({
+                    opacity: '0.3',
+                });
+                $('#nonfranchise').animate({
+                    opacity: '1',
+                });
+
+            }
+        });
+        // } else {
+
+        // }
+    }
+
+*/
+    function disabling2(elm) {
+        //var champ=elm;
+
+        var val =0;
+        var dossier = $('#iddossupdate').val();
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('dossiers.updating3') }}",
+            method: "GET",
+            data: {dossier: dossier ,  _token: _token},
+            success: function (data) {
+
+
+                $('#nonis_hospitalized').animate({
+                    opacity: '0.3',
+                });
+                $('#nonis_hospitalized').animate({
+                    opacity: '1',
+                });
+
+
+            }
+        });
+        // } else {
+
+        // }
+    }
+
 
 
 
@@ -1934,6 +2377,65 @@ $iduser=$CurrentUser->id;
             // alert('ERROR');
         }
     });
+
+
+
+        $('#btnaddemail').click(function(){
+            var parent = $('#iddossupdate').val();
+            var nom = $('#nome').val();
+            var prenom = $('#prenome').val();
+            var fonction = $('#fonctione').val();
+             var email = $('#emaildoss').val();
+             var observ = $('#remarquee').val();
+            var nature = $('#natureem').val();
+            if ((email != '') )
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('dossiers.addressadd') }}",
+                    method:"POST",
+                    data:{parent:parent,nom:nom,prenom:prenom,fonction:fonction,email:email,observ: observ, nature:nature, _token:_token},
+                    success:function(data){
+
+                        //   alert('Added successfully');
+                        window.location =data;
+
+                    }
+                });
+            }else{
+                // alert('ERROR');
+            }
+        });
+
+
+        $('#btnaddtel').click(function(){
+            var parent = $('#iddossupdate').val();
+            var nom = $('#nomt').val();
+            var prenom = $('#prenomt').val();
+            var fonction = $('#fonctiont').val();
+            var tel = $('#teldoss').val();
+             var observ = $('#remarquet').val();
+            var nature = $('#naturetel').val();
+            if ((tel != '') )
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('dossiers.addressadd2') }}",
+                    method:"POST",
+                    data:{parent:parent,nom:nom,prenom:prenom,fonction:fonction,tel:tel,observ: observ, nature:nature, _token:_token},
+                    success:function(data){
+
+                        //   alert('Added successfully');
+                        window.location =data;
+
+                    }
+                });
+            }else{
+                  alert('ERROR');
+            }
+        });
+
+
 
     });
 
@@ -2115,6 +2617,8 @@ $iduser=$CurrentUser->id;
 
 @stop
 
+<script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
+
 <script>
 
 
@@ -2155,9 +2659,68 @@ $iduser=$CurrentUser->id;
          /// }
      });
 
+     $('.radio1').click(function() {
+
+         var   div=document.getElementById('montantfr');
+         if(div.style.display==='none')
+         {div.style.display='block';	 }
+         else
+         {div.style.display='none';     }
+
+         var   div2=document.getElementById('plafondfr');
+         if(div2.style.display==='none')
+         {div2.style.display='block';	 }
+         else
+         {div2.style.display='none';     }
+     });
+
+     $('#btn01').click(function() {
+
+      var   div=document.getElementById('ben2');
+         if(div.style.display==='none')
+         {div.style.display='block';	 }
+         else
+         {div.style.display='none';     }
 
 
-     $("#typeprest").change(function() {
+     });
+
+     $('#btn02').click(function() {
+
+         var   div=document.getElementById('ben3');
+         if(div.style.display==='none')
+         {div.style.display='block';	 }
+         else
+         {div.style.display='none';     }
+
+
+     });
+
+
+     $('#btn03').click(function() {
+
+         var   div=document.getElementById('adresse2');
+         if(div.style.display==='none')
+         {div.style.display='block';	 }
+         else
+         {div.style.display='none';     }
+
+
+     });
+
+
+     $('#btn04').click(function() {
+
+         var   div=document.getElementById('adresse3');
+         if(div.style.display==='none')
+         {div.style.display='block';	 }
+         else
+         {div.style.display='none';     }
+
+
+     });
+
+         $("#typeprest").change(function() {
 
          document.getElementById('termine').style.display = 'none';
          document.getElementById('showNext').style.display='none';
@@ -2281,10 +2844,10 @@ $iduser=$CurrentUser->id;
 
 
 
-
-
-
  }); // $ function
 
 
 </script>
+<style>.headtable{background-color: grey!important;color:white;}
+    table{margin-bottom:40px;}
+</style>

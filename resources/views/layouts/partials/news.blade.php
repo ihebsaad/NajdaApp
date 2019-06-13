@@ -10,7 +10,7 @@ $total= ActualitesController:: NbrActus();
 ?>
 @isset ($liste)
 <?php if ($total >0) { ?>
-<div style="padding-left:80px;padding-right:80px">
+<div class="news" style="padding-left:80px;padding-right:80px">
 				<div class="breaking-news-ticker" id="newsTicker1">
 			    	<div class="bn-news">
 			    		<ul>

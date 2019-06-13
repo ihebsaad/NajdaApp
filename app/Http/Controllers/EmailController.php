@@ -3,14 +3,11 @@
 namespace App\Http\Controllers;
 use App\Boite;
 use App\Email;
-use App\Http\Controllers\Controller;
 use App\Prestation;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use DB;
 use Swift_Mailer;
-use Swift_SmtpTransport;
 use Webklex\IMAP\Client;
 use App\Entree ;
 use App\Dossier ;
@@ -22,11 +19,11 @@ Use Redirect;
 use App\Envoye ;
 use PDF as PDF2;
 use Illuminate\Support\Facades\Auth;
-use Twilio\Rest\Client as Client2;
-use Twilio\Twiml;
-use App\Notifications\Notif_Suivi_Doss;
+
  use Notification;
 use Auth as auth2 ;
+use App\Parametre;
+
 class EmailController extends Controller
 {
     public function __construct()
@@ -323,7 +320,8 @@ class EmailController extends Controller
                     'destinataire' => 'test@najda-assistance.com',
                     'emetteur' => ($from),
                     'sujet' =>  ($sujet),
-                    'contenu'=> utf8_encode($contenu) ,
+                  //  'contenu'=> utf8_encode($contenu) ,
+                    'contenu'=> ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
                     'type'=> 'email',
@@ -495,7 +493,8 @@ class EmailController extends Controller
                     'destinataire' => 'faxnajdassist@najda-assistance.com',
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
-                    'contenu'=> utf8_encode($contenu) ,
+                 //   'contenu'=> utf8_encode($contenu) ,
+                    'contenu'=>  ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
                     'type'=> 'email',
@@ -1590,6 +1589,7 @@ class EmailController extends Controller
         ]);
 */
         $entree = $request->get('entree');
+        $mess = $request->get('message');
         $refdossier = app('App\Http\Controllers\EntreesController')->ChampById('dossier',$entree);
         $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
         $clientid = app('App\Http\Controllers\DossiersController')->ClientDossierById($iddossier);
@@ -1601,29 +1601,21 @@ class EmailController extends Controller
 
         $to=  app('App\Http\Controllers\EntreesController')->ChampById('emetteur',$entree);
 
-        $sujet=  $nomabn.'  - V/Réf(Y/Ref): '.$refclient .' - N/Réf(O/Ref): '.$refdossier ;
 
-        $signature='Signature';
+         $message = Parametre::find(1);
+        $signature = $message["signature"];
 
         if ($langue=='francais'){
-        $contenu='
-Bonjour de <B>Najda</B><br><br>
-Nous avons le plaisir d’accuser bonne réception de votre nouvelle affaire et vous confirmons avoir ouvert un dossier au nom de l’assuré sous notre référence en objet.<br>
-Nous mettons en route les actions nécessaires pour répondre à vos demandes, et revenons vers vous rapidement avec les suites dès que nous avons des résultats à vous communiquer.<br>
-Nous vous rappelons qu’au besoin, vous pouvez nous appeler sur les numéros ci-dessous en signature, dont un numéro alternatif (+33 9) au cas où notre numéro habituel (+216 36) n’aboutirait pas.<br> 
-  ';
+
+            $sujet=  $nomabn.'  - V/Réf: '.$refclient .' - N/Réf: '.$refdossier ;
+
         }else{
 
-        $contenu='
-Hello from <b>Najda</b><br></br>
-We are pleased to acknowledge receipt of your new business and confirm that you have opened a file in the name of the insured under our reference object.<br>
-We take the necessary actions to respond to your requests, and return to you quickly with the suites as soon as we have results to communicate to you.</br>
-We remind you that if necessary, you can call us on the numbers below in signature, including an alternative number (+33 9) in case our usual number (+216 36) does not succeed.</br></br>           
-';
+            $sujet=  $nomabn.'  - Y/Ref: '.$refclient .' - O/Ref: '.$refdossier ;
 
         }
 
-        $contenu=$contenu.'<br><br>'.$signature;
+        $contenu=$mess.'<br><br>'.$signature;
         try{
             Mail::send([], [], function ($message) use ($to,$sujet,$contenu) {
                 $message
@@ -1645,7 +1637,6 @@ We remind you that if necessary, you can call us on the numbers below in signatu
         }
 
     }// end accuse
-
 
 
 
@@ -1698,14 +1689,8 @@ We remind you that if necessary, you can call us on the numbers below in signatu
         );
 
 */
-
-
-
-
         return view('emails.test');
-
     }
-
 
 
     function sendsms(Request $request)
@@ -1721,9 +1706,7 @@ We remind you that if necessary, you can call us on the numbers below in signatu
         $doss = trim( $request->get('dossier'));
         $dossier= $this->RefDossierById($doss);////;
 
-
         $from='SMS Najda +216 21 433 463';
-
         $par=Auth::id();
 
         try{

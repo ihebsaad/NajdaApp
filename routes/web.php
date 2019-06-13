@@ -126,11 +126,15 @@ Route::resource('/dossiers',  'DossiersController');
 Route::get('/dossiers', array('as' => 'dossiers','uses' => 'DossiersController@index'));
 Route::post('/dossiers/saving','DossiersController@saving')->name('dossiers.saving');
 Route::post('/dossiers/updating','DossiersController@updating')->name('dossiers.updating');
+Route::post('/dossiers/updating2','DossiersController@updating2')->name('dossiers.updating2');
+Route::post('/dossiers/updating3','DossiersController@updating3')->name('dossiers.updating3');
 Route::get('/dossiers/view/{id}', 'DossiersController@view')->name('dossiers.view');
 Route::post('/dossiers/addemail','DossiersController@addemail')->name('dossiers.addemail');
 Route::post('/dossiers/adddocument','DossiersController@adddocument')->name('dossiers.adddocument');
 Route::post('/dossiers/attribution','DossiersController@attribution')->name('dossiers.attribution');
 Route::post('/dossiers/listepres','DossiersController@ListePrestataireCitySpec')->name('dossiers.listepres');
+Route::post('/dossiers/addressadd','DossiersController@addressadd')->name('dossiers.addressadd');
+Route::post('/dossiers/addressadd2','DossiersController@addressadd2')->name('dossiers.addressadd2');
 
 
 /*** Clients **/
@@ -170,6 +174,15 @@ Route::get('/voitures', array('as' => 'voitures','uses' => 'VoituresController@i
 Route::post('/voitures/saving','VoituresController@saving')->name('voitures.saving');
 Route::post('/voitures/updating','VoituresController@updating')->name('voitures.updating');
 Route::get('/voitures/view/{id}', 'VoituresController@view');
+
+
+/*** Equipements -> equipements   **/
+Route::resource('/equipements',  'VoituresController');
+Route::get('/equipements', array('as' => 'equipements','uses' => 'EquipementsController@index'));
+Route::post('/equipements/saving','EquipementsController@saving')->name('equipements.saving');
+Route::post('/equipements/updating','EquipementsController@updating')->name('equipements.updating');
+Route::post('/equipements/updating2','EquipementsController@updating2')->name('equipements.updating2');
+Route::get('/equipements/view/{id}', 'EquipementsController@view');
 
 
 

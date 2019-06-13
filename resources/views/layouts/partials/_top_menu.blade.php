@@ -36,21 +36,6 @@
     @if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
 
 
-     <div class="col-md-3">
-         <a href="{{ route('typeprestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-             <span class="fas fa-lg   fa-clinic-medical"></span>
-             <br>
-             Types de prestations
-         </a>
-    </div>
-
-   <div class="col-md-3">
-        <a href="{{ route('prestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-            <span class="fas fa-briefcase-medical"></span>
-            <br>
-            Prestations
-        </a>
-    </div>
     @endif
 
     @can('isAdmin')
@@ -125,6 +110,29 @@
         @endcan
     </div>
 
+    @can('isAdmin')
+
+    <div class="row">
+
+
+    <div class="col-md-3">
+        <a href="{{ route('typeprestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+            <span class="fas fa-lg   fa-clinic-medical"></span>
+            <br>
+            Types de prestations
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{{ route('prestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+            <span class="fas fa-notes-medical"></span>
+            <br>
+            Prestations
+        </a>
+    </div>
+
+    </div>
+    @endcan
 
 
     <div class="row">
@@ -144,6 +152,14 @@
                     <span class="fa fa-lg fa-fw fa-ambulance"></span>
                     <br>
                     Véhicules
+                </a>
+            </div>
+
+            <div class="col-md-3">
+                <a href="{{ route('equipements') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="fas fa-lg fa-fw   fa-medkit"></span>
+                    <br>
+                    Equipements
                 </a>
             </div>
 
