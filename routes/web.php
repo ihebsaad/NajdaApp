@@ -130,7 +130,6 @@ Route::post('/dossiers/updating2','DossiersController@updating2')->name('dossier
 Route::post('/dossiers/updating3','DossiersController@updating3')->name('dossiers.updating3');
 Route::get('/dossiers/view/{id}', 'DossiersController@view')->name('dossiers.view');
 Route::post('/dossiers/addemail','DossiersController@addemail')->name('dossiers.addemail');
-Route::post('/dossiers/adddocument','DossiersController@adddocument')->name('dossiers.adddocument');
 Route::post('/dossiers/attribution','DossiersController@attribution')->name('dossiers.attribution');
 Route::post('/dossiers/listepres','DossiersController@ListePrestataireCitySpec')->name('dossiers.listepres');
 Route::post('/dossiers/addressadd','DossiersController@addressadd')->name('dossiers.addressadd');
@@ -377,4 +376,9 @@ Route::get('docgen', function () {
 		}
 		else {return 'fichier template non existant';}
 	});
+
+/*** Documents ***/
+
+Route::post('/documents/adddocument','DocumentsController@adddocument')->name('documents.adddocument');
+Route::post('/documents/htmlfilled','DocumentsController@htmlfilled')->name('documents.htmlfilled');
  
