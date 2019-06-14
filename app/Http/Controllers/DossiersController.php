@@ -264,7 +264,7 @@ class DossiersController extends Controller
         $emails =   Email::where('parent', $id)->get();
 
         $ref=$this->RefDossierById($id);
-        $entrees =   Entree::where('dossier', $ref)->get();
+       $entrees =   Entree::where('dossier', $ref)->get();
 
         $envoyes =   Envoye::where('dossier', $ref)->get();
 
