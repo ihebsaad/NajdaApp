@@ -31,8 +31,23 @@ class PrestatairesController extends Controller
      */
     public function index()
     {
-        $dossiers = Dossier::all();
-        $villes = Ville::all();
+        $minutes1=120;
+
+       // $dossiers = Dossier::all();
+
+       // $villes = Ville::all();
+        $minutes2=600;
+        $villes = Cache::remember('ville',$minutes2,  function () {
+
+            return DB::table('villes')
+                ->get();
+        });
+
+        $dossiers = Cache::remember('dossiers',$minutes1,  function () {
+
+            return DB::table('dossiers')
+                ->get();
+        });
 
         $prestataires = Prestataire::orderBy('created_at', 'desc')->paginate(10000000);
         return view('prestataires.index',['dossiers' => $dossiers,'villes' => $villes], compact('prestataires'));

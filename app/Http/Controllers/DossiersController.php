@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Adresse;
 use App\Prestataire;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -239,7 +240,14 @@ class DossiersController extends Controller
         $typesprestations = TypePrestation::all();
         $prestataires = Prestataire::all();
  //        $villes = Ville::all();
-        $gouvernorats = DB::table('cities')->get();
+        $minutes= 120;
+        $minutes2= 600;
+        $gouvernorats = Cache::remember('cities',$minutes2,  function () {
+
+            return DB::table('cities')
+                 ->get();
+        });
+       // $gouvernorats = DB::table('cities')->get();
 
         $dossier = Dossier::find($id);
 
@@ -325,28 +333,59 @@ class DossiersController extends Controller
             ->where('nature','facturation' )
             ->get();
 
+        $minutes= 120;
+        $hopitaux = Cache::remember('prestataires_type_prestations',$minutes,  function () {
 
-        $hopitaux = DB::table('prestataires_type_prestations')
+            return DB::table('prestataires_type_prestations')
+                ->where('type_prestation_id',8 )
+                ->orwhere('type_prestation_id',9 )
+                ->get();
+        });
+
+     /*   $hopitaux = DB::table('prestataires_type_prestations')
             ->where('type_prestation_id',8 )
             ->orwhere('type_prestation_id',9 )
-            ->get();
+            ->get();*/
 
-        $traitants = DB::table('prestataires_type_prestations')
+     /*   $traitants = DB::table('prestataires_type_prestations')
             ->where('type_prestation_id',15 )
-            ->get();
+            ->get();*/
 
-        $hotels = DB::table('prestataires_type_prestations')
+        $traitants = Cache::remember('prestataires_type_prestations', $minutes,  function () {
+
+            return DB::table('prestataires_type_prestations')
+                ->where('type_prestation_id',15 )
+                ->get();
+        });
+
+     /*   $hotels = DB::table('prestataires_type_prestations')
             ->where('type_prestation_id',18 )
             ->get();
+*/
+        $hotels = Cache::remember('prestataires_type_prestations', $minutes,  function () {
 
+            return DB::table('prestataires_type_prestations')
+                ->where('type_prestation_id',18 )
+                ->get();
+        });
+     /*
         $garages = DB::table('prestataires_type_prestations')
             ->where('type_prestation_id',30 )
             ->orwhere('type_prestation_id',22 )
             ->get();
+*/
+        $garages = Cache::remember('prestataires_type_prestations',$minutes,   function () {
 
+            return DB::table('prestataires_type_prestations')
+                ->where('type_prestation_id',30 )
+                ->orwhere('type_prestation_id',22 )
+
+                ->get();
+        });
         return view('dossiers.view',['garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'prestataires'=>$prestataires,'emails'=>$emails,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
 
     }
+
 
 
     /**

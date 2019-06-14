@@ -1125,34 +1125,43 @@ use App\Template_doc ;
                                                 <div class="row">
                                                         <div class="col-md-10">
                                                             <div class="form-group form-md-line-input form-md-floating-label">
-                                                                <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation" id="observation">  {{ $dossier->observation }} </textarea>
+                                                                <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation" id="observation">{{ $dossier->observation }}</textarea>
                                                             </div>
                                                         </div>
-                                                         <div class="col-md-2"></div>
+                                                         <div class="col-md-2">
+                                                             <span title="Ajouter une observation " style="width:20px" class=" btn-md" id="btno1" onclick="document.getElementById('obser2').style.display='block'"><i class="fa fa-plus"></i>  </span>
+
+                                                         </div>
 
                                                     </div>
-                                                <div class="row">
+                                                <div class="row" id="obser2"  <?php if ($dossier->observation2==''){ echo 'style="display:none"' ;} ?>  >
                                                     <div class="col-md-10">
                                                         <div class="form-group form-md-line-input form-md-floating-label">
-                                                             <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation2" id="observation2">  {{ $dossier->observation2 }} </textarea>
+                                                             <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation2" id="observation2">{{ $dossier->observation2 }}</textarea>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-2">
+                                                        <span title="Ajouter une observation " style="width:20px" class=" btn-md" id="btno2" onclick="document.getElementById('obser3').style.display='block'"><i class="fa fa-plus"></i>  </span>
+                                                    </div>
 
                                                 </div>
-                                                <div class="row">
+                                                <div class="row" id="obser3" <?php if ($dossier->observation3==''){ echo 'style="display:none"' ;} ?>>
                                                     <div class="col-md-10">
                                                         <div class="form-group form-md-line-input form-md-floating-label">
-                                                            <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation3" id="observation3">  {{ $dossier->observation3 }} </textarea>
+                                                            <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation3" id="observation3">{{ $dossier->observation3 }}</textarea>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-2"  >
+                                                        <span title="Ajouter une observation " style="width:20px" class=" btn-md" id="btno3" onclick="document.getElementById('obser4').style.display='block'"><i class="fa fa-plus"></i>  </span>
+
+
+                                                    </div>
 
                                                 </div>
-                                                <div class="row">
+                                                <div class="row" id="obser4" <?php if ($dossier->observation4==''){ echo 'style="display:none"' ;} ?>>
                                                     <div class="col-md-10">
                                                         <div class="form-group form-md-line-input form-md-floating-label">
-                                                            <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation4" id="observation4">  {{ $dossier->observation4 }} </textarea>
+                                                            <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation4" id="observation4">{{ $dossier->observation4 }}</textarea>
                                                         </div>
                                                     </div>
 
@@ -2628,6 +2637,25 @@ $iduser=$CurrentUser->id;
 
 </script>
 
+@section('footer_scripts')
+
+
+    <script src="{{ asset('public/js/folderview.js') }}" />
+
+@stop
+
+<script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
+
+<script>
+
+
+
+</script>
+<style>.headtable{background-color: grey!important;color:white;}
+    table{margin-bottom:40px;}
+</style>
+
+
 
 <style>
 
@@ -2677,10 +2705,10 @@ $iduser=$CurrentUser->id;
         font-weight: 900;
         text-transform: uppercase;
         background: white;
-       /* background: #25303B;
-        color: rgba(255,255,255,0.5);
-        border: 2px solid rgba(255,255,255,0.2);
-        box-shadow: 0 0 0 7px #25303B;*/
+        /* background: #25303B;
+         color: rgba(255,255,255,0.5);
+         border: 2px solid rgba(255,255,255,0.2);
+         box-shadow: 0 0 0 7px #25303B;*/
     }
     section#timeline article div.inner span.date span {
         display: block;
@@ -2781,254 +2809,13 @@ $iduser=$CurrentUser->id;
 
 
     .overme {
-         overflow:hidden;
+        overflow:hidden;
         white-space:nowrap;
         text-overflow: ellipsis;
         max-width:300px;
-     }
+    }
 
 
 
 
-</style>
-
-@section('footer_scripts')
-
-
-
-@stop
-
-<script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
-
-<script>
-
-
-
- $(function () {
-
-
-     $('#add2').click(function(){
-         var prestataire = $('#selectedprest').val();
-         var dossier_id = $('#iddossupdate').val();
-         var typeprest = $('#typeprest').val();
-         alert(prestataire);
-         alert(dossier_id);
-         alert(typeprest);
-
-         //   gouvcouv
-         ///if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
-         ///   {
-         var _token = $('input[name="_token"]').val();
-         $.ajax({
-             url:"{{ route('prestations.saving') }}",
-             method:"POST",
-             data:{prestataire:prestataire,dossier_id:dossier_id,typeprest:typeprest, _token:_token},
-             success:function(data){
-                 console.log(data);
-                 alert('data : '+data);
-                 //    window.location =data;
-
-             },
-             error: function(jqXHR, textStatus, errorThrown) {
-                 alert('msg : '.jqXHR.status);
-                 alert('msg 2 : '.errorThrown);
-             }
-
-         });
-         ///  }else{
-         // alert('ERROR');
-         /// }
-     });
-
-     $('.radio1').click(function() {
-
-         var   div=document.getElementById('montantfr');
-         if(div.style.display==='none')
-         {div.style.display='block';	 }
-         else
-         {div.style.display='none';     }
-
-         var   div2=document.getElementById('plafondfr');
-         if(div2.style.display==='none')
-         {div2.style.display='block';	 }
-         else
-         {div2.style.display='none';     }
-     });
-
-     $('#btn01').click(function() {
-
-      var   div=document.getElementById('ben2');
-         if(div.style.display==='none')
-         {div.style.display='block';	 }
-         else
-         {div.style.display='none';     }
-
-
-     });
-
-     $('#btn02').click(function() {
-
-         var   div=document.getElementById('ben3');
-         if(div.style.display==='none')
-         {div.style.display='block';	 }
-         else
-         {div.style.display='none';     }
-
-
-     });
-
-
-     $('#btn03').click(function() {
-
-         var   div=document.getElementById('adresse2');
-         if(div.style.display==='none')
-         {div.style.display='block';	 }
-         else
-         {div.style.display='none';     }
-
-
-     });
-
-
-     $('#btn04').click(function() {
-
-         var   div=document.getElementById('adresse3');
-         if(div.style.display==='none')
-         {div.style.display='block';	 }
-         else
-         {div.style.display='none';     }
-
-
-     });
-
-         $("#typeprest").change(function() {
-
-         document.getElementById('termine').style.display = 'none';
-         document.getElementById('showNext').style.display='none';
-         document.getElementById('choisir').style.display='none';
-         document.getElementById('selectedprest').value=0;
-
-     });
-
-         $("#gouvcouv").change(function(){
-     //  prest = $(this).val();
-             document.getElementById('selectedprest').value=0;
-
-             var  type =document.getElementById('typeprest').value;
-             var  gouv =document.getElementById('gouvcouv').value;
-             if((type !="")&&(gouv !=""))
-             {
-     var _token = $('input[name="_token"]').val();
-
-     document.getElementById('termine').style.display = 'none';
-
-     $.ajax({
-         url:"{{ route('dossiers.listepres') }}",
-         method:"post",
-
-         data:{gouv:gouv,type:type, _token:_token},
-         success:function(data){
-
-        //     alert('1'+data);
-             //   alert('Added successfully');
-         // alert('2'+JSON.parse((data)));
-              $('#data').html(data);
-         //window.location =data;
-            console.log(data);
-      ////       data.map((item, i) => console.log('Index:', i, 'Id:', item.id));
-             var  total =document.getElementById('total').value;
-
-            if(parseInt(total)>0)
-            {
-                document.getElementById('showNext').style.display='block';
-             }
-
-         }
-     }); // ajax
-
-             }else{
-                 alert('SVP, Sélectionner le gouvernorat et la spécialité');
-             }
- }); // change
-
-     $("#choisir").click(function() {
-         //selected= document.getElementById('selected').value;
-         selected=    $("#selected").val();
-         document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
-
-
-     });
-
-
-     $("#essai2").click(function() {
-         document.getElementById('termine').style.display = 'none';
-         document.getElementById('choisir').style.display = 'block';
-         document.getElementById('showNext').style.display = 'block';
-         document.getElementById('item1').style.display = 'block';
-         document.getElementById('selected').value = 1;
-         document.getElementById('selectedprest').value = 0;
-
-
-     });
-
-
-         $("#showNext").click(function() {
-             document.getElementById('selectedprest').value = 0;
-
-             var selected = document.getElementById('selected').value;
-         var total = document.getElementById('total').value;
-         //     alert(selected);
-         //    alert(total);
-         var next = parseInt(selected) + 1;
-         document.getElementById('selected').value = next;
-
-         if ((selected == 0)) {
-             document.getElementById('termine').style.display = 'none';
-             document.getElementById('item1').style.display = 'block';
-             document.getElementById('choisir').style.display = 'block';
-
-             //document.getElementById('selected').value=1;
-             // $("#selected").val('1');
-
-         }
-
-         if ((selected) == (total  )) {//alert("Il n y'a plus de prestataires, Réessayez");
-             document.getElementById('termine').style.display = 'block';
-
-             document.getElementById('item'+(selected)).style.display = 'none';
-             document.getElementById('showNext').style.display = 'none';
-             document.getElementById('choisir').style.display = 'none';
-
-
-         } else {
-
-         if ((selected != 0) && (selected <= total + 1)) {
-             document.getElementById('choisir').style.display = 'block';
-             document.getElementById('termine').style.display = 'none';
-             document.getElementById('item' + selected).style.display = 'none';
-             document.getElementById('item' + next).style.display = 'block';
-
-
-             $("#selected").val(next);
-
-
-
-         }
-     }
-
-         if(next>parseInt(total)+1) {
-             document.getElementById('item' + selected).style.display = 'none';
-         }
-
-
-     });
-
-
-
- }); // $ function
-
-
-</script>
-<style>.headtable{background-color: grey!important;color:white;}
-    table{margin-bottom:40px;}
 </style>
