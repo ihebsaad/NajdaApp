@@ -4,6 +4,10 @@ use App\User ;
 use App\Template_doc ; 
 
 ?>
+<?php use \App\Http\Controllers\PrestationsController;
+     use  \App\Http\Controllers\PrestatairesController;
+?>
+
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
 <link rel="stylesheet" href="{{ asset('public/css/timeline.css') }}" type="text/css">
 <!--select css-->
@@ -538,13 +542,31 @@ use App\Template_doc ;
                                                                     </div>
 
                                                                     <div class="col-md-6">
-                                                                        <div class="form-group">
+                                                                        <!--<div class="form-group">
                                                                             <label for="inputError" class="control-label">Hôtel</label>
 
                                                                             <div class="input-group-control">
                                                                                 <input onchange="changing(this)"  type="text" id="hotel" name="hotel" class="form-control"   value="{{ $dossier->hotel }}" >
                                                                             </div>
-                                                                        </div>
+                                                                        </div>-->
+
+                                                                            <div class="form-group">
+                                                                                <label for="inputError" class="control-label">Hôtel </label>
+
+                                                                                <div class="input-group-control">
+                                                                                    <select onchange="changing(this)"  type="text" id="hotel" name="hotel" class="form-control"   value="{{ $dossier->hotel }}">
+
+                                                                                        <option></option>
+                                                                                        <?php
+
+                                                                                        foreach($hotels as $ht)
+                                                                                        { if ($dossier->hotel == PrestatairesController::ChampById('name',$ht->prestataire_id)){ $selected='selected="selected"'; }else{ $selected=''; }
+                                                                                            if( PrestatairesController::ChampById('name',$ht->prestataire_id)!=''){ echo '<option  '.$selected.' value="'.   PrestatairesController::ChampById('name',$ht->prestataire_id).'">'.   PrestatairesController::ChampById('name',$ht->prestataire_id).'</option>';}
+                                                                                        }
+                                                                                        ?>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
                                                                     </div>
 
                                                                 </div>
@@ -836,24 +858,59 @@ use App\Template_doc ;
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="is_hospitalized" class=""> Hospitalisé
-                                                                        <div class="radio" id="uniform-is_hospitalized"><span><input onclick="changing(this)"  type="radio" name="is_hospitalized" id="is_hospitalized" value="1" <?php if ($dossier->is_hospitalized ==1){echo 'checked';} ?> ></span></div> Outpatient
-                                                                    </label> <label for="nonis_hospitalized" class=""> <div class="radio" id="uniform-nonis_hospitalized"><span class=""><input onclick="disabling('is_hospitalized')" type="radio" name="is_hospitalized" id="nonis_hospitalized" value="0"  <?php if ($dossier->is_hospitalized ==0){echo 'checked';} ?>  ></span></div> Inpatient
+                                                                        <div style="margin-right:20px" class="radio" id="uniform-is_hospitalized"><span><input onclick="changing(this)"  type="radio" name="is_hospitalized" id="is_hospitalized" value="1" <?php if ($dossier->is_hospitalized ==1){echo 'checked';} ?> ></span>Outpatient</div>
+                                                                    </label> <label for="nonis_hospitalized" class=""> <div class="radio" id="uniform-nonis_hospitalized"><span class=""><input onclick="disabling('is_hospitalized')" type="radio" name="is_hospitalized" id="nonis_hospitalized" value="0"  <?php if ($dossier->is_hospitalized ==0){echo 'checked';} ?>  ></span> Inpatient </div>
                                                                     </label>
                                                                 </div>
                                                             </div>
 
                                                         </div>
                                                         <div class="row">
-                                                            <div class="col-md-3">
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label for="inputError" class="control-label">Adresse Hopital </label>
+                                                                    <label for="inputError" class="control-label">Hôspitalisé à </label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="text" id="hospital_address" name="hospital_address" class="form-control"   value="{{ $dossier->hospital_address }}" >
+                                                                        <select onchange="changing(this)"  type="text" id="hospital_address" name="hospital_address" class="form-control"   value="{{ $dossier->hospital_address }}">
+
+                                                                        <option></option>
+                                                                            <?php
+
+                                                                        foreach($hopitaux as $hp)
+                                                                        { if ($dossier->hospital_address == PrestatairesController::ChampById('name',$hp->prestataire_id)){ $selected='selected="selected"'; }else{ $selected=''; }
+                                                                          if( PrestatairesController::ChampById('name',$hp->prestataire_id)!=''){ echo '<option  '.$selected.' value="'.   PrestatairesController::ChampById('name',$hp->prestataire_id).'">'.   PrestatairesController::ChampById('name',$hp->prestataire_id).'</option>';}
+                                                                      }
+                                                                      ?>
+                                                                        </select>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                          <!--  <div class="col-md-3">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="inputError" class="control-label">Médecin Traitant </label>
+                                                                <!--
+                                                                    <div class="input-group-control">
+                                                                        <input onchange="changing(this)"  type="text" id="medecin_traitant" name="medecin_traitant" class="form-control"   value="{{ $dossier->medecin_traitant }}" >
+                                                                    </div>
+                                        -->
+                                                                    <div class="input-group-control">
+                                                                        <select onchange="changing(this)"  type="text" id="medecin_traitant" name="medecin_traitant" class="form-control"   value="{{ $dossier->medecin_traitant }}">
+
+                                                                            <option></option>
+                                                                            <?php
+
+                                                                            foreach($traitants as $tr)
+                                                                            { if ($dossier->medecin_traitant == PrestatairesController::ChampById('name',$tr->prestataire_id)){ $selected='selected="selected"'; }else{ $selected=''; }
+                                                                                if (PrestatairesController::ChampById('name',$tr->prestataire_id)!='') {echo '<option '.$selected.' value="'. PrestatairesController::ChampById('name',$tr->prestataire_id).'">'. PrestatairesController::ChampById('name',$tr->prestataire_id).' Fixe: '. PrestatairesController::ChampById('phone_home',$tr->prestataire_id) .' Tel: '.PrestatairesController::ChampById('phone_cell',$tr->prestataire_id) .'</option>';}
+                                                                            }
+
+                                                                            ?>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <!--  <div class="col-md-3">
                                                                 <div class="form-group">
                                                                     <label for="inputError" class="control-label">Ch</label>
 
@@ -871,56 +928,32 @@ use App\Template_doc ;
                                                                     </div>
                                                                 </div>
                                                             </div>-->
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label for="inputError" class="control-label">Médecin Traitant </label>
 
-                                                                    <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="text" id="medecin_traitant" name="medecin_traitant" class="form-control"   value="{{ $dossier->medecin_traitant }}" >
-                                                                    </div>
-                                                                </div>
-                                                            </div>
                                                         </div>
 
                                                         <div class="row">
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label for="inputError" class="control-label">Adresse Hopital2 </label>
 
-                                                                    <div class="input-group-control">
-                                                                        <input onchange="changing(this)" type="text" id="hospital_address2" name="hospital_address2" class="form-control"   value="{{ $dossier->hospital_address2 }}" >
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
+                                                            <div class="col-md-5">
                                                                 <div class="form-group">
-                                                                    <label for="inputError" class="control-label">Ch2</label>
-
-                                                                    <div class="input-group-control">
-                                                                        <input onchange="changing(this)" type="text" id="hospital_ch2" name="hospital_ch2" class="form-control"   value="{{ $dossier->hospital_ch2 }}" >
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label for="inputError" class="control-label">Tel2 </label>
-
-                                                                    <div class="input-group-control">
-                                                                        <input onchange="changing(this)" type="text" id="hospital_phone2" name="hospital_phone2" class="form-control"   value="{{ $dossier->hospital_phone2 }}" >
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label for="inputError" class="control-label">Médecin Traitant2 </label>
+                                                                    <label for="inputError" class="control-label">Autre Médecin Traitant  </label>
 
                                                                     <div class="input-group-control">
                                                                         <input onchange="changing(this)" type="text" id="medecin_traitant2" name="medecin_traitant2" class="form-control" value="{{ $dossier->medecin_traitant2 }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                            <div class="col-md-5">
+                                                                <div class="form-group">
+                                                                    <label for="inputError" class="control-label">Tel Autre Médecin Traitant</label>
 
+                                                                    <div class="input-group-control">
+                                                                        <input onchange="changing(this)" type="text" id="hospital_phone2" name="hospital_phone2" class="form-control"   value="{{ $dossier->hospital_phone2 }}" >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+<!--
                                                         <div class="row">
                                                             <div class="col-md-3">
                                                                 <div class="form-group">
@@ -958,13 +991,13 @@ use App\Template_doc ;
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div>-->
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="panel panel-success " id="technique" style=" <?php if ($dossier->type_dossier =='Medical'){echo 'display:none';}?>;"">
+                                        <div class="panel panel-success " id="technique" style=" <?php if ($dossier->type_dossier =='Medical'){echo 'display:none';}?>;">
                                         <div class="panel-heading">
                                             <h4 class="panel-title">
                                                 <a class="accordion-toggle" data-toggle="collapse">
@@ -978,7 +1011,16 @@ use App\Template_doc ;
                                                     <div class="row">
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label for="inputError" class="control-label"> Type et marque du véhicule</label>
+                                                                <label for="inputError" class="control-label"> marque du véhicule</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input onchange="changing(this)" type="text" id="vehicule_marque" name="vehicule_marque" class="form-control"   value="{{ $dossier->vehicule_marque }}" >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label"> Type</label>
 
                                                                 <div class="input-group-control">
                                                                     <input onchange="changing(this)" type="text" id="vehicule_type" name="vehicule_type" class="form-control"   value="{{ $dossier->vehicule_type }}" >
@@ -994,28 +1036,57 @@ use App\Template_doc ;
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Lieu d'immobilisation </label>
 
-                                                                <div class="input-group-control">
-                                                                    <input onchange="changing(this)" type="text" id="lieu_immobilisation" name="lieu_immobilisation" class="form-control"   value="{{ $dossier->lieu_immobilisation }}" >
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
 
                                                     <div class="row">
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label for="inputError" class="control-label"> Adresse véhicule</label>
+                                                                <label for="inputError" class="control-label">Dernière adresse d'immobilisation </label>
 
                                                                 <div class="input-group-control">
-                                                                    <input onchange="changing(this)" type="text" id="vehicule_address" name="vehicule_address" class="form-control"   value="{{ $dossier->vehicule_address }}" >
+
+                                                                    <select onchange="changing(this)"  type="text" id="lieu_immobilisation" name="medecin_traitant" class="form-control"   value="{{ $dossier->lieu_immobilisation }}">
+
+                                                                        <option></option>
+                                                                        <?php
+
+                                                                        foreach($garages as $gr)
+                                                                        { if ($dossier->lieu_immobilisation == PrestatairesController::ChampById('name',$gr->prestataire_id)){ $selected='selected="selected"'; }else{ $selected=''; }
+                                                                            if (PrestatairesController::ChampById('name',$gr->prestataire_id)!='') {echo '<option '.$selected.' value="'. PrestatairesController::ChampById('name',$gr->prestataire_id).'">'. PrestatairesController::ChampById('name',$gr->prestataire_id).'</option>';}
+                                                                        }
+                                                                        ?>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">Autre  </label>
+
+                                                                <div class="input-group-control">
+                                                                    <input onchange="changing(this)"  type="text" id="vehicule_address2" name="vehicule_address2" class="form-control"   value="{{ $dossier->vehicule_address2 }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label"> Ville / localité</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input onchange="changing(this)" type="text" id="vehicule_address" name="vehicule_address" class="form-control"   value="{{ $dossier->vehicule_address }}" >
+                                                                </div>
+                                                                <script>
+                                                                    var placesAutocomplete = places({
+                                                                        appId: 'plCFMZRCP0KR',
+                                                                        apiKey: 'aafa6174d8fa956cd4789056c04735e1',
+                                                                        container: document.querySelector('#vehicule_address')
+                                                                    });
+                                                                </script>
+                                                            </div>
+                                                        </div>
+
+                                                    <!--   <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label for="inputError" class="control-label">Adresse véhicule2</label>
 
@@ -1032,7 +1103,7 @@ use App\Template_doc ;
                                                                     <input onchange="changing(this)"  type="text" id="vehicule_phone" name="vehicule_phone" class="form-control"   value="{{ $dossier->vehicule_phone }}" >
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div>-->
                                                     </div>
 
                                                 </div>
@@ -1049,17 +1120,43 @@ use App\Template_doc ;
                                         </div>
                                         <div class="panel-collapse collapse in">
                                             <div class="panel-body">
-                                                <div class="col-md-12">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
+                                                <label for="form_control_1">Observations de dossier<span class="required"> * </span></label>
+
+                                                <div class="row">
+                                                        <div class="col-md-10">
                                                             <div class="form-group form-md-line-input form-md-floating-label">
-                                                                <label for="form_control_1">Observation dossier<span class="required"> * </span></label>
                                                                 <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation" id="observation">  {{ $dossier->observation }} </textarea>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
+                                                         <div class="col-md-2"></div>
 
+                                                    </div>
+                                                <div class="row">
+                                                    <div class="col-md-10">
+                                                        <div class="form-group form-md-line-input form-md-floating-label">
+                                                             <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation2" id="observation2">  {{ $dossier->observation2 }} </textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2"></div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-10">
+                                                        <div class="form-group form-md-line-input form-md-floating-label">
+                                                            <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation3" id="observation3">  {{ $dossier->observation3 }} </textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2"></div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-10">
+                                                        <div class="form-group form-md-line-input form-md-floating-label">
+                                                            <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation4" id="observation4">  {{ $dossier->observation4 }} </textarea>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1602,7 +1699,6 @@ use App\Template_doc ;
 
 
             <div id="tab3" class="tab-pane fade">
-                <?php use \App\Http\Controllers\PrestationsController;     ?>
                     <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addpres" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une Prestation</b></button>
 
                 <table class="table table-striped" id="mytable" style="width:100%;margin-top:15px;">
@@ -2305,62 +2401,6 @@ $iduser=$CurrentUser->id;
 
         // }
     }
-/*
-    function disabling(elm) {
-        //var champ=elm;
-champ="franchise";
-        var val =0;
-         var dossier = $('#iddossupdate').val();
-         var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url: "{{ route('dossiers.updating2') }}",
-            method: "GET",
-            data: {dossier: dossier ,  _token: _token},
-            success: function (data) {
-
-                $('#nonfranchise').animate({
-                    opacity: '0.3',
-                });
-                $('#nonfranchise').animate({
-                    opacity: '1',
-                });
-
-            }
-        });
-        // } else {
-
-        // }
-    }
-
-*/
-    function disabling2(elm) {
-        //var champ=elm;
-
-        var val =0;
-        var dossier = $('#iddossupdate').val();
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url: "{{ route('dossiers.updating3') }}",
-            method: "GET",
-            data: {dossier: dossier ,  _token: _token},
-            success: function (data) {
-
-
-                $('#nonis_hospitalized').animate({
-                    opacity: '0.3',
-                });
-                $('#nonis_hospitalized').animate({
-                    opacity: '1',
-                });
-
-
-            }
-        });
-        // } else {
-
-        // }
-    }
-
 
 
 

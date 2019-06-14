@@ -162,7 +162,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkfax();
-                    }, 30000);  //30 secds
+                    }, 60000);  //30 secds
                 }
             });
         }
@@ -179,7 +179,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkboite();
-                    }, 30000);  //30 secds
+                    }, 1200000);  //30 secds
                 }
             });
         }

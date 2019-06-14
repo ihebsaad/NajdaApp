@@ -328,7 +328,7 @@ class DossiersController extends Controller
 
         $hopitaux = DB::table('prestataires_type_prestations')
             ->where('type_prestation_id',8 )
-            ->where('type_prestation_id',9 )
+            ->orwhere('type_prestation_id',9 )
             ->get();
 
         $traitants = DB::table('prestataires_type_prestations')
@@ -339,8 +339,12 @@ class DossiersController extends Controller
             ->where('type_prestation_id',18 )
             ->get();
 
+        $garages = DB::table('prestataires_type_prestations')
+            ->where('type_prestation_id',30 )
+            ->orwhere('type_prestation_id',22 )
+            ->get();
 
-        return view('dossiers.view',['hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'prestataires'=>$prestataires,'emails'=>$emails,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
+        return view('dossiers.view',['garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'prestataires'=>$prestataires,'emails'=>$emails,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
 
     }
 
