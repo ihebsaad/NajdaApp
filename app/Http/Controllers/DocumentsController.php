@@ -19,18 +19,42 @@ class DocumentsController extends Controller
     {
         $dossier= $_POST['dossdoc'] ;
         $templateid = $_POST['templatedocument'] ;
-        //return $_POST;
+        $parent =null;
+        $valchamps="";
+
         $arrfile = Template_doc::where('id', $templateid)->first();
         $infodossier = Dossier::where('id', $dossier)->first();
-        
-        $file=public_path($arrfile['path']);
 
+        $file=public_path($arrfile['path']);
             
             $champsArray = explode(',', $arrfile['champs']);
 
             $refdoss = $infodossier["reference_medic"];
             
             $array = array();
+
+
+        if (isset($_POST['parent']) )
+        {
+            if (!empty($_POST['parent']) && $_POST['parent']!== null)
+            {
+                $parent = $_POST['parent'];
+                $count = Document::where('parent',$parent)->count();
+                Document::where('id', $parent)->update(['dernier' => 0]);
+
+                if (isset($_POST['annule']))
+                    {$file=public_path($arrfile['template_annulation']);}
+                else {$file=public_path($arrfile['template_remplace']);}
+            }
+        }
+        //return $_POST;
+        //champ date precedente
+        if (isset($_POST['pre_dateheure']))
+        {
+            $array += [ '[PRE_DATEHEURE]' => $_POST['pre_dateheure']];
+        }
+        
+
             foreach ($champsArray as $champtemp) {
                 //verifier quil nest pas un champs libre
                 if (stristr($champtemp,'[CL_')=== FALSE) 
@@ -41,6 +65,7 @@ class DocumentsController extends Controller
                     $champform = strtolower($champform);
                     $valchamp = $_POST[$champform];
                     $array += [ $champtemp => $valchamp];
+
                 }
                 elseif(stristr($champtemp,'[CL_')!== FALSE)
                 {
@@ -48,11 +73,37 @@ class DocumentsController extends Controller
                     $champdb = str_replace('[CL_', '', $champtemp);
                     $champdb = str_replace(']', '', $champdb);
                     $champdb = strtolower($champdb);
-                    $array += [ $champtemp => $_POST['CL_'.$champdb]];
+
+                    $valchamp=$_POST['CL_'.$champdb];
+                    $array += [ $champtemp => $valchamp];
+
                 }
+
+                
+                    //remplissage de la colonne de base - valeur des champs
+                    if ($valchamps!=="")
+                    {$valchamps=$valchamps.'|'.$valchamp;}
+                    else
+                    {$valchamps=$valchamp;}
+
+
             }
 
-        $name_file = $arrfile['nom'].'_'.$refdoss.'.doc';
+        //$name_file = $arrfile['nom'].'_'.$refdoss.'.doc';
+        if (isset($count)) 
+            {
+                date_default_timezone_set('Africa/Tunis');
+                setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
+                $datees = strftime("%d-%B-%Y"."_"."%H-%M"); 
+                $name_file = $arrfile['nom'].'_'.$refdoss.'_'.$datees.'.doc';
+                $titref =$arrfile['nom'].'_'.$refdoss;
+            }
+        else 
+            {
+                $name_file = $arrfile['nom'].'_'.$refdoss.'.doc';
+
+                $titref =$arrfile['nom'].'_'.$refdoss;
+            }
             
          WordTemplate::export($file, $array, '/documents/'.$refdoss.'/'.$name_file);
           
@@ -60,8 +111,12 @@ class DocumentsController extends Controller
 
         $doc = new Document([
             'dossier' => $dossier,
-            'titre' => $arrfile['nom'].'_'.$refdoss,
+            'titre' => $titref,
             'emplacement' => 'documents/'.$refdoss.'/'.$name_file,
+            'template' => $templateid,
+            'parent' => $parent,
+            'dernier' => 1,
+            'valchamps' => $valchamps
 
         ]);
         $doc->save();
@@ -76,59 +131,144 @@ class DocumentsController extends Controller
         $dossier= $request->get('dossier') ;
         $templateid = $request->get('template') ;
         $arrfile = Template_doc::where('id', $templateid)->first();
-        $infodossier = Dossier::where('id', $dossier)->first();
-        //return $infodossier['reference_medic']." | ".$infodossier['subscriber_name']." | ".$infodossier['subscriber_lastname'];
-         // verifier si la template a un champ date/heure
-        $datees="";
-        if(stristr($arrfile['champs'], '[DATE_HEURE]') !== FALSE) 
-            {
-                date_default_timezone_set('Africa/Tunis');
-                setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
-                $datees = strftime("%d %B %Y".", "."%H:%M"); 
-            }
-        $champsArray = explode(',', $arrfile['champs']);
-        $array = array();
-        $array += [ 'templatehtml' => $arrfile['template_html']];
-        $array += [ 'templatertf' => $arrfile['path']];
-            foreach ($champsArray as $champtemp) {
-                //verifier quil nest pas un champs libre
-                if ((stristr($champtemp,'[CL_')=== FALSE) && ($champtemp !=='[DATE_HEURE]'))
-                {   
-                    //$array += [ $champtemp => 'ti' ];
-                    $champdb = str_replace('[', '', $champtemp);
-                    $champdb = str_replace(']', '', $champdb);
-                    $champdb = strtolower($champdb);
-                    $valchamp = $infodossier[$champdb];
-
-                    $champtemp = str_replace('[', '', $champtemp);
-                    $champtemp = str_replace(']', '', $champtemp);
-                    $champtemp = strtolower($champtemp);
-                    $array += [ $champtemp => $valchamp];
-                }
-                elseif($champtemp ==='[DATE_HEURE]')
+        // verifier si la template a un champ date/heure
+            $datees="";
+            if(stristr($arrfile['champs'], '[DATE_HEURE]') !== FALSE) 
                 {
-                    //champ date/heure
-                    $champtemp = str_replace('[', '', $champtemp);
-                    $champtemp = str_replace(']', '', $champtemp);
-                    $champtemp = strtolower($champtemp);
-                    $array += [ $champtemp => $datees];
+                    date_default_timezone_set('Africa/Tunis');
+                    setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
+                    $datees = strftime("%d %B %Y".", "."%H:%M"); 
                 }
-                elseif(stristr($champtemp,'[CL_')!== FALSE)
-                {
-                    //champ libre
-                    $champdb = str_replace('[CL_', '', $champtemp);
-                    $champdb = str_replace(']', '', $champdb);
-                    $champdb = strtolower($champdb);
+            $champsArray = explode(',', $arrfile['champs']);
+            $array = array();
 
-                    $champtemp = str_replace('[', '', $champtemp);
-                    $champtemp = str_replace(']', '', $champtemp);
-                    $champtemp = strtolower($champtemp);
-                    $array += [ 'CL_'.$champtemp => $champdb];
+            $array += [ 'templatehtml' => $arrfile['template_html']];
+            $array += [ 'templatertf' => $arrfile['path']];
+
+        // cas remplace et annule doc
+        if ($request->has('parent'))
+        {
+            $infoparent = Document::where('id', $request->get('parent'))->first();
+            $champsparentArray = explode('|', $infoparent['valchamps']);
+            $i=0;
+            foreach ($champsArray as $champtemp) {   
+                //verifier que le champs nest pas en double - se fini par 2]
+                if (stristr($champtemp,'2]')=== FALSE)
+                {
+                    //verifier quil nest pas un champs libre
+                    if ((stristr($champtemp,'[CL_')=== FALSE) && ($champtemp !=='[DATE_HEURE]'))
+                    {   
+                        if (array_key_exists($i,$champsparentArray))
+                        {
+                            $valchamp = $champsparentArray[$i];
+                        }
+                        else
+                            { $valchamp = "undefined index";}
+
+                        $champtemp = str_replace('[', '', $champtemp);
+                        $champtemp = str_replace(']', '', $champtemp);
+                        $champtemp = strtolower($champtemp);
+                        $array += [ $champtemp => $valchamp];
+                    }
+                    elseif($champtemp ==='[DATE_HEURE]')
+                    {
+                        //champ date/heure
+                        $champtemp = str_replace('[', '', $champtemp);
+                        $champtemp = str_replace(']', '', $champtemp);
+                        $champtemp = strtolower($champtemp);
+                        $array += [ $champtemp => $datees];
+                        // champ date precedente
+                        if (array_key_exists($i,$champsparentArray))
+                        {
+                            $valchamp = $champsparentArray[$i];
+                        }
+                        else
+                            { $valchamp = "undefined index";}
+                        $array += [ 'pre_dateheure' => $valchamp];
+
+                    }
+                    elseif(stristr($champtemp,'[CL_')!== FALSE)
+                    {
+                        //champ libre
+                        if (array_key_exists($i,$champsparentArray))
+                        {
+                            $valchamp = $champsparentArray[$i];
+                        }
+                        else
+                            { $valchamp = "undefined index";}
+
+                        $champtemp = str_replace('[CL_', '', $champtemp);
+                        $champtemp = str_replace(']', '', $champtemp);
+                        $champtemp = strtolower($champtemp);
+                        $array += [ 'CL_'.$champtemp => $valchamp];
+                    }
                 }
+                $i++;
             }
+            //$array=$champsparentArray[0];
+        }
+        // cas nouveau doc
+        else
+        {
+            $infodossier = Dossier::where('id', $dossier)->first();
+            //return $infodossier['reference_medic']." | ".$infodossier['subscriber_name']." | ".$infodossier['subscriber_lastname'];
+             
+                foreach ($champsArray as $champtemp) {
+                    //verifier quil nest pas un champs libre
+                    if ((stristr($champtemp,'[CL_')=== FALSE) && ($champtemp !=='[DATE_HEURE]'))
+                    {   
+                        //$array += [ $champtemp => 'ti' ];
+                        $champdb = str_replace('[', '', $champtemp);
+                        $champdb = str_replace(']', '', $champdb);
+                        $champdb = strtolower($champdb);
+                        $valchamp = $infodossier[$champdb];
+
+                        $champtemp = str_replace('[', '', $champtemp);
+                        $champtemp = str_replace(']', '', $champtemp);
+                        $champtemp = strtolower($champtemp);
+                        $array += [ $champtemp => $valchamp];
+                    }
+                    elseif($champtemp ==='[DATE_HEURE]')
+                    {
+                        //champ date/heure
+                        $champtemp = str_replace('[', '', $champtemp);
+                        $champtemp = str_replace(']', '', $champtemp);
+                        $champtemp = strtolower($champtemp);
+                        $array += [ $champtemp => $datees];
+                    }
+                    elseif(stristr($champtemp,'[CL_')!== FALSE)
+                    {
+                        //champ libre
+                        $champdb = str_replace('[CL_', '', $champtemp);
+                        $champdb = str_replace(']', '', $champdb);
+                        $champdb = strtolower($champdb);
+
+                        $champtemp = str_replace('[', '', $champtemp);
+                        $champtemp = str_replace(']', '', $champtemp);
+                        $champtemp = strtolower($champtemp);
+                        $array += [ 'CL_'.$champtemp => $champdb];
+                    }
+                }
+        }
+
         //$array = $arrayName = array('test' => 'valtes', 'test2' => 'valteddd');
         header('Content-type: application/json');    
         return json_encode($array);
     }
 
+public function historique(Request $request)
+    {
+        $docparent= $_POST['doc'] ;
+        $histodoc = array();
+        while ($docparent !== null) {
+            $arrdoc = Document::select('id','titre','emplacement','dernier','parent','updated_at')->where('id', $docparent)->first();
+            $histodoc[]=$arrdoc;
+            $docparent = $arrdoc['parent'];
+        }
+
+        //return $histodoc;
+        header('Content-type: application/json');    
+        return json_encode($histodoc);
+
+    }
 }

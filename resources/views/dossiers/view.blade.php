@@ -2,6 +2,7 @@
 <?php 
 use App\User ; 
 use App\Template_doc ; 
+use App\Document ; 
 
 ?>
 <?php use \App\Http\Controllers\PrestationsController;
@@ -1736,8 +1737,9 @@ use App\Template_doc ;
                     <thead>
                     <tr id="headtable">
                         <th style="">Document</th>
-                        <th style="">Description</th>
-                        <th style="">Télécharger</th>
+                        <!--<th style="">Description</th>-->
+                        <th style="">Historique</th>
+                        <th style="">Actions</th>
                      </tr>
 
                     </thead>
@@ -1745,11 +1747,49 @@ use App\Template_doc ;
                     @foreach($documents as $doc)
                         <tr>
                             <td style=";"><?php echo $doc->titre; ?></td>
-                            <td style=";"><?php echo $doc->description; ?></td>
+                            <!--<td style=";"><?php //echo $doc->description; ?></td>-->
+                            <td style=";">
+                            <?php
+                                if ($doc->parent !== null)
+                                {
+                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important;" id="btnhisto" onclick="historiquedoc('.$doc->parent.');"><i class="far fa-eye"></i> Voir</button>';
+                                   
+                                }
+                                else
+                                {
+                                    echo "Aucun";
+                                }
+                            ?>
+                            </td>
                             <?php 
                             $pathdoc = storage_path().$doc->emplacement;
+                            $templatedoc = $doc->template;
                             ?>
-                            <td style=";"><a  href="{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}" ><i class="fa fa-download"></i> Télécharger</a></td>
+                            <td>
+                                    <div class="page-toolbar">
+
+                                    <div class="btn-group">
+                                        <div class="btn-group" style="margin-right: 10px">
+                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important;" id="btnannremp">
+                                                <a style="color:black" href="#" id="annremp" onclick="remplacedoc(<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>);"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
+                                            </button>
+                                        </div>
+
+                                        <div class="btn-group" style="margin-right: 10px">
+                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,214,214) !important;" id="btnann">
+                                                <a style="color:black"  onclick="annuledoc(<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>);" href="#" > <i class="far fa-window-close"></i> Annuler</a>
+                                            </button>
+                                        </div>
+
+                                        <div class="btn-group" style="margin-right: 10px">
+                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important;" id="btntele">
+                                                <a style="color:black" href="{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}" ><i class="fa fa-download"></i> Télécharger</a>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </td>
                         </tr>
                     @endforeach
 
@@ -1979,14 +2019,23 @@ $iduser=$CurrentUser->id;
                             <div class="form-group " >
                                 <label for="emaildoss">Template</label>
                                 <div class=" row  ">
-                                    <select class="form-control" required id="templatedoc">
+                                    <select class="form-control select2" style="width: 230px" required id="templatedoc" name="templatedoc" >
+                                        <option value="Select">Selectionner</option>
                                     <?php
+                                        $usedtemplates = Document::where('dossier',$dossier->id)->distinct()->get(['template']);
+                                        $usedtid=array();
+                                        foreach ($usedtemplates as $tempu) {
+                                            $usedtid[]=$tempu['template'];
+                                        }
                                         $templatesd = Template_doc::get();
                                         $docwithcl = array();
                                     ?>
                                         @foreach ($templatesd as $tempdoc)
-                                            <option value={{ $tempdoc["id"] }} >{{ $tempdoc["nom"] }}</option>
+                                           @if (! in_array($tempdoc["id"],$usedtid))
+                                                <option value={{ $tempdoc["id"] }} >{{ $tempdoc["nom"] }}</option>
+                                            @endif                                            
                                         @endforeach
+                                        
                                    </select>
                                 </div>
                             </div>
@@ -2024,6 +2073,7 @@ $iduser=$CurrentUser->id;
                             {{ csrf_field() }}
                             <input id="dossdoc" name="dossdoc" type="hidden" value="{{ $dossier->id}}">
                             <input type="hidden" name="templatedocument" id="templatedocument" >
+                            <input type="hidden" name="iddocparent" id="iddocparent" >
                             <iframe src="#" id="templatefilled" name="templatefilled" style="width:100%;height:100%">content</iframe>
 
                         </form>
@@ -2040,6 +2090,40 @@ $iduser=$CurrentUser->id;
         </div>
     </div>
 </div>
+
+<!-- Modal historique doc-->
+<div class="modal fade" id="modalhistodoc" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="document" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModal2">Historique du document</h4>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <h5 style="font-size: 20px; font-weight: 900; color: slategrey;" id="dochistoname"></h5>
+                    <table class="table table-striped" id="tabledocshisto" style="width:100%;margin-top:15px;">
+                            <thead>
+                            <tr id="headtable">
+                                <th style="">Date de génération</th>
+                                <th style="">Actions</th>
+                             </tr>
+
+                            </thead>
+                            <tbody>
+                            </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php if ((Gate::check('isAdmin') || Gate::check('isSupervisor'))) { ?>
 <!-- Modal attribution dossier-->
 <div class="modal fade" id="attrmodal" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
@@ -2254,7 +2338,188 @@ $iduser=$CurrentUser->id;
 
 <script>
 
+function remplacedoc(iddoc,template)
+{
+    //alert(iddoc+' | '+template);
 
+        var dossier = $('#dossier').val();
+        var tempdoc = template;
+        $("#gendochtml").prop("disabled",false);
+        if ((dossier != '') )
+        {
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('documents.htmlfilled') }}",
+                method:"POST",
+                data:{dossier:dossier,template:tempdoc,parent:iddoc, _token:_token},
+                success:function(data){
+                    filltemplate(data,tempdoc);
+                    // set iddocparent value
+                    $('#iddocparent').val(iddoc);
+                    //alert(JSON.stringify(data));
+                }
+            });
+        }else{
+            // alert('ERROR');
+        }
+}
+
+function annuledoc(iddoc,template)
+{
+    //alert(iddoc+' | '+template);
+
+        var dossier = $('#dossier').val();
+        var tempdoc = template;
+        $("#gendochtml").prop("disabled",false);
+        /*if ((dossier != '') )
+        {
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('documents.htmlfilled') }}",
+                method:"POST",
+                data:{dossier:dossier,template:tempdoc,parent:iddoc,annule:iddoc, _token:_token},
+                success:function(data){
+                    filltemplate(data,tempdoc);
+                    // set iddocparent value
+                    $('#iddocparent').val(iddoc);
+                    //alert(JSON.stringify(data));
+                }
+            });
+        }*/
+        alert(tempdoc);
+}
+
+// affichage de lhistorique du document
+    
+    function historiquedoc(doc){
+        //$("#gendocfromhtml").submit();
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+                url:"{{ route('documents.historique') }}",
+                method:"POST",
+                //'&_token='+_token
+                data:'_token='+_token+'&doc='+doc,
+                success:function(data){
+                    //alert(JSON.stringify(data));
+                    var histdoc = JSON.parse(data);
+                    // vider le contenu du table historique
+                    $("#tabledocshisto tbody").empty();
+                    var items = [];
+                    $.each(histdoc, function(i, field){
+                      items.push([ i,field ]);
+                    });
+                    // affichage template dans iframe
+                    $.each(items, function(index, val) {
+
+                    //titre du document
+                    if (val[0]==0)
+                    {
+                        $("#dochistoname").text(val[1]['titre']);
+                    }
+
+                    //alert(val[0]+" | "+val[1]['emplacement']+" | "+val[1]['updated_at']);
+                    urlf="{{ URL::asset('storage'.'/app/') }}";
+                    aurlf="<a style='color:black' href='"+urlf+"/"+val[1]['emplacement']+"' ><i class='fa fa-download'></i> Télécharger</a>";
+                    $("#tabledocshisto tbody").append("<tr><td>"+val[1]['updated_at']+"</td><td>"+aurlf+"</td></tr>");
+
+                    });
+
+                    $("#modalhistodoc").modal('show');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
+                    alert('Erreur lors de recuperation de l historique du document');
+                    console.log('jqXHR:');
+                    console.log(jqXHR);
+                    console.log('textStatus:');
+                    console.log(textStatus);
+                    console.log('errorThrown:');
+                    console.log(errorThrown);
+                }
+            });
+    }
+
+function filltemplate(data,tempdoc)
+{
+   // window.location =data; hde gendocform and display template filled
+   $("#generatedoc").modal('hide');
+   //change html template content
+   var templateexist = true;
+   var parsed = JSON.parse(data);
+   var items = [];
+   var html_string="";
+   $.each(parsed, function(i, field){
+      items.push([ i,field ]);
+    });
+   // affichage template dans iframe
+  $.each(items, function(index, val) {
+
+        //recuperer la template html du document
+        if(val[0] ==='templatehtml') 
+            {
+                if ((val[1].includes(undefined)) || (!val[1])) 
+                {
+                    templateexist = false;
+                    alert("la template html du document n'est pas bien défini ");
+                }
+                else
+                {    
+                    html_string= "{{asset('public/') }}"+"/"+val[1];
+
+                }
+                
+            }
+        //verifier la templte rtf du document
+        if(val[0] ==='templatertf') 
+            {
+                if ((val[1].includes(undefined)) || (!val[1])) 
+                {
+                    $("#gendochtml").prop("disabled",true);
+                    alert("la template rtf du document n'est pas bien défini ");
+                }
+                else
+                {    
+                    $("#templatedocument").val(tempdoc);
+                }
+                
+            }
+
+    });
+
+  if (templateexist)
+    {
+
+        // remplissage de la template dans iframe
+        var numparam = 0;
+        $.each(items, function(index, val) {
+            // les champs du document
+            if ((val[0] !=='templatertf') && (val[0] !=='templatehtml') /* && (val[0].indexOf("CL_") == -1)*/ )
+            {
+                if (numparam == 0)
+                {
+                    html_string=html_string+'?';
+                }
+                else
+                {
+                    html_string=html_string+'&';
+                }
+
+                html_string=html_string+val[0]+'='+val[1];
+
+                numparam ++;
+            }
+        });
+
+
+
+        //chargement du contenu et affichage du preview du document
+        //alert(html_string);
+        document.getElementById('templatefilled').src = html_string;
+        $("#templatehtmldoc").modal('show');
+
+
+    }
+}
 
     function changing(elm) {
         var champ=elm.id;
@@ -2324,8 +2589,8 @@ $iduser=$CurrentUser->id;
 
 
     $(document).ready(function() {
-
     $("#agent").select2();
+    $("#templatedoc").select2();
     $('#emailadd').click(function(){
         var parent = $('#parent').val();
         var champ = $('#emaildoss').val();
@@ -2351,10 +2616,13 @@ $iduser=$CurrentUser->id;
         }
     });
 
+// fonction du remplissage de la template web du document
     $('#gendoc').click(function(){
         var dossier = $('#dossier').val();
         var tempdoc = $("#templatedoc").val();
         $("#gendochtml").prop("disabled",false);
+        // renitialise la val de parentdoc
+        $('#iddocparent').attr('value', '');  
         if ((dossier != '') )
         {
             var _token = $('input[name="_token"]').val();
@@ -2363,102 +2631,14 @@ $iduser=$CurrentUser->id;
                 method:"POST",
                 data:{dossier:dossier,template:tempdoc, _token:_token},
                 success:function(data){
-
-                    //   alert('Added successfully');
-                   // window.location =data; hde gendocform and display template filled
-                   $("#generatedoc").modal('hide');
-                   //change html template content
-                   var templateexist = true;
-                   var parsed = JSON.parse(data);
-                   var items = [];
-                   var html_string="";
-                   $.each(parsed, function(i, field){
-                      items.push([ i,field ]);
-                    });
-                   // affichage template dans iframe
-                  $.each(items, function(index, val) {
-
-                        //recuperer la template html du document
-                        if(val[0] ==='templatehtml') 
-                            {
-                                if ((val[1].includes(undefined)) || (!val[1])) 
-                                {
-                                    templateexist = false;
-                                    alert("la template html du document n'est pas bien défini ");
-                                }
-                                else
-                                {    
-                                    html_string= "{{asset('public/') }}"+"/"+val[1];
-
-                                }
-                                
-                            }
-                        //verifier la templte rtf du document
-                        if(val[0] ==='templatertf') 
-                            {
-                                if ((val[1].includes(undefined)) || (!val[1])) 
-                                {
-                                    $("#gendochtml").prop("disabled",true);
-                                    alert("la template rtf du document n'est pas bien défini ");
-                                }
-                                else
-                                {    
-                                    $("#templatedocument").val(tempdoc);
-                                }
-                                
-                            }
-
-                    });
-
-                  if (templateexist)
-                    {
-
-                        // remplissage de la template dans iframe
-                        var numparam = 0;
-                        $.each(items, function(index, val) {
-                            // les champs du document
-                            if ((val[0] !=='templatertf') && (val[0] !=='templatehtml') && (val[0].indexOf("CL_") == -1) )
-                            {
-                                if (numparam == 0)
-                                {
-                                    html_string=html_string+'?';
-                                }
-                                else
-                                {
-                                    html_string=html_string+'&';
-                                }
-
-                                html_string=html_string+val[0]+'='+val[1];
-
-                                numparam ++;
-                            }
-                        });
-
-
-
-                        //chargement du contenu et affichage du preview du document
-                        //alert(html_string);
-                        document.getElementById('templatefilled').src = html_string;
-                        $("#templatehtmldoc").modal('show');
-
-
-                    }
-
-
-                   /*var dd = JSON.stringify(data);
-                   var parsed = JSON.parse(dd);
-                   $('#templatefilled').contents().find('html').html("/"+parsed[0]['templatehtml']);*/
-                  // $("#templatehtmldoc").modal('show');
-                   //alert(data[1]); 
-
-
+                    filltemplate(data,tempdoc);
+                    //alert(JSON.stringify(data));
                 }
             });
         }else{
             // alert('ERROR');
         }
     });
-
 
         $('#btnaddemail').click(function(){
             var parent = $('#iddossupdate').val();
@@ -2518,27 +2698,41 @@ $iduser=$CurrentUser->id;
 
 
     // generate doc from html templte
-
     $('#gendochtml').click(function(){
         //alert($("#templatedocument").val());
         //$("#gendocfromhtml").submit();
         var _token = $('input[name="_token"]').val();
         var dossier = $('#dossdoc').val();
         var tempdoc = $("#templatedocument").val();
+        var idparent = '';
+        // verifier si cest le cas de annule et remplace pour sauvegarder lid du parent
+        if ($('#iddocparent').val())
+        {
+            idparent = $('#iddocparent').val();
+            console.log('parent: '+idparent);
+        }
         $.ajax({
                 url:"{{ route('documents.adddocument') }}",
                 method:"POST",
                 //'&_token='+_token
-                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc,
+                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent,
                 success:function(data){
                     //alert(JSON.stringify(data));
-                    //console.log(data);
+                    console.log(data);
                     location.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
+                    alert('Erreur lors de la generation du document');
+                    console.log('jqXHR:');
+                    console.log(jqXHR);
+                    console.log('textStatus:');
+                    console.log(textStatus);
+                    console.log('errorThrown:');
+                    console.log(errorThrown);
                 }
             });
     });
-     });
-
 
 
 

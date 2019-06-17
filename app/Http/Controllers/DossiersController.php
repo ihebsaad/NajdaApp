@@ -324,7 +324,7 @@ class DossiersController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
         //  $entrees =   Entree::all();
-        $documents = Document::where('dossier', $id)->get();
+        $documents = Document::where(['dossier' => $id,'dernier' => 1])->get();
         $dossiers = $this->ListeDossiersAffecte();
 
 

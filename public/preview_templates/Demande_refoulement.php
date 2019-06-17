@@ -2,8 +2,11 @@
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; $subscriber_name2=$_GET['subscriber_name'];}
 if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; $subscriber_lastname2=$_GET['subscriber_lastname'];}
+if (isset($_GET['CL_payee'])) {$Cl_payee=$_GET['CL_payee'];}
+if (isset($_GET['CL_passeport'])) {$CL_passeport=$_GET['CL_passeport'];}
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
 if (isset($_GET['vehicule_immatriculation'])) {$vehicule_immatriculation=$_GET['vehicule_immatriculation'];}
+if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>Demande_refoulement</title>
@@ -111,6 +114,7 @@ p,ul,ol /* Paragraph Style */
 </head>
 <body>
 <form id="formchamps">
+<input name="pre_dateheure" type="hidden" value="<?php if(isset ($pre_dateheure)) echo $pre_dateheure; ?>"></input>
 <p class=rvps1><span class=rvts1>Tunis le <input name="date_heure" type="text" value="<?php if(isset ($date_heure)) echo $date_heure; ?>"></input></span></p>
 <p class=rvps2><span class=rvts2><br></span></p>
 <p class=rvps2><span class=rvts3><br></span></p>
@@ -122,7 +126,7 @@ p,ul,ol /* Paragraph Style */
 <p><span class=rvts6>Objet : </span><span class=rvts7>Demande de refoulement</span></p>
 <p><span class=rvts7><br></span></p>
 <p><span class=rvts7><br></span></p>
-<p class=rvps3><span class=rvts1>Je soussigné Mr/Mme <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> titulaire du passeport <input name="CL_payee" placeholder="pays"></input> n° <input name="CL_passeport" placeholder="numéro du passeport"></input>, viens par la présente vous prier de bien vouloir me donner votre accord pour le refoulement de mon véhicule <input name="vehicule_type" placeholder="Type et marque du véhicule
+<p class=rvps3><span class=rvts1>Je soussigné Mr/Mme <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> titulaire du passeport <input name="CL_payee" placeholder="pays"  value="<?php if(isset ($Cl_payee)) echo $Cl_payee; ?>"></input> n° <input name="CL_passeport" placeholder="numéro du passeport" value="<?php if(isset ($CL_passeport)) echo $CL_passeport; ?>"></input>, viens par la présente vous prier de bien vouloir me donner votre accord pour le refoulement de mon véhicule <input name="vehicule_type" placeholder="Type et marque du véhicule
 " value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input>.</span></p>
 <p class=rvps3><span class=rvts1><br></span></p>
 <ul class=list0>
