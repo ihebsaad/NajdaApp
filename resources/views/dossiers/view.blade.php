@@ -1013,11 +1013,58 @@ use App\Template_doc ;
                                                             <div class="form-group">
                                                                 <label for="inputError" class="control-label"> marque du véhicule</label>
 
-                                                                <div class="input-group-control">
-                                                                    <input onchange="changing(this)" type="text" id="vehicule_marque" name="vehicule_marque" class="form-control"   value="{{ $dossier->vehicule_marque }}" >
+                                                                <select onchange="changing(this)" type="text" id="vehicule_marque" name="vehicule_marque" class="form-control"   value="{{ $dossier->vehicule_marque }}"     >
+                                                                    <option>Choisir la marque</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="AUTRE"){echo 'selected="selected"';}?> value="AUTRE">AUTRE**</option>
+                                                                    <option  <?php if($dossier->vehicule_marque=="ABARTH"){echo 'selected="selected"';}?> value="ABARTH">ABARTH</option>
+                                                                    <option  <?php if($dossier->vehicule_marque=="ALFA ROMEO"){echo 'selected="selected"';}?> value="ALFA ROMEO">ALFA ROMEO</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="ASTON MARTIN"){echo 'selected="selected"';}?> value="ASTON MARTIN">ASTON MARTIN</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="AUDI"){echo 'selected="selected"';}?> value="AUDI">AUDI</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="BENTLEY"){echo 'selected="selected"';}?> value="BENTLEY">BENTLEY</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="BMW"){echo 'selected="selected"';}?> value="BMW">BMW</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="CITROEN"){echo 'selected="selected"';}?> value="CITROEN">CITROEN</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="DACIA"){echo 'selected="selected"';}?> value="DACIA">DACIA</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="DS"){echo 'selected="selected"';}?> value="DS">DS</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="FERRARI"){echo 'selected="selected"';}?> value="FERRARI">FERRARI</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="FIAT"){echo 'selected="selected"';}?> value="FIAT">FIAT</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="FORD"){echo 'selected="selected"';}?> value="FORD">FORD</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="HONDA"){echo 'selected="selected"';}?> value="HONDA">HONDA</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="HYUNDAI"){echo 'selected="selected"';}?> value="HYUNDAI">HYUNDAI</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="IINFINITI"){echo 'selected="selected"';}?> value="IINFINITI">IINFINITI</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="JAGUAR"){echo 'selected="selected"';}?> value="JAGUAR">JAGUAR</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="JEEP"){echo 'selected="selected"';}?> value="JEEP">JEEP</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="KIA"){echo 'selected="selected"';}?> value="KIA">KIA</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="LADA"){echo 'selected="selected"';}?> value="LADA">LADA</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="LAMBORGHINI"){echo 'selected="selected"';}?> value="LAMBORGHINI">LAMBORGHINI</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="LAND ROVER"){echo 'selected="selected"';}?> value="LAND ROVER">LAND ROVER</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="LEXUS"){echo 'selected="selected"';}?> value="LEXUS">LEXUS</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="LOTUS"){echo 'selected="selected"';}?> value="LOTUS">LOTUS</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="MASERATI"){echo 'selected="selected"';}?> value="MASERATI">MASERATI</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="MAZDA"){echo 'selected="selected"';}?> value="MAZDA">MAZDA</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="MCLAREN"){echo 'selected="selected"';}?> value="MCLAREN">MCLAREN</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="MERCEDES-BENZ"){echo 'selected="selected"';}?> value="MERCEDES-BENZ">MERCEDES-BENZ</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="MINI"){echo 'selected="selected"';}?> value="MINI">MINI</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="MITSUBISHI"){echo 'selected="selected"';}?> value="MITSUBISHI">MITSUBISHI</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="NISSAN"){echo 'selected="selected"';}?> value="NISSAN">NISSAN</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="OPEL"){echo 'selected="selected"';}?> value="OPEL">OPEL</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="PEUGEOT"){echo 'selected="selected"';}?> value="PEUGEOT">PEUGEOT</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="PORSCHE"){echo 'selected="selected"';}?>  value="PORSCHE">PORSCHE</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="RENAULT"){echo 'selected="selected"';}?> value="RENAULT">RENAULT</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="ROLLS ROYCE"){echo 'selected="selected"';}?> value="ROLLS ROYCE">ROLLS ROYCE</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="SEAT"){echo 'selected="selected"';}?> value="SEAT">SEAT</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="SKODA"){echo 'selected="selected"';}?> value="SKODA">SKODA</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="SMART"){echo 'selected="selected"';}?> value="SMART">SMART</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="SSANGYONG"){echo 'selected="selected"';}?> value="SSANGYONG">SSANGYONG</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="SUBARU"){echo 'selected="selected"';}?> value="SUBARU">SUBARU</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="SUZUKI"){echo 'selected="selected"';}?> value="SUZUKI">SUZUKI</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="TESLA"){echo 'selected="selected"';}?> value="TESLA">TESLA</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="TOYOTA"){echo 'selected="selected"';}?> value="TOYOTA" >TOYOTA</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="VOLKSWAGEN"){echo 'selected="selected"';}?> value="VOLKSWAGEN">VOLKSWAGEN</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="VOLVO"){echo 'selected="selected"';}?> value="VOLVO">VOLVO</option>
+                                                                </select>
                                                                 </div>
                                                             </div>
-                                                        </div>
+
                                                         <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label for="inputError" class="control-label"> Type</label>
@@ -1115,7 +1162,7 @@ use App\Template_doc ;
                                         <div class="panel-heading">
                                             <h4 class="panel-title">
                                                 <a class="accordion-toggle" data-toggle="collapse">
-                                                    Observation</a>
+                                                    Observations</a>
                                             </h4>
                                         </div>
                                         <div class="panel-collapse collapse in">
@@ -1568,7 +1615,7 @@ use App\Template_doc ;
 
 
             </div><!-- Tab2 : Timeline-->
-
+            </div>
 
             <div id="tab3" class="tab-pane fade">
                     <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addpres" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une Prestation</b></button>
