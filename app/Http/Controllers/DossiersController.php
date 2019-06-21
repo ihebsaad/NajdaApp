@@ -39,7 +39,14 @@ class DossiersController extends Controller
      */
     public function index()
     {
-         $dossiers = Dossier::orderBy('created_at', 'desc')->paginate(10000000);
+        $minutes= 120;
+
+        //      $typesMissions=TypeMission::get();
+        $dossiers = Cache::remember('dossiers',$minutes,  function () {
+
+            return Dossier::orderBy('created_at', 'desc')->paginate(10000000);
+        });
+        // $dossiers = Dossier::orderBy('created_at', 'desc')->paginate(10000000);
         return view('dossiers.index', compact('dossiers'));
     }
 
@@ -52,7 +59,7 @@ class DossiersController extends Controller
      */
     public function create()
     {
-        $dossiers = Dossier::all();
+        $dossiers = Dossier::get();
 
         return view('dossiers.create',['dossiers' => $dossiers]);
     }
@@ -233,15 +240,43 @@ class DossiersController extends Controller
 
 
     public function view($id)
-    {
-        $typesMissions=TypeMission::get();
+    {        $minutes= 120;
+        $minutes2= 600;
+
+  //      $typesMissions=TypeMission::get();
+
+        $specialites = Cache::remember('specialites',$minutes2,  function () {
+
+            return DB::table('specialites')
+                ->get();
+        });
+
+        $typesMissions = Cache::remember('type_mission',$minutes2,  function () {
+
+            return DB::table('type_mission')
+                ->get();
+        });
+
         $Missions=Dossier::find($id)->activeMissions;
 
-        $typesprestations = TypePrestation::all();
-        $prestataires = Prestataire::all();
+       // $typesprestations = TypePrestation::all();
+
+        $typesprestations = Cache::remember('type_prestations',$minutes2,  function () {
+
+            return DB::table('type_prestations')
+                ->get();
+        });
+
+       // $prestataires = Prestataire::all();
+
+        $prestataires = Cache::remember('prestataires',$minutes,  function () {
+
+            return DB::table('prestataires')
+                ->get();
+        });
+
  //        $villes = Ville::all();
         $minutes= 120;
-        $minutes2= 600;
         $gouvernorats = Cache::remember('cities',$minutes2,  function () {
 
             return DB::table('cities')
@@ -258,10 +293,17 @@ class DossiersController extends Controller
         $adresse=app('App\Http\Controllers\ClientsController')->ClientChampById('adresse',$cl);
 
 
-        $clients = DB::table('clients')->select('id', 'name')->get();
+      //  $clients = DB::table('clients')->select('id', 'name')->get();
+
+        $clients = Cache::remember('clients',$minutes2,  function () {
+
+            return DB::table('clients')
+                ->get();
+        });
+
 
         $prestations =   Prestation::where('dossier_id', $id)->get();
-        $emails =   Email::where('parent', $id)->get();
+       // $emails =   Email::where('parent', $id)->get();
 
         $ref=$this->RefDossierById($id);
        $entrees =   Entree::where('dossier', $ref)->get();
@@ -382,11 +424,9 @@ class DossiersController extends Controller
 
                 ->get();
         });
-        return view('dossiers.view',['garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'prestataires'=>$prestataires,'emails'=>$emails,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
+        return view('dossiers.view',['specialites'=>$specialites,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'prestataires'=>$prestataires,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
 
     }
-
-
 
     /**
      * Show the form for editing the specified resource.
@@ -398,7 +438,7 @@ class DossiersController extends Controller
     {
         //
         $dossier = Dossier::find($id);
-        $dossiers = Dossier::all();
+        $dossiers = Dossier::get();
 
         return view('dossiers.edit',['dossiers' => $dossiers], compact('dossier'));
     }
@@ -522,8 +562,14 @@ class DossiersController extends Controller
 
 
     public  static function ListeDossiers()
-    {
-        $dossiers = Dossier::all();
+    { $minutes=60;
+        $dossiers = Cache::remember('dossiers',$minutes,  function () {
+
+            return DB::table('dossiers')
+                ->get();
+        });
+
+       // $dossiers = Dossier::all();
 
         return $dossiers;
 
@@ -574,7 +620,19 @@ class DossiersController extends Controller
             $specialite = app('App\Http\Controllers\PrestatairesController')->ChampById('specialite', $prestataire);
             $observ = app('App\Http\Controllers\PrestatairesController')->ChampById('observation', $prestataire);
 
-            $emails = Email::where('parent', $prestataire)->get();
+           // $emails = Email::where('parent', $prestataire)->get();
+
+            $emails =   Adresse::where('nature', 'email')
+                ->where('parent',$prestataire)
+                ->get();
+
+            $tels =   Adresse::where('nature', 'tel')
+                ->where('parent',$prestataire)
+                ->get();
+
+            $faxs =   Adresse::where('nature', 'fax')
+                ->where('parent',$prestataire)
+                ->get();
 
             //   $output.='prestataire : '. $prestataire ;
 
@@ -604,14 +662,11 @@ class DossiersController extends Controller
                              <input type="hidden" id="nomprest" value="'.$nom.'">
                             <div class="row" style="margin-top:10px;margin-bottom: 20px">
                                 <div class="col-md-8"><span style="color:grey" class="fa  fa-user-md"></span> <B>' . $nom . ' (' . $priorite . ')</b></div>
-                                <div class="col-md-4"><span style="color:grey" class="fa  fa-ambulance"></span> '.$specialite.'</div>
                                 <div class="col-md-8"><span style="color:grey" class="fa  fa-map-marker"></span>  '.$adresse.'</div>
 
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6"><span style="color:grey" class="fa fa-phone"></span> ' . $fixe . ' </div>
-                                <div class="col-md-6"><span style="color:grey" class="fa  fa-mobile"></span> ' . $tel1 . ' - ' . $tel2 . '  </div>
                                 <div class="col-md-8"><span style="color:grey" class="fas  fa-clipboard"></span> '.$observ.'</div>
 
                             </div>
@@ -621,11 +676,24 @@ class DossiersController extends Controller
 
                                      $output .= ' <tr>
                                             <td style="padding-right:8px;"><i class="fa fa-envelope"></i> ' . $email->champ . '</td>
-                                            <td style="padding-right:8px;">' . $email->nom . '</td>
-                                            <td style="padding-right:8px;">' . $email->qualite . '</td>
-                                            <td style="padding-right:8px;">' . $email->tel . '</td>
-                                        </tr> ';
+                                            <td style="padding-right:8px;">' . $email->remarque . '</td>
+                                         </tr> ';
                                         }
+
+            foreach ($tels as $tel) {
+
+                $output .= ' <tr>
+                                            <td style="padding-right:8px;"><i class="fa fa-phone"></i> ' . $tel->champ . '</td>
+                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>
+                                          </tr> ';
+            }
+            foreach ($faxs as $fax) {
+
+                $output .= ' <tr>
+                                            <td style="padding-right:8px;"><i class="fa fa-fax"></i> ' . $fax->champ . '</td>
+                                            <td style="padding-right:8px;">' . $fax->remarque . '</td>
+                                         </tr> ';
+            }
 
                          $output .='</table> </address>                         
 
@@ -637,7 +705,7 @@ class DossiersController extends Controller
                        
 ';
         return  ($output);
-       // return json_encode($liste);
+     //   return json_encode($liste);
 
     }
 

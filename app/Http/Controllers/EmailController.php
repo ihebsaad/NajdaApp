@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Adresse;
 use App\Boite;
 use App\Email;
 use App\Prestation;
@@ -1077,6 +1078,20 @@ class EmailController extends Controller
             if($reseau_mail2!='') { array_push($listeemails,$reseau_mail2);}
 
 
+
+            $emails =   Adresse::where('nature', 'email')
+                ->where('parent',$cl)
+                ->pluck('champ');
+
+            $emails =  $emails->unique();
+
+            if (count($emails)>0) {
+                foreach ($emails as $m) {
+                    array_push($listeemails, $m);
+
+                }
+            }
+
          }
         if($type=='prestataire')
         {
@@ -1122,7 +1137,12 @@ class EmailController extends Controller
             }
 
 
-            $emails =   Email::where('parent', $prest)->pluck('champ');
+           // $emails =   Email::where('parent', $prest)->pluck('champ');
+
+            $emails =   Adresse::where('nature', 'email')
+                ->where('parent',$prest)
+                ->pluck('champ');
+
             $emails =  $emails->unique();
 
             if (count($emails)>0){
@@ -1156,7 +1176,12 @@ class EmailController extends Controller
             $subscriber_mail3=app('App\Http\Controllers\DossiersController')->ChampById('subscriber_mail3',$id);
             if($subscriber_mail3!='') { array_push($listeemails,$subscriber_mail3);}
 
-            $emails =   Email::where('parent', $id)->pluck('champ');
+           // $emails =   Email::where('parent', $id)->pluck('champ');
+
+            $emails =   Adresse::where('nature', 'emaildoss')
+                ->where('parent',$id)
+                ->pluck('champ');
+
             $emails =  $emails->unique();
 
             if (count($emails)>0){

@@ -75,20 +75,25 @@ class PrestationsController extends Controller
     public function saving(Request $request)
     {
 
-        $iddoss=$request->get('dossier_id');
+        $iddoss= intval($request->get('dossier_id'));
+        $prest=intval($request->get('prestataire'));
+        $typep= intval( $request->get('type_prestations_id'));
+        $gouv= intval( $request->get('gouvernorat'));
 
             $prestation = new Prestation([
-           'prestataire_id' => $request->get('prestataire'),
-                 'dossier_id' => $iddoss ,
-               'type_prestations_id' => $request->get('typeprest')
-            //    'annule' => $request->get('annule'),
+           'prestataire_id' =>$prest ,
+                 'dossier_id' => intval($iddoss) ,
+               'type_prestations_id' =>$typep ,
+              'gouvernorat' => $request->get('gouvernorat'),
 
             ]);
 
 
         if ($prestation->save())
 
-            {return $prestation->id;}
+            {
+                return url('/dossiers/view/'.$iddoss)/*->with('success', ' Créé avec succès')*/;
+         }
 
             else {return '1000';}
 

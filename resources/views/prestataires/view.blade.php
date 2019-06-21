@@ -16,7 +16,7 @@
             <ul id="tabs" class="nav  nav-tabs"  data-tabs="tabs">
                 <li class=" nav-item active">
                     <a class="nav-link active   " href="#tab01" data-toggle="tab" onclick="showinfos();hideinfos2();hideinfos3();" >
-                        <i class="fas fa-lg fa-user-md"></i>  Détails du Prestataire
+                        <i class="fas fa-lg fa-user-md"></i>  Détails de l'intervenant
                     </a>
                 </li>
                 <li class="nav-item">
@@ -66,7 +66,7 @@
                             </div>
                         </div>
                     </div>
-         <div class="row">
+        <!-- <div class="row">
 
          <div class="col-md-6">
              <div class="form-group">
@@ -76,8 +76,20 @@
                  </div>
              </div>
          </div>
-         </div>
 
+         </div>-->
+
+         <div class="form-group ">
+             <label>Spécialités</label>
+             <div class="row">
+                 <select class="form-control  col-lg-12 itemName " style="width:400px" name="specialite"    id="specialite">
+                     <option></option>
+                     @foreach($specialites as $sp)
+                         <option   value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                     @endforeach
+                 </select>
+             </div>
+         </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group form-md-line-input form-md-floating-label">
@@ -311,35 +323,109 @@
 
                 <div class="row form-group">
 
-                                <div style="">
-                                    <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addemail" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createemail"><b><i class="fas fa-plus"></i> Ajouter une adresse email</b></button>
+
+                    <div class="row" style="margin-top:30px">
+                        <div class="col-md-8">
+                            <h4><i class="fa fa-lg fa-phone"></i>  Numéros de Téléphones</h4>
+                        </div>
+                        <div class="col-md-4">
+                            <button style="float:right" id="add1" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding1"><b><i class="fa fa-phone"></i> Ajouter un numéro Tel</b></button>
+                        </div>
+
+                    </div>
+                    <table class="table table-striped"  style="width:100%;margin-top:35px;margin-bottom:35px;font-size:16px;">
+                        <thead>
+                        <tr class="headtable">
+                            <th style="width:20%">Tel</th>
+                            <th style="width:20%">Type</th>
+                            <th style="width:50%">Remarque</th>
+                            <th style="width:10%">Contacter</th>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+                        @foreach($tels as $tel)
+                            <tr>
+                                <td style="width:20%;"><?php echo $tel->champ; ?></td>
+                                <td style="width:20%;"><?php echo $tel->type; ?></td>
+                                <td style="width:50%;"><?php echo $tel->remarque; ?></td>
+                                <td style="width:10%;"><i class="fa fa-phone"></i></td>
+                            </tr>
+                        @endforeach
+
+                        </tbody>
+                    </table>
 
 
-                                </div>
-                                <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;font-size:16px;">
-                                    <thead>
-                                    <tr id="headtable">
-                                        <th style="">Email</th>
-                                        <th style="">Nom</th>
-                                        <th style="">qualité</th>
-                                        <th style="">Tel</th>
-                                    </tr>
+                    <div class="row" style="margin-top:30px">
+                        <div class="col-md-8">
+                            <h4><i class="fa fa-lg fa-envelope"></i>  Adresses Emails </h4>
+                        </div>
+                        <div class="col-md-4">
+                            <button style="float:right" id="add2" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding2"><b><i class="fa fa-envelope"></i> Ajouter une adresse email</b></button>
+                        </div>
 
-                                    </thead>
-                                    <tbody>
-                                    @foreach($emails as $email)
-                                        <tr>
-                                            <td style=";"><?php echo $email->champ; ?></td>
-                                            <td style=";"><?php echo $email->nom; ?></td>
-                                            <td style=";"><?php echo $email->qualite; ?></td>
-                                            <td style=";"><?php echo $email->tel; ?></td>
-                                        </tr>
-                                    @endforeach
+                    </div>
+                    <table class="table table-striped"  style="width:100%;margin-top:35px;margin-bottom:35px;font-size:16px;">
+                        <thead>
+                        <tr class="headtable">
+                            <th style="width:20%">Email</th>
+                            <th style="width:20%">Type</th>
+                            <th style="width:50%">Remarque</th>
+                            <th style="width:10%">Contacter</th>
+                        </tr>
 
-                                    </tbody>
-                                </table>
+                        </thead>
+                        <tbody>
+                        @foreach($emails as $email)
+                            <tr>
+                                <td style="width:20%;"><?php echo $email->champ; ?></td>
+                                <td style="width:20%;"><?php echo $email->type; ?></td>
+                                <td style="width:50%;"><?php echo $email->remarque; ?></td>
+                                <td style="width:10%;"><i class="fa fa-envelope"></i></td>
+                            </tr>
+                        @endforeach
 
-                            </div>
+                        </tbody>
+                    </table>
+
+                    <div class="row" style="margin-top:30px">
+                        <div class="col-md-8">
+                            <h4><i class="fa fa-lg fa-fax"></i>  Numéros de Fax </h4>
+                        </div>
+                        <div class="col-md-4">
+                            <button style="float:right" id="add3" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding3"><b><i class="fa fa-fax"></i> Ajouter un numéro de fax</b></button>
+                        </div>
+
+                    </div>
+
+                    <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
+                        <thead>
+                        <tr class="headtable">
+                            <th style="width:20%">Tel</th>
+                            <th style="width:20%">Type</th>
+                            <th style="width:50%">Remarque</th>
+                            <th style="width:10%">Contacter</th>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+                        @foreach($faxs as $fax)
+                            <tr>
+                                <td style="width:20%;"><?php echo $fax->champ; ?></td>
+                                <td style="width:20%;"><?php echo $fax->type; ?></td>
+                                <td style="width:50%;"><?php echo $fax->remarque; ?></td>
+                                <td style="width:10%;"><i class="fa fa-fax"></i></td>
+                            </tr>
+                        @endforeach
+
+                        </tbody>
+                    </table>
+
+
+
+
+                </div>
 
 
 
@@ -392,6 +478,8 @@
 
     </div>
 
+
+
             <div id="tab03" class="tab-pane fade in  " style="padding-top:30px">
 
                 <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addev" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createeval"><b><i class="fas fa-plus"></i> Ajouter une Priorité</b></button>
@@ -408,7 +496,7 @@
 
                     </thead>
                     <tbody>
-                @foreach($evaluations as $eval)
+                 @foreach($evaluations as $eval)
                     <tr>
                         <td style="text-align: center"> <?php echo PrestationsController::GouvById( $eval['gouv']) ;?> </td>
                         <td style="text-align: center"> <?php echo PrestationsController::TypePrestationById( $eval['type_prest']) ;?></td>
@@ -422,6 +510,7 @@
 
             </div>
 
+
             </div>
 
     </section>
@@ -429,7 +518,7 @@
 
 
 
-    <!-- Modal Evaluation -->
+    <!-- Modal Evaluation-->
     <div class="modal fade" id="createeval" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -451,7 +540,7 @@
                                     <div class=" row  ">
                                         <select class=" form-control col-lg-12  " style="width:400px" name=""    id="typeprestation">
                                             <option></option>
-                                            @foreach($typesprestations as $aKey)
+                                           @foreach($typesprestations as $aKey)
                                                 <option     value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
                                             @endforeach
                                         </select>
@@ -476,7 +565,7 @@
                                         <input type="number" step="1" id="prior" max="10" min="0" value="1" />
                                     </div>
                                 </div>
-                                <div class="form-group ">
+                    <!--        <div class="form-group ">
                                     <label>Disponibilité</label>
                                     <div class="row">
                                         <input type="number" step="1" max="10" min="0" id="disp" value="0"  />
@@ -489,7 +578,7 @@
                                         <input type="number" step="1" max="10" min="0" id="note" value="0"  />
                                     </div>
                                 </div>
-
+                                -->
                             </form>
                         </div>
 
@@ -506,55 +595,44 @@
 
 
 
-    <!-- Modal Email-->
-    <div class="modal fade" id="createemail" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+
+
+    <!-- Modal Tels -->
+    <div class="modal fade" id="adding1" tabindex="-1" role="dialog" aria-labelledby="exampleModal1" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModal2">Ajouter une adresse Email </h5>
+                    <h5 class="modal-title" id="exampleModal1">Ajouter un numéro de téléphone </h5>
 
                 </div>
                 <div class="modal-body">
                     <div class="card-body">
 
-
                         <div class="form-group">
 
-                            <form id="addemailform" novalidate="novalidate">
+                            <form   id="ff" name="">
                                 {{ csrf_field() }}
 
-                                <input id="parent" name="parent" type="hidden" value="{{ $prestataire->id}}">
                                 <div class="form-group " >
-                                    <label for="emaildoss">Email</label>
+                                    <label for="adresse">Téléphone</label>
                                     <div class=" row  ">
-                                        <input class="form-control" type="email" required id="emaildoss"/>
+                                        <input class="form-control" type="text" required id="champ1"/>
 
                                     </div>
                                 </div>
+
 
                                 <div class="form-group ">
-                                    <label for="DescrEmail">Nom</label>
+                                    <label for="code">Remarque</label>
                                     <div class="row">
-                                        <input type="text" class="form-control"  id="DescrEmail" />
+                                        <textarea   class="form-control"  id="remarque1" ></textarea>
 
                                     </div>
                                 </div>
+                                <input id="nature1" name="nature" type="hidden" value="tel">
 
-                                <div class="form-group ">
-                                    <label for="DescrEmail">Qualité</label>
-                                    <div class="row">
-                                        <input type="text" class="form-control"  id="qualite" />
 
-                                    </div>
-                                </div>
 
-                                <div class="form-group ">
-                                    <label for="DescrEmail">Tel</label>
-                                    <div class="row">
-                                        <input type="text" class="form-control"  id="telmail" />
-
-                                    </div>
-                                </div>
                             </form>
                         </div>
 
@@ -564,13 +642,122 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                    <button type="button" id="emailadd" class="btn btn-primary">Ajouter</button>
+                    <span type="button" id="btnaddtel" class="btn btn-primary">Ajouter</span>
                 </div>
             </div>
         </div>
     </div>
 
+
+
+    <!-- Modal email -->
+    <div class="modal fade" id="adding2" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Ajouter une adresse email </h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+                        <div class="form-group">
+
+                            <form   id="ffll" name="">
+                                {{ csrf_field() }}
+
+                                <div class="form-group " >
+                                    <label for="adresse">Email</label>
+                                    <div class=" row  ">
+                                        <input class="form-control" type="text" required id="champ2"/>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group ">
+                                    <label for="code">Remarque</label>
+                                    <div class="row">
+                                        <textarea   class="form-control"  id="remarque2" ></textarea>
+
+                                    </div>
+                                </div>
+                                <input id="nature2" name="nature" type="hidden" value="email">
+
+
+
+                            </form>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <span type="button" id="btnaddemail" class="btn btn-primary">Ajouter</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal Fax -->
+    <div class="modal fade" id="adding3" tabindex="-1" role="dialog" aria-labelledby="exampleModal3" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal3">Ajouter un numéro de Fax </h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+                        <div class="form-group">
+
+                            <form   id="fggf" name="">
+                                {{ csrf_field() }}
+
+                                <div class="form-group " >
+                                    <label for="adresse">Fax</label>
+                                    <div class=" row  ">
+                                        <input class="form-control" type="text" required id="champ3"/>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group ">
+                                    <label for="code">Remarque</label>
+                                    <div class="row">
+                                        <textarea   class="form-control"  id="remarque3" ></textarea>
+
+                                    </div>
+                                </div>
+                                <input id="nature3" name="nature" type="hidden" value="fax">
+
+
+
+                            </form>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <span type="button" id="btnaddfax" class="btn btn-primary">Ajouter</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 @endsection
+<style>.headtable{background-color: grey!important;color:white;}
+    table{margin-bottom:40px;}
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
 
@@ -578,6 +765,11 @@
 
 
 <script>
+
+
+
+
+
 
 
     function hideinfos() {
@@ -718,6 +910,7 @@
         }
 
         });
+
 
 
         var $topo = $('.itemName');
@@ -944,6 +1137,83 @@
                 // alert('ERROR');
             }
         });
+
+
+
+        $('#btnaddtel').click(function(){
+
+            var parent = $('#idpres').val();
+            var champ = $('#champ1').val();
+            var remarque = $('#remarque1').val();
+            var nature = $('#nature1').val();
+            if ((champ != '') )
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('prestataires.addressadd') }}",
+                    method:"POST",
+                    data:{parent:parent,champ:champ,remarque:remarque,nature:nature, _token:_token},
+                    success:function(data){
+
+                        //   alert('Added successfully');
+                        window.location =data;
+
+                    }
+                });
+            }else{
+                // alert('ERROR');
+            }
+        });
+
+        $('#btnaddemail').click(function(){
+            var parent = $('#idpres').val();
+            var champ = $('#champ2').val();
+            var remarque = $('#remarque2').val();
+            var nature = $('#nature2').val();
+            if ((champ != '') )
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('prestataires.addressadd') }}",
+                    method:"POST",
+                    data:{parent:parent,champ:champ,remarque:remarque,nature:nature, _token:_token},
+                    success:function(data){
+
+                        //   alert('Added successfully');
+                        window.location =data;
+
+                    }
+                });
+            }else{
+                // alert('ERROR');
+            }
+        });
+
+
+        $('#btnaddfax').click(function(){
+            var parent = $('#idpres').val();
+            var champ = $('#champ3').val();
+            var remarque = $('#remarque3').val();
+            var nature = $('#nature3').val();
+            if ((champ != '') )
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('prestataires.addressadd') }}",
+                    method:"POST",
+                    data:{parent:parent,champ:champ,remarque:remarque,nature:nature, _token:_token},
+                    success:function(data){
+
+                        //   alert('Added successfully');
+                        window.location =data;
+
+                    }
+                });
+            }else{
+                // alert('ERROR');
+            }
+        });
+
 
 
 

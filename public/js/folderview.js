@@ -143,7 +143,7 @@
      }); // ajax
 
              }else{
-                 alert('SVP, Sélectionner le gouvernorat et la spécialité');
+                 alert('SVP, SÃ©lectionner le gouvernorat et la spÃ©cialitÃ©');
              }
  }); // change
 
@@ -188,7 +188,7 @@
 
          }
 
-         if ((selected) == (total  )) {//alert("Il n y'a plus de prestataires, Réessayez");
+         if ((selected) == (total  )) {//alert("Il n y'a plus de prestataires, Ressayez");
              document.getElementById('termine').style.display = 'block';
 
              document.getElementById('item'+(selected)).style.display = 'none';

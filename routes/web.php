@@ -216,6 +216,7 @@ Route::post('/prestataires/createcitieprest','PrestatairesController@createcitie
 Route::get('/prestataires/view/{id}', 'PrestatairesController@view');
 Route::post('/prestataires/addeval','PrestatairesController@addeval')->name('prestataires.addeval');
 Route::post('/prestataires/addemail','PrestatairesController@addemail')->name('prestataires.addemail');
+Route::post('/prestataires/addressadd','PrestatairesController@addressadd')->name('prestataires.addressadd');
 
 
 /*** Prestations **/
@@ -226,12 +227,33 @@ Route::get('/prestations', array('as' => 'prestations','uses' => 'PrestationsCon
 Route::get('/prestations/view/{id}', 'PrestationsController@view');
 Route::post('/prestations/updating','PrestationsController@updating')->name('prestations.updating');
 
+
+
+
+/*** Intervenants **/
+Route::resource('/intervenants',  'IntervenantsController');
+Route::get('/intervenants', array('as' => 'intervenants','uses' => 'IntervenantsController@index'));
+Route::post('/intervenants/saving','IntervenantsController@saving')->name('intervenants.saving');
+Route::post('/intervenants/updating','IntervenantsController@updating')->name('intervenants.updating');
+Route::get('/intervenants/view/{id}', 'IntervenantsController@view');
+Route::post('/intervenants/updating','IntervenantsController@updating')->name('intervenants.updating');
+
+
+
 /*** Type Prestations  **/
 //Route::resource('/typeprestations',  'TypePrestationsController');
 Route::get('/typeprestations', array('as' => 'typeprestations','uses' => 'TypePrestationsController@index'));
  Route::post('/typeprestations/saving','TypePrestationsController@saving')->name('typeprestations.saving');
 Route::post('/typeprestations/updating','TypePrestationsController@updating')->name('typeprestations.updating');;
 Route::get('/typeprestations/view/{id}', 'TypePrestationsController@view');
+ 
+/*** Specialités **/
+Route::resource('/specialites',  'SpecialitesController');
+Route::get('/specialites', array('as' => 'specialites','uses' => 'SpecialitesController@index'));
+ Route::post('/specialites/saving','SpecialitesController@saving')->name('specialites.saving');
+Route::post('/specialites/updating','SpecialitesController@updating')->name('specialites.updating');;
+Route::get('/specialites/view/{id}', 'SpecialitesController@view');
+
 
 /*** Notes **/
 Route::resource('/notes',  'NotesController');

@@ -9,6 +9,7 @@ use App\TypeMission;
 use App\Action;
 use App\Dossier;
 use auth;
+use Illuminate\Support\Facades\Cache;
 
 class MissionController extends Controller
 {
@@ -461,8 +462,13 @@ class MissionController extends Controller
      }
 
     public static function ListeTypeMissions( )
-    {
-        $typeMissions=TypeMission::all();
+    { $minutes2=600;
+        $typeMissions = Cache::remember('type_mission',$minutes2,  function () {
+
+            return DB::table('type_mission')
+                ->get();
+        });
+      //  $typeMissions=TypeMission::all();
         return $typeMissions;
 
     }

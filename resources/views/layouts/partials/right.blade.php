@@ -225,8 +225,6 @@ use App\Http\Controllers\TagsController;
                                                       }
 
 
-
-
                                                      });
 
 

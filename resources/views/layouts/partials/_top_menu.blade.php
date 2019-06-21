@@ -123,6 +123,13 @@
         </a>
     </div>
 
+        <div class="col-md-3">
+            <a href="{{ route('specialies') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                <span class="fas fa-lg   fa-clinic-medical"></span>
+                <br>
+                Spécialités
+            </a>
+        </div>
     <div class="col-md-3">
         <a href="{{ route('prestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
             <span class="fas fa-notes-medical"></span>

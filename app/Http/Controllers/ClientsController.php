@@ -12,6 +12,7 @@ use App\Dossier ;
 use App\Client ;
 use App\Ville ;
 use DB;
+use Illuminate\Support\Facades\Cache;
 
 
 class ClientsController extends Controller
@@ -30,10 +31,28 @@ class ClientsController extends Controller
      */
     public function index()
     {
-        $dossiers = Dossier::all();
-        $villes = Ville::all();
+        $minutes= 120;
+        $minutes2= 600;
 
-        $clients = Client::orderBy('created_at', 'desc')->paginate(10000000);
+        //      $typesMissions=TypeMission::get();
+        $dossiers = Cache::remember('dossiers',$minutes,  function () {
+
+            return Dossier::all();
+        });
+
+        $villes = Cache::remember('villes',$minutes2,  function () {
+
+            return Ville::all();
+
+        });
+
+      /*  $clients = Cache::remember('clients',$minutes,  function () {
+
+            return  Client::orderBy('created_at', 'desc')->paginate(10000000);
+
+        });*/
+       $clients = Client::orderBy('created_at', 'desc')->paginate(10000000);
+
         return view('clients.index',['dossiers' => $dossiers,'villes' => $villes], compact('clients'));
     }
 

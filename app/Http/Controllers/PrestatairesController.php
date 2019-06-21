@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Adresse;
 use App\Email;
 use App\Evaluation;
+use App\Specialite;
 use App\TypePrestation;
 use Illuminate\Support\Facades\Log;
 
@@ -13,6 +15,7 @@ use App\Prestataire ;
 use App\Prestation ;
 use App\Ville ;
 use DB;
+use Illuminate\Support\Facades\Cache;
 
 
 class PrestatairesController extends Controller
@@ -33,24 +36,36 @@ class PrestatairesController extends Controller
     {
         $minutes1=120;
 
-       // $dossiers = Dossier::all();
+         $dossiers = Dossier::all();
 
-       // $villes = Ville::all();
+        $villes = Ville::all();
         $minutes2=600;
-        $villes = Cache::remember('ville',$minutes2,  function () {
+      /*  $villes = Cache::remember('villes',$minutes2,  function () {
 
-            return DB::table('villes')
-                ->get();
+          return DB::table('villes')
+               ->get();
+           // return Ville::get();
+
         });
 
         $dossiers = Cache::remember('dossiers',$minutes1,  function () {
 
             return DB::table('dossiers')
                 ->get();
+          //  return Dossier::get();
         });
+*/
+
 
         $prestataires = Prestataire::orderBy('created_at', 'desc')->paginate(10000000);
-        return view('prestataires.index',['dossiers' => $dossiers,'villes' => $villes], compact('prestataires'));
+
+      //  $prestataires = Cache::remember('prestataires',$minutes1,  function () {
+
+        //    return  Prestataire::orderBy('created_at', 'desc')->paginate(10000000);
+
+        //});
+
+        return view('prestataires.index',[ 'dossiers' => $dossiers,'villes' => $villes], compact('prestataires'));
     }
 
  
@@ -132,8 +147,8 @@ class PrestatairesController extends Controller
 
         }
 
-
     }
+
 
     public function updating(Request $request)
     {
@@ -159,14 +174,40 @@ class PrestatairesController extends Controller
      */
     public function view($id)
     {
-        //$dossiers = Dossier::all();
-        //$dossiers = app('App\Http\Controllers\DossiersController')->ListeDossiersAffecte();
 
+         $minutes2= 600;
+
+       /* $specialites = Cache::remember('specialites',$minutes2,  function () {
+
+            //return DB::table('specialites')
+            //    ->get();
+            return     $specialites=Specialite::get();
+
+        });*/
+        $specialites=Specialite::get();
+        //      $typesMissions=TypeMission::get();
+        $gouvernorats = Cache::remember('gouvernorats',$minutes2,  function () {
+
+            return DB::table('cities')
+                ->get();
+        });
+
+        $gouvernorats = DB::table('cities')
+            ->get();
+
+        $villes = Cache::remember('villes',$minutes2,  function () {
+
+            return DB::table('villes')
+                ->get();
+        });
+        $villes=DB::table('villes')
+            ->get();
         $typesprestations = TypePrestation::all();
       // $villes = DB::table('cities')->select('id', 'name')->get();
-        $villes = Ville::all();
-        $gouvernorats = DB::table('cities')->get();
-        $emails =   Email::where('parent', $id)->get();
+       /// $villes = Ville::all();
+
+       // $gouvernorats = DB::table('cities')->get();
+      ////  $emails =   Email::where('parent', $id)->get();
 
         $relationsgv = DB::table('cities_prestataires')->select('citie_id')
             ->where('prestataire_id','=',$id)
@@ -181,8 +222,53 @@ class PrestatairesController extends Controller
 
         $evaluations =   Evaluation::where('prestataire', $id)->get();
 
+        $emails =   Adresse::where('nature', 'email')
+            ->where('parent',$id)
+            ->get();
 
-        return view('prestataires.view',['emails'=>$emails,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'prestations'=>$prestations], compact('prestataire'));
+        $tels =   Adresse::where('nature', 'tel')
+            ->where('parent',$id)
+            ->get();
+
+        $faxs =   Adresse::where('nature', 'fax')
+            ->where('parent',$id)
+            ->get();
+
+        return view('prestataires.view',['specialites'=>$specialites,'emails'=>$emails, 'tels'=>$tels, 'faxs'=>$faxs,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'prestations'=>$prestations], compact('prestataire'));
+
+    }
+
+
+
+
+
+    public function addressadd(Request $request)
+    {
+        if( ($request->get('champ'))!=null) {
+
+            $parent=$request->get('parent');
+            $adresse = new Adresse([
+                'champ' => $request->get('champ'),
+                 'nature' => $request->get('nature'),
+                'remarque' => $request->get('remarque'),
+                'parent' => $parent,
+
+            ]);
+
+            if ($adresse->save())
+            { $id=$adresse->id;
+
+                return url('/prestataires/view/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;
+                // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
+                //  return  $iddoss;
+            }
+
+            else {
+                return url('/prestataires');
+            }
+        }
+
+        // return redirect('/clients')->with('success', 'ajouté avec succès');
 
     }
 
