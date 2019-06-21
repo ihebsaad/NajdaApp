@@ -7,11 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Document extends Model
 {
     //
-    protected $fillable = ['id','dossier','titre','description','emplacement'];
+    protected $fillable = ['id','dossier','titre','description','emplacement','template','valchamps','parent','dernier'];
 
-    public function getDateFormat()
-    {
-        return 'Y-m-d H:i:s.u';
-    }
 
 }
