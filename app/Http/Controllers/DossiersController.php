@@ -244,6 +244,25 @@ class DossiersController extends Controller
 
 
 
+        $prestataires = Cache::remember('prestataires',$minutes,  function () {
+
+            return DB::table('prestataires')
+                ->get();
+        });
+
+
+        $specialites = Cache::remember('specialites',$minutes2,  function () {
+
+            return DB::table('specialites')
+                ->get();
+        });
+
+        $gouvernorats = Cache::remember('cities',$minutes2,  function () {
+
+            return DB::table('cities')
+                ->get();
+        });
+
         $typesMissions = Cache::remember('type_mission',$minutes2,  function () {
 
             return DB::table('type_mission')
@@ -345,7 +364,7 @@ class DossiersController extends Controller
 
 
 
-        return view('dossiers.view',['client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
+        return view('dossiers.view',['prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
 
     }
 
@@ -356,11 +375,7 @@ class DossiersController extends Controller
 
   //      $typesMissions=TypeMission::get();
 
-        $specialites = Cache::remember('specialites',$minutes2,  function () {
 
-            return DB::table('specialites')
-                ->get();
-        });
 
         $typesMissions = Cache::remember('type_mission',$minutes2,  function () {
 
@@ -369,22 +384,6 @@ class DossiersController extends Controller
         });
 
         $Missions=Dossier::find($id)->activeMissions;
-
-
-        $prestataires = Cache::remember('prestataires',$minutes,  function () {
-
-            return DB::table('prestataires')
-                ->get();
-        });
-
- //        $villes = Ville::all();
-
-        $gouvernorats = Cache::remember('cities',$minutes2,  function () {
-
-            return DB::table('cities')
-                 ->get();
-        });
-       // $gouvernorats = DB::table('cities')->get();
 
         $dossier = Dossier::find($id);
 
@@ -419,9 +418,6 @@ class DossiersController extends Controller
             ->get();
 
 
-
-
-
         $dossiers = $this->ListeDossiersAffecte();
 
 
@@ -438,8 +434,6 @@ class DossiersController extends Controller
                 ->orwhere('type_prestation_id',9 )
                 ->get();
         });
-
-
 
 
         $traitants = Cache::remember('prestataires_type_prestations', $minutes,  function () {
@@ -459,12 +453,7 @@ class DossiersController extends Controller
                 ->where('type_prestation_id',18 )
                 ->get();
         });
-     /*
-        $garages = DB::table('prestataires_type_prestations')
-            ->where('type_prestation_id',30 )
-            ->orwhere('type_prestation_id',22 )
-            ->get();
-*/
+
         $garages = Cache::remember('prestataires_type_prestations',$minutes,   function () {
 
             return DB::table('prestataires_type_prestations')
@@ -473,7 +462,7 @@ class DossiersController extends Controller
 
                 ->get();
         });
-        return view('dossiers.manage',['specialites'=>$specialites,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
+        return view('dossiers.manage',['garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
 
     }
 

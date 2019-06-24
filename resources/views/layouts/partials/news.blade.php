@@ -8,6 +8,7 @@ $total= ActualitesController:: NbrActus();
 //print_r($dossiers);
 
 ?>
+@if( Route::current()->getName() !='dossiers.manage' )
 @isset ($liste)
 <?php if ($total >0) { ?>
 <div class="news" style="padding-left:80px;padding-right:80px">
@@ -65,3 +66,4 @@ $total= ActualitesController:: NbrActus();
 
 @endisset
 
+@endif
