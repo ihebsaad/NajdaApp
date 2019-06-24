@@ -242,3 +242,6 @@ storage/Emails/296/REC - ee ffdgd dgd.pdf
 storage/Emails/295/REC - ee ffdgd dgd.pdf
 storage/Emails/294/REC - test ccc.pdf
 storage/Emails/242/REC - SPAM ReceivedFax 25533FAX1 from NajdaAssistance7382  total 1 pages.pdf
+storage/Emails/309/fax000025651.pdf
+storage/Emails/309/REC - ReceivedFax 25651FAX1 from 71906187  total 1 pages.pdf
+resources/views/dossiers/manage.blade.php

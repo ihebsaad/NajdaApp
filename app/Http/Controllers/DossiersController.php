@@ -238,18 +238,11 @@ class DossiersController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-
     public function view($id)
     {        $minutes= 120;
         $minutes2= 600;
 
-  //      $typesMissions=TypeMission::get();
 
-        $specialites = Cache::remember('specialites',$minutes2,  function () {
-
-            return DB::table('specialites')
-                ->get();
-        });
 
         $typesMissions = Cache::remember('type_mission',$minutes2,  function () {
 
@@ -259,7 +252,7 @@ class DossiersController extends Controller
 
         $Missions=Dossier::find($id)->activeMissions;
 
-       // $typesprestations = TypePrestation::all();
+        // $typesprestations = TypePrestation::all();
 
         $typesprestations = Cache::remember('type_prestations',$minutes2,  function () {
 
@@ -267,22 +260,10 @@ class DossiersController extends Controller
                 ->get();
         });
 
-       // $prestataires = Prestataire::all();
+        // $prestataires = Prestataire::all();
 
-        $prestataires = Cache::remember('prestataires',$minutes,  function () {
 
-            return DB::table('prestataires')
-                ->get();
-        });
-
- //        $villes = Ville::all();
-        $minutes= 120;
-        $gouvernorats = Cache::remember('cities',$minutes2,  function () {
-
-            return DB::table('cities')
-                 ->get();
-        });
-       // $gouvernorats = DB::table('cities')->get();
+        //        $villes = Ville::all();
 
         $dossier = Dossier::find($id);
 
@@ -293,27 +274,19 @@ class DossiersController extends Controller
         $adresse=app('App\Http\Controllers\ClientsController')->ClientChampById('adresse',$cl);
 
 
-      //  $clients = DB::table('clients')->select('id', 'name')->get();
-
-        $clients = Cache::remember('clients',$minutes2,  function () {
-
-            return DB::table('clients')
-                ->get();
-        });
-
 
         $prestations =   Prestation::where('dossier_id', $id)->get();
-       // $emails =   Email::where('parent', $id)->get();
+        // $emails =   Email::where('parent', $id)->get();
 
         $ref=$this->RefDossierById($id);
-       $entrees =   Entree::where('dossier', $ref)->get();
+        $entrees =   Entree::where('dossier', $ref)->get();
 
         $envoyes =   Envoye::where('dossier', $ref)->get();
 
         $entrees1 =   Entree::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
-      ///  $entrees1 =$entrees1->sortBy('reception');
+        ///  $entrees1 =$entrees1->sortBy('reception');
         $envoyes1 =   Envoye::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
-      ///  $envoyes1 =$envoyes1->sortBy('reception');
+        ///  $envoyes1 =$envoyes1->sortBy('reception');
 
         $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());
 
@@ -334,7 +307,7 @@ class DossiersController extends Controller
             return $datetime1 - $datetime2;
         }
 
-            );
+        );
 
 
         $identr=array();
@@ -370,6 +343,88 @@ class DossiersController extends Controller
         $dossiers = $this->ListeDossiersAffecte();
 
 
+
+
+        return view('dossiers.view',['client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
+
+    }
+
+
+    public function manage($id)
+    {        $minutes= 120;
+        $minutes2= 600;
+
+  //      $typesMissions=TypeMission::get();
+
+        $specialites = Cache::remember('specialites',$minutes2,  function () {
+
+            return DB::table('specialites')
+                ->get();
+        });
+
+        $typesMissions = Cache::remember('type_mission',$minutes2,  function () {
+
+            return DB::table('type_mission')
+                ->get();
+        });
+
+        $Missions=Dossier::find($id)->activeMissions;
+
+
+        $prestataires = Cache::remember('prestataires',$minutes,  function () {
+
+            return DB::table('prestataires')
+                ->get();
+        });
+
+ //        $villes = Ville::all();
+
+        $gouvernorats = Cache::remember('cities',$minutes2,  function () {
+
+            return DB::table('cities')
+                 ->get();
+        });
+       // $gouvernorats = DB::table('cities')->get();
+
+        $dossier = Dossier::find($id);
+
+        $cl=$this->ChampById('customer_id',$id);
+
+
+        $entite=app('App\Http\Controllers\ClientsController')->ClientChampById('entite',$cl);
+        $adresse=app('App\Http\Controllers\ClientsController')->ClientChampById('adresse',$cl);
+
+
+      //  $clients = DB::table('clients')->select('id', 'name')->get();
+
+        $clients = Cache::remember('clients',$minutes2,  function () {
+
+            return DB::table('clients')
+                ->get();
+        });
+
+
+        $prestations =   Prestation::where('dossier_id', $id)->get();
+       // $emails =   Email::where('parent', $id)->get();
+
+
+
+
+        $phones =   Adresse::where('nature', 'teldoss')
+            ->where('parent',$id)
+            ->get();
+
+        $emailads =   Adresse::where('nature', 'emaildoss')
+            ->where('parent',$id)
+            ->get();
+
+
+
+
+
+        $dossiers = $this->ListeDossiersAffecte();
+
+
         $liste = DB::table('adresses')
             ->where('parent',$cl )
             ->where('nature','facturation' )
@@ -384,14 +439,8 @@ class DossiersController extends Controller
                 ->get();
         });
 
-     /*   $hopitaux = DB::table('prestataires_type_prestations')
-            ->where('type_prestation_id',8 )
-            ->orwhere('type_prestation_id',9 )
-            ->get();*/
 
-     /*   $traitants = DB::table('prestataires_type_prestations')
-            ->where('type_prestation_id',15 )
-            ->get();*/
+
 
         $traitants = Cache::remember('prestataires_type_prestations', $minutes,  function () {
 
@@ -424,7 +473,7 @@ class DossiersController extends Controller
 
                 ->get();
         });
-        return view('dossiers.view',['specialites'=>$specialites,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'prestataires'=>$prestataires,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'gouvernorats'=>$gouvernorats,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
+        return view('dossiers.manage',['specialites'=>$specialites,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
 
     }
 

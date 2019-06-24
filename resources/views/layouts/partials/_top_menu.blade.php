@@ -124,7 +124,7 @@
     </div>
 
         <div class="col-md-3">
-            <a href="{{ route('specialies') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+            <a href="{{ route('specialites') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                 <span class="fas fa-lg   fa-clinic-medical"></span>
                 <br>
                 Spécialités

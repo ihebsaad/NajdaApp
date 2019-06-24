@@ -82,18 +82,34 @@
          <div class="form-group ">
              <label>Spécialités</label>
              <div class="row">
-                 <select class="form-control  col-lg-12 itemName " style="width:400px" name="specialite"    id="specialite">
+                 <select class="form-control  col-lg-12 itemName " style="width:400px" name="specialite"  multiple  id="specialite">
+
+
                      <option></option>
-                     @foreach($specialites as $sp)
-                         <option   value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                     <?php if ( count($relations2) > 0 ) {?>
+
+                     @foreach($relations2 as $rel  )
+                         @foreach($specialites as $sp)
+                             <option  @if($rel->specialite==$sp->id)selected="selected"@endif    onclick="createspec('spec<?php echo $sp->id; ?>')"  value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                         @endforeach
                      @endforeach
+
+                     <?php
+                     } else { ?>
+                     @foreach($specialites as $sp)
+                         <option    onclick="createspec('spec<?php echo $sp->id; ?>')"  value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                     @endforeach
+
+                     <?php }  ?>
+
                  </select>
+
              </div>
          </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group form-md-line-input form-md-floating-label">
-                                <label for="form_control_1">Observation prestataire<span class="required"> * </span></label>
+                                <label for="form_control_1">Observation  <span class="required"> * </span></label>
                                 <textarea onchange="changing(this)" rows="2" class="form-control" name="observation_prestataire" id="observation_prestataire"> {{$prestataire->observation_prestataire}} </textarea>
                             </div>
                         </div>
@@ -901,7 +917,104 @@
     */
 
     $(function () {
-        $('.itemName').select2({
+
+        $('#specialite').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+
+        });
+
+
+
+        var $topo1 = $('#specialite');
+
+        var valArray0 = ($topo1.val()) ? $topo1.val() : [];
+
+        $topo1.change(function() {
+            var val0 = $(this).val(),
+                numVals = (val0) ? val0.length : 0,
+                changes;
+            if (numVals != valArray0.length) {
+                var longerSet, shortSet;
+                (numVals > valArray0.length) ? longerSet = val0 : longerSet = valArray0;
+                (numVals > valArray0.length) ? shortSet = valArray0 : shortSet = val0;
+                //create array of values that changed - either added or removed
+                changes = $.grep(longerSet, function(n) {
+                    return $.inArray(n, shortSet) == -1;
+                });
+
+                UpdatingS(changes, (numVals > valArray0.length) ? 'selected' : 'removed');
+
+            }else{
+                // if change event occurs and previous array length same as new value array : items are removed and added at same time
+                UpdatingS( valArray0, 'removed');
+                UpdatingS( val0, 'selected');
+            }
+            valArray0 = (val0) ? val0 : [];
+        });
+
+
+
+        function UpdatingS(array, type) {
+            $.each(array, function(i, item) {
+
+                if (type=="selected"){
+
+
+                    var prestataire = $('#idpres').val();
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                        url: "{{ route('prestataires.createspec') }}",
+                        method: "POST",
+                        data: {prestataire: prestataire , specialite:item ,  _token: _token},
+                        success: function () {
+                            $('.select2-selection').animate({
+                                opacity: '0.3',
+                            });
+                            $('.select2-selection').animate({
+                                opacity: '1',
+                            });
+
+                        }
+                    });
+
+                }
+
+                if (type=="removed"){
+
+                    var prestataire = $('#idpres').val();
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                        url: "{{ route('prestataires.removespec') }}",
+                        method: "POST",
+                        data: {prestataire: prestataire , specialite:item ,  _token: _token},
+                        success: function () {
+                            $( ".select2-selection--multiple" ).hide( "slow", function() {
+                                // Animation complete.
+                            });
+                            $( ".select2-selection--multiple" ).show( "slow", function() {
+                                // Animation complete.
+                            });
+                        }
+                    });
+
+                }
+
+            });
+        } // updating
+
+
+
+
+
+
+        $('#typeprest').select2({
             filter: true,
         language: {
             noResults: function () {
@@ -913,7 +1026,7 @@
 
 
 
-        var $topo = $('.itemName');
+        var $topo = $('#typeprest');
 
         var valArray = ($topo.val()) ? $topo.val() : [];
 
@@ -947,7 +1060,6 @@
 
                 if (type=="selected"){
 
-
                     var prestataire = $('#idpres').val();
                     var _token = $('input[name="_token"]').val();
 
@@ -969,7 +1081,7 @@
                 }
 
                 if (type=="removed"){
-
+            alert(item);
                      var prestataire = $('#idpres').val();
                     var _token = $('input[name="_token"]').val();
 

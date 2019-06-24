@@ -14,6 +14,7 @@ use App\Dossier ;
 use App\Prestataire ;
 use App\Prestation ;
 use App\Ville ;
+use App\Citie ;
 use DB;
 use Illuminate\Support\Facades\Cache;
 
@@ -148,7 +149,8 @@ class PrestatairesController extends Controller
         }
 
     }
-
+    public function show()
+    {}
 
     public function updating(Request $request)
     {
@@ -177,34 +179,36 @@ class PrestatairesController extends Controller
 
          $minutes2= 600;
 
-       /* $specialites = Cache::remember('specialites',$minutes2,  function () {
+         $specialites = Cache::remember('specialites',$minutes2,  function () {
 
             //return DB::table('specialites')
             //    ->get();
-            return     $specialites=Specialite::get();
+            return    Specialite::get();
 
-        });*/
-        $specialites=Specialite::get();
+        });
+
+       /// $specialites=Specialite::get();
         //      $typesMissions=TypeMission::get();
         $gouvernorats = Cache::remember('gouvernorats',$minutes2,  function () {
 
-            return DB::table('cities')
-                ->get();
+                 return Citie::get();
+
         });
 
-        $gouvernorats = DB::table('cities')
-            ->get();
 
-        $villes = Cache::remember('villes',$minutes2,  function () {
+       // $gouvernorats = Citie::get();
+
+    /*    $villes = Cache::remember('villes',$minutes2,  function () {
 
             return DB::table('villes')
                 ->get();
-        });
-        $villes=DB::table('villes')
-            ->get();
+        });*/
+
+       // $villes=DB::table('villes')
+      //      ->get();
         $typesprestations = TypePrestation::all();
       // $villes = DB::table('cities')->select('id', 'name')->get();
-       /// $villes = Ville::all();
+        $villes = Ville::all();
 
        // $gouvernorats = DB::table('cities')->get();
       ////  $emails =   Email::where('parent', $id)->get();
@@ -214,6 +218,10 @@ class PrestatairesController extends Controller
             ->get();
 
         $relations = DB::table('prestataires_type_prestations')->select('type_prestation_id')
+            ->where('prestataire_id','=',$id)
+            ->get();
+
+        $relations2 = DB::table('specialites_prestataires')->select('specialite')
             ->where('prestataire_id','=',$id)
             ->get();
 
@@ -234,7 +242,7 @@ class PrestatairesController extends Controller
             ->where('parent',$id)
             ->get();
 
-        return view('prestataires.view',['specialites'=>$specialites,'emails'=>$emails, 'tels'=>$tels, 'faxs'=>$faxs,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'prestations'=>$prestations], compact('prestataire'));
+        return view('prestataires.view',['specialites'=>$specialites,'emails'=>$emails, 'tels'=>$tels, 'faxs'=>$faxs,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'relations2'=>$relations2,'prestations'=>$prestations], compact('prestataire'));
 
     }
 
@@ -384,6 +392,38 @@ class PrestatairesController extends Controller
         }else{return '';}
 
     }
+
+    public  function removespec(Request $request)
+    {
+        $prestataire= $request->get('prestataire');
+        $specialite= $request->get('specialite');
+
+
+        DB::table('pecialites_prestataires')
+            ->where([
+                ['prestataire_id', '=', $prestataire],
+                ['specialite', '=', $specialite],
+            ])->delete();
+
+
+
+    }
+
+    public  function createspec(Request $request)
+    {
+        $prestataire= $request->get('prestataire');
+        $specialite= $request->get('specialite');
+
+
+        DB::table('specialites_prestataires')->insert(
+            ['prestataire_id' => $prestataire,
+                'specialite' => $specialite]
+        );
+
+
+
+    }
+
 
 
     public  function removetypeprest(Request $request)

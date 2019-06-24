@@ -129,6 +129,7 @@ Route::post('/dossiers/updating','DossiersController@updating')->name('dossiers.
 Route::post('/dossiers/updating2','DossiersController@updating2')->name('dossiers.updating2');
 Route::post('/dossiers/updating3','DossiersController@updating3')->name('dossiers.updating3');
 Route::get('/dossiers/view/{id}', 'DossiersController@view')->name('dossiers.view');
+Route::get('/dossiers/manage/{id}', 'DossiersController@manage')->name('dossiers.manage');
 Route::post('/dossiers/addemail','DossiersController@addemail')->name('dossiers.addemail');
 Route::post('/dossiers/attribution','DossiersController@attribution')->name('dossiers.attribution');
 Route::post('/dossiers/listepres','DossiersController@ListePrestataireCitySpec')->name('dossiers.listepres');
@@ -213,6 +214,8 @@ Route::post('/prestataires/removetypeprest','PrestatairesController@removetypepr
 Route::post('/prestataires/createtypeprest','PrestatairesController@createtypeprest')->name('prestataires.createtypeprest');
 Route::post('/prestataires/removecitieprest','PrestatairesController@removecitieprest')->name('prestataires.removecitieprest');
 Route::post('/prestataires/createcitieprest','PrestatairesController@createcitieprest')->name('prestataires.createcitieprest');
+Route::post('/prestataires/removespec','PrestatairesController@removespec')->name('prestataires.removespec');
+Route::post('/prestataires/createspec','PrestatairesController@createspec')->name('prestataires.createspec');
 Route::get('/prestataires/view/{id}', 'PrestatairesController@view');
 Route::post('/prestataires/addeval','PrestatairesController@addeval')->name('prestataires.addeval');
 Route::post('/prestataires/addemail','PrestatairesController@addemail')->name('prestataires.addemail');
