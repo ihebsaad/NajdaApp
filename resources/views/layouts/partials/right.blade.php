@@ -319,6 +319,7 @@ use App\Http\Controllers\TagsController;
                         </div>
                       </div>    
                       <div id="ajouttag" style="display:block;margin-top: 30px">
+                        <input type="hidden" name="dossieridtag" id="dossieridtag" value="<?php echo $dosscourant; ?>">
                            <div class="form-group mar-20">
                                 <label for="tagname" class="control-label" style="padding-right: 20px">TAG</label>
                                 <select id="tagname" name="tagname" class="form-control select2" style="width: 230px">
@@ -696,6 +697,7 @@ $('#editbtn').click(function(){
 
 $('#btn-addtag').click(function(e){
       var entree = $('input[name="entree"]').val();
+      var dossier = $('input[name="dossieridtag"]').val();
       var tag = $('select[name=tagname]').val();
       var tagtxt = $('select[name=tagname] option:selected').text();
       var tagcontent = $('textarea#contenutag').val();
@@ -717,7 +719,7 @@ $('#btn-addtag').click(function(e){
                 $.ajax({
                     url:urladdtag,
                     method:"POST",
-                    data:{entree:entree,titre:tag,contenu:tagcontent,montant:montant,devise:devise, _token:_token},
+                    data:{entree:entree,dossier:dossier,titre:tag,contenu:tagcontent,montant:montant,devise:devise, _token:_token},
                     success:function(data){
                         $("#addedsuccess").fadeIn(1500);
                         $("#addedsuccess").fadeOut(1500);

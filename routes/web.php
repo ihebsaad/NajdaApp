@@ -407,4 +407,6 @@ Route::get('docgen', function () {
 Route::post('/documents/adddocument','DocumentsController@adddocument')->name('documents.adddocument');
 Route::post('/documents/htmlfilled','DocumentsController@htmlfilled')->name('documents.htmlfilled');
 Route::post('/documents/historique','DocumentsController@historique')->name('documents.historique');
+Route::post('/documents/canceldoc','DocumentsController@canceldoc')->name('documents.canceldoc');
+ 
  

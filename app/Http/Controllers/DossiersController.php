@@ -242,24 +242,11 @@ class DossiersController extends Controller
     {        $minutes= 120;
         $minutes2= 600;
 
-
-
-        $prestataires = Cache::remember('prestataires',$minutes,  function () {
-
-            return DB::table('prestataires')
-                ->get();
-        });
-
+  //      $typesMissions=TypeMission::get();
 
         $specialites = Cache::remember('specialites',$minutes2,  function () {
 
             return DB::table('specialites')
-                ->get();
-        });
-
-        $gouvernorats = Cache::remember('cities',$minutes2,  function () {
-
-            return DB::table('cities')
                 ->get();
         });
 
@@ -271,7 +258,7 @@ class DossiersController extends Controller
 
         $Missions=Dossier::find($id)->activeMissions;
 
-        // $typesprestations = TypePrestation::all();
+       // $typesprestations = TypePrestation::all();
 
         $typesprestations = Cache::remember('type_prestations',$minutes2,  function () {
 
@@ -279,10 +266,22 @@ class DossiersController extends Controller
                 ->get();
         });
 
-        // $prestataires = Prestataire::all();
+       // $prestataires = Prestataire::all();
+
+        $prestataires = Cache::remember('prestataires',$minutes,  function () {
+
+            return DB::table('prestataires')
+                ->get();
+        });
+
+        $gouvernorats = Cache::remember('cities',$minutes2,  function () {
+
+            return DB::table('cities')
+                ->get();
+        });
 
 
-        //        $villes = Ville::all();
+
 
         $dossier = Dossier::find($id);
 
@@ -293,9 +292,17 @@ class DossiersController extends Controller
         $adresse=app('App\Http\Controllers\ClientsController')->ClientChampById('adresse',$cl);
 
 
+      //  $clients = DB::table('clients')->select('id', 'name')->get();
+
+        $clients = Cache::remember('clients',$minutes2,  function () {
+
+            return DB::table('clients')
+                ->get();
+        });
+
 
         $prestations =   Prestation::where('dossier_id', $id)->get();
-        // $emails =   Email::where('parent', $id)->get();
+
 
         $ref=$this->RefDossierById($id);
         $entrees =   Entree::where('dossier', $ref)->get();
@@ -462,7 +469,9 @@ class DossiersController extends Controller
 
                 ->get();
         });
+        
         return view('dossiers.manage',['garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
+
 
     }
 

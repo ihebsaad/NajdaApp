@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Entree ;
 use App\Tag ;
+use App\Dossier ;
 
 
 class TagsController extends Controller
@@ -96,6 +97,17 @@ class TagsController extends Controller
                     default: 
                         $titre = "";
                 }
+                if (stristr($abbrev,"GOP")!== false)
+                {
+                    // ajout gop dans details dossier
+                    if ($request->has('dossier'))
+                    {
+                        if (! empty($request->get('dossier'))) {
+                            Dossier::where('id', $request->get('dossier'))->update(['GOP' => $identree,'montant_GOP' => $request->get('montant')]);
+                        }
+                    }
+                }
+                
                 $tag = new Tag([
                     'abbrev' => $abbrev,
                     'titre' => $titre,

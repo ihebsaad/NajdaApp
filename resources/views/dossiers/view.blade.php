@@ -374,6 +374,10 @@ use App\Document ;
                                     <div class="page-toolbar">
 
                                     <div class="btn-group">
+                                        <?php
+                                            if (stristr($doc->emplacement,'annulation')=== FALSE) 
+                                            {
+                                        ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important;" id="btnannremp">
                                                 <a style="color:black" href="#" id="annremp" onclick="remplacedoc(<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>);"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
@@ -382,10 +386,12 @@ use App\Document ;
 
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,214,214) !important;" id="btnann">
-                                                <a style="color:black"  onclick="annuledoc(<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>);" href="#" > <i class="far fa-window-close"></i> Annuler</a>
+                                                <a style="color:black"  onclick="annuledoc('<?php echo $doc->titre; ?>',<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>);" href="#" > <i class="far fa-window-close"></i> Annuler</a>
                                             </button>
                                         </div>
-
+                                        <?php
+                                            }
+                                        ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important;" id="btntele">
                                                 <a style="color:black" href="{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}" ><i class="fa fa-download"></i> Télécharger</a>
@@ -431,6 +437,7 @@ $CurrentUser = auth()->user();
 $iduser=$CurrentUser->id;
 
 ?>
+
 
 
 
@@ -972,10 +979,10 @@ function remplacedoc(iddoc,template)
                 method:"POST",
                 data:{dossier:dossier,template:tempdoc,parent:iddoc, _token:_token},
                 success:function(data){
-                    filltemplate(data,tempdoc);
-                    // set iddocparent value
-                    $('#iddocparent').val(iddoc);
-                    //alert(JSON.stringify(data));
+                        filltemplate(data,tempdoc);
+                        // set iddocparent value
+                        $('#iddocparent').val(iddoc);
+                        //alert(JSON.stringify(data));
                 }
             });
         }else{
@@ -983,29 +990,43 @@ function remplacedoc(iddoc,template)
         }
 }
 
-function annuledoc(iddoc,template)
+function annuledoc(titre,iddoc,template)
 {
     //alert(iddoc+' | '+template);
 
         var dossier = $('#dossier').val();
         var tempdoc = template;
         $("#gendochtml").prop("disabled",false);
-        /*if ((dossier != '') )
-        {
-            var _token = $('input[name="_token"]').val();
-            $.ajax({
-                url:"{{ route('documents.htmlfilled') }}",
-                method:"POST",
-                data:{dossier:dossier,template:tempdoc,parent:iddoc,annule:iddoc, _token:_token},
+        
+        //alert(tempdoc);
+        var r = confirm("Êtes-vous sûr de vouloir supprimer le document: "+titre+" ? ");
+        if (r == true) {
+          //alert("You pressed OK!");
+          if ((dossier != '') )
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('documents.canceldoc') }}",
+                    method:"POST",
+                    data:{dossier:dossier,template:tempdoc,parent:iddoc, _token:_token},
                 success:function(data){
-                    filltemplate(data,tempdoc);
-                    // set iddocparent value
-                    $('#iddocparent').val(iddoc);
                     //alert(JSON.stringify(data));
+                    console.log(data);
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
+                    alert('Erreur lors de lannulation du document');
+                    console.log('jqXHR:');
+                    console.log(jqXHR);
+                    console.log('textStatus:');
+                    console.log(textStatus);
+                    console.log('errorThrown:');
+                    console.log(errorThrown);
                 }
-            });
-        }*/
-        alert(tempdoc);
+                });
+            }
+        }
 }
 
 // affichage de lhistorique du document
@@ -1250,13 +1271,55 @@ function filltemplate(data,tempdoc)
                 method:"POST",
                 data:{dossier:dossier,template:tempdoc, _token:_token},
                 success:function(data){
-                    filltemplate(data,tempdoc);
-                    //alert(JSON.stringify(data));
+                     if (data !== 'nogop')
+                    {
+                        filltemplate(data,tempdoc);
+                    }
+                    else
+                    {
+                        alert("OPERATION NON AUTORISE: Le dossier n'a pas un GOP Spécifié!");
+                    }
                 }
             });
         }else{
             // alert('ERROR');
         }
+    });
+
+    $('#gendochtml').click(function(){
+        //alert($("#templatedocument").val());
+        //$("#gendocfromhtml").submit();
+        var _token = $('input[name="_token"]').val();
+        var dossier = $('#dossdoc').val();
+        var tempdoc = $("#templatedocument").val();
+        var idparent = '';
+        // verifier si cest le cas de annule et remplace pour sauvegarder lid du parent
+        if ($('#iddocparent').val())
+        {
+            idparent = $('#iddocparent').val();
+            console.log('parent: '+idparent);
+        }
+        $.ajax({
+                url:"{{ route('documents.adddocument') }}",
+                method:"POST",
+                //'&_token='+_token
+                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent,
+                success:function(data){
+                    //alert(JSON.stringify(data));
+                    console.log(data);
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
+                    alert('Erreur lors de la generation du document');
+                    console.log('jqXHR:');
+                    console.log(jqXHR);
+                    console.log('textStatus:');
+                    console.log(textStatus);
+                    console.log('errorThrown:');
+                    console.log(errorThrown);
+                }
+            });
     });
 
         $('#btnaddemail').click(function(){
@@ -1314,49 +1377,7 @@ function filltemplate(data,tempdoc)
             }
         });
 
-
-
-    // generate doc from html templte
-    $('#gendochtml').click(function(){
-        //alert($("#templatedocument").val());
-        //$("#gendocfromhtml").submit();
-        var _token = $('input[name="_token"]').val();
-        var dossier = $('#dossdoc').val();
-        var tempdoc = $("#templatedocument").val();
-        var idparent = '';
-        // verifier si cest le cas de annule et remplace pour sauvegarder lid du parent
-        if ($('#iddocparent').val())
-        {
-            idparent = $('#iddocparent').val();
-            console.log('parent: '+idparent);
-        }
-        $.ajax({
-                url:"{{ route('documents.adddocument') }}",
-                method:"POST",
-                //'&_token='+_token
-                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent,
-                success:function(data){
-                    //alert(JSON.stringify(data));
-                    console.log(data);
-                    location.reload();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
-                    alert('Erreur lors de la generation du document');
-                    console.log('jqXHR:');
-                    console.log(jqXHR);
-                    console.log('textStatus:');
-                    console.log(textStatus);
-                    console.log('errorThrown:');
-                    console.log(errorThrown);
-                }
-            });
-    });
-
-
-
-
-
+});
 
 </script>
 
@@ -1368,6 +1389,232 @@ function filltemplate(data,tempdoc)
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
 
 <script>
+
+
+    $(function () {
+
+
+        $('#add2').click(function(){
+             var prestataire = $('#selectedprest').val();
+            var dossier_id = $('#iddossupdate').val();
+          //  var nom = 'iheb';
+            var typeprest = $('#typeprest').val();
+            var gouvernorat = $('#gouvcouv').val();
+            var specialite = $('#specialite').val();
+
+            //   gouvcouv
+            ///if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
+            ///   {
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('prestations.saving') }}",
+                method:"POST",
+                data:{nom:nom,dossier_id:dossier_id,typeprest:typeprest,gouvernorat:gouvernorat, _token:_token},
+                success:function(data){
+                    alert(data);
+
+                    //   console.log(data);
+                   // alert('data : '+data);
+                        window.location =data;
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('msg : '.jqXHR.status);
+                    alert('msg 2 : '.errorThrown);
+                }
+
+            });
+            ///  }else{
+            // alert('ERROR');
+            /// }
+        });
+
+        $('.radio1').click(function() {
+
+            var   div=document.getElementById('montantfr');
+            if(div.style.display==='none')
+            {div.style.display='block';	 }
+            else
+            {div.style.display='none';     }
+
+            var   div2=document.getElementById('plafondfr');
+            if(div2.style.display==='none')
+            {div2.style.display='block';	 }
+            else
+            {div2.style.display='none';     }
+        });
+
+        $('#btn01').click(function() {
+
+            var   div=document.getElementById('ben2');
+            if(div.style.display==='none')
+            {div.style.display='block';	 }
+            else
+            {div.style.display='none';     }
+
+
+        });
+
+        $('#btn02').click(function() {
+
+            var   div=document.getElementById('ben3');
+            if(div.style.display==='none')
+            {div.style.display='block';	 }
+            else
+            {div.style.display='none';     }
+
+
+        });
+
+
+        $('#btn03').click(function() {
+
+            var   div=document.getElementById('adresse2');
+            if(div.style.display==='none')
+            {div.style.display='block';	 }
+            else
+            {div.style.display='none';     }
+
+
+        });
+
+
+        $('#btn04').click(function() {
+
+            var   div=document.getElementById('adresse3');
+            if(div.style.display==='none')
+            {div.style.display='block';	 }
+            else
+            {div.style.display='none';     }
+
+
+        });
+
+        $("#typeprest").change(function() {
+
+            document.getElementById('termine').style.display = 'none';
+            document.getElementById('showNext').style.display='none';
+            document.getElementById('choisir').style.display='none';
+            document.getElementById('selectedprest').value=0;
+
+        });
+
+        $("#gouvcouv").change(function(){
+            //  prest = $(this).val();
+            document.getElementById('selectedprest').value=0;
+
+            var  type =document.getElementById('typeprest').value;
+            var  gouv =document.getElementById('gouvcouv').value;
+            if((type !="")&&(gouv !=""))
+            {
+                var _token = $('input[name="_token"]').val();
+
+                document.getElementById('termine').style.display = 'none';
+
+                $.ajax({
+                    url:"{{ route('dossiers.listepres') }}",
+                    method:"post",
+
+                    data:{gouv:gouv,type:type, _token:_token},
+                    success:function(data){
+
+                        //     alert('1'+data);
+                        //   alert('Added successfully');
+                        // alert('2'+JSON.parse((data)));
+                        $('#data').html(data);
+                        //window.location =data;
+                        console.log(data);
+                        ////       data.map((item, i) => console.log('Index:', i, 'Id:', item.id));
+                        var  total =document.getElementById('total').value;
+
+                        if(parseInt(total)>0)
+                        {
+                            document.getElementById('showNext').style.display='block';
+                        }
+
+                    }
+                }); // ajax
+
+            }else{
+                alert('SVP, Sélectionner le gouvernorat et la spécialité');
+            }
+        }); // change
+
+        $("#choisir").click(function() {
+            //selected= document.getElementById('selected').value;
+            selected=    $("#selected").val();
+            document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
+
+
+        });
+
+
+        $("#essai2").click(function() {
+            document.getElementById('termine').style.display = 'none';
+            document.getElementById('choisir').style.display = 'block';
+            document.getElementById('showNext').style.display = 'block';
+            document.getElementById('item1').style.display = 'block';
+            document.getElementById('selected').value = 1;
+            document.getElementById('selectedprest').value = 0;
+
+
+        });
+
+
+        $("#showNext").click(function() {
+            document.getElementById('selectedprest').value = 0;
+
+            var selected = document.getElementById('selected').value;
+            var total = document.getElementById('total').value;
+            //     alert(selected);
+            //    alert(total);
+            var next = parseInt(selected) + 1;
+            document.getElementById('selected').value = next;
+
+            if ((selected == 0)) {
+                document.getElementById('termine').style.display = 'none';
+                document.getElementById('item1').style.display = 'block';
+                document.getElementById('choisir').style.display = 'block';
+
+                //document.getElementById('selected').value=1;
+                // $("#selected").val('1');
+
+            }
+
+            if ((selected) == (total  )) {//alert("Il n y'a plus de prestataires, Ressayez");
+                document.getElementById('termine').style.display = 'block';
+
+                document.getElementById('item'+(selected)).style.display = 'none';
+                document.getElementById('showNext').style.display = 'none';
+                document.getElementById('choisir').style.display = 'none';
+
+
+            } else {
+
+                if ((selected != 0) && (selected <= total + 1)) {
+                    document.getElementById('choisir').style.display = 'block';
+                    document.getElementById('termine').style.display = 'none';
+                    document.getElementById('item' + selected).style.display = 'none';
+                    document.getElementById('item' + next).style.display = 'block';
+
+
+                    $("#selected").val(next);
+
+
+
+                }
+            }
+
+            if(next>parseInt(total)+1) {
+                document.getElementById('item' + selected).style.display = 'none';
+            }
+
+
+        });
+
+
+
+    }); // $ function
 
 
     $(function () {
