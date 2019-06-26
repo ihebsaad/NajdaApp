@@ -129,7 +129,7 @@ Route::post('/dossiers/updating','DossiersController@updating')->name('dossiers.
 Route::post('/dossiers/updating2','DossiersController@updating2')->name('dossiers.updating2');
 Route::post('/dossiers/updating3','DossiersController@updating3')->name('dossiers.updating3');
 Route::get('/dossiers/view/{id}', 'DossiersController@view')->name('dossiers.view');
-Route::get('/dossiers/manage/{id}', 'DossiersController@manage')->name('dossiers.manage');
+Route::get('/dossiers/fiche/{id}', 'DossiersController@fiche')->name('dossiers.fiche');
 Route::post('/dossiers/addemail','DossiersController@addemail')->name('dossiers.addemail');
 Route::post('/dossiers/attribution','DossiersController@attribution')->name('dossiers.attribution');
 Route::post('/dossiers/listepres','DossiersController@ListePrestataireCitySpec')->name('dossiers.listepres');
