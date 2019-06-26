@@ -7,6 +7,7 @@ if (isset($_GET['vehicule_immatriculation'])) {$vehicule_immatriculation=$_GET['
 if (isset($_GET['subscriber_phone_cell'])) {$subscriber_phone_cell=$_GET['subscriber_phone_cell'];}
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic'];}
 if (isset($_GET['CL_dateheure'])) {$CL_dateheure=$_GET['CL_dateheure'];}
+if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -252,7 +253,7 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps1><span class=rvts6><br></span></p>
 <p class=rvps1><span class=rvts6><br></span></p>
 <p class=rvps1><span class=rvts6><br></span></p>
-<p class=rvps1><span class=rvts7>Nous soussignés, </span><span class=rvts5>Najda Assistance</span><span class=rvts7>, vous confirmons par la présente l</span><span class=rvts8>’</span><span class=rvts7>orientation vers votre garage du <input name="vehicule_type" placeholder="Type et marque du véhicule
+<p class=rvps1><span class=rvts7>Nous soussignés, </span><span class=rvts5>Najda Assistance</span><span class=rvts7>, vous confirmons par la présente l</span><span class=rvts8>’</span><span class=rvts7>orientation vers votre garage du véhicule <input name="vehicule_type" placeholder="Type et marque du véhicule
 " value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input>&nbsp; immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> et appartenant à notre client(e) Mr/Mme <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> (tél : <input name="subscriber_phone_cell" placeholder="num de téléphone du l'abonnée"  value="<?php if(isset ($subscriber_phone_cell)) echo $subscriber_phone_cell; ?>"></input>)</span></p>
 <p class=rvps1><span class=rvts9><br></span></p>
 <p class=rvps1><span class=rvts7>Merci de nous adresser dès la réception du véhicule et dans un délai maximal de </span><span class=rvts5>24h</span><span class=rvts7> un contact technique détaillant les éléments suivants :</span></p>
@@ -274,7 +275,7 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps1><span class=rvts7>Avec nos salutations Cordiales </span></p>
 <p><span class=rvts15><br></span></p>
 <p><span class=rvts15>P/la Gérante</span></p>
-<p><span class=rvts16>Agent_dossier</span></p>
+<p><span class=rvts16><input name="agent__name" id="agent__name" placeholder="nom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" /></span></p>
 <p><span class=rvts15>Plateau d</span><span class=rvts17>’</span><span class=rvts15>assistance technique </span></p>
 <p><span class=rvts18><br></span></p>
 <p class=rvps11><span class=rvts18> &nbsp; &nbsp; &nbsp; &nbsp;</span></p>

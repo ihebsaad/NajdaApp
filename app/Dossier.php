@@ -98,7 +98,7 @@ class Dossier extends Model
 */
  public function activeMissions()
     {
-        return $this->hasMany('App\Mission')->where('statut_courant','Active');
+        return $this->hasMany('App\Mission')->where('statut_courant','active');
     }
 
 

@@ -1211,9 +1211,11 @@ class EmailController extends Controller
 
 
         $attachements= DB::table('attachements')
-            ->whereIn('entree_id',$identr )
-            ->orWhereIn('envoye_id',$idenv )
+            /*->whereIn('entree_id',$identr )
+            ->orWhereIn('envoye_id',$idenv )*/
+            ->Where('dossier','=',$id )
             ->orderBy('created_at', 'desc')
+            ->distinct()
             ->get();
 
         return view('emails.envoimail',['prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type]);

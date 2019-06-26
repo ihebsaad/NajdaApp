@@ -36,7 +36,7 @@ class TypeMissionController extends Controller
 
           $data=DB::Table('type_mission')->where('nom_type_Mission','like','%'.$qery.'%')->get();
 
-          $output='<ul class="dropdown-menu" style="display:block ; position:relative">';
+          $output='<ul class="dropdown-menu" style="display:block ; position:relative; width: 300 px; left:-50px;">';
 
           foreach ($data as $row ) {
               
