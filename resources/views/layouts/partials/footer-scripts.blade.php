@@ -136,7 +136,13 @@
         
     });</script>
     <!-- end page level js -->
+    <?php
+    $urlapp=env('APP_URL');
 
+    if (App::environment('local')) {
+        // The environment is local
+        $urlapp='http://localhost/najdaapp';
+    }?>
 <script>
 
     $( "#open" ).click(function() {
@@ -306,7 +312,7 @@ console.log(parsed);*/
           onClick: function(){
          // window.focus();
          // this.close();
-              window.location ='https://najdaapp.enterpriseesolutions.com/entrees/show/'+parsed['data']['entree']['id'];
+              window.location ='<?php echo $urlapp; ?>/entrees/show/'+parsed['data']['entree']['id'];
 
           }
          

@@ -152,7 +152,6 @@ storage/Emails/213/reception.pdf
 storage/Emails/212/reception.pdf
 storage/Emails/202/reception.pdf
 storage/Emails/192/test 04 04.pdf
-resources/views/emails/envoimailbr.blade.php
 storage/Envoyes/110/AFFES - Votre R  f Your Ref    - Notre R  f Our Ref   15N0004.pdf
 storage/Envoyes/109/RENEE - Votre R  f Your Ref    - Notre R  f Our Ref   15TM0004.pdf
 storage/Envoyes/108/RENEE - Votre R  f Your Ref    - Notre R  f Our Ref   15TM0004.pdf
@@ -249,3 +248,4 @@ storage/Emails/311/fax000025655.pdf
 storage/Emails/310/fax000025654.pdf
 storage/Emails/313/REC - MaxBulk Mailer Delivery Report 126 test.pdf
 storage/Emails/312/fax000025656.pdf
+
