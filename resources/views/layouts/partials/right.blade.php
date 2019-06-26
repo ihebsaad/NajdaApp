@@ -29,7 +29,10 @@ use App\Http\Controllers\TagsController;
                                  // $Missions=$dossier->activeMissions;
 
                                if (true){ 
-                                $Missions=Auth::user()->activeMissions;
+                                $Missions=Auth::user()->activeMissions->sortBy(function($t)
+                                        {
+                                            return $t->updated_at;
+                                        })->reverse();
                             ?>
                   @if ($Missions)
 <!--  début tab -+----------------------------------------------------------------------------------------->
@@ -94,7 +97,11 @@ use App\Http\Controllers\TagsController;
                                    </div>
                                     <br>                             
                                   @endif
+
+                                      <div id ="contenuMissions">
                                       @foreach ($Missions as $Mission)
+                                      @if ( $Mission->statut_courant =='active')
+
                                       <div class="row" style="padding-bottom: 3px;">
                                       <div class="col-md-10">
                                       <div class="panel panel-default">
@@ -110,8 +117,12 @@ use App\Http\Controllers\TagsController;
 
                                        <div id="collapse{{$Mission->id}}" class="panel-collapse collapse in">
                                             <ul class="list-group">
-                                              @foreach($Mission->activeAction as  $sas)
-                                              <li class="list-group-item"><a  href="{{url('dossier/Mission/TraitementAction/'.$Mission->dossier->id.'/'.$Mission->id.'/'.$sas->id)}}">{{$sas->titre}} </a></li>
+                                              @foreach($Mission->activeActionEC as  $sas)
+                                              <li class="list-group-item"><a  href="{{url('dossier/Mission/TraitementAction/'.$sas->Mission->dossier->id.'/'.$sas->mission_id.'/'.$sas->id)}}">
+
+
+
+                                                {{$sas->titre}} </a></li>
                                               @endforeach
                                             </ul>
 
@@ -134,14 +145,15 @@ use App\Http\Controllers\TagsController;
                                              {{-- <a  style="color:black !important; margin-top: 10px; margin-right: 10px;" title ="Voir Workflow" href="{{url('Mission/workflow/'.$Mission->dossier->id.'/'.$Mission->id)}}"><span class="fa fa-2x fa-cogs" style=" margin-top: 10px; margin-right: 20px;" aria-hidden="true"></span>
                                             </a>--}}
                                                                          
-                                        <?php $actk=$Mission ;?>
+                                        <?php $actk=$Mission;?>
                                      
                                     </div>
                                     </div>
+                                    @endif
 
                                      @endforeach
 
-                                    
+                                      </div>
 
 
                                               </div>
@@ -179,17 +191,23 @@ use App\Http\Controllers\TagsController;
                                           </ul>
                                       </div><br />
                                   @endif
-                                  <form  method="post" action="{{ route('Missions.store') }}" style="padding-top:30px">
+                                  <form  method="post" action="{{route('Missions.storeActionsEC') }}" style="padding-top:30px">
                                       <div class="form-group">
                                            {{ csrf_field() }}
+
+                                        <div class="row">
+                                             <div class="col-md-3" style="padding-top:5px"> <label  style=" ;  text-align: left; width: 55px;">Extrait:</label></div>
+                                             <div class="col-md-9"><input id="titre" type="text" class="form-control" style="width:95%;  text-align: left !important;" name="titre"/></div>
+                                       </div>
+                                       <br>
                                         <!-- input pour l'autocomplete type Mission -->
                                           <div class="form-group">
 
                                                <div class="row">
                                                 <div class="col-md-3" style="padding-top:5px">  <label for="typeactauto" style="display: inline-block;  text-align: left; width: 55px;">Type:</label></div>
                                                 <div class="col-md-9"> 
-                                                  <input id="typeactauto" type="text" value="" class="form-control" style="width:95%;  text-align: left;" name="typeactauto"/>
-                                                 <div id="listtypeact" style="z-index: 9999;"> </div>
+                                                  <input id="typeactauto" type="text" value="" class="form-control" style="width:95%;  text-align: left;" name="typeactauto" autocomplete="off" />
+                                                 <div id="listtypeact" style=" left:-50px; z-index: 9999; width: 200 px;"> </div>
 
 
                                                  <script> $(document).ready(function(){
@@ -256,7 +274,7 @@ use App\Http\Controllers\TagsController;
 
                                           </div>
                                          <div class="form-group">
-                                            <?php $da= date('Y-m-d\TH:m'); ?>
+                                            <?php  $da = (new \DateTime())->modify('-1 Hour')->format('Y-m-d\TH:i');// $da= date('Y-m-d\TH:m'); ?>
 
                                                 <div class="row">
                                                     <div class="col-md-3" style="padding-top:5px">  <label for="datedeb" style="display: inline-block;  text-align: left; width: 55px;">Date:</label></div>
@@ -269,10 +287,7 @@ use App\Http\Controllers\TagsController;
                                               <div class="col-md-9"><input id="descrip" type="text" class="form-control" style="width:95%;  text-align: left;" name="descrip"/></div>
                                           </div>
                                         </div>
-                                         <div class="row">
-                                             <div class="col-md-3" style="padding-top:5px"> <label  style=" ;  text-align: left; width: 55px;">Extrait:</label></div>
-                                             <div class="col-md-9"><input id="titre" type="text" class="form-control" style="width:95%;  text-align: left !important;" name="titre"/></div>
-                                       </div></br>
+                                        </br>
                                        <div class="row">
                                              <div class="col-md-3" style="padding-top:5px"> <label  style=" ;  text-align: left; width: 55px;">Commentaire:</label></div>
                                              <div class="col-md-9"><textarea id="commentaire" class="form-control" style="width:95%;  text-align: left !important;" name="commentaire"></textarea></div>
@@ -860,6 +875,142 @@ $(document).ready(function() {
 
 });
 </script>
+
+
+<script>
+ setInterval(function(){ 
+     
+    $.ajax({
+       url : '{{ url('/') }}'+'/activerActionsReporteeOuRappelee',
+       type : 'GET',
+       dataType : 'html', // On désire recevoir du HTML
+       success : function(data){ // code_html contient le HTML renvoyé
+           //alert (data);
+
+           if(data)
+           {
+
+             // alert ("des nouvelles notes sont activées");
+              //$("#contenuNotes").prepend(data);
+              var sound = document.getElementById("audiokbs");
+              sound.setAttribute('src', "{{URL::asset('public/media/point.mp3')}}");
+              sound.play();
+
+             // alertify.alert("Note","Une nouvelle note est activée").show();
+
+             var r = confirm(data+'\n'+ 'Si vous voulez afficher maintenant les nouvelles actions actives dans l\'onglet des missions cliquez sur OK (Attention  la page sera rechargée et vos données peuvent être perdues !). \n Sinon vous pouvez annuler et consulter les actions ultèrieurement');
+              if (r == true) {
+                location.reload();
+            } else {
+              txt = "You pressed Cancel!";
+             }
+
+          //alert(data);
+
+            
+           }
+       }
+    });
+   
+
+
+}, 15000);
+
+
+</script>
+
+
+<!-- gestion des rappels des missions (pour les rappels actions voir traitementaction blade)-->
+  <script>
+
+var idMission;
+var datamission;
+var iddropdownM;
+var hrefidAcheverM;
+
+    setInterval(function(){
+ //alert("Hello"); 
+
+ 
+     
+    $.ajax({
+       url : '{{ url('/') }}'+'/getMissionAjaxModal',
+       type : 'GET',
+       dataType : 'html', // On désire recevoir du HTML
+       success : function(data){ // code_html contient le HTML renvoyé
+           //alert (data);
+
+           if(data)
+           {
+
+             // alert ("des nouvelles notes sont activées");
+              //$("#contenuNotes").prepend(data);
+              var sound = document.getElementById("audiokbs");
+              sound.setAttribute('src', "{{URL::asset('public/media/point.mp3')}}");
+              sound.play();
+
+             // alertify.alert("Note","Une nouvelle note est activée").show();
+
+             $("#contenuMissionModal").empty().append(data);
+             iddropdown=jQuery(data).find('.dropdown').attr("id");
+             $("#"+iddropdown).hide();
+             $("#hiddenreporterMiss").hide();
+            
+              
+             $("#myMissionModalReporter1").modal('show');          
+             idAction=jQuery(data).find('.rowkbs').attr("id");
+             dataAction=jQuery(data).find('#'+idAction).html();
+             hrefidAcheverA=jQuery(data).find('#idAchever').attr("href");
+
+            
+           }
+       }
+    });
+   
+
+
+}, 10000);
+
+    $(document).ready(function() {
+    
+    $(document).on("click","#missionOngletaj",function() {
+      //alert(datakbs);
+      $("#contenuMissions").prepend(dataAction);
+      $("#"+iddropdown).show();
+    
+
+        $('#actiontabs a[href="#Missionstab"]').trigger('click');
+
+
+    });
+
+  
+
+     $(document).on("click","#reporterHideM",function() {
+       
+       $("#hiddenreporterMiss").toggle();  
+
+
+    });
+
+      });
+
+
+  </script>
+
+<div class="modal fade" id="myMissionModalReporter1" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content" id="contenuMissionModal">
+       
+      </div>
+      
+    </div>
+</div>
+
+<!-- gestion les reports et l'attente de réponse des actions (pour les rappels mission voir right blade)-->
+
 
 
 

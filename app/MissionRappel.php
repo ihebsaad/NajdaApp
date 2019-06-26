@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Mission extends Model
+class MissionRappel extends Model
 {
     //
 
@@ -32,17 +32,7 @@ public function dossier()
      public function activeAction()
     {
         return $this->hasMany('App\Action')->where('statut','active');
-    }   
-
-     public function ActionECs()
-    {
-        return $this->hasMany('App\ActionEC');
-    }
-
-     public function activeActionEC()
-    {
-        return $this->hasMany('App\ActionEC')->where('statut','active')->orderBy('ordre');
-    }                                                                   
+    }                                                                
  
 
 }

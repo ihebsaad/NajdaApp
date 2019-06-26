@@ -277,6 +277,7 @@ Route::resource('/Missions',  'MissionController');
 Route::get('/Missions', array('as' => 'Missions','uses' => 'MissionController@index'));
 Route::post('/Missions/saving','MissionController@saving')->name('Missions.saving');
 Route::post('/Missions/store','MissionController@store')->name('Missions.store');
+Route::post('/Missions/storeActionsEnCours','MissionController@storeTableActionsEnCours')->name('Missions.storeActionsEC');
 Route::get('/Missions/view/{id}', 'MissionController@view');
 Route::get('/Mission/workflow/{dossid}/{id}', 'MissionController@getWorkflow');
 Route::post('/Mission/updateworkflow/', 'MissionController@updateWorkflow');
@@ -285,11 +286,13 @@ Route::get('/Mission/RendreInactive/{id}/{dossid}', 'MissionController@RendreIna
 Route::get('/Mission/RendreAchevee/{id}/{dossid}', 'MissionController@RendreAchevee');
 Route::get('/Mission/getAjaxWorkflow/{id}', 'MissionController@getAjaxWorkflow');
 Route::get('/dossier/Mission/AnnulerMissionCourante/{iddoss}/{idact}/{idsousact}' , 'MissionController@AnnulerMissionCourante');
+Route::get('/getMissionAjaxModal', 'MissionController@getMissionsAjaxModal');
+
 
 
 
 /*** Action**/
-Route::resource('/Actions',  'ActionController');
+Route::resource('/Actions','ActionController');
 Route::get('/Actions', array('as' => 'actions','uses' => 'ActionController@index'));
 Route::post('/Actions/saving','ActionController@saving')->name('Actions.saving');
 Route::get('/Actions/view/{id}', 'ActionController@view');
@@ -298,11 +301,13 @@ Route::get('/dossier/Mission/TraitementAction/{iddoss}/{idact}/{idsousact}',
 Route::get('/dossier/Mission/TraitercommentAction/{iddoss}/{idact}/{idsousact}',
   'ActionController@TraitercommentAction');
 
-Route::post('/dossier/Mission/TraitercommentActionAjax/{iddoss}/{idact}/{idsousact}',
+Route::get('/dossier/Mission/TraitercommentActionAjax/{iddoss}/{idact}/{idsousact}',
   'ActionController@TraitercommentActionAjax');
 
-Route::get('dossier/Mission/EnregistrerEtAllerSuivante/{iddoss}/{idact}/{idsousact}',
-  'ActionController@EnregistrerEtAllerSuivante');
+/*Route::get('dossier/Mission/EnregistrerEtAllerSuivante/{iddoss}/{idact}/{idsousact}',
+  'ActionController@EnregistrerEtAllerSuivante');*/
+  Route::get('dossier/Mission/Fait/{iddoss}/{idact}/{idsousact}',
+  'ActionController@BoutonFait');
 
 Route::get('dossier/Mission/AnnulerEtAllerSuivante/{iddoss}/{idact}/{idsousact}',
   'ActionController@AnnulerEtAllersuivante');
@@ -315,6 +320,17 @@ Route::get('dossier/Mission/FinaliserMission/{iddoss}/{idact}/{idsousact}',
 
 Route::get('dossier/Mission/ReporterAction/{iddoss}/{idact}/{idsousact}',
   'ActionController@ReporterAction');
+
+Route::get('dossier/Mission/RappelAction/{iddoss}/{idact}/{idsousact}',
+  'ActionController@RappelAction');
+
+Route::get('/getActionAjaxModal','ActionController@getActionsAjaxModal');
+
+
+Route::get('/activerActionsReporteeOuRappelee','ActionController@activerActionsReporteeOuRappelee');
+
+  Route::get('/traitementsBoutonsActions/{iddoss}/{idmiss}/{idsousact}/{bouton}',
+    'ActionController@Bouton_Faire1_ignorer2_reporter3_rappeler4');
 
 
 

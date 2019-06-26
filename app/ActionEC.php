@@ -4,15 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Action extends Model
+class ActionEC extends Model
 {
     //
-    protected $table='actions';
+    protected $table='actionecs';
 
     protected $fillable = [
-        'mission_id','type_Mission','action_idt','titre', 'descrip', 'date_deb','date_fin','igno_ou_non','rapl_ou_non',
+        'mission_id','action_idt','type_Mission','titre', 'descrip', 'date_deb','date_fin','igno_ou_non','rapl_ou_non',
         'num_rappel',
-        'rapp_doc_ou_non','date_rappel', 'report_ou_non','num_report','date_report', 'ordre', 'realisee','statut','nb_opt','opt_choisie','activ_avec_miss','user_id',
+        'rapp_doc_ou_non','date_rappel', 'report_ou_non','date_report', 'ordre', 'realisee','statut','nb_opt','opt_choisie'
+        ,'activ_avec_miss','user_id',
         'assistant_id','comment1','comment2','comment3','action_ava','action_apr', 'created_at','updated_at','deleted_at'
     ];
 

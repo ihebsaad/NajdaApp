@@ -362,13 +362,69 @@ if (isset($dossier))
 
 
 <div class="modal fade" id="AjouterNote" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Créer une nouvelle note</h4>
-            </div>
 
+             <div class="modal-dialog">
+             <div class="modal-content">
+             <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+             <h4 class="modal-title" id="myModalLabel">Créer une nouvelle note</h4>
+             </div>
+
+             <form action="{{route('Note.store')}}" method="POST">
+             <div class="modal-body">
+             <!-- début les inputs-->
+
+
+               <div class="form-group">
+                 {{ csrf_field() }}
+               <div class="row">
+                   <div class="col-md-4" style="padding-top:5px"> 
+                    <label  style=" ;  text-align: left; width: 40px;">Titre:</label>
+                  </div>
+                   <div class="col-md-8">
+                    <input id="titre" type="text" class="form-control" style="width:80%;  text-align: left !important;" name="titre"/>
+                  </div>
+              </div>
+              </div>
+
+              <div class="form-group">
+                  <div class="row">
+                      <div class="col-md-4" style="padding-top:5px">   
+                        <label for="descrip" style="display: inline-block;  text-align: right; width: 40px;">Contenu</label>
+                      </div>
+                      <div class="col-md-8">
+                        <textarea id="descrip" type="text" class="form-control" style="width:80%;  text-align: left;" name="descrip"></textarea>
+                      </div>
+                  </div>
+              </div>
+
+             <div class="form-group">
+
+              <div class="row">
+                <div class="col-md-4">
+               <?php $da = (new \DateTime())->modify('-1 Hour')->format('Y-m-d\TH:i:s'); ?>
+               <label for="daterappel" style="display: inline-block;  text-align: left; width:200px;"> la date de rappel</label>
+               </div>
+
+              <div class="col-md-8">
+             <input id="daterappel" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:80%; flow:right; display: inline-block; text-align: right;" name="daterappel"/>
+             </div>
+             </div>
+             </div>
+
+
+            <!-- fin les inputs-->
+             </div>
+             <div class="modal-footer">
+             <a href="#" type="button" class="btn btn-default" data-dismiss="modal">Fermer</a>
+             <button type="submit" class="btn btn-primary">Enregister</button>
+             </div>
+
+           </form>
+                 </div>
+             </div>
+
+             
             <form action="{{route('Note.store')}}" method="POST">
                 <div class="modal-body">
                     <!-- début les inputs-->
