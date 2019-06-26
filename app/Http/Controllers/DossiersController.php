@@ -636,11 +636,14 @@ class DossiersController extends Controller
 
         $gouv = $request->get('gouv');
         $type = $request->get('type');
+        $spec = $request->get('specialite');
         $liste = DB::table('evaluations')
             ->where('gouv',$gouv )
             ->where('type_prest',$type )
+            ->where('specialite',$spec )
             ->orderBy('priorite', 'asc')
             ->get();
+
 
         $output='';$c=0;
         foreach ($liste as $row) {
@@ -742,7 +745,7 @@ class DossiersController extends Controller
         $output=$output.'<input id="total" type="hidden" value="'.$c.'">  
                        
 ';
-        return  ($output);
+         return  ($output);
      //   return json_encode($liste);
 
     }

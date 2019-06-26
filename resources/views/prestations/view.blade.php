@@ -15,56 +15,28 @@
                         <input id="idprestation" name="idprestation" type="hidden" value="{{$prestation->id}}">
                  <div class="row" >
                  <div class="form-group col-md-6  ">
-                     <label>Type de prestation</label><br>
+                     <h3>Prestation</h3><br>
                      <?php use \App\Http\Controllers\PrestationsController;
                       use \App\Http\Controllers\PrestatairesController;     ?>
-
                      <h3><?php echo PrestationsController::TypePrestationById ($prestation->type_prestations_id); ?></h3>
-
                   </div>
-
                 </div>
 
-                 <!--  <div class="form-group">
-                     <label class="control-label">Prestataire</label>
-                     <input type="hidden" name="pres_id" id="pres_id" data-required="1" required="" aria-required="true" value="53">
-                     <input type="hidden" name="is_forced" id="is_forced" value="0">
-                     <div class="input-group" style="display:none" id="all_pres_div">
-                         <span class="input-group-addon btn green font-white" onclick="unForceSelectPres()">
-                             Retour
-                         </span>
-                         <div class="select2-container form-control" id="s2id_all_pres_id"><a href="javascript:void(0)" class="select2-choice" tabindex="-1">   <span class="select2-chosen" id="select2-chosen-8">&nbsp;</span><abbr class="select2-search-choice-close"></abbr>   <span class="select2-arrow" role="presentation"><b role="presentation"></b></span></a><label for="s2id_autogen8" class="select2-offscreen"></label><input class="select2-focusser select2-offscreen" type="text" aria-haspopup="true" role="button" aria-labelledby="select2-chosen-8" id="s2id_autogen8"><div class="select2-drop select2-display-none select2-with-searchbox">   <div class="select2-search">       <label for="s2id_autogen8_search" class="select2-offscreen"></label>       <input type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="select2-input" role="combobox" aria-expanded="true" aria-autocomplete="list" aria-owns="select2-results-8" id="s2id_autogen8_search" placeholder="">   </div>   <ul class="select2-results" role="listbox" id="select2-results-8">   </ul></div></div><select class="form-control select2-offscreen" id="all_pres_id" tabindex="-1" title="">
-                         </select>
-                     </div>
+                         <div class="row" style="margin-top:10px;margin-bottom: 20px">
+                                <div class="col-md-6"><span style="color:#a0d468" class="fa fa-lg fa-folder"></span>  Dossier <a href="{{action('DossiersController@view', $prestation['dossier_id'])}}" >  <?php echo $prestation['dossier_id'] ;?></a></div>
+                            </div>
 
-                     <div class="col-md-12" style="" id="autoPressDiv">
-                         <div class="well">
-                             <address id="autoPressFound">
-                                 <strong id="autoPresName">Clinique Cardio-Vasculaire</strong><br>
-                                 <i class="fa fa-envelope"></i> <span id="autoPresAddress"></span><br>
-                                 <i class="fa fa-phone"></i> <span id="autoPresPhone">71908000</span><br>
-                                 <i class="fa fa-mobile"></i> <span id="autoPresCell">50846277- 58573530  Lilia</span><br>
-                             </address>
-                             <address id="autoPressNotFound" style="display:none">
-                                 <strong>Aucun prestataire disponible. Cliquez pour recommencer.</strong>
-                             </address>
-                             <p>
-                                 <button type="button" class="btn btn-xs green" onclick="selectNewPres();"><i class="fa fa-refresh" style="cursor:pointer"></i> Sélectionner le suivant</button>
-                                 <button type="button" class="btn btn-xs yellow-lemon" onclick="forceSelectPres();"><i class="fa fa-check" style="cursor:pointer"></i> Sélection manuelle</button>
-                             </p>
-                         </div>
-                     </div>
-              --->
                         <div class="prestataire form-group">
                             <div class="row">
                             <label>Prestataire</label><br>
                             </div>
-                            <div class="row" style="margin-top:10px;margin-bottom: 20px">
+
+                                <div class="row" style="margin-top:10px;margin-bottom: 20px">
                                 <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-user-md"></span> <?php echo PrestatairesController::NomPrestatireById($prestation->prestataire_id); ?></div>
                                 <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-ambulance"></span> <?php echo PrestatairesController::SpecialitePrestatireById($prestation->prestataire_id); ?></div>
                                 <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-map-marker"></span> <?php echo PrestatairesController::AdressePrestatireById($prestation->prestataire_id); ?></div>
 
-                            </div>
+                               </div>
 
                             <div class="row">
                                 <div class="col-md-4"><span style="color:grey" class="fa fa-lg fa-phone"></span> <?php echo PrestatairesController::TelPrestatireById($prestation->prestataire_id); ?></div>
@@ -75,22 +47,30 @@
 
 
                         </div>
-                        <div class="form-group" id="authDiv" style="display:none">
-                            <label class="control-label"><i class="icon-user-following"></i> Autorisé par</label>
-                            <select id="user_auth" name="user_auth" class="form-control" placeholder="choisir un utilisateur...">
-                                <option value="223">Iheb Esolutions</option>
-                            </select>
-                        </div>
+
+
                         <!-- div class="form-group">
                             <label class="control-label">Prestataire <span class="required"> * </span></label>
                             <select name="pres_id" id="pres_id" class="form-control" data-required="1" required>
                             </select>
                         </div -->
                         <div class="form-group">
-                            <label class="control-label">Date de prestation <span class="required" aria-required="true"> * </span></label>
+                            <label class="control-label">Date de prestation <span class="required" aria-required="true">   </span></label>
                             <input value="{{$prestation->date_prestation}}" class="form-control datepicker-default" name="date_prestation" id="date_prestation" data-required="1" required="" aria-required="true">
                         </div>
-                        <div class="form-group">
+                 <div class="form-group">
+                     <label class="control-label">Type de Prestation <span class="required" aria-required="true">   </span></label>
+                     <input value="<?php  echo PrestationsController::TypePrestationById($prestation->type_prestations_id);?>" class="form-control" name="type_prestations_id" readonly id="date_prestation" data-required="1" required="" aria-required="true">
+                 </div>
+                 <div class="form-group">
+                     <label class="control-label">Spécialité <span class="required" aria-required="true">   </span></label>
+                     <input value="<?php  echo PrestationsController::SpecialiteById($prestation->specialite);?>" class="form-control " name="specialite" readonly id="specialite" data-required="1" required="" aria-required="true">
+                 </div>
+                 <div class="form-group">
+                     <label class="control-label">Gouvernorat <span class="required" aria-required="true">   </span></label>
+                     <input value="<?php  echo PrestationsController::GouvById($prestation->gouvernorat);?>" class="form-control" name="gouvernorat" id="gouvernorat" readonly data-required="1" required="" aria-required="true">
+                 </div>
+                 <div class="form-group">
                             <label>Prix</label>
                             <input onchange="changing(this)" value="{{$prestation->price}}" class="form-control" name="price" id="price">
                         </div>
@@ -101,9 +81,9 @@
                         <div class="form-group">
                             <div class="checkbox-list">
                                 <label>
-                                    <div class="checker" id="annules"><span><input  onchange="changing(this)" id="annule"  <?php if ($prestation->annule ==1){echo 'checked';} ?> type="checkbox" name="pres_parv" value="1"  ></span></div> Parvenue </label>
+                                    <div class="checker" id="annules"><span><input  onchange="changing2(this)" id="effectue"  <?php if ($prestation->effectue ==1){echo 'checked';} ?> type="checkbox" name="pres_parv"    ></span></div> Parvenue </label>
                                 <label>
-                                    <div class="checker" id="price_invoiceds"><span><input onchange="changing(this)"  id="price_invoiced"  <?php if ($prestation->price_invoiced ==1){echo 'checked';} ?>  type="checkbox" name="pres_fact"  value="1" ></span></div> Facturée au client </label>
+                                    <div class="checker" id="price_invoiceds"><span><input onchange="changing2(this)"  id="price_invoiced"  <?php if ($prestation->price_invoiced ==1){echo 'checked';} ?>  type="checkbox" name="pres_fact"    ></span></div> Facturée au client </label>
                                 <label>
                                 </label></div>
                         </div>
@@ -1493,5 +1473,36 @@
 
         // }
     }
+
+    function changing2(elm) {
+        var champ=elm.id;
+
+        var val =document.getElementById(champ).checked==1;
+
+        if (val==true){val=1;}
+        if (val==false){val=0;}
+         //  var type = $('#type').val();
+        var prestation = $('#idprestation').val();
+        //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('prestations.updating') }}",
+            method: "POST",
+            data: {prestation: prestation , champ:champ ,val:val, _token: _token},
+            success: function (data) {
+                $('#'+champ).animate({
+                    opacity: '0.3',
+                });
+                $('#'+champ).animate({
+                    opacity: '1',
+                });
+
+            }
+        });
+        // } else {
+
+        // }
+    }
+
 
 </script>

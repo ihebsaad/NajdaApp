@@ -24,7 +24,7 @@
     <div class="uper">
         <div class="portlet box grey">
             <div class="row">
-                <div class="col-lg-6">Prestataires</div>
+                <div class="col-lg-6">Interventions</div>
                 <div class="col-lg-6">
                     <button id="addprest" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Créer un Prestataire</b></button>
                 </div>

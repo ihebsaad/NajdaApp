@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Specialite;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
@@ -36,7 +37,8 @@ class PrestationsController extends Controller
         return view('prestations.index',['dossiers' => $dossiers,'villes' => $villes], compact('prestations'));
     }
 
- 
+    public function show()
+    {}
  
     /**
      * Show the form for creating a new resource.
@@ -77,30 +79,29 @@ class PrestationsController extends Controller
 
         $iddoss= intval($request->get('dossier_id'));
         $prest=intval($request->get('prestataire'));
-        $typep= intval( $request->get('type_prestations_id'));
+        $typep= intval( $request->get('typeprest'));
         $gouv= intval( $request->get('gouvernorat'));
         $spec= intval( $request->get('specialite'));
+        $date=  $request->get('date');
 
             $prestation = new Prestation([
            'prestataire_id' =>$prest ,
             'dossier_id' => $iddoss ,
             'type_prestations_id' =>$typep ,
             'gouvernorat' => $gouv,
-            'specialite' => $spec,
+                'specialite' => $spec,
+                'date_prestation' => $date,
 
             ]);
 
 
-        if ($prestation->save())
-            {
-                $id=$prestation->id;
-
-                return url('/dossiers/view/'.$id) ;
-         }
-
-            else {
-                return url('/dossiers/') ;
-        }
+           if ($prestation->save())
+           {
+               $id=$prestation->id;
+         //   return redirect('/prestations/view/'.$id)->with('success', 'ajouté avec succès ');
+               return url('/prestations/view/'.$id);
+           }
+            //
 
     }
 
@@ -228,6 +229,16 @@ class PrestationsController extends Controller
 
         if (isset($gouv['name'])) {
             return $gouv['name'];
+        }else{return '';}
+    }
+
+
+    public static function SpecialiteById($id)
+    {
+        $sp = Specialite::find($id);
+
+        if (isset($sp['nom'])) {
+            return $sp['nom'];
         }else{return '';}
     }
 

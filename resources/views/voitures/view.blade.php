@@ -67,21 +67,39 @@
         </div>
 
         <div class="row" style="margin-top:20px">
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="" class="control-label">Type </label>
-                    <input onchange="changing(this)"  class="form-control " name="type" id="type" type="text"   value={{ $voiture->type }} >
+                    <select onchange="changing(this)"  class="form-control " name="type" id="type" type="text"   value={{ $voiture->type }} >
+                        <option></option>
+                        <option <?php if ($voiture['type'] =='Voiture Tourisme'){echo 'selected="selected"';}?> value="Voiture Tourisme">Voiture Tourisme</option>
+                        <option <?php if ($voiture['type'] =='4X4'){echo 'selected="selected"';}?> value="4X4">4X4</option>
+                        <option <?php if ($voiture['type'] =='Ambulance A Gros Volume'){echo 'selected="selected"';}?>value="Ambulance A Gros Volume">Ambulance A Gros Volume</option>
+                        <option <?php if ($voiture['type'] =='Ambulance B'){echo 'selected="selected"';}?>value="Ambulance B">Ambulance B</option>
+                        <option <?php if ($voiture['type'] =='Plateau Remorquage'){echo 'selected="selected"';}?>value="Plateau Remorquage">Plateau Remorquage</option>
+                    </select>
                 </div>
 
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="" class="control-label">Fonction </label>
+                    <select onchange="changing(this)"  class="form-control " name="fonction" id="fonction" type="text"   value={{ $voiture->fonction }} >
+                        <option></option>
+                        <option <?php if ($voiture['fonction'] =='Taxi'){echo 'selected="selected"';}?> value="Taxi">Taxi</option>
+                        <option <?php if ($voiture['fonction'] =='Ambulance'){echo 'selected="selected"';}?> value="Ambulance">Ambulance</option>
+                        <option <?php if ($voiture['fonction'] =='Remorquage'){echo 'selected="selected"';}?>value="Remorquage">Remorquage</option>
+                        <option <?php if ($voiture['fonction'] =='Location'){echo 'selected="selected"';}?>value="Location">Location</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="" class="control-label">Immarticulation</label>
                     <input onchange="changing(this)"    class="form-control  " name="immarticulation" id="immarticulation" type="text"   value={{ $voiture->immarticulation }} >
                 </div>
-
             </div>
-
         </div>
         <input type="hidden" id="id" class="form-control"   value={{ $voiture->id }}>
     </form>

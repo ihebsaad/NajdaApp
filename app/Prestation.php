@@ -14,6 +14,9 @@ class Prestation extends Model
 'marge',
 'par',
 'newprice',
+'gouvernorat',
+'specialite'
+
 ];
 
 }

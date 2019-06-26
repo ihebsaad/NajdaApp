@@ -41,7 +41,6 @@
             </thead>
             <tbody>
             @foreach($voitures as $voiture)
-   
 
                 <tr>
                     <td  >{{$voiture->id}}</td>

@@ -225,8 +225,8 @@ Route::post('/prestataires/addressadd','PrestatairesController@addressadd')->nam
 /*** Prestations **/
 Route::resource('/prestations',  'PrestationsController');
 Route::get('/prestations', array('as' => 'prestations','uses' => 'PrestationsController@index'));
- Route::post('/prestations/saving','PrestatairesController@saving')->name('prestations.saving');
- Route::post('/prestations/updating','PrestatairesController@updating')->name('prestations.updating');
+ Route::post('/prestations/saving','PrestationsController@saving')->name('prestations.saving');
+ Route::post('/prestations/updating','PrestationsController@updating')->name('prestations.updating');
 Route::get('/prestations/view/{id}', 'PrestationsController@view');
 Route::post('/prestations/updating','PrestationsController@updating')->name('prestations.updating');
 

@@ -1604,15 +1604,13 @@ class EmailController extends Controller
 
 
 
-
-
     function accuse (Request $request)
     {
 
-      /*  $request->validate([
+         $request->validate([
             'g-recaptcha-response' => 'required|captcha'
         ]);
-*/
+
         $entree = $request->get('entree');
         $mess = $request->get('message');
         $refdossier = app('App\Http\Controllers\EntreesController')->ChampById('dossier',$entree);
@@ -1720,11 +1718,11 @@ class EmailController extends Controller
 
     function sendsms(Request $request)
     {
-     /*   $request->validate([
+        $request->validate([
             'g-recaptcha-response' => 'required|captcha'
         ]);
 
-*/
+
         $num = trim($request->get('destinataire'));
         $contenu = trim( $request->get('message'));
         $description = trim( $request->get('description'));

@@ -224,32 +224,50 @@ use App\Document ;
             </div>
 
             <div id="tab3" class="tab-pane fade">
-                    <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addpres" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une Prestation</b></button>
+                <span style="background-color:#fcdcd5;color:black;font-weight:bold">Prestation non effectué </span> <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addpres" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une Prestation</b></button>
 
                 <table class="table table-striped" id="mytable" style="width:100%;margin-top:15px;">
                     <thead>
                     <tr id="headtable">
-                        <th style="width:30%">Prestataire</th>
-                        <th style="width:30%">Type</th>
-                        <th style="width:30%">Prix</th>
+                        <th style="width:10%">Numéro</th>
+                        <th style="width:20%">Prestataire</th>
+                        <th style="width:20%">Type</th>
+                        <th style="width:20%">Spécialité</th>
+                        <th style="width:20%">Gouvernorat</th>
+                        <th style="width:10%">Prix</th>
                     </tr>
 
                     </thead>
                     <tbody>
+
                     @foreach($prestations as $prestation)
                         <?php $dossid= $prestation['dossier_id'];?>
+                        <?php $effectue= $prestation['effectue'];
+                        if($effectue ==0){$style='background-color:#fcdcd5;';}else{$style='';}
+                        ?>
 
-                        <tr>
-
-                            <td style="width:30%">
+                        <tr  >
+                            <td style="width:35%; <?php echo $style;?> ">
+                                <a href="{{action('PrestationsController@view', $prestation['id'])}}" >
+                                    <?php  echo $prestation['id']  ; ?>
+                                </a></td>
+                            <td style="width:25%">
                                 <?php $prest= $prestation['prestataire_id'];
                                 echo PrestationsController::PrestataireById($prest);  ?>
                             </td>
-                            <td style="width:30%;">
+                            <td style="width:20%;">
                                 <?php $typeprest= $prestation['type_prestations_id'];
                                 echo PrestationsController::TypePrestationById($typeprest);  ?>
                             </td>
-                            <td style="width:30%">{{$prestation->price}}</td>
+                            <td style="width:20%;">
+                                <?php $specialite= $prestation['specialite'];
+                                echo PrestationsController::SpecialiteById($specialite);  ?>
+                            </td>
+                            <td style="width:20%;">
+                                <?php $gouvernorat= $prestation['gouvernorat'];
+                                echo PrestationsController::GouvById($gouvernorat);  ?>
+                            </td>
+                            <td style="width:20%">{{$prestation->price}}</td>
 
                         </tr>
                     @endforeach
@@ -636,7 +654,6 @@ $iduser=$CurrentUser->id;
             <div class="modal-body">
                 <div class="card-body">
 
-
                     <div class="form-group">
                         
                         <form  method="post" action="{{ route('dossiers.attribution') }}">
@@ -677,7 +694,7 @@ $iduser=$CurrentUser->id;
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 <button type="submit" id="attribdoss" class="btn btn-primary">Affecter</button>
             </div>
-                        </form>
+          </form>
         </div>
     </div>
 </div>
@@ -837,7 +854,7 @@ $iduser=$CurrentUser->id;
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="exampleModalLabel">Ajouter une Nouvelle prestation</h3>
+                <h3 class="modal-title" id="exampleModalLabel" style="text-align:center">Ajouter une Nouvelle prestation</h3>
 
             </div>
             <div class="modal-body">
@@ -865,7 +882,7 @@ $iduser=$CurrentUser->id;
                             </div>
 
                             <div class="form-group ">
-                                <label>Spécialités</label>
+                                <label>Spécialité</label>
                                 <div class="row">
                                     <select class="form-control  col-lg-12 " style="width:400px" name="specialite"    id="specialite">
                                         <option></option>
@@ -936,6 +953,8 @@ $iduser=$CurrentUser->id;
                                 <option    value="<?php echo $prest->id;?>"> <?php echo $prest->name;?></option>
                             @endforeach
                             </select>
+                            <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}">
+
                         </form>
                     </div>
 
@@ -1353,6 +1372,7 @@ function filltemplate(data,tempdoc)
             });
     });
 
+    });
 
 
 
@@ -1375,25 +1395,24 @@ function filltemplate(data,tempdoc)
 
         $('#add2').click(function(){
              var prestataire = $('#selectedprest').val();
-            var dossier_id = $('#iddossupdate').val();
+            var dossier_id = $('#dossier').val();
 
             var typeprest = $('#typeprest').val();
             var gouvernorat = $('#gouvcouv').val();
             var specialite = $('#specialite').val();
+            var date = $('#pres_date').val();
 
             //   gouvcouv
-            ///if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
-            ///   {
+            if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
+               {
             var _token = $('input[name="_token"]').val();
             $.ajax({
                 url:"{{ route('prestations.saving') }}",
                 method:"POST",
-                data:{prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
+                data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
                 success:function(data){
 
-                    //   console.log(data);
-                   // alert('data : '+data);
-                        window.location =data;
+               window.location =data;
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -1402,9 +1421,9 @@ function filltemplate(data,tempdoc)
                 }
 
             });
-            ///  }else{
-            // alert('ERROR');
-            /// }
+              }else{
+             alert('ERROR');
+             }
         });
 
         $('.radio1').click(function() {
@@ -1483,17 +1502,19 @@ function filltemplate(data,tempdoc)
 
             var  type =document.getElementById('typeprest').value;
             var  gouv =document.getElementById('gouvcouv').value;
+            var  specialite =document.getElementById('specialite').value;
             if((type !="")&&(gouv !=""))
             {
                 var _token = $('input[name="_token"]').val();
 
                 document.getElementById('termine').style.display = 'none';
+                document.getElementById('choisir').style.display = 'none';
 
                 $.ajax({
                     url:"{{ route('dossiers.listepres') }}",
                     method:"post",
 
-                    data:{gouv:gouv,type:type, _token:_token},
+                    data:{gouv:gouv,type:type,specialite:specialite, _token:_token},
                     success:function(data){
 
                         //     alert('1'+data);

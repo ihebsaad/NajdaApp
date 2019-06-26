@@ -254,22 +254,26 @@
                                 <input onchange="changing(this)" type="text" class="form-control input" name="adresse" id="adresse"  value={{ $prestataire->adresse }}>
                             </div>
                         </div>
+                        <?php if ($prestataire->fax!='') {?>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Fax</label>
                                 <input onchange="changing(this)" type="text" id="fax" class="form-control" name="fax"  value={{ $prestataire->fax }}>
                             </div>
                         </div>
-
+                        <?php } ?>
                     </div>
 
                     <div class="row">
+                        <?php if ($prestataire->phone_cell!='') {?>
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Mobile 1</label>
                                 <input onchange="changing(this)" type="text" id="phone_cell" class="form-control" name="phone_cell"  value={{ $prestataire->phone_cell }}>
                             </div>
                         </div>
+                            <?php } if ($prestataire->phone_cell2!='') {?>
 
                         <div class="col-md-6">
                             <div class="form-group">
@@ -277,14 +281,19 @@
                                 <input onchange="changing(this)" type="text" id="phone_cell2" class="form-control" name="phone_cell2"  value={{ $prestataire->phone_cell2 }}>
                             </div>
                         </div>
+                            <?php } ?>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
+
+         <div class="row">
+             <?php   if ($prestataire->phone_home!='') {?>
+
+             <div class="col-md-6">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Téléphone 1</label>
                                 <input onchange="changing(this)" type="text" id="phone_home" class="form-control" name="phone_home"  value={{ $prestataire->phone_home }}>
                             </div>
                         </div>
+                 <?php } if ($prestataire->phone_home2!='') { ?>
 
                         <div class="col-md-6">
                             <div class="form-group">
@@ -292,6 +301,8 @@
                                 <input onchange="changing(this)" type="text" id="phone_home2" class="form-control" name="phone_home2"  value={{ $prestataire->phone_home2 }}>
                             </div>
                         </div>
+                 <?php } ?>
+
                     </div>
 
                     <div class="row">
@@ -455,10 +466,12 @@
         <table class="table table-striped" id="mytable" style="width:100%">
         <thead>
         <tr id="headtable">
-            <th style="width:35%">Dossier</th>
-            <th style="width:25%">Prestataire</th>
-            <th style="width:10%">Type</th>
-            <th style="width:20%">Prix</th>
+            <th style="width:10%">Dossier</th>
+            <th style="width:20%">Prestataire</th>
+            <th style="width:20%">Type</th>
+            <th style="width:20%">Spécialité</th>
+            <th style="width:20%">Gouvernorat</th>
+            <th style="width:10%">Prix</th>
         </tr>
        <!-- <tr>
             <th style="width:35%">Dossier</th>
@@ -472,18 +485,30 @@
 
         @foreach($prestations as $prestation)
             <?php $dossid= $prestation['dossier_id'];?>
+            <?php $effectue= $prestation['effectue'];
+            if($effectue ==0){$style='background-color:#fcdcd5;';}else{$style='';}
+            ?>
 
-            <tr>
-                <td style="width:35%"><a href="{{action('PrestationsController@view', $prestation['id'])}}" >
+            <tr  >
+                <td style="width:35%; <?php echo $style;?> ">
+               <a href="{{action('PrestationsController@view', $prestation['id'])}}" >
                         <?php  echo PrestationsController::DossierById($dossid);  ?>
                     </a></td>
                 <td style="width:25%">
                     <?php $prest= $prestation['prestataire_id'];
                     echo PrestationsController::PrestataireById($prest);  ?>
                 </td>
-                <td style="width:10%;">
+                <td style="width:20%;">
                     <?php $typeprest= $prestation['type_prestations_id'];
                     echo PrestationsController::TypePrestationById($typeprest);  ?>
+                </td>
+                <td style="width:20%;">
+                    <?php $specialite= $prestation['specialite'];
+                    echo PrestationsController::SpecialiteById($specialite);  ?>
+                </td>
+                <td style="width:20%;">
+                    <?php $gouvernorat= $prestation['gouvernorat'];
+                    echo PrestationsController::GouvById($gouvernorat);  ?>
                 </td>
                 <td style="width:20%">{{$prestation->price}}</td>
 
@@ -503,22 +528,20 @@
                 <table class="table table-striped" id="mytable2" style="width:100%">
                     <thead>
                     <tr id="headtable">
-                        <th style="text-align: center;width:35%">Gouvernorat</th>
-                        <th style="text-align: center;width:25%">Type</th>
+                        <th style="text-align: center;width:30%">Gouvernorat</th>
+                        <th style="text-align: center;width:30%">Type de prestation</th>
+                        <th style="text-align: center;width:30%">Spécialité</th>
                         <th style="text-align: center;width:10%">Priorité</th>
-                        <th style="text-align: center;width:10%">Disponibilité</th>
-                        <th style="text-align: center;width:20%">Evaluation</th>
-                    </tr>
+                     </tr>
 
                     </thead>
                     <tbody>
                  @foreach($evaluations as $eval)
                     <tr>
-                        <td style="text-align: center"> <?php echo PrestationsController::GouvById( $eval['gouv']) ;?> </td>
-                        <td style="text-align: center"> <?php echo PrestationsController::TypePrestationById( $eval['type_prest']) ;?></td>
-                        <td style="text-align: center"> {{$eval->priorite}} </td>
-                        <td style="text-align: center"> {{$eval->disponibilite}} </td>
-                        <td style="text-align: center"> {{$eval->evaluation}} </td>
+                        <td style="text-align: center;width:30%"><?php echo PrestationsController::GouvById( $eval['gouv']) ;?> </td>
+                        <td style="text-align: center;width:30%"><?php echo PrestationsController::TypePrestationById( $eval['type_prest']) ;?></td>
+                        <td style="text-align: center;width:30%"><?php echo PrestationsController::SpecialiteById($eval['specialite']) ;?></td>
+                        <td style="text-align: center;width:10%;"><?php echo $eval['priorite'] ;?></td>
                     </tr>
                     @endforeach
                     </tbody>

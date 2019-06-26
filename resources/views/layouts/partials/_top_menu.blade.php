@@ -18,7 +18,7 @@
               <a href="{{ route('prestataires') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                <span class="fa fa-lg fa-fw fa-user-md"></span>
                <br>
-                    Les prestataires 
+                    Les Intervenants
               </a>
           </div>
          <div class="col-md-3">

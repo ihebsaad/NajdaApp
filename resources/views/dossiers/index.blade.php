@@ -28,6 +28,7 @@
             <thead >
             <tr id="headtable">
                 <th style="width:20%">Référence</th>
+
                 <th style="width:25%">Client</th>
                 <th style="width:30%">Abonné</th>
                 <th style="width:15%">Etat</th>
@@ -42,8 +43,8 @@
             <tbody>
             @foreach($dossiers as $dossier)
                 <tr>
-                     <td style="width:20%"><a href="{{action('DossiersController@view', $dossier['id'])}}" >{{$dossier->reference_medic}}</a></td>
-                    <td style="width:25%">
+                    <td style="width:20%"><a href="{{action('DossiersController@view', $dossier['id'])}}" >{{$dossier->reference_medic}}</a> <a style="color:#a0d468" href="{{action('DossiersController@manage', $dossier['id'])}}" >Fiche</a></td>
+                     <td style="width:25%">
                         <?php $customer_id= $dossier['customer_id']; echo '<small>'. DossiersController::ClientById($customer_id).'</small>';?>
                     </td>
                     <td style="width:30%"><?php echo '<small>'.$dossier['subscriber_name'] .' '.$dossier['subscriber_lastname'] .'</small>';?></td>

@@ -245,3 +245,7 @@ storage/Emails/242/REC - SPAM ReceivedFax 25533FAX1 from NajdaAssistance7382  to
 storage/Emails/309/fax000025651.pdf
 storage/Emails/309/REC - ReceivedFax 25651FAX1 from 71906187  total 1 pages.pdf
 resources/views/dossiers/manage.blade.php
+storage/Emails/311/fax000025655.pdf
+storage/Emails/310/fax000025654.pdf
+storage/Emails/313/REC - MaxBulk Mailer Delivery Report 126 test.pdf
+storage/Emails/312/fax000025656.pdf
