@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
+
+use App\Attachement ;
 use App\Entree ;
 use App\Dossier ;
 use App\Client ;
@@ -138,6 +140,12 @@ class DocumentsController extends Controller
 
         //redirect()->route('docgen');
         //return url('/dossiers/view/'.$dossier) ;
+        // enregistrement de lattachement
+        $attachement = new Attachement([
+
+            'type'=>'doc','path' => '/app/documents/'.$refdoss.'/'.$name_file, 'nom' => $name_file,'boite'=>2,'dossier'=>$dossier
+        ]);
+        $attachement->save();
     }
 
     public function htmlfilled(Request $request)

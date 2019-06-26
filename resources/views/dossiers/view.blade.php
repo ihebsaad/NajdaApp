@@ -274,7 +274,8 @@ use App\Document ;
                     </thead>
                     <tbody>
                       @foreach($attachements as $attach)
-
+                      <?php if ($attach->boite < 2) {
+                        ?>
                         <tr>
 
                             <td style="width:15%;"><small><?php echo $attach->created_at;?></small></td>
@@ -319,6 +320,7 @@ use App\Document ;
                             <td style="width:10%"><small><?php if ($attach->boite>0) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';}else{echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}?></small></td>
 
                         </tr>
+                        <?php } ?>
                     @endforeach
 
                     </tbody>

@@ -93,11 +93,11 @@ text-overflow: ellipsis;}
 /* Time display */
 .time{
 /*position: absolute;*/
-  top: 34px;
+  top: 15px;
   left: 340px;
   font-weight: 300;
-  color: whitesmoke;
-  font-size: 36px;
+  color: #e4e4e4;
+  font-size: 22px;
 }
 
 .time b{

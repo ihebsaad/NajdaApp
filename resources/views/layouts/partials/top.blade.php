@@ -13,13 +13,14 @@
                 <img src="{{  URL::asset('public/img/logo.png') }}" alt="logo" />
             </a>
         </div>
-        <div class="col-sm-1 col-md-1 col-lg-1" style="">
-          <span  id="ndate" class="date" data-month="" data-year="" style="line-height: 1; padding-top: 13px;">
-                    <p id="njour" style="font-size: 10px; margin-bottom: 0px!important;"></p><span id="numj">13</span>
+        <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top: 5px;">
+          <span  id="ndate" class="date" data-month="" data-year="" style="width:70px;height:60px;line-height: 1; padding-top: 15px;">
+                    <span id="numj">13</span>
            </span>
         </div>
 
         <div style="min-width:100px!important;padding-top:15px;padding-left:0px!important" class="col-sm-1 col-md-1 col-lg-1">
+          <p id="njour" style="font-size: 25px; margin-bottom: 0px!important;color: white"></p>
           <div class="time">
         time</div>
         </div>
