@@ -347,7 +347,11 @@ class EmailController extends Controller
 
                     $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
                     $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
-              $user=  DB::table('users')->where('id','=', $userid )->first();
+                 
+              // $user=  DB::table('users')->where('id','=', $userid )->first();
+                //Notification::route($user, new Notif_Suivi_Doss($entree));
+                 
+                  $user=  DB::table('users')->where('id','=',1 )->first();
 
                     Notification::route($user, new Notif_Suivi_Doss($entree));
                 }
@@ -355,10 +359,12 @@ class EmailController extends Controller
                      $seance =  DB::table('seance')
                         ->where('id','=', 1 )->first();
                     $disp=$seance->dispatcheur ;
-              $user=  DB::table('users')->where('id','=', $disp )->first();
-
-                    Notification::route( $user, new Notif_Suivi_Doss($entree));
-
+                 
+                  //  $user=  DB::table('users')->where('id','=', $disp )->first();
+                  //  Notification::route( $user, new Notif_Suivi_Doss($entree));
+                 
+                  $user=  DB::table('users')->where('id','=',1 )->first();
+                    Notification::route($user, new Notif_Suivi_Doss($entree));
                 }
 
                 //$user= User::get();
