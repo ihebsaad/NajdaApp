@@ -8,6 +8,9 @@ use App\ActionEC;
 use App\Mission;
 use App\Dossier;
 use App\TypeMission;
+use App\Entree;
+use App\Envoye;
+use DB;
 use Auth;
 use App\ActionRappel;
 use Illuminate\Routing\UrlGenerator;
@@ -304,7 +307,40 @@ class ActionController extends Controller
      $Actions=$act->Actions;
     // dd($dossier);
 
-     return view('Actions.TraitementAction',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+
+     // variables retour pour fax
+
+     $ref= $dossier->reference_medic;
+        $entrees =   Entree::where('dossier', $ref)->get();
+        $envoyes =   Envoye::where('dossier', $ref)->get();
+
+         $identr=array();
+        $idenv=array();
+        foreach ($entrees as $entr)
+        {
+            array_push($identr,$entr->id );
+
+        }
+
+        foreach ($envoyes as $env)
+        {
+            array_push($idenv,$env->id );
+
+        }
+
+        $attachements= DB::table('attachements')
+            ->whereIn('entree_id',$identr )
+            ->orWhereIn('envoye_id',$idenv )
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+       // return view('emails.envoifax',['attachements'=>$attachements,'doss'=>$id]);
+
+
+     //
+
+     return view('actions.TraitementAction',['act'=>$act,'dossiers' => $dossiers,'attachements'=>$attachements,
+        'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action,'doss'=>$dossier->id], compact('dossier'));
 
     }
 
@@ -355,7 +391,7 @@ class ActionController extends Controller
 
                   Session::flash('messagekbsSucc', 'La mission en cours   '.$act->titre.' de dossier  '.$act->dossier->reference_medic .'  est maintenant achevée');            
 
-                  return view('Actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+                  return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
             }
             else
             {
@@ -482,7 +518,7 @@ class ActionController extends Controller
            Session::flash('messagekbsSucc', 'l\'action est mise en attente avec succèss');
              
 
-     return view('Actions.DossierMissionAction',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+     return view('actions.DossierMissionAction',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
 
 
         }
@@ -1052,7 +1088,7 @@ class ActionController extends Controller
         $Actions = Action::all();
 
         $Action = Action::find($id);
-        return view('Actions.view',['Actions' => $Actions], compact('Action'));
+        return view('actions.view',['Actions' => $Actions], compact('Action'));
 
     }
 
@@ -2200,7 +2236,7 @@ class ActionController extends Controller
 
                   Session::flash('messagekbsSucc', 'La mission en cours   '.$act->titre.' de dossier  '.$act->dossier->reference_medic .'  est maintenant achevée');            
 
-                  return view('Actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+                  return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
             }
             else
             {
@@ -2325,7 +2361,7 @@ public function Consultation_medicale_DV($option,$idmiss,$idact,$iddoss,$bouton)
 
                   Session::flash('messagekbsSucc', 'La mission en cours   '.$act->titre.' de dossier  '.$act->dossier->reference_medic .'  est maintenant achevée');            
 
-                  return view('Actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+                  return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
             }
             else
             {
@@ -2485,7 +2521,7 @@ public function Consultation_medicale_DV($option,$idmiss,$idact,$iddoss,$bouton)
 
                   Session::flash('messagekbsSucc', 'La mission en cours   '.$act->titre.' de dossier  '.$act->dossier->reference_medic .'  est maintenant achevée');            
 
-                  return view('Actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+                  return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
             }
             else
             {
@@ -2640,7 +2676,7 @@ public function Demande_investigation_de_dossier_douteux_DV($option,$idmiss,$ida
 
                   Session::flash('messagekbsSucc', 'La mission en cours   '.$act->titre.' de dossier  '.$act->dossier->reference_medic .'  est maintenant achevée');            
 
-                  return view('Actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+                  return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
             }
             else
             {
@@ -2733,7 +2769,7 @@ public function Demande_plan_vol_ou_de_traversee_DV($option,$idmiss,$idact,$iddo
 
                   Session::flash('messagekbsSucc', 'La mission en cours   '.$act->titre.' de dossier  '.$act->dossier->reference_medic .'  est maintenant achevée');            
 
-                  return view('Actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+                  return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
             }
             else
             {

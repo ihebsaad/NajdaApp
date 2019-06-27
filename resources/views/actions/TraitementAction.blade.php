@@ -630,6 +630,9 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
       </script>
 
+
+     {{-- @include('emails.envoimail');--}}
+
       
     </div>
   </div>
@@ -644,25 +647,8 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
     <p>
       <!-- Envoyer un SMS  Whatsapp ---------------------------------------------------------------------------------->
       
-    <form method="post" action="{{action('EmailController@sendwhatsapp')}}" >
-    <div class="form-group">
-        {{ csrf_field() }}
-        <label for="destinataire">Destinataire:</label>
-        <input id="destinataire" type="text" class="form-control" name="destinataire"    />
-    </div>
-
-    <div class="form-group">
-        <label for="contenu">Message:</label>
-        <textarea  type="text" class="form-control" name="message"></textarea>
-        {!! NoCaptcha::renderJs() !!}
-
-    </div>
-        <div class="form-group">
-        <button  type="submit"  class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
-        </div>
-
-    </form>
-
+   
+ @include('emails.smsAction');
 
     </p>
     <!-- Fin Envoyer un SMS  Whatsapp ---------------------------------------------------------------------------------->
@@ -674,8 +660,9 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
   </div>
 
   <div id="menu4" class="tab-pane fade">
-    <h3>Fax</h3>
-    <p>gestion de Fax</p>
+   <!-- <h2>Envoi de Fax</h2>-->
+  
+     @include('emails.envoifaxAction');
   </div>
 
   <div id="menu5" class="tab-pane fade">
