@@ -293,7 +293,7 @@ class EmailController extends Controller
             $sujet=($oMessage->getSubject())  ;
 
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
-            $contenu= $oMessage->getHTMLBody(true);
+            $contenu= utf8_encode($oMessage->getHTMLBody(true));
           //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
