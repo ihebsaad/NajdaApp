@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Auth;
 
  use Auth as auth2 ;
 use App\Parametre;
-use Illuminate\Notifications\Notification;
+use Notification;
 
 
 class EmailController extends Controller
@@ -352,8 +352,8 @@ class EmailController extends Controller
                 }
                 else{
                      $seance =  DB::table('seance')
-                        ->where('id','=', 1 );
-                    $disp=$seance['dispatcheur'];
+                        ->where('id','=', 1 )->first();
+                    $disp=$seance->dispatcheur ;
 
                     Notification::send($disp, new Notif_Suivi_Doss($entree));
 
