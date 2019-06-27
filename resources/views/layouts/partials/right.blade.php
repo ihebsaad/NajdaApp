@@ -894,18 +894,19 @@ $(document).ready(function() {
               //$("#contenuNotes").prepend(data);
               var sound = document.getElementById("audiokbs");
               sound.setAttribute('src', "{{URL::asset('public/media/point.mp3')}}");
-              sound.play();
+             // sound.play();
 
              // alertify.alert("Note","Une nouvelle note est activée").show();
 
-             var r = confirm(data+'\n'+ 'Si vous voulez afficher maintenant les nouvelles actions actives dans l\'onglet des missions cliquez sur OK (Attention  la page sera rechargée et vos données peuvent être perdues !). \n Sinon vous pouvez annuler et consulter les actions ultèrieurement');
+            /* var r = confirm(data+'\n'+ 'Si vous voulez afficher maintenant les nouvelles actions actives dans l\'onglet des missions cliquez sur OK (Attention  la page sera rechargée et vos données peuvent être perdues !). \n Sinon vous pouvez annuler et consulter les actions ultèrieurement');
               if (r == true) {
                 location.reload();
             } else {
               txt = "You pressed Cancel!";
-             }
+             }*/
 
-          //alert(data);
+           alert(data);
+           location.reload();
 
             
            }
