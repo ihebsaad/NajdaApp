@@ -272,25 +272,32 @@ console.log(parsed);*/
 
           }
         }
-        else
-        {  
-          // ajout de la nouvelle node (notification non dispatche)
-          $('#jstree').jstree().create_node("#" ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['sujet'] , "type" : typee, "a_attr":{"href":"{{ asset('entrees/show/') }}"+"/"+parsed['data']['entree']['id']}}, "first", function(){
-            // animation de nouvelle notification
-              setInterval(function(){
-                $("#"+parsed['data']['entree']['id']).toggleClass("newnotif");
-             },400);
-             // scroll vers lemplacement de la notification
-            $('#notificationstab').scrollTop(
-                $("#"+parsed['data']['entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
-            );
-          });
-            $('#jstree').bind("select_node.jstree", function (e, data) {
-                 var href = data.node.a_attr.href;
-                 document.location.href = href;
-            });
-        }
+        else {
+          <?php  if (Session::get('disp') != 0) { ?>
 
+                // ajout de la nouvelle node (notification non dispatche)
+                $('#jstree').jstree().create_node("#", {
+                    "id": parsed['data']['entree']['id'],
+                    "text": parsed['data']['entree']['sujet'],
+                    "type": typee,
+                    "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" + parsed['data']['entree']['id']}
+                }, "first", function () {
+                    // animation de nouvelle notification
+                    setInterval(function () {
+                        $("#" + parsed['data']['entree']['id']).toggleClass("newnotif");
+                    }, 400);
+                    // scroll vers lemplacement de la notification
+                    $('#notificationstab').scrollTop(
+                        $("#" + parsed['data']['entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
+                    );
+                });
+                $('#jstree').bind("select_node.jstree", function (e, data) {
+                    var href = data.node.a_attr.href;
+                    document.location.href = href;
+                });
+            <?php } ?>
+
+        }
 
         // notification desktop
 

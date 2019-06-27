@@ -37,9 +37,8 @@
  <link href="{{ URL::asset('public/css/datepicker.css') }}" rel="stylesheet">
 
  <!-- end of global css -->
-     <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/styles.css') }}" />
+ <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/styles.css') }}" />
  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-
 
  <!--page level css-->
     @yield('header_styles')
@@ -183,12 +182,12 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 }
             });
         }
+
         checkemails();
         checkemails2();
         checksms();
         checkboite();
         checkfax();
-
 
     });
 </script>

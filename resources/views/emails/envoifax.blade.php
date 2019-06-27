@@ -18,7 +18,7 @@
 
     <div class="form-group">
         {{ csrf_field() }}
-        <label for="description">Description:</label>
+        <label for="description">Objet:</label>
         <div class="row">
             <div class="col-md-10">
                 <input id="description" type="text" class="form-control" name="description" required />

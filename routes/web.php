@@ -52,8 +52,9 @@ Route::post('/home/fetch', 'HomeController@fetch')->name('home.fetch');
 /*** Entrees **/
 /* tous les emails (tous les entrees) dans la base */
 Route::get('/entrees/boite', array('as' => 'boite','uses' => 'EntreesController@boite'));
-Route::get('/entrees/',  'EntreesController@index');
+Route::get('/entrees/',  'EntreesController@index')->name('entrees.index');
 Route::post('/entrees/saving','EntreesController@saving')->name('entrees.saving');
+Route::get('/entrees/dispatching','EntreesController@dispatching')->name('entrees.dispatching');
 Route::get('/entrees/view/{id}', 'EntreesController@view');
 Route::get('/entrees/show/{id}', 'EntreesController@show');
 Route::get('/entrees/pdf/{id}', 'EntreesController@pdf');
@@ -63,6 +64,7 @@ Route::get('/entrees/destroy/{id}', 'EntreesController@destroy');
 Route::get('/entrees/archiver/{id}', 'EntreesController@archiver');
 Route::get('/entrees/archive/', 'EntreesController@archive')->name('entrees.archive');
 Route::post('/entrees/savecomment','EntreesController@savecomment')->name('entrees.savecomment');
+Route::post('/entrees/dispatchf','EntreesController@dispatchf')->name('entrees.dispatchf');
 
 
 

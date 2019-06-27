@@ -1,0 +1,101 @@
+ 
+ 
+	<style type="text/css">
+		@page { margin-left: 1in; margin-right: 0.69in; margin-top: 0.3in; margin-bottom: 0.07in }
+		p { margin-bottom: 0.1in; direction: ltr; line-height: 120%; text-align: left; orphans: 2; widows: 2 }
+	</style>
+   <?php  $urlapp=env('APP_URL');
+
+    if (App::environment('local')) {
+        // The environment is local
+        $urlapp='http://localhost/najdaapp';
+    }
+	?>
+	<div style="width:100%">
+<img src="<?php echo $urlapp ?>/public/img/najda.png" style="width:80px;float: right;margin-right:60px;margin-top:40px;margin-bottom:50px;">
+ </div>
+ <br> <br> <br> <br>
+<p style="margin-bottom: 0.08in; text-transform: uppercase; line-height: 100%"><a name="_GoBack"></a>
+<font style="font-family: Comic Sans MS;"><font size="7" style="font-size: 48pt"><b> F A X </b></font></font><br><br>
+</p>
+<table width="98%" cellpadding="0" cellspacing="0">
+	<col width="54*">
+	<col width="78*">
+	<col width="35*">
+	<col width="89*">
+	<tr valign="top">
+		<td width="21%" height="39" style="border-top: none; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><b>À&nbsp;:</b></font></p>
+		</td>
+		<td width="30%" style="border-top: none; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><?php echo $nom?></font></p>
+		</td>
+		<td width="14%" style="border-top: none; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><b>De&nbsp;:</b></font></p>
+		</td>
+		<td width="35%" style="border-top: none; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;">Najda Assistance </font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="21%" height="39" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><b>Télécopie&nbsp;:</b></font></p>
+		</td>
+		<td width="30%" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><?php echo $fax;?></font></p>
+		</td>
+		<td width="14%" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><b></b></font></p>
+		</td>
+		<td width="35%" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"> +216 73 000 000 </font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="21%" height="39" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><b></b></font></p>
+		</td>
+		<td width="30%" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"></font></p>
+		</td>
+		<td width="14%" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><b></b></font></p>
+		</td>
+		<td width="35%" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"> </font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="21%" height="39" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><b></b></font></p>
+		</td>
+		<td width="30%" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"> </font></p>
+		</td>
+		<td width="14%" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><b>Date&nbsp;:</b></font></p>
+		</td>
+		<td width="35%" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><?php echo $date;?></font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="21%" height="38" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><b>Objet&nbsp;:</b></font></p>
+		</td>
+		<td colspan="3" width="79%" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><?php echo $sujet; ?></font></p>
+		</td>
+	</tr>
+</table>
+<br><br><br>
+
+<div title="footer" style="font-size:10px;margin-top:220px;">
+<p align="right" style="margin-right: 0.02in"><B></i>Najda Assistance</i></B><br><B>Tel :</b> (+216) 36 00 36 00<br><B>Email: </B>contact@najda-assistance.com<br><B>Site Web: </B>www.najda-assistance.com 
+			<br><b>Adresse:</b> Rue Mohamed Hamdane, Sahloul 3, Sousse 4054</p>
+	 
+	</table>
+	<p style="margin-bottom: 0in; line-height: 100%"><br/>
+	</p>
+</div>
+ </html>

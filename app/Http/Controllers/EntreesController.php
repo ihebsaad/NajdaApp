@@ -39,8 +39,22 @@ class EntreesController extends Controller
 
     }
 
-    
-     public function boite()
+    public function dispatching()
+    {
+        //
+        $entrees = Entree::orderBy('id', 'desc')
+            ->where('statut','<','2')
+            ->where('dossier','=','')
+            ->paginate(10000000);
+
+        $dossiers = Dossier::orderBy('id', 'desc')->where('statut','<','2');
+
+        return view('entrees.dispatching',['dossiers' => $dossiers], compact('entrees'));
+
+    }
+
+
+    public function boite()
     {
        // Log::info('Accès à la boite des entrées - utilisateur: Mounir Tounsi');
 
@@ -159,7 +173,7 @@ class EntreesController extends Controller
 
 
 
-    public function update(Request $request, $id)
+    public function update(  $id)
     {
 
 
@@ -180,7 +194,7 @@ class EntreesController extends Controller
          $entree->statut = 3;  // 3 = archivé
           $entree->save();
 
-        return redirect('/entrees/boite')->with('success', '  Archivé avec succès');
+        return redirect('/entrees')->with('success', '  Archivé avec succès');
     }
 
     public function destroy($id)
@@ -188,7 +202,7 @@ class EntreesController extends Controller
         $entree = Entree::find($id);
         $entree->delete();
 
-        return redirect('/entrees/boite')->with('success', '  Supprimé avec succès');
+        return redirect('/entrees')->with('success', '  Supprimé avec succès');
     }
 
     public static function countarchives()
@@ -271,6 +285,22 @@ class EntreesController extends Controller
         }
 
      }
+
+    public   function dispatchf(Request $request)
+    {
+        $identree   =$request->get('entree');
+        $dossier  =$request->get('dossier');
+
+
+        $entree = Entree::find($identree);
+
+        $entree->dossier=$dossier;
+
+        $entree->save();
+        return url('/entrees/show/'.$identree)/*->with('success', 'Dossier Créé avec succès')*/;
+
+    }
+
 
 
 

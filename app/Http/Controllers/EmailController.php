@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Adresse;
 use App\Boite;
 use App\Email;
+use App\Notifications\Notif_Suivi_Doss;
 use App\Prestation;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -21,9 +22,10 @@ use App\Envoye ;
 use PDF as PDF2;
 use Illuminate\Support\Facades\Auth;
 
- use Notification;
-use Auth as auth2 ;
+ use Auth as auth2 ;
 use App\Parametre;
+use Illuminate\Notifications\Notification;
+
 
 class EmailController extends Controller
 {
@@ -317,6 +319,9 @@ class EmailController extends Controller
                 }
         }
 
+
+
+
                 $entree = new Entree([
                     'destinataire' => 'test@najda-assistance.com',
                     'emetteur' => ($from),
@@ -334,11 +339,35 @@ class EmailController extends Controller
                 ]);
 
                 $entree->save();
+
+
+                /*********************/
+                if($refdossier!= ''){
+
+
+                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                    $user = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+
+                    Notification::send($user, new Notif_Suivi_Doss($entree));
+                }
+                else{
+                     $seance =  DB::table('seance')
+                        ->where('id','=', 1 );
+                    $disp=$seance['dispatcheur'];
+
+                    Notification::send($disp, new Notif_Suivi_Doss($entree));
+
+                }
+
+                //$user= User::get();
+                // Notification::send($user, new Notif_Suivi_Doss($entree));
+
+
                 // Dispatching
                 //$this->disp();
                 $id=$entree->id;
 
-                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
+                  //   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
                     if($storeid==false){
                     $firstid=$id;
@@ -1477,9 +1506,10 @@ class EmailController extends Controller
     function sendfax (Request $request)
     {
 
-                 $request->validate([
+               /*  $request->validate([
                       'g-recaptcha-response' => 'required|captcha'
                   ]);
+                 */
 
         $doss = $request->get('dossier');
 
@@ -1491,8 +1521,8 @@ class EmailController extends Controller
 
         $cc='ihebsaad@gmail.com';
         //  $cc='';
-        //  $to='ihebsaad@gmail.com';
-        $to='envoifax@najda-assistance.com';
+           $to='ihebsaad@gmail.com';
+      ////////////  $to='envoifax@najda-assistance.com';
         $sujet='1234,Najda,najda,'.$nom.'@'.$numero.'';
 
 
@@ -1506,7 +1536,7 @@ class EmailController extends Controller
 
 
         try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$attachs,$doss,$cc,$numero,$description) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$attachs,$doss,$cc,$numero,$description,$nom) {
                 $message
                     ->to($to)
                     //   ->cc($cc  ?: [])
@@ -1516,8 +1546,21 @@ class EmailController extends Controller
 
                 $count=0;
 
-/// attach here
-///
+               $date=date('d/m/Y H:i');
+
+                 $filename=$nom.'-'.$date.' cover';
+
+                $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+
+               $this->garde_pdf($description,$numero,$date,$nom);
+                $fullpath=storage_path().'/Covers/'.$name.'.pdf';
+
+                $name=basename($fullpath);
+                $mime_content_type=mime_content_type ($fullpath);
+
+                $message->attach($fullpath, array(
+                    'as' =>$name,
+                    'mime' => $mime_content_type));
 
                 if(isset($attachs )) {
 
@@ -1650,8 +1693,6 @@ class EmailController extends Controller
                     ->subject($sujet)
                     ->setBody($contenu, 'text/html');
 
-
-
             });
 
             var_dump( Mail:: failures());
@@ -1662,7 +1703,6 @@ class EmailController extends Controller
         }
 
     }// end accuse
-
 
 
 
@@ -1690,6 +1730,32 @@ class EmailController extends Controller
             'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>1,'envoye_id'=>$id,'parent'=>$id,
         ]);
         $attachement->save();
+    }
+
+
+    public function garde_pdf($sujet,$fax,$date,$nom)
+    {
+        // Fetch all customers from database
+        // Send data to the view using loadView function of PDF facade
+        $pdf = PDF2::loadView('envoyes.garde', ['date' => $date,'sujet'=>$sujet,'fax'=>$fax,'nom'=>$nom  ])->setPaper('a4', '');
+
+        $path= storage_path()."/Covers/";
+
+        $filename=$nom.'-'.$date.' cover';
+        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+
+
+        $pdf->save($path.'/'.$name.'.pdf');
+
+        $path2='/Covers/'.$name.'.pdf';
+
+        $attachement = new Attachement([
+
+            'type'=>'pdf','path' => $path2, 'nom' => $name,'boite'=>4, 'parent'=>$sujet.'date-'.$date,
+        ]);
+
+        $attachement->save();
+
     }
 
     function test()

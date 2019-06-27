@@ -34,6 +34,7 @@ use App\Http\Controllers\TagsController;
                                 @endif
                                 @if (empty($entree->dossier))
                                         <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
+                                        <button id="afffolder" class="btn   " style="background-color: #c5d6eb;color:#333333;"  data-toggle="modal" data-target="#affectfolder"><b><i class="fas fa-folder"></i> Dispatcher</b></button>
                                  @endif
                                 <a  href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-info btn-sm btn-responsive traiter" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
                                   <span class="fa fa-fw fa-check"></span> Traité
@@ -217,6 +218,47 @@ $users=UsersController::ListeUsers();
 ?>
 
 
+
+<!-- Modal -->
+<div class="modal fade" id="affectfolder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Dispatcher</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+                    <form method="post" >
+                        {{ csrf_field() }}
+
+                        <div class="form-group">
+                            <label for="type">Dossier :</label>
+                         <select id ="affdoss">
+                             <option></option>
+                         <?php foreach($dossiers as $ds)
+
+                               {
+                               echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';
+                             }
+                                         ?>
+                         </select>
+                        </div>
+
+
+                    </form>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" id="updatefolder" class="btn btn-primary">Dispatcher</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal -->
 <div class="modal fade" id="createfolder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -376,7 +418,26 @@ $urlapp='http://localhost/najdaapp';
 
         });
 
+        $('#updatefolder').click(function(){
+            var entree = $('#entreeid').val();
+            var dossier = $('#affdoss').val();
 
+
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('entrees.dispatchf') }}",
+                method:"POST",
+                data:{entree:entree,dossier:dossier, _token:_token},
+                success:function(data){
+
+                    window.location =data;
+
+
+
+                }
+            });
+
+        });
 
 
 

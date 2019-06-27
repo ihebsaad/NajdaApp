@@ -524,9 +524,9 @@ class DossiersController extends Controller
         return redirect('/dossiers')->with('success', '  has been deleted Successfully');
     }
 
-    public static function IdDossierByRef($id)
+    public static function IdDossierByRef($ref)
     {
-        $dossier =  Dossier::where('reference_medic',$id)->first();
+        $dossier =  Dossier::where('reference_medic',$ref)->first();
         if (isset($dossier['id'])) {
             return $dossier['id'];
         }else{return '';}

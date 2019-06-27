@@ -29,7 +29,7 @@ class ActualitesController extends Controller
      */
     public function index()
     {
-        $dossiers = Dossier::all();
+        $dossiers = Dossier::get();
  
         $actualites = Actualite::orderBy('id', 'desc')->paginate(10000000);
         return view('actualites.index',['dossiers' => $dossiers], compact('actualites'));
@@ -174,7 +174,9 @@ class ActualitesController extends Controller
 
     public  static function Liste()
     {
-        $actualites = Actualite::all();
+       // $actualites = Actualite::all();
+        $actualites = Actualite::orderBy('id', 'desc')->paginate(10000000);
+
 
         return $actualites;
 
