@@ -349,7 +349,7 @@ class EmailController extends Controller
                     $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
               $user=  DB::table('users')->where('id','=', $userid )->first();
 
-                    Notification::send($user, new Notif_Suivi_Doss($entree));
+                    Notification::route($user, new Notif_Suivi_Doss($entree));
                 }
                 else{
                      $seance =  DB::table('seance')
@@ -357,7 +357,7 @@ class EmailController extends Controller
                     $disp=$seance->dispatcheur ;
               $user=  DB::table('users')->where('id','=', $disp )->first();
 
-                    Notification::send( $user, new Notif_Suivi_Doss($entree));
+                    Notification::route( $user, new Notif_Suivi_Doss($entree));
 
                 }
 
