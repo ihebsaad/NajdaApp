@@ -98,7 +98,7 @@ class DossiersController extends Controller
         $annee = date('y');
 
 
-        if ($type_affectation == 'Najda') {
+        if ($type_affectation == 'NAJDA') {
             $maxid = $this->GetMaxIdBytype('Najda');
             $reference_medic = $annee . 'N' . sprintf("%'.04d\n", $maxid+1);
         }
@@ -592,7 +592,7 @@ class DossiersController extends Controller
     {
         $annee=date('y');
         $maxid =  Dossier::where('type_affectation', $type)
-            ->where('type_affectation','like', $annee.'%')
+            ->where('reference_medic','like', $annee.'%')
              ->max('id');
 
              return intval($maxid+1);
