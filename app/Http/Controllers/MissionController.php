@@ -442,13 +442,15 @@ class MissionController extends Controller
          $missR=Mission::where('date_deb','<=', $dtc)->where('user_id', Auth::user()->id)->where('statut_courant','reportee')
          ->orderBy('date_deb', 'asc')->first();
 
-         $FactionMiss=ActionEC::where('mission_id',$missR->id)->where('ordre',1)->first();
+        
 
                          $output='';
 
 
 
                        if($missR){
+
+                         $FactionMiss=ActionEC::where('mission_id',$missR->id)->where('ordre',1)->first();
                          
                            //$output.='<div>'. $note->id.'</div>';
 

@@ -1010,6 +1010,70 @@ var hrefidAcheverM;
     </div>
 </div>
 
+
+
+
+<!-- gestion des affectations des nouveaux dossiers par le dispatcheur-->
+
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript">
+  
+
+
+
+    setInterval(function(){
+ //alert("Hello"); 
+
+  var userIdConnec = $('meta[name="userId"]').attr('content');
+     
+    $.ajax({
+       url : '{{ url('/') }}'+'/getNotificationAffectationDoss/'+userIdConnec,
+       type : 'GET',
+       dataType : 'html', // On désire recevoir du HTML
+       success : function(data){ // code_html contient le HTML renvoyé
+           //alert (data);
+
+           if(data)
+           {
+          
+           // var idUserAffecte=jQuery(data).find('.userAff').attr("id");
+           // var refdoss=jQuery(data).find('.refdoss').attr("id");
+           
+
+           swal(data);
+
+          // location.reload(); 
+            /* if(idUserAffecte==userIdConnec)
+             {
+
+                 alert('un nouveau dossier dont la réf : '+refdoss +'est affecté à vous');
+                 location.reload(); 
+
+
+             }*/
+            
+              
+       
+
+            
+           }
+       }
+    });
+   
+
+
+}, 5000);
+
+
+
+
+</script>
+
+
+
+
 <!-- gestion les reports et l'attente de réponse des actions (pour les rappels mission voir right blade)-->
 
 

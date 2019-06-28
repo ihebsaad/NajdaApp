@@ -23,7 +23,11 @@ use App\Http\Controllers\TagsController;
 
 
 <div class="panel panel-default panelciel " style="">
-
+ @if(session()->has('AffectNouveauDossier'))
+    <div class="alert alert-success">
+       <center> <h4>{{ session()->get('AffectNouveauDossier') }}</h4></center>
+    </div>
+  @endif
         <div class="panel-heading" style="">
                     <div class="row">
                         <div  style=" padding-left: 0px;color:black;font-weight: bold ;margin-bottom:15px;">
@@ -265,6 +269,7 @@ $users=UsersController::ListeUsers();
 
 <!-- Modal -->
 <div class="modal fade" id="createfolder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="{{ url('/entrees/show/affecterNouveauDossier')}}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -274,7 +279,7 @@ $users=UsersController::ListeUsers();
             <div class="modal-body">
                      <div class="card-body">
 
-                        <form method="post" >
+                        <!--<form method="post" >-->
                             {{ csrf_field() }}
 
                             <div class="form-group">
@@ -306,23 +311,28 @@ $users=UsersController::ListeUsers();
                                 <select   id="affecte" name="affecte"   class="form-control js-example-placeholder-single">
                                 @foreach($users as $user  )
                                     <option
-                                     @if($user->id==$iduser)selected="selected"@endif
+                                     @if($user->id==$iduser)
+                                     selected="selected"
+                                     @endif
 
                                     value="{{$user->id}}">{{$user->name}}</option>
 
                                 @endforeach
                                 </select>
                             </div>
-                         </form>
+
+                            <input type="hidden" value="{{Auth::user()->id}}" name="affecteur">
+                        <!-- </form>-->
                     </div>
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="button" id="add" class="btn btn-primary">Ajouter</button>
+                <button type="submit" id="add" class="btn btn-primary">Ajouter</button>
             </div>
         </div>
     </div>
+</form>
 </div>
 
 
@@ -377,7 +387,7 @@ $urlapp='http://localhost/najdaapp';
 
     $( document ).ready(function() {
 
-        $('#add').click(function(){
+        /*$('#add').click(function(){
             var type_dossier = $('#type_dossier').val();
              var type_affectation = $('#type_affectation').val();
             var affecte = $('#affecte').val();
@@ -399,7 +409,7 @@ $urlapp='http://localhost/najdaapp';
             }else{
                // alert('ERROR');
             }
-        });
+        });*/
 
 
         $('#sending').click(function(){

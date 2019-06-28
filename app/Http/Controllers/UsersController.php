@@ -8,6 +8,7 @@ use App\Entree ;
 use App\Dossier ;
 use App\User ;
 use App\Role ;
+use App\Seance ;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Session;
@@ -293,19 +294,34 @@ class UsersController extends Controller
     {
         $typeuser= $request->get('type');
 
+        $seance =   Seance::first();
+          
+
         if ($typeuser == "agent")
         {
             $disp = $request->get('disp');
             Session::put('disp', $disp);
+            if ($disp !== '0')
+              { $seance->dispatcheur=Auth::id();}
             $supmedic = $request->get('supmedic');
             Session::put('supmedic', $supmedic);
+            if ($supmedic !== '0')
+              { $seance->superviseurmedic=Auth::id();}
             $suptech = $request->get('suptech');
             Session::put('suptech', $suptech);
+            if ($suptech !== '0')
+              { $seance->superviseurtech=Auth::id();}
             $chrgtr = $request->get('chrgtr');
             Session::put('chrgtr', $chrgtr);
+            if ($chrgtr !== '0')
+              { $seance->chargetransport=Auth::id();}
             $disptel = $request->get('disptel');
             Session::put('disptel', $disptel);
+            if ($disptel !== '0')
+              { $seance->dispatcheurtel=Auth::id();}
         }
+
+        $seance->save();
 
     }
 

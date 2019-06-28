@@ -624,7 +624,7 @@ class DossiersController extends Controller
     }
     public  static function ListeDossiersAffecte()
     {
-        $dossiers = Dossier::where('affecte',Auth::id())->get();
+        $dossiers = Dossier::where('affecte',Auth::id())->orderBy('updated_at','desc')->get();
 
         return $dossiers;
 
