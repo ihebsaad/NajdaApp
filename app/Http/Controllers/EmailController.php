@@ -13,6 +13,7 @@ use Swift_Mailer;
 use Webklex\IMAP\Client;
 use App\Entree ;
 use App\Dossier ;
+use App\User ;
 use App\Attachement ;
 use Mail;
 use Spatie\PdfToText\Pdf;
@@ -348,17 +349,23 @@ class EmailController extends Controller
                     $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
                     $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
                  
-                $user=  DB::table('users')->where('id','=', $userid )->first();
-                 Notification::send($user, new Notif_Suivi_Doss($entree));
+              //  $user=  DB::table('users')->where('id','=', $userid )->first();
+                     $user = User::find($userid);
+
+                    $user->notify(new Notif_Suivi_Doss($entree));
+                // Notification::send($user, new Notif_Suivi_Doss($entree));
                   
                 }
                 else{
                      $seance =  DB::table('seance')
                         ->where('id','=', 1 )->first();
                     $disp=$seance->dispatcheur ;
-                 
-                    $user=  DB::table('users')->where('id','=', $disp )->first();
-                     Notification::send( $user, new Notif_Suivi_Doss($entree));
+
+                    $user = User::find($disp);
+                   // $user=  DB::table('users')->where('id','=', $disp )->first();
+                    $user->notify(new Notif_Suivi_Doss($entree));
+
+                  //  Notification::send( $user, new Notif_Suivi_Doss($entree));
                   
                 }
 
