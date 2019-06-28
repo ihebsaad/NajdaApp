@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\Notif_Suivi_Doss;
 use App\Parametre;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
 use App\Entree ;
+use App\User ;
 use App\Dossier ;
 use App\Attachement ;
  use DB;
 use Illuminate\Support\Facades\Auth;
-
+use Notification;
 use PDF;
 
 class EntreesController extends Controller
@@ -297,6 +299,16 @@ class EntreesController extends Controller
         $entree->dossier=$dossier;
 
         $entree->save();
+
+        // Notification
+       // $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+        $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossier);
+
+        //  $user=  DB::table('users')->where('id','=', $userid )->first();
+        $user = User::find($userid);
+
+        $user->notify(new Notif_Suivi_Doss($entree));
+
         return url('/entrees/show/'.$identree)/*->with('success', 'Dossier Créé avec succès')*/;
 
     }

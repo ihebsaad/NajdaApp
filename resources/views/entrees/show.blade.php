@@ -17,8 +17,10 @@ use App\Http\Controllers\TagsController;
 {{-- page level styles --}}
 @section('header_styles')
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/custom_css/layout_responsive.css') }}">
+
 @stop
 @section('content')
+
 
 <div class="panel panel-default panelciel " style="">
 
@@ -224,7 +226,7 @@ $users=UsersController::ListeUsers();
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Dispatcher</h5>
+                <h3 style="text-align:center" class="modal-title" id="exampleModalLabel">Dispatcher</h3>
 
             </div>
             <div class="modal-body">
@@ -235,15 +237,14 @@ $users=UsersController::ListeUsers();
 
                         <div class="form-group">
                             <label for="type">Dossier :</label>
-                         <select id ="affdoss"  class="select2">
+                         <select id ="affdoss"  class="form-control " style="width: 120px">
                              <option></option>
                          <?php foreach($dossiers as $ds)
 
                                {
-                               echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';
-                             }
-                                         ?>
+                               echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
                          </select>
+                            <br><br><br>
                         </div>
 
 
@@ -359,7 +360,6 @@ $users=UsersController::ListeUsers();
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="{{ URL::asset('resources/assets/js/spectrum.js') }}"></script>
 <script src="{{ URL::asset('resources/assets/js/jquery.marker.js') }}"></script>
-<script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
 
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/spectrum.css') }}">
 <?php
@@ -373,7 +373,6 @@ $urlapp='http://localhost/najdaapp';
 <script>
 
     $( document ).ready(function() {
-        $("#affdoss").select2();
 
         $('#add').click(function(){
             var type_dossier = $('#type_dossier').val();
