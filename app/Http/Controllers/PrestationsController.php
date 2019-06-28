@@ -98,7 +98,11 @@ class PrestationsController extends Controller
            if ($prestation->save())
            {
                $id=$prestation->id;
-         //   return redirect('/prestations/view/'.$id)->with('success', 'ajouté avec succès ');
+
+               $prestataire = Prestataire::find($prest);
+               $prestataire->derniere_prestaton= date('Y-m-d H:i:s.u');
+               $prestataire->save();
+               //   return redirect('/prestations/view/'.$id)->with('success', 'ajouté avec succès ');
                return url('/prestations/view/'.$id);
            }
             //

@@ -26,10 +26,11 @@ use App\Http\Controllers\TagsController;
 
         <div class="panel-heading" style="">
                     <div class="row">
-                        <div class="col-sm-4 col-md-4 col-lg-6"style=" padding-left: 0px;color:black;font-weight: bold ">
-                            <h4 class="panel-title"> <label for="sujet" style="overflow:hidden;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet']; echo ($sujet); ?></h4>
+                        <div  style=" padding-left: 0px;color:black;font-weight: bold ;margin-bottom:15px;">
+                            <h4 class="panel-title  "> <label for="sujet" style=" ;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet']; echo ($sujet); ?></h4>
                         </div>
-                        <div class="col-sm-8 col-md-8 col-lg-6" style="padding-right: 0px;">
+                    </div>
+                        <div class="row" style="padding-right: 10px;">
                             <div class="pull-right" style="margin-top: 0px;">
                                 @if (!empty($entree->dossier))
                                     <button class="btn btn-sm btn-default"><b>REF: {{ $entree['dossier']   }}</b></button>
@@ -38,9 +39,12 @@ use App\Http\Controllers\TagsController;
                                         <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
                                         <button id="afffolder" class="btn   " style="background-color: #c5d6eb;color:#333333;"  data-toggle="modal" data-target="#affectfolder"><b><i class="fas fa-folder"></i> Dispatcher</b></button>
                                  @endif
-                                <a  href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-info btn-sm btn-responsive traiter" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
-                                  <span class="fa fa-fw fa-check"></span> Traité
+                                <a  href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-warning btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Archiver" >
+                                  <span class="fa fa-fw fa-archive"></span> Archivé
                                 </a>
+                                    <a  href="{{action('EntreesController@traiter', $entree['id'])}}" class="btn btn-info btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
+                                        <span class="fa fa-fw fa-check"></span> Traité
+                                    </a>
                                     @if (!empty($entree->dossier))
                                     <button  id="accuse"   data-toggle="modal" data-target="#sendaccuse" class="btn btn-info btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer l'accusé de reception" >
                                         <i class="fas fa-mail-bulk"></i> Accusé
@@ -49,8 +53,7 @@ use App\Http\Controllers\TagsController;
                             </div>
                         </div>
 
-                    </div>
-                    
+
                  </a>
         </div>
         <div id="emailhead" class="panel-collapse collapse in" aria-expanded="true" style="">

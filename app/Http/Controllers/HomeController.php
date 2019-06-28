@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use DB;
 use Spatie\Searchable\Search;
@@ -31,6 +32,15 @@ class HomeController extends Controller
     {
         return view('roles');
     }
+
+
+    public function parametres()
+    {
+        $users = User::get();
+
+        return view('parametres',['users'=>$users]);
+    }
+
 
     public function index()
     {
@@ -72,6 +82,18 @@ class HomeController extends Controller
         }
         return view('home', ['countries' => $countries,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'dossiers' => $dossiers,'notifications'=>$result]);
      }
+
+
+    public function parametring(Request $request)
+    {
+
+         $champ= strval($request->get('champ'));
+        $val= $request->get('val');
+
+       // Seance::where('id', $id)->update(array($champ => $val));
+
+
+    }
 
     function fetch(Request $request)
     {

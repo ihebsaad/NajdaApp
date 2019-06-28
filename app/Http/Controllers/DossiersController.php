@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Adresse;
+use App\Evaluation;
 use App\Prestataire;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -646,11 +647,11 @@ class DossiersController extends Controller
         $gouv = $request->get('gouv');
         $type = $request->get('type');
         $spec = $request->get('specialite');
-        $liste = DB::table('evaluations')
-            ->where('gouv',$gouv )
+        $liste =Evaluation::where('gouv',$gouv )
             ->where('type_prest',$type )
             ->where('specialite',$spec )
-            ->orderBy('priorite', 'asc')
+            ->orderBy(['priorite', 'derniere_prestation'])
+         //  ->orderBy('derniere_prestation')
             ->get();
 
 

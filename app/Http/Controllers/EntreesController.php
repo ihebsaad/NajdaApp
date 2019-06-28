@@ -13,7 +13,7 @@ use App\Dossier ;
 use App\Attachement ;
  use DB;
 use Illuminate\Support\Facades\Auth;
-use Notification;
+use App\Notification;
 use PDF;
 
 class EntreesController extends Controller
@@ -189,7 +189,7 @@ class EntreesController extends Controller
     }
 
 
-    public function archiver( $id)
+    public static function archiver( $id)
     {
 
         $entree = Entree::find($id);
@@ -198,6 +198,23 @@ class EntreesController extends Controller
 
         return redirect('/entrees')->with('success', '  Archivé avec succès');
     }
+
+
+    public static function traiter( $id)
+    {
+
+        $notifid = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$id.'}}\')')->get(['id']);
+        $idnotif = array_values($notifid['0']->getAttributes());
+        $idnotification=$idnotif['0'];
+
+        $notif = Notification::find($idnotification);
+
+        $notif->statut=1 ;
+        $notif->save();
+
+        return redirect('/home')->with('success', '  Traité avec succès');
+    }
+
 
     public function destroy($id)
     {

@@ -16,6 +16,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/roles', 'HomeController@roles')->name('roles');
+Route::get('/parametres', 'HomeController@parametres')->name('parametres');
+Route::get('/parametring', 'HomeController@parametring')->name('home.parametring');
 
 // Authentication Routes...
 $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
@@ -62,6 +64,7 @@ Route::get('/entrees/sendpdf/{id}', 'EntreesController@sendpdf');
 Route::get('/entrees/export_pdf/{id}', 'EntreesController@export_pdf');
 Route::get('/entrees/destroy/{id}', 'EntreesController@destroy');
 Route::get('/entrees/archiver/{id}', 'EntreesController@archiver');
+Route::get('/entrees/traiter/{id}', 'EntreesController@traiter');
 Route::get('/entrees/archive/', 'EntreesController@archive')->name('entrees.archive');
 Route::post('/entrees/savecomment','EntreesController@savecomment')->name('entrees.savecomment');
 Route::post('/entrees/dispatchf','EntreesController@dispatchf')->name('entrees.dispatchf');

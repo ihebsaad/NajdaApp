@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-2">
               <a href="{{ route('dossiers') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                <span class="fa fa-lg fa-fw fa-folder"></span>
                <br>
@@ -14,20 +14,37 @@
                     Mes enregistrements
               </a>
           </div>-->
-          <div class="col-md-3">
+          <div class="col-md-2">
               <a href="{{ route('prestataires') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                <span class="fa fa-lg fa-fw fa-user-md"></span>
                <br>
                     Les Intervenants
               </a>
           </div>
-         <div class="col-md-3">
+
+         <div class="col-md-2">
               <a href="{{ route('boites') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
                <span class="fa fa-lg fa-fw fa-inbox"></span>
                <br>
                     Ma boîte de réception
               </a>
           </div>
+        <?php
+        $seance =  DB::table('seance')
+            ->where('id','=', 1 )->first();
+        $disp=$seance->dispatcheur ;
+
+        $iduser=Auth::id();
+        if ($iduser==$disp) {
+            ?>
+        <div class="col-md-2">
+            <a href="{{ route('entrees.dispatching') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
+                <span class="fas fa-lg  fa-map-signs"></span>
+                <br>
+                Dispatching
+            </a>
+        </div>
+        <?php } ?>
 
     </div>
 
@@ -40,7 +57,7 @@
 
     @can('isAdmin')
 
-    <div class="col-md-3">
+    <div class="col-md-2">
         <a href="{{ route('users') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
             <span class="fa fa-lg fa-fw fa-users"></span>
             <br>
@@ -48,7 +65,7 @@
         </a>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-2">
         <a href="{{ route('logs') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
             <span class="fa fa-lg fa-fw fa-history"></span>
             <br>
@@ -56,7 +73,7 @@
         </a>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-2">
                 <a href="{{ route('actualites') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="fa fa-lg fa-fw fa-bullhorn"></span>
                     <br>
@@ -73,7 +90,7 @@
 
         @can('isAdmin')
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <a href="{{ route('clients') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="fas fa-lg   fa-hotel"></span>
                     <br>
@@ -81,7 +98,7 @@
                 </a>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <a href="{{ route('clientgroupes') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class=" fas fa-industry "></span>
                     <br>
@@ -90,7 +107,7 @@
             </div>
 
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <a href="{{ route('cities') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="   fas fa-lg fa-fw fa-city"></span>
                     <br>
@@ -115,7 +132,7 @@
     <div class="row">
 
 
-    <div class="col-md-3">
+    <div class="col-md-2">
         <a href="{{ route('typeprestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
             <span class="fas fa-lg   fa-clinic-medical"></span>
             <br>
@@ -123,14 +140,14 @@
         </a>
     </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
             <a href="{{ route('specialites') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                 <span class="fas fa-lg   fa-clinic-medical"></span>
                 <br>
                 Spécialités
             </a>
         </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         <a href="{{ route('prestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
             <span class="fas fa-notes-medical"></span>
             <br>
@@ -146,7 +163,7 @@
 
         @can('isAdmin')
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <a href="{{ route('personnes') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="fas fa-user-nurse"></span>
                     <br>
@@ -154,7 +171,7 @@
                 </a>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <a href="{{ route('voitures') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="fa fa-lg fa-fw fa-ambulance"></span>
                     <br>
@@ -162,7 +179,7 @@
                 </a>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <a href="{{ route('equipements') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="fas fa-lg fa-fw   fa-medkit"></span>
                     <br>
