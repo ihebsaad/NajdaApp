@@ -235,7 +235,7 @@ $users=UsersController::ListeUsers();
 
                         <div class="form-group">
                             <label for="type">Dossier :</label>
-                         <select id ="affdoss">
+                         <select id ="affdoss"  class="select2">
                              <option></option>
                          <?php foreach($dossiers as $ds)
 
@@ -283,8 +283,8 @@ $users=UsersController::ListeUsers();
                             </div>
 
                             <div class="form-group">
-                                <label for="type">Affecté à :</label>
-                            <select id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single" readonly="readonly">
+                                <label for="type">Type d'affectation :</label>
+                            <select id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single"  >
                                 <option  value="Najda">Najda</option>
                                 <option   value="VAT">VAT</option>
                                 <option  value="MEDIC">MEDIC</option>
@@ -298,7 +298,7 @@ $users=UsersController::ListeUsers();
 
 
                             <div class="form-group">
-                                <label for="affecte">Agent:</label>
+                                <label for="affecte">Agent Affecté :</label>
                                 <select   id="affecte" name="affecte"   class="form-control js-example-placeholder-single">
                                 @foreach($users as $user  )
                                     <option
@@ -359,6 +359,7 @@ $users=UsersController::ListeUsers();
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="{{ URL::asset('resources/assets/js/spectrum.js') }}"></script>
 <script src="{{ URL::asset('resources/assets/js/jquery.marker.js') }}"></script>
+<script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
 
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/spectrum.css') }}">
 <?php
@@ -372,6 +373,7 @@ $urlapp='http://localhost/najdaapp';
 <script>
 
     $( document ).ready(function() {
+        $("#affdoss").select2();
 
         $('#add').click(function(){
             var type_dossier = $('#type_dossier').val();

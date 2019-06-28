@@ -30,11 +30,10 @@ if (App::environment('local')) {
             <thead>
             <tr id="headtable">
                 <th style="width:7%">Type</th>
-
-                <th style="width:20%">Date</th>
-                <th style="width:15%">Emetteur</th>
+                <th style="width:15%">Date</th>
+                <th style="width:20%">Emetteur</th>
                 <th style="width:50%">Sujet</th>
-                <th style="width:80%">Dossier</th>
+                <th style="width:8%">Dossier</th>
             </tr>
             <tr>
                 <th style="width:7%">Type</th>
@@ -47,11 +46,11 @@ if (App::environment('local')) {
             <tbody>
             @foreach($entrees as $entree)
                 <tr><?php $type=$entree['type'];?>
-                    <td style="font-size:15px;width:10%"><?php if ($type=='email'){echo '<img width="20" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="20" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="20" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="20" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php echo $entree['type']; ?></td>
-                    <td style="font-size:13px;width:20%"><?php echo  date('d/m/Y', strtotime($entree['reception'])) ; ?></td>
+                    <td style="font-size:15px;width:7%"><?php if ($type=='email'){echo '<img width="20" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="20" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="20" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="20" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php echo $entree['type']; ?></td>
+                    <td style="font-size:13px;width:15%"><?php echo  date('d/m/Y', strtotime($entree['reception'])) ; ?></td>
                     <td class="overme" style="font-size:13px;width:20%"><?php echo $entree['emetteur']; ?></td>
-                    <td class="overme" style="font-size:13px;width:40%"><a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:16px;"' ;} ?>  href="{{action('EntreesController@show', $entree['id'])}}" ><?php echo $entree['sujet'] ; ?></a></td>
-                    <td style="font-size:13px;width:10%"><?php echo $entree['dossier']; ?></td>
+                    <td class="overme" style="font-size:13px;width:50%"><a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:16px;"' ;} ?>  href="{{action('EntreesController@show', $entree['id'])}}" ><?php echo $entree['sujet'] ; ?></a></td>
+                    <td style="font-size:13px;width:8%"><?php echo $entree['dossier']; ?></td>
                 </tr>
             @endforeach
             </tbody>

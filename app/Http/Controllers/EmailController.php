@@ -357,12 +357,13 @@ class EmailController extends Controller
                   
                 }
                 else{
+
                      $seance =  DB::table('seance')
                         ->where('id','=', 1 )->first();
                     $disp=$seance->dispatcheur ;
 
                     $user = User::find($disp);
-                   // $user=  DB::table('users')->where('id','=', $disp )->first();
+                    // $user=  DB::table('users')->where('id','=', $disp )->first();
                     $user->notify(new Notif_Suivi_Doss($entree));
 
                   //  Notification::send( $user, new Notif_Suivi_Doss($entree));

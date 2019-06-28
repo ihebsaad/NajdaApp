@@ -1724,7 +1724,6 @@ function filltemplate(data,tempdoc)
             else
             {div.style.display='none';     }
 
-
         });
 
 
@@ -1807,7 +1806,6 @@ function filltemplate(data,tempdoc)
             document.getElementById('item1').style.display = 'block';
             document.getElementById('selected').value = 1;
             document.getElementById('selectedprest').value = 0;
-
 
         });
 
