@@ -1,4 +1,9 @@
- 
+ <?php
+    // use DB;
+
+     $seance = DB::table('seance')->first();
+
+?>
  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -17,7 +22,10 @@
         <input type="radio" checked name="is_company">
         <span class="checkround"></span>
     </label>-->
-
+<?php 
+        if (empty($seance->dispatcheur) || ($seance->dispatcheur === Auth::id()))
+        { 
+?>
     <label class="check ">Dispatcheur
         <?php 
             if (session()->has('disp'))
@@ -35,9 +43,21 @@
             {
                 echo '<input type="checkbox" name="disp">';
             }
-        ?>
+            ?>
         <span class="checkmark"></span>
+        <?php
+        }
+        else
+        {
+            $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheur);
+            echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Dispatcheur <b>( '.$nomagent.' )</b></label></div>';
+        }
+        ?>
     </label>
+<?php 
+        if (empty($seance->superviseurmedic) || ($seance->superviseurmedic === Auth::id()))
+        { 
+?>
     <label class="check ">Superviseur Médic
         <?php 
             if (session()->has('supmedic'))
@@ -57,7 +77,19 @@
             }
         ?>
         <span class="checkmark"></span>
+        <?php
+        }
+        else
+        {
+            $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->superviseurmedic);
+            echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Superviseur Médic <b>( '.$nomagent.' )</b></label></div>';
+        }
+        ?>
     </label>
+<?php 
+        if (empty($seance->superviseurtech) || ($seance->superviseurtech === Auth::id()))
+        { 
+?>
     <label class="check ">Superviseur Technique
         <?php 
             if (session()->has('suptech'))
@@ -77,7 +109,19 @@
             }
         ?>
         <span class="checkmark"></span>
+        <?php
+        }
+        else
+        {
+            $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->superviseurtech);
+            echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Superviseur Technique <b>( '.$nomagent.' )</b></label></div>';
+        }
+        ?>
     </label>
+<?php 
+        if (empty($seance->chargetransport) || ($seance->chargetransport === Auth::id()))
+        { 
+?>
     <label class="check ">Chargé Transport
         <?php 
             if (session()->has('chrgtr'))
@@ -97,7 +141,19 @@
             }
         ?>
         <span class="checkmark"></span>
+        <?php
+        }
+        else
+        {
+            $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->chargetransport);
+            echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Chargé Transport <b>( '.$nomagent.' )</b></label></div>';
+        }
+        ?>
     </label>
+<?php 
+        if (empty($seance->dispatcheurtel) || ($seance->dispatcheurtel === Auth::id()))
+        { 
+?>
     <label class="check ">Dispatcheur Téléphonique
         <?php 
             if (session()->has('disptel'))
@@ -117,6 +173,14 @@
             }
         ?>
         <span class="checkmark"></span>
+        <?php
+        }
+        else
+        {
+            $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheurtel);
+            echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Dispatcheur Téléphonique <b>( '.$nomagent.' )</b></label></div>';
+        }
+        ?>
     </label>
     {{ csrf_field() }}
 <br>
