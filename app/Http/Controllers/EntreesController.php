@@ -301,8 +301,8 @@ class EntreesController extends Controller
         $entree->save();
 
         // Notification
-       // $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-        $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossier);
+        $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($dossier);
+        $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
 
         //  $user=  DB::table('users')->where('id','=', $userid )->first();
         $user = User::find($userid);
