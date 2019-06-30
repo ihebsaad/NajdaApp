@@ -101,7 +101,7 @@ class DossiersController extends Controller
         if ($type_affectation == 'Najda') {
             $maxid = $this->GetMaxIdBytype('Najda');
             $refd= $this->RefDossierById($maxid);
-           intval( $num_dossier= substr ( $refd , 3  ,   strlen ($refd)) );
+           $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
                 
             $reference_medic = $annee . 'N' . sprintf("%'.04d\n", $num_dossier+1);
         }
