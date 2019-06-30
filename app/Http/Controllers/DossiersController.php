@@ -98,7 +98,7 @@ class DossiersController extends Controller
         $annee = date('y');
 
 
-        if ($type_affectation == 'NAJDA') {
+        if ($type_affectation == 'Najda') {
             $maxid = $this->GetMaxIdBytype('Najda');
             $reference_medic = $annee . 'N' . sprintf("%'.04d\n", $maxid+1);
         }
