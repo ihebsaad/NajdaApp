@@ -99,9 +99,16 @@ class PrestationsController extends Controller
            {
                $id=$prestation->id;
 
-               $prestataire = Prestataire::find($prest);
-               $prestataire->derniere_prestaton= date('Y-m-d H:i:s.u');
-               $prestataire->save();
+            //   $evaluation = Evaluation::find($prest);
+               $evaluation = DB::table('evaluations')
+                  // Evaluation::where('prestataire',$prest)
+                   ->where('gouv',$gouv)
+                   ->where('type_prest',$typep)
+                   ->where('specialite',$spec)->first();
+                   ;
+               
+               $evaluation->derniere_prestaton= date('Y-m-d H:i:s.u');
+               $evaluation->save();
                //   return redirect('/prestations/view/'.$id)->with('success', 'ajouté avec succès ');
                return url('/prestations/view/'.$id);
            }
