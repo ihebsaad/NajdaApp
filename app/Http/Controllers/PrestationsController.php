@@ -11,6 +11,7 @@ use App\Prestataire ;
 use App\Prestation ;
 use App\TypePrestation ;
 use App\Ville ;
+use App\Evaluation ;
 use DB;
 
 
@@ -100,8 +101,8 @@ class PrestationsController extends Controller
                $id=$prestation->id;
 
             //   $evaluation = Evaluation::find($prest);
-               $evaluation = DB::table('evaluations')
-                  // Evaluation::where('prestataire',$prest)
+               $evaluation = //DB::table('evaluations')
+                  Evaluation::where('prestataire',$prest)
                    ->where('gouv',$gouv)
                    ->where('type_prest',$typep)
                    ->where('specialite',$spec)->first();
