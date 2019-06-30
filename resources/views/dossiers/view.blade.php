@@ -1425,6 +1425,7 @@ function filltemplate(data,tempdoc)
             var typeprest = $('#typeprest').val();
             var gouvernorat = $('#gouvcouv').val();
             var specialite = $('#specialite').val();
+            var date = $('#pres_date').val();
 
             //   gouvcouv
             ///if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
@@ -1433,7 +1434,7 @@ function filltemplate(data,tempdoc)
             $.ajax({
                 url:"{{ route('prestations.saving') }}",
                 method:"POST",
-                data:{nom:nom,dossier_id:dossier_id,typeprest:typeprest,gouvernorat:gouvernorat, _token:_token},
+                data:{ date:date, specialite:specialite,dossier_id:dossier_id,typeprest:typeprest,gouvernorat:gouvernorat, _token:_token},
                 success:function(data){
                     alert(data);
 
