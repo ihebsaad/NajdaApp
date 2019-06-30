@@ -100,7 +100,10 @@ class DossiersController extends Controller
 
         if ($type_affectation == 'Najda') {
             $maxid = $this->GetMaxIdBytype('Najda');
-            $reference_medic = $annee . 'N' . sprintf("%'.04d\n", $maxid+1);
+            $refd= $this->RefDossierById($maxid);
+           $num_dossier= substr ( $refd , 3  ,   strlen ($refd));
+                
+            $reference_medic = $annee . 'N' . sprintf("%'.04d\n", $num_dossier+1);
         }
         if ($type_affectation == 'VAT') {
             $maxid = $this->GetMaxIdBytype('VAT');
@@ -595,7 +598,7 @@ class DossiersController extends Controller
             ->where('reference_medic','like', $annee.'%')
              ->max('id');
 
-             return intval($maxid+1);
+             return intval($maxid );
 
 
     }
