@@ -670,8 +670,9 @@ class DossiersController extends Controller
         $liste =Evaluation::where('gouv',$gouv )
             ->where('type_prest',$type )
             ->where('specialite',$spec )
-            ->orderBy(['priorite'=>'asc', 'derniere_prestation'=>'asc'])
-         //  ->orderBy('derniere_prestation')
+          //  ->orderBy(['priorite'=>'asc', 'derniere_prestation'=>'asc'])
+         ->orderBy('priorite','asc')
+         ->orderBy('derniere_prestation','asc')
             ->get();
 ///orderBy(['col1' => 'desc', 'col2' => 'asc', ... ])
 
