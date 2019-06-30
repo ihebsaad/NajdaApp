@@ -262,11 +262,14 @@ class DossiersController extends Controller
 
   //      $typesMissions=TypeMission::get();
 
-        $specialites = Cache::remember('specialites',$minutes2,  function () {
+     /*   $specialites = Cache::remember('specialites',$minutes2,  function () {
 
             return DB::table('specialites')
                 ->get();
-        });
+        });*/
+      $specialites =DB::table('specialites')
+                ->get();
+
 
         $typesMissions = Cache::remember('type_mission',$minutes2,  function () {
 
@@ -667,9 +670,10 @@ class DossiersController extends Controller
         $liste =Evaluation::where('gouv',$gouv )
             ->where('type_prest',$type )
             ->where('specialite',$spec )
-            ->orderBy(['priorite', 'derniere_prestation'])
+            ->orderBy(['priorite'=>'asc', 'derniere_prestation'=>'asc'])
          //  ->orderBy('derniere_prestation')
             ->get();
+///orderBy(['col1' => 'desc', 'col2' => 'asc', ... ])
 
 
         $output='';$c=0;
