@@ -106,7 +106,8 @@ class PrestationsController extends Controller
                    ->where('type_prest',$typep)
                    ->where('specialite',$spec)->first();
                    ;
-               $date=date('Y-m-d');
+               // $date=date('Y-m-d');
+               $date="2015-01-01 02:29:14" ;
                $evaluation->derniere_prestaton= $date;
                $evaluation->save();
                //   return redirect('/prestations/view/'.$id)->with('success', 'ajouté avec succès ');
