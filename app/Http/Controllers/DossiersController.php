@@ -672,7 +672,7 @@ class DossiersController extends Controller
             ->where('specialite',$spec )
           //  ->orderBy(['priorite'=>'asc', 'derniere_prestation'=>'asc'])
          ->orderBy('priorite','asc')
-         ->orderBy('derniere_prestation','asc')
+        // ->orderBy('derniere_prestation','asc')
             ->get();
 ///orderBy(['col1' => 'desc', 'col2' => 'asc', ... ])
 
