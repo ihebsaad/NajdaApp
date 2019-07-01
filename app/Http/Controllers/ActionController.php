@@ -193,18 +193,7 @@ class ActionController extends Controller
 
        // recherche des actions actives pour les dates particuliers pour les actions et les missions 
 
-       if ($output)
-       {
-
-          // recherche les missions actives  pour l'utilisateur courant
-
-        $missionsec=Mission::where('user_id',Auth::user()->id)->where('statut_courant',"active")
-                  ->('type_heu_spec',1)->get();
-
-
-
-
-       }
+     
 
 
 
