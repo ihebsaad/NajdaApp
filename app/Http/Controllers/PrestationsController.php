@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Specialite;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
@@ -99,7 +100,6 @@ class PrestationsController extends Controller
            if ($prestation->save())
            {
                $id=$prestation->id;
-
             //   $evaluation = Evaluation::find($prest);
                $evaluation = //DB::table('evaluations')
                   Evaluation::where('prestataire',$prest)
@@ -108,8 +108,10 @@ class PrestationsController extends Controller
                    ->where('specialite',$spec)->first();
                    ;
                // $date=date('Y-m-d');
-               $date="2015-01-01 02:29:14" ;
-               $evaluation->derniere_prestaton= $date;
+             //  $date="2015-01-01 02:29:14" ;
+               $current_date_time = Carbon::now()->toDateTimeString();
+
+               $evaluation->derniere_prestaton= $current_date_time;
                $evaluation->save();
                //   return redirect('/prestations/view/'.$id)->with('success', 'ajouté avec succès ');
                return url('/prestations/view/'.$id);

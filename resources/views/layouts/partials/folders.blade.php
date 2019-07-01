@@ -17,7 +17,7 @@ $dossiersaff= DossiersController:: ListeDossiersAffecte();
 
 ?>
 @isset ($dossiersaff)
-<div class="row folders" style="margin-top:20px;">
+<div class="row folders" style="margin-top:20px;min-height:120px">
         <div class="carousel-wrap">
           <div class="owl-carousel">
             @foreach ($dossiersaff as $i) 

@@ -1678,7 +1678,7 @@ function filltemplate(data,tempdoc)
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    alert('msg : '.jqXHR.status);
+                //    alert('msg : '.jqXHR.status);
                     alert('msg 2 : '.errorThrown);
                 }
 
