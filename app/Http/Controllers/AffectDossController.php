@@ -84,7 +84,7 @@ class AffectDossController extends Controller
            //cas d un nouveau dossier
             // code pour enregistrer dans la table dossier
      {
-        dd("nouveau");
+       // dd("nouveau");
 
          $reference_medic = '';
         $type_affectation = $request->get('type_affectation');
