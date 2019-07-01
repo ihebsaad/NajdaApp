@@ -52,7 +52,7 @@ Route::post('/home/fetch', 'HomeController@fetch')->name('home.fetch');
 //affectation dossier dispartcheur
 
 Route::get('/affectation/',  'AffectDossController@Interface_Affectation_DossierDispatcheur'); 
-Route::post('/entrees/show/affecterNouveauDossier',  'AffectDossController@CreerNouveauDossier'); 
+Route::post('/affecterDossier',  'AffectDossController@affecterDossier')->name('affectation.dossier'); 
 Route::get('/getNotificationAffectationDoss/{userConnect}', 'AffectDossController@getNotificationAffectationDoss'); 
 
 

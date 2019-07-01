@@ -36,7 +36,7 @@ class ActionController extends Controller
         return view('Actions.index', compact('Actions'));
     }
 
-     public function RappelAction (Request $request,$iddoss,$idact,$idsousact)
+     /*public function RappelAction (Request $request,$iddoss,$idact,$idsousact)
    {
 
         $sact=Action::find($idsousact);
@@ -90,13 +90,13 @@ class ActionController extends Controller
        // return redirect('dossiers/view/'.$iddoss);
 
 
-   }
+   }*/
 
    public function activerActionsReporteeOuRappelee ()
    {
 
           // $burl = URL::to("/");
-       $output="pas d'action reportee ou rappelee";
+       $output='';
 
          $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i');
 
@@ -189,6 +189,25 @@ class ActionController extends Controller
 
      //dd($output);
        return null;
+
+
+       // recherche des actions actives pour les dates particuliers pour les actions et les missions 
+
+       if ($output)
+       {
+
+          // recherche les missions actives  pour l'utilisateur courant
+
+        $missionsec=Mission::where('user_id',Auth::user()->id)->where('statut_courant',"active")
+                  ->('type_heu_spec',1)->get();
+
+
+
+
+       }
+
+
+
 
    }
 
@@ -548,6 +567,9 @@ class ActionController extends Controller
          //return $this->activerActionsReporteeOuRappelee();
 
         //dd($request->all());
+
+     
+
         $bouton=intval($request->get("numerobouton"));
        // dd($bouton);
 

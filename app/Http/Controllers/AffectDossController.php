@@ -38,15 +38,53 @@ class AffectDossController extends Controller
       }
 
 
-   public function CreerNouveauDossier(Request $request)
+   public function affecterDossier(Request $request)
    {
 
            // $in=$req->all();
             //dd($in);
 
+    if($request->get('statdoss')=="existant")
+    {
+        // dd("existant");
+         $dossier = Dossier::find($request->get('dossierid'));
+        
+          $agent= $request->get('agent');
+
+        if ($dossier->update(['affecte' => $agent]))
+        { 
 
 
+            $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i');
+            $affec=new AffectDoss([
+
+                  'util_affecteur'=>$request->get('affecteurdoss'),
+                  'util_affecte'=>$agent,
+                  'statut'=>"existant",
+                  
+                  'id_dossier'=> $dossier->id,
+                  'date_affectation'=>$dtc,
+
+            ]);
+
+             $affec->save();
+
+             return back()->with("AffectDossier", "le  dossier est affecté avec succès ");
+
+        }
+
+
+
+
+    }
+
+
+
+     if($request->get('statdoss')=="nouveau")
+           //cas d un nouveau dossier
             // code pour enregistrer dans la table dossier
+     {
+        dd("nouveau");
 
          $reference_medic = '';
         $type_affectation = $request->get('type_affectation');
@@ -111,6 +149,7 @@ class AffectDossController extends Controller
 
                   'util_affecteur'=>$request->get('affecteur'),
                   'util_affecte'=>$request->get('affecte'),
+                  'statut'=>"nouveau",
                   
                   'id_dossier'=>$iddoss,
                   'date_affectation'=>$dtc,
@@ -119,7 +158,7 @@ class AffectDossController extends Controller
 
              $affec->save();
 
-             return back()->with("AffectNouveauDossier", "le dossier est affecté avec succèss à l'utilisateur");
+             return back()->with("AffectNouveauDossier", "le nouveau dossier est affecté avec succès à l'utilisateur");
 
             //return url('/dossiers/view/'.$iddoss)/*->with('success', 'Dossier Créé avec succès')*/;
            // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
@@ -132,12 +171,14 @@ class AffectDossController extends Controller
 
             // fin saving dossier  
 
+        }
+
    }
 
 
 
 
-     public function affecterDossier($iddoss,$idaffecte,$idaffecteur)
+     /*public function affecterDossier($iddoss,$idaffecte,$idaffecteur)
      {
          
 
@@ -158,7 +199,7 @@ class AffectDossController extends Controller
 
 
 
-     }
+     }*/
 
 
      public function getNotificationAffectationDoss($userConnect)

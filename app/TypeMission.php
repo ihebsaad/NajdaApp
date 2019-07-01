@@ -12,7 +12,11 @@ class TypeMission extends Model
 
      protected $fillable = [
         
-      'nom_type_Mission','des_miss',
+      'nom_type_Mission','des_miss','type_heu_spec','rdv','act_rdv','dep_pour_miss','act_dep_pour_miss','dep_charge_dest',
+      'act_dep_charge_dest','arr_prev_dest','act_arr_prev_dest','decoll_ou_dep_bat','act_decoll_ou_dep_bat',
+      'arr_av_ou_bat','act_arr_av_ou_bat','retour_base', 'act_retour_base',
+
+
       'action1','ordre_action1','desc_action1', 'nb_opt_act1','igno_ou_non1','rapl_ou_non1','report_ou_non1',
       'doc_rapp_ou_non1','activ_avec_miss1',
       'action2','ordre_action2','desc_action2', 'nb_opt_act2','igno_ou_non2','rapl_ou_non2','report_ou_non2',

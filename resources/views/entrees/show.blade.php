@@ -269,7 +269,7 @@ $users=UsersController::ListeUsers();
 
 <!-- Modal -->
 <div class="modal fade" id="createfolder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <form method="post" action="{{ url('/entrees/show/affecterNouveauDossier')}}">
+    <form method="post" action="{{route('affectation.dossier') }}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -320,6 +320,7 @@ $users=UsersController::ListeUsers();
                                 @endforeach
                                 </select>
                             </div>
+                            <input type="hidden" value="nouveau" name="statdoss">
 
                             <input type="hidden" value="{{Auth::user()->id}}" name="affecteur">
                         <!-- </form>-->

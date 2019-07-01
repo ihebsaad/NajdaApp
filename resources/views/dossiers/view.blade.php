@@ -18,7 +18,11 @@ use App\Document ;
 
 <div class="row">
 
-
+ @if(session()->has('AffectDossier'))
+    <div class="alert alert-success">
+       <center> <h4>{{ session()->get('AffectDossier') }}</h4></center>
+    </div>
+  @endif
 
      <div class="col-md-6">
         <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
@@ -657,6 +661,7 @@ $iduser=$CurrentUser->id;
 <!-- Modal attribution dossier-->
 <div class="modal fade" id="attrmodal" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document">
+       <form  method="post" action="{{ route('affectation.dossier') }}">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModal2">Affectation dossier</h5>
@@ -667,9 +672,12 @@ $iduser=$CurrentUser->id;
 
                     <div class="form-group">
                         
-                        <form  method="post" action="{{ route('dossiers.attribution') }}">
+                        
                             {{ csrf_field() }}
                             <input id="dossierid" name="dossierid" type="hidden" value="{{ $dossier->id}}">
+                            <input id="affecteurdoss" name="affecteurdoss" type="hidden" value="{{ Auth::user()->id}}">
+                            <input id="statdoss" name="statdoss" type="hidden" value="existant">
+
                             <div class="form-group " >
                                 <div class=" row  ">
                                     <div class="form-group mar-20">
@@ -695,7 +703,7 @@ $iduser=$CurrentUser->id;
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                      
 
                     </div>
 
@@ -708,6 +716,7 @@ $iduser=$CurrentUser->id;
                 <button type="submit" id="attribdoss" class="btn btn-primary">Affecter</button>
             </div>
         </div>
+          </form>
     </div>
 </div>
 
