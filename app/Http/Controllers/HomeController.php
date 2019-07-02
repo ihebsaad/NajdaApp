@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Parametre;
 use App\User;
 use Illuminate\Http\Request;
 use DB;
@@ -90,7 +91,7 @@ class HomeController extends Controller
          $champ= strval($request->get('champ'));
         $val= $request->get('val');
 
-       // Seance::where('id', $id)->update(array($champ => $val));
+        Parametre::where('id', 1)->update(array($champ => $val));
 
 
     }

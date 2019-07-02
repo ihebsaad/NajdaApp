@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Entree;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
@@ -143,6 +144,13 @@ class AffectDossController extends Controller
         if ($dossier->save())
         { $iddoss=$dossier->id;
 
+            $identree = $request->get('entree_id');
+            if($identree!=''){
+                $entree  = Entree::find($identree);
+
+                $entree->dossier=$reference_medic;
+                $entree->save();
+            }
 
               $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i');
             $affec=new AffectDoss([

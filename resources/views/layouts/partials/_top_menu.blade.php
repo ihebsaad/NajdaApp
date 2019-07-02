@@ -100,7 +100,7 @@
 
             <div class="col-md-2">
                 <a href="{{ route('clientgroupes') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-                    <span class=" fas fa-industry "></span>
+                    <span class=" fas fa-lg   fa-industry "></span>
                     <br>
                     Groupes
                 </a>
@@ -149,12 +149,18 @@
         </div>
     <div class="col-md-2">
         <a href="{{ route('prestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-            <span class="fas fa-notes-medical"></span>
+            <span class="fas fa-lg  fa-notes-medical"></span>
             <br>
             Prestations
         </a>
     </div>
-
+        <div class="col-md-2">
+            <a href="{{ route('parametres') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                <span class="fas fa-lg  fa-sliders-h"></span>
+                <br>
+                Paramètres
+            </a>
+        </div>
     </div>
     @endcan
 
@@ -165,7 +171,7 @@
 
             <div class="col-md-2">
                 <a href="{{ route('personnes') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-                    <span class="fas fa-user-nurse"></span>
+                    <span class="fas fa-lg  fa-user-nurse"></span>
                     <br>
                     Personnels
                 </a>

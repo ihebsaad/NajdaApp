@@ -17,7 +17,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/roles', 'HomeController@roles')->name('roles');
 Route::get('/parametres', 'HomeController@parametres')->name('parametres');
-Route::get('/parametring', 'HomeController@parametring')->name('home.parametring');
+Route::post('/parametring', 'HomeController@parametring')->name('home.parametring');
 
 // Authentication Routes...
 $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');

@@ -100,19 +100,22 @@ class PrestationsController extends Controller
            if ($prestation->save())
            {
                $id=$prestation->id;
+               $date=date('Y-m-d');
             //   $evaluation = Evaluation::find($prest);
                $evaluation = //DB::table('evaluations')
                   Evaluation::where('prestataire',$prest)
                    ->where('gouv',$gouv)
                    ->where('type_prest',$typep)
-                   ->where('specialite',$spec)->first();
+                   ->where('specialite',$spec)
+                      ->update(['derniere_prestation' => $date])
                    ;
-               // $date=date('Y-m-d');
+                $date=date('Y-m-d');
              //  $date="2015-01-01 02:29:14" ;
-               $current_date_time = Carbon::now()->toDateTimeString();
+             //  $current_date_time = Carbon::now()->toDateTimeString();
 
-               $evaluation->derniere_prestaton= $current_date_time;
-               $evaluation->save();
+               //$evaluation->derniere_prestation= $date;
+              // $evaluation->evaluation=5;
+            //   $evaluation->save();
                //   return redirect('/prestations/view/'.$id)->with('success', 'ajouté avec succès ');
                return url('/prestations/view/'.$id);
            }

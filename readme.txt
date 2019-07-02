@@ -8,6 +8,7 @@
 /vendor/rap2hpoutre ../controller/
 copier la fonction index en fonction errors
 
+# Providers / AuthServiceProvider = definitions des roles (gates)
 
 Numero Tel Iheb:(USA) / Reception
 +13342316588

@@ -18,7 +18,7 @@
                      <h3>Prestation</h3><br>
                      <?php use \App\Http\Controllers\PrestationsController;
                       use \App\Http\Controllers\PrestatairesController;     ?>
-                     <h3><?php echo PrestationsController::TypePrestationById ($prestation->type_prestations_id); ?></h3>
+                     <b><?php echo PrestationsController::TypePrestationById ($prestation->type_prestations_id); ?></b>
                   </div>
                 </div>
 

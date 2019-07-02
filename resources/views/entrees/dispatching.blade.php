@@ -22,24 +22,23 @@ if (App::environment('local')) {
         }
     </style>
     <div class="uper">
-        @if(session()->get('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
-            </div><br />
-        @endif
+
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
             <tr id="headtable">
                 <th style="width:10%">Type</th>			
-                <th style="width:20%">Date</th>
+                <th style="width:15%">Date</th>
                 <th style="width:20%">Emetteur</th>
-                <th style="width:40%">Sujet</th>
+                <th style="width:35%">Sujet</th>
+               <!-- <th class="no-sort" style="width:8%" ></th>-->
+
             </tr>
             <tr>
                 <th style="width:10%">Type</th>			
-                <th style="width:20%">Date</th>
+                <th style="width:15%">Date</th>
                 <th style="width:20%">Emetteur</th>
-                <th style="width:40%">Sujet</th>
+                <th style="width:35%">Sujet</th>
+               <!-- <th style="width:8%" id="colmn6"></th>-->
             </tr>
             </thead>
             <tbody>
@@ -49,6 +48,7 @@ if (App::environment('local')) {
                     <td style="width:20%;font-size:12px;width:10%"><?php echo  date('d/m/Y', strtotime($entree['reception'])) ; ?></td>
                     <td class="overme" style="width:20%;font-size:12px;width:10%"><?php echo $entree['emetteur']; ?></td>
                     <td class="overme" style="width:40%;font-size:12px;width:10%"><a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:16px;"' ;} ?>  href="{{action('EntreesController@show', $entree['id'])}}" ><?php echo $entree['sujet'] ; ?></a></td>
+                <!--    <td></td>-->
                 </tr>
             @endforeach
             </tbody>
@@ -56,6 +56,7 @@ if (App::environment('local')) {
     </div>
 @endsection
 
+<style>#colmn6 input{display:none;}</style>
 
 
 @section('footer_scripts')

@@ -294,7 +294,7 @@ class EmailController extends Controller
             $sujet=($oMessage->getSubject())  ;
 
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
-            $contenu= utf8_encode($oMessage->getHTMLBody(true));
+            $contenu= ($oMessage->getHTMLBody(true));
           //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -370,12 +370,6 @@ class EmailController extends Controller
                   
                 }
 
-                //$user= User::get();
-                // Notification::send($user, new Notif_Suivi_Doss($entree));
-
-
-                // Dispatching
-                //$this->disp();
                 $id=$entree->id;
 
                   //   auth2::user()->notify(new Notif_Suivi_Doss($entree));
@@ -547,6 +541,35 @@ class EmailController extends Controller
                 ]);
 
                 $entree->save();
+
+                /*********************/
+                if($refdossier!= ''){
+
+
+                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                    $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+
+                    //  $user=  DB::table('users')->where('id','=', $userid )->first();
+                    $user = User::find($userid);
+
+                    $user->notify(new Notif_Suivi_Doss($entree));
+                    // Notification::send($user, new Notif_Suivi_Doss($entree));
+
+                }
+                else{
+
+                    $seance =  DB::table('seance')
+                        ->where('id','=', 1 )->first();
+                    $disp=$seance->dispatcheur ;
+
+                    $user = User::find($disp);
+                    // $user=  DB::table('users')->where('id','=', $disp )->first();
+                    $user->notify(new Notif_Suivi_Doss($entree));
+
+                    //  Notification::send( $user, new Notif_Suivi_Doss($entree));
+
+                }
+
                 $id=$entree->id;
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
@@ -700,7 +723,8 @@ class EmailController extends Controller
                     'destinataire' =>  'Boite Perso',
                     'emetteur' =>  ($from),
                     'sujet' =>  ($sujet),
-                    'contenu'=> utf8_encode($contenu) ,
+                    //'contenu'=> utf8_encode($contenu) ,
+                    'contenu'=> ($contenu) ,
                     'mailid'=>  $mailid,
                     'viewed'=>0,
                     'statut'=>0,
@@ -798,7 +822,8 @@ class EmailController extends Controller
             foreach ($aMessage as $oMessage) {
 
 
-                $sujet=strval($oMessage->getSubject())  ;
+                //$sujet=strval($oMessage->getSubject())  ;
+                $sujet=$oMessage->getSubject()  ;
 
                 $contenu= $oMessage->getHTMLBody(true);
 
@@ -845,6 +870,35 @@ class EmailController extends Controller
                     ]);
 
                     $entree->save();
+
+                    /*********************/
+                    if($refdossier!= ''){
+
+
+                        $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                        $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+
+                        //  $user=  DB::table('users')->where('id','=', $userid )->first();
+                        $user = User::find($userid);
+
+                        $user->notify(new Notif_Suivi_Doss($entree));
+                        // Notification::send($user, new Notif_Suivi_Doss($entree));
+
+                    }
+                    else{
+
+                        $seance =  DB::table('seance')
+                            ->where('id','=', 1 )->first();
+                        $disp=$seance->dispatcheur ;
+
+                        $user = User::find($disp);
+                        // $user=  DB::table('users')->where('id','=', $disp )->first();
+                        $user->notify(new Notif_Suivi_Doss($entree));
+
+                        //  Notification::send( $user, new Notif_Suivi_Doss($entree));
+
+                    }
+
                     $id=$entree->id;
 
                     ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
@@ -932,8 +986,10 @@ class EmailController extends Controller
                 $entree = new Entree([
                     'destinataire' => 'envoifax@najda-assistance.com',
                     'emetteur' => trim($from),
-                    'sujet' => utf8_encode($sujet),
-                    'contenu'=> utf8_encode($contenu) ,
+                    'sujet' => ($sujet),
+                 //   'sujet' => utf8_encode($sujet),
+                    'contenu'=> ($contenu) ,
+                  //  'contenu'=> utf8_encode($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
                     'type'=> 'fax',
@@ -945,6 +1001,34 @@ class EmailController extends Controller
                 ]);
 
                 $entree->save();
+
+                /*********************/
+                if($refdossier!= ''){
+
+
+                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                    $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+
+                    //  $user=  DB::table('users')->where('id','=', $userid )->first();
+                    $user = User::find($userid);
+
+                    $user->notify(new Notif_Suivi_Doss($entree));
+                    // Notification::send($user, new Notif_Suivi_Doss($entree));
+
+                }
+                else{
+
+                    $seance =  DB::table('seance')
+                        ->where('id','=', 1 )->first();
+                    $disp=$seance->dispatcheur ;
+
+                    $user = User::find($disp);
+                    // $user=  DB::table('users')->where('id','=', $disp )->first();
+                    $user->notify(new Notif_Suivi_Doss($entree));
+
+                    //  Notification::send( $user, new Notif_Suivi_Doss($entree));
+
+                }
                 $id=$entree->id;
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));

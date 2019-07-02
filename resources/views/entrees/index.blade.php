@@ -21,36 +21,36 @@ if (App::environment('local')) {
         }
     </style>
     <div class="uper">
-        @if(session()->get('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
-            </div><br />
-        @endif
         <table class="table table-striped" id="mytable" style="">
             <thead>
             <tr id="headtable">
                 <th style="width:7%">Type</th>
                 <th style="width:15%">Date</th>
-                <th style="width:20%">Emetteur</th>
-                <th style="width:40%">Sujet</th>
+                <th class="overme2" style="width:20%">Emetteur</th>
+                <th class="overme2" style="width:20%">Sujet</th>
                 <th style="width:8%">Dossier</th>
+                <th class="no-sort" style="width:8%"></th>
             </tr>
             <tr>
                 <th style="width:7%">Type</th>
                 <th style="width:15%">Date</th>
-                <th style="width:20%">Emetteur</th>
-                <th style="width:40%">Sujet</th>
+                <th class="overme2" style="width:20%">Emetteur</th>
+                <th class="overme2" style="width:30%">Sujet</th>
                 <th style="width:8%">Dossier</th>
+                <th style="width:8%" id="colmn6"></th>
             </tr>
             </thead>
             <tbody>
             @foreach($entrees as $entree)
                 <tr><?php $type=$entree['type'];?>
-                    <td style="font-size:15px;width:7%"><?php if ($type=='email'){echo '<img width="20" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="20" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="20" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="20" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php echo $entree['type']; ?></td>
+                    <td style="font-size:15px;width:7%">
+                        <?php if ($type=='email'){echo '<img width="20" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="20" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="20" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="20" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php echo $entree['type']; ?>
+                    </td>
                     <td style="font-size:13px;width:15%"><?php echo  date('d/m/Y', strtotime($entree['reception'])) ; ?></td>
-                    <td class="overme" style="font-size:13px;width:20%"><?php echo $entree['emetteur']; ?></td>
-                    <td class="overme" style="font-size:13px;width:40%"><a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:16px;"' ;} ?>  href="{{action('EntreesController@show', $entree['id'])}}" ><?php echo $entree['sujet'] ; ?></a></td>
+                    <td class="overme2" style="font-size:13px;width:20%"><?php echo $entree['emetteur']; ?></td>
+                    <td class="overme2" style="font-size:13px;width:30%"><a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:16px;"' ;} ?>  href="{{action('EntreesController@show', $entree['id'])}}" ><?php echo $entree['sujet'] ; ?></a></td>
                     <td style="font-size:13px;width:8%"><?php echo $entree['dossier']; ?></td>
+              <td><td>
                 </tr>
             @endforeach
             </tbody>
@@ -58,7 +58,7 @@ if (App::environment('local')) {
     </div>
 @endsection
 
-
+<style>#colmn6 input{display:none;}</style>
 
 @section('footer_scripts')
 
@@ -94,7 +94,7 @@ if (App::environment('local')) {
                 "aaSorting": [],
                 orderCellsTop: true,
                 dom: 'Bflrtip',
-                responsive:true,
+              //  responsive:true,
                 buttons: [
 
                     'csv', 'excel', 'pdf', 'print'

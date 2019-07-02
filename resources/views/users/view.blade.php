@@ -9,54 +9,104 @@
 
     <div class=" " style="padding:8px 8px 8px 8px">
         <div class="portlet box grey">
-            <div class="modal-header">Utilisateur</div>
+            <h3>   Utilisateur</h3>
         </div>
     <form class="form-horizontal" method="POST"  action="{{action('UsersController@update', $id)}}" >
         {{ csrf_field() }}
 
-    <div class="form-group">
-        <label for="ID">Numéro:</label>
-        <input id="id" type="text" class="form-control col-lg-6" name="id"  readonly value={{ $user->id }} />
-    </div>
-    <div class="form-group">
-         <label for="name">Nom:</label>
-        <input id="name" type="text" class="form-control col-lg-6" name="name"  value={{ $user->name }} />
-    </div>
-<div class="form-group">
-    <label for="type">Email :</label>
-    <input id="type" type="text" class="form-control col-lg-6" name="email"  value={{ $user->email }} />
-</div>
-<div class="form-group">
-    <label for="user_type">Type :</label>
-     <select  name="user_type"   >
-        <option value="user"  <?php if($user->user_type=='user') {echo'selected';}?> >Simple</option>
-        <option  value="admin"  <?php if($user->user_type=='admin') {echo'selected';}?>  >Admin</option>
-    </select>
-</div>
+
         <?php use \App\Http\Controllers\UsersController;     ?>
-        <div class="form-group  ">
-            <label>Rôles</label>
-                  <select class="itemName form-control col-lg-6" style="" name="roles"  multiple  id="roles" value="{{$user->roles}}">
+
+
+        <input type="hidden" id="iduser" value="{{$id}}" ></input>
+        <table class="table">
+
+        <tbody>
+        <tr>
+            <td class="text-primary">Nom </td>
+            <td>
+                <input id="lastname" onchange="changing(this)" type="text" class="form-control" name="name"  value="{{ $user->lastname }}" />
+            </td>
+        </tr>
+        <tr>
+            <td class="text-primary">Prénom </td>
+            <td>
+                <input id="name" onchange="changing(this)" type="text" class="form-control" name="name"  value="{{ $user->name }}" />
+                </td>
+        </tr>
+        <tr>
+            <td class="text-primary">Login</td>
+            <td> <input readonly id="email" autocomplete="off" onchange="changing(this)" type="email" class="form-control" name="email"  id="email" value="{{ $user->email }}" />          </td>
+        </tr>
+        <tr>
+            <td class="text-primary">Email Boite</td>
+            <td> <input id="boite" autocomplete="off" onchange="changing(this)"  type="email" class="form-control" name="boite" id="boite" value="{{ $user->boite }}" />                  </td>
+        </tr>
+        <tr>
+            <td class="text-primary">Mote de passe boite</td>
+            <td> <input id="passboite" autocomplete="off" onchange="changing(this)"   type="password" class="form-control" name="passboite"  id="passboite" value="" />
+            </td>
+        </tr>
+            <tr>
+                <td class="text-primary">Tel</td>
+                <td>    <input id="tel" onchange="changing(this);"  type="text" class="form-control" name="tel"  id="tel" value="{{ $user->phone }}" />
+                </td>
+            </tr>
+        <tr>
+            <td class="text-primary">Skype</td>
+            <td>    <input id="skype" onchange="changing(this);"  type="text" class="form-control" name="skype"  id="skype" value="{{ $user->skype }}" />
+            </td>
+        </tr>
+        <tr>
+            <td class="text-primary">Observation</td>
+            <td>    <textarea style="height:80px" id="observation" onchange="changing(this);"  type="text" class="form-control" name="observation"  id="observation"  ><?php echo  $user->observation ; ?></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="text-primary">Type</td>
+            <td>
+                <select  name="user_type"  id="type" onchange="changing(this);"  >
+                    <option value="user"  <?php if($user->user_type=='user') {echo'selected';}?> >Agent Simple</option>
+                    <option  value="superviseur"  <?php if($user->user_type=='superviseur') {echo'selected';}?>  >Superviseur</option>
+                    <option  value="dispatcheur"  <?php if($user->user_type=='dispatcheur') {echo'selected';}?>  >Dispatcheur</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="text-primary">Rôles</td>
+            <td>
+                <select class="itemName form-control col-lg-10" style="" name="roles"  multiple  id="roles" value="{{$user->roles}}">
                     <option></option>
                     <?php $c=0;if ( count($rolesusers) > 0 ) {
-                     foreach($roles as $aKey){
-                          ?>
-                             <option  <?php if(UsersController::CheckRoleUser($user['id'],$aKey->id)==1){echo 'selected="selected" ';} ?>   value="<?php echo $aKey->id;?>" > <?php echo  $aKey->nom; ?>
-                             </option>
-                     <?php
+                    foreach($roles as $aKey){
+                    ?>
+                    <option  <?php if(UsersController::CheckRoleUser($user['id'],$aKey->id)==1){echo 'selected="selected" ';} ?>   value="<?php echo $aKey->id;?>" > <?php echo  $aKey->nom; ?>
+                    </option>
+                    <?php
 
-                      }
+                    }
 
-                     } else{ ?>
+                    } else{ ?>
 
-                     @foreach($roles as $aKey)
-                         <option       value="<?php echo $aKey->id;?>"> <?php echo $aKey->nom;?></option>
-                     @endforeach
+                    @foreach($roles as $aKey)
+                        <option       value="<?php echo $aKey->id;?>"> <?php echo $aKey->nom;?></option>
+                    @endforeach
 
                     <?php }  ?>
 
                 </select>
-         </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="text-primary">Signature</td>
+            <td>    <textarea style="height:60px" id="signature" onchange="changing(this);"  type="text" class="form-control" name="observation"  id="observation"  ><?php echo  $user->signature ; ?></textarea>
+            </td>
+        </tr>
+        </tbody>
+        </table>
+
+
+
 
       <!--  <div class="form-group">
             <div class="col-md-6 col-md-offset-4 ">
@@ -181,5 +231,35 @@ $( ".select2-selection--multiple" ).show( "slow", function() {
 
 
 });
+
+
+
+
+    function changing(elm) {
+        var champ = elm.id;
+
+        var val = document.getElementById(champ).value;
+
+        var user = $('#iduser').val();
+        //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('users.updating') }}",
+            method: "POST",
+            data: {user: user, champ: champ, val: val, _token: _token},
+            success: function (data) {
+                $('#' + champ).animate({
+                    opacity: '0.3',
+                });
+                $('#' + champ).animate({
+                    opacity: '1',
+                });
+
+            }
+        });
+        // } else {
+
+        // }
+    }
 
 </script>

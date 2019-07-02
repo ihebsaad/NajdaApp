@@ -32,9 +32,12 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         $gate->define('isSupervisor', function ($user){
-            return $user->user_type=='supervisor';
+            return $user->user_type=='superviseur';
         });
 
+        $gate->define('isDisp', function ($user){
+            return $user->user_type=='dispatcheur';
+        });
 
     }
 }

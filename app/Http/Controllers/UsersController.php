@@ -93,7 +93,8 @@ class UsersController extends Controller
     public function saving(Request $request)
     {
         $user = new User([
-               'name' => $request->get('name'),
+            'name' => $request->get('name'),
+            'lastname' => $request->get('lastname'),
                 'email' => $request->get('email'),
                'user_type'=> $request->get('user_type'),
                'password'=>  bcrypt($request->get('password')),

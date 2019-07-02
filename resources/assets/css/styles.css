@@ -6,6 +6,12 @@ body{font-family: Comic Sans MS;}
   text-overflow: ellipsis;
   max-width:300px;
 }
+.overme2 {
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow: ellipsis;
+  max-width:150px;
+}
 .searchfield{width:100px;}
 #headtable {background-color: #4fc1e9;color:white;font-weight: 600;}
 

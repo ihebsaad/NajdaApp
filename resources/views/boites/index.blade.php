@@ -15,12 +15,7 @@
         }
     </style>
     <div class="uper">
-        @if(session()->get('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
-            </div><br />
-        @endif
-
+	
             <div class="portlet box grey">
                 <div class="row">
                     <div class="col-lg-8"><h2>Boite personnelle</h2></div>

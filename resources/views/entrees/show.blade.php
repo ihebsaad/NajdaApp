@@ -43,17 +43,25 @@ use App\Http\Controllers\TagsController;
                                         <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
                                         <button id="afffolder" class="btn   " style="background-color: #c5d6eb;color:#333333;"  data-toggle="modal" data-target="#affectfolder"><b><i class="fas fa-folder"></i> Dispatcher</b></button>
                                  @endif
-                                <a  href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-warning btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Archiver" >
-                                  <span class="fa fa-fw fa-archive"></span> Archivé
+                               @if(Gate::check('isAdmin') || Gate::check('isSupervisor') || Gate::check('isDisp') )
+
+                                    <a  href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-warning btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Archiver" >
+                                  <span class="fa fa-fw fa-archive"></span> Archiver
                                 </a>
                                     <a  href="{{action('EntreesController@traiter', $entree['id'])}}" class="btn btn-info btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
                                         <span class="fa fa-fw fa-check"></span> Traité
+                                    </a>
+
+                                    <a  href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                        <span class="fa fa-fw fa-trash-alt"></span> Supprimer
                                     </a>
                                     @if (!empty($entree->dossier))
                                     <button  id="accuse"   data-toggle="modal" data-target="#sendaccuse" class="btn btn-info btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer l'accusé de reception" >
                                         <i class="fas fa-mail-bulk"></i> Accusé
                                     </button>
                                     @endif
+                                  @endif
+
                             </div>
                         </div>
 
@@ -320,7 +328,10 @@ $users=UsersController::ListeUsers();
                                 @endforeach
                                 </select>
                             </div>
-                            <input type="hidden" value="nouveau" name="statdoss">
+                         <input type="hidden" value="nouveau" name="statdoss">
+                         <input type="hidden" value="nouveau" name="statdoss">
+
+                         <input type="hidden" value="<?php echo $entree['id'];?>" name="entree_id" >
 
                             <input type="hidden" value="{{Auth::user()->id}}" name="affecteur">
                         <!-- </form>-->
@@ -388,8 +399,9 @@ $urlapp='http://localhost/najdaapp';
 
     $( document ).ready(function() {
 
-        /*$('#add').click(function(){
+        $('#add').click(function(){
             var type_dossier = $('#type_dossier').val();
+            var entree = $('#entree_id').val();
              var type_affectation = $('#type_affectation').val();
             var affecte = $('#affecte').val();
             if ((type_dossier != '')&&(type_affectation != '')&&(affecte != ''))
@@ -398,7 +410,7 @@ $urlapp='http://localhost/najdaapp';
                 $.ajax({
                     url:"{{ route('dossiers.saving') }}",
                     method:"POST",
-                    data:{type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
+                    data:{entree:entree,type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
                     success:function(data){
 
                      //   alert('Added successfully');
@@ -410,7 +422,7 @@ $urlapp='http://localhost/najdaapp';
             }else{
                // alert('ERROR');
             }
-        });*/
+        });
 
 
         $('#sending').click(function(){

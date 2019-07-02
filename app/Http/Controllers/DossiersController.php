@@ -167,15 +167,25 @@ class DossiersController extends Controller
         if ($dossier->save())
         { $iddoss=$dossier->id;
 
+            $identree = $request->get('entree');
+            if($identree!=''){
+            $entree  = Entree::find($identree);
+
+            $entree->dossier=$reference_medic;
+                $entree->save();
+            }
+
             return url('/dossiers/view/'.$iddoss)/*->with('success', 'Dossier Créé avec succès')*/;
            // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
            //  return  $iddoss;
+
            }
 
          else {
              return url('/dossiers');
             }
     }
+
 
     public function updating(Request $request)
     {
@@ -672,7 +682,7 @@ class DossiersController extends Controller
             ->where('specialite',$spec )
           //  ->orderBy(['priorite'=>'asc', 'derniere_prestation'=>'asc'])
          ->orderBy('priorite','asc')
-        // ->orderBy('derniere_prestation','asc')
+          ->orderBy('derniere_prestation','asc')
             ->get();
 ///orderBy(['col1' => 'desc', 'col2' => 'asc', ... ])
 
@@ -728,20 +738,16 @@ class DossiersController extends Controller
                                        </div>';
    */
             $output .= '  <div id="item'.$c . '" style="display:none">
-             
-                                                                          
+                                                                                   
                              <div class="prestataire form-group">
                               <input type="hidden" id="prestataire_id_'.$c.'" value="'.$prestataire.'">
                              <input type="hidden" id="nomprest" value="'.$nom.'">
                             <div class="row" style="margin-top:10px;margin-bottom: 20px">
                                 <div class="col-md-8"><span style="color:grey" class="fa  fa-user-md"></span> <B>' . $nom . ' (' . $priorite . ')</b></div>
                                 <div class="col-md-8"><span style="color:grey" class="fa  fa-map-marker"></span>  '.$adresse.'</div>
-
                             </div>
-
                             <div class="row">
                                 <div class="col-md-8"><span style="color:grey" class="fas  fa-clipboard"></span> '.$observ.'</div>
-
                             </div>
                         </div>                       
                         <table style="padding-left:5px">';
@@ -752,9 +758,7 @@ class DossiersController extends Controller
                                             <td style="padding-right:8px;">' . $email->remarque . '</td>
                                          </tr> ';
                                         }
-
             foreach ($tels as $tel) {
-
                 $output .= ' <tr>
                                             <td style="padding-right:8px;"><i class="fa fa-phone"></i> ' . $tel->champ . '</td>
                                             <td style="padding-right:8px;">' . $tel->remarque . '</td>
@@ -767,9 +771,7 @@ class DossiersController extends Controller
                                             <td style="padding-right:8px;">' . $fax->remarque . '</td>
                                          </tr> ';
             }
-
                          $output .='</table> </address>                         
-
              </div> ';
 
 

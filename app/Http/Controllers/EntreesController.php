@@ -221,6 +221,14 @@ class EntreesController extends Controller
         $entree = Entree::find($id);
         $entree->delete();
 
+        $notifid = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$id.'}}\')')->get(['id']);
+        $idnotif = array_values($notifid['0']->getAttributes());
+        $idnotification=$idnotif['0'];
+
+        $notif = Notification::find($idnotification);
+
+        $notif->delete();
+
         return redirect('/entrees')->with('success', '  Supprimé avec succès');
     }
 

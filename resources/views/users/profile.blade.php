@@ -8,7 +8,7 @@
 
         <div class="row">
  
-                        <div class="col-md-4">
+                    <!--    <div class="col-md-4">
                             <div class="form-group">
                                 <div class="text-center mbl">
                                  </div>
@@ -20,46 +20,51 @@
                             </div>
 
 
-                        </div>
-                        <div class="col-md-8">
+                        </div>-->
+                        <div class="col-md-10">
                             <table class="table">
 
                                 <form class="form-horizontal" method="POST"   >
                                     {{ csrf_field() }}
                                     <input type="hidden" id="iduser" value="{{$id}}" ></input>
                                     <tbody>
-                                <tr>
-                                    <td class="text-primary">Nom complet</td>
-                                    <td><p class="user_name_max">
-                                            <input id="nom" onchange="changing(this)" type="text" class="form-control" name="name"  value="{{ $user->name }}" />
-                                        </p></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-primary">Email</td>
-                                    <td> <input id="email" autocomplete="off" onchange="changing(this)" type="email" class="form-control" name="email"  id="email" value="{{ $user->email }}" />          </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-primary">Email Boite</td>
-                                    <td> <input id="boite" autocomplete="off" onchange="changing(this)"  type="email" class="form-control" name="boite" id="boite" value="{{ $user->boite }}" />                  </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-primary">Mote de passe boite</td>
-                                    <td> <input id="passboite" autocomplete="off" onchange="changing(this)"   type="password" class="form-control" name="passboite"  id="passboite" value="{{ $user->passboite }}" />                                    </td>
-                                </tr>
-                                @if($user->phone)
+                                    <tr>
+                                        <td class="text-primary">Nom </td>
+                                        <td>
+                                            <input id="lastname" onchange="changing(this)" type="text" class="form-control" name="name"  value="{{ $user->lastname }}" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-primary">Prénom </td>
+                                        <td>
+                                            <input id="name" onchange="changing(this)" type="text" class="form-control" name="name"  value="{{ $user->name }}" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-primary">Login</td>
+                                        <td> <input readonly id="email" autocomplete="off" onchange="changing(this)" type="email" class="form-control" name="email"  id="email" value="{{ $user->email }}" />          </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-primary">Email Boite</td>
+                                        <td> <input id="boite" autocomplete="off" onchange="changing(this)"  type="email" class="form-control" name="boite" id="boite" value="{{ $user->boite }}" />                  </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-primary">Mote de passe boite</td>
+                                        <td> <input id="passboite" autocomplete="off" onchange="changing(this)"   type="password" class="form-control" name="passboite"  id="passboite" value="" />
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td class="text-primary">Tel</td>
                                         <td>    <input id="tel" onchange="changing(this);"  type="text" class="form-control" name="tel"  id="tel" value="{{ $user->phone }}" />
                                         </td>
                                     </tr>
-                                @endif
-                                @if($user->address)
                                     <tr>
-                                        <td class="text-primary">Adresse</td>
-                                        <td>{!! $user->address !!} </td>
+                                        <td class="text-primary">Skype</td>
+                                        <td>    <input id="skype" onchange="changing(this);"  type="text" class="form-control" name="skype"  id="skype" value="{{ $user->skype }}" />
+                                        </td>
                                     </tr>
-                                @endif
-                               <tr>
+
+                                <tr>
                                 <td class="text-primary">Rôle</td>
                                     <td>
 
