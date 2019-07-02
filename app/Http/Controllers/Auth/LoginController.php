@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-
+use App\Seance;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use Illuminate\Http\Request;
@@ -54,4 +54,37 @@ public function __construct()
 {
     $this->middleware('guest', ['except' => 'logout']);
 }
+public function logout(Request $request)
+    {
+        // vider les roles de lutilisateur dans la seance avant logout
+        $seance =   Seance::first();
+
+        if ($seance->dispatcheur==Auth::id())
+        {
+        	$seance->dispatcheur=NULL ;
+        }
+        if ($seance->dispatcheurtel==Auth::id())
+        {
+        	$seance->dispatcheurtel=NULL ;
+        }
+        if ($seance->superviseurmedic==Auth::id())
+        {
+        	$seance->superviseurmedic=NULL ;
+        }
+        if ($seance->superviseurtech==Auth::id())
+        {
+        	$seance->superviseurtech=NULL ;
+        }
+        if ($seance->chargetransport==Auth::id())
+        {
+        	$seance->chargetransport=NULL ;
+        }
+        $seance->save();
+
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return redirect('/');
+    }
 }

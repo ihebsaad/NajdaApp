@@ -304,22 +304,37 @@ class UsersController extends Controller
             Session::put('disp', $disp);
             if ($disp !== '0')
               { $seance->dispatcheur=Auth::id();}
+              elseif ($seance->dispatcheur==Auth::id())
+              { $seance->dispatcheur=NULL;}
+
             $supmedic = $request->get('supmedic');
             Session::put('supmedic', $supmedic);
             if ($supmedic !== '0')
               { $seance->superviseurmedic=Auth::id();}
+              elseif ($seance->superviseurmedic==Auth::id())
+              { $seance->superviseurmedic=NULL;}
+
             $suptech = $request->get('suptech');
             Session::put('suptech', $suptech);
             if ($suptech !== '0')
               { $seance->superviseurtech=Auth::id();}
+              elseif ($seance->superviseurtech==Auth::id())
+              { $seance->superviseurtech=NULL;}
+
             $chrgtr = $request->get('chrgtr');
             Session::put('chrgtr', $chrgtr);
             if ($chrgtr !== '0')
               { $seance->chargetransport=Auth::id();}
+              elseif ($seance->chargetransport==Auth::id())
+              { $seance->chargetransport=NULL;}
+            
             $disptel = $request->get('disptel');
             Session::put('disptel', $disptel);
             if ($disptel !== '0')
               { $seance->dispatcheurtel=Auth::id();}
+              elseif ($seance->dispatcheurtel==Auth::id())
+              { $seance->dispatcheurtel=NULL;}
+
         }
 
         $seance->save();
