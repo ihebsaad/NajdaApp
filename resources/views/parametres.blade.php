@@ -5,18 +5,23 @@
 
 
 
-                    <h3 class="card-title">Paramètres</h3>
+                    <h3 class="card-title">Tableau de bord</h3><br>
                          <!-- Tabs -->
                         <ul class="nav  nav-tabs">
 
                             <li class="nav-item active">
-                                <a class="nav-link  active " href="#tab1" data-toggle="tab" onclick="showinfos();hideinfos2()">
+                                <a class="nav-link  active " href="#tab1" data-toggle="tab" onclick="showinfos();hideinfos2();hideinfos3();">
                                     <i class="fa-lg fas fa-user-clock"></i>  Séance
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#tab2" data-toggle="tab" onclick="showinfos2();hideinfos()">
+                                <a class="nav-link" href="#tab2" data-toggle="tab" onclick="showinfos2();hideinfos();hideinfos3()">
                                     <i class="fa-lg fas fa-sliders-h"></i>  Paramètres
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#tab3" data-toggle="tab" onclick="showinfos3();hideinfos();hideinfos2()">
+                                    <i class="fa-lg fas fa-users"></i>  Utilisateurs Connectés
                                 </a>
                             </li>
                         </ul>
@@ -142,8 +147,26 @@
                         </div>
                     </div>
 
+                    <div id="tab3" class="tab-pane fade " style="display:block">
+                        <div class="padding:50px 50px 50px 50px"><br>
+                            <h4>Utilisateurs Connectés</h4><br>
+                            <ul style="width:600px;background-color:#F8F7F6;padding:50px 50px 50px 50px">
 
-@endsection
+                            <?php
+                            foreach($users as $user)
+                                {
+                                    $role='(Agent)';
+                                    if($user->id==$disp){$role='(Dispatcheur)';}
+                                     if($user->id==$sup){$role='(Superviseur)';}
+                                  if($user->isOnline()) { echo  '<li>'.$user->name.' '.$user->lastname .' - '. $role.' </li>' ;}
+                                }
+                                    ?><br>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    @endsection
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 
@@ -156,14 +179,18 @@
     function hideinfos2() {
         $('#tab2').css('display','none');
     }
+    function hideinfos3() {
+        $('#tab3').css('display','none');
+    }
     function showinfos() {
         $('#tab1').css('display','block');
     }
-
     function showinfos2() {
         $('#tab2').css('display','block');
     }
-
+    function showinfos3() {
+        $('#tab3').css('display','block');
+    }
 
     function changing(elm) {
         var champ=elm.id;

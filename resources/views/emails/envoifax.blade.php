@@ -6,8 +6,10 @@
     <link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
 
     <?php use \App\Http\Controllers\EnvoyesController;     ?>
-    <?php use \App\Http\Controllers\EntreesController;     ?>
-    <h2> Envoyer un Fax </h2>
+    <?php use \App\Http\Controllers\ClientsController;
+    use \App\Http\Controllers\PrestatairesController ;
+    ?>
+    <h2> Envoyer un Fax </h2><br>
     <div class="row">
 
         </div>
@@ -31,7 +33,26 @@
          <label for="destinataire">Destinataire:</label>
         <div class="row">
             <div class="col-md-10">
-                <input id="destinataire" type="text" class="form-control" name="nom" required />
+              <!--  <input id="destinataire" type="text" class="form-control" name="nom" required />-->
+
+                <?php if($type=='prestataire') {?>
+                <select class="form-control" id="prest" required name="nom" >
+                    <option ></option>
+                    @foreach($prestataires as $prestat)
+                        <option  <?php  if($prest==$prestat){ echo 'selected="selected" ';}  ?> value="<?php echo $prestat ;?>"> <?php   echo PrestatairesController::ChampById('name',$prestat); ;?></option>
+                    @endforeach
+                </select>
+                <?php }                 ?>
+                <?php if($type=='client') {?>
+
+                <input id="nom" required type="text" name="nom" readonly class="form-control" value="<?php  echo ClientsController::ClientChampById('name',$refdem) ;?> " />
+                <?php }                 ?>
+
+                <?php if($type=='libre') {?>
+
+               <input id="nom" required type="text" class="form-control" name="nom" required />
+                <?php }                 ?>
+
             </div>
 
 
@@ -39,12 +60,21 @@
     </div>
 
     <div class="form-group">
-         <label for="destinataire">Numéro:</label>
+         <label for="numero">Numéro:</label>
         <div class="row">
             <div class="col-md-10">
-                <input id="destinataire"  class="form-control" name="numero" required />
-            </div>
+             <?php  if($type=='libre'){ ?>
+                  <input id="numero"  class="form-control" name="numero" required />
+              <?php  }  else { ?>
 
+                 <select   id="numero"  class="form-control" required name="numero" >
+                @foreach($faxs as $fax)
+
+                    <option   value="<?php echo $fax; ?>"> <?php   echo  $fax ;?></option>
+                @endforeach
+                 </select>
+                <?php } ?>
+            </div>
 
         </div>
     </div>
@@ -55,7 +85,7 @@
         <label>Attachements </label>
         <div class="row">
             <div class="col-md-10">
-        <select id="attachs" class="itemName form-control col-lg-6" style="" name="attachs[]"  multiple  value="$('#attachs').val()">
+        <select id="attachs" class="itemName form-control col-lg-6" style="" name="attachs[]"  multiple    value="$('#attachs').val()">
             <option></option>
             @foreach($attachements as $attach)
                   @if($attach->type=='pdf')
@@ -122,6 +152,24 @@
             }
         });
 
+
+        <?php $urlapp=env('APP_URL'); ?>
+
+        $("#prest").change(function(){
+            //  prest = $(this).val();
+            var  prest =document.getElementById('prest').value;
+
+            if (prest>0)
+            {
+
+                window.location = '<?php echo $urlapp; ?>/emails/envoifax/<?php echo $doss; ?>/prestataire/'+prest;
+            }else{
+                window.location = "<?php echo $urlapp; ?>/emails/envoifax/<?php echo $doss; ?>/prestataire/0";
+
+            }
+
+
+        });
 
 
 

@@ -41,7 +41,7 @@
                                          <i style="margin-left:20px" id="close" class="fa fa-lg   fa-window-restore"></i>
                                     </span>
                                 </div>
-                <div class="panel-body" style="display: block;">                
+                <div class="panel-body" style="display: block;min-height:450px;">
                 @yield('content')
 
                               

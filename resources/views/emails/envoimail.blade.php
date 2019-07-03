@@ -187,7 +187,7 @@
                         <div class="row" >
                             <div class="alert alert-danger alert-dismissible   show" role="alert">
 
-                                Si vous avez un fichier à attacher, faites-le maintenant svp avant toute autre action!
+                                Avez-vous un fichier à attacher à ce mail ?
                              </div>
                         </div>
 

@@ -294,7 +294,8 @@ class EmailController extends Controller
             $sujet=($oMessage->getSubject())  ;
 
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
-            $contenu= ($oMessage->getHTMLBody(true));
+           // $contenu= ($oMessage->getHTMLBody(true));
+            $contenu= ($oMessage->getTextBody());
           //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -319,9 +320,6 @@ class EmailController extends Controller
                     break;
                 }
         }
-
-
-
 
                 $entree = new Entree([
                     'destinataire' => 'test@najda-assistance.com',
@@ -497,7 +495,8 @@ class EmailController extends Controller
 
             $sujet=strval($oMessage->getSubject())  ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
-            $contenu= $oMessage->getHTMLBody(true);
+           // $contenu= $oMessage->getHTMLBody(true);
+            $contenu= $oMessage->getTextBody();
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -704,7 +703,9 @@ class EmailController extends Controller
 
             $sujet=strval($oMessage->getSubject())  ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
-            $contenu= $oMessage->getHTMLBody(true);
+           ///// $contenu= $oMessage->getHTMLBody(true);
+            $contenu= $oMessage->getTextBody();
+
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -821,11 +822,11 @@ class EmailController extends Controller
 
             foreach ($aMessage as $oMessage) {
 
-
                 //$sujet=strval($oMessage->getSubject())  ;
                 $sujet=$oMessage->getSubject()  ;
 
-                $contenu= $oMessage->getHTMLBody(true);
+                //$contenu= $oMessage->getHTMLBody(true);
+                $contenu= $oMessage->getTextBody();
 
                 $date= $oMessage->getDate();
                 $mailid=$oMessage->getUid();
@@ -852,7 +853,6 @@ class EmailController extends Controller
 
 
                     $entree = new Entree([
-
 
                         'destinataire' =>  'SMS Najda',
                         'emetteur' =>  ($sujet),
@@ -956,7 +956,8 @@ class EmailController extends Controller
 
             $sujet=strval($oMessage->getSubject())  ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
-            $contenu= $oMessage->getHTMLBody(true);
+           // $contenu= $oMessage->getHTMLBody(true);
+            $contenu= $oMessage->getTextBody();
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -1381,8 +1382,48 @@ class EmailController extends Controller
         return view('emails.envoimailbr',['attachements'=>$attachements,'envoye'=>$envoye,'doss'=>$id]);
     }
 
-    public function envoifax($id)
-    {
+
+  //  public function envoifax($id)
+      public function envoifax($id,$type,$prest=null)
+       {
+           $faxs=array();
+           $prestataires=array();
+           $refdem='';
+           if (isset($prest)){$prest=$prest;}else{$prest=0;}
+
+           if($type=='client')
+          {
+              $cl=app('App\Http\Controllers\DossiersController')->ClientDossierById($id);
+              $refdem=app('App\Http\Controllers\DossiersController')->RefDemDossierById($id);
+
+              $faxs =   Adresse::where('nature', 'fax')
+                  ->where('parent',$cl)
+                  ->pluck('champ');
+
+              $faxs =  $faxs->unique();
+
+          }
+
+
+
+           if($type=='prestataire')
+           {
+               $prestataires =   Prestation::where('dossier_id', $id)->pluck('prestataire_id');
+               $prestataires = $prestataires->unique();
+
+               if ($prest!='')
+               {
+
+
+                   $faxs =   Adresse::where('nature', 'fax')
+                       ->where('parent',$prest)
+                       ->pluck('champ');
+
+                   $faxs =  $faxs->unique();
+               }
+
+
+           }
 
         $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
         $entrees =   Entree::where('dossier', $ref)->get();
@@ -1408,7 +1449,7 @@ class EmailController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('emails.envoifax',['attachements'=>$attachements,'doss'=>$id]);
+        return view('emails.envoifax',['attachements'=>$attachements,'doss'=>$id,'prest'=>$prest,'faxs'=>$faxs,'type'=>$type,'prestataires'=>$prestataires,'refdem'=>$refdem]);
     }
 
     function send (Request $request)
@@ -1609,6 +1650,7 @@ class EmailController extends Controller
         $doss = $request->get('dossier');
 
         $nom = $request->get('nom');
+        $nom= substr ( $nom,0 ,15);
         $description = $request->get('description');
         $numero = $request->get('numero');
         //  $contenu = $request->get('contenu');
@@ -1616,8 +1658,8 @@ class EmailController extends Controller
 
         $cc='ihebsaad@gmail.com';
         //  $cc='';
-           $to='ihebsaad@gmail.com';
-      ////////////  $to='envoifax@najda-assistance.com';
+            $to='ihebsaad@gmail.com';
+         $to='envoifax@najda-assistance.com';
         $sujet='1234,Najda,najda,'.$nom.'@'.$numero.'';
 
 
@@ -1707,9 +1749,9 @@ class EmailController extends Controller
                     $par=Auth::id();
                     $envoye = new Envoye([
                         'emetteur' => 'najdassist@gmail.com', //env('emailenvoi')
-                        'destinataire' => $numero .'-'.$doss,
+                        'destinataire' => $nom .'-'.$numero,
                         'par'=> $par,
-                        'sujet'=> 'Fax Najda',
+                        'sujet'=> 'Fax - '.$sujet,
                         'contenu'=> '',
                         'attachements'=> $count,
                         'statut'=> 1,

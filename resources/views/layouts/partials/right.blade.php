@@ -1023,7 +1023,7 @@ var hrefidAcheverM;
 
 
 
-    setInterval(function(){
+  //  setInterval(function(){
  //alert("Hello"); 
 
   var userIdConnec = $('meta[name="userId"]').attr('content');
@@ -1064,7 +1064,7 @@ var hrefidAcheverM;
    
 
 
-}, 5000);
+//}, 5000);
 
 
 

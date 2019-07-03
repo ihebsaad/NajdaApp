@@ -48,10 +48,8 @@
     <div class="panel-heading" id="headernotifs">
         <h4 class="panel-title">Notifications</h4>
         <span class="pull-right">
-                                       <i class="fa fa-fw clickable fa-chevron-up"></i>
-
-
-                                    </span>
+         <i class="fa fa-fw clickable fa-chevron-up"></i>
+            </span>
     </div>
     <div  class="panel-body" style="display: block;">
         <ul id="tabskbs" class="nav nav-tabs" style="margin-bottom: 15px;">
@@ -65,7 +63,7 @@
         </ul>
         <div id="NotificationsTabContent" class="tab-content">
             <div class="tab-pane fade active in  scrollable-panel" id="notificationstab">
-                <div class="row" style="width: 99%">
+             <!-- (TRI)   <div class="row" style="width: 99%">
                     <div class="col-xs-9 col-md-9 align-left">
                         <div class="select">
                             <select>
@@ -85,7 +83,7 @@
                     <div class="col-xs-1 col-md-1 pull-right">
                         <a href="#" class="btn btn-danger btn-sm btn-responsive" role="button"> </a>
                     </div>
-                </div>
+                </div>     --->
             @php
                 {{ //print_r(config('commondata.dossiers'));
                 }}

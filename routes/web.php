@@ -84,7 +84,10 @@ Route::get('/emails/sending','EmailController@sending')->name('emails.sending');
 Route::get('/emails/envoimail/{id}/{type}','EmailController@envoimail')->name('emails.envoimail');
 Route::get('/emails/envoimail/{id}/{type}/{prest}','EmailController@envoimail')->name('emails.envoimail');
 Route::get('/emails/envoimailbr/{id}','EmailController@envoimailbr')->name('emails.envoimailbr');
-Route::get('/emails/envoifax/{id}','EmailController@envoifax')->name('emails.envoifax');
+#Route::get('/emails/envoifax/{id}','EmailController@envoifax')->name('emails.envoifax');
+Route::get('/emails/envoifax/{id}/{type}','EmailController@envoifax')->name('emails.envoifax');
+Route::get('/emails/envoifax/{id}/{type}/{prest}','EmailController@envoifax')->name('emails.envoifax');
+
 //Route::post('/emails/searchprest','EmailController@searchprest')->name('emails.searchprest');
 Route::get('/emails/searchprest','EmailController@searchprest')->name('emails.searchprest');
 Route::get('/emails', 'EmailController@index');

@@ -72,11 +72,29 @@ use App\Document ;
                 </button>
             </div>
 
+
             <div class="btn-group">
-                <button type="button" class="btn btn-default" id="newfax">
-                    <a style="color:black" href="{{action('EmailController@envoifax',$dossier->id)}}"> <i class="fa fa-fax"></i> Fax</a>
+                <button type="button" id="newfax" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-fax"></i> Fax <i class="fa fa-angle-down"></i>
                 </button>
+
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="{{route('emails.envoifax',['id'=>$dossier->id,'type'=> 'client','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Au client </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.envoifax',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Au Prestataire </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.envoifax',['id'=>$dossier->id,'type'=> 'libre','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Libre </a>
+                    </li>
+
+                </ul>
             </div>
+
             <div class="btn-group">
                 <button type="button" class="btn btn-default" id="newcalldossier">
                     <i class="fa fa-phone"></i>
@@ -88,13 +106,12 @@ use App\Document ;
     </div>
     </div>
 
-
 </div>
     <section class="content form_layouts">
 
-
-	
-
+<br>
+        <B><a href="{{action('DossiersController@fiche',$dossier->id)}}"  >Détails du dossier </a></B>
+<br>
   
                  <div class="form-group" style="margin-top:25px;">
                         {{ csrf_field() }}
@@ -138,7 +155,6 @@ use App\Document ;
                                     </div>
                                 </div>
                             </div>
-
 
 
                             <div class="row">

@@ -18,7 +18,7 @@
         <?php use \App\Http\Controllers\UsersController;     ?>
 
 
-        <input type="hidden" id="iduser" value="{{$id}}" ></input>
+        <input type="hidden" id="id" value="{{$id}}" ></input>
         <table class="table">
 
         <tbody>

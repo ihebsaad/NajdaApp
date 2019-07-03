@@ -45,18 +45,14 @@ $total= ActualitesController:: NbrActus();
 				<script src="{{  URL::asset('public/js/breaking-news-ticker.min.js') }}" type="text/javascript"></script>
 				<link href="{{ URL::asset('public/css/breaking-news-ticker.css') }}" rel="stylesheet">
 
-
 				<script type="text/javascript">
 
                     jQuery(document).ready(function($){
                         $('#newsTicker1').breakingNews();
 
-
                         $('#newsTicker13').breakingNews({
                             effect: 'slide-right'
                         });
-
-
 
                     });
 
