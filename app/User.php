@@ -36,7 +36,7 @@ class User extends Authenticatable
 
      public function activeMissions()
     {
-        return $this->hasMany('App\Mission')->where('statut_courant','Active');
+        return $this->hasMany('App\Mission')->where('statut_courant','active');
     }
 
     public function dossier()

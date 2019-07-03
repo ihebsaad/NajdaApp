@@ -1319,7 +1319,7 @@ class EmailController extends Controller
 
         }
 
-         $identr=array();
+        $identr=array();
         $idenv=array();
         foreach ($entrees as $entr)
         {
