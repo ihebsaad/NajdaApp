@@ -146,7 +146,6 @@ class DocumentsController extends Controller
             'type'=>'doc','path' => '/app/documents/'.$refdoss.'/'.$name_file, 'nom' => $name_file,'boite'=>2,'dossier'=>$dossier
         ]);
         $attachement->save();
-        return $file;
     }
 
     public function htmlfilled(Request $request)

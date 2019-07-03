@@ -1381,9 +1381,9 @@ function filltemplate(data,tempdoc)
                 //'&_token='+_token
                 data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent,
                 success:function(data){
-                    alert(JSON.stringify(data));
-                    /*console.log(data);
-                    location.reload();*/
+                    //alert(JSON.stringify(data));
+                    console.log(data);
+                    location.reload();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
