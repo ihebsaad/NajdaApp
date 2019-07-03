@@ -35,7 +35,7 @@
                             $seance =  DB::table('seance')
                                 ->where('id','=', 1 )->first();
                             $disp=$seance->dispatcheur ;
-                            $sup=$seance->superviseur ;
+                            $sup=$seance->superviseurtech ;
                             $debut=$seance->debut ;
                             $fin=$seance->fin ;
 
@@ -158,7 +158,7 @@
                                     $role='(Agent)';
                                     if($user->id==$disp){$role='(Dispatcheur)';}
                                      if($user->id==$sup){$role='(Superviseur)';}
-                                  if($user->isOnline()) { echo  '<li>'.$user->name.' '.$user->lastname .' - '. $role.' </li>' ;}
+                                  if($user->isOnline()) { echo  '<li><i class="fa fa-user fa-lg"/> '.$user->name.' '.$user->lastname .' - '. $role.' </li>' ;}
                                 }
                                     ?><br>
 

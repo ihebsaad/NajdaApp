@@ -1023,7 +1023,7 @@ var hrefidAcheverM;
 
 
 
- 
+
   var userIdConnec = $('meta[name="userId"]').attr('content');
      
     $.ajax({
