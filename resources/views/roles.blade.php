@@ -1,6 +1,12 @@
  <?php
-    // use DB;
 
+    use \App\Http\Controllers\UsersController;
+    $haveroles =   DB::table('roles_users')
+            ->where(['user_id' => Auth::id()])
+            ->count();
+    if ($haveroles > 0)
+    {
+    // use DB;
      $seance = DB::table('seance')->first();
 
 ?>
@@ -23,6 +29,10 @@
         <span class="checkround"></span>
     </label>-->
 <?php 
+    // verifier si user a le role
+    if (UsersController::CheckRoleUser(Auth::id(),2) > 0)
+      {  
+        // verifier si le role est vide dans la seance et quil na pas deja le role
         if (empty($seance->dispatcheur) || ($seance->dispatcheur === Auth::id()))
         { 
 ?>
@@ -52,9 +62,12 @@
             $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheur);
             echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Dispatcheur <b>( '.$nomagent.' )</b></label></div>';
         }
+        }
         ?>
     </label>
 <?php 
+    if (UsersController::CheckRoleUser(Auth::id(),3) > 0)
+      { 
         if (empty($seance->superviseurmedic) || ($seance->superviseurmedic === Auth::id()))
         { 
 ?>
@@ -84,9 +97,12 @@
             $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->superviseurmedic);
             echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Superviseur Médic <b>( '.$nomagent.' )</b></label></div>';
         }
+        }
         ?>
     </label>
 <?php 
+    if (UsersController::CheckRoleUser(Auth::id(),4) > 0)
+      { 
         if (empty($seance->superviseurtech) || ($seance->superviseurtech === Auth::id()))
         { 
 ?>
@@ -116,9 +132,12 @@
             $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->superviseurtech);
             echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Superviseur Technique <b>( '.$nomagent.' )</b></label></div>';
         }
+        }
         ?>
     </label>
 <?php 
+    if (UsersController::CheckRoleUser(Auth::id(),5) > 0)
+      { 
         if (empty($seance->chargetransport) || ($seance->chargetransport === Auth::id()))
         { 
 ?>
@@ -148,9 +167,12 @@
             $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->chargetransport);
             echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Chargé Transport <b>( '.$nomagent.' )</b></label></div>';
         }
+        }
         ?>
     </label>
 <?php 
+    if (UsersController::CheckRoleUser(Auth::id(),6) > 0)
+      { 
         if (empty($seance->dispatcheurtel) || ($seance->dispatcheurtel === Auth::id()))
         { 
 ?>
@@ -179,6 +201,7 @@
         {
             $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheurtel);
             echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Dispatcheur Téléphonique <b>( '.$nomagent.' )</b></label></div>';
+        }
         }
         ?>
     </label>
@@ -385,5 +408,10 @@ body {font-family: "Open Sans", serif !important;}
 
 
 </style>
- 
+ <?php
+}
+else
+{
+    redirect()->to('home')->send();
+}
  

@@ -50,10 +50,13 @@ Route::post('/demo/test/', 'DemoController@test')->name('demo.test');
 Route::post('/home/fetch', 'HomeController@fetch')->name('home.fetch');
 
 //affectation dossier dispartcheur
-
 Route::get('/affectation/',  'AffectDossController@Interface_Affectation_DossierDispatcheur'); 
 Route::post('/affecterDossier',  'AffectDossController@affecterDossier')->name('affectation.dossier'); 
 Route::get('/getNotificationAffectationDoss/{userConnect}', 'AffectDossController@getNotificationAffectationDoss'); 
+
+// delegation mission
+Route::post('/deleguerMission/','DeleguerMissionController@deleguerMission')->name('Deleguer.Mission');
+Route::get('/getNotificationDeleguerMiss/{userConnect}', 'DeleguerMissionController@getNotificationDeleguerMiss'); 
 
 
 /*** Entrees **/
@@ -172,7 +175,7 @@ Route::post('/cities/updating','CitiesController@updating')->name('cities.updati
 Route::get('/cities/view/{id}', 'CitiesController@view');
 
 
-/*** Actualites   **/
+/*** Actualites  **/
 //Route::resource('/actualites',  'ActualitesController');
 Route::get('/actualites', array('as' => 'actualites','uses' => 'ActualitesController@index'));
 Route::post('/actualites/saving','ActualitesController@saving')->name('actualites.saving');

@@ -495,8 +495,7 @@ class DossiersController extends Controller
         $garages = Cache::remember('prestataires_type_prestations',$minutes,   function () {
 
             return DB::table('prestataires_type_prestations')
-                ->where('type_prestation_id',30 )
-                ->orwhere('type_prestation_id',22 )
+                ->where('type_prestation_id',22 )
 
                 ->get();
         });

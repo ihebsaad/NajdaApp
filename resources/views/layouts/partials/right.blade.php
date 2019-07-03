@@ -1023,9 +1023,7 @@ var hrefidAcheverM;
 
 
 
-  //  setInterval(function(){
- //alert("Hello"); 
-
+ 
   var userIdConnec = $('meta[name="userId"]').attr('content');
      
     $.ajax({
@@ -1070,6 +1068,60 @@ var hrefidAcheverM;
 
 
 </script>
+
+<!--  délégation des missions -->
+
+<script type="text/javascript">
+  
+
+    //setInterval(function(){
+ //alert("Hello"); 
+
+  var userIdConnec = $('meta[name="userId"]').attr('content');
+     
+    $.ajax({
+       url : '{{ url('/') }}'+'/getNotificationDeleguerMiss/'+userIdConnec,
+       type : 'GET',
+       dataType : 'html', // On désire recevoir du HTML
+       success : function(data){ // code_html contient le HTML renvoyé
+           //alert (data);
+
+           if(data)
+           {
+          
+           // var idUserAffecte=jQuery(data).find('.userAff').attr("id");
+           // var refdoss=jQuery(data).find('.refdoss').attr("id");
+           
+
+           swal(data);
+
+          // location.reload(); 
+            /* if(idUserAffecte==userIdConnec)
+             {
+
+                 alert('un nouveau dossier dont la réf : '+refdoss +'est affecté à vous');
+                 location.reload(); 
+
+
+             }*/
+            
+              
+       
+
+            
+           }
+       }
+    });
+   
+
+
+//}, 7000);
+
+
+
+
+</script>
+
 
 
 

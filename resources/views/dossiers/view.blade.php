@@ -149,6 +149,11 @@ use App\Document ;
                                 <i class="fas fa-lg fa-file-word"></i>  Docs
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tab7" data-toggle="tab">
+                                <i class="fas fa-file-import"></i>  OM
+                            </a>
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link"   href="{{action('DossiersController@fiche',$dossier->id)}}"  >
@@ -450,6 +455,57 @@ use App\Document ;
                             </td>
                         </tr>
                     @endforeach
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div id="tab7" class="tab-pane fade">
+                <div style="">
+                    <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addom" class="btn btn-md btn-success"   data-toggle="modal" data-target="#generatedoc"><b><i class="fas fa-plus"></i> Créer un ordre de mission</b></button>
+
+
+                </div>
+                <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
+                    <thead>
+                    <tr id="headtable">
+                        <th style="">OM</th>
+                        <!--<th style="">Description</th>-->
+                        <th style="">Historique</th>
+                        <th style="">Actions</th>
+                     </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style=";"></td>
+                            <td style=";">
+                            </td>
+                            <td>
+                                    <div class="page-toolbar">
+
+                                    <div class="btn-group">
+                                        <div class="btn-group" style="margin-right: 10px">
+                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important;" id="btnannremp">
+                                                <a style="color:black" href="#" id="annremp" onclick="remplacedoc();"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
+                                            </button>
+                                        </div>
+
+                                        <div class="btn-group" style="margin-right: 10px">
+                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,214,214) !important;" id="btnann">
+                                                <a style="color:black"  onclick="annuledoc();" href="#" > <i class="far fa-window-close"></i> Annuler</a>
+                                            </button>
+                                        </div>
+                                        <div class="btn-group" style="margin-right: 10px">
+                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important;" id="btntele">
+                                                <a style="color:black" href="" ><i class="fa fa-download"></i> Télécharger</a>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    </div>
+                            </td>
+                        </tr>
 
                     </tbody>
                 </table>

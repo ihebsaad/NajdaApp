@@ -27,13 +27,13 @@
 
 <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#home">Instructions</a></li>
-  <li><a data-toggle="tab" href="#menu1">Email</a></li>
+  <!--<li><a data-toggle="tab" href="#menu1">Email</a></li>
   <li><a data-toggle="tab" href="#menu2">SMS</a></li>
   <li><a data-toggle="tab" href="#menu3">Téléphone</a></li>
   <li><a data-toggle="tab" href="#menu4">Fax</a></li>
   <li><a data-toggle="tab" href="#menu5">Créer Prestation</a></li>
   <li><a data-toggle="tab" href="#menu6">Créer OM</a></li>
-  <li><a data-toggle="tab" href="#menu7">Créer Doc</a></li>
+  <li><a data-toggle="tab" href="#menu7">Créer Doc</a></li>-->
   
 </ul>
 
@@ -58,8 +58,55 @@
    <!--<form action="{{ url('dossier/Mission/TraitercommentAction/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}">-->
 
     <br>
+     <div class="row">
+     
+     <div class="col-sm-2">
 
-   
+
+      <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope"></i> Email <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'client','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Au client </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Au Prestataire </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            A l'assuré </a>
+                    </li>
+
+                </ul>
+     </div>&nbsp
+     </div>
+    <div class="col-sm-1">
+      <button class="btn btn-default">sms</button>&nbsp
+     </div>
+     <div class="col-sm-2">
+      <button class="btn btn-default">téléphone </button>&nbsp;
+     </div>
+     <div class="col-sm-1">
+      <button class="btn btn-default">fax</button>&nbsp
+     </div>
+     <div class="col-sm-2">
+      <button class="btn btn-default">prestation </button>
+     </div>
+     <div class="col-sm-2">
+      <button class="btn btn-default">créer DOC </button>&nbsp
+     </div>
+     <div class="col-sm-2">
+      <button class="btn btn-default">créer ORM </button>&nbsp
+     </div>
+
+
+
+    </div>
+
     <!--<div class="row">
        
 
@@ -313,15 +360,19 @@ $(document).on('click','.kbstab',function(){
     <div class="row" style=" padding-top: 50px;">
         
       <div class="col-md-5">
-         <button id="BouDeleAction" type="button"class="btn btn-primary disabled" style="width: 250px;"> Déléguer l'action</button>
+         <!--<button id="BouDeleAction" type="button"class="btn btn-primary disabled" style="width: 250px;"> Déléguer l'action</button>-->
       </div>
 
       <div class="col-md-2">
       </div>
 
    <div class="col-md-5">
-        <button id="BouDeleMiss" type="button" class="btn btn-primary disabled" style="width: 250px; "> Déléguer la mission
-        </button>
+        <!--<button id="BouDeleMiss" type="button" class="btn btn-primary disabled" style="width: 250px; "> Déléguer la mission
+        </button>-->
+
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalDelegMiss">Déléguer la mission courante</button>
+
+        
   </div>
       
 
@@ -553,12 +604,37 @@ $('#DivDeleAction').hide();
 });
 </script>
 <!-- fin traitement partie instructions ------------------------------------------------------------------ -->
-  <div id="menu1" class="tab-pane fade">
+  <div id="menu1" class="tab-pane fade" style="height: 500px;">
     <h3>Mail</h3>
     <p>
 
     <!-- début traitement email------------------------------------------------------------------ -->
+<div class="row">
+  <div class="col-md-6">
+  </div>
+    <div class="col-md-6">
+    <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope"></i> Email <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'client','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Au client </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Au Prestataire </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            A l'assuré </a>
+                    </li>
 
+                </ul>
+     </div>
+    </div>
+  </div>
      
       <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#annulerAttenteReponse"> Annuler attente de réponse</button>
 <style>
@@ -631,7 +707,11 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
       </script>
 
 
-     {{-- @include('emails.envoimail');--}}
+     {{--@include('emails.envoimailAction');--}}
+
+
+
+
 
       
     </div>
@@ -997,7 +1077,71 @@ var hrefidAcheverA;
 <div id="myModalk" class="modal fade" role="dialog"></div>
 
 
-<!-- model pour les rappels (Attente de réponse)-->
+<!-- model pour délégation des missions-->
+
+<div class="modal fade" id="modalDelegMiss" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <form  method="post" action="{{ route('Deleguer.Mission') }}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal2">Déléguer la mission courante</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+                    <div class="form-group">
+                        
+                        
+                            {{ csrf_field() }}
+                            <input id="MissDeldossid" name="MissDeldossid" type="hidden" value="{{$Action->Mission->dossier->id}}">
+                            <input id="delegMissid" name="delegMissid" type="hidden" value="{{$Action->Mission->id}}">
+
+                            <input id="affecteurmiss" name="affecteurmiss" type="hidden" value="{{ Auth::user()->id}}">
+                            <input id="statdoss" name="statdoss" type="hidden" value="existant">
+
+                            <div class="form-group " >
+                                <div class=" row  ">
+                                    <div class="form-group mar-20">
+                                        <label for="agent" class="control-label" style="padding-right: 20px">Agent</label>
+                                        <select id="agent" name="agent" class="form-control select2" style="width: 230px">
+                                            <option value="Select">Selectionner</option>
+                                            <?php $agents = App\User::get(); ?>
+                                           
+                                                @foreach ($agents as $agt)
+                                                <?php if (!empty ($agentname)) { ?>
+                                                @if ($agentname["id"] == $agt["id"])
+                                                    <option value={{ $agt["id"] }} selected >{{ $agt["name"] }}</option>
+                                                @else
+                                                    <option value={{ $agt["id"] }} >{{ $agt["name"] }}</option>
+                                                @endif
+                                                
+                                                <?php }
+                                                else
+                                                      {  echo '<option value='.$agt["id"] .' >'.$agt["name"].'</option>';}
+                                                ?>
+                                                @endforeach    
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                      
+
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="submit" id="attribdoss" class="btn btn-primary">Déleguer Mission</button>
+            </div>
+        </div>
+          </form>
+    </div>
+</div>
+
 
   
 

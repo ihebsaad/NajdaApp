@@ -14,7 +14,7 @@ class TypeMission extends Model
         
       'nom_type_Mission','des_miss','type_heu_spec','rdv','act_rdv','dep_pour_miss','act_dep_pour_miss','dep_charge_dest',
       'act_dep_charge_dest','arr_prev_dest','act_arr_prev_dest','decoll_ou_dep_bat','act_decoll_ou_dep_bat',
-      'arr_av_ou_bat','act_arr_av_ou_bat','retour_base', 'act_retour_base',
+      'arr_av_ou_bat','act_arr_av_ou_bat','retour_base', 'act_retour_base','nb_acts',
 
 
       'action1','ordre_action1','desc_action1', 'nb_opt_act1','igno_ou_non1','rapl_ou_non1','report_ou_non1',

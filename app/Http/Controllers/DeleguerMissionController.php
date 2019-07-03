@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Entree;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
@@ -9,14 +8,19 @@ use App\AffectDoss;
 use App\AffectDossHis;
 use App\User;
 use App\Dossier;
+use App\Mission;
+use App\TypeMission;
+use App\DelegMissHis;
+use App\DelegMiss;
 use DB;
 use App;
 use Redirect;
 use URL;
 use Session;
+use Auth;
 
 
-class AffectDossController extends Controller
+class DeleguerMissionController extends Controller
 {
 
 
@@ -26,160 +30,71 @@ class AffectDossController extends Controller
     }
 
 
-      public function Interface_Affectation_DossierDispatcheur()
-      {
-
-       $users=User::get();
-       //dd($users);
-       $dossiers=Dossier::get();
-     //dd($dossiers);
-            
-     return view('dispatcheur.affectation_doss',['users'=>$users,'dossiers'=> $dossiers]);
-
-      }
+     
 
 
-   public function affecterDossier(Request $request)
+   public function deleguerMission(Request $request)
    {
 
            // $in=$req->all();
             //dd($in);
 
-    if($request->get('statdoss')=="existant")
-    {
+      //  dd($request->all());
+
+        /*"MissDeldossid" => "20386"
+  "delegMissid" => "137"
+  "affecteurmiss" => "3"
+  "statdoss" => "existant"
+  "agent" => "3"*/
         // dd("existant");
-         $dossier = Dossier::find($request->get('dossierid'));
+         $mission = Mission::find($request->get('delegMissid'));
         
           $agent= $request->get('agent');
 
-        if ($dossier->update(['affecte' => $agent]))
+        if ( $mission->update(['user_id' => $agent]))
         { 
 
 
             $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i');
-            $affec=new AffectDoss([
+            $affec=new DelegMiss([
 
-                  'util_affecteur'=>$request->get('affecteurdoss'),
+                  'util_affecteur'=>$request->get('affecteurmiss'),
                   'util_affecte'=>$agent,
-                  'statut'=>"existant",
-                  
-                  'id_dossier'=> $dossier->id,
+                  'id_mission'=>$mission->id,                
+                  'id_dossier'=>$request->get('MissDeldossid'),
                   'date_affectation'=>$dtc,
 
             ]);
 
              $affec->save();
 
-             return back()->with("AffectDossier", "le dossier est affecté avec succès");
+                      
+                    $dossier= $mission->dossier;
+                   // $dossiers=Dossier::get();
+                    $typesMissions=TypeMission::get();                   
+              
+                    $Missions=Auth::user()->activeMissions;
+                    
+
+
+                Session::flash('AffectMission',"la mission est déléguée avec succès");            
+
+                return view('actions.deleguerMission',['typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
+
+             
 
         }
 
- 
+
+
+
     }
 
 
 
-     if($request->get('statdoss')=="nouveau")
-           //cas d un nouveau dossier
-            // code pour enregistrer dans la table dossier
-     {
-       // dd("nouveau");
+    
 
-         $reference_medic = '';
-        $type_affectation = $request->get('type_affectation');
-        $annee = date('y');
-
-
-        if ($type_affectation == 'Najda') {
-            $maxid = app('App\Http\Controllers\DossiersController')->GetMaxIdBytype('Najda');
-            $reference_medic = $annee . 'N' . sprintf("%'.04d\n", $maxid+1);
-        }
-        if ($type_affectation == 'VAT') {
-            $maxid =  app('App\Http\Controllers\DossiersController')->GetMaxIdBytype('VAT');
-            $reference_medic = $annee . 'V' . sprintf("%'.04d\n", $maxid+1);
-
-        }
-        if ($type_affectation == 'MEDIC') {
-            $maxid =  app('App\Http\Controllers\DossiersController')->GetMaxIdBytype('MEDIC');
-            $reference_medic = $annee . 'M' . sprintf("%'.04d\n", $maxid+1);
-
-        }
-        if ($type_affectation == 'Transport MEDIC') {
-            $maxid =  app('App\Http\Controllers\DossiersController')->GetMaxIdBytype('Transport MEDIC');
-            $reference_medic = $annee . 'TM' . sprintf("%'.04d\n", $maxid+1);
-
-        }
-        if ($type_affectation == 'Transport VAT') {
-            $maxid = app('App\Http\Controllers\DossiersController')->GetMaxIdBytype('Transport VAT');
-            $reference_medic = $annee . 'TV' . sprintf("%'.04d\n", $maxid+1);
-
-        }
-        if ($type_affectation == 'Medic International') {
-            $maxid =  app('App\Http\Controllers\DossiersController')->GetMaxIdBytype('Medic International');
-            $reference_medic = $annee . 'MI' . sprintf("%'.04d\n", $maxid+1);
-
-        }
-        if ($type_affectation == 'Najda TPA') {
-            $maxid =  app('App\Http\Controllers\DossiersController')->GetMaxIdBytype('Najda TPA');
-            $reference_medic = $annee . 'TPA' . sprintf("%'.04d\n", $maxid+1);
-
-        }
-        if ($type_affectation == 'Transport Najda') {
-            $maxid =  app('App\Http\Controllers\DossiersController')->GetMaxIdBytype('Transport Najda');
-            $reference_medic = $annee . 'TN' . sprintf("%'.04d\n", $maxid+1);
-
-        }
-
-
-     ///   if ($this->CheckRefExiste($reference_medic) === 0) {
-        $dossier = new Dossier([
-            'type_dossier' => $request->get('type_dossier'),
-            'type_affectation' => $type_affectation,
-            'affecte' => $request->get('affecte'),
-            'reference_medic' => $reference_medic,
-
-        ]);
-        if ($dossier->save())
-        { $iddoss=$dossier->id;
-
-            $identree = $request->get('entree_id');
-            if($identree!=''){
-                $entree  = Entree::find($identree);
-
-                $entree->dossier=$reference_medic;
-                $entree->save();
-            }
-
-              $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i');
-            $affec=new AffectDoss([
-
-                  'util_affecteur'=>$request->get('affecteur'),
-                  'util_affecte'=>$request->get('affecte'),
-                  'statut'=>"nouveau",
-                  
-                  'id_dossier'=>$iddoss,
-                  'date_affectation'=>$dtc,
-
-            ]);
-
-             $affec->save();
-
-             return back()->with("AffectNouveauDossier", "le nouveau dossier est affecté avec succès");
-
-            //return url('/dossiers/view/'.$iddoss)/*->with('success', 'Dossier Créé avec succès')*/;
-           // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
-           //  return  $iddoss;
-           }
-
-         else {
-             return url('/dossiers');
-            }
-
-            // fin saving dossier  
-
-        }
-
-   }
+   
 
 
 
@@ -208,27 +123,33 @@ class AffectDossController extends Controller
      }*/
 
 
-     public function getNotificationAffectationDoss($userConnect)
+     public function getNotificationDeleguerMiss($userConnect)
      {
 
-       $affd=AffectDoss::where('util_affecte',$userConnect)->orderBy('date_affectation', 'asc')->first();
-        $output='';
-       if( $affd !=null)
+       $affm=DelegMiss::where('util_affecte',$userConnect)->orderBy('date_affectation', 'asc')->first();
+       $output='';
+       if($affm != null)
        {
-            $ref_doss=Dossier::where('id',$affd->id_dossier)->first();
 
-            if( $ref_doss)
+
+           //$id_doss= Mission::where($affm->id_mission)->first()->id_dossier;
+         $id_doss=$affm->id_dossier;
+         $doss=Dossier::find($id_doss);
+             $ref_doss=$doss->reference_medic;
+         $titre_miss=Mission::where('id',$affm->id_mission)->first()->titre;
+
+            if($ref_doss &&  $titre_miss )
             {
-            $output='le dossier de référence '.$ref_doss->reference_medic.' est affecté à vous';
-             $affechis=new AffectDossHis($affd->toArray()); 
+            $output='la mission '.$titre_miss.' de dossier de référence '.$ref_doss.' est affecté à vous';
+             $affecmhis=new DelegMissHis($affm->toArray()); 
 
-             $affechis->save();
-             $affd->delete();
+             $affecmhis->save();
+             $affm->delete();
             }
 
            
           
-      }
+        }
 
        return  $output;
 

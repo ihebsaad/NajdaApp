@@ -71,9 +71,17 @@ class MissionController extends Controller
         $dossier=Dossier::where("reference_medic",trim($request->get('dossier')))->first();
         $typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeactauto')))->first();
         
+
+     
+       //dd($dossier);   
+        
+        
+       
+
          $Mission = new Mission([
              'titre' =>trim( $request->get('titre')),
              'descrip' => trim($request->get('descrip')),
+             'nb_acts_ori'=>$typeMiss->nb_acts,
              'commentaire' => trim($request->get('commentaire')),
              'date_deb'=> trim($request->get('datedeb')),
              'type_Mission' =>$typeMiss->id,
@@ -81,7 +89,23 @@ class MissionController extends Controller
              'statut_courant' => 'active',
              'realisee'=> 0,
              'affichee'=>1,
-             'user_id'=>auth::user()->id
+             'user_id'=>auth::user()->id,
+
+             'type_heu_spec'=> $typeMiss->type_heu_spec,
+             'rdv'=> $typeMiss->rdv,
+             'act_rdv'=> $typeMiss->act_rdv,
+             'dep_pour_miss'=> $typeMiss->dep_pour_miss,
+             'act_dep_pour_miss'=> $typeMiss->act_dep_pour_miss,
+             'dep_charge_dest'=> $typeMiss->dep_charge_dest,
+             'act_dep_charge_dest'=> $typeMiss->act_dep_charge_dest,
+             'arr_prev_dest'=> $typeMiss->arr_prev_dest,
+             'act_arr_prev_dest'=> $typeMiss->act_arr_prev_dest,
+             'decoll_ou_dep_bat'=> $typeMiss->decoll_ou_dep_bat,
+             'act_decoll_ou_dep_bat'=> $typeMiss->act_decoll_ou_dep_bat,
+             'arr_av_ou_bat'=> $typeMiss->arr_av_ou_bat,
+             'act_arr_av_ou_bat'=> $typeMiss->act_arr_av_ou_bat,
+              'retour_base'=> $typeMiss->retour_base,
+              'act_retour_base'=> $typeMiss->act_retour_base
         ]);
 
         $Mission->save();
@@ -134,10 +158,10 @@ class MissionController extends Controller
         // echo($attributes[1]);
         // echo($valeurs[1]);
            $taille=count($valeurs)-5;
-         for ($k=4; $k<=$taille; $k++)
+         for ($k=19; $k<=$taille; $k++)
            {
              
-            if($k>4)
+            if($k>19)
             {
 
 
@@ -227,6 +251,13 @@ class MissionController extends Controller
 
            foreach ($actionsecs as $k) {
              $k->update(['action_idt'=>$k->id]);
+             if($k->activ_avec_miss==1)
+             {
+
+                $k->update(['statut'=>'active']);
+
+
+             }
            }
 
 
