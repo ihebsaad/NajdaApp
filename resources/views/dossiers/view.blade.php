@@ -482,7 +482,7 @@ use App\Document ;
 </div>
             <div id="tab7" class="tab-pane fade">
                 <div style="">
-                    <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addom" class="btn btn-md btn-success"   data-toggle="modal" data-target="#generatedoc"><b><i class="fas fa-plus"></i> Créer un ordre de mission</b></button>
+                    <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addom" class="btn btn-md btn-success"   data-toggle="modal" data-target="#generateom"><b><i class="fas fa-plus"></i> Créer un ordre de mission</b></button>
 
 
                 </div>
@@ -498,7 +498,7 @@ use App\Document ;
                     </thead>
                     <tbody>
                         <tr>
-                            <td style=";"></td>
+                            <td style=";">OM_TAXI</td>
                             <td style=";">
                             </td>
                             <td>
@@ -676,6 +676,85 @@ $iduser=$CurrentUser->id;
         </div>
     </div>
 </div>
+<!-- Modal Document-->
+<div class="modal fade" id="generateom" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal2">Créer un ordre de mission </h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+
+                    <div class="form-group">
+                        {{ csrf_field() }}
+
+                        <form id="genomform" novalidate="novalidate">
+
+                            <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}">
+                            <div class="form-group " >
+              
+                                  <div class=" row  ">
+                                    <div class="col-md-3"><label for="templateom">Ordre de mission</label></div>
+                                      <select class="form-control select2" style="width: 230px" required id="templateom" name="templateom" >
+                                          <option value="Select">Selectionner</option>
+                                          <option value="Taxi">Taxi</option>
+                                      <?php
+                                         /* $usedtemplates = Document::where('dossier',$dossier->id)->distinct()->get(['template']);
+                                          $usedtid=array();
+                                          foreach ($usedtemplates as $tempu) {
+                                              $usedtid[]=$tempu['template'];
+                                          }
+                                          $templatesd = Template_doc::get();
+                                          $docwithcl = array();*/
+                                      ?>
+                                          {{--
+                                          @foreach ($templatesd as $tempdoc)
+                                             @if (! in_array($tempdoc["id"],$usedtid))
+                                                  <option value={{ $tempdoc["id"] }} >{{ $tempdoc["nom"] }}</option>
+                                              @endif                                            
+                                          @endforeach
+                                          --}}
+                                          
+                                     </select>
+                                  </div>
+                                  <div class=" row  " style="margin-top: 15px">
+                                    <div class="col-md-3"><label for="emispar">Émis par</label></div>
+                                      <select class="form-control" style="width: 230px" required id="emispar" name="emispar" >
+                                          <option value="Select">Selectionner</option>
+                                          <option value="najda">Najda Assistance </option>
+                                          <option value="medicm">Medic Multiservices </option>
+                                          <option value="medict">Medic transport </option>
+                                          <option value="vat">VAT transport </option>
+                                          <option value="medici">Medic International </option>
+                                     </select>
+                                  </div>
+                                  <div class=" row  " style="margin-top: 15px">
+                                    <div class="col-md-3"><label for="affectea">Affecté à</label></div>
+                                      <select class="form-control" style="width: 230px" required id="affectea" name="affectea" >
+                                          <option value="Select">Selectionner</option>
+                                          <option value="interne">Société soeur</option>
+                                          <option value="externe">Prestataire externe</option>
+                                     </select>
+                                  </div>
+                              </div>
+
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" id="genom" class="btn btn-primary">Valider</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal template html doc-->
 <div class="modal fade" id="templatehtmldoc" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document" style="width:900px;height: 450px">
@@ -712,7 +791,42 @@ $iduser=$CurrentUser->id;
         </div>
     </div>
 </div>
+<!-- Modal template html om-->
+<div class="modal fade" id="templatehtmlom" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:900px;height: 450px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal2">Veuillez éditer les champs de l'ordre de mission</h5>
 
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+
+                    <div class="form-group">
+                        
+
+                        <form id="genomfromhtml" novalidate="novalidate" method="post" action="">
+                            {{ csrf_field() }}
+                            <input id="dossdoc" name="dossdoc" type="hidden" value="{{ $dossier->id}}">
+                            <input type="hidden" name="templateordrem" id="templateordrem" >
+                            <input type="hidden" name="idomparent" id="idomparent" >
+                            <iframe src="#" id="omfilled" name="omfilled" style="width:100%;height:100%">content</iframe>
+
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" id="genomhtml" class="btn btn-primary">Générer</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal historique doc-->
 <div class="modal fade" id="modalhistodoc" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document" >
@@ -1413,6 +1527,57 @@ function filltemplate(data,tempdoc)
             // alert('ERROR');
         }
     });
+
+// fonction du remplissage de la template web du OM
+    $('#genom').click(function(){
+        var dossier = $('#dossier').val();
+        var tempom = $("#templateom").val();
+        if (tempom==="Select")
+        {
+            alert("Veuillez selectionner un ordre de mission");
+            return false;
+        }
+        var emispar = $("#emispar").val();
+        if (emispar==="Select")
+        {
+            alert("Veuillez selectionner l'entitée qui émis l'ordre de mission");
+            return false;
+        }
+        var affectea = $("#affectea").val();
+        if (affectea==="Select")
+        {
+            alert("Veuillez selectionner à qui sera affecté l'ordre de mission");
+            return false;
+        }
+        //$("#gendochtml").prop("disabled",false);
+        // renitialise la val de parentdoc
+        //$('#iddocparent').attr('value', '');  
+        if ((dossier != '') )
+        {
+            var _token = $('input[name="_token"]').val();
+            /*$.ajax({
+                url:"{{-- route('documents.htmlfilled') --}}",
+                method:"POST",
+                data:{dossier:dossier,template:tempom, _token:_token},
+                success:function(data){
+                        afficheom(data,tempom);
+                }
+            });*/
+            //alert(dossier+" | "+tempom+" | "+emispar+" | "+affectea);
+            afficheom(emispar,affectea,tempom);
+
+        }else{
+            // alert('ERROR');
+        }
+    });
+
+    function afficheom(emispar,affectea,tempom)
+    {
+        $("#generateom").modal('hide');
+         document.getElementById("omfilled").src = 'http://127.0.0.1:8000/NajdaApp/public/preview_templates/odm_taxi.php';
+        
+        $("#templatehtmlom").modal('show');
+    }
 
     $('#gendochtml').click(function(){
         //alert($("#templatedocument").val());
