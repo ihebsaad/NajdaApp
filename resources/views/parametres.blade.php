@@ -35,7 +35,7 @@
                             $seance =  DB::table('seance')
                                 ->where('id','=', 1 )->first();
                             $disp=$seance->dispatcheur ;
-                            $sup=$seance->superviseurtech ;
+                            $sup=$seance->superviseur ;
                             $debut=$seance->debut ;
                             $fin=$seance->fin ;
 
