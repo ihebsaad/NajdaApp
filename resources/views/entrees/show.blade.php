@@ -122,8 +122,8 @@ use App\Http\Controllers\TagsController;
                     </ul>
                     <div id="myTabContent" class="tab-content" style="padding:10px;padding-top:20px;background: #ffffff">
                        <?php if ( $entree['type']!='fax') { ?>
-                           <div class="tab-pane fade active in" id="mailcorps" style="min-height: 350px;">
-                                            <p id="mailtext" style="overflow:scroll;line-height: 25px;min-height:300px"><?php  $content= $entree['contenu'] ; ?>
+                           <div class="tab-pane fade active in" id="mailcorps" style="">
+                                            <p class="overme" id="mailtext" style=" line-height: 25px;"><?php  $content= $entree['contenu'] ; ?>
                                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
