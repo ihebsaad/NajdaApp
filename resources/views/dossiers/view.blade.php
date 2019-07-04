@@ -1575,7 +1575,7 @@ function filltemplate(data,tempdoc)
     function afficheom(emispar,affectea,tempom)
     {
         $("#generateom").modal('hide');
-         document.getElementById("omfilled").src = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php';
+         document.getElementById("omfilled").src = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?emispar='+emispar;
 
         
         $("#templatehtmlom").modal('show');

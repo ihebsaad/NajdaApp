@@ -85,22 +85,39 @@
      </div>&nbsp
      </div>
     <div class="col-sm-1">
-      <button class="btn btn-default">sms</button>&nbsp
+      <!--<button class="btn btn-default" >sms</button>&nbsp-->
+      <button type="button" class="btn btn-default"  >
+                    <a style="color:black" href="{{action('EmailController@sms',$dossier->id)}}"> SMS</a>
+                </button>
      </div>
      <div class="col-sm-2">
-      <button class="btn btn-default">téléphone </button>&nbsp;
+      <!--<button class="btn btn-default">téléphone </button>&nbsp;-->
+       <button type="button" class="btn btn-default" >
+              
+                    Téléphone
+
+                </button>
      </div>
      <div class="col-sm-1">
-      <button class="btn btn-default">fax</button>&nbsp
+      <!--<button class="btn btn-default">fax</button>&nbsp-->
+      <button type="button" class="btn btn-default" >
+          <a style="color:black" href="{{action('EmailController@envoifax',$dossier->id)}}"> Fax</a>
+      </button>
      </div>
      <div class="col-sm-2">
-      <button class="btn btn-default">prestation </button>
+     <button type="button" class="btn btn-default"  >
+                    <a style="color:black" href="{{url('dossiers/view/'.$dossier->id )}}"> Prestation</a>
+                </button>
      </div>
      <div class="col-sm-2">
-      <button class="btn btn-default">créer DOC </button>&nbsp
+      <button type="button" class="btn btn-default"  >
+                    <a style="color:black"  href="{{url('dossiers/view/'.$dossier->id )}}">Créer DOC</a>
+                </button>
      </div>
      <div class="col-sm-2">
-      <button class="btn btn-default">créer ORM </button>&nbsp
+      <button type="button" class="btn btn-default"  >
+                    <a style="color:black"  href="{{url('dossiers/view/'.$dossier->id )}}"> Créer ORM</a>
+                </button>
      </div>
 
 
@@ -288,7 +305,7 @@ $(document).on('click','.kbstab',function(){
     <!--position des boutons -->
     <div class="row">
 
-      <?php  if(isset($Action)) { if($Action->ordre < $Action->Mission->ActionECs->count()){ ?>
+      
      <!-- <div class="col-md-6">
           <a href="{{ url('dossier/Mission/EnregistrerEtAllerSuivante/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}" class="btn btn-primary"><i class="fa fa-check"></i>  Marquer la sous-action comme faite et <i class="fa fa-arrow-right"></i> aller à la suivante</a>
 
@@ -303,19 +320,15 @@ $(document).on('click','.kbstab',function(){
 
       </div>
 
-    <?php } else {?>
+    
 
       <!--<div class="col-md-6">
       <a href="{{ url('dossier/Mission/FinaliserMission/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}" class="btn btn-primary"><i class="fa fa-check-circle"></i>Marquer la sous-action comme faite </a>
 
       </div>-->
 
-      <div class="col-md-6">
-      <a href="{{ url('/dossier/Mission/AnnulerMissionCourante/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}" class="btn btn-primary"><i class="fa fa-check-circle"></i>Annuler la mission</a>
+      
 
-      </div>
-
-    <?php }} ?>
 
 
        <div class="col-md-1">
