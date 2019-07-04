@@ -798,6 +798,7 @@ $iduser=$CurrentUser->id;
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModal2">Veuillez éditer les champs de l'ordre de mission</h5>
 
+
             </div>
             <div class="modal-body">
                 <div class="card-body">
@@ -1574,7 +1575,8 @@ function filltemplate(data,tempdoc)
     function afficheom(emispar,affectea,tempom)
     {
         $("#generateom").modal('hide');
-         document.getElementById("omfilled").src = 'http://127.0.0.1:8000/NajdaApp/public/preview_templates/odm_taxi.php';
+         document.getElementById("omfilled").src = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php';
+
         
         $("#templatehtmlom").modal('show');
     }
