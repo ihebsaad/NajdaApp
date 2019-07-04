@@ -58,71 +58,7 @@
    <!--<form action="{{ url('dossier/Mission/TraitercommentAction/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}">-->
 
     <br>
-     <div class="row">
      
-     <div class="col-sm-2">
-
-
-      <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-envelope"></i> Email <i class="fa fa-angle-down"></i>
-                </button>
-                <ul class="dropdown-menu pull-right">
-                    <li>
-                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'client','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                            Au client </a>
-                    </li>
-                    <li>
-                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                            Au Prestataire </a>
-                    </li>
-                    <li>
-                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                            A l'assuré </a>
-                    </li>
-
-                </ul>
-     </div>&nbsp
-     </div>
-    <div class="col-sm-1">
-      <!--<button class="btn btn-default" >sms</button>&nbsp-->
-      <button type="button" class="btn btn-default"  >
-                    <a style="color:black" href="{{action('EmailController@sms',$dossier->id)}}"> SMS</a>
-                </button>
-     </div>
-     <div class="col-sm-2">
-      <!--<button class="btn btn-default">téléphone </button>&nbsp;-->
-       <button type="button" class="btn btn-default" >
-              
-                    Téléphone
-
-                </button>
-     </div>
-     <div class="col-sm-1">
-      <!--<button class="btn btn-default">fax</button>&nbsp-->
-      <button type="button" class="btn btn-default" >
-          <a style="color:black" href="{{action('EmailController@envoifax',$dossier->id)}}"> Fax</a>
-      </button>
-     </div>
-     <div class="col-sm-2">
-     <button type="button" class="btn btn-default"  >
-                    <a style="color:black" href="{{url('dossiers/view/'.$dossier->id )}}"> Prestation</a>
-                </button>
-     </div>
-     <div class="col-sm-2">
-      <button type="button" class="btn btn-default"  >
-                    <a style="color:black"  href="{{url('dossiers/view/'.$dossier->id )}}">Créer DOC</a>
-                </button>
-     </div>
-     <div class="col-sm-2">
-      <button type="button" class="btn btn-default"  >
-                    <a style="color:black"  href="{{url('dossiers/view/'.$dossier->id )}}"> Créer ORM</a>
-                </button>
-     </div>
-
-
-
-    </div>
 
     <!--<div class="row">
        
