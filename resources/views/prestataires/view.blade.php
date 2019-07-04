@@ -602,7 +602,7 @@
                                 <div class="form-group ">
                                     <label>Spécialité</label>
                                     <div class="row">
-                                        <select class="form-control  col-lg-12 " style="width:400px" name="specialite"    id="specialite">
+                                        <select class="form-control  col-lg-12 " style="width:400px" name="specialite2"    id="specialite2">
                                             <option></option>
                                             @foreach($specialites as $sp)
                                                 <option   value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
@@ -1238,8 +1238,8 @@
             var priorite = $('#prior').val();
          //   var disponibilite = $('#disp').val();
            // var evaluation = $('#note').val();
-            var specialite = $('#specialite').val();
-            if ((type_prest != '') &&(gouvernorat != '') && (specialite != '') &&(priorite != '') )
+            var specialite = $('#specialite2').val();
+             if ((type_prest != '') &&(gouvernorat != '') && (specialite != '') &&(priorite != '') )
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({

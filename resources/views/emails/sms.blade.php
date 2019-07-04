@@ -22,7 +22,7 @@
         <label for="contenu">Message:</label>
         <textarea  type="text" class="form-control" name="message"></textarea>
     </div>
-        {!! NoCaptcha::renderJs() !!}
+      {{--  {!! NoCaptcha::renderJs() !!}     --}}
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
         <div class="form-group">
