@@ -158,7 +158,7 @@
                                     $role='(Agent)';
                                     if($user->id==$disp){$role='(Dispatcheur)';}
                                      if($user->id==$sup){$role='(Superviseur)';}
-                                  if($user->isOnline()) { echo  '<li><i class="fa fa-user fa-lg"/> '.$user->name.' '.$user->lastname .' - '. $role.' </li>' ;}
+                                  if($user->isOnline()) { echo  '<li><i class="fa fa-user fa-lg" ></i>   '.$user->name.' '.$user->lastname .' - '. $role.' </li>' ;}
                                 }
                                     ?><br>
 
