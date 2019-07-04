@@ -77,29 +77,10 @@ use App\Document ;
             </div>
 
             <div class="btn-group">
-                <button type="button" id="newfax" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-fax"></i> Fax <i class="fa fa-angle-down"></i>
-
+                <button type="button" class="btn btn-default" id="newfax">
+                    <a style="color:black" href="{{action('EmailController@envoifax',$dossier->id)}}"> <i class="fa fa-fax"></i> Fax</a>
                 </button>
-
-
-                <ul class="dropdown-menu pull-right">
-                <li>
-                    <a href="{{route('emails.envoifax',['id'=>$dossier->id,'type'=> 'client','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                        Au client </a>
-                </li>
-                <li>
-                    <a href="{{route('emails.envoifax',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                        Au Prestataire </a>
-                </li>
-                <li>
-                    <a href="{{route('emails.envoifax',['id'=>$dossier->id,'type'=> 'libre','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                        Libre </a>
-                </li>
-
-            </ul>
             </div>
-
             <div class="btn-group">
                 <button type="button" class="btn btn-default" id="newcalldossier">
                     <i class="fa fa-phone"></i>
@@ -137,13 +118,11 @@ use App\Document ;
                                 <i class="fas  fa-lg fa-file-archive"></i>  Attachements
                             </a>
                         </li>
-                        <!--
                         <li class="nav-item">
                             <a class="nav-link" href="#tab5" data-toggle="tab">
                                 <i class="fas  fa-lg fa-cog"></i>  Autres
                             </a>
                         </li>
-                        -->
                         <li class="nav-item">
                             <a class="nav-link" href="#tab6" data-toggle="tab">
                                 <i class="fas fa-lg fa-file-word"></i>  Docs
@@ -152,12 +131,6 @@ use App\Document ;
                         <li class="nav-item">
                             <a class="nav-link" href="#tab7" data-toggle="tab">
                                 <i class="fas fa-file-import"></i>  OM
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link"   href="{{action('DossiersController@fiche',$dossier->id)}}"  >
-                                <i class="fas fa-lg fa-cog"></i><B> Gestion</B>
                             </a>
                         </li>
 
@@ -447,7 +420,7 @@ use App\Document ;
                                         ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important;" id="btntele">
-                                                <a style="color:black" href="{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}" ><i class="fa fa-download"></i> Télécharger</a>
+                                                <a style="color:black" onclick='modalodoc("<?php echo $doc->titre; ?>","{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
                                             </button>
                                         </div>
                                     </div>
@@ -460,7 +433,27 @@ use App\Document ;
                 </table>
 
             </div>
+<!-- Modal Ouvrir Document-->
+<div class="modal fade" id="opendoc" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:900px;height: 450px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="doctitle"></h5>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
 
+                    <iframe id="dociframe" src="" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
             <div id="tab7" class="tab-pane fade">
                 <div style="">
                     <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addom" class="btn btn-md btn-success"   data-toggle="modal" data-target="#generatedoc"><b><i class="fas fa-plus"></i> Créer un ordre de mission</b></button>
@@ -1066,7 +1059,13 @@ $iduser=$CurrentUser->id;
 <script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
 
 <script>
-
+function modalodoc(titre,emplacement)
+{
+    //alert(titre+" | "+emplacement);
+    $("#doctitle").text(titre);
+    document.getElementById('dociframe').src ="https://view.officeapps.live.com/op/view.aspx?src="+emplacement;
+    $("#opendoc").modal('show');
+}
 function remplacedoc(iddoc,template)
 {
     //alert(iddoc+' | '+template);

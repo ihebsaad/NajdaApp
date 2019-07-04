@@ -16,7 +16,6 @@ use App\Document ;
 use DB;
 use WordTemplate;
 
-
 class DocumentsController extends Controller
 {
     public function adddocument(Request $request)

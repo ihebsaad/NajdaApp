@@ -189,6 +189,7 @@ return [
         //App\Providers\GlobalsVServiceProvider::class
         App\Providers\CommonDataServiceProvider::class,
         Novay\WordTemplate\WordTemplateServiceProvider::class,
+        /*RobbieP\CloudConvertLaravel\CloudConvertLaravelServiceProvider::class,*/
 
     ],
 
