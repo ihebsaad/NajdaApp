@@ -24,7 +24,7 @@
     <p>Dossier: {{$Action->Mission->dossier->reference_medic}} </p>
 
  @if ($Action->Mission->activeActionEC)
-      <p>Liste des actions action pour la Mission en cours:  </p>
+      <p>Liste des actions actives pour la Mission en cours:  </p>
         <p> @foreach($Action->Mission->activeActionEC  as $d)
 
          

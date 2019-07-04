@@ -285,7 +285,7 @@ class MissionController extends Controller
                    $act->update(['statut_courant'=>'annulee']);
                    $Actions=$act->Actions;
 
-                   $this->Historiser_actions($idmiss);
+                  // $this->Historiser_actions($idmiss);
 
                    $Missions=Auth::user()->activeMissions;
                     

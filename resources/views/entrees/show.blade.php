@@ -214,6 +214,8 @@ use App\Http\Controllers\TagsController;
                                                     <input id="urldeletetag" type="hidden" name="urldeletetag" value="{{ route('tags.deletetag') }}" />
                                         </form>
         </div>
+
+        <center> <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#annulerAttenteReponse"> Annuler attente de réponse</button></center>
 </div>
 
 <style>
@@ -235,6 +237,106 @@ $users=UsersController::ListeUsers();
 
 ?>
 
+ <?php use \App\Http\Controllers\ActionController;
+             
+             $actionsReouRap=ActionController::ListeActionsRepOuRap();
+          
+       /*echo($actionsReouRap);*/
+ ?>
+
+
+<style>
+td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
+
+.selected {
+    background-color: brown;
+    color: #FFF;
+}
+</style>
+  <!-- modal annuler attente de réponse -->
+<div class="modal fade" id="annulerAttenteReponse" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Annuler Attente Réponse</h4>
+        </div>
+        <div class="modal-body">
+          <p>
+            
+           
+            <table id="tabkkk">
+
+                    <tr> <th></th> <th> Action  </th> <th> Mission  </th><th> Dossier   </th> </tr>
+                  @foreach ( $actionsReouRap as $rr)
+                    <tr> <td style="color: white; font-size: 0px;">{{$rr->id}}</td> <td>{{$rr->titre}}</td> <td>{{ $rr->Mission->titre}}</td> <td>{{$rr->Mission->dossier->reference_medic}}</td>  </tr>
+                   
+                  @endforeach
+                        
+            </table>
+            <!--<input type="button" id="tst" value="OK" onclick="fnselect()" />-->
+
+
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="tst" class="btn btn-default" data-dismiss="modal">Annuler Attente Réponse </button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Quitter</button>
+        </div>
+      </div>
+  
+
+      
+
+</div>
+      </div>
+
+       <script type="text/javascript">
+        
+      $("#tabkkk tr").click(function(){
+         $(this).addClass('selected').siblings().removeClass('selected');    
+         var value=$(this).find('td:first').html();
+        //alert(value);    
+      });
+
+      $('#tst').on('click', function(e){
+          var arrid =$("#tabkkk tr.selected td:first").html();
+
+
+           $.ajax({
+       url : '{{ url('/') }}'+'/annulerAttenteReponseAction/'+arrid,
+       type : 'GET',
+       dataType : 'html', // On désire recevoir du HTML
+       success : function(data){ // code_html contient le HTML renvoyé
+           //alert (data);
+
+           if(data)
+           {
+
+          
+
+           alert(data);
+           location.reload();
+
+            
+           }
+       }
+    });
+   
+
+
+
+
+
+
+
+
+      });
+
+
+      </script>
 
 
 <!-- Modal -->
@@ -507,6 +609,7 @@ padding: 5px;
 }
     </style>
 
+   
 
 
 @endsection

@@ -119,7 +119,7 @@ Route::get('/emails/open/{id}', 'EmailController@open');
 
 
 /****** Boite Personnelle ****/
-Route::get('/boites/',  'BoitesController@index')->name('boites');;
+Route::get('/boites/',  'BoitesController@index')->name('boites');
 Route::get('/boites/show/{id}', 'BoitesController@show');
 
 
@@ -347,6 +347,8 @@ Route::get('/activerActionsReporteeOuRappelee','ActionController@activerActionsR
 
   Route::get('/traitementsBoutonsActions/{iddoss}/{idmiss}/{idsousact}/{bouton}',
     'ActionController@Bouton_Faire1_ignorer2_reporter3_rappeler4');
+
+Route::get('/annulerAttenteReponseAction/{idact}','ActionController@annulerAttenteReponseAction');
 
 
 

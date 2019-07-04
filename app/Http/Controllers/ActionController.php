@@ -36,6 +36,38 @@ class ActionController extends Controller
         return view('Actions.index', compact('Actions'));
     }
 
+    public  static function ListeActionsRepOuRap()
+    {
+        $actionRR = ActionEC::where('statut','=', 'reportee')->orWhere('statut','=','rappelee')->get();
+        //dd($actionRR);
+        return $actionRR;
+
+    }
+
+    public  function  annulerAttenteReponseAction ($idact)
+    {
+      $actrr=ActionEC::where('id',$idact)->first();
+
+      $output='Annulation erronée';
+
+      if($actrr)
+      {
+
+        if($actrr->update(['statut'=>'active']))
+        {
+
+              $output='Annulation validée et l\'action en question est activée';
+
+        }
+
+
+      }
+      return  $output;
+
+
+    }
+
+
      /*public function RappelAction (Request $request,$iddoss,$idact,$idsousact)
    {
 
@@ -634,7 +666,7 @@ class ActionController extends Controller
 
                            // activer action 6
 
-                            if($action6->statut !="faite" && ($action3->statut=="faite" || $action4->statut=="faite"))// activer action 5
+                            if($action6->statut !="faite" && ($action3->statut=="faite" || $action4->statut=="faite"))
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Confirmation au client')
@@ -831,35 +863,39 @@ class ActionController extends Controller
                   }
           
              }
-      return $this->Avance_de_fonds_contre_RDD_versionBouton($option,$idmiss,$idact,$iddoss,$bouton);
+          
+             
+           
 
+              
 
-
-               /* 
-
-  $at=ActionEC::where("id_mission",$idmiss)->first()->titre;
+          $at=ActionEC::where("mission_id",$idmiss)->first()->type_Mission;
 
                switch($at){
 
-         case "Transport assis / chaise roulante": 
-         return $this->Transport_assis_chaise_roulante($option,$idmiss,$idact,$iddoss); break; 
+          case "Transport assis  chaise roulante": 
+         return $this->Transport_assis_chaise_roulante_DV($option,$idmiss,$idact,$iddoss,$bouton); break; 
 
-          case "TAXI": 
-          return $this->Taxi($option,$idmiss,$idact,$iddoss); break;
+         case "Transport ambulance": 
+         return $this->Transport_ambulance_DV($option,$idmiss,$idact,$iddoss,$bouton); break; 
+
+         case "TAXI": 
+         return $this->taxi_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
          case "Transport ambulance": 
          return $this->Transport_ambulance($option,$idmiss,$idact,$iddoss); break;
 
          case "Avance de fonds contre RDD": 
-         return $this->Avance_de_fonds_contre_RDD($option,$idmiss,$idact,$iddoss); break;  
+         return $this->Avance_de_fonds_contre_RDD_versionBouton($option,$idmiss,$idact,$iddoss,$bouton); break;  
 
          case "Billetterie fournie par VAT": 
-         return $this->billetterie_fournie_par_VAT($option,$idmiss,$idact,$iddoss); break;  
+         return $this->Billetterie_fournie_par_VAT_DV($option,$idmiss,$idact,$iddoss,$bouton); break;  
         
+
    
                 // default:
                  // Code to be executed if n is different from all labels
-         }*/
+         }
 
 
 
@@ -2367,6 +2403,504 @@ class ActionController extends Controller
     }
 
    //--------------------------------------Version derniere du workflow-------------------------------------
+
+
+public function Transport_ambulance_DV ($option,$idmiss,$idact,$iddoss,$bouton)
+{
+
+
+      if($this->test_fin_mission($idmiss)==true)
+            {
+
+
+                   $Action=ActionEC::find($idact);
+                    $act=$Action->Mission;     
+                    $dossier=$act->dossier;
+                    $dossiers=Dossier::get();
+                   $typesMissions=TypeMission::get();
+
+                   $act->update(['statut_courant'=>'achevee']);
+                   $Actions=$act->Actions;
+
+                   $this->Historiser_actions($idmiss);
+
+                    $Missions=Auth::user()->activeMissions;
+                    
+
+
+                  Session::flash('messagekbsSucc', 'La mission en cours   '.$act->titre.' de dossier  '.$act->dossier->reference_medic .'  est maintenant achevée');            
+
+                  return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+            }
+            else
+            {
+
+                   
+
+                        $toutesActions=ActionEC::Where('mission_id',$idmiss)->where('statut','!=','rfaite')
+                        ->orderBy('ordre')->get();
+                       
+                       // dd($toutesActions);
+                         $actions = array(); 
+
+                         foreach ($toutesActions as $ta ) {
+                              $actions[]=$ta;
+                         }
+
+                       $action1=$actions[0];$action2=$actions[1];$action3=$actions[2];$action4=$actions[3];
+                       $action5=$actions[4];$action6=$actions[5];$action7=$actions[6];
+
+
+                // activer action 2 Définir destination 
+                      
+
+               if( $action2->statut!="faite" && ($action1->statut=="faite" && $action1->opt_choisie=="1"))
+               {
+
+                $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',2)->where('statut','!=','rfaite')->first();
+                $actSui->update(['statut'=>"active"]);                
+
+
+               }
+
+
+              // activation action 3 Informer la structure d’accueil
+              
+             if($action3->statut!="faite" && ($action2->statut=="faite" ||$action2->statut=="ignoree"))
+              
+               {
+                
+                $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',3)->where('statut','!=','rfaite')->first();
+                $actSui->update(['statut'=>"active"]);                 
+
+
+               }
+
+
+           // activation  action 4 Créer ODM ambulance
+
+               
+           
+           if( $action4->statut!="faite" && ($action2->statut=="faite" || $action2->statut=="ignoree" 
+                 || $action5->statut=="faite" || $action5->statut=="ignoree"))
+             
+             {
+
+                $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',4)->where('statut','!=','rfaite')->first();
+                $actSui->update(['statut'=>"active"]); 
+
+
+             }  
+
+             //activer action 5 Vérifier modalités de voyage 
+            
+       
+              if($action5->statut!="faite" && ($action1->statut=="faite" && $action4->opt_choisie=="1"))
+               {
+
+                 $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',5)
+                 ->where('statut','!=','rfaite')->first();
+                 $actSui->update(['statut'=>"active"]);                
+
+
+               }
+
+               // activer action 6 : Prendre détails mission
+          
+
+                if($action6->statut!="faite" && ($action4->statut=="faite" && $action4->opt_choisie=="2"))
+               {
+
+                 $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',6)
+                 ->where('statut','!=','rfaite')->first();
+                 $actSui->update(['statut'=>"active"]);              
+
+               }
+
+
+                // activer Action 7 : Confirmer le service à l’assistance
+
+                if($action7->statut!="faite" && $action4->statut=="faite")
+               {
+
+                 $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',7)
+                 ->where('statut','!=','rfaite')->first();
+                 $actSui->update(['statut'=>"active"]);              
+
+               }
+
+
+
+            }
+
+
+  return $this->afficheEtatAction_mision_dossier($idact,$bouton);
+
+
+
+
+
+}
+
+
+
+
+public function Transport_assis_chaise_roulante_DV($option,$idmiss,$idact,$iddoss,$bouton)
+{
+  // dd("rrr");
+
+      
+           
+
+                   $changement=false;
+
+                        $toutesActions=ActionEC::Where('mission_id',$idmiss)->where('statut','!=','rfaite')
+                        ->orderBy('ordre')->get();
+                       
+                       // dd($toutesActions);
+                         $actions = array(); 
+
+                         foreach ($toutesActions as $ta ) {
+                              $actions[]=$ta;
+                         }
+
+                       $action1=$actions[0];$action2=$actions[1];$action3=$actions[2];$action4=$actions[3];
+                       
+
+
+
+                           // activer action 2 Informer les prestataires
+                           if(($action1->statut=="faite" || $action1->statut=="ignoree" ) &&   $action2->statut =="inactive")  
+                           {
+
+                             $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',2)
+                             ->where('statut','!=','rfaite')->first();
+                            $actSui->update(['statut'=>"active"]);   
+
+                            $changement=true;             
+
+
+                           }
+                                 
+
+                           // activer action 3 Rappel prendre chaise roulante
+                           if(($action1->statut=="faite" && $action2->opt_choisie=="1" ) &&  $action3->statut =="inactive")  
+                           {
+
+                             $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',3)
+                             ->where('statut','!=','rfaite')->first();
+                            $actSui->update(['statut'=>"active"]);   
+                             $changement=true;             
+
+
+                           }
+
+
+
+
+                             // activer action 4 :  FTF et medif  
+                           if((($action3->statut=="faite" && $action3->opt_choisie=="1")|| ($action3->statut=="ignoree" && $action3->opt_choisie=="1")) && $action4->statut =="inactive")  
+                           {
+
+                             $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',4)
+                             ->where('statut','!=','rfaite')->first();
+                            $actSui->update(['statut'=>"active"]);   
+                             $changement=true;             
+
+
+                           }
+
+                      if( $changement==true)
+                      {
+                     return $this->afficheEtatAction_mision_dossier($idact,$bouton);
+                      }
+
+      if($this->test_fin_mission($idmiss)==true)
+            {
+
+
+                   $Action=ActionEC::find($idact);
+                    $act=$Action->Mission;     
+                    $dossier=$act->dossier;
+                    $dossiers=Dossier::get();
+                   $typesMissions=TypeMission::get();
+
+                   $act->update(['statut_courant'=>'achevee']);
+                   $Actions=$act->Actions;
+
+                   $this->Historiser_actions($idmiss);
+
+                    $Missions=Auth::user()->activeMissions;
+                    
+
+
+                  Session::flash('messagekbsSucc', 'La mission en cours   '.$act->titre.' de dossier  '.$act->dossier->reference_medic .'  est maintenant achevée');            
+
+                  return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+            }
+
+}
+
+
+
+// debut workflow taxi
+public function taxi_DV($option,$idmiss,$idact,$iddoss,$bouton)
+{
+
+
+      
+          
+
+                   $changement=false;
+
+                        $toutesActions=ActionEC::Where('mission_id',$idmiss)->where('statut','!=','rfaite')
+                        ->orderBy('ordre')->get();
+                       
+                       // dd($toutesActions);
+                         $actions = array(); 
+
+                         foreach ($toutesActions as $ta ) {
+                              $actions[]=$ta;
+                         }
+
+                       $action1=$actions[0];$action2=$actions[1];$action3=$actions[2];$action4=$actions[3];
+                       $action5=$actions[4];$action6=$actions[5];
+
+
+                // activer action 2 Créer OM taxi
+
+               if( $action2->statut!="faite" && $action2->statut!="ignoree" && ($action1->statut=="faite" || $action1->statut=="ignoree"))
+               {
+
+                $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Créer OM taxi')
+                ->where('statut','!=','rfaite')->first();
+                $actSui->update(['statut'=>"active"]);                
+                  $changement=true;
+
+               }
+
+
+              // activation action 3 Envoyer au prestataire
+             if($action3->statut!="faite" && $action3->statut!="ignoree" && $action2->statut=="faite" )
+              
+               {
+                
+                $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Envoyer au prestataire')
+                ->where('statut','!=','rfaite')->first();
+                $actSui->update(['statut'=>"active"]);                 
+                 $changement=true;
+
+               }
+
+
+           // activation  action 4 Informer l’assuré
+           
+           if( $action4->statut!="faite" && $action4->statut!="ignoree" && $action3->statut=="faite" )
+             
+             {
+
+                $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Informer l’assuré')
+                ->where('statut','!=','rfaite')->first();
+                $actSui->update(['statut'=>"active"]); 
+
+                 $changement=true;
+             }  
+
+             //activer action 5 Confirmer au client
+
+       
+              if($action5->statut!="faite" && $action5->statut!="ignoree" && ($action3->statut=="faite" || $action4->statut=="faite"))// activer action 5
+               {
+
+                 $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Confirmer au client')
+                 ->where('statut','!=','rfaite')->first();
+                 $actSui->update(['statut'=>"active"]);                
+
+                   $changement=true;
+               }
+
+               // activer action 6 Suivre mission taxi
+
+                if($action6->statut!="faite" && $action6->statut!="ignoree"  && $action4->statut=="faite" )// activer action 5
+               {
+
+                 $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Suivre mission taxi')
+                 ->where('statut','!=','rfaite')->first();
+                 $actSui->update(['statut'=>"active"]);  
+
+                  $changement=true;            
+
+               }
+
+
+                    if($changement==true)
+                      {
+                     return $this->afficheEtatAction_mision_dossier($idact,$bouton);
+                      }
+
+         if($this->test_fin_mission($idmiss)==true)
+            {
+
+
+                   $Action=ActionEC::find($idact);
+                    $act=$Action->Mission;     
+                    $dossier=$act->dossier;
+                    $dossiers=Dossier::get();
+                   $typesMissions=TypeMission::get();
+
+                   $act->update(['statut_courant'=>'achevee']);
+                   $Actions=$act->Actions;
+
+                   $this->Historiser_actions($idmiss);
+
+                    $Missions=Auth::user()->activeMissions;
+                    
+
+
+                  Session::flash('messagekbsSucc', 'La mission en cours   '.$act->titre.' de dossier  '.$act->dossier->reference_medic .'  est maintenant achevée');            
+
+                  return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+            }
+
+
+
+}
+
+// fin workflow taxi
+
+// début workflow  Billetterie_fournie_par_VAT
+ public function Billetterie_fournie_par_VAT_DV($option,$idmiss,$idact,$iddoss,$bouton)
+        {
+
+            if($this->test_fin_mission($idmiss)==true)
+            {
+
+
+                   $Action=ActionEC::find($idact);
+                    $act=$Action->Mission;     
+                    $dossier=$act->dossier;
+                    $dossiers=Dossier::get();
+                   $typesMissions=TypeMission::get();
+
+                   $act->update(['statut_courant'=>'achevee']);
+                   $Actions=$act->Actions;
+
+                   $this->Historiser_actions($idmiss);
+
+                    $Missions=Auth::user()->activeMissions;
+                    
+
+
+                  Session::flash('messagekbsSucc', 'La mission en cours   '.$act->titre.' de dossier  '.$act->dossier->reference_medic .'  est maintenant achevée');            
+
+                  return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+            }
+            else
+            {
+
+                   
+
+                        $toutesActions=ActionEC::Where('mission_id',$idmiss)->where('statut','!=','rfaite')
+                        ->orderBy('ordre')->get();
+                       
+                       // dd($toutesActions);
+                         $actions = array(); 
+
+                         foreach ($toutesActions as $ta ) {
+                              $actions[]=$ta;
+                         }
+
+                       $action1=$actions[0];$action2=$actions[1];$action3=$actions[2];$action4=$actions[3];
+                       $action5=$actions[4];$action6=$actions[5];$action7=$actions[6];
+
+
+
+           
+
+
+                // activer action 2 Envoyer les propositions au client
+               if(  $action2->statut!="faite" && $action1->statut=="faite")
+               {
+
+                 $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Envoyer les propositions au client')
+                 ->where('statut','!=','rfaite')->first();
+                $actSui->update(['statut'=>"active"]);                
+
+
+               }
+
+
+              // activation action 3 Etablir medif
+             if(  $action3->statut!="faite" && $action2->statut=="faite" && $action2->opt_choisie="2" )
+              
+               {
+                
+                $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Etablir medif')
+                ->where('statut','!=','rfaite')->first();
+                $actSui->update(['statut'=>"active"]);                 
+
+
+               }
+
+
+           // activation  action 4 Confirmation émission
+           
+           if($action4->statut!="faite" && $action2->statut=="faite" )
+             
+             {
+
+                $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Confirmation émission')
+                ->where('statut','!=','rfaite')->first();
+                $actSui->update(['statut'=>"active"]); 
+
+
+             }  
+
+             //activer action 5 Envoyer medif à VAT
+
+       
+              if( $action5->statut!="faite" && ($action2->statut=="faite" || $action3->statut=="faite"))
+               {
+
+                 $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Envoyer medif à VAT')
+                 ->where('statut','!=','rfaite')->first();
+                 $actSui->update(['statut'=>"active"]);                
+
+
+               }
+
+               // activer action 6 Confirmer au client l’émission
+
+                if( $action6->statut!="faite" && $action4->statut=="faite" )
+               {
+
+                 $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Confirmer au client l’émission')
+                 ->where('statut','!=','rfaite')->first();
+                 $actSui->update(['statut'=>"active"]);              
+
+               }
+
+                 // activer action 7 Envoi à la facturation
+
+                if($action7->statut!="faite" && $action6->statut=="faite" )
+               {
+
+                 $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Envoi à la facturation')
+                 ->where('statut','!=','rfaite')->first();
+                 $actSui->update(['statut'=>"active"]);              
+
+               }
+
+              
+
+          }
+
+             return $this->afficheEtatAction_mision_dossier($idact,$bouton);
+        }
+
+
+
+// fin workflow Billetterie_fournie_par_VAT
 
 
     //   workflow civiere
