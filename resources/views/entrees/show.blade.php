@@ -110,7 +110,7 @@ use App\Http\Controllers\TagsController;
                 <div class="row">
                    <ul class="nav nav-pills">
                         <li class="active" >
-                            <a href="#mailcorps" data-toggle="tab" aria-expanded="true"><?php if ( $entree['type']=='fax') {echo 'détails';}else {?>Corps du mail<?php }?></a>
+                            <?php if ( $entree['type']=='fax') {}else {?> <a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps du mail</a><?php }?>
                         </li>
                         @if ( $entree['nb_attach']   > 0)
                             @for ($i = 1; $i <= $entree['nb_attach'] ; $i++)
@@ -121,15 +121,16 @@ use App\Http\Controllers\TagsController;
                         @endif
                     </ul>
                     <div id="myTabContent" class="tab-content" style="padding:10px;padding-top:20px;background: #ffffff">
-                                        <div class="tab-pane fade active in" id="mailcorps" style="min-height: 350px;">
-                                            <p id="mailtext" style="overflow:scroll;line-height: 25px;"><?php  $content= $entree['contenu'] ; ?>
+                       <?php if ( $entree['type']!='fax') { ?>
+                           <div class="tab-pane fade active in" id="mailcorps" style="min-height: 350px;">
+                                            <p id="mailtext" style="overflow:scroll;line-height: 25px;min-height:300px"><?php  $content= $entree['contenu'] ; ?>
                                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
                                             <?php  $cont=  str_replace($search,$replace, $content); ?>
                                             <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
                                             <?php  echo $cont; ?></p>
-                                        </div>
+                                        </div><?php } ?>
 
                          @if ($entree['nb_attach']  > 0)
                                           <?php
@@ -140,7 +141,7 @@ use App\Http\Controllers\TagsController;
                                             @if (!empty($attachs) )
                                             <?php $i=1; ?>
                                             @foreach ($attachs as $att)
-                                                <div class="tab-pane fade in" id="pj<?php echo $i; ?>">
+                                                <div class="tab-pane fade in <?php  if ( ($entree['type']=='fax')&&($i==1)) {echo 'active';}?>" id="pj<?php echo $i; ?>">
 
                                                     <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
 

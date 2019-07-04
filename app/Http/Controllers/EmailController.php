@@ -1642,10 +1642,10 @@ class EmailController extends Controller
     function sendfax (Request $request)
     {
 
-               /*  $request->validate([
+                $request->validate([
                       'g-recaptcha-response' => 'required|captcha'
                   ]);
-                 */
+
 
         $doss = $request->get('dossier');
 
@@ -1660,7 +1660,10 @@ class EmailController extends Controller
         //  $cc='';
             $to='ihebsaad@gmail.com';
          $to='envoifax@najda-assistance.com';
-        $sujet='1234,Najda,najda,'.$nom.'@'.$numero.'';
+         // nom sans espace
+        $nom2 = str_replace(' ', '', $nom);
+
+        $sujet='1234,Najda,najda,'.$nom2.'@'.$numero.'';
 
 
         $swiftTransport =  new \Swift_SmtpTransport( 'smtp.gmail.com', '587', 'tls');

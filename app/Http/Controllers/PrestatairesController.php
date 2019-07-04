@@ -94,8 +94,7 @@ class PrestatairesController extends Controller
             'gouv' => $request->get('gouvernorat'),
             'type_prest' => $request->get('type_prest'),
             'priorite' => $request->get('priorite'),
-            'disponibilite' => $request->get('disponibilite'),
-            'evaluation' => $request->get('evaluation'),
+            'specialite' => $request->get('specialite'),
 
 
         ]);
@@ -240,6 +239,10 @@ class PrestatairesController extends Controller
 
         $faxs =   Adresse::where('nature', 'fax')
             ->where('parent',$id)
+            ->get();
+
+
+        $specialites =DB::table('specialites')
             ->get();
 
         return view('prestataires.view',['specialites'=>$specialites,'emails'=>$emails, 'tels'=>$tels, 'faxs'=>$faxs,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'relations2'=>$relations2,'prestations'=>$prestations], compact('prestataire'));

@@ -521,7 +521,7 @@
 
 
 
-            <div id="tab03" class="tab-pane fade in  " style="padding-top:30px">
+            <div id="tab03" class="tab-pane fade    " style="padding-top:30px">
 
                 <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addev" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createeval"><b><i class="fas fa-plus"></i> Ajouter une Priorité</b></button>
 
@@ -598,6 +598,19 @@
                                         </select>
                                     </div>
                                 </div>
+
+                                <div class="form-group ">
+                                    <label>Spécialité</label>
+                                    <div class="row">
+                                        <select class="form-control  col-lg-12 " style="width:400px" name="specialite"    id="specialite">
+                                            <option></option>
+                                            @foreach($specialites as $sp)
+                                                <option   value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <div class="form-group ">
                                     <label>Priorité</label>
                                     <div class="row">
@@ -1223,15 +1236,16 @@
             var type_prest = $('#typeprestation').val();
             var gouvernorat = $('#gouvpr').val();
             var priorite = $('#prior').val();
-            var disponibilite = $('#disp').val();
-            var evaluation = $('#note').val();
-            if ((type_prest != '') &&(gouvernorat != '') &&(priorite != '') )
+         //   var disponibilite = $('#disp').val();
+           // var evaluation = $('#note').val();
+            var specialite = $('#specialite').val();
+            if ((type_prest != '') &&(gouvernorat != '') && (specialite != '') &&(priorite != '') )
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url:"{{ route('prestataires.addeval') }}",
                     method:"POST",
-                    data:{prestataire:prestataire,type_prest:type_prest,gouvernorat:gouvernorat,priorite:priorite,disponibilite:disponibilite,evaluation:evaluation, _token:_token},
+                    data:{prestataire:prestataire,type_prest:type_prest,gouvernorat:gouvernorat,priorite:priorite,specialite:specialite, _token:_token},
                     success:function(data){
 
                         //   alert('Added successfully');

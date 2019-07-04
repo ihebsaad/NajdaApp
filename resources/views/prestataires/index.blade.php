@@ -24,9 +24,9 @@
     <div class="uper">
         <div class="portlet box grey">
             <div class="row">
-                <div class="col-lg-6">Interventions</div>
+                <div class="col-lg-6">Intervenants</div>
                 <div class="col-lg-6">
-                    <button id="addprest" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Créer un Prestataire</b></button>
+                    <button id="addprest" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Créer un Intervenant</b></button>
                 </div>
             </div>
         </div>
@@ -98,7 +98,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Créer un nouveau Prestataire</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Créer un nouveau Intervenant</h5>
 
                 </div>
                 <div class="modal-body">
