@@ -76,7 +76,9 @@ use App\Document ;
             <div class="btn-group">
                 <button type="button" id="newfax" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-fax"></i> Fax <i class="fa fa-angle-down"></i>
+
                 </button>
+
 
                 <ul class="dropdown-menu pull-right">
                     <li>
@@ -110,7 +112,7 @@ use App\Document ;
     <section class="content form_layouts">
 
 <br>
-        <B><a href="{{action('DossiersController@fiche',$dossier->id)}}"  >Détails du dossier </a></B>
+        <B><a href="{{action('DossiersController@view',$dossier->id)}}"  > <i class="fas fa-lg fa-folder-open"></i>  Détails du dossier </a></B>
 <br>
   
                  <div class="form-group" style="margin-top:25px;">
