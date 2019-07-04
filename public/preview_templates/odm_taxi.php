@@ -46,7 +46,7 @@ if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
 		<?php } ?>
 
 
-		<?php if ($emispar == "medicm") { ?>
+		<?php if (($emispar == "medicm") || ($emispar == "medict") ||  ($emispar == "vat"))  { ?>
 		<div>
 			<p style="margin-left:7px;margin-top:0.55pt; margin-bottom:0pt; widows:0; orphans:0; font-size:5.5pt"><span style="height:0pt; margin-top:-0.35pt; display:block; position:absolute; z-index:0"><img src="medicm.png" width="161" height="98" alt="" style="margin-top:10pt; -aw-left-pos:16pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:-10.4pt; -aw-wrap-type:none; position:absolute" /></span><span style="font-family:'Times New Roman'">&#xa0;</span></p>
 		</div>
