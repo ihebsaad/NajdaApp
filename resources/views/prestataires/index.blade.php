@@ -35,14 +35,14 @@
             <thead>
             <tr id="headtable">
                 <th style="width:35%">Nom</th>
-                <th style="width:25%">Spécialité</th>
-                <th style="width:10%">Priorité</th>
+            <!--    <th style="width:25%">Spécialité</th>-->
+              <!-- <th style="width:10%">Priorité</th>-->
                 <th style="width:20%">Ville</th>
              </tr>
             <tr>
                 <th style="width:35%">Nom</th>
-                <th style="width:25%">Spécialité</th>
-                <th   style="width:10%">Priorité</th>
+            <!--    <th style="width:25%">Spécialité</th>-->
+               <!-- <th   style="width:10%">Priorité</th>-->
                 <th style="width:20%">Ville</th>
             </tr>
             </thead>
@@ -68,8 +68,8 @@
 
                 <tr>
                     <td style="width:35%"><a href="{{action('PrestatairesController@view', $prestataire['id'])}}" >{{$prestataire->name}}</a></td>
-                    <td style="width:25%">{{$prestataire->specialite}}</td>
-                    <td style="width:10%;text-align:center"   class="<?php echo $class;?> ">{{$prestataire->ordre}}</td>
+                <!--    <td style="width:25%">{{$prestataire->specialite}}</td>-->
+                <!--    <td style="width:10%;text-align:center"   class="<?php echo $class;?> ">{{$prestataire->ordre}}</td>-->
                     <td style="width:20%"><?php     /*$prestataire['ville_id'] ; */
                      echo $ville ;
                         ?></td>

@@ -614,7 +614,7 @@
                                 <div class="form-group ">
                                     <label>Priorité</label>
                                     <div class="row">
-                                        <input type="number" step="1" id="prior" max="10" min="0" value="1" />
+                                        <input style="padding-left:5px;" type="number" step="1" id="prior" max="10" min="0" value="1" />
                                     </div>
                                 </div>
                     <!--        <div class="form-group ">
