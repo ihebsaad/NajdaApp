@@ -1574,7 +1574,7 @@ function filltemplate(data,tempdoc)
     function afficheom(emispar,affectea,tempom)
     {
         $("#generateom").modal('hide');
-         document.getElementById("omfilled").src = 'http://127.0.0.1:8000/NajdaApp/public/preview_templates/odm_taxi.php';
+         document.getElementById("omfilled").src = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php';
         
         $("#templatehtmlom").modal('show');
     }
