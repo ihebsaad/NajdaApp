@@ -69,15 +69,15 @@
                 </button>
                 <ul class="dropdown-menu pull-right">
                     <li>
-                        <a href="" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                        <a href="#" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
                             Au client </a>
                     </li>
                     <li>
-                        <a href="" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                        <a href="#" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
                             Au Prestataire </a>
                     </li>
                     <li>
-                        <a href="" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                        <a href="#" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
                             A l'assuré </a>
                     </li>
 
@@ -101,22 +101,22 @@
      <div class="col-sm-1">
       <!--<button class="btn btn-default">fax</button>&nbsp-->
       <button type="button" class="btn btn-default" >
-          <a style="color:black" href=""> Fax</a>
+          <a style="color:black" href="#"> Fax</a>
       </button>
      </div>
      <div class="col-sm-2">
      <button type="button" class="btn btn-default"  >
-                    <a style="color:black" href=""> Prestation</a>
+                    <a style="color:black" href="#"> Prestation</a>
                 </button>
      </div>
      <div class="col-sm-2">
       <button type="button" class="btn btn-default"  >
-                    <a style="color:black"  href="">Créer DOC</a>
+                    <a style="color:black"  href="#">Créer DOC</a>
                 </button>
      </div>
      <div class="col-sm-2">
       <button type="button" class="btn btn-default"  >
-                    <a style="color:black"  href=""> Créer ORM</a>
+                    <a style="color:black"  href="#"> Créer ORM</a>
                 </button>
      </div>
 
