@@ -64,6 +64,13 @@
       0 => 'Rap2hpoutre\\LaravelLogViewer\\LaravelLogViewerServiceProvider',
     ),
   ),
+  'renatomarinho/laravel-page-speed' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'RenatoMarinho\\LaravelPageSpeed\\ServiceProvider',
+    ),
+  ),
   'webklex/laravel-imap' => 
   array (
     'providers' => 
