@@ -87,7 +87,7 @@
     <div class="col-sm-1">
       <!--<button class="btn btn-default" >sms</button>&nbsp-->
       <button type="button" class="btn btn-default"  >
-                    <a style="color:black" href=""> SMS</a>
+                    <a style="color:black" href="#"> SMS</a>
                 </button>
      </div>
      <div class="col-sm-2">
