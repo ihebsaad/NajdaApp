@@ -45,6 +45,52 @@ use App\Document ;
             {echo '<b>Non affecté</b>';} 
         } ?>
     </div>
+    <div class="col-md-6" style="text-align: right;padding-right: 35px">
+        <div class="page-toolbar">
+
+        <div class="btn-group">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope"></i> Email <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'client','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Au client </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Au Prestataire </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            A l'assuré </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" id="sms">
+                    <a style="color:black" href="{{action('EmailController@sms',$dossier->id)}}"> <i class="fas fa-sms"></i> SMS</a>
+                </button>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" id="newfax">
+                    <a style="color:black" href="{{action('EmailController@envoifax',$dossier->id)}}"> <i class="fa fa-fax"></i> Fax</a>
+                </button>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" id="newcalldossier">
+                    <i class="fa fa-phone"></i>
+                    Tél
+
+                </button>
+            </div>
+        </div>
+    </div>
+    </div>
 
 
 </div>
