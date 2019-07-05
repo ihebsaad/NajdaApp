@@ -69,15 +69,15 @@
                 </button>
                 <ul class="dropdown-menu pull-right">
                     <li>
-                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'client','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                        <a href="{{url('dossiers/view/'.$dossier->id )}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
                             Au client </a>
                     </li>
                     <li>
-                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                        <a href="{{url('dossiers/view/'.$dossier->id )}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
                             Au Prestataire </a>
                     </li>
                     <li>
-                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                        <a href="{{url('dossiers/view/'.$dossier->id )}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
                             A l'assuré </a>
                     </li>
 
@@ -87,7 +87,7 @@
     <div class="col-sm-1">
       <!--<button class="btn btn-default" >sms</button>&nbsp-->
       <button type="button" class="btn btn-default"  >
-                    <a style="color:black" href="{{action('EmailController@sms',$dossier->id)}}"> SMS</a>
+                    <a style="color:black" href="{{url('dossiers/view/'.$dossier->id )}}"> SMS</a>
                 </button>
      </div>
      <div class="col-sm-2">
@@ -101,7 +101,7 @@
      <div class="col-sm-1">
       <!--<button class="btn btn-default">fax</button>&nbsp-->
       <button type="button" class="btn btn-default" >
-          <a style="color:black" href="{{action('EmailController@envoifax',$dossier->id)}}"> Fax</a>
+          <a style="color:black" href="{{url('dossiers/view/'.$dossier->id )}}"> Fax</a>
       </button>
      </div>
      <div class="col-sm-2">
