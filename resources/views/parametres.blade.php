@@ -170,9 +170,7 @@
                     @endsection
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-
 <script>
-
 
     function hideinfos() {
         $('#tab1').css('display','none');
@@ -215,4 +213,4 @@
 
     }
 
-        </script>
+</script>
