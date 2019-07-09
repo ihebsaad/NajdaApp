@@ -1,4 +1,4 @@
-@extends('layouts.mainlayout')
+@extends('layouts.fulllayout')
 
 @section('content')
     <h3 style="margin-left:50px">Créer un nouveau utilisateur</h3><br><br>

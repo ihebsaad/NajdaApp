@@ -43,8 +43,13 @@ use App\Http\Controllers\TagsController;
                                         <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
                                         <button id="afffolder" class="btn   " style="background-color: #c5d6eb;color:#333333;"  data-toggle="modal" data-target="#affectfolder"><b><i class="fas fa-folder"></i> Dispatcher</b></button>
                                  @endif
-                               @if(Gate::check('isAdmin') || Gate::check('isSupervisor') || Gate::check('isDisp') )
 
+                                <?php    $seance =  DB::table('seance')
+                                    ->where('id','=', 1 )->first();
+                                    $disp=$seance->dispatcheur ;
+
+                                    $iduser=Auth::id();
+                                    if ($iduser==$disp) { ?>
                                     <a  href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-warning btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Archiver" >
                                   <span class="fa fa-fw fa-archive"></span> Archiver
                                 </a>
@@ -60,8 +65,7 @@ use App\Http\Controllers\TagsController;
                                         <i class="fas fa-mail-bulk"></i> Accusé
                                     </button>
                                     @endif
-                                  @endif
-
+                                   <?php } ?>
                             </div>
                         </div>
 

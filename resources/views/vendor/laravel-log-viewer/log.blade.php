@@ -1,79 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="robots" content="noindex, nofollow">
+
   <title>Historique des opérations</title>
-  <link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
-  <style>
-    body {
-      padding: 25px;
-    }
 
-    h1 {
-      font-size: 1.5em;
-      margin-top: 0;
-    }
 
-    #table-log {
-        font-size: 0.85rem;
-    }
+@extends('layouts.fulllayout')
 
-    .sidebar {
-        font-size: 0.85rem;
-        line-height: 1;
-    }
+@section('content')
 
-    .btn {
-        font-size: 0.7rem;
-    }
-
-    .stack {
-      font-size: 0.85em;
-    }
-
-    .date {
-      min-width: 75px;
-    }
-
-    .text {
-      word-break: break-all;
-    }
-
-    a.llv-active {
-      z-index: 2;
-      background-color: #f5f5f5;
-      border-color: #777;
-    }
-
-    .list-group-item {
-      word-wrap: break-word;
-    }
-
-    .folder {
-      padding-top: 15px;
-    }
-
-    .div-scroll {
-      height: 80vh;
-      overflow: hidden auto;
-    }
-    .nowrap {
-      white-space: nowrap;
-    }
-
-  </style>
-</head>
-<body>
 <div class="container-fluid">
-  <div class="row">
-    <div class="col sidebar mb-3">
-      <h1><i class="fa fa-calendar" aria-hidden="true"></i> Historique des opérations</h1>
+
+    <div class="row">
+    <div class="col-lg-3    ">
+        <h3 style="margin-left:30px;margin-bottom:30px"><i class="fa fa-file-alt" aria-hidden="true"></i> Fichiers</h3>
 
       <div class="list-group div-scroll">
         @foreach($folders as $folder)
@@ -101,54 +38,39 @@
         @endforeach
       </div>
     </div>
-    <div class="col-10 table-container">
-      @if ($logs === null)
+    <div class="col-lg-9 ">
+        <h3 style="margin-left:30px;margin-bottom:30px"><i class="fa fa-calendar" aria-hidden="true"></i> Historique des opérations</h3>
+
+
+    @if ($logs === null)
         <div>
           Document > 50 Mo, SVP Télécharger le.
         </div>
       @else
-        <table id="table-log" class="table table-striped" data-ordering-index="{{ $standardFormat ? 2 : 0 }}">
-          <thead>
+        <table id="mytable" style="width:100%" class="table table-striped" data-ordering-index="{{ $standardFormat ? 2 : 0 }}">
+          <thead >
           <tr>
-            @if ($standardFormat)
-              <th style="width:15%">Type</th>
+               <th style="width:15%">Type</th>
              <!-- <th>Context</th>-->
               <th style="width:15%">Date</th>
-            @else
-              <th style="width:15%">Ligne numéro</th>
-            @endif
-            <th>Contenu</th>
+             <th style="width70%">Contenu</th>
           </tr>
           </thead>
+
           <tbody>
 
           @foreach($logs as $key => $log)
 		  @if ($log['level']!='error')
             <tr data-display="stack{{{$key}}}">
-              @if ($standardFormat)
                 <td style="width:15%" class="nowrap text-{{{$log['level_class']}}}">
                   <span class="fa fa-{{{$log['level_img']}}}" aria-hidden="true"></span>&nbsp;&nbsp;{{$log['level']}}
                 </td>
                <!-- <td class="text">{{$log['context']}}</td>-->
-              @endif
-              <td style="width:15%" class="date">{{{$log['date']}}}</td>
+              <td style="width:15%" class="">{{{$log['date']}}}</td>
               <td class="text">
-                @if ($log['stack'])
-                  <button type="button"
-                          class="float-right expand btn btn-outline-dark btn-sm mb-2 ml-2"
-                          data-display="stack{{{$key}}}">
-                    <span class="fa fa-search"></span>
-                  </button>
-                @endif
+
                 {{{$log['text']}}}
-                @if (isset($log['in_file']))
-                  <br/>{{{$log['in_file']}}}
-                @endif
-                @if ($log['stack'])
-                  <div class="stack" id="stack{{{$key}}}"
-                       style="display: none; white-space: pre-wrap;">{{{ trim($log['stack']) }}}
-                  </div>
-                @endif
+
               </td>
             </tr>
 		 @endif
@@ -182,156 +104,98 @@
     </div>
   </div>
 </div>
-<!-- jQuery for Bootstrap -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-<!-- FontAwesome -->
-<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-<!-- Datatables -->
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-<script>
-  $(document).ready(function () {
-    $('.table-container tr').on('click', function () {
-      $('#' + $(this).data('display')).toggle();
-    });
-    $('#table-log').DataTable({
-      "order": [$('#table-log').data('orderingIndex'), 'desc'],
-      "stateSave": true,
-	  
-				"language": {
-					
-					"decimal":        "",
-					"emptyTable":     "Pas de données",
-					"info":           "Affichage de  _START_ à _END_ de _TOTAL_ entrées",
-					"infoEmpty":      "Affichage 0 à 0 of 0 entries",
-					"infoFiltered":   "(filteré de _MAX_ total entrées)",
-					"infoPostFix":    "",
-					"thousands":      ",",
-					"lengthMenu":     "afficher _MENU_ ",
-					"loadingRecords": "Chargement...",
-					"processing":     "Chargement...",
-					"search":         "Recherche:",
-					"zeroRecords":    "Pas de résultats",
-						"paginate": {
-						"first":      "Premier",
-						"last":       "Dernier",
-						"next":       "Suivant",
-						"previous":   "Premier"
-									},
-						"aria": {
-						"sortAscending":  ": Activer pour un Tri ascendant",
-						"sortDescending": ": Activer pour un Tri descendant"
-								}
-							},
-				
-      "stateSaveCallback": function (settings, data) {
-        window.localStorage.setItem("datatable", JSON.stringify(data));
-      },
-      "stateLoadCallback": function (settings) {
-        var data = JSON.parse(window.localStorage.getItem("datatable"));
-        if (data) data.start = 0;
-        return data;
-      }
-    });
-    $('#delete-log, #clean-log, #delete-all-log').click(function () {
-      return confirm('Etes vous sûre?');
-    });
-  });
-</script>
-</body>
-</html>
-<style>
-/*
- var table = $('#myTable').DataTable( {
-        dom: 'Blfrtip',
-         "order": [[ 0, "desc" ]] ,
 
-	  "columnDefs": [ {
-          "targets": 'no-sort',
-          "orderable": false,
-    } ],
-	 
-	   buttons: [						 
-                    {
-                    extend: 'print',
-                    text: '  Imprimer',
-					className : 'fa fa-print',						
-                    exportOptions: {
-                    columns: [ 0, 1,2,3,4,5 ],
-                	}
-                    },
-                    {
-                    extend: 'csv',
-                    text: '  Csv',
-					className : 'fa fa-file-o',						
-                    exportOptions: {
-                    columns: [ 0, 1,2,3,4,5 ],
-                	}
-                    },
-				 {
-                    extend: 'excel',
-                    text: '  Excel',
-					className : 'fa fa-file-excel-o',
-                    exportOptions: {
-                    columns: [ 0, 1,2,3,4,5 ],
-               	}
-                    },				
-				{
-                    extend: 'pdf',
-                    text: '  Pdf',
-					className : 'fa fa-file-pdf-o',					
-                    exportOptions: {
-                    columns: [ 0, 1,2,3,4,5 ],
-                	}
-                    },
-				 {
-                    extend: 'copy',
-                    text: '  Copier',
-					className : 'fa fa-copy',					 
-                    exportOptions: {
-                    columns: [ 0, 1,2,3,4,5 ],
-                	}
-                  },
-		   		{
-                    extend: 'colvis',
-                    text: '  Colonnes',
-					className : 'fa fa-hand-o-up',	
-				}
 
-                ]
-				,
-				"language": {
-					
-					"decimal":        "",
-					"emptyTable":     "Pas de données",
-					"info":           "Affichage de  _START_ à _END_ de _TOTAL_ entrées",
-					"infoEmpty":      "Affichage 0 à 0 of 0 entries",
-					"infoFiltered":   "(filteré de _MAX_ total entrées)",
-					"infoPostFix":    "",
-					"thousands":      ",",
-					"lengthMenu":     "afficher _MENU_ ",
-					"loadingRecords": "Chargement...",
-					"processing":     "Chargement...",
-					"search":         "Recherche:",
-					"zeroRecords":    "Pas de résultats",
-						"paginate": {
-						"first":      "Premier",
-						"last":       "Dernier",
-						"next":       "Suivant",
-						"previous":   "Premier"
-									},
-						"aria": {
-						"sortAscending":  ": Activer pour un Tri ascendant",
-						"sortDescending": ": Activer pour un Tri descendant"
-								}
-							}
-				
-	 
-    } );
-*/
-</style>
+@endsection
+
+
+  @section('footer_scripts')
+
+      <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/jquery.dataTables.js') }}" ></script>
+      <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/dataTables.bootstrap.js') }}" ></script>
+      <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/dataTables.rowReorder.js') }}" ></script>
+      <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/dataTables.scroller.js') }}" ></script>
+
+      <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/dataTables.buttons.js') }}" ></script>
+      <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/dataTables.responsive.js') }}" ></script>
+      <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/buttons.colVis.js') }}" ></script>
+      <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/buttons.html5.js') }}" ></script>
+
+      <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/buttons.bootstrap.js') }}" ></script>
+      <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/buttons.print.js') }}" ></script>
+      <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/pdfmake.js') }}" ></script>
+      <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/vfs_fonts.js') }}" ></script>
+
+      <style>.searchfield{width:100px;}</style>
+
+
+      <script type="text/javascript">
+          $(document).ready(function() {
+
+
+              $('#mytable thead tr:eq(1) th').each( function () {
+                  var title = $('#mytable thead tr:eq(0) th').eq( $(this).index() ).text();
+                  $(this).html( '<input class="searchfield" type="text"   />' );
+              } );
+
+              var table = $('#mytable').DataTable({
+                  orderCellsTop: true,
+                  dom: 'Bflrtip',
+                  responsive:true,
+                  buttons: [
+
+                     // 'csv', 'excel', 'pdf', 'print'
+                  ],
+                  "columnDefs": [ {
+                      "targets": 'no-sort',
+                      "orderable": false,
+                  } ]
+                  ,
+                  "language":
+                      {
+                          "decimal":        "",
+                          "emptyTable":     "Pas de données",
+                          "info":           "affichage de  _START_ à _END_ de _TOTAL_ entrées",
+                          "infoEmpty":      "affichage 0 à 0 de 0 entrées",
+                          "infoFiltered":   "(Filtrer de _MAX_ total d`entrées)",
+                          "infoPostFix":    "",
+                          "thousands":      ",",
+                          "lengthMenu":     "affichage de _MENU_ entrées",
+                          "loadingRecords": "chargement...",
+                          "processing":     "chargement ...",
+                          "search":         "Recherche:",
+                          "zeroRecords":    "Pas de résultats",
+                          "paginate": {
+                              "first":      "Premier",
+                              "last":       "Dernier",
+                              "next":       "Suivant",
+                              "previous":   "Précédent"
+                          },
+                          "aria": {
+                              "sortAscending":  ": activer pour un tri ascendant",
+                              "sortDescending": ": activer pour un tri descendant"
+                          }
+                      }
+
+              });
+
+// Apply the search
+              table.columns().every(function (index) {
+                  $('#mytable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+                      table.column($(this).parent().index() + ':visible')
+                          .search(this.value)
+                          .draw();
+                  });
+              });
+
+
+
+
+
+
+
+          });
+
+      </script>
+  @stop
+
