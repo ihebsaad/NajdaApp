@@ -14,8 +14,6 @@
                                 <input onchange="changing(this)" type="text" class="form-control input" name="label" id="label"  value={{ $clientgroupe->label }}>
                             </div>
                         </div>
-  
-  
 
                         <div class="col-md-6">
                             <div class="row">
@@ -41,7 +39,7 @@
                      </div>
                     <input type="hidden" id="id" class="form-control"   value={{ $clientgroupe->id }}>
     </form>
-                </div>	 
+      </div>
 
   </div>
 

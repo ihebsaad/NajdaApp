@@ -402,7 +402,7 @@
                                         <td style="width:20%;"><?php echo $fax->champ; ?></td>
                                         <td style="width:20%;"><?php echo $fax->type; ?></td>
                                         <td style="width:50%;"><?php echo $fax->remarque; ?></td>
-                                        <td style="width:10%;"><><i class="fa fa-fax"></i></td>
+                                        <td style="width:10%;"><i class="fa fa-fax"></i></td>
                                     </tr>
                                 @endforeach
 

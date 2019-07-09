@@ -1,4 +1,4 @@
-@extends('layouts.mainlayout')
+@extends('layouts.dispatchlayout')
 
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/dataTables.bootstrap.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/buttons.bootstrap.css') }}" />
