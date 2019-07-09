@@ -6,7 +6,8 @@ use App\Document ;
 
 ?>
 <?php use \App\Http\Controllers\PrestationsController;
-     use  \App\Http\Controllers\PrestatairesController;
+use  \App\Http\Controllers\PrestatairesController;
+use  \App\Http\Controllers\DocsController;
 ?>
 
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
@@ -18,9 +19,12 @@ use App\Document ;
 
 <div class="row">
 
+    <div class="col-md-3">
 
+        <h2><?php echo   $dossier->reference_medic ;?></h2>
+    </div>
 
-     <div class="col-md-6">
+     <div class="col-md-3">
         <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
         <b>Affecté à:</b> 
         <?php 
@@ -122,16 +126,8 @@ use App\Document ;
                             <input type="hidden" name="iddossupdate" id="iddossupdate" value="{{ $dossier->id }}">
 
                             <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="inputError" class="control-label">Réf Dossier</label>
 
-                                        <div class="input-group-control">
-                                            <input  type="text" id="reference_medic" name="reference_medic" class="form-control" disabled=""   value="{{ $dossier->reference_medic }}" >
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Type de dossier</label>
                                         <select  onchange="changing(this);location.reload();"  id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
@@ -141,7 +137,7 @@ use App\Document ;
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Affecté à </label>
                                         <select id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single" readonly="readonly">
@@ -156,11 +152,9 @@ use App\Document ;
                                         </select>
                                     </div>
                                 </div>
-                            </div>
 
 
-                            <div class="row">
-                                <div class="col-md-4">
+                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Client </label>
                                         <select onchange="changing(this);location.reload();" id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"   value="{{ $dossier->customer_id }}" >
@@ -178,7 +172,7 @@ use App\Document ;
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                            <!--    <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="inputError" class="control-label">Référence *</label>
 
@@ -186,9 +180,9 @@ use App\Document ;
                                             <input    type="text" id="customer" name="reference_customer" class="form-control"   value="{{ $dossier->reference_customer }}" >
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="complexite"> Degré de complexité</label>
                                         <select onchange="changing(this)" class="form-control" name="complexite" id="complexite"  >
@@ -199,6 +193,7 @@ use App\Document ;
                                     </div>
                                 </div>
                             </div>
+
 
                             <div class="row form">
                                 <div class="col-md-12">
@@ -217,7 +212,7 @@ use App\Document ;
                                                         <div class="panel-body">
                                                             <div class="col-md-12">
                                                                 <div class="row">
-                                                                    <div class="col-md-5">
+                                                                    <div class="col-md-4">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Nom abonné * </label>
 
@@ -226,7 +221,7 @@ use App\Document ;
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-5">
+                                                                    <div class="col-md-4">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Prénom *</label>
 
@@ -235,10 +230,22 @@ use App\Document ;
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <label for="ben" class="control-label">bénéficiaire différent</label><br>
+
+                                                                                 <label for="annule" class="">
+                                                                                    <div class="radio" id="uniform-actif">
+                                                                                        <span class="checked">
+                                                                               <input    type="checkbox"  id="benefdiff"   value="1"  <?php if ($dossier->benefdiff ==1){echo 'checked';} ?>  onclick="changing2(this);showBen();" >
+                                                                                        </span>Oui</div>
+                                                                                </label>
+                                                                         </div>
+                                                                    </div>
 
                                                                 </div>
 
-                                                                <div class="row">
+                                                                <div class="row" id="bens" <?php if ($dossier->benefdiff ==0) { ?> style="display:none" <?php }?> >
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Bénéficaire </label>
@@ -452,22 +459,23 @@ use App\Document ;
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="row">
+                                                                <div class="row" id="adresse3"  <?php if ($dossier->subscriber_local_address3 =='') {echo 'style="display:none;"';}  ?> >
                                                                     <div class="form-group col-md-10">
-                                                                        <label for="inputError" class="control-label">Dernière adresse en Tunisie   </label>
+                                                                        <label for="inputError" class="control-label"><p id="derniere3">Dernière</p> Adresse en Tunisie  </label>
 
                                                                         <div class="input-group-control">
-                                                                            <input onchange="changing(this)"  type="text" id="subscriber_local_address" name="subscriber_local_address" class="form-control"   value="{{ $dossier->subscriber_local_address }}">
+                                                                            <input onchange="changing(this)"  type="text" id="subscriber_local_address3" name="subscriber_local_address3" class="form-control"   value="{{ $dossier->subscriber_local_address3 }}" >
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="col-md-1" style="padding-top:30px">
-                                                                        <span title="Afficher une autre adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn03"><i class="fa   fa-plus"></i> <i class="fa fa-minus"></i></span>
+                                                                    <div class="col-md-1"style="padding-top:30px">
+                                                                        <span title="cacher l'adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn04moins"><i class="fa  fa-minus"></i> </span>
+
                                                                     </div>
                                                                 </div>
                                                                 <div class="row" id="adresse2"   <?php if ($dossier->subscriber_local_address2 =='') {echo 'style="display:none;"';}  ?> >
                                                                     <div class="form-group col-md-10">
-                                                                        <label for="inputError" class="control-label">Adresse en Tunisie </label>
+                                                                        <label for="inputError" class="control-label"><p id="derniere2">Dernière</p> Adresse en Tunisie  </label>
 
                                                                         <div class="input-group-control">
                                                                             <input onchange="changing(this)"  type="text" id="subscriber_local_address2" name="subscriber_local_address2" class="form-control"   value="{{ $dossier->subscriber_local_address2 }}" >
@@ -475,22 +483,26 @@ use App\Document ;
                                                                     </div>
 
                                                                     <div class="col-md-1" style="padding-top:30px">
-                                                                        <span style='; ' title="Afficher une autre adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn04"><i class="fa  fa-plus"></i> <i class="fa fa-minus"></i></span>
+                                                                        <span title="Afficher une autre adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn04plus"><i class="fa fa-plus"></i> </span>
+                                                                        <span title="cacher l'adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn03moins"><i class="fa   fa-minus"></i> </span>
                                                                     </div>
                                                                 </div>
-
-                                                                <div class="row" id="adresse3"  <?php if ($dossier->subscriber_local_address3 =='') {echo 'style="display:none;"';}  ?> >
+                                                                <div class="row">
                                                                     <div class="form-group col-md-10">
-                                                                        <label for="inputError" class="control-label">Adresse en Tunisie   </label>
+                                                                        <label for="inputError" class="control-label"><p id="derniere1">Dernière</p> Adresse en Tunisie </label>
 
                                                                         <div class="input-group-control">
-                                                                            <input onchange="changing(this)"  type="text" id="subscriber_local_address3" name="subscriber_local_address3" class="form-control"   value="{{ $dossier->subscriber_local_address3 }}" >
+                                                                            <input onchange="changing(this)"  type="text" id="subscriber_local_address" name="subscriber_local_address" class="form-control"   value="{{ $dossier->subscriber_local_address }}">
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="col-md-1">
-                                                                    </div>
+                                                                    <div class="col-md-1" style="padding-top:30px">
+                                                                        <span title="Afficher une autre adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn03plus"><i class="fa   fa-plus"></i> </span>
+                                                                     </div>
                                                                 </div>
+
+
+
 
                                                                 <div class="row">
                                                                     <div class="form-group col-md-10">
@@ -504,7 +516,7 @@ use App\Document ;
                                                                     </div>
                                                                 <div class="row">
 
-                                                                    <div class="col-md-6">
+                                                                    <div class="col-md-5">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Ville</label>
 
@@ -521,7 +533,7 @@ use App\Document ;
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="col-md-6">
+                                                                    <div class="col-md-5">
                                                                         <!--<div class="form-group">
                                                                             <label for="inputError" class="control-label">Hôtel</label>
 
@@ -548,7 +560,12 @@ use App\Document ;
                                                                                 </div>
                                                                             </div>
                                                                     </div>
+                                                                    <div class="col-md-2">
+                                                                        <label for="inputError" class="control-label">Autre : </label>
 
+                                                                        <a style="" href="{{ route('prestataires') }}" class="btn btn-default btn-sm" role="button">+ Ajouter</a>
+
+                                                                    </div>
                                                                 </div>
                                                                     <div class="row">
 
@@ -616,7 +633,7 @@ use App\Document ;
                                                                         <h4><i class="fa fa-lg fa-user"></i> Numéros Tels</h4>
                                                                     </div>
                                                                     <div class="col-md-4">
-                                                                        <span style="float:right" id="addtel" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding6"><b><i class="fa fa-user"></i> Ajouter un Tel</b></span>
+                                                                        <span style="float:right" id="addtel" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding6"><b><i class="fa fa-user"></i> Ajouter un numéro de téléphone</b></span>
                                                                     </div>
 
                                                                 </div>
@@ -626,7 +643,8 @@ use App\Document ;
                                                                     <tr class="headtable">
                                                                         <th style="width:20%">Nom et Prénom</th>
                                                                         <th style="width:20%">Qualité</th>
-                                                                        <th style="width:30%">Tel</th>
+                                                                        <th style="width:30%">téléphone</th>
+                                                                        <th style="width:30%">type</th>
                                                                         <th style="width:10%">Remarque</th>
                                                                     </tr>
 
@@ -637,6 +655,7 @@ use App\Document ;
                                                                             <td style="width:20%;"><?php echo $phone->nom; ?>  <?php echo $phone->prenom; ?></td>
                                                                             <td style="width:20%;"><?php echo $phone->fonction; ?></td>
                                                                             <td style="width:50%;"><?php echo $phone->tel; ?></td>
+                                                                            <td style="width:50%;"><?php echo $phone->typetel; ?></td>
                                                                              <td style="width:50%;"><?php echo $phone->remarque; ?></td>
                                                                         </tr>
                                                                     @endforeach
@@ -747,12 +766,21 @@ use App\Document ;
 
 
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-9">
                                                             <div class="form-group">
-                                                                <label for="inputError" class="control-label">Adresse de facturation  </label>
+                                                                <label for="inputError" class="control-label">Entité de facturation  </label>
 
                                                                 <div class="input-group-control">
-                                                                    <input onchange="changing(this)" type="text" id="adresse_facturation" name="adresse_facturation" class="form-control"   value="{{ $dossier->adresse_facturation }}" >
+                                                                    <select onchange="changing(this)" type="text" id="adresse_facturation" name="adresse_facturation" class="form-control"    >
+                                                                        <option></option>
+                                                                        <option  <?php if ($dossier->adresse_facturation==$entite){echo 'selected="selected"';} ?> value="<?php echo $entite;?>"><?php echo $entite .' <small>'.$adresse.'</small>';?></option>
+                                                                        <?php foreach ($liste as $l)
+                                                                        {?>
+                                                                            <option  <?php  if ($dossier->adresse_facturation==$l->nom ){echo 'selected="selected"';} ?> value="<?php $l->nom;?>" ><?php $l->nom ;?>   <small>  <?php $l->champ;?> </small></option>
+                                                                       <?php
+                                                                        }
+                                                                        ?>
+                                                                    </select>
                                                                 </div>
                                                             </div>
 
@@ -762,21 +790,37 @@ use App\Document ;
                                                         
                                                     </div>
 
-                                                    <div class="row" style="margin-left:30px">
-                                                        <label  style="color:grey"> Entité principale du client :  <b><?php echo $entite; ?></b>     Adresse :  <b><?php echo $adresse; ?></b></label></br><br>
+
+
+                                                    <div class="form-group row ">
+                                                        <h4>Documents à signer</h4>
+
+
+                                                        <div class="row">
+                                                            <select class="form-control  col-lg-12 itemName " style="width:400px" name="docs"  multiple  id="docs">
+
+
+                                                                <option></option>
+                                                                <?php if ( count($relations1) > 0 ) {?>
+
+                                                                @foreach($relations1 as $rel  )
+                                                                    @foreach($cldocs as $doc)
+                                                                        <option  @if($rel->doc==$doc->doc)selected="selected"@endif    onclick="createdocdossier('spec<?php echo $doc->doc; ?>')"  value="<?php echo $doc->doc;?>"> <?php echo DocsController::ChampById('nom',$doc->doc);?></option>
+                                                                    @endforeach
+                                                                @endforeach
+
+                                                                <?php
+                                                                } else { ?>
+                                                                @foreach($cldocs as $doc)
+                                                                    <option    onclick="createdocdossier('spec<?php echo $doc->doc; ?>')"  value="<?php echo $doc->doc;?>"> <?php echo DocsController::ChampById('nom',$doc->doc);?></option>
+                                                                @endforeach
+
+                                                                <?php }  ?>
+
+                                                            </select>
+
+                                                        </div>
                                                     </div>
-
-                                                    <label style="color:grey">Autres Adresses:</label>
-                                                        <?php foreach ($liste as $l)
-                                                        {
-                                                           echo ' <div class="row" style="margin-left:30px">';
-
-                                                            echo '<label style="color:grey">Entité : <b>'. $l->nom.'</b>   Adresse: <b>'.$l->champ.'</b></label>';
-                                                            echo ' </div>';
-
-                                                        }
-                                                        ?>       <br> <br>
-
 
 
                                                     <div class="row">
@@ -846,7 +890,7 @@ use App\Document ;
 
                                                         </div>
                                                         <div class="row">
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="inputError" class="control-label">Hôspitalisé à </label>
 
@@ -1889,6 +1933,16 @@ $iduser=$CurrentUser->id;
                                 </div>
                             </div>
                             <div class="form-group ">
+                                <label for="code">Type</label>
+                                <div class="row">
+                                    <select    class="form-control"  id="typetel"  >
+                                        <option value="Fixe">Fixe</option>
+                                        <option value="Mobile">Mobile</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="form-group ">
                                 <label for="code">Remarque</label>
                                 <div class="row">
                                     <textarea   class="form-control"  id="remarquet" ></textarea>
@@ -2136,7 +2190,38 @@ function filltemplate(data,tempdoc)
     }
 
 
-    function disabling(elm) {
+function changing2(elm) {
+    var champ=elm.id;
+
+
+    var val =document.getElementById(champ).checked==1;
+
+    if (val==true){val=1;}
+    if (val==false){val=0;}
+     var dossier = $('#iddossupdate').val();
+    //if ( (val != '')) {
+    var _token = $('input[name="_token"]').val();
+    $.ajax({
+        url: "{{ route('dossiers.updating') }}",
+        method: "POST",
+        data: {dossier: dossier , champ:champ ,val:val, _token: _token},
+        success: function (data) {
+            $('#'+champ).animate({
+                opacity: '0.3',
+            });
+            $('#'+champ).animate({
+                opacity: '1',
+            });
+
+        }
+    });
+    // } else {
+
+    // }
+}
+
+
+function disabling(elm) {
         var champ=elm;
 
         var val =0;
@@ -2176,139 +2261,153 @@ function filltemplate(data,tempdoc)
 
 
     $(document).ready(function() {
-    $("#agent").select2();
-    $("#templatedoc").select2();
-    $('#emailadd').click(function(){
-        var parent = $('#parent').val();
-        var champ = $('#emaildoss').val();
-        var nom = $('#DescrEmail').val();
-        var tel = $('#telmail').val();
-        var qualite = $('#qualite').val();
-        if ((champ != '') )
-        {
-            var _token = $('input[name="_token"]').val();
-            $.ajax({
-                url:"{{ route('dossiers.addemail') }}",
-                method:"POST",
-                data:{parent:parent,champ:champ,nom:nom,tel:tel,qualite:qualite, _token:_token},
-                success:function(data){
+        $("#agent").select2();
+        $("#templatedoc").select2();
+        $('#emailadd').click(function () {
+            var parent = $('#parent').val();
+            var champ = $('#emaildoss').val();
+            var nom = $('#DescrEmail').val();
+            var tel = $('#telmail').val();
+            var qualite = $('#qualite').val();
+            if ((champ != '')) {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: "{{ route('dossiers.addemail') }}",
+                    method: "POST",
+                    data: {parent: parent, champ: champ, nom: nom, tel: tel, qualite: qualite, _token: _token},
+                    success: function (data) {
 
-                    //   alert('Added successfully');
-                    window.location =data;
+                        //   alert('Added successfully');
+                        window.location = data;
 
-                }
-            });
-        }else{
-            // alert('ERROR');
-        }
-    });
+                    }
+                });
+            } else {
+                // alert('ERROR');
+            }
+        });
 
 // fonction du remplissage de la template web du document
-    $('#gendoc').click(function(){
-        var dossier = $('#dossier').val();
-        var tempdoc = $("#templatedoc").val();
-        $("#gendochtml").prop("disabled",false);
-        // renitialise la val de parentdoc
-        $('#iddocparent').attr('value', '');  
-        if ((dossier != '') )
-        {
-            var _token = $('input[name="_token"]').val();
-            $.ajax({
-                url:"{{ route('documents.htmlfilled') }}",
-                method:"POST",
-                data:{dossier:dossier,template:tempdoc, _token:_token},
-                success:function(data){
-                    filltemplate(data,tempdoc);
-                    //alert(JSON.stringify(data));
-                }
-            });
-        }else{
-            // alert('ERROR');
-        }
-    });
+        $('#gendoc').click(function () {
+            var dossier = $('#dossier').val();
+            var tempdoc = $("#templatedoc").val();
+            $("#gendochtml").prop("disabled", false);
+            // renitialise la val de parentdoc
+            $('#iddocparent').attr('value', '');
+            if ((dossier != '')) {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: "{{ route('documents.htmlfilled') }}",
+                    method: "POST",
+                    data: {dossier: dossier, template: tempdoc, _token: _token},
+                    success: function (data) {
+                        filltemplate(data, tempdoc);
+                        //alert(JSON.stringify(data));
+                    }
+                });
+            } else {
+                // alert('ERROR');
+            }
+        });
 
-        $('#btnaddemail').click(function(){
+        $('#btnaddemail').click(function () {
             var parent = $('#iddossupdate').val();
             var nom = $('#nome').val();
             var prenom = $('#prenome').val();
             var fonction = $('#fonctione').val();
-             var email = $('#emaildoss').val();
-             var observ = $('#remarquee').val();
+            var email = $('#emaildoss').val();
+            var observ = $('#remarquee').val();
             var nature = $('#natureem').val();
-            if ((email != '') )
-            {
+            if ((email != '')) {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
-                    url:"{{ route('dossiers.addressadd') }}",
-                    method:"POST",
-                    data:{parent:parent,nom:nom,prenom:prenom,fonction:fonction,email:email,observ: observ, nature:nature, _token:_token},
-                    success:function(data){
+                    url: "{{ route('dossiers.addressadd') }}",
+                    method: "POST",
+                    data: {
+                        parent: parent,
+                        nom: nom,
+                        prenom: prenom,
+                        fonction: fonction,
+                        email: email,
+                        observ: observ,
+                        nature: nature,
+                        _token: _token
+                    },
+                    success: function (data) {
 
                         //   alert('Added successfully');
-                        window.location =data;
+                        window.location = data;
 
                     }
                 });
-            }else{
+            } else {
                 // alert('ERROR');
             }
         });
 
 
-        $('#btnaddtel').click(function(){
+        $('#btnaddtel').click(function () {
             var parent = $('#iddossupdate').val();
             var nom = $('#nomt').val();
             var prenom = $('#prenomt').val();
             var fonction = $('#fonctiont').val();
             var tel = $('#teldoss').val();
-             var observ = $('#remarquet').val();
+            var observ = $('#remarquet').val();
+            var typetel = $('#typetel').val();
             var nature = $('#naturetel').val();
-            if ((tel != '') )
-            {
+            if ((tel != '')) {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
-                    url:"{{ route('dossiers.addressadd2') }}",
-                    method:"POST",
-                    data:{parent:parent,nom:nom,prenom:prenom,fonction:fonction,tel:tel,observ: observ, nature:nature, _token:_token},
-                    success:function(data){
+                    url: "{{ route('dossiers.addressadd2') }}",
+                    method: "POST",
+                    data: {
+                        parent: parent,
+                        nom: nom,
+                        prenom: prenom,
+                        fonction: fonction,
+                        tel: tel,
+                        observ: observ,
+                        nature: nature,
+                        typetel: typetel,
+                        _token: _token
+                    },
+                    success: function (data) {
 
                         //   alert('Added successfully');
-                        window.location =data;
+                        window.location = data;
 
                     }
                 });
-            }else{
-                  alert('ERROR');
+            } else {
+                alert('ERROR');
             }
         });
 
 
-
-    // generate doc from html templte
-    $('#gendochtml').click(function(){
-        //alert($("#templatedocument").val());
-        //$("#gendocfromhtml").submit();
-        var _token = $('input[name="_token"]').val();
-        var dossier = $('#dossdoc').val();
-        var tempdoc = $("#templatedocument").val();
-        var idparent = '';
-        // verifier si cest le cas de annule et remplace pour sauvegarder lid du parent
-        if ($('#iddocparent').val())
-        {
-            idparent = $('#iddocparent').val();
-            console.log('parent: '+idparent);
-        }
-        $.ajax({
-                url:"{{ route('documents.adddocument') }}",
-                method:"POST",
+        // generate doc from html templte
+        $('#gendochtml').click(function () {
+            //alert($("#templatedocument").val());
+            //$("#gendocfromhtml").submit();
+            var _token = $('input[name="_token"]').val();
+            var dossier = $('#dossdoc').val();
+            var tempdoc = $("#templatedocument").val();
+            var idparent = '';
+            // verifier si cest le cas de annule et remplace pour sauvegarder lid du parent
+            if ($('#iddocparent').val()) {
+                idparent = $('#iddocparent').val();
+                console.log('parent: ' + idparent);
+            }
+            $.ajax({
+                url: "{{ route('documents.adddocument') }}",
+                method: "POST",
                 //'&_token='+_token
-                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent,
-                success:function(data){
+                data: $("#templatefilled").contents().find('form').serialize() + '&_token=' + _token + '&dossdoc=' + dossier + '&templatedocument=' + tempdoc + '&parent=' + idparent,
+                success: function (data) {
                     //alert(JSON.stringify(data));
                     console.log(data);
                     location.reload();
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
                     alert('Erreur lors de la generation du document');
                     console.log('jqXHR:');
@@ -2319,9 +2418,32 @@ function filltemplate(data,tempdoc)
                     console.log(errorThrown);
                 }
             });
+        });
+
+
+
+/*
+        $('#subscriber_name').change(function() {
+            var subscriber_name = $('#subscriber_name').val();
+            var beneficiaire = $('#beneficiaire').val();
+            if( beneficiaire==''){
+                $('#beneficiaire').val(subscriber_name);
+            }
+
+
+        });
+
+        $('#subscriber_lastname').change(function() {
+            var subscriber_lastname = $('#subscriber_lastname').val();
+            var prenom_benef = $('#prenom_benef').val();
+            if( prenom_benef==''){
+                $('#prenom_benef').val(subscriber_lastname);
+            }
+        });
+
+        */
+
     });
-
-
 
 
 
@@ -2394,7 +2516,9 @@ function filltemplate(data,tempdoc)
 
             var   div=document.getElementById('ben2');
             if(div.style.display==='none')
-            {div.style.display='block';	 }
+            {
+                div.style.display='block';
+            }
             else
             {div.style.display='none';     }
 
@@ -2413,25 +2537,70 @@ function filltemplate(data,tempdoc)
         });
 
 
-        $('#btn03').click(function() {
+        $('#btn03plus').click(function() {
 
             var   div=document.getElementById('adresse2');
             if(div.style.display==='none')
-            {div.style.display='block';	 }
-            else
-            {div.style.display='none';     }
+            {div.style.display='block';
+                document.getElementById('derniere1').style.display='none';
+                document.getElementById('derniere3').style.display='none';
+                document.getElementById('derniere2').style.display='block';
+            }
+           /* else
+            {div.style.display='none';     }*/
 
 
         });
 
 
-        $('#btn04').click(function() {
+        $('#btn04plus').click(function() {
 
             var   div=document.getElementById('adresse3');
             if(div.style.display==='none')
-            {div.style.display='block';	 }
-            else
-            {div.style.display='none';     }
+            {div.style.display='block';
+                document.getElementById('derniere1').style.display='none';
+                document.getElementById('derniere2').style.display='none';
+                document.getElementById('derniere3').style.display='block';
+            }
+          /*  else
+            {div.style.display='none';     }*/
+
+
+        });
+
+        $('#btn03moins').click(function() {
+            var   div=document.getElementById('adresse2');
+          /*  if(div.style.display==='block')
+            {div.style.display='none';
+                document.getElementById('derniere1').style.display='block';
+                document.getElementById('derniere2').style.display='none';
+                document.getElementById('derniere3').style.display='none';
+                document.getElementById('adresse3').style.display='none';
+            }*/
+            document.getElementById('derniere1').style.display='block';
+            document.getElementById('derniere2').style.display='none';
+            document.getElementById('derniere3').style.display='none';
+            document.getElementById('adresse2').style.display='none';
+            document.getElementById('adresse3').style.display='none';
+        /*    else
+            {div.style.display='none';     }*/
+
+
+        });
+
+
+        $('#btn04moins').click(function() {
+
+            var   div=document.getElementById('adresse3');
+            if(div.style.display==='block')
+            {div.style.display='none';
+
+                document.getElementById('derniere1').style.display='none';
+                document.getElementById('derniere2').style.display='block';
+                document.getElementById('derniere3').style.display='none';
+            }
+            /*     else
+             {div.style.display='none';     }*/
 
 
         });
@@ -2560,9 +2729,110 @@ function filltemplate(data,tempdoc)
 
 
 
+
+
+        $('#docs').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+
+        });
+
+
+
+        var $topo1 = $('#docs');
+
+        var valArray0 = ($topo1.val()) ? $topo1.val() : [];
+
+        $topo1.change(function() {
+            var val0 = $(this).val(),
+                numVals = (val0) ? val0.length : 0,
+                changes;
+            if (numVals != valArray0.length) {
+                var longerSet, shortSet;
+                (numVals > valArray0.length) ? longerSet = val0 : longerSet = valArray0;
+                (numVals > valArray0.length) ? shortSet = valArray0 : shortSet = val0;
+                //create array of values that changed - either added or removed
+                changes = $.grep(longerSet, function(n) {
+                    return $.inArray(n, shortSet) == -1;
+                });
+
+                UpdatingS(changes, (numVals > valArray0.length) ? 'selected' : 'removed');
+
+            }else{
+                // if change event occurs and previous array length same as new value array : items are removed and added at same time
+                UpdatingS( valArray0, 'removed');
+                UpdatingS( val0, 'selected');
+            }
+            valArray0 = (val0) ? val0 : [];
+        });
+
+
+
+        function UpdatingS(array, type) {
+            $.each(array, function(i, item) {
+
+                if (type=="selected"){
+
+
+                    var dossier = $('#iddossupdate').val();
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                        url: "{{ route('docs.createdocdossier') }}",
+                        method: "POST",
+                        data: {dossier: dossier , doc:item ,  _token: _token},
+                        success: function () {
+                            $('.select2-selection').animate({
+                                opacity: '0.3',
+                            });
+                            $('.select2-selection').animate({
+                                opacity: '1',
+                            });
+
+                        }
+                    });
+
+                }
+
+                if (type=="removed"){
+
+                    var dossier = $('#iddossupdate').val();
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                        url: "{{ route('docs.removedocdossier') }}",
+                        method: "POST",
+                        data: {dossier: dossier , doc:item ,  _token: _token},
+                        success: function () {
+                            $( ".select2-selection--multiple" ).hide( "slow", function() {
+                                // Animation complete.
+                            });
+                            $( ".select2-selection--multiple" ).show( "slow", function() {
+                                // Animation complete.
+                            });
+                        }
+                    });
+
+                }
+
+            });
+        } // updating
+
+
+
     }); // $ function
 
+  function showBen() {
 
+      if (document.getElementById('benefdiff').value == 1) {
+          $('#bens').css('display','block');
+
+      }
+  }
 
 </script>
 <style>.headtable{background-color: grey!important;color:white;}

@@ -212,6 +212,16 @@ Route::get('/personnes/view/{id}', 'PersonnesController@view');
 
 
 
+/*** docs -> documents à signer   **/
+Route::resource('/docs',  'DocsController');
+Route::get('/docs', array('as' => 'docs','uses' => 'DocsController@index'));
+Route::post('/docs/saving','DocsController@saving')->name('docs.saving');
+Route::post('/docs/updating','DocsController@updating')->name('docs.updating');
+Route::get('/docs/view/{id}', 'DocsController@view');
+Route::post('/docs/removespec','DocsController@removespec')->name('docs.removespec');
+Route::post('/docs/createspec','DocsController@createspec')->name('docs.createspec');
+Route::post('/docs/removedocdossier','DocsController@removedocdossier')->name('docs.removedocdossier');
+Route::post('/docs/createdocdossier','DocsController@createdocdossier')->name('docs.createdocdossier');
 
 /*** Groupes Clients **/
 Route::resource('/clientgroupes',  'ClientGroupesController');

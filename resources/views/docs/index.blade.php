@@ -7,80 +7,53 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
 
 @section('content')
-    <?php use \App\Http\Controllers\PrestatairesController;
 
-    //echo json_encode($villes);
-    //  collect($villes);
 
-   /// $filtered = $villes->where('id', 10)->pluck('name');
-   // echo $filtered ;
-
-    ?>
     <style>
         .uper {
             margin-top: 10px;
         }
+        .no-sort input{display:none;}
     </style>
     <div class="uper">
-        <div class="portlet box grey">
+         <div class="portlet box grey">
             <div class="row">
-                <div class="col-lg-6">Prestataires</div>
+                <div class="col-lg-6">Documents à signer</div>
                 <div class="col-lg-6">
-                    <button id="addprest" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter un Prestataire</b></button>
+                    <button id="addgr" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter un document</b></button>
                 </div>
             </div>
         </div>
-
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
             <tr id="headtable">
-                <th style="width:35%">Nom</th>
-            <!--    <th style="width:25%">Spécialité</th>-->
-              <!-- <th style="width:10%">Priorité</th>-->
-                <th style="width:20%">Ville</th>
-             </tr>
+                <th style="width:10%">ID</th>
+                <th style="width:45%">Nom</th>
+                 <th style="width:10%">Actions</th>
+              </tr>
             <tr>
-                <th style="width:35%">Nom</th>
-            <!--    <th style="width:25%">Spécialité</th>-->
-               <!-- <th   style="width:10%">Priorité</th>-->
-                <th style="width:20%">Ville</th>
+                <th style="width:10%">ID</th>
+                <th style="width:45%">Nom</th>
+                 <th class="no-sort" style="width:10%">Actions</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($prestataires as $prestataire)
-                <?php $ordre=$prestataire['ordre'];
-                if ($ordre==1){$class="bg-primary";}
-                else {
-                    if ($ordre==2){$class="bg-info";}
-                    else {
-                        if ($ordre==3){$class="bg-danger";}
-                        if ($ordre==0){$class="bg-warning";}
-
-                    }
-
-                    }
-                     $villeid=intval($prestataire['ville_id']);
-                if (isset($villes[$villeid]['name']) ){$ville=$villes[$villeid]['name'];}
-                else{$ville=$prestataire['ville'];}
-
+            @foreach($docs as $doc)
+                <?php
+          
 
                 ?>
 
                 <tr>
-                    <td style="width:35%"><a href="{{action('PrestatairesController@view', $prestataire['id'])}}" >{{$prestataire->name}}</a></td>
-                <!--    <td style="width:25%">{{$prestataire->specialite}}</td>-->
-                <!--    <td style="width:10%;text-align:center"   class="<?php echo $class;?> ">{{$prestataire->ordre}}</td>-->
-                    <td style="width:20%"><?php     /*$prestataire['ville_id'] ; */
-                     echo $ville ;
-                        ?></td>
-
+                    <td  >{{$doc->id}}</td>
+                    <td  ><a href="{{action('DocsController@view', $doc['id'])}}" >{{$doc->nom}}</a></td>
+                      <td    > </td>
+ 
                 </tr>
             @endforeach
             </tbody>
         </table>
     </div>
-
-
 
 
     <?php use \App\Http\Controllers\UsersController;
@@ -96,7 +69,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ajouter un nouveau Prestataire</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Ajouter document à signer</h5>
 
                 </div>
                 <div class="modal-body">
@@ -107,15 +80,9 @@
 
                             <div class="form-group">
                                 <label for="type">Nom :</label>
-                            <input class="form-control" type="text" id="nom" />
+                                <input class="form-control" type="text" id="nom" />
 
                             </div>
-
-                            <div class="form-group">
-                                <label for="type">Spécialité :</label>
-                                <input class="form-control" type="text" id="specialite" />
-                            </div>
-
 
                         </form>
                     </div>
@@ -128,9 +95,6 @@
             </div>
         </div>
     </div>
-
-
-
 
 
 
@@ -218,17 +182,15 @@
             });
 
 
-
             $('#add').click(function(){
                 var nom = $('#nom').val();
-                 var specialite = $('#specialite').val();
-                if ((nom != '')&&(specialite != '') )
+                if ((nom != '')  )
                 {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
-                        url:"{{ route('prestataires.saving') }}",
+                        url:"{{ route('docs.saving') }}",
                         method:"POST",
-                        data:{nom:nom,specialite:specialite, _token:_token},
+                        data:{nom:nom, _token:_token},
                         success:function(data){
 
                             //   alert('Added successfully');
@@ -241,12 +203,6 @@
                     // alert('ERROR');
                 }
             });
-
-
-
-
-
-
 
         });
 

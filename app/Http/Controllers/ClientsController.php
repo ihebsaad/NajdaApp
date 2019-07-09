@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Adresse;
 use App\ClientGroupe;
+use App\Doc;
 use App\TypePrestation;
 use Illuminate\Support\Facades\Log;
 
@@ -268,6 +269,9 @@ class ClientsController extends Controller
     public function view($id)
     {
         $dossiers = Dossier::all();
+        $docs = DB::table('docs')->select('id', 'nom')->get();
+        $relations2 = DB::table('clients_docs')->select('client', 'doc')->get();
+
         $groupes = DB::table('client_groupes')->select('id', 'label')->get();
 
         $countries = DB::table('apps_countries')->select('id', 'country_name')->get();
@@ -288,7 +292,6 @@ class ClientsController extends Controller
             ->where('parent',$id)
             ->get();
 
-
         $qualites =   Adresse::where('nature', 'qualite')
             ->where('parent',$id)
             ->get();
@@ -302,9 +305,8 @@ class ClientsController extends Controller
             ->get();
 
 
-
         $client = Client::find($id);
-        return view('clients.view',['dossiers' => $dossiers,'groupes'=>$groupes,'countries'=>$countries,'emails'=>$emails,'tels'=>$tels,'faxs'=>$faxs,'entites'=>$entites,'qualites'=>$qualites ,'reseaux'=>$reseaux,'gestions'=>$gestions], compact('client'));
+        return view('clients.view',['docs'=>$docs,'relations2'=>$relations2 ,'dossiers' => $dossiers,'groupes'=>$groupes,'countries'=>$countries,'emails'=>$emails,'tels'=>$tels,'faxs'=>$faxs,'entites'=>$entites,'qualites'=>$qualites ,'reseaux'=>$reseaux,'gestions'=>$gestions], compact('client'));
 
     }
 

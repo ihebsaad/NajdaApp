@@ -3,8 +3,6 @@
 @section('content')
 
 
-
-
                     <h3 class="card-title">Tableau de bord</h3><br>
                          <!-- Tabs -->
                         <ul class="nav  nav-tabs">
@@ -46,7 +44,6 @@
                        $accuse2=$parametres->accuse2 ;
                        $dollar=$parametres->dollar ;
                        $euro=$parametres->euro ;
-
 
 
                        // ChampById

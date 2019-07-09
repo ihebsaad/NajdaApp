@@ -18,7 +18,7 @@
               <a href="{{ route('prestataires') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                <span class="fa fa-lg fa-fw fa-user-md"></span>
                <br>
-                    Les Intervenants
+                    Les Prestataires
               </a>
           </div>
 
@@ -106,6 +106,13 @@
                 </a>
             </div>
 
+            <div class="col-md-2">
+                <a href="{{ route('docs') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="   fas fa-lg fa-fw   fa-file-signature"></span>
+                    <br>
+                    Documents à signer
+                </a>
+            </div>
 
             <div class="col-md-2">
                 <a href="{{ route('cities') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">

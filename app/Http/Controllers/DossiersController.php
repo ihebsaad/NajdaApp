@@ -23,6 +23,8 @@ use App\Citie;
 use App\Email;
 use WordTemplate;
 
+ini_set('memory_limit','1024M');
+
 
 class DossiersController extends Controller
 {
@@ -87,7 +89,6 @@ class DossiersController extends Controller
 
     public function show ( )
     {
-
 
     }
 
@@ -175,7 +176,7 @@ class DossiersController extends Controller
                 $entree->save();
             }
 
-            return url('/dossiers/view/'.$iddoss)/*->with('success', 'Dossier Créé avec succès')*/;
+            return url('/dossiers/fiche/'.$iddoss)/*->with('success', 'Dossier Créé avec succès')*/;
            // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
            //  return  $iddoss;
 
@@ -255,7 +256,7 @@ class DossiersController extends Controller
 
         ]);
         $email->save();
-        return url('/dossiers/view/'.$parent) ;
+        return url('/dossiers/fihe/'.$parent) ;
     }
 
 
@@ -325,13 +326,13 @@ class DossiersController extends Controller
 
       //  $clients = DB::table('clients')->select('id', 'name')->get();
 
-        $clients = Cache::remember('clients',$minutes2,  function () {
+      /*  $clients = Cache::remember('clients',$minutes2,  function () {
 
             return DB::table('clients')
                 ->get();
         });
 
-
+*/
         $prestations =   Prestation::where('dossier_id', $id)->get();
 
 
@@ -401,7 +402,6 @@ class DossiersController extends Controller
 
 
 
-
         return view('dossiers.view',['prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
 
     }
@@ -411,8 +411,13 @@ class DossiersController extends Controller
     {        $minutes= 120;
         $minutes2= 600;
 
+
+        $relations1 = DB::table('dossiers_docs')->select('dossier', 'doc')
+            ->where('dossier',$id)
+            ->get();
   //      $typesMissions=TypeMission::get();
 
+        $cldocs = DB::table('clients_docs')->select('client', 'doc')->get();
 
 
         $typesMissions = Cache::remember('type_mission',$minutes2,  function () {
@@ -465,7 +470,7 @@ class DossiersController extends Controller
             ->get();
 
         $minutes= 120;
-        $hopitaux = Cache::remember('prestataires_type_prestations',$minutes,  function () {
+        $hopitaux = Cache::remember('hopitaux',$minutes,  function () {
 
             return DB::table('prestataires_type_prestations')
                 ->where('type_prestation_id',8 )
@@ -474,7 +479,7 @@ class DossiersController extends Controller
         });
 
 
-        $traitants = Cache::remember('prestataires_type_prestations', $minutes,  function () {
+        $traitants = Cache::remember('traitants', $minutes,  function () {
 
             return DB::table('prestataires_type_prestations')
                 ->where('type_prestation_id',15 )
@@ -485,14 +490,14 @@ class DossiersController extends Controller
             ->where('type_prestation_id',18 )
             ->get();
 */
-        $hotels = Cache::remember('prestataires_type_prestations', $minutes,  function () {
+        $hotels = Cache::remember('hotels', $minutes,  function () {
 
             return DB::table('prestataires_type_prestations')
                 ->where('type_prestation_id',18 )
                 ->get();
         });
 
-        $garages = Cache::remember('prestataires_type_prestations',$minutes,   function () {
+        $garages = Cache::remember('garages',$minutes,   function () {
 
             return DB::table('prestataires_type_prestations')
                 ->where('type_prestation_id',22 )
@@ -500,7 +505,7 @@ class DossiersController extends Controller
                 ->get();
         });
 
-        return view('dossiers.fiche',['garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
+        return view('dossiers.fiche',['cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
 
 
     }
@@ -802,7 +807,7 @@ class DossiersController extends Controller
             if ($adresse->save())
             {
 
-                return url('/dossiers/view/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;
+                return url('/dossiers/fiche/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;
                 // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
                 //  return  $iddoss;
             }
@@ -827,6 +832,7 @@ class DossiersController extends Controller
                 'prenom' => $request->get('prenom'),
                 'fonction' => $request->get('fonction'),
                 'tel' => $request->get('tel'),
+                'typetel' => $request->get('typetel'),
                 'remarque' => $request->get('observ'),
                 'nature' => $request->get('nature'),
                 'parent' => $parent,
@@ -835,7 +841,7 @@ class DossiersController extends Controller
             if ($adresse->save())
             {
 
-                return url('/dossiers/view/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;
+                return url('/dossiers/fiche/'.$parent)/*->with('success', 'Dossier Créé avec succès')*/;
                 // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
                 //  return  $iddoss;
             }
