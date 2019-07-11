@@ -164,6 +164,26 @@ class EntreesController extends Controller
 
     }
 
+
+
+    public function showdisp($id)
+    {
+        $dossiers = Dossier::all();
+        $entree = Entree::find($id);
+        if ($entree->viewed==0 )
+        {
+            $this->export_pdf($id);
+            $entree->viewed=1;
+        }
+        $refdoss = $entree->dossier;
+        $entree->save();
+        $dossier = Dossier::where('reference_medic','=',$refdoss)->first();
+
+        //$dossier=compact($dossier);
+        return view('entrees.showdisp',['dossiers' => $dossiers, 'dossier' => $dossier], compact('entree'));
+
+    }
+
     public function edit($id)
     {
         //
@@ -196,7 +216,18 @@ class EntreesController extends Controller
          $entree->statut = 3;  // 3 = archivé
           $entree->save();
 
-        return redirect('/entrees')->with('success', '  Archivé avec succès');
+        return redirect('/entrees/dispatching')->with('success', '  Archivé');
+    }
+
+
+    public static function spam( $id)
+    {
+
+        $entree = Entree::find($id);
+        $entree->statut = 5;  // 5 = Spam
+        $entree->save();
+
+        return redirect('/entrees/dispatching')->with('success', '  Marqué comme SPAM');
     }
 
 
@@ -212,7 +243,7 @@ class EntreesController extends Controller
         $notif->statut=1 ;
         $notif->save();
 
-        return redirect('/home')->with('success', '  Traité avec succès');
+        return redirect('/home')->with('success', '  Traité');
     }
 
 
@@ -229,7 +260,7 @@ class EntreesController extends Controller
 
         $notif->delete();
 
-        return redirect('/entrees')->with('success', '  Supprimé avec succès');
+        return redirect('/entrees')->with('success', '  Supprimé');
     }
 
     public static function countarchives()
@@ -334,7 +365,8 @@ class EntreesController extends Controller
 
         $user->notify(new Notif_Suivi_Doss($entree));
 
-        return url('/entrees/show/'.$identree)/*->with('success', 'Dossier Créé avec succès')*/;
+        //return url('/entrees/show/'.$identree)/*->with('success', 'Dossier Créé avec succès')*/;
+        return url('/entrees/dispatching/');
 
     }
 

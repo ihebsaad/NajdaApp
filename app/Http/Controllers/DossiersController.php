@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Adresse;
+use App\AffectDoss;
 use App\Evaluation;
+use App\Parametre;
 use App\Prestataire;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -21,7 +23,9 @@ use App\Prestation;
 use App\TypePrestation;
 use App\Citie;
 use App\Email;
+
 use WordTemplate;
+use Mail;
 
 ini_set('memory_limit','1024M');
 
@@ -174,9 +178,82 @@ class DossiersController extends Controller
 
             $entree->dossier=$reference_medic;
                 $entree->save();
+
+
+                $message= $request->get('message');
+                    $message='test';
+                $send= $request->get('send');
+              ///  if ($send==true)
+               /// {  //$params=array('entree'=>$entree->id,'message'=>$message);
+               //     app('App\Http\Controllers\EmailController')->accuse($entree,$message);
+
+                    $refdossier = app('App\Http\Controllers\EntreesController')->ChampById('dossier',$identree);
+                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                    $clientid = app('App\Http\Controllers\DossiersController')->ClientDossierById($iddossier);
+                    $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$clientid);
+
+                    $nomabn=app('App\Http\Controllers\DossiersController')->NomAbnDossierById($iddossier);
+
+                    $refclient=app('App\Http\Controllers\ClientsController')->ClientChampById('reference',$clientid);
+
+                    $to=  app('App\Http\Controllers\EntreesController')->ChampById('emetteur',$identree);
+
+
+                    $params = Parametre::find(1);
+                    $signature = $params["signature"];
+
+                    if ($langue=='francais'){
+
+                        $sujet=  $nomabn.'  - V/Ref: '.$refclient .' - N/Ref: '.$refdossier ;
+
+                    }else{
+
+                        $sujet=  $nomabn.'  - Y/Ref: '.$refclient .' - O/Ref: '.$refdossier ;
+
+                    }
+
+                    $contenu=$message.'<br><br>'.$signature;
+                    try{
+                        Mail::send([], [], function ($message) use ($to,$sujet,$contenu) {
+                            $message
+
+                                ->to($to)
+
+                                ->subject($sujet)
+                                ->setBody($contenu, 'text/html');
+
+                        });
+
+
+                   } catch (Exception $ex) {
+                        // Debug via $ex->getMessage();
+                  //      echo '<script>alert("Erreur !") </script>' ;
+                    }
+
+
+
+
+              ///  }
+
+                $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i');
+                $affec=new AffectDoss([
+
+                    'util_affecteur'=>$request->get('affecteur'),
+                    'util_affecte'=>$request->get('affecte'),
+                    'statut'=>"nouveau",
+
+                    'id_dossier'=>$iddoss,
+                    'date_affectation'=>$dtc,
+
+                ]);
+
+                $affec->save();
+
+
             }
 
-            return url('/dossiers/fiche/'.$iddoss)/*->with('success', 'Dossier Créé avec succès')*/;
+          //  return url('/dossiers/fiche/'.$iddoss)/*->with('success', 'Dossier Créé avec succès')*/;
+            return url('/dossiers/') ;
            // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
            //  return  $iddoss;
 

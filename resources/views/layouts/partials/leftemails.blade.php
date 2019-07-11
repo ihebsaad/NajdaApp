@@ -60,7 +60,7 @@ if (App::environment('local')) {
          <i class="fa fa-fw clickable fa-chevron-up"></i>
             </span>
     </div>
-    <div  class="panel-body" style="display: block;">
+    <div  class="panel-body scrollable-panel" style="display: block;">
 <ul>
          <?php $entrees = Entree::orderBy('id', 'desc')
             ->where('statut','<','2')
@@ -69,13 +69,15 @@ if (App::environment('local')) {
 			$c=0;
 			foreach($entrees as $entree)
 			{$c++;
-			if(($c % 2 )==0){$bg='background-color:#EDEDE9';}else{$bg='background-color:#F9F9F8';}
-			 $type=$entree['type']; 
-			 echo '<li  class="overme" style=";padding-left:6px;margin-bottom:25px;'.$bg.'" >';
+			if(($c % 2 )==0){$bg='background-color:#EDEDE9';}else{$bg='background-color:#F9F9F8';}$date=$entree['reception'];$newDate = date("d/m/Y H:i", strtotime($date));
+
+    $type=$entree['type'];
+			 echo '<li  class="overme" style=";padding-left:6px;margin-bottom:15px;'.$bg.'" >';
 
 			  if ($type=='email'){echo '<img width="15" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="15" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="15" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="15" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php // echo $entree['type']; ?>
-			<label style="font-size:11px"><?php  echo $entree['emetteur'] . '</label><br>';  ?>
-    <a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:16px;"' ;} ?>  href="{{action('EntreesController@show', $entree['id'])}}" ><small style="font-size:9px"><?php echo $entree['sujet'] ; ?></small></a>
+			<label style="font-size:11px"><a style="color:black" href="{{action('EntreesController@showdisp', $entree['id'])}}" ><?php  echo $entree['emetteur'] . '</a></label><br>
+<label style="font-size:12px">'.$newDate.'</label><br>';  ?>
+    <a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:13px;"' ;} ?>  href="{{action('EntreesController@showdisp', $entree['id'])}}" ><small style="font-size:11px"><?php echo $entree['sujet'] ; ?></small></a>
 			<?php echo '</li>';
 
 			}

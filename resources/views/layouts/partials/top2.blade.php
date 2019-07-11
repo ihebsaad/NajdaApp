@@ -343,23 +343,9 @@
           </a> 
         </div>
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-		 <?php
-        $seance =  DB::table('seance')
-            ->where('id','=', 1 )->first();
-        $disp=$seance->dispatcheur ;
-
-        $iduser=Auth::id();
-        if ($iduser==$disp) {
-            ?>
-			  <a href="{{ route('entrees.dispatching') }}" class="btn btn-danger btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
-              <span class="  fa-fw    fas    fa-map-signs fa-2x"></span>
-          </a>
-		<?php } else {?>
-          <a href="{{ route('entrees.index') }}" class="btn btn-danger btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
-              <span class="fa fa-fw fa-envelope fa-2x"></span>
+          <a href="{{ route('home') }}" class="btn btn-danger btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="basculer en mode agent" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
+            Mode Agent
           </a> 
-	 <?php }  ?>
-
         </div>
         <div class="col-sm-1 col-md-1 col-lg-1">
           <ul class="nav navbar-nav" style="float: right!important;">
@@ -385,77 +371,4 @@
 
     </header>
 
-    <script>
-      /* function colorerSeq(string,qy) {
-           
-
-
-           if(qy!='')
-           {
-          // For all matching elements
-             $(string).each(function() {
-
-          // Get contents of string
-                  var myStr = $(this).text();
-                  //alert(myStr);
-                  // Split myStr into an array of characters
-                  myStr = myStr.split("");
-                  var dejaEn=false;
-                  // Build an html string of characters wrapped in  tags with classes
-                  var myContents = "";
-                  for (var i = 0, len = myStr.length; i < len; i++) {
-                    
-                    if(qy[0].toUpperCase()==myStr[i].toUpperCase())
-                    {
-
-                      if(!dejaEn)
-                      {
-
-                      for(var j=0, len2 = qy.length; j<len2; j++)
-                      {
-                        if(i<len)
-                        {
-                          if(qy[j].toUpperCase()==myStr[i].toUpperCase())
-                          {
-                           myContents += '<span class="single-char char-' + i + '">' + myStr[i] + '</span>';
-                           i++;
-                           //b=true;
-                          }
-                          else
-                          {
-                            myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-                            j=len2;
-                            i++;
-                          }
-                          
-                        }
-                       
-
-                      }
-                    
-                      
-                      i--;
-                      dejaEn=true;
-                          }
-                          else
-                          {
-
-                            myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-
-                          }
-                     
-                     }
-                     else
-                     {
-
-                      myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-                     }
-                  }
-
-                  // Replace original string with constructed html string
-                  $(this).html(myContents);
-                });
-           }
-              
-              }*/
-    </script>
+  

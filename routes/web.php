@@ -67,10 +67,12 @@ Route::post('/entrees/saving','EntreesController@saving')->name('entrees.saving'
 Route::get('/entrees/dispatching','EntreesController@dispatching')->name('entrees.dispatching');
 Route::get('/entrees/view/{id}', 'EntreesController@view');
 Route::get('/entrees/show/{id}', 'EntreesController@show');
+Route::get('/entrees/showdisp/{id}', 'EntreesController@showdisp')->name('entrees.showdisp');
 Route::get('/entrees/pdf/{id}', 'EntreesController@pdf');
 Route::get('/entrees/sendpdf/{id}', 'EntreesController@sendpdf');
 Route::get('/entrees/export_pdf/{id}', 'EntreesController@export_pdf');
 Route::get('/entrees/destroy/{id}', 'EntreesController@destroy');
+Route::get('/entrees/spam/{id}', 'EntreesController@spam');
 Route::get('/entrees/archiver/{id}', 'EntreesController@archiver');
 Route::get('/entrees/traiter/{id}', 'EntreesController@traiter');
 Route::get('/entrees/archive/', 'EntreesController@archive')->name('entrees.archive');

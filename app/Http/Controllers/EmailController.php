@@ -294,8 +294,8 @@ class EmailController extends Controller
             $sujet=($oMessage->getSubject())  ;
 
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
-           // $contenu= ($oMessage->getHTMLBody(true));
-            $contenu= ($oMessage->getTextBody());
+             $contenu= ($oMessage->getHTMLBody(true));
+            $contenubrut= ($oMessage->getTextBody());
           //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -325,7 +325,7 @@ class EmailController extends Controller
                     'destinataire' => 'test@najda-assistance.com',
                     'emetteur' => ($from),
                     'sujet' =>  ($sujet),
-                  //  'contenu'=> utf8_encode($contenu) ,
+                   'contenutxt'=> $contenubrut ,
                     'contenu'=> ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -495,8 +495,8 @@ class EmailController extends Controller
 
             $sujet=strval($oMessage->getSubject())  ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
-           // $contenu= $oMessage->getHTMLBody(true);
-            $contenu= $oMessage->getTextBody();
+            $contenu= $oMessage->getHTMLBody(true);
+            $contenubrut= $oMessage->getTextBody();
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -525,9 +525,10 @@ class EmailController extends Controller
 
                 $entree = new Entree([
                     'destinataire' => 'faxnajdassist@najda-assistance.com',
+
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
-                 //   'contenu'=> utf8_encode($contenu) ,
+                    'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -703,8 +704,8 @@ class EmailController extends Controller
 
             $sujet=strval($oMessage->getSubject())  ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
-           ///// $contenu= $oMessage->getHTMLBody(true);
-            $contenu= $oMessage->getTextBody();
+             $contenu= $oMessage->getHTMLBody(true);
+            $contenubrut= $oMessage->getTextBody();
 
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
@@ -724,8 +725,8 @@ class EmailController extends Controller
                     'destinataire' =>  'Boite Perso',
                     'emetteur' =>  ($from),
                     'sujet' =>  ($sujet),
-                    //'contenu'=> utf8_encode($contenu) ,
-                    'contenu'=> ($contenu) ,
+                    'contenutxt'=> $contenubrut ,
+                     'contenu'=> ($contenu) ,
                     'mailid'=>  $mailid,
                     'viewed'=>0,
                     'statut'=>0,
@@ -1789,15 +1790,15 @@ class EmailController extends Controller
 
 
 
-    function accuse (Request $request)
+    function accuse ($entree,$mess)
     {
 
        /*  $request->validate([
             'g-recaptcha-response' => 'required|captcha'
         ]);
 */
-        $entree = $request->get('entree');
-        $mess = $request->get('message');
+       // $entree = $request->get('entree');
+       // $mess = $request->get('message');
         $refdossier = app('App\Http\Controllers\EntreesController')->ChampById('dossier',$entree);
         $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
         $clientid = app('App\Http\Controllers\DossiersController')->ClientDossierById($iddossier);

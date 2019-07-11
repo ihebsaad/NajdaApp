@@ -1,7 +1,7 @@
 <li class="dropdown user user-menu">
     <a href="#" class="dropdown-toggle padding-user" data-toggle="dropdown">
 
-         <i  style="color:#b6cce7" class="fas fa-user-circle fa-5x myuser"></i>
+         <i  style="color:#b6cce7" class="fas fa-user-circle fa-4x myuser"></i>
 
 
     </a>
@@ -13,8 +13,20 @@
                 $name=$user->name;
                 $iduser=$user->id;
             ?>
+            <p>
+			<?php echo $name; ?>
+			<?php    $seance =  DB::table('seance')
+            ->where('id','=', 1 )->first();
+        $disp=$seance->dispatcheur ;
+        $sup=$seance->superviseur ;
 
-            <p><?php echo $name; ?></p>
+        $iduser=Auth::id();
+        if ($iduser==$disp) { ?>
+		<span>(le dispatcheur)</span>
+		<?php }    if ($iduser==$sup) { ?>
+		<span>(le superviseur)</span>
+		<?php } ?>
+		</p>
         </li>
         <li style="margin-top:8px">
             <a href="{{ route('profile',$iduser) }}">

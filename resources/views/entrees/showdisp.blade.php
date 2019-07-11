@@ -1,4 +1,4 @@
-@extends('layouts.mainlayout')
+@extends('layouts.dispatchlayout')
 {{-- Page title --}}
 @section('title')
     @parent
@@ -28,22 +28,22 @@ use App\Http\Controllers\TagsController;
        <center> <h4>{{ session()->get('AffectNouveauDossier') }}</h4></center>
     </div>
   @endif
-        <div class="panel-heading" style=""   >
-                     <div class="row">
+        <div class="panel-heading" style="">
+                    <div class="row">
                         <div  style=" padding-left: 0px;color:black;font-weight: bold ;">
                             <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet']; echo ($sujet); ?><span id="hiding" class="pull-right">
          <i style="color:grey;margin-top:10px"class="fa fa-2x fa-fw clickable fa-chevron-down"></i>
-            </span></h4>
-                        </div>
+            </span></h4>                        </div>
                     </div>
-                        <div class="row" style="padding-right: 10px;margin-top:10px" id="emailbuttons">
+                 <div class="row" style="padding-right: 10px;margin-top:10px;" id="emailbuttons">
                             <div class="pull-right" style="margin-top: 0px;">
                                 @if (!empty($entree->dossier))
                                     <button class="btn btn-sm btn-default"><b>REF: {{ $entree['dossier']   }}</b></button>
                                 @endif
                                 @if (empty($entree->dossier))
                                         <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
-                                        <button id="afffolder" class="btn   " style="background-color: #c5d6eb;color:#333333;"  data-toggle="modal" data-target="#affectfolder"><b><i class="fas fa-folder"></i> Dispatcher</b></button>
+                                        <button class="btn   " id="showdispl" style="background-color: #c5d6eb;color:#333333;"  ><b><i class="fas fa-folder"></i> Dispatcher</b></button>
+                                      <!--  <button id="afffolder" class="btn   " style="background-color: #c5d6eb;color:#333333;"  data-toggle="modal" data-target="#affectfolder"><b><i class="fas fa-folder"></i> Dispatcher</b></button>-->
                                  @endif
 
                                 <?php    $seance =  DB::table('seance')
@@ -79,10 +79,14 @@ use App\Http\Controllers\TagsController;
         </div>
         <div id="emailhead" class="panel-collapse collapse in" aria-expanded="true" style="">
             <div class="panel-body">
+                <div class="row" id="displine" style="display:none;padding-left:30px;padding-bottom:15px;padding-top:15px;background-color: #F9F9F8 ">
+                    <B> Dossier : </B> <input type="text" readonly id="affdoss"  style="width:150px;" />    <button style="margin-left:35px" type="button" id="updatefolder" class="btn btn-primary">Dispatcher</button>
+
+                </div>
                 <div class="row" style="font-size:11px;">
-                        <div class="col-sm-4 col-md-4 col-lg-4"style=" padding-top: 4px; ">
-                            <span><b>Emetteur: </b>{{ $entree['emetteur']  }}</span>
-                        </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4" style=" padding-top: 4px; ">
+                        <span><b>Emetteur: </b>{{ $entree['emetteur']  }}</span>
+                    </div>
                     <div class="col-sm-4 col-md-4 col-lg-4" style=" padding-left: 0px; ">
                         <span><b>À : </b>{{ $entree['destinataire']  }}</span>
                     </div>
@@ -103,7 +107,6 @@ use App\Http\Controllers\TagsController;
                 </div>
             </div>
         </div>
-
 </div>
 <div class="panel panel-default panelciel " >
         <!--<div class="panel-heading" style="cursor:pointer" data-toggle="collapse" data-parent="#accordion-cat-1" href="#emailcontent" class="" aria-expanded="true">-->
@@ -118,49 +121,48 @@ use App\Http\Controllers\TagsController;
                     </div>        
                  </a>
         </div>
-        <div id="emailcontent" class="panel-collapse collapse in" aria-expanded="true" style="">
-            <div class="panel-body" id="emailnpj">
-                <div class="row">
-                   <ul class="nav nav-pills">
-                        <li class="active" >
-                           <?php if ( $entree['type']=='fax') {}else {?> <a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps HTML du mail</a><?php }?>
-                       </li>
-                       <?php if ( $entree['type']!='fax') { ?>
-                       <li class=" " >
-                              <a href="#txtcorps" data-toggle="tab" aria-expanded="true"> Texte Brut</a>
-                       </li>
-                       <?php }?>
-                        @if ( $entree['nb_attach']   > 0)
-                            @for ($i = 1; $i <= $entree['nb_attach'] ; $i++)
-                                <li>
-                                    <a class=" " href="#pj<?php echo $i; ?>" data-toggle="tab" aria-expanded="false">PJ<?php echo $i; ?></a>
-                                </li>
-                            @endfor
-                        @endif
-                    </ul>
-                    <div id="myTabContent" class="tab-content" style="background: #ffffff">
-                       <?php if ( $entree['type']!='fax') { ?>
-                           <div class="tab-pane fade active in" id="mailcorps" style="">
-                                            <p  id="mailtext" style=" line-height: 25px;"><?php  $content= $entree['contenu'] ; ?>
-                                            <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
-                                            <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
+    <div id="emailcontent" class="panel-collapse collapse in" aria-expanded="true" style="">
+        <div class="panel-body" id="emailnpj">
+            <div class="row">
+                <ul class="nav nav-pills">
+                    <li class="active" >
+                        <?php if ( $entree['type']=='fax') {}else {?> <a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps HTML du mail</a><?php }?>
+                    </li>
+                    <?php if ( $entree['type']!='fax') { ?>
+                    <li class=" " >
+                        <a href="#txtcorps" data-toggle="tab" aria-expanded="true"> Texte Brut</a>
+                    </li>
+                    <?php }?>
+                    @if ( $entree['nb_attach']   > 0)
+                        @for ($i = 1; $i <= $entree['nb_attach'] ; $i++)
+                            <li>
+                                <a class=" " href="#pj<?php echo $i; ?>" data-toggle="tab" aria-expanded="false">PJ<?php echo $i; ?></a>
+                            </li>
+                        @endfor
+                    @endif
+                </ul>
+                <div id="myTabContent" class="tab-content" style="background: #ffffff">
+                    <?php if ( $entree['type']!='fax') { ?>
+                    <div class="tab-pane fade active in" id="mailcorps" style="">
+                        <p  id="mailtext" style=" line-height: 25px;"><?php  $content= $entree['contenu'] ; ?>
+                            <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
+                            <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
-                                            <?php  $cont=  str_replace($search,$replace, $content); ?>
-                                            <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
-                                            <?php  echo $cont; ?></p>
-                                        </div><?php } ?>
+                            <?php  $cont=  str_replace($search,$replace, $content); ?>
+                            <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
+                            <?php  echo $cont; ?></p>
+                    </div><?php } ?>
 
-                           <?php if ( $entree['type']!='fax') { ?>
-                           <div class="tab-pane fade   in" id="txtcorps" style="">
-                               <p  id="mailtext2" style=" line-height: 25px;"><?php  $contenttxt= $entree['contenutxt'] ; ?>
-                                   <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
-                                   <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
+                    <?php if ( $entree['type']!='fax') { ?>
+                    <div class="tab-pane fade   in" id="txtcorps" style="">
+                        <p  id="mailtext2" style=" line-height: 25px;"><?php  $contenttxt= $entree['contenutxt'] ; ?>
+                            <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
+                            <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
-                                   <?php  $cont2=  str_replace($search,$replace, $contenttxt); ?>
-                                   <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
-                                   <?php  echo $cont2; ?></p>
-                           </div><?php } ?>
-
+                            <?php  $cont2=  str_replace($search,$replace, $contenttxt); ?>
+                            <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
+                            <?php  echo $cont2; ?></p>
+                    </div><?php } ?>
                          @if ($entree['nb_attach']  > 0)
                                           <?php
                                             // get attachements info from DB
@@ -171,11 +173,7 @@ use App\Http\Controllers\TagsController;
                                             <?php $i=1; ?>
                                             @foreach ($attachs as $att)
                                                 <div class="tab-pane fade in <?php  if ( ($entree['type']=='fax')&&($i==1)) {echo 'active';}?>" id="pj<?php echo $i; ?>">
-
                                                     <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
-
-                                                    
-                                                    
                                                     @switch($att->type)
                                                         @case('docx')
                                                         @case('doc')
@@ -244,7 +242,7 @@ use App\Http\Controllers\TagsController;
                                         </form>
         </div>
 
-        <center> <button style="margin-bottom:15px" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#annulerAttenteReponse"> Annuler attente de réponse</button></center>
+        <center> <button  style="margin-bottom:15px" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#annulerAttenteReponse"> Annuler attente de réponse</button></center>
 </div>
 
 <style>
@@ -409,7 +407,8 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
 <!-- Modal -->
 <div class="modal fade" id="createfolder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-     <div class="modal-dialog" role="document">
+    <form method="post" action="{{route('affectation.dossier') }}">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Créer un nouveau dossier</h5>
@@ -468,15 +467,6 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
                         <!-- </form>-->
                     </div>
 
-                <input style="margin-top:8px;" type="checkbox" id="checkaccuse"><label for="checkaccuse" style="margin-left:10px;cursor:pointer">Envoyer un accusé de réception au client</label></input>
-                <div id="formaccuse" style="display:none">
-                     {{ csrf_field() }}
-                    <?php $message= EntreesController::GetParametre($entree['id']);
-                    //  echo json_encode($message);?>
-                    <div  style=" width: 540px; height: 450px;" id="message" contenteditable="true" ><?php echo $message   ;?></div>
-                 </div>
-
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
@@ -484,7 +474,8 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
             </div>
         </div>
     </div>
- </div>
+</form>
+</div>
 
 
 <!-- Modal Accusé -->
@@ -543,17 +534,13 @@ $urlapp='http://localhost/najdaapp';
             var entree = $('#entree_id').val();
              var type_affectation = $('#type_affectation').val();
             var affecte = $('#affecte').val();
-            var message = $('#message').html();
-            //var send = $('#checkaccuse') ;
-            if (document.getElementById('checkaccuse').checked == true){send=true;}else{send=false;}
-
             if ((type_dossier != '')&&(type_affectation != '')&&(affecte != ''))
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url:"{{ route('dossiers.saving') }}",
                     method:"POST",
-                    data:{message:message,send:send,entree:entree,type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
+                    data:{entree:entree,type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
                     success:function(data){
 
                      //   alert('Added successfully');
@@ -592,22 +579,23 @@ $urlapp='http://localhost/najdaapp';
             var entree = $('#entreeid').val();
             var dossier = $('#affdoss').val();
 
-
             var _token = $('input[name="_token"]').val();
-            $.ajax({
+            if(dossier!='')
+            {
+                $.ajax({
                 url:"{{ route('entrees.dispatchf') }}",
                 method:"POST",
                 data:{entree:entree,dossier:dossier, _token:_token},
                 success:function(data){
-
                     window.location =data;
-
-
 
                 }
             });
 
+            }else{alert('Sélectionnez un dossier');}
+
         });
+
 
 
 
@@ -638,6 +626,20 @@ $urlapp='http://localhost/najdaapp';
 
     });
 
+
+    $('#showdispl').click(function() {
+
+        var   div=document.getElementById('displine');
+        if(div.style.display==='none')
+        {
+            div.style.display='block';
+        }
+        else
+        {div.style.display='none';     }
+
+
+    });
+
     $('#hiding').on('click',   function() {
 
         var   div=document.getElementById('emailhead');
@@ -655,19 +657,6 @@ $urlapp='http://localhost/najdaapp';
 
     });
 
-    $('#checkaccuse').on('click',   function() {
-
-        var   div=document.getElementById('formaccuse');
-         if(div.style.display==='none')
-        {
-            div.style.display='block';
-         }
-        else
-        {
-            div.style.display='none';
-         }
-
-    });
 
 </script>
 
