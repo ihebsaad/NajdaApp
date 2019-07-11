@@ -83,7 +83,7 @@ use App\Http\Controllers\TagsController;
                     <B> Dossier : </B> <input type="text" readonly id="affdoss"  style="width:150px;" />    <button style="margin-left:35px" type="button" id="updatefolder" class="btn btn-primary">Dispatcher</button>
 
                 </div>
-                <div class="row" style="font-size:11px;">
+                <div class="row" style="font-size:12px;">
                     <div class="col-sm-4 col-md-4 col-lg-4" style=" padding-top: 4px; ">
                         <span><b>Emetteur: </b>{{ $entree['emetteur']  }}</span>
                     </div>
@@ -126,13 +126,13 @@ use App\Http\Controllers\TagsController;
             <div class="row">
                 <ul class="nav nav-pills">
                     <li class="active" >
-                        <?php if ( $entree['type']=='fax') {}else {?> <a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps HTML du mail</a><?php }?>
+                        <?php if ( $entree['type']=='fax') {}else {?> <a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps du mail</a><?php }?>
                     </li>
-                    <?php if ( $entree['type']!='fax') { ?>
+                    <?php /* if ( $entree['type']!='fax') { ?>
                     <li class=" " >
                         <a href="#txtcorps" data-toggle="tab" aria-expanded="true"> Texte Brut</a>
                     </li>
-                    <?php }?>
+                    <?php }*/ ?>
                     @if ( $entree['nb_attach']   > 0)
                         @for ($i = 1; $i <= $entree['nb_attach'] ; $i++)
                             <li>
@@ -153,16 +153,16 @@ use App\Http\Controllers\TagsController;
                             <?php  echo $cont; ?></p>
                     </div><?php } ?>
 
-                    <?php if ( $entree['type']!='fax') { ?>
+                    <?php /* if ( $entree['type']!='fax') { ?>
                     <div class="tab-pane fade   in" id="txtcorps" style="">
-                        <p  id="mailtext2" style=" line-height: 25px;"><?php  $contenttxt= $entree['contenutxt'] ; ?>
+                        <p  id="mailtext2" style=" line-height: 25px;"><?php  $contenttxt= utf8_decode($entree['contenutxt']) ; ?>
                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
                             <?php  $cont2=  str_replace($search,$replace, $contenttxt); ?>
                             <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
                             <?php  echo $cont2; ?></p>
-                    </div><?php } ?>
+                    </div><?php } */ ?>
                          @if ($entree['nb_attach']  > 0)
                                           <?php
                                             // get attachements info from DB

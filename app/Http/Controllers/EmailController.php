@@ -295,7 +295,7 @@ class EmailController extends Controller
 
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
              $contenu= ($oMessage->getHTMLBody(true));
-            $contenubrut= ($oMessage->getTextBody());
+           // $contenubrut= DB::connection()->getPdo()->quote(utf8_encode(($oMessage->getTextBody())));
           //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -325,7 +325,7 @@ class EmailController extends Controller
                     'destinataire' => 'test@najda-assistance.com',
                     'emetteur' => ($from),
                     'sujet' =>  ($sujet),
-                   'contenutxt'=> $contenubrut ,
+                 //  'contenutxt'=> $contenubrut ,
                     'contenu'=> ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -496,7 +496,7 @@ class EmailController extends Controller
             $sujet=strval($oMessage->getSubject())  ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
-            $contenubrut= $oMessage->getTextBody();
+          //  $contenubrut= $oMessage->getTextBody();
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -528,7 +528,7 @@ class EmailController extends Controller
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
-                    'contenutxt'=> $contenubrut,
+                  //  'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -705,7 +705,7 @@ class EmailController extends Controller
             $sujet=strval($oMessage->getSubject())  ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
              $contenu= $oMessage->getHTMLBody(true);
-            $contenubrut= $oMessage->getTextBody();
+         //   $contenubrut= $oMessage->getTextBody();
 
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
@@ -725,7 +725,7 @@ class EmailController extends Controller
                     'destinataire' =>  'Boite Perso',
                     'emetteur' =>  ($from),
                     'sujet' =>  ($sujet),
-                    'contenutxt'=> $contenubrut ,
+                  //  'contenutxt'=> $contenubrut ,
                      'contenu'=> ($contenu) ,
                     'mailid'=>  $mailid,
                     'viewed'=>0,
