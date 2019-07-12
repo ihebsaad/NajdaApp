@@ -454,5 +454,12 @@ Route::post('/documents/adddocument','DocumentsController@adddocument')->name('d
 Route::post('/documents/htmlfilled','DocumentsController@htmlfilled')->name('documents.htmlfilled');
 Route::post('/documents/historique','DocumentsController@historique')->name('documents.historique');
 Route::post('/documents/canceldoc','DocumentsController@canceldoc')->name('documents.canceldoc');
+
+
+/*** Ordre Missions  ***/
+
+Route::post('/ordremissions/export_pdf_odmtaxi','OrdreMissionsController@export_pdf_odmtaxi')->name('ordremissions.export_pdf_odmtaxi');
+//Route::get('/entrees/sendpdf/{id}', 'EntreesController@sendpdf');
+Route::get('/ordremissions/pdfodmtaxi','OrdreMissionsController@pdfodmtaxi')->name('ordremissions.pdfodmtaxi');
  
  

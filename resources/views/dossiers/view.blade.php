@@ -3,6 +3,8 @@
 use App\User ; 
 use App\Template_doc ; 
 use App\Document ; 
+use App\Client;
+use App\ClientGroupe;
 
 ?>
 <?php use \App\Http\Controllers\PrestationsController;
@@ -571,9 +573,9 @@ $iduser=$CurrentUser->id;
                     <div class="form-group">
 
                         <form id="addemailform" novalidate="novalidate">
-                            {{ csrf_field() }}
+                            {{-- csrf_field() --}}
 
-                            <input id="parent" name="parent" type="hidden" value="{{ $dossier->id}}">
+                            <input id="parent" name="parent" type="hidden" value="{{-- $dossier->id --}}">
                             <div class="form-group " >
                                 <label for="emaildoss">Email</label>
                                 <div class=" row  ">
@@ -676,7 +678,7 @@ $iduser=$CurrentUser->id;
         </div>
     </div>
 </div>
-<!-- Modal Document-->
+<!-- Modal OM-->
 <div class="modal fade" id="generateom" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -693,7 +695,7 @@ $iduser=$CurrentUser->id;
 
                         <form id="genomform" novalidate="novalidate">
 
-                            <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}">
+                            <input id="dossom" name="dossom" type="hidden" value="{{ $dossier->id}}">
                             <div class="form-group " >
               
                                   <div class=" row  ">
@@ -716,6 +718,17 @@ $iduser=$CurrentUser->id;
                                                   <option value={{ $tempdoc["id"] }} >{{ $tempdoc["nom"] }}</option>
                                               @endif                                            
                                           @endforeach
+
+
+                                          nom group client
+nom client
+ref client dossier
+
+dossier:
+customer_id       ---->    clients: name / groupe    ---->    label
+reference_customer
+
+
                                           --}}
                                           
                                      </select>
@@ -1565,17 +1578,18 @@ function filltemplate(data,tempdoc)
                 }
             });*/
             //alert(dossier+" | "+tempom+" | "+emispar+" | "+affectea);
-            afficheom(emispar,affectea,tempom);
+            afficheom(emispar,affectea,tempom,dossier);
 
         }else{
             // alert('ERROR');
         }
     });
 
-    function afficheom(emispar,affectea,tempom)
+    function afficheom(emispar,affectea,tempom,dossier)
     {
         $("#generateom").modal('hide');
-         document.getElementById("omfilled").src = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?emispar='+emispar;
+        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?emispar='+emispar+'&affectea='+affectea+'&dossier='+dossier+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
+         document.getElementById("omfilled").src = url;
 
         
         $("#templatehtmlom").modal('show');
@@ -1599,6 +1613,42 @@ function filltemplate(data,tempdoc)
                 method:"POST",
                 //'&_token='+_token
                 data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent,
+                success:function(data){
+                    //alert(JSON.stringify(data));
+                    console.log(data);
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
+                    alert('Erreur lors de la generation du document');
+                    console.log('jqXHR:');
+                    console.log(jqXHR);
+                    console.log('textStatus:');
+                    console.log(textStatus);
+                    console.log('errorThrown:');
+                    console.log(errorThrown);
+                }
+            });
+    });
+
+    $('#genomhtml').click(function(){
+        //alert($("#templatedocument").val());
+        //$("#gendocfromhtml").submit();
+        var _token = $('input[name="_token"]').val();
+        var dossier = $('#dossom').val();
+        var tempdoc = $("#templateordrem").val();
+        var idparent = '';
+        // verifier si cest le cas de annule et remplace pour sauvegarder lid du parent
+        if ($('#idomparent').val())
+        {
+            idparent = $('#idomparent').val();
+            console.log('parent: '+idparent);
+        }
+        $.ajax({
+                url:"{{ route('ordremissions.export_pdf_odmtaxi') }}",
+                method:"POST",
+                //'&_token='+_token
+                data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent,
                 success:function(data){
                     //alert(JSON.stringify(data));
                     console.log(data);

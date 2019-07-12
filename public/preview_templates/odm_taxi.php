@@ -1,5 +1,99 @@
 <?php 
 if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
+if (isset($_GET['affectea'])) {$affectea=$_GET['affectea'];}
+if (isset($_GET['dossier'])) {$dossier=$_GET['dossier'];}
+
+if (isset($_GET['DB_HOST'])) {$dbHost=$_GET['DB_HOST'];}
+if (isset($_GET['DB_DATABASE'])) {$dbname=$_GET['DB_DATABASE'];}
+if (isset($_GET['DB_USERNAME'])) {$dbuser=$_GET['DB_USERNAME'];}
+if (isset($_GET['DB_PASSWORD'])) {$dbpass=$_GET['DB_PASSWORD'];}
+// Create connection
+$conn = mysqli_connect($dbHost, $dbuser, $dbpass,$dbname);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+mysqli_query($conn,"set names 'utf8'");
+
+$sql = "SELECT reference_medic, subscriber_name, subscriber_lastname, customer_id, reference_customer, affecte FROM dossiers WHERE id=".$dossier;
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // output data of each row
+    $detaildoss = $result->fetch_assoc();
+
+    // infos client
+    $sqlcl = "SELECT name, groupe FROM clients WHERE id=".$detaildoss['customer_id'];
+	$resultcl = $conn->query($sqlcl);
+	if ($resultcl->num_rows > 0) {
+    // output data of each row
+    $detailcl = $resultcl->fetch_assoc();
+    
+	} else {
+    echo "0 results client";
+	}
+
+	// infos agent
+    $sqlagt = "SELECT name FROM users WHERE id=".$detaildoss['affecte'];
+	$resultagt = $conn->query($sqlagt);
+	if ($resultagt->num_rows > 0) {
+    // output data of each row
+    $detailagt = $resultagt->fetch_assoc();
+    
+	} else {
+    echo "0 results agent";
+	}
+} else {
+    echo "0 results dossier";
+}
+
+// base_hotels(18)_cliniques(8)_hopitaux(9)_ports(72,38-assistance)_aeroports(73) (name/tel)
+$sqltypeprest = "SELECT id,name,phone_home FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id IN (8,9,18,38,72,73))";
+
+$resulttp = $conn->query($sqltypeprest);
+if ($resulttp->num_rows > 0) {
+    // output data of each row
+    $array_prest = array();
+    while($row = $resulttp->fetch_assoc()) {
+        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+        $array_prest[] = array('id' => $row["id"],'name' => $row["name"], 'phone_home' => $row["phone_home"]);
+    }
+    //print_r($array_prest);
+	} else {
+    echo "0 results prestataires";
+	}
+
+// hotel clinique hopital
+$sqlhch = "SELECT id,name,phone_home FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id IN (8,9,18))";
+$resulthch = $conn->query($sqlhch);
+if ($resulthch->num_rows > 0) {
+    // output data of each row
+    $array_presthch = array();
+    while($rowhch = $resulthch->fetch_assoc()) {
+        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+        $array_presthch[] = array('id' => $rowhch["id"],'name' => $rowhch["name"], 'phone_home' => $rowhch["phone_home"]);
+    }
+    //print_r($array_prest);
+	} else {
+    echo "0 results prestataires hch";
+	}
+
+// Aeroport Port
+	$sqlap = "SELECT id,name,phone_home FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id IN (72,73))";
+	$resultap = $conn->query($sqlap);
+	if ($resultap->num_rows > 0) {
+	    // output data of each row
+	    $array_prestap = array();
+	    while($rowap = $resultap->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_prestap[] = array('id' => $rowap["id"],'name' => $rowap["name"], 'phone_home' => $rowap["phone_home"]);
+	    }
+	    //print_r($array_prest);
+		} else {
+	    echo "0 results prestataires ap";
+		}
+header("Content-Type: text/html;charset=UTF-8");
 ?>
 <html>
 <head>
@@ -10,8 +104,10 @@ if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 </head>
 <body>
+<form id="formchamps">
 <div class="row">
 	<div id="entetelogo" class="col-md-3">
+<input name="emispar" id="emispar" type="hidden" value="<?php if(isset ($emispar)) echo $emispar; ?>"></input>
 	<?php if (isset($emispar)) {  ?>
 		<?php if ($emispar == "najda") { ?>
 		<div>
@@ -46,9 +142,27 @@ if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
 		<?php } ?>
 
 
-		<?php if (($emispar == "medicm") || ($emispar == "medict") ||  ($emispar == "vat"))  { ?>
+		<?php if (($emispar == "medicm") || ($emispar == "medict"))  { ?>
 		<div>
 			<p style="margin-left:7px;margin-top:0.55pt; margin-bottom:0pt; widows:0; orphans:0; font-size:5.5pt"><span style="height:0pt; margin-top:-0.35pt; display:block; position:absolute; z-index:0"><img src="medicm.png" width="161" height="98" alt="" style="margin-top:10pt; -aw-left-pos:16pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:-10.4pt; -aw-wrap-type:none; position:absolute" /></span><span style="font-family:'Times New Roman'">&#xa0;</span></p>
+		</div>
+		<br style="clear:both; mso-break-type:section-break" />
+			<p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0.2pt; margin-bottom:0pt; widows:0; orphans:0; font-size:7.5pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p>
+			<p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
+		<span id="Eligne1" style="font-family:'Times New Roman'; font-weight:bold">Rue Mohamed Hamdane - Sahloul III</span>
+				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
+		<span id="Eligne2" style="font-family:'Times New Roman'; font-weight:bold">B.P. 41 - 4054 Sousse-Sahloul - Tunisie </span>
+				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
+		<span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 73 36 90 00</span>
+				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
+		<span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 73 36 90 01</span>
+				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt">
+		<span id="Eligne4" style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">ambulance.transp@medicmultiservices.com</span>
+		<?php } ?>
+
+		<?php if ($emispar == "vat")  { ?>
+		<div>
+			<p style="margin-left:7px;margin-top:0.55pt; margin-bottom:0pt; widows:0; orphans:0; font-size:5.5pt"><span style="height:0pt; margin-top:-0.35pt; display:block; position:absolute; z-index:0"><img src="vat.png" width="161" height="98" alt="" style="margin-top:10pt; -aw-left-pos:16pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:-10.4pt; -aw-wrap-type:none; position:absolute" /></span><span style="font-family:'Times New Roman'">&#xa0;</span></p>
 		</div>
 		<br style="clear:both; mso-break-type:section-break" />
 			<p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0.2pt; margin-bottom:0pt; widows:0; orphans:0; font-size:7.5pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p>
@@ -78,7 +192,13 @@ if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
 <input name="CL_km_approximatif" type="number" id="CL_km_approximatif" min="0" max="10000">
 				<span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">   </span><span style="font-family:'Times New Roman'; font-weight:bold">     </span><span style="font-family:'Times New Roman'; font-weight:bold">T</span><span style="font-family:'Times New Roman'; font-weight:bold">arif annoncé</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">? </span>
 <input name="CL_tarif" type="number" id="CL_tarif">
-				<span style="font-family:'Times New Roman'; font-weight:bold">                                     </span></p><p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">Client IMA</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; color:#ff0000"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; color:#4f81bd">(si_client_dossier=IMA)</span></p><p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Pour</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.7pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">le:</span>
+				<span style="font-family:'Times New Roman'; font-weight:bold">                                     </span></p>
+<?php  // Si client IMA
+if ($detailcl['groupe'] == 3) { ?>
+				<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#000"><?php print($detailcl['name']); ?></span></p>
+<input name="clientIMA" id="clientIMA" type="hidden" value="<?php echo $detailcl['name']; ?>"></input>
+<?php } ?>
+				<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Pour</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.7pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">le:</span>
 <input type="datetime-local" name="CL_heuredateRDV" id="CL_heuredateRDV">
 					<span style="font-family:'Times New Roman'; font-weight:bold; color:#0070c0">  </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.85pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Dimanche</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.9pt">   </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:  </span>
 <input type="checkbox" name="CL_Dimanche" id="CL_Dimanche" value="oui">
@@ -92,10 +212,10 @@ if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
 </div></br>
 <div class="row" style=" margin-left: 0px;margin-top: 20px ">
 			<span style="font-family:'Times New Roman'; font-weight:bold">Identité personne à transporter:</span><span style="font-family:'Times New Roman'; color:#ff0000">&#xa0;
-<input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input>
+<input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildoss)) echo $detaildoss['subscriber_name']; ?>" /> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($detaildoss)) echo $detaildoss['subscriber_lastname']; ?>"></input>
 			</span>
 			<span style="font-family:'Times New Roman'; font-weight:bold"> </span><span style="width:2.79pt; display:inline-block">&#xa0;</span><span style="width:36pt; display:inline-block">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">N/Réf</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">:  </span><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">
-<input name="reference_medic" placeholder="Notre Reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span></p>
+<input name="reference_medic" placeholder="Notre Reference" value="<?php if(isset ($detaildoss)) echo $detaildoss['reference_medic']; ?>"></input></span></p>
 </div>
 <div class="row" style=" margin-left: 0px; ">
 			<p style="margin-top:4.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">RDV avec </span><span style="font-family:'Times New Roman'; font-weight:bold">le passager</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
@@ -149,10 +269,41 @@ if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
 </p>
 </div>
 </div>
-			<p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p><p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">Trajet</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">:</span><span style="font-family:'Times New Roman'; font-weight:bold">  </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu prise en charge</span><span style="font-family:'Times New Roman'">: </span><span style="font-family:'Times New Roman'; color:#ff0000">base_hotels_cliniques_hopitaux_ports_aeroports (ou autre_libre)</span><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000"> </span><span style="font-family:'Times New Roman'; font-weight:bold">Tel: </span><span style="font-family:'Times New Roman'; color:#ff0000">Tel_</span><span style="font-family:'Times New Roman'; color:#ff0000">base_ou_</span><span style="font-family:'Times New Roman'; color:#ff0000">libre</span><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">    </span></p><p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:Wingdings; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold; color:#0070c0"> </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu décharge: </span><span style="font-family:'Times New Roman'; color:#ff0000">base_hotels_cliniques_hopitaux_ports_aeroports (ou autre_libre)</span><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000"> </span><span style="font-family:'Times New Roman'; font-weight:bold">Tel: </span><span style="font-family:'Times New Roman'; color:#ff0000">Tel_base_ou_libre</span><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">   </span></p><p style="margin-top:4.65pt; margin-left:5.85pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000"> </span>
+			<p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p><p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">Trajet</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">:</span><span style="font-family:'Times New Roman'; font-weight:bold">  </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu prise en charge</span><span style="font-family:'Times New Roman'">: </span>
+<input type="text" list="CL_lieuprest_pc" name="CL_lieuprest_pc" />
+<datalist id="CL_lieuprest_pc">
+<?php
+foreach ($array_prest as $prest) {
+	echo "<option value='".$prest['name']."' telprest='".$prest['phone_home']."'>".$prest['name']."</option>";
+}
+?>
+</datalist>
+				<span style="font-family:'Times New Roman'; font-weight:bold">Tel: </span>
+<input name="CL_prestatairetel_pc" id="CL_prestatairetel_pc" placeholder="Téléphone du prestataire" pattern= "^[0–9]$"></input>
+				<span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">    </span></p><p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:Wingdings; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold; color:#0070c0"> </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu décharge: </span>
+<input type="text" list="CL_lieudecharge_dec" name="CL_lieudecharge_dec" />
+<datalist id="CL_lieudecharge_dec">
+<?php
+foreach ($array_prest as $prest) {
+	echo "<option value='".$prest['name']."' telprest='".$prest['phone_home']."'>".$prest['name']."</option>";
+}
+?>
+</datalist>
+				<span style="font-family:'Times New Roman'; font-weight:bold">Tel: </span>
+<input name="CL_prestatairetel_dec" id="CL_prestatairetel_dec" placeholder="Téléphone du prestataire" pattern= "^[0–9]$"></input>
+					<span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">   </span></p><p style="margin-top:4.65pt; margin-left:5.85pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000"> </span>
 <input type="checkbox" name="CB_preetape" id="CB_preetape" value="oui" checked><span style="font-family:'Times New Roman'; font-weight:bold"> Première étape</span>
 <span id="preetape">
-				<span style="font-family:'Times New Roman'; font-weight:bold"> (passage </span><span style="font-family:'Times New Roman'; font-weight:bold">par</span><span style="font-family:'Times New Roman'; font-weight:bold"> </span><span style="font-family:'Times New Roman'; font-weight:bold">lieu de séjour</span><span style="font-family:'Times New Roman'; font-weight:bold">/clinique.</span><span style="font-family:'Times New Roman'; font-weight:bold">):  </span><span style="font-family:'Times New Roman'; color:#ff0000">base_hotels_cliniques_hopitaux_ (ou autre_libre)</span></p>
+				<span style="font-family:'Times New Roman'; font-weight:bold"> (passage </span><span style="font-family:'Times New Roman'; font-weight:bold">par</span><span style="font-family:'Times New Roman'; font-weight:bold"> </span><span style="font-family:'Times New Roman'; font-weight:bold">lieu de séjour</span><span style="font-family:'Times New Roman'; font-weight:bold">/clinique.</span><span style="font-family:'Times New Roman'; font-weight:bold">):  </span>
+<input type="text" list="CL_lieupre" name="CL_lieupre" />
+<datalist id="CL_lieupre">
+<?php
+foreach ($array_presthch as $presthch) {
+	echo "<option value='".$presthch['name']."' telprest='".$presthch['phone_home']."'>".$presthch['name']."</option>";
+}
+?>
+</datalist>
+			</p>
 </span>
 				<p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
 <input type="checkbox" name="CB_trmedecin" id="CB_trmedecin" value="oui" checked>
@@ -169,7 +320,16 @@ if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
   <option value="Destination" selected>Destination</option>
   <option value="Origine">Origine</option>
 </select>
-			<span style="font-family:'Times New Roman'; font-weight:bold">: </span><span style="font-family:'Times New Roman'; color:#ff0000">aéroport_port_ou_autre_libre</span><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000"> </span><span style="font-family:'Times New Roman'; font-weight:bold">Vol/bateau#: </span>
+			<span style="font-family:'Times New Roman'; font-weight:bold">: </span>
+<input type="text" list="CL_apdestor" name="CL_apdestor" />
+<datalist id="CL_apdestor">
+<?php
+foreach ($array_prestap as $prestap) {
+	echo "<option value='".$prestap['name']."' telprest='".$prestap['phone_home']."'>".$prestap['name']."</option>";
+}
+?>
+</datalist>
+			<span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000"> </span><span style="font-family:'Times New Roman'; font-weight:bold">Vol/bateau#: </span>
 <input name="CL_volorbateau" id="CL_volorbateau" placeholder=" n° de vol ou nom du bateau" />
 				<span style="font-family:'Times New Roman'; font-weight:bold">Heure </span>
 <select id="CL_decatter" name="CL_decatter">
@@ -197,24 +357,43 @@ if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
 <textarea id="CL_remarque" name="CL_remarque" rows="2" cols="50" placeholder="Remarques">
 </textarea>
 					</p>
+<?php if (isset($affectea)){
+		if ($affectea == "interne") { 
+?>					
 <div id="prestinterne" >
-					<p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; padding-bottom:1pt; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#0070c0">&#xa0;</span></p><p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;border-top: 1.5pt solid #000000;padding-top:10px"><span style="font-family:'Times New Roman'; font-weight:bold">Origine de la demande: </span><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">client_dossier</span><span style="font-family:'Times New Roman'; font-weight:bold">   Date demande: </span>
+					<p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; padding-bottom:1pt; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#0070c0">&#xa0;</span></p><p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;border-top: 1.5pt solid #000000;padding-top:10px"><span style="font-family:'Times New Roman'; font-weight:bold">Origine de la demande: </span><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">
+<input name="client_dossier" placeholder="Client du dossier" value="<?php if(isset ($detailcl)) echo $detailcl['name']; ?>"></input></span><span style="font-family:'Times New Roman'; font-weight:bold">   Date demande: </span>
 <input type="date" id="CL_datedemande" name="CL_datedemande" >
 						<span style="font-family:'Times New Roman'; font-weight:bold"> Heure: </span>
 <input type="time" id="CL_heuredemande" name="CL_heuredemande" min="00:00" max="23:59" >
-						<span style="font-family:'Times New Roman'; font-weight:bold">  </span></p><p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; border-bottom:1.5pt solid #000000; padding-bottom:10px; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Notre réf.</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">Notre_r</span><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">éf_dossier</span><span style="font-family:'Times New Roman'; font-weight:bold">   Réf. client: </span><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">Réf_client_dossier</span></p>
+						<span style="font-family:'Times New Roman'; font-weight:bold">  </span></p><p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; border-bottom:1.5pt solid #000000; padding-bottom:10px; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Notre réf.</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
+<input name="reference_medic2" placeholder="Notre Reference" value="<?php if(isset ($detaildoss)) echo $detaildoss['reference_medic']; ?>"></input>
+							<span style="font-family:'Times New Roman'; font-weight:bold">   Réf. client: </span>
+<input name="reference_customer" placeholder="Reference client" value="<?php if(isset ($detaildoss)) echo $detaildoss['reference_customer']; ?>"></input>
+						</p>
 </div>
+
+						
+<input name="affectea" id="affectea" type="hidden" value="interne"></input>
 						<p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic; color:#ff0000">Veuillez SVP nous rappeler après réception de cet ordre de mission pour nous donner le nom et numéro de téléphone de l’ambulancier chargé de cette mission.</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic; color:#ff0000"> Et appeler en cours de mission pour indiquer d’éventuelles attentes ou changements ou évènements imprévus pendant la mission. </span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">              </span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic"> </span></p><p style="margin-top:0pt; margin-bottom:0pt; line-height:125%; widows:0; orphans:0; font-size:8pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
+<?php }} ?>
+<?php if (isset($affectea)){
+		if ($affectea == "externe") { 
+?>
 <div id="prestexterne" >
-						<p style="margin-top:0pt; margin-bottom:0pt; line-height:125%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Merci</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">de</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">nous</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">adresser</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.35pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">votre</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">facture</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">originale</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">dès</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.35pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">que</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">possible</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">(et</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">au</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">plus</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">tard</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.45pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">dans</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.35pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">un</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.45pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">délai</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">de</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">30</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.35pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">jours),</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.7pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">à</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.35pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">notre </span><span style="font-family:'Times New Roman'; font-weight:bold">adresse</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">ci-dessus,</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.65pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">en mentionnant notre référence</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.6pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">ci-</span><span style="font-family:'Times New Roman'; font-weight:bold">haut</span><span style="font-family:'Times New Roman'; font-weight:bold">.</span></p><p style="margin-top:0.55pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">RAPPEL</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline"> IMPORTANT+++</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">Toute facture reçue dans nos locaux</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">plus de 60 jours</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">après le service rendu</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">ne pourra plus être garantie</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">pour règlement. La </span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">garantie de </span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">prise en charge </span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">de ce service</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic"> a donc une validité maximale de 60 jours après la date de la prestation de service.</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">La</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic"> facture devra être accompagnée </span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">impérativement d’une copie de cet ordre de mission</span></p><p style="margin-top:0.35pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><img src="bz7qd-pjv8o.003.png" width="752" height="2" alt="" style="-aw-left-pos:21.9pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:248.4pt; -aw-wrap-type:topbottom" /><br /></p><p style="margin-top:8.85pt; margin-right:4.95pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Merci de votre </span><span style="font-family:'Times New Roman'; font-weight:bold">c</span><span style="font-family:'Times New Roman'; font-weight:bold">ollaboration. </span></p><p style="margin-top:0pt; margin-right:447.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">P/la Gérante</span></p><p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">Agent_dossier</span></p><p style="margin-top:0.05pt; margin-right:434.35pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Plateau d’assistance médicale</span></p><p style="margin-top:0.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">« courrier</span><span style="font-family:'Times New Roman'; font-weight:bold"> électronique, sans signature »</span></p>
-<input type="text" list="cars" />
-<datalist id="cars">
-  <option>Volvo</option>
-  <option>Saab</option>
-  <option>Mercedes</option>
-  <option>Audi</option>
-</datalist>
+	<input name="affectea" id="affectea" type="hidden" value="externe"></input>
+						<p style="margin-top:4.65pt; margin-bottom:0pt; line-height:125%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Merci</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">de</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">nous</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">adresser</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.35pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">votre</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">facture</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">originale</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">dès</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.35pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">que</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">possible</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">(et</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">au</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">plus</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">tard</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.45pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">dans</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.35pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">un</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.45pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">délai</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">de</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">30</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.35pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">jours),</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.7pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">à</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.35pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">notre </span><span style="font-family:'Times New Roman'; font-weight:bold">adresse</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.4pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">ci-dessus,</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.65pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">en mentionnant notre référence</span><span style="font-family:'Times New Roman'; font-weight:bold; letter-spacing:-0.6pt"> </span><span style="font-family:'Times New Roman'; font-weight:bold">ci-</span><span style="font-family:'Times New Roman'; font-weight:bold">haut</span><span style="font-family:'Times New Roman'; font-weight:bold">.</span></p><p style="margin-top:0.55pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">RAPPEL</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline"> IMPORTANT+++</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">Toute facture reçue dans nos locaux</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">plus de 60 jours</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">après le service rendu</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">ne pourra plus être garantie</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">pour règlement. La </span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">garantie de </span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">prise en charge </span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">de ce service</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic"> a donc une validité maximale de 60 jours après la date de la prestation de service.</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">La</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic"> facture devra être accompagnée </span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">impérativement d’une copie de cet ordre de mission</span></p><p style="margin-top:0.35pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><img src="bz7qd-pjv8o.003.png" width="752" height="2" alt="" style="-aw-left-pos:21.9pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:248.4pt; -aw-wrap-type:topbottom" /><br /></p>
+
 </div>
+<?php }} ?>
+<div id="signatureagent">
+<p style="margin-top:8.85pt; margin-right:4.95pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Merci de votre </span><span style="font-family:'Times New Roman'; font-weight:bold">c</span><span style="font-family:'Times New Roman'; font-weight:bold">ollaboration. </span></p><p style="margin-top:0pt; margin-right:447.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">P/la Gérante</span></p><p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; widows:0; orphans:0; font-size:10pt">
+
+<span style="font-family:'Times New Roman'; font-weight:bold; color:#000"> <?php if (isset($detailagt)) {echo $detailagt['name']; } ?> </span>
+<input name="agent" id="agent" type="hidden" value="<?php if (isset($detailagt)) {echo $detailagt['name']; } ?>"></input>
+</p><p style="margin-top:0.05pt; margin-right:434.35pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Plateau d’assistance médicale</span></p><p style="margin-top:0.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">« courrier</span><span style="font-family:'Times New Roman'; font-weight:bold"> électronique, sans signature »</span></p>
+</div>
+</form>
 <script type="text/javascript">
 	$('#CL_choix').on('change', function (e) {
 	    var valueSelected = this.value;
@@ -302,5 +481,41 @@ if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
 	    	$("#preportaeroport1").hide();
 	    }
 	});
+
+	/// fill phone number on select prest Prise en charge
+	document.querySelector('input[list="CL_lieuprest_pc"]').addEventListener('input', onInput);
+
+	function onInput(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("CL_prestatairetel_pc").value = options[i].getAttribute("telprest");
+	      break;
+	    }
+	  }
+	}
+
+	/// fill phone number on select prest Decharge
+	document.querySelector('input[list="CL_lieudecharge_dec"]').addEventListener('input', onInputdec);
+
+	function onInputdec(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("CL_prestatairetel_dec").value = options[i].getAttribute("telprest");
+	      break;
+	    }
+	  }
+	}
 </script>
 				</body></html>
