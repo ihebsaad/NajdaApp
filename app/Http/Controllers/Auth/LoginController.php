@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Dossier;
 use App\Http\Controllers\Controller;
 use App\Seance;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -30,30 +31,25 @@ protected function authenticated(Request $request, $user)
 /*if ( $user->isAdmin() ) {
     return redirect()->route('dashboard');
 }*/
-if (\Gate::allows('isAdmin')) {
- return redirect('/home');
-}
-else
-{
-    return redirect('/roles');
-}
-}
-/**
- * Where to redirect users after login.
- *
- * @var string
- */
-//protected $redirectTo = '/admin';
+    $user = auth()->user();
+    $type=$user->user_type;
+    if($type=='financier')
+    {
+        return redirect('/parametres');
 
-/**
- * Create a new controller instance.
- *
- * @return void
- */
+    }
+else
+ {
+    return redirect('/roles');
+ }
+}
+
+
 public function __construct()
 {
     $this->middleware('guest', ['except' => 'logout']);
 }
+
 public function logout(Request $request)
     {
         // vider les roles de lutilisateur dans la seance avant logout
@@ -79,7 +75,17 @@ public function logout(Request $request)
         {
         	$seance->chargetransport=NULL ;
         }
+
         $seance->save();
+
+        // supprimer les affectations
+        $user = auth()->user();
+        $iduser=$user->id;
+
+        Dossier::where('affecte',$iduser)
+
+            ->update(array('affecte' =>NULL));
+
 
         $this->guard()->logout();
 

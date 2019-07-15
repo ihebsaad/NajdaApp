@@ -66,10 +66,10 @@
             <td class="text-primary">Type</td>
             <td>
                 <select  name="user_type"  id="user_type" onchange="changing(this);"  >
-                    <option value="admin"  <?php if($user->user_type=='admin') {echo'selected';}?> >Administrateur</option>
-                    <option value="user"  <?php if($user->user_type=='user') {echo'selected';}?> >Agent Simple</option>
-                    <option  value="superviseur"  <?php if($user->user_type=='superviseur') {echo'selected';}?>  >Superviseur</option>
-                    <option  value="dispatcheur"  <?php if($user->user_type=='dispatcheur') {echo'selected';}?>  >Dispatcheur</option>
+                    <option value="admin"  <?php if($user->user_type=='admin') {echo'selected="selected"';}?> >Administrateur</option>
+                    <option value="user"  <?php if($user->user_type=='user') {echo'selected="selected"';}?> >Agent Simple</option>
+                    <option  value="superviseur"  <?php if($user->user_type=='superviseur') {echo'selected="selected"';}?>  >Superviseur</option>
+                    <option  value="dispatcheur"  <?php if($user->user_type=='dispatcheur') {echo'selected="selected"';}?>  >Dispatcheur</option>
                 </select>
             </td>
         </tr>

@@ -46,11 +46,12 @@ if (App::environment('local')) {
             </thead>
             <tbody>
             @foreach($entrees as $entree)
-                <tr><?php $type=$entree['type'];?>
+                <tr><?php $type=$entree['type'];
+                    if($entree['viewed']==false) {$style='color:#337085!important;font-weight:800;font-size:16px;' ;}else{$style='';} ?>
                     <td style="font-size:14px;width:6%"><?php if ($type=='email'){echo '<img width="20" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="20" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="20" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="20" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php echo $entree['type']; ?></td>
                     <td style="width:15%;font-size:12px;width:10%"><?php echo  date('d/m/Y', strtotime($entree['reception'])) ; ?></td>
                     <td  style="width:20%;font-size:12px;max-width:150px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $entree['emetteur']; ?></td>
-                    <td  style="width:35%;font-size:12px;max-width:200px;"><a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:16px;"' ;} ?>  href="{{route('entrees.showdisp',['id'=> $entree['id']] )}}" ><?php echo $entree['sujet'] ; ?></a></td>
+                    <td  style="width:35%;font-size:12px;max-width:200px;"><a style="<?php echo $style;?>"  <?php if ($entree['dossier']!='') {  ?>   href="<?php echo $urlapp.'/entrees/show/',$entree['id']?>" <?php } else{  ?> href= "<?php echo $urlapp.'/entrees/showdisp/',$entree['id']?>"    <?php } ?>     ><?php echo $entree['sujet'] ; ?></a></td>
                     <td  style="width:8%;font-size:12px; "><?php echo $entree['dossier'];?></td>
                     <td></td>
                 </tr>

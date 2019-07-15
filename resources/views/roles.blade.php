@@ -4,10 +4,19 @@
     $haveroles =   DB::table('roles_users')
             ->where(['user_id' => Auth::id()])
             ->count();
-    if ($haveroles > 0)
-    {
+ //   if ($haveroles > 0)
+  ///  {
     // use DB;
      $seance = DB::table('seance')->first();
+
+ $user = auth()->user();
+ $name=$user->name;
+ $lastname=$user->lastname;
+ $iduser=$user->id;
+ $typeuser=$user->user_type;
+
+ $debut=$seance->debut;
+ $fin=$seance->fin;
 
 ?>
  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -21,17 +30,19 @@
 <div class="col-md-3">
 </div>
 <div class="col-md-6" style="padding:100px 50px 100px 50px">
-
+    <h1>Bienvenue <?php echo  $name .' '. $lastname; ?></h1><br>
 <h2>Sélectionnez votre/vos rôle(s) pendant cette séance :</h2><br>
 
     <!--<label class="radio">Agent
         <input type="radio" checked name="is_company">
         <span class="checkround"></span>
     </label>-->
+
+
 <?php 
     // verifier si user a le role
-    if (UsersController::CheckRoleUser(Auth::id(),2) > 0)
-      {  
+   // if (UsersController::CheckRoleUser(Auth::id(),2) > 0)
+    //  {
         // verifier si le role est vide dans la seance et quil na pas deja le role
         if (empty($seance->dispatcheur) || ($seance->dispatcheur === Auth::id()))
         { 
@@ -62,16 +73,16 @@
             $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheur);
             echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Dispatcheur <b>( '.$nomagent.' )</b></label></div>';
         }
-        }
+      //  }
         ?>
     </label>
 <?php 
-    if (UsersController::CheckRoleUser(Auth::id(),3) > 0)
-      { 
+     if( ($typeuser=='superviseur') || ($typeuser=='admin'))
+      {
         if (empty($seance->superviseurmedic) || ($seance->superviseurmedic === Auth::id()))
         { 
 ?>
-    <label class="check ">Superviseur Médic
+    <label class="check ">Superviseur Médical
         <?php 
             if (session()->has('supmedic'))
             {
@@ -97,12 +108,12 @@
             $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->superviseurmedic);
             echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Superviseur Médic <b>( '.$nomagent.' )</b></label></div>';
         }
-        }
+       }
         ?>
     </label>
-<?php 
-    if (UsersController::CheckRoleUser(Auth::id(),4) > 0)
-      { 
+<?php
+    if( ($typeuser=='superviseur') || ($typeuser=='admin'))
+    {
         if (empty($seance->superviseurtech) || ($seance->superviseurtech === Auth::id()))
         { 
 ?>
@@ -133,11 +144,14 @@
             echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Superviseur Technique <b>( '.$nomagent.' )</b></label></div>';
         }
         }
+
+
+
         ?>
     </label>
 <?php 
-    if (UsersController::CheckRoleUser(Auth::id(),5) > 0)
-      { 
+   // if (UsersController::CheckRoleUser(Auth::id(),5) > 0)
+   //   {
         if (empty($seance->chargetransport) || ($seance->chargetransport === Auth::id()))
         { 
 ?>
@@ -167,12 +181,12 @@
             $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->chargetransport);
             echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Chargé Transport <b>( '.$nomagent.' )</b></label></div>';
         }
-        }
+    //    }
         ?>
     </label>
 <?php 
-    if (UsersController::CheckRoleUser(Auth::id(),6) > 0)
-      { 
+   // if (UsersController::CheckRoleUser(Auth::id(),6) > 0)
+    //  {
         if (empty($seance->dispatcheurtel) || ($seance->dispatcheurtel === Auth::id()))
         { 
 ?>
@@ -202,9 +216,94 @@
             $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheurtel);
             echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Dispatcheur Téléphonique <b>( '.$nomagent.' )</b></label></div>';
         }
+   //     }
+        ?>
+    </label>
+
+
+
+    <?php
+    // $date_actu =time();
+    $date_actu =date("H:i");
+  /*  echo ' date_actu: '.$date_actu.'<br>';
+    echo 'Debut: '.$debut.'<br>';
+    echo 'Fin : '.$fin .'<br>';
+    echo 'date_actu > debut : '.($date_actu > $debut).'<br>';
+    echo 'date_actu > fin : '.($date_actu > $fin).'<br>';
+    echo 'date_actu < debut : '.($date_actu < $debut).'<br>';
+    echo 'date_actu < fin : '.($date_actu < $fin).'<br>';*/
+
+    // verif date actuelle par rapport seance
+   if ( $date_actu < $debut || ($date_actu > $fin) )
+     {
+
+    if (empty($seance->veilleur) || ($seance->veilleur === Auth::id())  )
+    {
+    ?>
+    <label class="check ">Veilleur de nuit
+        <?php
+        if (session()->has('veilleur'))
+        {
+            if (Session::get('veilleur') == 0)
+            {
+                echo '<input type="checkbox" name="veilleur">';
+            }
+            else
+            {
+                echo '<input type="checkbox" name="veilleur" checked>';
+            }
+        }
+        else
+        {
+            echo '<input type="checkbox" name="veilleur">';
+        }
+
+        ?>
+        <span class="checkmark"></span>
+        <?php
+        }
+        else
+        {
+            $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->veilleur);
+            echo '<div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label style="display:inline-block;padding-left:5px;font-size:18px">Dispatcheur Téléphonique <b>( '.$nomagent.' )</b></label></div>';
+        }
+
+
+           } // verif date actuelle par rapport seance
+            else{
+                echo '<input type="hidden" name="veilleur">';
+
+            }
+        ?>
+    </label>
+
+
+    <?php
+    if(  ($typeuser=='admin'))
+    {
+
+
+    ?>
+    <label class="check ">Administrateur
+        <?php
+
+
+        echo '<input type="checkbox" name="admin">';
+
+
+        ?>
+        <span class="checkmark"></span>
+        <?php
+
+        } else{
+
+            echo '<input type="hidden" name="admin">';
+
         }
         ?>
     </label>
+
+
     {{ csrf_field() }}
 <br>
  <button onclick="redirect()" class="btn cust-btn " type="button" id="btn-primary" style="font-size: 20PX;letter-spacing: 1px;width:150px">Entrer</button>
@@ -238,18 +337,30 @@
          var disptel = 0;
          if ($('input[name="disptel"]').is(':checked'))
          {disptel=1;}
-         var type="agent";
+         var admin=0;
+         if ($('input[name="admin"]').is(':checked'))
+         {admin=1;
+          }
+
+       //  var type="agent";
          //alert(disp +" | "+ dispmedic +" | "+ disptech +" | "+ chrgtr +" | "+disptel+" | "+type);
             $.ajax({
                 url:"{{ route('users.sessionroles') }}",
                 method:"POST",
-                data:{type:type,disp:disp,supmedic:supmedic,suptech:suptech,chrgtr:chrgtr,disptel:disptel, _token:_token},
+                data:{disp:disp,supmedic:supmedic,suptech:suptech,chrgtr:chrgtr,disptel:disptel, _token:_token},
                 success:function(data){
 
-                    
-                    window.location = '{{route('home')}}';
-
-
+                    if(admin==1){
+                        window.location = '{{route('parametres')}}';
+                    }
+                    else{
+                        if(disp==1) {
+                          window.location = '{{route('entrees.dispatching')}}';
+                        }
+                        else{
+                            window.location = '{{route('home')}}';
+                        }
+                    }
                 }
             });
      }
@@ -409,9 +520,11 @@ body {font-family: "Open Sans", serif !important;}
 
 </style>
  <?php
-}
+
+/*}
 else
 {
     redirect()->to('home')->send();
 }
  
+*/

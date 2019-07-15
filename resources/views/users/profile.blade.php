@@ -8,19 +8,8 @@
 
         <div class="row">
  
-                    <!--    <div class="col-md-4">
-                            <div class="form-group">
-                                <div class="text-center mbl">
-                                 </div>
-                            </div>
-                            <div align="center">
-                                <h3 class="user_name_max">{!! $user->name !!} </h3>
-                                <p>{!! $user->email !!}</p>
-								
-                            </div>
 
 
-                        </div>-->
                         <div class="col-md-10">
                             <table class="table">
 
@@ -58,11 +47,8 @@
                                         <td>    <input id="tel" onchange="changing(this);"  type="text" class="form-control" name="tel"  id="tel" value="{{ $user->phone }}" />
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td class="text-primary">Skype</td>
-                                        <td>    <input id="skype" onchange="changing(this);"  type="text" class="form-control" name="skype"  id="skype" value="{{ $user->skype }}" />
-                                        </td>
-                                    </tr>
+
+
 
                                 <tr>
                                 <td class="text-primary">Rôle</td>
@@ -71,11 +57,8 @@
                                         <span class="label label-success">{{$user->user_type}}</span>
                                     </td>
                                 </tr>
-                              <!--
-                                <tr>
-                                    <td class="text-primary">Skype</td>
-                                    <td>{!!$user->skype!!}</td>
-                                </tr>-->
+
+
                                 <tr>
                                     <td colspan="2">
 

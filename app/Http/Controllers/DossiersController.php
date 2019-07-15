@@ -49,11 +49,11 @@ class DossiersController extends Controller
         $minutes= 120;
 
         //      $typesMissions=TypeMission::get();
-        $dossiers = Cache::remember('dossiers',$minutes,  function () {
+        // $dossiers = // Cache::remember('dossiers',$minutes,  function () {
 
-            return Dossier::orderBy('created_at', 'desc')->paginate(10000000);
-        });
-        // $dossiers = Dossier::orderBy('created_at', 'desc')->paginate(10000000);
+         //   return Dossier::orderBy('created_at', 'desc')->paginate(10000000);
+       // });
+        $dossiers = Dossier::orderBy('created_at', 'desc')->paginate(10000000);
         return view('dossiers.index', compact('dossiers'));
     }
 
@@ -169,25 +169,28 @@ class DossiersController extends Controller
             'reference_medic' => $reference_medic,
 
         ]);
+
         if ($dossier->save())
         { $iddoss=$dossier->id;
 
             $identree = $request->get('entree');
             if($identree!=''){
-            $entree  = Entree::find($identree);
+          //  $entree  = Entree::find($identree);
 
-            $entree->dossier=$reference_medic;
-                $entree->save();
+           // $entree->dossier=$reference_medic;
+
+                Entree::where('id',$identree)
+                    ->update(array('dossier' => $reference_medic));
 
 
                 $message= $request->get('message');
-                    $message='test';
+                //    $message='test';
                 $send= $request->get('send');
-              ///  if ($send==true)
-               /// {  //$params=array('entree'=>$entree->id,'message'=>$message);
-               //     app('App\Http\Controllers\EmailController')->accuse($entree,$message);
+                if ($send==true)
+                {  //$params=array('entree'=>$entree->id,'message'=>$message);
+               //     app('App\Http\Controllers\EmailController')->accuse($identree,$message);
 
-                    $refdossier = app('App\Http\Controllers\EntreesController')->ChampById('dossier',$identree);
+             /*       $refdossier = app('App\Http\Controllers\EntreesController')->ChampById('dossier',$identree);
                     $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
                     $clientid = app('App\Http\Controllers\DossiersController')->ClientDossierById($iddossier);
                     $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$clientid);
@@ -232,8 +235,9 @@ class DossiersController extends Controller
 
 
 
+*/
 
-              ///  }
+                }// endif send
 
                 $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i');
                 $affec=new AffectDoss([
@@ -249,15 +253,14 @@ class DossiersController extends Controller
 
                 $affec->save();
 
+            } //if entree!=""
 
-            }
-
-          //  return url('/dossiers/fiche/'.$iddoss)/*->with('success', 'Dossier Créé avec succès')*/;
-            return url('/dossiers/') ;
+            return url('/dossiers/view/'.$iddoss)/*->with('success', 'Dossier Créé avec succès')*/;
+        //    return url('/dossiers/') ;
            // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
            //  return  $iddoss;
 
-           }
+           } //if dossier save
 
          else {
              return url('/dossiers');

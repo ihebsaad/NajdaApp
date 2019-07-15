@@ -15,16 +15,20 @@ use App\Document ;
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 @section('content')
+    @if(session()->has('AffectDossier'))
+        <div class="alert alert-success">
+            <center> <h4>{{ session()->get('AffectDossier') }}</h4></center>
+        </div>
+    @endif
 
 <div class="row">
+    <div class="col-md-3">
 
- @if(session()->has('AffectDossier'))
-    <div class="alert alert-success">
-       <center> <h4>{{ session()->get('AffectDossier') }}</h4></center>
+        <h2><?php echo   $dossier->reference_medic ;?></h2>
     </div>
-  @endif
 
-     <div class="col-md-6">
+<?php $statut=$dossier->current_status;?>
+     <div class="col-md-3">
         <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
         <b>Affecté à:</b> 
         <?php 
@@ -39,10 +43,16 @@ use App\Document ;
         <?php }
         else
         {
+            if($statut=='Cloture'){echo 'Dossier Clôturé';} else {
+
             if ((Gate::check('isAdmin') || Gate::check('isSupervisor')))
             {echo '<a href="#" data-toggle="modal" data-target="#attrmodal">Non affecté</a>';}
             else
-            {echo '<b>Non affecté</b>';} 
+            {echo '<b>Non affecté</b>';}
+
+
+
+            }
         } ?>
     </div>
     <div class="col-md-6" style="text-align: right;padding-right: 35px">

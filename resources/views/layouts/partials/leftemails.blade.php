@@ -75,9 +75,9 @@ if (App::environment('local')) {
 			 echo '<li  class="overme" style=";padding-left:6px;margin-bottom:15px;'.$bg.'" >';
 
 			  if ($type=='email'){echo '<img width="15" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="15" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="15" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="15" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php // echo $entree['type']; ?>
-			<label style="font-size:11px"><a style="color:black" href="{{action('EntreesController@showdisp', $entree['id'])}}" ><?php  echo $entree['emetteur'] . '</a></label><br>
-<label style="font-size:12px">'.$newDate.'</label><br>';  ?>
-    <a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:13px;"' ;} ?>  href="{{action('EntreesController@showdisp', $entree['id'])}}" ><small style="font-size:11px"><?php echo $entree['sujet'] ; ?></small></a>
+             <a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:13px;"' ;} ?>  href="{{action('EntreesController@showdisp', $entree['id'])}}" ><small style="font-size:11px"><?php echo $entree['sujet'] ; ?></small></a><br>
+             <label style="font-size:11px"><a style="color:black" href="{{action('EntreesController@showdisp', $entree['id'])}}" ><?php  echo $entree['emetteur'] . '</a></label><br>
+<label style="font-size:12px">'.$newDate.'</label>';  ?>
 			<?php echo '</li>';
 
 			}

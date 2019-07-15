@@ -67,7 +67,8 @@
                                 <select  name="user_type"  id="type"   >
                                     <option value="user"   >Agent Simple</option>
                                     <option  value="superviseur"   >Superviseur</option>
-                                    <option  value="dispatcheur"    >Dispatcheur</option>
+                                    <option  value="financier"    >Financier</option>
+                                    <option  value="admin"    >Administrateur</option>
                                 </select>
 
                             </div>

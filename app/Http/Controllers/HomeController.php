@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Parametre;
+use App\Seance;
 use App\User;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Session;
 use Spatie\Searchable\Search;
 use App\Dossier ;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +30,61 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function changerroles(Request $request)
+    {
+        $seance =   Seance::first();
+ // supprime rde la seance
+        if ($seance->dispatcheur==Auth::id())
+        {
+            $seance->dispatcheur=NULL ;
+        }
+        if ($seance->dispatcheurtel==Auth::id())
+        {
+            $seance->dispatcheurtel=NULL ;
+        }
+        if ($seance->superviseurmedic==Auth::id())
+        {
+            $seance->superviseurmedic=NULL ;
+        }
+        if ($seance->superviseurtech==Auth::id())
+        {
+            $seance->superviseurtech=NULL ;
+        }
+        if ($seance->chargetransport==Auth::id())
+        {
+            $seance->chargetransport=NULL ;
+        }
+        if ($seance->veilleur==Auth::id())
+        {
+            $seance->veilleur=NULL ;
+        }
+
+        $seance->save();
+
+   // supprimer de la session
+
+             $request->session()->put('veilleur',0) ;
+             $request->session()->put('disp',0);
+             $request->session()->put('disptel',0) ;
+             $request->session()->put('supmedic',0) ;
+             $request->session()->put('suptech',0) ;
+             $request->session()->put('chrgtr',0)  ;
+
+
+        // supprimer les affectations
+        $user = auth()->user();
+        $iduser=$user->id;
+
+        Dossier::where('affecte',$iduser)
+
+            ->update(array('affecte' =>NULL));
+
+     //   $request->session()->invalidate();
+
+return redirect('roles');
+
+    }
 
     public function roles()
     {
@@ -92,6 +149,17 @@ class HomeController extends Controller
         $val= $request->get('val');
 
         Parametre::where('id', 1)->update(array($champ => $val));
+
+
+    }
+
+    public function parametring2(Request $request)
+    {
+
+        $champ= strval($request->get('champ'));
+        $val= $request->get('val');
+
+        Seance::where('id', 1)->update(array($champ => $val));
 
 
     }

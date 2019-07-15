@@ -293,13 +293,13 @@ class UsersController extends Controller
 
     public  function sessionroles(Request $request)
     {
-        $typeuser= $request->get('type');
+      //  $typeuser= $request->get('type');
 
         $seance =   Seance::first();
-          
 
-        if ($typeuser == "agent")
-        {
+
+    //    if ($typeuser == "agent")
+     //   {
             $disp = $request->get('disp');
             Session::put('disp', $disp);
             if ($disp !== '0')
@@ -310,21 +310,71 @@ class UsersController extends Controller
             $supmedic = $request->get('supmedic');
             Session::put('supmedic', $supmedic);
             if ($supmedic !== '0')
-              { $seance->superviseurmedic=Auth::id();}
+              { $seance->superviseurmedic=Auth::id();
+
+                /*  Dossier::where('type_dossier','Medical')
+                      ->where('current_status','!=','Cloture')
+                      ->update(array('affecte' => Auth::id()));
+                  */
+                // affecter tous les dossiers Medical et Mixte au superviseur Medical
+                   Dossier::where(function ($query) {
+                      $query->where('type_dossier','Medical')
+                          ->where('current_status', '!=', 'Cloture');
+                  })->orWhere(function($query) {
+                      $query->where('type_dossier','Mixte')
+                          ->where('current_status', '!=', 'Cloture');
+                  })->update(array('affecte' => Auth::id()));
+
+
+              }
               elseif ($seance->superviseurmedic==Auth::id())
               { $seance->superviseurmedic=NULL;}
 
             $suptech = $request->get('suptech');
             Session::put('suptech', $suptech);
             if ($suptech !== '0')
-              { $seance->superviseurtech=Auth::id();}
+              { $seance->superviseurtech=Auth::id();
+
+                  Dossier::where('type_dossier','Technique')
+                      ->where('current_status','!=','Cloture')
+
+              ///    (['type_dossier' => 'Technique','current_status'=>'<> Cloture'])
+                      ->update(array('affecte' => Auth::id()));
+
+              }
               elseif ($seance->superviseurtech==Auth::id())
               { $seance->superviseurtech=NULL;}
 
             $chrgtr = $request->get('chrgtr');
             Session::put('chrgtr', $chrgtr);
             if ($chrgtr !== '0')
-              { $seance->chargetransport=Auth::id();}
+              { $seance->chargetransport=Auth::id();
+
+              // affecter tous les dossier TN, TM, TV, XP au chargé transport
+
+                  Dossier::where(function ($query) {
+                      $query->where('reference_medic','like','%TN%')
+                          ->where('current_status', '!=', 'Cloture');
+                  })->orWhere(function($query) {
+                      $query->where('reference_medic','like','%TM%')
+                          ->where('current_status', '!=', 'Cloture');
+                  })->orWhere(function($query) {
+                      $query->where('reference_medic','like','%TV%')
+                          ->where('current_status', '!=', 'Cloture');
+                  })->orWhere(function($query) {
+                      $query->where('reference_medic','like','%XP%')
+                          ->where('current_status', '!=', 'Cloture');
+                  })->update(array('affecte' => Auth::id()));
+                  ;
+
+             /*     Dossier::where('reference_medic' ,'like','%TN%')
+                  //where('statut', 0)
+                      //->where('type_dossier','Technique')
+                      ->where('current_status','!=','Cloture')
+                      ->update(array('affecte' => Auth::id()));
+*/
+              }
+
               elseif ($seance->chargetransport==Auth::id())
               { $seance->chargetransport=NULL;}
             
@@ -335,7 +385,21 @@ class UsersController extends Controller
               elseif ($seance->dispatcheurtel==Auth::id())
               { $seance->dispatcheurtel=NULL;}
 
+
+        $veilleur = $request->get('veilleur');
+        Session::put('veilleur', $veilleur);
+        if ($veilleur !== '0')
+        { $seance->veilleur=Auth::id();
+        // affecter tous les dossiers au veilleur
+            Dossier::where('current_status','!=','Cloture')
+                ->update(array('affecte' => Auth::id()));
         }
+        elseif ($seance->veilleur==Auth::id())
+        { $seance->veilleur=NULL;}
+
+
+
+        //   }
 
         $seance->save();
 

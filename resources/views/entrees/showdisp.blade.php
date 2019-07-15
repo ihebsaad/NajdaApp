@@ -407,7 +407,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
 <!-- Modal -->
 <div class="modal fade" id="createfolder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <form method="post" action="{{route('affectation.dossier') }}">
+
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -458,8 +458,18 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
                                 @endforeach
                                 </select>
                             </div>
+
+
+                         <input style="margin-top:8px;" type="checkbox" id="checkaccuse"><label for="checkaccuse" style="margin-left:10px;cursor:pointer">Envoyer un accusé de réception au client</label></input>
+                         <div id="formaccuse" style="display:none">
+                             {{ csrf_field() }}
+                             <?php $message= EntreesController::GetParametre($entree['id']);
+                             //  echo json_encode($message);?>
+                             <div  style=" width: 540px; height: 450px;" id="message" contenteditable="true" ><?php echo $message   ;?></div>
+                         </div>
+
                          <input type="hidden" value="nouveau" name="statdoss">
-                         <input type="hidden" value="nouveau" name="statdoss">
+
 
                          <input type="hidden" value="<?php echo $entree['id'];?>" name="entree_id" >
 
@@ -474,7 +484,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
             </div>
         </div>
     </div>
-</form>
+
 </div>
 
 
@@ -494,7 +504,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
                         {{ csrf_field() }}
                         <?php $message= EntreesController::GetParametre($entree['id']);
                       //  echo json_encode($message);?>
-                    <div  style=" width: 540px; height: 450px;" id="message" contenteditable="true" ><?php echo $message   ;?></div>
+                    <div  style=" width: 540px; height: 450px;" id="message00" contenteditable="true" ><?php echo $message   ;?></div>
                     </form>
                     <button style="margin-top:20px;text-align:center" type="button"  id="sending" class="btn btn-lg  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
 
@@ -534,13 +544,17 @@ $urlapp='http://localhost/najdaapp';
             var entree = $('#entree_id').val();
              var type_affectation = $('#type_affectation').val();
             var affecte = $('#affecte').val();
+             var message = $('#message').html();
+            var send=false;
+            if (document.getElementById('checkaccuse').checked == true){send=true;}else{send=false;}
+
             if ((type_dossier != '')&&(type_affectation != '')&&(affecte != ''))
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url:"{{ route('dossiers.saving') }}",
                     method:"POST",
-                    data:{entree:entree,type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
+                    data:{message:message,send:send,entree:entree,type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
                     success:function(data){
 
                      //   alert('Added successfully');
@@ -657,6 +671,20 @@ $urlapp='http://localhost/najdaapp';
 
     });
 
+
+    $('#checkaccuse').on('click',   function() {
+
+        var   div=document.getElementById('formaccuse');
+        if(div.style.display==='none')
+        {
+            div.style.display='block';
+        }
+        else
+        {
+            div.style.display='none';
+        }
+
+    });
 
 </script>
 
