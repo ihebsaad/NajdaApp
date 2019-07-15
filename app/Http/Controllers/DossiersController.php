@@ -99,6 +99,8 @@ class DossiersController extends Controller
     public function saving(Request $request)
     {
         $reference_medic = '';
+        $subscriber_lastname = $request->get('lastname');
+        $subscriber_name = $request->get('name');
         $type_affectation = $request->get('type_affectation');
         $annee = date('y');
 
@@ -107,7 +109,7 @@ class DossiersController extends Controller
             $maxid = $this->GetMaxIdBytype('Najda');
             $refd= $this->RefDossierById($maxid);
            $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
-                
+
             $reference_medic = $annee . 'N' . sprintf("%'.04d\n", $num_dossier+1);
         }
         if ($type_affectation == 'VAT') {
@@ -148,14 +150,14 @@ class DossiersController extends Controller
         if ($type_affectation == 'Najda TPA') {
             $maxid = $this->GetMaxIdBytype('Najda TPA');
              $refd= $this->RefDossierById($maxid);
-           $num_dossier=  intval(substr ( $refd , 5  ,   strlen ($refd)) );            
+           $num_dossier=  intval(substr ( $refd , 5  ,   strlen ($refd)) );
             $reference_medic = $annee . 'TPA' . sprintf("%'.04d\n", $num_dossier+1);
 
         }
         if ($type_affectation == 'Transport Najda') {
             $maxid = $this->GetMaxIdBytype('Transport Najda');
              $refd= $this->RefDossierById($maxid);
-           $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );            
+           $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
             $reference_medic = $annee . 'TN' . sprintf("%'.04d\n", $num_dossier+1);
 
         }
@@ -167,6 +169,8 @@ class DossiersController extends Controller
             'type_affectation' => $type_affectation,
             'affecte' => $request->get('affecte'),
             'reference_medic' => $reference_medic,
+            'subscriber_lastname' => $subscriber_lastname,
+            'subscriber_name' => $subscriber_name,
 
         ]);
 
@@ -174,7 +178,7 @@ class DossiersController extends Controller
         { $iddoss=$dossier->id;
 
             $identree = $request->get('entree');
-            if($identree!=''){
+        //    if($identree!=''){
           //  $entree  = Entree::find($identree);
 
            // $entree->dossier=$reference_medic;
@@ -182,7 +186,7 @@ class DossiersController extends Controller
                 Entree::where('id',$identree)
                     ->update(array('dossier' => $reference_medic));
 
-
+            $nomabn=  $subscriber_name.' '.$subscriber_lastname;
                 $message= $request->get('message');
                 //    $message='test';
                 $send= $request->get('send');
@@ -190,12 +194,12 @@ class DossiersController extends Controller
                 {  //$params=array('entree'=>$entree->id,'message'=>$message);
                //     app('App\Http\Controllers\EmailController')->accuse($identree,$message);
 
-             /*       $refdossier = app('App\Http\Controllers\EntreesController')->ChampById('dossier',$identree);
+                  $refdossier = app('App\Http\Controllers\EntreesController')->ChampById('dossier',$identree);
                     $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
                     $clientid = app('App\Http\Controllers\DossiersController')->ClientDossierById($iddossier);
                     $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$clientid);
 
-                    $nomabn=app('App\Http\Controllers\DossiersController')->NomAbnDossierById($iddossier);
+                   // $nomabn=app('App\Http\Controllers\DossiersController')->NomAbnDossierById($iddossier);
 
                     $refclient=app('App\Http\Controllers\ClientsController')->ClientChampById('reference',$clientid);
 
@@ -235,7 +239,7 @@ class DossiersController extends Controller
 
 
 
-*/
+
 
                 }// endif send
 
@@ -253,7 +257,7 @@ class DossiersController extends Controller
 
                 $affec->save();
 
-            } //if entree!=""
+        //    } //if entree!=""
 
             return url('/dossiers/view/'.$iddoss)/*->with('success', 'Dossier Créé avec succès')*/;
         //    return url('/dossiers/') ;

@@ -445,6 +445,14 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
                             </div>
 
 
+                         <div class="form-group">
+                             <label for="type">Prénom de l'abonné :</label>
+                             <input type="text" id="subscriber_name" class="form-control">
+                         </div>
+                         <div class="form-group">
+                             <label for="type">Nom de l'abonné :</label>
+                             <input type="text" id="subscriber_lastname" class="form-control">
+                         </div>
                             <div class="form-group">
                                 <label for="affecte">Agent Affecté :</label>
                                 <select   id="affecte" name="affecte"   class="form-control js-example-placeholder-single">
@@ -462,7 +470,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
                          <input type="hidden" value="nouveau" name="statdoss">
 
 
-                         <input type="hidden" value="<?php echo $entree['id'];?>" name="entree_id" >
+                         <input type="hidden" value="<?php echo $entree['id'];?>" name="entree_id" id="entree_id" >
 
                             <input type="hidden" value="{{Auth::user()->id}}" name="affecteur">
                         <!-- </form>-->
@@ -543,8 +551,8 @@ $urlapp='http://localhost/najdaapp';
             var entree = $('#entree_id').val();
              var type_affectation = $('#type_affectation').val();
             var affecte = $('#affecte').val();
-            var affecteur = $('#affecteur').val();
-            var statdoss = $('#statdoss').val();
+            var lastname = $('#subscriber_lastname').val();
+            var name = $('#subscriber_name').val();
             var message = $('#message').html();
             //var send = $('#checkaccuse') ;
             var send=false;
@@ -555,10 +563,8 @@ $urlapp='http://localhost/najdaapp';
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url:"{{ route('dossiers.saving') }}",
-                 //   url:"{{ route('affectation.dossier') }}",
                     method:"POST",
-                    data:{message:message,send:send,entree:entree,type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
-                 ///   data:{statdoss:statdoss,affecteur:affecteur,entree:entree,type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
+                    data:{lastname:lastname,name:name ,message:message,send:send,entree:entree,type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
 
                     success:function(data){
 

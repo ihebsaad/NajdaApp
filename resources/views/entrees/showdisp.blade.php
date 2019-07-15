@@ -444,6 +444,15 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
                             </div>
 
 
+                         <div class="form-group">
+                             <label for="type">Prénom de l'abonné :</label>
+                             <input type="text" id="subscriber_name" class="form-control">
+                         </div>
+                         <div class="form-group">
+                             <label for="type">Nom de l'abonné :</label>
+                             <input type="text" id="subscriber_lastname" class="form-control">
+                         </div>
+
                             <div class="form-group">
                                 <label for="affecte">Agent Affecté :</label>
                                 <select   id="affecte" name="affecte"   class="form-control js-example-placeholder-single">
@@ -471,7 +480,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
                          <input type="hidden" value="nouveau" name="statdoss">
 
 
-                         <input type="hidden" value="<?php echo $entree['id'];?>" name="entree_id" >
+                         <input type="hidden" value="<?php echo $entree['id'];?>" name="entree_id"  id="entree_id" >
 
                             <input type="hidden" value="{{Auth::user()->id}}" name="affecteur">
                         <!-- </form>-->
@@ -543,10 +552,12 @@ $urlapp='http://localhost/najdaapp';
             var type_dossier = $('#type_dossier').val();
             var entree = $('#entree_id').val();
              var type_affectation = $('#type_affectation').val();
+             var lastname = $('#subscriber_lastname').val();
+             var name = $('#subscriber_name').val();
             var affecte = $('#affecte').val();
              var message = $('#message').html();
             var send=false;
-            if (document.getElementById('checkaccuse').checked == true){send=true;}else{send=false;}
+             if (document.getElementById('checkaccuse').checked == true){send=true;}else{send=false;}
 
             if ((type_dossier != '')&&(type_affectation != '')&&(affecte != ''))
             {
@@ -554,7 +565,7 @@ $urlapp='http://localhost/najdaapp';
                 $.ajax({
                     url:"{{ route('dossiers.saving') }}",
                     method:"POST",
-                    data:{message:message,send:send,entree:entree,type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
+                    data:{lastname:lastname,name:name ,message:message,send:send,entree:entree,type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
                     success:function(data){
 
                      //   alert('Added successfully');
