@@ -84,13 +84,13 @@ use App\Http\Controllers\TagsController;
 
                 </div>
                 <div class="row" style="font-size:12px;">
-                    <div class="col-sm-4 col-md-4 col-lg-4" style=" padding-top: 4px; ">
+                    <div class="col-sm-5 col-md-5 col-lg-5" style=" padding-top: 4px; ">
                         <span><b>Emetteur: </b>{{ $entree['emetteur']  }}</span>
                     </div>
                     <div class="col-sm-4 col-md-4 col-lg-4" style=" padding-left: 0px; ">
-                        <span><b>À : </b>{{ $entree['destinataire']  }}</span>
+                        <span><b>À: </b>{{ $entree['destinataire']  }}</span>
                     </div>
-                        <div class="col-sm-4 col-md-4 col-lg-4 " style="padding-right: 0px;">
+                        <div class="col-sm-3 col-md-3 col-lg-3 " style="padding-right: 0px;">
                             <span class="pull-right"><b>Date: </b><?php if ($entree['type']=='email'){echo  date('d/m/Y H:i', strtotime( $entree['reception']  )) ; }else {echo  date('d/m/Y H:i', strtotime( $entree['created_at']  )) ; }?></span>
                             <?php 
                                 // verifier si l'entree possede de notification et la marque comme lu

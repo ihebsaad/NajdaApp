@@ -1,87 +1,16 @@
 <div class="container">
-    <div class="row">
-          <div class="col-sm-2">
-              <a href="{{ route('dossiers') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-               <span class="fa fa-lg fa-fw fa-folder"></span>
-               <br>
-                    Liste des dossiers
-              </a>
-          </div>
-        <!-- <div class="col-md-3">
-              <a href="#" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-               <span class="fa fa-lg  fa-fw fa-phone"></span>
-               <br>
-                    Mes enregistrements
-              </a>
-          </div>-->
-          <div class="col-sm-2">
-              <a href="{{ route('prestataires') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-               <span class="fa fa-lg fa-fw fa-user-md"></span>
-               <br>
-                    Les Prestataires
-              </a>
-          </div>
-
-         <div class="col-sm-2">
-              <a href="{{ route('boites') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
-               <span class="fa fa-lg fa-fw fa-inbox"></span>
-               <br>
-                    Ma boîte de réception
-              </a>
-          </div>
-        <?php
-        $seance =  DB::table('seance')
-            ->where('id','=', 1 )->first();
-        $disp=$seance->dispatcheur ;
-
-        $iduser=Auth::id();
-        if ($iduser==$disp) {
-            ?>
-        <div class="col-sm-2">
-            <a href="{{ route('entrees.index') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
-                <span class="fas fa-lg  fa-envelope"></span>
-                <br>
-                Boite Générale
-            </a>
-        </div>
-        <?php } else{?>
-
-            <div class="col-sm-2">
-            <a href="{{ route('entrees.dispatching') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
-                <span class="fas fa-lg  fa-map-signs"></span>
-                <br>
-            Dispatching
-            </a>
-        </div>
-
-       <?php }
-
-        ?>
-
-    </div>
+ 
+ 
 
     <div class="row">
 
     @if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
 
-            <div class="col-sm-2">
-            <a href="{{ route('supervision') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-                <span class="fas fa-lg  fa-sliders-h"></span>
-                <br>
-                Supervision
-            </a>
-        </div>
-	
-    @endif
-    
-  @can('isSupervisor')
 
-    </div>
-    
-      @endcan
-      
+    @endif
+
     @can('isAdmin')
-<!--
+
     <div class="col-sm-2">
         <a href="{{ route('users') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
             <span class="fa fa-lg fa-fw fa-users"></span>
@@ -105,7 +34,7 @@
                     Actualités
                 </a>
     </div>
--->
+
     @endcan
     </div>
 
@@ -114,7 +43,7 @@
     <div class="row">
 
         @can('isAdmin')
-<!--
+
             <div class="col-sm-2">
                 <a href="{{ route('clients') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="fas fa-lg   fa-hotel"></span>
@@ -147,15 +76,15 @@
                 </a>
             </div>
 
-	    -->
+	    
 
         @endcan
     </div>
 
-    @can('isAdmin')
-<!--
+
     <div class="row">
 
+        @can('isAdmin')
 
     <div class="col-sm-2">
         <a href="{{ route('typeprestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
@@ -172,13 +101,7 @@
                 Spécialités
             </a>
         </div>
-    <div class="col-sm-2">
-        <a href="{{ route('prestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-            <span class="fas fa-lg  fa-notes-medical"></span>
-            <br>
-            Prestations
-        </a>
-    </div>
+
         <div class="col-sm-2">
             <a href="{{ route('parametres') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                 <span class="fas fa-lg  fa-sliders-h"></span>
@@ -186,15 +109,26 @@
                 Paramètres
             </a>
         </div>
+        @endcan
+
+            @cannot('isAdmin')
+
+        <div class="col-sm-2">
+            <a href="{{ route('prestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                <span class="fas fa-lg  fa-notes-medical"></span>
+                <br>
+                Prestations
+            </a>
+        </div>
+            @endcannot
+
     </div>
-    -->
-    @endcan
 
 
     <div class="row">
 
         @can('isAdmin')
-<!--
+
             <div class="col-sm-2">
                 <a href="{{ route('personnes') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="fas fa-lg  fa-user-nurse"></span>
@@ -218,7 +152,7 @@
                     Equipements
                 </a>
             </div>
--->
+
         @endcan
     </div>
 

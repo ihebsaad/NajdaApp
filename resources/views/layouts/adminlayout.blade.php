@@ -4,7 +4,7 @@
     @include('layouts.partials.head')
 </head>
 <body>
-@include('layouts.partials.top')
+@include('layouts.partials.top3')
 
 
 <div class="content row">

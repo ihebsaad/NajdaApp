@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Demande;
 use App\Parametre;
 use App\Seance;
 use App\User;
@@ -31,10 +32,201 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+
+
+    public function demande(Request $request)
+    {
+        $par=$request->get('par');
+        if( $par!=null) {
+
+            $nompar=  app('App\Http\Controllers\UsersController')->ChampById('name',$par) .' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$par) ;
+
+            $demande = new Demande([
+                'par' => $par,
+                'vers' => $request->get('vers'),
+                'role' => trim($request->get('role')),
+                'emetteur'=>$nompar,
+                'statut' => 0,
+                'type' => 'role'
+
+            ]);
+
+            $demande->save();
+
+        }
+
+    }
+
+
+    public function checkdemandes( )
+    {
+        $user = auth()->user();
+
+        $iduser=$user->id;
+
+        // statut: 0 => non traitée
+
+     $demande=  Demande::where('statut', 0)->where('type','role')->where('vers',$iduser)->first();
+        if ($demande!=null)
+        {return $demande->toJson() ;}
+        else {return null;}
+
+    }
+
+
+    public function removereponse(Request $request )
+    {
+        $user = auth()->user();
+        $iduser=$user->id;
+
+        $role=$request->get('role');
+
+      //  Demande::where('statut', '0')->where('type','reponserole')->where('vers',$iduser)->where('role',$role)->update(array('statut'=>'1' ));
+        Demande::where('statut', '0')->where('type','reponserole')->where('vers',$iduser)->where('role',$role)->delete();
+
+    }
+    public function checkreponses(Request $request )
+    {
+        $user = auth()->user();
+
+        $iduser=$user->id;
+
+        // statut: 0 => non traitée
+
+        $demande=  Demande::where('statut', 0)->where('type','reponserole')->where('vers',$iduser)->first();
+        if ($demande!=null)
+        {
+            $role=$demande->role;
+
+            if ($role== 'Dispatcheur Emails')
+            {
+                $request->session()->put('disp',0);
+
+            }
+
+            if ($role== 'Dispatcheur Téléphonique')
+            {
+                $request->session()->put('disptel',0) ;
+            }
+
+            if ($role== 'Superviseur Médical')
+            {
+                $request->session()->put('supmedic',0) ;
+            }
+
+            if ($role== 'Superviseur Technique')
+            {
+                $request->session()->put('suptech',0) ;
+            }
+
+            if ($role== 'Chargé de Transport')
+            {
+                $request->session()->put('chrgtr',0)  ;
+            }
+
+            if ($role== 'Veilleur de Nuit')
+            {
+                $request->session()->put('veilleur',0) ;
+            }
+            return $demande->toJson() ;
+
+        }
+        else {return null;}
+
+
+    }
+
+
+    public function affecterrole(Request $request)
+    {
+        $iddemande=$request->get('id');
+        $ok=$request->get('ok');
+
+        if ($ok==0)
+        {
+            //changement de statut |    statut: 2 => refusée
+            Demande::where('id', $iddemande)->update(array('statut'=>2));
+        }
+        if ($ok==1)
+        {
+            // changement de statut |    statut: 1 => acceptée
+            Demande::where('id', $iddemande)->update(array('statut'=>1));
+
+            $demande= Demande::where('id', $iddemande)->first();
+
+            $seance =   Seance::first();
+
+
+            $role= $demande->role;
+            // id emetteur demande de role
+            $par= $demande->par;
+            $vers= $demande->vers;
+            $nomrole='';
+            if ($role== 'Dispatcheur Emails')
+            { $nomrole = 'dispatcheur';
+                $request->session()->put('disp',0);
+
+            }
+
+            if ($role== 'Dispatcheur Téléphonique')
+            { $nomrole = 'dispatcheurtel';
+                $request->session()->put('disptel',0) ;
+            }
+
+            if ($role== 'Superviseur Médical')
+            { $nomrole = 'superviseurmedic';
+                $request->session()->put('supmedic',0) ;
+            }
+
+            if ($role== 'Superviseur Technique')
+            { $nomrole = 'superviseurtech';
+                $request->session()->put('suptech',0) ;
+            }
+
+            if ($role== 'Chargé de Transport')
+            { $nomrole = 'chargetransport';
+                $request->session()->put('chrgtr',0)  ;
+            }
+
+            if ($role== 'Veilleur de Nuit')
+            { $nomrole = 'veilleur';
+                $request->session()->put('veilleur',0) ;
+            }
+
+            // changement de role dans la séance
+           Seance::where('id', '1')->update(array($nomrole=>$par));
+            // $seance->$nomrole=$par;
+
+            // Ajout de la réponse de demande (inverse)
+
+            $nompar=  app('App\Http\Controllers\UsersController')->ChampById('name',$vers) .' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$vers) ;
+
+            $demande = new Demande([
+                'par' => $vers,
+                'vers' => $par,
+                'role' => $role,
+                'emetteur'=>$nompar,
+                'statut' => 0,
+                'type' => 'reponserole'
+
+            ]);
+
+            $demande->save();
+
+
+        } // end ok == true
+
+
+
+    }
+
     public function changerroles(Request $request)
     {
+        $id=Auth::id();
+        if($id >0)
+        {
         $seance =   Seance::first();
- // supprime rde la seance
+ // supprime r de la seance
         if ($seance->dispatcheur==Auth::id())
         {
             $seance->dispatcheur=NULL ;
@@ -83,7 +275,11 @@ class HomeController extends Controller
      //   $request->session()->invalidate();
 
 return redirect('roles');
+        }
+        else{
+            return redirect('login');
 
+        }
     }
 
     public function roles()
@@ -99,6 +295,13 @@ return redirect('roles');
         return view('parametres',['users'=>$users]);
     }
 
+
+    public function supervision()
+    {
+        $users = User::get();
+
+        return view('supervision',['users'=>$users]);
+    }
 
     public function index()
     {

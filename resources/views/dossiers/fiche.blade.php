@@ -21,7 +21,7 @@ use  \App\Http\Controllers\DocsController;
 
     <div class="col-md-3">
 
-        <h2><?php echo   $dossier->reference_medic ;?></h2>
+        <h2>Fiche de Dossier:<?php echo   $dossier->reference_medic ;?></h2>
     </div>
 
      <div class="col-md-3">
@@ -116,7 +116,7 @@ use  \App\Http\Controllers\DocsController;
     <section class="content form_layouts">
 
 <br>
-        <B><a href="{{action('DossiersController@view',$dossier->id)}}"  > <i class="fas fa-lg fa-folder-open"></i>  Détails du dossier </a></B>
+        <B><a class="pull-right" href="{{action('DossiersController@view',$dossier->id)}}"  > <i class="fas fa-lg fa-folder-open"></i> Allez vers Détails du dossier </a></B>
 <br>
   
                  <div class="form-group" style="margin-top:25px;">

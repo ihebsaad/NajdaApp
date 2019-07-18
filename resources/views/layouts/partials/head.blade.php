@@ -11,10 +11,14 @@
             | Najda Assistance
         @show
     </title>
+ <style>
+     #swal2-content{font-size:15px}
+     </style>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
       <!-- CSRF Token -->
-    
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+ {{ csrf_field() }}
+
+ <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -64,7 +68,8 @@
 $urlnotif=$urlapp.'/entrees/show/' ;
 //$urlnotif = preg_replace('/\s+/', '', $urlnotif);
 ?>
-
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css" />
 <script>
 
     $(document).ready(function(){
@@ -161,7 +166,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkfax();
-                    }, 60000);  //30 secds
+                    }, 60000);  //60 secds
                 }
             });
         }
@@ -178,7 +183,114 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkboite();
-                    }, 1200000);  //30 secds
+                    }, 1200000);  //2 mins
+                }
+            });
+        }
+
+        function checkdemandes(){
+            $.ajax({
+                type: "get",
+              //  data:{nom:nom, _token:_token},
+                url: "<?php echo $urlapp; ?>/checkdemandes",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check demandes : '+data);
+                    //Send another request in n seconds.
+
+                    if(data !='')
+                    {
+                        var obj = JSON.parse(data);
+
+                        var id=obj.id ;
+                        var par=obj.par ;
+                        var role=obj.role ;
+                         var vers=obj.vers ;
+                        var emetteur=obj.emetteur ;
+                        var type=obj.type ;
+
+
+                        if (type=='role')
+                        {
+                            var message= emetteur+' a demandé de prendre le rôle : '+role;
+                         const swalWithBootstrapButtons = Swal.mixin({
+                            customClass: {
+                                confirmButton: 'btn btn-success',
+                                cancelButton: 'btn btn-danger'
+                            },
+                            buttonsStyling: false,
+                        })
+
+                        swalWithBootstrapButtons.fire({
+                            title: 'changement de rôle',
+                            text: message,
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Ok !',
+                            cancelButtonText: 'Non',
+                         //   reverseButtons: true
+                        }).then((result) => {
+                            if (result.value) {
+
+
+                           // affectation du role ok =true
+                            var _token = $('input[name="_token"]').val();
+
+                             $.ajax({
+
+                                url: "{{ route('home.affecterrole') }}",
+                                method: "POST",
+                                data: {id:id ,ok:1, _token: _token},
+                                success: function (data) {
+
+
+                                }
+                            });
+
+                        swalWithBootstrapButtons.fire(
+                            'Attribué!',
+                            'le rôle '+role+' n\'est plus parmi vos permissions ',
+                            'success'
+                        )
+
+                    } else if (
+                        // Read more about handling dismissals
+                    result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                            var _token = $('input[name="_token"]').val();
+
+                             // ok =false
+                            $.ajax({
+                                url: "{{ route('home.affecterrole') }}",
+                                method: "POST",
+                                data: {id:id ,ok:0, _token: _token},
+                                success: function (data) {
+
+
+                                }
+                            });
+
+
+                        swalWithBootstrapButtons.fire(
+                            'Non attribué',
+                            'le rôle '+role+' reste parmi vos permissions ',
+                            'error'
+                        )
+
+                    }
+                    })
+                        } // end type=role
+
+
+
+
+                       //////////////////////
+                    }
+
+                    setTimeout(function(){
+                        checkdemandes();
+                    }, 30000);  //30 secds
                 }
             });
         }
@@ -188,6 +300,6 @@ $urlnotif=$urlapp.'/entrees/show/' ;
         checksms();
         checkboite();
         checkfax();
-
+        checkdemandes();
     });
 </script>

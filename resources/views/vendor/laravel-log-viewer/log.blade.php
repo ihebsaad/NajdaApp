@@ -2,7 +2,7 @@
   <title>Historique des opérations</title>
 
 
-@extends('layouts.fulllayout')
+@extends('layouts.adminlayout')
 
 @section('content')
 

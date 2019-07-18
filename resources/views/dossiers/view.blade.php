@@ -136,7 +136,7 @@ use App\ClientGroupe;
  
                         <li class="nav-item active">
                             <a class="nav-link  active show" href="#tab2" data-toggle="tab">
-                               <i class="fas a-lg fa-exchange-alt"></i>  Echanges
+                               <i class="fas a-lg fa-exchange-alt"></i>  Communications
                             </a>
                         </li>
                         <li class="nav-item">
@@ -167,7 +167,7 @@ use App\ClientGroupe;
 
                         <li class="nav-item">
                             <a class="nav-link"   href="{{action('DossiersController@fiche',$dossier->id)}}"  >
-                                <i class="fas fa-lg fa-cog"></i><B> Gestion</B>
+                                <i class="fas fa-lg fa-cog"></i><B> Fiche</B>
                             </a>
                         </li>
 

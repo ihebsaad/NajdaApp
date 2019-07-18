@@ -110,60 +110,72 @@ class DossiersController extends Controller
             $refd= $this->RefDossierById($maxid);
            $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
 
-            $reference_medic = $annee . 'N' . sprintf("%'.04d\n", $num_dossier+1);
+            $reference_medic = $annee . 'N' . sprintf("%'.05d\n", $num_dossier+1);
         }
         if ($type_affectation == 'VAT') {
             $maxid = $this->GetMaxIdBytype('VAT');
              $refd= $this->RefDossierById($maxid);
            $num_dossier=  intval(substr ( $refd , 5  ,   strlen ($refd)) );
-            $reference_medic = $annee . 'V' . sprintf("%'.04d\n", $num_dossier+1);
+            $reference_medic = $annee . 'V' . sprintf("%'.05d\n", $num_dossier+1);
 
         }
         if ($type_affectation == 'MEDIC') {
             $maxid = $this->GetMaxIdBytype('MEDIC');
             $refd= $this->RefDossierById($maxid);
            $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
-            $reference_medic = $annee . 'M' . sprintf("%'.04d\n", $num_dossier+1);
+            $reference_medic = $annee . 'M' . sprintf("%'.05d\n", $num_dossier+1);
 
         }
         if ($type_affectation == 'Transport MEDIC') {
             $maxid = $this->GetMaxIdBytype('Transport MEDIC');
             $refd= $this->RefDossierById($maxid);
            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
-            $reference_medic = $annee . 'TM' . sprintf("%'.04d\n", $num_dossier+1);
+            $reference_medic = $annee . 'TM' . sprintf("%'.05d\n", $num_dossier+1);
 
         }
+
         if ($type_affectation == 'Transport VAT') {
             $maxid = $this->GetMaxIdBytype('Transport VAT');
            $refd= $this->RefDossierById($maxid);
            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
-            $reference_medic = $annee . 'TV' . sprintf("%'.04d\n", $num_dossier+1);
-
+            $reference_medic = $annee . 'TV' . sprintf("%'.05d\n", $num_dossier+1);
         }
+
         if ($type_affectation == 'Medic International') {
             $maxid = $this->GetMaxIdBytype('Medic International');
              $refd= $this->RefDossierById($maxid);
            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
-            $reference_medic = $annee . 'MI' . sprintf("%'.04d\n", $num_dossier+1);
+            $reference_medic = $annee . 'MI' . sprintf("%'.05d\n", $num_dossier+1);
 
         }
+
         if ($type_affectation == 'Najda TPA') {
             $maxid = $this->GetMaxIdBytype('Najda TPA');
              $refd= $this->RefDossierById($maxid);
            $num_dossier=  intval(substr ( $refd , 5  ,   strlen ($refd)) );
-            $reference_medic = $annee . 'TPA' . sprintf("%'.04d\n", $num_dossier+1);
+            $reference_medic = $annee . 'TPA' . sprintf("%'.05d\n", $num_dossier+1);
 
         }
+
         if ($type_affectation == 'Transport Najda') {
             $maxid = $this->GetMaxIdBytype('Transport Najda');
              $refd= $this->RefDossierById($maxid);
            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
-            $reference_medic = $annee . 'TN' . sprintf("%'.04d\n", $num_dossier+1);
+            $reference_medic = $annee . 'TN' . sprintf("%'.05d\n", $num_dossier+1);
+
+        }
+
+        if ($type_affectation == 'X-Press') {
+            $maxid = $this->GetMaxIdBytype('X-Press');
+            $refd= $this->RefDossierById($maxid);
+            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier+1);
 
         }
 
 
-     ///   if ($this->CheckRefExiste($reference_medic) === 0) {
+
+        ///   if ($this->CheckRefExiste($reference_medic) === 0) {
         $dossier = new Dossier([
             'type_dossier' => $request->get('type_dossier'),
             'type_affectation' => $type_affectation,

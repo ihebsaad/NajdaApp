@@ -1,7 +1,7 @@
 <header class="header">
         
         <div class="collapse bg-grey" id="navbarHeader">
-             @include('layouts.partials._top_menu')
+             @include('layouts.partials._top_menuadmin')
 
         </div>
 
@@ -25,31 +25,14 @@
         time</div>
         </div>
 
-      @can('isAdmin')
 
-          <div  class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
-          <a href="{{ route('parametres') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
-                                                <i class="fas fa-user-tie"></i>
+         <div id="dpause" class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
+          <a  href="{{ route('home') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;"> 
+                                                <span class="fas fa-fw fa-users-cog"></span>
                                                 <br>
-                                                Admin
+                                                Supervision
           </a> 
         </div>
-
-          @endcan
-
-          @cannot('isSupervisor')
-              @cannot('isAdmin')
-
-              <div id="dpause" class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
-                  <a href="#"  class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
-                      <span class="fa fa-fw fa-pause"></span>
-                      <br>
-                      Pause
-                  </a>
-              </div>
-
-              @endcannot
-          @endcannot
         <div class="col-sm-3 col-md-3 col-lg-3" style=" height: 40px!important;padding-top:27px;padding-left:0px ">
           <form class="search-container" action="{{route('RechercheMulti.test')}}" id="testRecheche" method="POST">
             <input type="text" id="search-bar"  placeholder="Recherche" autocomplete="off" name="qy">

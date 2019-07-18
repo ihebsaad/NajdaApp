@@ -14,7 +14,7 @@
                 $iduser=$user->id;
             ?>
 
-            <b style="font-size: 20px;color:white;">   <?php echo $name .' '. $lastname; ?></b>
+            <b style="font-size: 16px;color:white;">   <?php echo $name .' '. $lastname; ?></b>
 			<?php    $seance =  DB::table('seance')
             ->where('id','=', 1 )->first();
         $disp=$seance->dispatcheur ;
@@ -44,7 +44,7 @@
             </a>
         </li>
         <li style="margin-top:8px">
-            <a href="{{ route('changerroles') }}">
+            <a href="{{ route('roles') }}">
                 <i class="fas fa-fw fa-lg fa-exchange-alt"></i>
                 Changer de rôle(s)
             </a>

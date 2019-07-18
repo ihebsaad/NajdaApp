@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="col-lg-8">Dossiers</div>
                 <div class="col-lg-4">
-                    <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
+                 <!--   <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>-->
                 </div>
             </div>
         </div>
@@ -42,7 +42,7 @@
             <tbody>
             @foreach($dossiers as $dossier)
                 <tr><?php $statut=$dossier['current_status'];  $affecte=$dossier['affecte'];   ?>
-                    <td style="width:20%"><a href="{{action('DossiersController@view', $dossier['id'])}}" >{{$dossier->reference_medic}}</a> <a style="color:#a0d468" href="{{action('DossiersController@fiche', $dossier['id'])}}" >Fiche</a></td>
+                    <td style="width:20%"><a href="{{action('DossiersController@view', $dossier['id'])}}" >{{$dossier->reference_medic}}</a> <a style="color:#a0d468" href="{{action('DossiersController@fiche', $dossier['id'])}}" >Fiche<i class="fa fa-file-txt"></a></td>
                      <td style="width:25%">
                         <?php $customer_id= $dossier['customer_id']; echo '<small>'. DossiersController::ClientById($customer_id).'</small>';?>
                     </td>

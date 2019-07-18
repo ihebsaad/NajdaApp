@@ -75,6 +75,10 @@ public function logout(Request $request)
         {
         	$seance->chargetransport=NULL ;
         }
+        if ($seance->veilleur==Auth::id())
+        {
+            $seance->veilleur=NULL ;
+        }
 
         $seance->save();
 

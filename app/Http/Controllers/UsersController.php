@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Demande;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
@@ -293,10 +294,17 @@ class UsersController extends Controller
 
     public  function sessionroles(Request $request)
     {
-      //  $typeuser= $request->get('type');
+        $user = auth()->user();
+        $iduser=$user->id;
+
+        // supprimer les affectations de l utilisateur
+
+            Dossier::where('affecte',$iduser)
+
+                ->update(array('affecte' =>NULL));
+
 
         $seance =   Seance::first();
-
 
     //    if ($typeuser == "agent")
      //   {

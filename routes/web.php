@@ -18,8 +18,15 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/roles', 'HomeController@roles')->name('roles');
 Route::get('/changerroles', 'HomeController@changerroles')->name('changerroles');
 Route::get('/parametres', 'HomeController@parametres')->name('parametres');
+Route::get('/supervision', 'HomeController@supervision')->name('supervision');
 Route::post('/parametring', 'HomeController@parametring')->name('home.parametring');
 Route::post('/parametring2', 'HomeController@parametring2')->name('home.parametring2');
+Route::post('/demande', 'HomeController@demande')->name('home.demande');
+Route::post('/removereponse', 'HomeController@removereponse')->name('home.removereponse');
+Route::post('/affecterrole', 'HomeController@affecterrole')->name('home.affecterrole');
+Route::get('/checkdemandes', 'HomeController@checkdemandes')->name('checkdemandes');
+Route::get('/checkreponses', 'HomeController@checkreponses')->name('checkreponses');
+
 
 // Authentication Routes...
 $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
