@@ -55,7 +55,7 @@ class DeleguerMissionController extends Controller
         { 
 
 
-            $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i');
+            $dtc = (new \DateTime())->format('Y-m-d H:i');
             $affec=new DelegMiss([
 
                   'util_affecteur'=>$request->get('affecteurmiss'),
@@ -140,7 +140,7 @@ class DeleguerMissionController extends Controller
 
             if($ref_doss &&  $titre_miss )
             {
-            $output='la mission '.$titre_miss.' de dossier de référence '.$ref_doss.' est affecté à vous';
+            $output='la mission '.$titre_miss.' de dossier de référence '.$ref_doss.' est affectée à vous';
              $affecmhis=new DelegMissHis($affm->toArray()); 
 
              $affecmhis->save();
