@@ -263,7 +263,7 @@ $(document).on('click','.kbstab',function(){
       <br>
       <p> 
       <div class="row">
-        <?php $da = (new \DateTime())->modify('-1 Hour')->format('Y-m-d\TH:i'); ?>
+        <?php $da = (new \DateTime())->format('Y-m-d\TH:i'); ?>
        <input id="daterappel" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:50%;  text-align: left;" name="daterappel"/>
       </div>
       <br><br>
@@ -280,7 +280,7 @@ $(document).on('click','.kbstab',function(){
       <br>
       <p align="right" style="margin-right: 5px;">
           <div class="row">
-        <?php $da = (new \DateTime())->modify('-1 Hour')->format('Y-m-d\TH:i'); ?>
+        <?php $da = (new \DateTime())->format('Y-m-d\TH:i'); ?>
        <input id="datereport" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="datereport"/>
       </div>
       <br><br>

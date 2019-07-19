@@ -19,7 +19,8 @@ class Mission extends Model
         'arr_prev_dest','act_arr_prev_dest','h_arr_prev_dest',
         'decoll_ou_dep_bat','act_decoll_ou_dep_bat','h_decoll_ou_dep_bat',
         'arr_av_ou_bat','act_arr_av_ou_bat','h_arr_av_ou_bat',
-        'retour_base','act_retour_base','h_retour_base'
+        'retour_base','act_retour_base','h_retour_base','sejour','date_deb_sejour','date_fin_sejour','location_voit',
+        'date_deb_location_voit','date_fin_location_voit',
     ];
 
 

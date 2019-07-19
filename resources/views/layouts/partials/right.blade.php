@@ -274,7 +274,7 @@ use App\Http\Controllers\TagsController;
 
                                           </div>
                                          <div class="form-group">
-                                            <?php  $da = (new \DateTime())->modify('-1 Hour')->format('Y-m-d\TH:i');// $da= date('Y-m-d\TH:m'); ?>
+                                            <?php  $da = (new \DateTime())->format('Y-m-d\TH:i');// $da= date('Y-m-d\TH:m'); ?>
 
                                                 <div class="row">
                                                     <div class="col-md-3" style="padding-top:5px">  <label for="datedeb" style="display: inline-block;  text-align: left; width: 55px;">Date:</label></div>
