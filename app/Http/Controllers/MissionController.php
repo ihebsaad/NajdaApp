@@ -471,7 +471,7 @@ class MissionController extends Controller
         $burl = URL::to("/");
 
 
-         $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i');
+         $dtc = (new \DateTime())->format('Y-m-d H:i');
          $missR=Mission::where('date_deb','<=', $dtc)->where('user_id', Auth::user()->id)->where('statut_courant','reportee')
          ->orderBy('date_deb', 'asc')->first();
 
