@@ -34,45 +34,40 @@
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
             <tr id="headtable">
-                <th style="width:35%">Nom</th>
-            <!--    <th style="width:25%">Spécialité</th>-->
-              <!-- <th style="width:10%">Priorité</th>-->
-                <th style="width:20%">Ville</th>
+                <th style="width:30%">Prestataire</th>
+               <th style="width:20%;font-size:14px;">Type de prestations</th>
+                <th style="width:15%">Gouvernorats</th>
+                <th style="width:10%">Ville</th>
+                <th style="width:15%">Spécialités</th>
+                <th style="width:10%">Actions</th>
              </tr>
-            <tr>
-                <th style="width:35%">Nom</th>
-            <!--    <th style="width:25%">Spécialité</th>-->
-               <!-- <th   style="width:10%">Priorité</th>-->
-                <th style="width:20%">Ville</th>
+            <tr style="font-size:14px;">
+                <th style="width:20%">Prestataire</th>
+                <th style="width:20%">Type de prestation</th>
+                <th style="width:20%">Gouvernorats</th>
+                <th style="width:10%">Ville</th>
+                <th style="width:20%">Spécialités</th>
             </tr>
             </thead>
             <tbody>
             @foreach($prestataires as $prestataire)
-                <?php $ordre=$prestataire['ordre'];
-                if ($ordre==1){$class="bg-primary";}
-                else {
-                    if ($ordre==2){$class="bg-info";}
-                    else {
-                        if ($ordre==3){$class="bg-danger";}
-                        if ($ordre==0){$class="bg-warning";}
-
-                    }
-
-                    }
+                <?php $id= $prestataire['id'];
                      $villeid=intval($prestataire['ville_id']);
                 if (isset($villes[$villeid]['name']) ){$ville=$villes[$villeid]['name'];}
                 else{$ville=$prestataire['ville'];}
 
-
+                $gouvs=  PrestatairesController::PrestataireGouvs($id);
+                $typesp=  PrestatairesController::PrestataireTypesP($id);
+                $specs=  PrestatairesController::PrestataireSpecs($id);
                 ?>
 
                 <tr>
-                    <td style="width:35%"><a href="{{action('PrestatairesController@view', $prestataire['id'])}}" >{{$prestataire->name}}</a></td>
-                <!--    <td style="width:25%">{{$prestataire->specialite}}</td>-->
-                <!--    <td style="width:10%;text-align:center"   class="<?php echo $class;?> ">{{$prestataire->ordre}}</td>-->
-                    <td style="width:20%"><?php     /*$prestataire['ville_id'] ; */
-                     echo $ville ;
-                        ?></td>
+                    <td style="font-size:15px;width:30%"><a href="{{action('PrestatairesController@view', $id)}}" ><?php echo '<i>'.$prestataire->civilite .'</i> <b>'. $prestataire->name .'</b> '.$prestataire->prenom; ?></a></td>
+                    <td style="font-size:14px;width:20%"><?php foreach($typesp as $tp){echo $tp->type_prestation_id.'  ';}?>/td>
+                    <td style="font-size:14px;width:15%"><?php foreach($gouvs as $gv){echo $gv->citie_id.'  ';}?></td>
+                    <td style="font-size:14px;width:10%"><?php echo $ville; ?></td>
+                    <td style="font-size:14px;width:15%"><?php foreach($specs as $sp){echo $sp->specialite.'  ';}?></td>
+                    <td style="font-size:14px;width:10%">Actions</td>
 
                 </tr>
             @endforeach
@@ -82,9 +77,9 @@
 
 
 
-
-    <?php use \App\Http\Controllers\UsersController;
-    $users=UsersController::ListeUsers();
+    <?php
+    use \App\Http\Controllers\UsersController;
+     $users=UsersController::ListeUsers();
 
     $CurrentUser = auth()->user();
 

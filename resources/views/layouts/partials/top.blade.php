@@ -40,12 +40,40 @@
           @cannot('isSupervisor')
               @cannot('isAdmin')
 
-              <div id="dpause" class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
-                  <a href="#"  class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
-                      <span class="fa fa-fw fa-pause"></span>
-                      <br>
-                      Pause
-                  </a>
+              <div  id="pause" class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
+                <?php   $user = auth()->user();
+                  $iduser=$user->id;
+                  $statut=$user->statut;
+                   if($statut==2) { ?>
+
+                    <a href="#"    id="enpause" class="btn btn-danger btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
+                        <span class="fas fa-mug-hot"></span>
+                        <br>
+                        En Pause
+                    </a>
+
+                    <a href="#"  style="display:none" id="dpause" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
+                        <span class="fa fa-fw fa-pause"></span>
+                        <br>
+                        Pause
+                    </a>
+
+                <?php }else{  ?>
+
+                    <a href="#"  id="dpause" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
+                        <span class="fa fa-fw fa-pause"></span>
+                        <br>
+                        Pause
+                    </a>
+
+                    <a href="#"    style="display:none"  id="enpause" class="btn btn-danger btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
+                        <span class="fas fa-mug-hot"></span>
+                        <br>
+                        En Pause
+                    </a>
+                  <?php }
+                  ?>
+
               </div>
 
               @endcannot
@@ -401,6 +429,34 @@
 
     </header>
 
+<div class="modal  " id="modalconfirm" >
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" style="text-align:center"  id="modalalert0"><center>Demande de Pause  </center> </h3>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+                    <div style="text-align:center" class="row" >
+                        <div style="text-align:center" class="     show" role="alert">
+
+                            <h5> <center> Vous voulez demander une pause ?</center></h5>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <a id="oui"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Oui</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Non</button>
+            </div>
+        </div>
+    </div>
+</div>
     <script>
       /* function colorerSeq(string,qy) {
            

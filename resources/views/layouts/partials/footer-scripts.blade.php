@@ -11,6 +11,7 @@
 
     
     <!--<script src="{{  URL::asset('public/js/jquery-ui/jquery.ui.min.js') }}" type="text/javascript"></script>-->
+{{ csrf_field() }}
 
     <script src="{{  URL::asset('public/js/bootstrap.min.js') }}" type="text/javascript"></script>
     <script src="{{  URL::asset('public/js/custom_js/metisMenu.js') }}" type="text/javascript"></script>
@@ -329,3 +330,33 @@ console.log(parsed);*/
 
         
   </script>
+
+<script>
+
+    $('#dpause').click(function() {
+
+        $('#modalconfirm').modal({show: true});
+
+    });
+
+
+        $('#oui').click(function() {
+            $('#modalconfirm').modal('hide');
+
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: "{{ route('home.demandepause') }}",
+                    method: "POST",
+                    data: {   _token: _token},
+
+                    success: function (data) {
+                        alert('Demande envoyée');
+
+                    }
+                });
+
+
+        }); //end click
+
+
+</script>

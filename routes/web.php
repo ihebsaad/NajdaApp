@@ -22,7 +22,10 @@ Route::get('/supervision', 'HomeController@supervision')->name('supervision');
 Route::post('/parametring', 'HomeController@parametring')->name('home.parametring');
 Route::post('/parametring2', 'HomeController@parametring2')->name('home.parametring2');
 Route::post('/demande', 'HomeController@demande')->name('home.demande');
+Route::post('/demandepause', 'HomeController@demandepause')->name('home.demandepause');
+Route::post('/reponsepause', 'HomeController@reponsepause')->name('home.reponsepause');
 Route::post('/removereponse', 'HomeController@removereponse')->name('home.removereponse');
+Route::post('/removereponsepause', 'HomeController@removereponsepause')->name('home.removereponsepause');
 Route::post('/affecterrole', 'HomeController@affecterrole')->name('home.affecterrole');
 Route::get('/checkdemandes', 'HomeController@checkdemandes')->name('checkdemandes');
 Route::get('/checkreponses', 'HomeController@checkreponses')->name('checkreponses');
@@ -410,6 +413,7 @@ Route::get('/users/profile/{id}', 'UsersController@profile')->name('profile');
 Route::post('/users/createuserrole', 'UsersController@createuserrole')->name('users.createuserrole');
 Route::post('/users/removeuserrole', 'UsersController@removeuserrole')->name('users.removeuserrole');
 Route::post('/users/sessionroles', 'UsersController@sessionroles')->name('users.sessionroles');
+Route::post('/changestatut', 'UsersController@changestatut')->name('users.changestatut');
 
 Route::get('/users/destroy/{id}', 'UsersController@destroy');
 //Route::get('/edit/{id}','UsersController@edit');

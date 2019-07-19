@@ -266,6 +266,14 @@ class UsersController extends Controller
 
     }
 
+    public function changestatut(Request $request)
+    {
+        $user = auth()->user();
+        $iduser=$user->id;
+        User::where('id', $iduser)->update(array('statut' => '0'));
+
+    }
+
     public function updating(Request $request)
     {
         $id= $request->get('user');

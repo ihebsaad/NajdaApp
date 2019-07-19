@@ -164,9 +164,8 @@
 
  <?php
 
- use App\Demande;use
-
-     \App\Http\Controllers\UsersController;
+ use App\Demande;
+ use     \App\Http\Controllers\UsersController;
     $haveroles =   DB::table('roles_users')
             ->where(['user_id' => Auth::id()])
             ->count();
@@ -189,7 +188,7 @@
 
 
  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script><!--
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
 
 <!------ Include the above in your HEAD tag ---------->
@@ -201,7 +200,8 @@
 </div>
 <div class="col-md-6" style="padding:100px 50px 100px 50px">
     <h1>Bienvenue <?php echo  $name .' '. $lastname; ?></h1><br>
-<h2>Sélectionnez votre/vos rôle(s) pendant cette séance :</h2><br>
+<h2>Sélectionnez votre/vos rôle(s) pendant cette séance :</h2>
+    <small> (Cliquez sur un rôle attribué pour le demander)</small><br><br><br>
     <input type="hidden" id="par" value="<?php echo $iduser; ?>" >
 {{ csrf_field() }}
 
@@ -506,7 +506,7 @@
 
     {{ csrf_field() }}
 <br>
- <button onclick="redirect()" class="btn cust-btn " type="button" id="btn-primary" style="font-size: 20PX;letter-spacing: 1px;width:150px">Entrer</button>
+ <button onclick="redirect()" class="btn cust-btn " type="button" id="btn-primary" style="margin-top:50px;font-size: 20PX;letter-spacing: 1px;width:150px">Entrer</button>
 </div>
 
 <div class="col-md-3">
@@ -515,7 +515,39 @@
   
 </div>
 </body>
+
+
 </html>
+
+<!-- Modal Document-->
+<div class="modal  " id="modalconfirm" >
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" style="text-align:center"  id="modalalert0"><center>Demande de rôle  </center> </h3>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+                    <div style="text-align:center" class="row" >
+                        <div style="text-align:center" class="     show" role="alert">
+
+                            <h5> <center> Vous voulez demander ce rôle ?</center></h5>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <a id="oui"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Oui</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Non</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
  <script>
@@ -582,59 +614,67 @@
 
 
  function demande(role,vers) {
+
+     $('#modalconfirm').modal({show:true});
+
+
      var par = $('#par').val();
 
+     $('#oui').click(function() {
+         $('#modalconfirm').modal('hide');
 
-     if (role== 'Dispatcheur Emails')
-     { nomrole = 'dispatcheur';
-         //  $request->session()->put('disp',0);
+         if (role == 'Dispatcheur Emails') {
+             nomrole = 'dispatcheur';
+             //  $request->session()->put('disp',0);
 
-     }
+         }
 
-     if (role== 'Dispatcheur Téléphonique')
-     { nomrole = 'dispatcheurtel';
-         //   $request->session()->put('disptel',0) ;
-     }
+         if (role == 'Dispatcheur Téléphonique') {
+             nomrole = 'dispatcheurtel';
+             //   $request->session()->put('disptel',0) ;
+         }
 
-     if (role== 'Superviseur Médical')
-     { nomrole = 'superviseurmedic';
-         //   $request->session()->put('supmedic',0) ;
-     }
+         if (role == 'Superviseur Médical') {
+             nomrole = 'superviseurmedic';
+             //   $request->session()->put('supmedic',0) ;
+         }
 
-     if (role== 'Superviseur Technique')
-     { nomrole = 'superviseurtech';
-         //   $request->session()->put('suptech',0) ;
-     }
+         if (role == 'Superviseur Technique') {
+             nomrole = 'superviseurtech';
+             //   $request->session()->put('suptech',0) ;
+         }
 
-     if (role== 'Chargé de Transport')
-     { nomrole = 'chargetransport';
-         //    $request->session()->put('chrgtr',0)  ;
-     }
+         if (role == 'Chargé de Transport') {
+             nomrole = 'chargetransport';
+             //    $request->session()->put('chrgtr',0)  ;
+         }
 
-     if (role== 'Veilleur de Nuit')
-     { nomrole = 'veilleur';
-         //   $request->session()->put('veilleur',0) ;
-     }
-     if ((par != '')) {
-         var _token = $('input[name="_token"]').val();
-         $.ajax({
-             url: "{{ route('home.demande') }}",
-             method: "POST",
-             data: {role:role,vers:vers,par: par, _token: _token},
-             success: function (data) {
+         if (role == 'Veilleur de Nuit') {
+             nomrole = 'veilleur';
+             //   $request->session()->put('veilleur',0) ;
+         }
+         if ((par != '')) {
+             var _token = $('input[name="_token"]').val();
+             $.ajax({
+                 url: "{{ route('home.demande') }}",
+                 method: "POST",
+                 data: {role: role, vers: vers, par: par, _token: _token},
+                 success: function (data) {
 
-                    alert('Demande envoyée');
-		    
-		    $('#label'+nomrole).text(' (Demande Envoyée) ');
+                     alert('Demande envoyée');
 
-                 $('#label'+nomrole).css("color", "green");
+                     $('#label' + nomrole).text(' (Demande Envoyée) ');
+
+                     $('#label' + nomrole).css("color", "green");
 
 
-             }
-         });
-     } else {
-         // alert('ERROR');
-     }
+                 }
+             });
+         } else {
+             // alert('ERROR');
+         }
+
+     }); //end click
  }
      <?php
      $urlapp=env('APP_URL');
@@ -732,7 +772,7 @@
 
                          setTimeout(function(){
                              window.location = '{{route('roles')}}';
-                         }, 5000);
+                         }, 3000);
                      }
 
 

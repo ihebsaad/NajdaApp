@@ -75,6 +75,23 @@ $urlnotif=$urlapp.'/entrees/show/' ;
     $(document).ready(function(){
 
 
+        $('#enpause').click(function() {
+
+            $("#dpause").css("display", "block");
+            $("#enpause").css("display", "none");
+            var _token = $('input[name="_token"]').val();
+
+            $.ajax({
+                url:"{{ route('users.changestatut') }}",
+                method:"POST",
+                data:{ _token:_token},
+                success:function(data){
+
+                }
+            });
+        });
+
+
         $('#search-bar').keyup(function(){
             var query = $(this).val();
             if(query != '')
@@ -283,9 +300,131 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                         } // end type=role
 
 
+                        if(type=='pause')
+                        {
+
+                            var message= emetteur+' a demandé une pause';
+                            const swalWithBootstrapButtons = Swal.mixin({
+                                customClass: {
+                                    confirmButton: 'btn btn-success',
+                                    cancelButton: 'btn btn-danger'
+                                },
+                                buttonsStyling: false,
+                            })
+
+                            swalWithBootstrapButtons.fire({
+                                title: 'Demande de pause',
+                                text: message,
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Ok !',
+                                cancelButtonText: 'Non',
+                                //   reverseButtons: true
+                            }).then((result) => {
+                                if (result.value) {
 
 
-                       //////////////////////
+                            // affectation du role ok =true
+                            var _token = $('input[name="_token"]').val();
+
+                            $.ajax({
+
+                                url: "{{ route('home.reponsepause') }}",
+                                method: "POST",
+                                data: {id:id ,ok:1, _token: _token},
+                                success: function (data) {
+
+
+                                }
+                            });
+
+                            swalWithBootstrapButtons.fire(
+                                'Accepté!',
+                                'Pause Acceptée ! ',
+                                'success'
+                            )
+
+                        } else if (
+                            // Read more about handling dismissals
+                        result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            var _token = $('input[name="_token"]').val();
+
+                            // ok =false
+                            $.ajax({
+                                url: "{{ route('home.reponsepause') }}",
+                                method: "POST",
+                                data: {id:id ,ok:0, _token: _token},
+                                success: function (data) {
+
+
+                                }
+                            });
+
+
+                            swalWithBootstrapButtons.fire(
+                                'Réfusée',
+                                'Pause réfusée ! ',
+                                'error'
+                            )
+
+                        }
+                        })
+
+                        } // end type pause
+
+
+
+                        if(type=='reponsedemande')
+                        {
+                          var rep=0;
+                            if(role=='oui')
+                            {
+                                rep=1;
+                                Swal.fire(
+                                    'Pause accepté!',
+                                    'Votre demande de pause a été acceptée',
+                                    'success'
+                                )
+                                // here
+
+                                $("#dpause").css("display", "none");
+                                $("#enpause").css("display", "block");
+                            }
+                            if(role=='non')
+                            {rep=0;
+                                Swal.fire(
+                                    'Pause réfusée!',
+                                    'Votre demande de pause a été réfusée',
+                                    'error'
+                                )
+                            }
+
+                            // affectation du role ok =true
+                            var _token = $('input[name="_token"]').val();
+
+                            $.ajax({
+
+                                url: "{{ route('home.removereponsepause') }}",
+                                method: "POST",
+                                data: {id:id ,  _token: _token},
+                                success: function (data) {
+
+
+                                }
+                            });
+
+
+
+
+                        } // end type reponsedemande
+
+
+
+
+
+
+                        //////////////////////
                     }
 
                     setTimeout(function(){

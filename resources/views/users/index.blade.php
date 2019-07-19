@@ -26,7 +26,7 @@
                      <td><a href="{{action('UsersController@view', $user['id'])}}" >{{$user->name}}</a></td>
                     <td>{{$user->email}}</td>
                     <td>{{$user->user_type}}</td>
-                    <td><?php if ($user->isOnline()){ echo '<span class="label label-success">Connecté</span> ';} else{echo '<span class="label label-danger">Hors ligne</span>';}  ?></td>
+                    <td><?php if ($user->isOnline()){  if($user->statut==0){echo '<span class="label label-success">Connecté</span> ';} else{ echo '<span class="label label-warning">En Pause</span> ';  }    } else{echo '<span class="label label-danger">Hors ligne</span>';}  ?></td>
                 </tr>
             @endforeach
             </tbody>

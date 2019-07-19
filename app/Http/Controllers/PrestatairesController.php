@@ -536,6 +536,26 @@ class PrestatairesController extends Controller
 
     }
 
+    public static function PrestataireGouvs($id)
+    {
+        $relationsgv = DB::table('cities_prestataires')->select('citie_id')
+        ->where('prestataire_id','=',$id)
+        ->get();
+        return $relationsgv ;
+    }
+    public static function PrestataireTypesP($id)
+    {
+        $relations = DB::table('prestataires_type_prestations')->select('type_prestation_id')
+        ->where('prestataire_id','=',$id)
+        ->get();
+        return $relations ;  }
+
+        public static function PrestataireSpecs($id)
+    {
+        $relations2 = DB::table('specialites_prestataires')->select('specialite')
+        ->where('prestataire_id','=',$id)
+        ->get();
+        return $relations2 ;  }
 
 
 }

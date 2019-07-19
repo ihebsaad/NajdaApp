@@ -58,6 +58,33 @@ class HomeController extends Controller
     }
 
 
+    public function demandepause(Request $request)
+    {
+        $user = auth()->user();
+        $iduser=$user->id;
+
+        $seance =   Seance::first();
+        $supmedic=$seance->superviseurmedic;
+
+        $nompar=  app('App\Http\Controllers\UsersController')->ChampById('name',$iduser) .' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$iduser) ;
+        if ($supmedic >0)
+        {
+
+            $demande = new Demande([
+                'par' => $iduser,
+                'vers' => $supmedic,  // Superviseur Medical
+                 'emetteur'=>$nompar,
+                'statut' => 0,
+                'type' => 'pause'
+
+            ]);
+
+            $demande->save();
+
+        }
+
+    }
+
     public function checkdemandes( )
     {
         $user = auth()->user();
@@ -66,7 +93,7 @@ class HomeController extends Controller
 
         // statut: 0 => non traitée
 
-     $demande=  Demande::where('statut', 0)->where('type','role')->where('vers',$iduser)->first();
+     $demande =  Demande::where('statut', 0)->where('type','!=','reponserole')->where('vers',$iduser)->first();
         if ($demande!=null)
         {return $demande->toJson() ;}
         else {return null;}
@@ -85,6 +112,19 @@ class HomeController extends Controller
         Demande::where('statut', '0')->where('type','reponserole')->where('vers',$iduser)->where('role',$role)->delete();
 
     }
+
+    public function removereponsepause(Request $request )
+    {
+        $user = auth()->user();
+        $iduser=$user->id;
+
+        $id=$request->get('id');
+
+        //  Demande::where('statut', '0')->where('type','reponserole')->where('vers',$iduser)->where('role',$role)->update(array('statut'=>'1' ));
+        Demande::where('id', $id)->delete();
+
+    }
+
     public function checkreponses(Request $request )
     {
         $user = auth()->user();
@@ -135,6 +175,65 @@ class HomeController extends Controller
 
 
     }
+
+    public function reponsepause(Request $request)
+    {
+        $iddemande=$request->get('id');
+        $ok=$request->get('ok');
+
+        $demande= Demande::where('id', $iddemande)->first();
+
+
+        // id emetteur demande de role
+        $par= $demande->par;
+        $vers= $demande->vers;
+        $nompar=  app('App\Http\Controllers\UsersController')->ChampById('name',$vers) .' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$vers) ;
+
+
+        if ($ok==0)
+        {
+            //changement de statut |    statut: 2 => refusée
+            Demande::where('id', $iddemande)->update(array('statut'=>2));
+
+            // ajouter reponse  (role = non)
+            $demande = new Demande([
+                'par' => $vers,
+                'vers' => $par,
+                'emetteur'=>$nompar,
+                'statut' => 0,
+                'type' => 'reponsedemande',
+                'role' => 'non'
+
+            ]);
+
+            $demande->save();
+
+        }
+        if ($ok==1)
+        {
+            // changement de statut |    statut: 1 => acceptée
+            Demande::where('id', $iddemande)->update(array('statut'=>1));
+
+            // ajouter reponse  (role = oui)
+            $demande = new Demande([
+                'par' => $vers,
+                'vers' => $par,
+                'emetteur'=>$nompar,
+                'statut' => 0,
+                'type' => 'reponsedemande',
+                'role' => 'oui'
+
+            ]);
+
+            $demande->save();
+
+            User::where('id', $par)->update(array('statut'=>'2'));
+
+        }
+
+    }
+
+
 
 
     public function affecterrole(Request $request)
