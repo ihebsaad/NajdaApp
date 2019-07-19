@@ -283,7 +283,7 @@ class ActionController extends Controller
           // $burl = URL::to("/");
        $output='';
 
-         $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i');
+         $dtc = (new \DateTime())->format('Y-m-d H:i');
 
          $actionRR=ActionEC::where('user_id', Auth::user()->id)
                           ->where(function($q){                             
