@@ -105,7 +105,9 @@ class MissionController extends Controller
              'arr_av_ou_bat'=> $typeMiss->arr_av_ou_bat,
              'act_arr_av_ou_bat'=> $typeMiss->act_arr_av_ou_bat,
               'retour_base'=> $typeMiss->retour_base,
-              'act_retour_base'=> $typeMiss->act_retour_base
+              'act_retour_base'=> $typeMiss->act_retour_base,
+              'sejour'=>$typeMiss->sejour,
+              'location_voit'=> $typeMiss->location_voit
         ]);
 
         $Mission->save();
@@ -158,10 +160,10 @@ class MissionController extends Controller
         // echo($attributes[1]);
         // echo($valeurs[1]);
            $taille=count($valeurs)-5;
-         for ($k=19; $k<=$taille; $k++)
+         for ($k=21; $k<=$taille; $k++)
            {
              
-            if($k>19)
+            if($k>21)
             {
 
 
