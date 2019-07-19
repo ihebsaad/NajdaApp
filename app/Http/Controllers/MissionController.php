@@ -115,7 +115,7 @@ class MissionController extends Controller
        //date_default_timezone_set('Africa/Tunis');
        //setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
 
-          $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d\TH:i');
+          $dtc = (new \DateTime())->format('Y-m-d\TH:i');
        //dd($Mission->date_deb."  ". $dtc);
         //dd(time($dtc)."  ".time($request->get('datedeb')));
          $format = "Y-m-d\TH:i";
