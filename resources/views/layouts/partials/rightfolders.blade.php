@@ -36,10 +36,10 @@ use App\Dossier ;
 		*/	
  			$c=0;
 			foreach($dossiers as $dossier)
-			{$c++;
+			{$c++; if($dossier->affecte==''){$styled=';color:red;';}else{$styled=';color:black;';}
 			if(($c % 2 )==0){$bg='background-color:#EDEDE9';}else{$bg='background-color:#F9F9F8';} $idd=$dossier['id'];$ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;
         echo '<li  class="overme" style=";padding-left:6px;margin-bottom:15px;'.$bg.'" >';
-        echo '<label   title="sélectionner ce dossier" onclick="selectFolder(this)" id="folder-'.$ref.'" style="width:80px;font-size:14px;cursor:pointer;font-weight:bold;">'.$ref .'</label>'; ?><a style="margin-left:30px;margin-right:20px" title="fiche de dossier" href="{{action('DossiersController@fiche', $idd)}}" ><span class="fa fa-file"/></a><a title="détails de dossier" href="{{action('DossiersController@view', $idd)}}" ><span class="fa fa-folder-open"/></a>
+        echo '<label   title="sélectionner ce dossier" onclick="selectFolder(this)" id="folder-'.$ref.'" style="width:80px;font-size:14px;cursor:pointer;font-weight:bold;'.$styled.'">'.$ref .'</label>'; ?><a style="margin-left:30px;margin-right:20px" title="fiche de dossier" href="{{action('DossiersController@fiche', $idd)}}" ><span class="fa fa-file"/></a><a title="détails de dossier" href="{{action('DossiersController@view', $idd)}}" ><span class="fa fa-folder-open"/></a>
                <br><small style="font-size:11px"><?php echo $abn;?></small>
                <br><small style="font-size:10px"><?php echo $client;?></small>
 

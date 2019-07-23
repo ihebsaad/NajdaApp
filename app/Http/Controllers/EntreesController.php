@@ -361,9 +361,11 @@ class EntreesController extends Controller
         $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
 
         //  $user=  DB::table('users')->where('id','=', $userid )->first();
-        $user = User::find($userid);
+      if($userid  >0) {
+          $user = User::find($userid);
 
-        $user->notify(new Notif_Suivi_Doss($entree));
+          $user->notify(new Notif_Suivi_Doss($entree));
+      }
 
         //return url('/entrees/show/'.$identree)/*->with('success', 'Dossier Créé avec succès')*/;
         return url('/entrees/dispatching/');
