@@ -7,7 +7,8 @@ class Actualite extends Model
 {
 	
   protected $fillable = [
- 'description'
+ 'description',
+      'statut'
      ];
  
 }

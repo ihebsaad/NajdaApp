@@ -93,12 +93,13 @@ class ActualitesController extends Controller
     public function updating(Request $request)
     {
 
-        $id= $request->get('actualite');
+        $id= $request->get('actus');
         $champ= strval($request->get('champ'));
        $val= $request->get('val');
       //  $dossier = Dossier::find($id);
        // $dossier->$champ =   $val;
-        Actualite::where('id', $id)->update(array($champ => $val));
+     //   Actualite::where('id', $id)->update(array($champ => $val));
+        Actualite::where('id', $id)->update(array('statut' => $val));
 
       //  $dossier->save();
 
@@ -175,7 +176,7 @@ class ActualitesController extends Controller
     public  static function Liste()
     {
        // $actualites = Actualite::all();
-        $actualites = Actualite::orderBy('id', 'desc')->paginate(10000000);
+        $actualites = Actualite::orderBy('id', 'desc')->where('statut','1')->paginate(10000000);
 
 
         return $actualites;
@@ -187,7 +188,7 @@ class ActualitesController extends Controller
     public  static function NbrActus()
     {
 
-        $count = DB::table('actualites')
+        $count = DB::table('actualites')->where('statut','1')
               ->count();
 
         return $count;

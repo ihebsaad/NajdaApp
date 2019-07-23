@@ -42,11 +42,11 @@
                                     <i class="fa-lg fas fa-user-clock"></i>  Séance
                                 </a>
                             </li>
-                            <li class="nav-item">
+                       <!--     <li class="nav-item">
                                 <a class="nav-link" href="#tab2" data-toggle="tab" onclick="showinfos2();hideinfos();hideinfos3();hideinfos4()">
                                     <i class="fa-lg fas fa-sliders-h"></i>  Paramètres
                                 </a>
-                            </li>
+                            </li>--->
                             <?php }
 
                             if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
@@ -192,7 +192,7 @@
                         </div>
                      </div>
 
-                    <div id="tab2" class="tab-pane fade " style="display:block">
+               <!--     <div id="tab2" class="tab-pane fade " style="display:block">
                         <div class="padding:50px 50px 50px 50px"><br>
                         <h4>Paramètres</h4><br>
 
@@ -225,7 +225,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    </div>--->
 <?php }
 
 if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
@@ -239,11 +239,11 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
                             foreach($users as $user)
                                 {
                                     $role='(Agent)';
+                                    if($user->id==$veilleur){$role='(Veilleur de nuit)';}
                                     if($user->id==$disp){$role='(Dispatcheur)';}
                                     if($user->id==$disptel){$role='(Dispatcheur Téléphonique)';}
                                     if($user->id==$supmedic){$role='(Superviseur Médical)';}
                                     if($user->id==$suptech){$role='(Superviseur Technique)';}
-                                    if($user->id==$veilleur){$role='(Veilleur de nuit)';}
                                     if($user->id==$charge){$role='(Chargé de transport)';}
                                     if($user->type=='admin'){$role='(Administrateur)';}
                                   if($user->isOnline()) { echo  '<li><i class="fa fa-user fa-lg" ></i>   '.$user->name.' '.$user->lastname .' - '. $role.' </li>' ;}

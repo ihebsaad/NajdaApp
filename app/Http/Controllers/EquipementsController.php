@@ -91,6 +91,9 @@ class EquipementsController extends Controller
             }
         }
 
+        $user = auth()->user();
+        $nomuser=$user->name.' '.$user->name;
+        Log::info('[Agent: '.$nomuser.'] Ajout équipement ');
     }
 
     public function updating(Request $request)

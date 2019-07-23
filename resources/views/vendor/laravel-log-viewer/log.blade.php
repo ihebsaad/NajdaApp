@@ -1,4 +1,4 @@
-
+<style>#mytable_filter{float:right;}</style>
   <title>Historique des opérations</title>
 
 
@@ -48,12 +48,12 @@
         </div>
       @else
         <table id="mytable" style="width:100%" class="table table-striped" data-ordering-index="{{ $standardFormat ? 2 : 0 }}">
-          <thead >
+          <thead   >
           <tr>
-               <th style="width:15%">Type</th>
+               <!--<th style="width:15%">Type</th>-->
              <!-- <th>Context</th>-->
               <th style="width:15%">Date</th>
-             <th style="width70%">Contenu</th>
+             <th style="width:70%">Détails</th>
           </tr>
           </thead>
 
@@ -62,12 +62,12 @@
           @foreach($logs as $key => $log)
 		  @if ($log['level']!='error')
             <tr data-display="stack{{{$key}}}">
-                <td style="width:15%" class="nowrap text-{{{$log['level_class']}}}">
+               <!-- <td style="width:15%" class="nowrap text-{{{$log['level_class']}}}">
                   <span class="fa fa-{{{$log['level_img']}}}" aria-hidden="true"></span>&nbsp;&nbsp;{{$log['level']}}
-                </td>
+                </td>-->
                <!-- <td class="text">{{$log['context']}}</td>-->
-              <td style="width:15%" class="">{{{$log['date']}}}</td>
-              <td class="text">
+              <td style="width:15%" class=""><?php $date=$log['date']; $datef = new DateTime($date); echo  date_format($datef, 'd/m/Y   H:i'); ?></td>
+              <td style="width:75%" class="text">
 
                 {{{$log['text']}}}
 
@@ -89,7 +89,7 @@
           <a id="clean-log" href="?clean={{ \Illuminate\Support\Facades\Crypt::encrypt($current_folder ? $current_folder . "/" . $current_file : $current_file) }}{{ ($current_folder) ? '&f=' . \Illuminate\Support\Facades\Crypt::encrypt($current_folder) : '' }}">
             <span class="fa fa-sync"></span> Vider le fichier
           </a>
-          -
+
   <!--        <a id="delete-log" href="?del={{ \Illuminate\Support\Facades\Crypt::encrypt($current_folder ? $current_folder . "/" . $current_file : $current_file) }}{{ ($current_folder) ? '&f=' . \Illuminate\Support\Facades\Crypt::encrypt($current_folder) : '' }}">
             <span class="fa fa-trash"></span> Delete file
           </a>-->
@@ -139,6 +139,8 @@
               } );
 
               var table = $('#mytable').DataTable({
+                  "order": [[ 0, "desc" ]],
+
                   orderCellsTop: true,
                   dom: 'Bflrtip',
                   responsive:true,

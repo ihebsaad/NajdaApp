@@ -34,7 +34,6 @@
                                                 Admin
           </a> 
         </div>
-
           @endcan
 
           @cannot('isSupervisor')
@@ -110,7 +109,7 @@
       display:block ; 
       position:relative ;
       top:-65px; 
-      left: -50 px;
+      left: -50px;
      
 
       }
@@ -457,77 +456,4 @@
         </div>
     </div>
 </div>
-    <script>
-      /* function colorerSeq(string,qy) {
-           
 
-
-           if(qy!='')
-           {
-          // For all matching elements
-             $(string).each(function() {
-
-          // Get contents of string
-                  var myStr = $(this).text();
-                  //alert(myStr);
-                  // Split myStr into an array of characters
-                  myStr = myStr.split("");
-                  var dejaEn=false;
-                  // Build an html string of characters wrapped in  tags with classes
-                  var myContents = "";
-                  for (var i = 0, len = myStr.length; i < len; i++) {
-                    
-                    if(qy[0].toUpperCase()==myStr[i].toUpperCase())
-                    {
-
-                      if(!dejaEn)
-                      {
-
-                      for(var j=0, len2 = qy.length; j<len2; j++)
-                      {
-                        if(i<len)
-                        {
-                          if(qy[j].toUpperCase()==myStr[i].toUpperCase())
-                          {
-                           myContents += '<span class="single-char char-' + i + '">' + myStr[i] + '</span>';
-                           i++;
-                           //b=true;
-                          }
-                          else
-                          {
-                            myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-                            j=len2;
-                            i++;
-                          }
-                          
-                        }
-                       
-
-                      }
-                    
-                      
-                      i--;
-                      dejaEn=true;
-                          }
-                          else
-                          {
-
-                            myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-
-                          }
-                     
-                     }
-                     else
-                     {
-
-                      myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-                     }
-                  }
-
-                  // Replace original string with constructed html string
-                  $(this).html(myContents);
-                });
-           }
-              
-              }*/
-    </script>

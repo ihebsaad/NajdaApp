@@ -25,9 +25,41 @@
         time</div>
         </div>
 
-        
+          @can('isAdmin')
 
-        <!--<div id="dpause" class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
+              <div  class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
+                  <a href="{{ route('parametres') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
+                      <i class="fas fa-user-tie"></i>
+                      <br>
+                      Admin
+                  </a>
+              </div>
+
+      @endcan
+
+          @can('isSupervisor')
+
+              <div  class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
+                  <a href="{{ route('home') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
+                      <i class="fas fa-users-cog"></i>
+                      <br>
+                      Supervision
+                  </a>
+              </div>
+
+      @endcan
+
+      @cannot('isSupervisor')
+          @cannot('isAdmin')
+                  <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
+                      <a href="{{ route('home') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="basculer en mode agent" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
+                         Mode Agent
+                      </a>
+                  </div>
+
+          @endcannot
+      @endcannot
+              <!--<div id="dpause" class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
           <a href="#" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;"> 
                                                 <span class="fa fa-fw fa-pause"></span>
                                                 <br>
@@ -342,11 +374,22 @@
               <span class="fa fa-fw fa-phone fa-2x"></span>
           </a> 
         </div>
+          <!--
+          @can('isAdmin')
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
           <a href="{{ route('home') }}" class="btn btn-danger btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="basculer en mode agent" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
-            Mode Agent
-          </a> 
+            Supervision
+          </a>
         </div>
+          @endcan
+              @cannot('isAdmin')
+              <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
+                  <a href="{{ route('home') }}" class="btn btn-danger btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="basculer en mode agent" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
+                      Mode Agent
+                  </a>
+              </div>
+              @endcannot
+-->
         <div class="col-sm-1 col-md-1 col-lg-1">
           <ul class="nav navbar-nav" style="float: right!important;">
 

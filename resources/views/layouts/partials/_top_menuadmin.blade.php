@@ -101,14 +101,14 @@
                 Spécialités
             </a>
         </div>
-
+<!---
         <div class="col-sm-2">
             <a href="{{ route('parametres') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                 <span class="fas fa-lg  fa-sliders-h"></span>
                 <br>
                 Paramètres
             </a>
-        </div>
+        </div>--->
         @endcan
 
             @cannot('isAdmin')

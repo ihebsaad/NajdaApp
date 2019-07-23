@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Adresse;
 use App\Email;
 use App\Evaluation;
+use App\Intervenant;
 use App\Specialite;
 use App\TypePrestation;
 use Illuminate\Support\Facades\Log;
@@ -127,22 +128,79 @@ class PrestatairesController extends Controller
 
     public function saving(Request $request)
     {
+        if( ($request->get('dossier'))!=null) {
+
+         $doss=   $request->get('dossier');
+            if (($request->get('nom')) != null) {
+
+                $prestataire = new Prestataire([
+                    'name' => $request->get('nom'),
+                    'prenom' => $request->get('prenom'),
+
+                ]);
+
+
+                if ($prestataire->save()) {
+                    $id = $prestataire->id;
+
+                    $interv = new Intervenant([
+                        'nom' => $request->get('nom'),
+                        'prenom' => $request->get('prenom'),
+                        'dossier' => $doss,
+                        'prestataire' => $id,
+
+                    ]);
+                    $interv->save();
+
+
+                    return url('/dossiers/view/' . $doss.'#tab4')/*->with('success', ' Créé avec succès')*/
+                        ;
+                } else {
+                    return url('/prestataires');
+                }
+
+            }
+        }else{
+
+
+            $prestataire = new Prestataire([
+                'name' => $request->get('nom'),
+                'prenom' => $request->get('prenom'),
+
+            ]);
+
+            if ($prestataire->save()) {
+                $id = $prestataire->id;
+
+                return url('/prestataires/view/' . $id)/*->with('success', ' Créé avec succès')*/
+                    ;
+            } else {
+                return url('/prestataires');
+            }
+
+
+        }
+
+    }
+
+    public function saving2(Request $request)
+    {
         if( ($request->get('nom'))!=null) {
 
             $prestataire = new Prestataire([
                 'nom' => $request->get('nom'),
-                'specialite' => $request->get('specialite'),
+                'prenom' => $request->get('prenom'),
 
             ]);
 
             if ($prestataire->save())
             { $id=$prestataire->id;
 
-                return url('/prestataires/view/'.$id)/*->with('success', ' Créé avec succès')*/;
-             }
+              //  return url('/dossiers/view/'.$id)/*->with('success', ' Créé avec succès')*/;
+            }
 
             else {
-                return url('/prestataires');
+            ///    return url('/prestataires');
             }
 
         }
@@ -543,20 +601,47 @@ class PrestatairesController extends Controller
         ->get();
         return $relationsgv ;
     }
+
     public static function PrestataireTypesP($id)
     {
         $relations = DB::table('prestataires_type_prestations')->select('type_prestation_id')
         ->where('prestataire_id','=',$id)
         ->get();
-        return $relations ;  }
+        return $relations ;
+    }
 
         public static function PrestataireSpecs($id)
     {
         $relations2 = DB::table('specialites_prestataires')->select('specialite')
         ->where('prestataire_id','=',$id)
         ->get();
-        return $relations2 ;  }
+        return $relations2 ;
+    }
 
+    public static function TypeprestationByid($id)
+    {
+      $typep= TypePrestation::find($id);
+        if (isset($typep['name'])) {
+            return $typep['name'] ;
+        }else{return '';}
+    }
+
+    public static function GouvByid($id)
+    {
+      $gouv=  Citie::find($id);
+        if (isset($gouv['name'])) {
+            return $gouv['name'] ;
+        }else{return '';}
+    }
+    public static function SpecialiteByid($id)
+    {
+      $spec = Specialite::find($id);
+
+        if (isset($spec['nom'])) {
+            return $spec['nom'] ;
+        }else{return '';}
+
+    }
 
 }
 

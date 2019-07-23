@@ -99,6 +99,13 @@ class PrestationsController extends Controller
 
            if ($prestation->save())
            {
+               $user = auth()->user();
+               $nomuser=$user->name.' '.$user->name;
+
+               $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($iddoss);
+               Log::info('[Agent: '.$nomuser.'] Ajout de prestation pour le dossier: '.$ref);
+
+
                $id=$prestation->id;
                $date=date('Y-m-d');
             //   $evaluation = Evaluation::find($prest);
@@ -219,6 +226,14 @@ class PrestationsController extends Controller
         if (isset($dossier['reference_medic'])) {
             return $dossier['reference_medic'];
         }else{return '';}
+    }
+
+
+    public static function PrestById($id)
+    {
+        $prestataire = Prestataire::find($id);
+        return $prestataire;
+
     }
 
 

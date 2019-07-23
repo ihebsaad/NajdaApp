@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 
 class LoginController extends Controller
 {
@@ -33,6 +35,11 @@ protected function authenticated(Request $request, $user)
 }*/
     $user = auth()->user();
     $type=$user->user_type;
+
+    $nomuser=$user->name.' '.$user->name;
+    Log::info('[Agent: '.$nomuser.'] Login ');
+
+
     if($type=='financier')
     {
         return redirect('/parametres');
@@ -85,6 +92,11 @@ public function logout(Request $request)
         // supprimer les affectations
         $user = auth()->user();
         $iduser=$user->id;
+
+         $nomuser=$user->name.' '.$user->name;
+
+        Log::info('[Agent: '.$nomuser.'] Déconnexion ');
+
 
         Dossier::where('affecte',$iduser)
 

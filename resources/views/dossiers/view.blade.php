@@ -31,7 +31,13 @@ use App\ClientGroupe;
 
 <?php $statut=$dossier->current_status;?>
      <div class="col-md-3">
-        <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
+
+         <?php
+         // les agents ne voient pas l'aaffectation - à vérifier
+         if (Gate::check('isAdmin') || Gate::check('isSupervisor') ) { ?>
+
+
+         <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
         <b>Affecté à:</b> 
         <?php 
         $agentname = User::where('id',$dossier->affecte)->first();
@@ -56,6 +62,8 @@ use App\ClientGroupe;
 
             }
         } ?>
+
+      <?php  } ?>
     </div>
     <div class="col-md-6" style="text-align: right;padding-right: 35px">
         <div class="page-toolbar">
@@ -72,7 +80,7 @@ use App\ClientGroupe;
                     </li>
                     <li>
                         <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                            Au Prestataire </a>
+                            À l'intervenant </a>
                     </li>
                     <li>
                         <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
@@ -102,7 +110,7 @@ use App\ClientGroupe;
                     </li>
                     <li>
                         <a href="{{route('emails.envoifax',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                            Au Prestataire </a>
+                            À l'intervenant </a>
                     </li>
                     <li>
                         <a href="{{route('emails.envoifax',['id'=>$dossier->id,'type'=> 'libre','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
@@ -146,14 +154,15 @@ use App\ClientGroupe;
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#tab4" data-toggle="tab">
+                                <i class="fas  fa-lg fa-users"></i>  Intervenants
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tab5" data-toggle="tab">
                                 <i class="fas  fa-lg fa-file-archive"></i>  Attachements
                             </a>
                         </li>
-                       <!-- <li class="nav-item">
-                            <a class="nav-link" href="#tab5" data-toggle="tab">
-                                <i class="fas  fa-lg fa-cog"></i>  Autres
-                            </a>
-                        </li>-->
+
                         <li class="nav-item">
                             <a class="nav-link" href="#tab6" data-toggle="tab">
                                 <i class="fas fa-lg fa-file-word"></i>  Docs
@@ -323,79 +332,167 @@ use App\ClientGroupe;
 
             </div>
 
-            <div id="tab4" class="tab-pane fade">
 
-                <table class="table table-striped" id="mytable" style=" ;margin-top:15px;">
-                    <thead>
-                    <tr id="headtable">
-                        <th style="width:15%">Date</th>
-                        <th style="width:30%">Titre</th>
-                        <th style="width:40%">Description</th>
+           <div id="tab4" href="#tab4" class="tab-pane fade">
+               <div class="row">
+                   <div class="col-md-4"><h3 style="margin-bottom:30px">Intervenants</h3></div>
+                   <div class="col-md-4"><button   style="margin-top:15px" id="" class="pull-right btn btn-md btn-default"   data-toggle="modal" data-target="#createinterv"><b><i class="fas fa-plus"></i> Ajouter un Intervenant Libre</b></button></div>
+                   <div class="col-md-4"><button   style="margin-top:15px" id="" class="pull-right btn btn-md btn-success"   data-toggle="modal" data-target="#insererprest"><b><i class="fas fa-plus"></i>  Insérer un Prestataire </b></button></div>
+               </div>
+<br><B> Intervenants qui ont effectué de(s) prestation(s) </B>
+               <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
+                   <thead>
+                   <tr class="headtable">
 
-                        <th style="width:5%">type</th>
-                        <th style="width:10%">Boite</th>
-                    </tr>
+                       <th style="width:20%">Intervenant</th>
+                       <th style="width:20%;font-size:14px;">Type de prestations</th>
+                       <th style="width:15%">Gouvernorats</th>
+                       <th style="width:10%">Ville</th>
+                       <th style="width:15%">Spécialités</th>
+                   </tr>
 
-                    </thead>
-                    <tbody>
-                      @foreach($attachements as $attach)
-                      <?php if ($attach->boite < 2) {
-                        ?>
-                        <tr>
-                            <td style="width:15%;"><small><?php echo $attach->created_at;?></small></td>
-                            <td  class="overme" style="width:30%;"><small><?php /* if ($attach->dossier!=null) {echo 'Fichier externe';}else{*/ echo $attach->nom; /*}*/ ?></small></td>
-                            <td class="overme" style="width:40%;"><small><?php  echo $attach->description;   ?></small></td>
+                   </thead>
+                   <tbody>
 
-                            <td style="width:5%;"><small><?php
-                                    $type= $attach->type;
-                                    switch ($type) {
+<?php foreach($prestations as $pr )
+    {          $effectue= $pr['effectue'];
+              if($effectue ==1)
+                  {
+
+               $prest= $pr['prestataire_id'];
+               /*
+$villeid=intval($prest['ville_id']);
+if (isset($villes[$villeid]['name']) ){$ville=$villes[$villeid]['name'];}
+else{$ville=$prest['ville'];}
+*/
+$interv = PrestationsController::PrestById($prest);
+
+            $gouvs=  PrestatairesController::PrestataireGouvs($prest);
+            $typesp=  PrestatairesController::PrestataireTypesP($prest);
+            $specs=  PrestatairesController::PrestataireSpecs($prest);
+            $ville=PrestatairesController::ChampById('ville',$prest);
+
+            ?> <tr>
+<td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $prest)}}" ><?php echo '<i>'.$interv['civilite'] .'</i> <b>'. $interv['name'] .'</b> '.$interv['prenom']; ?></a></td>
+<td style="font-size:12px;width:20%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
+<td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
+<td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
+<td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td></tr>
+<?php } ?>
+
+<?php
+
+}
+    ?>
+                   </tbody>
+               </table><br><br><br>
+
+
+               <B> Intervenants Ajoutés Manuellement </B>
+               <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
+                   <thead>
+                   <tr class="headtable">
+
+                       <th style="width:20%">Intervenant</th>
+                       <th style="width:20%;font-size:14px;">Type de prestations</th>
+                       <th style="width:15%">Gouvernorats</th>
+                       <th style="width:10%">Ville</th>
+                       <th style="width:15%">Spécialités</th>
+                   </tr>
+                   </thead>
+                   <tbody>
+
+                   <?php foreach($intervenants as $interv )
+                   {  $prest= $interv['prestataire_id'];
+
+                   $interven = PrestationsController::PrestById($prest);
+
+                   $gouvs=  PrestatairesController::PrestataireGouvs($prest);
+                   $typesp=  PrestatairesController::PrestataireTypesP($prest);
+                   $specs=  PrestatairesController::PrestataireSpecs($prest);
+                   $ville= PrestatairesController::ChampById('ville',$prest);
+
+                   ?> <tr>
+                       <td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $prest)}}" ><?php echo '<i>'.$interven['civilite'] .'</i> <b>'. $interven['name'] .'</b> '.$interven['prenom']; ?></a></td>
+                       <td style="font-size:12px;width:20%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
+                       <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
+                       <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
+                       <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td></tr>
+                   <?php } ?>
+
+
+                   </tbody>
+               </table><br><br><br>
+
+           </div>
+
+
+                <div id="tab5" class="tab-pane fade">
+
+                    <table class="table table-striped" id="mytable" style=" ;margin-top:15px;">
+                        <thead>
+                        <tr id="headtable">
+                            <th style="width:15%">Date</th>
+                            <th style="width:30%">Titre</th>
+                            <th style="width:40%">Description</th>
+
+                            <th style="width:5%">type</th>
+                            <th style="width:10%">Boite</th>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+                        @foreach($attachements as $attach)
+                            <?php if ($attach->boite < 2) {
+                            ?>
+                            <tr>
+                                <td style="width:15%;"><small><?php echo $attach->created_at;?></small></td>
+                                <td  class="overme" style="width:30%;"><small><?php /* if ($attach->dossier!=null) {echo 'Fichier externe';}else{*/ echo $attach->nom; /*}*/ ?></small></td>
+                                <td class="overme" style="width:40%;"><small><?php  echo $attach->description;   ?></small></td>
+
+                                <td style="width:5%;"><small><?php
+                                        $type= $attach->type;
+                                        switch ($type) {
                                         case 'pdf':
                                         echo '<i class="far fa-2X fa-file-pdf"></i>';
-                                            break;
+                                        break;
                                         case 'txt':
-                                            echo '<i class="far fa-2X fa-file-alt"></i>';
-                                            break;
+                                        echo '<i class="far fa-2X fa-file-alt"></i>';
+                                        break;
                                         case 'png':
-                                            echo '<i class="far fa-2X fa-file-image"></i>';
-                                            break;
+                                        echo '<i class="far fa-2X fa-file-image"></i>';
+                                        break;
                                         case 'jpg':
-                                            echo '<i class="far fa-2X fa-file-image"></i>';
-                                            break;
+                                        echo '<i class="far fa-2X fa-file-image"></i>';
+                                        break;
                                         case 'doc':
-                                            echo '<i class="far fa-2X  fa-file-word"></i>';
-                                            break;
+                                        echo '<i class="far fa-2X  fa-file-word"></i>';
+                                        break;
                                         case 'docx':
                                         echo '<i class="far fa-2X fa-file-word"></i>';
                                         break;
                                         case 'xls':
-                                            echo '<i class="far fa-2X fa-file-excel"></i>';
-                                            break;
+                                        echo '<i class="far fa-2X fa-file-excel"></i>';
+                                        break;
                                         case 'xls':
-                                            echo '<i class="far fa-2X fa-file-excel"></i>';
-                                            break;
+                                        echo '<i class="far fa-2X fa-file-excel"></i>';
+                                        break;
                                         default:
-                                            echo '<i class="far fa-2X  fa-file"></i>';
-                                    }
+                                        echo '<i class="far fa-2X  fa-file"></i>';
+                                        }
 
 
-                                    ?></small></td>
-                            <td style="width:10%"><small><?php if ($attach->boite>0) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';}else{echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}?></small></td>
+                                        ?></small></td>
+                                <td style="width:10%"><small><?php if ($attach->boite>0) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';}else{echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}?></small></td>
 
-                        </tr>
-                        <?php } ?>
-                    @endforeach
+                            </tr>
+                            <?php } ?>
+                        @endforeach
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
 
-            </div>
-
-      <!--      <div id="tab5" class="tab-pane fade">
-
-<br><br>
-
-            </div>-->
-
+                </div>
             <div id="tab6" class="tab-pane fade">
                 <div style="">
                     <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="adddoc" class="btn btn-md btn-success"   data-toggle="modal" data-target="#generatedoc"><b><i class="fas fa-plus"></i> Générer un document</b></button>
@@ -1217,6 +1314,93 @@ reference_customer
         </div>
     </div>
 </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="insererprest"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Insérer un Prestataire</h5>
+
+                </div>
+                <div class="modal-body" style="min-height:250px">
+                    <div class="card-body">
+
+                        <form method="post" >
+                            {{ csrf_field() }}
+
+                            <div class="form-group" style="margin-top:30px;ùargin-left:30px">
+                                <label for="type">Prestataire :</label>
+                                 <select id="selectable" style="margin-top:10px;margin-bottom:10px;width:350px"      class="form-control  "  >
+                                    <option></option>
+                                    <?php
+
+                                        foreach($prestataires as $prest)
+                                  //  {    foreach($prestations as $pr )
+                                     {
+                                        // $prestat= $pr['prestataire_id'];
+                                       //$interv = PrestationsController::PrestById($prestat);
+                                   //  if ($pr['prestataire_id'] != $inter['id'])
+                                    //{ ?>
+
+                                    <option    value="<?php echo $prest->id;?>"> <?php echo $prest->name;?></option>
+                              <?php // }
+                                   // }
+                                    }?>
+                                 </select>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" id="addpr2" class="btn btn-primary">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="createinterv" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ajouter un nouveau Prestataire</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+                        <form method="post" >
+                            {{ csrf_field() }}
+
+                            <div class="form-group">
+                                <label for="type">Nom :</label>
+                                <input class="form-control" type="text" id="nom" />
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="type">Prénom :</label>
+                                <input class="form-control" type="text" id="prenom" />
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" id="addpr1" class="btn btn-primary">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -1432,7 +1616,7 @@ function filltemplate(data,tempdoc)
 
         var val =document.getElementById(champ).value;
         //  var type = $('#type').val();
-        var dossier = $('#iddossupdate').val();
+        var dossier = $('#dossier').val();
         //if ( (val != '')) {
         var _token = $('input[name="_token"]').val();
         $.ajax({
@@ -1459,7 +1643,7 @@ function filltemplate(data,tempdoc)
         var champ=elm;
 
         var val =0;
-        var dossier = $('#iddossupdate').val();
+        var dossier = $('#dossier').val();
         //if ( (val != '')) {
         var _token = $('input[name="_token"]').val();
         $.ajax({
@@ -1497,6 +1681,10 @@ function filltemplate(data,tempdoc)
     $(document).ready(function() {
     $("#agent").select2();
     $("#templatedoc").select2();
+    $("#selectable").select2 (
+        //{ dropdownParent: "#insererprest" }
+        );
+
     $('#emailadd').click(function(){
         var parent = $('#parent').val();
         var champ = $('#emaildoss').val();
@@ -1678,7 +1866,7 @@ function filltemplate(data,tempdoc)
     });
 
         $('#btnaddemail').click(function(){
-            var parent = $('#iddossupdate').val();
+            var parent = $('#dossier').val();
             var nom = $('#nome').val();
             var prenom = $('#prenome').val();
             var fonction = $('#fonctione').val();
@@ -1706,7 +1894,7 @@ function filltemplate(data,tempdoc)
 
 
         $('#btnaddtel').click(function(){
-            var parent = $('#iddossupdate').val();
+            var parent = $('#dossier').val();
             var nom = $('#nomt').val();
             var prenom = $('#prenomt').val();
             var fonction = $('#fonctiont').val();
@@ -1968,8 +2156,67 @@ function filltemplate(data,tempdoc)
 
 
 
-    }); // $ function
 
+
+        $('#addpr1').click(function(){
+            var nom = $('#nom').val();
+            var prenom = $('#prenom').val();
+            var dossier = $('#dossier').val();
+            if ((nom != '')&&(prenom != '') )
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('prestataires.saving') }}",
+                    method:"POST",
+                    data:{nom:nom,prenom:prenom,dossier:dossier, _token:_token},
+                    success:function(data){
+
+                        //   alert('Added successfully');
+                        window.location =data;
+
+
+                    }
+                });
+            }else{
+                // alert('ERROR');
+            }
+        });
+
+        $('#addpr2').click(function(){
+            var prestataire = $('#selectable').val();
+             var dossier = $('#dossier').val();
+
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('intervenants.saving') }}",
+                    method:"POST",
+                    data:{prestataire:prestataire,dossier:dossier, _token:_token},
+                    success:function(data){
+
+                        //   alert('Added successfully');
+                      //  window.location =data;
+                        location.reload();
+
+/// here
+                    }
+                });
+
+        });
+
+
+
+
+        var url = document.location.toString();
+        if (url.match('#')) {
+            $('.nav-item a[href="#' + url.split('#')[1] + '"]').tab('show');
+        }
+
+// Change hash for page-reload
+        $('.nav-item a').on('shown.bs.tab', function (e) {
+            window.location.hash = e.target.hash;
+        })
+
+    }); // $ function
 
 
 </script>
@@ -2141,3 +2388,5 @@ function filltemplate(data,tempdoc)
 
 
 </style>
+
+

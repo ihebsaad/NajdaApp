@@ -25,8 +25,12 @@ use  \App\Http\Controllers\DocsController;
     </div>
 
      <div class="col-md-3">
+        <?php
+         // les agents ne voient pas l'aaffectation - à vérifier
+         if (Gate::check('isAdmin') || Gate::check('isSupervisor') ) { ?>
         <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
-        <b>Affecté à:</b> 
+
+        <b>Affecté à:</b>
         <?php 
         $agentname = User::where('id',$dossier->affecte)->first();
         if ((Gate::check('isAdmin') || Gate::check('isSupervisor')) && !empty ($agentname))
@@ -44,7 +48,10 @@ use  \App\Http\Controllers\DocsController;
             else
             {echo '<b>Non affecté</b>';} 
         } ?>
-    </div>
+
+         <?php   } ?>
+
+     </div>
     <div class="col-md-6" style="text-align: right;padding-right: 35px">
         <div class="page-toolbar">
 
@@ -60,7 +67,7 @@ use  \App\Http\Controllers\DocsController;
                     </li>
                     <li>
                         <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                            Au Prestataire </a>
+                            À l'intervenant </a>
                     </li>
                     <li>
                         <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
@@ -91,7 +98,7 @@ use  \App\Http\Controllers\DocsController;
                     </li>
                     <li>
                         <a href="{{route('emails.envoifax',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                            Au Prestataire </a>
+                            À l'intervenant </a>
                     </li>
                     <li>
                         <a href="{{route('emails.envoifax',['id'=>$dossier->id,'type'=> 'libre','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">

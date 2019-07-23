@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Adresse;
 use App\Boite;
 use App\Email;
+use App\Intervenant;
 use App\Notifications\Notif_Suivi_Doss;
 use App\Prestation;
 use Illuminate\Support\Facades\Log;
@@ -339,7 +340,7 @@ class EmailController extends Controller
 
                 $entree->save();
 
-
+                Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
                 /*********************/
                 if($refdossier!= ''){
 
@@ -541,6 +542,7 @@ class EmailController extends Controller
                 ]);
 
                 $entree->save();
+                Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
 
                 /*********************/
                 if($refdossier!= ''){
@@ -871,6 +873,7 @@ class EmailController extends Controller
                     ]);
 
                     $entree->save();
+                    Log::info('SMS reçu : '.$sujet.' Dossier: '.$refdossier);
 
                     /*********************/
                     if($refdossier!= ''){
@@ -1003,6 +1006,7 @@ class EmailController extends Controller
                 ]);
 
                 $entree->save();
+                Log::info('Fax reçu de : '.$from.' Dossier: '.$refdossier );
 
                 /*********************/
                 if($refdossier!= ''){
@@ -1224,13 +1228,14 @@ class EmailController extends Controller
             $prestataires =   Prestation::where('dossier_id', $id)->pluck('prestataire_id');
             $prestataires = $prestataires->unique();
 
+            $intervenants =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
 
+            // merger prestataire + intervenants
+            $prestataires=$prestataires->merge($intervenants);
 
             $listeemails=array();
 
-
             $mails=array();
-
 
         if ($prest!='')
         {
@@ -1412,6 +1417,11 @@ class EmailController extends Controller
                $prestataires =   Prestation::where('dossier_id', $id)->pluck('prestataire_id');
                $prestataires = $prestataires->unique();
 
+               $intervenants =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
+
+               // merger prestataire + intervenants
+               $prestataires=$prestataires->merge($intervenants);
+
                if ($prest!='')
                {
 
@@ -1526,7 +1536,11 @@ class EmailController extends Controller
 
                }
 
-         $count=0;
+                $user = auth()->user();
+                $nomuser=$user->name.' '.$user->name;
+                Log::info('[Agent: '.$nomuser.'] Envoi de mail '.$sujet);
+
+                $count=0;
 
          if(isset($files )) {
              foreach($files as $file) {
@@ -1732,6 +1746,9 @@ class EmailController extends Controller
                     }
                 }
 
+                $user = auth()->user();
+                $nomuser=$user->name.' '.$user->name;
+                Log::info('[Agent: '.$nomuser.'] Envoi de Fax à '.$to);
 
                 $urlapp=env('APP_URL');
 
@@ -1964,6 +1981,10 @@ class EmailController extends Controller
         ]);
 
         $envoye->save();
+
+                $user = auth()->user();
+                $nomuser=$user->name.' '.$user->name;
+                Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
 
                 $urlapp=env('APP_URL');
 

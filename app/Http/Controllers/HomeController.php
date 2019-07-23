@@ -13,6 +13,8 @@ use Spatie\Searchable\Search;
 use App\Dossier ;
 use Illuminate\Support\Facades\Auth;
 use App\TypeMission;
+use Illuminate\Support\Facades\Log;
+
 
 class HomeController extends Controller
 {
@@ -37,14 +39,15 @@ class HomeController extends Controller
     public function demande(Request $request)
     {
         $par=$request->get('par');
+      $role=  trim($request->get('role'));
         if( $par!=null) {
 
             $nompar=  app('App\Http\Controllers\UsersController')->ChampById('name',$par) .' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$par) ;
-
+            $vers=$request->get('vers');
             $demande = new Demande([
                 'par' => $par,
-                'vers' => $request->get('vers'),
-                'role' => trim($request->get('role')),
+                'vers' => $vers,
+                'role' => $role,
                 'emetteur'=>$nompar,
                 'statut' => 0,
                 'type' => 'role'
@@ -52,6 +55,12 @@ class HomeController extends Controller
             ]);
 
             $demande->save();
+
+            $user = auth()->user();
+            $nomuser=$user->name.' '.$user->name;
+            $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$vers).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$vers);
+
+             Log::info('[Agent: '.$nomuser.'] Demande de rôle '.$role.' à : '.$nomagent);
 
         }
 
@@ -80,6 +89,12 @@ class HomeController extends Controller
             ]);
 
             $demande->save();
+
+            $user = auth()->user();
+            $nomuser=$user->name.' '.$user->name;
+            $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$supmedic).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$supmedic);
+
+            Log::info('[Agent: '.$nomuser.'] Demande de Pause à : '.$nomagent);
 
         }
 
@@ -208,6 +223,13 @@ class HomeController extends Controller
 
             $demande->save();
 
+            $user = auth()->user();
+            $nomuser=$user->name.' '.$user->name;
+            $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$par).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$par);
+
+            Log::info('[Agent: '.$nomuser.'] Refuse de donner Pause à : '.$nomagent);
+
+
         }
         if ($ok==1)
         {
@@ -225,6 +247,12 @@ class HomeController extends Controller
 
             ]);
 
+            $user = auth()->user();
+            $nomuser=$user->name.' '.$user->name;
+            $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$par).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$par);
+
+            Log::info('[Agent: '.$nomuser.'] Accepte de donner Pause à : '.$nomagent);
+
             $demande->save();
 
             User::where('id', $par)->update(array('statut'=>'2'));
@@ -241,25 +269,41 @@ class HomeController extends Controller
         $iddemande=$request->get('id');
         $ok=$request->get('ok');
 
+        $demande= Demande::where('id', $iddemande)->first();
+
+        $seance =   Seance::first();
+
+
+        $role= $demande->role;
+        // id emetteur demande de role
+        $par= $demande->par;
+        $vers= $demande->vers;
+
         if ($ok==0)
         {
             //changement de statut |    statut: 2 => refusée
             Demande::where('id', $iddemande)->update(array('statut'=>2));
+
+
+            $user = auth()->user();
+            $nomuser=$user->name.' '.$user->name;
+            $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$par).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$par);
+
+            Log::info('[Agent: '.$nomuser.'] Refuse de donner le rôle: '.$role.' à : '.$nomagent);
+
         }
         if ($ok==1)
         {
             // changement de statut |    statut: 1 => acceptée
             Demande::where('id', $iddemande)->update(array('statut'=>1));
 
-            $demande= Demande::where('id', $iddemande)->first();
+            $user = auth()->user();
+            $nomuser=$user->name.' '.$user->name;
+            $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$par).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$par);
 
-            $seance =   Seance::first();
+            Log::info('[Agent: '.$nomuser.'] Accepte de donner le rôle: '.$role.' à : '.$nomagent);
 
 
-            $role= $demande->role;
-            // id emetteur demande de role
-            $par= $demande->par;
-            $vers= $demande->vers;
             $nomrole='';
             if ($role== 'Dispatcheur Emails')
             { $nomrole = 'dispatcheur';

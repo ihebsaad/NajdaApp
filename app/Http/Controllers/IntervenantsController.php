@@ -72,28 +72,31 @@ class IntervenantsController extends Controller
 
     public function saving(Request $request)
     {
-       $iddoss= intval($request->get('dossier_id'));
+       $iddoss= intval($request->get('dossier'));
+       $prestataire=$request->get('prestataire');
 
+        $nom=  app('App\Http\Controllers\PrestatairesController')->ChampById('name',$prestataire);
+        $prenom=app('App\Http\Controllers\PrestatairesController')->ChampById('prenom',$prestataire);
 
             $intervenant = new Intervenant([
-                'nom' => $request->get('nom'),
-                'dossier' => $request->get('dossier_id'),
-                'type_prestation' => $request->get('type_prestation'),
-                'gouvernorat' => $request->get('gouvernorat')
+                'prestataire_id' => $prestataire,
+                'dossier' => $iddoss,
+                'nom' => $nom ,
+                'prenom' =>$prenom ,
 
             ]);
+       if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
 
-        if ($intervenant->save())
-            {
+           if ($intervenant->save()) {
 
-                return url('/dossiers/view/'.$iddoss);
-            }
-
-            else {
-                return url('/intervenants');
-            }
-
+               return url('/dossiers/view/' . $iddoss . '#tab4');
+           } else {
+              // return url('/intervenants');
+           }
+       }
     }
+
+
 
     public function updating(Request $request)
     {
@@ -172,9 +175,24 @@ class IntervenantsController extends Controller
         return redirect('/intervenants')->with('success', '  Supprimé avec succès');
     }
 
- 
- 
 
+    public static function CheckIntervExiste($prestataire,$dossier)
+    {
+        $number =  Intervenant::where('prestataire_id', $prestataire)->where('dossier', $dossier)->count('id');
+
+        return $number;
+
+
+    }
+
+    public static function CheckPrestationExiste($prestataire,$dossier)
+    {
+        $number =  Prestation::where('prestataire_id', $prestataire)->where('dossier_id', $dossier)->count('id');
+
+        return $number;
+
+
+    }
 
 }
 

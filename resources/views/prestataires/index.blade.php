@@ -62,12 +62,12 @@
                 ?>
 
                 <tr>
-                    <td style="font-size:15px;width:30%"><a href="{{action('PrestatairesController@view', $id)}}" ><?php echo '<i>'.$prestataire->civilite .'</i> <b>'. $prestataire->name .'</b> '.$prestataire->prenom; ?></a></td>
-                    <td style="font-size:14px;width:20%"><?php foreach($typesp as $tp){echo $tp->type_prestation_id.'  ';}?>/td>
-                    <td style="font-size:14px;width:15%"><?php foreach($gouvs as $gv){echo $gv->citie_id.'  ';}?></td>
-                    <td style="font-size:14px;width:10%"><?php echo $ville; ?></td>
-                    <td style="font-size:14px;width:15%"><?php foreach($specs as $sp){echo $sp->specialite.'  ';}?></td>
-                    <td style="font-size:14px;width:10%">Actions</td>
+                    <td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $id)}}" ><?php echo '<i>'.$prestataire->civilite .'</i> <b>'. $prestataire->name .'</b> '.$prestataire->prenom; ?></a></td>
+                    <td style="font-size:12px;width:20%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
+                    <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
+                    <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
+                    <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
+                    <td style="font-size:13px;width:10%">Actions</td>
 
                 </tr>
             @endforeach
@@ -107,8 +107,9 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="type">Spécialité :</label>
-                                <input class="form-control" type="text" id="specialite" />
+                                <label for="type">Prénom :</label>
+                                <input class="form-control" type="text" id="prenom" />
+
                             </div>
 
 
@@ -216,14 +217,14 @@
 
             $('#add').click(function(){
                 var nom = $('#nom').val();
-                 var specialite = $('#specialite').val();
-                if ((nom != '')&&(specialite != '') )
+                 var prenom = $('#prenom').val();
+                if ((nom != '')&&(prenom != '') )
                 {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
                         url:"{{ route('prestataires.saving') }}",
                         method:"POST",
-                        data:{nom:nom,specialite:specialite, _token:_token},
+                        data:{nom:nom,prenom:prenom, _token:_token},
                         success:function(data){
 
                             //   alert('Added successfully');
@@ -236,9 +237,6 @@
                     // alert('ERROR');
                 }
             });
-
-
-
 
 
 

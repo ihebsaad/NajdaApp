@@ -17,6 +17,7 @@ use App\Dossier ;
 use App\Template_doc ;
 use App\Document ;
 use App\Client ;
+use App\Intervenant ;
 use DB;
 use App\TypeMission;
 use App\Prestation;
@@ -189,6 +190,12 @@ class DossiersController extends Controller
         if ($dossier->save())
         { $iddoss=$dossier->id;
 
+
+
+            $user = auth()->user();
+            $nomuser=$user->name.' '.$user->name;
+            Log::info('[Agent: '.$nomuser.'] Ajout de dossier: '.$reference_medic);
+
             $identree = $request->get('entree');
         //    if($identree!=''){
           //  $entree  = Entree::find($identree);
@@ -336,6 +343,13 @@ class DossiersController extends Controller
 
         Dossier::where('id', $id)->update(array('affecte' => $agent));
 
+        $ref=$this->RefDossierById($id);
+
+        $user = auth()->user();
+        $nomuser=$user->name.' '.$user->name;
+        $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
+        Log::info('[Agent: '.$nomuser.'] Affectation de dossier :'.$ref.' à: '.$nomagent);
+
         return back();
 
     }
@@ -430,6 +444,7 @@ class DossiersController extends Controller
 
 */
         $prestations =   Prestation::where('dossier_id', $id)->get();
+        $intervenants =   Intervenant::where('dossier', $id)->get();
 
 
         $ref=$this->RefDossierById($id);
@@ -498,7 +513,7 @@ class DossiersController extends Controller
 
 
 
-        return view('dossiers.view',['prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
+        return view('dossiers.view',['intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
 
     }
 

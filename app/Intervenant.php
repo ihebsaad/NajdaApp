@@ -7,8 +7,9 @@ class Intervenant extends Model
 {
 	
   protected $fillable = [
-      'nom',
       'dossier',
+'prestataire_id',
+      'nom',
  'prenom',
  'date',
  'type_prestation',

@@ -29,19 +29,30 @@
             <tr id="headtable">
                 <th style="width:10%">Num</th>
                 <th style="width:70%;">Description</th>
+                <th style="width:10%;">Statut</th>
                 <th style="width:10%" class="no-sort" style="">Supprimer</th>
               </tr>
             <tr>
                 <th style="width:10%">Num</th>
                 <th style="width:70%">Description</th>
+                <th style="width:10%;">Statut</th>
                 <th style="width:10%"class="no-sort" style="">Supprimer</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($actualites as $actualite)       
-                <tr>
-                    <td  ><?php echo $actualite['id'];?></td>
+            @foreach($actualites as $actualite)
+                <tr><?php $id= $actualite['id']; ?>
+                    <td  ><?php echo $id ;?></td>
                     <td  > <?php echo $actualite['description'];?></td>
+                    <td  > <?php $statut=   $actualite['statut'];?>
+                        <div class="radio" id="uniform-actif">
+                            <span class="checked">
+                            <input  class="actus-<?php echo $id;?>"  type="checkbox"    id="actus-<?php echo $id;?>"    <?php if ($statut ==1){echo 'checked'; }  ?>  onclick="changing(this,'<?php echo $id; ?>' );"      >
+                        </span> Affiché
+                        </div>
+
+
+                    </td>
                       <td    >  <a href="{{action('ActualitesController@destroy', $actualite['id'])}}" class="btn btn-sm btn-danger btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Supprimer">
                             <i class="fa fa-lg fa-fw fa-trash-alt"></i>
                         </a> </td>
@@ -119,6 +130,37 @@
 
 
     <script type="text/javascript">
+
+        function changing(elm,actus) {
+            var champ=elm.id;
+
+            var val =document.getElementById('actus-'+actus).checked==1;
+
+            if (val==true){val=1;}
+           else{val=0;}
+alert(val);
+             //if ( (val != '')) {
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url: "{{ route('actualites.updating') }}",
+                method: "POST",
+                data: {actus:actus , champ:champ ,val:val, _token: _token},
+                success: function (data) {
+                    $('.actus-'+actus).animate({
+                        opacity: '0.3',
+                    });
+                    $('.actus-'+actus).animate({
+                        opacity: '1',
+                    });
+
+                }
+            });
+            // } else {
+
+            // }
+        }
+
+
         $(document).ready(function() {
 
 
