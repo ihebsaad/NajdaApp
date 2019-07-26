@@ -314,7 +314,7 @@ class UsersController extends Controller
                    ->update(array('affecte' => NULL));
            }
 
-      
+
 
     //    if ($typeuser == "agent")
      //   {
