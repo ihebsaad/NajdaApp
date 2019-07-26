@@ -35,7 +35,7 @@ class UsersController extends Controller
         if(\Gate::allows('isAdmin'))
         {
 
-            $users = User::orderBy('id', 'asc')->paginate(10);
+            $users = User::orderBy('id', 'desc')->get() ;
             return view('users.index',['dossiers' => $dossiers], compact('users'));        }
         else {
             // redirect
