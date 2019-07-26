@@ -611,7 +611,7 @@ $interv = PrestationsController::PrestById($prest);
                             <td style=";"><?php echo $omtx->titre; ?></td>
                             <td style=";">
                             <?php
-                                if ($doc->parent !== null)
+                                if ($omtx->parent !== null)
                                 {
                                     echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important;" id="btnhisto" onclick="historiqueomtx('.$omtx->parent.');"><i class="far fa-eye"></i> Voir</button>';
                                    
