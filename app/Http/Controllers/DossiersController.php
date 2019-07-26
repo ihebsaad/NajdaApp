@@ -24,6 +24,7 @@ use App\Prestation;
 use App\TypePrestation;
 use App\Citie;
 use App\Email;
+use App\OMTaxi;
 
 use WordTemplate;
 use Mail;
@@ -509,11 +510,13 @@ class DossiersController extends Controller
             ->get();
         //  $entrees =   Entree::all();
         $documents = Document::where(['dossier' => $id,'dernier' => 1])->get();
+        $omtaxis = OMTaxi::where(['dossier' => $id,'dernier' => 1])->get();
         $dossiers = $this->ListeDossiersAffecte();
 
 
 
-        return view('dossiers.view',['intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents], compact('dossier'));
+        return view('dossiers.view',['intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis], compact('dossier'));
+
 
     }
 

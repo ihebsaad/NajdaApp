@@ -1,7 +1,10 @@
 <?php 
-if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
-if (isset($_GET['affectea'])) {$affectea=$_GET['affectea'];}
-if (isset($_GET['dossier'])) {$dossier=$_GET['dossier'];}
+if (! isset($_GET['remplace']))
+{
+	if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
+	if (isset($_GET['affectea'])) {$affectea=$_GET['affectea'];}
+	if (isset($_GET['dossier'])) {$dossier=$_GET['dossier'];}
+}
 
 if (isset($_GET['DB_HOST'])) {$dbHost=$_GET['DB_HOST'];}
 if (isset($_GET['DB_DATABASE'])) {$dbname=$_GET['DB_DATABASE'];}
@@ -16,36 +19,53 @@ if (!$conn) {
 }
 mysqli_query($conn,"set names 'utf8'");
 
-$sql = "SELECT reference_medic, subscriber_name, subscriber_lastname, customer_id, reference_customer, affecte FROM dossiers WHERE id=".$dossier;
-$result = $conn->query($sql);
+// cas remplace: recuperation info parent
+if (isset($_GET['remplace']) && isset($_GET['parent']))
+{
+	$parentom=$_GET['parent'];
+	$sqlp = "SELECT * FROM om_taxi WHERE id=".$parentom;
+	$resultp = $conn->query($sqlp);
+	if ($resultp->num_rows > 0) {
+	$detailom = $resultp->fetch_assoc();
+	$emispar = $detailom['emispar'];
+	}
+	else { exit("impossible de recuperer les informations de lordre de mission ".$parentom);}
+}
+else
+{
 
-if ($result->num_rows > 0) {
-    // output data of each row
-    $detaildoss = $result->fetch_assoc();
+	$sql = "SELECT reference_medic, subscriber_name, subscriber_lastname, customer_id, reference_customer, affecte FROM dossiers WHERE id=".$dossier;
+	$result = $conn->query($sql);
 
-    // infos client
-    $sqlcl = "SELECT name, groupe FROM clients WHERE id=".$detaildoss['customer_id'];
-	$resultcl = $conn->query($sqlcl);
-	if ($resultcl->num_rows > 0) {
-    // output data of each row
-    $detailcl = $resultcl->fetch_assoc();
-    
+	if ($result->num_rows > 0) {
+	    // output data of each row
+	    $detaildoss = $result->fetch_assoc();
+
+	    // infos client
+	    $sqlcl = "SELECT name, groupe FROM clients WHERE id=".$detaildoss['customer_id'];
+		$resultcl = $conn->query($sqlcl);
+		if ($resultcl->num_rows > 0) {
+	    // output data of each row
+	    $detailcl = $resultcl->fetch_assoc();
+	    
+		} else {
+	    echo "0 results client";
+		}
+
+		// infos agent
+	    $sqlagt = "SELECT name FROM users WHERE id=".$detaildoss['affecte'];
+		$resultagt = $conn->query($sqlagt);
+		if ($resultagt->num_rows > 0) {
+	    // output data of each row
+	    $detailagt = $resultagt->fetch_assoc();
+	    
+		} else {
+	    echo "0 results agent";
+		}
 	} else {
-    echo "0 results client";
+	    echo "0 results dossier";
 	}
 
-	// infos agent
-    $sqlagt = "SELECT name FROM users WHERE id=".$detaildoss['affecte'];
-	$resultagt = $conn->query($sqlagt);
-	if ($resultagt->num_rows > 0) {
-    // output data of each row
-    $detailagt = $resultagt->fetch_assoc();
-    
-	} else {
-    echo "0 results agent";
-	}
-} else {
-    echo "0 results dossier";
 }
 
 // base_hotels(18)_cliniques(8)_hopitaux(9)_ports(72,38-assistance)_aeroports(73) (name/tel)
@@ -93,6 +113,7 @@ if ($resulthch->num_rows > 0) {
 		} else {
 	    echo "0 results prestataires ap";
 		}
+
 header("Content-Type: text/html;charset=UTF-8");
 ?>
 <html>
@@ -181,96 +202,228 @@ header("Content-Type: text/html;charset=UTF-8");
 	<?php } ?>
 	</div>
 	<div class="col-md-9">
-		<span style="font-family:'Times New Roman'; color:#ff0000">Att</span><span style="font-family:'Times New Roman'; color:#ff0000">&#xa0;</span><span style="font-family:'Times New Roman'; color:#ff0000">: Prestataire_</span>
-			<span style="font-family:'Times New Roman'; color:#ff0000">taxi</span><span style="font-family:'Times New Roman'; color:#ff0000">_</span><span style="font-family:'Times New Roman'; color:#ff0000">choisi</span><span style="font-family:'Times New Roman'; color:#ff0000"> </span><span style="font-family:'Times New Roman'; color:#ff0000"> </span><span style="font-family:'Times New Roman'">(sera rempli </span><span style="font-family:'Times New Roman'">au 2</span><span style="font-family:'Times New Roman'; font-size:7.33pt; vertical-align:super">ème</span><span style="font-family:'Times New Roman'"> temps</span><span style="font-family:'Times New Roman'"> </span><span style="font-family:'Times New Roman'">au moment du</span><span style="font-family:'Times New Roman'"> choix)</span></p><h1 style="margin-top:8.75pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:20pt"><span style="font-family:'Times New Roman'; text-decoration:underline">ORDRE DE MISSION</span><span style="font-family:'Times New Roman'; text-decoration:underline"> </span><span style="font-family:'Times New Roman'; text-decoration:underline">TAXI</span></h1><p style="margin-top:0.6pt; margin-left:5.85pt; margin-bottom:0pt; text-align:right; widows:0; orphans:0; font-size:8pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
+		<!--<span style="font-family:'Times New Roman'; color:#ff0000">Att</span><span style="font-family:'Times New Roman'; color:#ff0000">&#xa0;</span><span style="font-family:'Times New Roman'; color:#ff0000">: Prestataire_</span>
+			<span style="font-family:'Times New Roman'; color:#ff0000">taxi</span><span style="font-family:'Times New Roman'; color:#ff0000">_</span><span style="font-family:'Times New Roman'; color:#ff0000">choisi</span><span style="font-family:'Times New Roman'; color:#ff0000"> </span><span style="font-family:'Times New Roman'; color:#ff0000"> </span><span style="font-family:'Times New Roman'">(sera rempli </span><span style="font-family:'Times New Roman'">au 2</span><span style="font-family:'Times New Roman'; font-size:7.33pt; vertical-align:super">ème</span><span style="font-family:'Times New Roman'"> temps</span><span style="font-family:'Times New Roman'"> </span><span style="font-family:'Times New Roman'">au moment du</span><span style="font-family:'Times New Roman'"> choix)</span></p>-->
+
+			<h1 style="margin-top:8.75pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:20pt"><span style="font-family:'Times New Roman'; text-decoration:underline">ORDRE DE MISSION</span><span style="font-family:'Times New Roman'; text-decoration:underline"> </span><span style="font-family:'Times New Roman'; text-decoration:underline">TAXI</span></h1><p style="margin-top:0.6pt; margin-left:5.85pt; margin-bottom:0pt; text-align:right; widows:0; orphans:0; font-size:8pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
 			<p style="margin-top:0.6pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'">Choix:&#xa0;</span>
+<?php if (isset($detailom)) { ?>
+<select id="CL_choix" name="CL_choix">
+  <option value="Transfert" <?php if (isset($detailom['CL_choix'])) { if ($detailom['CL_choix'] === "Transfert") {echo "selected";}} ?> >Transfert</option>
+  <option value="Circuit" <?php if (isset($detailom['CL_choix'])) { if ($detailom['CL_choix'] === "Circuit") {echo "selected";}} ?> >Circuit</option>
+</select>
+<?php } else { ?>
 <select id="CL_choix" name="CL_choix">
   <option value="Transfert" selected>Transfert</option>
   <option value="Circuit">Circuit</option>
 </select>
+<?php } ?>
 				<span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">        </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">K</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">m approximatif</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">&#xa0;</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">: </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt"> </span>
-<input name="CL_km_approximatif" type="number" id="CL_km_approximatif" min="0" max="10000">
+<input name="CL_km_approximatif" type="number" id="CL_km_approximatif" min="0" max="10000" <?php if (isset($detailom)) { if (isset($detailom['CL_km_approximatif'])) {echo "value='".$detailom['CL_km_approximatif']."'";}} ?> >
 				<span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">   </span><span style="font-family:'Times New Roman'; font-weight:bold">     </span><span style="font-family:'Times New Roman'; font-weight:bold">T</span><span style="font-family:'Times New Roman'; font-weight:bold">arif annoncé</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">? </span>
-<input name="CL_tarif" type="number" id="CL_tarif">
+<input name="CL_tarif" type="number" id="CL_tarif" <?php if (isset($detailom)) { if (isset($detailom['CL_tarif'])) {echo "value='".$detailom['CL_tarif']."'";}} ?> >
 				<span style="font-family:'Times New Roman'; font-weight:bold">                                     </span></p>
 <?php  // Si client IMA
-if ($detailcl['groupe'] == 3) { ?>
-				<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#000"><?php print($detailcl['name']); ?></span></p>
-<input name="clientIMA" id="clientIMA" type="hidden" value="<?php echo $detailcl['name']; ?>"></input>
-<?php } ?>
+if (isset($detailom))
+{ if (isset($detailom['clientIMA']))
+	{ ?>
+<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#000"><?php print($detailom['clientIMA']); ?></span></p>
+<input name="clientIMA" id="clientIMA" type="hidden" value="<?php echo $detailom['clientIMA']; ?>"></input>
+<?php	}}
+	else
+	{
+		if ($detailcl['groupe'] == 3) { ?>
+						<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#000"><?php print($detailcl['name']); ?></span></p>
+		<input name="clientIMA" id="clientIMA" type="hidden" value="<?php echo $detailcl['name']; ?>"></input>
+	<?php }}  ?>
 				<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Pour</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.7pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">le:</span>
-<input type="datetime-local" name="CL_heuredateRDV" id="CL_heuredateRDV">
+<input type="datetime-local" name="CL_heuredateRDV" id="CL_heuredateRDV" <?php if (isset($detailom)) { if (isset($detailom['CL_heuredateRDV'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_heuredateRDV']))."'";}} ?> > 
 					<span style="font-family:'Times New Roman'; font-weight:bold; color:#0070c0">  </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.85pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Dimanche</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.9pt">   </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:  </span>
+<?php  if (isset($detailom))
+{ if (isset($detailom['CL_Dimanche']))
+	{ if (($detailom['CL_Dimanche'] === "oui")||($detailom['CL_Dimanche'] === "on")) { ?>	
+		<input type="checkbox" name="CL_Dimanche" id="CL_Dimanche" checked value="oui">
+		<?php } else { ?>
+		<input type="checkbox" name="CL_Dimanche" id="CL_Dimanche" value="">
+<?php }} else { ?>
 <input type="checkbox" name="CL_Dimanche" id="CL_Dimanche" value="oui">
+<?php }
+} else { ?>				
+<input type="checkbox" name="CL_Dimanche" id="CL_Dimanche" value="oui">
+<?php } ?>
 					<span style="width:18.05pt; display:inline-block">&#xa0;</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Férié</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.8pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:</span>
+<?php  if (isset($detailom))
+{ if (isset($detailom['CL_Ferie']))
+	{ if (($detailom['CL_Ferie'] === "oui")||($detailom['CL_Ferie'] === "on")) { ?>	
+		<input type="checkbox" name="CL_Ferie" id="CL_Ferie" checked value="oui">
+		<?php } else { ?>
+		<input type="checkbox" name="CL_Ferie" id="CL_Ferie" value="">
+<?php }} else { ?>
 <input type="checkbox" name="CL_Ferie" id="CL_Ferie" value="oui">
+<?php }
+} else { ?>				
+<input type="checkbox" name="CL_Ferie" id="CL_Ferie" value="oui">
+<?php } ?>					
 					<span style="width:13.57pt; display:inline-block">&#xa0;</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Nuit</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.25pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">: </span>
+<?php  if (isset($detailom))
+{ if (isset($detailom['CL_Nuit']))
+	{ if (($detailom['CL_Nuit'] === "oui")||($detailom['CL_Nuit'] === "on")) { ?>	
+		<input type="checkbox" name="CL_Nuit" id="CL_Nuit" checked value="oui">
+		<?php } else { ?>
+		<input type="checkbox" name="CL_Nuit" id="CL_Nuit" value="">
+<?php }} else { ?>
 <input type="checkbox" name="CL_Nuit" id="CL_Nuit" value="oui">
+<?php }
+} else { ?>				
+<input type="checkbox" name="CL_Nuit" id="CL_Nuit" value="oui">
+<?php } ?>					
 					<span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">          Aller/Retour</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-1.45pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:</span>
+<?php  if (isset($detailom))
+{ if (isset($detailom['CL_AllerRetour']))
+	{ if (($detailom['CL_AllerRetour'] === "oui")||($detailom['CL_AllerRetour'] === "on")) { ?>	
+		<input type="checkbox" name="CL_AllerRetour" id="CL_AllerRetour" checked value="oui">
+		<?php } else { ?>
+		<input type="checkbox" name="CL_AllerRetour" id="CL_AllerRetour" value="">
+<?php }} else { ?>
 <input type="checkbox" name="CL_AllerRetour" id="CL_AllerRetour" value="oui">
+<?php }
+} else { ?>				
+<input type="checkbox" name="CL_AllerRetour" id="CL_AllerRetour" value="oui">
+<?php } ?>						
 	</div>
 </div></br>
 <div class="row" style=" margin-left: 0px;margin-top: 20px ">
 			<span style="font-family:'Times New Roman'; font-weight:bold">Identité personne à transporter:</span><span style="font-family:'Times New Roman'; color:#ff0000">&#xa0;
+<?php  if (isset($detailom))
+{ if (isset($detailom['subscriber_name']))
+	{ ?>
+<input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(! empty($detailom['subscriber_name'])) echo $detailom['subscriber_name']; ?>" /> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(! empty($detailom['subscriber_lastname'])) echo $detailom['subscriber_lastname']; ?>"></input>
+<?php }} else { ?>				
 <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($detaildoss)) echo $detaildoss['subscriber_name']; ?>" /> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($detaildoss)) echo $detaildoss['subscriber_lastname']; ?>"></input>
+<?php } ?>
 			</span>
 			<span style="font-family:'Times New Roman'; font-weight:bold"> </span><span style="width:2.79pt; display:inline-block">&#xa0;</span><span style="width:36pt; display:inline-block">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">N/Réf</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">:  </span><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">
-<input name="reference_medic" placeholder="Notre Reference" value="<?php if(isset ($detaildoss)) echo $detaildoss['reference_medic']; ?>"></input></span></p>
+<?php  if (isset($detailom))
+{ if (isset($detailom['reference_medic']))
+	{ ?>
+<input name="reference_medic" placeholder="Notre Reference" value="<?php if(! empty($detailom['reference_medic'])) echo $detailom['reference_medic']; ?>"></input>	
+<?php }} else { ?>	
+<input name="reference_medic" placeholder="Notre Reference" value="<?php if(isset ($detaildoss)) echo $detaildoss['reference_medic']; ?>"></input>	
+<?php } ?>
+</span></p>
 </div>
 <div class="row" style=" margin-left: 0px; ">
 			<p style="margin-top:4.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">RDV avec </span><span style="font-family:'Times New Roman'; font-weight:bold">le passager</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<input type="time" id="CL_heure_RDV" name="CL_heure_RDV" min="00:00" max="23:59" >
+<input type="time" id="CL_heure_RDV" name="CL_heure_RDV" min="00:00" max="23:59"  <?php if (isset($detailom)) { if (isset($detailom['CL_heure_RDV'])) {echo "value='".date('H:i',strtotime($detailom['CL_heure_RDV']))."'";}} ?> >
 				<span style="font-family:'Times New Roman'; color:#0070c0">            </span><span style="font-family:'Times New Roman'; font-weight:bold">Contact téléphonique</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">:   </span><span style="font-family:'Times New Roman'; color:#31849b">
-<input name="CL_contacttel" placeholder="Contact téléphonique" pattern= "^[0–9]$"></input>
+<input name="CL_contacttel" placeholder="Contact téléphonique" pattern= "^[0–9]$" <?php if (isset($detailom)) { if (isset($detailom['CL_contacttel'])) {echo "value='".$detailom['CL_contacttel']."'";}} ?> ></input>
 				 </span><span style="font-family:'Times New Roman'">Qualité</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">: </span>
-<input name="CL_qualite" placeholder="Qualité" ></input>
+<input name="CL_qualite" placeholder="Qualité" <?php if (isset($detailom)) { if (isset($detailom['CL_qualite'])) {echo "value='".$detailom['CL_qualite']."'";}} ?> ></input>
 				</p>
 </div>
 			<p style="margin-top:4.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
+<?php if (isset($detailom['CL_choix'])) { if ($detailom['CL_choix'] === "Circuit") { ?>	
+<div id="ccirquit1" style="display: block;">
+<?php } else { ?>			
 <div id="ccirquit1" style="display: none;">
+<?php }} ?>
 <span style="font-family:'Times New Roman'; font-weight:bold">Type </span><span style="font-family:'Times New Roman'; font-weight:bold">circuit/Destination</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<input name="CL_circuitdestination" placeholder="circuit/Destination" ></input>
+<input name="CL_circuitdestination" placeholder="circuit/Destination"  <?php if (isset($detailom)) { if (isset($detailom['CL_circuitdestination'])) {echo "value='".$detailom['CL_circuitdestination']."'";}} ?> ></input>
 </div>
 				<span style="font-family:'Times New Roman'; font-weight:bold"> </span></p>
 <p style="margin-top:4.65pt;margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
-<input type="checkbox" name="CB_accompagnant" id="CB_accompagnant" value="oui" checked><span style="font-family:'Times New Roman'; font-weight:bold">Accompagnant</span><span style="font-family:'Times New Roman'; font-weight:bold">(</span><span style="font-family:'Times New Roman'; font-weight:bold">s</span><span style="font-family:'Times New Roman'; font-weight:bold">)</span>
+<?php if (isset($detailom['CB_accompagnant'])) { if (($detailom['CB_accompagnant'] === "oui")||($detailom['CB_accompagnant'] === "on")) { ?>
+<input type="checkbox" name="CB_accompagnant" id="CB_accompagnant" value="oui" checked>	
+<?php } else { $pasaccomp = true; ?>
+<input type="checkbox" name="CB_accompagnant" id="CB_accompagnant" >	
+<?php }} else { if (empty($detailom['CB_accompagnant'])) { $pasaccomp = true; ?>
+<input type="checkbox" name="CB_accompagnant" id="CB_accompagnant" >
+<?php } else { ?>	
+<input type="checkbox" name="CB_accompagnant" id="CB_accompagnant" value="oui" checked>
+<?php }} ?>
+<span style="font-family:'Times New Roman'; font-weight:bold">Accompagnant</span><span style="font-family:'Times New Roman'; font-weight:bold">(</span><span style="font-family:'Times New Roman'; font-weight:bold">s</span><span style="font-family:'Times New Roman'; font-weight:bold">)</span>
+<?php if (isset($pasaccomp)) { ?>
+<span id='zoneaccom' style="display: none;">
+<?php } else { ?>
 <span id='zoneaccom' >
+<?php } ?>
 				<span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<input name="CL_nbreaccompagnant" type="number" id="CL_nbreaccompagnant" min="0" max="100" placeholder="Nombre des accompagnants">
+<input name="CL_nbreaccompagnant" type="number" id="CL_nbreaccompagnant" min="0" max="100" placeholder="Nombre des accompagnants" <?php if (isset($detailom)) { if (isset($detailom['CL_nbreaccompagnant'])) {echo "value='".$detailom['CL_nbreaccompagnant']."'";}} ?> >
 					<span style="font-family:'Times New Roman'; font-weight:bold">Relation </span>
-<input name="CL_relation" placeholder="Relation" ></input>
+<input name="CL_relation" placeholder="Relation" <?php if (isset($detailom)) { if (isset($detailom['CL_relation'])) {echo "value='".$detailom['CL_relation']."'";}} ?> ></input>
 					<span style="font-family:'Times New Roman'; font-weight:bold; color:#0070c0">    </span><span style="font-family:'Times New Roman'; font-weight:bold">Nbre. </span><span style="font-family:'Times New Roman'; font-weight:bold">d</span><span style="font-family:'Times New Roman'; font-weight:bold">e bagages:  </span>
-<input name="CL_nbrebagages" type="number" id="CL_nbrebagages" min="0" max="100" placeholder="Nombre des bagages">
+<input name="CL_nbrebagages" type="number" id="CL_nbrebagages" min="0" max="100" placeholder="Nombre des bagages" <?php if (isset($detailom)) { if (isset($detailom['CL_nbrebagages'])) {echo "value='".$detailom['CL_nbrebagages']."'";}} ?> >
 					<span style="font-family:'Times New Roman'; font-weight:bold">Type </span>
-<input name="CL_type" placeholder="Type" ></input>
+<input name="CL_type" placeholder="Type" <?php if (isset($detailom)) { if (isset($detailom['CL_type'])) {echo "value='".$detailom['CL_type']."'";}} ?> ></input>
 				</span></p>
-<div id="ctransfert1">
+<?php if (isset($detailom['CL_choix'])) { if ($detailom['CL_choix'] === "Transfert") { ?>	
+<div id="ctransfert1" style="display: block;">
+<?php } else { ?>			
+<div id="ctransfert1" style="display: none;">
+<?php }} ?>				
 <p style="margin-top:4.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Passager</span><span style="font-family:'Times New Roman'; font-weight:bold"> à </span><span style="font-family:'Times New Roman'; font-weight:bold">statut de malade ?</span>
-<input type="checkbox" name="CL_passagermalade" id="CL_passagermalade" value="oui">
+<?php if (isset($detailom['CL_passagermalade'])) { if (($detailom['CL_passagermalade'] === "oui")||($detailom['CL_passagermalade'] === "on")) { $passmalade = true; ?>
+<input type="checkbox" name="CL_passagermalade" id="CL_passagermalade" value="oui" checked>	
+<?php } else {  ?>
+<input type="checkbox" name="CL_passagermalade" id="CL_passagermalade" >	
+<?php }} else { if (empty($detailom['CL_passagermalade'])) { ?>
+<input type="checkbox" name="CL_passagermalade" id="CL_passagermalade" >
+<?php } else { $passmalade = true; ?>	
+<input type="checkbox" name="CL_passagermalade" id="CL_passagermalade" value="oui" checked>
+<?php }} ?>
 				<span style="font-family:'Times New Roman'; font-weight:bold"> </span>
+<?php if (isset($passmalade)) { ?>			
+<select id="CL_statutmalade" name="CL_statutmalade" style="display: inline-block;">
+<?php } else { ?>
 <select id="CL_statutmalade" name="CL_statutmalade" style="display: none;">
+<?php } ?>	
+<?php if (isset($detailom)) { ?>	
+  <option value="WCHR" <?php if (isset($detailom['CL_statutmalade'])) { if ($detailom['CL_statutmalade'] === "WCHR") {echo "selected";}} ?> >WCHR</option>
+  <option value="WCHS" <?php if (isset($detailom['CL_statutmalade'])) { if ($detailom['CL_statutmalade'] === "WCHS") {echo "selected";}} ?> >WCHS</option>
+  <option value="WCHC" <?php if (isset($detailom['CL_statutmalade'])) { if ($detailom['CL_statutmalade'] === "WCHC") {echo "selected";}} ?> >WCHC</option>
+<?php } else { ?>
   <option value="WCHR" selected>WCHR</option>
   <option value="WCHS">WCHS</option>
   <option value="WCHC">WCHC</option>
+<?php } ?>
 </select>
+
 					</p><p style="margin-top:4.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Chaise roulante à emporter</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">dans le taxi ?</span>
-<input type="checkbox" name="CL_chaiseroulante" id="CL_chaiseroulante" value="oui">
+<?php if (isset($detailom['CL_chaiseroulante'])) { if (($detailom['CL_chaiseroulante'] === "oui")||($detailom['CL_chaiseroulante'] === "on")) {  ?>
+<input type="checkbox" name="CL_chaiseroulante" id="CL_chaiseroulante" value="oui" checked>	
+<?php } else {  ?>
+<input type="checkbox" name="CL_chaiseroulante" id="CL_chaiseroulante" >	
+<?php }} else { if (empty($detailom['CL_chaiseroulante'])) { ?>
+<input type="checkbox" name="CL_chaiseroulante" id="CL_chaiseroulante" >
+<?php } else {  ?>	
+<input type="checkbox" name="CL_chaiseroulante" id="CL_chaiseroulante" value="oui" checked>
+<?php }} ?>
 						</p>
+<?php if (isset($passmalade)) { ?>			
+<div id="cmalade1" style="display: block;">
+<?php } else { ?>
 <div id="cmalade1" style="display: none;">
+<?php } ?>
+
 <p style="margin-top:4.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Escorte</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
 <select id="CL_escorte" name="CL_escorte">
+<?php if (isset($detailom['CL_escorte'])) { ?>	
+  <option value="medecin" <?php if (isset($detailom['CL_escorte'])) { if ($detailom['CL_escorte'] === "medecin") {echo "selected";}} ?> >médecin</option>
+  <option value="paramedical" <?php if (isset($detailom['CL_escorte'])) { if ($detailom['CL_escorte'] === "paramedical") {echo "selected";}} ?> >paramédical</option>
+<?php } else { ?>
   <option value="medecin" selected>médecin</option>
   <option value="paramedical">paramédical </option>
+<?php } ?>	
 </select>
 							<span style="font-family:'Times New Roman'; font-weight:bold">Nom</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<input name="CL_nomprenom" id="CL_nomprenom" placeholder="nom et prénom" />
+<input name="CL_nomprenom" id="CL_nomprenom" placeholder="nom et prénom" <?php if (isset($detailom)) { if (isset($detailom['CL_nomprenom'])) {echo "value='".$detailom['CL_nomprenom']."'";}} ?> />
 							<span style="font-family:'Times New Roman'; font-weight:bold">  </span><span style="font-family:'Times New Roman'; font-weight:bold">  Tél</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<input name="CL_numtel" placeholder="téléphone" pattern= "^[0–9]$"></input>
+<input name="CL_numtel" placeholder="téléphone" pattern= "^[0–9]$" <?php if (isset($detailom)) { if (isset($detailom['CL_numtel'])) {echo "value='".$detailom['CL_numtel']."'";}} ?> ></input>
 </p>
 </div>
 </div>
 			<p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p><p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">Trajet</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">:</span><span style="font-family:'Times New Roman'; font-weight:bold">  </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu prise en charge</span><span style="font-family:'Times New Roman'">: </span>
-<input type="text" list="CL_lieuprest_pc" name="CL_lieuprest_pc" />
+<input type="text" list="CL_lieuprest_pc" name="CL_lieuprest_pc" <?php if (isset($detailom)) { if (isset($detailom['CL_lieuprest_pc'])) {echo "value='".$detailom['CL_lieuprest_pc']."'";}} ?> />
 <datalist id="CL_lieuprest_pc">
 <?php
 foreach ($array_prest as $prest) {
@@ -279,9 +432,9 @@ foreach ($array_prest as $prest) {
 ?>
 </datalist>
 				<span style="font-family:'Times New Roman'; font-weight:bold">Tel: </span>
-<input name="CL_prestatairetel_pc" id="CL_prestatairetel_pc" placeholder="Téléphone du prestataire" pattern= "^[0–9]$"></input>
+<input name="CL_prestatairetel_pc" id="CL_prestatairetel_pc" placeholder="Téléphone du prestataire" pattern= "^[0–9]$" <?php if (isset($detailom)) { if (isset($detailom['CL_prestatairetel_pc'])) {echo "value='".$detailom['CL_prestatairetel_pc']."'";}} ?> ></input>
 				<span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">    </span></p><p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:Wingdings; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold; color:#0070c0"> </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu décharge: </span>
-<input type="text" list="CL_lieudecharge_dec" name="CL_lieudecharge_dec" />
+<input type="text" list="CL_lieudecharge_dec" name="CL_lieudecharge_dec" <?php if (isset($detailom)) { if (isset($detailom['CL_lieudecharge_dec'])) {echo "value='".$detailom['CL_lieudecharge_dec']."'";}} ?> />
 <datalist id="CL_lieudecharge_dec">
 <?php
 foreach ($array_prest as $prest) {
@@ -290,12 +443,27 @@ foreach ($array_prest as $prest) {
 ?>
 </datalist>
 				<span style="font-family:'Times New Roman'; font-weight:bold">Tel: </span>
-<input name="CL_prestatairetel_dec" id="CL_prestatairetel_dec" placeholder="Téléphone du prestataire" pattern= "^[0–9]$"></input>
+<input name="CL_prestatairetel_dec" id="CL_prestatairetel_dec" placeholder="Téléphone du prestataire" pattern= "^[0–9]$" <?php if (isset($detailom)) { if (isset($detailom['CL_prestatairetel_dec'])) {echo "value='".$detailom['CL_prestatairetel_dec']."'";}} ?> ></input>
 					<span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">   </span></p><p style="margin-top:4.65pt; margin-left:5.85pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000"> </span>
-<input type="checkbox" name="CB_preetape" id="CB_preetape" value="oui" checked><span style="font-family:'Times New Roman'; font-weight:bold"> Première étape</span>
-<span id="preetape">
+<?php if (isset($detailom['CB_preetape'])) { if (($detailom['CB_preetape'] === "oui")||($detailom['CB_preetape'] === "on")) { $preetape = true; ?>
+<input type="checkbox" name="CB_preetape" id="CB_preetape" value="oui" checked>	
+<?php } else {  ?>
+<input type="checkbox" name="CB_preetape" id="CB_preetape" >	
+<?php }} else { if (empty($detailom['CB_preetape'])) { ?>
+<input type="checkbox" name="CB_preetape" id="CB_preetape" >
+<?php } else { $preetape = true; ?>	
+<input type="checkbox" name="CB_preetape" id="CB_preetape" value="oui" checked>
+<?php }} ?>
+<span style="font-family:'Times New Roman'; font-weight:bold"> Première étape</span>
+<?php if (isset($preetape)) { ?>			
+<span id="preetape" style="display: inline-block;">
+<?php } else { ?>
+<span id="preetape" style="display: none;">
+<?php } ?>
+
 				<span style="font-family:'Times New Roman'; font-weight:bold"> (passage </span><span style="font-family:'Times New Roman'; font-weight:bold">par</span><span style="font-family:'Times New Roman'; font-weight:bold"> </span><span style="font-family:'Times New Roman'; font-weight:bold">lieu de séjour</span><span style="font-family:'Times New Roman'; font-weight:bold">/clinique.</span><span style="font-family:'Times New Roman'; font-weight:bold">):  </span>
-<input type="text" list="CL_lieupre" name="CL_lieupre" />
+
+<input type="text" list="CL_lieupre" name="CL_lieupre" <?php if (isset($detailom)) { if (isset($detailom['CL_lieupre'])) {echo "value='".$detailom['CL_lieupre']."'";}} ?> />
 <datalist id="CL_lieupre">
 <?php
 foreach ($array_presthch as $presthch) {
@@ -306,22 +474,52 @@ foreach ($array_presthch as $presthch) {
 			</p>
 </span>
 				<p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
+<?php if (isset($detailom['CB_trmedecin'])) { if (($detailom['CB_trmedecin'] === "oui")||($detailom['CB_trmedecin'] === "on")) { $trmedecin = true; ?>
+<input type="checkbox" name="CB_trmedecin" id="CB_trmedecin" value="oui" checked>	
+<?php } else {  ?>
+<input type="checkbox" name="CB_trmedecin" id="CB_trmedecin" >	
+<?php }} else { if (empty($detailom['CB_trmedecin'])) { ?>
+<input type="checkbox" name="CB_trmedecin" id="CB_trmedecin" >
+<?php } else { $trmedecin = true; ?>	
 <input type="checkbox" name="CB_trmedecin" id="CB_trmedecin" value="oui" checked>
+<?php }} ?>
 					<span style="font-family:'Times New Roman'; font-weight:bold">T</span><span style="font-family:'Times New Roman'; font-weight:bold">ransfert vers clinique</span><span style="font-family:'Times New Roman'; font-weight:bold">/hôpital</span>
-<span id="trmedecin">
+<?php if (isset($trmedecin)) { ?>			
+<span id="trmedecin" style="display: inline-block;">
+<?php } else { ?>
+<span id="trmedecin" style="display: none;">
+<?php } ?>
 					<span style="font-family:'Times New Roman'; font-weight:bold">,&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">nom et </span><span style="font-family:'Times New Roman'; font-weight:bold">coordonnés médecin ayant donné l’accord d’acceptation </span>
-<input name="CL_infosmedecin" id="CL_infosmedecin" placeholder="nom et coordonnés médecin" />
+<input name="CL_infosmedecin" id="CL_infosmedecin" placeholder="nom et coordonnés médecin" <?php if (isset($detailom)) { if (isset($detailom['CL_infosmedecin'])) {echo "value='".$detailom['CL_infosmedecin']."'";}} ?> />
 </span>
 			</p><p style="margin-top:4.65pt; margin-left:5.85pt;margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
-<input type="checkbox" name="CB_preportaeroport" id="CB_preportaeroport" value="oui" checked><span style="font-family:'Times New Roman'; font-weight:bold">Si de/vers aéroport/port</span>
-<span id="preportaeroport" >
+<?php if (isset($detailom['CB_preportaeroport'])) { if (($detailom['CB_preportaeroport'] === "oui")||($detailom['CB_preportaeroport'] === "on")) { $preportaeroport = true; ?>
+<input type="checkbox" name="CB_preportaeroport" id="CB_preportaeroport" value="oui" checked>	
+<?php } else {  ?>
+<input type="checkbox" name="CB_preportaeroport" id="CB_preportaeroport" >	
+<?php }} else { if (empty($detailom['CB_preportaeroport'])) { ?>
+<input type="checkbox" name="CB_preportaeroport" id="CB_preportaeroport" >
+<?php } else { $preportaeroport = true; ?>	
+<input type="checkbox" name="CB_preportaeroport" id="CB_preportaeroport" value="oui" checked>
+<?php }} ?>
+<span style="font-family:'Times New Roman'; font-weight:bold">Si de/vers aéroport/port</span>
+<?php if (isset($preportaeroport)) { ?>			
+<span id="preportaeroport" style="display: inline-block;">
+<?php } else { ?>
+<span id="preportaeroport" style="display: none;">
+<?php } ?>
 			<span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000"> </span><span style="font-family:'Times New Roman'; font-weight:bold"> : </span>
 <select id="CL_destorg" name="CL_destorg">
+<?php if (isset($detailom['CL_destorg'])) { ?>	
+  <option value="Destination" <?php if (isset($detailom['CL_destorg'])) { if ($detailom['CL_destorg'] === "Destination") {echo "selected";}} ?> >Destination</option>
+  <option value="Origine" <?php if (isset($detailom['CL_destorg'])) { if ($detailom['CL_destorg'] === "Origine") {echo "selected";}} ?> >Origine</option>
+<?php } else { ?>
   <option value="Destination" selected>Destination</option>
   <option value="Origine">Origine</option>
+<?php } ?>
 </select>
 			<span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<input type="text" list="CL_apdestor" name="CL_apdestor" />
+<input type="text" list="CL_apdestor" name="CL_apdestor" <?php if (isset($detailom)) { if (isset($detailom['CL_apdestor'])) {echo "value='".$detailom['CL_apdestor']."'";}} ?> />
 <datalist id="CL_apdestor">
 <?php
 foreach ($array_prestap as $prestap) {
@@ -330,31 +528,45 @@ foreach ($array_prestap as $prestap) {
 ?>
 </datalist>
 			<span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000"> </span><span style="font-family:'Times New Roman'; font-weight:bold">Vol/bateau#: </span>
-<input name="CL_volorbateau" id="CL_volorbateau" placeholder=" n° de vol ou nom du bateau" />
+<input name="CL_volorbateau" id="CL_volorbateau" placeholder=" n° de vol ou nom du bateau" <?php if (isset($detailom)) { if (isset($detailom['CL_volorbateau'])) {echo "value='".$detailom['CL_volorbateau']."'";}} ?> />
 				<span style="font-family:'Times New Roman'; font-weight:bold">Heure </span>
 <select id="CL_decatter" name="CL_decatter">
+<?php if (isset($detailom['CL_decatter'])) { ?>	
+  <option value="decollage" <?php if (isset($detailom['CL_decatter'])) { if ($detailom['CL_decatter'] === "decollage") {echo "selected";}} ?> >Décollage</option>
+  <option value="atterrissage" <?php if (isset($detailom['CL_decatter'])) { if ($detailom['CL_decatter'] === "atterrissage") {echo "selected";}} ?> >Atterrissage</option>
+<?php } else { ?>
   <option value="decollage" selected>Décollage</option>
   <option value="atterrissage">Atterrissage</option>
+<?php } ?>  
 </select>
 				<span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<input type="time" id="CL_heure_D_A" name="CL_heure_D_A" min="00:00" max="23:59" >	
+<input type="time" id="CL_heure_D_A" name="CL_heure_D_A" min="00:00" max="23:59" <?php if (isset($detailom)) { if (isset($detailom['CL_heure_D_A'])) {echo "value='".date('H:i',strtotime($detailom['CL_heure_D_A']))."'";}} ?> >	
 </span>			
 				</p>
+<?php if (isset($detailom['CB_preportaeroport']) && isset($detailom['CL_destorg'])) { if ((($detailom['CB_preportaeroport'] === "oui"||($detailom['CB_preportaeroport'] === "on"))) && ($detailom['CL_destorg'] === "Destination")) { ?>				
 				<p id="preportaeroport1" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Nom </span><span style="font-family:'Times New Roman'; font-weight:bold">B</span><span style="font-family:'Times New Roman'; font-weight:bold">ateau</span><span style="font-family:'Times New Roman'; font-weight:bold"> </span>
-<input name="CL_bateau" id="CL_bateau" placeholder="nom du bateau" />
+<input name="CL_bateau" id="CL_bateau" placeholder="nom du bateau" <?php if (isset($detailom)) { if (isset($detailom['CL_bateau'])) {echo "value='".$detailom['CL_bateau']."'";}} ?> />
 					<span style="font-family:'Times New Roman'; font-weight:bold">   Réf/pnr: </span>
-<input name="CL_refbillet" id="CL_refbillet" placeholder="réf du billet" />
+<input name="CL_refbillet" id="CL_refbillet" placeholder="réf du billet" <?php if (isset($detailom)) { if (isset($detailom['CL_refbillet'])) {echo "value='".$detailom['CL_refbillet']."'";}} ?> />
 				</p>
+<?php }} ?>				
 <p id="preportaeroport2" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Heure </span><span style="font-family:'Times New Roman'; font-weight:bold">souhaitée </span><span style="font-family:'Times New Roman'; font-weight:bold">arrivée aérop/port: </span>
-<input type="time" id="CL_heurearr" name="CL_heurearr" min="00:00" max="23:59" >	
+<input type="time" id="CL_heurearr" name="CL_heurearr" min="00:00" max="23:59" <?php if (isset($detailom)) { if (isset($detailom['CL_heurearr'])) {echo "value='".date('H:i',strtotime($detailom['CL_heurearr']))."'";}} ?> >	
 					<span style="font-family:'Times New Roman'"> Si vers aéroport, par défaut heure décollage – 2heures, si de </span><span style="font-family:'Times New Roman'">l’</span><span style="font-family:'Times New Roman'">aéroport, par défaut heure atterrissage</span><span style="font-family:'Times New Roman'"> ou heure atterrissage-30min si choix «</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">avion sanitaire</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">». S</span><span style="font-family:'Times New Roman'">i vers Port par défaut heure départ -3 heures, si de Port heure arrivée </span></p>
 					<p style="margin-top:0pt; margin-left:6.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
+<?php if (isset($passmalade)) { ?>			
+<p id="resumeclin" style="margin-left:5.85pt;margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;  display: block;">
+<?php } else { ?>
 <p id="resumeclin" style="margin-left:5.85pt;margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;  display: none;">
+<?php } ?>					
+
 						<span style="font-family:'Times New Roman'; font-weight:bold">Résumé clinique</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
 <textarea id="CL_resumeclinique" name="CL_resumeclinique" rows="3" cols="50" placeholder="Résumé clinique">
+ <?php if (isset($detailom)) { if (isset($detailom['CL_resumeclinique'])) {echo $detailom['CL_resumeclinique'];}} ?> 	
 </textarea>
 					</p><p style="margin-top:3.75pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p><div style="margin-top:0pt;clear:both"><p style="margin-left:5.85pt;margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Remarque</span><span style="font-family:'Times New Roman'; font-weight:bold">s</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
 <textarea id="CL_remarque" name="CL_remarque" rows="2" cols="50" placeholder="Remarques">
+ <?php if (isset($detailom)) { if (isset($detailom['CL_remarque'])) {echo $detailom['CL_remarque'];}} ?> 
 </textarea>
 					</p>
 <?php if (isset($affectea)){

@@ -118,7 +118,7 @@ if (isset($_POST['clientIMA'])) { ?>
 				 </span>
 				<span style="font-family:'Times New Roman'; font-weight:bold"> </span></p>		
 <?php }} ?>	
-<?php if (isset($_POST['CB_accompagnant'])) { if ($_POST['CB_accompagnant'] === "oui") { ?>
+<?php if (isset($_POST['CB_accompagnant'])) { if (($_POST['CB_accompagnant'] === "oui")||($_POST['CB_accompagnant'] === "on")) { ?>
 <p style="margin-top:4.65pt;margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
 <span style="font-family:'Times New Roman'; font-weight:bold">Accompagnant</span><span style="font-family:'Times New Roman'; font-weight:bold">(</span><span style="font-family:'Times New Roman'; font-weight:bold">s</span><span style="font-family:'Times New Roman'; font-weight:bold">)</span>
 				<span style="font-family:'Times New Roman'; font-weight:bold">: </span>
@@ -139,13 +139,13 @@ if (isset($_POST['clientIMA'])) { ?>
 <p style="margin-top:4.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Passager</span><span style="font-family:'Times New Roman'; font-weight:bold"> à </span><span style="font-family:'Times New Roman'; font-weight:bold">statut de malade ?</span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_passagermalade'])) { echo $_POST['CL_passagermalade']; } else {echo "non";} ?></span>
 				<span style="font-family:'Times New Roman'; font-weight:bold"> </span>
-<?php if (isset($_POST['CL_passagermalade'])) { if ($_POST['CL_passagermalade'] === "oui") { ?>		
+<?php if (isset($_POST['CL_passagermalade'])) { if (($_POST['CL_passagermalade'] === "oui")||($_POST['CL_passagermalade'] === "on")) { ?>		
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_statutmalade'])) { echo $_POST['CL_statutmalade']; } ?></span>		
 <?php }} ?>
 					</p><p style="margin-top:4.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Chaise roulante à emporter</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">dans le taxi ?</span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_chaiseroulante'])) { echo $_POST['CL_chaiseroulante']; } else {echo "non";}  ?></span>
 						</p>
-<?php if (isset($_POST['CL_passagermalade'])) { if ($_POST['CL_passagermalade'] === "oui") { ?>	
+<?php if (isset($_POST['CL_passagermalade'])) { if (($_POST['CL_passagermalade'] === "oui")||($_POST['CL_passagermalade'] === "on")) { ?>	
 <p style="margin-top:4.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Escorte</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_escorte'])) { echo $_POST['CL_escorte']; } ?></span>	
 							<span style="font-family:'Times New Roman'; font-weight:bold">Nom</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
@@ -164,7 +164,7 @@ if (isset($_POST['clientIMA'])) { ?>
 				<span style="font-family:'Times New Roman'; font-weight:bold">Tel: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_prestatairetel_dec'])) { echo $_POST['CL_prestatairetel_dec']; } ?></span>
 					<span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">   </span></p>
-<?php if (isset($_POST['CB_preetape'])) { if ($_POST['CB_preetape'] === "oui") { ?>	
+<?php if (isset($_POST['CB_preetape'])) { if (($_POST['CB_preetape'] === "oui")||($_POST['CB_preetape'] === "on")) { ?>	
 <p style="margin-top:4.65pt; margin-left:5.85pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000"> </span>
 <span style="font-family:'Times New Roman'; font-weight:bold"> Première étape</span>
 <span id="preetape">
@@ -172,7 +172,7 @@ if (isset($_POST['clientIMA'])) { ?>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_lieupre'])) { echo $_POST['CL_lieupre']; } ?></span>
 </p>
 <?php }} ?>
-<?php if (isset($_POST['CB_trmedecin'])) { if ($_POST['CB_trmedecin'] === "oui") { ?>	
+<?php if (isset($_POST['CB_trmedecin'])) { if (($_POST['CB_trmedecin'] === "oui")||($_POST['CB_trmedecin'] === "on")) { ?>	
 <p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
 					<span style="font-family:'Times New Roman'; font-weight:bold">T</span><span style="font-family:'Times New Roman'; font-weight:bold">ransfert vers clinique</span><span style="font-family:'Times New Roman'; font-weight:bold">/hôpital</span>
 <span id="trmedecin">
@@ -181,7 +181,7 @@ if (isset($_POST['clientIMA'])) { ?>
 </span>
 </p>
 <?php }} ?>
-<?php if (isset($_POST['CB_preportaeroport'])) { if ($_POST['CB_preportaeroport'] === "oui") { ?>	
+<?php if (isset($_POST['CB_preportaeroport'])) { if (($_POST['CB_preportaeroport'] === "oui")||($_POST['CB_preportaeroport'] === "on")) { ?>	
 <p style="margin-top:4.65pt; margin-left:5.85pt;margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
 <span style="font-family:'Times New Roman'; font-weight:bold">Si de/vers aéroport/port</span>
 <span id="preportaeroport" >
@@ -198,21 +198,21 @@ if (isset($_POST['clientIMA'])) { ?>
 </span>			
 </p>
 <?php }} ?>
-<?php if (isset($_POST['CB_preportaeroport']) && isset($_POST['CL_destorg'])) { if (($_POST['CB_preportaeroport'] === "oui") && ($_POST['CL_destorg'] === "Destination")) { ?>
+<?php if (isset($_POST['CB_preportaeroport']) && isset($_POST['CL_destorg'])) { if ((($_POST['CB_preportaeroport'] === "oui"||($_POST['CB_preportaeroport'] === "on"))) && ($_POST['CL_destorg'] === "Destination")) { ?>
 <p id="preportaeroport1" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Nom </span><span style="font-family:'Times New Roman'; font-weight:bold">B</span><span style="font-family:'Times New Roman'; font-weight:bold">ateau</span><span style="font-family:'Times New Roman'; font-weight:bold"> </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_bateau'])) { echo $_POST['CL_bateau']; } ?></span>
 					<span style="font-family:'Times New Roman'; font-weight:bold">   Réf/pnr: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_refbillet'])) { echo $_POST['CL_refbillet']; } ?></span>
 </p>
 <?php }} ?>
-<?php if (isset($_POST['CB_preportaeroport'])) { if ($_POST['CB_preportaeroport'] === "oui") { ?>
+<?php if (isset($_POST['CB_preportaeroport'])) { if (($_POST['CB_preportaeroport'] === "oui")||($_POST['CB_preportaeroport'] === "on")) { ?>
 <p id="preportaeroport2" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Heure </span><span style="font-family:'Times New Roman'; font-weight:bold">souhaitée </span><span style="font-family:'Times New Roman'; font-weight:bold">arrivée aérop/port: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_heurearr'])) { echo $_POST['CL_heurearr']; } ?></span>
 					<span style="font-family:'Times New Roman'"> Si vers aéroport, par défaut heure décollage – 2heures, si de </span><span style="font-family:'Times New Roman'">l’</span><span style="font-family:'Times New Roman'">aéroport, par défaut heure atterrissage</span><span style="font-family:'Times New Roman'"> ou heure atterrissage-30min si choix «</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">avion sanitaire</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">». S</span><span style="font-family:'Times New Roman'">i vers Port par défaut heure départ -3 heures, si de Port heure arrivée </span>
 </p>
 <p style="margin-top:0pt; margin-left:6.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
 <?php }} ?>
-<?php if (isset($_POST['CL_passagermalade'])) { if ($_POST['CL_passagermalade'] === "oui") { ?>	
+<?php if (isset($_POST['CL_passagermalade'])) { if (($_POST['CL_passagermalade'] === "oui")||($_POST['CL_passagermalade'] === "on")) { ?>	
 <p id="resumeclin" style="margin-left:5.85pt;margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt; ">
 						<span style="font-family:'Times New Roman'; font-weight:bold">Résumé clinique</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_resumeclinique'])) { echo $_POST['CL_resumeclinique']; } ?></span>

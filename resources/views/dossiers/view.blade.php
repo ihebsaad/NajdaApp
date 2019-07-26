@@ -606,34 +606,60 @@ $interv = PrestationsController::PrestById($prest);
 
                     </thead>
                     <tbody>
+                        @foreach($omtaxis as $omtx)
                         <tr>
-                            <td style=";">OM_TAXI</td>
+                            <td style=";"><?php echo $omtx->titre; ?></td>
                             <td style=";">
+                            <?php
+                                if ($doc->parent !== null)
+                                {
+                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important;" id="btnhisto" onclick="historiqueomtx('.$omtx->parent.');"><i class="far fa-eye"></i> Voir</button>';
+                                   
+                                }
+                                else
+                                {
+                                    echo "Aucun";
+                                }
+                            ?>
                             </td>
+                            <?php 
+                            $emppos=strpos($omtx->emplacement, '/OrdreMissions/');
+                            $empsub=substr($omtx->emplacement, $emppos);
+                            $pathomtx = storage_path().$empsub;
+                            //$templatedoc = $doc->template;
+                            ?>
                             <td>
                                     <div class="page-toolbar">
 
                                     <div class="btn-group">
+                                        <?php
+                                            if (stristr($empsub,'annulation')=== FALSE) 
+                                            {
+                                        ?>
                                         <div class="btn-group" style="margin-right: 10px">
-                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important;" id="btnannremp">
-                                                <a style="color:black" href="#" id="annremp" onclick="remplacedoc();"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
+                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important;" id="btnannrempomtx">
+                                                <a style="color:black" href="#" id="annrempomtx" onclick="remplaceom(<?php echo $omtx->id; ?>);"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
                                             </button>
                                         </div>
 
                                         <div class="btn-group" style="margin-right: 10px">
-                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,214,214) !important;" id="btnann">
-                                                <a style="color:black"  onclick="annuledoc();" href="#" > <i class="far fa-window-close"></i> Annuler</a>
+                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,214,214) !important;" id="btnannomtx">
+                                                <a style="color:black"  onclick="annuleom('<?php echo $omtx->titre; ?>',<?php echo $omtx->id; ?>);" href="#" > <i class="far fa-window-close"></i> Annuler</a>
                                             </button>
                                         </div>
+                                        <?php
+                                            }
+                                        ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important;" id="btntele">
-                                                <a style="color:black" href="" ><i class="fa fa-download"></i> Télécharger</a>
+                                                <a style="color:black" onclick='modalodoc("<?php echo $omtx->titre; ?>","{{ URL::asset('storage'.$empsub) }}");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
                                             </button>
                                         </div>
                                     </div>
-                                    </div>
+                                </div>
                             </td>
                         </tr>
+                    @endforeach
 
                     </tbody>
                 </table>
@@ -1407,11 +1433,24 @@ reference_customer
 <script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
 
 <script>
+function remplaceom(id)
+{
+    var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?remplace=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
+         document.getElementById("omfilled").src = url;
+
+        
+        $("#templatehtmlom").modal('show');
+}   
 function modalodoc(titre,emplacement)
 {
     //alert(titre+" | "+emplacement);
     $("#doctitle").text(titre);
-    document.getElementById('dociframe').src ="https://view.officeapps.live.com/op/view.aspx?src="+emplacement;
+    // cas OM fichier PDF
+    if (emplacement.indexOf("/OrdreMissions/") !== -1 )
+    {document.getElementById('dociframe').src =emplacement;}
+    else
+    // cas DOC fichier DOC
+    {document.getElementById('dociframe').src ="https://view.officeapps.live.com/op/view.aspx?src="+emplacement;}
     $("#opendoc").modal('show');
 }
 function remplacedoc(iddoc,template)
@@ -1741,6 +1780,7 @@ function filltemplate(data,tempdoc)
     });
 
 // fonction du remplissage de la template web du OM
+//https://www.jqueryscript.net/loading/Ajax-Progress-Bar-Plugin-with-jQuery-Bootstrap-progressTimer.html
     $('#genom').click(function(){
         var dossier = $('#dossier').val();
         var tempom = $("#templateom").val();

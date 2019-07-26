@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use DB;
 use Spatie\PdfToText\Pdf;
 use PDF as PDF3;
+use App\Attachement ;
+use App\OMTaxi;
 
 
 class OrdreMissionsController extends Controller
@@ -31,13 +33,19 @@ class OrdreMissionsController extends Controller
         $name='OM - '.$name;
         // If you want to store the generated pdf to the server then you can use the store function
         $pdf->save($path.$iddoss.'/'.$name.'.pdf');
-        /*$path2='/OrdreMissions/'.$id.'/'.$name.'.pdf';
 
+        // enregistrement dans la base
+        //OMTaxi::create([$request->all(),'emplacement'=>$path.$iddoss.'/'.$name.'.pdf']);
+        $omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        $result = $omtaxi->update($request->all());
+
+        // enregistrement de lattachement
+        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
         $attachement = new Attachement([
 
-            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>1,'envoye_id'=>$id,'parent'=>$id,
+            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
         ]);
-        $attachement->save();*/
+        $attachement->save();
     }
 
     public function pdfodmtaxi()
