@@ -303,18 +303,18 @@ class UsersController extends Controller
     {
         $user = auth()->user();
         $iduser=$user->id;
-
-        // supprimer les affectations de l utilisateur
-
-            Dossier::where('affecte',$iduser)
-
-                ->update(array('affecte' =>NULL));
-
-
         $seance =   Seance::first();
         $date_actu =date("H:i");
         $debut=$seance->debut;
         $fin=$seance->fin;
+        // supprimer les affectations de l utilisateur
+           if ( ($date_actu >'07:50' && $date_actu < '08:45'  ) || ($date_actu >'14:50' && $date_actu < '15:45'  )   ) {
+
+               Dossier::where('affecte', $iduser)
+                   ->update(array('affecte' => NULL));
+           }
+
+      
 
     //    if ($typeuser == "agent")
      //   {
