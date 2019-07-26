@@ -107,6 +107,7 @@ class UsersController extends Controller
 
     }
 
+
     /**
      * Display the specified resource.
      *
@@ -283,9 +284,7 @@ class UsersController extends Controller
         // $dossier->$champ =   $val;
         User::where('id', $id)->update(array($champ => $val));
 
-        //  $dossier->save();
 
-        ///   return redirect('/dossiers')->with('success', 'Entry has been added');
 
     }
 
@@ -313,6 +312,9 @@ class UsersController extends Controller
 
 
         $seance =   Seance::first();
+        $date_actu =date("H:i");
+        $debut=$seance->debut;
+        $fin=$seance->fin;
 
     //    if ($typeuser == "agent")
      //   {
@@ -332,15 +334,19 @@ class UsersController extends Controller
                       ->where('current_status','!=','Cloture')
                       ->update(array('affecte' => Auth::id()));
                   */
-                // affecter tous les dossiers Medical et Mixte au superviseur Medical
-                   Dossier::where(function ($query) {
-                      $query->where('type_dossier','Medical')
-                          ->where('current_status', '!=', 'Cloture');
-                  })->orWhere(function($query) {
-                      $query->where('type_dossier','Mixte')
-                          ->where('current_status', '!=', 'Cloture');
-                  })->update(array('affecte' => Auth::id()));
 
+                // affecter tous les dossiers Medical et Mixte au superviseur Medical
+                    // vérification Temps
+               ///   if ( ($date_actu >'07:50' && $date_actu < '08:45'  ) || ($date_actu >'14:50' && $date_actu < '15:45'  )   ) {
+
+                      Dossier::where(function ($query) {
+                          $query->where('type_dossier', 'Medical')
+                              ->where('current_status', '!=', 'Cloture');
+                      })->orWhere(function ($query) {
+                          $query->where('type_dossier', 'Mixte')
+                              ->where('current_status', '!=', 'Cloture');
+                      })->update(array('affecte' => Auth::id()));
+                ///  }
 
               }
               elseif ($seance->superviseurmedic==Auth::id())
@@ -351,11 +357,15 @@ class UsersController extends Controller
             if ($suptech !== '0')
               { $seance->superviseurtech=Auth::id();
 
+                  // vérification Temps
+                  ///   if ( ($date_actu >'07:50' && $date_actu < '08:45'  ) || ($date_actu >'14:50' && $date_actu < '15:45'  )   ) {
+
                   Dossier::where('type_dossier','Technique')
                       ->where('current_status','!=','Cloture')
 
               ///    (['type_dossier' => 'Technique','current_status'=>'<> Cloture'])
                       ->update(array('affecte' => Auth::id()));
+                  //}
 
               }
               elseif ($seance->superviseurtech==Auth::id())
@@ -367,6 +377,8 @@ class UsersController extends Controller
               { $seance->chargetransport=Auth::id();
 
               // affecter tous les dossier TN, TM, TV, XP au chargé transport
+                  // vérification Temps
+                  ///   if ( ($date_actu >'07:50' && $date_actu < '08:45'  ) || ($date_actu >'14:50' && $date_actu < '15:45'  )   ) {
 
                   Dossier::where(function ($query) {
                       $query->where('reference_medic','like','%TN%')
@@ -381,8 +393,7 @@ class UsersController extends Controller
                       $query->where('reference_medic','like','%XP%')
                           ->where('current_status', '!=', 'Cloture');
                   })->update(array('affecte' => Auth::id()));
-                  ;
-
+              // }
              /*     Dossier::where('reference_medic' ,'like','%TN%')
                   //where('statut', 0)
                       //->where('type_dossier','Technique')
@@ -407,8 +418,12 @@ class UsersController extends Controller
         if ($veilleur !== '0')
         { $seance->veilleur=Auth::id();
         // affecter tous les dossiers au veilleur
-            Dossier::where('current_status','!=','Cloture')
-                ->update(array('affecte' => Auth::id()));
+            // vérification Temps
+            ///if ( $date_actu < $debut || ($date_actu > $fin) ) {
+
+                Dossier::where('current_status', '!=', 'Cloture')
+                    ->update(array('affecte' => Auth::id()));
+            //}
         }
         elseif ($seance->veilleur==Auth::id())
         { $seance->veilleur=NULL;}

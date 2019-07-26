@@ -18,21 +18,22 @@
         <?php use \App\Http\Controllers\UsersController;     ?>
 
 
-        <input type="hidden" id="id" value="{{$id}}" ></input>
+        <input type="hidden" id="iduser" value="{{$id}}" ></input>
         <table class="table">
 
         <tbody>
-        <tr>
-            <td class="text-primary">Nom </td>
-            <td>
-                <input id="lastname" onchange="changing(this)" type="text" class="form-control" name="name"  value="{{ $user->lastname }}" />
-            </td>
-        </tr>
+
         <tr>
             <td class="text-primary">Prénom </td>
             <td>
                 <input id="name" onchange="changing(this)" type="text" class="form-control" name="name"  value="{{ $user->name }}" />
                 </td>
+        </tr>
+        <tr>
+            <td class="text-primary">Nom </td>
+            <td>
+                <input id="lastname" onchange="changing(this)" type="text" class="form-control" name="lastname"  value="{{ $user->lastname }}" />
+            </td>
         </tr>
         <tr>
             <td class="text-primary">Login</td>
@@ -53,11 +54,6 @@
                 </td>
             </tr>
         <tr>
-            <td class="text-primary">Skype</td>
-            <td>    <input id="skype" onchange="changing(this);"  type="text" class="form-control" name="skype"  id="skype" value="{{ $user->skype }}" />
-            </td>
-        </tr>
-        <tr>
             <td class="text-primary">Observation</td>
             <td>    <textarea style="height:80px" id="observation" onchange="changing(this);"  type="text" class="form-control" name="observation"  id="observation"  ><?php echo  $user->observation ; ?></textarea>
             </td>
@@ -73,12 +69,12 @@
                 </select>
             </td>
         </tr>
-        <tr>
+     <!--   <tr>
             <td class="text-primary">Rôles</td>
             <td>
                 <select class="itemName form-control col-lg-10" style="" name="roles"  multiple  id="roles" value="{{$user->roles}}">
                     <option></option>
-                    <?php $c=0;if ( count($rolesusers) > 0 ) {
+                    <?php /* $c=0;if ( count($rolesusers) > 0 ) {
                     foreach($roles as $aKey){
                     ?>
                     <option  <?php if(UsersController::CheckRoleUser($user['id'],$aKey->id)==1){echo 'selected="selected" ';} ?>   value="<?php echo $aKey->id;?>" > <?php echo  $aKey->nom; ?>
@@ -93,11 +89,11 @@
                         <option       value="<?php echo $aKey->id;?>"> <?php echo $aKey->nom;?></option>
                     @endforeach
 
-                    <?php }  ?>
+                    <?php } */ ?>
 
                 </select>
             </td>
-        </tr>
+        </tr>--->
         <tr>
             <td class="text-primary">Signature</td>
             <td>    <textarea style="height:60px" id="signature" onchange="changing(this);"  type="text" class="form-control" name="observation"  id="observation"  ><?php echo  $user->signature ; ?></textarea>
@@ -177,7 +173,7 @@ $.each(array, function(i, item) {
 if (type=="selected"){
 
 
-var user = $('#id').val();
+var user = $('#iduser').val();
 var _token = $('input[name="_token"]').val();
 
 $.ajax({
@@ -199,7 +195,7 @@ opacity: '1',
 
 if (type=="removed"){
 
-var user = $('#id').val();
+var user = $('#iduser').val();
 var _token = $('input[name="_token"]').val();
 
 $.ajax({
@@ -232,8 +228,6 @@ $( ".select2-selection--multiple" ).show( "slow", function() {
 
 
 });
-
-
 
 
     function changing(elm) {

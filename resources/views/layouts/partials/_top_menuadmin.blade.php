@@ -111,16 +111,8 @@
         </div>--->
         @endcan
 
-            @cannot('isAdmin')
 
-        <div class="col-sm-2">
-            <a href="{{ route('prestations') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-                <span class="fas fa-lg  fa-notes-medical"></span>
-                <br>
-                Prestations
-            </a>
-        </div>
-            @endcannot
+
 
     </div>
 

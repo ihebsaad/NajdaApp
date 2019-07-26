@@ -84,7 +84,7 @@ use App\ClientGroupe;
                     </li>
                     <li>
                         <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                            A l'assuré </a>
+                            À l'assuré </a>
                     </li>
 
                 </ul>

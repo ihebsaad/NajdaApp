@@ -159,7 +159,8 @@
                                     $nassure['subscriber_name'] = "";
                                     $nassure['subscriber_lastname'] = "";
                                   // fin recuperation nom assuré
-                                  echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']." | ".$nassure['subscriber_name']." ".$nassure['subscriber_lastname']."<ul>";}
+                                  echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']." | ".$nassure['subscriber_name']." ".$nassure['subscriber_lastname']."<ul>";
+                                  }
                                 foreach ($ntf as $n) {
 
                                   if (!isset ($n['type']) )
@@ -174,6 +175,8 @@
                                   if (!isset ($n['sujet']) )
                                     {  $n['sujet'] = ' '; }
 
+                                        if (!empty($ntf[0]['dossier']))
+                                {
                                     switch ($n['type']) {
                                         case "email":
                                             echo '<li id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>';
@@ -194,6 +197,29 @@
                                             echo '<li id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>';
                                     }
 
+                                }else{
+
+                               switch ($n['type']) {
+                                        case "email":
+                                            echo '<li id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>';
+                                            break;
+                                        case "fax":
+                                            echo '<li id="'.$n['id'].'" rel="trfax" '.$newnotif.'><a href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>';
+                                            break;
+                                        case "tel":
+                                            echo '<li id="'.$n['id'].'" rel="trtel" '.$newnotif.'><a href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>';
+                                            break;
+                                        case "sms":
+                                            echo '<li id="'.$n['id'].'" rel="trsms" '.$newnotif.'><a href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span> '.$n['sujet'].'</span></a></li>';
+                                            break;
+                                        case "whatsapp":
+                                            echo '<li id="'.$n['id'].'" rel="trwp" '.$newnotif.'><a href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fab fa-whatsapp"></span> '.$n['sujet'].'</span></a></li>';
+                                            break;
+                                        default:
+                                            echo '<li id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>';
+                                    }
+
+                                    }
 
                                 }
                                 if (!empty($ntf[0]['dossier'])) {echo '</ul>'; }

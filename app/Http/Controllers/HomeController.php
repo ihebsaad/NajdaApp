@@ -124,7 +124,7 @@ class HomeController extends Controller
         $role=$request->get('role');
 
       //  Demande::where('statut', '0')->where('type','reponserole')->where('vers',$iduser)->where('role',$role)->update(array('statut'=>'1' ));
-        Demande::where('statut', '0')->where('type','reponserole')->where('vers',$iduser)->where('role',$role)->delete();
+        Demande::where('statut','<' , '1')->where('type','reponserole')->where('vers',$iduser)->where('role',$role)->delete();
 
     }
 
@@ -148,7 +148,7 @@ class HomeController extends Controller
 
         // statut: 0 => non traitée
 
-        $demande=  Demande::where('statut', 0)->where('type','reponserole')->where('vers',$iduser)->first();
+        $demande=  Demande::where('statut','<' ,'1')->where('type','reponserole')->where('vers',$iduser)->first();
         if ($demande!=null)
         {
             $role=$demande->role;
@@ -290,6 +290,19 @@ class HomeController extends Controller
             $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$par).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$par);
 
             Log::info('[Agent: '.$nomuser.'] Refuse de donner le rôle: '.$role.' à : '.$nomagent);
+
+            $nompar=  app('App\Http\Controllers\UsersController')->ChampById('name',$vers) .' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$vers) ;
+
+            $demande = new Demande([
+                'par' => $vers,
+                'vers' => $par,
+                'role' => $role,
+                'emetteur'=>$nompar,
+                'statut' => -1,
+                'type' => 'reponserole' //////
+
+            ]);
+            $demande->save();
 
         }
         if ($ok==1)

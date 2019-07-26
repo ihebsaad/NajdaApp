@@ -104,7 +104,7 @@
                                                 <option
                                                         @if($user->id==$supmedic)selected="selected"@endif
 
-                                                value="{{$user->id}}">{{$user->name}}</option>
+                                                value="{{$user->id}}">{{$user->name.' '.$user->lastname}}</option>
 
                                             @endforeach
                                         </select>                                       </td>
@@ -118,7 +118,7 @@
                                                 <option
                                                         @if($user->id==$suptech)selected="selected"@endif
 
-                                                value="{{$user->id}}">{{$user->name}}</option>
+                                                value="{{$user->id}}">{{$user->name.' '.$user->lastname}}</option>
 
                                             @endforeach
                                         </select>                                       </td>
@@ -132,7 +132,7 @@
                                                 <option
                                                         @if($user->id==$disp)selected="selected"@endif
 
-                                                value="{{$user->id}}">{{$user->name}}</option>
+                                                value="{{$user->id}}">{{$user->name.' '.$user->lastname}}</option>
 
                                             @endforeach
                                         </select>
@@ -147,7 +147,7 @@
                                                 <option
                                                         @if($user->id==$disptel)selected="selected"@endif
 
-                                                value="{{$user->id}}">{{$user->name}}</option>
+                                                value="{{$user->id}}">{{$user->name.' '.$user->lastname}}</option>
 
                                             @endforeach
                                         </select>
@@ -162,7 +162,7 @@
                                                 <option
                                                         @if($user->id==$charge)selected="selected"@endif
 
-                                                value="{{$user->id}}">{{$user->name}}</option>
+                                                value="{{$user->id}}">{{$user->name.' '.$user->lastname}}</option>
 
                                             @endforeach
                                         </select>
@@ -180,7 +180,7 @@
                                                 <option
                                                         @if($user->id==$veilleur)selected="selected"@endif
 
-                                                value="{{$user->id}}">{{$user->name}}</option>
+                                                value="{{$user->id}}">{{$user->name.' '.$user->lastname}}</option>
 
                                             @endforeach
                                         </select>                                       </td>

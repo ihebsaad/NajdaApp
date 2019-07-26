@@ -248,8 +248,9 @@
         }
         else
         {
-            $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheur);
-           ?><div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Dispatcheur Emails','<?php echo $seance->dispatcheur; ?>')"  style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Dispatcheur <b>( <?php echo $nomagent; ?>  )</b></label><label class="demande" id="labeldispatcheur"></label></div>
+         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheur).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->dispatcheur); ?>
+
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Dispatcheur Emails','<?php echo $seance->dispatcheur; ?>')"  style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Dispatcheur <b>( <?php echo $nomagent; ?>  )</b></label><label class="demande" id="labeldispatcheur"></label></div>
       <?php  }
       //  }
         ?>
@@ -289,8 +290,9 @@
         }
         else
         {
-            $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->superviseurmedic);
-        ?><div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Superviseur Médical','<?php echo $seance->superviseurmedic; ?>')"  style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Superviseur Médical <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labelsuperviseurmedic"></label></div>
+         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->superviseurmedic).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->superviseurmedic); ?>
+
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Superviseur Médical','<?php echo $seance->superviseurmedic; ?>')"  style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Superviseur Médical <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labelsuperviseurmedic"></label></div>
      <?php   }
        }
         ?>
@@ -329,8 +331,9 @@
         }
         else
         {
-            $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->superviseurtech);
-            ?><div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Superviseur Technique','<?php echo $seance->superviseurtech; ?>')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Superviseur Technique <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labelsuperviseurtech"></label></div>
+         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->superviseurtech).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->superviseurtech); ?>
+
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Superviseur Technique','<?php echo $seance->superviseurtech; ?>')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Superviseur Technique <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labelsuperviseurtech"></label></div>
       <?php  }
         }
 
@@ -372,8 +375,9 @@
         }
         else
         {
-            $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->chargetransport);
-            ?><div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label  title="demander ce rôle"  onclick="demande('Chargé de Transport','<?php echo $seance->chargetransport; ?>')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Chargé de Transport <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labelchargetransport"></label></div>
+         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->chargetransport).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->chargetransport); ?>
+
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label  title="demander ce rôle"  onclick="demande('Chargé de Transport','<?php echo $seance->chargetransport; ?>')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Chargé de Transport <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labelchargetransport"></label></div>
         <?php }
     //    }
         ?>
@@ -412,8 +416,9 @@
         }
         else
         {
-            $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheurtel);
-         ?><div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Dispatcheur Téléphonique','<?php echo $seance->dispatcheurtel; ?>')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Dispatcheur Téléphonique <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labeldispatcheurtel"></label></div>
+        $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheurtel).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->dispatcheurtel); ?>
+
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Dispatcheur Téléphonique','<?php echo $seance->dispatcheurtel; ?>')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Dispatcheur Téléphonique <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labeldispatcheurtel"></label></div>
         <?php }
    //     }
         ?>
@@ -463,7 +468,7 @@
         }
         else
         {
-            $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->veilleur); ?>
+            $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->veilleur).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->veilleur); ?>
 
             <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Veilleur de Nuit','<?php echo $seance->veilleur; ?>')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Veilleur de nuit <b>( <?php echo $nomagent; ?> )</b></label><label  class="demande" id="labelveilleur"></label></div>
       <?php  }
@@ -665,7 +670,7 @@
 
                      $('#label' + nomrole).text(' (Demande Envoyée) ');
 
-                     $('#label' + nomrole).css("color", "green");
+                     $('#label' + nomrole).css("color", "grey");
 
 
                  }
@@ -705,12 +710,15 @@
                      var role=obj.role ;
                      var vers=obj.vers ;
                      var emetteur=obj.emetteur ;
+                     var statut=obj.statut ;
                      var type=obj.type ;
 
 
                      if (type=='reponserole') {
 
-
+                         // role accepté
+                         if(statut==0)
+                       {
                          if (role== 'Dispatcheur Emails')
                          { nomrole = 'dispatcheur';
                            //  $request->session()->put('disp',0);
@@ -774,6 +782,70 @@
                              window.location = '{{route('roles')}}';
                          }, 3000);
                      }
+
+                         // role refusé
+                         if(statut == -1)
+                         {
+                             if (role== 'Dispatcheur Emails')
+                             { nomrole = 'dispatcheur';
+                                 //  $request->session()->put('disp',0);
+                                 alert('Rôle '+role+' non alloué');
+                                 //   affecter(nomrole);
+                                 removereponse(role);
+
+                             }
+
+                             if (role== 'Dispatcheur Téléphonique')
+                             { nomrole = 'dispatcheurtel';
+                                 //   $request->session()->put('disptel',0) ;
+                                 alert('Rôle '+role+' non alloué');
+                                 removereponse(role);
+
+                             }
+
+                             if (role== 'Superviseur Médical')
+                             { nomrole = 'superviseurmedic';
+                                 //   $request->session()->put('supmedic',0) ;
+                                 alert('Rôle '+role+' non alloué');
+                                 removereponse(role);
+
+                             }
+
+                             if (role== 'Superviseur Technique')
+                             { nomrole = 'superviseurtech';
+                                 //   $request->session()->put('suptech',0) ;
+                                 alert('Rôle '+role+' non alloué');
+                                 removereponse(role);
+
+                             }
+
+                             if (role== 'Chargé de Transport')
+                             { nomrole = 'chargetransport';
+                                 //    $request->session()->put('chrgtr',0)  ;
+                                 alert('Rôle '+role+' non alloué');
+                                 removereponse(role);
+
+                             }
+
+                             if (role== 'Veilleur de Nuit')
+                             { nomrole = 'veilleur';
+                                 //   $request->session()->put('veilleur',0) ;
+                                 alert('Rôle '+role+' non alloué');
+                                 removereponse(role);
+
+                             }
+
+                             $('#label'+nomrole).css("color", "red");
+                             $('#label'+nomrole).text(' (Demande Refusée) ');
+
+                         /*    setTimeout(function(){
+                                 window.location = '{{route('roles')}}';
+                             }, 3000);*/
+                         }
+
+
+                     }
+
 
 
                      }

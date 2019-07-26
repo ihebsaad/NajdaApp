@@ -56,13 +56,13 @@
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Nom *</label>
-                                <input onchange="changing(this)" type="text" class="form-control input" name="name" id="name"  value={{ $prestataire->name }}>
+                                <input onchange="changing(this)" type="text" class="form-control input" name="name" id="name"  value="{{ $prestataire->name }}">
                             </div>
                         </div>
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Prénom *</label>
-                                <input onchange="changing(this)" type="text" class="form-control input" name="prenom" id="prenom"  value={{ $prestataire->prenom }}>
+                                <input onchange="changing(this)" type="text" class="form-control input" name="prenom" id="prenom"  value="{{ $prestataire->prenom }}">
                             </div>
                         </div>
                     </div>
@@ -119,7 +119,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Pririoté</label>
-                                <select onchange="changing(this)" id="ordre" name="ordre" class="form-control"   value={{ $prestataire->ordre }}>
+                                <select onchange="changing(this)" id="ordre" name="ordre" class="form-control"   value="{{ $prestataire->ordre }}">
                                     <option <?php if ($prestataire->ordre ==''){echo 'selected="selected"';} ?> value="0"></option>
                                     <option  <?php if ($prestataire->ordre =='1'){echo 'selected="selected"';} ?>value="1">1</option>
                                     <option  <?php if ($prestataire->ordre =='2'){echo 'selected="selected"';} ?>value="2">2</option>
@@ -251,14 +251,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Adresse </label>
-                                <input onchange="changing(this)" type="text" class="form-control input" name="adresse" id="adresse"  value={{ $prestataire->adresse }}>
+                                <input onchange="changing(this)" type="text" class="form-control input" name="adresse" id="adresse"  value="{{ $prestataire->adresse }}">
                             </div>
                         </div>
                         <?php if ($prestataire->fax!='') {?>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Fax</label>
-                                <input onchange="changing(this)" type="text" id="fax" class="form-control" name="fax"  value={{ $prestataire->fax }}>
+                                <input onchange="changing(this)" type="text" id="fax" class="form-control" name="fax"  value="{{ $prestataire->fax }}">
                             </div>
                         </div>
                         <?php } ?>
@@ -270,7 +270,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Mobile 1</label>
-                                <input onchange="changing(this)" type="text" id="phone_cell" class="form-control" name="phone_cell"  value={{ $prestataire->phone_cell }}>
+                                <input onchange="changing(this)" type="text" id="phone_cell" class="form-control" name="phone_cell"  value="{{ $prestataire->phone_cell }}">
                             </div>
                         </div>
                             <?php } if ($prestataire->phone_cell2!='') {?>
@@ -278,7 +278,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Mobile 2 </label>
-                                <input onchange="changing(this)" type="text" id="phone_cell2" class="form-control" name="phone_cell2"  value={{ $prestataire->phone_cell2 }}>
+                                <input onchange="changing(this)" type="text" id="phone_cell2" class="form-control" name="phone_cell2"  value="{{ $prestataire->phone_cell2 }}">
                             </div>
                         </div>
                             <?php } ?>
@@ -290,7 +290,7 @@
              <div class="col-md-6">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Téléphone 1</label>
-                                <input onchange="changing(this)" type="text" id="phone_home" class="form-control" name="phone_home"  value={{ $prestataire->phone_home }}>
+                                <input onchange="changing(this)" type="text" id="phone_home" class="form-control" name="phone_home"  value="{{ $prestataire->phone_home }}">
                             </div>
                         </div>
                  <?php } if ($prestataire->phone_home2!='') { ?>
@@ -298,7 +298,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Téléphone 2</label>
-                                <input onchange="changing(this)" type="text" id="phone_home2" class="form-control" name="phone_home2"  value={{ $prestataire->phone_home2 }}>
+                                <input onchange="changing(this)" type="text" id="phone_home2" class="form-control" name="phone_home2"  value="{{ $prestataire->phone_home2 }}">
                             </div>
                         </div>
                  <?php } ?>
@@ -309,15 +309,15 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Email </label>
-                                <?php if($prestataire->mail!=''){ ?><input onchange="changing(this)"  type="text" id="mail" class="form-control" name="mail" placeholder="Email"  value={{ $prestataire->mail }}> <br><?php }?>
+                                <?php if($prestataire->mail!=''){ ?><input onchange="changing(this)"  type="text" id="mail" class="form-control" name="mail" placeholder="Email"  value="{{ $prestataire->mail }}"> <br><?php }?>
 
-                                <?php if($prestataire->mail2!=''){ ?>   <input onchange="changing(this)"  type="text" id="mail2" name="mail2" class="form-control" placeholder="Email2"  value={{ $prestataire->mail2 }}><br> <?php }?>
+                                <?php if($prestataire->mail2!=''){ ?>   <input onchange="changing(this)"  type="text" id="mail2" name="mail2" class="form-control" placeholder="Email2"  value="{{ $prestataire->mail2 }}"><br> <?php }?>
 
-                                <?php if($prestataire->mail3!=''){ ?>   <input onchange="changing(this)" type="text" id="mail3"  name="mail3" class="form-control" placeholder="Email3"  value={{ $prestataire->mail3 }}><br> <?php }?>
+                                <?php if($prestataire->mail3!=''){ ?>   <input onchange="changing(this)" type="text" id="mail3"  name="mail3" class="form-control" placeholder="Email3"  value="{{ $prestataire->mail3 }}"><br> <?php }?>
 
-                                <?php if($prestataire->mail4!=''){ ?>   <input onchange="changing(this)" type="text" id="mail4" name="mail4" class="form-control" placeholder="Email4"  value={{ $prestataire->mail4 }}><br> <?php }?>
+                                <?php if($prestataire->mail4!=''){ ?>   <input onchange="changing(this)" type="text" id="mail4" name="mail4" class="form-control" placeholder="Email4"  value="{{ $prestataire->mail4 }}"><br> <?php }?>
 
-                                <?php if($prestataire->mail5!=''){ ?>   <input onchange="changing(this)" type="text" id="mail5"  name="email5" class="form-control" placeholder="Email5"  value={{ $prestataire->mail5 }}><br> <?php }?>
+                                <?php if($prestataire->mail5!=''){ ?>   <input onchange="changing(this)" type="text" id="mail5"  name="email5" class="form-control" placeholder="Email5"  value="{{ $prestataire->mail5 }}"><br> <?php }?>
 
                             </div>
                         </div>
@@ -456,7 +456,7 @@
 
 
 
-                    <input type="hidden" id="idpres" class="form-control"   value={{ $prestataire->id }}>
+                    <input type="hidden" id="idpres" class="form-control"   value="{{ $prestataire->id }}">
 
         </div>
 
