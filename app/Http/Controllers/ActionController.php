@@ -130,7 +130,7 @@ class ActionController extends Controller
 
       // recherche les missions actives  pour l'utilisateur courant
 
-        $missionsec=Mission::where('user_id', Auth::user()->id)->where('statut_courant',"active")->('type_heu_spec',1)->get();
+        $missionsec= Mission::where('user_id', Auth::user()->id)->where('statut_courant',"active")->where('type_heu_spec',1)->get();
           
      
 
@@ -173,7 +173,7 @@ class ActionController extends Controller
 
                                         // rendre datespec 0
 
-                                        $miss-> update (['dep_pour_miss'=>0]);
+                                        //$miss-> update(['dep_pour_miss'=>0]);
 
                                          $output='Rappel pour l\'Attente de réponse pour l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->titre.' | Dossier : '. $action6->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
              
@@ -195,113 +195,113 @@ class ActionController extends Controller
 
 
 
+                                // cas de rdv
+                                    
+                                 /*if($miss->rdv==1 && $miss->h_rdv!=null )
+                                 {
 
-            // cas de rdv
-                
-             /*if($miss->rdv==1 && $miss->h_rdv!=null )
-             {
+                              
+                                   $datespe = \DateTime::createFromFormat($format, $miss->$miss->h_rdv);
 
-          
-               $datespe = \DateTime::createFromFormat($format, $miss->$miss->h_rdv);
+                                 
+                                    if($miss->type_Mission==11)//consultation médicale
+                                        {
+                                            //activer l'action 6 de consultation médicale  Si_heure_systeme>heure_RDV+2h 
 
-             
-                if($miss->type_Mission==11)//consultation médicale
-                    {
-                        //activer l'action 6 de consultation médicale  Si_heure_systeme>heure_RDV+2h 
+                                            if($datespe->modify('+2 Hour')->format('Y-m-d H:i') < $dateSys)
+                                            {
 
-                        if($datespe->modify('+2 Hour')->format('Y-m-d H:i') < $dateSys)
-                        {
+                                                $action6=ActionEC::where('mission_id',$miss->id)->where('ordre',6);
+                                                if($action6->statut=='inactive')
+                                                {
 
-                            $action6=ActionEC::where('mission_id',$miss->id)->where('ordre',6);
-                            if($action6->statut=='inactive')
-                            {
+                                                     $action6->statut="active";
 
-                                 $action6->statut="active";
-
-                            }
-
-
-                        }
+                                                }
 
 
-
-                    }
-
-
-                
-             }*/
-
-            // cas dpart pour mission
-                
-           /*  if($miss->dep_pour_miss==1 && $miss->h_dep_pour_miss!=null )
-             {
-
-           
-               $datespe  = \DateTime::createFromFormat($format, $miss->h_dep_pour_miss);
-
-             
-
-                
-             }
-
-        
-            if($miss->dep_charge_dest==1 && $miss->h_dep_charge_dest!=null )
-             {
-
-               $format = "Y-m-d\TH:i";
-               $dateSys = \DateTime::createFromFormat($format, $dtc);
-               $datespe  = \DateTime::createFromFormat($format, $miss->h_dep_charge_dest);
-
-             
-                
-             }*/
+                                            }
 
 
-      
-        
 
-        /*if($miss->arr_prev_dest==1 && $miss->h_arr_prev_dest!=null )
-             {
-
-            
-               $datespe  = \DateTime::createFromFormat($format, $miss->h_arr_prev_dest);
-
-             
+                                        }
 
 
-                
-             }*/
+                                    
+                                 }*/
 
-             
-       
+                                // cas dpart pour mission
+                                    
+                               /*  if($miss->dep_pour_miss==1 && $miss->h_dep_pour_miss!=null )
+                                 {
+
+                               
+                                   $datespe  = \DateTime::createFromFormat($format, $miss->h_dep_pour_miss);
+
+                                 
+
+                                    
+                                 }
+
+                            
+                                if($miss->dep_charge_dest==1 && $miss->h_dep_charge_dest!=null )
+                                 {
+
+                                   $format = "Y-m-d\TH:i";
+                                   $dateSys = \DateTime::createFromFormat($format, $dtc);
+                                   $datespe  = \DateTime::createFromFormat($format, $miss->h_dep_charge_dest);
+
+                                 
+                                    
+                                 }*/
 
 
-       /*if($miss->decoll_ou_dep_bat==1 && $miss->h_decoll_ou_dep_bat!=null )
-             {
-            
-               $datespe  = \DateTime::createFromFormat($format, $miss->h_decoll_ou_dep_bat);
-             
-                
-             }*/
+                          
+                            
 
-       
+                            /*if($miss->arr_prev_dest==1 && $miss->h_arr_prev_dest!=null )
+                                 {
 
-            /* if($miss->arr_av_ou_bat==1 && $miss->h_arr_av_ou_bat!=null )
-             {
-            
-               $datespe  = \DateTime::createFromFormat($format, $miss->h_arr_av_ou_bat);
-             
-                
-             }*/
+                                
+                                   $datespe  = \DateTime::createFromFormat($format, $miss->h_arr_prev_dest);
+
+                                 
 
 
-                 /*if($miss->retour_base==1 && $miss->h_retour_base!=null )
-             {
-            
-               $datespe  = \DateTime::createFromFormat($format, $miss->h_retour_base);
-             
-                
-             }*/
+                                    
+                                 }*/
+
+                                 
+                           
+
+
+                           /*if($miss->decoll_ou_dep_bat==1 && $miss->h_decoll_ou_dep_bat!=null )
+                                 {
+                                
+                                   $datespe  = \DateTime::createFromFormat($format, $miss->h_decoll_ou_dep_bat);
+                                 
+                                    
+                                 }*/
+
+                           
+
+                                /* if($miss->arr_av_ou_bat==1 && $miss->h_arr_av_ou_bat!=null )
+                                 {
+                                
+                                   $datespe  = \DateTime::createFromFormat($format, $miss->h_arr_av_ou_bat);
+                                 
+                                    
+                                 }*/
+
+
+                                     /*if($miss->retour_base==1 && $miss->h_retour_base!=null )
+                                 {
+                                
+                                   $datespe  = \DateTime::createFromFormat($format, $miss->h_retour_base);
+                                 
+                                    
+                                 }*/
+
 
 
 
