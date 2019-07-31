@@ -302,6 +302,10 @@ use App\Http\Controllers\TagsController;
                                            <?php if(isset($dossier)) {  ?>
                                           
                                           <input id="dossier" type="hidden" class="form-control" value="{{$dossier->reference_medic}}" name="dossier"/>
+                                          <input id="dossierID" type="hidden" class="form-control" value="{{$dossier->id}}" name="dossierID"/>
+                                          <input id="hreftopwindow" type="hidden" class="form-control" value="" name="hreftopwindow"/>
+
+
                                           <?php } else {  ?>
                                                <div class="row">
 
@@ -892,8 +896,8 @@ $(document).ready(function() {
 
              // alert ("des nouvelles notes sont activées");
               //$("#contenuNotes").prepend(data);
-              var sound = document.getElementById("audiokbs");
-              sound.setAttribute('src', "{{URL::asset('public/media/point.mp3')}}");
+              //var sound = document.getElementById("audiokbs");
+              //sound.setAttribute('src', "{{URL::asset('public/media/point.mp3')}}");
              // sound.play();
 
              // alertify.alert("Note","Une nouvelle note est activée").show();
@@ -905,8 +909,99 @@ $(document).ready(function() {
               txt = "You pressed Cancel!";
              }*/
 
-           alert(data);
-           location.reload();
+          
+           var urllocale=top.location.href;
+
+           var pos=urllocale.indexOf("traitementsBoutonsActions");
+
+           var count=0;
+
+           if(pos!= -1)
+           {
+              for (var i = pos; i <100; i++) {
+                
+                  if(urllocale[i]=='/')
+                  {
+                    count++;
+                  }
+
+                }
+             
+
+
+
+           }
+
+          // alert(count);
+
+           //alert(data);
+
+          // sweetAlert('Activation d\'action', data , 'success');
+         // swal(data);
+
+          const swalWithBootstrapButtonskbs = Swal.mixin({
+                            customClass: {
+                                confirmButton: 'btn btn-success',
+                                cancelButton: 'btn btn-danger'
+                            },
+                            buttonsStyling: false,
+                        }) ;
+
+                        swalWithBootstrapButtonskbs.fire({
+                            title: 'Activation d\'action',
+                            html: '<b>'+data+'</b>',
+                            type: 'warning',
+                            showCancelButton: false,
+                            confirmButtonText: 'Ok !',
+                            cancelButtonText: 'Non',
+                         //   reverseButtons: true
+                        }).then((result) => {
+                            if (result.value) {
+
+  
+      
+                      var actionk= $('#idactActive').val() ;
+                      var  missk= $('#idactMissActive').val() ;
+                      var  dossk= $('#idactDossActive').val() ;
+                        
+                       // alert(actionk+"/"+ missk+"/"+dossk);
+
+                                      if(count==4)
+                                
+                                         {
+
+                                           var NouveaURL;
+                                         //alert('{{ url('/') }}');
+                                         if(actionk != null && missk !=null && dossk != null)
+                                         {
+                                        NouveaURL="{{ url('/') }}"+"/dossier/Mission/TraitementAction/"+dossk+"/"+missk+"/"+actionk;
+                                         }
+                                         else
+                                         {
+                                         NouveaURL="{{ url('/') }}";
+                                         }
+                                         //window.location.replace(NouveaURL) ;
+                                         document.location.href=NouveaURL;
+
+                                          //alert(window.location.href);
+                                        
+                                         }
+                                         else
+                                         {
+
+                                          window.location.reload(true);
+
+                                         }
+
+
+                            }
+
+
+                            }); 
+
+           
+          
+          
 
             
            }
@@ -920,6 +1015,125 @@ $(document).ready(function() {
 
 </script>
 
+<!--activerAct_des_dates_speciales-->
+<script>
+
+
+  <script>
+ setInterval(function(){ 
+     
+    $.ajax({
+       url : '{{ url('/') }}'+'/activerAct_des_dates_speciales',
+       type : 'GET',
+       dataType : 'html', // On désire recevoir du HTML
+       success : function(data){ // code_html contient le HTML renvoyé
+           //alert (data);
+
+           if(data)
+           {
+
+          
+           var urllocale=top.location.href;
+
+           var pos=urllocale.indexOf("traitementsBoutonsActions");
+
+           var count=0;
+
+           if(pos!= -1)
+           {
+              for (var i = pos; i <100; i++) {
+                
+                  if(urllocale[i]=='/')
+                  {
+                    count++;
+                  }
+
+                }
+             
+
+           }
+
+    
+
+          const swalWithBootstrapButtonskbs = Swal.mixin({
+                            customClass: {
+                                confirmButton: 'btn btn-success',
+                                cancelButton: 'btn btn-danger'
+                            },
+                            buttonsStyling: false,
+                        }) ;
+
+                        swalWithBootstrapButtonskbs.fire({
+                            title: 'Activation d\'action',
+                            html: '<b>'+data+'</b>',
+                            type: 'warning',
+                            showCancelButton: false,
+                            confirmButtonText: 'Ok !',
+                            cancelButtonText: 'Non',
+                         //   reverseButtons: true
+                        }).then((result) => {
+                            if (result.value) {
+
+  
+      
+                      var actionk= $('#idactActive').val() ;
+                      var  missk= $('#idactMissActive').val() ;
+                      var  dossk= $('#idactDossActive').val() ;
+                        
+                       // alert(actionk+"/"+ missk+"/"+dossk);
+
+                                      if(count==4)
+                                
+                                         {
+
+                                           var NouveaURL;
+                                         //alert('{{ url('/') }}');
+                                         if(actionk != null && missk !=null && dossk != null)
+                                         {
+                                        NouveaURL="{{ url('/') }}"+"/dossier/Mission/TraitementAction/"+dossk+"/"+missk+"/"+actionk;
+                                         }
+                                         else
+                                         {
+                                         NouveaURL="{{ url('/') }}";
+                                         }
+                                         //window.location.replace(NouveaURL) ;
+                                         document.location.href=NouveaURL;
+
+                                          //alert(window.location.href);
+                                        
+                                         }
+                                         else
+                                         {
+
+                                          window.location.reload(true);
+
+                                         }
+
+
+                            }
+
+
+                            }); 
+
+           
+          
+          
+
+            
+           }
+       }
+    });
+   
+
+
+}, 20000);
+
+
+</script>
+
+
+
+</script>
 
 <!-- gestion des rappels des missions (pour les rappels actions voir traitementaction blade)-->
   <script>
@@ -1120,6 +1334,14 @@ var hrefidAcheverM;
 
 
 
+</script>
+
+<script>
+
+
+  $("#hreftopwindow").val(top.location.href);
+  
+  
 </script>
 
 

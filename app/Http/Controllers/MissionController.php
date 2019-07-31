@@ -68,6 +68,8 @@ class MissionController extends Controller
      public function storeTableActionsEnCours(Request $request)
     {
 
+
+     // dd( $request->all());
         $dossier=Dossier::where("reference_medic",trim($request->get('dossier')))->first();
         $typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeactauto')))->first();
         
@@ -206,7 +208,7 @@ class MissionController extends Controller
               else // pour la sauvegarde de date de début de la première sous action
               {
 
-               if( $valeurs[$k]!= null)
+               if($valeurs[$k]!= null)
                {
 
                   $ActionEC = new ActionEC([
@@ -258,14 +260,52 @@ class MissionController extends Controller
 
                 $k->update(['statut'=>'active']);
 
-
              }
            }
 
 
+     // return redirect('dossiers/view/'.$request->dossierID);
+
+      $currenturl=$request->hreftopwindow;
+       //dd($currenturl);
+      //$targeturl=back()->getTargetUrl();
+      //dd($targeturl);traitementsBoutonsActions
+      $res=strstr($currenturl,"traitementsBoutonsActions");
+     // dd($res);
+      $count=0;
+      if($res) {
+
+         
+         for ($i=0; $i<100 ;$i++)
+         {
+           
+           if($res[$i]=='/')
+           {
+           $count++;
+           }
+             
+
+         }
+
+         //dd($res);
+
+      }
+
+     // dd($count);
+
+       //dd(back()->getTargetUrl());
+
+      if( $count!=4)
+      {
+       return back();          
+
+      }
+      
+      return redirect('dossiers/view/'.$request->dossierID);
+
+      
 
 
-      return back();
       
 
     }

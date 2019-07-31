@@ -370,7 +370,9 @@ Route::get('/getActionAjaxModal','ActionController@getActionsAjaxModal');
 
 Route::get('/activerActionsReporteeOuRappelee','ActionController@activerActionsReporteeOuRappelee');
 
-  Route::get('/traitementsBoutonsActions/{iddoss}/{idmiss}/{idsousact}/{bouton}',
+Route::get('/activerAct_des_dates_speciales','ActionController@activerAct_des_dates_speciales');
+
+Route::get('/traitementsBoutonsActions/{iddoss}/{idmiss}/{idsousact}/{bouton}',
     'ActionController@Bouton_Faire1_ignorer2_reporter3_rappeler4');
 
 Route::get('/annulerAttenteReponseAction/{idact}','ActionController@annulerAttenteReponseAction');
