@@ -17,9 +17,19 @@ class ActionEC extends Model
         'assistant_id','comment1','comment2','comment3','action_ava','action_apr', 'created_at','updated_at','deleted_at'
     ];
 
-  public function Mission()
+  
+   public function Mission()
     {
         return $this->belongsTo('App\Mission');
+    }
+
+     public function agent()
+    {
+        return $this->belongsTo('App\User','user_id');
+    }
+        public function assistant()
+    {
+        return $this->belongsTo('App\User','assistant_id');
     }
 
 

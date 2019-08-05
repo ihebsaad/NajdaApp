@@ -141,6 +141,8 @@ use App\Http\Controllers\TagsController;
                                             <a class="workflowkbs" id="<?php echo $Mission->id ?>" style="color:black !important; margin-top: 10px; margin-right: 10px;" data-toggle="modal" data-target="#myworow" title ="Voir Workflow" href="#"><span class="fa fa-2x fa-tasks" style="  margin-right: 20px;" aria-hidden="true"></span>
                                             </a>
                                             <input id="workflowh<?php echo $Mission->id ?>" type="hidden" value="{{$Mission->titre}}">
+                                            <input id="workflowht<?php echo $Mission->id ?>" type="hidden" value="{{$Mission->typeMission->nom_type_Mission}}">
+
 
                                              {{-- <a  style="color:black !important; margin-top: 10px; margin-right: 10px;" title ="Voir Workflow" href="{{url('Mission/workflow/'.$Mission->dossier->id.'/'.$Mission->id)}}"><span class="fa fa-2x fa-cogs" style=" margin-top: 10px; margin-right: 20px;" aria-hidden="true"></span>
                                             </a>--}}
@@ -600,7 +602,7 @@ use App\Http\Controllers\TagsController;
 
 <!------------- Modal workflow ---------------------------------------------------------------- -->
   <div class="modal fade" id="myworkflow" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
     
       <!-- Modal content-->
       <div class="modal-content">
@@ -841,6 +843,8 @@ $("#workflowform input:checkbox").change(function() {
 
     }
     ?>
+
+    <!-- get modal workflow by ajax -->
 <script>
 
 $(document).ready(function() {
@@ -851,7 +855,8 @@ $(document).ready(function() {
    var idw=$(this).attr("id");
    //alert(idw);
    var nomact=$('#workflowh'+idw).attr("value");
-      $("#titleworkflowmodal").empty().append(nomact);//ou la methode html
+   var typemiss=$('#workflowht'+idw).attr("value");
+      $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
 
            $.ajax({
 
@@ -1018,8 +1023,6 @@ $(document).ready(function() {
 <!--activerAct_des_dates_speciales-->
 <script>
 
-
-  <script>
  setInterval(function(){ 
      
     $.ajax({

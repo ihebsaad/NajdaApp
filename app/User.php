@@ -50,6 +50,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Action');
     }
 
+     public function ActionECs()
+    {
+        return $this->hasMany('App\ActionEC');
+    }
+
     /* public function ActionsTh()
     {
         return $this->hasManyThrough('App\Action', 'App\Action');

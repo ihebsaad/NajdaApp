@@ -136,10 +136,11 @@ class ActionController extends Controller
 
         if($missionsec)
         {
-          $dtc = (new \DateTime())->format('Y-m-d H:i');
-          $format = "Y-m-d\TH:i";
-          $dateSys = \DateTime::createFromFormat($format, $dtc);
+          $dtc = (new \DateTime())->format('Y-m-d H:i:s');
 
+          $format = "Y-m-d H:i:s";
+          $dateSys = \DateTime::createFromFormat($format, $dtc);
+        // dd($dateSys);
              foreach ($missionsec as $miss) {
 
 
@@ -148,34 +149,43 @@ class ActionController extends Controller
 
 
 
-                      if($miss->dep_pour_miss==1 && $miss->h_dep_pour_miss!=null )
+                      if($miss->type_heu_spec==1 && $miss->h_dep_pour_miss!=null )
                          {
 
-                      
-                           $datespe = \DateTime::createFromFormat($format,$miss->h_dep_pour_miss);
+                        //dd($miss->h_dep_pour_miss);
+                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
+                        //dd( $datespe1);
 
+                           $datespe = \DateTime::createFromFormat($format,($miss->h_dep_pour_miss));
+                           // dd( $datespe );
                          
                             if($miss->type_Mission==6)//taxi 
                                 {
                                     //activer l'action 6 de consultation médicale  Si_heure_systeme>heure_RDV+2h 
 
-                                    if($datespe->format('Y-m-d H:i') <= $dateSys)
+                                   // dd($datespe);
+                                    //dd($dateSys);
+
+                                    if($datespe <= $dateSys)
                                     {
 
-                                        $action6=ActionEC::where('mission_id',$miss->id)->where('ordre',6);
+                                        $action6=ActionEC::where('mission_id',$miss->id)->where('ordre',6)->first();
                                         //Suivre mission taxi
                                         if($action6->statut=='inactive')
                                         {
 
-                                             $action6->statut="active";
+                                             $action6->update(['statut'=>"active"]);
+                                             $action6->update(['date_deb' => $dateSys]); 
+                                              $action6->update(['user_id'=>Auth::user()->id]);
+                                             $miss-> update(['type_heu_spec'=>0]);
 
                                         }
 
                                         // rendre datespec 0
 
-                                        //$miss-> update(['dep_pour_miss'=>0]);
+                                       
 
-                                         $output='Rappel pour l\'Attente de réponse pour l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->titre.' | Dossier : '. $action6->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
+                                         $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->titre.' | Dossier : '. $action6->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
              
                                             return($output);
 
@@ -228,7 +238,9 @@ class ActionController extends Controller
 
 
                                     
-                                 }*/
+                                 }
+
+                                 */
 
                                 // cas dpart pour mission
                                     
@@ -238,9 +250,7 @@ class ActionController extends Controller
                                
                                    $datespe  = \DateTime::createFromFormat($format, $miss->h_dep_pour_miss);
 
-                                 
-
-                                    
+                                                                     
                                  }
 
                             
@@ -770,7 +780,7 @@ class ActionController extends Controller
             {
                 return false;
 
-            }
+                }
             
         }
 
@@ -784,6 +794,10 @@ class ActionController extends Controller
          //return $this->activerActionsReporteeOuRappelee();
 
         //dd($request->all());
+
+         $dtc = (new \DateTime())->format('Y-m-d\TH:i');                         
+         $format = "Y-m-d\TH:i";
+         $dateSys  = \DateTime::createFromFormat($format, $dtc);
 
      
 
@@ -804,6 +818,8 @@ class ActionController extends Controller
            {
 
            $action->update(['statut'=>"faite"]); 
+           $action->update(['date_fin' => $dateSys]);
+           $action->update(['user_id'=>auth::user()->id]);
                   
 
            }  
@@ -813,7 +829,8 @@ class ActionController extends Controller
                    if($bouton==2)  //bouton ignorer
                    {
 
-                      $action->update(['statut'=>"ignoree"]); 
+                      $action->update(['statut'=>"ignoree"]);
+                      $action->update(['user_id'=>auth::user()->id]); 
 
                    }  
                    else{
@@ -823,11 +840,8 @@ class ActionController extends Controller
                            {
 
                            
-                                 
-                                
-                                $dtc = (new \DateTime())->format('Y-m-d\TH:i');                         
-                                $format = "Y-m-d\TH:i";
-                                 $dateSys  = \DateTime::createFromFormat($format, $dtc);
+                                                       
+                               
 
                                  $dateRepAct  = \DateTime::createFromFormat($format, $request->get('datereport'));
                                  // dd($dateRepAct);
@@ -841,11 +855,13 @@ class ActionController extends Controller
                                  else
                                  {
                                  $action->update(['statut'=>"rfaite"]);
+                                 $action->update(['user_id'=>auth::user()->id]);
 
                                  $Naction= new ActionEC($action->toArray());                    
                                  $Naction->save();
                                  $NNaction=ActionEC::where('id',$Naction->id);
                                  $NNaction->update(['statut'=>"reportee"]);
+                                 $NNaction->update(['user_id'=>auth::user()->id]);
                                 // $Naction->update(['statut'=>"inactive"]);
 
                                  $n=$Naction->num_report;
@@ -871,9 +887,7 @@ class ActionController extends Controller
 
                                 // sur la validité de temps                                  
                                 
-                                $dtc = (new \DateTime())->format('Y-m-d\TH:i');                         
-                                $format = "Y-m-d\TH:i";
-                                $dateSys  = \DateTime::createFromFormat($format, $dtc);
+                               
 
                                  $dateRapAct  = \DateTime::createFromFormat($format, $request->get('daterappel'));
                                 // dd($dateRapAct);
@@ -888,6 +902,8 @@ class ActionController extends Controller
                                  {
 
                                  $action->update(['statut'=>"rfaite"]);
+                                 $action->update(['user_id'=>auth::user()->id]);
+
                                  $Naction= new ActionEC($action->toArray());                    
                                  //$Naction->create();
                                  $Naction->save();
@@ -897,6 +913,7 @@ class ActionController extends Controller
                                  $n+=1;
                                  $NNaction->update(['num_rappel'=> $n]);
                                  $NNaction->update(['date_rappel'=> $dateRapAct]);
+                                 $NNaction->update(['user_id'=>auth::user()->id]);
 
                                  //return back()->with('messagekbs', 'l attente de réponse est enregistrée avec succèss');
 
@@ -930,7 +947,7 @@ class ActionController extends Controller
          return $this->taxi_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
         
          case "Avance de fonds contre RDD": 
-         return $this->Avance_de_fonds_contre_RDD_versionBouton($option,$idmiss,$idact,$iddoss,$bouton); break;  
+         return $this->Avance_de_fonds_contre_RDD_DV($option,$idmiss,$idact,$iddoss,$bouton); break;  
 
          case "Billetterie fournie par VAT": 
          return $this->Billetterie_fournie_par_VAT_DV($option,$idmiss,$idact,$iddoss,$bouton); break;  
@@ -1516,6 +1533,7 @@ class ActionController extends Controller
 /**----------------------------------------------test des fonctions workflow----------------------------*/
 
 
+
  
       
 
@@ -1624,7 +1642,205 @@ class ActionController extends Controller
 
 
 
-   //--------------------------------------Version derniere du workflow-------------------------------------
+   //-------------------------------------- derniere version du workflow-------------------------------------
+
+
+
+    // quelques fonctions utiles pour le workflow
+
+public function fin_mission_si_test_fin($idact,$idmiss)
+{
+
+                   $Action=ActionEC::find($idact);
+                    $act=$Action->Mission;     
+                    $dossier=$act->dossier;
+                    $dossiers=Dossier::get();
+                   $typesMissions=TypeMission::get();
+
+                   $act->update(['statut_courant'=>'achevee']);
+                   $Actions=$act->Actions;
+
+                   $this->Historiser_actions($idmiss);
+
+                    $Missions=Auth::user()->activeMissions;
+                    
+
+
+                  Session::flash('messagekbsSucc', 'La mission en cours   '.$act->titre.' de dossier  '.$act->dossier->reference_medic .'  est maintenant achevée');            
+
+                  return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+ }
+              
+
+public function etat_action_sinon_test_fin($chang,$bouton,$idact)
+{
+              if($chang==false && ($bouton==3 || $bouton==4 || $bouton==1 ||$bouton==2 ))
+                        {
+
+
+                             $Action=ActionEC::find($idact);
+                             $act=$Action->Mission;     
+                             $dossier=$act->dossier;
+                             $dossiers=Dossier::get();
+                             $typesMissions=TypeMission::get();
+                             $Missions=Auth::user()->activeMissions;
+                             $Actions=$act->Actions;
+                           // dd($dossier);
+
+                       if ($bouton==1)
+                       Session::flash('messagekbsSucc', 'l\'action est faite avec succès');
+                      if ($bouton==2)
+                       Session::flash('messagekbsSucc', 'l\'action est ignorée');
+                       if ($bouton==3)
+                       Session::flash('messagekbsSucc', 'l\'action est reportée');
+                        if ($bouton==4)
+                       Session::flash('messagekbsSucc', 'l\'action est mise en attente');
+             
+
+                         return view('actions.DossierMissionAction',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+
+
+
+                        } 
+
+
+ }  
+
+
+  public function Avance_de_fonds_contre_RDD_DV($option,$idmiss,$idact,$iddoss,$bouton)
+        {
+
+
+
+                       $dtc = (new \DateTime())->format('Y-m-d\TH:i');                         
+                       $format = "Y-m-d\TH:i";
+                        $dateSys  = \DateTime::createFromFormat($format, $dtc);
+              
+          
+
+                   $chang=false;
+
+                 
+                   
+
+                        $toutesActions=ActionEC::Where('mission_id',$idmiss)->where('statut','!=','rfaite')
+                        ->orderBy('ordre')->get();
+                       
+                       // dd($toutesActions);
+                         $actions = array(); 
+
+                         foreach ($toutesActions as $ta ) {
+                              $actions[]=$ta;
+                         }
+
+                       $action1=$actions[0];$action2=$actions[1];$action3=$actions[2];$action4=$actions[3];
+                       $action5=$actions[4];$action6=$actions[5];
+
+
+                             // activer action 2 Informer le client
+
+                           if(($action1->statut=="reportee" || $action1->statut=="rappelee" || $action1->statut=="faite") && $action2->statut !="faite"  )// activer action 2
+                           {
+
+                             $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Informer le client')
+                             ->where('statut','!=','rfaite')->first();
+                            $actSui->update(['statut'=>"active"]); 
+                             $actSui->update(['date_deb' => $dateSys]);              
+                            $chang=true;           
+
+
+                           }
+
+
+                          // activation action 3
+
+
+
+                         if($action3->statut !="faite" && (($action1->statut=="faite" && $action1->opt_choisie=="1" && 
+                            $action2->statut=="faite" && 
+                            $action2->opt_choisie=="1" )||
+                            (($action1->statut=="reportee"||$action1->statut=="rappelee") && $action1->opt_choisie=="2")||
+                            (($action1->statut=="reportee" ||$action1->statut=="rappelee")&& $action1->opt_choisie=="3")
+                          ))
+                           {
+                            
+                            $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Missionner prestataire')
+                            ->where('statut','!=','rfaite')->first();
+                            $actSui->update(['statut'=>"active"]); 
+                             $actSui->update(['date_deb' => $dateSys]);              
+                            $chang=true;                
+
+
+                           }
+
+                     
+
+                       // activation  action 4
+                       
+                       if($action4->statut !="faite" && (($action1->statut=="reportee" && ($action1->opt_choisie=="2"||$action1->opt_choisie=="3")&& ($action2->statut=="faite" && $action2->opt_choisie=="2"))||($action1->statut=="faite" && $action1->opt_choisie=="1" && $action2->opt_choisie=="2" && $action2->statut=="faite")
+
+                         ) )
+                         {
+
+                             $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Préparer le cash pour remise')
+                             ->where('statut','!=','rfaite')->first();
+                            $actSui->update(['statut'=>"active"]); 
+                             $actSui->update(['date_deb' => $dateSys]);              
+                              $chang=true;
+
+
+                         }  
+
+                         //activer action 5
+
+                   
+                          if($action5->statut !="faite" && ($action3->statut=="faite" || $action3->statut=="reportee"))// activer action 5
+                           {
+
+                             $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Effectuer le virement à notre prestataire')->where('statut','!=','rfaite')->first();
+                             $actSui->update(['statut'=>"active"]); 
+                              $actSui->update(['date_deb' => $dateSys]);              
+                              $chang=true;               
+
+
+                           }
+
+                           // activer action 6
+
+                            if($action6->statut !="faite" && ($action3->statut=="faite" || $action4->statut=="faite"))
+                           {
+
+                             $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Confirmation au client')
+                             ->where('statut','!=','rfaite')->first();
+                             $actSui->update(['statut'=>"active"]);
+                              $actSui->update(['date_deb' => $dateSys]);              
+                             $chang=true;              
+
+                           }
+
+
+                      if($chang==true)
+                      {
+                     return $this->afficheEtatAction_mision_dossier($idact,$bouton);
+                      }
+
+                     if($this->test_fin_mission($idmiss)==true)
+                        {
+
+                              return $this->fin_mission_si_test_fin($idact,$idmiss);
+
+                        }
+
+
+                      return $this->etat_action_sinon_test_fin($chang,$bouton,$idact);
+                                   
+
+        
+           
+          
+
+        }
+
 
 
 public function Transport_ambulance_DV ($option,$idmiss,$idact,$iddoss,$bouton)
@@ -1869,11 +2085,13 @@ public function Transport_assis_chaise_roulante_DV($option,$idmiss,$idact,$iddos
 public function taxi_DV($option,$idmiss,$idact,$iddoss,$bouton)
 {
 
-
-      
+                 $dtc = (new \DateTime())->format('Y-m-d\TH:i');                         
+                 $format = "Y-m-d\TH:i";
+                 $dateSys  = \DateTime::createFromFormat($format, $dtc);
+              
           
 
-                   $changement=false;
+                   $chang=false;
 
                         $toutesActions=ActionEC::Where('mission_id',$idmiss)->where('statut','!=','rfaite')
                         ->orderBy('ordre')->get();
@@ -1891,54 +2109,58 @@ public function taxi_DV($option,$idmiss,$idact,$iddoss,$bouton)
 
                 // activer action 2 Créer OM taxi
 
-               if( $action2->statut!="faite" && $action2->statut!="ignoree" && ($action1->statut=="faite" || $action1->statut=="ignoree"))
+               if( $action2->statut=="inactive" && ($action1->statut=="faite" || $action1->statut=="ignoree"))
                {
 
-                $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Créer OM taxi')
+                $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',2)
                 ->where('statut','!=','rfaite')->first();
-                $actSui->update(['statut'=>"active"]);                
-                  $changement=true;
+                $actSui->update(['statut'=>"active"]); 
+                $actSui->update(['date_deb' => $dateSys]);               
+                  $chang=true;
 
                }
 
 
               // activation action 3 Envoyer au prestataire
-             if($action3->statut!="faite" && $action3->statut!="ignoree" && $action2->statut=="faite" )
+             if($action3->statut=="inactive"  && $action2->statut=="faite" )
               
                {
                 
-                $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Envoyer au prestataire')
+                $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',3)
                 ->where('statut','!=','rfaite')->first();
-                $actSui->update(['statut'=>"active"]);                 
-                 $changement=true;
+                $actSui->update(['statut'=>"active"]);   
+                $actSui->update(['date_deb' => $dateSys]);              
+                 $chang=true;
 
                }
 
 
            // activation  action 4 Informer l’assuré
            
-           if( $action4->statut!="faite" && $action4->statut!="ignoree" && $action3->statut=="faite" )
+           if( $action4->statut=="inactive" && $action3->statut=="faite" )
              
              {
 
-                $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Informer l’assuré')
+                $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',4)
                 ->where('statut','!=','rfaite')->first();
                 $actSui->update(['statut'=>"active"]); 
+                $actSui->update(['date_deb' => $dateSys]);
 
-                 $changement=true;
+                 $chang=true;
              }  
 
              //activer action 5 Confirmer au client
 
        
-              if($action5->statut!="faite" && $action5->statut!="ignoree" && ($action3->statut=="faite" || $action4->statut=="faite"))// activer action 5
+              if($action5->statut=="inactive" && ($action3->statut=="faite" || $action4->statut=="faite"))// activer action 5
                {
 
-                 $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Confirmer au client')
+                 $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',5)
                  ->where('statut','!=','rfaite')->first();
-                 $actSui->update(['statut'=>"active"]);                
+                 $actSui->update(['statut'=>"active"]);  
+                 $actSui->update(['date_deb' => $dateSys]);              
 
-                   $changement=true;
+                   $chang=true;
                }
 
                // activer action 6 Suivre mission taxi
@@ -1959,16 +2181,17 @@ public function taxi_DV($option,$idmiss,$idact,$iddoss,$bouton)
                 if($action7->statut=="inactive"  && ($action6->statut=="faite" || $action6->statut=="faite" ) )// activer action 5
                {
 
-                 $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Suivre mission taxi')
+                 $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',7)
                  ->where('statut','!=','rfaite')->first();
                  $actSui->update(['statut'=>"active"]);  
+                 $actSui->update(['date_deb' => $dateSys]);
 
-                  $changement=true;            
+                  $chang=true;            
 
                }
 
 
-                    if($changement==true)
+                    if($chang==true)
                       {
                      return $this->afficheEtatAction_mision_dossier($idact,$bouton);
                       }
@@ -1976,52 +2199,13 @@ public function taxi_DV($option,$idmiss,$idact,$iddoss,$bouton)
          if($this->test_fin_mission($idmiss)==true)
             {
 
+                  return $this->fin_mission_si_test_fin($idact,$idmiss);
 
-                   $Action=ActionEC::find($idact);
-                    $act=$Action->Mission;     
-                    $dossier=$act->dossier;
-                    $dossiers=Dossier::get();
-                   $typesMissions=TypeMission::get();
-
-                   $act->update(['statut_courant'=>'achevee']);
-                   $Actions=$act->Actions;
-
-                   $this->Historiser_actions($idmiss);
-
-                    $Missions=Auth::user()->activeMissions;
-                    
-
-
-                  Session::flash('messagekbsSucc', 'La mission en cours   '.$act->titre.' de dossier  '.$act->dossier->reference_medic .'  est maintenant achevée');            
-
-                  return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
             }
-              if($chang==false && ($bouton==3 || $bouton==4 || $bouton==1 ))
-                        {
 
 
-                             $Action=ActionEC::find($idact);
-                             $act=$Action->Mission;     
-                             $dossier=$act->dossier;
-                             $dossiers=Dossier::get();
-                             $typesMissions=TypeMission::get();
-                             $Missions=Auth::user()->activeMissions;
-                             $Actions=$act->Actions;
-                           // dd($dossier);
-
-                       if ($bouton==1)
-                       Session::flash('messagekbsSucc', 'l\'action est faite avec succès');
-                       if ($bouton==3)
-                       Session::flash('messagekbsSucc', 'l\'action est reportée');
-                        if ($bouton==4)
-                       Session::flash('messagekbsSucc', 'l\'action est mise en attente');
-             
-
-                         return view('actions.DossierMissionAction',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
-
-
-
-                        }   
+          return $this->etat_action_sinon_test_fin($chang,$bouton,$idact);
+               
 
 
 

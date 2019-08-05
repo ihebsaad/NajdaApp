@@ -89,11 +89,13 @@ class MissionController extends Controller
              'type_Mission' =>$typeMiss->id,
              'dossier_id' => $dossier->id,
              'statut_courant' => 'active',
+
              'realisee'=> 0,
              'affichee'=>1,
              'user_id'=>auth::user()->id,
 
              'type_heu_spec'=> $typeMiss->type_heu_spec,
+             'type_heu_spec_archiv'=> $typeMiss->type_heu_spec,
              'rdv'=> $typeMiss->rdv,
              'act_rdv'=> $typeMiss->act_rdv,
              'dep_pour_miss'=> $typeMiss->dep_pour_miss,
@@ -189,7 +191,7 @@ class MissionController extends Controller
              'rapp_doc_ou_non'=>trim($valeurs[$k+7]),
              'activ_avec_miss'=>trim($valeurs[$k+8]),
              'realisee'=> false,
-             'user_id'=> $Mission->user_id,
+             //'user_id'=> $Mission->user_id,
              'statut'=>'inactive'
                                        
                   ]); 
@@ -227,7 +229,7 @@ class MissionController extends Controller
              'rapp_doc_ou_non'=> trim($valeurs[$k+7]),
                'activ_avec_miss'=>trim($valeurs[$k+8]),
              'realisee'=> false,
-             'user_id'=> $Mission->user_id,
+             //'user_id'=> $Mission->user_id,
              'date_deb' => $Mission->date_deb,
              'statut'=>'active'       
                   ]); 
@@ -702,8 +704,148 @@ class MissionController extends Controller
        // return view('actions.workflow', compact('Actions'));
     }
 
+      public function getAjaxWorkflow($id)
+    {
 
-    public function getAjaxWorkflow($id)
+     // $_GET['idw'];
+
+      $actk=Mission::find($id);
+
+      $output='';
+
+      if(!$actk->ActionECs->isEmpty())
+      {
+                   $output='<h4><b>Etat des actions</b></h4><br>';
+
+
+                $i = 0;
+                $len = count($actk->Actions);
+                //$actko=$actk->Actions->orderBy('ordre','DESC')->get();
+                $actko=ActionEC::where('mission_id',$id)->orderBy('ordre','ASC')->get();
+                  
+                   $output.='<table class="table table-striped">
+                  <thead>
+                    <tr>
+
+                      <th>Action</th>
+                      <th>date début</th>
+                      <th>date fin</th>
+                      <th>Effectuée par</th>
+                      <th>statut</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>';
+
+
+                foreach ( $actko as $sactions)
+                    { 
+
+                           $i++;      
+                   
+                     //$output.='<div class="row">' ;
+                        if ($sactions->statut!='rfaite')
+                        {
+
+                        $output.='<tr><td style="overflow: auto;" title="'.$sactions->titre.'"><span style="font-weight : none;">'.$sactions->titre.'</span></td>
+                        <td style="overflow: auto;" title="'.$sactions->date_deb.'"><span style="font-weight : none;">'.$sactions->date_deb.'</span></td>
+                        <td style="overflow: auto;" title="'.$sactions->date_fin.'"><span style="font-weight : none;">'.$sactions->date_fin.'</span></td>';
+
+                        if($sactions->user_id!=null)
+                        {
+
+                        $output.='<td style="overflow: auto;" title="'.$sactions->agent->name.' '.$sactions->agent->lastname.'"><span style="font-weight : none;">'.$sactions->agent->name.' '.$sactions->agent->lastname.'</span></td>';
+                        }
+                        else
+                        {
+
+                         $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;"> </span></td>';
+
+                        }
+
+
+                        $output.='<td style="overflow: auto;" title="'.$sactions->statut.'"><span style="font-weight : none;">'.$sactions->statut.'</span></td></tr>' ;
+                        }
+                   
+
+                    }
+                    if($i==0)
+                    {
+                       $output.='<tr><td><span style="font-weight : bold;">Pas d\'actions</span></td></tr>' ;
+
+                    }
+
+
+                   $output.=' </tbody> </table>';
+
+
+                   $output.='<br><br><h4> <b>Historique des commentaires des actions qui ont été mis en attente </b></h4><br> <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Action</th>
+                
+                      <th>Num rappel</th>
+                      <th>Date rappel</th>
+                      <th>Effectuée par</th>
+
+                      <th>commentaire l</th>
+                      <th>commentaire 2</th>
+                      <th>commentaire 3</th>
+                     
+                    </tr>
+                  </thead>
+                  <tbody>';
+
+                   $i=0;
+
+                 $actrfait=ActionEC::select()->where('mission_id',$id)->where('statut','=','rfaite')->orWhere('statut','=','rappelee')->orderBy('ordre','desc')->orderBy('num_rappel','DESC')->get();
+
+                 // $actrfait1=$actrfait->all();
+
+                  foreach ($actrfait as $sactions)
+                    { 
+
+                           $i++;      
+                   
+                     //$output.='<div class="row">' ;
+                        if ($sactions->statut=='rfaite')
+                        {
+
+                          $output.='<tr><td style="overflow: hidden;" title="'.$sactions->titre.'" ><span style="font-weight : bold;">'.$sactions->titre.'</span></td>
+                     
+                          <td style="overflow: auto;" title="'.$sactions->num_rappel.'" ><span style="font-weight : bold;">'.$sactions->num_rappel.'</span></td>
+                          <td style="overflow: auto;" title="'.$sactions->date_rappel.'" ><span style="font-weight : bold;">'.$sactions->date_rappel.'</span></td>
+                          <td style="overflow: auto;" title="'.$sactions->agent->name.' '.$sactions->agent->lastname.'" ><span style="font-weight : bold;">'.$sactions->agent->name.' '.$sactions->agent->lastname.'</span></td>
+
+                          <td style="overflow: hidden;" title="'.$sactions->comment1.'"><span style="font-weight : bold; overflow: hidden;">'.$sactions->comment1.'</span></td>
+                          <td style="overflow: hidden;" title="'.$sactions->comment2.'"><span style="font-weight : bold;">'.$sactions->comment2.'</span></td>
+                          <td style="overflow: hidden;" title="'.$sactions->comment3.'" ><span style="font-weight : bold;">'.$sactions->comment3.'</span></td>
+                          </tr>' ;
+                        }
+                   
+
+                    }
+                    if($i==0)
+                    {
+                       $output.='<tr><td><span style="font-weight : bold;">Pas d\'actions</span></td>
+                         </tr>' ;
+
+                    }
+
+
+                  $output.=' </tbody> </table>';
+
+
+
+        
+         }
+
+   return $output;
+
+    }
+
+
+  /*  public function getAjaxWorkflow($id)
     {
 
      // $_GET['idw'];
@@ -785,7 +927,7 @@ class MissionController extends Controller
 
    return $output;
 
-    }
+    }*/
  
 
     public function saving(Request $request)

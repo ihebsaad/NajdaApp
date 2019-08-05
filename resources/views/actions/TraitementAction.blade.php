@@ -937,7 +937,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
    <script>
   
-   $("#kbspaneltitle").append('<?php if($Action) {  echo 'Mission : '.$Action->Mission->titre.' | Action : '.$Action->titre ; }  ?>');
+   $("#kbspaneltitle").append('<?php if($Action) {  echo 'Mission : '.$Action->Mission->titre.'  | Action : '.$Action->titre.'<br><div style ="overflow: hidden ; width: 100%;"> (type de mission  :  '.$Action->type_Mission.'  )</div>' ; }  ?>');
   </script>
 <!-- enregistrer commentaires sans bouton -->
 <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
