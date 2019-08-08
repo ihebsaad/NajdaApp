@@ -325,7 +325,7 @@ console.log(parsed);*/
             */
             ?>
 
-        }
+            
 
         // notification desktop
 
