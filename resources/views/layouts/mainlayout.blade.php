@@ -44,7 +44,7 @@
                 <div class="panel-body" style="display: block;min-height:450px;">
                 @yield('content')
 
-                              {{$view_name}}
+
                 </div>
             </div>
             <!-- /.content -->

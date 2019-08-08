@@ -109,6 +109,9 @@ public function logout(Request $request)
         }
 
 */
+        Dossier::where('affecte', $iduser)
+            ->update(array('affecte' => NULL));
+
         $this->guard()->logout();
 
         $request->session()->invalidate();
