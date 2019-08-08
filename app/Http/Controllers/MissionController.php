@@ -96,6 +96,7 @@ class MissionController extends Controller
 
              'type_heu_spec'=> $typeMiss->type_heu_spec,
              'type_heu_spec_archiv'=> $typeMiss->type_heu_spec,
+             'date_spec_affect'=>0,
              'rdv'=> $typeMiss->rdv,
              'act_rdv'=> $typeMiss->act_rdv,
              'dep_pour_miss'=> $typeMiss->dep_pour_miss,

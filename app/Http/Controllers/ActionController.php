@@ -68,6 +68,49 @@ class ActionController extends Controller
     }
 
 
+     public  function traiterDatesSpecifiques(Request $request)
+     {
+
+        // dd($request->all());
+
+          $dtc = (new \DateTime())->format('Y-m-d\TH:i');
+
+          $format = "Y-m-d\TH:i";
+          $dateSys = \DateTime::createFromFormat($format, $dtc);
+          $datespe = \DateTime::createFromFormat($format,$request->dateSpec);
+
+        if($dateSys>= $datespe)
+        {
+
+            return 'date spécifique invalide'; 
+        }
+        else
+        {
+            $miss=Mission::where('id',$request->idmissionDateSpec)->first();
+
+            if($miss->type_Mission==6)
+            {
+            
+            $miss->update(['date_spec_affect'=>1]); 
+
+            $miss->update(['h_dep_pour_miss'=>$datespe]);
+
+            return 'date affectée';       
+
+            }
+
+
+
+         
+
+        }
+
+       //  return $request->idmissionDateSpec.' '.$request->dateSpec.' '.$request->NomTypeDateSpec ;
+
+
+     }
+
+
      /*public function RappelAction (Request $request,$iddoss,$idact,$idsousact)
    {
 
@@ -130,7 +173,8 @@ class ActionController extends Controller
 
       // recherche les missions actives  pour l'utilisateur courant
 
-        $missionsec= Mission::where('user_id', Auth::user()->id)->where('statut_courant',"active")->where('type_heu_spec',1)->get();
+        $missionsec= Mission::where('user_id', Auth::user()->id)->where('statut_courant',"active")->where('type_heu_spec',1)
+        ->where('date_spec_affect','=',1)->get();
           
      
 
@@ -149,7 +193,7 @@ class ActionController extends Controller
 
 
 
-                      if($miss->type_heu_spec==1 && $miss->h_dep_pour_miss!=null )
+                      if($miss->date_spec_affect==1 && $miss->h_dep_pour_miss!=null )
                          {
 
                         //dd($miss->h_dep_pour_miss);
@@ -177,17 +221,23 @@ class ActionController extends Controller
                                              $action6->update(['statut'=>"active"]);
                                              $action6->update(['date_deb' => $dateSys]); 
                                               $action6->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['type_heu_spec'=>0]);
+                                             $miss-> update(['date_spec_affect'=>0]);
+
+                                              $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->titre.' | Dossier : '. $action6->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
+     
+                                           return($output);
+
+
+
+
+                                        
 
                                         }
 
                                         // rendre datespec 0
 
                                        
-
-                                         $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->titre.' | Dossier : '. $action6->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
-             
-                                            return($output);
+                                        
 
 
 
@@ -776,7 +826,7 @@ class ActionController extends Controller
         $actions=ActionEC::where('mission_id',$idmission)->get();
         foreach ($actions as $a) {
 
-            if($a->statut=="active" || $a->statut=="reportee" || $a->statut=="rappelee" || $a->Mission->type_heu_spec==1 )
+            if($a->statut=="active" || $a->statut=="reportee" || $a->statut=="rappelee" || $a->statut=="deleguee" || $a->Mission->date_spec_affect==1 )
             {
                 return false;
 
@@ -839,8 +889,7 @@ class ActionController extends Controller
                              if($bouton==3)  //bouton reporter
                            {
 
-                           
-                                                       
+                                                                                  
                                
 
                                  $dateRepAct  = \DateTime::createFromFormat($format, $request->get('datereport'));
@@ -848,7 +897,7 @@ class ActionController extends Controller
                                  if($dateRepAct<= $dateSys)
                                  {
 
-                                    return back()->with('messagekbsFail', 'Erreur: Date de report invalide : date de report doit etre supérieure à la date courante');
+                                    return back()->with('messagekbsFail', 'Erreur: Date de report invalide : date de report doit être supérieure à la date courante');
 
                                   /*return Redirect::back()->withErrors(['messagekbs', 'Date de report invalide : date de report doit etre supérieure à la date courante']);*/
                                  }
@@ -896,7 +945,7 @@ class ActionController extends Controller
                                  {
 
                                  /* return Redirect::back()->withErrors(['messagekbs', 'Date d attente de réponse invalide : elle doit etre supérieure à la date courante']);*/
-                                 return back()->with('messagekbsFail', 'Date d attente de réponse invalide : elle doit etre supérieure à la date courante');
+                                 return back()->with('messagekbsFail', 'Date d attente de réponse invalide : elle doit être supérieure à la date courante');
                                  }
                                  else
                                  {
@@ -943,7 +992,7 @@ class ActionController extends Controller
          case "Transport ambulance": 
          return $this->Transport_ambulance_DV($option,$idmiss,$idact,$iddoss,$bouton); break; 
 
-         case "TAXI": 
+         case "Taxi": 
          return $this->taxi_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
         
          case "Avance de fonds contre RDD": 
@@ -1092,7 +1141,7 @@ class ActionController extends Controller
 
     }
 
-      public function BoutonFait(Request $request, $iddoss,$idmiss,$idact)
+      /*public function BoutonFait(Request $request, $iddoss,$idmiss,$idact)
 
     {
 
@@ -1136,7 +1185,7 @@ class ActionController extends Controller
 
   
 
-    }
+    }*/
 
 
 

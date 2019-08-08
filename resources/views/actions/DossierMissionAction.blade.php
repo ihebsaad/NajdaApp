@@ -22,8 +22,8 @@
   <p>Action: {{$Action->titre}} </p>
   <p>Mission: {{$Action->Mission->titre}} </p>
     <p>Dossier: {{$Action->Mission->dossier->reference_medic}} </p>
-
- @if ($Action->Mission->activeActionEC)
+@if($Action->user_id != $Action->assistant_id)
+ @if (count($Action->Mission->activeActionEC)>0)
       <p>Liste des actions actives pour la Mission en cours:  </p>
         <p> @foreach($Action->Mission->activeActionEC  as $d)
 
@@ -40,9 +40,11 @@
 
 @else
  
- <p>cette mission est terminée </p>
+ <p>Il n'y a pas des actions actives pour le moment </p>
         
 @endif
+@endif
+
     
 
   

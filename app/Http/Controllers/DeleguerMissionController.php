@@ -77,7 +77,7 @@ class DeleguerMissionController extends Controller
                     
 
 
-                Session::flash('AffectMission',"la mission est déléguée avec succès");            
+                Session::flash('AffectMission',"la mission ". $mission->titre." de dossier".$dossier->reference_medic ."est déléguée ");            
 
                 return view('actions.deleguerMission',['typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
 
@@ -140,11 +140,23 @@ class DeleguerMissionController extends Controller
 
             if($ref_doss &&  $titre_miss )
             {
-            $output='la mission '.$titre_miss.' de dossier de référence '.$ref_doss.' est affectée à vous';
-             $affecmhis=new DelegMissHis($affm->toArray()); 
 
-             $affecmhis->save();
-             $affm->delete();
+
+            $affecmhis=new DelegMissHis($affm->toArray()); 
+
+             if( $affecmhis->save() && $affm->delete())
+              {
+
+                $output='la mission '.$titre_miss.' de dossier de référence '.$ref_doss.' est affectée à vous';
+
+              }
+              else
+               {
+
+                  $output='Erreur lors d\'archivage des Notifiactions d\'affectation des missions déléguées. Veuillez contacter l\'     administrateur. vérifiez si quelqu\'un veut vous affecter  la mission '.$titre_miss.' de dossier de référence '.$ref_doss ;
+
+            
+               }
             }
 
            
@@ -156,7 +168,7 @@ class DeleguerMissionController extends Controller
 
      }
 
-
+ 
 
 
 

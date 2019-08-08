@@ -69,6 +69,10 @@ use App\Http\Controllers\TagsController;
                                 color: red;
                               }
 
+                              .panel-heading.activeActDeleg {
+                                background-color: #8A0808 /*#86B404  #2EFEF7;*/
+                              }
+
                               </style>
                               <?php if (isset($act)){$currentMission=$act->id;}else{$currentMission=0;} ?>
 
@@ -155,7 +159,50 @@ use App\Http\Controllers\TagsController;
 
                                      @endforeach
 
+                                     <br><br>
+                                    <!-- actions déléguées -->
+
+                                      <div class="panel panel-default">
+
+                                        <div class="panel-heading activeActDeleg">
+
+                                         
+                                           <h4 class="panel-title">
+                                              <a data-toggle="collapse" href="">Actions déléguées</a>
+                                           </h4>
+                                        </div>
+
+                                       <div id="" class="panel-collapse collapse in">
+                                            <ul class="list-group">
+                                             {{-- @foreach($Mission->activeActionEC as  $sas) --}}
+
+                                             <?php  $actionsDeleg = App\ActionEC::whereNotNull('statut')->where('statut','=','deleguee')->where('assistant_id','=', Auth::user()->id)->get(); ?>
+                                           @if(isset($actionsDeleg) && !Empty($actionsDeleg) && count($actionsDeleg) > 0)
+
+                                            @foreach($actionsDeleg as  $sas)
+
+                                             <li class="list-group-item"><a  href="{{url('dossier/Mission/TraitementAction/'.$sas->Mission->dossier->id.'/'.$sas->mission_id.'/'.$sas->id)}}">
+
+                                                Action: {{$sas->titre}}</a> <br> (Dossier: {{$sas->Mission->dossier->reference_medic}} / Mission:  {{$sas->Mission->titre}} / Type de mission : {{$sas->Mission->typeMission->nom_type_Mission}} / Affectée par: {{$sas->agent->name}} {{$sas->agent->lastname}} ) </li>
+                                                @endforeach
+                                         
+                                           @else
+
+                                            <li class="list-group-item">Il n'y a pas des actions déléguées</li>
+                                          
+                                           @endif
+                                            </ul>
+
+                                        </div>
+
+
+                                        <!-- /.panel-heading -->
+
+
                                       </div>
+
+
+                                      </div><!--  kkkk-->
 
 
                                               </div>
@@ -1298,6 +1345,61 @@ var hrefidAcheverM;
      
     $.ajax({
        url : '{{ url('/') }}'+'/getNotificationDeleguerMiss/'+userIdConnec,
+       type : 'GET',
+       dataType : 'html', // On désire recevoir du HTML
+       success : function(data){ // code_html contient le HTML renvoyé
+           //alert (data);
+
+           if(data)
+           {
+          
+           // var idUserAffecte=jQuery(data).find('.userAff').attr("id");
+           // var refdoss=jQuery(data).find('.refdoss').attr("id");
+           
+
+           swal(data);
+
+          // location.reload(); 
+            /* if(idUserAffecte==userIdConnec)
+             {
+
+                 alert('un nouveau dossier dont la réf : '+refdoss +'est affecté à vous');
+                 location.reload(); 
+
+
+             }*/
+            
+              
+       
+
+            
+           }
+       }
+    });
+   
+
+
+//}, 7000);
+
+
+
+
+</script>
+
+
+
+<!--  délégation des actions -->
+
+<script type="text/javascript">
+  
+
+    //setInterval(function(){
+ //alert("Hello"); 
+
+  var userIdConnec = $('meta[name="userId"]').attr('content');
+     
+    $.ajax({
+       url : '{{ url('/') }}'+'/getNotificationDeleguerAct/'+userIdConnec,
        type : 'GET',
        dataType : 'html', // On désire recevoir du HTML
        success : function(data){ // code_html contient le HTML renvoyé

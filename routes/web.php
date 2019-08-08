@@ -70,6 +70,10 @@ Route::get('/getNotificationAffectationDoss/{userConnect}', 'AffectDossControlle
 Route::post('/deleguerMission/','DeleguerMissionController@deleguerMission')->name('Deleguer.Mission');
 Route::get('/getNotificationDeleguerMiss/{userConnect}', 'DeleguerMissionController@getNotificationDeleguerMiss'); 
 
+// delegation action
+Route::post('/deleguerAction/','DeleguerActionController@deleguerAction')->name('Deleguer.Action');
+Route::get('/getNotificationDeleguerAct/{userConnect}', 'DeleguerActionController@getNotificationDeleguerAct'); 
+
 
 /*** Entrees **/
 /* tous les emails (tous les entrees) dans la base */
@@ -376,6 +380,8 @@ Route::get('/traitementsBoutonsActions/{iddoss}/{idmiss}/{idsousact}/{bouton}',
     'ActionController@Bouton_Faire1_ignorer2_reporter3_rappeler4');
 
 Route::get('/annulerAttenteReponseAction/{idact}','ActionController@annulerAttenteReponseAction');
+
+Route::post('/Actions/traiterDatesSpecifiques','ActionController@traiterDatesSpecifiques')->name('Action.dateSpecifique');
 
 
 

@@ -42,11 +42,11 @@
  
   <!-- début onglet instructions------------------------------------------------------------------ -->
   <div id="home" class="tab-pane fade in active">
-     @if(session()->has('messagekbsSucc'))
+     {{--@if(session()->has('messagekbsSucc'))
     <div class="alert alert-success">
        <center> <h4>{{ session()->get('messagekbsSucc') }}</h4></center>
     </div>
-  @endif
+  @endif--}}
 
     @if(session()->has('messagekbsFail'))
     <div class="alert alert-danger">
@@ -237,7 +237,7 @@
      <div id="DivRapOuRepAct" class="row" style="border-style:solid; border-color:black;"> <!--début onglet reporter/attente document-->
 
     <ul class="nav nav-tabs nav-justified">
-    <li class="active"><a data-toggle="tab" href="#OngRapAct">Attente de réponse <i class="fa fa-2x fa-history"> </i> </a></li>
+    <li class="active"><a data-toggle="tab" href="#OngRapAct">Mise en attente (Rappel) <i class="fa fa-2x fa-history"> </i> </a></li>
     <li ><a data-toggle="tab" href="#OngRepAct">Reporter action <i class="fa fa-2x fa-clock"> </i></a></li>
     
      </ul>
@@ -269,7 +269,7 @@ $(document).on('click','.kbstab',function(){
       </div>
       <br><br>
       <div class="row">
-        <button id="BouRapAct" type="submit" style="flow : left; margin-left: 120px"> Attente de réponse</button>
+        <button id="BouRapAct" type="submit" style="flow : left; margin-left: 120px"> Mise en attente</button>
       </div>
 
       </p>
@@ -296,10 +296,98 @@ $(document).on('click','.kbstab',function(){
 
 
 
-     </div><!--fin  onglet reporter/attente document-->
+ </div><!--fin  onglet reporter/mise en attente-->
+       <br><br>
+
+
+       <!-- gestion des dates spécifiques-->
+
+       @if($Action->Mission->type_heu_spec==1 )
+
+        @if($Action->Mission->type_Mission==6 && $Action->ordre < 6 )
+
+
+        <input type="hidden" id="idmissionDateSpec" name="idmissionDateSpec" value="{{$Action->Mission->id}}"  />
+        <input type="hidden" id="NomTypeDateSpec" name="NomTypeDateSpec" value="dep_pour_miss"  />
+         
+       <h4><b> Dates spécifiques : </b></h4>
+
+       <br>
+       
+        <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
+
+        <div class="row">
+          <br>
+          <span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>
+          <br> <br>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px;"> &nbsp;&nbsp; la (les) date(s) spécifique(s) à fixer pour cette mission est (sont) : </span>
+          <br><br>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date Départ pour mission </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l'action 6 :</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> suivre mission taxi </span>
+          <br>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
+
+           {{-- @if($Action->Mission->date_spec_affect==1)
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; color:green ;"> oui, date assignée </span>
+           @else
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Non, date non assignée</span>
+           @endif--}}
+
+            <span id="idspandateAssNonAss" style="padding: 5px; font-weight: bold; font-size: 15px; color:<?php if($Action->Mission->date_spec_affect==1)
+
+             {
+              echo 'green';
+             }
+             else
+             {
+              echo 'red' ;
+             }?>
+
+             ;"> <?php if($Action->Mission->date_spec_affect==1)
+
+             {
+              echo 'oui, date assignée';
+             }
+             else
+             {
+              echo 'Non, date non assignée' ;
+             }?>
+             
+            </span>
 
 
 
+        </div>
+        <br>
+        <br>
+             <div class="row">
+
+              <label style="padding: 5px; font-weight: bold; font-size: 15px;">&nbsp;&nbsp; Mettre à jour la date spécifique : </label>
+              <?php $da = (new \DateTime())->format('Y-m-d\TH:i'); ?>
+             <input id="dateSpec" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec"/>
+            </div>
+
+        <br>
+
+         <div class="row">
+          <div class="col-md-5"> </div>
+
+           <div class="col-md-2"></div>
+
+          <div class="col-md-5">
+         <button id="MajDateSpec" type="button" style=""> Mettre à jour date spécifique</button> 
+         </div>
+          
+         </div>
+         <br>
+    
+       </div>
+
+           @endif
+
+        @endif
+
+    <!-- fin gestion des dates spécifiques-->
 
        <br><br>
 
@@ -319,7 +407,7 @@ $(document).on('click','.kbstab',function(){
           <button id="BouFaiAct" type="submit" class="btn btn-success" style="width: 200px;"> Fait </button>
 
 
-      </div>
+         </div>
 
     
 
@@ -375,6 +463,7 @@ $(document).on('click','.kbstab',function(){
         
       <div class="col-md-5">
          <!--<button id="BouDeleAction" type="button"class="btn btn-primary disabled" style="width: 250px;"> Déléguer l'action</button>-->
+         <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalDelegAct">Déléguer l'action courante</button>
       </div>
 
       <div class="col-md-2">
@@ -798,7 +887,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
       <div class="modal-body">
         <p>
       <div class="form-group">
-        <?php $da = (new \DateTime())->modify('-1 Hour')->format('Y-m-d\TH:i'); ?>
+        <?php $da = (new \DateTime())->format('Y-m-d\TH:i'); ?>
 
       <label for="datereport" style="display: inline-block;  text-align: left; width:200px;">Saisissez la date de report:</label>
       <input id="datereport" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:95%;  text-align: right;" name="datereport"/>
@@ -841,7 +930,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
       <div class="modal-body">
         <p>
       <div class="form-group">
-        <?php $da = (new \DateTime())->modify('-1 Hour')->format('Y-m-d\TH:i'); ?>
+        <?php $da = (new \DateTime())->format('Y-m-d\TH:i'); ?>
 
       <label for="daterappel" style="display: inline-block;  text-align: left; width:200px;">Saisissez la date de report:</label>
       <input id="daterappel" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:95%;  text-align: right;" name="daterappel"/>
@@ -974,9 +1063,56 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
             }
         });
 
-         }, 3000);
+         }, 2000);
 
     }
+
+  </script>
+
+  <!-- gestion des dates spécifiques-->
+
+  <script>
+
+$('#MajDateSpec').click(function(){
+        var idmissionDateSpec = $('#idmissionDateSpec').val();
+        var NomTypeDateSpec = $('#NomTypeDateSpec').val();
+        var dateSpec = $('#dateSpec').val();
+      
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('Action.dateSpecifique') }}",
+                method:"POST",
+                data:{idmissionDateSpec:idmissionDateSpec,NomTypeDateSpec:NomTypeDateSpec,dateSpec:dateSpec,_token:_token},
+                success:function(data){
+
+                    //  idspandateAssNonAss
+                   // window.location =data;
+
+                   if(data=='date spécifique invalide')
+                   {
+                       alert(data);
+                   }
+                   if(data=='date affectée')
+                   {
+                       alert(data);
+                 
+                         $('#idspandateAssNonAss').css('color','green');
+                                              
+                         $('#idspandateAssNonAss').text('Oui,date affectée');
+                          //$('#idspandateAssNonAss').css('text-decoration','blink'); 
+
+                   }
+
+                   
+
+                }
+            });
+       
+    });
+     
+
+
+
 
   </script>
 
@@ -1157,6 +1293,73 @@ var hrefidAcheverA;
 </div>
 
 
+<!-- model pour délégation des actions-->
+
+<div class="modal fade" id="modalDelegAct" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <form  method="post" action="{{ route('Deleguer.Action') }}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal2">Déléguer l'action courante</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+                    <div class="form-group">
+                        
+                        
+                            {{ csrf_field() }}
+                            <input id="MissDeldossid" name="MissDeldossid" type="hidden" value="{{$Action->Mission->dossier->id}}">
+                            <input id="delegMissid" name="delegMissid" type="hidden" value="{{$Action->Mission->id}}">
+                            <input id="delegActid" name="delegActid" type="hidden" value="{{$Action->id}}">
+
+                            <input id="affecteurmiss" name="affecteurmiss" type="hidden" value="{{ Auth::user()->id}}">
+                            <input id="statdoss" name="statdoss" type="hidden" value="existant">
+
+                            <div class="form-group " >
+                                <div class=" row  ">
+                                    <div class="form-group mar-20">
+                                        <label for="agent" class="control-label" style="padding-right: 20px">Agent</label>
+                                        <select id="agent" name="agent" class="form-control select2" style="width: 230px">
+                                            <option value="Select">Selectionner</option>
+                                            <?php $agents = App\User::get(); ?>
+                                           
+                                                @foreach ($agents as $agt)
+                                                <?php if (!empty ($agentname)) { ?>
+                                                @if ($agentname["id"] == $agt["id"])
+                                                    <option value={{ $agt["id"] }} selected >{{ $agt["name"] }}</option>
+                                                @else
+                                                    <option value={{ $agt["id"] }} >{{ $agt["name"] }}</option>
+                                                @endif
+                                                
+                                                <?php }
+                                                else
+                                                      {  echo '<option value='.$agt["id"] .' >'.$agt["name"].'</option>';}
+                                                ?>
+                                                @endforeach    
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                      
+
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="submit" id="attribdoss" class="btn btn-primary">Déleguer l'action</button>
+            </div>
+        </div>
+          </form>
+    </div>
+</div>
+
+
   
 
 
@@ -1206,7 +1409,9 @@ i++;
 
  });
 
-  $('#DivRapOuRepAct').hide();
+  $('#DivRapOuRepAct').show();
+
+  //$('#DivRapOuRepAct').hide();
 
 
 /* bouton et div de délégation*/
