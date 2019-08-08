@@ -1141,7 +1141,7 @@ class ActionController extends Controller
 
     }
 
-      /*public function BoutonFait(Request $request, $iddoss,$idmiss,$idact)
+    public function BoutonFait(Request $request, $iddoss,$idmiss,$idact)
 
     {
 
@@ -1185,7 +1185,7 @@ class ActionController extends Controller
 
   
 
-    }*/
+    }
 
 
 
