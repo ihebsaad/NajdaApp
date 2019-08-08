@@ -361,22 +361,20 @@ if (App::environment('local')) {
             }
         });
 
-        Push.create("Nouvelle "+parsed['data']['entree']['type'], {
 
-            body: parsed['data']['entree']['sujet'],
-            icon: "{{ asset('public/img/najda.png') }}",
-            timeout: 5000,
 
-            onClick: function(){
-                // window.focus();
-                // this.close();
-                window.location ='<?php echo $urlapp; ?>/entrees/showdisp/'+parsed['data']['entree']['id'];
+    Push.create("Notif: "+parsed['data']['entree']['type'],{
+        body: parsed['data']['entree']['sujet'],
+        icon: "{{ asset('public/img/najda.png') }}",
+        timeout: 5000,
+        onClick: function () {
+            window.focus();
+            window.location ='<?php echo $urlapp; ?>/entrees/showdisp/'+parsed['data']['entree']['id'];
 
-            }
+         }
+    })
 
-        });
-
-    });
+    }
 
 
 </script>
