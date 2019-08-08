@@ -200,32 +200,35 @@ if (App::environment('local')) {
     var parsed = JSON.parse(jsnt);
     //alert("l'ID: "+parsed['data']['entree']['id']+" le sujet: "+parsed['data']['entree']['sujet']);
     //attribuer type selon type recu
-    var typee = "tremail";var img='';
+    var typee = "tremail";var img="";
     if ((typeof parsed['data']['entree']['type'] !== "undefined") && (parsed['data']['entree']['type'] !== null) && (parsed['data']['entree']['type'] !== ''))
     {
-        switch(parsed['data']['entree']['type']) {
+        switch (parsed['data']['entree']['type']) {
             case "email":
                 typee = "tremail";
-                img='<?php echo $urlapp; ?>/public/img/email.png';
+                img = '<?php echo $urlapp; ?>/public/img/email.png';
 
                 break;
             case "fax":
                 typee = "trfax";
-                img='<?php echo $urlapp; ?>/public/img/faxx.png';
+                img = '<?php echo $urlapp; ?>/public/img/faxx.png';
 
                 break;
-
             case "sms":
                 typee = "trsms";
-                img='<?php echo $urlapp; ?>/public/img/smss.png';
+                img = '<?php echo $urlapp; ?>/public/img/smss.png';
 
                 break;
-            case "whatsapp":
-                typee = "trwp";
+            case "phone":
+                typee = "trsms";
+                img = '<?php echo $urlapp; ?>/public/img/tel.png';
+
                 break;
+
             default:
                 typee = "tremail";
-                img='<?php echo $urlapp; ?>/public/img/email.png';
+                img = '<?php echo $urlapp; ?>/public/img/email.png';
+
 
         }
     }
@@ -305,45 +308,19 @@ if (App::environment('local')) {
         });
 
 
+
         <?php } ?>
 
-            <?php }else{ ?>
-
-            switch (parsed['data']['entree']['type']) {
-            case "email":
-                typee = "tremail";
-                img = '<?php echo $urlapp; ?>/public/img/email.png';
-
-                break;
-            case "fax":
-                typee = "trfax";
-                img = '<?php echo $urlapp; ?>/public/img/faxx.png';
-
-                break;
-            case "sms":
-                typee = "trsms";
-                img = '<?php echo $urlapp; ?>/public/img/smss.png';
-
-                break;
-            case "phone":
-                typee = "trsms";
-                img = '<?php echo $urlapp; ?>/public/img/tel.png';
-
-                break;
-
-            default:
-                typee = "tremail";
-                img = '<?php echo $urlapp; ?>/public/img/email.png';
-
-
-        }
+        <?php }else{ ?>
         $("#notifdisp").prepend("<li class='overme' style='padding-left:6px;margin-bottom:15px;background-color:#fd9883;color:white;font-weight:800;'><img width='15' src='" + img + "' /> <a  style=';font-weight:800;font-size:14px;' href='<?php echo $urlapp; ?>/showdisp/" + parsed['data']['entree']['id'] + "'   ><small style='font-size:12px'> " + parsed['data']['entree']['sujet'] + "</small></a><br>                  <label style='font-size:12px'><a style='color:white' href='<?php echo $urlapp; ?>/showdisp/" + parsed['data']['entree']['id'] + "'  >" + parsed['data']['entree']['emetteur'] + "</a></label><br><label style='font-size:12px'> " + parsed['data']['entree']['date'] + "</label></li>");
 
         <?php } ?>
 
-    }
+
 
         // php if interface = dispatching
+
+
 
 
         // notification desktop
