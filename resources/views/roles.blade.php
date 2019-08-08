@@ -476,7 +476,7 @@
 
            } // verif date actuelle par rapport seance
             else{
-                echo '<input type="checkbox" name="veilleur">';
+                echo '<input style="display:none" value="0" type="checkbox" name="veilleur">';
 
             }
         ?>
