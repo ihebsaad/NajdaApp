@@ -305,45 +305,73 @@ if (App::environment('local')) {
         });
 
 
-
         <?php } ?>
 
             <?php }else{ ?>
 
+            switch (parsed['data']['entree']['type']) {
+            case "email":
+                typee = "tremail";
+                img = '<?php echo $urlapp; ?>/public/img/email.png';
 
-             $("#notifdisp").hide();
-        $("#notifdisp").prepend("<li class='overme' style='padding-left:6px;margin-bottom:15px;background-color:#fd9883;color:white;font-weight:800;'><img width='15' src='"+img+"' /> <a  style='color:white!important;font-weight:800;font-size:14px;' href='<?php echo $urlapp; ?>/showdisp/"+parsed['data']['entree']['id']+"'   ><small style='font-size:12px;color:white!important;'> "+parsed['data']['entree']['sujet']+"</small></a><br>                  <label style='font-size:12px'><a style='color:white' href='<?php echo $urlapp; ?>/showdisp/"+parsed['data']['entree']['id']+"'  >"+parsed['data']['entree']['emetteur']+"</a></label><br><label style='font-size:12px'> "+parsed['data']['entree']['date']+"</label></li>");
+                break;
+            case "fax":
+                typee = "trfax";
+                img = '<?php echo $urlapp; ?>/public/img/faxx.png';
 
-             $("#notifdisp").slideToggle();
+                break;
+            case "sms":
+                typee = "trsms";
+                img = '<?php echo $urlapp; ?>/public/img/smss.png';
+
+                break;
+            case "phone":
+                typee = "trsms";
+                img = '<?php echo $urlapp; ?>/public/img/tel.png';
+
+                break;
+
+            default:
+                typee = "tremail";
+                img = '<?php echo $urlapp; ?>/public/img/email.png';
+
+
+        }
+        $("#notifdisp").prepend("<li class='overme' style='padding-left:6px;margin-bottom:15px;background-color:#fd9883;color:white;font-weight:800;'><img width='15' src='" + img + "' /> <a  style=';font-weight:800;font-size:14px;' href='<?php echo $urlapp; ?>/showdisp/" + parsed['data']['entree']['id'] + "'   ><small style='font-size:12px'> " + parsed['data']['entree']['sujet'] + "</small></a><br>                  <label style='font-size:12px'><a style='color:white' href='<?php echo $urlapp; ?>/showdisp/" + parsed['data']['entree']['id'] + "'  >" + parsed['data']['entree']['emetteur'] + "</a></label><br><label style='font-size:12px'> " + parsed['data']['entree']['date'] + "</label></li>");
 
         <?php } ?>
 
-
     }
-    });
 
-    // notification desktop
-
-    Push.config({
-        serviceWorker: "{{asset('public/js/serviceWorker.min.js') }}", // Sets a                      custom service worker script
-        fallback: function(payload) {
-            // Code that executes on browsers with no notification support
-            // "payload" is an object containing the
-            // title, body, tag, and icon of the notification
-        }
-    });
+        // php if interface = dispatching
 
 
+        // notification desktop
 
-    Push.create("Notif: "+parsed['data']['entree']['type'],{
-        body: parsed['data']['entree']['sujet'],
-        icon: "{{ asset('public/img/najda.png') }}",
-        timeout: 5000,
-        onClick: function () {
+        Push.config({
+            serviceWorker: "{{asset('public/js/serviceWorker.min.js') }}", // Sets a                      custom service worker script
+            fallback: function(payload) {
+                // Code that executes on browsers with no notification support
+                // "payload" is an object containing the
+                // title, body, tag, and icon of the notification
+            }
+        });
 
-            window.location ='<?php echo $urlapp; ?>/entrees/showdisp/'+parsed['data']['entree']['id'];
+        Push.create("Nouvelle "+parsed['data']['entree']['type'], {
 
-        }
+            body: parsed['data']['entree']['sujet'],
+            icon: "{{ asset('public/img/najda.png') }}",
+            timeout: 5000,
+
+            onClick: function(){
+                // window.focus();
+                // this.close();
+                window.location ='<?php echo $urlapp; ?>/entrees/show/'+parsed['data']['entree']['id'];
+
+            }
+
+        });
+
     });
 
 
