@@ -476,7 +476,7 @@
 
            } // verif date actuelle par rapport seance
             else{
-                echo '<input style="display:none" value="0" type="checkbox" name="veilleur">';
+                echo '<input type="hidden" name="veilleur">';
 
             }
         ?>
@@ -593,13 +593,17 @@
          if ($('input[name="admin"]').is(':checked'))
          {admin=1;
           }
+         veilleur=0;
+         if ($('input[name="veilleur"]').is(':checked'))
+         {veilleur=1;
+         }
 
        //  var type="agent";
          //alert(disp +" | "+ dispmedic +" | "+ disptech +" | "+ chrgtr +" | "+disptel+" | "+type);
             $.ajax({
                 url:"{{ route('users.sessionroles') }}",
                 method:"POST",
-                data:{disp:disp,supmedic:supmedic,suptech:suptech,chrgtr:chrgtr,disptel:disptel, _token:_token},
+                data:{disp:disp,supmedic:supmedic,suptech:suptech,chrgtr:chrgtr,disptel:disptel,veilleur:veilleur, _token:_token},
                 success:function(data){
 
                     if(admin==1){
