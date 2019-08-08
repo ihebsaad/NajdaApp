@@ -22,8 +22,12 @@ class AppServiceProvider extends ServiceProvider
     {
          Schema::defaultStringLength(191);
          Entree::observe(EntreeObserver::class);
-         
-        
+
+        view()->composer('*', function($view){
+            $view_name = str_replace('.', '-', $view->getName());
+            view()->share('view_name', $view_name);
+        });
+
         // definir les variables globales
          /*view()->composer('*', function ($view) {
             $dossiers = Dossier::get();

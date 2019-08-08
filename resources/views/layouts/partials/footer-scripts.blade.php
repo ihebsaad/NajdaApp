@@ -224,6 +224,8 @@ console.log(parsed);*/
                     typee = "tremail";
                 }
               }
+        // Vérifier le nom de la vue
+         <?php if ($view_name!='entrees-dispatching') { ?>
         // verifier si la notification est dispatche
         if ((typeof parsed['data']['entree']['dossier'] !== "undefined") && (parsed['data']['entree']['dossier'] !== null))
         {
@@ -301,11 +303,15 @@ console.log(parsed);*/
 
             <?php } ?>
 
+            <?php }else{ ?>
+              $("#notifdisp").prepend("<li class='overme' style='padding-left:6px;margin-bottom:15px;'>New Notif</li>");
+
+        <?php } ?>
+
 
 
             // php if interface = dispatching
 
-            $("#notifdisp").prepend("<li class='overme' style='padding-left:6px;margin-bottom:15px;'>ONE</li>");
 
             <?php /*
             if ($type=='email'){echo '<img width="15" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="15" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="15" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="15" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php // echo $entree['type']; ?>
