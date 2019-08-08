@@ -346,20 +346,18 @@ if (App::environment('local')) {
         <?php } ?>
 
 
+    }
 
-        // php if interface = dispatching
+    // notification desktop
 
-
-        // notification desktop
-
-        Push.config({
-            serviceWorker: "{{asset('public/js/serviceWorker.min.js') }}", // Sets a                      custom service worker script
-            fallback: function(payload) {
-                // Code that executes on browsers with no notification support
-                // "payload" is an object containing the
-                // title, body, tag, and icon of the notification
-            }
-        });
+    Push.config({
+        serviceWorker: "{{asset('public/js/serviceWorker.min.js') }}", // Sets a                      custom service worker script
+        fallback: function(payload) {
+            // Code that executes on browsers with no notification support
+            // "payload" is an object containing the
+            // title, body, tag, and icon of the notification
+        }
+    });
 
 
 
@@ -371,11 +369,10 @@ if (App::environment('local')) {
             window.focus();
             window.location ='<?php echo $urlapp; ?>/entrees/showdisp/'+parsed['data']['entree']['id'];
 
-         }
+        }
     });
 
-    }
-
+    });
 
 </script>
 
