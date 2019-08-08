@@ -372,7 +372,7 @@ if (App::environment('local')) {
             window.location ='<?php echo $urlapp; ?>/entrees/showdisp/'+parsed['data']['entree']['id'];
 
          }
-    })
+    });
 
     }
 
