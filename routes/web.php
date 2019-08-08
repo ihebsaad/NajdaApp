@@ -481,6 +481,7 @@ Route::post('/documents/canceldoc','DocumentsController@canceldoc')->name('docum
 /*** Ordre Missions  ***/
 
 Route::post('/ordremissions/export_pdf_odmtaxi','OrdreMissionsController@export_pdf_odmtaxi')->name('ordremissions.export_pdf_odmtaxi');
+Route::post('/ordremissions/historique','OrdreMissionsController@historique')->name('ordremissions.historique');
 //Route::get('/entrees/sendpdf/{id}', 'EntreesController@sendpdf');
 Route::get('/ordremissions/pdfodmtaxi','OrdreMissionsController@pdfodmtaxi')->name('ordremissions.pdfodmtaxi');
  

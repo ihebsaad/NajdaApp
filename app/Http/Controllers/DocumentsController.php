@@ -110,14 +110,14 @@ class DocumentsController extends Controller
                 date_default_timezone_set('Africa/Tunis');
                 setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
                 $datees = strftime("%d-%B-%Y"."_"."%H-%M"); 
-                $name_file = $arrfile['nom'].'_'.$refdoss.'_'.$datees.'.doc';
-                $titref =$arrfile['nom'].'_'.$refdoss;
+                $name_file = utf8_encode($arrfile['nom'].'_'.$refdoss.'_'.$datees.'.doc');
+                $titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
             }
         else 
             {
-                $name_file = $arrfile['nom'].'_'.$refdoss.'.doc';
+                $name_file = utf8_encode($arrfile['nom'].'_'.$refdoss.'.doc');
 
-                $titref =$arrfile['nom'].'_'.$refdoss;
+                $titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
             }
             
        WordTemplate::export($file, $array, '/documents/'.$refdoss.'/'.$name_file);
@@ -176,8 +176,8 @@ class DocumentsController extends Controller
                 $champsArray = explode(',', $arrfile['champs']);
                 $array = array();
 
-                $array += [ 'templatehtml' => $arrfile['template_html']];
-                $array += [ 'templatertf' => $arrfile['path']];
+                $array += [ 'templatehtml' => utf8_encode($arrfile['template_html'])];
+                $array += [ 'templatertf' => utf8_encode($arrfile['path'])];
 
             // cas remplace et annule doc
             if ($request->has('parent'))
@@ -205,7 +205,7 @@ class DocumentsController extends Controller
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp => $valchamp];
+                                $array += [ $champtemp => utf8_encode($valchamp)];
                             }
                             elseif($champtemp ==='[CUSTOMER_ID__NAME]')
                             {
@@ -230,7 +230,7 @@ class DocumentsController extends Controller
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp => $valchamp];
+                                $array += [ $champtemp => utf8_encode($valchamp)];
                             }
                             elseif($champtemp ==='[AGENT__NAME]')
                             {
@@ -257,7 +257,7 @@ class DocumentsController extends Controller
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp => $valchamp];
+                                $array += [ $champtemp => utf8_encode($valchamp)];
                             }
                         }
                         elseif($champtemp ==='[DATE_HEURE]')
@@ -266,7 +266,7 @@ class DocumentsController extends Controller
                             $champtemp = str_replace('[', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ $champtemp => $datees];
+                            $array += [ $champtemp => utf8_encode($datees)];
                             // champ date precedente
                             if (array_key_exists($i,$champsparentArray))
                             {
@@ -274,7 +274,7 @@ class DocumentsController extends Controller
                             }
                             else
                                 { $valchamp = "undefined index";}
-                            $array += [ 'pre_dateheure' => $valchamp];
+                            $array += [ 'pre_dateheure' => utf8_encode($valchamp)];
 
                         }
                         elseif(stristr($champtemp,'[CL_')!== FALSE)
@@ -290,7 +290,7 @@ class DocumentsController extends Controller
                             $champtemp = str_replace('[CL_', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ 'CL_'.$champtemp => $valchamp];
+                            $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
                         }
                    // }
                     $i++;
@@ -317,7 +317,7 @@ class DocumentsController extends Controller
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp => $valchamp];
+                                $array += [ $champtemp => utf8_encode($valchamp)];
                             }
                             elseif($champtemp ==='[CUSTOMER_ID__NAME]')
                             {
@@ -329,7 +329,7 @@ class DocumentsController extends Controller
                                     $champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
-                                    $array += [ $champtemp => $valchamp];
+                                    $array += [ $champtemp => utf8_encode($valchamp)];
                                 }
                             }
                             elseif($champtemp ==='[AGENT__NAME]')
@@ -342,7 +342,7 @@ class DocumentsController extends Controller
                                     $champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
-                                    $array += [ $champtemp => $valchamp];
+                                    $array += [ $champtemp => utf8_encode($valchamp)];
                                 }
                             }
                         }
@@ -352,7 +352,7 @@ class DocumentsController extends Controller
                             $champtemp = str_replace('[', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ $champtemp => $datees];
+                            $array += [ $champtemp => utf8_encode($datees)];
                         }
                         elseif(stristr($champtemp,'[CL_')!== FALSE)
                         {
@@ -364,14 +364,15 @@ class DocumentsController extends Controller
                             $champtemp = str_replace('[', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ 'CL_'.$champtemp => $champdb];
+                            $array += [ 'CL_'.$champtemp => utf8_encode($champdb)];
                         }
                     }
             }
 
-            //$array = $arrayName = array('test' => 'valtes', 'test2' => 'valteddd');
-            header('Content-type: application/json');    
-            return json_encode($array);
+            
+            //header('Content-type: application/json');    
+            //return json_encode($array);
+            return response() -> json($array, 200, ['Content-type'=> 'application/json; charset=utf-8'], JSON_UNESCAPED_UNICODE);
         
     }
 

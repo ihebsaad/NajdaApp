@@ -613,7 +613,7 @@ $interv = PrestationsController::PrestById($prest);
                             <?php
                                 if ($omtx->parent !== null)
                                 {
-                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important;" id="btnhisto" onclick="historiqueomtx('.$omtx->parent.');"><i class="far fa-eye"></i> Voir</button>';
+                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$omtx->parent.');"><i class="far fa-eye"></i> Voir</button>';
                                    
                                 }
                                 else
@@ -637,13 +637,13 @@ $interv = PrestationsController::PrestById($prest);
                                             {
                                         ?>
                                         <div class="btn-group" style="margin-right: 10px">
-                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important;" id="btnannrempomtx">
-                                                <a style="color:black" href="#" id="annrempomtx" onclick="remplaceom(<?php echo $omtx->id; ?>);"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
+                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important; padding: 6px 6px!important;" id="btnannrempomtx">
+                                                <a style="color:black" href="#" id="annrempomtx" onclick="remplaceom(<?php echo $omtx->id; ?>);"> <i class="far fa-plus-square"></i> Remplacer</a>
                                             </button>
                                         </div>
 
                                         <div class="btn-group" style="margin-right: 10px">
-                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,214,214) !important;" id="btnannomtx">
+                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,214,214) !important; padding: 6px 6px!important;" id="btnannomtx">
                                                 <a style="color:black"  onclick="annuleom('<?php echo $omtx->titre; ?>',<?php echo $omtx->id; ?>);" href="#" > <i class="far fa-window-close"></i> Annuler</a>
                                             </button>
                                         </div>
@@ -651,7 +651,12 @@ $interv = PrestationsController::PrestById($prest);
                                             }
                                         ?>
                                         <div class="btn-group" style="margin-right: 10px">
-                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important;" id="btntele">
+                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(221,221,221) !important; padding: 6px 6px!important;" id="btncomp">
+                                                <a style="color:black" onclick='completeom("<?php echo $omtx->id; ?>");' ><i class="fas fa-pen"></i> Compléter</a>
+                                            </button>
+                                        </div>
+                                        <div class="btn-group" style="margin-right: 10px">
+                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important; padding: 6px 6px!important;" id="btntele">
                                                 <a style="color:black" onclick='modalodoc("<?php echo $omtx->titre; ?>","{{ URL::asset('storage'.$empsub) }}");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
                                             </button>
                                         </div>
@@ -877,14 +882,14 @@ reference_customer
                                           <option value="medici">Medic International </option>
                                      </select>
                                   </div>
-                                  <div class=" row  " style="margin-top: 15px">
+                                  <!--<div class=" row  " style="margin-top: 15px">
                                     <div class="col-md-3"><label for="affectea">Affecté à</label></div>
                                       <select class="form-control" style="width: 230px" required id="affectea" name="affectea" >
                                           <option value="Select">Selectionner</option>
                                           <option value="interne">Société soeur</option>
                                           <option value="externe">Prestataire externe</option>
                                      </select>
-                                  </div>
+                                  </div>-->
                               </div>
 
                         </form>
@@ -956,7 +961,7 @@ reference_customer
                         <form id="genomfromhtml" novalidate="novalidate" method="post" action="">
                             {{ csrf_field() }}
                             <input id="dossdoc" name="dossdoc" type="hidden" value="{{ $dossier->id}}">
-                            <input type="hidden" name="templateordrem" id="templateordrem" >
+                            <input type="hidden" name="templateordrem" id="templateordrem" value="">
                             <input type="hidden" name="idomparent" id="idomparent" >
                             <iframe src="#" id="omfilled" name="omfilled" style="width:100%;height:100%">content</iframe>
 
@@ -986,6 +991,38 @@ reference_customer
                 <div class="card-body">
                     <h5 style="font-size: 20px; font-weight: 900; color: slategrey;" id="dochistoname"></h5>
                     <table class="table table-striped" id="tabledocshisto" style="width:100%;margin-top:15px;">
+                            <thead>
+                            <tr id="headtable">
+                                <th style="">Date de génération</th>
+                                <th style="">Actions</th>
+                             </tr>
+
+                            </thead>
+                            <tbody>
+                            </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal historique OM TAXI-->
+<div class="modal fade" id="modalhistoom" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="document" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModal2">Historique de l'ordre de mission</h4>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <h5 style="font-size: 20px; font-weight: 900; color: slategrey;" id="dochistoname"></h5>
+                    <table class="table table-striped" id="tableomshisto" style="width:100%;margin-top:15px;">
                             <thead>
                             <tr id="headtable">
                                 <th style="">Date de génération</th>
@@ -1437,9 +1474,19 @@ function remplaceom(id)
 {
     var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?remplace=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
          document.getElementById("omfilled").src = url;
-
-        
+         $("#idomparent").val(id);
+        $('#templateordrem').val("remplace");
         $("#templatehtmlom").modal('show');
+        //alert($("#idomparent").val());
+}  
+function completeom(id)
+{
+    var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?complete=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
+         document.getElementById("omfilled").src = url;
+         $("#idomparent").val(id);
+        $('#templateordrem').val("complete");
+        $("#templatehtmlom").modal('show');
+        //alert($("#idomparent").val());
 }   
 function modalodoc(titre,emplacement)
 {
@@ -1567,14 +1614,64 @@ function annuledoc(titre,iddoc,template)
                 }
             });
     }
+// affichage de lhistorique du om taxi
+    
+    function historiqueomtx(om){
+        //$("#gendocfromhtml").submit();
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+                url:"{{ route('ordremissions.historique') }}",
+                method:"POST",
+                //'&_token='+_token
+                data:'_token='+_token+'&om='+om,
+                success:function(data){
+                    //alert(JSON.stringify(data));
+                    var histom = JSON.parse(data);
+                    // vider le contenu du table historique
+                    $("#tableomshisto tbody").empty();
+                    var items = [];
+                    $.each(histom, function(i, field){
+                      items.push([ i,field ]);
+                    });
+                    // affichage template dans iframe
+                    $.each(items, function(index, val) {
 
+                    //titre du document
+                    if (val[0]==0)
+                    {
+                        $("#omhistoname").text(val[1]['titre']);
+                    }
+
+                    //alert(val[0]+" | "+val[1]['emplacement']+" | "+val[1]['updated_at']);
+                    urlf="{{ URL::asset('storage') }}";
+                    posom=val[1]['emplacement'].indexOf("/OrdreMissions/");
+                    empom=val[1]['emplacement'].slice(posom+1);
+                    aurlf="<a style='color:black' href='"+urlf+"/"+empom+"' ><i class='fa fa-download'></i> Télécharger</a>";
+                    $("#tableomshisto tbody").append("<tr><td>"+val[1]['updated_at']+"</td><td>"+aurlf+"</td></tr>");
+
+                    });
+
+                    $("#modalhistoom").modal('show');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
+                    alert('Erreur lors de recuperation de l historique du om taxi');
+                    console.log('jqXHR:');
+                    console.log(jqXHR);
+                    console.log('textStatus:');
+                    console.log(textStatus);
+                    console.log('errorThrown:');
+                    console.log(errorThrown);
+                }
+            });
+    }
 function filltemplate(data,tempdoc)
 {
    // window.location =data; hde gendocform and display template filled
    $("#generatedoc").modal('hide');
    //change html template content
    var templateexist = true;
-   var parsed = JSON.parse(data);
+   var parsed = data;
    var items = [];
    var html_string="";
    $.each(parsed, function(i, field){
@@ -1594,6 +1691,7 @@ function filltemplate(data,tempdoc)
                 else
                 {    
                     html_string= "{{asset('public/') }}"+"/"+val[1];
+                    //alert(html_string);
 
                 }
                 
@@ -1758,6 +1856,7 @@ function filltemplate(data,tempdoc)
         $('#iddocparent').attr('value', '');  
         if ((dossier != '') )
         {
+            //alert('dossier is set');
             var _token = $('input[name="_token"]').val();
             $.ajax({
                 url:"{{ route('documents.htmlfilled') }}",
@@ -1766,6 +1865,7 @@ function filltemplate(data,tempdoc)
                 success:function(data){
                      if (data !== 'nogop')
                     {
+                        //alert('no gop needed');
                         filltemplate(data,tempdoc);
                     }
                     else
@@ -1784,6 +1884,7 @@ function filltemplate(data,tempdoc)
     $('#genom').click(function(){
         var dossier = $('#dossier').val();
         var tempom = $("#templateom").val();
+        var op ="";
         if (tempom==="Select")
         {
             alert("Veuillez selectionner un ordre de mission");
@@ -1795,12 +1896,12 @@ function filltemplate(data,tempdoc)
             alert("Veuillez selectionner l'entitée qui émis l'ordre de mission");
             return false;
         }
-        var affectea = $("#affectea").val();
+        /*var affectea = $("#affectea").val();
         if (affectea==="Select")
         {
             alert("Veuillez selectionner à qui sera affecté l'ordre de mission");
             return false;
-        }
+        }*/
         //$("#gendochtml").prop("disabled",false);
         // renitialise la val de parentdoc
         //$('#iddocparent').attr('value', '');  
@@ -1816,19 +1917,19 @@ function filltemplate(data,tempdoc)
                 }
             });*/
             //alert(dossier+" | "+tempom+" | "+emispar+" | "+affectea);
-            afficheom(emispar,affectea,tempom,dossier);
+            afficheom(emispar,tempom,dossier);
 
         }else{
             // alert('ERROR');
         }
     });
 
-    function afficheom(emispar,affectea,tempom,dossier)
+    function afficheom(emispar,tempom,dossier)
     {
         $("#generateom").modal('hide');
-        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?emispar='+emispar+'&affectea='+affectea+'&dossier='+dossier+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
+        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?emispar='+emispar+'&dossier='+dossier+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
          document.getElementById("omfilled").src = url;
-
+         $('#templateordrem').val("");
         
         $("#templatehtmlom").modal('show');
     }
@@ -1876,6 +1977,12 @@ function filltemplate(data,tempdoc)
         var dossier = $('#dossom').val();
         var tempdoc = $("#templateordrem").val();
         var idparent = '';
+        if ($('#templateordrem').val())
+        {
+        alert ($('#templateordrem').val());}
+        if ($('#idomparent').val())
+        {
+        alert ($('#idomparent').val());}
         // verifier si cest le cas de annule et remplace pour sauvegarder lid du parent
         if ($('#idomparent').val())
         {
@@ -1890,11 +1997,17 @@ function filltemplate(data,tempdoc)
                 success:function(data){
                     //alert(JSON.stringify(data));
                     console.log(data);
-                    location.reload();
+                    $('#idomparent').val("");
+                    $('#templateordrem').val("");
+                    
+                    if (!$.trim(data))
+                    {location.reload();}
+                    else
+                        {alert(data);}
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
-                    alert('Erreur lors de la generation du document');
+                    alert('Erreur lors de la generation du OM');
                     console.log('jqXHR:');
                     console.log(jqXHR);
                     console.log('textStatus:');
