@@ -206,23 +206,27 @@ console.log(parsed);*/
                 switch(parsed['data']['entree']['type']) {
                   case "email":
                     typee = "tremail";
-                    img='https://najdaapp.enterprise-esolutions.com/public/img/email.png';
+                      img='<?php echo $utlapp; ?>/public/img/email.png';
+
                     break;
                   case "fax":
                     typee = "trfax";
-                    break;
-                  case "sms":
-                    typee = "trsms";
-                    break;
+                      img='<?php echo $utlapp; ?>/public/img/faxx.png';
+
+                      break;
 
                   case "sms":
                     typee = "trsms";
-                    break;
+                      img='<?php echo $utlapp; ?>/public/img/smss.png';
+
+                      break;
                   case "whatsapp":
                     typee = "trwp";
                     break;
                   default:
                     typee = "tremail";
+                      img='<?php echo $utlapp; ?>/public/img/email.png';
+
                 }
               }
         // Vérifier le nom de la vue
@@ -309,27 +313,32 @@ console.log(parsed);*/
                 switch(parsed['data']['entree']['type']) {
                 case "email":
                     typee = "tremail";
-                    img='https://najdaapp.enterprise-esolutions.com/public/img/email.png';
+                    img='<?php echo $utlapp; ?>/public/img/email.png';
 
                     break;
                 case "fax":
                     typee = "trfax";
+                    img='<?php echo $utlapp; ?>/public/img/faxx.png';
 
                         break;
                 case "sms":
                     typee = "trsms";
+                    img='<?php echo $utlapp; ?>/public/img/smss.png';
 
                         break;
                 case "phone":
                     typee = "trsms";
+                    img='<?php echo $utlapp; ?>/public/img/tel.png';
 
                         break;
 
                 default:
                     typee = "tremail";
+                    img='<?php echo $utlapp; ?>/public/img/email.png';
+
 
             }
-              $("#notifdisp").prepend("<li class='overme' style='padding-left:6px;margin-bottom:15px;background-color:#fd9883'><img width='15' src='"+img+"' /> <a  style='color:#337085!important;font-weight:800;font-size:13px;' href='<?php echo $urlapp; ?>/showdisp/"+parsed['data']['entree']['id']+"'   ><small style='font-size:11px'> "+parsed['data']['entree']['sujet']+"</small></a><br>                  <label style='font-size:11px'><a style='color:black' href='<?php echo $urlapp; ?>/showdisp/"+parsed['data']['entree']['id']+"'  >"+parsed['data']['entree']['emetteur']+"</a></label><br><label style='font-size:12px'> "+parsed['data']['entree']['emetteur']+"</label></li>");
+              $("#notifdisp").prepend("<li class='overme' style='padding-left:6px;margin-bottom:15px;background-color:#fd9883;color:white;font-weight:800;'><img width='15' src='"+img+"' /> <a  style=';font-weight:800;font-size:14px;' href='<?php echo $urlapp; ?>/showdisp/"+parsed['data']['entree']['id']+"'   ><small style='font-size:12px'> "+parsed['data']['entree']['sujet']+"</small></a><br>                  <label style='font-size:12px'><a style='color:white' href='<?php echo $urlapp; ?>/showdisp/"+parsed['data']['entree']['id']+"'  >"+parsed['data']['entree']['emetteur']+"</a></label><br><label style='font-size:12px'> "+parsed['data']['entree']['date']+"</label></li>");
 
         <?php } ?>
 
