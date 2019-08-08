@@ -61,7 +61,7 @@ if (App::environment('local')) {
             </span>
     </div>
     <div  class="panel-body scrollable-panel" style="display: block;">
-<ul>
+<ul id="notifdisp">
          <?php $entrees = Entree::orderBy('id', 'desc')
             ->where('statut','<','2')
             ->where('dossier','=','')

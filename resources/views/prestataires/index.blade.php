@@ -47,6 +47,8 @@
                 <th style="width:20%">Gouvernorats</th>
                 <th style="width:10%">Ville</th>
                 <th style="width:20%">Spécialités</th>
+                <th style="width:10%"> </th>
+
             </tr>
             </thead>
             <tbody>
@@ -67,7 +69,7 @@
                     <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
                     <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
                     <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
-                    <td style="font-size:13px;width:10%">Actions</td>
+                    <td style="font-size:13px;width:10%"> </td>
 
                 </tr>
             @endforeach

@@ -718,6 +718,7 @@ class DossiersController extends Controller
         }else{return '';}
 
     }
+
     public static function FullnameAbnDossierById($id)
     {
         $dossier = Dossier::find($id);
