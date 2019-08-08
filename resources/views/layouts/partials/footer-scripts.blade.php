@@ -310,34 +310,7 @@ if (App::environment('local')) {
 
             <?php }else{ ?>
 
-            switch(parsed['data']['entree']['type']) {
-            case "email":
-                typee = "tremail";
-                img='<?php echo $urlapp; ?>/public/img/email.png';
 
-                break;
-            case "fax":
-                typee = "trfax";
-                img='<?php echo $urlapp; ?>/public/img/faxx.png';
-
-                break;
-            case "sms":
-                typee = "trsms";
-                img='<?php echo $urlapp; ?>/public/img/smss.png';
-
-                break;
-            case "phone":
-                typee = "trsms";
-                img='<?php echo $urlapp; ?>/public/img/tel.png';
-
-                break;
-
-            default:
-                typee = "tremail";
-                img='<?php echo $urlapp; ?>/public/img/email.png';
-
-
-        }
              $("#notifdisp").hide();
         $("#notifdisp").prepend("<li class='overme' style='padding-left:6px;margin-bottom:15px;background-color:#fd9883;color:white;font-weight:800;'><img width='15' src='"+img+"' /> <a  style='color:white!important;font-weight:800;font-size:14px;' href='<?php echo $urlapp; ?>/showdisp/"+parsed['data']['entree']['id']+"'   ><small style='font-size:12px;color:white!important;'> "+parsed['data']['entree']['sujet']+"</small></a><br>                  <label style='font-size:12px'><a style='color:white' href='<?php echo $urlapp; ?>/showdisp/"+parsed['data']['entree']['id']+"'  >"+parsed['data']['entree']['emetteur']+"</a></label><br><label style='font-size:12px'> "+parsed['data']['entree']['date']+"</label></li>");
 
@@ -347,6 +320,7 @@ if (App::environment('local')) {
 
 
     }
+    });
 
     // notification desktop
 
@@ -366,13 +340,12 @@ if (App::environment('local')) {
         icon: "{{ asset('public/img/najda.png') }}",
         timeout: 5000,
         onClick: function () {
-            window.focus();
+
             window.location ='<?php echo $urlapp; ?>/entrees/showdisp/'+parsed['data']['entree']['id'];
 
         }
     });
 
-    });
 
 </script>
 
