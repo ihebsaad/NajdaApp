@@ -338,7 +338,10 @@ console.log(parsed);*/
 
 
             }
-              $("#notifdisp").prepend("<li class='overme' style='padding-left:6px;margin-bottom:15px;background-color:#fd9883;color:white;font-weight:800;'><img width='15' src='"+img+"' /> <a  style=';font-weight:800;font-size:14px;' href='<?php echo $urlapp; ?>/showdisp/"+parsed['data']['entree']['id']+"'   ><small style='font-size:12px'> "+parsed['data']['entree']['sujet']+"</small></a><br>                  <label style='font-size:12px'><a style='color:white' href='<?php echo $urlapp; ?>/showdisp/"+parsed['data']['entree']['id']+"'  >"+parsed['data']['entree']['emetteur']+"</a></label><br><label style='font-size:12px'> "+parsed['data']['entree']['date']+"</label></li>");
+             $("#notifdisp").hide();
+              $("#notifdisp").prepend("<li class='overme' style='padding-left:6px;margin-bottom:15px;background-color:#fd9883;color:white;font-weight:800;'><img width='15' src='"+img+"' /> <a  style='color:white!important;font-weight:800;font-size:14px;' href='<?php echo $urlapp; ?>/showdisp/"+parsed['data']['entree']['id']+"'   ><small style='font-size:12px;color:white!important;'> "+parsed['data']['entree']['sujet']+"</small></a><br>                  <label style='font-size:12px'><a style='color:white' href='<?php echo $urlapp; ?>/showdisp/"+parsed['data']['entree']['id']+"'  >"+parsed['data']['entree']['emetteur']+"</a></label><br><label style='font-size:12px'> "+parsed['data']['entree']['date']+"</label></li>");
+
+            $("#notifdisp").slideToggle();
 
         <?php } ?>
 
@@ -346,11 +349,11 @@ console.log(parsed);*/
 
             // php if interface = dispatching
 
-  
+
         // notification desktop
 
             Push.config({
-            serviceWorker: "{{asset('public/js/serviceWorker.min.js') }}", // Sets a                      custom service worker script
+            serviceWorker: "{{asset('public/js/serviceWorker.min.js') }}", // Sets a   custom service worker script
               fallback: function(payload) {
             // Code that executes on browsers with no notification support
              // "payload" is an object containing the 
