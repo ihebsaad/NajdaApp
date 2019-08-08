@@ -304,7 +304,34 @@ console.log(parsed);*/
             <?php } ?>
 
             <?php }else{ ?>
-              $("#notifdisp").prepend("<li class='overme' style='padding-left:6px;margin-bottom:15px;'>New Notif</li>");
+
+                switch(parsed['data']['entree']['type']) {
+                case "email":
+                    typee = "tremail"
+                    <?php $img=`<img width="15" src="'. $urlapp .'/public/img/email.png" />` ;?>
+                    break;
+                case "fax":
+                    typee = "trfax";
+                    <?php $img=`<img width="15" src="'. $urlapp .'/public/img/faxx.png" />` ;?>
+
+                        break;
+                case "sms":
+                    typee = "trsms";
+                    <?php $img=`<img width="15" src="'. $urlapp .'/public/img/smss.png" />` ;?>
+
+                        break;
+                case "phone":
+                    typee = "trsms";
+                    <?php $img=`<img width="15" src="'. $urlapp .'/public/img/tel.png" />` ;?>
+
+                        break;
+
+                default:
+                    typee = "tremail";
+            <?php $img=`<img width="15" src="'. $urlapp .'/public/img/email.png" />` ;?>
+
+            }
+              $("#notifdisp").prepend("<li class='overme' style='padding-left:6px;margin-bottom:15px;'><?php echo $img; ?></li>");
 
         <?php } ?>
 
@@ -325,7 +352,7 @@ console.log(parsed);*/
             */
             ?>
 
-            
+
 
         // notification desktop
 
