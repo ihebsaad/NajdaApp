@@ -81,7 +81,7 @@ class OrdreMissionsController extends Controller
         			$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1]);
         			$result = $omtaxi->update($request->all());
         			//return 'complete action '.$result;
-        			
+        			exit();
         		}
         	}
         	
