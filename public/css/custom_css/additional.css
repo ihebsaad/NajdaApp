@@ -24,7 +24,7 @@ section#timeline article div.inner p {
 
 .newnotif{
         font-weight:bold;
-        color:#999;
+        color:#fd9883;
     }
 #jstree li[rel="tremail"] > a.jstree-anchor > i, #jstree li[rel="trfax"] > a.jstree-anchor > i {display: none;}
 .scrollable-panel {
