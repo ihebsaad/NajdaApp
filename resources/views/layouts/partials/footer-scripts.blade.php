@@ -233,7 +233,7 @@ if (App::environment('local')) {
         }
     }
     // Vérifier le nom de la vue
-    <?php if (($view_name!='entrees-dispatching')  ||($view_name!='entrees-showdisp') ) { ?>
+    <?php if (($view_name!='entrees-dispatching')  && ($view_name!='entrees-showdisp') ) { ?>
 
     // verifier si la notification est dispatche
     if ((typeof parsed['data']['entree']['dossier'] !== "undefined") && (parsed['data']['entree']['dossier'] !== null))
