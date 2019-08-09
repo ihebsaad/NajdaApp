@@ -31,6 +31,7 @@ use App\Http\Controllers\TagsController;
         <div class="panel-heading" style="">
                     <div class="row">
                         <div  style=" padding-left: 0px;color:black;font-weight: bold ;">
+                            {{$view_name}}
                             <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet']; echo ($sujet); ?><span id="hiding" class="pull-right">
          <i style="color:grey;margin-top:10px"class="fa fa-2x fa-fw clickable fa-chevron-down"></i>
             </span></h4>                        </div>
