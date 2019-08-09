@@ -973,6 +973,9 @@ reference_customer
 
             </div>
             <div class="modal-footer">
+                <div id="assignprest">
+                    
+                </div>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 <button type="button" id="genomhtml" class="btn btn-primary">Générer</button>
             </div>

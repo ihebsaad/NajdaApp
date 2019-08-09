@@ -71,7 +71,7 @@ class DeleguerActionController extends Controller
                     
 
 
-                Session::flash('AffectMission',"l'action".$act->titre ." de mission ".  $act->Mission->titre." de dossier ".$dossier->reference_medic ."est déléguée "); 
+                Session::flash('AffectMission',"l'action ".$act->titre ." de mission ".  $act->Mission->titre." de dossier ".$dossier->reference_medic ." est déléguée "); 
 
                           
 
