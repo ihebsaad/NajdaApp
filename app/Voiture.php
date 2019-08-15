@@ -13,7 +13,10 @@ class Voiture extends Model
  'annule',
  'type',
  'km',
- 'immarticulation'
+ 'immarticulation',
+      'carburant',
+      'telepeage',
+
      ];
  
 }

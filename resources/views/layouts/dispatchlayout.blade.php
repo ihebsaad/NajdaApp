@@ -4,7 +4,7 @@
     @include('layouts.partials.head')
 </head>
 <body>
-@include('layouts.partials.top2')
+@include('layouts.partials.topdisp')
 
  @include('layouts.partials.folders2')
 

@@ -10,7 +10,7 @@
         <div class="col-sm-2 col-md-2 col-lg-2" style="">
            <a href="{{ route('home')}}" class="logo">
                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
-                <img src="{{  URL::asset('public/img/logo.png') }}" alt="logo" />
+                <img style="margin-left:-25px;" src="{{  URL::asset('public/img/logo.png') }}" alt="logo" />
             </a>
         </div>
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top: 5px;">
@@ -40,7 +40,7 @@
           @can('isSupervisor')
 
               <div  class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
-                  <a href="{{ route('home') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
+                  <a href="{{ route('supervision') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
                       <i class="fas fa-users-cog"></i>
                       <br>
                       Supervision
@@ -53,7 +53,7 @@
           @cannot('isAdmin')
                   <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
                       <a href="{{ route('home') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="basculer en mode agent" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
-                         Mode Agent
+                          <i class="far fa-user"></i> Agent
                       </a>
                   </div>
 

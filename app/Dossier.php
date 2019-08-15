@@ -88,19 +88,19 @@ class Dossier extends Model
 
 
     ];
-/*
+
     protected $dateFormat = 'Y-m-d H:i';
 
     public function getDateFormat()
     {
         return 'Y-m-d H:i:s.u';
     }
-*/
+/*
  public function activeMissions()
     {
         return $this->hasMany('App\Mission')->where('statut_courant','active');
     }
-
+*/
 
  public function Missions()
     {

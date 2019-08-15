@@ -459,6 +459,15 @@ return redirect('roles');
         return view('supervision',['users'=>$users]);
     }
 
+
+    public function affectation()
+    {
+        $users = User::get();
+
+        return view('affectation',['users'=>$users]);
+    }
+
+
     public function index()
     {
 

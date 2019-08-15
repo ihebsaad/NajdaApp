@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Demande;
+use App\Notification;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
@@ -435,5 +436,65 @@ class UsersController extends Controller
         $seance->save();
 
     }
+
+    public static function countmissions($id)
+    {
+        $user=User::find($id);
+
+        $count=   $user->activeMissions->count();
+
+        return $count;
+
+    }
+
+    //ActionECs
+
+
+    public static function countactions($id)
+    {
+        $user=User::find($id);
+
+        $missions=  $user->activeMissions;
+            $somme=0;
+        foreach($missions as $m)
+        {
+            $somme+= $m->ActionECs->count();
+        }
+        return $somme;
+
+    }
+
+//activeActionEC
+
+    public static function countactionsactives($id)
+    {
+        $user=User::find($id);
+        $missions=  $user->activeMissions;
+        $somme=0;
+        foreach($missions as $m)
+        {
+            $somme+= $m->activeActionEC->count();
+        }
+        return $somme;
+
+    }
+    public static function countaffectes($id)
+    {
+        $user=User::find($id);
+
+        $number =  Dossier::where('affecte', $user)->count('id');
+
+        return $number;
+    }
+
+    public static function countnotifs($id)
+    {
+
+        $number =   Notification::where('notifiable_id','=', $id  )->where('statut','=', 0 )->count();
+
+        return $number;
+    }
+
+
 
  }

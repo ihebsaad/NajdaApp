@@ -97,8 +97,7 @@ class DossiersController extends Controller
     {
 
     }
-
-    public function saving(Request $request)
+    public function saving(Request $request )
     {
         $reference_medic = '';
         $subscriber_lastname = $request->get('lastname');

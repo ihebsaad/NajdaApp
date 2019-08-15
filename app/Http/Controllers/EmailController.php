@@ -1961,8 +1961,8 @@ class EmailController extends Controller
         try{
             Mail::send([], [], function ($message) use ($contenu,$dossier,$par,$description,$num,$from) {
                 $message
-                     //  ->to('ihebsaad@gmail.com')
-                     ->to('ecom_plus@tcs.com.tn')
+                     ->to('ihebsaad@gmail.com')
+                 //    ->to('ecom_plus@tcs.com.tn')
 
                     ->subject('sms '.$num.' ECOM1')
                     ->setBody($contenu );

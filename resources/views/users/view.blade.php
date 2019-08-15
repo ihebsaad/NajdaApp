@@ -69,6 +69,7 @@
                 </select>
             </td>
         </tr>
+
      <!--   <tr>
             <td class="text-primary">Rôles</td>
             <td>
@@ -99,11 +100,27 @@
             <td>    <textarea style="height:60px" id="signature" onchange="changing(this);"  type="text" class="form-control" name="observation"  id="observation"  ><?php echo  $user->signature ; ?></textarea>
             </td>
         </tr>
+
         </tbody>
         </table>
 
+        <?php
 
 
+        $missions=UsersController::countmissions($user->id);
+        $actions=UsersController::countactions($user->id);
+        $actives=UsersController::countactionsactives($user->id);
+        $dossiers=UsersController::countaffectes($user->id);
+        $notifications=UsersController::countnotifs($user->id);
+
+        ?>
+        <table id="tabstats" style="background-color: #a6e1ec;margin-left:80px ;margin-top:40px ;width:300px;font-weight: 600;">
+            <tr><td><span>Notifications </span></td><td><b><?php echo $notifications;?></b></td></tr>
+            <tr><td><span>Dossiers Affectés </span></td><td><b><?php echo $dossiers;?></b></td></tr>
+            <tr><td><span>Missions en cours </span></td><td><b><?php echo $missions;?></b></td></tr>
+            <tr><td><span>Total des Actions </span></td><td><b><?php echo $actions;?></b></tr>
+            <tr><td><span>Actions Actives </span></td><td><b><?php echo $actives;?></b></td></tr>
+        </table>
 
       <!--  <div class="form-group">
             <div class="col-md-6 col-md-offset-4 ">
@@ -116,7 +133,11 @@
 
 
 </div>
-	
+	<style>
+        #tabstats {font-size: 15px;padding:30px 30px 30px 30px;}
+        #tabstats td{border-left:1px solid white;border-bottom:1px solid white;min-width:50px;min-height: 25px;;text-align: center;}
+        #tabstats tr{margin-bottom:15px;text-align: center;height: 40px;}
+        </style>
 @endsection
 
 

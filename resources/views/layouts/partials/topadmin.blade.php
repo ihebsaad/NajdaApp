@@ -7,13 +7,13 @@
 
     <div class="navbar ">
       <div class="row">
-        <div class="col-sm-2 col-md-2 col-lg-2" style="">
+        <div class="col-sm-1 col-md-1 col-lg-1" style="margin-right:60px">
            <a href="{{ route('home')}}" class="logo">
                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
-                <img src="{{  URL::asset('public/img/logo.png') }}" alt="logo" />
+                <img style="margin-left:-25px;" src="{{  URL::asset('public/img/logo.png') }}" alt="logo" />
             </a>
         </div>
-        <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top: 5px;">
+       <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top: 5px;">
           <span  id="ndate" class="date" data-month="" data-year="" style="width:70px;height:60px;line-height: 1; padding-top: 15px;">
                     <span id="numj">13</span>
            </span>
@@ -27,12 +27,26 @@
 
 
          <div id="dpause" class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
-          <a  href="{{ route('home') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;"> 
+          <a  href="{{ route('supervision') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
                                                 <span class="fas fa-fw fa-users-cog"></span>
                                                 <br>
                                                 Supervision
           </a> 
         </div>
+
+
+          <?php $user = auth()->user();
+          $typeuser=$user->type;
+          if($typeuser!='simple'){
+          ?>
+          <div  class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
+              <a href="{{ route('home') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
+                  <i class="far fa-user"></i>
+                  <br>
+                  Agent
+              </a>
+          </div>
+          <?php }?>
         <div class="col-sm-3 col-md-3 col-lg-3" style=" height: 40px!important;padding-top:27px;padding-left:0px ">
           <form class="search-container" action="{{route('RechercheMulti.test')}}" id="testRecheche" method="POST">
             <input type="text" id="search-bar"  placeholder="Recherche" autocomplete="off" name="qy">
@@ -336,11 +350,11 @@
 
 
 
-        <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
+     <!--   <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
           <a href="#" class="btn btn-primary btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;"> 
               <span class="fa fa-fw fa-phone fa-2x"></span>
           </a> 
-        </div>
+        </div>-->
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
 		 <?php
         $seance =  DB::table('seance')
@@ -384,77 +398,3 @@
 
     </header>
 
-    <script>
-      /* function colorerSeq(string,qy) {
-           
-
-
-           if(qy!='')
-           {
-          // For all matching elements
-             $(string).each(function() {
-
-          // Get contents of string
-                  var myStr = $(this).text();
-                  //alert(myStr);
-                  // Split myStr into an array of characters
-                  myStr = myStr.split("");
-                  var dejaEn=false;
-                  // Build an html string of characters wrapped in  tags with classes
-                  var myContents = "";
-                  for (var i = 0, len = myStr.length; i < len; i++) {
-                    
-                    if(qy[0].toUpperCase()==myStr[i].toUpperCase())
-                    {
-
-                      if(!dejaEn)
-                      {
-
-                      for(var j=0, len2 = qy.length; j<len2; j++)
-                      {
-                        if(i<len)
-                        {
-                          if(qy[j].toUpperCase()==myStr[i].toUpperCase())
-                          {
-                           myContents += '<span class="single-char char-' + i + '">' + myStr[i] + '</span>';
-                           i++;
-                           //b=true;
-                          }
-                          else
-                          {
-                            myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-                            j=len2;
-                            i++;
-                          }
-                          
-                        }
-                       
-
-                      }
-                    
-                      
-                      i--;
-                      dejaEn=true;
-                          }
-                          else
-                          {
-
-                            myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-
-                          }
-                     
-                     }
-                     else
-                     {
-
-                      myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-                     }
-                  }
-
-                  // Replace original string with constructed html string
-                  $(this).html(myContents);
-                });
-           }
-              
-              }*/
-    </script>

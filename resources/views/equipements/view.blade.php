@@ -35,17 +35,17 @@
                         </div>
                         <div class="col-md-6">
                             <div class="row" style="padding-top:20px">
-                                <div class="col-md-4">
-                                    <label style="padding-top:10px">Actif</label>
+                                <div class="col-md-2">
+                                    <label style="padding-top:10px">Actif:</label>
                                 </div>
                                 <div class="radio-list">
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <label for="annule" class="">
                                             <div class="radio" id="uniform-actif"><span class="checked">
                                                 <input  onclick="changing(this)" type="radio" name="annule" id="annule" value="0"   <?php if ($equipement->annule ==0){echo 'checked';} ?>></span></div> Oui
                                         </label>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <label for="nonactif" class="">
                                             <div class="radio" id="uniform-nonactif"><span>
                                                 <input onclick="disabling('annule')" type="radio" name="annule" id="nonactif" value="1"  <?php if ($equipement->annule ==1){echo 'checked';} ?>></span></div> Non
@@ -60,14 +60,14 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="inputError" class="control-label">Date de Début indisponibilité * </label>
-                    <input onchange="changing(this)"  data-format="dd-MM-yyyy hh:mm:ss" placeholder="jj-mm-aaaa" class="form-control datepicker-default form-control" name="date_deb_indisponibilite" id="date_deb_indisponibilite" type="text"   value="{{ $equipement->date_deb_indisponibilite }}" >
+                    <input onchange="changing(this)"  type="datetime-local"   class="form-control  " name="date_deb_indisponibilite" id="date_deb_indisponibilite" type="text"   value="{{ $equipement->date_deb_indisponibilite }}" >
                 </div>
 
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="inputError" class="control-label">Date de Fin indisponibilité *</label>
-                    <input onchange="changing(this)"  data-format="dd-MM-yyyy hh:mm:ss" placeholder="jj-mm-aaaa" class="form-control datepicker-default form-control" name="date_fin_indisponibilite" id="date_fin_indisponibilite" type="text"   value="{{ $equipement->date_fin_indisponibilite }}" >
+                    <input onchange="changing(this)"  type="datetime-local"   class="form-control  " name="date_fin_indisponibilite" id="date_fin_indisponibilite" type="text"   value="{{ $equipement->date_fin_indisponibilite }}" >
                 </div>
 
             </div>
