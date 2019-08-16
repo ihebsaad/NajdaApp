@@ -84,7 +84,7 @@ use \App\Http\Controllers\UsersController;
 							<thead style="text-align:center"><th>Agent</th><th>Type</th><th>Rôle Principal</th><th>Dossiers Affectés</th><th>Missions</th><th>Actions </th><th>Actions Actives</th><th>Notifications</th>
                             <?php $c=0;
                             foreach($users as $user)
-                                { if($c % 2 ==0){$bg='style="background-color:#dddcda!important"';}else{$bg='';}
+                                { if($c % 2 ==0){$bg='background-color:#dddcda!important';}else{$bg='';}
                                     $role='Agent';
                                     if($user->id==$charge){$role='Chargé de transport';}
                                     if($user->id==$disp){$role='Dispatcheur';}
@@ -101,7 +101,7 @@ use \App\Http\Controllers\UsersController;
                                     // if($user->type=='admin'){$role='(Administrateur)';}
 									if($user->user_type!='admin'){
 										
-                                  if($user->isOnline()) {$c++; echo  '<tr class="usertr" onclick="showuser(this)"` id="user-'.$user->id.'" '.$bg.' ><td>   '.$user->name.' '.$user->lastname .'</td><td>'.$user->user_type.' </td><td>'. $role.'</td><td>'.$dossiers.'</td><td>'.$missions.'</td><td>'.$actions.'</td><td>'.$actives.'</td><td>'.$notifications.'</td>  </tr>' ;}
+                                  if($user->isOnline()) {$c++; echo  '<tr class="usertr" onclick="showuser(this);"  id="user-'.$user->id.'" style="cursor:pointer;'.$bg.'" ><td>   '.$user->name.' '.$user->lastname .'</td><td>'.$user->user_type.' </td><td>'. $role.'</td><td>'.$dossiers.'</td><td>'.$missions.'</td><td>'.$actions.'</td><td>'.$actives.'</td><td>'.$notifications.'</td>  </tr>' ;}
 									}
                                 }
                                     ?><br>
@@ -115,7 +115,7 @@ use \App\Http\Controllers\UsersController;
 			
 			<div class="panel panel-danger col-md-5" style="padding:0 ; ">
                     <div class="panel-heading">
-                        <h4 class="panel-title"> <br></h4>
+                        <h4 class="panel-title"> Liste des dossiers</h4>
                        <!-- <span class="pull-right">
                            <i class="fa fa-fw clickable fa-chevron-up"></i>
                             
@@ -125,9 +125,9 @@ use \App\Http\Controllers\UsersController;
 
                    <div class="panel-body scrollable-panel" style="display: block;">
                        <div class="row" style="margin-bottom:15px;">
-                           <div class="col-md-3" style="margin-left:50px;;color:#F39C12"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Mixte</b></div>
-                           <div class="col-md-3" style="margin-left:50px;;color:#52BE80"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Medical</b></div>
-                           <div class="col-md-3" style="margin-left:50px;;color:#3498DB"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Technique</b></div>
+                           <div class="col-md-4" style=";color:#F39C12"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Mixte</b></div>
+                           <div class="col-md-4" style=";color:#52BE80"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Medical</b></div>
+                           <div class="col-md-4" style=";color:#3498DB"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Technique</b></div>
                        </div>
 
                     <?php   foreach($users as $user)
@@ -136,36 +136,59 @@ use \App\Http\Controllers\UsersController;
 
                        if($user->isOnline()) {
                            $c++;?>
-                        <div style="display:none;" class="agent" id="agent-<?php echo $user->id;?>">
-                       <?php echo  '<h4 style="text-align:center">Agent : '.$user->name.' '.$user->lastname .'</h4>';
+                        <div  class="agent" id="agent-<?php echo $user->id;?>"  style="display:none">
+                       <?php echo  '<h4 style=";text-align:center;background-color:grey;color:white;padding-top:10px;padding-bottom:10px;border:2px solid black">Agent : '.$user->name.' '.$user->lastname .'</h4>';
 
                            $folders = Dossier::where('affecte','=',$user->id)->get();
-                          echo '<ul>';
+                          echo '<ul  class="fa-ul"  >';
                            foreach($folders as $folder)
-                           {
+                           {$idd=$folder['id'];
+                            $missions=UsersController::countmissionsDossier($idd);
+                            $actions=UsersController::countactionsDossier($idd);
+                              $notifications=UsersController::countnotifsDossier($idd);
 
+                            $complexite=$folder['complexite'];
                        $type=$folder['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
-                       $idd=$folder['id'];$ref=$folder['reference_medic'];$abn=$folder['subscriber_lastname'].' '.$folder['subscriber_name'];$idclient=$folder['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
+                       $ref=$folder['reference_medic'];$abn=$folder['subscriber_lastname'].' '.$folder['subscriber_name'];$idclient=$folder['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
 
-                        <li  id="dossier-<?php echo $idd;?>"    style="padding:10px 10px 10px 10px;color:white;margin-top:20px;<?php echo $style;?>" >
-                           <label style="font-size: 18px;"><?php echo $ref;?></label>
-                           <div class="infos">  <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
-                               <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small>
+                        <li  id="dossier-<?php echo $idd;?>"    style=";padding:10px 10px 10px 10px;color:white;margin-top:20px;<?php echo $style;?>" >
+                            <a title="voir la fiche" href="{{action('DossiersController@fiche',$idd)}}"> <span style="color:grey;margin-top:25px" class="fa-li"><i style="color:grey" class="fa fa-folder-open"></i></span></a>
+                           <div class="row">
 
-
+                            <div class="col-md-4">
+                                <label style="font-size: 18px;"><a style="color:white;text-shadow: 1px 1px black" title="voir les détails du dossier" href="{{action('DossiersController@view',$idd)}}"><?php echo $ref;?></a></label>
+                           <div class="infos">  <small style="font-size:11px"><?php custom_echo($abn,25);?></small>
+                               <br><small style="font-size:10px"><?php echo custom_echo($client,25);?></small>
                            </div>
+                           </div>
+
+                               <div class="col-md-4" style="text-shadow: 1px 1px black">
+                                   Complexité: <?php echo $complexite;?><br>
+                                   Notifications: <?php echo $notifications;?>
+
+                               </div>
+                               <div class="col-md-4"  style="text-shadow: 1px 1px black">
+                                   Missions: <?php echo $missions;?><br>
+                                   Actions: <?php echo $actions;?>
+
+                               </div>
+
+
+                           </div><!---row-->
+
                        </li>
                     <?php       } ?>
                     </ul>
-                       <?php }
+                        </div>
+
+                   <?php }
 
                        }
                        }
 
                        ?>
 
-                  </div>
- 
+
             </div>
             <!-- /.content -->
         </div>
@@ -207,10 +230,21 @@ use \App\Http\Controllers\UsersController;
         $('#tab4').css('display','block');
     }
 
+    // function slect all elements from class tag
+    function toggle(className, displayState){
+        var elements = document.getElementsByClassName(className);
+
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.display = displayState;
+        }
+    }
+
+
     function showuser(elm) {
         var userid = elm.id;
         var user = userid.slice( 5);
-       ////// document.getElement('agent').style.display='none';
+        //document.getElement('agent').style.display='none';
+        toggle('agent', 'none');
 
         document.getElementById('agent-'+user).style.display='block';
     }

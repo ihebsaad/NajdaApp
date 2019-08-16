@@ -447,7 +447,6 @@ class UsersController extends Controller
 
     }
 
-    //ActionECs
 
 
     public static function countactions($id)
@@ -464,7 +463,6 @@ class UsersController extends Controller
 
     }
 
-//activeActionEC
 
     public static function countactionsactives($id)
     {
@@ -478,6 +476,7 @@ class UsersController extends Controller
         return $somme;
 
     }
+
     public static function countaffectes($id)
     {
         $user=User::find($id);
@@ -494,6 +493,58 @@ class UsersController extends Controller
 
         return $number;
     }
+
+
+
+    public static function countmissionsDossier($id)
+    {
+        $dossier=Dossier::find($id);
+
+        $count=   $dossier->Missions->count();
+
+        return $count;
+
+    }
+
+    public static function countactionsDossier($id)
+    {
+        $dossier=Dossier::find($id);
+
+        $missions=  $dossier->Missions;
+        $somme=0;
+        foreach($missions as $m)
+        {
+            $somme+= $m->ActionECs->count();
+        }
+        return $somme;
+
+    }
+/*
+    public static function countactionsactivesDossier($id)
+    {
+        $dossier=Dossier::find($id);
+        $missions=  $dossier->Missions;
+        $somme=0;
+        foreach($missions as $m)
+        {
+            $somme+= $m->activeActionEC->count();
+        }
+        return $somme;
+
+    }
+*/
+    public static function countnotifsDossier($id)
+    {
+        $dossier=Dossier::find($id);
+        $ref=$dossier->reference_medic;
+
+        $number = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"dossier": "'.$ref.'"}}\')')->count(['id']);
+
+
+
+        return $number;
+    }
+
 
 
 

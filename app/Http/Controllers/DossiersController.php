@@ -819,7 +819,7 @@ class DossiersController extends Controller
             $tel2 = app('App\Http\Controllers\PrestatairesController')->ChampById('phone_cell2', $prestataire);
             $fixe = app('App\Http\Controllers\PrestatairesController')->ChampById('phone_home', $prestataire);
             $specialite = app('App\Http\Controllers\PrestatairesController')->ChampById('specialite', $prestataire);
-            $observ = app('App\Http\Controllers\PrestatairesController')->ChampById('observation', $prestataire);
+            $observ = app('App\Http\Controllers\PrestatairesController')->ChampById('observation_prestataire', $prestataire);
 
            // $emails = Email::where('parent', $prestataire)->get();
 

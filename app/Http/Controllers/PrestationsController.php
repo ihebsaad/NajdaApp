@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Adresse;
 use App\Specialite;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -164,7 +165,22 @@ class PrestationsController extends Controller
         $villes = Ville::all();
         $gouvernorats = DB::table('cities')->get();
 
-        return view('prestations.view',['dossiers'=>$dossiers,'typesprestations'=>$typesprestations,'gouvernorats' => $gouvernorats,'villes'=>$villes], compact('prestation'));
+        $prestataire=$prestation->prestataire_id;
+        $emails =   Adresse::where('nature', 'email')
+            ->where('parent',$prestataire)
+            ->get();
+
+        $tels =   Adresse::where('nature', 'tel')
+            ->where('parent',$prestataire)
+            ->get();
+
+        $faxs =   Adresse::where('nature', 'fax')
+            ->where('parent',$prestataire)
+            ->get();
+
+
+
+        return view('prestations.view',['emails'=>$emails,'tels'=>$tels,'faxs'=>$faxs,'dossiers'=>$dossiers,'typesprestations'=>$typesprestations,'gouvernorats' => $gouvernorats,'villes'=>$villes], compact('prestation'));
 
     }
 

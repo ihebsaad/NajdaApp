@@ -72,7 +72,7 @@
   
   				                             <?php $c=0;
                             foreach($users as $user)
-                                { if($c % 2 ==0){$bg='style="border:2px dotted black"';}else{$bg='';}
+                                { if($c % 2 ==0){$bg=' border:2px dotted black ;';}else{$bg='';}
 								$iduser=$user->id;
                                      $role='Agent';
                                     if($user->id==$charge){$role='Chargé de transport';}
@@ -91,14 +91,14 @@
 									if($user->user_type!='admin'){
 										
                                   if($user->isOnline()) {
-									  $c++; echo  '<div class="userdiv" id="user-'.$iduser.'" '.$bg.'  >';
+									  $c++; echo  '<div class="userdiv" id="user-'.$iduser.'" style="margin-bottom:30px;'.$bg.'"  >';
 									  echo '<h3>'.$user->name.'  '.$user->lastname.' <small> ('.$role.')</small> </h3>';
 
                                       $folders = Dossier::where('affecte','=',$user->id)->get();
   foreach($folders as $folder)
               { $type=$folder['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
               $idd=$folder['id'];$ref=$folder['reference_medic'];$abn=$folder['subscriber_lastname'].' '.$folder['subscriber_name'];$idclient=$folder['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-              <div  id="dossier-<?php echo $idd;?>" class="dossier"  style="margin-top:20px;<?php echo $style;?>" >
+              <div  id="dossier-<?php echo $idd;?>" class="dossier"  style="margin-top:5px;<?php echo $style;?>" >
                     <label style="font-size: 18px;"><?php echo $ref;?></label>
                   <div class="infos">  <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
                       <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small>
@@ -124,9 +124,9 @@
 
                    <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
                        <div class="row" style="margin-bottom:15px;">
-                           <div class="col-md-3" style="margin-left:50px;;color:#F39C12"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Mixte</b></div>
-                           <div class="col-md-3" style="margin-left:50px;;color:#52BE80"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Medical</b></div>
-                           <div class="col-md-3" style="margin-left:50px;;color:#3498DB"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Technique</b></div>
+                           <div class="col-md-4" style=";color:#F39C12"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Mixte</b></div>
+                           <div class="col-md-4" style=";color:#52BE80"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Medical</b></div>
+                           <div class="col-md-4" style=";color:#3498DB"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Technique</b></div>
                        </div>
 
  					<div id="drag-elements">
@@ -135,7 +135,7 @@
                         foreach($dossiers as $dossier)
 			{ $type=$dossier['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
 			$idd=$dossier['id'];$ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-			     <div  id="dossier-<?php echo $idd;?>" class="dossier"  style="margin-top:20px;<?php echo $style;?>" >
+			     <div  id="dossier-<?php echo $idd;?>" class="dossier"  style="margin-top:5px;<?php echo $style;?>" >
                 <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <label style="font-size: 15px;"><?php echo $ref;?></label>
 	 	         <div class="infos">  <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
                <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small>
@@ -344,7 +344,8 @@ width:300px;
  border-radius: 5px;
   min-height: 700px;
   margin: 0 auto;
-  padding: 2em;
+    padding: 20px;
+
 }
 
 #drag-elements > div {
