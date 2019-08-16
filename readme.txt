@@ -29,3 +29,6 @@ sudo chmod -R 755 ./vendor
 
 //array_push($ccimails,'medic.multiservices@topnet.tn' );
 
+// update dossier on close set affecte to Null
+// UPDATE `dossiers` SET `affecte`=NULL  where `current_status`='Cloture';
+

@@ -462,9 +462,13 @@ return redirect('roles');
 
     public function affectation()
     {
-        $users = User::get();
 
-        return view('affectation',['users'=>$users]);
+        if(\Gate::allows('isAdmin') || \Gate::allows('isSupervisor')  ) {
+            $users = User::get();
+
+            return view('affectation', ['users' => $users]);
+        }else{ return back();}
+
     }
 
 

@@ -78,12 +78,19 @@
 
             <div class="col-sm-2">
             <a href="{{ route('supervision') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-                <span class="fas fa-lg  fa-sliders-h"></span>
+                <span class="fas fa-lg  fa-users-cog"></span>
                 <br>
                 Supervision
             </a>
         </div>
-	
+
+            <div class="col-sm-2">
+                <a href="{{ route('affectation') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="fas fa-lg  fa-user-tag"></span>
+                    <br>
+                    Affectations
+                </a>
+            </div>
     @endif
     
   @can('isSupervisor')

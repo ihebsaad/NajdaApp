@@ -350,7 +350,7 @@ class DossiersController extends Controller
         $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
         Log::info('[Agent: '.$nomuser.'] Affectation de dossier :'.$ref.' à: '.$nomagent);
 
-        return back();
+      //  return back();
 
     }
 

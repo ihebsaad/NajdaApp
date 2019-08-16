@@ -482,7 +482,7 @@ class UsersController extends Controller
     {
         $user=User::find($id);
 
-        $number =  Dossier::where('affecte', $user)->count('id');
+        $number =  Dossier::where('affecte', $id)->count();
 
         return $number;
     }
