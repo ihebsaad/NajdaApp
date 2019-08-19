@@ -98,7 +98,17 @@
     </div>
     
       @endcan
-      
+
+
+    <div class="row">
+        <div class="col-sm-2">
+            <a href="{{ route('boites') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
+                <span class="fa fa-lg fa-fw fa-inbox"></span>
+                <br>
+                Emails Personnels
+            </a>
+        </div>
+    </div>
     @can('isAdmin')
 <!--
     <div class="col-sm-2">
@@ -243,13 +253,7 @@
 
 @endcan
 
-<div class="col-sm-2">
-    <a href="{{ route('boites') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
-        <span class="fa fa-lg fa-fw fa-inbox"></span>
-        <br>
-        Emails Personnels
-    </a>
-</div>
+
 </div>
 
     <style>

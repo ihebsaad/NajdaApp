@@ -16,8 +16,22 @@
                                 <input onchange="changing(this)" type="text" class="form-control input" name="nom" id="nom"  value="{{ $specialite->nom }}">
                             </div>
                         </div>
+                        <div class="row">
 
- 
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="inputError" class="control-label">Type de Prestation *</label>
+                                <select class="  form-control col-lg-6"   onchange="changing(this)"    id="type_prestation">
+                                    <option></option>
+                                @foreach($typesprestations as $aKey)
+                                    <option    <?php if (  $specialite->type_prestation==$aKey->id){echo 'selected="selected"';} ?>   value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
+                                @endforeach
+
+                                 </select>
+                            </div>
+                        </div>
+                        </div>
+
 
 
                         <input type="hidden" id="idtp" class="form-control"   value="{{ $specialite->id }}">

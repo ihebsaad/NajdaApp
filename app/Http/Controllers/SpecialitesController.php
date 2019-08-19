@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\TypePrestation;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
@@ -33,7 +34,9 @@ class SpecialitesController extends Controller
         $villes = Ville::all();
 
         $specialites = Specialite::orderBy('id', 'desc')->paginate(10000000);
-        return view('specialites.index',['dossiers' => $dossiers,'villes' => $villes], compact('specialites'));
+        $typesprestations = TypePrestation::get();
+
+        return view('specialites.index',['typesprestations'=>$typesprestations,'dossiers' => $dossiers,'villes' => $villes], compact('specialites'));
     }
 
  
@@ -77,7 +80,8 @@ class SpecialitesController extends Controller
         if( ($request->get('nom'))!=null) {
 
             $specialite = new Specialite([
-                'nom' => $request->get('nom')
+                'nom' => $request->get('nom'),
+                'type_prestation' => $request->get('type_prestation')
 
             ]);
             if ($specialite->save())
@@ -121,7 +125,9 @@ class SpecialitesController extends Controller
         $villes = DB::table('cities')->select('id', 'name')->get();
 
         $specialite = Specialite::find($id);
-        return view('specialites.view',['dossiers' => $dossiers,'villes'=>$villes], compact('specialite'));
+        $typesprestations = TypePrestation::get();
+
+        return view('specialites.view',['typesprestations'=>$typesprestations,'dossiers' => $dossiers,'villes'=>$villes], compact('specialite'));
 
     }
 

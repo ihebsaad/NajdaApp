@@ -7,6 +7,7 @@ class Specialite extends Model
 {
 
     protected $fillable = [
-        'nom'
+        'nom',
+        'type_prestation'
     ];
 }

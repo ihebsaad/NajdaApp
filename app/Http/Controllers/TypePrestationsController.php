@@ -172,9 +172,14 @@ class TypePrestationsController extends Controller
         return redirect('/typeprestations')->with('success', '  Supprimé avec succès');
     }
 
- 
- 
 
+
+    public static function nomById($id)
+    {
+        //
+        $typeprestations = TypePrestation::find($id);
+       return $typeprestations['name'];
+    }
 
 }
 

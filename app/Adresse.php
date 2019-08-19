@@ -17,7 +17,9 @@ class Adresse extends Model
 'fonction',
 'tel',
 'fax',
-'mail'
-    ];
+'mail',
+      'typetel'
+
+  ];
  
 }

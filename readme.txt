@@ -32,3 +32,4 @@ sudo chmod -R 755 ./vendor
 // update dossier on close set affecte to Null
 // UPDATE `dossiers` SET `affecte`=NULL  where `current_status`='Cloture';
 
+// Villes & places : https://community.algolia.com/

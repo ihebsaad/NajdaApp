@@ -84,8 +84,27 @@ class Dossier extends Model
         'subscriber_local_address2',
         'subscriber_local_address3',
         'hotel',
-        'ville'
+        'ville',
 
+        'empalcement_medic',
+        'date_debut_medic',
+        'date_fin_medic',
+        'empalcement_medic2',
+        'date_debut_medic2',
+        'date_fin_medic2',
+        'empalcement_medic3',
+        'date_debut_medic3',
+        'date_fin_medic3',
+
+        'empalcement_trans',
+        'date_debut_trans',
+        'date_fin_trans',
+        'empalcement_trans2',
+        'date_debut_trans2',
+        'date_fin_trans2',
+        'empalcement_trans3',
+        'date_debut_trans3',
+        'date_fin_trans3',
 
     ];
 

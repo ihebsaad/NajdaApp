@@ -8,7 +8,8 @@
 
 @section('content')
 
-
+    <?php use \App\Http\Controllers\TypePrestationsController;
+?>
     <style>
         .uper {
             margin-top: 10px;
@@ -28,13 +29,15 @@
             <thead>
             <tr id="headtable">
                 <th style="width:10%">ID</th>
-                <th style="width:45%">Nom</th>
+                <th style="width:30%">Spécialité</th>
+                <th style="width:30%">Type de prestation</th>
                  <th style="width:10%">Actions</th>
               </tr>
             <tr>
                 <th style="width:10%">ID</th>
-                <th style="width:45%">Nom</th>
-                 <th class="no-sort" style="width:10%">Actions</th>
+                <th style="width:30%">Spécialité</th>
+                <th style="width:30%">Type de prestation</th>
+                <th class="no-sort" style="width:10%">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -47,6 +50,7 @@
                 <tr>
                     <td  >{{$specialite->id}}</td>
                     <td  ><a href="{{action('SpecialitesController@view', $specialite['id'])}}" >{{$specialite->nom}}</a></td>
+                    <td  > <?php echo TypePrestationsController::nomById($specialite->type_prestation); ?></td>
                       <td    > </td>
  
                 </tr>
@@ -78,11 +82,21 @@
                         <form method="post" >
                             {{ csrf_field() }}
 
-                            <div class="form-group">
+                            <div class="form-group row ">
                                 <label for="type">Nom :</label>
                                 <input class="form-control" type="text" id="nom" />
 
                             </div>
+                            <div class=" row form-group">
+                                <label for="type">Type de prestation :</label>
+                                <select class="  form-control col-lg-6"      id="type_prestation">
+                                    <option></option>
+                                @foreach($typesprestations as $aKey)
+                                    <option        value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
+                                @endforeach
+                                </select>
+                            </div><br><br>
+
 
                         </form>
                     </div>
@@ -184,13 +198,14 @@
 
             $('#add').click(function(){
                 var nom = $('#nom').val();
+                var type_prestation = $('#type_prestation').val();
                 if ((nom != '')  )
                 {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
                         url:"{{ route('specialites.saving') }}",
                         method:"POST",
-                        data:{nom:nom, _token:_token},
+                        data:{nom:nom,type_prestation:type_prestation, _token:_token},
                         success:function(data){
 
                             //   alert('Added successfully');

@@ -96,6 +96,8 @@ class PrestatairesController extends Controller
             'type_prest' => $request->get('type_prest'),
             'priorite' => $request->get('priorite'),
             'specialite' => $request->get('specialite'),
+            'ville' => $request->get('ville'),
+            'postal' => $request->get('postal'),
 
 
         ]);
@@ -264,7 +266,8 @@ class PrestatairesController extends Controller
        // $villes=DB::table('villes')
       //      ->get();
         $typesprestations = TypePrestation::all();
-      // $villes = DB::table('cities')->select('id', 'name')->get();
+        $typesprestationsid = TypePrestation::select('id');
+       // $villes = DB::table('cities')->select('id', 'name')->get();
         $villes = Ville::all();
 
        // $gouvernorats = DB::table('cities')->get();
@@ -301,7 +304,13 @@ class PrestatairesController extends Controller
 
 
         $specialites =DB::table('specialites')
+            ->whereIn('type_prestation', $typesprestationsid)
             ->get();
+
+       /* $specialites2 =DB::table('specialites')
+                  ->whereIn('type_prestation', $typesprestationsid)
+            ->get();
+*/
 
         return view('prestataires.view',['specialites'=>$specialites,'emails'=>$emails, 'tels'=>$tels, 'faxs'=>$faxs,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'relations2'=>$relations2,'prestations'=>$prestations], compact('prestataire'));
 
@@ -460,7 +469,7 @@ class PrestatairesController extends Controller
         $specialite= $request->get('specialite');
 
 
-        DB::table('pecialites_prestataires')
+        DB::table('specialites_prestataires')
             ->where([
                 ['prestataire_id', '=', $prestataire],
                 ['specialite', '=', $specialite],

@@ -26,7 +26,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#tab03" data-toggle="tab"  onclick="showinfos3();hideinfos();hideinfos2();">
-                        <i class="fas fa-lg fa-sort-amount-down"></i>  Priorité
+                        <i class="fas fa-lg fa-sort-amount-down"></i>  Priorités
                     </a>
                 </li>
 
@@ -82,11 +82,12 @@
          <div class="form-group ">
              <label>Spécialités</label>
              <div class="row">
+                 <?php  echo 'specialites'. json_encode($specialites) .'<br>';?>
+                 <?php echo '$relations2 '.json_encode($relations2);?>
                  <select class="form-control  col-lg-12 itemName " style="width:400px" name="specialite"  multiple  id="specialite">
 
-
                      <option></option>
-                     <?php if ( count($relations2) > 0 ) {?>
+                     <?php if ( count($relations2) > 0 ) { ?>
 
                      @foreach($relations2 as $rel  )
                          @foreach($specialites as $sp)
@@ -95,12 +96,13 @@
                      @endforeach
 
                      <?php
+
                      } else { ?>
-                     @foreach($specialites as $sp)
+                    /* @foreach($specialites as $sp)
                          <option    onclick="createspec('spec<?php echo $sp->id; ?>')"  value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
                      @endforeach
 
-                     <?php }  ?>
+                     <?php }   ?>
 
                  </select>
 
@@ -308,7 +310,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="inputError" class="control-label">Email </label>
+                                <?php if($prestataire->mail!=''){ ?>  <label for="inputError" class="control-label">Email </label><?php } ?>
                                 <?php if($prestataire->mail!=''){ ?><input onchange="changing(this)"  type="text" id="mail" class="form-control" name="mail" placeholder="Email"  value="{{ $prestataire->mail }}"> <br><?php }?>
 
                                 <?php if($prestataire->mail2!=''){ ?>   <input onchange="changing(this)"  type="text" id="mail2" name="mail2" class="form-control" placeholder="Email2"  value="{{ $prestataire->mail2 }}"><br> <?php }?>
@@ -528,9 +530,10 @@
                 <table class="table table-striped" id="mytable2" style="width:100%">
                     <thead>
                     <tr id="headtable">
-                        <th style="text-align: center;width:30%">Gouvernorat</th>
-                        <th style="text-align: center;width:30%">Type de prestation</th>
-                        <th style="text-align: center;width:30%">Spécialité</th>
+                        <th style="text-align: center;width:20%">Type de prestation</th>
+                        <th style="text-align: center;width:20%">Spécialité</th>
+                        <th style="text-align: center;width:20%">Gouvernorat</th>
+                        <th style="text-align: center;width:20%">Ville</th>
                         <th style="text-align: center;width:10%">Priorité</th>
                      </tr>
 
@@ -538,9 +541,11 @@
                     <tbody>
                  @foreach($evaluations as $eval)
                     <tr>
-                        <td style="text-align: center;width:30%"><?php echo PrestationsController::GouvById( $eval['gouv']) ;?> </td>
-                        <td style="text-align: center;width:30%"><?php echo PrestationsController::TypePrestationById( $eval['type_prest']) ;?></td>
-                        <td style="text-align: center;width:30%"><?php echo PrestationsController::SpecialiteById($eval['specialite']) ;?></td>
+                        <td style="text-align: center;width:20%"><?php echo PrestationsController::TypePrestationById( $eval['type_prest']) .'';?></td>
+                        <td style="text-align: center;width:20%"><?php echo PrestationsController::SpecialiteById($eval['specialite']) ;?></td>
+                        <td style="text-align: center;width:20%"><?php echo PrestationsController::GouvById( $eval['gouv']) ;?> </td>
+                        <td style="text-align: center;width:20%"><?php echo   $eval['ville'] ;?> </td>
+
                         <td style="text-align: center;width:10%;"><?php echo $eval['priorite'] ;?></td>
                     </tr>
                     @endforeach
@@ -562,7 +567,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModal2">Ajouter une Evaluation </h5>
+                    <h5 class="modal-title" id="exampleModal2">Ajouter une Priorité </h5>
 
                 </div>
                 <div class="modal-body">
@@ -579,9 +584,52 @@
                                     <div class=" row  ">
                                         <select class=" form-control col-lg-12  " style="width:400px" name=""    id="typeprestation">
                                             <option></option>
-                                           @foreach($typesprestations as $aKey)
+
+
+                                            <?php if ( count($relations) > 0 ) {?>
+
+                                            @foreach($relations as $prest  )
+                                                @foreach($typesprestations as $aKey)
+                                                <?php  if($prest->type_prestation_id==$aKey->id) { ?>    <option  value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option><?php }?>
+                                                @endforeach
+                                            @endforeach
+
+                                            <?php
+                                            } else { ?>
+                                            @foreach($typesprestations as $aKey)
                                                 <option     value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
                                             @endforeach
+
+                                            <?php }  ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group ">
+                                    <label>Spécialité</label>
+                                    <div class="row">
+                                        <select class="form-control  col-lg-12 " style="width:400px" name="specialite2"    id="specialite2">
+                                            <option></option>
+
+
+                                            <?php if ( count($relations2) > 0 ) {?>
+
+                                            @foreach($relations2 as $rel  )
+                                                @foreach($specialites as $sp)
+                                                    <?php if($rel->specialite==$sp->id) {  ?>   <option   value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option><?php } ?>
+                                                @endforeach
+                                            @endforeach
+
+                                            <?php
+                                            } else { ?>
+                                            @foreach($specialites as $sp)
+                                                <option     value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                            @endforeach
+
+                                            <?php }  ?>
+
+
                                         </select>
                                     </div>
                                 </div>
@@ -591,26 +639,50 @@
                                     <div class="row">
                                         <select class="form-control  col-lg-12 "  style="width:400px" name="gouv"    id="gouvpr">
                                             <option></option>
-                                            @foreach($gouvernorats as $aKeyG)
-                                                <option      value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
-                                            @endforeach
 
-                                        </select>
+                                                <?php if ( count($relationsgv) > 0 ) {?>
+
+                                                @foreach($relationsgv as $Rgv  )
+                                                    @foreach($gouvernorats as $aKeyG)
+                                                         <?php if($Rgv->citie_id==$aKeyG->id) {  ?>   <option   value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option> <?php } ?>
+                                                    @endforeach
+                                                @endforeach
+
+                                                <?php
+                                                } else { ?>
+
+                                                @foreach($gouvernorats as $aKeyG)
+                                                    <option     value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
+                                                @endforeach
+
+                                                <?php }  ?>
+                                            </select>
+
                                     </div>
                                 </div>
+
 
                                 <div class="form-group ">
-                                    <label>Spécialité</label>
+                                    <label>Ville</label>
                                     <div class="row">
-                                        <select class="form-control  col-lg-12 " style="width:400px" name="specialite2"    id="specialite2">
-                                            <option></option>
-                                            @foreach($specialites as $sp)
-                                                <option   value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
+                                        <input class="form-control col-lg-6" style="padding-left:5px;" type="text"  id="villepr" />
+                                        <input class="form-control" style="padding-left:5px;" type="hidden"  id="villecode" />
 
+                                    </div>
+                                <script>
+                                    (function() {
+                                        var placesAutocomplete2 = places({
+                                            appId: 'plCFMZRCP0KR',
+                                            apiKey: 'aafa6174d8fa956cd4789056c04735e1',
+                                            container: document.querySelector('#villepr'),
+
+                                        });
+                                        placesAutocomplete2.on('change', function resultSelected(e) {
+                                              document.querySelector('#villecode').value = e.suggestion.postcode || '';
+                                        });
+                                    })();
+                                    </script>
+                                </div>
                                 <div class="form-group ">
                                     <label>Priorité</label>
                                     <div class="row">
@@ -1236,6 +1308,8 @@
             var type_prest = $('#typeprestation').val();
             var gouvernorat = $('#gouvpr').val();
             var priorite = $('#prior').val();
+            var ville = $('#villepr').val();
+            var postal = $('#villecode').val();
          //   var disponibilite = $('#disp').val();
            // var evaluation = $('#note').val();
             var specialite = $('#specialite2').val();
@@ -1245,7 +1319,7 @@
                 $.ajax({
                     url:"{{ route('prestataires.addeval') }}",
                     method:"POST",
-                    data:{prestataire:prestataire,type_prest:type_prest,gouvernorat:gouvernorat,priorite:priorite,specialite:specialite, _token:_token},
+                    data:{prestataire:prestataire,type_prest:type_prest,gouvernorat:gouvernorat,priorite:priorite,specialite:specialite,ville:ville,postal:postal, _token:_token},
                     success:function(data){
 
                         //   alert('Added successfully');

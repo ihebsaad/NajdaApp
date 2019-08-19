@@ -353,6 +353,77 @@ use  \App\Http\Controllers\DocsController;
 
                                                                 </div>
 
+
+
+                                                                <div class="row" style="margin-top:30px">
+                                                                    <div class="col-md-8">
+                                                                        <h4><i class="fa fa-lg fa-user"></i> Numéros Tels</h4>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <span style="float:right" id="addtel" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding6"><b><i class="fa fa-user"></i> Ajouter un numéro de téléphone</b></span>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
+                                                                    <thead>
+                                                                    <tr class="headtable">
+                                                                        <th style="width:20%">Nom et Prénom</th>
+                                                                        <th style="width:20%">Qualité</th>
+                                                                        <th style="width:10%">Téléphone</th>
+                                                                        <th style="width:30%">Type</th>
+                                                                        <th style="width:20%">Remarque</th>
+                                                                    </tr>
+
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    @foreach($phones as $phone)
+                                                                        <tr>
+                                                                            <td style="width:20%;"><?php echo $phone->nom; ?>  <?php echo $phone->prenom; ?></td>
+                                                                            <td style="width:20%;"><?php echo $phone->fonction; ?></td>
+                                                                            <td style="width:10%;"><?php echo $phone->tel; ?></td>
+                                                                            <td style="width:30%;"><?php echo $phone->typetel.'<br>'; if($phone->typetel=='Mobile') {?> <a onclick="setTel(this);" class="<?php echo $phone->tel;?>" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i>Envoyer un SMS </a><?php } ?>
+                                                                            </td>
+                                                                            <td style="width:20%;"><?php echo $phone->remarque; ?></td>
+                                                                        </tr>
+                                                                    @endforeach
+
+                                                                    </tbody>
+                                                                </table>
+
+                                                                <div class="row" style="margin-top:30px">
+                                                                    <div class="col-md-8">
+                                                                        <h4><i class="fa fa-lg fa-user"></i> Emails </h4>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <span style="float:right" id="addemail" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding7"><b><i class="fa fa-user"></i> Ajouter une adresse email</b></span>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <table class="table table-striped"  style="width:100%;margin-top:25px;margin-bottom:25px;font-size:16px;">
+                                                                    <thead>
+                                                                    <tr class="headtable">
+                                                                        <th style="width:20%">Nom et Prénom</th>
+                                                                        <th style="width:20%">Qualité</th>
+                                                                        <th style="width:30%">Email</th>
+                                                                        <th style="width:10%">Remarque</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    @foreach($emailads as $emailad)
+                                                                        <tr>
+                                                                            <td style="width:20%;"><?php echo $emailad->nom; ?>  <?php echo $emailad->prenom; ?></td>
+                                                                            <td style="width:20%;"><?php echo $emailad->fonction; ?></td>
+                                                                            <td style="width:30%;"><?php echo $emailad->mail; ?></td>
+                                                                            <td style="width:30%;"><?php echo $emailad->remarque; ?></td>
+                                                                        </tr>
+                                                                    @endforeach
+
+                                                                    </tbody>
+                                                                </table>
+
+
                                                                 <div class="row">
 
                                                                     <?php if ($dossier->subscriber_phone_cell !='') { ?>
@@ -634,73 +705,6 @@ use  \App\Http\Controllers\DocsController;
 
 
 
-
-                                                                <div class="row" style="margin-top:30px">
-                                                                    <div class="col-md-8">
-                                                                        <h4><i class="fa fa-lg fa-user"></i> Numéros Tels</h4>
-                                                                    </div>
-                                                                    <div class="col-md-4">
-                                                                        <span style="float:right" id="addtel" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding6"><b><i class="fa fa-user"></i> Ajouter un numéro de téléphone</b></span>
-                                                                    </div>
-
-                                                                </div>
-
-                                                                <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
-                                                                    <thead>
-                                                                    <tr class="headtable">
-                                                                        <th style="width:20%">Nom et Prénom</th>
-                                                                        <th style="width:20%">Qualité</th>
-                                                                        <th style="width:30%">téléphone</th>
-                                                                        <th style="width:30%">type</th>
-                                                                        <th style="width:10%">Remarque</th>
-                                                                    </tr>
-
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    @foreach($phones as $phone)
-                                                                        <tr>
-                                                                            <td style="width:20%;"><?php echo $phone->nom; ?>  <?php echo $phone->prenom; ?></td>
-                                                                            <td style="width:20%;"><?php echo $phone->fonction; ?></td>
-                                                                            <td style="width:50%;"><?php echo $phone->tel; ?></td>
-                                                                            <td style="width:50%;"><?php echo $phone->typetel; ?></td>
-                                                                             <td style="width:50%;"><?php echo $phone->remarque; ?></td>
-                                                                        </tr>
-                                                                    @endforeach
-
-                                                                    </tbody>
-                                                                </table>
-
-                                                                <div class="row" style="margin-top:30px">
-                                                                    <div class="col-md-8">
-                                                                        <h4><i class="fa fa-lg fa-user"></i> Emails </h4>
-                                                                    </div>
-                                                                    <div class="col-md-4">
-                                                                        <span style="float:right" id="addemail" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding7"><b><i class="fa fa-user"></i> Ajouter une adresse email</b></span>
-                                                                    </div>
-
-                                                                </div>
-
-                                                                <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
-                                                                    <thead>
-                                                                    <tr class="headtable">
-                                                                        <th style="width:20%">Nom et Prénom</th>
-                                                                        <th style="width:20%">Qualité</th>
-                                                                        <th style="width:30%">Email</th>
-                                                                        <th style="width:10%">Remarque</th>
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    @foreach($emailads as $emailad)
-                                                                        <tr>
-                                                                            <td style="width:20%;"><?php echo $emailad->nom; ?>  <?php echo $emailad->prenom; ?></td>
-                                                                            <td style="width:20%;"><?php echo $emailad->fonction; ?></td>
-                                                                            <td style="width:50%;"><?php echo $emailad->mail; ?></td>
-                                                                            <td style="width:50%;"><?php echo $emailad->remarque; ?></td>
-                                                                        </tr>
-                                                                    @endforeach
-
-                                                                    </tbody>
-                                                                </table>
 
                                                             </div>
                                                         </div>
@@ -1042,7 +1046,7 @@ use  \App\Http\Controllers\DocsController;
                                                     <div class="row">
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label for="inputError" class="control-label"> marque du véhicule</label>
+                                                                <label for="inputError" class="control-label"> Marque du véhicule</label>
 
                                                                 <select onchange="changing(this)" type="text" id="vehicule_marque" name="vehicule_marque" class="form-control"   value="{{ $dossier->vehicule_marque }}"     >
                                                                     <option>Choisir la marque</option>
@@ -1975,6 +1979,72 @@ $iduser=$CurrentUser->id;
 
 
 
+<!-- Modal SMS -->
+<div class="modal fade" id="sendsms" tabindex="-1" role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal7">Envoyer un SMS </h5>
+
+            </div>
+            <form method="post" action="{{action('EmailController@sendsms')}}" >
+
+                <div class="modal-body">
+                    <div class="card-body">
+
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+                            <label for="description">Dossier:</label>
+
+                            <div class="form-group">
+                                <select id ="dossier"  class="form-control " style="width: 120px">
+                                    <option></option>
+                                    <?php foreach($dossiers as $ds)
+
+                                    {
+                                        echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
+                                </select>
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+                            <label for="description">Description:</label>
+                            <input id="description" type="text" class="form-control" name="description"     />
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="destinataire">Destinataire:</label>
+                            <input id="destinataire" type="number" class="form-control" name="destinataire"      />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contenu">Message:</label>
+                            <textarea  type="text" class="form-control" name="message"></textarea>
+                        </div>
+                    {{--  {!! NoCaptcha::renderJs() !!}     --}}
+                    <!--  <script src="https://www.google.com/recaptcha/api.js" async defer></script>-->
+
+
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button  type="submit"  class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
 
 
 <?php } ?>
@@ -2840,6 +2910,13 @@ function disabling(elm) {
 
       }
   }
+
+    function setTel(elm)
+    {
+        var num=elm.className;
+        document.getElementById('destinataire').value=parseInt(num);
+
+    }
 
 </script>
 <style>.headtable{background-color: grey!important;color:white;}
