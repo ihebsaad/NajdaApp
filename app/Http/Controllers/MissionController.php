@@ -9,6 +9,8 @@ use App\TypeMission;
 use App\Action;
 use App\ActionEC;
 use App\Dossier;
+use App\User;
+use App\Entree;
 use auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Routing\UrlGenerator;
@@ -69,7 +71,7 @@ class MissionController extends Controller
     {
 
 
-     // dd( $request->all());
+   // dd( $request->all());
         $dossier=Dossier::where("reference_medic",trim($request->get('dossier')))->first();
         $typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeactauto')))->first();
         
@@ -116,6 +118,26 @@ class MissionController extends Controller
         ]);
 
         $Mission->save();
+
+
+        // mise à jour de table entree col mission_id
+
+        if($request->get('idEntreeMissionOnMarker'))
+        {
+
+          $entree=Entree::where('id',$request->get('idEntreeMissionOnMarker'))->first();
+
+          if($entree && $Mission)
+          {
+          
+            $entree->update(['mission_id'=> $Mission->id]) ;
+
+          }
+
+
+
+
+        }
 
        //date_default_timezone_set('Africa/Tunis');
        //setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
@@ -310,6 +332,67 @@ class MissionController extends Controller
 
 
       
+
+    }
+
+   public function  getMailGeneratorByAjax ($idmiss)
+
+   {
+
+  $entree=Entree::where('mission_id','!=',null)->where('mission_id',$idmiss)->first();
+
+              $output='<div class="form-group">
+                
+                <label for="emetteur">emetteur:</label>
+                <input id="emetteur" type="text" class="form-control" name="emetteur"  value="'. $entree->emetteur.'"/>
+            </div>
+            <div class="form-group">
+            <label for="sujet">sujet :</label>
+            <input style="overflow:scroll;" id="sujet" type="text" class="form-control" name="sujet"  value="'.$entree->sujet.'" />
+
+            </div>
+            <div class="form-group">
+                <label for="contenu">contenu:</label>
+                <div class="form-control" style="overflow:scroll;min-height:200px">'.
+
+               $entree->contenu.'
+             
+                </div>
+
+
+             </div>
+            <div class="form-group">
+                 <label for="date">date:</label>'.
+               date('d/m/Y', strtotime($entree->reception)) .'
+            </div>';
+
+   return  $output;
+
+   }
+
+    public function AnnulerMissionCouranteByAjax($idmiss)
+    {
+        
+        $output='';
+         
+          $miss=Mission::find($idmiss);
+
+          if($miss->update(['statut_courant'=>'annulee']))
+          {
+
+           $output= "la mission est annulée";
+
+          }
+          else
+          {
+
+           $output= "Erreur lors de l'annulation de la mission ";
+
+          }
+
+
+        return $output;
+
 
     }
 
@@ -508,6 +591,83 @@ class MissionController extends Controller
     }
 
 
+public function getAjaxDeleguerMission($idmiss)
+{
+    $output='';
+
+     $miss=Mission::where('id',$idmiss)->first();
+
+     $output.='<form  method="post" action="'. route('Deleguer.Mission') .'">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal2">Déléguer la mission courante</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+                    <div class="form-group">'.
+                        
+                        
+                            csrf_field() .'
+                            <input id="MissDeldossid" name="MissDeldossid" type="hidden" value="'.$miss->dossier->id.'">
+                            <input id="delegMissid" name="delegMissid" type="hidden" value="'.$idmiss.'">
+
+                            <input id="affecteurmiss" name="affecteurmiss" type="hidden" value="'. Auth::user()->id.'">
+                            <input id="statdoss" name="statdoss" type="hidden" value="existant">
+
+                            <div class="form-group " >
+                                <div class=" row  ">
+                                    <div class="form-group mar-20">
+                                        <label for="agent" class="control-label" style="padding-right: 20px">Agent</label>
+                                        <select id="agent" name="agent" class="form-control select2" style="width: 230px">
+                                            <option value="Select">Selectionner</option>';
+                                              $agents = User::get(); 
+                                              $agentname='';
+                                                foreach ($agents as $agt){
+                                                 if (!empty ($agentname)) { 
+                                                 if ($agentname["id"] == $agt["id"]) {
+                                               $output.=' <option value="'. $agt["id"] .'" selected >'. $agt["name"] .'</option>';
+                                                }
+                                                else
+                                                {
+                                                 $output.=' <option value="'.$agt["id"] .'" >'. $agt["name"] .'</option>';
+                                                }
+                                               
+                                                
+                                                
+                                                }
+                                                else
+                                                  { $output.= '<option value="'.$agt["id"] .'" >'.$agt["name"].'</option>';}
+                                                
+                                               }   
+                                       $output.= ' </select>
+                                    </div>
+                                </div>
+                            </div>
+                      
+
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="submit" id="attribdoss" class="btn btn-primary">Déleguer Mission</button>
+            </div>
+        </div>
+          </form>';
+
+          return $output;
+
+}
+
+
+
+//  pour les missions reportées
+
       public function getMissionsAjaxModal ()
     {
 
@@ -705,6 +865,9 @@ class MissionController extends Controller
        // return view('actions.workflow', compact('Actions'));
     }
 
+
+
+// tableau des etats des actions de la mission
       public function getAjaxWorkflow($id)
     {
 
@@ -723,7 +886,7 @@ class MissionController extends Controller
                 $len = count($actk->Actions);
                 //$actko=$actk->Actions->orderBy('ordre','DESC')->get();
                 $actko=ActionEC::where('mission_id',$id)->orderBy('ordre','ASC')->get();
-                  
+                   $output.='<input id="InputetatActionMission" style="float:right" type="text" placeholder="Recherche.." autocomplete="off"> <br><br>';
                    $output.='<table class="table table-striped">
                   <thead>
                     <tr>
@@ -731,16 +894,21 @@ class MissionController extends Controller
                       <th>Action</th>
                       <th>date début</th>
                       <th>date fin</th>
-                      <th>Effectuée par</th>
+                      <th>Realisée par</th>
+                      <th>Num rappel</th>
+                      <th>comment 1</th>
+                      <th>comment 2</th>
+                      <th>comment 3</th>
+
                       <th>statut</th>
 
                     </tr>
                   </thead>
-                  <tbody>';
+                  
+                  <tbody id="tabetatActionMission">';
 
-
-                foreach ( $actko as $sactions)
-                    { 
+                  foreach ($actko as $sactions)
+                     { 
 
                            $i++;      
                    
@@ -763,6 +931,11 @@ class MissionController extends Controller
                          $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;"> </span></td>';
 
                         }
+                        $output.='<td style="overflow: auto;" title="'.$sactions->num_rappel.'"><span style="font-weight : none;">'.$sactions->num_rappel.'</span></td>' ;
+
+                        $output.='<td style="overflow: auto;" title="'.$sactions->comment1.'"><span style="font-weight : none;">'.$sactions->comment1.'</span></td>' ;
+                        $output.='<td style="overflow: auto;" title="'.$sactions->comment2.'"><span style="font-weight : none;">'.$sactions->comment2.'</span></td>' ;
+                        $output.='<td style="overflow: auto;" title="'.$sactions->comment3.'"><span style="font-weight : none;">'.$sactions->comment3.'</span></td>' ;
 
 
                         $output.='<td style="overflow: auto;" title="'.$sactions->statut.'"><span style="font-weight : none;">'.$sactions->statut.'</span></td></tr>' ;
@@ -780,62 +953,7 @@ class MissionController extends Controller
                    $output.=' </tbody> </table>';
 
 
-                   $output.='<br><br><h4> <b>Historique des commentaires des actions qui ont été mis en attente </b></h4><br> <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>Action</th>
-                
-                      <th>Num rappel</th>
-                      <th>Date rappel</th>
-                      <th>Effectuée par</th>
-
-                      <th>commentaire l</th>
-                      <th>commentaire 2</th>
-                      <th>commentaire 3</th>
-                     
-                    </tr>
-                  </thead>
-                  <tbody>';
-
-                   $i=0;
-
-                 $actrfait=ActionEC::select()->where('mission_id',$id)->where('statut','=','rfaite')->orWhere('statut','=','rappelee')->orderBy('ordre','desc')->orderBy('num_rappel','DESC')->get();
-
-                 // $actrfait1=$actrfait->all();
-
-                  foreach ($actrfait as $sactions)
-                    { 
-
-                           $i++;      
-                   
-                     //$output.='<div class="row">' ;
-                        if ($sactions->statut=='rfaite')
-                        {
-
-                          $output.='<tr><td style="overflow: hidden;" title="'.$sactions->titre.'" ><span style="font-weight : bold;">'.$sactions->titre.'</span></td>
-                     
-                          <td style="overflow: auto;" title="'.$sactions->num_rappel.'" ><span style="font-weight : bold;">'.$sactions->num_rappel.'</span></td>
-                          <td style="overflow: auto;" title="'.$sactions->date_rappel.'" ><span style="font-weight : bold;">'.$sactions->date_rappel.'</span></td>
-                          <td style="overflow: auto;" title="'.$sactions->agent->name.' '.$sactions->agent->lastname.'" ><span style="font-weight : bold;">'.$sactions->agent->name.' '.$sactions->agent->lastname.'</span></td>
-
-                          <td style="overflow: hidden;" title="'.$sactions->comment1.'"><span style="font-weight : bold; overflow: hidden;">'.$sactions->comment1.'</span></td>
-                          <td style="overflow: hidden;" title="'.$sactions->comment2.'"><span style="font-weight : bold;">'.$sactions->comment2.'</span></td>
-                          <td style="overflow: hidden;" title="'.$sactions->comment3.'" ><span style="font-weight : bold;">'.$sactions->comment3.'</span></td>
-                          </tr>' ;
-                        }
-                   
-
-                    }
-                    if($i==0)
-                    {
-                       $output.='<tr><td><span style="font-weight : bold;">Pas d\'actions</span></td>
-                         </tr>' ;
-
-                    }
-
-
-                  $output.=' </tbody> </table>';
-
+                  
 
 
         

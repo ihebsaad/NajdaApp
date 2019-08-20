@@ -20,9 +20,14 @@ use Session;
 
 class ActionController extends Controller
 {
+
+
+    public $cas_MissDocAsigner=0;
+    
     public function __construct()
     {
         $this->middleware('auth');
+
     }
 
     /**
@@ -843,6 +848,8 @@ class ActionController extends Controller
     public function Bouton_Faire1_ignorer2_reporter3_rappeler4(Request $request, $iddoss,$idmiss,$idact,$bouton)
     {
 
+       // dd($this->cas_MissDocAsigner);
+
          //return $this->activerActionsReporteeOuRappelee();
 
         //dd($request->all());
@@ -872,6 +879,36 @@ class ActionController extends Controller
            $action->update(['statut'=>"faite"]); 
            $action->update(['date_fin' => $dateSys]);
            $action->update(['user_id'=>auth::user()->id]);
+
+          
+
+           // Cas particulier pour la mission document à signer (boucle)
+
+             if($action->Mission->type_Mission==38)
+             {   
+
+
+                    if($action->ordre==2 || $action->ordre==3 )
+                   {
+
+                    $act4=ActionEC::where("mission_id",$idmiss)->where('statut','!=','rfaite')->where('ordre','=',4)->first();
+
+                    if($act4->statut=='faite')
+                    {
+                      //dd("ok");
+                        $this->cas_MissDocAsigner=1;
+
+                    }
+
+                           
+
+
+                   }
+
+                     
+
+
+             }
                   
 
            }  
@@ -1008,6 +1045,9 @@ class ActionController extends Controller
 
         case "Recherche devis de frais medicaux pour hospitalisation":     
          return $this->Recherche_devis_de_frais_medicaux_pour_hospitalisation_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+        case "Document à signer":
+        return $this-> Document_a_signer_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
    
                 // default:
                  // Code to be executed if n is different from all labels
@@ -6705,7 +6745,9 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
 
                             
                        
-                        if(($action1->statut=="faite" || $action1->statut=="ignoree" ||$action4->statut=="faite") && $action2->statut =="inactive")  
+                        if((($action1->statut=="faite" || $action1->statut=="ignoree" ) && $action2->statut =="inactive" )
+
+                             || ($action4->statut=="faite" && $action2->statut =="faite" &&  $this->cas_MissDocAsigner==0))   
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',2)
@@ -6715,7 +6757,7 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
 
                             $chang=true;             
 
-
+                              //$this->cas_MissDocAsigner=1;
                            }
                                  
                            

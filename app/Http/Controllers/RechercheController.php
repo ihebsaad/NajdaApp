@@ -214,8 +214,122 @@ class RechercheController extends Controller
 
     }
 
-   
+
+public function pageRechercheAvancee(Request $request )
+{
+
+  //dd($request->all());
+
+      /*"reference_medic1" => "15TM0004"
+  "current_status" => "0"
+  "customer_id_search" => "0"
+  "nom_benef_search" => null
+  "pres_id_search" => null*/
+
+  if($request->get('reference_medic1'))
+
+  {
+
+    
+
+      $datasearch=Dossier::where('reference_medic',$request->get('reference_medic1'))->get();
+
+
+      // dd( $datasearch);
+     
+      // return redirect()->back()->with(compact('datasearch'));
+
+
+  }
+  else
+  {
+
+    //------------------- 1/4-----------------------------------------
+    if($request->get('current_status') && $request->get('customer_id_search')== 0 && $request->get('nom_benef_search') == null && 
+      $request->get('pres_id_search')== null)
+
+    {
+         
+         $datasearch=Dossier::where('current_status',$request->get('current_status'))->get();
+      
+    }
+
+    if($request->get('current_status') && $request->get('customer_id_search') != 0 && $request->get('nom_benef_search') == null && 
+      $request->get('pres_id_search')== null)
+
+    {
+  
+         $datasearch=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get(); 
+    }
+
+
+     if($request->get('current_status') && $request->get('customer_id_search') != 0 && $request->get('nom_benef_search') != null && 
+      $request->get('pres_id_search')== null)
+
+    {
+
+
+        $data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();
+
+               $datasearch = array(); 
+
+                  foreach($data as $d )
+                  {              
+                           $c=$d->subscriber_name." ".$d->subscriber_lastname;
+                            if(stripos( $c,$request->get('nom_benef_search')) )
+                                  {
+
+                                       $datasearch[]=$d;
+                                  }
+
+                  }
+
+
+
+    }
+
+
+     if($request->get('current_status')== 0 && $request->get('customer_id_search') == 0 && $request->get('nom_benef_search') == null &&  $request->get('pres_id_search') != null)
+      {
+
+       // dd("ok");
+
+        /*$data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();*/
+
+
+           $datasearch = DB::table('prestations')
+            ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+            ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+            ->where('prestataires.id','=', $request->get('pres_id_search'))        
+            ->select('dossiers.*', 'prestataires.name')
+            ->get();
+            
+
+       // dd( $datasearch);
+
+        }
+
+      //-----------------------------2/4--------------------------------------------
+
+
+
+
+  }
+
+    return view('dossiers.index', compact('datasearch'));
+
+ // dd($request->all());
+
+  // $qery=$request->get('qy');
+
+ // return view('recherche.recherche_avancee');
 }
+
+
+
+
+   
+}// fin controller
 
 
 

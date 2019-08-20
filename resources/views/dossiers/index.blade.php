@@ -14,16 +14,156 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
 
 @section('content')
+
+
     <?php use \App\Http\Controllers\DossiersController;     ?>
     <div class="uper">
         <div class="portlet box grey">
             <div class="row">
-                <div class="col-lg-8">Dossiers</div>
+                <div class="col-lg-8">liste des Dossiers</div>
                 <div class="col-lg-4">
                  <!--   <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>-->
                 </div>
             </div>
         </div>
+
+        <!-- debut recherche avancee sur dossiers-->
+
+
+      <div class="portlet box blue">
+               <div  style="background-color:#4fc1e9; height: 45px; margin-bottom: 0px; padding: 2px;">
+                
+                   <h4>  &nbsp;<strong> <i class="fa fa-search"></i> &nbsp;Recherche avancée </strong></h4>
+                    
+                </div>
+            <div class="portlet-title" style="margin-top: 0px; padding-top: 0px;">
+                
+            </div>
+            <div class="portlet-body">
+                <form accept-charset="utf-8" id="searchDossierform" action="{{route('page_recherche.avancee')}}">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="inputError" class="control-label" >Référence </label>
+                                <input type="text" id="reference_medic1" name="reference_medic1" class="form-control" placeholder="Référence....">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Etat </label>
+                                <select id="current_status" name="current_status" class="form-control js-example-placeholder-single" >
+                                    <option value="0">Sélectionner.....</option>
+                                    <option value="Cloture">Clos</option>
+                                    <option value="En cours">En cours</option>
+                                    <option value="Cloture transport">Clos transport</option>
+                                    <option value="En cours transport">En cours transport</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Client </label>
+                                <select id="customer_id_search" name="customer_id_search" class="form-control js-example-placeholder-single" >
+                                    <option value="0">Tous</option>
+                                      @foreach(App\Client::get() as $c)
+
+                                         <option value="{{$c->id}}">{{$c->name}}</option>
+
+                                      @endforeach
+                                                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Assuré </label>
+                            <input class="form-control" name="nom_benef_search" id="nom_benef_search">
+                        </div>
+                        <div class="col-md-4">
+                            <label>Prestataire </label>
+                            <select class="form-control" name="pres_id_search" id="pres_id_search">
+                                <option value=""></option>
+
+                                @foreach(App\Prestataire::get() as $p)
+
+                                 <option value="{{$p->id}}">{{$p->name}}</option>  
+
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <!--<div class="form-group ">
+                                <label >Filtre par date </label>
+                                <div id="reportrange" class="form-control btn default" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100% ;">
+                                    <i class="fa fa-calendar"></i>
+                                    <span> </span>
+                                    <b class="fa fa-angle-down"></b>
+                                </div>
+                                <input type="hidden" name="date_debut" id="date_debut" value="" />
+                                <input type="hidden" name="date_fin" id="date_fin" value="" />
+                            </div>-->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button classj="btn btn-circle blue" id="rechercher" type="submit" style="margin-top: 25px;">Rechercher</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+          
+        </div>
+
+         <?php if (isset($datasearch)) { ?>
+           <div></div>
+
+            <table class="table table-striped" id="mytable" style="width:100%">
+            <thead >
+            <tr id="headtable">
+                <th style="width:20%">Référence</th>
+                <th style="width:25%">Client</th>
+                <th style="width:20%">Abonné</th>
+                <th style="width:20%">Etat</th>
+              </tr>
+            <tr>
+                <th style="width:20%">Référence</th>
+                <th style="width:25%">Client</th>
+                <th style="width:20%">Abonné</th>
+                <th style="width:20%">Etat</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            @foreach($datasearch as $do)
+                <tr><?php $statut=$do->current_status;  $affecte=$do->affecte;   ?>
+                    <td style="width:20%"><a href="{{action('DossiersController@view', $do->id )}}" >{{$do->reference_medic}}</a> <a style="color:#a0d468" href="{{action('DossiersController@fiche', $do->id )}}" >Fiche<i class="fa fa-file-txt"></a></td>
+                     <td style="width:25%">
+                        <?php $customer_id= $do->customer_id ; echo '<small>'. DossiersController::ClientById($customer_id).'</small>';?>
+                    </td>
+                    <td style="width:20%"><?php echo '<small>'.$do->subscriber_name .' '.$do->subscriber_lastname .'</small>';?></td>
+                    <td style="width:20%"> <?php if($statut=='Cloture'){echo 'Clôturé';} else {
+                    if($affecte==0 or ($affecte=='') ){echo '<span style="color:red">Non Affecté !</span>';}else {
+                        echo 'En cours <br> Affecté à : '. app('App\Http\Controllers\UsersController')->ChampById('name', $affecte);
+                    }
+                    }
+                     ?> </td>
+
+                    </td>
+
+
+
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+
+            <!-- fin recherche avancee sur dossiers-->
+
+         <?php }else {if (isset($dossiers)) { ?>
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead >
             <tr id="headtable">
@@ -40,6 +180,7 @@
             </tr>
             </thead>
             <tbody>
+
             @foreach($dossiers as $dossier)
                 <tr><?php $statut=$dossier['current_status'];  $affecte=$dossier['affecte'];   ?>
                     <td style="width:20%"><a href="{{action('DossiersController@view', $dossier['id'])}}" >{{$dossier->reference_medic}}</a> <a style="color:#a0d468" href="{{action('DossiersController@fiche', $dossier['id'])}}" >Fiche<i class="fa fa-file-txt"></a></td>
@@ -62,6 +203,7 @@
             @endforeach
             </tbody>
         </table>
+        <?php  } }?>
     </div>
 
 

@@ -139,17 +139,36 @@ use App\Http\Controllers\TagsController;
                                       </div>
                                     </div>
                                     <div class="col-md-2" >
-                                     
 
+                                        <div class="dropdown" style="float:right;">
+                                          <button class="dropbtn"><span class="fa fa-2x fa-tasks" aria-hidden="true"></span></button>
+                                          <div class="dropdown-content" style="right:0;">
+                                          <a class="etatAction" id="<?php echo $Mission->id ?>" href="#">Voir état action</a>
+                                          <a class="mailGenerateur" id="<?php echo $Mission->id ?>" href="#">Mail générateur</a>
+                                          <a class="deleguerMission" id="<?php echo $Mission->id ?>" href="#">Déléguer Mission</a>
+                                          <a class="annulerMission" id="<?php echo $Mission->id ?>" href="#">Annuler Mission</a>
 
-                                            <a class="workflowkbs" id="<?php echo $Mission->id ?>" style="color:black !important; margin-top: 10px; margin-right: 10px;" data-toggle="modal" data-target="#myworow" title ="Voir Workflow" href="#"><span class="fa fa-2x fa-tasks" style="  margin-right: 20px;" aria-hidden="true"></span>
-                                            </a>
-                                            <input id="workflowh<?php echo $Mission->id ?>" type="hidden" value="{{$Mission->titre}}">
+                                           <input id="workflowh<?php echo $Mission->id ?>" type="hidden" value="{{$Mission->titre}}">
                                             <input id="workflowht<?php echo $Mission->id ?>" type="hidden" value="{{$Mission->typeMission->nom_type_Mission}}">
 
 
+
+                                          </div>
+                                        </div>
+
+
+
+                                     
+
+
+                                            <!-- {{-- <a class="workflowkbs" id="<?php echo $Mission->id ?>" style="color:black !important; margin-top: 10px; margin-right: 10px;" data-toggle="modal" data-target="#myworow" title ="Voir Workflow" href="#"><span class="fa fa-2x fa-tasks" style="  margin-right: 20px;" aria-hidden="true"></span>
+                                            </a>
+                                            <input id="workflowh<?php echo $Mission->id ?>" type="hidden" value="{{$Mission->titre}}">
+                                            <input id="workflowht<?php echo $Mission->id ?>" type="hidden" value="{{$Mission->typeMission->nom_type_Mission}}"> --}} --> 
+
+
                                              {{-- <a  style="color:black !important; margin-top: 10px; margin-right: 10px;" title ="Voir Workflow" href="{{url('Mission/workflow/'.$Mission->dossier->id.'/'.$Mission->id)}}"><span class="fa fa-2x fa-cogs" style=" margin-top: 10px; margin-right: 20px;" aria-hidden="true"></span>
-                                            </a>--}}
+                                            </a>  --}}
                                                                          
                                         <?php $actk=$Mission;?>
                                      
@@ -240,7 +259,17 @@ use App\Http\Controllers\TagsController;
                                           </ul>
                                       </div><br />
                                   @endif
+
+                                  <!-- input pour sauvgarder l id de l entree lors de click (iheb)(et voir l'autre input hidden dans le formulaire suivant qui va contenir id entree lors de markage (haithem) et creation de mission-->
+
+                                 <input id="idEntreeMissionOnclik" type="hidden" class="form-control" value="" name="idEntreeMissionOnclik"/>
+
+
                                   <form  method="post" action="{{route('Missions.storeActionsEC') }}" style="padding-top:30px">
+                                   <input id="idEntreeMissionOnMarker" type="hidden" class="form-control" value="" 
+                                   name="idEntreeMissionOnMarker"/>
+
+
                                       <div class="form-group">
                                            {{ csrf_field() }}
 
@@ -648,11 +677,16 @@ use App\Http\Controllers\TagsController;
 <!-- --------- fin modal ------------------------------------------------------------->
 
 <!------------- Modal workflow ---------------------------------------------------------------- -->
-  <div class="modal fade" id="myworkflow" role="dialog">
-    <div class="modal-dialog modal-lg">
+<style>
+
+
+</style>
+
+  <div class="modal fade" id="myworkflow" role="dialog" >
+    <div class="modal-dialog modal-lg" >
     
       <!-- Modal content-->
-      <div class="modal-content">
+      <div class="modal-content" >
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 id="titleworkflowmodal" class="modal-title"></h4>
@@ -674,10 +708,22 @@ use App\Http\Controllers\TagsController;
       </div>
       
     </div>
-  </div>
+  </div> <!-- fin modal workflow-->
+
+
+<!-- model pour délégation des missions-->
+
+<div class="modal fade" id="modalDelegMissAjax" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" id="contenuModalDeleguerMission" role="document">
+       
+    </div>
+</div>
+
+
+
   
 </div>
-<!--fin modal workflow -->
+<!--fin modal -->
 
 <!-- pour l'Mission libre-->
 
@@ -885,7 +931,7 @@ $("#workflowform input:checkbox").change(function() {
 
     if (App::environment('local')) {
         // The environment is local
-        $urlapp='http://localhost/NejdaApp';
+        $urlapp='http://localhost/najdaapp';
        // $urlapp=env('APP_URL');
 
     }
@@ -926,11 +972,188 @@ $(document).ready(function() {
              
            });
 
-  })
+  });
+
+
+  //   -----------------
+
+
+  
+
+
+//-- script click etat action
+ $('.etatAction').on('click', function() {
+
+
+   var idw=$(this).attr("id");
+  // alert(idw);
+   var nomact=$('#workflowh'+idw).attr("value");
+   //alert
+   var typemiss=$('#workflowht'+idw).attr("value");
+      $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
+
+           $.ajax({
+
+               url: "<?php echo $urlapp; ?>/Mission/getAjaxWorkflow/"+idw,
+               type : 'GET',
+              // data : 'idw=' + idw,
+               success: function(data){
+               
+              // alert(data);
+
+               //alert(JSON.stringify(data));
+              $('#contenumodalworkflow').html(data);
+
+              $('#myworkflow').modal('show');
+
+                  //alert(JSON.stringify(retour))   ;
+                 // location.reload();
+            }
+
+             
+           });
+
+  });
+
+
+ // script click doc générateur
+
+ $('.mailGenerateur').on('click', function() {
+
+
+   var idw=$(this).attr("id");
+   //alert(idw);
+   var nomact=$('#workflowh'+idw).attr("value");
+   var typemiss=$('#workflowht'+idw).attr("value");
+      $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
+
+           $.ajax({
+
+               url: "<?php echo $urlapp; ?>/Mission/getMailGenerator/"+idw,
+               type : 'GET',
+              // data : 'idw=' + idw,
+               success: function(data){
+               
+              //alert(data);
+
+               //alert(JSON.stringify(data));
+              $('#contenumodalworkflow').html(data);
+
+              $('#myworkflow').modal('show');
+
+                  //alert(JSON.stringify(retour))   ;
+                 // location.reload();
+            }
+
+             
+           });
+
+  });
+
+ //--- déléguer mission
+
+
+$('.deleguerMission').on('click', function() {
+
+
+   var idw=$(this).attr("id");
+   //alert(idw);
+   var nomact=$('#workflowh'+idw).attr("value");
+   var typemiss=$('#workflowht'+idw).attr("value");
+      $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
+
+           $.ajax({
+
+               url: "<?php echo $urlapp; ?>/Mission/getAjaxDeleguerMission/"+idw,
+               type : 'GET',
+              // data : 'idw=' + idw,
+               success: function(data){
+               
+              //alert(data);
+
+               //alert(JSON.stringify(data));
+              $('#contenuModalDeleguerMission').html(data);
+
+
+              $('#modalDelegMissAjax').modal('show');
+
+                  //alert(JSON.stringify(retour))   ;
+                 // location.reload();
+            }
+
+             
+           });
+
+  });
+
+//-- annuler mission 
+
+$('.annulerMission').on('click', function() {
+
+
+   var idw=$(this).attr("id");
+   //alert(idw);
+  // var nomact=$('#workflowh'+idw).attr("value");
+   //var typemiss=$('#workflowht'+idw).attr("value");
+    //  $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
+
+var r = confirm("Voulez-vous vraiment annuler cette mission ?");
+if (r == true) {
+ 
+         $.ajax({
+
+               url: "<?php echo $urlapp; ?>/Mission/AnnulerMissionCouranteByAjax/"+idw,
+               type : 'GET',
+              // data : 'idw=' + idw,
+               success: function(data){
+               
+               
+               location.reload();
+               alert(data);
+
+               //alert(JSON.stringify(data));
+             // $('#contenumodalworkflow').html(data);
+
+             // $('#myworkflow').modal('show');
+
+                  //alert(JSON.stringify(retour))   ;
+                 // location.reload();
+            }
+
+             
+           });
+
+         } 
+  
+
+  });
+
+
+
 
 
 });
 </script>
+
+
+<!-- script pour le modal etat actopn d une mission-->
+
+<script>
+
+$(document).on("keyup","#InputetatActionMission",function() {
+ 
+    var value = $(this).val().toLowerCase();
+    $("#tabetatActionMission tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+
+
+
+
+</script>
+
+
 
 
 <script>

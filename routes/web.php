@@ -333,6 +333,11 @@ Route::get('/Mission/RendreAchevee/{id}/{dossid}', 'MissionController@RendreAche
 Route::get('/Mission/getAjaxWorkflow/{id}', 'MissionController@getAjaxWorkflow');
 Route::get('/dossier/Mission/AnnulerMissionCourante/{iddoss}/{idact}/{idsousact}' , 'MissionController@AnnulerMissionCourante');
 Route::get('/getMissionAjaxModal', 'MissionController@getMissionsAjaxModal');
+Route::get('/Mission/getAjaxDeleguerMission/{id}', 'MissionController@getAjaxDeleguerMission');
+Route::get('/Mission/AnnulerMissionCouranteByAjax/{id}', 'MissionController@AnnulerMissionCouranteByAjax');
+Route::get('/Mission/getMailGenerator/{id}', 'MissionController@getMailGeneratorByAjax');
+
+
 
 
 
@@ -409,6 +414,10 @@ Route::get('/etapestypesMissions/view/{id}', 'EtapesTypeMissionController@view')
 Route::post('/RechercheMultiAutocomplete','RechercheController@rechercheMultiAjax')->name('RechercheMulti.autocomplete');
 
 Route::post('/testRechercheMultiAutocomplete','RechercheController@test')->name('RechercheMulti.test');
+
+Route::get('/pageRechercheAvancee','RechercheController@pageRechercheAvancee')->name('page_recherche.avancee');
+
+ 
 
 
 /*** Users **/

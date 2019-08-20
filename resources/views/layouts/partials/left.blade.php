@@ -179,44 +179,44 @@
                                 {
                                     switch ($n['type']) {
                                         case "email":
-                                            echo '<li id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>';
                                             break;
                                         case "fax":
-                                            echo '<li id="'.$n['id'].'" rel="trfax" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li id="'.$n['id'].'" rel="trfax" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'"  href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>';
                                             break;
                                         case "tel":
-                                            echo '<li id="'.$n['id'].'" rel="trtel" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="trtel" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>';
                                             break;
                                         case "sms":
-                                            echo '<li id="'.$n['id'].'" rel="trsms" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="trsms" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span> '.$n['sujet'].'</span></a></li>';
                                             break;
                                         case "whatsapp":
-                                            echo '<li id="'.$n['id'].'" rel="trwp" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fab fa-whatsapp"></span> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="trwp" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fab fa-whatsapp"></span> '.$n['sujet'].'</span></a></li>';
                                             break;
                                         default:
-                                            echo '<li id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>';
                                     }
 
                                 }else{
 
                                switch ($n['type']) {
                                         case "email":
-                                            echo '<li id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>';
                                             break;
                                         case "fax":
-                                            echo '<li id="'.$n['id'].'" rel="trfax" '.$newnotif.'><a href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="trfax" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'"  href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>';
                                             break;
                                         case "tel":
-                                            echo '<li id="'.$n['id'].'" rel="trtel" '.$newnotif.'><a href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="trtel" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>';
                                             break;
                                         case "sms":
-                                            echo '<li id="'.$n['id'].'" rel="trsms" '.$newnotif.'><a href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="trsms" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span> '.$n['sujet'].'</span></a></li>';
                                             break;
                                         case "whatsapp":
-                                            echo '<li id="'.$n['id'].'" rel="trwp" '.$newnotif.'><a href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fab fa-whatsapp"></span> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="trwp" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fab fa-whatsapp"></span> '.$n['sujet'].'</span></a></li>';
                                             break;
                                         default:
-                                            echo '<li id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>';
                                     }
 
                                     }
@@ -696,6 +696,21 @@ if (isset($dossier))
 
 
     });
+</script>
+
+<script>
+
+   
+    $(document).on("click",".idEntreePourMiss",function() {
+
+        var idw=$(this).attr("id");
+       // alert(idw);
+        $('#idEntreeMissionOnclik').val(idw);
+        //alert( $('#idEntreeMissionOnclik').val());
+
+    });
+
+
 </script>
 
 

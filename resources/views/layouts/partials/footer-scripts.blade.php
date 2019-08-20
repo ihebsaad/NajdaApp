@@ -317,6 +317,9 @@ if (App::environment('local')) {
         $("#notifdisp").prepend("<li class='overme' style='color:white;padding-left:6px;margin-bottom:15px;background-color:#fd9883;color:white;font-weight:800;'><img width='15' src='" + img + "' /> <a  style=';font-weight:800;font-size:14px;color:white' href='<?php echo $urlapp; ?>/entrees/showdisp/" + parsed['data']['entree']['id'] + "'   ><small style='font-size:12px;color:white;'> " + parsed['data']['entree']['sujet'] + "</small></a><br>                  <label style='font-size:12px'><a style='color:white' href='<?php echo $urlapp; ?>/entrees/showdisp/" + parsed['data']['entree']['id'] + "'  >" + parsed['data']['entree']['emetteur'] + "</a></label><br><label style='font-size:12px'> " + parsed['data']['entree']['date'] + "</label></li>");
         $("#notifdisp").fadeIn('slow');
 
+        $('#idEntreeMissionOnclik').val(parsed['data']['entree']['id']);
+        alert(parsed['data']['entree']['id']);
+
         <?php } ?>
 
 
