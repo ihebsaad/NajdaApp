@@ -233,6 +233,42 @@
 					//alert(clickedmrktxt+' || '+ $(e.target).attr("class"));
 					$('#actiontabs a[href="#newMissiontab"]').trigger('click');
 					$('input#titre').val(clickedmrktxt);
+
+					 
+
+					 var urllocale=top.location.href;
+			         var pos=urllocale.indexOf("entrees/show");
+
+                      // alert(pos);
+			         if(pos != -1)
+			         {
+
+                      
+                       var n = urllocale.lastIndexOf("/");
+
+
+
+                       var res = urllocale.substr(n+1);
+
+                        //alert(res);
+
+                        $('#idEntreeMissionOnMarker').val(res);
+
+                       // alert( $('#idEntreeMissionOnMarker').val());
+
+			         }
+
+                     
+			         
+
+
+
+
+					/*var idEntreeMission = $('#idEntreeMissionOnclik').val();// ou val()
+					$('#idEntreeMissionOnMarker').val(idEntreeMission );
+
+					alert(idEntreeMission);
+					alert($('#idEntreeMissionOnMarker').val());*/
 					
 					/*_that._callback('click', e);
 					
