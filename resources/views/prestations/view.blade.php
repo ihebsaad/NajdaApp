@@ -34,27 +34,15 @@
                                 </div>
                             </div>
                             <table style="margin-left:25px;margin-bottom:10px">
-                             <?php   foreach ($emails as $email) { ?>
 
-                                  <tr>
-                                    <td style="padding-right:8px;padding-bottom:5px"><i class="fa fa-envelope"></i>  <?php echo $email->champ ;?></td>
-                                    <td style="padding-right:8px;padding-bottom:5px;"><?php echo $email->remarque ;?></td>
-                                </tr>
                     <?php
-                             }
                                 foreach ($tels as $tel) {?>
                                   <tr>
                                     <td style="padding-right:8px;padding-bottom:5px;"><i class="fa fa-phone"></i> <?php echo $tel->champ ;?></td>
                                     <td style="padding-right:8px;padding-bottom:5px;"><?php echo $tel->remarque;?></td>
                                 </tr>
                              <?php       }
-                                foreach ($faxs as $fax) {?>
-
-                                 <tr>
-                                    <td style="padding-right:8px;padding-bottom:5px;"><i class="fa fa-fax"></i> <?php echo $fax->champ ;?></td>
-                                    <td style="padding-right:8px;padding-bottom:5px;"><?php echo$fax->remarque ;?></td>
-                                </tr>
-                             <?php      } ?>
+                             ?>
                                  </table>
 
 
@@ -76,14 +64,18 @@
                      <input value="<?php  echo PrestationsController::GouvById($prestation->gouvernorat);?>" class="form-control" name="gouvernorat" id="gouvernorat" readonly data-required="1" required="" aria-required="true">
                  </div>
                  <div class="form-group">
-                            <label>Prix</label>
+                     <label class="control-label">Ville <span class="required" aria-required="true">   </span></label>
+                     <input value="<?php // echo PrestationsController::ChampById('ville',$prestation->id);?>" class="form-control" name="gouvernorat" id="gouvernorat" readonly data-required="1" required="" aria-required="true">
+                 </div>
+                 <div class="form-group">
+                            <label>Prix / Fourchette</label>
                             <input onchange="changing(this)" value="{{$prestation->price}}" class="form-control" name="price" id="price">
                         </div>
-                        <div class="form-group">
+                   <!--     <div class="form-group">
                             <label>Marge du prix</label>
                             <input  onchange="changing(this)" value="{{$prestation->marge}}" class="form-control" name="marge" id="marge">
-                        </div>
-                        <div class="form-group">
+                        </div>-->
+                    <!--    <div class="form-group">
                             <div class="checkbox-list">
                                 <label>
                                     <div class="checker" id="annules"><span><input  onchange="changing2(this)" id="effectue"  <?php if ($prestation->effectue ==1){echo 'checked';} ?> type="checkbox" name="pres_parv"    ></span></div> Parvenue </label>
@@ -91,7 +83,7 @@
                                     <div class="checker" id="price_invoiceds"><span><input onchange="changing2(this)"  id="price_invoiced"  <?php if ($prestation->price_invoiced ==1){echo 'checked';} ?>  type="checkbox" name="pres_fact"    ></span></div> Facturée au client </label>
                                 <label>
                                 </label></div>
-                        </div>
+                        </div>-->
 
                 </div>
 

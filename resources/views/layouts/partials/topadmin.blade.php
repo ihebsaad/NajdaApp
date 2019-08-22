@@ -10,7 +10,7 @@
         <div class="col-sm-1 col-md-1 col-lg-1" style="margin-right:60px">
            <a href="{{ route('home')}}" class="logo">
                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
-                <img style="margin-left:-25px;" src="{{  URL::asset('public/img/logo.png') }}" alt="logo" />
+                <img style="margin-left:-60px;" src="{{  URL::asset('public/img/logo.png') }}" alt="logo" />
             </a>
         </div>
        <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top: 5px;">
@@ -39,7 +39,7 @@
           $typeuser=$user->type;
           if($typeuser!='simple'){
           ?>
-          <div  class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
+          <div  class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important;margin-left:15px">
               <a href="{{ route('home') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
                   <i class="far fa-user"></i>
                   <br>
@@ -61,294 +61,6 @@
           </form>
         </div>
 
-   <style>
-
-    .single-char {
-        color:red;
-        cursor:pointer;
-      }
-      .single-char2 {
-        color:black;
-        cursor:pointer;
-      }
-
-
-      .kbsdropdowns
-      {
-
-      display:block ; 
-      position:relative ;
-      top:-65px; 
-      left: -50 px;
-     
-
-      }
-      </style>
-    
-      <script> 
-
-
-        function colorerSeq(string,qy) {
-           
-
-
-           if(qy!='')
-           {
-
-            var caracSp = ['-', '_', '(',')',' '];
-            //alert(string);
-          // For all matching elements
-             $(string).each(function() {
-
-
-              var hrefString=$(this).html();
-           //  alert(hrefString);
-              var a1=hrefString.indexOf("\"");
-              var b1=hrefString.lastIndexOf("\"");
-              hrefString=hrefString.substring(a1+1,b1);
-
-          // Get contents of string
-                  var myStr = $(this).text();
-                  //alert(myStr);
-                  // Split myStr into an array of characters
-                  myStr = myStr.split("");
-                  var dejaEn=false;
-                  // Build an html string of characters wrapped in  tags with classes
-                  var myContents = "";
-                  var noniden="";
-                  var ancien;
-                  var kol=false;
-                  for (var i = 0, len = myStr.length; i < len; i++) {
-                    //alert(myStr[i]);
-                    
-                    if(qy[0].toUpperCase()==myStr[i].toUpperCase())
-                    {
-
-                      if(!dejaEn)
-                      {
-
-                         ancien= myContents ;
-                         kol=true;
-                        // an_i=i;
-                         noniden="";
-
-                      for(var j=0, len2 = qy.length; j<len2; j++)
-                      {
-                       
-                        if(i<len)
-                        {
-
-                          if(qy[j].toUpperCase()==myStr[i].toUpperCase() || caracSp.includes(myStr[i]) )
-                          {
-
-                                  if(qy[j].toUpperCase()==myStr[i].toUpperCase())
-                                  {
-                                      // alert ("bonjour");
-                                   myContents += '<span class="single-char char-' + i + '">' + myStr[i] + '</span>';
-                                   noniden+= '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-                                   i++;
-                                   //b=true;
-                                 }
-
-                                 else
-                                 {
-                                  //alert ("special");
-
-                                       if(caracSp.includes(myStr[i]))
-                                       {
-                                        //alert ("special");
-
-                                        i++;
-
-                                          if(qy[j].toUpperCase()==myStr[i].toUpperCase())
-                                            {
-                                             myContents += '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
-                                             myContents += '<span class="single-char char-' + i + '">' + myStr[i] + '</span>';
-
-                                             noniden+= '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
-                                             noniden+= '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-
-                                             i++;
-                                                                              //b=true;
-                                            }
-                                            else
-                                            {
-                                          myContents += '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
-                                            noniden+= '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
-
-
-                                            }
-
-                                       }
-                               }
-
-                          }
-                          else
-                          {
-                            myContents=ancien;
-                            myContents += noniden;
-                            myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-                            j=len2;
-                            //i=an_i;
-                            //i++;
-                            kol=false;
-                           ancien= myContents;
-                           
-                          }
-                          
-                        }
-                        else
-                        {
-                            myContents=ancien;
-                            j=len2;
-                           // i=an_i;
-                            kol=false;
-
-                        }
-                       
-
-                      }
-                    
-                                          
-
-                          if(kol)
-                          {
-                             i--;
-                            dejaEn=true;
-
-                          }
-                          else
-                          {
-
-                           // i=an_i;
-                           // i--;
-                            dejaEn=false;
-                          
-                           // myContents=ancien;
-                           // myContents+= noniden;
-
-                          }
-
-
-
-                        }
-                          else
-                          {
-
-                            myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-
-                          }
-                     
-                     }
-                     else
-                     {
-
-                      myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-                     }
-                  }
-                              myContents='<a href="'+hrefString+'">'+myContents+'</a>';
-                  // Replace original string with constructed html string
-                  $(this).html(myContents);
-                 
-                  //alert($(this).html(myContents).text());
-                });
-           }
-              
-              }
-
-
-
-
-        $(document).ready(function(){
-
-             $("#search-bar").keyup(function(){
-
-              var qy=$(this).val();
-              //alert(qy);
-
-              if(qy != ''){
-
-                var _token=$('input[name="_token"]').val();
-
-                $.ajax({
-
-                  url:"{{ route('RechercheMulti.autocomplete')}}",
-                  method:"POST",
-                  data:{qy:qy, _token:_token},
-                  success:function(data)
-                  {
-
-
-                    //alert(data);
-
-                    $("#kkk").fadeIn();
-                    $("#kkk").html(data);
-
-                  
-                   var myStringType=$('.resAutocompRech');
-                    // alert( myStringType.html());
-                   colorerSeq(myStringType,qy);
-                  // alert(myStringType);
-
-                   /* $(document).ready(function() {
-                    var myStringType = $('.resAutocompTyoeAct').text();
-                    arrayMe(myStringType);
-                     });*/
-
-
-
-                  }
-
-
-                });
-
-
-              }
-              else
-              {
-
-
-               $("#kkk").fadeOut();
-
-
-              }
-
-
-
-
-             });
-
-
-            
-         });
-         
-
-
-
-          </script>
-
-          <script>
-             $(document).on('click','.resAutocompTyoeAct',function(){
-
-             // alert("bonjour");
-
-            $("#search-bar").val($(this).text());
-            $("#kkk").fadeOut();
-
-
-             });
-
-
-             $('#search-bar').blur(function() {
-                 $("#kkk").fadeOut();
-              });
-
-                        
-
-          </script>
-
-
-
 
      <!--   <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
           <a href="#" class="btn btn-primary btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;"> 
@@ -368,7 +80,7 @@
               <span class="  fa-fw    fas    fa-map-signs fa-2x"></span>
           </a>
 		<?php } else {?>
-          <a href="{{ route('entrees.index') }}" class="btn btn-danger btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
+          <a href="{{ route('entrees.index') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
               <span class="fa fa-fw fa-envelope fa-2x"></span>
           </a> 
 	 <?php }  ?>
@@ -397,4 +109,306 @@
     </div>
 
     </header>
+
+
+
+<style>
+    @media  (max-width: 1280px)  /*** 150 % ***/  {
+        #search-bar{width:250px;}
+        .search-icon{display:none;}
+    }
+    @media (max-width: 1024px)    {
+        #search-bar{width:220px;}
+    .boite,  .date,  .search-icon{display:none;}
+    }
+    @media (max-width: 1100px) /*** 175 % ***/  {
+        #search-bar{width:200px;}
+        .boite,   .date,   .search-icon{display:none;}
+    }
+
+
+    .single-char {
+        color:red;
+        cursor:pointer;
+    }
+    .single-char2 {
+        color:black;
+        cursor:pointer;
+    }
+
+
+    .kbsdropdowns
+    {
+
+        display:block ;
+        position:relative ;
+        top:-65px;
+        left: -50 px;
+
+
+    }
+</style>
+
+<script>
+
+
+    function colorerSeq(string,qy) {
+
+
+
+        if(qy!='')
+        {
+
+            var caracSp = ['-', '_', '(',')',' '];
+            //alert(string);
+            // For all matching elements
+            $(string).each(function() {
+
+
+                var hrefString=$(this).html();
+                //  alert(hrefString);
+                var a1=hrefString.indexOf("\"");
+                var b1=hrefString.lastIndexOf("\"");
+                hrefString=hrefString.substring(a1+1,b1);
+
+                // Get contents of string
+                var myStr = $(this).text();
+                //alert(myStr);
+                // Split myStr into an array of characters
+                myStr = myStr.split("");
+                var dejaEn=false;
+                // Build an html string of characters wrapped in  tags with classes
+                var myContents = "";
+                var noniden="";
+                var ancien;
+                var kol=false;
+                for (var i = 0, len = myStr.length; i < len; i++) {
+                    //alert(myStr[i]);
+
+                    if(qy[0].toUpperCase()==myStr[i].toUpperCase())
+                    {
+
+                        if(!dejaEn)
+                        {
+
+                            ancien= myContents ;
+                            kol=true;
+                            // an_i=i;
+                            noniden="";
+
+                            for(var j=0, len2 = qy.length; j<len2; j++)
+                            {
+
+                                if(i<len)
+                                {
+
+                                    if(qy[j].toUpperCase()==myStr[i].toUpperCase() || caracSp.includes(myStr[i]) )
+                                    {
+
+                                        if(qy[j].toUpperCase()==myStr[i].toUpperCase())
+                                        {
+                                            // alert ("bonjour");
+                                            myContents += '<span class="single-char char-' + i + '">' + myStr[i] + '</span>';
+                                            noniden+= '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
+                                            i++;
+                                            //b=true;
+                                        }
+
+                                        else
+                                        {
+                                            //alert ("special");
+
+                                            if(caracSp.includes(myStr[i]))
+                                            {
+                                                //alert ("special");
+
+                                                i++;
+
+                                                if(qy[j].toUpperCase()==myStr[i].toUpperCase())
+                                                {
+                                                    myContents += '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
+                                                    myContents += '<span class="single-char char-' + i + '">' + myStr[i] + '</span>';
+
+                                                    noniden+= '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
+                                                    noniden+= '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
+
+                                                    i++;
+                                                    //b=true;
+                                                }
+                                                else
+                                                {
+                                                    myContents += '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
+                                                    noniden+= '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
+
+
+                                                }
+
+                                            }
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        myContents=ancien;
+                                        myContents += noniden;
+                                        myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
+                                        j=len2;
+                                        //i=an_i;
+                                        //i++;
+                                        kol=false;
+                                        ancien= myContents;
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    myContents=ancien;
+                                    j=len2;
+                                    // i=an_i;
+                                    kol=false;
+
+                                }
+
+
+                            }
+
+
+
+                            if(kol)
+                            {
+                                i--;
+                                dejaEn=true;
+
+                            }
+                            else
+                            {
+
+                                // i=an_i;
+                                // i--;
+                                dejaEn=false;
+
+                                // myContents=ancien;
+                                // myContents+= noniden;
+
+                            }
+
+
+
+                        }
+                        else
+                        {
+
+                            myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
+
+                        }
+
+                    }
+                    else
+                    {
+
+                        myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
+                    }
+                }
+                myContents='<a href="'+hrefString+'">'+myContents+'</a>';
+                // Replace original string with constructed html string
+                $(this).html(myContents);
+
+                //alert($(this).html(myContents).text());
+            });
+        }
+
+    }
+
+
+
+
+    $(document).ready(function(){
+
+        $("#search-bar").keyup(function(){
+
+            var qy=$(this).val();
+            //alert(qy);
+
+            if(qy != ''){
+
+                var _token=$('input[name="_token"]').val();
+
+                $.ajax({
+
+                    url:"{{ route('RechercheMulti.autocomplete')}}",
+                    method:"POST",
+                    data:{qy:qy, _token:_token},
+                    success:function(data)
+                    {
+
+
+                        //alert(data);
+
+                        $("#kkk").fadeIn();
+                        $("#kkk").html(data);
+
+
+                        var myStringType=$('.resAutocompRech');
+                        // alert( myStringType.html());
+                        colorerSeq(myStringType,qy);
+                        // alert(myStringType);
+
+                        /* $(document).ready(function() {
+                         var myStringType = $('.resAutocompTyoeAct').text();
+                         arrayMe(myStringType);
+                         });*/
+
+
+
+                    }
+
+
+                });
+
+
+            }
+            else
+            {
+
+
+                $("#kkk").fadeOut();
+
+
+            }
+
+
+
+
+        });
+
+
+
+    });
+
+
+
+
+</script>
+
+<script>
+    $(document).on('click','.resAutocompTyoeAct',function(){
+
+        // alert("bonjour");
+
+        $("#search-bar").val($(this).text());
+        $("#kkk").fadeOut();
+
+
+    });
+
+
+    $('#search-bar').blur(function() {
+        $("#kkk").fadeOut();
+    });
+
+
+
+</script>
+
 

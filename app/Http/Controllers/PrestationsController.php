@@ -15,6 +15,7 @@ use App\TypePrestation ;
 use App\Ville ;
 use App\Evaluation ;
 use DB;
+use Illuminate\Support\Facades\Mail;
 
 
 class PrestationsController extends Controller
@@ -108,7 +109,7 @@ class PrestationsController extends Controller
 
 
                $id=$prestation->id;
-               $date=date('Y-m-d');
+               $date=date('Y-m-d H:i:s');
             //   $evaluation = Evaluation::find($prest);
                $evaluation = //DB::table('evaluations')
                   Evaluation::where('prestataire',$prest)
@@ -117,7 +118,7 @@ class PrestationsController extends Controller
                    ->where('specialite',$spec)
                       ->update(['derniere_prestation' => $date])
                    ;
-                $date=date('Y-m-d');
+           //     $date=date('Y-m-d h:i:s');
              //  $date="2015-01-01 02:29:14" ;
              //  $current_date_time = Carbon::now()->toDateTimeString();
 
@@ -125,7 +126,8 @@ class PrestationsController extends Controller
               // $evaluation->evaluation=5;
             //   $evaluation->save();
                //   return redirect('/prestations/view/'.$id)->with('success', 'ajouté avec succès ');
-               return url('/prestations/view/'.$id);
+               // return url('/prestations/view/'.$id);
+               return $id;
            }
             //
 
@@ -146,6 +148,63 @@ class PrestationsController extends Controller
      ///   return redirect('/dossiers')->with('success', 'Entry has been added');
 
     }
+
+    public function updatestatut(Request $request)
+    {
+
+        $id= $request->get('prestation');
+        $statut=  $request->get('statut');
+        $details= $request->get('details');
+        $prestataire= $request->get('prestataire');
+
+
+        Prestation::where('id', $id)->update(array('statut' => $statut));
+       if($details!=''){ Prestation::where('id', $id)->update(array('details' => $details));}
+
+        $to='';$raison='';
+        $sujet='Demande de prestation échouée';
+        if($statut=='nonjoignable'){$raison='Non Joignable';}
+        if($statut=='nondisponbile'){$raison='Non Disponbile';}
+        if($statut=='autre'){$raison=$details;}
+     $nomprest= app('App\Http\Controllers\PrestatairesController')->ChampById('civilite',$prestataire).' '. app('App\Http\Controllers\PrestatairesController')->ChampById('prenom',$prestataire).' '.  app('App\Http\Controllers\PrestatairesController')->ChampById('name',$prestataire);
+        $contenu= "Bonjour ".$nomprest.",<br>
+une demande de prestation de vos services a échoué pour les raisons suivantes :<br>
+<b>".$raison."</b> <br><br>
+Contactez nous pour plus d'informations.<br>
+A bientôt.<br>
+
+";
+
+        $cc=array();
+        $emails =   Adresse::where('nature', 'email')
+            ->where('parent',$prestataire)
+            ->get();
+
+        foreach($emails as $email) {
+            array_push($cc,$email->champ );
+
+        }
+
+        Mail::send([], [], function ($message) use ($to,$sujet,$contenu ,$cc  ) {
+        $message
+              ->to('saadiheb@gmail.com')
+            // ->to()
+
+            ->cc($cc ?: [])
+          //  ->bcc($ccimails ?: [])
+            ->subject($sujet)
+            ->setBody($contenu, 'text/html');
+     /*   if (isset($to)) {
+
+            foreach ($to as $t) {
+                $message->to($t);
+            }
+        }*/
+    });
+
+    }
+
+
 
     /**
      * Display the specified resource.

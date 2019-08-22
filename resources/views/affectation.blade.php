@@ -27,7 +27,19 @@
               </div>
         				
 		  <div class="panel-body" style="display: block;min-height:800px;padding:15px 15px 15px 15px">
+              <ul id="tabs" class="nav  nav-tabs"  >
+                  <li class=" nav-item ">
+                      <a class="nav-link active   " href="{{ route('supervision') }}"  >
+                          <i class="fas fa-lg  fa-users-cog"></i>  Supervision
+                      </a>
+                  </li>
+                  <li class="nav-item active">
+                      <a class="nav-link" href="{{ route('affectation') }}"  >
+                          <i class="fas fa-lg  fa-user-tag"></i>  Affectations
+                      </a>
+                  </li>
 
+              </ul>
           <?php
               use \App\Http\Controllers\UsersController;
               use \App\Http\Controllers\ClientsController;

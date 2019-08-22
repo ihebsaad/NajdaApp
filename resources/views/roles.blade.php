@@ -606,10 +606,15 @@
                 data:{disp:disp,supmedic:supmedic,suptech:suptech,chrgtr:chrgtr,disptel:disptel,veilleur:veilleur, _token:_token},
                 success:function(data){
 
+                    if((supmedic==1)||(suptech==1)){
+                        window.location = '{{route('supervision')}}';
+                    }
+
                     if(admin==1){
                         window.location = '{{route('parametres')}}';
                     }
                     else{
+
                         if(disp==1) {
                           window.location = '{{route('entrees.dispatching')}}';
                         }

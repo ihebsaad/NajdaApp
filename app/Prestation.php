@@ -15,7 +15,9 @@ class Prestation extends Model
 'par',
 'newprice',
 'gouvernorat',
-'specialite'
+'specialite',
+ 'prestation',
+ 'statut'
 
 ];
 

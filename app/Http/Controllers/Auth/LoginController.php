@@ -36,7 +36,7 @@ protected function authenticated(Request $request, $user)
     $user = auth()->user();
     $type=$user->user_type;
 
-    $nomuser=$user->name.' '.$user->name;
+    $nomuser=$user->name.' '.$user->lastname;
     Log::info('[Agent: '.$nomuser.'] Login ');
 
 
@@ -93,7 +93,7 @@ public function logout(Request $request)
         $user = auth()->user();
         $iduser=$user->id;
 
-         $nomuser=$user->name.' '.$user->name;
+         $nomuser=$user->name.' '.$user->lastname;
 
         Log::info('[Agent: '.$nomuser.'] Déconnexion ');
 

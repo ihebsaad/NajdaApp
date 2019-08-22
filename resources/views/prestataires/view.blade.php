@@ -2,8 +2,6 @@
 
 @section('content')
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
     <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.1/select2.min.js"></script>-->
 
@@ -82,9 +80,7 @@
          <div class="form-group ">
              <label>Spécialités</label>
              <div class="row">
-                 <?php  echo 'specialites'. json_encode($specialites) .'<br>';?>
-                 <?php echo '$relations2 '.json_encode($relations2);?>
-                 <select class="form-control  col-lg-12 itemName " style="width:400px" name="specialite"  multiple  id="specialite">
+                  <select class="form-control  col-lg-12 itemName " style="width:400px" name="specialite"  multiple  id="specialite" onchange="location.reload();">
 
                      <option></option>
                      <?php if ( count($relations2) > 0 ) { ?>
@@ -366,9 +362,9 @@
                         <thead>
                         <tr class="headtable">
                             <th style="width:20%">Tel</th>
-                            <th style="width:20%">Type</th>
-                            <th style="width:50%">Remarque</th>
-                            <th style="width:10%">Contacter</th>
+                            <th style="width:40%">Remarque</th>
+                            <th style="width:35%">Type</th>
+
                         </tr>
 
                         </thead>
@@ -376,9 +372,9 @@
                         @foreach($tels as $tel)
                             <tr>
                                 <td style="width:20%;"><?php echo $tel->champ; ?></td>
-                                <td style="width:20%;"><?php echo $tel->type; ?></td>
-                                <td style="width:50%;"><?php echo $tel->remarque; ?></td>
-                                <td style="width:10%;"><i class="fa fa-phone"></i></td>
+                                <td style="width:40%;"><?php echo $tel->remarque; ?></td>
+                                <td style="width:35%;"><?php echo $tel->typetel.' '; if($tel->typetel=='Mobile') {?> <a onclick="setTel(this);" class="<?php echo $tel->champ;?>" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a><?php } ?>
+
                             </tr>
                         @endforeach
 
@@ -457,8 +453,7 @@
                 </div>
 
 
-
-                    <input type="hidden" id="idpres" class="form-control"   value="{{ $prestataire->id }}">
+   <input type="hidden" id="idpres" class="form-control"   value="{{ $prestataire->id }}">
 
         </div>
 
@@ -475,12 +470,7 @@
             <th style="width:20%">Gouvernorat</th>
             <th style="width:10%">Prix</th>
         </tr>
-       <!-- <tr>
-            <th style="width:35%">Dossier</th>
-            <th style="width:25%">Prestataire</th>
-            <th   style="width:10%">Type</th>
-            <th style="width:20%">Prix</th>
-        </tr>-->
+
         </thead>
         <tbody>
         <?php use \App\Http\Controllers\PrestationsController;     ?>
@@ -525,6 +515,7 @@
 
             <div id="tab03" class="tab-pane fade    " style="padding-top:30px">
 
+
                 <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addev" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createeval"><b><i class="fas fa-plus"></i> Ajouter une Priorité</b></button>
 
                 <table class="table table-striped" id="mytable2" style="width:100%">
@@ -541,7 +532,7 @@
                     <tbody>
                  @foreach($evaluations as $eval)
                     <tr>
-                        <td style="text-align: center;width:20%"><?php echo PrestationsController::TypePrestationById( $eval['type_prest']) .'';?></td>
+                        <td style="text-align: center;width:20%"><?php echo PrestationsController::TypePrestationById( $eval['type_prest']) ;?></td>
                         <td style="text-align: center;width:20%"><?php echo PrestationsController::SpecialiteById($eval['specialite']) ;?></td>
                         <td style="text-align: center;width:20%"><?php echo PrestationsController::GouvById( $eval['gouv']) ;?> </td>
                         <td style="text-align: center;width:20%"><?php echo   $eval['ville'] ;?> </td>
@@ -745,7 +736,16 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group ">
+                                    <label for="code">Type</label>
+                                    <div class="row">
+                                        <select    class="form-control"  id="typetel"  >
+                                            <option value="Fixe">Fixe</option>
+                                            <option value="Mobile">Mobile</option>
+                                        </select>
 
+                                    </div>
+                                </div>
                                 <div class="form-group ">
                                     <label for="code">Remarque</label>
                                     <div class="row">
@@ -877,6 +877,71 @@
         </div>
     </div>
 
+
+    <!-- Modal SMS -->
+    <div class="modal fade" id="sendsms" role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal7">Envoyer un SMS </h5>
+
+                </div>
+                <form method="post"   >
+
+                    <div class="modal-body">
+                        <div class="card-body">
+
+
+                            <div class="form-group">
+                                {{ csrf_field() }}
+                                <label for="description">Dossier:</label>
+
+                                <div class="form-group">
+                                    <select id ="ledossier"  class="form-control " style="width: 120px">
+                                        <option></option>
+                                        <?php foreach($dossiers as $ds)
+
+                                        {
+                                            echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="form-group">
+                                {{ csrf_field() }}
+                                <label for="description">Description:</label>
+                                <input id="ladescription" type="text" class="form-control" name="description"     />
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="destinataire">Destinataire:</label>
+                                <input id="ledestinataire" type="number" class="form-control" name="destinataire"      />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contenu">Message:</label>
+                                <textarea  type="text" class="form-control" name="lemessage"></textarea>
+                            </div>
+                        {{--  {!! NoCaptcha::renderJs() !!}     --}}
+                        <!--  <script src="https://www.google.com/recaptcha/api.js" async defer></script>-->
+
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <span   id="envoisms" class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</span>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
 
 @endsection
 <style>.headtable{background-color: grey!important;color:white;}
@@ -1026,6 +1091,34 @@
 
     $(function () {
 
+        $('#envoisms').click(function(){
+            var description = $('#ladescription').val();
+            var destinataire = $('#ledestinataire').val();
+            var message = $('#lemessagel').val();
+            var dossier = $('#ledossier').val();
+
+
+            if ((message != '') &&(destinataire!='')&&(description!=''))
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('emails.sendsms') }}",
+                    method:"POST",
+                    data:{description:description,destinataire:destinataire,message:message,dossier:dossier, _token:_token},
+                    success:function(data){
+
+                        alert('SMS Envoyé !');
+                        // window.location =data;
+                        $("#sendsms").modal('hide');
+
+                    }
+                });
+            }else{
+                // alert('ERROR');
+            }
+        });
+
+
         $('#specialite').select2({
             filter: true,
             language: {
@@ -1035,6 +1128,7 @@
             }
 
         });
+        $("#dossier").select2();
 
 
 
@@ -1369,13 +1463,14 @@
             var champ = $('#champ1').val();
             var remarque = $('#remarque1').val();
             var nature = $('#nature1').val();
+            var typetel = $('#typetel').val();
             if ((champ != '') )
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url:"{{ route('prestataires.addressadd') }}",
                     method:"POST",
-                    data:{parent:parent,champ:champ,remarque:remarque,nature:nature, _token:_token},
+                    data:{parent:parent,champ:champ,remarque:remarque,nature:nature,typetel:typetel, _token:_token},
                     success:function(data){
 
                         //   alert('Added successfully');
@@ -1438,6 +1533,16 @@
         });
 
 
+        var url = document.location.toString();
+        if (url.match('#')) {
+            $('.nav-item a[href="#' + url.split('#')[1] + '"]').tab('show');
+        }
+
+// Change hash for page-reload
+        $('.nav-item a').on('shown.bs.tab', function (e) {
+            window.location.hash = e.target.hash;
+        })
+
 
 
 
@@ -1445,37 +1550,12 @@
 
 
 
+    function setTel(elm)
+    {
+        var num=elm.className;
+        document.getElementById('ledestinataire').value=parseInt(num);
 
-
-/*
-    $(function () {
-        $('.itemName').select2({
-            filter: true,
-
-            ajax: {
-                url: "{{-- route('emails.fetch') --}}",
-                delay: 250,
-                processResults: function (data) {
-                    return {
-                        results: $.map(data, function (attachements) {
-                            return {
-                                text: attachements.nom,
-                                id: attachements.id
-                            }
-                        })
-                    };
-                },
-                cache: true
-            }
-        });
-    });
-
-
-*/
-
-
-
-
+    }
 
 
 

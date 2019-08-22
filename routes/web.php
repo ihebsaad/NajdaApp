@@ -170,6 +170,7 @@ Route::post('/dossiers/attribution','DossiersController@attribution')->name('dos
 Route::post('/dossiers/listepres','DossiersController@ListePrestataireCitySpec')->name('dossiers.listepres');
 Route::post('/dossiers/addressadd','DossiersController@addressadd')->name('dossiers.addressadd');
 Route::post('/dossiers/addressadd2','DossiersController@addressadd2')->name('dossiers.addressadd2');
+Route::get('/dossiers/searchprest','DossiersController@searchprest')->name('dossiers.searchprest');
 
 
 /*** Clients **/
@@ -275,6 +276,7 @@ Route::get('/prestations', array('as' => 'prestations','uses' => 'PrestationsCon
  Route::post('/prestations/updating','PrestationsController@updating')->name('prestations.updating');
 Route::get('/prestations/view/{id}', 'PrestationsController@view');
 Route::post('/prestations/updating','PrestationsController@updating')->name('prestations.updating');
+Route::post('/prestations/updatestatut','PrestationsController@updatestatut')->name('prestations.updatestatut');
 
 
 

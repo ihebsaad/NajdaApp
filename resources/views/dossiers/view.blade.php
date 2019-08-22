@@ -16,6 +16,12 @@ use App\ClientGroupe;
 <!--select css-->
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+
+<link href="//demo.chandra-admin.com/assets/vendors/Buttons/css/buttons.css" rel="stylesheet">
+<link href="//demo.chandra-admin.com/assets/vendors/hover/hover.css" rel="stylesheet">
+<link href="//demo.chandra-admin.com/assets/css/custom_css/advbuttons.css" rel="stylesheet">
+
+
 @section('content')
     @if(session()->has('AffectDossier'))
         <div class="alert alert-success">
@@ -276,12 +282,31 @@ use App\ClientGroupe;
 
 
 
-
             </div>
 
             <div id="tab3" class="tab-pane fade">
-                <span style="background-color:#fcdcd5;color:black;font-weight:bold">Prestation non effectuée </span> <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addpres" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une Prestation</b></button>
+                <ul class="nav  nav-tabs">
 
+                    <li class="nav-item active">
+                        <a class="nav-link  active show" href="#tab31" data-toggle="tab"  onclick="showinfos();hideinfos2();hideinfos3();">
+                            <i class="fas fa-lg  fa-ambulance"></i>  Prestations
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tab32" data-toggle="tab"  onclick=";showinfos2();hideinfos();hideinfos3();">
+                            <i class="fas fa-lg  fa-user-md"></i>  Recherche des Prestataires
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tab33" data-toggle="tab"  onclick="showinfos3();hideinfos();hideinfos2();">
+                            <i class="fas  fa-lg fa-users"></i>  Ajouter une prestation
+                        </a>
+                    </li>
+
+                </ul>
+                <div id="tab31" class="tab-pane fade active in">
+                <br>
+                <span style="background-color:#fcdcd5;color:black;font-weight:bold">Prestation non effectuée </span>  <br>
                 <table class="table table-striped" id="mytable" style="width:100%;margin-top:15px;">
                     <thead>
                     <tr id="headtable">
@@ -329,8 +354,274 @@ use App\ClientGroupe;
                     @endforeach
                     </tbody>
                 </table>
+                </div>
 
-            </div>
+                <div id="tab32" class="tab-pane fade ">
+                  <br>
+
+<form method="post" action="{{action('DossiersController@searchprest')}}">
+                    <div class="form-group " >
+                        <label>Type de prestations</label>
+                        <div class=" row  ">
+                            <select class="itemName form-control col-lg-12  " style="width:400px" name="typeprest"    id="typeprest2">
+                                <option></option>
+                                @foreach($typesprestations as $aKey)
+                                    <option     value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
+                                @endforeach
+
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+                        <div class="row">
+                            <label>Spécialité</label>
+                        </div>
+                        <div class="row">
+                            <select class="form-control  col-lg-12 " style="width:400px" name="specialite"    id="specialite2">
+                                <option></option>
+                                @foreach($specialites as $sp)
+                                    <option class="tprest2" id="tprest2-<?php echo $sp->type_prestation;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+                        <label>Gouvernorat de couverture</label>
+                        <div class="row">
+                            <select class="form-control  col-lg-12 " style="width:400px" name="gouvernorat"    id="gouvcouv2">
+                                <option></option>
+                                @foreach($gouvernorats as $aKeyG)
+                                    <option   value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
+                                @endforeach
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+                        <div class="row">
+                            <label>Ville</label>
+                        </div>
+                        <div class="row" style=";margin-bottom:10px;"><style>.algolia-places{width:80%;}</style>
+                        </div>
+                        <input class="form-control" style="padding-left:5px" type="text" placeholder="toutes"  name="ville" id="villepr2" />
+                        <input class="form-control" style="padding-left:5px;" type="hidden" name="postal" id="villecode2" />
+
+                    </div>
+                    <script>
+                        (function() {
+                            var placesAutocomplete3 = places({
+                                appId: 'plCFMZRCP0KR',
+                                apiKey: 'aafa6174d8fa956cd4789056c04735e1',
+                                container: document.querySelector('#villepr2'),
+
+                            });
+                            placesAutocomplete3.on('change', function resultSelected(e) {
+                                document.querySelector('#villecode2').value = e.suggestion.postcode || '';
+                            });
+                        })();
+                    </script>
+
+    <input type="hidden" name="dossier" value="<?php echo $dossier->id; ?>"/>
+
+    <input type="submit" value="envoyer"/>
+
+                    <div class="row">  <label>Prestataires</label>
+                    </div>
+
+<?php /* $c=0;?><table><?php $c=0;?>
+                            @foreach($prestataires as $prest)
+                            <?php $c++; if($c<30) { ?>
+                            <div id="<?php echo $prest->id; ?>">
+                                <?php
+                                $gouvs=  PrestatairesController::PrestataireGouvs($id);
+                                $typesp=  PrestatairesController::PrestataireTypesP($id);
+                                $specs=  PrestatairesController::PrestataireSpecs($id);
+                                ?>
+                             <tr class="PR-Gouv-<?php // echo $prest->gouv ?>">
+                                    <div class="PR-SP-<?php // echo $prest->specialite ?>">
+                                        <td  class="PR-Postal-<?php // echo $prest->specialite ?>" ><?php  echo  $prest->name;    ?></td>
+                                    </div>
+                                </tr>
+                            </div>
+                                <?php } ?>
+                        @endforeach
+             </table><?php } */ ?>
+</form>
+                     </div><!--32-->
+
+
+
+
+                 <div id="tab33" class="tab-pane fade ">
+                    <br> <!-- <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addpres" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une Prestation</b></button>-->
+
+                     <h3>Ajouter une nouvelle prestation</h3><br>
+                     <?php use \App\Http\Controllers\UsersController;
+                     $users=UsersController::ListeUsers();
+
+                     $CurrentUser = auth()->user();
+
+                     $iduser=$CurrentUser->id;
+
+                     ?>
+                     <div class="form-group">
+
+                         <form id="addpresform" novalidate="novalidate">
+                             {{ csrf_field() }}
+
+
+                             <div class="form-group " >
+                                 <label>Type de prestations</label>
+                                 <div class=" row  ">
+                                     <select class="itemName form-control col-lg-12  " style="width:400px" name="itemName"    id="typeprest">
+                                         <option></option>
+                                         @foreach($typesprestations as $aKey)
+                                             <option     value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
+                                         @endforeach
+
+                                     </select>
+
+                                 </div>
+                             </div>
+
+                             <div class="form-group ">
+                                 <div class="row">
+                                     <label>Spécialité</label>
+                                 </div>
+                                 <div class="row">
+                                     <select class="form-control  col-lg-12 " style="width:400px" name="specialite"    id="specialite">
+                                         <option></option>
+                                         @foreach($specialites as $sp)
+                                             <option class="tprest" id="tprest-<?php echo $sp->type_prestation;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                         @endforeach
+                                     </select>
+                                 </div>
+                             </div>
+
+                             <div class="form-group ">
+                                 <label>Gouvernorat de couverture</label>
+                                 <div class="row">
+                                     <select class="form-control  col-lg-12 " style="width:400px" name="gouv"    id="gouvcouv">
+                                         <option></option>
+                                         @foreach($gouvernorats as $aKeyG)
+                                             <option   value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
+                                         @endforeach
+
+                                     </select>
+                                 </div>
+                             </div>
+
+                             <div class="form-group ">
+                                 <div class="row">
+                                     <label>Ville</label>
+                                 </div>
+                                 <div class="row" style=";margin-bottom:10px;"><style>.algolia-places{width:80%;}</style></div>
+                                 <input class="form-control" style="padding-left:5px" type="text"  id="villepr" />
+                                 <input class="form-control" style="padding-left:5px;" type="hidden"  id="villecode" />
+
+                             </div>
+                             <script>
+                                 (function() {
+                                     var placesAutocomplete2 = places({
+                                         appId: 'plCFMZRCP0KR',
+                                         apiKey: 'aafa6174d8fa956cd4789056c04735e1',
+                                         container: document.querySelector('#villepr'),
+
+                                     });
+                                     placesAutocomplete2.on('change', function resultSelected(e) {
+                                         document.querySelector('#villecode').value = e.suggestion.postcode || '';
+                                     });
+                                 })();
+                             </script>
+
+
+                             <div class="form-group row" >
+                                 <label class=" control-label">Date de prestation <span class="required" aria-required="true"> * </span></label>
+                                 <div class="row">
+                                     <input style="width:200px;" value='<?php echo date('d/m/Y'); ?>' class="form-control datepicker-default " name="pres_date" id="pres_date" data-required="1" required="" aria-required="true">
+                                 </div>
+                             </div>
+
+                             <div class="row">
+                                 <span class="btn btn-success" id="rechercher" >Rechercher <i class="fa fa-loop"></i></span>
+                             </div>
+                             <!--
+                                                         <div style="align:center;text-align:center">
+
+                                                             <span style="align:center" id="check" class="btn btn-danger">Chercher des prestataires</span>
+
+                                                         </div>
+                             -->
+                             <div id="data" ><style>#data b{text-align:center;}</style>
+
+                             </div>
+                             <!--                         <a href="#" class="hvr-shrink button button-3d button-success button-rounded" style="display:none;margin-top:40px;margin-bottom:30px" id="choisir"><i class="fa fa-check"></i>  Sélectionner</a>-->
+                             <button style="display:none;margin-top:50px;margin-bottom:50px" id="showNext" type="button" class="hvr-wobble-horizontal btn btn-lg btn-labeled btn-info">
+                                 Suivant
+                                 <span class="btn-label" style="left: 13px;">
+                                                    <i class="fa fa-chevron-right"></i>
+                                                </span>
+                             </button>
+
+                             <div id="termine" style="display:none;height:120px;align:center;">
+                                 <center><br>   Fin de la liste.<br></center>
+
+                                 <button style="margin-bottom: 40px" id="essai2" type="button" class="btn btn-labeled btn-default btn-lg hvr-wobble-to-top-right right1">
+                                                <span class="btn-label">
+                                                    <i class="fa fa-refresh"></i>
+                                                </span>
+                                     Réessayez
+                                 </button>
+                             </div>
+                             <input type="hidden" id="selected" value="0">
+                             <input type="hidden" id="par" value="<?php echo $iduser;?>">
+                             <button style="display:none;margin-botom:10px" type="button" id="add2" class="btn btn-primary"><i class="fa fa-check"></i> Sélectionner</button>
+
+                             <div class="row">  <label>Prestataire</label>
+                             </div>
+
+                             <div class="row">  <select style="width:350px;margin-top:10px;margin-bottom:10px;" disabled id="selectedprest"  class="form-control col-lg-9 " value=" ">
+                                     <option></option>
+                                     @foreach($prestataires as $prest)
+                                         <option    value="<?php echo $prest->id;?>"> <?php echo $prest->name;?></option>
+                                     @endforeach
+                                 </select>
+                             </div>
+                             <div class="form-group"  id="prestation"  style="display:none">
+                                 <input type="hidden"  id="idprestation" value="0" />
+                             <div class="row">
+                                 <label>statut:</label>
+                             </div>
+
+                             <div class="row">
+                                <div class="col-md-4">
+                                    <select class="form-control" id="statutprest" >
+                                        <option></option>
+                                        <option    value="nonjoignable">Non Joignable </option>
+                                     <option    value="nondisponible">Non Disponible </option>
+                                     <option    value="autre">Autre </option>
+                                 </select>
+
+                                </div>
+                                 <div class="col-md-8" >
+                                     <input type="text" style="display:none;" class="form-control" Placeholder="Détails"  id="detailsprest">
+                                 </div>
+
+                                 </div>
+                            </div>
+
+
+                             <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}">
+
+                         </form>
+                     </div>
+                </div>
+
+                </div>
 
 
            <div id="tab4" href="#tab4" class="tab-pane fade">
@@ -385,6 +676,7 @@ $interv = PrestationsController::PrestById($prest);
 }
     ?>
                    </tbody>
+
                </table><br><br><br>
 
 
@@ -684,14 +976,7 @@ $interv = PrestationsController::PrestById($prest);
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
 
-<?php use \App\Http\Controllers\UsersController;
-$users=UsersController::ListeUsers();
 
-$CurrentUser = auth()->user();
-
-$iduser=$CurrentUser->id;
-
-?>
 
 
 
@@ -1265,109 +1550,13 @@ reference_customer
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="exampleModalLabel" style="text-align:center">Ajouter une Nouvelle prestation</h3>
+                <h3 class="modal-title" id="exampleModalLabel" style="text-align:center"><center>Ajouter une Nouvelle prestation</center></h3>
 
             </div>
             <div class="modal-body">
                 <div class="card-body">
 
 
-                    <div class="form-group">
-
-                        <form id="addpresform" novalidate="novalidate">
-                            {{ csrf_field() }}
-
-                            <input id="idprestation" name="idprestation" type="hidden" value="68356">
-                            <div class="form-group " >
-                                <label>Type de prestations</label>
-                                <div class=" row  ">
-                                    <select class="itemName form-control col-lg-12  " style="width:400px" name="itemName"    id="typeprest">
-                                        <option></option>
-                                        @foreach($typesprestations as $aKey)
-                                            <option     value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
-                                        @endforeach
-
-                                    </select>
-
-                                </div>
-                            </div>
-
-                            <div class="form-group ">
-                                <label>Spécialité</label>
-                                <div class="row">
-                                    <select class="form-control  col-lg-12 " style="width:400px" name="specialite"    id="specialite">
-                                        <option></option>
-                                        @foreach($specialites as $sp)
-                                            <option   value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group ">
-                                <label>Gouvernorat de couverture</label>
-                                <div class="row">
-                                    <select class="form-control  col-lg-12 " style="width:400px" name="gouv"    id="gouvcouv">
-                                        <option></option>
-                                        @foreach($gouvernorats as $aKeyG)
-                                            <option   value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
-                                        @endforeach
-
-                                    </select>
-                                </div>
-                            </div>
-
-
-
-                            <div class="form-group">
-                                 <label class="control-label">Date de prestation <span class="required" aria-required="true"> * </span></label>
-                                <input value='<?php echo date('d/m/Y'); ?>' class="form-control datepicker-default" name="pres_date" id="pres_date" data-required="1" required="" aria-required="true">
-                            </div>
-<!--
-                            <div style="align:center;text-align:center">
-
-                                <span style="align:center" id="check" class="btn btn-danger">Chercher des prestataires</span>
-
-                            </div>
--->
-                            <div id="data">
-
-                            </div>
-                            <link href="http://demo.chandra-admin.com/assets/vendors/Buttons/css/buttons.css" rel="stylesheet">
-                            <link href="http://demo.chandra-admin.com/assets/vendors/hover/hover.css" rel="stylesheet">
-                            <link href="http://demo.chandra-admin.com/assets/css/custom_css/advbuttons.css" rel="stylesheet">
-                            <a href="#" class="hvr-shrink button button-3d button-success button-rounded" style="display:none;margin-top:40px;margin-bottom:30px" id="choisir"><i class="fa fa-check"></i>  Sélectionner</a>
-                            <button style="display:none;margin-top:50px;margin-bottom:50px" id="showNext" type="button" class="hvr-wobble-horizontal btn btn-lg btn-labeled btn-info">
-                                Suivant
-                                <span class="btn-label" style="left: 13px;">
-                                                    <i class="fa fa-chevron-right"></i>
-                                                </span>
-                            </button>
-
-                            <div id="termine" style="display:none;height:120px;align:center;">
-                                <center><br>   Fin de la liste.<br></center>
-
-                                <button style="margin:20px 0px 20px 40px" id="essai2" type="button" class="btn btn-labeled btn-default btn-lg hvr-wobble-to-top-right right1">
-                                                <span class="btn-label">
-                                                    <i class="fa fa-refresh"></i>
-                                                </span>
-                                    Réessayez
-                                </button>
-                            </div>
-                            <input type="hidden" id="selected" value="0">
-                             <input type="hidden" id="par" value="<?php echo $iduser;?>">
-                            <label>Prestataire</label>
-
-                            <select style="margin-top:10px;margin-bottom:10px;" disabled id="selectedprest"  class="form-control" value=" ">
-                                <option></option>
-                            @foreach($prestataires as $prest)
-                                <option    value="<?php echo $prest->id;?>"> <?php echo $prest->name;?></option>
-                            @endforeach
-                            </select>
-                            <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}">
-
-                        </form>
-                    </div>
 
 
                 </div>
@@ -1375,7 +1564,6 @@ reference_customer
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="button" id="add2" class="btn btn-primary">Ajouter</button>
             </div>
         </div>
     </div>
@@ -1467,13 +1655,101 @@ reference_customer
         </div>
     </div>
 
+
+    <!-- Modal SMS -->
+    <div class="modal fade" id="sendsms" role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal7">Envoyer un SMS </h5>
+
+                </div>
+                <form   >
+               <!-- <form method="post" action="{{--action('EmailController@sendsms')--}}" >-->
+
+<!-- change it to ajax-->
+                    <div class="modal-body">
+                        <div class="card-body">
+
+
+                            <div class="form-group">
+                                {{ csrf_field() }}
+
+                                <div class="form-group">
+                                    <input type="hidden" id ="ledossier"  name ="dossier"  class="form-control " value="<?php echo $dossier->id; ?>">
+
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="form-group">
+                                {{ csrf_field() }}
+                                <label for="description">Description:</label>
+                                <input id="ladescription" type="text" class="form-control" name="description"     />
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="destinataire">Destinataire:</label>
+                                <input id="ledestinataire" type="number" class="form-control" name="destinataire"      />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contenu">Message:</label>
+                                <textarea  id="lemessage" type="text" class="form-control" name="message"></textarea>
+                            </div>
+                        {{--  {!! NoCaptcha::renderJs() !!}     --}}
+                        <!--  <script src="https://www.google.com/recaptcha/api.js" async defer></script>-->
+
+
+
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal" style="margin-left:30px">Fermer</button>
+                        <span   id="envoisms" class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</span>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
+
 <script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
 
 <script>
-function remplaceom(id)
+    function hideinfos() {
+        $('#tab31').css('display','none');
+    }
+    function hideinfos2() {
+        $('#tab32').css('display','none');
+    }
+    function hideinfos3() {
+        $('#tab33').css('display','none');
+    }
+    function showinfos() {
+        $('#tab31').css('display','block');
+    }
+
+    function showinfos2() {
+        $('#tab32').css('display','block');
+    }
+    function showinfos3() {
+        $('#tab33').css('display','block');
+    }
+
+
+    function remplaceom(id)
 {
     var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?remplace=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
          document.getElementById("omfilled").src = url;
@@ -1825,6 +2101,33 @@ function filltemplate(data,tempdoc)
         //{ dropdownParent: "#insererprest" }
         );
 
+         $('#envoisms').click(function(){
+            var description = $('#ladescription').val();
+            var destinataire = $('#ledestinataire').val();
+             var message = $('#lemessagel').val();
+             var dossier = $('#ledossier').val();
+
+
+            if ((message != '') &&(destinataire!='')&&(description!=''))
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('emails.sendsms') }}",
+                    method:"POST",
+                    data:{description:description,destinataire:destinataire,message:message,dossier:dossier, _token:_token},
+                    success:function(data){
+
+                         alert('SMS Envoyé !');
+                       // window.location =data;
+                        $("#sendsms").modal('hide');
+
+                    }
+                });
+            }else{
+                // alert('ERROR');
+            }
+        });
+
     $('#emailadd').click(function(){
         var parent = $('#parent').val();
         var champ = $('#emaildoss').val();
@@ -2094,8 +2397,15 @@ function filltemplate(data,tempdoc)
     $(function () {
 
 
+
+
         $('#add2').click(function(){
-             var prestataire = $('#selectedprest').val();
+
+            selected=   document.getElementById('selected').value;
+            document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
+
+
+            var prestataire = $('#selectedprest').val();
             var dossier_id = $('#dossier').val();
 
             var typeprest = $('#typeprest').val();
@@ -2112,8 +2422,11 @@ function filltemplate(data,tempdoc)
                 method:"POST",
                 data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
                 success:function(data){
+           var prestation=parseInt(data);
+               /// window.location =data;
 
-                window.location =data;
+                    document.getElementById('prestation').style.display='block';
+                    document.getElementById('idprestation').value =prestation;
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -2187,34 +2500,74 @@ function filltemplate(data,tempdoc)
 
         });
 
+        function toggle(className, displayState){
+            var elements = document.getElementsByClassName(className);
+
+            for (var i = 0; i < elements.length; i++){
+                elements[i].style.display = displayState;
+            }
+        }
+
         $("#typeprest").change(function() {
 
             document.getElementById('termine').style.display = 'none';
             document.getElementById('showNext').style.display='none';
-            document.getElementById('choisir').style.display='none';
+            document.getElementById('add2').style.display='none';
             document.getElementById('selectedprest').value=0;
 
+
+            toggle('tprest', 'none');
+           var typeprest=  document.getElementById('typeprest').value;
+
+            document.getElementById('tprest-'+typeprest).style.display='block';
         });
 
-        $("#gouvcouv").change(function(){
+
+        $("#typeprest2").change(function() {
+
+
+
+            toggle('tprest2', 'none');
+            var typeprest=  document.getElementById('typeprest2').value;
+
+            document.getElementById('tprest2-'+typeprest).style.display='block';
+        });
+
+
+        $("#rechercher").click(function(){
+
+
+            // document.getElementById('termine').style.display = 'none';
+            document.getElementById('showNext').style.display='none';
+            document.getElementById('add2').style.display='none';
+            document.getElementById('selectedprest').value=0;
+
+
+            toggle('tprest', 'none');
+            var typeprest=  document.getElementById('typeprest').value
+
+            document.getElementById('tprest-'+typeprest).style.display='block';
+
             //  prest = $(this).val();
             document.getElementById('selectedprest').value=0;
 
             var  type =document.getElementById('typeprest').value;
             var  gouv =document.getElementById('gouvcouv').value;
             var  specialite =document.getElementById('specialite').value;
+            var  ville =document.getElementById('villepr2').value;
+            var  postal =document.getElementById('villecode').value;
             if((type !="")&&(gouv !=""))
             {
                 var _token = $('input[name="_token"]').val();
 
                 document.getElementById('termine').style.display = 'none';
-                document.getElementById('choisir').style.display = 'none';
+                document.getElementById('add2').style.display = 'none';
 
                 $.ajax({
                     url:"{{ route('dossiers.listepres') }}",
                     method:"post",
 
-                    data:{gouv:gouv,type:type,specialite:specialite, _token:_token},
+                    data:{gouv:gouv,type:type,specialite:specialite,ville:ville,postal:postal, _token:_token},
                     success:function(data){
 
                         //     alert('1'+data);
@@ -2239,18 +2592,18 @@ function filltemplate(data,tempdoc)
             }
         }); // change
 
-        $("#choisir").click(function() {
+    /*    $("#choisir").click(function() {
             //selected= document.getElementById('selected').value;
             selected=    $("#selected").val();
             document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
 
 
         });
-
+*/
 
         $("#essai2").click(function() {
             document.getElementById('termine').style.display = 'none';
-            document.getElementById('choisir').style.display = 'block';
+            document.getElementById('add2').style.display = 'block';
             document.getElementById('showNext').style.display = 'block';
             document.getElementById('item1').style.display = 'block';
             document.getElementById('selected').value = 1;
@@ -2259,53 +2612,106 @@ function filltemplate(data,tempdoc)
         });
 
 
-        $("#showNext").click(function() {
-            document.getElementById('selectedprest').value = 0;
+        $("#statutprest").change(function() {
+ if(document.getElementById('statutprest').value=='autre'){
+    document.getElementById('detailsprest').style.display='block';
 
-            var selected = document.getElementById('selected').value;
-            var total = document.getElementById('total').value;
-            //     alert(selected);
-            //    alert(total);
-            var next = parseInt(selected) + 1;
-            document.getElementById('selected').value = next;
+}else{
+    document.getElementById('detailsprest').style.display='none';
 
-            if ((selected == 0)) {
-                document.getElementById('termine').style.display = 'none';
-                document.getElementById('item1').style.display = 'block';
-                document.getElementById('choisir').style.display = 'block';
+}
+        });
 
-                //document.getElementById('selected').value=1;
-                // $("#selected").val('1');
+            $("#showNext").click(function() {
+            var shownext=false;var infos=false;
+            // reinitialiser le champs de statut
+            if(document.getElementById('selectedprest').value ==0) {
+                document.getElementById('statutprest').value ='';
+            document.getElementById('detailsprest').value ='';}
 
-            }
-
-            if ((selected) == (total  )) {//alert("Il n y'a plus de prestataires, Ressayez");
-                document.getElementById('termine').style.display = 'block';
-
-                document.getElementById('item'+(selected)).style.display = 'none';
-                document.getElementById('showNext').style.display = 'none';
-                document.getElementById('choisir').style.display = 'none';
-
-
-            } else {
-
-                if ((selected != 0) && (selected <= total + 1)) {
-                    document.getElementById('choisir').style.display = 'block';
-                    document.getElementById('termine').style.display = 'none';
-                    document.getElementById('item' + selected).style.display = 'none';
-                    document.getElementById('item' + next).style.display = 'block';
-
-
-                    $("#selected").val(next);
-
-
-
+            // si une prestation a èté ajoutée
+            if(document.getElementById('idprestation').value >0) {
+                if ((document.getElementById('statutprest').value == 'autre') && (document.getElementById('detailsprest').value != '')) {
+                    shownext=true;infos=true
+                }
+                if ((document.getElementById('statutprest').value == 'nonjoignable') || (document.getElementById('statutprest').value == 'nondisponible')) {
+                    shownext=true;infos=true
                 }
             }
+            else{shownext=true;}
+             if(shownext==true)
+              {
+            if(infos==true){
+                // enregistrement des infos de prestation  + envoi des emails
 
-            if(next>parseInt(total)+1) {
-                document.getElementById('item' + selected).style.display = 'none';
+                var _token = $('input[name="_token"]').val();
+                var  prestation =document.getElementById('idprestation').value;
+                var  prestataire =document.getElementById('selectedprest').value;
+                var  statut =document.getElementById('statutprest').value;
+                var  details =document.getElementById('detailsprest').value;
+
+                $.ajax({
+                    url:"{{ route('prestations.updatestatut') }}",
+                    method:"POST",
+                    data:{prestation:prestation,prestataire:prestataire,statut:statut,details:details, _token:_token},
+                    success:function(data){
+
+                           alert('success');
+
+                    }
+                });
+
             }
+                document.getElementById('selectedprest').value = 0;
+
+                var selected = document.getElementById('selected').value;
+                var total = document.getElementById('total').value;
+                //     alert(selected);
+                //    alert(total);
+                var next = parseInt(selected) + 1;
+                document.getElementById('selected').value = next;
+
+                if ((selected == 0)) {
+                    document.getElementById('termine').style.display = 'none';
+                    document.getElementById('item1').style.display = 'block';
+                    document.getElementById('add2').style.display = 'block';
+
+                    //document.getElementById('selected').value=1;
+                    // $("#selected").val('1');
+
+                }
+
+                if ((selected) == (total  )) {//alert("Il n y'a plus de prestataires, Ressayez");
+                    document.getElementById('termine').style.display = 'block';
+
+                    document.getElementById('item'+(selected)).style.display = 'none';
+                    document.getElementById('showNext').style.display = 'none';
+                    document.getElementById('add2').style.display = 'none';
+
+
+                } else {
+
+                    if ((selected != 0) && (selected <= total + 1)) {
+                        document.getElementById('add2').style.display = 'block';
+                        document.getElementById('termine').style.display = 'none';
+                        document.getElementById('item' + selected).style.display = 'none';
+                        document.getElementById('item' + next).style.display = 'block';
+
+
+                        $("#selected").val(next);
+
+
+
+                    }
+                }
+
+                if(next>parseInt(total)+1) {
+                    document.getElementById('item' + selected).style.display = 'none';
+                }
+
+            }
+            else{alert('SVP Expliquez la raison de ne pas choisir ce prestataire');}
+
 
 
         });
@@ -2372,8 +2778,17 @@ function filltemplate(data,tempdoc)
             window.location.hash = e.target.hash;
         })
 
+
+
     }); // $ function
 
+
+    function setTel(elm)
+    {
+        var num=elm.className;
+        document.getElementById('destinataire').value=parseInt(num);
+
+    }
 
 </script>
 <style>.headtable{background-color: grey!important;color:white;}
@@ -2532,7 +2947,48 @@ function filltemplate(data,tempdoc)
         background: #9b59b6;
     }
 
-
+    section#timeline article:nth-child(6) div.inner h2 {
+        background: #F8C471;
+    }
+    section#timeline article:nth-child(6) div.inner h2:after {
+        background: #F8C471;
+    }
+    section#timeline article:nth-child(7) div.inner h2 {
+        background: #85C1E9;
+    }
+    section#timeline article:nth-child(7) div.inner h2:after {
+        background: #85C1E9;
+    }
+    section#timeline article:nth-child(8) div.inner h2 {
+        background: #909497;
+    }
+    section#timeline article:nth-child(8) div.inner h2:after {
+        background: #909497;
+    }
+    section#timeline article:nth-child(9) div.inner h2 {
+        background: #F1948A  ;
+    }
+    section#timeline article:nth-child(9) div.inner h2:after {
+        background: #F1948A  ;
+    }
+    section#timeline article:nth-child(10) div.inner h2 {
+        background: #7DCEA0;
+    }
+    section#timeline article:nth-child(10) div.inner h2:after {
+        background: #7DCEA0;
+    }
+    section#timeline article:nth-child(11) div.inner h2 {
+        background: #B7950B;
+    }
+    section#timeline article:nth-child(11) div.inner h2:after {
+        background: #B7950B;
+    }
+    section#timeline article:nth-child(11) div.inner h2 {
+        background: #F5B7B1;
+    }
+    section#timeline article:nth-child(11) div.inner h2:after {
+        background: #F5B7B1;
+    }
     .overme {
         overflow:hidden;
         white-space:nowrap;

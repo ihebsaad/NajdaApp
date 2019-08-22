@@ -89,6 +89,9 @@ class PrestatairesController extends Controller
     public function addeval(Request $request)
     {
       $prest  =  $request->get('prestataire');
+    if($request->get('ville')==''){
+    $ville='toutes';$postal=1;}
+    else{$ville=$request->get('ville'); $postal=$request->get('postal');}
 
         $eval = new Evaluation([
             'prestataire' => $prest,
@@ -96,14 +99,14 @@ class PrestatairesController extends Controller
             'type_prest' => $request->get('type_prest'),
             'priorite' => $request->get('priorite'),
             'specialite' => $request->get('specialite'),
-            'ville' => $request->get('ville'),
-            'postal' => $request->get('postal'),
-
+            'ville' => $ville,
+            'postal' => $postal,
 
         ]);
 
        if ($eval->save()){
-        return url('/prestataires/view/'.$prest) ;
+      //  return url('/prestataires/view/'.$prest.'#tab03') ;
+        return url('/prestataires/view/'.$prest ) ;
        }
     }
 
@@ -311,8 +314,10 @@ class PrestatairesController extends Controller
                   ->whereIn('type_prestation', $typesprestationsid)
             ->get();
 */
+        $dossiers = Dossier::where('current_status','<>','Cloture')
+             ->get();
 
-        return view('prestataires.view',['specialites'=>$specialites,'emails'=>$emails, 'tels'=>$tels, 'faxs'=>$faxs,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'relations2'=>$relations2,'prestations'=>$prestations], compact('prestataire'));
+        return view('prestataires.view',['dossiers'=>$dossiers,'specialites'=>$specialites,'emails'=>$emails, 'tels'=>$tels, 'faxs'=>$faxs,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'relations2'=>$relations2,'prestations'=>$prestations], compact('prestataire'));
 
     }
 
@@ -329,6 +334,7 @@ class PrestatairesController extends Controller
                 'champ' => $request->get('champ'),
                  'nature' => $request->get('nature'),
                 'remarque' => $request->get('remarque'),
+                'typetel' => $request->get('typetel'),
                 'parent' => $parent,
 
             ]);

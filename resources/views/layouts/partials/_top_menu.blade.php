@@ -92,11 +92,11 @@
                 </a>
             </div>
     @endif
-    
-  @can('isSupervisor')
-
     </div>
-    
+
+@can('isSupervisor')
+
+
       @endcan
 
 
@@ -136,6 +136,20 @@
     </div>
 -->
     @endcan
+
+
+
+    <?php
+    $parametres =  DB::table('parametres')
+        ->where('id','=', 1 )->first();
+    $dollar=$parametres->dollar ;
+    $euro=$parametres->euro ;
+    ?>
+    <div class="col-md-2 btn bg-success  btn-md btn-responsive    " style="cursor:default;max-width:180px;margin-left:10px;margin-top:20px;margin-bottom:15px;"  >
+        <span style="color:white;font-size:15px; ">1 Dollar ($) = <?php echo $dollar; ?> <small>dt</small></span><br>
+        <span style="color:white;font-size:15px; ">1 Euro (€) =  <?php echo $euro; ?> <small>dt</small></span>
+    </div>
+
     </div>
 
 
@@ -253,8 +267,6 @@
 
 @endcan
 
-
-</div>
 
     <style>
     .menu-item{background-color: #4fc1e9!important;color:white!important;min-width:165px!important;margin-bottom:5px;margin-top:5px;}

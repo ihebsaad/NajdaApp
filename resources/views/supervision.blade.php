@@ -80,6 +80,19 @@ use \App\Http\Controllers\UsersController;
 ?>
                         <div class="padding:5px 5px 5px 5px"><br>
                            <!-- <h4>Supervision</h4><br>-->
+                            <ul id="tabs" class="nav  nav-tabs"  >
+                                <li class=" nav-item active">
+                                    <a class="nav-link active   " href="{{ route('supervision') }}"  >
+                                        <i class="fas fa-lg  fa-users-cog"></i>  Supervision
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('affectation') }}"  >
+                                        <i class="fas fa-lg  fa-user-tag"></i>  Affectations
+                                    </a>
+                                </li>
+
+                            </ul>
                             <table id="tabusers" style="text-align: center ;background-color:#F8F7F6;padding:5px 5px 5px 5px">
 							<thead style="text-align:center"><th>Agent</th><th>Type</th><th>Rôle Principal</th><th>Dossiers Affectés</th><th>Missions</th><th>Actions </th><th>Actions Actives</th><th>Notifications</th>
                             <?php $c=0;

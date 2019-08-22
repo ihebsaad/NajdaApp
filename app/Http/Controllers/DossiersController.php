@@ -410,11 +410,11 @@ class DossiersController extends Controller
 
        // $prestataires = Prestataire::all();
 
-        $prestataires = Cache::remember('prestataires',$minutes,  function () {
+      //  $prestataires = Cache::remember('prestataires',$minutes,  function () {
 
-            return DB::table('prestataires')
+            $prestataires= DB::table('prestataires')
                 ->get();
-        });
+      //  });
 
         $gouvernorats = Cache::remember('cities',$minutes2,  function () {
 
@@ -512,9 +512,9 @@ class DossiersController extends Controller
         $omtaxis = OMTaxi::where(['dossier' => $id,'dernier' => 1])->get();
         $dossiers = $this->ListeDossiersAffecte();
 
+        $evaluations=DB::table('evaluations')->get();
 
-
-        return view('dossiers.view',['intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis], compact('dossier'));
+        return view('dossiers.view',['evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis], compact('dossier'));
 
 
     }
@@ -795,67 +795,49 @@ class DossiersController extends Controller
         $gouv = $request->get('gouv');
         $type = $request->get('type');
         $spec = $request->get('specialite');
-        $liste =Evaluation::where('gouv',$gouv )
-            ->where('type_prest',$type )
-            ->where('specialite',$spec )
-          //  ->orderBy(['priorite'=>'asc', 'derniere_prestation'=>'asc'])
-         ->orderBy('priorite','asc')
-          ->orderBy('derniere_prestation','asc')
-            ->get();
+        $ville = $request->get('ville');
+        $postal = $request->get('postal');
+        if (intval($postal) >1 &&($ville!='')){
+            $liste =Evaluation::where('gouv',$gouv )
+                ->where('type_prest',$type )
+                ->where('specialite',$spec )
+                ->where('postal',$postal )
+                ->orderBy('priorite','asc')
+                ->orderBy('derniere_prestation','asc')
+                ->get();
+
+        }else{
+            $liste =Evaluation::where('gouv',$gouv )
+                ->where('type_prest',$type )
+                ->where('specialite',$spec )
+                ->where('postal',1 )
+                ->orderBy('priorite','asc')
+                ->orderBy('derniere_prestation','asc')
+                ->get();
+        }
+
 ///orderBy(['col1' => 'desc', 'col2' => 'asc', ... ])
+        $tot= count($liste);
+  if ( $tot > 0  ){
+
+      $output='<B style="margin-left:20px;margin-top:20px; ">'.$tot.' Résultat(s) trouvé(s)</B><br><br>';$c=0;
+      foreach ($liste as $row) {
+          $c++;
 
 
-        $output='';$c=0;
-        foreach ($liste as $row) {
-            $c++;
+          $prestataire = $row->prestataire;
+          $priorite = $row->priorite;
+
+          $nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
+          $adresse = app('App\Http\Controllers\PrestatairesController')->ChampById('adresse', $prestataire);
+          $observ = app('App\Http\Controllers\PrestatairesController')->ChampById('observation_prestataire', $prestataire);
 
 
-            $prestataire = $row->prestataire;
-            $priorite = $row->priorite;
+          $tels =   Adresse::where('nature', 'tel')
+              ->where('parent',$prestataire)
+              ->get();
 
-            $nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-            $adresse = app('App\Http\Controllers\PrestatairesController')->ChampById('adresse', $prestataire);
-            $tel1 = app('App\Http\Controllers\PrestatairesController')->ChampById('phone_cell', $prestataire);
-            $tel2 = app('App\Http\Controllers\PrestatairesController')->ChampById('phone_cell2', $prestataire);
-            $fixe = app('App\Http\Controllers\PrestatairesController')->ChampById('phone_home', $prestataire);
-            $specialite = app('App\Http\Controllers\PrestatairesController')->ChampById('specialite', $prestataire);
-            $observ = app('App\Http\Controllers\PrestatairesController')->ChampById('observation_prestataire', $prestataire);
-
-           // $emails = Email::where('parent', $prestataire)->get();
-
-            $emails =   Adresse::where('nature', 'email')
-                ->where('parent',$prestataire)
-                ->get();
-
-            $tels =   Adresse::where('nature', 'tel')
-                ->where('parent',$prestataire)
-                ->get();
-
-            $faxs =   Adresse::where('nature', 'fax')
-                ->where('parent',$prestataire)
-                ->get();
-
-            //   $output.='prestataire : '. $prestataire ;
-
-            /*   $output.='   <div class="item  '.$active.' ">
-                                           <div class="col-md-12" style=""  >
-                                               <div class="well">
-                                                   <address id="autoPressFound">
-                                                       <strong >'.$nom.'</strong><br>
-                                                       <i class="fa fa-map-marker"></i> <span >'.$adresse.'</span><br>
-                                                       <i class="fa fa-phone"></i> <span >'.$fixe.'</span><br>
-                                                       <i class="fa fa-mobile"></i> <span >'.$tel1.' - '.$tel2.'   </span><br>
-                                                   </address>
-                                                   <p>
-                                                       <button type="button" class="btn btn-xs green" onclick="selectNewPres();"><i class="fa fa-refresh" style="cursor:pointer"></i> Sélectionner le suivant</button>
-                                                       <button type="button" class="btn btn-xs yellow-lemon" onclick="forceSelectPres();"><i class="fa fa-check" style="cursor:pointer"></i> Sélection manuelle</button>
-                                                   </p>
-                                               </div>
-                                           </div>
-
-                                       </div>';
-   */
-            $output .= '  <div id="item'.$c . '" style="display:none">
+          $output .= '  <div id="item'.$c . '" style="display:none">
                                                                                    
                              <div class="prestataire form-group">
                               <input type="hidden" id="prestataire_id_'.$c.'" value="'.$prestataire.'">
@@ -869,37 +851,185 @@ class DossiersController extends Controller
                             </div>
                         </div>                       
                         <table style="padding-left:5px">';
-                             foreach ($emails as $email) {
 
-                                     $output .= ' <tr>
-                                            <td style="padding-right:8px;"><i class="fa fa-envelope"></i> ' . $email->champ . '</td>
-                                            <td style="padding-right:8px;">' . $email->remarque . '</td>
-                                         </tr> ';
-                                        }
-            foreach ($tels as $tel) {
-                $output .= ' <tr>
+
+          foreach ($tels as $tel) {
+              $output .= ' <tr>
                                             <td style="padding-right:8px;"><i class="fa fa-phone"></i> ' . $tel->champ . '</td>
-                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>
-                                          </tr> ';
-            }
-            foreach ($faxs as $fax) {
+                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>';?>
+<?php if($tel->typetel=='Mobile') {
+                  $output .= '<td><a onclick="setTel(this);" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
+                    } else
+                      { $output .= '<td></td>';}
 
-                $output .= ' <tr>
-                                            <td style="padding-right:8px;"><i class="fa fa-fax"></i> ' . $fax->champ . '</td>
-                                            <td style="padding-right:8px;">' . $fax->remarque . '</td>
-                                         </tr> ';
-            }
-                         $output .='</table> </address>                         
+                   $output .= '</tr> ';
+          }
+
+
+          $output .='</table> </address>                         
              </div> ';
 
 
-        }
-        $output=$output.'<input id="total" type="hidden" value="'.$c.'">  
-                       
-';
+      }
+      $output=$output.'<input id="total" type="hidden" value="'.$c.'"> ';
+
+  }else {
+
+      $output='<B>Aucun élément trouvé !</B>' ;
+  }
+
+
          return  ($output);
      //   return json_encode($liste);
 
+    }
+
+    public function searchprest(Request $request)
+    {
+        $id=$request->get('dossier');
+        $minutes= 120;
+        $minutes2= 600;
+
+        //      $typesMissions=TypeMission::get();
+
+        /*   $specialites = Cache::remember('specialites',$minutes2,  function () {
+
+               return DB::table('specialites')
+                   ->get();
+           });*/
+        $specialites =DB::table('specialites')
+            ->get();
+
+
+        $typesMissions = Cache::remember('type_mission',$minutes2,  function () {
+
+            return DB::table('type_mission')
+                ->get();
+        });
+
+        $Missions=Dossier::find($id)->activeMissions;
+
+        // $typesprestations = TypePrestation::all();
+
+        $typesprestations = Cache::remember('type_prestations',$minutes2,  function () {
+
+            return DB::table('type_prestations')
+                ->get();
+        });
+
+        // $prestataires = Prestataire::all();
+
+        $prestataires = Cache::remember('prestataires',$minutes,  function () {
+
+            return DB::table('prestataires')
+                ->get();
+        });
+
+        $gouvernorats = Cache::remember('cities',$minutes2,  function () {
+
+            return DB::table('cities')
+                ->get();
+        });
+
+
+
+
+        $dossier = Dossier::find($id);
+
+        $cl=$this->ChampById('customer_id',$id);
+
+
+        $entite=app('App\Http\Controllers\ClientsController')->ClientChampById('entite',$cl);
+        $adresse=app('App\Http\Controllers\ClientsController')->ClientChampById('adresse',$cl);
+
+
+        //  $clients = DB::table('clients')->select('id', 'name')->get();
+
+        /*  $clients = Cache::remember('clients',$minutes2,  function () {
+
+              return DB::table('clients')
+                  ->get();
+          });
+
+  */
+        $prestations =   Prestation::where('dossier_id', $id)->get();
+        $intervenants =   Intervenant::where('dossier', $id)->get();
+
+
+        $ref=$this->RefDossierById($id);
+        $entrees =   Entree::where('dossier', $ref)->get();
+
+        $envoyes =   Envoye::where('dossier', $ref)->get();
+
+        $entrees1 =   Entree::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
+        ///  $entrees1 =$entrees1->sortBy('reception');
+        $envoyes1 =   Envoye::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
+        ///  $envoyes1 =$envoyes1->sortBy('reception');
+
+        $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());
+
+        $phones =   Adresse::where('nature', 'teldoss')
+            ->where('parent',$id)
+            ->get();
+
+        $emailads =   Adresse::where('nature', 'emaildoss')
+            ->where('parent',$id)
+            ->get();
+
+
+
+        // Sort the array
+        usort($communins, function  ($element1, $element2) {
+            $datetime1 = strtotime($element1['reception']);
+            $datetime2 = strtotime($element2['reception']);
+            return $datetime1 - $datetime2;
+        }
+
+        );
+
+
+        $identr=array();
+        $idenv=array();
+        foreach ($entrees as $entr)
+        {
+            //  $attaches= Attachement::where('entree_id',$entr->id)->get();
+            //  $attaches= DB::table('attachements')->where('entree_id',$entr->id)->get();
+
+            //$tab =  Entree::find($entr->id)->attachements;
+            array_push($identr,$entr->id );
+
+        }
+
+        foreach ($envoyes as $env)
+        {
+            //   $attaches= DB::table('attachements')->where('envoye_id',$env->id)->get();
+
+            // $tab =  Envoye::find($env->id)->attachements;
+            //array_push($attachements,$attaches );
+            array_push($idenv,$env->id );
+
+        }
+
+        $attachements= DB::table('attachements')
+            ->whereIn('entree_id',$identr )
+            ->orWhereIn('envoye_id',$idenv )
+            ->orWhere('dossier','=',$id )
+            ->orderBy('created_at', 'desc')
+            ->get();
+        //  $entrees =   Entree::all();
+        $documents = Document::where(['dossier' => $id,'dernier' => 1])->get();
+        $omtaxis = OMTaxi::where(['dossier' => $id,'dernier' => 1])->get();
+        $dossiers = $this->ListeDossiersAffecte();
+
+        $evaluations=DB::table('evaluations')->get();
+
+
+        /*****Recherche *****/
+
+       return view('dossiers.view',['evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis], compact('dossier'));
+
+      //  return redirect('/dossiers/view/'.$id);
+     //   return view('dossiers.view', compact('datasearch'));
     }
 
     public function addressadd(Request $request)
