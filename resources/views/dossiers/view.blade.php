@@ -192,7 +192,7 @@ use App\ClientGroupe;
                 </div>
             </div>
             <div class="tab-content mar-top">
-			
+            
             <div id="tab2" class="tab-pane fade active in">
 
 
@@ -1208,6 +1208,7 @@ reference_customer
 
                         <form id="gendocfromhtml" novalidate="novalidate" method="post" action="{{ route('documents.adddocument') }}">
                             {{ csrf_field() }}
+                            <input type="hidden" id="idMissionDoc" name="idMissionDoc"  value="">
                             <input id="dossdoc" name="dossdoc" type="hidden" value="{{ $dossier->id}}">
                             <input type="hidden" name="templatedocument" id="templatedocument" >
                             <input type="hidden" name="iddocparent" id="iddocparent" >
@@ -1245,6 +1246,7 @@ reference_customer
 
                         <form id="genomfromhtml" novalidate="novalidate" method="post" action="">
                             {{ csrf_field() }}
+                            <input type="hidden" id="idMissionOM" name="idMissionOM"  value="">
                             <input id="dossdoc" name="dossdoc" type="hidden" value="{{ $dossier->id}}">
                             <input type="hidden" name="templateordrem" id="templateordrem" value="">
                             <input type="hidden" name="idomparent" id="idomparent" >
@@ -1726,6 +1728,102 @@ reference_customer
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
 
 <script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
+
+<script>
+//script pour activer l onglet OM si lurl contient le mot CreerOM 
+
+ $(document).ready(function() {
+
+                     var urllocale=top.location.href;
+                     var posit=urllocale.indexOf("/dossiers/view/CreerOM/");
+
+                      // alert(pos);
+                     if(posit != -1)
+                     {
+
+                        var urlloc2=urllocale;
+
+                       var n = urllocale.lastIndexOf("/");
+                       var res = urllocale.substr(n+1);
+
+                       document.location.href=urlloc2+"#tab7";
+                       //location.reload();
+
+                   //  alert(res);
+
+                    // $('#ViewDosstabs a[href="#tab7"]').trigger();
+
+                       $('#idMissionOM').val(res);
+
+                       // alert( $('#idEntreeMissionOnMarker').val());
+
+                       //alert($('#idMissionOM').val());
+
+                       if(res.indexOf('#')!=-1)
+                       {
+
+
+                           var re = res.substr(0,(res.indexOf('#')));
+                            $('#idMissionOM').val(re);
+                             //alert($('#idMissionOM').val()+"kkk");
+
+
+                       }
+
+                     }
+
+
+      });
+
+</script>
+<script>
+//script pour activer l onglet OM si lurl contient le mot CreerDoc 
+
+ $(document).ready(function() {
+
+                     var urllocale=top.location.href;
+                     var posit=urllocale.indexOf("/dossiers/view/CreerDoc/");
+
+                      // alert(pos);
+                     if(posit != -1)
+                     {
+
+                        var urlloc2=urllocale;
+
+                       var n = urllocale.lastIndexOf("/");
+                       var res = urllocale.substr(n+1);
+
+                       document.location.href=urlloc2+"#tab6";
+                       //location.reload();
+
+                   //  alert(res);
+
+                    // $('#ViewDosstabs a[href="#tab7"]').trigger();
+
+                       $('#idMissionDoc').val(res);
+
+                       // alert( $('#idEntreeMissionOnMarker').val());
+
+                       //alert($('#idMissionOM').val());
+
+                       if(res.indexOf('#')!=-1)
+                       {
+
+
+                           var re = res.substr(0,(res.indexOf('#')));
+                            $('#idMissionDoc').val(re);
+                             //alert($('#idMissionOM').val()+"kkk");
+
+
+                       }
+
+                     }
+
+
+      });
+
+</script>
+
 
 <script>
     function hideinfos() {
@@ -2273,17 +2371,24 @@ function filltemplate(data,tempdoc)
         var dossier = $('#dossdoc').val();
         var tempdoc = $("#templatedocument").val();
         var idparent = '';
+        var idMissionDoc=$("#idMissionDoc").val();
         // verifier si cest le cas de annule et remplace pour sauvegarder lid du parent
         if ($('#iddocparent').val())
         {
             idparent = $('#iddocparent').val();
             console.log('parent: '+idparent);
         }
+         if($('#idMissionDoc').val()==null)
+        {
+
+           alert(" attention l id mission null. Veuillez Contacter l admin");
+
+        }
         $.ajax({
                 url:"{{ route('documents.adddocument') }}",
                 method:"POST",
                 //'&_token='+_token
-                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent,
+                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent+'&idMissionDoc='+idMissionDoc,
                 success:function(data){
                      console.log(data);
                     location.reload();
@@ -2310,6 +2415,7 @@ function filltemplate(data,tempdoc)
         var dossier = $('#dossom').val();
         var tempdoc = $("#templateordrem").val();
         var idparent = '';
+         var idMissionOM=$("#idMissionOM").val();
         if ($('#templateordrem').val())
         {
         alert ($('#templateordrem').val());}
@@ -2322,11 +2428,17 @@ function filltemplate(data,tempdoc)
             idparent = $('#idomparent').val();
             console.log('parent: '+idparent);
         }
+         if($('#idMissionOM').val()==null)
+        {
+
+           alert(" attention l id mission null. Veuillez Contacter l admin");
+
+        }
         $.ajax({
                 url:"{{ route('ordremissions.export_pdf_odmtaxi') }}",
                 method:"POST",
                 //'&_token='+_token
-                data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent,
+                data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent+'&idMissionOM='+idMissionOM,
                 success:function(data){
                      console.log(data);
                     $('#idomparent').val("");
@@ -2473,13 +2585,13 @@ function filltemplate(data,tempdoc)
 
             var   div=document.getElementById('montantfr');
             if(div.style.display==='none')
-            {div.style.display='block';	 }
+            {div.style.display='block';  }
             else
             {div.style.display='none';     }
 
             var   div2=document.getElementById('plafondfr');
             if(div2.style.display==='none')
-            {div2.style.display='block';	 }
+            {div2.style.display='block';     }
             else
             {div2.style.display='none';     }
         });
@@ -2488,7 +2600,7 @@ function filltemplate(data,tempdoc)
 
             var   div=document.getElementById('ben2');
             if(div.style.display==='none')
-            {div.style.display='block';	 }
+            {div.style.display='block';  }
             else
             {div.style.display='none';     }
 
@@ -2499,7 +2611,7 @@ function filltemplate(data,tempdoc)
 
             var   div=document.getElementById('ben3');
             if(div.style.display==='none')
-            {div.style.display='block';	 }
+            {div.style.display='block';  }
             else
             {div.style.display='none';     }
 
@@ -2511,7 +2623,7 @@ function filltemplate(data,tempdoc)
 
             var   div=document.getElementById('adresse2');
             if(div.style.display==='none')
-            {div.style.display='block';	 }
+            {div.style.display='block';  }
             else
             {div.style.display='none';     }
 
@@ -2522,7 +2634,7 @@ function filltemplate(data,tempdoc)
 
             var   div=document.getElementById('adresse3');
             if(div.style.display==='none')
-            {div.style.display='block';	 }
+            {div.style.display='block';  }
             else
             {div.style.display='none';     }
 

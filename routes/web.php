@@ -338,6 +338,14 @@ Route::get('/getMissionAjaxModal', 'MissionController@getMissionsAjaxModal');
 Route::get('/Mission/getAjaxDeleguerMission/{id}', 'MissionController@getAjaxDeleguerMission');
 Route::get('/Mission/AnnulerMissionCouranteByAjax/{id}', 'MissionController@AnnulerMissionCouranteByAjax');
 Route::get('/Mission/getMailGenerator/{id}', 'MissionController@getMailGeneratorByAjax');
+Route::get('/Mission/getDescriptionMissionAjax/{id}', 'MissionController@getDescriptionMissionAjax');
+
+Route::get('/dossiers/view/CreerOM/{id}/{idmiss}', 'MissionController@viewDossierMission');
+Route::get('dossiers/view/CreerDoc/{id}/{idmiss}', 'MissionController@viewDossierMission');
+
+
+
+
 
 
 

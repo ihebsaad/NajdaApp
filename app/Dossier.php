@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class Dossier extends Model
 
 {
-    protected $fillable = ['id', 'created_by', 'affecte',
+    protected $fillable = ['id', 'created_by', 'affecte','created','created_at',
 
 
 'subscriber_name',
@@ -112,12 +112,12 @@ class Dossier extends Model
 
     ];
 
-    protected $dateFormat = 'Y-m-d H:i';
+    /*protected $dateFormat = 'Y-m-d H:i:s';*/
 
-    public function getDateFormat()
+    /*public function getDateFormat()
     {
         return 'Y-m-d H:i:s.u';
-    }
+    }*/
 /*
  public function activeMissions()
     {
