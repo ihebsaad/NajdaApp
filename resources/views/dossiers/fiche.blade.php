@@ -539,21 +539,21 @@ use  \App\Http\Controllers\DocsController;
                                                                 </div>
                                                                 <div class="row" id="adresse3"  <?php if ($dossier->subscriber_local_address3 =='') {echo 'style="display:none;"';}  ?> >
                                                                     <div class="form-group col-md-10">
-                                                                        <label for="inputError" class="control-label"><p id="derniere3">Dernière</p> Adresse en Tunisie  </label>
+                                                                        <label for="inputError" class="control-label"><label id="derniere3">Dernière</label> Adresse en Tunisie  </label>
 
                                                                         <div class="input-group-control">
                                                                             <input onchange="changing(this)"  type="text" id="subscriber_local_address3" name="subscriber_local_address3" class="form-control"   value="{{ $dossier->subscriber_local_address3 }}" >
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="col-md-1"style="padding-top:30px">
+                                                                    <div class="col-md-1" style="padding-top:30px">
                                                                         <span title="cacher l'adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn04moins"><i class="fa  fa-minus"></i> </span>
 
                                                                     </div>
                                                                 </div>
                                                                 <div class="row" id="adresse2"   <?php if ($dossier->subscriber_local_address2 =='') {echo 'style="display:none;"';}  ?> >
                                                                     <div class="form-group col-md-10">
-                                                                        <label for="inputError" class="control-label"><p id="derniere2">Dernière</p> Adresse en Tunisie  </label>
+                                                                        <label for="inputError" class="control-label"><label id="derniere2">Dernière</label> Adresse en Tunisie  </label>
 
                                                                         <div class="input-group-control">
                                                                             <input onchange="changing(this)"  type="text" id="subscriber_local_address2" name="subscriber_local_address2" class="form-control"   value="{{ $dossier->subscriber_local_address2 }}" >
@@ -567,7 +567,7 @@ use  \App\Http\Controllers\DocsController;
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="form-group col-md-10">
-                                                                        <label for="inputError" class="control-label"><p id="derniere1">Dernière</p> Adresse en Tunisie </label>
+                                                                        <label for="inputError" class="control-label"><label id="derniere1">Dernière</label> Adresse en Tunisie </label>
 
                                                                         <div class="input-group-control">
                                                                             <input onchange="changing(this)"  type="text" id="subscriber_local_address" name="subscriber_local_address" class="form-control"   value="{{ $dossier->subscriber_local_address }}">
@@ -988,6 +988,110 @@ use  \App\Http\Controllers\DocsController;
                                                             </div>
 
                                                         </div>
+
+
+                                                        <div class="row"   id="adresse03" <?php if ($dossier->empalcement_medic3 =='') {echo 'style="display:none;"';}  ?> >
+                                                            <div class="col-md-5">
+                                                                <div class="form-group">
+                                                                    <label for="inputError" class="control-label"><label id="derniere03">Dernière</label> structure d’hospitalisation  </label>
+
+                                                                    <div class="input-group-control">
+                                                                        <input onchange="changing(this)" type="text" id="empalcement_medic3" name="medecin_traitant2" class="form-control" value="{{ $dossier->empalcement_medic3 }}" >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="inputError" class="control-label">De (Date)</label>
+
+                                                                    <div class="input-group-control">
+                                                                        <input onchange="changing(this)" type="text" id="date_debut_medic3"  class="form-control datepicker-default" data-format="dd-MM-yyyy hh:mm:ss"  value="{{ $dossier->date_debut_medic3 }}" >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="inputError" class="control-label">A (Date)</label>
+
+                                                                    <div class="input-group-control">
+                                                                        <input onchange="changing(this)" type="text" id="date_fin_medic3"   class="form-control datepicker-default"   value="{{ $dossier->date_fin_medic3 }}" >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-1" style="padding-top:30px">
+                                                                <span title="cacher l'adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn004moins"><i class="fa  fa-minus"></i> </span>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" id="adresse02" <?php if ($dossier->empalcement_medic2 =='') {echo 'style="display:none;"';}  ?> >
+                                                            <div class="col-md-5">
+                                                                <div class="form-group">
+                                                                    <label for="inputError" class="control-label"><label id="derniere02">Dernière</label> structure d’hospitalisation  </label>
+
+                                                                    <div class="input-group-control">
+                                                                        <input onchange="changing(this)" type="text" id="empalcement_medic2"   class="form-control" value="{{ $dossier->empalcement_medic2 }}" >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="inputError" class="control-label">De (Date)</label>
+
+                                                                    <div class="input-group-control">
+                                                                        <input onchange="changing(this)" type="text" id="date_debut_medic2"  class="form-control datepicker-default"   value="{{ $dossier->date_debut_medic2 }}" >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="inputError" class="control-label">A (Date)</label>
+
+                                                                    <div class="input-group-control">
+                                                                        <input onchange="changing(this)" type="text" id="date_fin_medic2"  class="form-control datepicker-default"   value="{{ $dossier->date_fin_medic2 }}" >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-1" style="padding-top:30px">
+                                                                <span title="Afficher une autre adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn004plus"><i class="fa fa-plus"></i> </span>
+                                                                <span title="cacher l'adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn003moins"><i class="fa   fa-minus"></i> </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row" id="adresse01">
+                                                            <div class="col-md-5">
+                                                                <div class="form-group">
+                                                                    <label for="inputError" class="control-label"><label id="derniere01">Dernière </label> structure d’hospitalisation  </label>
+
+                                                                    <div class="input-group-control">
+                                                                        <input onchange="changing(this)" type="text" id="empalcement_medic"    class="form-control" value="{{ $dossier->empalcement_medic }}" >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="inputError" class="control-label">De (Date)</label>
+
+                                                                    <div class="input-group-control">
+                                                                        <input onchange="changing(this)" type="text" id="date_debut_medic" class="form-control datepicker-default"   value="{{ $dossier->date_debut_medic }}" >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="inputError" class="control-label">A (Date)</label>
+
+                                                                    <div class="input-group-control">
+                                                                        <input onchange="changing(this)" type="text" id="date_fin_medic"   class="form-control datepicker-default"   value="{{ $dossier->date_fin_medic }}" >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-1" style="padding-top:30px">
+                                                                <div class="col-md-1" style="padding-top:30px">
+                                                                    <span title="Afficher une autre adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn003plus"><i class="fa   fa-plus"></i> </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 <!--
                                                         <div class="row">
                                                             <div class="col-md-3">
@@ -1168,25 +1272,154 @@ use  \App\Http\Controllers\DocsController;
                                                             </div>
                                                         </div>
 
-                                                    <!--   <div class="col-md-4">
+                                                    </div>
+
+
+                                                    <div class="row"   id="adresse13" <?php if ($dossier->empalcement_trans3 =='') {echo 'style="display:none;"';}  ?> >
+                                                        <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label for="inputError" class="control-label">Adresse véhicule2</label>
+                                                                <label for="inputError" class="control-label"><label id="derniere13">Dernier</label> garage </label>
 
                                                                 <div class="input-group-control">
-                                                                    <input onchange="changing(this)"  type="text" id="vehicule_address2" name="vehicule_address2" class="form-control"   value="{{ $dossier->vehicule_address2 }}">
+                                                                    <input onchange="changing(this)" type="text" id="empalcement_trans3"  class="form-control" value="{{ $dossier->empalcement_trans3 }}" >
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label for="inputError" class="control-label">Tel </label>
+                                                                <label for="inputError" class="control-label">Type</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input onchange="changing(this)"  type="text" id="vehicule_phone" name="vehicule_phone" class="form-control"   value="{{ $dossier->vehicule_phone }}" >
+                                                                    <select onchange="changing(this)"   id="type_trans3" class="form-control "  value="{{ $dossier->type_trans3 }}" >
+                                                                        <option  <?php if($dossier->type_trans3==""){echo 'selected="selected"';}?> value=""></option>
+                                                                        <option  <?php if($dossier->type_trans3=="gardiennage"){echo 'selected="selected"';}?>  value="gardiennage">Gardiennage </option>
+                                                                        <option  <?php if($dossier->type_trans3=="garage"){echo 'selected="selected"';}?> value="garage">Garage </option>
+                                                                        <option  <?php if($dossier->type_trans3=="libre"){echo 'selected="selected"';}?> value="libre">Adresse Libre </option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
-                                                        </div>-->
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">De (Date)</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input onchange="changing(this)" type="text" id="date_debut_trans3"  class="form-control datepicker-default" data-format="dd-MM-yyyy" style="padding:6px 3px 6px 3px!important;" value="{{ $dossier->date_debut_trans3 }}" >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">A (Date)</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input onchange="changing(this)" type="text" id="date_fin_trans3"   class="form-control datepicker-default"  style="padding:6px 3px 6px 3px!important;"  value="{{ $dossier->date_fin_trans3 }}" >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-1" style="padding-top:30px">
+                                                            <span title="cacher l'adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn014moins"><i class="fa  fa-minus"></i> </span>
+
+                                                        </div>
                                                     </div>
+                                                    <div class="row" id="adresse12" <?php if ($dossier->empalcement_trans2 =='') {echo 'style="display:none;"';}  ?> >
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label"><label id="derniere12">Dernier</label> garage  </label>
+
+                                                                <div class="input-group-control">
+                                                                    <input onchange="changing(this)" type="text" id="empalcement_trans2"   class="form-control" value="{{ $dossier->empalcement_trans2 }}" >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">Type</label>
+
+                                                                <div class="input-group-control">
+                                                                    <select onchange="changing(this)"   id="type_trans2" class="form-control "  value="{{ $dossier->type_trans2 }}" >
+                                                                        <option  <?php if($dossier->type_trans2==""){echo 'selected="selected"';}?> value=""></option>
+                                                                        <option  <?php if($dossier->type_trans2=="gardiennage"){echo 'selected="selected"';}?>  value="gardiennage">Gardiennage </option>
+                                                                        <option  <?php if($dossier->type_trans2=="garage"){echo 'selected="selected"';}?> value="garage">Garage </option>
+                                                                        <option  <?php if($dossier->type_trans2=="libre"){echo 'selected="selected"';}?> value="libre">Adresse Libre </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">De (Date)</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input onchange="changing(this)" type="text" id="date_debut_trans2"  class="form-control datepicker-default"  style="padding:6px 3px 6px 3px!important;" value="{{ $dossier->date_debut_trans2 }}" >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">A (Date)</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input onchange="changing(this)" type="text" id="date_fin_trans2"  class="form-control datepicker-default"  style="padding:6px 3px 6px 3px!important;"  value="{{ $dossier->date_fin_trans2 }}" >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1" style="padding-top:30px">
+                                                            <span title="Afficher une autre adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn014plus"><i class="fa fa-plus"></i> </span>
+                                                            <span title="cacher l'adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn013moins"><i class="fa   fa-minus"></i> </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row" id="adresse11">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label"><label id="derniere11">Dernier </label> garage  </label>
+
+                                                                <div class="input-group-control">
+                                                                    <input onchange="changing(this)" type="text" id="empalcement_trans"    class="form-control" value="{{ $dossier->empalcement_trans }}" >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">Type</label>
+
+                                                                <div class="input-group-control">
+                                                                    <select onchange="changing(this)"   id="type_trans" class="form-control "  value="{{ $dossier->type_trans }}" >
+                                                                    <option  <?php if($dossier->type_trans==""){echo 'selected="selected"';}?> value=""></option>
+                                                                    <option  <?php if($dossier->type_trans=="gardiennage"){echo 'selected="selected"';}?>  value="gardiennage">Gardiennage </option>
+                                                                    <option  <?php if($dossier->type_trans=="garage"){echo 'selected="selected"';}?> value="garage">Garage </option>
+                                                                    <option  <?php if($dossier->type_trans=="libre"){echo 'selected="selected"';}?> value="libre">Adresse Libre </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">De (Date)</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input onchange="changing(this)" type="text" id="date_debut_trans" class="form-control datepicker-default"  style="padding:6px 3px 6px 3px!important;" value="{{ $dossier->date_debut_trans }}" >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">A (Date)</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input onchange="changing(this)" type="text" id="date_fin_trans"   class="form-control datepicker-default" style="padding:6px 3px 6px 3px!important;"  value="{{ $dossier->date_fin_trans }}" >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1" style="padding-top:30px">
+                                                            <div class="col-md-1" style="padding-top:30px">
+                                                                <span title="Afficher une autre adresse" style="margin-top:20px;width:20px" class=" btn-md" id="btn013plus"><i class="fa  fa-plus"></i> </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
 
                                                 </div>
                                             </div>
@@ -2146,7 +2379,11 @@ function annuledoc(iddoc,template)
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
-                    alert('Erreur lors de recuperation de l historique du document');
+                     Swal.fire({
+                        type: 'error',
+                        title: 'oups...',
+                        text: "Erreur lors de recuperation de l historique du document"
+                    });
                     console.log('jqXHR:');
                     console.log(jqXHR);
                     console.log('textStatus:');
@@ -2178,7 +2415,11 @@ function filltemplate(data,tempdoc)
                 if ((val[1].includes(undefined)) || (!val[1])) 
                 {
                     templateexist = false;
-                    alert("la template html du document n'est pas bien défini ");
+                     Swal.fire({
+                        type: 'error',
+                        title: 'oups...',
+                        text: "la template html du document n'est pas bien défini"
+                    });
                 }
                 else
                 {    
@@ -2193,7 +2434,11 @@ function filltemplate(data,tempdoc)
                 if ((val[1].includes(undefined)) || (!val[1])) 
                 {
                     $("#gendochtml").prop("disabled",true);
-                    alert("la template rtf du document n'est pas bien défini ");
+                     Swal.fire({
+                        type: 'error',
+                        title: 'oups...',
+                        text: "la template rtf du document n'est pas bien défini"
+                    });
                 }
                 else
                 {    
@@ -2621,7 +2866,7 @@ function disabling(elm) {
             {div.style.display='block';
                 document.getElementById('derniere1').style.display='none';
                 document.getElementById('derniere3').style.display='none';
-                document.getElementById('derniere2').style.display='block';
+                document.getElementById('derniere2').style.display='inline';
             }
            /* else
             {div.style.display='none';     }*/
@@ -2637,7 +2882,7 @@ function disabling(elm) {
             {div.style.display='block';
                 document.getElementById('derniere1').style.display='none';
                 document.getElementById('derniere2').style.display='none';
-                document.getElementById('derniere3').style.display='block';
+                document.getElementById('derniere3').style.display='inline';
             }
           /*  else
             {div.style.display='none';     }*/
@@ -2654,7 +2899,7 @@ function disabling(elm) {
                 document.getElementById('derniere3').style.display='none';
                 document.getElementById('adresse3').style.display='none';
             }*/
-            document.getElementById('derniere1').style.display='block';
+            document.getElementById('derniere1').style.display='inline';
             document.getElementById('derniere2').style.display='none';
             document.getElementById('derniere3').style.display='none';
             document.getElementById('adresse2').style.display='none';
@@ -2681,6 +2926,136 @@ function disabling(elm) {
 
 
         });
+///////
+
+
+
+        $('#btn003plus').click(function() {
+
+            var   div=document.getElementById('adresse02');
+            if(div.style.display==='none')
+            {div.style.display='block';
+                document.getElementById('derniere01').style.display='none';
+                document.getElementById('derniere03').style.display='none';
+                document.getElementById('derniere02').style.display='inline';
+            }
+            /* else
+             {div.style.display='none';     }*/
+
+
+        });
+
+
+        $('#btn004plus').click(function() {
+
+            var   div=document.getElementById('adresse03');
+            if(div.style.display==='none')
+            {div.style.display='block';
+                document.getElementById('derniere01').style.display='none';
+                document.getElementById('derniere02').style.display='none';
+                document.getElementById('derniere03').style.display='inline';
+            }
+            /*  else
+             {div.style.display='none';     }*/
+
+
+        });
+
+        $('#btn003moins').click(function() {
+
+
+            document.getElementById('derniere01').style.display='inline';
+            document.getElementById('derniere02').style.display='none';
+            document.getElementById('derniere03').style.display='none';
+            document.getElementById('adresse02').style.display='none';
+            document.getElementById('adresse03').style.display='none';
+            /*    else
+             {div.style.display='none';     }*/
+
+
+        });
+
+
+        $('#btn004moins').click(function() {
+
+            var   div=document.getElementById('adresse03');
+            if(div.style.display==='block')
+            {div.style.display='none';
+
+                document.getElementById('derniere01').style.display='none';
+                document.getElementById('derniere02').style.display='inline';
+                document.getElementById('derniere03').style.display='none';
+            }
+            /*     else
+             {div.style.display='none';     }*/
+
+
+        });
+        //////
+
+
+        $('#btn013plus').click(function() {
+
+            var   div=document.getElementById('adresse12');
+            if(div.style.display==='none')
+            {div.style.display='block';
+                document.getElementById('derniere11').style.display='none';
+                document.getElementById('derniere13').style.display='none';
+                document.getElementById('derniere12').style.display='inline';
+            }
+            /* else
+             {div.style.display='none';     }*/
+
+
+        });
+
+
+        $('#btn014plus').click(function() {
+
+            var   div=document.getElementById('adresse13');
+            if(div.style.display==='none')
+            {div.style.display='block';
+                document.getElementById('derniere11').style.display='none';
+                document.getElementById('derniere12').style.display='none';
+                document.getElementById('derniere13').style.display='inline';
+            }
+            /*  else
+             {div.style.display='none';     }*/
+
+
+        });
+
+        $('#btn013moins').click(function() {
+
+
+            document.getElementById('derniere11').style.display='inline';
+            document.getElementById('derniere12').style.display='none';
+            document.getElementById('derniere13').style.display='none';
+            document.getElementById('adresse12').style.display='none';
+            document.getElementById('adresse13').style.display='none';
+            /*    else
+             {div.style.display='none';     }*/
+
+
+        });
+
+
+        $('#btn014moins').click(function() {
+
+            var   div=document.getElementById('adresse13');
+            if(div.style.display==='block')
+            {div.style.display='none';
+
+                document.getElementById('derniere11').style.display='none';
+                document.getElementById('derniere12').style.display='inline';
+                document.getElementById('derniere13').style.display='none';
+            }
+            /*     else
+             {div.style.display='none';     }*/
+
+
+        });
+
 
         $("#typeprest").change(function() {
 
@@ -3083,7 +3458,9 @@ function disabling(elm) {
         max-width:300px;
     }
 
-
+.form-control .datepicker-default{
+    padding:6px 3px 6px 3px;
+}
 
 
 </style>

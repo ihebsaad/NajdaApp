@@ -224,7 +224,6 @@
         <?php
         if ($seance->dispatcheur === Auth::id()) {  echo '<input type="checkbox" name="disp" checked>';} else {
 
-
             if (session()->has('disp'))
             {
                 if (Session::get('disp') == 0)
@@ -429,13 +428,6 @@
     <?php
     // $date_actu =time();
     $date_actu =date("H:i");
-  /*  echo ' date_actu: '.$date_actu.'<br>';
-    echo 'Debut: '.$debut.'<br>';
-    echo 'Fin : '.$fin .'<br>';
-    echo 'date_actu > debut : '.($date_actu > $debut).'<br>';
-    echo 'date_actu > fin : '.($date_actu > $fin).'<br>';
-    echo 'date_actu < debut : '.($date_actu < $debut).'<br>';
-    echo 'date_actu < fin : '.($date_actu < $fin).'<br>';*/
 
     // verif date actuelle par rapport seance
    if ( $date_actu < $debut || ($date_actu > $fin) )
@@ -554,6 +546,9 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css" />
+
 
  <script>
 
@@ -608,7 +603,7 @@
 
                     if((supmedic==1)||(suptech==1)){
                         window.location = '{{route('supervision')}}';
-                    }
+                    }else{
 
                     if(admin==1){
                         window.location = '{{route('parametres')}}';
@@ -621,6 +616,10 @@
                         else{
                             window.location = '{{route('home')}}';
                         }
+                    }
+
+                    //
+
                     }
                 }
             });
@@ -675,7 +674,12 @@
                  data: {role: role, vers: vers, par: par, _token: _token},
                  success: function (data) {
 
-                     alert('Demande envoyée');
+                    // alert('Demande envoyée');
+                     Swal.fire({
+                         type: 'success',
+                         title: 'Envoyée...',
+                         text: "Demande envoyée"
+                     });
 
                      $('#label' + nomrole).text(' (Demande Envoyée) ');
 
@@ -731,7 +735,12 @@
                          if (role== 'Dispatcheur Emails')
                          { nomrole = 'dispatcheur';
                            //  $request->session()->put('disp',0);
-                            alert('Rôle '+role+' alloué');
+                          //  alert('Rôle '+role+' alloué');
+                             Swal.fire({
+                                 type: 'success',
+                                 title: 'Alloué...',
+                                 text: 'Rôle '+role+' alloué'
+                             });
                           //   affecter(nomrole);
                             removereponse(role);
 
@@ -740,7 +749,12 @@
                          if (role== 'Dispatcheur Téléphonique')
                          { nomrole = 'dispatcheurtel';
                           //   $request->session()->put('disptel',0) ;
-                             alert('Rôle '+role+' alloué');
+                          //   alert('Rôle '+role+' alloué');
+                             Swal.fire({
+                                 type: 'success',
+                                 title: 'Alloué...',
+                                 text: 'Rôle '+role+' alloué'
+                             });
                              removereponse(role);
 
                          }
@@ -748,7 +762,12 @@
                          if (role== 'Superviseur Médical')
                          { nomrole = 'superviseurmedic';
                           //   $request->session()->put('supmedic',0) ;
-                             alert('Rôle '+role+' alloué');
+                          //   alert('Rôle '+role+' alloué');
+                             Swal.fire({
+                                 type: 'success',
+                                 title: 'Alloué...',
+                                 text: 'Rôle '+role+' alloué'
+                             });
                              removereponse(role);
 
                          }
@@ -756,7 +775,12 @@
                          if (role== 'Superviseur Technique')
                          { nomrole = 'superviseurtech';
                           //   $request->session()->put('suptech',0) ;
-                             alert('Rôle '+role+' alloué');
+                            // alert('Rôle '+role+' alloué');
+                             Swal.fire({
+                                 type: 'success',
+                                 title: 'Alloué...',
+                                 text: 'Rôle '+role+' alloué'
+                             });
                              removereponse(role);
 
                          }
@@ -764,7 +788,12 @@
                          if (role== 'Chargé de Transport')
                          { nomrole = 'chargetransport';
                          //    $request->session()->put('chrgtr',0)  ;
-                             alert('Rôle '+role+' alloué');
+                           //  alert('Rôle '+role+' alloué');
+                             Swal.fire({
+                                 type: 'success',
+                                 title: 'Alloué...',
+                                 text: 'Rôle '+role+' alloué'
+                             });
                              removereponse(role);
 
                          }
@@ -772,7 +801,12 @@
                          if (role== 'Veilleur de Nuit')
                          { nomrole = 'veilleur';
                           //   $request->session()->put('veilleur',0) ;
-                             alert('Rôle '+role+' alloué');
+                            // alert('Rôle '+role+' alloué');
+                             Swal.fire({
+                                 type: 'success',
+                                 title: 'Alloué...',
+                                 text: 'Rôle '+role+' alloué'
+                             });
                              removereponse(role);
 
                          }
@@ -852,9 +886,7 @@
                              }, 3000);*/
                          }
 
-
                      }
-
 
 
                      }

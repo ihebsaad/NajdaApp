@@ -23,14 +23,14 @@
  
             <div class="panel panel-primary column col-md-6"  style="margin-left:30px;margin-right:50px;padding:0" >
               <div class="panel-heading">
-                                    <h4 id="kbspaneltitle" class="panel-title"> Agents connectés </h4>
+                <h4 id="kbspaneltitle" class="panel-title"> Agents connectés </h4>
 
               </div>
         				
-		  <div class="panel-body" style="display: block;min-height:450px;padding:15px 15px 15px 15px">
+		  <div class="panel-body" style="display: block;min-height:700px;padding:15px 15px 15px 15px">
 		 <?php
-use \App\Http\Controllers\UsersController;
-              use \App\Http\Controllers\ClientsController;
+          use \App\Http\Controllers\UsersController;
+          use \App\Http\Controllers\ClientsController;
 
 
               function custom_echo($x, $length)
@@ -76,6 +76,16 @@ use \App\Http\Controllers\UsersController;
       use \App\Dossier;
 
 
+              function convertToHoursMins($time, $format = '%02d:%02d') {
+                  if ($time < 1) {
+                      return;
+                  }
+                  $hours = floor($time / 60);
+                  $minutes = ($time % 60);
+                  return sprintf($format, $hours, $minutes);
+              }
+
+
               if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
 ?>
                         <div class="padding:5px 5px 5px 5px"><br>
@@ -94,7 +104,7 @@ use \App\Http\Controllers\UsersController;
 
                             </ul>
                             <table id="tabusers" style="text-align: center ;background-color:#F8F7F6;padding:5px 5px 5px 5px">
-							<thead style="text-align:center"><th>Agent</th><th>Type</th><th>Rôle Principal</th><th>Dossiers Affectés</th><th>Missions</th><th>Actions </th><th>Actions Actives</th><th>Notifications</th>
+                                <thead style="text-align:center;font-size:13px;"><th>Agent</th><th>Type</th><th>Rôle Principal</th><th>Dossiers Affectés</th><th>Missions</th><th>Actions </th><th>Actions Actives</th><th>Notifications</th></thead>
                             <?php $c=0;
                             foreach($users as $user)
                                 { if($c % 2 ==0){$bg='background-color:#dddcda!important';}else{$bg='';}
@@ -106,15 +116,28 @@ use \App\Http\Controllers\UsersController;
                                     if($user->id==$suptech){$role='Superviseur Technique';}
                                     if($user->id==$veilleur){$role='Veilleur de nuit';}
 
+
 									$missions=UsersController::countmissions($user->id);
 									$actions=UsersController::countactions($user->id);
 									$actives=UsersController::countactionsactives($user->id);
+									$dureeactions=UsersController::countactionsduree($user->id);
+                                    if ($dureeactions <60){$dureeactions=$dureeactions.' minutes';}else{
+                                        $dureeactions=convertToHoursMins($dureeactions, '%2d heures, %2d minutes');
+
+                                    }
+
+									$dureeactives=UsersController::countactionsactivesduree($user->id);
+									if ($dureeactives <60){$dureeactives=$dureeactives.' minutes';}else{
+                                      $dureeactives=convertToHoursMins($dureeactives, '%2d heures, %2d minutes');
+
+                                    }
+
                                     $dossiers=UsersController::countaffectes($user->id);
                                     $notifications=UsersController::countnotifs($user->id);
                                     // if($user->type=='admin'){$role='(Administrateur)';}
 									if($user->user_type!='admin'){
 										
-                                  if($user->isOnline()) {$c++; echo  '<tr class="usertr" onclick="showuser(this);"  id="user-'.$user->id.'" style="cursor:pointer;'.$bg.'" ><td>   '.$user->name.' '.$user->lastname .'</td><td>'.$user->user_type.' </td><td>'. $role.'</td><td>'.$dossiers.'</td><td>'.$missions.'</td><td>'.$actions.'</td><td>'.$actives.'</td><td>'.$notifications.'</td>  </tr>' ;}
+                                  if($user->isOnline()) {$c++; echo  '<tr class="usertr" onclick="showuser(this);"  id="user-'.$user->id.'" style="font-size:12px;cursor:pointer;'.$bg.'" ><td>   '.$user->name.' '.$user->lastname .'</td><td>'.$user->user_type.' </td><td>'. $role.'</td><td>'.$dossiers.'</td><td>'.$missions.'</td><td>'.$actions.' <br>charge : '.$dureeactions.'</td><td>'.$actives.' <br>charge : '.$dureeactives.'</td><td>'.$notifications.'</td>  </tr>' ;}
 									}
                                 }
                                     ?><br>
@@ -158,6 +181,7 @@ use \App\Http\Controllers\UsersController;
                            {$idd=$folder['id'];
                             $missions=UsersController::countmissionsDossier($idd);
                             $actions=UsersController::countactionsDossier($idd);
+
                               $notifications=UsersController::countnotifsDossier($idd);
 
                             $complexite=$folder['complexite'];
@@ -207,12 +231,7 @@ use \App\Http\Controllers\UsersController;
         </div>
 
   </div><!-- /main -->
-	<style>
-        #tabusers td, #tabusers th{text-align: center;padding-left:5px;padding-right: 5px;}
-        #tabusers th{height:60px;background-color: #4FC1E9;color:white;border-left:1px solid white;}
-        #tabusers td{border-left:1px solid white;border-bottom:1px solid white;}
-        #tabusers tr{margin-bottom:15px;min-height:40px;}
-        </style>
+
      @endsection
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
@@ -252,13 +271,22 @@ use \App\Http\Controllers\UsersController;
         }
     }
 
+    function toggle2(className, displayState){
+        var elements = document.getElementsByClassName(className);
+
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.border = displayState;
+        }
+    }
 
     function showuser(elm) {
         var userid = elm.id;
         var user = userid.slice( 5);
         //document.getElement('agent').style.display='none';
         toggle('agent', 'none');
+        toggle2('usertr', 'none');
 
+        document.getElementById('user-'+user).style.border='2px solid black';
         document.getElementById('agent-'+user).style.display='block';
     }
         function changing(elm) {
@@ -308,3 +336,11 @@ use \App\Http\Controllers\UsersController;
 
 </script>
 
+<style>
+    #tabusers td, #tabusers th{text-align: center;padding-left:5px;padding-right: 5px;}
+    #tabusers th{height:60px;background-color: #4FC1E9;color:white;border-left:1px solid white;}
+    #tabusers td{border-left:1px solid white;border-bottom:1px solid white;}
+    #tabusers tr{margin-bottom:15px;min-height:40px;}
+
+
+    </style>

@@ -26,7 +26,7 @@
               
               </div>
         				
-		  <div class="panel-body" style="display: block;min-height:800px;padding:15px 15px 15px 15px">
+		  <div class="panel-body scrollable-panel" style="display: block;min-height:1000px;padding:15px 15px 15px 15px">
               <ul id="tabs" class="nav  nav-tabs"  >
                   <li class=" nav-item ">
                       <a class="nav-link active   " href="{{ route('supervision') }}"  >
@@ -308,8 +308,8 @@
     .userdiv h3{margin-top:2px!important;}
     .userdiv .delete {display:none;}
 
-    .userdiv   {border:2px dotted grey; padding:5px 5px 5px;opactity:0.1;height:300px;}
-    .userdiv .dossier label{font-size:18px!important;}
+    .userdiv   {border:2px dotted grey; padding:5px 5px 5px;opactity:0.1;height:400px;}
+    .userdiv .dossier label{font-size:18px;}
     .userdiv .dossier .infos{display:none;}
     #drag-elements .dossier .infos{display:block;}
 
@@ -474,6 +474,29 @@ width:300px;
 
 
 
+
+    @media (min-width: 1280px) {
+
+        .userdiv .dossier label{font-size:13px!important;}
+        .userdiv .dossier {width:100px;height:40px;}
+    }
+
+
+
+    /**  small **/
+    @media (min-width: 768px) and (max-width: 980px) {
+
+        .userdiv .dossier label{font-size:13px!important;}
+        .userdiv .dossier {width:100px;height:40px;}
+    }
+
+    /***/
+    @media (min-width: 480px) and (max-width: 767px) {
+
+        .userdiv .dossier label{font-size:13px!important;}
+        .userdiv .dossier {width:100px;height:40px;}
+
+    }
 
 
 </style>

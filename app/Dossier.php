@@ -106,6 +106,10 @@ class Dossier extends Model
         'date_debut_trans3',
         'date_fin_trans3',
 
+        'type_trans',
+        'type_trans2',
+        'type_trans3'
+
     ];
 
     protected $dateFormat = 'Y-m-d H:i';

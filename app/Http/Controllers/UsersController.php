@@ -464,6 +464,26 @@ class UsersController extends Controller
     }
 
 
+
+    public static function countactionsduree($id)
+    {
+        $user=User::find($id);
+
+        $missions=  $user->activeMissions;
+        $somme=0;
+        foreach($missions as $m)
+        {
+
+            $ActionECs = $m->ActionECs;
+            foreach($ActionECs as $ae)
+
+            {$somme+= $ae->duree;}
+
+        }
+        return $somme;
+
+    }
+
     public static function countactionsactives($id)
     {
         $user=User::find($id);
@@ -472,6 +492,23 @@ class UsersController extends Controller
         foreach($missions as $m)
         {
             $somme+= $m->activeActionEC->count();
+        }
+        return $somme;
+
+    }
+
+
+    public static function countactionsactivesduree($id)
+    {
+        $user=User::find($id);
+        $missions=  $user->activeMissions;
+        $somme=0;
+        foreach($missions as $m)
+        {
+            $activeActionEC = $m->activeActionEC;
+            foreach($activeActionEC as $aae)
+
+            {$somme+= $aae->duree;}
         }
         return $somme;
 
@@ -519,6 +556,8 @@ class UsersController extends Controller
         return $somme;
 
     }
+
+
 /*
     public static function countactionsactivesDossier($id)
     {
@@ -544,8 +583,6 @@ class UsersController extends Controller
 
         return $number;
     }
-
-
 
 
  }

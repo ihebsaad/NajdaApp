@@ -1,5 +1,8 @@
 @extends('layouts.mainlayout')
 
+
+<link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 @section('content')
 
 
@@ -948,10 +951,15 @@
     table{margin-bottom:40px;}
 </style>
 
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-
 
 <script>
 
@@ -1128,7 +1136,7 @@
             }
 
         });
-        $("#dossier").select2();
+     //   $("#dossier").select2();
 
 
 

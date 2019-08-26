@@ -1756,8 +1756,7 @@ reference_customer
          $("#idomparent").val(id);
         $('#templateordrem').val("remplace");
         $("#templatehtmlom").modal('show');
-        //alert($("#idomparent").val());
-}  
+ }
 function completeom(id)
 {
     var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?complete=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
@@ -1765,12 +1764,10 @@ function completeom(id)
          $("#idomparent").val(id);
         $('#templateordrem').val("complete");
         $("#templatehtmlom").modal('show');
-        //alert($("#idomparent").val());
-}   
+ }
 function modalodoc(titre,emplacement)
 {
-    //alert(titre+" | "+emplacement);
-    $("#doctitle").text(titre);
+     $("#doctitle").text(titre);
     // cas OM fichier PDF
     if (emplacement.indexOf("/OrdreMissions/") !== -1 )
     {document.getElementById('dociframe').src =emplacement;}
@@ -1781,7 +1778,6 @@ function modalodoc(titre,emplacement)
 }
 function remplacedoc(iddoc,template)
 {
-    //alert(iddoc+' | '+template);
 
         var dossier = $('#dossier').val();
         var tempdoc = template;
@@ -1797,26 +1793,22 @@ function remplacedoc(iddoc,template)
                         filltemplate(data,tempdoc);
                         // set iddocparent value
                         $('#iddocparent').val(iddoc);
-                        //alert(JSON.stringify(data));
-                }
+                 }
             });
         }else{
-            // alert('ERROR');
-        }
+         }
 }
 
 function annuledoc(titre,iddoc,template)
 {
-    //alert(iddoc+' | '+template);
 
         var dossier = $('#dossier').val();
         var tempdoc = template;
         $("#gendochtml").prop("disabled",false);
         
-        //alert(tempdoc);
-        var r = confirm("Êtes-vous sûr de vouloir supprimer le document: "+titre+" ? ");
+         var r = confirm("Êtes-vous sûr de vouloir supprimer le document: "+titre+" ? ");
         if (r == true) {
-          //alert("You pressed OK!");
+
           if ((dossier != '') )
             {
                 var _token = $('input[name="_token"]').val();
@@ -1825,13 +1817,18 @@ function annuledoc(titre,iddoc,template)
                     method:"POST",
                     data:{dossier:dossier,template:tempdoc,parent:iddoc, _token:_token},
                 success:function(data){
-                    //alert(JSON.stringify(data));
+
                     console.log(data);
                     location.reload();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
-                    alert('Erreur lors de lannulation du document');
+
+                     Swal.fire({
+                        type: 'error',
+                        title: 'Oups...',
+                        text: 'Erreur lors de lannulation du document',
+
+                    });
                     console.log('jqXHR:');
                     console.log(jqXHR);
                     console.log('textStatus:');
@@ -1855,7 +1852,7 @@ function annuledoc(titre,iddoc,template)
                 //'&_token='+_token
                 data:'_token='+_token+'&doc='+doc,
                 success:function(data){
-                    //alert(JSON.stringify(data));
+
                     var histdoc = JSON.parse(data);
                     // vider le contenu du table historique
                     $("#tabledocshisto tbody").empty();
@@ -1872,7 +1869,7 @@ function annuledoc(titre,iddoc,template)
                         $("#dochistoname").text(val[1]['titre']);
                     }
 
-                    //alert(val[0]+" | "+val[1]['emplacement']+" | "+val[1]['updated_at']);
+
                     urlf="{{ URL::asset('storage'.'/app/') }}";
                     aurlf="<a style='color:black' href='"+urlf+"/"+val[1]['emplacement']+"' ><i class='fa fa-download'></i> Télécharger</a>";
                     $("#tabledocshisto tbody").append("<tr><td>"+val[1]['updated_at']+"</td><td>"+aurlf+"</td></tr>");
@@ -1882,8 +1879,13 @@ function annuledoc(titre,iddoc,template)
                     $("#modalhistodoc").modal('show');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
-                    alert('Erreur lors de recuperation de l historique du document');
+
+                     Swal.fire({
+                        type: 'error',
+                        title: 'Oups...',
+                        text: 'Erreur lors de recuperation de l historique du document',
+
+                    });
                     console.log('jqXHR:');
                     console.log(jqXHR);
                     console.log('textStatus:');
@@ -1904,7 +1906,7 @@ function annuledoc(titre,iddoc,template)
                 //'&_token='+_token
                 data:'_token='+_token+'&om='+om,
                 success:function(data){
-                    //alert(JSON.stringify(data));
+
                     var histom = JSON.parse(data);
                     // vider le contenu du table historique
                     $("#tableomshisto tbody").empty();
@@ -1921,7 +1923,7 @@ function annuledoc(titre,iddoc,template)
                         $("#omhistoname").text(val[1]['titre']);
                     }
 
-                    //alert(val[0]+" | "+val[1]['emplacement']+" | "+val[1]['updated_at']);
+
                     urlf="{{ URL::asset('storage') }}";
                     posom=val[1]['emplacement'].indexOf("/OrdreMissions/");
                     empom=val[1]['emplacement'].slice(posom+1);
@@ -1933,8 +1935,14 @@ function annuledoc(titre,iddoc,template)
                     $("#modalhistoom").modal('show');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
-                    alert('Erreur lors de recuperation de l historique du om taxi');
+
+
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oups...',
+                        text: 'Erreur lors de recuperation de l historique du om taxi',
+
+                    });
                     console.log('jqXHR:');
                     console.log(jqXHR);
                     console.log('textStatus:');
@@ -1965,12 +1973,16 @@ function filltemplate(data,tempdoc)
                 if ((val[1].includes(undefined)) || (!val[1])) 
                 {
                     templateexist = false;
-                    alert("la template html du document n'est pas bien défini ");
+
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oups...',
+                        text: "la template html du document n'est pas bien défini"
+                    });
                 }
                 else
                 {    
                     html_string= "{{asset('public/') }}"+"/"+val[1];
-                    //alert(html_string);
 
                 }
                 
@@ -1981,7 +1993,11 @@ function filltemplate(data,tempdoc)
                 if ((val[1].includes(undefined)) || (!val[1])) 
                 {
                     $("#gendochtml").prop("disabled",true);
-                    alert("la template rtf du document n'est pas bien défini ");
+                     Swal.fire({
+                        type: 'error',
+                        title: 'Oups...',
+                        text: "la template RTF du document n'est pas bien défini"
+                    });
                 }
                 else
                 {    
@@ -2019,7 +2035,7 @@ function filltemplate(data,tempdoc)
 
 
         //chargement du contenu et affichage du preview du document
-        //alert(html_string);
+
         document.getElementById('templatefilled').src = html_string;
         $("#templatehtmldoc").modal('show');
 
@@ -2117,14 +2133,18 @@ function filltemplate(data,tempdoc)
                     data:{description:description,destinataire:destinataire,message:message,dossier:dossier, _token:_token},
                     success:function(data){
 
-                         alert('SMS Envoyé !');
+                         Swal.fire({
+                            type: 'success',
+                            title: 'Envoyé...',
+                            text: "SMS Envoyé"
+                        });
                        // window.location =data;
                         $("#sendsms").modal('hide');
 
                     }
                 });
             }else{
-                // alert('ERROR');
+
             }
         });
 
@@ -2143,13 +2163,12 @@ function filltemplate(data,tempdoc)
                 data:{parent:parent,champ:champ,nom:nom,tel:tel,qualite:qualite, _token:_token},
                 success:function(data){
 
-                    //   alert('Added successfully');
-                    window.location =data;
+                     window.location =data;
 
                 }
             });
         }else{
-            // alert('ERROR');
+
         }
     });
 
@@ -2162,8 +2181,7 @@ function filltemplate(data,tempdoc)
         $('#iddocparent').attr('value', '');  
         if ((dossier != '') )
         {
-            //alert('dossier is set');
-            var _token = $('input[name="_token"]').val();
+             var _token = $('input[name="_token"]').val();
             $.ajax({
                 url:"{{ route('documents.htmlfilled') }}",
                 method:"POST",
@@ -2171,18 +2189,21 @@ function filltemplate(data,tempdoc)
                 success:function(data){
                      if (data !== 'nogop')
                     {
-                        //alert('no gop needed');
+
                         filltemplate(data,tempdoc);
                     }
                     else
                     {
-                        alert("OPERATION NON AUTORISE: Le dossier n'a pas un GOP Spécifié!");
+                         Swal.fire({
+                            type: 'error',
+                            title: 'Oups...',
+                            text: "OPERATION NON AUTORISE: Le dossier n'a pas un GOP Spécifié!"
+                        });
                     }
                 }
             });
         }else{
-            // alert('ERROR');
-        }
+         }
     });
 
 // fonction du remplissage de la template web du OM
@@ -2193,20 +2214,27 @@ function filltemplate(data,tempdoc)
         var op ="";
         if (tempom==="Select")
         {
-            alert("Veuillez selectionner un ordre de mission");
+             Swal.fire({
+                type: 'error',
+                title: 'oups...',
+                text: "Veuillez selectionner un ordre de mission"
+            });
             return false;
         }
         var emispar = $("#emispar").val();
         if (emispar==="Select")
         {
-            alert("Veuillez selectionner l'entitée qui émis l'ordre de mission");
+             Swal.fire({
+                type: 'error',
+                title: 'oups...',
+                text: "Veuillez selectionner l'entitée qui émis l'ordre de mission"
+            });
             return false;
         }
         /*var affectea = $("#affectea").val();
         if (affectea==="Select")
         {
-            alert("Veuillez selectionner à qui sera affecté l'ordre de mission");
-            return false;
+             return false;
         }*/
         //$("#gendochtml").prop("disabled",false);
         // renitialise la val de parentdoc
@@ -2222,11 +2250,10 @@ function filltemplate(data,tempdoc)
                         afficheom(data,tempom);
                 }
             });*/
-            //alert(dossier+" | "+tempom+" | "+emispar+" | "+affectea);
-            afficheom(emispar,tempom,dossier);
+             afficheom(emispar,tempom,dossier);
 
         }else{
-            // alert('ERROR');
+
         }
     });
 
@@ -2241,8 +2268,7 @@ function filltemplate(data,tempdoc)
     }
 
     $('#gendochtml').click(function(){
-        //alert($("#templatedocument").val());
-        //$("#gendocfromhtml").submit();
+         //$("#gendocfromhtml").submit();
         var _token = $('input[name="_token"]').val();
         var dossier = $('#dossdoc').val();
         var tempdoc = $("#templatedocument").val();
@@ -2259,13 +2285,15 @@ function filltemplate(data,tempdoc)
                 //'&_token='+_token
                 data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent,
                 success:function(data){
-                    //alert(JSON.stringify(data));
-                    console.log(data);
+                     console.log(data);
                     location.reload();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
-                    alert('Erreur lors de la generation du document');
+                      Swal.fire({
+                        type: 'error',
+                        title: 'oups...',
+                        text: "Erreur lors de la generation du document"
+                    });
                     console.log('jqXHR:');
                     console.log(jqXHR);
                     console.log('textStatus:');
@@ -2277,8 +2305,7 @@ function filltemplate(data,tempdoc)
     });
 
     $('#genomhtml').click(function(){
-        //alert($("#templatedocument").val());
-        //$("#gendocfromhtml").submit();
+         //$("#gendocfromhtml").submit();
         var _token = $('input[name="_token"]').val();
         var dossier = $('#dossom').val();
         var tempdoc = $("#templateordrem").val();
@@ -2301,8 +2328,7 @@ function filltemplate(data,tempdoc)
                 //'&_token='+_token
                 data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent,
                 success:function(data){
-                    //alert(JSON.stringify(data));
-                    console.log(data);
+                     console.log(data);
                     $('#idomparent').val("");
                     $('#templateordrem').val("");
                     
@@ -2312,8 +2338,11 @@ function filltemplate(data,tempdoc)
                         {alert(data);}
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
-                    alert('Erreur lors de la generation du OM');
+                      Swal.fire({
+                        type: 'error',
+                        title: 'oups...',
+                        text: "Erreur lors de la génération "
+                    });
                     console.log('jqXHR:');
                     console.log(jqXHR);
                     console.log('textStatus:');
@@ -2341,13 +2370,13 @@ function filltemplate(data,tempdoc)
                     data:{parent:parent,nom:nom,prenom:prenom,fonction:fonction,email:email,observ: observ, nature:nature, _token:_token},
                     success:function(data){
 
-                        //   alert('Added successfully');
+
                         window.location =data;
 
                     }
                 });
             }else{
-                // alert('ERROR');
+
             }
         });
 
@@ -2369,13 +2398,13 @@ function filltemplate(data,tempdoc)
                     data:{parent:parent,nom:nom,prenom:prenom,fonction:fonction,tel:tel,observ: observ, nature:nature, _token:_token},
                     success:function(data){
 
-                        //   alert('Added successfully');
+
                         window.location =data;
 
                     }
                 });
             }else{
-                  alert('ERROR');
+
             }
         });
 
@@ -2430,13 +2459,13 @@ function filltemplate(data,tempdoc)
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                //    alert('msg : '.jqXHR.status);
-                    alert('msg 2 : '.errorThrown);
+
+
                 }
 
             });
               }else{
-             alert('ERROR');
+
              }
         });
 
@@ -2570,9 +2599,7 @@ function filltemplate(data,tempdoc)
                     data:{gouv:gouv,type:type,specialite:specialite,ville:ville,postal:postal, _token:_token},
                     success:function(data){
 
-                        //     alert('1'+data);
-                        //   alert('Added successfully');
-                        // alert('2'+JSON.parse((data)));
+
                         $('#data').html(data);
                         //window.location =data;
                         console.log(data);
@@ -2588,7 +2615,11 @@ function filltemplate(data,tempdoc)
                 }); // ajax
 
             }else{
-                alert('SVP, Sélectionner le gouvernorat et la spécialité');
+                 Swal.fire({
+                    type: 'error',
+                    title: 'oups...',
+                    text: "SVP, Sélectionner le gouvernorat et la spécialité"
+                });
             }
         }); // change
 
@@ -2656,7 +2687,7 @@ function filltemplate(data,tempdoc)
                     data:{prestation:prestation,prestataire:prestataire,statut:statut,details:details, _token:_token},
                     success:function(data){
 
-                           alert('success');
+
 
                     }
                 });
@@ -2666,8 +2697,8 @@ function filltemplate(data,tempdoc)
 
                 var selected = document.getElementById('selected').value;
                 var total = document.getElementById('total').value;
-                //     alert(selected);
-                //    alert(total);
+
+
                 var next = parseInt(selected) + 1;
                 document.getElementById('selected').value = next;
 
@@ -2681,7 +2712,8 @@ function filltemplate(data,tempdoc)
 
                 }
 
-                if ((selected) == (total  )) {//alert("Il n y'a plus de prestataires, Ressayez");
+                if ((selected) == (total  )) {
+
                     document.getElementById('termine').style.display = 'block';
 
                     document.getElementById('item'+(selected)).style.display = 'none';
@@ -2710,7 +2742,15 @@ function filltemplate(data,tempdoc)
                 }
 
             }
-            else{alert('SVP Expliquez la raison de ne pas choisir ce prestataire');}
+            else{
+                  Swal.fire({
+                     type: 'error',
+                     title: 'Attendez...',
+                     text: 'SVP Expliquez la raison de ne pas choisir ce prestataire',
+
+                 })
+
+            }
 
 
 
@@ -2733,14 +2773,14 @@ function filltemplate(data,tempdoc)
                     data:{nom:nom,prenom:prenom,dossier:dossier, _token:_token},
                     success:function(data){
 
-                        //   alert('Added successfully');
+
                         window.location =data;
 
 
                     }
                 });
             }else{
-                // alert('ERROR');
+
             }
         });
 
@@ -2755,8 +2795,7 @@ function filltemplate(data,tempdoc)
                     data:{prestataire:prestataire,dossier:dossier, _token:_token},
                     success:function(data){
 
-                        //   alert('Added successfully');
-                      //  window.location =data;
+
                         location.reload();
 
 /// here
