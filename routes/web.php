@@ -277,6 +277,7 @@ Route::get('/prestations', array('as' => 'prestations','uses' => 'PrestationsCon
 Route::get('/prestations/view/{id}', 'PrestationsController@view');
 Route::post('/prestations/updating','PrestationsController@updating')->name('prestations.updating');
 Route::post('/prestations/updatestatut','PrestationsController@updatestatut')->name('prestations.updatestatut');
+Route::post('/prestations/valide','PrestationsController@valide')->name('prestations.valide');
 
 
 

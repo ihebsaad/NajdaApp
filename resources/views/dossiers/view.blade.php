@@ -280,8 +280,6 @@ use App\ClientGroupe;
                         </section>
 
 
-
-
             </div>
 
             <div id="tab3" class="tab-pane fade">
@@ -579,9 +577,9 @@ use App\ClientGroupe;
                              </div>
                              <input type="hidden" id="selected" value="0">
                              <input type="hidden" id="par" value="<?php echo $iduser;?>">
-                             <button style="display:none;margin-botom:10px" type="button" id="add2" class="btn btn-primary"><i class="fa fa-check"></i> Sélectionner</button>
+                             <button style="display:none;margin-botom:10px" type="button" id="add2" class="btn btn-primary"><i class="far fa-hand-point-up"></i> Sélectionner</button>
 
-                             <div class="row">  <label>Prestataire</label>
+                             <div class="row">  <label>Prestataire sélectionné :</label>
                              </div>
 
                              <div class="row">  <select style="width:350px;margin-top:10px;margin-bottom:10px;" disabled id="selectedprest"  class="form-control col-lg-9 " value=" ">
@@ -592,9 +590,11 @@ use App\ClientGroupe;
                                  </select>
                              </div>
                              <div class="form-group"  id="prestation"  style="display:none">
+                                 <button style="display:none;margin-botom:10px" type="button" id="valide" class="btn btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
+
                                  <input type="hidden"  id="idprestation" value="0" />
                              <div class="row">
-                                 <label>statut:</label>
+                                 <label>Prestation non effectuée ? Raison:</label>
                              </div>
 
                              <div class="row">
@@ -2529,6 +2529,13 @@ function filltemplate(data,tempdoc)
 
 @stop
 
+<?php
+$urlapp=env('APP_URL');
+
+if (App::environment('local')) {
+// The environment is local
+$urlapp='http://localhost/najdaapp';
+}?>
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
 
 <script>
@@ -2538,6 +2545,26 @@ function filltemplate(data,tempdoc)
     $(function () {
 
 
+        $('#valide').click(function(){
+          var prestation=  document.getElementById('idprestation').value;
+            var _token = $('input[name="_token"]').val();
+
+            $.ajax({
+                url:"{{ route('prestations.valide') }}",
+                method:"POST",
+                data:{prestation:prestation, _token:_token},
+                success:function(data){
+                 //   var prestation=parseInt(data);
+                    /// window.location =data;
+                    window.location = '<?php echo $urlapp; ?>/prestations/show/'+prestation;
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+                }
+
+            });
+        });
 
 
         $('#add2').click(function(){
@@ -2567,6 +2594,7 @@ function filltemplate(data,tempdoc)
                /// window.location =data;
 
                     document.getElementById('prestation').style.display='block';
+                    document.getElementById('valide').style.display='block';
                     document.getElementById('idprestation').value =prestation;
 
                 },

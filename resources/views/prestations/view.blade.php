@@ -18,15 +18,22 @@
                      <h3>Prestation</h3>
                      <?php use \App\Http\Controllers\PrestationsController;
                       use \App\Http\Controllers\PrestatairesController;     ?>
+                     <?php
+                     $urlapp=env('APP_URL');
+
+                     if (App::environment('local')) {
+// The environment is local
+                         $urlapp='http://localhost/najdaapp';
+                     }?>
                   </div>
                 </div>
 
                          <div class="row" style="margin-top:10px;margin-bottom: 20px">
-                                <div class="col-md-6"><span style="color:#a0d468" class="fa fa-lg fa-folder"></span>  Dossier <a href="{{action('DossiersController@view', $prestation['dossier_id'])}}" >  <?php echo $prestation['dossier_id'] ;?></a></div>
+                                <div class="col-md-6"><span style="color:#a0d468" class="fa fa-lg fa-folder"></span>  Dossier <a href="<?php echo $urlapp.'/dossiers/view/'.$prestation['dossier_id'].'#tab3' ;?> " >  <?php echo $prestation['dossier_id'] ;?></a></div>
                             </div>
                             <div class="prestataire form-group">
                                 <div class="row" style=";margin-bottom: 5px">
-                                    <div class="col-md-8"><span style="color:grey" class="fa  fa-user-md"></span> <b>  <?php echo PrestatairesController::ChampById('civilite',$prestation->prestataire_id).' '. PrestatairesController::ChampById('name',$prestation->prestataire_id).' '.PrestatairesController::ChampById('prenom',$prestation->prestataire_id) . ' (' . PrestatairesController::ChampById('ordre',$prestation->prestataire_id). ')';?></b></div>
+                                    <div class="col-md-8"><span style="color:grey" class="fa  fa-user-md"></span> <b>  <?php echo PrestatairesController::ChampById('civilite',$prestation->prestataire_id).' '. PrestatairesController::ChampById('name',$prestation->prestataire_id).' '.PrestatairesController::ChampById('prenom',$prestation->prestataire_id) ;?></b></div>
                                     <div class="col-md-8"><span style="color:grey" class="fa  fa-map-marker"></span>  Adresse : <?php echo  PrestatairesController::ChampById('adresse',$prestation->prestataire_id).' '. PrestatairesController::ChampById('ville',$prestation->prestataire_id);?></div>
                                 </div>
                                 <div class="row">

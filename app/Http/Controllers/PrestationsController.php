@@ -74,7 +74,17 @@ class PrestationsController extends Controller
         ]);
 
         $prestations->save();
-        return redirect('/prestations')->with('success', ' ajouté avec succès');
+        return redirect('/prestations')->with('success', ' ajouté ');
+
+    }
+
+
+    public function valide(Request $request)
+    {
+
+        $prestation=intval($request->get('prestation'));
+
+        Prestation::where('id', $prestation)->update(array('effectue' => 1));
 
     }
 

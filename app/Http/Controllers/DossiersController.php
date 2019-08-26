@@ -820,7 +820,7 @@ class DossiersController extends Controller
         $tot= count($liste);
   if ( $tot > 0  ){
 
-      $output='<B style="margin-left:20px;margin-top:20px; ">'.$tot.' Résultat(s) trouvé(s)</B><br><br>';$c=0;
+      $output='<B style="margin-left:20px;margin-top:20px; "><br>'.$tot.' Résultat(s) trouvé(s)<br></B><br><br>';$c=0;
       foreach ($liste as $row) {
           $c++;
 
@@ -837,7 +837,7 @@ class DossiersController extends Controller
               ->where('parent',$prestataire)
               ->get();
 
-          $output .= '  <div id="item'.$c . '" style="display:none">
+          $output .= '  <div id="item'.$c . '" style="display:none;;padding: 20px 20px 20px 20px; border:3px dotted #4fc1e9">
                                                                                    
                              <div class="prestataire form-group">
                               <input type="hidden" id="prestataire_id_'.$c.'" value="'.$prestataire.'">
