@@ -17,6 +17,30 @@ use Illuminate\Routing\UrlGenerator;
 use URL;
 use Session;
 
+
+use App\Adresse;
+use App\AffectDoss;
+
+use App\Prestataire;
+use Illuminate\Support\Facades\Log;
+use App\Envoye ;
+use App\Template_doc ;
+use App\Document ;
+use App\Client ;
+use App\Intervenant ;
+
+
+use App\Prestation;
+use App\TypePrestation;
+use App\Citie;
+use App\Email;
+use App\OMTaxi;
+
+use WordTemplate;
+use Mail;
+
+ini_set('memory_limit','1024M');
+
 class MissionController extends Controller
 {
     //
@@ -665,6 +689,118 @@ public function getAjaxDeleguerMission($idmiss)
 }
 
 
+//  fonction pour la description de mission contenant les dates speciales
+
+       public function getDescriptionMissionAjax($id)
+       {
+
+
+
+           $output='Cette mission ne contenant pas de date(s) spécifique(s)';
+
+           $miss=Mission::where('id',$id)->first();
+
+       // gestion des dates spécifiques
+
+       if($miss->type_heu_spec==1 )
+       
+          {
+
+             $output='';
+
+         if( $miss->type_Mission==6 )
+            {
+  
+        $output.='<input type="hidden" id="idmissionDateSpecM" name="idmissionDateSpec" value="'.$miss->id.'"  />
+        <input type="hidden" id="NomTypeDateSpecM" name="NomTypeDateSpec" value="dep_pour_miss"  />
+         
+       <h4><b> Dates spécifiques : </b></h4>
+
+       <br>
+       
+        <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
+
+        <div class="row">
+          <br>
+          <span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>
+          <br> <br>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px;"> &nbsp;&nbsp; la (les) date(s) spécifique(s) à fixer pour cette mission est (sont) : </span>
+          <br><br>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date Départ pour mission </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 6 :</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> suivre mission taxi </span>
+          <br>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
+
+        
+            <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
+
+          if($miss->date_spec_affect==1)
+             {
+             $output.='green';
+             }
+             else
+             {
+              $output.= 'red' ;
+             }
+
+            $output.= ';">';
+
+
+             if($miss->date_spec_affect==1)
+
+             {
+              $output.= 'oui, date assignée';
+             }
+             else
+             {
+             $output.='Non, date non assignée' ;
+             }
+             
+             $output.='</span>';
+
+
+
+       $output.='</div>
+        <br>
+        <br>
+             <div class="row">
+
+              <label style="padding: 5px; font-weight: bold; font-size: 15px;">&nbsp;&nbsp; Mettre à jour la date spécifique : </label>';
+
+              $da = (new \DateTime())->format('Y-m-d\TH:i'); 
+
+              $output.='<input id="dateSpecM" type="datetime-local" value="'.$da.'" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec"/>
+            </div>
+
+        <br>
+
+         <div class="row">
+          <div class="col-md-5"> </div>
+
+           <div class="col-md-2"></div>
+
+          <div class="col-md-5">
+         <button id="MajDateSpecM" type="button" style=""> Mettre à jour date spécifique</button> 
+         </div>
+          
+         </div>
+         <br>
+    
+       </div>';
+
+      }
+
+     }
+
+  // fin gestion des dates spécifiques
+
+
+
+          return $output;
+
+       }
+
+
 
 //  pour les missions reportées
 
@@ -1141,6 +1277,156 @@ public function getAjaxDeleguerMission($idmiss)
 
     }
 
+    // 2eme versionde view dossier mais avec id mission
+
+    
+
+     public function viewDossierMission($id,$idmiss)
+    {        
+
+
+           $missionDocOm=Mission::where('id',$idmiss)->first();
+
+         $minutes= 120;
+        $minutes2= 600;
+
+  //      $typesMissions=TypeMission::get();
+
+     /*   $specialites = Cache::remember('specialites',$minutes2,  function () {
+
+            return DB::table('specialites')
+                ->get();
+        });*/
+      $specialites =DB::table('specialites')
+                ->get();
+
+
+        $typesMissions = Cache::remember('type_mission',$minutes2,  function () {
+
+            return DB::table('type_mission')
+                ->get();
+        });
+
+        $Missions=Dossier::find($id)->activeMissions;
+
+       // $typesprestations = TypePrestation::all();
+
+        $typesprestations = Cache::remember('type_prestations',$minutes2,  function () {
+
+            return DB::table('type_prestations')
+                ->get();
+        });
+
+       // $prestataires = Prestataire::all();
+
+      //  $prestataires = Cache::remember('prestataires',$minutes,  function () {
+
+            $prestataires= DB::table('prestataires')
+                ->get();
+      //  });
+
+        $gouvernorats = Cache::remember('cities',$minutes2,  function () {
+
+            return DB::table('cities')
+                ->get();
+        });
+
+
+
+
+        $dossier = Dossier::find($id);
+
+        $cl=app('App\Http\Controllers\DossiersController')->ChampById('customer_id',$id);
+
+
+        $entite=app('App\Http\Controllers\ClientsController')->ClientChampById('entite',$cl);
+        $adresse=app('App\Http\Controllers\ClientsController')->ClientChampById('adresse',$cl);
+
+
+      //  $clients = DB::table('clients')->select('id', 'name')->get();
+
+      /*  $clients = Cache::remember('clients',$minutes2,  function () {
+
+            return DB::table('clients')
+                ->get();
+        });
+
+*/
+        $prestations =   Prestation::where('dossier_id', $id)->get();
+        $intervenants =   Intervenant::where('dossier', $id)->get();
+
+
+        $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
+        $entrees =   Entree::where('dossier', $ref)->get();
+
+        $envoyes =   Envoye::where('dossier', $ref)->get();
+
+        $entrees1 =   Entree::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
+        ///  $entrees1 =$entrees1->sortBy('reception');
+        $envoyes1 =   Envoye::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
+        ///  $envoyes1 =$envoyes1->sortBy('reception');
+
+        $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());
+
+        $phones =   Adresse::where('nature', 'teldoss')
+            ->where('parent',$id)
+            ->get();
+
+        $emailads =   Adresse::where('nature', 'emaildoss')
+            ->where('parent',$id)
+            ->get();
+
+
+
+        // Sort the array
+        usort($communins, function  ($element1, $element2) {
+            $datetime1 = strtotime($element1['reception']);
+            $datetime2 = strtotime($element2['reception']);
+            return $datetime1 - $datetime2;
+        }
+
+        );
+
+
+        $identr=array();
+        $idenv=array();
+        foreach ($entrees as $entr)
+        {
+            //  $attaches= Attachement::where('entree_id',$entr->id)->get();
+            //  $attaches= DB::table('attachements')->where('entree_id',$entr->id)->get();
+
+            //$tab =  Entree::find($entr->id)->attachements;
+            array_push($identr,$entr->id );
+
+        }
+
+        foreach ($envoyes as $env)
+        {
+            //   $attaches= DB::table('attachements')->where('envoye_id',$env->id)->get();
+
+            // $tab =  Envoye::find($env->id)->attachements;
+            //array_push($attachements,$attaches );
+            array_push($idenv,$env->id );
+
+        }
+
+        $attachements= DB::table('attachements')
+            ->whereIn('entree_id',$identr )
+            ->orWhereIn('envoye_id',$idenv )
+            ->orWhere('dossier','=',$id )
+            ->orderBy('created_at', 'desc')
+            ->get();
+        //  $entrees =   Entree::all();
+        $documents = Document::where(['dossier' => $id,'dernier' => 1])->get();
+        $omtaxis = OMTaxi::where(['dossier' => $id,'dernier' => 1])->get();
+        $dossiers = app('App\Http\Controllers\DossiersController')->ListeDossiersAffecte();
+
+        $evaluations=DB::table('evaluations')->get();
+
+        return view('dossiers.view',['evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis, 'missionDocOm'=>$missionDocOm], compact('dossier'));
+
+
+    }
 
 
 
@@ -1148,4 +1434,12 @@ public function getAjaxDeleguerMission($idmiss)
 
 
 
-}
+
+
+
+
+
+
+
+
+}// fin controller

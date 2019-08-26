@@ -10,6 +10,7 @@ use App\Dossier;
 use App\TypeMission;
 use Auth;
 use DB;
+use Carbon\Carbon;
 use Illuminate\Routing\UrlGenerator;
 use URL;
 
@@ -218,7 +219,7 @@ class RechercheController extends Controller
 public function pageRechercheAvancee(Request $request )
 {
 
-  //dd($request->all());
+ //dd($request->all());
 
       /*"reference_medic1" => "15TM0004"
   "current_status" => "0"
@@ -226,94 +227,1429 @@ public function pageRechercheAvancee(Request $request )
   "nom_benef_search" => null
   "pres_id_search" => null*/
 
+
+  /* $format = "Y-m-d H:i:s";
+          $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+          dd($datedeb);
+          
+         // dd($datefin);
+          $datasearch=Dossier::where('reference_medic',$request->get('reference_medic1'))->first();
+          
+
+           dd($datecreation);*/
+
+            $datasearch =null;
+
+           $format = "Y-m-d H:i:s";
+
   if($request->get('reference_medic1'))
 
   {
 
-    
 
-      $datasearch=Dossier::where('reference_medic',$request->get('reference_medic1'))->get();
+                    $datasearch=Dossier::where('reference_medic',$request->get('reference_medic1'))->get();
 
 
+                
       // dd( $datasearch);
      
       // return redirect()->back()->with(compact('datasearch'));
 
 
   }
+
   else
-  {
-
-    //------------------- 1/4-----------------------------------------
-    if($request->get('current_status') && $request->get('customer_id_search')== 0 && $request->get('nom_benef_search') == null && 
-      $request->get('pres_id_search')== null)
-
-    {
-         
-         $datasearch=Dossier::where('current_status',$request->get('current_status'))->get();
-      
-    }
-
-    if($request->get('current_status') && $request->get('customer_id_search') != 0 && $request->get('nom_benef_search') == null && 
-      $request->get('pres_id_search')== null)
-
-    {
-  
-         $datasearch=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get(); 
-    }
+  {  
 
 
-     if($request->get('current_status') && $request->get('customer_id_search') != 0 && $request->get('nom_benef_search') != null && 
-      $request->get('pres_id_search')== null)
+           if($request->get('reference_medic1')==null && $request->get('current_status')== null && $request->get('customer_id_search') == null && $request->get('nom_benef_search') == null &&  $request->get('pres_id_search') == null )
+            {
+                
+                if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                       && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
-    {
+                           ($request->get('date_debut') && $request->get('date_fin'))  )
+                  
+                  {
+                     //dd('ok');
+                  
+
+                     $data=Dossier::get();
+
+                     $datasearch=array();
+
+                      $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+                     
+                      $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
+
+                     foreach ( $data as $d) {
+
+                    
+
+                      if($d->created !=null)
+                      {
+
+                       $datecreation = \DateTime::createFromFormat($format, $d->created);
+
+                      }
+
+                     else
+                     {
+                       //$format2 = "Y-m-d H:i:s.u";
+
+                     // dd($d->created_at);
+
+                      //$datecreation= Carbon::parse($d->created_at)->format($format);
+                      // $datecreation= Carbon::createFromFormat($format,$d->created_at);
+
+                      
+
+                     
+                      $datecreation = \DateTime::createFromFormat($format, $d->created_at);
+
+                      // dd( $datecreation);
+//
+
+                     }
+
+                          if($datecreation >= $datedeb &&  $datecreation <= $datefin)
+                          {
+
+                            $datasearch[]=$d;
+
+                          }
 
 
-        $data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();
+                     }
 
-               $datasearch = array(); 
+                  }
 
-                  foreach($data as $d )
-                  {              
-                           $c=$d->subscriber_name." ".$d->subscriber_lastname;
-                            if(stripos( $c,$request->get('nom_benef_search')) )
-                                  {
 
-                                       $datasearch[]=$d;
-                                  }
+            }
+           // else
+           // {
+              // dd('ok');
+              //------------------- 1/4-----------------------------------------
+
+               if($request->get('current_status')  && $request->get('customer_id_search')==null && $request->get('nom_benef_search') == null && $request->get('pres_id_search')== null)
+
+              {
+
+               
+
+                   if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                       && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
+
+                           ($request->get('date_debut') && $request->get('date_fin'))  )
+                  
+                   {
+                     //dd('ok');
+                  
+
+                     $data=Dossier::where('current_status',$request->get('current_status'))->get();
+
+                     $datasearch=array();
+
+                      $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+                     
+                      $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
+
+                     foreach ( $data as $d) {
+
+                    
+
+                      if($d->created !=null)
+                      {
+
+                       $datecreation = \DateTime::createFromFormat($format, $d->created);
+
+                      }
+
+                     else
+                     {
+                       //$format2 = "Y-m-d H:i:s.u";
+
+                     // dd($d->created_at);
+
+                      //$datecreation= Carbon::parse($d->created_at)->format($format);
+                      // $datecreation= Carbon::createFromFormat($format,$d->created_at);
+
+                      
+
+                     
+                      $datecreation = \DateTime::createFromFormat($format, $d->created_at);
+
+                      // dd( $datecreation);
+
+
+                     }
+
+                          if($datecreation >= $datedeb &&  $datecreation <= $datefin)
+                          {
+
+                            $datasearch[]=$d;
+
+                          }
+
+
+                     }
+
+                  }
+                  else
+                  {
+                    //dd("Pas de date");
+                   
+                   $datasearch=Dossier::where('current_status',$request->get('current_status'))->get();
+
+
+                   }
+
+
+                
+              }
+
+              if($request->get('current_status') && $request->get('customer_id_search') && $request->get('nom_benef_search') == null &&  $request->get('pres_id_search')== null)
+
+              {
+
+
+              if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                       && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
+
+                           ($request->get('date_debut') && $request->get('date_fin'))  )
+                  
+                   {
+                     //dd('okb');
+
+                  
+
+                     $data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get(); 
+
+                     $datasearch=array();
+
+                      $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+                     
+                      $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
+
+                     foreach ( $data as $d) {
+
+                    
+
+                      if($d->created !=null)
+                      {
+
+                       $datecreation = \DateTime::createFromFormat($format, $d->created);
+
+                      }
+
+                     else
+                     {
+                       //$format2 = "Y-m-d H:i:s.u";
+
+                     // dd($d->created_at);
+
+                      //$datecreation= Carbon::parse($d->created_at)->format($format);
+                      // $datecreation= Carbon::createFromFormat($format,$d->created_at);
+
+                      
+
+                     
+                      $datecreation = \DateTime::createFromFormat($format, $d->created_at);
+
+                      // dd( $datecreation);
+
+
+                     }
+
+                          if($datecreation >= $datedeb &&  $datecreation <= $datefin)
+                          {
+
+                            $datasearch[]=$d;
+
+                          }
+
+
+                     }
+
+                  }
+                  else
+                  {
+                     // dd('okb');
+            
+                   $datasearch=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get(); 
+
+                  }
+              }
+
+
+               if($request->get('current_status') && $request->get('customer_id_search')  && $request->get('nom_benef_search') != null &&  $request->get('pres_id_search')== null)
+
+              {
+
+
+                   if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                       && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
+
+                           ($request->get('date_debut') && $request->get('date_fin'))  )
+                  
+                   {
+                     //dd('okbr');
+
+                  
+
+                     $da=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();
+
+                         $data = array(); 
+
+                            foreach($da as $d )
+                            {              
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                      if(stripos( $c,$request->get('nom_benef_search')) )
+                                            {
+                                                 $data[]=$d;
+                                            }
+
+                            }
+
+                   
+
+                     $datasearch=array();
+
+                      $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+                     
+                      $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
+
+                     foreach ( $data as $d) {
+
+                    
+
+                      if($d->created !=null)
+                      {
+
+                       $datecreation = \DateTime::createFromFormat($format, $d->created);
+
+                      }
+
+                     else
+                     {
+                       //$format2 = "Y-m-d H:i:s.u";
+
+                     // dd($d->created_at);
+
+                      //$datecreation= Carbon::parse($d->created_at)->format($format);
+                      // $datecreation= Carbon::createFromFormat($format,$d->created_at);
+
+                      
+
+                     
+                      $datecreation = \DateTime::createFromFormat($format, $d->created_at);
+
+                      // dd( $datecreation);
+
+
+                     }
+
+                          if($datecreation >= $datedeb &&  $datecreation <= $datefin)
+                          {
+
+                            $datasearch[]=$d;
+
+                          }
+
+
+                     }
+
+                  }
+                  else
+                  {
+
+
+                 //dd('kkk');
+
+                  $data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();
+
+                         $datasearch = array(); 
+
+                            foreach($data as $d )
+                            {              
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                      if(stripos( $c,$request->get('nom_benef_search')) )
+                                            {
+                                                 $datasearch[]=$d;
+                                            }
+
+                            }
+
+                   }
+
+              }
+
+
+               if($request->get('current_status') && $request->get('customer_id_search') && $request->get('nom_benef_search')  &&  $request->get('pres_id_search') != null)
+                {
+
+                 // dd("ok");
+
+                  /*$data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();*/
+
+                     if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                       && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
+
+                           ($request->get('date_debut') && $request->get('date_fin'))  )
+                  
+                   {
+                    // dd('okbr');
+
+                  
+
+                    $da = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where('dossiers.current_status',$request->get('current_status'))
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))        
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+
+
+                       $data = array(); 
+
+                            foreach($da as $d )
+                            {              
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                      if(stripos( $c,$request->get('nom_benef_search')) )
+                                            {
+                                                 $data[]=$d;
+                                            }
+
+                            }
+                      
+
+                   
+
+                     $datasearch=array();
+
+                      $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+                     
+                      $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
+
+                     foreach ( $data as $d) {
+
+                    
+
+                      if($d->created !=null)
+                      {
+
+                       $datecreation = \DateTime::createFromFormat($format, $d->created);
+
+                      }
+
+                     else
+                     {
+                       //$format2 = "Y-m-d H:i:s.u";
+
+                     // dd($d->created_at);
+
+                      //$datecreation= Carbon::parse($d->created_at)->format($format);
+                      // $datecreation= Carbon::createFromFormat($format,$d->created_at);
+
+                      
+
+                     
+                      $datecreation = \DateTime::createFromFormat($format, $d->created_at);
+
+                      // dd( $datecreation);
+
+
+                     }
+
+                          if($datecreation >= $datedeb &&  $datecreation <= $datefin)
+                          {
+
+                            $datasearch[]=$d;
+
+                          }
+
+
+                     }
+
+                  }
+
+                  else
+                  {
+
+                    // dd('okkk');
+
+                     $data = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where('dossiers.current_status',$request->get('current_status'))
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))        
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+
+
+                       $datasearch = array(); 
+
+                            foreach($data as $d )
+                            {              
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                      if(stripos( $c,$request->get('nom_benef_search')) )
+                                            {
+                                                 $datasearch[]=$d;
+                                            }
+
+                            }
+                      }
+
+                 // dd( $datasearch);
+
+                  }
+
+                   if($request->get('current_status') && $request->get('customer_id_search') == null && $request->get('nom_benef_search') != null && $request->get('pres_id_search')== null)
+
+                      {
+
+                    if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                       && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
+
+                           ($request->get('date_debut') && $request->get('date_fin'))  )
+                  
+                   {
+                     //dd('okbr');
+
+                                     
+                      $da=Dossier::where('current_status',$request->get('current_status'))->get();
+
+                      $data = array(); 
+
+                            foreach($da as $d )
+                                    {              
+                                             $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                              if(stripos( $c,$request->get('nom_benef_search')) )
+                                                    {
+                                                         $data[]=$d;
+                                                    }
+
+                                    }
+                      
+
+                   
+
+                     $datasearch=array();
+
+                      $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+                     
+                      $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
+
+                     foreach ( $data as $d) {
+
+                    
+
+                      if($d->created !=null)
+                      {
+
+                       $datecreation = \DateTime::createFromFormat($format, $d->created);
+
+                      }
+
+                     else
+                     {
+                       //$format2 = "Y-m-d H:i:s.u";
+
+                     // dd($d->created_at);
+
+                      //$datecreation= Carbon::parse($d->created_at)->format($format);
+                      // $datecreation= Carbon::createFromFormat($format,$d->created_at);
+
+                      
+
+                     
+                      $datecreation = \DateTime::createFromFormat($format, $d->created_at);
+
+                      // dd( $datecreation);
+
+
+                     }
+
+                          if($datecreation >= $datedeb &&  $datecreation <= $datefin)
+                          {
+
+                            $datasearch[]=$d;
+
+                          }
+
+
+                     }
+
+                   //  dd($datasearch);
+
+                  }
+
+
+                        else
+                        {
+                            //dd('fffff');
+
+                          $data=Dossier::where('current_status',$request->get('current_status'))->get();
+
+                                 $datasearch = array(); 
+
+                                    foreach($data as $d )
+                                    {              
+                                             $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                              if(stripos( $c,$request->get('nom_benef_search')) )
+                                                    {
+                                                         $datasearch[]=$d;
+                                                    }
+
+                                    }
+
+
+
+
+                          }
+
+
+
+
+                      }
+
+
+   
+                    if($request->get('current_status') && $request->get('customer_id_search')==null && $request->get('nom_benef_search')==null  &&  $request->get('pres_id_search') != null)
+                {
+
+                 // dd("ok");
+
+                  /*$data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();*/
+                       if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                       && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
+
+                           ($request->get('date_debut') && $request->get('date_fin'))  )
+                  
+                   {
+                     //dd('okbr');
+
+                                     
+                       $data = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where('dossiers.current_status',$request->get('current_status'))                        
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+                      
+
+                   
+
+                     $datasearch=array();
+
+                      $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+                     
+                      $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
+
+                     foreach ( $data as $d) {
+
+                    
+
+                      if($d->created !=null)
+                      {
+
+                       $datecreation = \DateTime::createFromFormat($format, $d->created);
+
+                      }
+
+                     else
+                     {
+                       //$format2 = "Y-m-d H:i:s.u";
+
+                     // dd($d->created_at);
+
+                      //$datecreation= Carbon::parse($d->created_at)->format($format);
+                      // $datecreation= Carbon::createFromFormat($format,$d->created_at);
+
+                      
+
+                     
+                      $datecreation = \DateTime::createFromFormat($format, $d->created_at);
+
+                      // dd( $datecreation);
+
+
+                     }
+
+                          if($datecreation >= $datedeb &&  $datecreation <= $datefin)
+                          {
+
+                            $datasearch[]=$d;
+
+                          }
+
+
+                     }
+
+                   //  dd($datasearch);
 
                   }
 
 
 
-    }
+                    else
+                    {
+
+                     $datasearch = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where('dossiers.current_status',$request->get('current_status'))                        
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+                      
+                    }
+                 // dd( $datasearch);
 
 
-     if($request->get('current_status')== 0 && $request->get('customer_id_search') == 0 && $request->get('nom_benef_search') == null &&  $request->get('pres_id_search') != null)
-      {
+                }
 
-       // dd("ok");
+                //-----------------------------2/4--------------------------------------------
 
-        /*$data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();*/
+                   if($request->get('current_status')==null && $request->get('customer_id_search') && $request->get('nom_benef_search') == null &&  $request->get('pres_id_search')== null)
+
+              {
+
+                  if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                       && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
+
+                           ($request->get('date_debut') && $request->get('date_fin'))  )
+                  
+                   {
+                     //dd('okbr');
+
+                                     
+                       $data=Dossier::where('customer_id',$request->get('customer_id_search'))->get();
+                      
+
+                   
+
+                     $datasearch=array();
+
+                      $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+                     
+                      $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
+
+                     foreach ( $data as $d) {
+
+                    
+
+                      if($d->created !=null)
+                      {
+
+                       $datecreation = \DateTime::createFromFormat($format, $d->created);
+
+                      }
+
+                     else
+                     {
+                       //$format2 = "Y-m-d H:i:s.u";
+
+                     // dd($d->created_at);
+
+                      //$datecreation= Carbon::parse($d->created_at)->format($format);
+                      // $datecreation= Carbon::createFromFormat($format,$d->created_at);
+
+                      
+
+                     
+                      $datecreation = \DateTime::createFromFormat($format, $d->created_at);
+
+                      // dd( $datecreation);
 
 
-           $datasearch = DB::table('prestations')
-            ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
-            ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
-            ->where('prestataires.id','=', $request->get('pres_id_search'))        
-            ->select('dossiers.*', 'prestataires.name')
-            ->get();
-            
+                     }
 
-       // dd( $datasearch);
+                          if($datecreation >= $datedeb &&  $datecreation <= $datefin)
+                          {
 
-        }
+                            $datasearch[]=$d;
 
-      //-----------------------------2/4--------------------------------------------
+                          }
 
 
+                     }
+
+                   //  dd($datasearch);
+
+                  }
 
 
+
+
+                else
+                {
+                   
+                   $datasearch=Dossier::where('customer_id',$request->get('customer_id_search'))->get();
+
+
+                 }
+                
+              }
+
+
+
+               if($request->get('current_status')==null && $request->get('customer_id_search') && $request->get('nom_benef_search') &&  $request->get('pres_id_search')== null)
+
+              {
+
+                     if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                       && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
+
+                           ($request->get('date_debut') && $request->get('date_fin'))  )
+                  
+                   {
+                     //dd('okbr');
+
+                                     
+                        $da=Dossier::where('customer_id',$request->get('customer_id_search'))->get();
+
+                         $data = array(); 
+
+                            foreach($da as $d )
+                            {              
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                      if(stripos( $c,$request->get('nom_benef_search')) )
+                                            {
+                                                 $data[]=$d;
+                                            }
+
+                            }
+                      
+
+                   
+
+                     $datasearch=array();
+
+                      $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+                     
+                      $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
+
+                     foreach ( $data as $d) {
+
+                    
+
+                      if($d->created !=null)
+                      {
+
+                       $datecreation = \DateTime::createFromFormat($format, $d->created);
+
+                      }
+
+                     else
+                     {
+                       //$format2 = "Y-m-d H:i:s.u";
+
+                     // dd($d->created_at);
+
+                      //$datecreation= Carbon::parse($d->created_at)->format($format);
+                      // $datecreation= Carbon::createFromFormat($format,$d->created_at);
+
+                      
+
+                     
+                      $datecreation = \DateTime::createFromFormat($format, $d->created_at);
+
+                      // dd( $datecreation);
+
+
+                     }
+
+                          if($datecreation >= $datedeb &&  $datecreation <= $datefin)
+                          {
+
+                            $datasearch[]=$d;
+
+                          }
+
+
+                     }
+
+                   //  dd($datasearch);
+
+                  }
+
+
+                else
+                {
+
+                 $data=Dossier::where('customer_id',$request->get('customer_id_search'))->get();
+
+                         $datasearch = array(); 
+
+                            foreach($data as $d )
+                            {              
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                      if(stripos( $c,$request->get('nom_benef_search')) )
+                                            {
+                                                 $datasearch[]=$d;
+                                            }
+
+                            }
+
+                   }              
+              }
+
+
+                if($request->get('current_status')== null && $request->get('customer_id_search') && $request->get('nom_benef_search') == null &&  $request->get('pres_id_search') != null)
+                {
+
+
+                  if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                       && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
+
+                           ($request->get('date_debut') && $request->get('date_fin'))  )
+                  
+                   {
+                     //dd('okbr');
+
+                                     
+                        $data = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))        
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+                      
+
+                   
+
+                     $datasearch=array();
+
+                      $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+                     
+                      $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
+
+                     foreach ( $data as $d) {
+
+                    
+
+                      if($d->created !=null)
+                      {
+
+                       $datecreation = \DateTime::createFromFormat($format, $d->created);
+
+                      }
+
+                     else
+                     {
+                       //$format2 = "Y-m-d H:i:s.u";
+
+                     // dd($d->created_at);
+
+                      //$datecreation= Carbon::parse($d->created_at)->format($format);
+                      // $datecreation= Carbon::createFromFormat($format,$d->created_at);
+
+                      
+
+                     
+                      $datecreation = \DateTime::createFromFormat($format, $d->created_at);
+
+                      // dd( $datecreation);
+
+
+                     }
+
+                          if($datecreation >= $datedeb &&  $datecreation <= $datefin)
+                          {
+
+                            $datasearch[]=$d;
+
+                          }
+
+
+                     }
+
+                   //  dd($datasearch);
+
+                  }
+
+
+                
+
+                    else
+                    {
+                     $datasearch = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))        
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+
+
+                    }
+                      
+
+                 // dd( $datasearch);
+
+                  }  
+
+
+                   if($request->get('current_status')==null && $request->get('customer_id_search') && $request->get('nom_benef_search')  &&  $request->get('pres_id_search') != null)
+                {
+
+                 // dd("ok");
+
+                  /*$data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();*/
+
+                     if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                       && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
+
+                           ($request->get('date_debut') && $request->get('date_fin'))  )
+                  
+                   {
+                    // dd('okbr');
+
+                  
+
+                    $da = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))                    
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))        
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+
+
+                       $data = array(); 
+
+                            foreach($da as $d )
+                            {              
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                      if(stripos( $c,$request->get('nom_benef_search')) )
+                                            {
+                                                 $data[]=$d;
+                                            }
+
+                            }
+                      
+
+                   
+
+                     $datasearch=array();
+
+                      $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+                     
+                      $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
+
+                     foreach ( $data as $d) {
+
+                    
+
+                      if($d->created !=null)
+                      {
+
+                       $datecreation = \DateTime::createFromFormat($format, $d->created);
+
+                      }
+
+                     else
+                     {
+                       //$format2 = "Y-m-d H:i:s.u";
+
+                     // dd($d->created_at);
+
+                      //$datecreation= Carbon::parse($d->created_at)->format($format);
+                      // $datecreation= Carbon::createFromFormat($format,$d->created_at);
+
+                      
+
+                     
+                      $datecreation = \DateTime::createFromFormat($format, $d->created_at);
+
+                      // dd( $datecreation);
+
+
+                     }
+
+                          if($datecreation >= $datedeb &&  $datecreation <= $datefin)
+                          {
+
+                            $datasearch[]=$d;
+
+                          }
+
+
+                     }
+
+                  }
+
+                  else
+                  {
+
+                    // dd('okkk');
+
+                     $data = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))        
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+
+
+                       $datasearch = array(); 
+
+                            foreach($data as $d )
+                            {              
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                      if(stripos( $c,$request->get('nom_benef_search')) )
+                                            {
+                                                 $datasearch[]=$d;
+                                            }
+
+                            }
+                      }
+
+                 // dd( $datasearch);
+
+                  } 
+
+
+
+
+                //----------------------------------------------3/4--------------------------------------------------
+
+
+                  if($request->get('current_status')==null && $request->get('customer_id_search')==null && $request->get('nom_benef_search') &&  $request->get('pres_id_search')== null)
+
+                      {
+
+                        //dd('3-4');
+
+                             if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                       && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
+
+                           ($request->get('date_debut') && $request->get('date_fin'))  )
+                  
+                   {
+                     //dd('okbr');
+
+                                     
+                       $da=Dossier::get();
+
+                                 $data = array(); 
+
+                                    foreach($da as $d )
+                                    {              
+                                             $c= " ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                              if(stripos( $c,$request->get('nom_benef_search')) )
+                                                    {
+                                                      //dd("ok");
+
+                                                         $data[]=$d;
+                                                    }
+
+                                    }
+                      
+
+                   
+
+                     $datasearch=array();
+
+                      $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+                     
+                      $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
+
+                     foreach ( $data as $d) {
+
+                    
+
+                      if($d->created !=null)
+                      {
+
+                       $datecreation = \DateTime::createFromFormat($format, $d->created);
+
+                      }
+
+                     else
+                     {
+                       //$format2 = "Y-m-d H:i:s.u";
+
+                     // dd($d->created_at);
+
+                      //$datecreation= Carbon::parse($d->created_at)->format($format);
+                      // $datecreation= Carbon::createFromFormat($format,$d->created_at);
+
+                      
+
+                     
+                      $datecreation = \DateTime::createFromFormat($format, $d->created_at);
+
+                      // dd( $datecreation);
+
+
+                     }
+
+                          if($datecreation >= $datedeb &&  $datecreation <= $datefin)
+                          {
+
+                            $datasearch[]=$d;
+
+                          }
+
+
+                     }
+
+                   //  dd($datasearch);
+
+                  }
+
+
+                        else
+                        {                   
+
+                         $data=Dossier::get();
+
+                                 $datasearch = array(); 
+
+                                    foreach($data as $d )
+                                    {              
+                                             $c= " ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                              if(stripos( $c,$request->get('nom_benef_search')) )
+                                                    {
+                                                      //dd("ok");
+
+                                                         $datasearch[]=$d;
+                                                    }
+
+                                    }
+
+                          }
+
+                                         
+                      }
+
+                 if($request->get('current_status')==null && $request->get('customer_id_search')==null && $request->get('nom_benef_search')  &&  $request->get('pres_id_search') != null)
+                {
+
+                
+
+                           if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                       && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
+
+                           ($request->get('date_debut') && $request->get('date_fin'))  )
+                  
+                   {
+                     //dd('okbr');
+
+                                     
+                       $da = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))                        
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+
+
+                       $data = array(); 
+
+                            foreach($da as $d )
+                            {              
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                      if(stripos( $c,$request->get('nom_benef_search')) )
+                                            {
+                                                 $data[]=$d;
+                                            }
+
+                            }
+                      
+
+                   
+
+                     $datasearch=array();
+
+                      $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+                     
+                      $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
+
+                     foreach ( $data as $d) {
+
+                    
+
+                      if($d->created !=null)
+                      {
+
+                       $datecreation = \DateTime::createFromFormat($format, $d->created);
+
+
+                      }
+
+                     else
+                     {
+                       //$format2 = "Y-m-d H:i:s.u";
+
+                     // dd($d->created_at);
+
+                      //$datecreation= Carbon::parse($d->created_at)->format($format);
+                      // $datecreation= Carbon::createFromFormat($format,$d->created_at);
+
+                      
+
+                     
+                      $datecreation = \DateTime::createFromFormat($format, $d->created_at);
+
+                      // dd( $datecreation);
+
+
+                     }
+
+                          if($datecreation >= $datedeb &&  $datecreation <= $datefin)
+                          {
+
+                            $datasearch[]=$d;
+
+                          }
+
+
+                     }
+
+                   //  dd($datasearch);
+
+                  }
+
+
+                  else
+                  {
+
+                           //dd('jjj');
+                     $data = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))                        
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+
+
+                       $datasearch = array(); 
+
+                            foreach($data as $d )
+                            {              
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                      if(stripos( $c,$request->get('nom_benef_search')) )
+                                            {
+                                                 $datasearch[]=$d;
+                                            }
+
+                            }
+                      
+
+                 // dd( $datasearch);
+                    }
+
+                  }
+
+
+
+              //--------------------------------------------------4/4---------------------------------------------
+
+                   if($request->get('current_status')==null && $request->get('customer_id_search')==null && $request->get('nom_benef_search')==null  &&  $request->get('pres_id_search') != null)
+                {
+
+                             if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                       && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
+
+                           ($request->get('date_debut') && $request->get('date_fin'))  )
+                  
+                   {
+                     //dd('okbr');
+
+                                     
+                       $data = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))                        
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+                      
+
+                   
+
+                     $datasearch=array();
+
+                      $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+                     
+                      $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
+
+                     foreach ( $data as $d) {
+
+                    
+
+                      if($d->created !=null)
+                      {
+
+                       $datecreation = \DateTime::createFromFormat($format, $d->created);
+
+
+                      }
+
+                     else
+                     {
+                       //$format2 = "Y-m-d H:i:s.u";
+
+                     // dd($d->created_at);
+
+                      //$datecreation= Carbon::parse($d->created_at)->format($format);
+                      // $datecreation= Carbon::createFromFormat($format,$d->created_at);
+
+                      
+
+                     
+                      $datecreation = \DateTime::createFromFormat($format, $d->created_at);
+
+                      // dd( $datecreation);
+
+
+                     }
+
+                          if($datecreation >= $datedeb &&  $datecreation <= $datefin)
+                          {
+
+                            $datasearch[]=$d;
+
+                          }
+
+
+                     }
+
+                   //  dd($datasearch);
+
+                  }
+
+
+
+                    else
+                    {
+
+                     $datasearch = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))                        
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+
+                    }
+                 // dd( $datasearch);
+
+                  }
+
+
+
+
+
+             
+           // }
   }
 
     return view('dossiers.index', compact('datasearch'));

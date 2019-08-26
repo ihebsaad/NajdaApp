@@ -143,6 +143,7 @@ use App\Http\Controllers\TagsController;
                                         <div class="dropdown" style="float:right;">
                                           <button class="dropbtn"><span class="fa fa-2x fa-tasks" aria-hidden="true"></span></button>
                                           <div class="dropdown-content" style="right:0;">
+                                          <a class="DescripMission" id="<?php echo $Mission->id ?>" href="#">Descrip. Mission</a>
                                           <a class="etatAction" id="<?php echo $Mission->id ?>" href="#">Voir état action</a>
                                           <a class="mailGenerateur" id="<?php echo $Mission->id ?>" href="#">Mail générateur</a>
                                           <a class="deleguerMission" id="<?php echo $Mission->id ?>" href="#">Déléguer Mission</a>
@@ -978,6 +979,40 @@ $(document).ready(function() {
   //   -----------------
 
 
+//--script pour la description de mission et les dates speciales
+
+$('.DescripMission').on('click', function() {
+
+
+   var idw=$(this).attr("id");
+  // alert(idw);
+   var nomact=$('#workflowh'+idw).attr("value");
+   //alert
+   var typemiss=$('#workflowht'+idw).attr("value");
+      $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
+
+           $.ajax({
+
+               url: "<?php echo $urlapp; ?>/Mission/getDescriptionMissionAjax/"+idw,
+               type : 'GET',
+              // data : 'idw=' + idw,
+               success: function(data){
+               
+              // alert(data);
+
+               //alert(JSON.stringify(data));
+              $('#contenumodalworkflow').html(data);
+
+              $('#myworkflow').modal('show');
+
+                  //alert(JSON.stringify(retour))   ;
+                 // location.reload();
+            }
+
+             
+           });
+
+  });
   
 
 
@@ -1671,6 +1706,55 @@ var hrefidAcheverM;
   
   
 </script>
+
+
+<!-- gestion de bouton mette à jour date spécifique pour le modal descrip mission -->
+ <script>
+
+  $(document).on("click","#MajDateSpecM",function() {
+
+//$('#MajDateSpecMiss').click(function(){
+        var idmissionDateSpec = $('#idmissionDateSpecM').val();
+        var NomTypeDateSpec = $('#NomTypeDateSpecM').val();
+        var dateSpec = $('#dateSpecM').val();
+      
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('Action.dateSpecifique') }}",
+                method:"POST",
+                data:{idmissionDateSpec:idmissionDateSpec,NomTypeDateSpec:NomTypeDateSpec,dateSpec:dateSpec,_token:_token},
+                success:function(data){
+
+                    //  idspandateAssNonAss
+                   // window.location =data;
+
+                   if(data=='date spécifique invalide')
+                   {
+                       alert(data);
+                   }
+                   if(data=='date affectée')
+                   {
+                       alert(data);
+                 
+                         $('#idspandateAssNonAssM').css('color','green');
+                                              
+                         $('#idspandateAssNonAssM').text('Oui,date affectée');
+                          //$('#idspandateAssNonAss').css('text-decoration','blink'); 
+
+                   }
+
+                   
+
+                }
+            });
+       
+    });
+     
+
+
+
+
+  </script>
 
 
 

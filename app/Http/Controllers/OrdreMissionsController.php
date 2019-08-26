@@ -8,12 +8,16 @@ use PDF as PDF3;
 use PDF as PDFcomp;
 use App\Attachement ;
 use App\OMTaxi;
+use App\Mission;
 
 
 class OrdreMissionsController extends Controller
 {
 	public function export_pdf_odmtaxi(Request $request)
     {
+
+       
+        //dd($_POST['idMissionOM']);
         // verifier si remplacement ou annule
         if (isset($_POST['parent']) && (! empty($_POST['parent'])))
         {
@@ -116,6 +120,27 @@ class OrdreMissionsController extends Controller
         //OMTaxi::create([$request->all(),'emplacement'=>$path.$iddoss.'/'.$name.'.pdf']);
         $omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         $result = $omtaxi->update($request->all());
+
+
+
+
+         //$format ='Y-m-d H:i';
+         $datePourSuiviMiss=$omtaxi->CL_heuredateRDV;
+         //str_replace("T"," ",$datePourSuiviMiss);
+         //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss); 
+         $datePourSuivi= date('Y-m-d H:i',strtotime($datePourSuiviMiss));
+
+         //$datePourSuivi = \DateTime::createFromFormat($format, $datePourSuiviMiss);
+
+         $miss=Mission::where('id',$_POST['idMissionOM'])->first();
+         $miss->update(['h_dep_pour_miss'=> $datePourSuivi,'date_spec_affect'=> true]);
+                
+
+
+        return  $datePourSuivi;
+
+       // return $_POST['idMissionOM'];
+        
     }
 
     public function historique(Request $request)
