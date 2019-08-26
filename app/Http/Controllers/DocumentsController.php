@@ -119,6 +119,17 @@ class DocumentsController extends Controller
 
                 $titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
             }
+
+
+     /* if (strpos($file, 'PEC_location_Najda_a_VAT') !== false)  
+        {
+            if (isset($_POST['CL_date_fin_location']))
+            {
+                // maj table
+            }
+        }*/
+
+        return $_POST['idMissionDoc'];
             
        WordTemplate::export($file, $array, '/documents/'.$refdoss.'/'.$name_file);
           
