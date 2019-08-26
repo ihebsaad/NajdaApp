@@ -20,6 +20,7 @@ Route::get('/changerroles', 'HomeController@changerroles')->name('changerroles')
 Route::get('/parametres', 'HomeController@parametres')->name('parametres');
 Route::get('/supervision', 'HomeController@supervision')->name('supervision');
 Route::get('/affectations', 'HomeController@affectation')->name('affectation');
+Route::get('/notifs', 'HomeController@notifs')->name('notifs');
 Route::post('/parametring', 'HomeController@parametring')->name('home.parametring');
 Route::post('/parametring2', 'HomeController@parametring2')->name('home.parametring2');
 Route::post('/demande', 'HomeController@demande')->name('home.demande');
@@ -131,8 +132,7 @@ Route::post('/emails/sendsms', 'EmailController@sendsms')->name('emails.sendsms'
 Route::post('/emails/sendfax', 'EmailController@sendfax')->name('emails.sendfax');
 Route::get('/emails/whatsapp', 'EmailController@whatsapp');
 Route::post('/emails/sendwhatsapp', 'EmailController@sendwhatsapp')->name('emails.sendwhatsapp');
-//Route::put('/emails/sendwhatsapp', 'EmailController@sendwhatsapp')->name('emails.sendwhatsapp');
-//Route::get('/emails/sendwhatsapp', 'EmailController@sendwhatsapp')->name('emails.sendwhatsapp');
+
 Route::get('/emails/maboite', 'EmailController@maboite');
 Route::get('/emails/open/{id}', 'EmailController@open');
 
@@ -329,7 +329,7 @@ Route::post('/Missions/storeActionsEnCours','MissionController@storeTableActions
 Route::get('/Missions/view/{id}', 'MissionController@view');
 Route::get('/Mission/workflow/{dossid}/{id}', 'MissionController@getWorkflow');
 Route::post('/Mission/updateworkflow/', 'MissionController@updateWorkflow');
-//Route::post('/Mission/updateworkflow/{dossid}/{id}', 'MissionController@updateWorkflow');
+
 Route::get('/Mission/RendreInactive/{id}/{dossid}', 'MissionController@RendreInactive');
 Route::get('/Mission/RendreAchevee/{id}/{dossid}', 'MissionController@RendreAchevee');
 Route::get('/Mission/getAjaxWorkflow/{id}', 'MissionController@getAjaxWorkflow');
@@ -338,9 +338,6 @@ Route::get('/getMissionAjaxModal', 'MissionController@getMissionsAjaxModal');
 Route::get('/Mission/getAjaxDeleguerMission/{id}', 'MissionController@getAjaxDeleguerMission');
 Route::get('/Mission/AnnulerMissionCouranteByAjax/{id}', 'MissionController@AnnulerMissionCouranteByAjax');
 Route::get('/Mission/getMailGenerator/{id}', 'MissionController@getMailGeneratorByAjax');
-
-
-
 
 
 
@@ -390,7 +387,6 @@ Route::get('/traitementsBoutonsActions/{iddoss}/{idmiss}/{idsousact}/{bouton}',
 Route::get('/annulerAttenteReponseAction/{idact}','ActionController@annulerAttenteReponseAction');
 
 Route::post('/Actions/traiterDatesSpecifiques','ActionController@traiterDatesSpecifiques')->name('Action.dateSpecifique');
-
 
 
 

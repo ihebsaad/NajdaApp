@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Demande;
+use App\Entree;
 use App\Parametre;
 use App\Seance;
 use App\User;
@@ -442,6 +443,14 @@ return redirect('roles');
     {
         return view('roles');
     }
+
+    public function notifs()
+    {
+        $entrees = Entree::orderBy('id', 'desc')->where('statut','<','2')->paginate(20);
+
+        return view('notifs',['entrees'=>$entrees]);
+    }
+
 
 
     public function parametres()

@@ -33,3 +33,6 @@ sudo chmod -R 755 ./vendor
 // UPDATE `dossiers` SET `affecte`=NULL  where `current_status`='Cloture';
 
 // Villes & places : https://community.algolia.com/
+
+//create 'fonts' folder under 'storage' and make sure your server can access this folder.
+  `chmod mode 777 fonts`

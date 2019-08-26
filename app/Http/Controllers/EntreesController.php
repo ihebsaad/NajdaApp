@@ -165,7 +165,6 @@ class EntreesController extends Controller
     }
 
 
-
     public function showdisp($id)
     {
         $dossiers = Dossier::all();

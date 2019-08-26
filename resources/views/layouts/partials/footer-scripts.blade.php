@@ -235,7 +235,10 @@ if (App::environment('local')) {
     // Vérifier le nom de la vue
     <?php if (($view_name!='entrees-dispatching')  && ($view_name!='entrees-showdisp') ) { ?>
 
-    // verifier si la notification est dispatche
+  <?php  if (($view_name!='supervision')  && ($view_name!='affectation') && ($view_name!='notifs')  && ($view_name!='parametres') ) { ?>
+
+
+        // verifier si la notification est dispatche
     if ((typeof parsed['data']['entree']['dossier'] !== "undefined") && (parsed['data']['entree']['dossier'] !== null))
     {
         // verifier si le dossier exist dans la liste des notifications
@@ -312,6 +315,7 @@ if (App::environment('local')) {
 
     }
 
+    <?php } // end supervision and admin views  ?>
         <?php }else{ ?>
          $("#notifdisp").fadeOut('slow');
         $("#notifdisp").prepend("<li class='overme' style='color:white;padding-left:6px;margin-bottom:15px;background-color:#fd9883;color:white;font-weight:800;'><img width='15' src='" + img + "' /> <a  style=';font-weight:800;font-size:14px;color:white' href='<?php echo $urlapp; ?>/entrees/showdisp/" + parsed['data']['entree']['id'] + "'   ><small style='font-size:12px;color:white;'> " + parsed['data']['entree']['sujet'] + "</small></a><br>                  <label style='font-size:12px'><a style='color:white' href='<?php echo $urlapp; ?>/entrees/showdisp/" + parsed['data']['entree']['id'] + "'  >" + parsed['data']['entree']['emetteur'] + "</a></label><br><label style='font-size:12px'> " + parsed['data']['entree']['date'] + "</label></li>");

@@ -102,6 +102,11 @@
                                     </a>
                                 </li>
 
+                                <li class="nav-item ">
+                                    <a class="nav-link " href="{{ route('notifs') }}"  >
+                                        <i class="fa fa-lg  fa-inbox"></i>  Flux de réception
+                                    </a>
+                                </li>
                             </ul>
                             <table id="tabusers" style="text-align: center ;background-color:#F8F7F6;padding:5px 5px 5px 5px">
                                 <thead style="text-align:center;font-size:13px;"><th>Agent</th><th>Type</th><th>Rôle Principal</th><th>Dossiers Affectés</th><th>Missions</th><th>Actions </th><th>Actions Actives</th><th>Notifications</th></thead>

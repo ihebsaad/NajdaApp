@@ -39,6 +39,12 @@
                       </a>
                   </li>
 
+                  <li class="nav-item ">
+                      <a class="nav-link " href="{{ route('notifs') }}"  >
+                          <i class="fa fa-lg  fa-inbox"></i>  Flux de réception
+                      </a>
+                  </li>
+
               </ul>
           <?php
               use \App\Http\Controllers\UsersController;

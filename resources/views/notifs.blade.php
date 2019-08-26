@@ -37,12 +37,12 @@ use \App\Http\Controllers\UsersController;
               {
                   if(strlen($x)<=$length)
                   {
-                      echo $x;
+                      return $x;
                   }
                   else
                   {
                       $y=substr($x,0,$length) . '..';
-                      echo $y;
+                      return $y;
                   }
               }
 
@@ -85,10 +85,45 @@ use \App\Http\Controllers\UsersController;
                   return sprintf($format, $hours, $minutes);
               }
 
+			  function time_elapsed_string($datetime, $full = false) {
+    $now = new DateTime;
+    $ago = new DateTime($datetime);
+    $diff = $now->diff($ago);
 
+    $diff->w = floor($diff->d / 7);
+    $diff->d -= $diff->w * 7;
+
+    $string = array(
+        'y' => 'année',
+        'm' => 'mois',
+        'w' => 'semaine',
+        'd' => 'jour',
+        'h' => 'heure',
+        'i' => 'minute',
+     //   's' => 'seconde',
+    );
+    foreach ($string as $k => &$v) {
+        if ($diff->$k) {
+            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+        } else {
+            unset($string[$k]);
+        }
+    }
+
+    if (!$full) $string = array_slice($string, 0, 1);
+    return $string ? implode(', ', $string) . ' ' : 'maintenant';
+}
+
+
+$urlapp=env('APP_URL');
+
+if (App::environment('local')) {
+    // The environment is local
+    $urlapp='http://localhost/najdaapp';
+}
               if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
 ?>
-                        <div class="padding:5px 5px 5px 5px"><br>
+                        <div class="padding:5px 5px 5px 5px">
                            <!-- <h4>Supervision</h4><br>-->
                             <ul id="tabs" class="nav  nav-tabs"  >
                                 <li class=" nav-item ">
@@ -103,19 +138,38 @@ use \App\Http\Controllers\UsersController;
                                 </li>
                                 <li class="nav-item active">
                                     <a class="nav-link active" href="{{ route('affectation') }}"  >
-                                        <i class="fa fa-lg  fa-envelope"></i>  Flux de réceptions
+                                        <i class="fa fa-lg  fa-inbox"></i>  Flux de réception
                                     </a>
                                 </li>
                             </ul>
+							<br>
                             <table id="tabusers" style="text-align: center ;background-color:#F8F7F6;padding:5px 5px 5px 5px">
-                                <thead style="text-align:center;font-size:13px;"><th>Type</th><th>Sujet</th><th>Dossier</th><th>Attachements</th><th>Agent</th></thead>
+                                <thead style="text-align:center;font-size:14px;"><th>Type</th><th>Réception</th><th>Emetteur</th><th>Sujet</th><th>Nb attchs</th><th>Dossier</th><th>Affecté à</th><th>Consulté</th></thead>
+								<tbody class="thetable" style="font-size:14px;line-height:30px">
                             <?php $c=0;
-                            foreach($users as $user)
+                            foreach($entrees as $entree)
                                 {
+									$type=$entree['type'];
+									$time=$entree['created_at'];$heure= "<small>Il y'a ".time_elapsed_string($time, false).'</small>';
+								//	$emetteur= $entree['emetteur'] ;
+									$emetteur=custom_echo($entree['emetteur'],'18');
+								//	$sujet= $entree['sujet'] ;
+									$sujet=custom_echo($entree['sujet'],'20');  
+									$dossier=$entree['dossier']; if($dossier==''){$folder='<small style="color:red">Non Dispatché!</small>';}else{$folder=$entree['dossier'];}
+									$attachs=$entree['nb_attach'];
+									$affecte=$entree['affecte']; if($affecte>0){$agent= UsersController::ChampById('name',$affecte).' '.UsersController::ChampById('lastname',$affecte); }else{ $agent='<span style="color:red">Non Affecté!</span>'; }
+									$viewed=$entree['viewed']; if($viewed==1){$consulte='<span style="color:green">OUI';}else{$consulte='<span style="color:red">NON</span>';}
 									
+									echo '<tr><td>';
+									  if ($type=='email'){echo '<img width="15" src="'. $urlapp .'/public/img/email.png" />';}   if ($type=='fax'){echo '<img width="15" src="'. $urlapp .'/public/img/faxx.png" />';}  if ($type=='sms'){echo '<img width="15" src="'. $urlapp .'/public/img/smss.png" />';}   if ($type=='phone'){echo '<img width="15" src="'. $urlapp .'/public/img/tel.png" />';} 
+									echo ' '.$type.'</td><td>'.$heure.'</td><td>'.$emetteur.'</td><td>';
+									if($dossier==''){ ?><a href="{{action('EntreesController@showdisp', $entree['id'])}}"> <?php }else{ ?> <a href="{{action('EntreesController@show', $entree['id'])}}"> <?php }  
+									echo $sujet.'</a></td><td>'.$attachs.'</td><td>'.$folder.'</td><td>'.$agent.'</td><td>'.$consulte.'</td></tr>';
                                 }
-                                    ?><br>
-
+								 
+?>
+								</tbody>
+                                    
                             </table>
                         </div>
     <?php } ?>
@@ -223,6 +277,19 @@ use \App\Http\Controllers\UsersController;
     #tabusers th{height:60px;background-color: #4FC1E9;color:white;border-left:1px solid white;}
     #tabusers td{border-left:1px solid white;border-bottom:1px solid white;}
     #tabusers tr{margin-bottom:15px;min-height:40px;}
+ 
 
+	@media (min-width: 1024px) {
 
+	.thetable{line-height:30px;}
+
+	}
+	
+	@media  (width > 1280px)    {
+		
+	 .thetable{line-height:30px;}
+		
+		}
+	
+ 
     </style>
