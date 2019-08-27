@@ -284,7 +284,7 @@ use App\Http\Controllers\TagsController;
 
                                                <div class="row">
                                                 <div class="col-md-3" style="padding-top:5px">  <label for="typeactauto" style="display: inline-block;  text-align: left; width: 50px;">Type:</label></div>
-                                                <div class="col-md-9"> 
+                                                <div class="col-md-9" style=" margin-left: -8px ; "> 
                                                  <!-- <input id="typeactauto" type="text" value="" class="form-control" style="width:95%;  text-align: left;" name="typeactauto" autocomplete="off" />-->
 
 
