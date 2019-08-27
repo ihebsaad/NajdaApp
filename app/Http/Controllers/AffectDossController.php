@@ -56,7 +56,7 @@ class AffectDossController extends Controller
         { 
 
 
-            $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i');
+            $dtc = (new \DateTime())->format('Y-m-d H:i');
             $affec=new AffectDoss([
 
                   'util_affecteur'=>$request->get('affecteurdoss'),
@@ -157,7 +157,7 @@ class AffectDossController extends Controller
             app('App\Http\Controllers\EmailController')->accuse($params);
             }
 
-              $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i');
+            $dtc = (new \DateTime())->format('Y-m-d H:i');
             $affec=new AffectDoss([
 
                   'util_affecteur'=>$request->get('affecteur'),
@@ -166,7 +166,6 @@ class AffectDossController extends Controller
                   
                   'id_dossier'=>$iddoss,
                   'date_affectation'=>$dtc,
-
             ]);
 
              $affec->save();

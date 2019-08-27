@@ -346,6 +346,22 @@ class DossiersController extends Controller
         $ref=$this->RefDossierById($id);
 
         $user = auth()->user();
+        $iduser=$user->id;
+
+        $dtc = (new \DateTime())->format('Y-m-d H:i');
+        $affec=new AffectDoss([
+
+            'util_affecteur'=>$iduser,
+            'util_affecte'=>$agent,
+            'statut'=>"nouveau",
+
+            'id_dossier'=>$id,
+            'date_affectation'=>$dtc,
+        ]);
+
+        $affec->save();
+
+        $user = auth()->user();
         $nomuser=$user->name.' '.$user->name;
         $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
         Log::info('[Agent: '.$nomuser.'] Affectation de dossier :'.$ref.' à: '.$nomagent);
