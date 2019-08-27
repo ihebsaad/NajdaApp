@@ -269,7 +269,7 @@ $(document).on('click','.kbstab',function(){
       </div>
       <br><br>
       <div class="row">
-        <button id="BouRapAct" type="submit" style="flow : left; margin-left: 120px"> Mise en attente</button>
+        <button id="BouRapAct"  class="btn btn-success" type="submit" style="flow : left; margin-left: 120px"> Mise en attente</button>
       </div>
 
       </p>
@@ -286,7 +286,7 @@ $(document).on('click','.kbstab',function(){
       </div>
       <br><br>
       <div class="row">
-        <button id="BouRepAct" type="submit" style="float: right; margin-right: 130px;"> Reporter Action</button> &nbsp  &nbsp &nbsp
+        <button id="BouRepAct"  class="btn btn-success" type="submit" style="float: right; margin-right: 130px;"> Reporter Action</button> &nbsp  &nbsp &nbsp
       </div>
     
       </p>
@@ -302,90 +302,7 @@ $(document).on('click','.kbstab',function(){
 
        <!-- gestion des dates spécifiques-->
 
-       @if($Action->Mission->type_heu_spec==1 )
-
-        @if($Action->Mission->type_Mission==6 && $Action->ordre < 6 )
-
-
-        <input type="hidden" id="idmissionDateSpec" name="idmissionDateSpec" value="{{$Action->Mission->id}}"  />
-        <input type="hidden" id="NomTypeDateSpec" name="NomTypeDateSpec" value="dep_pour_miss"  />
-         
-       <h4><b> Dates spécifiques : </b></h4>
-
-       <br>
-       
-        <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
-
-        <div class="row">
-          <br>
-          <span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>
-          <br> <br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px;"> &nbsp;&nbsp; la (les) date(s) spécifique(s) à fixer pour cette mission est (sont) : </span>
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date Départ pour mission </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l'action 6 :</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> suivre mission taxi </span>
-          <br>
-           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
-
-           {{-- @if($Action->Mission->date_spec_affect==1)
-           <span style="padding: 5px; font-weight: bold; font-size: 15px; color:green ;"> oui, date assignée </span>
-           @else
-           <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Non, date non assignée</span>
-           @endif--}}
-
-            <span id="idspandateAssNonAss" style="padding: 5px; font-weight: bold; font-size: 15px; color:<?php if($Action->Mission->date_spec_affect==1)
-
-             {
-              echo 'green';
-             }
-             else
-             {
-              echo 'red' ;
-             }?>
-
-             ;"> <?php if($Action->Mission->date_spec_affect==1)
-
-             {
-              echo 'oui, date assignée';
-             }
-             else
-             {
-              echo 'Non, date non assignée' ;
-             }?>
-             
-            </span>
-
-
-
-        </div>
-        <br>
-        <br>
-             <div class="row">
-
-              <label style="padding: 5px; font-weight: bold; font-size: 15px;">&nbsp;&nbsp; Mettre à jour la date spécifique : </label>
-              <?php $da = (new \DateTime())->format('Y-m-d\TH:i'); ?>
-             <input id="dateSpec" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec"/>
-            </div>
-
-        <br>
-
-         <div class="row">
-          <div class="col-md-5"> </div>
-
-           <div class="col-md-2"></div>
-
-          <div class="col-md-5">
-         <button id="MajDateSpec" type="button" style=""> Mettre à jour date spécifique</button> 
-         </div>
-          
-         </div>
-         <br>
     
-       </div>
-
-           @endif
-
-        @endif
 
     <!-- fin gestion des dates spécifiques-->
 
