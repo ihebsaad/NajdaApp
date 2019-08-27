@@ -1708,7 +1708,7 @@ var hrefidAcheverM;
 </script>
 
 
-<!-- gestion de bouton mette à jour date spécifique pour le modal descrip mission -->
+<!-- gestion de bouton mette à jour date spécifique 1 pour le modal descrip mission -->
  <script>
 
   $(document).on("click","#MajDateSpecM",function() {
@@ -1739,6 +1739,54 @@ var hrefidAcheverM;
                          $('#idspandateAssNonAssM').css('color','green');
                                               
                          $('#idspandateAssNonAssM').text('Oui,date affectée');
+                          //$('#idspandateAssNonAss').css('text-decoration','blink'); 
+
+                   }
+
+                   
+
+                }
+            });
+       
+    });
+     
+
+
+
+
+  </script>
+
+  <!-- gestion de bouton mette à jour date spécifique 2 pour le modal descrip mission -->
+ <script>
+
+  $(document).on("click","#MajDateSpecM2",function() {
+
+//$('#MajDateSpecMiss').click(function(){
+        var idmissionDateSpec = $('#idmissionDateSpecM2').val();
+        var NomTypeDateSpec = $('#NomTypeDateSpecM2').val();
+        var dateSpec = $('#dateSpecM2').val();
+      
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('Action.dateSpecifique') }}",
+                method:"POST",
+                data:{idmissionDateSpec:idmissionDateSpec,NomTypeDateSpec:NomTypeDateSpec,dateSpec:dateSpec,_token:_token},
+                success:function(data){
+
+                    //  idspandateAssNonAss
+                   // window.location =data;
+
+                   if(data=='date spécifique invalide')
+                   {
+                       alert(data);
+                   }
+                   if(data=='date affectée')
+                   {
+                       alert(data);
+                 
+                         $('#idspandateAssNonAssM2').css('color','green');
+                                              
+                         $('#idspandateAssNonAssM2').text('Oui,date affectée');
                           //$('#idspandateAssNonAss').css('text-decoration','blink'); 
 
                    }
