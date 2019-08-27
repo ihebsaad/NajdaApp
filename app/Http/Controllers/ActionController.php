@@ -256,7 +256,10 @@ class ActionController extends Controller
                                     if($datespe <= $dateSys)
                                     {
 
-                                        $action6=ActionEC::where('mission_id',$miss->id)->where('ordre',6)->first();
+                                        $action6=ActionEC::where('mission_id',$miss->id)
+                                                          ->where('statut','!=','rfaite')
+                                                          ->where('ordre',6)
+                                                          ->first();
                                         //Suivre mission taxi
                                         if($action6->statut=='inactive')
                                         {
@@ -316,7 +319,10 @@ class ActionController extends Controller
                                     if($datespe <= $dateSys)
                                     {
 
-                                        $action7=ActionEC::where('mission_id',$miss->id)->where('ordre',7)->first();
+                                        $action7=ActionEC::where('mission_id',$miss->id)
+                                                           ->where('statut','!=','rfaite')
+                                                           ->where('ordre',7)
+                                                           ->first();
                                         //Suivre mission taxi
                                         if($action7->statut=='inactive')
                                         {

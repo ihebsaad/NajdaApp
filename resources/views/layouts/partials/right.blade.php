@@ -283,13 +283,33 @@ use App\Http\Controllers\TagsController;
                                           <div class="form-group">
 
                                                <div class="row">
-                                                <div class="col-md-3" style="padding-top:5px">  <label for="typeactauto" style="display: inline-block;  text-align: left; width: 55px;">Type:</label></div>
+                                                <div class="col-md-3" style="padding-top:5px">  <label for="typeactauto" style="display: inline-block;  text-align: left; width: 50px;">Type:</label></div>
                                                 <div class="col-md-9"> 
-                                                  <input id="typeactauto" type="text" value="" class="form-control" style="width:95%;  text-align: left;" name="typeactauto" autocomplete="off" />
+                                                 <!-- <input id="typeactauto" type="text" value="" class="form-control" style="width:95%;  text-align: left;" name="typeactauto" autocomplete="off" />-->
+
+
+                                          <select id="typeMissauto" name="typeMissauto" class="form-control select2" style="width:95%; border: 1px solid #ccc; height: 32px">
+                                            <option value="">Sélectionner</option>
+                                         @foreach( $typesMissions as $c) 
+
+                                                <option value="{{$c->nom_type_Mission}}">{{$c->nom_type_Mission}} </option>
+
+                                         @endforeach
+
+
+
+                                         </select>
+
+
+
+
+
                                                  <div id="listtypeact" style=" left:-50px; z-index: 9999; width: 200 px;"> </div>
 
 
                                                  <script> $(document).ready(function(){
+
+                                                     $("#typeMissauto").select2();
 
                                                      $("#typeactauto").keyup(function(){
 
@@ -310,8 +330,8 @@ use App\Http\Controllers\TagsController;
 
                                                            // alert(data);
 
-                                                           $("#listtypeact").fadeIn();
-                                                            $("#listtypeact").html(data);
+                                                           //$("#listtypeact").fadeIn();
+                                                            //$("#listtypeact").html(data);
 
                                                           }
 
