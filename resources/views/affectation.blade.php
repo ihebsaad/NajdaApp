@@ -231,20 +231,25 @@
               console.log('DOSSIER : '+dossier);
               var _token = $('input[name="_token"]').val();
 
-              $.ajax({
-                  url: "{{ route('dossiers.attribution') }}",
-                  method: "POST",
-                  data: {  dossierid:dossier ,agent:null, _token: _token},
-                  success: function ( ) {
-                      $('#dossier-'+dossier).animate({
-                          opacity: '0.3',
-                      });
-                      $('#dossier-'+dossier).animate({
-                          opacity: '1',
-                      });
+              // attendre 5 secondes pour confirmer l'attribution
+              setTimeout(function(){
+                  $.ajax({
+                      url: "{{ route('dossiers.attribution') }}",
+                      method: "POST",
+                      data: {  dossierid:dossier ,agent:null, _token: _token},
+                      success: function ( ) {
+                          $('#dossier-'+dossier).animate({
+                              opacity: '0.1',
+                          });
+                          $('#dossier-'+dossier).animate({
+                              opacity: '1',
+                          });
 
-                  }
-              });
+                      }
+                  });
+
+              }, 5000);
+
           }else {
               var userdiv=target.id;
               var dossdiv=el.id;
