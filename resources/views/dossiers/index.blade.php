@@ -124,6 +124,7 @@
                             </select>
                         </div>
                         <div class="col-md-4">
+                            
                             <div class="form-group ">
                                 <label >Filtrez par date de création de dossier </label>
                                 <!--<div id="reportrange" class="form-control btn default" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100% ;">
@@ -139,7 +140,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <button classj="btn btn-circle blue" id="rechercher" type="submit" style="margin-top: 25px;">Rechercher</button>
+                            <button class="btn btn-circle blue" id="rechercher" type="submit" style="margin-top: 25px;">Rechercher</button>
                         </div>
                     </div>
                 </form>

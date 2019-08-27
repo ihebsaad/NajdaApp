@@ -123,6 +123,8 @@ class MissionController extends Controller
              'type_heu_spec'=> $typeMiss->type_heu_spec,
              'type_heu_spec_archiv'=> $typeMiss->type_heu_spec,
              'date_spec_affect'=>0,
+             'date_spec_affect2'=>0,
+             'date_spec_affect3'=>0,
              'rdv'=> $typeMiss->rdv,
              'act_rdv'=> $typeMiss->act_rdv,
              'dep_pour_miss'=> $typeMiss->dep_pour_miss,
@@ -163,7 +165,7 @@ class MissionController extends Controller
 
         }
 
-       //date_default_timezone_set('Africa/Tunis');
+      //date_default_timezone_set('Africa/Tunis');
        //setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
 
           $dtc = (new \DateTime())->format('Y-m-d\TH:i');
@@ -694,11 +696,22 @@ public function getAjaxDeleguerMission($idmiss)
        public function getDescriptionMissionAjax($id)
        {
 
+          $miss=Mission::where('id',$id)->first();
+
+         $output='<h4><b> <i>Nom mission :<i/></span> '.$miss->titre.'</b> </h4> <br>';
+
+         $output.='<h4><b> Description de mission : '.$miss->typeMission->des_miss.'</b> </h4> <br>';
+         $output.='<h4><b> type de  mission : '.$miss->typeMission->nom_type_Mission.'</b> </h4> <br>'; 
+         $output.='<h4><b> Nombre d\'actions: '.$miss->ActionECs->count().'</b> </h4> <br>';
 
 
-           $output='Cette mission ne contenant pas de date(s) spécifique(s)';
+        if ($miss->type_heu_spec==0)
+          {
+                         
+           $output.='<h4>Cette mission ne contenant pas de date(s) spécifique(s)</h4>';
 
-           $miss=Mission::where('id',$id)->first();
+          }
+           
 
        // gestion des dates spécifiques
 
@@ -706,7 +719,7 @@ public function getAjaxDeleguerMission($idmiss)
        
           {
 
-             $output='';
+             //$output='';
 
          if( $miss->type_Mission==6 )
             {
@@ -717,14 +730,16 @@ public function getAjaxDeleguerMission($idmiss)
        <h4><b> Dates spécifiques : </b></h4>
 
        <br>
+          <span style="padding: 0px; font-weight: bold; font-size: 17px;">  la (les) date(s) spécifique(s) à fixer pour cette mission est (sont) : </span>
+        <br>
+       <br>
        
         <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
 
         <div class="row">
           <br>
-          <span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>
-          <br> <br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px;"> &nbsp;&nbsp; la (les) date(s) spécifique(s) à fixer pour cette mission est (sont) : </span>
+          <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
+          
           <br><br>
           <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date Départ pour mission </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 6 :</span>
           <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> suivre mission taxi </span>
@@ -785,10 +800,90 @@ public function getAjaxDeleguerMission($idmiss)
           
          </div>
          <br>
+         <br>
+       </div>';
+
+       /* date spécifique pour lancer evalutaion --------------------------------------------------------*/
+
+
+
+       $output.='<input type="hidden" id="idmissionDateSpecM2" name="idmissionDateSpec2" value="'.$miss->id.'"  />
+        <input type="hidden" id="NomTypeDateSpecM2" name="NomTypeDateSpec2" value="arr_prev_dest"  />
+         
+       
+       <br>
+       
+        <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
+
+        <div class="row">
+          <br>
+        
+        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date prévue pour fin de mission </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 7 :</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Evaluation  </span>
+          <br>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
+
+        
+            <span id="idspandateAssNonAssM2" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
+
+          if($miss->date_spec_affect2==1)
+             {
+             $output.='green';
+             }
+             else
+             {
+              $output.= 'red' ;
+             }
+
+            $output.= ';">';
+
+
+             if($miss->date_spec_affect2==1)
+
+             {
+              $output.= 'oui, date assignée';
+             }
+             else
+             {
+             $output.='Non, date non assignée' ;
+             }
+             
+             $output.='</span>';
+
+
+
+       $output.='</div>
+        <br>
+        <br>
+             <div class="row">
+
+              <label style="padding: 5px; font-weight: bold; font-size: 15px;">&nbsp;&nbsp; Mettre à jour la date spécifique : </label>';
+
+              $da = (new \DateTime())->format('Y-m-d\TH:i'); 
+
+              $output.='<input id="dateSpecM2" type="datetime-local" value="'.$da.'" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec2"/>
+            </div>
+
+        <br>
+
+         <div class="row">
+          <div class="col-md-5"> </div>
+
+           <div class="col-md-2"></div>
+
+          <div class="col-md-5">
+         <button id="MajDateSpecM2" type="button" style=""> Mettre à jour date spécifique</button> 
+         </div>
+          
+         </div>
+         <br>
     
        </div>';
 
-      }
+
+
+
+      }// fin type taxi
 
      }
 

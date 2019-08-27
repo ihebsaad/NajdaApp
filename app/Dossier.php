@@ -112,9 +112,9 @@ class Dossier extends Model
 
     ];
 
-    /*protected $dateFormat = 'Y-m-d H:i:s';*/
+    /*protected $dateFormat = 'Y-m-d H:i:s';
 
-    /*public function getDateFormat()
+    public function getDateFormat()
     {
         return 'Y-m-d H:i:s.u';
     }*/

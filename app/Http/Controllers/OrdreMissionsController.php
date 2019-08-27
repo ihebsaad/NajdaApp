@@ -53,6 +53,7 @@ class OrdreMissionsController extends Controller
         		}
         		if ($_POST['templatedocument'] === "complete")
         		{
+                    //return $_POST['idMissionOM'];
         			
 	        		// Send data to the view using loadView function of PDF facade
         			$pdfcomp = PDFcomp::loadView('ordremissions.pdfodmtaxi')->setPaper('a4', '');
@@ -85,7 +86,24 @@ class OrdreMissionsController extends Controller
         			$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1]);
         			$result = $omtaxi->update($request->all());
         			//return 'complete action '.$result;
-        			exit();
+
+                    // affecter date  prévue destination ( prévue fin de mission)
+                     
+
+                    //$format ='Y-m-d H:i';
+                     $datefinMiss=$omtaxi->dharrivedest;
+                     //str_replace("T"," ",$datePourSuiviMiss);
+                     //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss); 
+                     $dateFM= date('Y-m-d H:i',strtotime($datefinMiss));
+
+                     //$datePourSuivi = \DateTime::createFromFormat($format, $datePourSuiviMiss);
+
+                     $miss=Mission::where('id',$_POST['idMissionOM'])->first();
+                     $miss->update(['h_arr_prev_dest'=>  $dateFM,'date_spec_affect2'=> true]);
+
+
+
+                    exit();
         		}
         	}
         	
@@ -137,7 +155,7 @@ class OrdreMissionsController extends Controller
                 
 
 
-        return  $datePourSuivi;
+        return  "OM creé";
 
        // return $_POST['idMissionOM'];
         

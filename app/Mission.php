@@ -12,7 +12,7 @@ class Mission extends Model
         'titre', 'descrip','nb_acts_ori','commentaire', 'date_deb','date_fin', 'statut_courant','realisee','affichee', 'dossier_id','type_Mission', 
         'user_id','assistant','url_doc_gen','equipement' , 'voiture', 'prestataire','intervenant','created_at','updated_at',
         'deleted_at',
-        'type_heu_spec','type_heu_spec_archiv','date_spec_affect',
+        'type_heu_spec','type_heu_spec_archiv','date_spec_affect','date_spec_affect2','date_spec_affect3',
         'rdv','act_rdv','h_rdv',
         'dep_pour_miss','act_dep_pour_miss','h_dep_pour_miss',
         'dep_charge_dest','act_dep_charge_dest','h_dep_charge_dest',
@@ -22,6 +22,13 @@ class Mission extends Model
         'retour_base','act_retour_base','h_retour_base','sejour','date_deb_sejour','date_fin_sejour','location_voit',
         'date_deb_location_voit','date_fin_location_voit',
     ];
+
+   /* protected $dateFormat = 'Y-m-d H:i';
+
+    public function getDateFormat()
+    {
+        return 'Y-m-d H:i:s.u';
+    }*/
 
 
 public function dossier()
