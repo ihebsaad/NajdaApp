@@ -76,7 +76,7 @@ class ActionController extends Controller
      public  function traiterDatesSpecifiques(Request $request)
      {
 
-        // dd($request->all());
+         //dd($request->all());
 
           $dtc = (new \DateTime())->format('Y-m-d\TH:i');
 
@@ -95,12 +95,28 @@ class ActionController extends Controller
 
             if($miss->type_Mission==6)
             {
+
+              if($request->NomTypeDateSpec=="dep_pour_miss")
+              {
             
-            $miss->update(['date_spec_affect'=>1]); 
+                $miss->update(['date_spec_affect'=>1]); 
 
-            $miss->update(['h_dep_pour_miss'=>$datespe]);
+                $miss->update(['h_dep_pour_miss'=>$datespe]);
 
-            return 'date affectée';       
+                return 'date affectée'; 
+              }  
+
+
+
+              if($request->NomTypeDateSpec=="arr_prev_dest")
+              {
+            
+                $miss->update(['date_spec_affect2'=>1]); 
+
+                $miss->update(['h_arr_prev_dest'=>$datespe]);
+
+                return 'date affectée'; 
+              }     
 
             }
 
@@ -178,9 +194,28 @@ class ActionController extends Controller
 
       // recherche les missions actives  pour l'utilisateur courant
 
-        $missionsec= Mission::where('user_id', Auth::user()->id)->where('statut_courant',"active")->where('type_heu_spec',1)
-        ->where('date_spec_affect','=',1)->get();
-          
+        /*$missionsec= Mission::where('user_id', Auth::user()->id)->where('statut_courant',"active")->where('type_heu_spec',1)
+        ->where('date_spec_affect','=',1)->get();*/
+
+
+        $missionsec= Mission::where('user_id', Auth::user()->id)
+                             ->where('statut_courant',"active")
+                             ->where('type_heu_spec',1)
+                             ->where(function($q){                             
+                               $q->whereNotNull('date_spec_affect')
+                               ->orwhereNotNull('date_spec_affect2')
+                               ->orwhereNotNull('date_spec_affect3');
+                                })
+                             ->where(function($q){                             
+                               $q->where('date_spec_affect','=',1)
+                               ->orWhere('date_spec_affect2','=',1)
+                               ->orWhere('date_spec_affect3','=',1);
+                                })
+                             ->get();
+
+
+
+        
      
 
         if($missionsec)
@@ -193,8 +228,11 @@ class ActionController extends Controller
              foreach ($missionsec as $miss) {
 
 
-
+             
              // cas om taxi ici rendez-vous= date début pour mission
+
+              if($miss->type_Mission==6)//taxi 
+                                {
 
 
 
@@ -225,10 +263,70 @@ class ActionController extends Controller
 
                                              $action6->update(['statut'=>"active"]);
                                              $action6->update(['date_deb' => $dateSys]); 
-                                              $action6->update(['user_id'=>Auth::user()->id]);
+                                             $action6->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
 
                                               $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->titre.' | Dossier : '. $action6->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
+     
+                                           return($output);
+
+                                        
+
+                                        }
+
+                                        // rendre datespec 0
+
+                                       
+                                        
+
+
+
+                                    }
+
+
+
+                                 }
+
+
+                            
+                               }
+
+
+
+                               // cas affect2
+
+
+                          if($miss->date_spec_affect2==1 && $miss->h_arr_prev_dest!=null )
+                         {
+
+                        //dd($miss->h_dep_pour_miss);
+                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
+                        //dd( $datespe1);
+
+                           $datespe = \DateTime::createFromFormat($format,($miss->h_arr_prev_dest));
+                           // dd( $datespe );
+                         
+                            if($miss->type_Mission==6)//taxi 
+                                {
+                                    //activer l'action 6 de consultation médicale  Si_heure_systeme>heure_RDV+2h 
+
+                                   // dd($datespe);
+                                    //dd($dateSys);
+
+                                    if($datespe <= $dateSys)
+                                    {
+
+                                        $action7=ActionEC::where('mission_id',$miss->id)->where('ordre',7)->first();
+                                        //Suivre mission taxi
+                                        if($action7->statut=='inactive')
+                                        {
+
+                                             $action7->update(['statut'=>"active"]);
+                                             $action7->update(['date_deb' => $dateSys]); 
+                                              $action7->update(['user_id'=>Auth::user()->id]);
+                                             $miss->update(['date_spec_affect2'=>0]);
+
+                                              $output='Activation de l\'action :'. $action7->titre.' | Mission :'. $action7->Mission->titre.' | Dossier : '. $action7->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action7->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action7->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action7->Mission->dossier->id.'"/> ';
      
                                            return($output);
 
@@ -250,14 +348,15 @@ class ActionController extends Controller
 
 
 
-                                }
+                                 }
 
 
                             
-                         }
+                               }
 
 
-                        
+
+                        }// fin cas taxi
 
 
 
@@ -374,7 +473,7 @@ class ActionController extends Controller
 
 
 
-             }
+             }// fin pour
 
 
 
@@ -833,11 +932,11 @@ class ActionController extends Controller
         $actions=ActionEC::where('mission_id',$idmission)->get();
         foreach ($actions as $a) {
 
-            if($a->statut=="active" || $a->statut=="reportee" || $a->statut=="rappelee" || $a->statut=="deleguee" || $a->Mission->date_spec_affect==1 )
+            if($a->statut=="active" || $a->statut=="reportee" || $a->statut=="rappelee" || $a->statut=="deleguee" || $a->Mission->date_spec_affect===1 ||  $a->Mission->date_spec_affect2===1 || $a->Mission->date_spec_affect3===1 )
             {
                 return false;
 
-                }
+            }
             
         }
 
@@ -1779,7 +1878,7 @@ public function etat_action_sinon_test_fin($chang,$bouton,$idact)
                            // dd($dossier);
 
                        if ($bouton==1)
-                       Session::flash('messagekbsSucc', 'l\'action est faite avec succès');
+                       Session::flash('messagekbsSucc', 'l\'action est faite ');
                       if ($bouton==2)
                        Session::flash('messagekbsSucc', 'l\'action est ignorée');
                        if ($bouton==3)
@@ -2268,7 +2367,7 @@ public function taxi_DV($option,$idmiss,$idact,$iddoss,$bouton)
 
                // activer action 7 evaluation
 
-                if($action7->statut=="inactive"  && ($action6->statut=="faite" || $action6->statut=="faite" ) )// activer action 5
+               /* if($action7->statut=="inactive"  && ($action6->statut=="faite" || $action6->statut=="faite" ) )// activer action 5
                {
 
                  $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',7)
@@ -2278,7 +2377,7 @@ public function taxi_DV($option,$idmiss,$idact,$iddoss,$bouton)
 
                   $chang=true;            
 
-               }
+               }*/
 
 
                     if($chang==true)
