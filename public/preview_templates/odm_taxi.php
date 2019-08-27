@@ -2,9 +2,9 @@
 if (! isset($_GET['remplace']))
 {
 	if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
-	if (isset($_GET['affectea'])) {$affectea=$_GET['affectea'];}
 	if (isset($_GET['dossier'])) {$dossier=$_GET['dossier'];}
 }
+	
 
 if (isset($_GET['DB_HOST'])) {$dbHost=$_GET['DB_HOST'];}
 if (isset($_GET['DB_DATABASE'])) {$dbname=$_GET['DB_DATABASE'];}
@@ -28,7 +28,8 @@ if ((isset($_GET['remplace']) || isset($_GET['complete'])) && isset($_GET['paren
 	if ($resultp->num_rows > 0) {
 	$detailom = $resultp->fetch_assoc();
 	$emispar = $detailom['emispar'];
-	$affectea = $detailom['affectea'];
+	if (isset($_GET['affectea'])) {$affectea=$_GET['affectea'];} else {$affectea = $detailom['affectea'];}
+	
 	}
 	else { exit("impossible de recuperer les informations de lordre de mission ".$parentom);}
 }
@@ -226,8 +227,11 @@ header("Content-Type: text/html;charset=UTF-8");
 	<?php } ?>
 	</div>
 	<div class="col-md-9">
-		<!--<span style="font-family:'Times New Roman'; color:#ff0000">Att</span><span style="font-family:'Times New Roman'; color:#ff0000">&#xa0;</span><span style="font-family:'Times New Roman'; color:#ff0000">: Prestataire_</span>
-			<span style="font-family:'Times New Roman'; color:#ff0000">taxi</span><span style="font-family:'Times New Roman'; color:#ff0000">_</span><span style="font-family:'Times New Roman'; color:#ff0000">choisi</span><span style="font-family:'Times New Roman'; color:#ff0000"> </span><span style="font-family:'Times New Roman'; color:#ff0000"> </span><span style="font-family:'Times New Roman'">(sera rempli </span><span style="font-family:'Times New Roman'">au 2</span><span style="font-family:'Times New Roman'; font-size:7.33pt; vertical-align:super">ème</span><span style="font-family:'Times New Roman'"> temps</span><span style="font-family:'Times New Roman'"> </span><span style="font-family:'Times New Roman'">au moment du</span><span style="font-family:'Times New Roman'"> choix)</span></p>-->
+		<?php if (isset($detailom['prestataire_taxi'])) { ?>
+		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
+			<span id="prestataire_taxi" style="font-family:'Times New Roman'; "><?php echo $detailom['prestataire_taxi']; ?></span>
+			<input name="type_affectation" id="type_affectation" type="hidden" value="<?php echo $detailom['prestataire_taxi']; ?>"></input>
+		<?php } ?>
 
 			<h1 style="margin-top:8.75pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:20pt"><span style="font-family:'Times New Roman'; text-decoration:underline">ORDRE DE MISSION</span><span style="font-family:'Times New Roman'; text-decoration:underline"> </span><span style="font-family:'Times New Roman'; text-decoration:underline">TAXI</span></h1><p style="margin-top:0.6pt; margin-left:5.85pt; margin-bottom:0pt; text-align:right; widows:0; orphans:0; font-size:8pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
 			<p style="margin-top:0.6pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'">Choix:&#xa0;</span>

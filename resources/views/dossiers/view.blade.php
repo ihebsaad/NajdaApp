@@ -861,7 +861,7 @@ $interv = PrestationsController::PrestById($prest);
 
             </div>
 <!-- Modal Ouvrir Document-->
-<div class="modal fade" id="opendoc" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="opendoc"  role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document" style="width:900px;height: 450px">
         <div class="modal-content">
             <div class="modal-header">
@@ -930,7 +930,7 @@ $interv = PrestationsController::PrestById($prest);
                                         ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important; padding: 6px 6px!important;" id="btnannrempomtx">
-                                                <a style="color:black" href="#" id="annrempomtx" onclick="remplaceom(<?php echo $omtx->id; ?>);"> <i class="far fa-plus-square"></i> Remplacer</a>
+                                                <a style="color:black" href="#" id="annrempomtx" onclick="remplaceom(<?php echo $omtx->id; ?>,'<?php echo $omtx->affectea; ?>');"> <i class="far fa-plus-square"></i> Remplacer</a>
                                             </button>
                                         </div>
 
@@ -942,11 +942,18 @@ $interv = PrestationsController::PrestById($prest);
                                         <?php
                                             }
                                         ?>
+                                        <?php
+                                            if (isset($omtx->affectea)) 
+                                            { if ($omtx->affectea === "interne") {
+                                        ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(221,221,221) !important; padding: 6px 6px!important;" id="btncomp">
-                                                <a style="color:black" onclick='completeom("<?php echo $omtx->id; ?>");' ><i class="fas fa-pen"></i> Compléter</a>
+                                                <a style="color:black" onclick='completeom("<?php echo $omtx->id; ?>","<?php echo $omtx->affectea; ?>");' ><i class="fas fa-pen"></i> Compléter</a>
                                             </button>
                                         </div>
+                                        <?php
+                                            }}
+                                        ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important; padding: 6px 6px!important;" id="btntele">
                                                 <a style="color:black" onclick='modalodoc("<?php echo $omtx->titre; ?>","{{ URL::asset('storage'.$empsub) }}");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
@@ -1046,7 +1053,7 @@ $interv = PrestationsController::PrestById($prest);
 </div>
 -->
 <!-- Modal Document-->
-<div class="modal fade" id="generatedoc" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="generatedoc" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -1102,7 +1109,7 @@ $interv = PrestationsController::PrestById($prest);
     </div>
 </div>
 <!-- Modal OM-->
-<div class="modal fade" id="generateom" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="generateom" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -1166,6 +1173,7 @@ reference_customer
                                           <option value="vat">VAT transport </option>
                                           <option value="medici">Medic International </option>
                                      </select>
+                                     <input type="hidden" name="affectea" id="affectea" value="">
                                   </div>
                                   <!--<div class=" row  " style="margin-top: 15px">
                                     <div class="col-md-3"><label for="affectea">Affecté à</label></div>
@@ -1192,7 +1200,7 @@ reference_customer
     </div>
 </div>
 <!-- Modal template html doc-->
-<div class="modal fade" id="templatehtmldoc" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="templatehtmldoc" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document" style="width:900px;height: 450px">
         <div class="modal-content">
             <div class="modal-header">
@@ -1229,7 +1237,7 @@ reference_customer
     </div>
 </div>
 <!-- Modal template html om-->
-<div class="modal fade" id="templatehtmlom" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="templatehtmlom" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document" style="width:900px;height: 450px">
         <div class="modal-content">
             <div class="modal-header">
@@ -1260,11 +1268,37 @@ reference_customer
 
             </div>
             <div class="modal-footer">
-                <div id="assignprest">
-                    
+                <div class="row">
+                    <div id="claffect1" class="col-md-2" style="float: left!important;">
+                        Assigner à: 
+
+                    </div>
+                    <div id="claffect2" class="col-md-4" style="float: left!important;">
+                        <select id="affectationprest" name="affectationprest" class="form-control" style="width: 230px">
+                                                    <option value="Select">Selectionner</option>
+                                                    <option value="interne">Entite-soeur</option>
+                                                    <option value="externe">Prestataire externe</option>
+                        </select>
+                    </div>
+                    <div id="typeaffect" class="col-md-3" style="float: left!important;display: none;">
+                        <select id="type_affectation" name="type_affectation" class="form-control" style="width: 230px">
+                                                    <option value="Select">Selectionner</option>
+                                                    <option value="Najda">Najda Assistance</option>
+                                                    <option value="MEDIC">MEDIC</option>
+                                                    <option value="VAT">VAT</option>
+                                                    <option value="Transport VAT">Transport VAT</option>
+                                                    <option value="Transport MEDIC">Transport MEDIC</option>
+                                                    <option value="Medic International">Medic International</option>
+                                                    <option value="Najda TPA">Najda TPA</option>
+                                                    <option value="Transport Najda">Transport Najda</option>
+                                                    <option value="Transport Najda">X-Press</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3" style="float: right!important;">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button type="button" id="genomhtml" class="btn btn-primary">Générer</button>
+                    </div>
                 </div>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="button" id="genomhtml" class="btn btn-primary">Générer</button>
             </div>
         </div>
     </div>
@@ -1730,6 +1764,7 @@ reference_customer
 <script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
 
 <script>
+
 //script pour activer l onglet OM si lurl contient le mot CreerOM 
 
  $(document).ready(function() {
@@ -1847,20 +1882,44 @@ reference_customer
     }
 
 
-    function remplaceom(id)
+
+function remplaceom(id,affectea)
 {
+    document.getElementById('claffect1').style.display = 'block';
+    document.getElementById('claffect2').style.display = 'block';
     var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?remplace=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
          document.getElementById("omfilled").src = url;
          $("#idomparent").val(id);
         $('#templateordrem').val("remplace");
+        if (affectea !== undefined && affectea !== null && affectea !== '')
+        {
+            //$("#affectationprest").val(affectea).change();
+            document.getElementById('claffect1').style.display = 'none';
+            document.getElementById('claffect2').style.display = 'none';
+            document.getElementById('typeprest').style.display = 'none';
+            
+        }
+        
         $("#templatehtmlom").modal('show');
  }
-function completeom(id)
+
+function completeom(id,affectea)
 {
+    document.getElementById('claffect1').style.display = 'block';
+    document.getElementById('claffect2').style.display = 'block';
     var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?complete=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
          document.getElementById("omfilled").src = url;
          $("#idomparent").val(id);
         $('#templateordrem').val("complete");
+        if (affectea !== undefined && affectea !== null && affectea !== '')
+        {
+            //$("#affectationprest").val(affectea).change();
+            document.getElementById('claffect1').style.display = 'none';
+            document.getElementById('claffect2').style.display = 'none';
+            document.getElementById('typeprest').style.display = 'none';
+            
+        }
+        
         $("#templatehtmlom").modal('show');
  }
 function modalodoc(titre,emplacement)
@@ -2309,6 +2368,7 @@ function filltemplate(data,tempdoc)
     $('#genom').click(function(){
         var dossier = $('#dossier').val();
         var tempom = $("#templateom").val();
+        var affectea = $("#affectea").val();
         var op ="";
         if (tempom==="Select")
         {
@@ -2348,21 +2408,33 @@ function filltemplate(data,tempdoc)
                         afficheom(data,tempom);
                 }
             });*/
-             afficheom(emispar,tempom,dossier);
+            afficheom(emispar,tempom,dossier,affectea);
+
 
         }else{
 
         }
     });
 
-    function afficheom(emispar,tempom,dossier)
+    function afficheom(emispar,tempom,dossier,affectea)
     {
+        $("#affectationprest").val("Select").change();
         $("#generateom").modal('hide');
-        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?emispar='+emispar+'&dossier='+dossier+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
+        if (affectea === undefined && affectea === null)
+        {
+            affectea = "";
+        }
+        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?emispar='+emispar+'&dossier='+dossier+'&affectea='+affectea+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
          document.getElementById("omfilled").src = url;
-         $('#templateordrem').val("");
+         
         
         $("#templatehtmlom").modal('show');
+        $('#templateordrem').val("");
+         if (affectea !== "")
+         {
+            $('#affectationprest').val(affectea);
+         }
+
     }
 
     $('#gendochtml').click(function(){
@@ -2414,6 +2486,12 @@ function filltemplate(data,tempdoc)
         var _token = $('input[name="_token"]').val();
         var dossier = $('#dossom').val();
         var tempdoc = $("#templateordrem").val();
+        var affectea = $("#affectea").val();
+        if (affectea == "interne")
+        {
+          var type_affectation = $("#type_affectation").val();
+        } else {var type_affectation = "";}
+        
         var idparent = '';
          var idMissionOM=$("#idMissionOM").val();
         if ($('#templateordrem').val())
@@ -2438,7 +2516,9 @@ function filltemplate(data,tempdoc)
                 url:"{{ route('ordremissions.export_pdf_odmtaxi') }}",
                 method:"POST",
                 //'&_token='+_token
-                data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent+'&idMissionOM='+idMissionOM,
+
+                data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&affectea='+affectea+'&type_affectation='+type_affectation+'&templatedocument='+tempdoc+'&parent='+idparent,
+
                 success:function(data){
                      console.log(data);
                     $('#idomparent').val("");
@@ -2464,6 +2544,27 @@ function filltemplate(data,tempdoc)
                 }
             });
     });
+
+    $("#affectationprest").change(function() {
+
+            if ($("#affectationprest").val()==="interne")
+            {
+                document.getElementById('typeaffect').style.display = 'block';
+                $("#affectea").val("interne");
+            }else
+            {
+                document.getElementById('typeaffect').style.display = 'none';
+                if ($("#affectationprest").val()==="externe")
+                {
+                    $("#affectea").val("externe");
+                }
+                else
+                {
+                    $("#affectea").val("");
+                }
+            }
+
+        });
 
         $('#btnaddemail').click(function(){
             var parent = $('#dossier').val();

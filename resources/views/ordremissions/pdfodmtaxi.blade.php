@@ -76,10 +76,13 @@
 	<?php } ?>
 	</div>
 	<div class="col-md-6" style="text-align: right!important">
-<?php if (isset($_POST['prestatairetaxi'])) { ?>
-		<p>
-		<span style="font-family:'Times New Roman'; color:#ff0000">Att</span><span style="font-family:'Times New Roman'; color:#ff0000">&#xa0;</span><span style="font-family:'Times New Roman'; color:#ff0000">: Prestataire_</span>
-			<span style="font-family:'Times New Roman'; color:#ff0000">taxi</span><span style="font-family:'Times New Roman'; color:#ff0000">_</span><span style="font-family:'Times New Roman'; color:#ff0000">choisi</span><span style="font-family:'Times New Roman'; color:#ff0000"> </span><span style="font-family:'Times New Roman'; color:#ff0000"> </span><span style="font-family:'Times New Roman'">(sera rempli </span><span style="font-family:'Times New Roman'">au 2</span><span style="font-family:'Times New Roman'; font-size:7.33pt; vertical-align:super">ème</span><span style="font-family:'Times New Roman'"> temps</span><span style="font-family:'Times New Roman'"> </span><span style="font-family:'Times New Roman'">au moment du</span><span style="font-family:'Times New Roman'"> choix)</span></p>
+<?php if (isset($_POST['type_affectation'])) { ?>
+		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
+			<span id="prestataire_taxi" style="font-family:'Times New Roman'; "><?php echo $_POST['type_affectation']; ?></span>
+<?php } ?>
+<?php if (isset($_POST['prestataire_taxi'])) { ?>
+		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
+			<span id="prestataire_taxi" style="font-family:'Times New Roman'; "><?php echo $_POST['prestataire_taxi']; ?></span>
 <?php } ?>
 			<h1 style="margin-top:8.75pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:20pt"><span style="font-family:'Times New Roman'; text-decoration:underline">ORDRE DE MISSION</span><span style="font-family:'Times New Roman'; text-decoration:underline"> </span><span style="font-family:'Times New Roman'; text-decoration:underline">TAXI</span></h1><p style="margin-top:0.6pt; margin-left:5.85pt; margin-bottom:0pt; text-align:right; widows:0; orphans:0; font-size:8pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
 			<p style="text-align: right!important; margin-top:0.6pt;  font-size:10pt"><span style="font-family:'Times New Roman'">Choix:&#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_choix'])) { echo $_POST['CL_choix']; } ?></span>
@@ -103,7 +106,8 @@ if (isset($_POST['clientIMA'])) { ?>
 			<span style="font-family:'Times New Roman'; ">&#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['subscriber_name'])) { echo $_POST['subscriber_name']; } ?></span>
 			 <span style="font-family:'Times New Roman'"> <?php if (isset($_POST['subscriber_lastname'])) { echo $_POST['subscriber_lastname']; } ?></span>
 			<span style="font-family:'Times New Roman'; font-weight:bold"> </span><span style="width:2.79pt; display:inline-block">&#xa0;</span><span style="width:36pt; display:inline-block">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">N/Réf</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">:  </span>
-			<span style="font-family:'Times New Roman'; font-weight:bold;"><span style="font-family:'Times New Roman'"><?php if (isset($_POST['reference_medic'])) { echo $_POST['reference_medic']; } ?></span></span>
+			<!-- verification en cas affectation au nouveau dossier - ref medic nouveau dossier -->
+			<span style="font-family:'Times New Roman'; font-weight:bold;"><span style="font-family:'Times New Roman'"><?php if (isset($reference_medic) ){ echo $reference_medic; }  if ((isset($_POST['reference_medic'])) && (! isset($reference_medic))) { echo $_POST['reference_medic']; } ?></span></span>
 	</p>
 </div>
 <div class="row" style=" margin-left: 0px; ">
@@ -230,7 +234,7 @@ if (isset($_POST['clientIMA'])) { ?>
 						<span style="font-family:'Times New Roman'; font-weight:bold"> Heure: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_heuredemande'])) { echo $_POST['CL_heuredemande']; } ?></span>
 						<span style="font-family:'Times New Roman'; font-weight:bold">  </span></p><p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; border-bottom:1.5pt solid #000000; padding-bottom:10px; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Notre réf.</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($_POST['reference_medic2'])) { echo $_POST['reference_medic2']; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($reference_medic2) ){ echo $reference_medic2; }  if ((isset($_POST['reference_medic2'])) && (! isset($reference_medic2))) { echo $_POST['reference_medic2']; } ?></span>
 							<span style="font-family:'Times New Roman'; font-weight:bold">   Réf. client: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['reference_customer'])) { echo $_POST['reference_customer']; } ?></span>
 						</p>
