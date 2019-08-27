@@ -698,10 +698,12 @@ public function getAjaxDeleguerMission($idmiss)
 
           $miss=Mission::where('id',$id)->first();
 
-         $output='<h4><b> <i>Nom mission :<i/></span> '.$miss->titre.'</b> </h4> <br>';
+         $output='<h4><b> <i>Nom de mission :<i/></span> '.$miss->titre.'</b> </h4> <br>';
+
+         $output.='<h4><b> type de  mission : '.$miss->typeMission->nom_type_Mission.'</b> </h4> <br>';
 
          $output.='<h4><b> Description de mission : '.$miss->typeMission->des_miss.'</b> </h4> <br>';
-         $output.='<h4><b> type de  mission : '.$miss->typeMission->nom_type_Mission.'</b> </h4> <br>'; 
+          
          $output.='<h4><b> Nombre d\'actions: '.$miss->ActionECs->count().'</b> </h4> <br>';
 
 
