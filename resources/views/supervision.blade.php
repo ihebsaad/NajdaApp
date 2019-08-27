@@ -204,12 +204,12 @@
                            </div>
                            </div>
 
-                               <div class="col-md-4" style="text-shadow: 1px 1px black">
+                               <div class="col-md-4" style=" ">
                                    Complexité: <?php echo $complexite;?><br>
                                    Notifications: <?php echo $notifications;?>
 
                                </div>
-                               <div class="col-md-4"  style="text-shadow: 1px 1px black">
+                               <div class="col-md-4"  style=" ">
                                    Missions: <?php echo $missions;?><br>
                                    Actions: <?php echo $actions;?>
 

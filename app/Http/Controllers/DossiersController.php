@@ -359,7 +359,9 @@ class DossiersController extends Controller
             'date_affectation'=>$dtc,
         ]);
 
+
         $affec->save();
+        //mise à jour notification
 
         $user = auth()->user();
         $nomuser=$user->name.' '.$user->name;

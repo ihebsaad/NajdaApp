@@ -94,7 +94,6 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <br>
                             <label>Assuré </label>
                             <!--<input class="form-control" name="nom_benef_search" id="nom_benef_search">-->
 
@@ -111,7 +110,6 @@
                              </select>
                         </div>
                         <div class="col-md-4">
-                            <br>
                             <label>Prestataire </label>
                             <select class="form-control select2" name="pres_id_search" id="pres_id_search">
                                 <option value="">sélectionner</option>
@@ -126,7 +124,7 @@
                         <div class="col-md-4">
                             
                             <div class="form-group ">
-                                <label >Filtrez par date de création de dossier </label>
+                                <label >Date de création</label>
                                 <!--<div id="reportrange" class="form-control btn default" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100% ;">
                                     <i class="fa fa-calendar"></i>
                                     <span> </span>
@@ -140,7 +138,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <button class="btn btn-circle blue" id="rechercher" type="submit" style="margin-top: 25px;">Rechercher</button>
+                            <button class="btn btn-circle blue pull-right" id="rechercher" type="submit" style="margin-top: 20px;margin-right:20px;"><i class="fa fa-loop" ></i> Rechercher</button>
                         </div>
                     </div>
                 </form>
