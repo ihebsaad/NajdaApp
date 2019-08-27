@@ -35,7 +35,8 @@
         </div>
 
 
-          <?php $user = auth()->user();
+          <?php
+     /*     $user = auth()->user();
           $typeuser=$user->type;
           if($typeuser!='simple'){
           ?>
@@ -46,7 +47,7 @@
                   Agent
               </a>
           </div>
-          <?php }?>
+          <?php }   */ ?>
         <div class="col-sm-3 col-md-3 col-lg-3" style=" height: 40px!important;padding-top:27px;padding-left:0px ">
           <form class="search-container" action="{{route('RechercheMulti.test')}}" id="testRecheche" method="POST">
             <input type="text" id="search-bar"  placeholder="Recherche" autocomplete="off" name="qy">
