@@ -322,7 +322,7 @@ Route::get('/ReporterNote/{id}','NotesController@ReporterNote');
 
  
 /*** Missions**/
-Route::resource('/Missions',  'MissionController');
+//Route::resource('/Missions',  'MissionController');
 Route::get('/Missions', array('as' => 'Missions','uses' => 'MissionController@index'));
 Route::post('/Missions/saving','MissionController@saving')->name('Missions.saving');
 Route::post('/Missions/store','MissionController@store')->name('Missions.store');
