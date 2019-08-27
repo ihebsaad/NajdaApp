@@ -2530,11 +2530,12 @@ function filltemplate(data,tempdoc)
                         {alert(data);}
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                      Swal.fire({
+                     /* Swal.fire({
                         type: 'error',
                         title: 'oups...',
                         text: "Erreur lors de la génération "
-                    });
+                    });*/
+                    alert("Erreur lors de la génération ");
                     console.log('jqXHR:');
                     console.log(jqXHR);
                     console.log('textStatus:');
