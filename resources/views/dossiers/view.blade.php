@@ -2494,12 +2494,12 @@ function filltemplate(data,tempdoc)
         
         var idparent = '';
          var idMissionOM=$("#idMissionOM").val();
-       /* if ($('#templateordrem').val())
+        if ($('#templateordrem').val())
         {
         alert ($('#templateordrem').val());}
         if ($('#idomparent').val())
         {
-        alert ($('#idomparent').val());}*/
+        alert ($('#idomparent').val());}
         // verifier si cest le cas de annule et remplace pour sauvegarder lid du parent
         if ($('#idomparent').val())
         {
