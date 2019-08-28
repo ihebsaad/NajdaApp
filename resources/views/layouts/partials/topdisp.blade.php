@@ -49,28 +49,24 @@
 
       @endcan
 
-        @cannnot('isSupervisor')
-          <div  class="col-sm-1 col-md-1 col-lg-1 ">
-          </div>
-        @endcannot
-
-    @cannot('isAdmin')
+      @cannot('isSupervisor')
+          @cannot('isAdmin')
                   <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;margin-left:15px">
                       <a href="{{ route('home') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="basculer en mode agent" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
-                          <i class="far fa-user"></i><br>
-                          Agent
+                          <i class="far fa-user"></i> Agent
                       </a>
                   </div>
 
           @endcannot
-               <!--<div id="dpause" class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
+      @endcannot
+              <!--<div id="dpause" class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
           <a href="#" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;"> 
                                                 <span class="fa fa-fw fa-pause"></span>
                                                 <br>
                                                 Pause
           </a> 
         </div>-->
-        <div class="col-sm-2 col-md-2 col-lg-2" style=" height: 40px!important;padding-top:27px;padding-left:0px ">
+        <div class="col-sm-3 col-md-3 col-lg-3" style=" height: 40px!important;padding-top:27px;padding-left:0px ">
           <form class="search-container" action="{{route('RechercheMulti.test')}}" id="testRecheche" method="POST">
             <input type="text" id="search-bar"  placeholder="Recherche" autocomplete="off" name="qy">
             <a href="#" onclick='document.getElementById("testRecheche").submit()'><img class="search-icon" src="{{ URL::asset('public/img/search-icon.png') }}"></a>
