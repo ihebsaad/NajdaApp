@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Entree;
+use App\Notification;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
@@ -170,7 +171,12 @@ class AffectDossController extends Controller
 
              $affec->save();
 
-             return back()->with("AffectNouveauDossier", "le nouveau dossier est affecté");
+            Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"dossier": "'.$ref.'"}}\')')
+                ->where('statut','=', 0 )
+                ->update(array('notifiable_id' => $agent));
+
+
+            return back()->with("AffectNouveauDossier", "le nouveau dossier est affecté");
 
             //return url('/dossiers/view/'.$iddoss)/*->with('success', 'Dossier Créé avec succès')*/;
            // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);

@@ -28,6 +28,7 @@ use App\OMTaxi;
 
 use WordTemplate;
 use Mail;
+use App\Notification;
 
 ini_set('memory_limit','1024M');
 
@@ -215,28 +216,33 @@ class DossiersController extends Controller
 
                   $refdossier = app('App\Http\Controllers\EntreesController')->ChampById('dossier',$identree);
                     $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+
                     $clientid = app('App\Http\Controllers\DossiersController')->ClientDossierById($iddossier);
-                    $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$clientid);
+                    if ($clientid >0)
+                    {
+                        $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$clientid);
+                        $refclient=app('App\Http\Controllers\ClientsController')->ClientChampById('reference',$clientid);
 
-                   // $nomabn=app('App\Http\Controllers\DossiersController')->NomAbnDossierById($iddossier);
+                        if ($langue=='francais'){
 
-                    $refclient=app('App\Http\Controllers\ClientsController')->ClientChampById('reference',$clientid);
+                            $sujet=  $nomabn.'  - V/Ref: '.$refclient .' - N/Ref: '.$refdossier ;
+
+                        }else{
+
+                            $sujet=  $nomabn.'  - Y/Ref: '.$refclient .' - O/Ref: '.$refdossier ;
+
+                        }
+                    } else{
+
+                         $sujet=  $nomabn.'  -    O/Ref: '.$refdossier ;
+                    }
 
                     $to=  app('App\Http\Controllers\EntreesController')->ChampById('emetteur',$identree);
-
 
                     $params = Parametre::find(1);
                     $signature = $params["signature"];
 
-                    if ($langue=='francais'){
 
-                        $sujet=  $nomabn.'  - V/Ref: '.$refclient .' - N/Ref: '.$refdossier ;
-
-                    }else{
-
-                        $sujet=  $nomabn.'  - Y/Ref: '.$refclient .' - O/Ref: '.$refdossier ;
-
-                    }
 
                     $contenu=$message.'<br><br>'.$signature;
                     try{
@@ -361,7 +367,13 @@ class DossiersController extends Controller
 
 
         $affec->save();
-        //mise à jour notification
+
+        //mise à jour notifications
+        Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"dossier": "'.$ref.'"}}\')')
+            ->where('statut','=', 0 )
+        ->update(array('notifiable_id' => $agent));
+
+
 
         $user = auth()->user();
         $nomuser=$user->name.' '.$user->name;

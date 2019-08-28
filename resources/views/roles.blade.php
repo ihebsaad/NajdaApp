@@ -832,7 +832,12 @@
                              if (role== 'Dispatcheur Emails')
                              { nomrole = 'dispatcheur';
                                  //  $request->session()->put('disp',0);
-                                 alert('Rôle '+role+' non alloué');
+
+                                 Swal.fire({
+                                     type: 'error',
+                                     title: 'Refusé...',
+                                     text: 'Rôle '+role+' non alloué'
+                                 });
                                  //   affecter(nomrole);
                                  removereponse(role);
 
@@ -841,7 +846,12 @@
                              if (role== 'Dispatcheur Téléphonique')
                              { nomrole = 'dispatcheurtel';
                                  //   $request->session()->put('disptel',0) ;
-                                 alert('Rôle '+role+' non alloué');
+
+                                 Swal.fire({
+                                     type: 'error',
+                                     title: 'Refusé...',
+                                     text: 'Rôle '+role+' non alloué'
+                                 });
                                  removereponse(role);
 
                              }
@@ -849,7 +859,12 @@
                              if (role== 'Superviseur Médical')
                              { nomrole = 'superviseurmedic';
                                  //   $request->session()->put('supmedic',0) ;
-                                 alert('Rôle '+role+' non alloué');
+
+                                 Swal.fire({
+                                     type: 'error',
+                                     title: 'Refusé...',
+                                     text: 'Rôle '+role+' non alloué'
+                                 });
                                  removereponse(role);
 
                              }
@@ -857,7 +872,12 @@
                              if (role== 'Superviseur Technique')
                              { nomrole = 'superviseurtech';
                                  //   $request->session()->put('suptech',0) ;
-                                 alert('Rôle '+role+' non alloué');
+
+                                 Swal.fire({
+                                     type: 'error',
+                                     title: 'Refusé...',
+                                     text: 'Rôle '+role+' non alloué'
+                                 });
                                  removereponse(role);
 
                              }
@@ -865,7 +885,12 @@
                              if (role== 'Chargé de Transport')
                              { nomrole = 'chargetransport';
                                  //    $request->session()->put('chrgtr',0)  ;
-                                 alert('Rôle '+role+' non alloué');
+
+                                 Swal.fire({
+                                     type: 'error',
+                                     title: 'Refusé...',
+                                     text: 'Rôle '+role+' non alloué'
+                                 });
                                  removereponse(role);
 
                              }
@@ -873,7 +898,12 @@
                              if (role== 'Veilleur de Nuit')
                              { nomrole = 'veilleur';
                                  //   $request->session()->put('veilleur',0) ;
-                                 alert('Rôle '+role+' non alloué');
+
+                                 Swal.fire({
+                                     type: 'error',
+                                     title: 'Refusé...',
+                                     text: 'Rôle '+role+' non alloué'
+                                 });
                                  removereponse(role);
 
                              }
