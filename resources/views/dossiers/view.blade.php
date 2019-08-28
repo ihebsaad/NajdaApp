@@ -1963,7 +1963,7 @@ function annuledoc(titre,iddoc,template)
         var tempdoc = template;
         $("#gendochtml").prop("disabled",false);
         
-         var r = confirm("Êtes-vous sûr de vouloir supprimer le document: "+titre+" ? ");
+         var r = confirm("Êtes-vous sûr de vouloir Annuler le document: "+titre+" ? ");
         if (r == true) {
 
           if ((dossier != '') )
@@ -2494,12 +2494,12 @@ function filltemplate(data,tempdoc)
         
         var idparent = '';
          var idMissionOM=$("#idMissionOM").val();
-        if ($('#templateordrem').val())
+       /* if ($('#templateordrem').val())
         {
         alert ($('#templateordrem').val());}
         if ($('#idomparent').val())
         {
-        alert ($('#idomparent').val());}
+        alert ($('#idomparent').val());}*/
         // verifier si cest le cas de annule et remplace pour sauvegarder lid du parent
         if ($('#idomparent').val())
         {
