@@ -129,7 +129,7 @@ class DocumentsController extends Controller
             }
         }*/
 
-        return $_POST['idMissionDoc'];
+       // return $_POST['idMissionDoc'];
             
        WordTemplate::export($file, $array, '/documents/'.$refdoss.'/'.$name_file);
           

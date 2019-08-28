@@ -93,8 +93,8 @@ class OrdreMissionsController extends Controller
         			//return 'complete action '.$result;
 
                     // affecter date  prévue destination ( prévue fin de mission)
-                     
-
+                if (isset($_POST['idMissionOM']))     
+        		{
                     //$format ='Y-m-d H:i';
                      $datefinMiss=$omtaxi->dharrivedest;
                      //str_replace("T"," ",$datePourSuiviMiss);
@@ -105,7 +105,7 @@ class OrdreMissionsController extends Controller
 
                      $miss=Mission::where('id',$_POST['idMissionOM'])->first();
                      $miss->update(['h_arr_prev_dest'=>  $dateFM,'date_spec_affect2'=> true]);
-
+                 }
 
 
                     exit();
@@ -146,7 +146,8 @@ class OrdreMissionsController extends Controller
 
 
 
-
+        if (isset($_POST['idMissionOM']))     
+        {
          //$format ='Y-m-d H:i';
          $datePourSuiviMiss=$omtaxi->CL_heuredateRDV;
          //str_replace("T"," ",$datePourSuiviMiss);
@@ -157,7 +158,7 @@ class OrdreMissionsController extends Controller
 
          $miss=Mission::where('id',$_POST['idMissionOM'])->first();
          $miss->update(['h_dep_pour_miss'=> $datePourSuivi,'date_spec_affect'=> true]);
-                
+        }       
 
 
 
