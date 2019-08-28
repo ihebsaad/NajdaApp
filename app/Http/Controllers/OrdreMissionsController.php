@@ -93,7 +93,7 @@ class OrdreMissionsController extends Controller
         			//return 'complete action '.$result;
 
                     // affecter date  prévue destination ( prévue fin de mission)
-                if (isset($_POST['idMissionOM']))     
+               if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))    
         		{
                     //$format ='Y-m-d H:i';
                      $datefinMiss=$omtaxi->dharrivedest;
@@ -146,7 +146,7 @@ class OrdreMissionsController extends Controller
 
 
 
-        if (isset($_POST['idMissionOM']))     
+        if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))     
         {
          //$format ='Y-m-d H:i';
          $datePourSuiviMiss=$omtaxi->CL_heuredateRDV;
