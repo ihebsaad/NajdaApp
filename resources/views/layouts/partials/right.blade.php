@@ -144,7 +144,7 @@ use App\Http\Controllers\TagsController;
                                           <button class="dropbtn"><span class="fa fa-2x fa-tasks" aria-hidden="true"></span></button>
                                           <div class="dropdown-content" style="right:0;">
                                           <a class="DescripMission" id="<?php echo $Mission->id ?>" href="#">Descrip. Mission</a>
-                                          <a class="etatAction" id="<?php echo $Mission->id ?>" href="#">Voir état action</a>
+                                          <a class="etatAction" id="<?php echo $Mission->id ?>" href="#">Voir état actions</a>
                                           <a class="mailGenerateur" id="<?php echo $Mission->id ?>" href="#">Mail générateur</a>
                                           <a class="deleguerMission" id="<?php echo $Mission->id ?>" href="#">Déléguer Mission</a>
                                           <a class="annulerMission" id="<?php echo $Mission->id ?>" href="#">Annuler Mission</a>

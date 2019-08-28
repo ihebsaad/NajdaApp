@@ -1963,7 +1963,7 @@ function annuledoc(titre,iddoc,template)
         var tempdoc = template;
         $("#gendochtml").prop("disabled",false);
         
-         var r = confirm("Êtes-vous sûr de vouloir supprimer le document: "+titre+" ? ");
+         var r = confirm("Êtes-vous sûr de vouloir Annuler le document: "+titre+" ? ");
         if (r == true) {
 
           if ((dossier != '') )
@@ -2517,7 +2517,7 @@ function filltemplate(data,tempdoc)
                 method:"POST",
                 //'&_token='+_token
 
-                data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&affectea='+affectea+'&type_affectation='+type_affectation+'&templatedocument='+tempdoc+'&parent='+idparent,
+                data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&affectea='+affectea+'&type_affectation='+type_affectation+'&templatedocument='+tempdoc+'&parent='+idparent+'&idMissionOM='+idMissionOM,
 
                 success:function(data){
                      console.log(data);

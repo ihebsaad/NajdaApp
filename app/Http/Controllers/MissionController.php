@@ -369,6 +369,10 @@ class MissionController extends Controller
 
   $entree=Entree::where('mission_id','!=',null)->where('mission_id',$idmiss)->first();
 
+        if($entree)
+
+        {
+
               $output='<div class="form-group">
                 
                 <label for="emetteur">emetteur:</label>
@@ -387,12 +391,17 @@ class MissionController extends Controller
              
                 </div>
 
-
              </div>
             <div class="form-group">
                  <label for="date">date:</label>'.
                date('d/m/Y', strtotime($entree->reception)) .'
             </div>';
+          }
+          else
+          {
+            $output='<div class="form-group"> <h4>Il n\'y a pas de mail génerateur pour cette mission </h4></div>';
+
+          }
 
    return  $output;
 
@@ -700,19 +709,19 @@ public function getAjaxDeleguerMission($idmiss)
 
           $miss=Mission::where('id',$id)->first();
 
-         $output='<h4><b> <i>Nom de mission :<i/></span> '.$miss->titre.'</b> </h4> <br>';
+         $output='<h4><b> <i><u>Nom de mission :</u><i/></span> '.$miss->titre.'</b> </h4> <br>';
 
-         $output.='<h4><b> type de  mission : '.$miss->typeMission->nom_type_Mission.'</b> </h4> <br>';
+         $output.='<h4><b><u> type de  mission : </u>'.$miss->typeMission->nom_type_Mission.'</b> </h4> <br>';
 
-         $output.='<h4><b> Description de mission : '.$miss->typeMission->des_miss.'</b> </h4> <br>';
+         $output.='<h4><b><u> Description de mission : </u>'.$miss->typeMission->des_miss.'</b> </h4> <br>';
           
-         $output.='<h4><b> Nombre d\'actions: '.$miss->ActionECs->count().'</b> </h4> <br>';
+         $output.='<h4><b> <u>Nombre d\'actions: </u>'.$miss->ActionECs->count().'</b> </h4> <br>';
 
 
         if ($miss->type_heu_spec==0)
           {
                          
-           $output.='<h4>Cette mission ne contenant pas de date(s) spécifique(s)</h4>';
+           $output.='<h4>Cette mission n\'inclut pas de date(s) spécifique(s)</h4>';
 
           }
            
@@ -1120,7 +1129,7 @@ public function getAjaxDeleguerMission($idmiss)
                 $i = 0;
                 $len = count($actk->Actions);
                 //$actko=$actk->Actions->orderBy('ordre','DESC')->get();
-                $actko=ActionEC::where('mission_id',$id)->orderBy('ordre','ASC')->get();
+                $actko=ActionEC::where('mission_id',$id)->orderBy('ordre','ASC')->orderBy('num_rappel','DESC')->get();
                    $output.='<input id="InputetatActionMission" style="float:right" type="text" placeholder="Recherche.." autocomplete="off"> <br><br>';
                    $output.='<table class="table table-striped">
                   <thead>
@@ -1148,7 +1157,7 @@ public function getAjaxDeleguerMission($idmiss)
                            $i++;      
                    
                      //$output.='<div class="row">' ;
-                        if ($sactions->statut!='rfaite')
+                        if ($i!=0)
                         {
 
                         $output.='<tr><td style="overflow: auto;" title="'.$sactions->titre.'"><span style="font-weight : none;">'.$sactions->titre.'</span></td>
@@ -1172,8 +1181,21 @@ public function getAjaxDeleguerMission($idmiss)
                         $output.='<td style="overflow: auto;" title="'.$sactions->comment2.'"><span style="font-weight : none;">'.$sactions->comment2.'</span></td>' ;
                         $output.='<td style="overflow: auto;" title="'.$sactions->comment3.'"><span style="font-weight : none;">'.$sactions->comment3.'</span></td>' ;
 
+                         if ($sactions->statut!='rfaite')
+                          {
+                           $output.='<td style="overflow: auto;" title="'.$sactions->statut.'"><span style="font-weight : none;">'.$sactions->statut.'</span></td></tr>' ;
+                          }
+                          else
+                          {
+                            $output.='<td style="overflow: auto;" title=" rappelée"><span style="font-weight : none;"> rappelée</span></td></tr>' ;
+                          }
+                        }
+                        else
+                        {
 
-                        $output.='<td style="overflow: auto;" title="'.$sactions->statut.'"><span style="font-weight : none;">'.$sactions->statut.'</span></td></tr>' ;
+
+
+
                         }
                    
 
