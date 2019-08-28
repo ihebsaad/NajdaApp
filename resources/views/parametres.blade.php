@@ -49,14 +49,14 @@
                             </li>--->
                             <?php }
 
-                            if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
+                            if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) { /*
                             ?>
                             <li class="nav-item">
                                 <a class="nav-link <?php if ($user_type=='superviseur'){echo 'active';}?>" href="#tab3" data-toggle="tab" onclick="showinfos3();hideinfos();hideinfos2();hideinfos4()">
                                     <i class="fa-lg fas fa-users"></i>  Supervision
                                 </a>
                             </li>
-                         <?php  } if( ($user_type=='financier')  || ( ($user_type=='admin')) ) {
+                         <?php */ } if( ($user_type=='financier')  || ( ($user_type=='admin')) ) {
 
                             ?>
                             <li class="nav-item">
@@ -228,7 +228,7 @@
                     </div>--->
 <?php }
 
-if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
+if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {/*
 ?>
                     <div id="tab3" class="tab-pane fade <?php if ($user_type=='superviseur'){echo 'in active';}?>" style="display:block">
                         <div class="padding:50px 50px 50px 50px"><br>
@@ -253,7 +253,7 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
                             </ul>
                         </div>
                     </div>
-    <?php }
+    <?php */ }
     if( ($user_type=='financier')  || ( ($user_type=='admin')) ) {
 
     ?>

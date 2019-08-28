@@ -1,5 +1,6 @@
 @extends('layouts.mainlayout')
 
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
@@ -959,7 +960,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <script>
 
@@ -1291,7 +1291,7 @@
                 }
 
                 if (type=="removed"){
-            alert(item);
+           // alert(item);
                      var prestataire = $('#idpres').val();
                     var _token = $('input[name="_token"]').val();
 
