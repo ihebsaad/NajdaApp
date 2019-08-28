@@ -2517,7 +2517,7 @@ function filltemplate(data,tempdoc)
                 method:"POST",
                 //'&_token='+_token
 
-                data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&affectea='+affectea+'&type_affectation='+type_affectation+'&templatedocument='+tempdoc+'&parent='+idparent,
+                data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&affectea='+affectea+'&type_affectation='+type_affectation+'&templatedocument='+tempdoc+'&parent='+idparent+'&idMissionOM='+idMissionOM,
 
                 success:function(data){
                      console.log(data);
