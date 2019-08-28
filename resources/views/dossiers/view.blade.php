@@ -1073,7 +1073,7 @@ $interv = PrestationsController::PrestById($prest);
                             <div class="form-group " >
                                 <label for="emaildoss">Template</label>
                                 <div class=" row  ">
-                                    <select class="form-control select2" style="width: 230px" required id="templatedoc" name="templatedoc" >
+                                    <select class="form-control select2" style="width: 350px" required id="templatedoc" name="templatedoc" >
                                         <option value="Select">Selectionner</option>
                                     <?php
                                         $usedtemplates = Document::where('dossier',$dossier->id)->distinct()->get(['template']);
