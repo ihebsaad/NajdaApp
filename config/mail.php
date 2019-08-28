@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER'/*, 'smtp'*/),
+    'driver' => env('MAIL_DRIVER', 'smtp'),
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST'/*, 'smtp.gmail.com'*/),
+    'host' => env('MAIL_HOST', 'ssl0.ovh.net'),
 
     /*
     |--------------------------------------------------------------------------
@@ -42,7 +42,7 @@ return [
     |
     */
 
-    'port' => env('MAIL_PORT'/*, 587*/),
+    'port' => env('MAIL_PORT', 587),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS'/*, 'saadiheb@gmail.com'*/),
-        'name' => env('MAIL_FROM_NAME'/*, 'iheb'*/),
+        'address' => env('MAIL_FROM_ADDRESS', 'faxnajdassist@najda-assistance.com'),
+        'name' => env('MAIL_FROM_NAME', 'Najda Assistance'),
     ],
 
     /*
@@ -71,7 +71,7 @@ return [
     |
     */
 
-    'encryption' => env('MAIL_ENCRYPTION'/*, 'tls'*/),
+    'encryption' => env('MAIL_ENCRYPTION' , ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -84,9 +84,9 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME'/*,'saadiheb@gmail.com'*/),
+    'username' => env('MAIL_USERNAME','faxnajdassist@najda-assistance.com'),
 
-    'password' => env('MAIL_PASSWORD'/*,'ihebssss'*/),
+    'password' => env('MAIL_PASSWORD','e-solutions2019'),
 
     /*
     |--------------------------------------------------------------------------
