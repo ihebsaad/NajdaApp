@@ -2657,7 +2657,7 @@ $urlapp='http://localhost/najdaapp';
                 success:function(data){
                  //   var prestation=parseInt(data);
                     /// window.location =data;
-                    window.location = '<?php echo $urlapp; ?>/prestations/show/'+prestation;
+                    window.location = '<?php echo $urlapp; ?>/prestations/view/'+prestation;
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
