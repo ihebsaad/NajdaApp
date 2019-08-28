@@ -97,7 +97,9 @@ class MissionController extends Controller
 
    // dd( $request->all());
         $dossier=Dossier::where("reference_medic",trim($request->get('dossier')))->first();
-        $typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeactauto')))->first();
+        //$typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeactauto')))->first();
+        $typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeMissauto')))->first();
+
         
 
      
