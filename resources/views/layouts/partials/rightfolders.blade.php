@@ -22,8 +22,8 @@ use App\Dossier ;
         <div class="panel-body " style="display: block;padding-top:10px;padding-left:10px;padding-right:10px;">
             <div class="row">
                 <div class="col-sm-4"> <input class="search" type="text" id="myInput" onkeyup="Searchf()" placeholder="N° Dossier.." title="Taper"></div>
-                <div class="col-sm-4"><input  class="search" type="text" id="myInput2" onkeyup="Searchf2()" placeholder="Abonné.." title="Taper"></div>
-                <div class="col-sm-4"> <input class="search" type="text" id="myInput3" onkeyup="Searchf3()" placeholder="Client.." title="Taper"></div>
+                <div class="col-sm-4"><input  class="search" type="text" id="myInput2" onkeyup="Searchf2()" placeholder="Assuré.." title="Taper"></div>
+                <div class="col-sm-4"> <input class="search" type="text" id="myInput3" onkeyup="Searchf3()" placeholder="Ref Client.." title="Taper"></div>
             </div>
 
             <div class="panel-body scrollable-panel" style="display: block;">

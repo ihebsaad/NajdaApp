@@ -42,7 +42,6 @@ use App\ClientGroupe;
          // les agents ne voient pas l'aaffectation - à vérifier
          if (Gate::check('isAdmin') || Gate::check('isSupervisor') ) { ?>
 
-
          <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
         <b>Affecté à:</b> 
         <?php 
@@ -63,8 +62,6 @@ use App\ClientGroupe;
             {echo '<a href="#" data-toggle="modal" data-target="#attrmodal">Non affecté</a>';}
             else
             {echo '<b>Non affecté</b>';}
-
-
 
             }
         } ?>

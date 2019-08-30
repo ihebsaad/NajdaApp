@@ -83,7 +83,6 @@ use  \App\Http\Controllers\DocsController;
                 </button>
             </div>
 
-
             <div class="btn-group">
                 <button type="button" id="newfax" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-fax"></i> Fax <i class="fa fa-angle-down"></i>
@@ -160,7 +159,6 @@ use  \App\Http\Controllers\DocsController;
                                     </div>
                                 </div>
 
-
                                  <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Client </label>
@@ -179,7 +177,16 @@ use  \App\Http\Controllers\DocsController;
                                         </select>
                                     </div>
                                 </div>
-                            <!--    <div class="col-md-4">
+
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Référence Client </label>
+                                        <input onchange="changing(this)" type="text" id="reference_customer" name="reference_customer" class="form-control"  value="{{ $dossier->reference_customer }}" >
+
+                                    </div>
+                                    </div>
+                                <!--    <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="inputError" class="control-label">Référence *</label>
 

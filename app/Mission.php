@@ -56,6 +56,11 @@ public function dossier()
         return $this->hasMany('App\ActionEC');
     }
 
+    public function ActionECsSansRappel()
+    {
+        return $this->hasMany('App\ActionEC')->where('statut','!=','rfaite');
+    }
+
      public function activeActionEC()
     {
         return $this->hasMany('App\ActionEC')->where('statut','active')->orderBy('ordre');

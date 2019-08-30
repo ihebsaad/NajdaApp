@@ -102,6 +102,12 @@
                                     </a>
                                 </li>
 
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('missions') }}"  >
+                                        <i class="fas fa-lg  fa-user-tag"></i>  Missions
+                                    </a>
+                                </li>
+
                                 <li class="nav-item ">
                                     <a class="nav-link " href="{{ route('notifs') }}"  >
                                         <i class="fa fa-lg  fa-inbox"></i>  Flux de réception

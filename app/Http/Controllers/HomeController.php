@@ -446,26 +446,55 @@ return redirect('roles');
 
     public function notifs()
     {
-        $entrees = Entree::orderBy('id', 'desc')->where('statut','<','2')->paginate(20);
 
-        return view('notifs',['entrees'=>$entrees]);
+        if( \Gate::allows('isAdmin') || \Gate::allows('isSupervisor') )
+        {
+            $entrees = Entree::orderBy('id', 'desc')->where('statut','<','2')->paginate(20);
+            return view('notifs',['entrees'=>$entrees]);
+
+        }
+        else {
+            // redirect
+            return redirect('/')->with('success', 'droits insuffisants');
+
+        }
+
+
     }
 
 
 
     public function parametres()
     {
-        $users = User::get();
 
-        return view('parametres',['users'=>$users]);
+        if( \Gate::allows('isAdmin')   )
+        {
+            $users = User::get();
+            return view('parametres',['users'=>$users]);
+
+        }
+        else {
+            // redirect
+            return redirect('/')->with('success', 'droits insuffisants');
+
+        }
     }
 
 
     public function supervision()
     {
-        $users = User::get();
+       if( \Gate::allows('isAdmin') || \Gate::allows('isSupervisor') )
+        {
+            $users = User::get();
 
-        return view('supervision',['users'=>$users]);
+            return view('supervision',['users'=>$users]);
+
+        }
+        else {
+            // redirect
+            return redirect('/')->with('success', 'droits insuffisants');
+
+        }
     }
 
 
@@ -480,6 +509,17 @@ return redirect('roles');
 
     }
 
+
+    public function missions()
+    {
+
+        if(\Gate::allows('isAdmin') || \Gate::allows('isSupervisor')  ) {
+            $users = User::get();
+
+            return view('missions', ['users' => $users]);
+        }else{ return back();}
+
+    }
 
     public function index()
     {

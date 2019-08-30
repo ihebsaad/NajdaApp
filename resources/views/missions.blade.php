@@ -23,14 +23,14 @@
  
             <div class="panel panel-primary column col-md-6"  style="margin-left:30px;margin-right:50px;padding:0" >
               <div class="panel-heading">
-                                    <h4 id="kbspaneltitle" class="panel-title"> Agents connectés </h4>
+                <h4 id="kbspaneltitle" class="panel-title"> Agents connectés </h4>
 
               </div>
         				
 		  <div class="panel-body" style="display: block;min-height:700px;padding:15px 15px 15px 15px">
 		 <?php
-use \App\Http\Controllers\UsersController;
-   use \App\Http\Controllers\ClientsController;
+          use \App\Http\Controllers\UsersController;
+          use \App\Http\Controllers\ClientsController;
 
 
               function custom_echo($x, $length)
@@ -85,49 +85,14 @@ use \App\Http\Controllers\UsersController;
                   return sprintf($format, $hours, $minutes);
               }
 
-			  function time_elapsed_string($datetime, $full = false) {
-    $now = new DateTime;
-    $ago = new DateTime($datetime);
-    $diff = $now->diff($ago);
 
-    $diff->w = floor($diff->d / 7);
-    $diff->d -= $diff->w * 7;
-
-    $string = array(
-        'y' => 'année',
-        'm' => 'mois',
-        'w' => 'semaine',
-        'd' => 'jour',
-        'h' => 'heure',
-        'i' => 'minute',
-     //   's' => 'seconde',
-    );
-    foreach ($string as $k => &$v) {
-        if ($diff->$k) {
-            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
-        } else {
-            unset($string[$k]);
-        }
-    }
-
-    if (!$full) $string = array_slice($string, 0, 1);
-    return $string ? implode(', ', $string) . ' ' : 'maintenant';
-}
-
-
-$urlapp=env('APP_URL');
-
-if (App::environment('local')) {
-    // The environment is local
-    $urlapp='http://localhost/najdaapp';
-}
               if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
 ?>
-                        <div class="padding:5px 5px 5px 5px">
+                        <div class="padding:5px 5px 5px 5px"><br>
                            <!-- <h4>Supervision</h4><br>-->
                             <ul id="tabs" class="nav  nav-tabs"  >
-                                <li class=" nav-item ">
-                                    <a class="nav-link    " href="{{ route('supervision') }}"  >
+                                <li class=" nav-item active">
+                                    <a class="nav-link active   " href="{{ route('supervision') }}"  >
                                         <i class="fas fa-lg  fa-users-cog"></i>  Supervision
                                     </a>
                                 </li>
@@ -143,40 +108,51 @@ if (App::environment('local')) {
                                     </a>
                                 </li>
 
-                                <li class="nav-item active">
-                                    <a class="nav-link active" href="{{ route('affectation') }}"  >
+                                <li class="nav-item ">
+                                    <a class="nav-link " href="{{ route('notifs') }}"  >
                                         <i class="fa fa-lg  fa-inbox"></i>  Flux de réception
                                     </a>
                                 </li>
                             </ul>
-							<br>
                             <table id="tabusers" style="text-align: center ;background-color:#F8F7F6;padding:5px 5px 5px 5px">
-                                <thead style="text-align:center;font-size:14px;"><th>Type</th><th>Réception</th><th>Emetteur</th><th>Sujet</th><th>Nb attchs</th><th>Dossier</th><th>Affecté à</th><th>Consulté</th></thead>
-								<tbody class="thetable" style="font-size:14px;line-height:30px">
+                                <thead style="text-align:center;font-size:13px;"><th>Agent</th><th>Type</th><th>Rôle Principal</th><th>Dossiers Affectés</th><th>Missions</th><th>Actions </th><th>Actions Actives</th><th>Notifications</th></thead>
                             <?php $c=0;
-                            foreach($entrees as $entree)
-                                {
-									$type=$entree['type'];
-									$time=$entree['created_at'];$heure= "<small>Il y'a ".time_elapsed_string($time, false).'</small>';
-								//	$emetteur= $entree['emetteur'] ;
-									$emetteur=custom_echo($entree['emetteur'],'18');
-								//	$sujet= $entree['sujet'] ;
-									$sujet=custom_echo($entree['sujet'],'20');  
-									$dossier=$entree['dossier']; if($dossier==''){$folder='<small style="color:red">Non Dispatché!</small>';}else{$folder=$entree['dossier'];}
-									$attachs=$entree['nb_attach'];
-									$affecte=$entree['affecte']; if($affecte>0){$agent= UsersController::ChampById('name',$affecte).' '.UsersController::ChampById('lastname',$affecte); }else{ $agent='<span style="color:red">Non Affecté!</span>'; }
-									$viewed=$entree['viewed']; if($viewed==1){$consulte='<span style="color:green">OUI';}else{$consulte='<span style="color:red">NON</span>';}
-									
-									echo '<tr><td>';
-									  if ($type=='email'){echo '<img width="15" src="'. $urlapp .'/public/img/email.png" />';}   if ($type=='fax'){echo '<img width="15" src="'. $urlapp .'/public/img/faxx.png" />';}  if ($type=='sms'){echo '<img width="15" src="'. $urlapp .'/public/img/smss.png" />';}   if ($type=='phone'){echo '<img width="15" src="'. $urlapp .'/public/img/tel.png" />';} 
-									echo ' '.$type.'</td><td>'.$heure.'</td><td>'.$emetteur.'</td><td>';
-									if($dossier==''){ ?><a href="{{action('EntreesController@showdisp', $entree['id'])}}"> <?php }else{ ?> <a href="{{action('EntreesController@show', $entree['id'])}}"> <?php }  
-									echo $sujet.'</a></td><td>'.$attachs.'</td><td>'.$folder.'</td><td>'.$agent.'</td><td>'.$consulte.'</td></tr>';
+                            foreach($users as $user)
+                                { if($c % 2 ==0){$bg='background-color:#dddcda!important';}else{$bg='';}
+                                    $role='Agent';
+                                    if($user->id==$charge){$role='Chargé de transport';}
+                                    if($user->id==$disp){$role='Dispatcheur';}
+                                    if($user->id==$disptel){$role='Dispatcheur Téléphonique';}
+                                    if($user->id==$supmedic){$role='Superviseur Médical';}
+                                    if($user->id==$suptech){$role='Superviseur Technique';}
+                                    if($user->id==$veilleur){$role='Veilleur de nuit';}
+
+
+									$missions=UsersController::countmissions($user->id);
+									$actions=UsersController::countactions($user->id);
+									$actives=UsersController::countactionsactives($user->id);
+									$dureeactions=UsersController::countactionsduree($user->id);
+                                    if ($dureeactions <60){$dureeactions=$dureeactions.' minutes';}else{
+                                        $dureeactions=convertToHoursMins($dureeactions, '%2d heures, %2d minutes');
+
+                                    }
+
+									$dureeactives=UsersController::countactionsactivesduree($user->id);
+									if ($dureeactives <60){$dureeactives=$dureeactives.' minutes';}else{
+                                      $dureeactives=convertToHoursMins($dureeactives, '%2d heures, %2d minutes');
+
+                                    }
+
+                                    $dossiers=UsersController::countaffectes($user->id);
+                                    $notifications=UsersController::countnotifs($user->id);
+                                    // if($user->type=='admin'){$role='(Administrateur)';}
+									if($user->user_type!='admin'){
+										
+                                  if($user->isOnline()) {$c++; echo  '<tr class="usertr" onclick="showuser(this);"  id="user-'.$user->id.'" style="font-size:12px;cursor:pointer;'.$bg.'" ><td>   '.$user->name.' '.$user->lastname .'</td><td>'.$user->user_type.' </td><td>'. $role.'</td><td>'.$dossiers.'</td><td>'.$missions.'</td><td>'.$actions.' <br>charge : '.$dureeactions.'</td><td>'.$actives.' <br>charge : '.$dureeactives.'</td><td>'.$notifications.'</td>  </tr>' ;}
+									}
                                 }
-								 
-?>
-								</tbody>
-                                    
+                                    ?><br>
+
                             </table>
                         </div>
     <?php } ?>
@@ -186,15 +162,58 @@ if (App::environment('local')) {
 			
 			<div class="panel panel-danger col-md-5" style="padding:0 ; ">
                     <div class="panel-heading">
-                        <h4 class="panel-title"> </h4>
-
+                        <h4 class="panel-title"> Liste des missions</h4>
+                       <!-- <span class="pull-right">
+                           <i class="fa fa-fw clickable fa-chevron-up"></i>
+                            
+                        </span>-->
                     </div>
 
 
                    <div class="panel-body scrollable-panel" style="display: block;">
- 
+    
+                    <?php   foreach($users as $user)
+                       {
+                       if($user->user_type!='admin'){
 
-                   </div>
+                       if($user->isOnline()) {
+                           $c++;?>
+                        <div  class="agent" id="agent-<?php echo $user->id;?>"  style="display:none">
+                       <?php
+					   echo  '<h4 style=";text-align:center;background-color:grey;color:white;padding-top:10px;padding-bottom:10px;border:2px solid black">Agent : '.$user->name.' '.$user->lastname .'</h4>';
+
+					   
+					 $missions=  $user->activeMissions;$c=0;
+					foreach($missions as $m)
+					{$c++;
+ 						echo  '<h4 style=";text-align:center;background-color:#D0ECE7;color:black;padding-top:10px;padding-bottom:10px;border:2px solid grey">Mission :'.$c.' '.$m->titre.'</h4>';
+
+					 echo '<ul>';
+
+                       $actions=$m->activeActionEC;
+                      foreach($actions as $act)
+                      { echo  '<li>';
+                          echo '<p style="font-size:13px"><label>Action :     </label>'.custom_echo($act->titre,50).'</p>';
+                          echo '<p style="font-size:12px"><label>Description : </label>'.custom_echo($act->descrip,80).'</p>';
+                          echo '<div class="row" style="font-size:14px"><div class="col-md-4">Début :  '.$act->date_deb. '</div><div class="col-md-4">Fin :  '.$act->date_fin.'</div><div class="col-md-4"><b>('.$act->statut.')</b></div>';
+                          echo '</div>';
+						  echo  '</li>';
+                      }
+					echo'</ul>';
+					}
+                     ?>
+					 
+                        </div>
+
+                   <?php }
+
+                       }
+                       }
+
+                       ?>
+
+
+            </div>
             <!-- /.content -->
         </div>
 
@@ -204,6 +223,31 @@ if (App::environment('local')) {
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <script>
+
+    function hideinfos() {
+        $('#tab1').css('display','none');
+    }
+    function hideinfos2() {
+        $('#tab2').css('display','none');
+    }
+    function hideinfos3() {
+        $('#tab3').css('display','none');
+    }
+    function hideinfos4() {
+        $('#tab4').css('display','none');
+    }
+    function showinfos() {
+        $('#tab1').css('display','block');
+    }
+    function showinfos2() {
+        $('#tab2').css('display','block');
+    }
+    function showinfos3() {
+        $('#tab3').css('display','block');
+    }
+    function showinfos4() {
+        $('#tab4').css('display','block');
+    }
 
     // function slect all elements from class tag
     function toggle(className, displayState){
@@ -284,19 +328,6 @@ if (App::environment('local')) {
     #tabusers th{height:60px;background-color: #4FC1E9;color:white;border-left:1px solid white;}
     #tabusers td{border-left:1px solid white;border-bottom:1px solid white;}
     #tabusers tr{margin-bottom:15px;min-height:40px;}
- 
 
-	@media (min-width: 1024px) {
 
-	.thetable{line-height:30px;}
-
-	}
-	
-	@media  (width > 1280px)    {
-		
-	 .thetable{line-height:30px;}
-		
-		}
-	
- 
     </style>

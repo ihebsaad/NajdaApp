@@ -497,6 +497,25 @@ class UsersController extends Controller
 
     }
 
+    public static function affichactionsactives($id)
+    {
+        $user=User::find($id);
+        $missions=  $user->activeMissions;
+
+        foreach($missions as $m)
+        {
+            $actions=$m->activeActionEC;
+            foreach($actions as $act)
+            {
+                echo 'titre : '.$act->titre;
+                echo 'Description : '.$act->descrip;
+                echo 'Debut : '.$act->date_deb;
+                echo 'Fin : '.$act->date_fin;
+            }
+         //   $somme+= $m->activeActionEC->count();
+        }
+
+    }
 
     public static function countactionsactivesduree($id)
     {
