@@ -268,7 +268,7 @@ $users=UsersController::ListeUsers();
 
  <?php use \App\Http\Controllers\ActionController;
              
-             $actionsReouRap=ActionController::ListeActionsRepOuRap();
+             $actionsReouRap=ActionController::ListeActionsRepOuRap($dossier->id);
           
        /*echo($actionsReouRap);*/
  ?>
@@ -295,16 +295,28 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
         <div class="modal-body">
           <p>
             
-           
+            @if(count($actionsReouRap)!=0)
             <table id="tabkkk">
+                <tr> <th></th> <th> Action  </th> <th> Mission  </th><th> Dossier   </th> </tr>
 
-                    <tr> <th></th> <th> Action  </th> <th> Mission  </th><th> Dossier   </th> </tr>
+
+               
+
+                 
+
                   @foreach ( $actionsReouRap as $rr)
                     <tr> <td style="color: white; font-size: 0px;">{{$rr->id}}</td> <td>{{$rr->titre}}</td> <td>{{ $rr->Mission->titre}}</td> <td>{{$rr->Mission->dossier->reference_medic}}</td>  </tr>
                    
                   @endforeach
-                        
+
+              
             </table>
+              @else
+
+                 <div> les attentes de réponse pour ce dossier n'existe pas </div>
+
+            @endif
+                        
             <!--<input type="button" id="tst" value="OK" onclick="fnselect()" />-->
 
 

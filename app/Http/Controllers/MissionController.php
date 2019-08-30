@@ -343,12 +343,18 @@ class MissionController extends Controller
          //dd($res);
 
       }
+      else
+      {
+         $res2=strstr($currenturl,"deleguerMission");
+         $res3=strstr($currenturl,"deleguerAction");
+
+      }
 
      // dd($count);
 
        //dd(back()->getTargetUrl());
 
-      if( $count!=4)
+      if( $count!=4 && ! $res2 && ! $res3)
       {
        return back();          
 
@@ -1136,15 +1142,15 @@ public function getAjaxDeleguerMission($idmiss)
                     <tr>
 
                       <th>Action</th>
-                      <th>date début</th>
-                      <th>date fin</th>
-                      <th>Realisée par</th>
+                      <th>Date début</th>
+                      <th>Date fin</th>
+                      <th>Réalisée par</th>
                       <th>Num rappel</th>
-                      <th>comment 1</th>
-                      <th>comment 2</th>
-                      <th>comment 3</th>
+                      <th>commentaire 1</th>
+                      <th>commentaire 2</th>
+                      <th>commentaire 3</th>
 
-                      <th>statut</th>
+                      <th>Statut</th>
 
                     </tr>
                   </thead>
@@ -1183,11 +1189,52 @@ public function getAjaxDeleguerMission($idmiss)
 
                          if ($sactions->statut!='rfaite')
                           {
-                           $output.='<td style="overflow: auto;" title="'.$sactions->statut.'"><span style="font-weight : none;">'.$sactions->statut.'</span></td></tr>' ;
+                            if($sactions->statut=='deleguee')
+                            {
+                            $output.='<td style="overflow: auto;" title="déléguée à '.$sactions->assistant->name. ' '.$sactions->assistant->lastname.'"><span style="font-weight : none; color:red"> déléguée à '.$sactions->assistant->name.' '.$sactions->assistant->lastname.'</span></td></tr>' ;
+                            }
+                            else{
+                                  if($sactions->statut=='reportee')
+                                  {
+                                  $output.='<td style="overflow: auto;" title="reportée"><span style="font-weight : none;"> reportée </span></td></tr>' ;
+                                  }
+                                  else
+                                  {
+
+                                      if($sactions->statut=='rappelee')
+                                      {
+                                      $output.='<td style="overflow: auto;" title="mise en attente"><span style="font-weight : none;"> mise en attente </span></td></tr>' ;
+                                      }
+                                      else
+                                      {// cas pour active
+
+                                            if($sactions->statut=='active')
+                                          {
+                                          $output.='<td style="overflow: auto;" title="en cours (active)"><span style="font-weight : none;"> en cours (active) </span></td></tr>' ;
+                                          }
+                                          else
+                                          {
+
+                                           $output.='<td style="overflow: auto;" title="'.$sactions->statut.'"><span style="font-weight : none;"> '.$sactions->statut.' </span></td></tr>' ;
+
+                                          }
+
+
+
+                                      }
+
+
+
+                                  }
+
+                                }
+
+
                           }
                           else
                           {
-                            $output.='<td style="overflow: auto;" title=" rappelée"><span style="font-weight : none;"> rappelée</span></td></tr>' ;
+
+                            $output.='<td style="overflow: auto;" title=" rappelée"><span style="font-weight : none;"> mise en attente</span></td></tr>' ;
                           }
                         }
                         else

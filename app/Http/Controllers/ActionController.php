@@ -41,11 +41,29 @@ class ActionController extends Controller
         return view('Actions.index', compact('Actions'));
     }
 
-    public  static function ListeActionsRepOuRap()
+    public  static function ListeActionsRepOuRap($iddoss)
     {
-        $actionRR = ActionEC::where('statut','=', 'reportee')->orWhere('statut','=','rappelee')->get();
+
+       $var=array();
+        //$actionRR = ActionEC::where('statut','=', 'reportee')->orWhere('statut','=','rappelee')->get();
+       $actionRR = ActionEC::where('statut','=', 'reportee')->orWhere('statut','=','rappelee')->get();
         //dd($actionRR);
-        return $actionRR;
+
+       if($actionRR)
+       {
+            foreach ($actionRR as $key ) {
+              if($key->Mission->dossier->id== $iddoss)
+              {
+                  $var[]=$key;
+
+              }
+            }
+
+
+       }
+
+
+        return $var;
 
     }
 
@@ -547,7 +565,7 @@ class ActionController extends Controller
                  $upde= ActionEC::find($actionRapp->id);
                      $upde->update(['statut' => 'active']);
 
-                     $output='Rappel pour l\'Attente de réponse pour l\'action :'.$upde->titre.' | Mission :'.$upde->Mission->titre.' | Dossier : '.$upde->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
+                     $output='Rappel pour la mise en attente de l\'action :'.$upde->titre.' | Mission :'.$upde->Mission->titre.' | Dossier : '.$upde->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
                     // dd($output);
                         return($output);
                 }
@@ -970,6 +988,11 @@ class ActionController extends Controller
 
         $action=ActionEC::where("id",$idact)->first();
         $option=$request->get("optionAction");
+
+       if($action )
+       {
+
+
        // ebregistrement des valeurs des options
        if($option != null)
             {
@@ -1281,7 +1304,14 @@ class ActionController extends Controller
 
         /* */
 
+      }
+      else
+      {
 
+           return redirect('dossiers/view/'.$iddoss);
+
+
+      }
 
 
 
