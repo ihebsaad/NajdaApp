@@ -715,7 +715,7 @@ public function getAjaxDeleguerMission($idmiss)
 
          $output.='<h4><b><u> Description de mission : </u>'.$miss->typeMission->des_miss.'</b> </h4> <br>';
           
-         $output.='<h4><b> <u>Nombre d\'actions: </u>'.$miss->ActionECs->count().'</b> </h4> <br>';
+         /*$output.='<h4><b> <u>Nombre d\'actions: </u>'.$miss->ActionECs->count().'</b> </h4> <br>';*/
 
 
         if ($miss->type_heu_spec==0)
