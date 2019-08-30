@@ -804,8 +804,10 @@ $interv = PrestationsController::PrestById($prest);
                     <tbody>
                     @foreach($documents as $doc)
                         <tr>
-                            <td style=";"><?php echo $doc->titre; ?></td>
-                            <!--<td style=";"><?php //echo $doc->description; ?></td>-->
+                            <td style=";"><?php echo $doc->titre; 
+                                            if (stristr($doc->emplacement,'annulation') !== FALSE) 
+                                            {
+                                        ?> <code><i class="far fa-window-close"></i> Annulé</code></td><?php } ?>
                             <td style=";">
                             <?php
                                 if ($doc->parent !== null)
