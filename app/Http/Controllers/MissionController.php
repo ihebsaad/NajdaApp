@@ -230,17 +230,18 @@ class MissionController extends Controller
              'mission_id' =>$Mission->id,
              'titre' => trim($valeurs[$k]),
              'type_Mission' => trim($valeurs[1]),
-             'ordre'=> trim($valeurs[$k+1]),
-             'descrip' => trim($valeurs[$k+2]),
-             'nb_opt'=> trim($valeurs[$k+3]),
+             'duree' => trim($valeurs[$k+1]),
+             'ordre'=> trim($valeurs[$k+2]),
+             'descrip' => trim($valeurs[$k+3]),
+             'nb_opt'=> trim($valeurs[$k+4]),
              'opt_choisie'=>0,
-             'igno_ou_non'=> trim($valeurs[$k+4]),
-             'rapl_ou_non'=> trim($valeurs[$k+5]),
+             'igno_ou_non'=> trim($valeurs[$k+5]),
+             'rapl_ou_non'=> trim($valeurs[$k+6]),
              'num_rappel'=>0,
-             'report_ou_non'=> trim($valeurs[$k+6]),
+             'report_ou_non'=> trim($valeurs[$k+7]),
              'num_report'=>0,
-             'rapp_doc_ou_non'=>trim($valeurs[$k+7]),
-             'activ_avec_miss'=>trim($valeurs[$k+8]),
+             'rapp_doc_ou_non'=>trim($valeurs[$k+8]),
+             'activ_avec_miss'=>trim($valeurs[$k+9]),
              'realisee'=> false,
              //'user_id'=> $Mission->user_id,
              'statut'=>'inactive'
@@ -250,7 +251,7 @@ class MissionController extends Controller
                    $ActionEC->save();
 
 
-              $k+=8;
+              $k+=9;
               }
               else
               {
@@ -268,17 +269,18 @@ class MissionController extends Controller
              'mission_id' =>$Mission->id,
              'titre' => trim($valeurs[$k]),
              'type_Mission' => trim($valeurs[1]),
-             'ordre'=> trim($valeurs[$k+1]),
-             'descrip' => trim($valeurs[$k+2]),
-              'nb_opt'=> trim($valeurs[$k+3]),
+             'duree' => trim($valeurs[$k+1]),
+             'ordre'=> trim($valeurs[$k+2]),
+             'descrip' => trim($valeurs[$k+3]),
+              'nb_opt'=> trim($valeurs[$k+4]),
               'opt_choisie'=>0,
-             'igno_ou_non'=> trim($valeurs[$k+4]),
-             'rapl_ou_non'=> trim($valeurs[$k+5]),
+             'igno_ou_non'=> trim($valeurs[$k+5]),
+             'rapl_ou_non'=> trim($valeurs[$k+6]),
              'num_rappel'=>0,
-             'report_ou_non'=> trim($valeurs[$k+6]),
+             'report_ou_non'=> trim($valeurs[$k+7]),
              'num_report'=>0,
-             'rapp_doc_ou_non'=> trim($valeurs[$k+7]),
-               'activ_avec_miss'=>trim($valeurs[$k+8]),
+             'rapp_doc_ou_non'=> trim($valeurs[$k+8]),
+               'activ_avec_miss'=>trim($valeurs[$k+9]),
              'realisee'=> false,
              //'user_id'=> $Mission->user_id,
              'date_deb' => $Mission->date_deb,
@@ -288,7 +290,7 @@ class MissionController extends Controller
                    $ActionEC->save();
 
 
-               $k+=8;
+               $k+=9;
              
               }
               else
