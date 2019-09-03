@@ -171,7 +171,8 @@ Route::post('/dossiers/attribution','DossiersController@attribution')->name('dos
 Route::post('/dossiers/listepres','DossiersController@ListePrestataireCitySpec')->name('dossiers.listepres');
 Route::post('/dossiers/addressadd','DossiersController@addressadd')->name('dossiers.addressadd');
 Route::post('/dossiers/addressadd2','DossiersController@addressadd2')->name('dossiers.addressadd2');
-Route::get('/dossiers/searchprest','DossiersController@searchprest')->name('dossiers.searchprest');
+//Route::post('/searchprest','DossiersController@searchprest')->name('searchprest');
+Route::get('/searchprest','DossiersController@searchprest')->name('searchprest');
 
 
 /*** Clients **/
@@ -186,14 +187,16 @@ Route::post('/clients/addressadd3','ClientsController@addressadd3')->name('clien
 Route::post('/clients/updatingnature','ClientsController@updatingnature')->name('clients.updatingnature');
 Route::post('/clients/removenature','ClientsController@removenature')->name('clients.removenature');
 Route::get('/clients/view/{id}', 'ClientsController@view');
+Route::get('/clients/destroy/{id}', 'ClientsController@destroy');
 
 
 /*** Cities -> Gouvernorats  **/
-Route::resource('/cities',  'CitiesController');
+//Route::resource('/cities',  'CitiesController');
 Route::get('/cities', array('as' => 'cities','uses' => 'CitiesController@index'));
 Route::post('/cities/saving','CitiesController@saving')->name('cities.saving');
 Route::post('/cities/updating','CitiesController@updating')->name('cities.updating');
 Route::get('/cities/view/{id}', 'CitiesController@view');
+Route::get('/cities/destroy/{id}', 'CitiesController@destroy');
 
 
 /*** Actualites  **/
@@ -206,35 +209,36 @@ Route::get('/actualites/destroy/{id}', 'ActualitesController@destroy');
  
 
 /*** Voitures ->Véhicules   **/
-Route::resource('/voitures',  'VoituresController');
+//Route::resource('/voitures',  'VoituresController');
 Route::get('/voitures', array('as' => 'voitures','uses' => 'VoituresController@index'));
 Route::post('/voitures/saving','VoituresController@saving')->name('voitures.saving');
 Route::post('/voitures/updating','VoituresController@updating')->name('voitures.updating');
 Route::get('/voitures/view/{id}', 'VoituresController@view');
+Route::get('/voitures/destroy/{id}', 'VoituresController@destroy');
 
 
 /*** Equipements -> equipements   **/
-Route::resource('/equipements',  'VoituresController');
+//Route::resource('/equipements',  'VoituresController');
 Route::get('/equipements', array('as' => 'equipements','uses' => 'EquipementsController@index'));
 Route::post('/equipements/saving','EquipementsController@saving')->name('equipements.saving');
 Route::post('/equipements/updating','EquipementsController@updating')->name('equipements.updating');
 Route::post('/equipements/updating2','EquipementsController@updating2')->name('equipements.updating2');
 Route::get('/equipements/view/{id}', 'EquipementsController@view');
+Route::get('/equipements/destroy/{id}', 'EquipementsController@destroy');
 
 
 
 /*** personnes -> personnels   **/
-Route::resource('/personnes',  'PersonnesController');
+//Route::resource('/personnes',  'PersonnesController');
 Route::get('/personnes', array('as' => 'personnes','uses' => 'PersonnesController@index'));
 Route::post('/personnes/saving','PersonnesController@saving')->name('personnes.saving');
 Route::post('/personnes/updating','PersonnesController@updating')->name('personnes.updating');
 Route::get('/personnes/view/{id}', 'PersonnesController@view');
-
-
+Route::get('/personnes/destroy/{id}', 'PersonnesController@destroy');
 
 
 /*** docs -> documents à signer   **/
-Route::resource('/docs',  'DocsController');
+//Route::resource('/docs',  'DocsController');
 Route::get('/docs', array('as' => 'docs','uses' => 'DocsController@index'));
 Route::post('/docs/saving','DocsController@saving')->name('docs.saving');
 Route::post('/docs/updating','DocsController@updating')->name('docs.updating');
@@ -243,17 +247,20 @@ Route::post('/docs/removespec','DocsController@removespec')->name('docs.removesp
 Route::post('/docs/createspec','DocsController@createspec')->name('docs.createspec');
 Route::post('/docs/removedocdossier','DocsController@removedocdossier')->name('docs.removedocdossier');
 Route::post('/docs/createdocdossier','DocsController@createdocdossier')->name('docs.createdocdossier');
+Route::get('/docs/destroy/{id}', 'DocsController@destroy');
+
 
 /*** Groupes Clients **/
-Route::resource('/clientgroupes',  'ClientGroupesController');
+//Route::resource('/clientgroupes',  'ClientGroupesController');
 Route::get('/clientgroupes', array('as' => 'clientgroupes','uses' => 'ClientGroupesController@index'));
 Route::post('/clientgroupes/saving','ClientGroupesController@saving')->name('clientgroupes.saving');
 Route::post('/clientgroupes/updating','ClientGroupesController@updating')->name('clientgroupes.updating');
 Route::get('/clientgroupes/view/{id}', 'ClientGroupesController@view');
+Route::get('/clientgroupes/destroy/{id}', 'ClientGroupesController@destroy');
 
 
 /*** Prestataires **/
-Route::resource('/prestataires',  'PrestatairesController');
+//Route::resource('/prestataires',  'PrestatairesController');
 Route::get('/prestataires', array('as' => 'prestataires','uses' => 'PrestatairesController@index'));
 Route::post('/prestataires/saving','PrestatairesController@saving')->name('prestataires.saving');
 Route::post('/prestataires/saving2','PrestatairesController@saving2')->name('prestataires.saving2');
@@ -268,10 +275,11 @@ Route::get('/prestataires/view/{id}', 'PrestatairesController@view');
 Route::post('/prestataires/addeval','PrestatairesController@addeval')->name('prestataires.addeval');
 Route::post('/prestataires/addemail','PrestatairesController@addemail')->name('prestataires.addemail');
 Route::post('/prestataires/addressadd','PrestatairesController@addressadd')->name('prestataires.addressadd');
+Route::get('/prestataires/destroy/{id}', 'PrestatairesController@destroy');
 
 
 /*** Prestations **/
-Route::resource('/prestations',  'PrestationsController');
+//Route::resource('/prestations',  'PrestationsController');
 Route::get('/prestations', array('as' => 'prestations','uses' => 'PrestationsController@index'));
  Route::post('/prestations/saving','PrestationsController@saving')->name('prestations.saving');
  Route::post('/prestations/updating','PrestationsController@updating')->name('prestations.updating');
@@ -284,12 +292,13 @@ Route::post('/prestations/valide','PrestationsController@valide')->name('prestat
 
 
 /*** Intervenants **/
-Route::resource('/intervenants',  'IntervenantsController');
+//Route::resource('/intervenants',  'IntervenantsController');
 Route::get('/intervenants', array('as' => 'intervenants','uses' => 'IntervenantsController@index'));
 Route::post('/intervenants/saving','IntervenantsController@saving')->name('intervenants.saving');
 Route::post('/intervenants/updating','IntervenantsController@updating')->name('intervenants.updating');
 Route::get('/intervenants/view/{id}', 'IntervenantsController@view');
 Route::post('/intervenants/updating','IntervenantsController@updating')->name('intervenants.updating');
+Route::get('/intervenants/destroy/{id}', 'IntervenantsController@destroy');
 
 
 
@@ -299,17 +308,19 @@ Route::get('/typeprestations', array('as' => 'typeprestations','uses' => 'TypePr
  Route::post('/typeprestations/saving','TypePrestationsController@saving')->name('typeprestations.saving');
 Route::post('/typeprestations/updating','TypePrestationsController@updating')->name('typeprestations.updating');;
 Route::get('/typeprestations/view/{id}', 'TypePrestationsController@view');
- 
+Route::get('/typeprestations/destroy/{id}', 'TypePrestationsController@destroy');
+
 /*** Specialités **/
-Route::resource('/specialites',  'SpecialitesController');
+//Route::resource('/specialites',  'SpecialitesController');
 Route::get('/specialites', array('as' => 'specialites','uses' => 'SpecialitesController@index'));
  Route::post('/specialites/saving','SpecialitesController@saving')->name('specialites.saving');
 Route::post('/specialites/updating','SpecialitesController@updating')->name('specialites.updating');;
 Route::get('/specialites/view/{id}', 'SpecialitesController@view');
+Route::get('/specialites/destroy/{id}', 'SpecialitesController@destroy');
 
 
 /*** Notes **/
-Route::resource('/notes',  'NotesController');
+//Route::resource('/notes',  'NotesController');
 Route::get('/notes', array('as' => 'notes','uses' => 'NotesController@index'));
 Route::post('/notes/updating','NotesController@updating')->name('notes.updating');
 Route::get('/notes/view/{id}', 'NotesController@view');
@@ -319,6 +330,7 @@ Route::get('/getNotesAjaxModal','NotesController@getNotesAjaxModal');
 Route::get('/SupprimerNoteAjax/{id}','NotesController@SupprimerNoteAjax');
 Route::get('/SupprimerNote/{id}','NotesController@SupprimerNote');
 Route::get('/ReporterNote/{id}','NotesController@ReporterNote');
+Route::get('/notes/destroy/{id}', 'NotesController@destroy');
 
 
  

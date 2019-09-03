@@ -104,7 +104,7 @@
 
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('missions') }}"  >
-                                        <i class="fas fa-lg  fa-user-tag"></i>  Missions
+                                        <i class="fas fa-lg  fa-user-cog"></i>  Missions
                                     </a>
                                 </li>
 

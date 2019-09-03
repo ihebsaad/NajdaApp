@@ -347,5 +347,5 @@ class NotesController extends Controller
         $note = Note::find($id);
         $note->delete();
 
-        return redirect('/notes')->with('success', '  Supprimé avec succès');    }
+        return redirect('/notes')->with('success', '  Supprimé  ');    }
 }

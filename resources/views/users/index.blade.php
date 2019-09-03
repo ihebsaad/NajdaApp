@@ -22,6 +22,7 @@
             <th>Email</th>
             <th>Rôle</th>
             <th>Status</th>
+            <th>Actions</th>
         </tr>
             <tr>
                 <th>ID</th>
@@ -29,6 +30,7 @@
                 <th>Email</th>
                 <th>Rôle</th>
                 <th>Status</th>
+                <th> </th>
               </tr>
             </thead>
             <tbody>
@@ -39,6 +41,11 @@
                     <td>{{$user->email}}</td>
                     <td>{{$user->user_type}}</td>
                     <td><?php if ($user->isOnline()){  if($user->statut==0){echo '<span class="label label-success">Connecté</span> ';} else{ echo '<span class="label label-warning">En Pause</span> ';  }    } else{echo '<span class="label label-danger">Hors ligne</span>';}  ?></td>
+                  <td>  @can('isAdmin')
+                        <a  href="{{action('UsersController@destroy', $user['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                            <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                        </a>
+                      @endcan</td>
                 </tr>
             @endforeach
             </tbody>

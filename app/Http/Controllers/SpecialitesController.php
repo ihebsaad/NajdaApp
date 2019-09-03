@@ -177,7 +177,7 @@ class SpecialitesController extends Controller
         $specialites = Specialite::find($id);
         $specialites->delete();
 
-        return redirect('/specialites')->with('success', '  Supprimé avec succès');
+        return redirect('/specialites')->with('success', '  Supprimé  ');
     }
 
  

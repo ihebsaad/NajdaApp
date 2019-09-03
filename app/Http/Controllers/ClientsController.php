@@ -356,7 +356,7 @@ class ClientsController extends Controller
         $client = Client::find($id);
         $client->delete();
 
-        return redirect('/clients')->with('success', '  Supprimé avec succès');
+        return redirect('/clients')->with('success', '  Supprimé  ');
     }
 
     public static function GroupeById($id)

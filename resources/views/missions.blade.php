@@ -31,6 +31,7 @@
 		 <?php
           use \App\Http\Controllers\UsersController;
           use \App\Http\Controllers\ClientsController;
+            Use App\ActionEC ;
 
 
               function custom_echo($x, $length)
@@ -104,7 +105,7 @@
 
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('missions') }}"  >
-                                        <i class="fas fa-lg  fa-user-tag"></i>  Missions
+                                        <i class="fas fa-lg  fa-user-cog"></i>  Missions
                                     </a>
                                 </li>
 
@@ -162,7 +163,7 @@
 			
 			<div class="panel panel-danger col-md-5" style="padding:0 ; ">
                     <div class="panel-heading">
-                        <h4 class="panel-title"> Liste des missions</h4>
+                        <h4 class="panel-title"> Liste des actions</h4>
                        <!-- <span class="pull-right">
                            <i class="fa fa-fw clickable fa-chevron-up"></i>
                             
@@ -171,8 +172,11 @@
 
 
                    <div class="panel-body scrollable-panel" style="display: block;">
-    
-                    <?php   foreach($users as $user)
+                    <div class="row">
+                        <span id="actoutes"  onclick="showatoutes()" class="pull-left" style="padding:10px 10px 10px 10px;text-align:center;background-color:grey;color:white;width:250px;cursor:pointer">Toutes les Actions</span>
+                       <span id="acactives" onclick="showactives()" class="pull-right" style="padding:10px 10px 10px 10px;text-align:center;background-color:#4fc1e9;color:white;width:250px;cursor:pointer">Actions Actives</span>
+                    </div>
+                        <?php   foreach($users as $user)
                        {
                        if($user->user_type!='admin'){
 
@@ -180,28 +184,78 @@
                            $c++;?>
                         <div  class="agent" id="agent-<?php echo $user->id;?>"  style="display:none">
                        <?php
-					   echo  '<h4 style=";text-align:center;background-color:grey;color:white;padding-top:10px;padding-bottom:10px;border:2px solid black">Agent : '.$user->name.' '.$user->lastname .'</h4>';
+					   echo  '<h4 style=";text-align:center;background-color:black;color:white;padding-top:10px;padding-bottom:10px;border:2px solid black">Agent : '.$user->name.' '.$user->lastname .'</h4>';
 
 					   
 					 $missions=  $user->activeMissions;$c=0;
 					foreach($missions as $m)
 					{$c++;
- 						echo  '<h4 style=";text-align:center;background-color:#D0ECE7;color:black;padding-top:10px;padding-bottom:10px;border:2px solid grey">Mission :'.$c.' '.$m->titre.'</h4>';
+ 						echo  '<h4 style=";text-align:center;background-color:#D0ECE7;color:black;padding-top:10px;padding-bottom:10px;border:2px solid grey">Mission '.$c.' : ('.$m->typeMission->nom_type_Mission .')  '.$m->titre.'</h4>';
 
 					 echo '<ul>';
+                        $statut='';
 
-                       $actions=$m->activeActionEC;
+                      // $actions=$m->activeActionEC;
+                       $actions=$m->ActionECs;
                       foreach($actions as $act)
-                      { echo  '<li>';
-                          echo '<p style="font-size:13px"><label>Action :     </label>'.custom_echo($act->titre,50).'</p>';
-                          echo '<p style="font-size:12px"><label>Description : </label>'.custom_echo($act->descrip,80).'</p>';
-                          echo '<div class="row" style="font-size:14px"><div class="col-md-4">Début :  '.$act->date_deb. '</div><div class="col-md-4">Fin :  '.$act->date_fin.'</div><div class="col-md-4"><b>('.$act->statut.')</b></div>';
+                      {
+                          if (
+                              ($act->user_id == '')&&($act->assistant_id == '') ||
+                              (($act->user_id == $user->id ) && ( $act->assistant_id == $user->id || ($act->assistant_id =='' )   )  )
+                           )
+                              {
+
+                          $datedebut=$act->date_deb; $debut=date("d/m/Y H:i", strtotime($datedebut));
+                          $datefin=$act->date_fin; $fin=date("d/m/Y H:i", strtotime($datefin));
+                          $statut=$act->statut; if ($statut=='active'){$color='#4fc1e9';$statut='Active';} if ($statut=='inactive'){$color='grey';$statut='Inactive';}if ($statut=='faite' || $statut=='rfaite'){$color='#45B39D';$statut='Réalisée';}if ($statut=='reportee' || $statut=='rappelee'){$color='#F0B27A';$statut='Mise en attente';}
+
+                          echo  '<li style="display:block;margin-left:-35px;margin-bottom:15px;border:3px solid '.$color.';padding:10px 10px 10px 10px"  class=" liactions action-'.$statut.'">';
+                        //  echo '<a  > <span style="color:grey;margin-top:25px" class="fa-li"><i style="color:grey" class="fa fa-cogs"></i></span></a>';
+
+                          echo '<p style="font-size:14px"><label style="font-weight:600">Action:</label>  '.custom_echo($act->titre,50).'</p>';
+                          echo '<p style="font-size:13px"><label style="font-weight:600">Description:</label>  '.custom_echo($act->descrip,150).'</p>';
+                          echo '<div class="row" style="font-size:14px;padding-left:0px;"><div class="col-md-4 col-lg-4">'; if($datedebut!=''){ echo '<label style="font-weight:600">Début:</label>  '.$debut;} echo '</div> <div class="col-md-4">'; if($datefin!=''){echo '<label style="font-weight:600">Fin:</label>  '.$fin;} echo '</div><div class="col-md-3 col-lg-2"><b style="color:'.$color.'">'.$statut.'</b></div><div class="col-md-2 col-lg-2">Charge: '.$act->duree.' mins</div>';
+
                           echo '</div>';
 						  echo  '</li>';
+
+                              } // end user_id
+
+
                       }
 					echo'</ul>';
 					}
-                     ?>
+
+                            echo '<center><h4 style="text-align:center;background-color:#8A0808;color:white;border:1px solid grey;padding-top:10px;padding-bottom:10px">Actions déleguées</h4></center>';
+                            $statut='';
+                            echo'<ul>';
+                            $allactionecs=ActionEC::get();
+                            foreach($allactionecs as $actd)
+                                {
+
+                                    if (  ($actd->statut =='deleguee')  && ($user->id == $actd->assistant_id)    )
+                                        {  $miss=$actd->Mission;
+
+                                            $datedebut=$actd->date_deb; $debut=date("d/m/Y H:i", strtotime($datedebut));
+                                            $datefin=$actd->date_fin; $fin=date("d/m/Y H:i", strtotime($datefin));
+                                             $comment1=  $actd->comment1;
+                                            echo  '<li style="margin-left:-35px;margin-bottom:15px;border:3px solid #8A0808;padding:10px 10px 10px 10px">';
+                                            //  echo '<a  > <span style="color:grey;margin-top:25px" class="fa-li"><i style="color:grey" class="fa fa-cogs"></i></span></a>';
+
+                                            echo '<p style="font-size:15px"><label style="font-weight:600">Mission:</label>  ('. $miss->typeMission->nom_type_Mission .') '.custom_echo($miss->titre,50).'</p>';
+                                            echo '<p style="font-size:14px"><label style="font-weight:600">Action:</label>  '.custom_echo($actd->titre,50).'</p>';
+                                            echo '<p style="font-size:13px"><label style="font-weight:600">Description:</label>  '.custom_echo($actd->descrip,150).'</p>';
+                                            echo '<div class="row" style="font-size:14px;padding-left:0px;"><div class="col-md-4 col-lg-4">'; if($datedebut!=''){ echo '<label style="font-weight:600">Début:</label>  '.$debut;} echo '</div> <div class="col-md-4">'; if($datefin!=''){echo '<label style="font-weight:600">Fin:</label>  '.$fin;} echo '</div><div class="col-md-3 col-lg-2">Afectée par: '.$actd->agent->name.' '.$actd->agent->lastname .'</div><div class="col-md-3 col-lg-2">Charge : '.$actd->duree.' mins</div>';
+
+                                            echo '</div>';
+                                            echo  '</li>';
+
+                                        }
+                                }
+
+                            echo'</ul>';
+
+                            ?>
 					 
                         </div>
 
@@ -249,7 +303,29 @@
         $('#tab4').css('display','block');
     }
 
-    // function slect all elements from class tag
+
+    function   showatoutes (){
+
+        var elements = document.getElementsByClassName('liactions');
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.display = 'block';
+        }
+    }
+
+function   showactives (){
+
+    var elements = document.getElementsByClassName('liactions');
+    for (var i = 0; i < elements.length; i++){
+        elements[i].style.display = 'none';
+    }
+
+             var elements = document.getElementsByClassName('action-Active');
+            for (var i = 0; i < elements.length; i++){
+                elements[i].style.display = 'block';
+            }
+    }
+
+        // function slect all elements from class tag
     function toggle(className, displayState){
         var elements = document.getElementsByClassName(className);
 

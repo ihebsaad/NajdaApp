@@ -123,12 +123,23 @@ class ClientGroupesController extends Controller
 
     }
 
+
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function show($id)
+    {
+        $dossiers = Dossier::all();
+        $villes = DB::table('cities')->select('id', 'name')->get();
+
+        $clientgroupe = ClientGroupe::find($id);
+        return view('clientgroupes.view',['dossiers' => $dossiers,'villes'=>$villes], compact('clientgroupe'));
+
+    }
     public function edit($id)
     {
         //
@@ -169,7 +180,7 @@ class ClientGroupesController extends Controller
         $clientgroupes = ClientGroupe::find($id);
         $clientgroupes->delete();
 
-        return redirect('/clientgroupes')->with('success', '  Supprimé avec succès');
+        return redirect('/clientgroupes')->with('success', '  Supprimé');
     }
 
  

@@ -877,6 +877,11 @@
 
         </div>
 
+    @can('isAdmin')
+        <a  href="{{action('ClientsController@destroy', $client->id )}}" class="pull-right btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+            <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+        </a>
+    @endcan
 
     <input type="hidden" id="idcl" class="form-control"   value={{ $client->id }}>
     <input id="parent" name="parent" type="hidden" value="{{ $client->id}}">

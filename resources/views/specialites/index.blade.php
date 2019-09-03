@@ -51,7 +51,13 @@
                     <td  >{{$specialite->id}}</td>
                     <td  ><a href="{{action('SpecialitesController@view', $specialite['id'])}}" >{{$specialite->nom}}</a></td>
                     <td  > <?php echo TypePrestationsController::nomById($specialite->type_prestation); ?></td>
-                      <td    > </td>
+                      <td    >
+                          @can('isAdmin')
+                              <a  href="{{action('SpecialitesController@destroy', $specialite['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                  <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                              </a>
+                          @endcan
+                      </td>
  
                 </tr>
             @endforeach

@@ -1147,6 +1147,7 @@ class EmailController extends Controller
         $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
         $nomabn=app('App\Http\Controllers\DossiersController')->NomAbnDossierById($id);
         $refdem=app('App\Http\Controllers\DossiersController')->RefDemDossierById($id);
+        $refclient=app('App\Http\Controllers\DossiersController')->ChampById('reference_customer',$id);
         $entrees =   Entree::where('dossier', $ref)->get();
         $envoyes =   Envoye::where('dossier', $ref)->get();
 
@@ -1349,7 +1350,7 @@ class EmailController extends Controller
             ->distinct()
             ->get();
 
-        return view('emails.envoimail',['prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type]);
+        return view('emails.envoimail',['refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type]);
     }
 
     public function envoimailbr($id)

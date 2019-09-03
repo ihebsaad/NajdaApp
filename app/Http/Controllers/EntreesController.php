@@ -152,7 +152,8 @@ class EntreesController extends Controller
         $entree = Entree::find($id);
         if ($entree->viewed==0 )
         {
-        $this->export_pdf($id);
+          if( ( $entree->type=='email')||( $entree->type=='sms'))
+          {$this->export_pdf($id);}
         $entree->viewed=1;
         }
         $refdoss = $entree->dossier;

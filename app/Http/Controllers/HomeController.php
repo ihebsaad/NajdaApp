@@ -449,7 +449,7 @@ return redirect('roles');
 
         if( \Gate::allows('isAdmin') || \Gate::allows('isSupervisor') )
         {
-            $entrees = Entree::orderBy('id', 'desc')->where('statut','<','2')->paginate(20);
+            $entrees = Entree::orderBy('id', 'desc')->where('statut','<','2')->paginate(12);
             return view('notifs',['entrees'=>$entrees]);
 
         }

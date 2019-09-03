@@ -367,8 +367,7 @@ if (isset($dossier))
     $( document ).ready(function() {
         // verifier sil existe des notifications pour le dossier courant pour les marquer comme actifs
         if ($("#prt_{{ $dossier['reference_medic']}}").length > 0) {
-            // $("li#prt_{{{-- $dossier['reference_medic'] --}}}").addClass('dossiercourant');
-            // scroll vers lemplacement de la notification
+             // scroll vers lemplacement de la notification
             $('html, #notificationstab').animate({
                 scrollTop: $("#prt_{{ $dossier['reference_medic']}}").offset().top
             }, 1000);

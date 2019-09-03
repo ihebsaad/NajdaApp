@@ -168,7 +168,7 @@ class ActualitesController extends Controller
         $actualite = Actualite::find($id);
         $actualite->delete();
 
-        return redirect('/actualites')->with('success', '  Supprimée avec succès');
+        return redirect('/actualites')->with('success', '  Supprimée');
     }
 
 

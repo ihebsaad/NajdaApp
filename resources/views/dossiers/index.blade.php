@@ -22,7 +22,7 @@
     <div class="uper">
         <div class="portlet box grey">
             <div class="row">
-                <div class="col-lg-8"> <h3>Liste des dossiers </h3></div>
+                <div class="col-lg-8"> <h4>Liste des dossiers </h4></div>
                 <div class="col-lg-4">
                  <!--   <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>-->
                 </div>
@@ -35,13 +35,13 @@
       <div class="portlet box blue">
                <div  style="background-color:#4fc1e9; height: 45px; margin-bottom: 0px; padding: 2px;">
                 
-                   <h4>  &nbsp;<strong> <i class="fa fa-search"></i> &nbsp;Recherche avancée </strong></h4>
+                   <h4 style="cursor:pointer"  id="search">  &nbsp;<strong> <i class="fa fa-search"></i> &nbsp;Recherche avancée </strong></h4>
                     
                 </div>
             <div class="portlet-title" style="margin-top: 0px; padding-top: 0px;">
                 
             </div>
-            <div class="portlet-body">
+            <div class="portlet-body"  id="searchbox"  style="display:none">
                 <form accept-charset="utf-8" id="searchDossierform" action="{{route('page_recherche.avancee')}}">
                     <div class="row">
                         <div class="col-md-4">
@@ -525,8 +525,21 @@
     
     
 });
-  
 
+
+ $('#search').on('click',   function() {
+
+     var   div=document.getElementById('searchbox');
+     if(div.style.display==='none')
+     {
+         div.style.display='block';
+     }
+     else
+     {
+         div.style.display='none';
+     }
+
+ });
 
 </script>
 

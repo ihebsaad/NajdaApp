@@ -473,7 +473,7 @@ class DossiersController extends Controller
         });
 
 */
-        $prestations =   Prestation::where('dossier_id', $id)->get();
+        $prestations =   Prestation::where('dossier_id', $id)->where('effectue',1)->get();
         $intervenants =   Intervenant::where('dossier', $id)->get();
 
 
@@ -887,7 +887,7 @@ class DossiersController extends Controller
                                             <td style="padding-right:8px;"><i class="fa fa-phone"></i> ' . $tel->champ . '</td>
                                             <td style="padding-right:8px;">' . $tel->remarque . '</td>';?>
 <?php if($tel->typetel=='Mobile') {
-                  $output .= '<td><a onclick="setTel(this);" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
+                  $output .= '<td><a onclick="setTel(this);" class="'. trim($tel->champ).'" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
                     } else
                       { $output .= '<td></td>';}
 
@@ -915,52 +915,73 @@ class DossiersController extends Controller
 
     public function searchprest(Request $request)
     {
-        $id=$request->get('dossier');
-        $minutes= 120;
-        $minutes2= 600;
 
-        //      $typesMissions=TypeMission::get();
+        $datasearch =null;
 
-        /*   $specialites = Cache::remember('specialites',$minutes2,  function () {
 
-               return DB::table('specialites')
-                   ->get();
-           });*/
+        if($request->get('dossier'))
+        { $id=$request->get('dossier'); }
+
+        if($request->get('specialite'))
+        { $specialite=$request->get('specialite'); }
+        else{ $specialite='';}
+
+        if($request->get('gouvernorat'))
+        { $gouvernorat=$request->get('gouvernorat'); }
+        else{ $gouvernorat='';}
+
+        if($request->get('typeprest'))
+        { $typeprest=$request->get('typeprest'); }
+        else{ $typeprest='';}
+
+        if($request->get('ville'))
+        { $ville=$request->get('ville'); }
+        else{ $ville='';}
+
+        if($request->get('postal'))
+        { $postal=$request->get('postal'); }
+        else{ $postal='';}
+
+
+        if (intval($postal) >1 &&($ville!='')){
+            $datasearch =Evaluation::where('gouv',$gouvernorat )
+                ->where('type_prest',$typeprest )
+                ->where('specialite',$specialite )
+                ->where('postal',$postal )
+                ->orderBy('priorite','asc')
+                ->orderBy('derniere_prestation','asc')
+                ->get();
+
+        }else{
+
+            $datasearch =Evaluation::where('gouv',$gouvernorat )
+                ->where('type_prest',$typeprest )
+                ->where('specialite',$specialite )
+                ->where('postal',1 )
+                ->orderBy('priorite','asc')
+                ->orderBy('derniere_prestation','asc')
+                ->get();
+        }
+
+
         $specialites =DB::table('specialites')
             ->get();
 
 
-        $typesMissions = Cache::remember('type_mission',$minutes2,  function () {
-
-            return DB::table('type_mission')
+        $typesMissions = DB::table('type_mission')
                 ->get();
-        });
 
         $Missions=Dossier::find($id)->activeMissions;
 
-        // $typesprestations = TypePrestation::all();
-
-        $typesprestations = Cache::remember('type_prestations',$minutes2,  function () {
-
-            return DB::table('type_prestations')
+        $typesprestations =  DB::table('type_prestations')
                 ->get();
-        });
 
-        // $prestataires = Prestataire::all();
+        $prestataires= DB::table('prestataires')
+            ->get();
+        //  });
 
-        $prestataires = Cache::remember('prestataires',$minutes,  function () {
-
-            return DB::table('prestataires')
+        $gouvernorats = DB::table('cities')
                 ->get();
-        });
-
-        $gouvernorats = Cache::remember('cities',$minutes2,  function () {
-
-            return DB::table('cities')
-                ->get();
-        });
-
-
 
 
         $dossier = Dossier::find($id);
@@ -972,16 +993,7 @@ class DossiersController extends Controller
         $adresse=app('App\Http\Controllers\ClientsController')->ClientChampById('adresse',$cl);
 
 
-        //  $clients = DB::table('clients')->select('id', 'name')->get();
-
-        /*  $clients = Cache::remember('clients',$minutes2,  function () {
-
-              return DB::table('clients')
-                  ->get();
-          });
-
-  */
-        $prestations =   Prestation::where('dossier_id', $id)->get();
+        $prestations =   Prestation::where('dossier_id', $id)->where('effectue',1)->get();
         $intervenants =   Intervenant::where('dossier', $id)->get();
 
 
@@ -991,9 +1003,8 @@ class DossiersController extends Controller
         $envoyes =   Envoye::where('dossier', $ref)->get();
 
         $entrees1 =   Entree::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
-        ///  $entrees1 =$entrees1->sortBy('reception');
+
         $envoyes1 =   Envoye::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
-        ///  $envoyes1 =$envoyes1->sortBy('reception');
 
         $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());
 
@@ -1021,20 +1032,15 @@ class DossiersController extends Controller
         $idenv=array();
         foreach ($entrees as $entr)
         {
-            //  $attaches= Attachement::where('entree_id',$entr->id)->get();
-            //  $attaches= DB::table('attachements')->where('entree_id',$entr->id)->get();
 
-            //$tab =  Entree::find($entr->id)->attachements;
             array_push($identr,$entr->id );
 
         }
 
         foreach ($envoyes as $env)
         {
-            //   $attaches= DB::table('attachements')->where('envoye_id',$env->id)->get();
 
-            // $tab =  Envoye::find($env->id)->attachements;
-            //array_push($attachements,$attaches );
+
             array_push($idenv,$env->id );
 
         }
@@ -1052,13 +1058,9 @@ class DossiersController extends Controller
 
         $evaluations=DB::table('evaluations')->get();
 
+        return view('dossiers.view',['datasearch'=>$datasearch,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis], compact('dossier'));
 
-        /*****Recherche *****/
 
-       return view('dossiers.view',['evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis], compact('dossier'));
-
-      //  return redirect('/dossiers/view/'.$id);
-     //   return view('dossiers.view', compact('datasearch'));
     }
 
     public function addressadd(Request $request)

@@ -402,7 +402,7 @@ class PrestatairesController extends Controller
         $prestataire = Prestataire::find($id);
         $prestataire->delete();
 
-        return redirect('/prestataires')->with('success', '  Supprimé avec succès');
+        return redirect('/prestataires')->with('success', '  Supprimé ');
     }
 
     public static function VilleById($id)

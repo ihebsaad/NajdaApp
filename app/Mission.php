@@ -53,7 +53,7 @@ public function dossier()
 
      public function ActionECs()
     {
-        return $this->hasMany('App\ActionEC');
+        return $this->hasMany('App\ActionEC')->orderBy('ordre');
     }
 
     public function ActionECsSansRappel()

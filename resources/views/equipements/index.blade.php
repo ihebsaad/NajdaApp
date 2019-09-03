@@ -49,7 +49,13 @@
                     <td  >{{$equipement->id}}</td>
                     <td  ><a href="{{action('EquipementsController@view', $equipement['id'])}}" >{{$equipement->nom}}</a></td>
 					<td    > {{$equipement->reference}}</td>
- 
+
+                   <td> @can('isAdmin')
+                        <a  href="{{action('EquipementsController@destroy', $equipement['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                            <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                        </a>
+                       @endcan
+                   </td>
                 </tr>
             @endforeach
             </tbody>

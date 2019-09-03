@@ -128,10 +128,10 @@
         <label for="sujet">sujet :</label>
         <?php if($type=='prestataire')
         { ?>
-        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - V/Ref(Y/Ref):  - N/Ref(O/Ref): <?php echo $ref ?>"/>
+        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - V/Ref(Y/Ref): <?php echo $refclient ?>  - N/Ref(O/Ref): <?php echo $ref ?>"/>
   <?php }
         if (($type=='assure')||($type=='client')) {?>
-        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - V/Ref(Y/Ref): <?php echo $refdem ?>  - N/Ref(O/Ref): <?php echo $ref ?>"/>
+        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - V/Ref(Y/Ref): <?php echo $refclient ?>   - N/Ref(O/Ref): <?php echo $ref ?>"/>
 <?php        } ?>
     </div>
     <div class="form-group">

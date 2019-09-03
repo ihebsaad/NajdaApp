@@ -31,6 +31,13 @@
 		 <?php
 use \App\Http\Controllers\UsersController;
    use \App\Http\Controllers\ClientsController;
+              use \App\Attachement ;
+              $urlapp=env('APP_URL');
+
+              if (App::environment('local')) {
+                  // The environment is local
+                  $urlapp='http://localhost/najdaapp';
+              }
 
 
               function custom_echo($x, $length)
@@ -139,7 +146,7 @@ if (App::environment('local')) {
 
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('missions') }}"  >
-                                        <i class="fas fa-lg  fa-user-tag"></i>  Missions
+                                        <i class="fas fa-lg  fa-user-cog"></i>  Missions
                                     </a>
                                 </li>
 
@@ -167,17 +174,20 @@ if (App::environment('local')) {
 									$affecte=$entree['affecte']; if($affecte>0){$agent= UsersController::ChampById('name',$affecte).' '.UsersController::ChampById('lastname',$affecte); }else{ $agent='<span style="color:red">Non Affecté!</span>'; }
 									$viewed=$entree['viewed']; if($viewed==1){$consulte='<span style="color:green">OUI';}else{$consulte='<span style="color:red">NON</span>';}
 									
-									echo '<tr><td>';
+									echo '<tr class="usertr" onclick="show(this);"  id="user-'.$entree['id'].'" ><td>';
 									  if ($type=='email'){echo '<img width="15" src="'. $urlapp .'/public/img/email.png" />';}   if ($type=='fax'){echo '<img width="15" src="'. $urlapp .'/public/img/faxx.png" />';}  if ($type=='sms'){echo '<img width="15" src="'. $urlapp .'/public/img/smss.png" />';}   if ($type=='phone'){echo '<img width="15" src="'. $urlapp .'/public/img/tel.png" />';} 
 									echo ' '.$type.'</td><td>'.$heure.'</td><td>'.$emetteur.'</td><td>';
 									if($dossier==''){ ?><a href="{{action('EntreesController@showdisp', $entree['id'])}}"> <?php }else{ ?> <a href="{{action('EntreesController@show', $entree['id'])}}"> <?php }  
 									echo $sujet.'</a></td><td>'.$attachs.'</td><td>'.$folder.'</td><td>'.$agent.'</td><td>'.$consulte.'</td></tr>';
+
                                 }
-								 
+
 ?>
 								</tbody>
-                                    
+
                             </table>
+                            <?php echo $entrees->render(); ?>
+
                         </div>
     <?php } ?>
 	
@@ -192,9 +202,118 @@ if (App::environment('local')) {
 
 
                    <div class="panel-body scrollable-panel" style="display: block;">
- 
 
+                    <?php   foreach($entrees as $entree)
+                       {
+ ?> <div class="agent" id="agent-<?php echo $entree->id;?>"  style="display:none" >
+                            <div class="form-group pull-left">
+                               <?php if ($type=='email'){echo '<img width="15" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="15" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="15" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="15" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php // echo $entree['type']; ?>
+
+                            </div>
+
+                            <div class="form-group pull-right">
+                                <label for="date">Date:</label>
+                                <label> <?php echo  date('d/m/Y H:i', strtotime($entree->reception)) ; ?></label>
+                            </div><br>
+
+                        <div class="form-group">
+                        <label for="emetteur">Emetteur:</label>
+                       <input id="emetteur" type="text" class="form-control" name="emetteur"  value="<?php echo $entree->emetteur ?>" />
                    </div>
+                <div class="form-group">
+                    <label for="sujet">Sujet :</label>
+                    <input style="overflow:scroll;" id="sujet" type="text" class="form-control" name="sujet"  value="<?php echo  ($entree->sujet);?>"  />
+
+                </div>
+                <div class="form-group">
+                    <label for="contenu">Contenu:</label>
+                    <div class="form-control" style="overflow:scroll;min-height:400px">
+
+                        <?php $contenu= $entree['contenu'];
+                        echo ($contenu);  ?>
+                    </div>
+
+                    @if ($entree['nb_attach']  > 0)
+                        <?php
+                        // get attachements info from DB
+                        $attachs = Attachement::get()->where('parent', '=', $entree['id'] );
+
+                        ?>
+                        @if (!empty($attachs) )
+                            <?php $i=1; ?>
+                            @foreach ($attachs as $att)
+                                <div class="tab-pane fade in <?php  if ( ($entree['type']=='fax')&&($i==1)) {echo 'active';}?>" id="pj<?php echo $i; ?>">
+                                    Pièce jointe N°: <?php echo $i; ?>
+                                    <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
+
+
+                                    @switch($att->type)
+                                    @case('docx')
+                                    @case('doc')
+                                    @case('dot')
+                                    @case('dotx')
+                                    @case('docm')
+                                    @case('odt')
+                                    @case('pot')
+                                    @case('potm')
+                                    @case('pps')
+                                    @case('ppsm')
+                                    @case('ppt')
+                                    @case('pptm')
+                                    @case('pptx')
+                                    @case('ppsx')
+                                    @case('odp')
+                                    @case('xls')
+                                    @case('xlsx')
+                                    @case('xlsm')
+                                    @case('xlsb')
+                                    @case('ods')
+                                    <iframe src="https://view.officeapps.live.com/op/view.aspx?src={{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                                    @break
+
+                                    @case('pdf')
+                                    <?php
+
+                                    $fact=$att->facturation;
+                                    if ($fact!='')
+                                    {
+                                        echo '<span class="pdfnotice"> Ce document contient le(s) mots important(s) suivant(s) : <b>'.$fact.'</b></span>';
+                                    }
+
+                                    ?>
+
+                                    <iframe src="{{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                                    @break
+
+                                    @case('jpg')
+                                    @case('jpeg')
+                                    @case('gif')
+                                    @case('png')
+                                    @case('bmp')
+                                    <img src="{{ URL::asset('storage'.$att->path) }}" class="mx-auto d-block" style="max-width: 100%!important;">
+                                    @break
+
+                                    @default
+                                    <span>Type de fichier non reconnu ... </span>
+                                    @endswitch
+
+                                </div>
+                                <?php $i++; ?>
+                            @endforeach
+
+                        @endif
+
+                    @endif
+                </div>
+
+
+                        </div>
+
+
+                    <?php        }
+                       ?>
+
+
             <!-- /.content -->
         </div>
 
@@ -222,7 +341,7 @@ if (App::environment('local')) {
         }
     }
 
-    function showuser(elm) {
+    function show(elm) {
         var userid = elm.id;
         var user = userid.slice( 5);
         //document.getElement('agent').style.display='none';

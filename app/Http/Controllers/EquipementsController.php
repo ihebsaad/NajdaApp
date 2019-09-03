@@ -188,7 +188,7 @@ class EquipementsController extends Controller
         $equipements = Equipement::find($id);
         $equipements->delete();
 
-        return redirect('/equipements')->with('success', '  Supprimé avec succès');
+        return redirect('/equipements')->with('success', '  Supprimé ');
     }
 
  

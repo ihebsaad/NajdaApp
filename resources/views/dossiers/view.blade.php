@@ -1,10 +1,12 @@
 @extends('layouts.mainlayout')
 <?php 
 use App\User ; 
-use App\Template_doc ; 
+use App\Prestataire ;
+use App\Template_doc ;
 use App\Document ; 
 use App\Client;
 use App\ClientGroupe;
+use App\Adresse;
 
 ?>
 <?php use \App\Http\Controllers\PrestationsController;
@@ -281,87 +283,44 @@ use App\ClientGroupe;
 
             <div id="tab3" class="tab-pane fade">
                 <ul class="nav  nav-tabs">
-
                     <li class="nav-item active">
-                        <a class="nav-link  active show" href="#tab31" data-toggle="tab"  onclick="showinfos();hideinfos2();hideinfos3();">
-                            <i class="fas fa-lg  fa-ambulance"></i>  Prestations
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#tab32" data-toggle="tab"  onclick=";showinfos2();hideinfos();hideinfos3();">
+                        <a class="nav-link active show" href="#tab32" data-toggle="tab"  onclick=";showinfos2();hideinfos();hideinfos3();">
                             <i class="fas fa-lg  fa-user-md"></i>  Recherche des Prestataires
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#tab33" data-toggle="tab"  onclick="showinfos3();hideinfos();hideinfos2();">
-                            <i class="fas  fa-lg fa-users"></i>  Ajouter une prestation
+                            <i class="fas  fa-lg fa-users"></i>  Optimiseur
                         </a>
                     </li>
 
+                    <li class="nav-item ">
+                        <a class="nav-link   " href="#tab34" data-toggle="tab"  onclick="showinfos();hideinfos2();hideinfos3();">
+                            <i class="fas fa-lg  fa-ambulance"></i>  Prestations
+                        </a>
+                    </li>
+
+
                 </ul>
-                <div id="tab31" class="tab-pane fade active in">
-                <br>
-                <span style="background-color:#fcdcd5;color:black;font-weight:bold">Prestation non effectuée </span>  <br>
-                <table class="table table-striped" id="mytable" style="width:100%;margin-top:15px;">
-                    <thead>
-                    <tr id="headtable">
-                        <th style="width:10%">Numéro</th>
-                        <th style="width:20%">Prestataire</th>
-                        <th style="width:20%">Type</th>
-                        <th style="width:20%">Spécialité</th>
-                        <th style="width:20%">Gouvernorat</th>
-                        <th style="width:10%">Prix</th>
-                    </tr>
 
-                    </thead>
-                    <tbody>
 
-                    @foreach($prestations as $prestation)
-                        <?php $dossid= $prestation['dossier_id'];?>
-                        <?php $effectue= $prestation['effectue'];
-                        if($effectue ==0){$style='background-color:#fcdcd5;';}else{$style='';}
-                        ?>
-
-                        <tr  >
-                            <td style="width:35%; <?php echo $style;?> ">
-                                <a href="{{action('PrestationsController@view', $prestation['id'])}}" >
-                                    <?php  echo $prestation['id']  ; ?>
-                                </a></td>
-                            <td style="width:25%">
-                                <?php $prest= $prestation['prestataire_id'];
-                                echo PrestationsController::PrestataireById($prest);  ?>
-                            </td>
-                            <td style="width:20%;">
-                                <?php $typeprest= $prestation['type_prestations_id'];
-                                echo PrestationsController::TypePrestationById($typeprest);  ?>
-                            </td>
-                            <td style="width:20%;">
-                                <?php $specialite= $prestation['specialite'];
-                                echo PrestationsController::SpecialiteById($specialite);  ?>
-                            </td>
-                            <td style="width:20%;">
-                                <?php $gouvernorat= $prestation['gouvernorat'];
-                                echo PrestationsController::GouvById($gouvernorat);  ?>
-                            </td>
-                            <td style="width:20%">{{$prestation->price}}</td>
-
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-                </div>
-
-                <div id="tab32" class="tab-pane fade ">
+                <div id="tab32" class="tab-pane fade active in  ">
                   <br>
-
-<form method="post" action="{{action('DossiersController@searchprest')}}">
+<?php
+                    if (isset($_GET['typeprest'])){$typeprest=$_GET['typeprest']; } else{$typeprest='';}
+                    if (isset($_GET['specialite'])){$specialite=$_GET['specialite']; } else{$specialite='';}
+                    if (isset($_GET['gouvernorat'])){$gouvernorat=$_GET['gouvernorat']; } else{$gouvernorat='';}
+                    if (isset($_GET['typeprest'])){$typeprest=$_GET['typeprest']; } else{$typeprest='';}
+                    if (isset($_GET['ville'])){$ville=$_GET['ville']; } else{$ville='';}
+?>
+<form  accept-charset="utf-8" action="{{route('searchprest')}}">
                     <div class="form-group " >
                         <label>Type de prestations</label>
                         <div class=" row  ">
-                            <select class="itemName form-control col-lg-12  " style="width:400px" name="typeprest"    id="typeprest2">
+                            <select class="itemName form-control col-lg-12  " required style="width:400px" name="typeprest"    id="typeprest2">
                                 <option></option>
                                 @foreach($typesprestations as $aKey)
-                                    <option     value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
+                                    <option   <?php if($typeprest==$aKey->id){echo 'selected="selected"';}?>  value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
                                 @endforeach
 
                             </select>
@@ -374,10 +333,10 @@ use App\ClientGroupe;
                             <label>Spécialité</label>
                         </div>
                         <div class="row">
-                            <select class="form-control  col-lg-12 " style="width:400px" name="specialite"    id="specialite2">
+                            <select class="form-control  col-lg-12 " style="width:400px" name="specialite"  required  id="specialite2">
                                 <option></option>
                                 @foreach($specialites as $sp)
-                                    <option class="tprest2" id="tprest2-<?php echo $sp->type_prestation;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                    <option  <?php if($specialite==$sp->id){echo 'selected="selected"';}?>  class="tprest2" id="tprest2-<?php echo $sp->type_prestation;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
                                 @endforeach
                             </select>
                         </div>
@@ -386,10 +345,10 @@ use App\ClientGroupe;
                     <div class="form-group ">
                         <label>Gouvernorat de couverture</label>
                         <div class="row">
-                            <select class="form-control  col-lg-12 " style="width:400px" name="gouvernorat"    id="gouvcouv2">
+                            <select class="form-control  col-lg-12 " style="width:400px" name="gouvernorat"   required   id="gouvcouv2">
                                 <option></option>
                                 @foreach($gouvernorats as $aKeyG)
-                                    <option   value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
+                                    <option  <?php if($gouvernorat==$aKeyG->id){echo 'selected="selected"';}?>  value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
                                 @endforeach
 
                             </select>
@@ -402,7 +361,7 @@ use App\ClientGroupe;
                         </div>
                         <div class="row" style=";margin-bottom:10px;"><style>.algolia-places{width:80%;}</style>
                         </div>
-                        <input class="form-control" style="padding-left:5px" type="text" placeholder="toutes"  name="ville" id="villepr2" />
+                        <input class="form-control" value="<?php echo $ville; ?>" style="padding-left:5px" type="text" placeholder="toutes"  name="ville" id="villepr2" />
                         <input class="form-control" style="padding-left:5px;" type="hidden" name="postal" id="villecode2" />
 
                     </div>
@@ -422,10 +381,9 @@ use App\ClientGroupe;
 
     <input type="hidden" name="dossier" value="<?php echo $dossier->id; ?>"/>
 
-    <input type="submit" value="envoyer"/>
+    <input type="submit" value="envoyer" class="btn btn-success" style="width:150px"/>
 
-                    <div class="row">  <label>Prestataires</label>
-                    </div>
+
 
 <?php /* $c=0;?><table><?php $c=0;?>
                             @foreach($prestataires as $prest)
@@ -445,6 +403,77 @@ use App\ClientGroupe;
                                 <?php } ?>
                         @endforeach
              </table><?php } */ ?>
+
+    <?php if (isset($datasearch)) { ?>
+    <div class="row" style="margin-top:15px">  <label>Liste des Prestataires trouvés:</label>
+    </div>
+    <table class="table table-striped" id="mytable" style="width:100%">
+    <thead>
+    <tr id="headtable">
+    <th style="width:30%">Prestataire</th>
+    <th style="width:20%;font-size:14px;">Type de prestations</th>
+    <th style="width:15%">Gouvernorats</th>
+    <th style="width:10%">Ville</th>
+    <th style="width:15%">Spécialités</th>
+    <th style="width:10%">Actions</th>
+    </tr>
+   <!-- <tr style="font-size:14px;">
+    <th style="width:20%">Prestataire</th>
+    <th style="width:20%">Type de prestation</th>
+    <th style="width:20%">Gouvernorats</th>
+    <th style="width:10%">Ville</th>
+    <th style="width:20%">Spécialités</th>
+    <th style="width:10%"> </th>
+
+    </tr>-->
+    </thead>
+    <tbody>
+  <?php  foreach($datasearch as $do)
+      {  $id= $do['prestataire'];
+  $prestataire = Prestataire::find($id);
+        $villeid=intval($do['ville_id']);
+        if (isset($villes[$villeid]['name']) ){$ville=$villes[$villeid]['name'];}
+        else{$ville=$do['ville'];}
+
+        $gouvs=  PrestatairesController::PrestataireGouvs($id);
+        $typesp=  PrestatairesController::PrestataireTypesP($id);
+        $specs=  PrestatairesController::PrestataireSpecs($id);
+  $tels=array();
+  $tels =   Adresse::where('nature', 'tel')
+  ->where('parent',$id)
+  ->get();
+        ?>
+
+        <tr>
+            <td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $id)}}" ><?php echo '<i>'.$prestataire->civilite .'</i> <b>'. $prestataire->name .'</b> '.$prestataire->prenom; ?></a></td>
+            <td style="font-size:12px;width:20%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
+            <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
+            <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
+            <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
+            <td style="font-size:13px;width:10%"> </td>
+
+        </tr>
+
+
+     <?php
+        foreach ($tels as $tel) {
+       echo ' <tr>
+            <td colspan="2" style="padding-right:8px;"><i class="fa fa-phone"></i> ' . $tel->champ . '</td>
+            <td colspan="2" style="padding-right:8px;">' . $tel->remarque . '</td>';?>
+            <?php if($tel->typetel=='Mobile') {
+            echo '<td colspan="2"><a onclick="setTel(this);" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
+            } else
+            { echo  '<td colspan="2"></td>';}
+
+           echo '</tr> ';
+            }
+?>
+     <?php }?>
+
+          </tbody>
+    </table>
+
+  <?php }  ?>
 </form>
                      </div><!--32-->
 
@@ -470,7 +499,7 @@ use App\ClientGroupe;
 
 
                              <div class="form-group " >
-                                 <label>Type de prestations</label>
+                                 <label>Type de prestations *</label>
                                  <div class=" row  ">
                                      <select class="itemName form-control col-lg-12  " style="width:400px" name="itemName"    id="typeprest">
                                          <option></option>
@@ -485,7 +514,7 @@ use App\ClientGroupe;
 
                              <div class="form-group ">
                                  <div class="row">
-                                     <label>Spécialité</label>
+                                     <label>Spécialité *</label>
                                  </div>
                                  <div class="row">
                                      <select class="form-control  col-lg-12 " style="width:400px" name="specialite"    id="specialite">
@@ -498,7 +527,7 @@ use App\ClientGroupe;
                              </div>
 
                              <div class="form-group ">
-                                 <label>Gouvernorat de couverture</label>
+                                 <label>Gouvernorat de couverture *</label>
                                  <div class="row">
                                      <select class="form-control  col-lg-12 " style="width:400px" name="gouv"    id="gouvcouv">
                                          <option></option>
@@ -616,6 +645,58 @@ use App\ClientGroupe;
 
                          </form>
                      </div>
+                </div>
+
+                <div id="tab34" class="tab-pane fade ">
+                    <br>
+                    <!--  <span style="background-color:#fcdcd5;color:black;font-weight:bold">Prestation non effectuée </span>  <br>-->
+                    <table class="table table-striped" id="mytable" style="width:100%;margin-top:15px;">
+                        <thead>
+                        <tr id="headtable">
+                            <th style="width:10%">Numéro</th>
+                            <th style="width:20%">Prestataire</th>
+                            <th style="width:20%">Type</th>
+                            <th style="width:20%">Spécialité</th>
+                            <th style="width:20%">Gouvernorat</th>
+                            <th style="width:10%">Prix</th>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+
+                        @foreach($prestations as $prestation)
+                            <?php $dossid= $prestation['dossier_id'];?>
+                            <?php $effectue= $prestation['effectue'];
+                            if($effectue ==0){$style='background-color:#fcdcd5;';}else{$style='';}
+                            ?>
+
+                            <tr  >
+                                <td style="width:35%; <?php echo $style;?> ">
+                                    <a href="{{action('PrestationsController@view', $prestation['id'])}}" >
+                                        <?php  echo $prestation['id']  ; ?>
+                                    </a></td>
+                                <td style="width:25%">
+                                    <?php $prest= $prestation['prestataire_id'];
+                                    echo PrestationsController::PrestataireById($prest);  ?>
+                                </td>
+                                <td style="width:20%;">
+                                    <?php $typeprest= $prestation['type_prestations_id'];
+                                    echo PrestationsController::TypePrestationById($typeprest);  ?>
+                                </td>
+                                <td style="width:20%;">
+                                    <?php $specialite= $prestation['specialite'];
+                                    echo PrestationsController::SpecialiteById($specialite);  ?>
+                                </td>
+                                <td style="width:20%;">
+                                    <?php $gouvernorat= $prestation['gouvernorat'];
+                                    echo PrestationsController::GouvById($gouvernorat);  ?>
+                                </td>
+                                <td style="width:20%">{{$prestation->price}}</td>
+
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
                 </div>
 
                 </div>
@@ -2912,7 +2993,8 @@ $urlapp='http://localhost/najdaapp';
             else{shownext=true;}
              if(shownext==true)
               {
-            if(infos==true){
+                  document.getElementById('statutprest').value ='';
+                  if(infos==true){
                 // enregistrement des infos de prestation  + envoi des emails
 
                 var _token = $('input[name="_token"]').val();
@@ -3065,7 +3147,7 @@ $urlapp='http://localhost/najdaapp';
     function setTel(elm)
     {
         var num=elm.className;
-        document.getElementById('destinataire').value=parseInt(num);
+        document.getElementById('ledestinataire').value=parseInt(num);
 
     }
 

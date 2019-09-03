@@ -41,7 +41,7 @@
 
                   <li class="nav-item">
                       <a class="nav-link" href="{{ route('missions') }}"  >
-                          <i class="fas fa-lg  fa-user-tag"></i>  Missions
+                          <i class="fas fa-lg  fa-user-cog"></i>  Missions
                       </a>
                   </li>
 
@@ -121,7 +121,7 @@
                                       $folders = Dossier::where('affecte','=',$user->id)->get();
   foreach($folders as $folder)
               { $type=$folder['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
-              $idd=$folder['id'];$ref=$folder['reference_medic'];$abn=$folder['subscriber_lastname'].' '.$folder['subscriber_name'];$idclient=$folder['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
+              $idd=$folder['id'];$ref=$folder['reference_medic'];$abn=$folder['subscriber_lastname'].' '.$folder['subscriber_name'];$idclient=$folder['customer_id'];$client= $folder['reference_customer'] /*  ClientsController::ClientChampById('name',$idclient)*/ ;?>
               <div  id="dossier-<?php echo $idd;?>" class="dossier"  style="margin-top:5px;<?php echo $style;?>" >
                     <label style="font-size: 18px;"><?php echo $ref;?></label>
                   <div class="infos">  <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
@@ -145,7 +145,11 @@
                         <h4 class="panel-title">Dossiers Non Affectés</h4>
          
                     </div>
-
+                <div class="row">
+                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInput" onkeyup="Searchf()" placeholder="N° de Dossier.." title="Taper"></div>
+                    <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInput2" onkeyup="Searchf2()" placeholder="Assuré.." title="Taper"></div>
+                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInput3" onkeyup="Searchf3()" placeholder="Réf Client.." title="Taper"></div>
+                </div>
                    <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
                        <div class="row" style="margin-bottom:15px;">
                            <div class="col-md-4" style=";color:#F39C12"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Mixte</b></div>
@@ -154,19 +158,21 @@
                        </div>
 
  					<div id="drag-elements">
-					
+
 			<?php  $type='';$style='';
                         foreach($dossiers as $dossier)
 			{ $type=$dossier['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
 			$idd=$dossier['id'];$ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-			     <div  id="dossier-<?php echo $idd;?>" class="dossier"  style="margin-top:5px;<?php echo $style;?>" >
+			      <div  id="dossier-<?php echo $idd;?>" class="dossier"  style="margin-top:5px;<?php echo $style;?>" >
                 <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <label style="font-size: 15px;"><?php echo $ref;?></label>
 	 	         <div class="infos">  <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
                <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small>
 			
                      <i style="float:left;color:;margin-top:10px" class="delete fa fa-trash" onclick="Delete('<?php echo $idd;?>')"></i></div>
-	 </div>
+	        </div>
+
 	<?php	}
+
 		
 		?>
 					</div>
@@ -196,7 +202,73 @@
 -->
 
 
- 
+<script>
+    function selectFolder(elm)
+    {
+        var idelm=elm.id;
+        var ref=idelm.slice(7);
+
+        var dossier=document.getElementById('affdoss').value=ref;
+    }
+
+
+    function Searchf() {
+        var input, filter, ul, li, label, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("drag-elements");
+        li = ul.getElementsByClassName("dossier");
+        for (i = 0; i < li.length; i++) {
+            label = li[i].getElementsByTagName("label")[0];
+            txtValue = label.textContent || label.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+
+
+        }
+    }
+    function Searchf2() {
+        var input, filter, ul, li, label, i, txtValue;
+        input = document.getElementById("myInput2");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("drag-elements");
+        li = ul.getElementsByClassName("dossier");
+        for (i = 0; i < li.length; i++) {
+            label = li[i].getElementsByTagName("small")[0];
+            txtValue = label.textContent || label.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+
+
+        }
+    }
+
+    function Searchf3() {
+        var input, filter, ul, li, label, i, txtValue;
+        input = document.getElementById("myInput3");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("drag-elements");
+        li = ul.getElementsByClassName("dossier");
+        for (i = 0; i < li.length; i++) {
+            label = li[i].getElementsByTagName("small")[1];
+            txtValue = label.textContent || label.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+
+
+        }
+    }
+
+</script>
 <script>
  function Delete(ID)
  {

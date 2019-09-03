@@ -231,10 +231,10 @@ public function pageRechercheAvancee(Request $request )
   /* $format = "Y-m-d H:i:s";
           $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
           dd($datedeb);
-          
+
          // dd($datefin);
           $datasearch=Dossier::where('reference_medic',$request->get('reference_medic1'))->first();
-          
+
 
            dd($datecreation);*/
 
@@ -250,41 +250,41 @@ public function pageRechercheAvancee(Request $request )
                     $datasearch=Dossier::where('reference_medic',$request->get('reference_medic1'))->get();
 
 
-                
+
       // dd( $datasearch);
-     
+
       // return redirect()->back()->with(compact('datasearch'));
 
 
   }
 
   else
-  {  
+  {
 
 
            if($request->get('reference_medic1')==null && $request->get('current_status')== null && $request->get('customer_id_search') == null && $request->get('nom_benef_search') == null &&  $request->get('pres_id_search') == null )
             {
-                
-                if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+
+                if( (strcmp($request->get('date_debut') , "Invalid date")!= 0
                        && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
                            ($request->get('date_debut') && $request->get('date_fin'))  )
-                  
+
                   {
                      //dd('ok');
-                  
+
 
                      $data=Dossier::get();
 
                      $datasearch=array();
 
                       $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
-                     
+
                       $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
 
                      foreach ( $data as $d) {
 
-                    
+
 
                       if($d->created !=null)
                       {
@@ -302,9 +302,9 @@ public function pageRechercheAvancee(Request $request )
                       //$datecreation= Carbon::parse($d->created_at)->format($format);
                       // $datecreation= Carbon::createFromFormat($format,$d->created_at);
 
-                      
 
-                     
+
+
                       $datecreation = \DateTime::createFromFormat($format, $d->created_at);
 
                       // dd( $datecreation);
@@ -335,28 +335,28 @@ public function pageRechercheAvancee(Request $request )
 
               {
 
-               
 
-                   if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+
+                   if( (strcmp($request->get('date_debut') , "Invalid date")!= 0
                        && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
                            ($request->get('date_debut') && $request->get('date_fin'))  )
-                  
+
                    {
                      //dd('ok');
-                  
+
 
                      $data=Dossier::where('current_status',$request->get('current_status'))->get();
 
                      $datasearch=array();
 
                       $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
-                     
+
                       $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
 
                      foreach ( $data as $d) {
 
-                    
+
 
                       if($d->created !=null)
                       {
@@ -374,9 +374,9 @@ public function pageRechercheAvancee(Request $request )
                       //$datecreation= Carbon::parse($d->created_at)->format($format);
                       // $datecreation= Carbon::createFromFormat($format,$d->created_at);
 
-                      
 
-                     
+
+
                       $datecreation = \DateTime::createFromFormat($format, $d->created_at);
 
                       // dd( $datecreation);
@@ -398,14 +398,14 @@ public function pageRechercheAvancee(Request $request )
                   else
                   {
                     //dd("Pas de date");
-                   
+
                    $datasearch=Dossier::where('current_status',$request->get('current_status'))->get();
 
 
                    }
 
 
-                
+
               }
 
               if($request->get('current_status') && $request->get('customer_id_search') && $request->get('nom_benef_search') == null &&  $request->get('pres_id_search')== null)
@@ -413,27 +413,27 @@ public function pageRechercheAvancee(Request $request )
               {
 
 
-              if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+              if( (strcmp($request->get('date_debut') , "Invalid date")!= 0
                        && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
                            ($request->get('date_debut') && $request->get('date_fin'))  )
-                  
+
                    {
                      //dd('okb');
 
-                  
 
-                     $data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get(); 
+
+                     $data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();
 
                      $datasearch=array();
 
                       $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
-                     
+
                       $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
 
                      foreach ( $data as $d) {
 
-                    
+
 
                       if($d->created !=null)
                       {
@@ -451,9 +451,9 @@ public function pageRechercheAvancee(Request $request )
                       //$datecreation= Carbon::parse($d->created_at)->format($format);
                       // $datecreation= Carbon::createFromFormat($format,$d->created_at);
 
-                      
 
-                     
+
+
                       $datecreation = \DateTime::createFromFormat($format, $d->created_at);
 
                       // dd( $datecreation);
@@ -475,8 +475,8 @@ public function pageRechercheAvancee(Request $request )
                   else
                   {
                      // dd('okb');
-            
-                   $datasearch=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get(); 
+
+                   $datasearch=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();
 
                   }
               }
@@ -487,22 +487,22 @@ public function pageRechercheAvancee(Request $request )
               {
 
 
-                   if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                   if( (strcmp($request->get('date_debut') , "Invalid date")!= 0
                        && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
                            ($request->get('date_debut') && $request->get('date_fin'))  )
-                  
+
                    {
                      //dd('okbr');
 
-                  
+
 
                      $da=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();
 
-                         $data = array(); 
+                         $data = array();
 
                             foreach($da as $d )
-                            {              
+                            {
                                      $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
@@ -511,17 +511,17 @@ public function pageRechercheAvancee(Request $request )
 
                             }
 
-                   
+
 
                      $datasearch=array();
 
                       $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
-                     
+
                       $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
 
                      foreach ( $data as $d) {
 
-                    
+
 
                       if($d->created !=null)
                       {
@@ -539,9 +539,9 @@ public function pageRechercheAvancee(Request $request )
                       //$datecreation= Carbon::parse($d->created_at)->format($format);
                       // $datecreation= Carbon::createFromFormat($format,$d->created_at);
 
-                      
 
-                     
+
+
                       $datecreation = \DateTime::createFromFormat($format, $d->created_at);
 
                       // dd( $datecreation);
@@ -568,10 +568,10 @@ public function pageRechercheAvancee(Request $request )
 
                   $data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();
 
-                         $datasearch = array(); 
+                         $datasearch = array();
 
                             foreach($data as $d )
-                            {              
+                            {
                                      $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
@@ -592,30 +592,30 @@ public function pageRechercheAvancee(Request $request )
 
                   /*$data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();*/
 
-                     if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                     if( (strcmp($request->get('date_debut') , "Invalid date")!= 0
                        && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
                            ($request->get('date_debut') && $request->get('date_fin'))  )
-                  
+
                    {
                     // dd('okbr');
 
-                  
+
 
                     $da = DB::table('prestations')
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
                       ->where('dossiers.current_status',$request->get('current_status'))
-                      ->where('dossiers.customer_id',$request->get('customer_id_search'))        
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
 
-                       $data = array(); 
+                       $data = array();
 
                             foreach($da as $d )
-                            {              
+                            {
                                      $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
@@ -623,19 +623,19 @@ public function pageRechercheAvancee(Request $request )
                                             }
 
                             }
-                      
 
-                   
+
+
 
                      $datasearch=array();
 
                       $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
-                     
+
                       $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
 
                      foreach ( $data as $d) {
 
-                    
+
 
                       if($d->created !=null)
                       {
@@ -653,9 +653,9 @@ public function pageRechercheAvancee(Request $request )
                       //$datecreation= Carbon::parse($d->created_at)->format($format);
                       // $datecreation= Carbon::createFromFormat($format,$d->created_at);
 
-                      
 
-                     
+
+
                       $datecreation = \DateTime::createFromFormat($format, $d->created_at);
 
                       // dd( $datecreation);
@@ -685,15 +685,15 @@ public function pageRechercheAvancee(Request $request )
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
                       ->where('dossiers.current_status',$request->get('current_status'))
-                      ->where('dossiers.customer_id',$request->get('customer_id_search'))        
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
 
-                       $datasearch = array(); 
+                       $datasearch = array();
 
                             foreach($data as $d )
-                            {              
+                            {
                                      $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
@@ -711,21 +711,21 @@ public function pageRechercheAvancee(Request $request )
 
                       {
 
-                    if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                    if( (strcmp($request->get('date_debut') , "Invalid date")!= 0
                        && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
                            ($request->get('date_debut') && $request->get('date_fin'))  )
-                  
+
                    {
                      //dd('okbr');
 
-                                     
+
                       $da=Dossier::where('current_status',$request->get('current_status'))->get();
 
-                      $data = array(); 
+                      $data = array();
 
                             foreach($da as $d )
-                                    {              
+                                    {
                                              $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
                                               if(stripos( $c,$request->get('nom_benef_search')) )
                                                     {
@@ -733,19 +733,19 @@ public function pageRechercheAvancee(Request $request )
                                                     }
 
                                     }
-                      
 
-                   
+
+
 
                      $datasearch=array();
 
                       $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
-                     
+
                       $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
 
                      foreach ( $data as $d) {
 
-                    
+
 
                       if($d->created !=null)
                       {
@@ -763,9 +763,9 @@ public function pageRechercheAvancee(Request $request )
                       //$datecreation= Carbon::parse($d->created_at)->format($format);
                       // $datecreation= Carbon::createFromFormat($format,$d->created_at);
 
-                      
 
-                     
+
+
                       $datecreation = \DateTime::createFromFormat($format, $d->created_at);
 
                       // dd( $datecreation);
@@ -794,10 +794,10 @@ public function pageRechercheAvancee(Request $request )
 
                           $data=Dossier::where('current_status',$request->get('current_status'))->get();
 
-                                 $datasearch = array(); 
+                                 $datasearch = array();
 
                                     foreach($data as $d )
-                                    {              
+                                    {
                                              $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
                                               if(stripos( $c,$request->get('nom_benef_search')) )
                                                     {
@@ -817,42 +817,42 @@ public function pageRechercheAvancee(Request $request )
                       }
 
 
-   
+
                     if($request->get('current_status') && $request->get('customer_id_search')==null && $request->get('nom_benef_search')==null  &&  $request->get('pres_id_search') != null)
                 {
 
                  // dd("ok");
 
                   /*$data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();*/
-                       if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                       if( (strcmp($request->get('date_debut') , "Invalid date")!= 0
                        && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
                            ($request->get('date_debut') && $request->get('date_fin'))  )
-                  
+
                    {
                      //dd('okbr');
 
-                                     
+
                        $data = DB::table('prestations')
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
-                      ->where('dossiers.current_status',$request->get('current_status'))                        
+                      ->where('dossiers.current_status',$request->get('current_status'))
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
-                      
 
-                   
+
+
 
                      $datasearch=array();
 
                       $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
-                     
+
                       $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
 
                      foreach ( $data as $d) {
 
-                    
+
 
                       if($d->created !=null)
                       {
@@ -870,9 +870,9 @@ public function pageRechercheAvancee(Request $request )
                       //$datecreation= Carbon::parse($d->created_at)->format($format);
                       // $datecreation= Carbon::createFromFormat($format,$d->created_at);
 
-                      
 
-                     
+
+
                       $datecreation = \DateTime::createFromFormat($format, $d->created_at);
 
                       // dd( $datecreation);
@@ -903,10 +903,10 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
-                      ->where('dossiers.current_status',$request->get('current_status'))                        
+                      ->where('dossiers.current_status',$request->get('current_status'))
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
-                      
+
                     }
                  // dd( $datasearch);
 
@@ -919,29 +919,29 @@ public function pageRechercheAvancee(Request $request )
 
               {
 
-                  if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                  if( (strcmp($request->get('date_debut') , "Invalid date")!= 0
                        && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
                            ($request->get('date_debut') && $request->get('date_fin'))  )
-                  
+
                    {
                      //dd('okbr');
 
-                                     
-                       $data=Dossier::where('customer_id',$request->get('customer_id_search'))->get();
-                      
 
-                   
+                       $data=Dossier::where('customer_id',$request->get('customer_id_search'))->get();
+
+
+
 
                      $datasearch=array();
 
                       $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
-                     
+
                       $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
 
                      foreach ( $data as $d) {
 
-                    
+
 
                       if($d->created !=null)
                       {
@@ -959,9 +959,9 @@ public function pageRechercheAvancee(Request $request )
                       //$datecreation= Carbon::parse($d->created_at)->format($format);
                       // $datecreation= Carbon::createFromFormat($format,$d->created_at);
 
-                      
 
-                     
+
+
                       $datecreation = \DateTime::createFromFormat($format, $d->created_at);
 
                       // dd( $datecreation);
@@ -988,12 +988,12 @@ public function pageRechercheAvancee(Request $request )
 
                 else
                 {
-                   
+
                    $datasearch=Dossier::where('customer_id',$request->get('customer_id_search'))->get();
 
 
                  }
-                
+
               }
 
 
@@ -1002,21 +1002,21 @@ public function pageRechercheAvancee(Request $request )
 
               {
 
-                     if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                     if( (strcmp($request->get('date_debut') , "Invalid date")!= 0
                        && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
                            ($request->get('date_debut') && $request->get('date_fin'))  )
-                  
+
                    {
                      //dd('okbr');
 
-                                     
+
                         $da=Dossier::where('customer_id',$request->get('customer_id_search'))->get();
 
-                         $data = array(); 
+                         $data = array();
 
                             foreach($da as $d )
-                            {              
+                            {
                                      $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
@@ -1024,19 +1024,19 @@ public function pageRechercheAvancee(Request $request )
                                             }
 
                             }
-                      
 
-                   
+
+
 
                      $datasearch=array();
 
                       $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
-                     
+
                       $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
 
                      foreach ( $data as $d) {
 
-                    
+
 
                       if($d->created !=null)
                       {
@@ -1054,9 +1054,9 @@ public function pageRechercheAvancee(Request $request )
                       //$datecreation= Carbon::parse($d->created_at)->format($format);
                       // $datecreation= Carbon::createFromFormat($format,$d->created_at);
 
-                      
 
-                     
+
+
                       $datecreation = \DateTime::createFromFormat($format, $d->created_at);
 
                       // dd( $datecreation);
@@ -1084,10 +1084,10 @@ public function pageRechercheAvancee(Request $request )
 
                  $data=Dossier::where('customer_id',$request->get('customer_id_search'))->get();
 
-                         $datasearch = array(); 
+                         $datasearch = array();
 
                             foreach($data as $d )
-                            {              
+                            {
                                      $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
@@ -1096,7 +1096,7 @@ public function pageRechercheAvancee(Request $request )
 
                             }
 
-                   }              
+                   }
               }
 
 
@@ -1104,35 +1104,35 @@ public function pageRechercheAvancee(Request $request )
                 {
 
 
-                  if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                  if( (strcmp($request->get('date_debut') , "Invalid date")!= 0
                        && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
                            ($request->get('date_debut') && $request->get('date_fin'))  )
-                  
+
                    {
                      //dd('okbr');
 
-                                     
+
                         $data = DB::table('prestations')
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
-                      ->where('dossiers.customer_id',$request->get('customer_id_search'))        
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
-                      
 
-                   
+
+
 
                      $datasearch=array();
 
                       $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
-                     
+
                       $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
 
                      foreach ( $data as $d) {
 
-                    
+
 
                       if($d->created !=null)
                       {
@@ -1150,9 +1150,9 @@ public function pageRechercheAvancee(Request $request )
                       //$datecreation= Carbon::parse($d->created_at)->format($format);
                       // $datecreation= Carbon::createFromFormat($format,$d->created_at);
 
-                      
 
-                     
+
+
                       $datecreation = \DateTime::createFromFormat($format, $d->created_at);
 
                       // dd( $datecreation);
@@ -1175,7 +1175,7 @@ public function pageRechercheAvancee(Request $request )
                   }
 
 
-                
+
 
                     else
                     {
@@ -1183,17 +1183,17 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
-                      ->where('dossiers.customer_id',$request->get('customer_id_search'))        
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
 
                     }
-                      
+
 
                  // dd( $datasearch);
 
-                  }  
+                  }
 
 
                    if($request->get('current_status')==null && $request->get('customer_id_search') && $request->get('nom_benef_search')  &&  $request->get('pres_id_search') != null)
@@ -1203,29 +1203,29 @@ public function pageRechercheAvancee(Request $request )
 
                   /*$data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();*/
 
-                     if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                     if( (strcmp($request->get('date_debut') , "Invalid date")!= 0
                        && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
                            ($request->get('date_debut') && $request->get('date_fin'))  )
-                  
+
                    {
                     // dd('okbr');
 
-                  
+
 
                     $da = DB::table('prestations')
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
-                      ->where('prestataires.id','=', $request->get('pres_id_search'))                    
-                      ->where('dossiers.customer_id',$request->get('customer_id_search'))        
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
 
-                       $data = array(); 
+                       $data = array();
 
                             foreach($da as $d )
-                            {              
+                            {
                                      $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
@@ -1233,19 +1233,19 @@ public function pageRechercheAvancee(Request $request )
                                             }
 
                             }
-                      
 
-                   
+
+
 
                      $datasearch=array();
 
                       $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
-                     
+
                       $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
 
                      foreach ( $data as $d) {
 
-                    
+
 
                       if($d->created !=null)
                       {
@@ -1263,9 +1263,9 @@ public function pageRechercheAvancee(Request $request )
                       //$datecreation= Carbon::parse($d->created_at)->format($format);
                       // $datecreation= Carbon::createFromFormat($format,$d->created_at);
 
-                      
 
-                     
+
+
                       $datecreation = \DateTime::createFromFormat($format, $d->created_at);
 
                       // dd( $datecreation);
@@ -1294,15 +1294,15 @@ public function pageRechercheAvancee(Request $request )
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
-                      ->where('dossiers.customer_id',$request->get('customer_id_search'))        
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
 
-                       $datasearch = array(); 
+                       $datasearch = array();
 
                             foreach($data as $d )
-                            {              
+                            {
                                      $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
@@ -1314,7 +1314,7 @@ public function pageRechercheAvancee(Request $request )
 
                  // dd( $datasearch);
 
-                  } 
+                  }
 
 
 
@@ -1328,21 +1328,21 @@ public function pageRechercheAvancee(Request $request )
 
                         //dd('3-4');
 
-                             if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                             if( (strcmp($request->get('date_debut') , "Invalid date")!= 0
                        && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
                            ($request->get('date_debut') && $request->get('date_fin'))  )
-                  
+
                    {
                      //dd('okbr');
 
-                                     
+
                        $da=Dossier::get();
 
-                                 $data = array(); 
+                                 $data = array();
 
                                     foreach($da as $d )
-                                    {              
+                                    {
                                              $c= " ".$d->subscriber_name." ".$d->subscriber_lastname;
                                               if(stripos( $c,$request->get('nom_benef_search')) )
                                                     {
@@ -1352,19 +1352,19 @@ public function pageRechercheAvancee(Request $request )
                                                     }
 
                                     }
-                      
 
-                   
+
+
 
                      $datasearch=array();
 
                       $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
-                     
+
                       $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
 
                      foreach ( $data as $d) {
 
-                    
+
 
                       if($d->created !=null)
                       {
@@ -1382,9 +1382,9 @@ public function pageRechercheAvancee(Request $request )
                       //$datecreation= Carbon::parse($d->created_at)->format($format);
                       // $datecreation= Carbon::createFromFormat($format,$d->created_at);
 
-                      
 
-                     
+
+
                       $datecreation = \DateTime::createFromFormat($format, $d->created_at);
 
                       // dd( $datecreation);
@@ -1408,14 +1408,14 @@ public function pageRechercheAvancee(Request $request )
 
 
                         else
-                        {                   
+                        {
 
                          $data=Dossier::get();
 
-                                 $datasearch = array(); 
+                                 $datasearch = array();
 
                                     foreach($data as $d )
-                                    {              
+                                    {
                                              $c= " ".$d->subscriber_name." ".$d->subscriber_lastname;
                                               if(stripos( $c,$request->get('nom_benef_search')) )
                                                     {
@@ -1428,35 +1428,35 @@ public function pageRechercheAvancee(Request $request )
 
                           }
 
-                                         
+
                       }
 
                  if($request->get('current_status')==null && $request->get('customer_id_search')==null && $request->get('nom_benef_search')  &&  $request->get('pres_id_search') != null)
                 {
 
-                
 
-                           if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+
+                           if( (strcmp($request->get('date_debut') , "Invalid date")!= 0
                        && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
                            ($request->get('date_debut') && $request->get('date_fin'))  )
-                  
+
                    {
                      //dd('okbr');
 
-                                     
+
                        $da = DB::table('prestations')
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
-                      ->where('prestataires.id','=', $request->get('pres_id_search'))                        
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
 
-                       $data = array(); 
+                       $data = array();
 
                             foreach($da as $d )
-                            {              
+                            {
                                      $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
@@ -1464,19 +1464,19 @@ public function pageRechercheAvancee(Request $request )
                                             }
 
                             }
-                      
 
-                   
+
+
 
                      $datasearch=array();
 
                       $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
-                     
+
                       $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
 
                      foreach ( $data as $d) {
 
-                    
+
 
                       if($d->created !=null)
                       {
@@ -1495,9 +1495,9 @@ public function pageRechercheAvancee(Request $request )
                       //$datecreation= Carbon::parse($d->created_at)->format($format);
                       // $datecreation= Carbon::createFromFormat($format,$d->created_at);
 
-                      
 
-                     
+
+
                       $datecreation = \DateTime::createFromFormat($format, $d->created_at);
 
                       // dd( $datecreation);
@@ -1527,15 +1527,15 @@ public function pageRechercheAvancee(Request $request )
                      $data = DB::table('prestations')
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
-                      ->where('prestataires.id','=', $request->get('pres_id_search'))                        
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
 
-                       $datasearch = array(); 
+                       $datasearch = array();
 
                             foreach($data as $d )
-                            {              
+                            {
                                      $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
@@ -1543,7 +1543,7 @@ public function pageRechercheAvancee(Request $request )
                                             }
 
                             }
-                      
+
 
                  // dd( $datasearch);
                     }
@@ -1557,34 +1557,34 @@ public function pageRechercheAvancee(Request $request )
                    if($request->get('current_status')==null && $request->get('customer_id_search')==null && $request->get('nom_benef_search')==null  &&  $request->get('pres_id_search') != null)
                 {
 
-                             if( (strcmp($request->get('date_debut') , "Invalid date")!= 0   
+                             if( (strcmp($request->get('date_debut') , "Invalid date")!= 0
                        && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
                            ($request->get('date_debut') && $request->get('date_fin'))  )
-                  
+
                    {
                      //dd('okbr');
 
-                                     
+
                        $data = DB::table('prestations')
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
-                      ->where('prestataires.id','=', $request->get('pres_id_search'))                        
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
-                      
 
-                   
+
+
 
                      $datasearch=array();
 
                       $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
-                     
+
                       $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
 
                      foreach ( $data as $d) {
 
-                    
+
 
                       if($d->created !=null)
                       {
@@ -1603,9 +1603,9 @@ public function pageRechercheAvancee(Request $request )
                       //$datecreation= Carbon::parse($d->created_at)->format($format);
                       // $datecreation= Carbon::createFromFormat($format,$d->created_at);
 
-                      
 
-                     
+
+
                       $datecreation = \DateTime::createFromFormat($format, $d->created_at);
 
                       // dd( $datecreation);
@@ -1635,7 +1635,7 @@ public function pageRechercheAvancee(Request $request )
                      $datasearch = DB::table('prestations')
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
-                      ->where('prestataires.id','=', $request->get('pres_id_search'))                        
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
                       ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
@@ -1648,7 +1648,7 @@ public function pageRechercheAvancee(Request $request )
 
 
 
-             
+
            // }
   }
 

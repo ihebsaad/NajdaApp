@@ -167,7 +167,7 @@ class PersonnesController extends Controller
         $personnes = Personne::find($id);
         $personnes->delete();
 
-        return redirect('/personnes')->with('success', '  Supprimé avec succès');
+        return redirect('/personnes')->with('success', '  Supprimé ');
     }
 
  

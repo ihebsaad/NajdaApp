@@ -168,7 +168,7 @@ class VoituresController extends Controller
         $voitures = Voiture::find($id);
         $voitures->delete();
 
-        return redirect('/voitures')->with('success', '  Supprimé avec succès');
+        return redirect('/voitures')->with('success', '  Supprimé ');
     }
 
  

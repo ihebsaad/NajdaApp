@@ -47,7 +47,13 @@
                 <tr>
                     <td  >{{$doc->id}}</td>
                     <td  ><a href="{{action('DocsController@view', $doc['id'])}}" >{{$doc->nom}}</a></td>
-                      <td    > </td>
+                      <td    >
+                          @can('isAdmin')
+                              <a  href="{{action('DocsController@destroy', $doc['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                  <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                              </a>
+                          @endcan
+                      </td>
  
                 </tr>
             @endforeach

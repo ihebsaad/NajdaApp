@@ -170,7 +170,7 @@ class DocsController extends Controller
         $docs = Doc::find($id);
         $docs->delete();
 
-        return redirect('/docs')->with('success', '  Supprimé avec succès');
+        return redirect('/docs')->with('success', '  Supprimé  ');
     }
 
 

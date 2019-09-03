@@ -169,7 +169,7 @@ class TypePrestationsController extends Controller
         $typeprestations = TypePrestation::find($id);
         $typeprestations->delete();
 
-        return redirect('/typeprestations')->with('success', '  Supprimé avec succès');
+        return redirect('/typeprestations')->with('success', '  Supprimé ');
     }
 
 

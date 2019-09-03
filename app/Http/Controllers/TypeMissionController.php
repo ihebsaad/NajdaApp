@@ -165,7 +165,7 @@ class TypeMissionController extends Controller
         $typeMission = TypeMission::find($id);
         $typeMission->delete();
 
-        return redirect('/typesMissions')->with('success', '  has been deleted Successfully');  
+        return redirect('/typesMissions')->with('success', '  Supprimé');
 
      }
 }
