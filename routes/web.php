@@ -16,12 +16,15 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/roles', 'HomeController@roles')->name('roles');
+Route::get('/pause', 'HomeController@pause')->name('pause');
 Route::get('/changerroles', 'HomeController@changerroles')->name('changerroles');
 Route::get('/parametres', 'HomeController@parametres')->name('parametres');
 Route::get('/supervision', 'HomeController@supervision')->name('supervision');
 Route::get('/affectations', 'HomeController@affectation')->name('affectation');
 Route::get('/missions', 'HomeController@missions')->name('missions');
 Route::get('/notifs', 'HomeController@notifs')->name('notifs');
+Route::get('/transport', 'HomeController@transport')->name('transport');
+Route::get('/transportsemaine', 'HomeController@transportsemaine')->name('transportsemaine');
 Route::post('/parametring', 'HomeController@parametring')->name('home.parametring');
 Route::post('/parametring2', 'HomeController@parametring2')->name('home.parametring2');
 Route::post('/demande', 'HomeController@demande')->name('home.demande');

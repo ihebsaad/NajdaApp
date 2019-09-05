@@ -80,7 +80,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
             $("#dpause").css("display", "block");
             $("#enpause").css("display", "none");
             var _token = $('input[name="_token"]').val();
-
+            // back statut en ligne
             $.ajax({
                 url:"{{ route('users.changestatut') }}",
                 method:"POST",
@@ -269,7 +269,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                             'Attribué!',
                             'le rôle '+role+' n\'est plus parmi vos permissions ',
                             'success'
-                        )
+                        );
 
                     } else if (
                         // Read more about handling dismissals
@@ -390,6 +390,9 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
                                 $("#dpause").css("display", "none");
                                 $("#enpause").css("display", "block");
+                                setTimeout(function(){
+                                    window.location = '{{route('pause')}}';
+                                }, 3000);
                             }
                             if(role=='non')
                             {rep=0;

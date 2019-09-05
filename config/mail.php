@@ -16,7 +16,8 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER', 'smtp'),
+  //  'driver' => env('MAIL_DRIVER', 'smtp'),
+    'driver' =>   'smtp',
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +30,8 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'ssl0.ovh.net'),
+  //  'host' => env('MAIL_HOST', 'ssl0.ovh.net'),
+    'host' =>   'ssl0.ovh.net' ,
 
     /*
     |--------------------------------------------------------------------------
@@ -42,7 +44,8 @@ return [
     |
     */
 
-    'port' => env('MAIL_PORT', 587),
+  //  'port' => env('MAIL_PORT', 587),
+    'port' =>   587,
 
     /*
     |--------------------------------------------------------------------------
@@ -55,9 +58,14 @@ return [
     |
     */
 
-    'from' => [
+   /* 'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'faxnajdassist@najda-assistance.com'),
         'name' => env('MAIL_FROM_NAME', 'Najda Assistance'),
+    ],*/
+
+    'from' => [
+        'address' => 'faxnajdassist@najda-assistance.com',
+        'name' => 'Najda Assistance',
     ],
 
     /*
@@ -71,7 +79,8 @@ return [
     |
     */
 
-    'encryption' => env('MAIL_ENCRYPTION' , ''),
+  //  'encryption' => env('MAIL_ENCRYPTION' , ''),
+    'encryption' => '',
 
     /*
     |--------------------------------------------------------------------------
@@ -84,9 +93,11 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME','faxnajdassist@najda-assistance.com'),
+  //  'username' => env('MAIL_USERNAME','faxnajdassist@najda-assistance.com'),
+    'username' =>  'faxnajdassist@najda-assistance.com' ,
 
-    'password' => env('MAIL_PASSWORD','e-solutions2019'),
+ //   'password' => env('MAIL_PASSWORD','e-solutions2019'),
+    'password' =>  'e-solutions2019' ,
 
     /*
     |--------------------------------------------------------------------------

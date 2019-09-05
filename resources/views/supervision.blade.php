@@ -115,6 +115,10 @@
                                 </li>
                             </ul>
                             <table id="tabusers" style="text-align: center ;background-color:#F8F7F6;padding:5px 5px 5px 5px">
+                               <div class="row" style="margin-top:20px">
+                                <span   class=" " style="margin-left:10px;margin-right:30px;marign-top:25px;padding:5px 5px 5px 5px;text-align:center;background-color:#fd9883;color:white;width:150px;">Grande charge</span>
+                                <span    class=" " style="margin-left:10px;margin-right:30px;marign-top:25px;padding:5px 5px 5px 5px;text-align:center;background-color:#FFCE54;color:black;width:150px;">En pause</span>
+                               </div>
                                 <thead style="text-align:center;font-size:13px;"><th>Agent</th><th>Type</th><th>Rôle Principal</th><th>Dossiers Affectés</th><th>Missions</th><th>Actions </th><th>Actions Actives</th><th>Notifications</th></thead>
                             <?php $c=0;
                             foreach($users as $user)
@@ -148,7 +152,8 @@
                                     // if($user->type=='admin'){$role='(Administrateur)';}
 									if($user->user_type!='admin'){
 										
-                                  if($user->isOnline()) {$c++; echo  '<tr class="usertr" onclick="showuser(this);"  id="user-'.$user->id.'" style="font-size:12px;cursor:pointer;'.$bg.'" ><td>   '.$user->name.' '.$user->lastname .'</td><td>'.$user->user_type.' </td><td>'. $role.'</td><td>'.$dossiers.'</td><td>'.$missions.'</td><td>'.$actions.' <br>charge : '.$dureeactions.'</td><td>'.$actives.' <br>charge : '.$dureeactives.'</td><td>'.$notifications.'</td>  </tr>' ;}
+                                  if($user->isOnline()) {$style=''; if($dureeactives >20){$style='background-color:#fd9883;color:white;';}    if($user->statut==2){$style='background-color:#FFCE54;color:black;';}
+                                      $c++; echo  '<tr class="usertr" onclick="showuser(this);"  id="user-'.$user->id.'" style="font-size:12px;cursor:pointer;'.$style.'" ><td>   '.$user->name.' '.$user->lastname .'</td><td>'.$user->user_type.' </td><td>'. $role.'</td><td>'.$dossiers.'</td><td>'.$missions.'</td><td>'.$actions.' <br>charge : '.$dureeactions.'</td><td>'.$actives.' <br>charge : '.$dureeactives.'</td><td>'.$notifications.'</td>  </tr>' ;}
 									}
                                 }
                                     ?><br>

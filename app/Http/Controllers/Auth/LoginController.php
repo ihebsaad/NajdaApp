@@ -34,11 +34,13 @@ protected function authenticated(Request $request, $user)
     return redirect()->route('dashboard');
 }*/
     $user = auth()->user();
+    $iduser=$user->id;
     $type=$user->user_type;
 
     $nomuser=$user->name.' '.$user->lastname;
     Log::info('[Agent: '.$nomuser.'] Login ');
 
+    User::where('id', $iduser)->update(array('statut' => '0'));
 
     if($type=='financier')
     {

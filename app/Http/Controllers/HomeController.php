@@ -58,7 +58,7 @@ class HomeController extends Controller
             $demande->save();
 
             $user = auth()->user();
-            $nomuser=$user->name.' '.$user->name;
+            $nomuser=$user->name.' '.$user->lastname;
             $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$vers).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$vers);
 
              Log::info('[Agent: '.$nomuser.'] Demande de rôle '.$role.' à : '.$nomagent);
@@ -92,7 +92,7 @@ class HomeController extends Controller
             $demande->save();
 
             $user = auth()->user();
-            $nomuser=$user->name.' '.$user->name;
+            $nomuser=$user->name.' '.$user->lastname;
             $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$supmedic).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$supmedic);
 
             Log::info('[Agent: '.$nomuser.'] Demande de Pause à : '.$nomagent);
@@ -225,7 +225,7 @@ class HomeController extends Controller
             $demande->save();
 
             $user = auth()->user();
-            $nomuser=$user->name.' '.$user->name;
+            $nomuser=$user->name.' '.$user->lastname;
             $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$par).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$par);
 
             Log::info('[Agent: '.$nomuser.'] Refuse de donner Pause à : '.$nomagent);
@@ -249,7 +249,7 @@ class HomeController extends Controller
             ]);
 
             $user = auth()->user();
-            $nomuser=$user->name.' '.$user->name;
+            $nomuser=$user->name.' '.$user->lastname;
             $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$par).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$par);
 
             Log::info('[Agent: '.$nomuser.'] Accepte de donner Pause à : '.$nomagent);
@@ -287,7 +287,7 @@ class HomeController extends Controller
 
 
             $user = auth()->user();
-            $nomuser=$user->name.' '.$user->name;
+            $nomuser=$user->name.' '.$user->lastname;
             $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$par).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$par);
 
             Log::info('[Agent: '.$nomuser.'] Refuse de donner le rôle: '.$role.' à : '.$nomagent);
@@ -312,7 +312,7 @@ class HomeController extends Controller
             Demande::where('id', $iddemande)->update(array('statut'=>1));
 
             $user = auth()->user();
-            $nomuser=$user->name.' '.$user->name;
+            $nomuser=$user->name.' '.$user->lastname;
             $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$par).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$par);
 
             Log::info('[Agent: '.$nomuser.'] Accepte de donner le rôle: '.$role.' à : '.$nomagent);
@@ -444,6 +444,11 @@ return redirect('roles');
         return view('roles');
     }
 
+    public function pause()
+    {
+        return view('pause');
+    }
+
     public function notifs()
     {
 
@@ -506,6 +511,28 @@ return redirect('roles');
 
             return view('affectation', ['users' => $users]);
         }else{ return back();}
+
+    }
+
+    public function transport()
+    {
+
+       // if(\Gate::allows('isAdmin') || \Gate::allows('isSupervisor')  ) {
+        //   $users = User::get();
+
+            return view('transport' );
+      //  }else{ return back();}
+
+    }
+
+    public function transportsemaine()
+    {
+
+        // if(\Gate::allows('isAdmin') || \Gate::allows('isSupervisor')  ) {
+        //   $users = User::get();
+
+        return view('transportsemaine' );
+        //  }else{ return back();}
 
     }
 
