@@ -41,7 +41,7 @@
             <div class="portlet-title" style="margin-top: 0px; padding-top: 0px;">
                 
             </div>
-            <div class="portlet-body"  id="searchbox"   >
+            <div class="portlet-body"  id="searchbox"    >
                 <form accept-charset="utf-8" id="searchDossierform" action="{{route('page_recherche.avancee')}}">
                     <div class="row">
                         <div class="col-md-4">
@@ -335,11 +335,12 @@
 
 
 
-    <style>.searchfield{width:100px;}</style>
+    <style>.searchfield{width:100px;}
+     </style>
 
     <script type="text/javascript">
     $(document).ready(function() {
-        $('#searchbox').hide();
+      //  $('#searchbox').hide();
 
 
         $('#mytable thead tr:eq(1) th').each( function () {

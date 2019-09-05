@@ -539,7 +539,7 @@
         }
 
         @media (min-width: 1024px) {
-            .om{width:180px;}
+            .om{width:200px;}
 
         }
 
