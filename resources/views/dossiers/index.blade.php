@@ -442,7 +442,11 @@
  <script>
     $(function() {
 
-    var start = moment().subtract(29, 'days');
+   // var start = moment().subtract(29, 'days');
+   // var start = moment().set({'year': 2015, 'month': 0 , 'day': 0});
+   
+      var start = moment("01/01/2015", "DD/MM/YYYY");
+    //var start ='01/01/2015' ;
     var end = moment();
 
     //var start ='';
