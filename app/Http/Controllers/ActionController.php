@@ -1032,6 +1032,18 @@ class ActionController extends Controller
 
 
                    }
+                  /* else
+                   {
+                    if($action->ordre==4 && $action->statut=="faite" )
+                    {
+
+                      $this->cas_MissDocAsigner=0;
+                    }
+
+
+
+
+                   }*/
 
                      
 
@@ -1078,17 +1090,16 @@ class ActionController extends Controller
                                  $NNaction=ActionEC::where('id',$Naction->id);
                                  $NNaction->update(['statut'=>"reportee"]);
                                  $NNaction->update(['user_id'=>auth::user()->id]);
-                                // $Naction->update(['statut'=>"inactive"]);
+                              
 
                                  $n=$Naction->num_report;
                                  $n+=1;
                                  $NNaction->update(['num_report'=> $n]);
                                  $NNaction->update(['date_report'=> $dateRepAct]);
 
-                                 //$Naction->update(['num_report'=> $n]);
-                                // $Naction->update(['date_report'=> $dateRepAct]);
-
-                                //return back()->with('messagekbsSucc', 'l action est reportée avec succèss');
+                                  /*$action->update(['statut'=>"reportee"]);
+                                  $action->update(['user_id'=>auth::user()->id]);
+                                  $action->update(['date_report'=> $dateRepAct]);*/
                                 }
                             }
 
@@ -1153,52 +1164,95 @@ class ActionController extends Controller
 
                switch($at){
 
-          case "Transport assis  chaise roulante": 
+                 case "Suivi frais médicaux":
+         return $this->Suivi_frais_medicaux_DV($option,$idmiss,$idact,$iddoss,$bouton); break;   
+
+                case "Document à signer":
+        return $this-> Document_a_signer_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+          case "Demande qualité structure":
+         return $this->Demande_qualite_structure_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+         case "Contact technique":
+         return $this-> Contact_technique_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+                 case "Remboursement de frais avancés": //31
+         return $this->Remboursement_de_frais_avances_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+                 case "Recherche de vehicule avec coordonnees GPS": //29
+         return $this->Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+         case "Recap frais engagés":// 30
+         return $this->Recap_frais_engages_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+                case "Rapport médical":
+         return $this->Rapport_medical_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+            case "Libre générique":
+         return $this->libre_generique_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+             case "Expertise fin de travaux (client IMA)":
+         return $this->Expertise_fin_de_travaux_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+                case "Expédition par poste rapide":
+         return $this->Expedition_par_poste_rapide_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+          /*case "Dossier à l étranger":
+         return $this->Dossier_a_etranger_DV($option,$idmiss,$idact,$iddoss,$bouton); break;*/
+
+         case "Demande de plan de vol ou de traversée": //14
+        return $this->Demande_plan_vol_ou_de_traversee_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+          case "Demande investigation de dossier douteux": // id 13
+         return $this->Demande_investigation_de_dossier_douteux_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+          case "Transport sur civière": // id 10
+         return $this->Civiere_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+          case "Transport assis  chaise roulante": // id 5
          return $this->Transport_assis_chaise_roulante_DV($option,$idmiss,$idact,$iddoss,$bouton); break; 
 
-         case "Transport ambulance": 
+         case "Transport ambulance":  // 7
          return $this->Transport_ambulance_DV($option,$idmiss,$idact,$iddoss,$bouton); break; 
 
-         case "Taxi": 
+         case "Taxi": // 6
          return $this->taxi_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
         
-         case "Avance de fonds contre RDD": 
+         case "Avance de fonds contre RDD": //8
          return $this->Avance_de_fonds_contre_RDD_DV($option,$idmiss,$idact,$iddoss,$bouton); break;  
 
-         case "Billetterie fournie par VAT": 
+         case "Billetterie fournie par VAT": // 9
          return $this->Billetterie_fournie_par_VAT_DV($option,$idmiss,$idact,$iddoss,$bouton); break;  
         
-          case "Départ un lieu hospitalisation":
+          case "Départ un lieu hospitalisation":// 15
          return $this->Depart_lieu_hospitalisation_DV($option,$idmiss,$idact,$iddoss,$bouton); break; 
 
         case "Recherche devis de frais medicaux pour hospitalisation":     
          return $this->Recherche_devis_de_frais_medicaux_pour_hospitalisation_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-        case "Document à signer":
-        return $this-> Document_a_signer_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+        
+
+        case "Tout transport aérien international sous assistance":
+         return $this->transport_aerien_international_sous_assistance_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
    
                 // default:
                  // Code to be executed if n is different from all labels
          }
 
-         /*case "Transport sur civière":
-         return $this->Civiere_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+         /*
 
          case "Consultation médicale":
          return $this->Consultation_medicale_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-         case "Contact technique":
-         return $this-> Contact_technique_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+         
 
 
          case "Dédouanement de pièces":
          return $this->Dedouanement_de_pieces_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-         case "Demande investigation de dossier douteux": 
-         return $this->Demande_investigation_de_dossier_douteux_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+         
 
-        case "Demande de plan de vol ou de traversée":
-        return $this->Demande_plan_vol_ou_de_traversee_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+        
 
 
          case "Départ un lieu hospitalisation":
@@ -1221,8 +1275,7 @@ class ActionController extends Controller
         return $this-> Document_a_signer_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
 
-        case "Demande qualité structure":
-         return $this->Demande_qualite_structure_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+        
 
          case "Expertise": 
          return $this->Expertise_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
@@ -1230,8 +1283,7 @@ class ActionController extends Controller
          case "Expédition par poste rapide":
          return $this->Expedition_par_poste_rapide_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-         case "Expertise fin de travaux (client IMA)":
-         return $this->Expertise_fin_de_travaux_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+         
 
          case "Escorte de l étranger":
          return $this->Escorte_de_étranger_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
@@ -1239,8 +1291,7 @@ class ActionController extends Controller
           case "Escorte internationale fournie par MI":
          return $this->Escorte_internationale_fournie_par_MI_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-          case "Libre générique":
-         return $this->libre_generique_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+         
 
          case "Location de voiture":
          return $this->Location_de_voiture_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
@@ -1251,8 +1302,7 @@ class ActionController extends Controller
         case "PEC frais medicaux":
          return $this->PEC_frais_medicaux_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-         case "Rapport médical":
-         return $this->Rapport_medical_DV($option,$idmiss,$idact,$iddoss,$bouton); break; 
+          
 
 
          case "Rapatriement véhicule sur cargo":     
@@ -1279,17 +1329,13 @@ class ActionController extends Controller
          case "Réservation hotel":
          return $this->Reservation_hotels_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
          
-         case "Remboursement de frais avancés":
-         return $this->Remboursement_de_frais_avances_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
         
-         case "Recherche de vehicule avec coordonnees GPS":
-         return $this->Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+        
+        
          
-         case "Recap frais engagés":
-         return $this->Recap_frais_engages_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+        
 
-        case "Suivi frais médicaux":
-         return $this->Suivi_frais_medicaux_DV($option,$idmiss,$idact,$iddoss,$bouton); break;    
+        
               
         case "Transport terrestre effectué par prestataire externe":
          return $this->Transport_terrestre_effectue_par_prestataire_externe_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
@@ -1298,8 +1344,7 @@ class ActionController extends Controller
          return $this->Transports_terrestres_assure_par_MMS_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
          
 
-         case "Tout transport aérien international sous assistance":
-         return $this->transport_aerien_international_sous_assistance($option,$idmiss,$idact,$iddoss,$bouton); break;*/
+         */
        
 
         /* */
@@ -1965,10 +2010,10 @@ public function etat_action_sinon_test_fin($chang,$bouton,$idact)
 
                              // activer action 2 Informer le client
 
-                           if(($action1->statut=="reportee" || $action1->statut=="rappelee" || $action1->statut=="faite") && $action2->statut =="inactive"  )// activer action 2
+                           if(($action1->statut=="rappelee") && $action2->statut =="inactive"  )// activer action 2
                            {
 
-                             $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Informer le client')
+                             $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',2)
                              ->where('statut','!=','rfaite')->first();
                             $actSui->update(['statut'=>"active"]); 
                              $actSui->update(['date_deb' => $dateSys]);              
@@ -1982,15 +2027,16 @@ public function etat_action_sinon_test_fin($chang,$bouton,$idact)
 
 
 
-                         if($action3->statut =="inactive" && (($action1->statut=="faite" && $action1->opt_choisie=="1" && 
+                         if($action3->statut =="inactive" 
+                           && (($action1->statut=="faite" && $action1->opt_choisie=="1" && 
                             $action2->statut=="faite" && 
                             $action2->opt_choisie=="1" )||
-                            (($action1->statut=="reportee"||$action1->statut=="rappelee") && $action1->opt_choisie=="2")||
-                            (($action1->statut=="reportee" ||$action1->statut=="rappelee")&& $action1->opt_choisie=="3")
+                            (($action1->statut=="rappelee") && $action1->opt_choisie=="2")||
+                            (($action1->statut=="rappelee")&& $action1->opt_choisie=="3")
                           ))
                            {
                             
-                            $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Missionner prestataire')
+                            $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',3)
                             ->where('statut','!=','rfaite')->first();
                             $actSui->update(['statut'=>"active"]); 
                              $actSui->update(['date_deb' => $dateSys]);              
@@ -2003,12 +2049,12 @@ public function etat_action_sinon_test_fin($chang,$bouton,$idact)
 
                        // activation  action 4
                        
-                       if($action4->statut =="inactive" && (($action1->statut=="reportee" && ($action1->opt_choisie=="2"||$action1->opt_choisie=="3")&& ($action2->statut=="faite" && $action2->opt_choisie=="2"))||($action1->statut=="faite" && $action1->opt_choisie=="1" && $action2->opt_choisie=="2" && $action2->statut=="faite")
+                       if($action4->statut =="inactive" && (($action1->statut=="rappelee" && ($action1->opt_choisie=="2"||$action1->opt_choisie=="3")&& ($action2->statut=="faite" && $action2->opt_choisie=="2"))||($action1->statut=="faite" && $action1->opt_choisie=="1" && $action2->opt_choisie=="2" && $action2->statut=="faite")
 
                          ) )
                          {
 
-                             $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Préparer le cash pour remise')
+                             $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',4)
                              ->where('statut','!=','rfaite')->first();
                             $actSui->update(['statut'=>"active"]); 
                              $actSui->update(['date_deb' => $dateSys]);              
@@ -2023,7 +2069,7 @@ public function etat_action_sinon_test_fin($chang,$bouton,$idact)
                           if($action5->statut =="inactive" && ($action3->statut=="faite" || $action3->statut=="reportee"))// activer action 5
                            {
 
-                             $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Effectuer le virement à notre prestataire')->where('statut','!=','rfaite')->first();
+                             $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',5)->where('statut','!=','rfaite')->first();
                              $actSui->update(['statut'=>"active"]); 
                               $actSui->update(['date_deb' => $dateSys]);              
                               $chang=true;               
@@ -2033,10 +2079,10 @@ public function etat_action_sinon_test_fin($chang,$bouton,$idact)
 
                            // activer action 6
 
-                            if($action6->statut !="faite" && ($action3->statut=="faite" || $action4->statut=="faite"))
+                            if($action6->statut =="inactive" && ($action3->statut=="faite" || $action4->statut=="faite"))
                            {
 
-                             $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Confirmation au client')
+                             $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',6)
                              ->where('statut','!=','rfaite')->first();
                              $actSui->update(['statut'=>"active"]);
                               $actSui->update(['date_deb' => $dateSys]);              
@@ -2147,7 +2193,7 @@ public function Transport_ambulance_DV ($option,$idmiss,$idact,$iddoss,$bouton)
              //activer action 5 Vérifier modalités de voyage 
             
        
-              if($action5->statut=="inactive" && ($action1->statut=="faite" && $action4->opt_choisie=="1"))
+              if($action5->statut=="inactive" && ($action1->statut=="faite" && $action1->opt_choisie=="2"))
                {
 
                  $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',5)
@@ -2256,7 +2302,7 @@ public function Transport_assis_chaise_roulante_DV($option,$idmiss,$idact,$iddos
                                  
 
                            // activer action 3 Rappel prendre chaise roulante
-                           if(($action1->statut=="faite" && $action2->opt_choisie=="1" ) &&  $action3->statut =="inactive")  
+                           if(($action1->statut=="faite" && $action2->statut=="faite"  && $action2->opt_choisie=="1" ) &&  $action3->statut =="inactive")  
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',3)
@@ -2474,7 +2520,7 @@ public function taxi_DV($option,$idmiss,$idact,$iddoss,$bouton)
                if(  $action2->statut=="inactive" && $action1->statut=="faite")
                {
 
-                 $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Envoyer les propositions au client')
+                 $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',2)
                  ->where('statut','!=','rfaite')->first();
                 $actSui->update(['statut'=>"active"]); 
                 $actSui->update(['date_deb' => $dateSys]);
@@ -2507,7 +2553,7 @@ public function taxi_DV($option,$idmiss,$idact,$iddoss,$bouton)
              
              {
 
-                $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Confirmation émission')
+                $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',4)
                 ->where('statut','!=','rfaite')->first();
                 $actSui->update(['statut'=>"active"]); 
                 $actSui->update(['date_deb' => $dateSys]);
@@ -2520,10 +2566,10 @@ public function taxi_DV($option,$idmiss,$idact,$iddoss,$bouton)
              //activer action 5 Envoyer medif à VAT
 
        
-              if( $action5->statut=="inactive" && ($action2->statut=="faite" || $action3->statut=="faite"))
+              if( $action5->statut=="inactive" && ($action2->statut=="faite" && $action3->statut=="faite"))
                {
 
-                 $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Envoyer medif à VAT')
+                 $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',5)
                  ->where('statut','!=','rfaite')->first();
                  $actSui->update(['statut'=>"active"]); 
                  $actSui->update(['date_deb' => $dateSys]);
@@ -2538,7 +2584,7 @@ public function taxi_DV($option,$idmiss,$idact,$iddoss,$bouton)
                 if( $action6->statut=="inactive" && $action4->statut=="faite" )
                {
 
-                 $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Confirmer au client l’émission')
+                 $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',6)
                  ->where('statut','!=','rfaite')->first();
                  $actSui->update(['statut'=>"active"]);  
                  $actSui->update(['date_deb' => $dateSys]);
@@ -2552,7 +2598,7 @@ public function taxi_DV($option,$idmiss,$idact,$iddoss,$bouton)
                 if($action7->statut=="inactive" && $action6->statut=="faite" )
                {
 
-                 $actSui=ActionEC::where('mission_id',$idmiss)->where('titre','Envoi à la facturation')
+                 $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',7)
                  ->where('statut','!=','rfaite')->first();
                  $actSui->update(['statut'=>"active"]); 
                  $actSui->update(['date_deb' => $dateSys]);
@@ -2664,10 +2710,10 @@ public function taxi_DV($option,$idmiss,$idact,$iddoss,$bouton)
 
                              // activer action 7 Préparer frais d’accès tarmac si aéroport de Tunis
 
-                            if($action7->statut =="inactive" && $action4->statut=="faite" && $action3->opt_choisie=="1")// 
+                            if($action7->statut =="inactive" && $action4->statut=="faite" && $action3->opt_choisie=="1" && $action3->statut=="faite" )// 
                            {
 
-                             $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',6)
+                             $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',7)
                              ->where('statut','!=','rfaite')->first();
                               $actSui->update(['date_deb' => $dateSys]);
                              $actSui->update(['statut'=>"active"]);  
@@ -3093,7 +3139,7 @@ public function Demande_investigation_de_dossier_douteux_DV($option,$idmiss,$ida
 
 
                            // activer action 2 Transfert à la régulation médicale  
-                           if($action1->statut=="faite"   && $action2->statut !="faite"  )  
+                           if($action1->statut=="faite"  && $action2->statut =="inactive"  )  
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',2)
@@ -3109,7 +3155,7 @@ public function Demande_investigation_de_dossier_douteux_DV($option,$idmiss,$ida
                       // activation action 3 Répondre à l’assistance 
                    
 
-                           if(($action2->statut=="faite" || $action2->statut=="ignoree")  && $action3->statut !="faite"  )  
+                           if(($action2->statut=="faite" || $action2->statut=="ignoree")  && $action3->statut =="inactive"  )  
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',3)
@@ -3278,7 +3324,7 @@ public function Demande_plan_vol_ou_de_traversee_DV($option,$idmiss,$idact,$iddo
                                                  
 
                             if($action8->statut =="inactive" && 
-                                ($action7->statut=="rappelee" || $action7->statut=="faite"))// 
+                                ($action7->statut=="ignoree" || $action7->statut=="faite"))// 
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',8)
@@ -3436,12 +3482,14 @@ public function Depart_lieu_hospitalisation_DV($option,$idmiss,$idact,$iddoss,$b
 
                          
                             $dtc = (new \DateTime())->format('Y-m-d H:i');
-                            $format = "Y-m-d\TH:i";
-                            $dateSys = \DateTime::createFromFormat($format, $dtc);
+                            //$format = "Y-m-d\TH:i";
+                            //$dateSys = \DateTime::createFromFormat($format, $dtc);
 
                            $var_rappe=ActionEC::where('mission_id',$idmiss)->where('ordre',6)
-                            ->where('statut','!=','rfaite')->where('num_rappel','=',2)
-                            ->where('date_rappel','<=', $dateSys)->first();
+                            ->where('statut','=','rfaite')->where('num_rappel','=',0)
+                            ->where('date_rappel','<=', $dtc)->first();
+
+                           // dd($var_rappe);
 
                             if($action7->statut =="inactive" && $action6->statut=="faite" && ($action6->opt_choisie=="2"||
                                   ($action6->opt_choisie=="1" &&  $var_rappe!=null ) ))// 
@@ -4179,7 +4227,7 @@ public function Expedition_par_poste_rapide_DV($option,$idmiss,$idact,$iddoss,$b
                            if( $action7->statut=="faite" && $action8->statut =="inactive")  
                            {
 
-                             $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',7)
+                             $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',8)
                              ->where('statut','!=','rfaite')->first();
                               $actSui->update(['statut'=>"active"]); 
                                $actSui->update(['date_deb' => $dateSys]);  
@@ -4194,7 +4242,7 @@ public function Expedition_par_poste_rapide_DV($option,$idmiss,$idact,$iddoss,$b
                            if( $action7->statut=="faite" && $action9->statut =="inactive")  
                            {
 
-                             $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',7)
+                             $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',9)
                              ->where('statut','!=','rfaite')->first();
                               $actSui->update(['statut'=>"active"]);
                                $actSui->update(['date_deb' => $dateSys]);   
@@ -4788,7 +4836,7 @@ public function libre_generique_DV($option,$idmiss,$idact,$iddoss,$bouton)
                   
 
                         
-                           if($action2->statut=="faite"  &&  $action3->statut =="inactive")  
+                           if(($action2->statut=="faite" || $action2->statut=="ignoree")  &&  $action3->statut =="inactive")  
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',3)
@@ -4955,7 +5003,7 @@ public function Rapport_medical_DV($option,$idmiss,$idact,$iddoss,$bouton)
 
                            // activer action 8  evaluation Si_appui_bouton_faite_action5 OU si_appui_ignorer_action6
 
-                            if($action5->statut=="faite" && $action6->statut=="ignoree"  && $action8->statut =="inactive") 
+                            if(($action5->statut=="faite" || $action6->statut=="ignoree") && $action8->statut =="inactive") 
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',8)
@@ -4992,7 +5040,7 @@ public function Rapport_medical_DV($option,$idmiss,$idact,$iddoss,$bouton)
 // debut workflow Tout transport aérien international sous assistance
 
 
-public function transport_aerien_international_sous_assistance($option,$idmiss,$idact,$iddoss,$bouton)
+public function transport_aerien_international_sous_assistance_DV($option,$idmiss,$idact,$iddoss,$bouton)
 {
   // dd("rrr");
 
@@ -5083,7 +5131,7 @@ public function transport_aerien_international_sous_assistance($option,$idmiss,$
 
                            }
 
-                             // activer Action 10 :Vérifier saisie de toutes les prestations dossier 
+                             // activer Action 9 :Vérifier saisie de toutes les prestations dossier 
                                                                   
                                
                            if($action8->statut=="faite" &&  $action9->statut =="inactive")  
@@ -5875,7 +5923,7 @@ public function Recap_frais_engages_DV($option,$idmiss,$idact,$iddoss,$bouton)
               
                {
                 
-                $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',3)
+                $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',4)
                 ->where('statut','!=','rfaite')->first();
                 $actSui->update(['statut'=>"active"]); 
                  $actSui->update(['date_deb' => $dateSys]);                
@@ -6082,7 +6130,7 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
                           // activer action 3 : : Informer le client et prendre sa décision                                       
 
                         
-                           if(($action1->statut=="ignoree" || $action1->statut=="faite" ) && $action3->statut =="inactive")  
+                           if(($action2->statut=="ignoree" || $action2->statut=="faite" ) && $action3->statut =="inactive")  
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',3)
@@ -6692,7 +6740,7 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
                           //si_appui_fait_action1_et_si_choix_option1_action1 OU si_appui_fait_action2                                    
 
                         
-                        if( (($action1->statut=="faite" && $action1->opt_choisie=="1") || $action2->statut=="faite")  && $action3->statut =="inactive")  
+                        if( (($action1->statut=="faite" && $action1->opt_choisie=="1") || $action2->statut=="faite"|| $action2->statut=="ignoree")  && $action3->statut =="inactive")  
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',3)
@@ -7371,7 +7419,7 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
 
                             
                        
-                        if(($action1->statut=="faite" || $action3->statut=="faite" ) && $action2->statut =="inactive")  
+                        if((($action1->statut=="faite" || $action3->statut=="faite" ) && $action2->statut =="inactive" )|| ($action3->statut=="faite" &&  $action2->statut!="rappelee" &&   $action2->statut!="reportee" ))  
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',2)

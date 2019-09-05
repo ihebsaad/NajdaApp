@@ -723,6 +723,17 @@ public function getAjaxDeleguerMission($idmiss)
 
          $output.='<h4><b><u> Description de mission : </u>'.$miss->typeMission->des_miss.'</b> </h4> <br>';
           
+          if($miss->commentaire)
+          {
+         $output.='<h4><b><u> Commentaire : </u>'.$miss->commentaire.'</b> </h4> <br>';
+          }
+          else
+          {
+
+          $output.='<h4><b><u> Commentaire : </u> Il n\' y a pas de commentaire pour cette mission</b> </h4> <br>';
+
+          }
+          
          /*$output.='<h4><b> <u>Nombre d\'actions: </u>'.$miss->ActionECs->count().'</b> </h4> <br>';*/
 
 
@@ -1168,9 +1179,17 @@ public function getAjaxDeleguerMission($idmiss)
                         if ($i!=0)
                         {
 
-                        $output.='<tr><td style="overflow: auto;" title="'.$sactions->titre.'"><span style="font-weight : none;">'.$sactions->titre.'</span></td>
-                        <td style="overflow: auto;" title="'.$sactions->date_deb.'"><span style="font-weight : none;">'.$sactions->date_deb.'</span></td>
-                        <td style="overflow: auto;" title="'.$sactions->date_fin.'"><span style="font-weight : none;">'.$sactions->date_fin.'</span></td>';
+                        $output.='<tr><td style="overflow: auto;" title="'.$sactions->titre.'"><span style="font-weight : none;">'.$sactions->titre.'</span></td>';
+                        if($sactions->num_rappel == 0)
+                        {
+                        $output.='<td style="overflow: auto;" title="'.$sactions->date_deb.'"><span style="font-weight : none;">'.$sactions->date_deb.'</span></td>';
+                         }
+                         else
+                         {
+                           $output.='<td style="overflow: auto;" title="'.$sactions->date_rappel.'"><span style="font-weight : none;">'.$sactions->date_rappel.'</span></td>';
+                         }
+
+                        $output.='<td style="overflow: auto;" title="'.$sactions->date_fin.'"><span style="font-weight : none;">'.$sactions->date_fin.'</span></td>';
 
                         if($sactions->user_id!=null)
                         {
@@ -1217,7 +1236,15 @@ public function getAjaxDeleguerMission($idmiss)
                                           else
                                           {
 
-                                           $output.='<td style="overflow: auto;" title="'.$sactions->statut.'"><span style="font-weight : none;"> '.$sactions->statut.' </span></td></tr>' ;
+                                            if($sactions->statut=='ignoree')
+                                              {
+                                              $output.='<td style="overflow: auto;" title="ignorée"><span style="font-weight : none;"> ignorée </span></td></tr>' ;
+                                              }
+                                              else
+                                              {
+
+                                               $output.='<td style="overflow: auto;" title="'.$sactions->statut.'"><span style="font-weight : none;"> '.$sactions->statut.' </span></td></tr>' ;
+                                              }
 
                                           }
 
