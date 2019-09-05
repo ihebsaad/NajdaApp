@@ -28,7 +28,7 @@ section#timeline article div.inner p {
     }
 #jstree li[rel="tremail"] > a.jstree-anchor > i, #jstree li[rel="trfax"] > a.jstree-anchor > i {display: none;}
 .scrollable-panel {
-  height: 700px;
+  height: 1000px;
   overflow-y: auto;
 }
 .nav-tabs { border-bottom: 2px solid #DDD; }

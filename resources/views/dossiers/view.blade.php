@@ -603,42 +603,51 @@ use App\Adresse;
                              </div>
                              <input type="hidden" id="selected" value="0">
                              <input type="hidden" id="par" value="<?php echo $iduser;?>">
-                             <button style="display:none;margin-botom:10px" type="button" id="add2" class="btn btn-primary"><i class="far fa-hand-point-up"></i> Sélectionner</button>
-
-                             <div class="row">  <label>Prestataire sélectionné :</label>
-                             </div>
-
-                             <div class="row">  <select style="width:350px;margin-top:10px;margin-bottom:10px;" disabled id="selectedprest"  class="form-control col-lg-9 " value=" ">
-                                     <option></option>
-                                     @foreach($prestataires as $prest)
-                                         <option    value="<?php echo $prest->id;?>"> <?php echo $prest->name;?></option>
-                                     @endforeach
-                                 </select>
-                             </div>
-                             <div class="form-group"  id="prestation"  style="display:none">
-                                 <button style="display:none;margin-botom:10px" type="button" id="valide" class="btn btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
-
-                                 <input type="hidden"  id="idprestation" value="0" />
                              <div class="row">
-                                 <label>Prestation non effectuée ? Raison:</label>
+                                 <div class="col-md-4">
+                                     <button style="display:none;margin-botom:10px;margin-top:20px" type="button" id="add2" class="btn btn-lg btn-primary"><i class="far fa-save"></i> Enregister la prestation</button>
+                                 </div>
+                                 <div class="col-md-4">
+                                     <label>Prestataire sélectionné :</label><br>
+                                     <select style="width:350px;margin-top:10px;margin-bottom:10px;" disabled id="selectedprest"  class="form-control col-lg-9 " value=" ">
+                                         <option></option>
+                                         @foreach($prestataires as $prest)
+                                             <option    value="<?php echo $prest->id;?>"> <?php echo $prest->name;?></option>
+                                         @endforeach
+                                     </select>
+                                 </div>
+                                 <div class="col-md-4"></div>
                              </div>
 
                              <div class="row">
-                                <div class="col-md-4">
-                                    <select class="form-control" id="statutprest" >
-                                        <option></option>
-                                        <option    value="nonjoignable">Non Joignable </option>
-                                     <option    value="nondisponible">Non Disponible </option>
-                                     <option    value="autre">Autre </option>
-                                 </select>
+                                 <div class="form-group"  id="prestation"  style="display:none">
+                                   <div class="col-md-6">
+                                       <button style="display:none;margin-botom:10px" type="button" id="valide" class="btn btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
+                                   </div>
+                                     <input type="hidden"  id="idprestation" value="0" />
+                                          <label>Prestation non effectuée ? Raison:</label>
 
-                                </div>
-                                 <div class="col-md-8" >
-                                     <input type="text" style="display:none;" class="form-control" Placeholder="Détails"  id="detailsprest">
-                                 </div>
+                                     <div class="row">
+                                         <div class="col-md-4">
+                                             <select class="form-control" id="statutprest" >
+                                                 <option></option>
+                                                 <option    value="nonjoignable">Non Joignable </option>
+                                                 <option    value="nondisponible">Non Disponible </option>
+                                                 <option    value="autre">Autre </option>
+                                             </select>
 
+                                         </div>
+                                         <div class="col-md-8" >
+                                             <input type="text" style="display:none;" class="form-control" Placeholder="Détails"  id="detailsprest">
+                                         </div>
+
+                                     </div>
                                  </div>
-                            </div>
+                             </div>
+
+                             <div class="row">
+                             </div>
+
 
 
                              <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}">
@@ -2894,7 +2903,7 @@ $urlapp='http://localhost/najdaapp';
 
 
             toggle('tprest', 'none');
-            var typeprest=  document.getElementById('typeprest').value
+            var typeprest=  document.getElementById('typeprest').value;
 
             document.getElementById('tprest-'+typeprest).style.display='block';
 
@@ -2993,7 +3002,6 @@ $urlapp='http://localhost/najdaapp';
             else{shownext=true;}
              if(shownext==true)
               {
-                  document.getElementById('statutprest').value ='';
                   if(infos==true){
                 // enregistrement des infos de prestation  + envoi des emails
 
@@ -3008,6 +3016,7 @@ $urlapp='http://localhost/najdaapp';
                     method:"POST",
                     data:{prestation:prestation,prestataire:prestataire,statut:statut,details:details, _token:_token},
                     success:function(data){
+                        document.getElementById('statutprest').value ='';
 
 
 

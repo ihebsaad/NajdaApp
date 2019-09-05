@@ -21,12 +21,12 @@
     <?php use \App\Http\Controllers\DossiersController;     ?>
     <div class="uper">
         <div class="portlet box grey">
-            <div class="row">
+           <!-- <div class="row">
                 <div class="col-lg-8"> <h4>Liste des dossiers </h4></div>
                 <div class="col-lg-4">
-                 <!--   <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>-->
+                 <!--   <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>--><!--
                 </div>
-            </div>
+            </div>-->
         </div>
 
         <!-- debut recherche avancee sur dossiers-->
@@ -41,7 +41,7 @@
             <div class="portlet-title" style="margin-top: 0px; padding-top: 0px;">
                 
             </div>
-            <div class="portlet-body"  id="searchbox"  style="display:none">
+            <div class="portlet-body"  id="searchbox"   >
                 <form accept-charset="utf-8" id="searchDossierform" action="{{route('page_recherche.avancee')}}">
                     <div class="row">
                         <div class="col-md-4">
@@ -339,6 +339,7 @@
 
     <script type="text/javascript">
     $(document).ready(function() {
+        $('#searchbox').hide();
 
 
         $('#mytable thead tr:eq(1) th').each( function () {
@@ -522,9 +523,9 @@
     $("#current_status").select2();
 
 
-    
-    
-});
+
+
+ });
 
 
  $('#search').on('click',   function() {

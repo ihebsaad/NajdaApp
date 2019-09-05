@@ -101,8 +101,8 @@
                                                           $vers=$o['CL_lieudecharge_dec'];
                                                           $type=$o['type'];
                                                           if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                                                          if($type=='ambulance'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                                                          if($type=='remorquage'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                                                          if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                                                          if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                                        if($hour<8)
 
                                                        {  ?>
@@ -155,8 +155,8 @@
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                if($hour>7 && $hour<11)
 
                                {  ?>
@@ -209,8 +209,8 @@
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                if($hour>10 && $hour<14)
 
                                {  ?>
@@ -263,8 +263,8 @@
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                if($hour>13 && $hour<17)
 
                                {  ?>
@@ -316,8 +316,8 @@
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                if($hour>17 && $hour<20)
 
                                {  ?>
@@ -370,8 +370,8 @@
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                if($hour>19 && $hour<24)
 
                                {  ?>

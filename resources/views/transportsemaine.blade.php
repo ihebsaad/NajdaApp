@@ -100,8 +100,8 @@
                                                           $vers=$o['CL_lieudecharge_dec'];
                                                           $type=$o['type'];
                                                           if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                                                          if($type=='ambulance'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                                                          if($type=='remorquage'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                                                          if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                                                          if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                                          $Date= date("Y-m-d", strtotime($date));
                                                           $day=$today;
                                                        if($Date==$day)
@@ -162,8 +162,8 @@
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                $Date= date("Y-m-d", strtotime($date));
 
                                if($Date==$day)
@@ -223,8 +223,8 @@
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                $Date= date("Y-m-d", strtotime($date));
 
                                if($Date==$day)
@@ -284,8 +284,8 @@
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                $Date= date("Y-m-d", strtotime($date));
 
                                if($Date==$day)
@@ -344,8 +344,8 @@
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                $Date= date("Y-m-d", strtotime($date));
 
                                if($Date==$day)
@@ -405,8 +405,8 @@
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                $Date= date("Y-m-d", strtotime($date));
 
                                if($Date==$day)
@@ -467,8 +467,8 @@
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                $Date= date("Y-m-d", strtotime($date));
 
                                if($Date==$day)
