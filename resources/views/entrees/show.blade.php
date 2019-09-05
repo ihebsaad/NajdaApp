@@ -313,7 +313,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
             </table>
               @else
 
-                 <div> les attentes de réponse pour ce dossier n'existe pas </div>
+                 <div> les attentes de réponse pour ce dossier n'existent pas </div>
 
             @endif
                         
