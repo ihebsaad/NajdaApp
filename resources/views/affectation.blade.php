@@ -55,7 +55,7 @@
           <?php
               use \App\Http\Controllers\UsersController;
               use \App\Http\Controllers\ClientsController;
-    $user = auth()->user();
+              $user = auth()->user();
               $seance =  DB::table('seance')
                   ->where('id','=', 1 )->first();
               $disp=$seance->dispatcheur ;
@@ -162,11 +162,14 @@
 			<?php  $type='';$style='';
                         foreach($dossiers as $dossier)
 			{ $type=$dossier['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
-			$idd=$dossier['id'];$ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
+			$idd=$dossier['id'];
+            $immatricul=$dossier['vehicule_immatriculation'];
+			$ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
 			      <div  id="dossier-<?php echo $idd;?>" class="dossier"  style="margin-top:5px;<?php echo $style;?>" >
                 <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <label style="font-size: 15px;"><?php echo $ref;?></label>
 	 	         <div class="infos">  <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
-               <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small>
+               <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
+                  <?php if($immatricul!='') { echo '<small style="font-size:10px">'. $immatricul .'</small>';} ?>
 			
                      <i style="float:left;color:;margin-top:10px" class="delete fa fa-trash" onclick="Delete('<?php echo $idd;?>')"></i></div>
 	        </div>

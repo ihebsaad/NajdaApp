@@ -146,18 +146,18 @@ use App\Adresse;
             <div class="row" style="margin-top:10px">
                 <div class="col-lg-12">
                     <ul class="nav  nav-tabs">
- 
-                        <li class="nav-item active">
-                            <a class="nav-link  active show" href="#tab2" data-toggle="tab">
+
+                        <li class="nav-item ">
+                            <a class="nav-link  " href="#tab2" data-toggle="tab">
                                <i class="fas a-lg fa-exchange-alt"></i>  Communications
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item ">
                             <a class="nav-link" href="#tab3" data-toggle="tab">
                                 <i class="fas fa-lg  fa-ambulance"></i>  Prestations
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item active show">
                             <a class="nav-link" href="#tab4" data-toggle="tab">
                                 <i class="fas  fa-lg fa-users"></i>  Intervenants
                             </a>
@@ -192,7 +192,7 @@ use App\Adresse;
             </div>
             <div class="tab-content mar-top">
             
-            <div id="tab2" class="tab-pane fade active in">
+            <div id="tab2" class="tab-pane fade">
 
 
                         <section id="timeline">
@@ -281,7 +281,7 @@ use App\Adresse;
 
             </div>
 
-            <div id="tab3" class="tab-pane fade">
+            <div id="tab3" class="tab-pane fade  active in">
                 <ul class="nav  nav-tabs">
                     <li class="nav-item active">
                         <a class="nav-link active show" href="#tab32" data-toggle="tab"  onclick=";showinfos2();hideinfos();hideinfos3();">
@@ -607,7 +607,7 @@ use App\Adresse;
                                  <div class="col-md-4">
                                      <button style="display:none;margin-botom:10px;margin-top:20px" type="button" id="add2" class="btn btn-lg btn-primary"><i class="far fa-save"></i> Enregister la prestation</button>
                                  </div>
-                                 <div class="col-md-4">
+                                 <div class="col-md-4"  id="add2prest" style="display:none" >
                                      <label>Prestataire sélectionné :</label><br>
                                      <select style="width:350px;margin-top:10px;margin-bottom:10px;" disabled id="selectedprest"  class="form-control col-lg-9 " value=" ">
                                          <option></option>
@@ -620,28 +620,27 @@ use App\Adresse;
                              </div>
 
                              <div class="row">
-                                 <div class="form-group"  id="prestation"  style="display:none">
-                                   <div class="col-md-6">
-                                       <button style="display:none;margin-botom:10px" type="button" id="valide" class="btn btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
+                                 <div class="  form-group"  id="prestation"  style="display:none">
+                                   <div class="col-md-4">
+                                       <button style="display:none;margin-botom:10px" type="button" id="valide" class="btn btn-lg btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
                                    </div>
-                                     <input type="hidden"  id="idprestation" value="0" />
-                                          <label>Prestation non effectuée ? Raison:</label>
+                                     <div class="col-md-4">
+                                         <label>ou bien Prestation non effectuée ? Raison:</label>
 
-                                     <div class="row">
-                                         <div class="col-md-4">
-                                             <select class="form-control" id="statutprest" >
-                                                 <option></option>
-                                                 <option    value="nonjoignable">Non Joignable </option>
-                                                 <option    value="nondisponible">Non Disponible </option>
-                                                 <option    value="autre">Autre </option>
-                                             </select>
-
-                                         </div>
-                                         <div class="col-md-8" >
-                                             <input type="text" style="display:none;" class="form-control" Placeholder="Détails"  id="detailsprest">
-                                         </div>
+                                         <select class="form-control" id="statutprest" >
+                                             <option></option>
+                                             <option    value="nonjoignable">Non Joignable </option>
+                                             <option    value="nondisponible">Non Disponible </option>
+                                             <option    value="autre">Autre </option>
+                                         </select>
 
                                      </div>
+                                     <div class="col-md-4" >
+                                         <textarea type="text" style="display:none;height:60px" class="form-control" Placeholder="Détails"  id="detailsprest" ></textarea>
+                                      </div>
+                                     <input type="hidden"  id="idprestation" value="0" />
+
+
                                  </div>
                              </div>
 
@@ -2872,6 +2871,7 @@ $urlapp='http://localhost/najdaapp';
             document.getElementById('termine').style.display = 'none';
             document.getElementById('showNext').style.display='none';
             document.getElementById('add2').style.display='none';
+            document.getElementById('add2prest').style.display='none';
             document.getElementById('selectedprest').value=0;
 
 
@@ -2899,7 +2899,9 @@ $urlapp='http://localhost/najdaapp';
             // document.getElementById('termine').style.display = 'none';
             document.getElementById('showNext').style.display='none';
             document.getElementById('add2').style.display='none';
+            document.getElementById('add2prest').style.display='none';
             document.getElementById('selectedprest').value=0;
+
 
 
             toggle('tprest', 'none');
@@ -2921,6 +2923,7 @@ $urlapp='http://localhost/najdaapp';
 
                 document.getElementById('termine').style.display = 'none';
                 document.getElementById('add2').style.display = 'none';
+                document.getElementById('add2prest').style.display='none';
 
                 $.ajax({
                     url:"{{ route('dossiers.listepres') }}",
@@ -2965,6 +2968,7 @@ $urlapp='http://localhost/najdaapp';
         $("#essai2").click(function() {
             document.getElementById('termine').style.display = 'none';
             document.getElementById('add2').style.display = 'block';
+            document.getElementById('add2prest').style.display='block';
             document.getElementById('showNext').style.display = 'block';
             document.getElementById('item1').style.display = 'block';
             document.getElementById('selected').value = 1;
@@ -2985,10 +2989,7 @@ $urlapp='http://localhost/najdaapp';
 
             $("#showNext").click(function() {
             var shownext=false;var infos=false;
-            // reinitialiser le champs de statut
-            if(document.getElementById('selectedprest').value ==0) {
-                document.getElementById('statutprest').value ='';
-            document.getElementById('detailsprest').value ='';}
+
 
             // si une prestation a èté ajoutée
             if(document.getElementById('idprestation').value >0) {
@@ -3016,15 +3017,23 @@ $urlapp='http://localhost/najdaapp';
                     method:"POST",
                     data:{prestation:prestation,prestataire:prestataire,statut:statut,details:details, _token:_token},
                     success:function(data){
-                        document.getElementById('statutprest').value ='';
 
-
+                        // reinitialiser le champs de statut
+                        if(document.getElementById('selectedprest').value ==0) {
+                            document.getElementById('statutprest').value ='';
+                            document.getElementById('detailsprest').value ='';}
 
                     }
                 });
+                      document.getElementById('statutprest').selectedIndex =0;
+
+                      if(document.getElementById('idprestation').value >0) {
+                          document.getElementById('prestation').style.display='none';
+                      }
 
             }
                 document.getElementById('selectedprest').value = 0;
+                  document.getElementById('detailsprest').value='';
 
                 var selected = document.getElementById('selected').value;
                 var total = document.getElementById('total').value;
@@ -3037,6 +3046,8 @@ $urlapp='http://localhost/najdaapp';
                     document.getElementById('termine').style.display = 'none';
                     document.getElementById('item1').style.display = 'block';
                     document.getElementById('add2').style.display = 'block';
+                    document.getElementById('add2prest').style.display='block';
+
 
                     //document.getElementById('selected').value=1;
                     // $("#selected").val('1');
@@ -3050,12 +3061,16 @@ $urlapp='http://localhost/najdaapp';
                     document.getElementById('item'+(selected)).style.display = 'none';
                     document.getElementById('showNext').style.display = 'none';
                     document.getElementById('add2').style.display = 'none';
+                    document.getElementById('add2prest').style.display='none';
+
 
 
                 } else {
 
                     if ((selected != 0) && (selected <= total + 1)) {
                         document.getElementById('add2').style.display = 'block';
+                        document.getElementById('add2prest').style.display='block';
+
                         document.getElementById('termine').style.display = 'none';
                         document.getElementById('item' + selected).style.display = 'none';
                         document.getElementById('item' + next).style.display = 'block';
@@ -3069,23 +3084,42 @@ $urlapp='http://localhost/najdaapp';
                 }
 
                 if(next>parseInt(total)+1) {
-                    document.getElementById('item' + selected).style.display = 'none';
+               //     document.getElementById('item' + selected).style.display = 'none';
                 }
+
+                  if( document.getElementById('idprestation').value>0 ){
+                      document.getElementById('idprestation').value=0
+                      document.getElementById('selectedprest').value = 0;
+                      document.getElementById('detailsprest').value='';
+                      document.getElementById('prestation').style.display='none';
+                      document.getElementById('statutprest').selectedIndex =0;
+
+                  }
+
 
             }
             else{
-                  Swal.fire({
-                     type: 'error',
-                     title: 'Attendez...',
-                     text: 'SVP Expliquez la raison de ne pas choisir ce prestataire',
+                if(document.getElementById('selectedprest').selectedIndex  >0) {
 
-                 })
+                     Swal.fire({
+                         type: 'error',
+                         title: 'Attendez...',
+                         text: 'SVP Expliquez la raison de ne pas choisir ce prestataire',
+
+                     })
+
+
+                 }
+
+
 
             }
 
 
 
-        });
+
+
+            });
 
 
 

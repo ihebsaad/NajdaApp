@@ -75,7 +75,7 @@ class HomeController extends Controller
 
         $seance =   Seance::first();
         $supmedic=$seance->superviseurmedic;
-
+        $duree=  $request->get('duree');
         $nompar=  app('App\Http\Controllers\UsersController')->ChampById('name',$iduser) .' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$iduser) ;
         if ($supmedic >0)
         {
@@ -85,7 +85,8 @@ class HomeController extends Controller
                 'vers' => $supmedic,  // Superviseur Medical
                  'emetteur'=>$nompar,
                 'statut' => 0,
-                'type' => 'pause'
+                'type' => 'pause',
+                'duree' =>$duree
 
             ]);
 
@@ -95,7 +96,7 @@ class HomeController extends Controller
             $nomuser=$user->name.' '.$user->lastname;
             $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$supmedic).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$supmedic);
 
-            Log::info('[Agent: '.$nomuser.'] Demande de Pause à : '.$nomagent);
+            Log::info('[Agent: '.$nomuser.'] Demande une Pause de durée : '.$duree.' mins à : '.$nomagent);
 
         }
 
@@ -586,7 +587,8 @@ return redirect('roles');
               $result[null][] = $element;
             }
         }
-        return view('home', ['countries' => $countries,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'dossiers' => $dossiers,'notifications'=>$result]);
+     //   return view('home', ['countries' => $countries,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'dossiers' => $dossiers,'notifications'=>$result]);
+        return view('home'  );
      }
 
 

@@ -160,7 +160,7 @@
     <div class="modal-dialog" >
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" style="text-align:center"  id="modalalert0"><center>Demande de Pause  </center> </h3>
+                <h5 class="modal-title" style="text-align:center"  id="modalalert0"><center>Demande de Pause  </center> </h5>
 
             </div>
             <div class="modal-body">
@@ -169,7 +169,9 @@
                     <div style="text-align:center" class="row" >
                         <div style="text-align:center" class="     show" role="alert">
 
-                            <h5> <center> Vous voulez demander une pause ?</center></h5>
+                            <h3 style="font-weight:bold;"> <center> Vous voulez demander une pause ?</center></h3>
+                            <div class="row"><label>Durée: </label>    <center><input type="number" step="1" value="15" class="form-control" style="width:60px;margin:10px 10px 10px 10px" name="duree" id="dureep" /> Minutes</center>
+                            </div>
                         </div>
                     </div>
 
@@ -486,6 +488,38 @@
         $("#kkk").fadeOut();
     });
 
+
+
+</script>
+
+<script>
+
+    $('#dpause').click(function() {
+
+        $('#modalconfirm').modal({show: true});
+
+    });
+
+
+    $('#oui').click(function() {
+        $('#modalconfirm').modal('hide');
+
+        var _token = $('input[name="_token"]').val();
+        var duree = document.getElementById('dureep').value;
+
+        $.ajax({
+            url: "{{ route('home.demandepause') }}",
+            method: "POST",
+            data: { duree:duree,  _token: _token},
+
+            success: function (data) {
+                alert('Demande envoyée');
+
+            }
+        });
+
+
+    }); //end click
 
 
 </script>

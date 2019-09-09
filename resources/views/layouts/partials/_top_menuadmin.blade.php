@@ -122,6 +122,14 @@
         @can('isAdmin')
 
             <div class="col-sm-2">
+                <a href="{{ route('transport') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
+                    <span class="fas fa-lg  fa-calendar-alt"></span>
+                    <br>
+                    Missions Transport
+                </a>
+            </div>
+
+            <div class="col-sm-2">
                 <a href="{{ route('personnes') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="fas fa-lg  fa-user-nurse"></span>
                     <br>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Dossier;
 use App\Http\Controllers\Controller;
 use App\Seance;
+use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use Illuminate\Http\Request;

@@ -631,14 +631,14 @@ use  \App\Http\Controllers\DocsController;
                                                                                 <label for="inputError" class="control-label">Hôtel </label>
 
                                                                                 <div class="input-group-control">
-                                                                                    <select onchange="changing(this)"  type="text" id="hotel" name="hotel" class="form-control"   value="{{ $dossier->hotel }}">
+                                                                                    <select onchange="changing(this);ajout_prest(this);"   id="hotel" name="hotel" class="form-control"   value="{{ $dossier->hotel }}">
 
                                                                                         <option></option>
                                                                                         <?php
 
                                                                                         foreach($hotels as $ht)
                                                                                         { if ($dossier->hotel == PrestatairesController::ChampById('name',$ht->prestataire_id)){ $selected='selected="selected"'; }else{ $selected=''; }
-                                                                                            if( PrestatairesController::ChampById('name',$ht->prestataire_id)!=''){ echo '<option  '.$selected.' value="'.   PrestatairesController::ChampById('name',$ht->prestataire_id).'">'.   PrestatairesController::ChampById('name',$ht->prestataire_id).'</option>';}
+                                                                                            if( PrestatairesController::ChampById('name',$ht->prestataire_id)!=''){ echo '<option title="'.$ht->prestataire_id.'" '.$selected.' value="'.   PrestatairesController::ChampById('name',$ht->prestataire_id).'">'.   PrestatairesController::ChampById('name',$ht->prestataire_id).'</option>';}
                                                                                         }
                                                                                         ?>
                                                                                     </select>
@@ -913,14 +913,14 @@ use  \App\Http\Controllers\DocsController;
                                                                     <label for="inputError" class="control-label">Hôspitalisé à </label>
 
                                                                     <div class="input-group-control">
-                                                                        <select onchange="changing(this)"  type="text" id="hospital_address" name="hospital_address" class="form-control"   value="{{ $dossier->hospital_address }}">
+                                                                        <select onchange="changing(this);ajout_prest(this);"  type="text" id="hospital_address" name="hospital_address" class="form-control"   value="{{ $dossier->hospital_address }}">
 
                                                                         <option></option>
                                                                             <?php
 
                                                                         foreach($hopitaux as $hp)
                                                                         { if ($dossier->hospital_address == PrestatairesController::ChampById('name',$hp->prestataire_id)){ $selected='selected="selected"'; }else{ $selected=''; }
-                                                                          if( PrestatairesController::ChampById('name',$hp->prestataire_id)!=''){ echo '<option  '.$selected.' value="'.   PrestatairesController::ChampById('name',$hp->prestataire_id).'">'.   PrestatairesController::ChampById('name',$hp->prestataire_id).'</option>';}
+                                                                          if( PrestatairesController::ChampById('name',$hp->prestataire_id)!=''){ echo '<option title="'.$hp->prestataire_id.'" '.$selected.' value="'.   PrestatairesController::ChampById('name',$hp->prestataire_id).'">'.   PrestatairesController::ChampById('name',$hp->prestataire_id).'</option>';}
                                                                       }
                                                                       ?>
                                                                         </select>
@@ -936,14 +936,14 @@ use  \App\Http\Controllers\DocsController;
                                                                     </div>
                                         -->
                                                                     <div class="input-group-control">
-                                                                        <select onchange="changing(this)"  type="text" id="medecin_traitant" name="medecin_traitant" class="form-control"   value="{{ $dossier->medecin_traitant }}">
+                                                                        <select onchange="changing(this);ajout_prest(this);"  type="text" id="medecin_traitant" name="medecin_traitant" class="form-control"   value="{{ $dossier->medecin_traitant }}">
 
                                                                             <option></option>
                                                                             <?php
 
                                                                             foreach($traitants as $tr)
                                                                             { if ($dossier->medecin_traitant == PrestatairesController::ChampById('name',$tr->prestataire_id)){ $selected='selected="selected"'; }else{ $selected=''; }
-                                                                                if (PrestatairesController::ChampById('name',$tr->prestataire_id)!='') {echo '<option '.$selected.' value="'. PrestatairesController::ChampById('name',$tr->prestataire_id).'">'. PrestatairesController::ChampById('name',$tr->prestataire_id).' Fixe: '. PrestatairesController::ChampById('phone_home',$tr->prestataire_id) .' Tel: '.PrestatairesController::ChampById('phone_cell',$tr->prestataire_id) .'</option>';}
+                                                                                if (PrestatairesController::ChampById('name',$tr->prestataire_id)!='') {echo '<option title="'.$tr->prestataire_id.'" '.$selected.' value="'. PrestatairesController::ChampById('name',$tr->prestataire_id).'">'. PrestatairesController::ChampById('name',$tr->prestataire_id).' Fixe: '. PrestatairesController::ChampById('phone_home',$tr->prestataire_id) .' Tel: '.PrestatairesController::ChampById('phone_cell',$tr->prestataire_id) .'</option>';}
                                                                             }
 
                                                                             ?>
@@ -1239,14 +1239,14 @@ use  \App\Http\Controllers\DocsController;
 
                                                                 <div class="input-group-control">
 
-                                                                    <select onchange="changing(this)"  type="text" id="lieu_immobilisation" name="medecin_traitant" class="form-control"   value="{{ $dossier->lieu_immobilisation }}">
+                                                                    <select onchange="changing(this);ajout_prest(this);"  type="text" id="lieu_immobilisation" name="medecin_traitant" class="form-control"   value="{{ $dossier->lieu_immobilisation }}">
 
                                                                         <option></option>
                                                                         <?php
 
                                                                         foreach($garages as $gr)
                                                                         { if ($dossier->lieu_immobilisation == PrestatairesController::ChampById('name',$gr->prestataire_id)){ $selected='selected="selected"'; }else{ $selected=''; }
-                                                                            if (PrestatairesController::ChampById('name',$gr->prestataire_id)!='') {echo '<option '.$selected.' value="'. PrestatairesController::ChampById('name',$gr->prestataire_id).'">'. PrestatairesController::ChampById('name',$gr->prestataire_id).'</option>';}
+                                                                            if (PrestatairesController::ChampById('name',$gr->prestataire_id)!='') {echo '<option  title="'.$gr->prestataire_id.'"  '.$selected.' value="'. PrestatairesController::ChampById('name',$gr->prestataire_id).'">'. PrestatairesController::ChampById('name',$gr->prestataire_id).'</option>';}
                                                                         }
                                                                         ?>
                                                                     </select>
@@ -2788,8 +2788,40 @@ function disabling(elm) {
 
 <script>
 
+    function ajout_prest(elm) {
+
+        var prest = elm.id;
+       // alert(prest);
+        var prestataire = document.getElementById(prest) ;
+      //  alert(prestataire);
+
+        var title= parseInt(prestataire.options[prestataire.selectedIndex].title);
+
+
+
+        if (title > 0) {
+
+            var dossier = $('#iddossupdate').val();
+
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url: "{{ route('intervenants.saving') }}",
+                method: "POST",
+                data: {prestataire: title, dossier: dossier, _token: _token},
+                success: function (data) {
+
+                    alert('intervenant ajouté ');
+
+
+                }
+            });
+        }
+
+    }
 
     $(function () {
+
+
 
 
         $('#add2').click(function(){

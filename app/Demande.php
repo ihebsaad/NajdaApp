@@ -13,6 +13,7 @@ class Demande extends Model
         'statut',
         'emetteur',
         'type',
+        'duree',
 
 
     ];

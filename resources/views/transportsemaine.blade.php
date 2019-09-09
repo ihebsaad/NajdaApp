@@ -32,33 +32,31 @@
 
     // OM TAXIs
     $ordres_taxi = \App\OMTaxi::where('CL_heuredateRDV', '>=', Carbon::now()->toDateString())
-        ->select('id','CL_heuredateRDV','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
+        ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
         ->orderBy('CL_heuredateRDV')
         ->get();
 
     //OM Ambul
 
     $ordres_ambul =   \App\OMAmbulance::where('CL_heuredateRDV',  '>=', Carbon::now()->toDateString())
-        ->select('id','CL_heuredateRDV','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
+        ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
         ->orderBy('CL_heuredateRDV')
          ->get();
     // OM Remorq
 
     $ordres_rem =  \App\OMRemorquage::where('CL_heuredateRDV',  '>=', Carbon::now()->toDateString())
-        ->select('id','CL_heuredateRDV','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
+        ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
         ->orderBy('CL_heuredateRDV')
          ->get();
     $oms = array_merge($ordres_taxi->toArray(),$ordres_ambul->toArray(),$ordres_rem->toArray() );
 
-    // Sort the array
-   /* usort($oms, function  ($element1, $element2) {
-        $datetime1 = strtotime($element1['CL_heuredateRDV']);
-        $datetime2 = strtotime($element2['CL_heuredateRDV']);
-
-        return $datetime1 - $datetime2 ;
+    function cmp($a, $b)
+    {
+        return strcmp($a["CL_heuredateRDV"], $b["CL_heuredateRDV"]);
     }
-    );
-*/
+
+    usort($oms, "cmp");
+
 
     ?>
     <div class="panel panel-primary column col-md-12"  style="margin-left:0;margin-right:0;padding:10px 10px 10px 10px" >
@@ -99,7 +97,8 @@
                                                           $de=$o['CL_lieuprest_pc'];
                                                           $vers=$o['CL_lieudecharge_dec'];
                                                           $type=$o['type'];
-                                                          if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
+                                                          $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
+                                                         if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
                                                           if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
                                                           if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                                          $Date= date("Y-m-d", strtotime($date));
@@ -107,9 +106,9 @@
                                                        if($Date==$day)
 
                                                        {  ?>
-                                                <div  class="om " style=" float:left;margin-top:15px;margin-right:30px;background-color:<?php echo $color; ?>; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;min-height: 100px"  id="div-<?php echo $type;?>-<?php echo $o['id'];?>"  ondblclick="display(this);">
+                                                <div  class="om " style=" float:left;margin-top:15px;margin-right:30px;background-color:<?php echo $color2; ?>; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;min-height: 120px"  id="div-<?php echo $type;?>-<?php echo $o['id'];?>"  ondblclick="display(this);">
 
-                                                         <div class="row" style=" margin-bottom:5px;">
+                                                    <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>; ">
                                                               <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
                                                               <div class="col-md-3"><?php echo $icon; ?></div>
                                                           </div>
@@ -161,6 +160,7 @@
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
+                               $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
                                if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
                                if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
@@ -168,9 +168,9 @@
 
                                if($Date==$day)
                                {  ?>
-                               <div class="om " style=" float:left;margin-top:15px;margin-right:30px;background-color:<?php echo $color; ?>; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;min-height: 100px"  id="div-<?php echo $type;?>-<?php echo $o['id'];?>"  ondblclick="display(this);">
+                               <div class="om " style=" float:left;margin-top:15px;margin-right:30px;background-color:<?php echo $color2; ?>; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;min-height: 120px"  id="div-<?php echo $type;?>-<?php echo $o['id'];?>"  ondblclick="display(this);">
 
-                                   <div class="row" style=" margin-bottom:5px;">
+                                   <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>; ">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
                                        <div class="col-md-3"><?php echo $icon; ?></div>
                                    </div>
@@ -222,6 +222,7 @@
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
+                               $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
                                if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
                                if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
@@ -229,9 +230,9 @@
 
                                if($Date==$day)
                                {  ?>
-                               <div class="om " style=" float:left;margin-top:15px;margin-right:30px;background-color:<?php echo $color; ?>; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;min-height: 100px"  id="div-<?php echo $type;?>-<?php echo $o['id'];?>"  ondblclick="display(this);">
+                               <div class="om " style=" float:left;margin-top:15px;margin-right:30px;background-color:<?php echo $color2; ?>; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;min-height: 120px"  id="div-<?php echo $type;?>-<?php echo $o['id'];?>"  ondblclick="display(this);">
 
-                                   <div class="row" style=" margin-bottom:5px;">
+                                   <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>; ">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
                                        <div class="col-md-3"><?php echo $icon; ?></div>
                                    </div>
@@ -283,6 +284,7 @@
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
+                               $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
                                if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
                                if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
@@ -290,9 +292,9 @@
 
                                if($Date==$day)
                                {  ?>
-                               <div class="om " style=" float:left;margin-top:15px;margin-right:30px;background-color:<?php echo $color; ?>; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;min-height: 100px"  id="div-<?php echo $type;?>-<?php echo $o['id'];?>"  ondblclick="display(this);">
+                               <div class="om " style=" float:left;margin-top:15px;margin-right:30px;background-color:<?php echo $color2; ?>; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;min-height: 120px"  id="div-<?php echo $type;?>-<?php echo $o['id'];?>"  ondblclick="display(this);">
 
-                                   <div class="row" style=" margin-bottom:5px;">
+                                   <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>; ">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
                                        <div class="col-md-3"><?php echo $icon; ?></div>
                                    </div>
@@ -343,6 +345,7 @@
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
+                               $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
                                if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
                                if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
@@ -350,9 +353,9 @@
 
                                if($Date==$day)
                                {  ?>
-                               <div class="om " style=" float:left;margin-top:15px;margin-right:30px;background-color:<?php echo $color; ?>; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;min-height: 100px"  id="div-<?php echo $type;?>-<?php echo $o['id'];?>"  ondblclick="display(this);">
+                               <div class="om " style=" float:left;margin-top:15px;margin-right:30px;background-color:<?php echo $color2; ?>; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;min-height: 120px"  id="div-<?php echo $type;?>-<?php echo $o['id'];?>"  ondblclick="display(this);">
 
-                                   <div class="row" style=" margin-bottom:5px;">
+                                   <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>; ">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
                                        <div class="col-md-3"><?php echo $icon; ?></div>
                                    </div>
@@ -404,6 +407,7 @@
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
+                               $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
                                if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
                                if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
@@ -411,9 +415,9 @@
 
                                if($Date==$day)
                                {  ?>
-                               <div class="om " style=" float:left;margin-top:15px;margin-right:30px;background-color:<?php echo $color; ?>; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;min-height: 100px"  id="div-<?php echo $type;?>-<?php echo $o['id'];?>"  ondblclick="display(this);">
+                               <div class="om " style=" float:left;margin-top:15px;margin-right:30px;background-color:<?php echo $color2; ?>; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;min-height: 120px"  id="div-<?php echo $type;?>-<?php echo $o['id'];?>"  ondblclick="display(this);">
 
-                                   <div class="row" style=" margin-bottom:5px;">
+                                   <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>; ">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
                                        <div class="col-md-3"><?php echo $icon; ?></div>
                                    </div>
@@ -466,6 +470,7 @@
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
+                               $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
                                if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
                                if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
@@ -473,7 +478,7 @@
 
                                if($Date==$day)
                                {  ?>
-                               <div class="om " style=" float:left;margin-top:15px;margin-right:30px;background-color:<?php echo $color; ?>; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;min-height: 100px"  id="div-<?php echo $type;?>-<?php echo $o['id'];?>"   ondblclick="display(this);">
+                               <div class="om " style=" float:left;margin-top:15px;margin-right:30px;background-color:<?php echo $color2; ?>; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;min-height: 120px"  id="div-<?php echo $type;?>-<?php echo $o['id'];?>"   ondblclick="display(this);">
 
                                    <div class="row" style=" margin-bottom:5px;">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>

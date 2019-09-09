@@ -82,7 +82,7 @@
                 <?php }
                 ?>
         </div>
-        <label for="destinataire">adresse(s):</label>
+        <label for="destinataire">Adresse(s):</label>
         <div class="row">
         <div class="col-md-10">
             <select id="destinataire"  class="form-control" name="destinataire[]"  multiple >
@@ -125,7 +125,7 @@
     </div>
 
     <div class="form-group">
-        <label for="sujet">sujet :</label>
+        <label for="sujet">Sujet :</label>
         <?php if($type=='prestataire')
         { ?>
         <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - V/Ref(Y/Ref): <?php echo $refclient ?>  - N/Ref(O/Ref): <?php echo $ref ?>"/>
@@ -138,33 +138,37 @@
         <label for="description">Description :</label>
         <input id="description" type="text" class="form-control" name="description" required/>
     </div>
-    <div class="form-group ">
-        <label for="contenu">contenu:</label>
-       <div class="editor" >
-        <textarea style="min-height: 280px;" id="contenu" type="text"  class="textarea tex-com" placeholder="Contenu de l'email ici" name="contenu" required  ></textarea>
-       </div>
-    </div>
+
 
     <div class="form-group form-group-default">
         <label id="attachem">Attachements de dossier</label>
         <div class="row"  >
             <div class="col-md-10">
-        <select id="attachs"  class="itemName form-control col-lg-12" style="" name="attachs[]"  multiple  value="$('#attachs').val()">
-            <option></option>
-            @foreach($attachements as $attach)
-                <option value="<?php echo $attach->id;?>"> <?php echo $attach->nom;?></option>
-            @endforeach
-        </select>
+                <select id="attachs"  class="itemName form-control col-lg-12" style="" name="attachs[]"  multiple  value="$('#attachs').val()">
+                    <option></option>
+                    @foreach($attachements as $attach)
+                        <option value="<?php echo $attach->id;?>"> <?php echo $attach->nom;?></option>
+                    @endforeach
+                </select>
             </div>
         </div>
-     </div>
-   {{--   {!! NoCaptcha::display() !!}   --}}
-     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    </div>
 
-     <div class="form-group form-group-default">
+    <div class="form-group form-group-default">
         <label>Attachements Externes</label>
         <input class="btn btn-danger fileinput-button" id="file" type="file" name="files[]"   multiple>
     </div>
+
+    <div class="form-group ">
+        <label for="contenu">Contenu:</label>
+       <div class="editor" >
+        <textarea style="min-height: 280px;" id="contenu" type="text"  class="textarea tex-com" placeholder="Contenu de l'email ici" name="contenu" required  ></textarea>
+       </div>
+    </div>
+
+   {{--   {!! NoCaptcha::display() !!}   --}}
+     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 
     <button  type="submit"  class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
 

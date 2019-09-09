@@ -85,7 +85,7 @@ class IntervenantsController extends Controller
                 'prenom' =>$prenom ,
 
             ]);
-       if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
+     //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
 
            if ($intervenant->save()) {
 
@@ -93,7 +93,7 @@ class IntervenantsController extends Controller
            } else {
               // return url('/intervenants');
            }
-       }
+     //  }
     }
 
 

@@ -302,8 +302,9 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
                         if(type=='pause')
                         {
+                            var duree=obj.duree ;
 
-                            var message= emetteur+' a demandé une pause';
+                            var message= emetteur+' a demandé une pause de '+duree+' minutes';
                             const swalWithBootstrapButtons = Swal.mixin({
                                 customClass: {
                                     confirmButton: 'btn btn-success',

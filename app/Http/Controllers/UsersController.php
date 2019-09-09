@@ -40,7 +40,7 @@ class UsersController extends Controller
             return view('users.index',['dossiers' => $dossiers], compact('users'));        }
         else {
             // redirect
-            return redirect('/')->with('success', 'droits insuffisants');
+            return redirect('/home')->with('success', 'droits insuffisants');
 
         }
 

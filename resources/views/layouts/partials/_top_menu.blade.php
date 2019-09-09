@@ -108,6 +108,15 @@
                 Emails Personnels
             </a>
         </div>
+
+        <div class="col-sm-2">
+            <a href="{{ route('transport') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
+                <span class="fas fa-lg  fa-calendar-alt"></span>
+                <br>
+                Missions Transport
+            </a>
+        </div>
+
     </div>
     @can('isAdmin')
 <!--
