@@ -22,7 +22,25 @@ class ActionController extends Controller
 {
 
 
-    public $cas_MissDocAsigner=0;
+ // varibales pour résoudre le problème de boucle  de workflow dossier à létranger
+ 
+   public $boucle_Dossier_etranger=0;
+   public $entree_act3_Dossier_etranger=0;
+   public $entree_act4_Dossier_etranger=0;
+
+  // varibales pour résoudre le problème de boucle  de workflow document à signer
+ 
+   public $boucle_Doc_A_signer=0;
+   public $entree_act2_Doc_A_signer=0;
+   public $entree_act4_Doc_A_signer=0;
+
+  // varibales pour résoudre le problème de boucle  de workflow Suivi_frais_médicaux
+
+   public $boucle_Suivi_frais=0;
+   public $entree_act3_suivi_frais=0;
+   public $entree_act2_suivi_frais=0;
+
+
     
     public function __construct()
     {
@@ -1010,48 +1028,107 @@ class ActionController extends Controller
 
           
 
+    // Cas particulier pour la mission dossier à l étranger
+
+  
+             if($action->Mission->type_Mission==17)
+             {   
+
+                
+                  if($action->ordre==3  )
+                   {
+                      $this->boucle_Dossier_etranger=1;
+                      $this->entree_act3_Dossier_etranger=0;
+                      $this->entree_act4_Dossier_etranger=1;             
+
+                   }
+
+
+                   if($action->ordre==4)
+                    {
+                        $this->boucle_Dossier_etranger=1;
+                        $this->entree_act3_Dossier_etranger=1;
+                        $this->entree_act4_Dossier_etranger=0;                  
+
+                    }
+
+       
+
+             }
+          
+     
+
+
+
+
+
+
            // Cas particulier pour la mission document à signer (boucle)
 
              if($action->Mission->type_Mission==38)
              {   
 
 
-                    if($action->ordre==2 || $action->ordre==3 )
+                
+
+                  if($action->ordre==2 && $option==2 )
                    {
 
-                    $act4=ActionEC::where("mission_id",$idmiss)->where('statut','!=','rfaite')->where('ordre','=',4)->first();
-
-                    if($act4->statut=='faite')
-                    {
-                      //dd("ok");
-                        $this->cas_MissDocAsigner=1;
-
-                    }
-
-                           
-
+                        $this->boucle_Doc_A_signer=1;
+                        $this->entree_act2_Doc_A_signer=0;
+                        $this->entree_act4_Doc_A_signer=1;                
 
                    }
-                  /* else
-                   {
-                    if($action->ordre==4 && $action->statut=="faite" )
-                    {
 
-                      $this->cas_MissDocAsigner=0;
+
+                   if($action->ordre==4)
+                    {
+                        $this->boucle_Doc_A_signer=1;
+                        $this->entree_act2_Doc_A_signer=1;
+                        $this->entree_act4_Doc_A_signer=0;                   
+
                     }
 
 
-
-
-                   }*/
+              
 
                      
 
 
              }
+
+             // traiter boucle mission suivi frais médicaux
+
+              if($action->Mission->type_Mission==42)
+             { 
+
+
+                    if($action->ordre==2)
+                   {
+
+                    $this->boucle_Suivi_frais=1;
+                    $this->entree_act3_suivi_frais=1;
+                    $this->entree_act2_suivi_frais=0;
+
+                   }
+
+
+                   if($action->ordre==3)
+                    {
+
+                     $this->boucle_Suivi_frais=1;
+                     $this->entree_act2_suivi_frais=1;
+                      $this->entree_act3_suivi_frais=0;
+
+                    }
+
+
+
+
+             } 
                   
 
-           }  
+           }  // fin bouton fait
            else
            {
 
@@ -1164,6 +1241,9 @@ class ActionController extends Controller
 
                switch($at){
 
+                 case "Dossier à l étranger":
+         return $this->Dossier_a_etranger_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
                  case "Suivi frais médicaux":
          return $this->Suivi_frais_medicaux_DV($option,$idmiss,$idact,$iddoss,$bouton); break;   
 
@@ -1262,8 +1342,7 @@ class ActionController extends Controller
          case "Devis transport international sous assistance":
          return $this->Devis_transport_international_sous_assistance_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-         case "Dossier à l étranger":
-         return $this->Dossier_a_etranger_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+        
 
          case "Demande d evasan internationale":
          return $this->Demande_evasan_internationale_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
@@ -3752,7 +3831,8 @@ public function Dossier_a_etranger_DV($option,$idmiss,$idact,$iddoss,$bouton)
                                  
                            
                            // activer action 3 Informer le client  
-                           if(($action1->statut=="faite" || $action4->statut=="faite" ||$action4->statut=="ignoree" ) &&  $action3->statut =="inactive")  
+                           if((($action1->statut=="faite" || $action4->statut=="faite"  ) &&  $action3->statut =="inactive") || 
+                            ($this->boucle_Dossier_etranger==1 && $this->entree_act3_Dossier_etranger==1)  )
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',3)
@@ -3765,18 +3845,15 @@ public function Dossier_a_etranger_DV($option,$idmiss,$idact,$iddoss,$bouton)
                            }
 
 
-
-
                              // activer action 4 :Revenir au correspondant
-                           if($action3->statut=="faite" && $action4->statut =="inactive")  
+                           if(($action3->statut=="faite" && $action4->statut =="inactive") || ($this->boucle_Dossier_etranger==1 && $this->entree_act4_Dossier_etranger==1)) 
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',4)
                              ->where('statut','!=','rfaite')->first();
                               $actSui->update(['statut'=>"active"]); 
                               $actSui->update(['date_deb' => $dateSys]);  
-                             $chang=true;             
-
+                             $chang=true;          
 
                            }
 
@@ -6930,8 +7007,11 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
                        
                         if((($action1->statut=="faite" || $action1->statut=="ignoree" ) && $action2->statut =="inactive" )
 
-                             || ($action4->statut=="faite" && $action2->statut =="faite" &&  $this->cas_MissDocAsigner==0))   
+                             || ($this->boucle_Doc_A_signer==1 &&  $this->entree_act2_Doc_A_signer==1 ))   
                            {
+
+                             
+                        
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',2)
                              ->where('statut','!=','rfaite')->first();
@@ -6965,7 +7045,7 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
                          // activer Action 4 Demander à l’assuré de refaire le doc                           
 
                     
-                           if($action2->opt_choisie=="2" && $action2->statut=="faite"  && $action4->statut =="inactive")  
+                           if($action2->opt_choisie=="2" && $action2->statut=="faite"  && $action4->statut =="inactive"  ||  ($this->entree_act4_Doc_A_signer==1 && $this->boucle_Doc_A_signer==1) )  
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',4)
@@ -7419,7 +7499,7 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
 
                             
                        
-                        if((($action1->statut=="faite" || $action3->statut=="faite" ) && $action2->statut =="inactive" )|| ($action3->statut=="faite" &&  $action2->statut!="rappelee" &&   $action2->statut!="reportee" ))  
+                        if((($action1->statut=="faite" || $action3->statut=="faite" ) && $action2->statut =="inactive" )|| ($action3->statut=="faite" &&  $this->boucle_Suivi_frais==1 && $this->entree_act2_suivi_frais==1 ))  
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',2)
@@ -7437,7 +7517,7 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
                                              
 
                         
-                        if($action2->statut=="faite" && $action3->statut =="inactive")  
+                        if($action2->statut=="faite" && $action3->statut =="inactive" ||  $this->boucle_Suivi_frais==1 && $this->entree_act3_suivi_frais==1 )  
                            {
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',3)
                              ->where('statut','!=','rfaite')->first();
