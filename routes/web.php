@@ -359,6 +359,7 @@ Route::get('/Mission/getDescriptionMissionAjax/{id}', 'MissionController@getDesc
 
 Route::get('/dossiers/view/CreerOM/{id}/{idmiss}', 'MissionController@viewDossierMission');
 Route::get('dossiers/view/CreerDoc/{id}/{idmiss}', 'MissionController@viewDossierMission');
+Route::post('/Missions/storeMissionByAjax','MissionController@storeMissionByAjax')->name('Mission.StoreMissionByAjax');
 
 
 

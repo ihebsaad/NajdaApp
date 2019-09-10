@@ -244,7 +244,7 @@ use App\Http\Controllers\TagsController;
 
 
                                    <div class="row text-center">
-                                                           <h4>Créer une nouvelle Mission</h4>
+                                                           <h4>Création d'une nouvelle Mission</h4>
 
                                                             
                               <div class="card-header">
@@ -265,8 +265,8 @@ use App\Http\Controllers\TagsController;
 
                                  <input id="idEntreeMissionOnclik" type="hidden" class="form-control" value="" name="idEntreeMissionOnclik"/>
 
-
-                                  <form  method="post" action="{{route('Missions.storeActionsEC') }}" style="padding-top:30px">
+                                  <?php if(isset($dossier)) {  ?>
+                                  <form  id="idFormCreationMission" method="post" action="{{route('Missions.storeActionsEC') }}" style="padding-top:30px">
                                    <input id="idEntreeMissionOnMarker" type="hidden" class="form-control" value="" 
                                    name="idEntreeMissionOnMarker"/>
 
@@ -403,7 +403,9 @@ use App\Http\Controllers\TagsController;
                                           <input id="dossier" type="hidden" class="form-control" value="{{$dossier->reference_medic}}" name="dossier"/>
                                           <input id="dossierID" type="hidden" class="form-control" value="{{$dossier->id}}" name="dossierID"/>
                                           <input id="hreftopwindow" type="hidden" class="form-control" value="" name="hreftopwindow"/>
+                                            
 
+                                    
 
                                           <?php } else {  ?>
                                                <div class="row">
@@ -415,9 +417,19 @@ use App\Http\Controllers\TagsController;
                                            <?php } ?>
 
                                       </div>
-                                       <button  type="submit"  class="btn btn-success">Ajouter</button>
+                                       <!--<button  type="submit"  class="btn btn-success">Ajouter</button>-->
+                                        <br><br>
+                                        <button  id="idAjoutMiss" type="button"  class="btn btn-success">Ajouter la mission</button>
+                                        <br><br><br>
+                                        <button  id="idFinAjoutMiss" type="button"  class="btn btn-danger">Fin ajout de missions</button>
+
                                      <!-- <button id="add"  class="btn btn-primary">Ajax Add</button>-->
                                   </form>
+                                   <?php } else {?>
+
+                                    <div> vous devez sélectionner un dossier pour créer une mission  </div>
+
+                                     <?php } ?>
                                </div>   
 
 
@@ -1191,7 +1203,7 @@ if (r == true) {
 </script>
 
 
-<!-- script pour le modal etat actopn d une mission-->
+<!-- script pour le modal etat actopn d une mission recherche-->
 
 <script>
 
@@ -1823,7 +1835,149 @@ var hrefidAcheverM;
 
 
   </script>
+  <script>
 
+  $("#idAjoutMiss").click(function(e){ // On sélectionne le formulaire par son identifiant
+   // e.preventDefault(); // Le navigateur ne peut pas envoyer le formulaire
+     //alert('ok');
+
+     $("#idAjoutMiss").prop('disabled', true);
+
+     var en=true;
+
+     if(!$('#idFormCreationMission #titre').val())
+     {
+
+      alert('vous devez remplir le champs extrait');
+      en=false;
+
+     }
+
+     if(!$('#idFormCreationMission #typeMissauto').val())
+     {
+
+      alert('vous devez sélectionner le type de mission');
+      en=false;
+
+     }
+
+  
+
+    if(!$('#idFormCreationMission #dossier').val())
+     {
+
+      alert('vous devez sélectionner un dossier pour créer une mission ou créer une mission à partir d\'un email');
+      en=false;
+
+     }
+     
+ 
+
+   if(en==true)
+   {
+    var donnees = $('#idFormCreationMission').serialize(); // On créer une variable content le formulaire sérialisé
+    var _token = $('input[name="_token"]').val();
+    $.ajax({
+
+           url:"{{ route('Mission.StoreMissionByAjax') }}",
+           method:"POST",
+           data : donnees,
+           success:function(data){
+
+         
+                alert(data);
+                 $('#idFormCreationMission #typeMissauto').val('');
+                 //$('#idFormCreationMission #typeMissauto option:eq(1)').prop('selected', true);
+                //$('#idFormCreationMission #typeMissauto').text('Sélectionner');
+                $('#idFormCreationMission #titre').val('');
+                   
+
+                },
+            error: function(jqXHR, textStatus, errorThrown) {
+
+              alert('erreur lors de création de la mission');
+
+
+            }
+
+   
+    });
+  }
+
+   $("#idAjoutMiss").prop('disabled', false);
+
+});
+
+</script>
+
+<!-- bouton fin creation mission-->
+
+ <script>
+
+  $("#idFinAjoutMiss").click(function(e){ // On sélectionne le formulaire par son identifiant
+ 
+
+       var urllocalee=top.location.href;
+
+           var poss=urllocalee.indexOf("traitementsBoutonsActions");
+           var res22=urllocalee.indexOf("deleguerMission");
+           var res33=urllocalee.indexOf("deleguerAction");
+           var res44=urllocalee.indexOf("AnnulerMissionCourante");
+           
+           //alert(poss);
+           var countt=0;
+
+           if(poss!= -1)
+           {
+              for (var i = poss; i <100; i++) {
+                
+                  if(urllocalee[i]=='/')
+                  {
+                    countt++;
+                  }
+
+                }
+             
+
+
+
+           }
+
+      if( poss!=-1 && countt!=4 && res22!= -1 && res33!=-1 &&  res44 !=-1 )
+      {
+       location.reload();          
+
+      }
+
+      if(poss==-1)
+      {
+
+        location.reload();   
+
+
+      }
+        if(countt==4 ||  res22!= -1 ||  res33!=-1  || res44 !=-1 )
+      {  
+
+     
+
+        var dosskk= $('#dossierID').val() ;
+        
+        var NouveaURL="{{ url('/') }}"+"/dossiers/view/"+dosskk;
+
+                                           
+        document.location.href=NouveaURL;
+
+
+      }
+     // return redirect('dossiers/view/'.$request->dossierID);
+
+        
+     //location.reload();
+
+});
+
+</script>
 
 
 

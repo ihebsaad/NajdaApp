@@ -89,6 +89,242 @@ class MissionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+
+    public function storeMissionByAjax (Request $request)
+    {
+      // return 'ok';
+          //dd($request->all());
+
+       // dd( $request->all());
+        $dossier=Dossier::where("reference_medic",trim($request->get('dossier')))->first();
+        //$typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeactauto')))->first();
+        $typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeMissauto')))->first();
+
+        
+
+     
+       //dd($dossier);   
+        
+        
+       
+
+         $Mission = new Mission([
+             'titre' =>trim( $request->get('titre')),
+             'descrip' => trim($request->get('descrip')),
+             'nb_acts_ori'=>$typeMiss->nb_acts,
+             'commentaire' => trim($request->get('commentaire')),
+             'date_deb'=> trim($request->get('datedeb')),
+             'type_Mission' =>$typeMiss->id,
+             'dossier_id' => $dossier->id,
+             'statut_courant' => 'active',
+
+             'realisee'=> 0,
+             'affichee'=>1,
+             'user_id'=>auth::user()->id,
+
+             'type_heu_spec'=> $typeMiss->type_heu_spec,
+             'type_heu_spec_archiv'=> $typeMiss->type_heu_spec,
+             'date_spec_affect'=>0,
+             'date_spec_affect2'=>0,
+             'date_spec_affect3'=>0,
+             'rdv'=> $typeMiss->rdv,
+             'act_rdv'=> $typeMiss->act_rdv,
+             'dep_pour_miss'=> $typeMiss->dep_pour_miss,
+             'act_dep_pour_miss'=> $typeMiss->act_dep_pour_miss,
+             'dep_charge_dest'=> $typeMiss->dep_charge_dest,
+             'act_dep_charge_dest'=> $typeMiss->act_dep_charge_dest,
+             'arr_prev_dest'=> $typeMiss->arr_prev_dest,
+             'act_arr_prev_dest'=> $typeMiss->act_arr_prev_dest,
+             'decoll_ou_dep_bat'=> $typeMiss->decoll_ou_dep_bat,
+             'act_decoll_ou_dep_bat'=> $typeMiss->act_decoll_ou_dep_bat,
+             'arr_av_ou_bat'=> $typeMiss->arr_av_ou_bat,
+             'act_arr_av_ou_bat'=> $typeMiss->act_arr_av_ou_bat,
+              'retour_base'=> $typeMiss->retour_base,
+              'act_retour_base'=> $typeMiss->act_retour_base,
+              'sejour'=>$typeMiss->sejour,
+              'location_voit'=> $typeMiss->location_voit
+        ]);
+
+        $Mission->save();
+
+
+        // mise à jour de table entree col mission_id
+
+        if($request->get('idEntreeMissionOnMarker'))
+        {
+
+          $entree=Entree::where('id',$request->get('idEntreeMissionOnMarker'))->first();
+
+          if($entree && $Mission)
+          {
+          
+            $entree->update(['mission_id'=> $Mission->id]) ;
+
+          }
+
+
+
+
+        }
+
+      //date_default_timezone_set('Africa/Tunis');
+       //setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
+
+          $dtc = (new \DateTime())->format('Y-m-d\TH:i');
+       //dd($Mission->date_deb."  ". $dtc);
+        //dd(time($dtc)."  ".time($request->get('datedeb')));
+         $format = "Y-m-d\TH:i";
+         $dateSys  = \DateTime::createFromFormat($format, $dtc);
+
+         $dateMiss  = \DateTime::createFromFormat($format, $request->get('datedeb'));
+        // dd($dateMiss);
+
+         /*if($dateSys > $dateMiss)
+         {
+               dd("date sys > date miss");
+
+         }
+         else
+         {
+
+          dd("date sys <= date miss");
+         }*/
+
+       if($dateMiss >$dateSys)
+       {
+       //$Mission->update(['affichee'=>0]);
+        $Mission->update(['statut_courant'=>'reportee']);
+
+       //dd($request->get('datedeb')."  ". $dtc);
+       
+       }
+
+       //dd('faux');
+
+
+        //$type_act=DB::table('type_actions')->where('id', $request->get('typeact'));
+       // $type_act=TypeMission::find($request->get('typeactauto'));
+        $type_act= $typeMiss;
+       //dd($type_act->getAttributes());
+
+         $attributes = array_keys($type_act->getOriginal());
+         $valeurs = array_values($type_act->getOriginal());
+         //dd(count($valeurs));
+        // dd($valeurs);
+
+        // echo($attributes[1]);
+        // echo($valeurs[1]);
+           $taille=count($valeurs)-5;
+         for ($k=21; $k<=$taille; $k++)
+           {
+             
+            if($k>21)
+            {
+
+
+
+           if( $valeurs[$k]!= null)
+              {
+
+                 $ActionEC = new ActionEC([
+             'mission_id' =>$Mission->id,
+             'titre' => trim($valeurs[$k]),
+             'type_Mission' => trim($valeurs[1]),
+             'duree' => trim($valeurs[$k+1]),
+             'ordre'=> trim($valeurs[$k+2]),
+             'descrip' => trim($valeurs[$k+3]),
+             'nb_opt'=> trim($valeurs[$k+4]),
+             'opt_choisie'=>0,
+             'igno_ou_non'=> trim($valeurs[$k+5]),
+             'rapl_ou_non'=> trim($valeurs[$k+6]),
+             'num_rappel'=>0,
+             'report_ou_non'=> trim($valeurs[$k+7]),
+             'num_report'=>0,
+             'rapp_doc_ou_non'=>trim($valeurs[$k+8]),
+             'activ_avec_miss'=>trim($valeurs[$k+9]),
+             'realisee'=> false,
+             //'user_id'=> $Mission->user_id,
+             'statut'=>'inactive'
+                                       
+                  ]); 
+                  
+                   $ActionEC->save();
+
+
+              $k+=9;
+              }
+              else
+              {
+                $k=1000;
+              }
+
+              }
+              else // pour la sauvegarde de date de début de la première sous action
+              {
+
+               if($valeurs[$k]!= null)
+               {
+
+                  $ActionEC = new ActionEC([
+             'mission_id' =>$Mission->id,
+             'titre' => trim($valeurs[$k]),
+             'type_Mission' => trim($valeurs[1]),
+             'duree' => trim($valeurs[$k+1]),
+             'ordre'=> trim($valeurs[$k+2]),
+             'descrip' => trim($valeurs[$k+3]),
+              'nb_opt'=> trim($valeurs[$k+4]),
+              'opt_choisie'=>0,
+             'igno_ou_non'=> trim($valeurs[$k+5]),
+             'rapl_ou_non'=> trim($valeurs[$k+6]),
+             'num_rappel'=>0,
+             'report_ou_non'=> trim($valeurs[$k+7]),
+             'num_report'=>0,
+             'rapp_doc_ou_non'=> trim($valeurs[$k+8]),
+               'activ_avec_miss'=>trim($valeurs[$k+9]),
+             'realisee'=> false,
+             //'user_id'=> $Mission->user_id,
+             'date_deb' => $Mission->date_deb,
+             'statut'=>'active'       
+                  ]); 
+                  
+                   $ActionEC->save();
+
+
+               $k+=9;
+             
+              }
+              else
+              {
+                $k=1000;
+              }
+
+
+
+              }
+           }
+
+
+           //mettre à jour le id temporairedes des actions de table actionsEc
+
+           $actionsecs=ActionEC::where('mission_id', $Mission->id)->get();
+
+           foreach ($actionsecs as $k) {
+             $k->update(['action_idt'=>$k->id]);
+             if($k->activ_avec_miss==1)
+             {
+
+                $k->update(['statut'=>'active']);
+
+             }
+           }
+
+
+    return 'Mission créee';
+
+      
+
+    }
  
 
      public function storeTableActionsEnCours(Request $request)
