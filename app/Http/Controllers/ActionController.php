@@ -64,7 +64,7 @@ class ActionController extends Controller
 
        $var=array();
         //$actionRR = ActionEC::where('statut','=', 'reportee')->orWhere('statut','=','rappelee')->get();
-       $actionRR = ActionEC::where('statut','=', 'reportee')->orWhere('statut','=','rappelee')->get();
+       $actionRR = ActionEC::where('statut','=','rappelee')->get();
         //dd($actionRR);
 
        if($actionRR)
