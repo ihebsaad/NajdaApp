@@ -267,8 +267,12 @@ $users=UsersController::ListeUsers();
 ?>
 
  <?php use \App\Http\Controllers\ActionController;
+
+   if ($dossier) {
              
              $actionsReouRap=ActionController::ListeActionsRepOuRap($dossier->id);
+
+         }
           
        /*echo($actionsReouRap);*/
  ?>
