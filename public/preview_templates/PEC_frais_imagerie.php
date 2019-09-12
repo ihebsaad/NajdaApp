@@ -11,7 +11,7 @@ if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>6jiacanmja9u84pukojh280ybj2i5epr_PEC_frais_imagerie</title>
+<html><head><title>PEC_frais_imagerie</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <style type="text/css"><!--
@@ -218,7 +218,7 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p class=rvps5><span class=rvts5>*Prénom :</span><span class=rvts6> </span><span class=rvts5><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
 <p><span class=rvts7>*Notre réf. dossier</span><span class=rvts8>: <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> </span></p>
 <p><span class=rvts7>*Nature de l</span><span class=rvts9>’</span><span class=rvts7>examen :</span><span class=rvts8> <input name="CL_nature_examen" placeholder="Nature Examen" value="<?php if(isset ($CL_nature_examen)) echo $CL_nature_examen; ?>"></input></span></p>
-<p><span class=rvts7>*Montant garanti (TND): </span><span class=rvts8> <input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>"></input> </span><span class=rvts7>Toutes lettres</span><span class=rvts8> : <input name="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input></span></p>
+<p><span class=rvts7>*Montant garanti (TND): </span><span class=rvts8> <input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input> </span><span class=rvts7>Toutes lettres</span><span class=rvts8> : <input name="CL_montant_toutes_lettres"  id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input></span> dinars</p>
 <p><span class=rvts10><br></span></p>
 <p class=rvps1><span class=rvts2>Nous soussignés, </span><span class=rvts11>Najda Assistance</span><span class=rvts2>, nous engageons à prendre en charge, pour le compte de notre client, les frais de l</span><span class=rvts12>’</span><span class=rvts2>imagerie susmentionnée effectué au profit du patient ci-dessus.</span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
@@ -240,5 +240,13 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p><span class=rvts2><br></span></p>
 <p><span class=rvts2><br></span></p>
 <p class=rvps3><span class=rvts2><br></span></p>
+</form>
+<script language="javascript" src="nombre_en_lettre.js"></script>
+<script type="text/javascript">
+    function keyUpHandler(obj){
+            //document.getElementById("CL_montant_toutes_lettres").firstChild.nodeValue =   NumberToLetter(obj.value)
+            document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value)
+        }//fin de keypressHandler
+</script>
 </body></html>
 

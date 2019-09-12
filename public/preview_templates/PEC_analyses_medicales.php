@@ -4,12 +4,13 @@ if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__n
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];}
 if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname'];}
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic'];}
-if (isset($_GET['CL_montantmax'])) {$CL_montantmax=$_GET['CL_montantmax'];}
-if (isset($_GET['CL_montantlettres'])) {$CL_montantlettres=$_GET['CL_montantlettres'];}
+if (isset($_GET['CL_montant_numerique'])) {$CL_montant_numerique=$_GET['CL_montant_numerique'];}
+if (isset($_GET['CL_montant_toutes_lettres'])) {$CL_montant_toutes_lettres=$_GET['CL_montant_toutes_lettres'];}
 if (isset($_GET['CL_natureexamen'])) {$CL_natureexamen=$_GET['CL_natureexamen'];}
 if (isset($_GET['CL_dateexamen'])) {$CL_dateexamen=$_GET['CL_dateexamen'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
+if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>PEC_analyses_medicales</title>
@@ -247,7 +248,7 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps4><span class=rvts5>Nom patient</span><span class=rvts6> : <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
 <p class=rvps4><span class=rvts7>Prénom</span><span class=rvts8> : <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span></p>
 <p class=rvps4><span class=rvts7>Notre réf. dossier</span><span class=rvts8> : <input name="reference_medic" placeholder="Notre Reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span></p>
-<p class=rvps5><span class=rvts5>Montant maximal de prise en charge (TND)</span><span class=rvts6>:&nbsp;</span><span class=rvts9> </span><span class=rvts6><input name="CL_montantmax" placeholder="Montant maximal"  value="<?php if(isset ($CL_montantmax)) echo $CL_montantmax; ?>"></input></span><span class=rvts9>&nbsp;&nbsp;&nbsp; </span><span class=rvts5>Toutes lettres</span><span class=rvts6> : <input name="CL_montantlettres" placeholder="Montant en toutes lettres"  value="<?php if(isset ($CL_montantlettres)) echo $CL_montantlettres; ?>"></input></span></p>
+<p class=rvps5><span class=rvts5>Montant maximal de prise en charge (TND)</span><span class=rvts6>:&nbsp;</span><span class=rvts9> </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_numerique" placeholder="Montant maximal"  value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input></span><span class=rvts9>&nbsp;&nbsp;&nbsp; </span><span class=rvts5>Toutes lettres</span><span class=rvts6> : <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant en toutes lettres"  value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars</span></p>
 <p class=rvps6><span class=rvts6><br></span></p>
 <p class=rvps7><span class=rvts6>Nous</span><span class=rvts10> </span><span class=rvts6>soussignés,</span><span class=rvts10> </span><span class=rvts5>Najda</span><span class=rvts11> </span><span class=rvts5>Assistance</span><span class=rvts6>,</span><span class=rvts10> </span><span class=rvts6>nous</span><span class=rvts10> </span><span class=rvts6>engageons</span><span class=rvts10> </span><span class=rvts6>à</span><span class=rvts10> </span><span class=rvts6>prendre</span><span class=rvts10> </span><span class=rvts6>en</span><span class=rvts10> </span><span class=rvts6>charge</span><span class=rvts10> </span><span class=rvts6>frais</span><span class=rvts10> </span><span class=rvts6>des</span><span class=rvts10> </span><span class=rvts6>examens</span><span class=rvts10>&nbsp;</span><span class=rvts12> </span><span class=rvts10><input name="CL_natureexamen" placeholder="Nature d examen"  value="<?php if(isset ($CL_natureexamen)) echo $CL_natureexamen; ?>"></input></span><span class=rvts6> à réaliser</span><span class=rvts10> </span><span class=rvts6>le</span><span class=rvts10> </span><span class=rvts6><input name="CL_dateexamen" placeholder="Date d examen"  value="<?php if(isset ($CL_dateexamen)) echo $CL_dateexamen; ?>"></input> au</span><span class=rvts10> </span><span class=rvts6>profit</span><span class=rvts10> </span><span class=rvts6>de</span><span class=rvts10> </span><span class=rvts6>du (de la) patient(e) ci-dessus pour le montant maximal mentionné ci-dessus.</span></p>
 <p class=rvps6><span class=rvts6><br></span></p>
@@ -266,4 +267,13 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps1><span class=rvts14>Plateau TPA</span></p>
 <p class=rvps1><span class=rvts14>« courrier électronique, sans signature »</span></p>
 </form>
+<script language="javascript" src="nombre_en_lettre.js"></script>
+<script type="text/javascript">
+	function keyUpHandler(obj){
+			//document.getElementById("CL_montant_toutes_lettres").firstChild.nodeValue	=	NumberToLetter(obj.value)
+			if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block";}
+			else {document.getElementById("alertGOP").style.display="none";}
+			document.getElementById("CL_montant_toutes_lettres").value	= NumberToLetter(obj.value)
+		}//fin de keypressHandler
+</script>
 </body></html>

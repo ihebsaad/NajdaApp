@@ -10,7 +10,7 @@ if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>292fcxk4nbcqwcknwijfxrum5zl0tqt9_PEC_opticien</title>
+<html><head><title>PEC_opticien</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <style type="text/css"><!--
@@ -171,7 +171,6 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <body>
 <form id="formchamps">
     <input name="pre_dateheure" type="hidden" value="<?php if(isset ($pre_dateheure)) echo $pre_dateheure; ?>"> </input>
-<p><span class=rvts1>0</span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
@@ -185,7 +184,7 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p class=rvps5><span class=rvts5>*Nom patient : <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span></p>
 <p class=rvps5><span class=rvts5>*Prénom : <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
 <p class=rvps1><span class=rvts7>*Notre réf. dossier :  <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span></p>
-<p class=rvps4><span class=rvts5>*Montant (TND): </span><span class=rvts6><input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>"></input></span><span class=rvts5>Toutes lettres</span><span class=rvts6> : <input name="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars</span></p>
+<p class=rvps4><span class=rvts5>*Montant (TND): </span><span class=rvts6><input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input></span><span class=rvts5>Toutes lettres</span><span class=rvts6> : <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars</span></p>
 <p class=rvps4><span class=rvts5><br></span></p>
 <p class=rvps1><span class=rvts8>Nous soussignés, Najda Assistance, nous engageons à prendre en charge frais relatifs à l</span><span class=rvts9>’</span><span class=rvts8>acquisition de lunettes pour le compte du patient nommé ci-dessus. </span></p>
 <p class=rvps6><span class=rvts6><br></span></p>
@@ -212,4 +211,12 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p><span class=rvts8><br></span></p>
 <p><span class=rvts8><br></span></p>
 <p><span class=rvts8><br></span></p>
+</form>
+<script language="javascript" src="nombre_en_lettre.js"></script>
+<script type="text/javascript">
+    function keyUpHandler(obj){
+            //document.getElementById("CL_montant_toutes_lettres").firstChild.nodeValue =   NumberToLetter(obj.value)
+            document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value)
+        }//fin de keypressHandler
+</script>
 </body></html>

@@ -11,7 +11,7 @@ if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>k6mq78c80lcz5sjym1y1sxf87dxikwmc_PEC_+pharmacie</title>
+<html><head><title>PEC_pharmacie</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <style type="text/css"><!--
@@ -174,7 +174,6 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <body>
 <form id="formchamps">
     <input name="pre_dateheure" type="hidden" value="<?php if(isset ($pre_dateheure)) echo $pre_dateheure; ?>"> </input>
-<p><span class=rvts1>0</span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
@@ -190,8 +189,8 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p class=rvps1><span class=rvts6>Nom patient : </span><span class=rvts7> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span></p>
 <p class=rvps1><span class=rvts6>Prénom : </span><span class=rvts7><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
 <p class=rvps1><span class=rvts6>Notre réf. dossier : </span><span class=rvts7>  <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span></p>
-<p class=rvps1><span class=rvts6>Médecin prescripteur : <input name="CL_name_medecin" placeholder="Name Medecin" value="<?php if(isset ($CL_name_medecin)) echo $CL_name_medecin; ?>"></input></span></p>
-<p class=rvps1><span class=rvts6>Montant (TND): <input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>"></input> Montant toutes lettres : <input name="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input></span></p>
+<p class=rvps1><span class=rvts6>Médecin prescripteur : <input name="CL_name_medecin" placeholder="nom du medecin" value="<?php if(isset ($CL_name_medecin)) echo $CL_name_medecin; ?>"></input></span></p>
+<p class=rvps1><span class=rvts6>Montant (TND): <input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input> Montant toutes lettres : <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input></span> dinars</p>
 <p class=rvps1><span class=rvts6><br></span></p>
 <p class=rvps1><span class=rvts8>Nous soussignés, </span><span class=rvts7>Najda Assistance</span><span class=rvts8>, nous engageons par la présente à prendre en charge les frais relatifs à l</span><span class=rvts9>’</span><span class=rvts8>achat des médicaments prescrit pour le compte du (de la) patient(e) ci-dessus.</span><span class=rvts7> </span></p>
 <p><span class=rvts2>Merci de nous adresser votre facture originale par voie postale dans les 20 jours au maximum, accompagnée d</span><span class=rvts10>’</span><span class=rvts2>une copie de la présente prise en charge à l</span><span class=rvts10>’</span><span class=rvts2>adresse susmentionnée en entête.</span></p>
@@ -206,5 +205,13 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p class=rvps1><span class=rvts2><input name="agent__name" id="agent__name" placeholder="nom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" > </input></span></p>
 <p class=rvps1><span class=rvts2>Plateau TPA</span></p>
 <p class=rvps1><span class=rvts2>« courrier électronique, sans signature »</span></p>
+</form>
+<script language="javascript" src="nombre_en_lettre.js"></script>
+<script type="text/javascript">
+    function keyUpHandler(obj){
+            //document.getElementById("CL_montant_toutes_lettres").firstChild.nodeValue =   NumberToLetter(obj.value)
+            document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value)
+        }//fin de keypressHandler
+</script>
 </body></html>
 

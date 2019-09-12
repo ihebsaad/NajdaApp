@@ -107,6 +107,16 @@ class TagsController extends Controller
                         }
                     }
                 }
+                if (stristr($abbrev,"Franchise")!== false)
+                {
+                    // ajout franchise dans details dossier
+                    if ($request->has('dossier'))
+                    {
+                        if (! empty($request->get('dossier'))) {
+                            Dossier::where('id', $request->get('dossier'))->update(['franchise' => 1,'montant_franchise' => $request->get('montant')]);
+                        }
+                    }
+                }
                 
                 $tag = new Tag([
                     'abbrev' => $abbrev,

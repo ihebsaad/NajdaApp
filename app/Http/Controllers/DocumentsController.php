@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Attachement ;
 use App\Entree ;
+use App\Tag ;
 use App\Dossier ;
 use App\Client ;
 use App\User ;
@@ -175,6 +176,233 @@ class DocumentsController extends Controller
                 return 'nogop';
             }
         }
+        // verifier les conditions tags
+        //$refdoss = Dossier->RefDossierById($dossier);
+        $indossier=Dossier::select('reference_medic','franchise','montant_franchise','GOP','montant_GOP')->where('id',$dossier)->first();
+        $refdoss = $indossier['reference_medic'];
+        $entreesdos=Entree::where("dossier",$refdoss)->get();
+        
+        if ( ! empty($entreesdos)) {
+        switch ($arrfile['nom']) {
+            case "PEC_analyses_medicales":
+            case "PEC_frais_medicaux":
+            case "PEC_opticien":
+            case "PEC_frais_imagerie":
+            case "PEC_consultation":
+                $dossfranchise = false;
+                $dossgopmed = false;
+                $dossplafond = false;
+                foreach ($entreesdos as $entr) {
+                    //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
+                    $coltags = Tag::where("entree","=",$entr['id'])->get();
+                    if (!empty($coltags))
+                    {
+
+                        foreach ($coltags as $ltag) {
+                            if ((strpos( $ltag['abbrev'],"Franchise") !== FALSE) || (strpos( $ltag['abbrev'], "Plafond") !== FALSE) || (strpos( $ltag['abbrev'], "GOPmed") !== FALSE))
+                            {
+                             //if ($resp === "notallow") {$resp="allow";}
+                             if (strpos( $ltag['abbrev'],"GOPmed") !== FALSE)
+                             {
+                                $dossgopmed = true;
+                             }
+                             if (strpos( $ltag['abbrev'],"Franchise") !== FALSE)
+                             {
+                                /*if ($indossier['franchise'] == 1)
+                                {$resp= $resp."&Franchise_".$entr['id'];}
+                                elseif (($indossier['franchise'] == 0) && ($resp === "allow"))
+                                    {$resp="notallow";}*/
+                                $dossfranchise = true;
+                             }
+                             if (strpos( $ltag['abbrev'], "Plafond") !== FALSE)
+                             {
+                                //$resp= $resp."&Plafond_".$entr['id'];
+                                $dossplafond = true;
+                             }
+                             
+                            }
+                        }
+                    }
+                }
+                //return $arrtags;
+                if ($dossgopmed === false)
+                {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP (frais médicaux) Spécifié!";}
+                else
+                {
+                    $resp = "allow_VERIFmontant(".$montantgop.")_GOPmed";
+                    if ($dossplafond)
+                        {$resp = $resp . "_Plafond";}
+                    if ($dossfranchise)
+                        {$resp = $resp . "_Franchise";}
+                }
+                break;
+                
+                case "PEC_Reeducation":
+                case "PEC_pharmacie":
+                    $dossgopmed = false;
+                    $dossplafond = false;
+                    foreach ($entreesdos as $entr) {
+                        //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
+                        $coltags = Tag::where("entree","=",$entr['id'])->get();
+                        if (!empty($coltags))
+                        {
+
+                            foreach ($coltags as $ltag) {
+                                if ((strpos( $ltag['abbrev'], "Plafond") !== FALSE) || (strpos( $ltag['abbrev'], "GOPmed") !== FALSE))
+                                {
+                                 //if ($resp === "notallow") {$resp="allow";}
+                                 if (strpos( $ltag['abbrev'],"GOPmed") !== FALSE)
+                                 {
+                                    $dossgopmed = true;
+                                 }
+                                 if (strpos( $ltag['abbrev'], "Plafond") !== FALSE)
+                                 {
+                                    $dossplafond = true;
+                                 }
+                                 
+                                }
+                            }
+                        }
+                    }
+                    //return $arrtags;
+                    if ($dossgopmed === false)
+                    {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP (frais médicaux) Spécifié!";}
+                    else
+                    {
+                        $resp = "allow_GOPmed";
+                        if ($dossplafond)
+                            {$resp = $resp . "_Plafond";}
+                    }
+                    break;
+                
+                
+                case "PEC_depannage":
+                    $dossgoptn = false;
+                    $dossplafondrm = false;
+                    foreach ($entreesdos as $entr) {
+                        //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
+                        $coltags = Tag::where("entree","=",$entr['id'])->get();
+                        if (!empty($coltags))
+                        {
+
+                            foreach ($coltags as $ltag) {
+                                if ((strpos( $ltag['abbrev'], "PlafondRem") !== FALSE) || (strpos( $ltag['abbrev'], "GOPtn") !== FALSE))
+                                {
+                                 //if ($resp === "notallow") {$resp="allow";}
+                                 if (strpos( $ltag['abbrev'],"GOPtn") !== FALSE)
+                                 {
+                                    $dossgoptn = true;
+                                 }
+                                 if (strpos( $ltag['abbrev'], "PlafondRem") !== FALSE)
+                                 {
+                                    $dossplafondrm = true;
+                                 }
+                                 
+                                }
+                            }
+                        }
+                    }
+                    //return $arrtags;
+                    if (($dossgoptn === false) || ($dossplafondrm === false))
+                    {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP (Toutes natures) ou Plafond (Remorquage) Spécifié!";}
+                    else
+                    {
+                        $resp = "allow_GOPtn_PlafondRem";
+                    }
+                    break;
+
+
+
+                case "PEC_gardiennage":
+                case "PEC_Hotel":
+                case "PEC_location_Najda_a_VAT":
+                case "Orientation_vehicule_accidente_pr_expertise_Rev":
+                case "Procuration_Najda_pr_prestataire_rapat_veh":
+                case "PEC_Reparation":
+                case "PEC_Pompes_funebres":
+                case "PEC_expertise":
+                case "PEC_evasan_armee":
+                case "PEC_deplacement":
+                case "PEC_dedouanement_pieces":
+                case "PEC_Cargo":
+                $dossgoptn = false;
+                foreach ($entreesdos as $entr) {
+                    //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
+                    $coltags = Tag::where("entree","=",$entr['id'])->get();
+                    if (!empty($coltags))
+                    {
+
+                        foreach ($coltags as $ltag) {
+                             if (strpos( $ltag['abbrev'],"GOPtn") !== FALSE)
+                             {
+                                $dossgoptn = true;
+                             }
+                        }
+                    }
+                }
+                //return $arrtags;
+                if ($dossgoptn === false)
+                {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP (Toutes natures) Spécifié!";}
+                else
+                {
+                    $resp = "allow_GOPtn";
+                }
+                break;
+
+                
+                case "RM_anglais":
+                $dossRMtraduit = false;
+                foreach ($entreesdos as $entr) {
+                    //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
+                    $coltags = Tag::where("entree","=",$entr['id'])->get();
+                    if (!empty($coltags))
+                    {
+
+                        foreach ($coltags as $ltag) {
+                             if (strpos( $ltag['abbrev'],"RMtraduit") !== FALSE)
+                             {
+                                $dossRMtraduit = true;
+                             }
+                        }
+                    }
+                }
+                //return $arrtags;
+                if ($dossRMtraduit === false)
+                {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un RM traduit Spécifié!";}
+                else
+                {
+                    $resp = "allow_RMtraduit";
+                }
+                break;
+
+
+                case "RM_francais":
+                $dossRM = false;
+                foreach ($entreesdos as $entr) {
+                    //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
+                    $coltags = Tag::where("entree","=",$entr['id'])->get();
+                    if (!empty($coltags))
+                    {
+
+                        foreach ($coltags as $ltag) {
+                             if ((strpos( $ltag['abbrev'],"RM") !== FALSE) && (strpos( $ltag['abbrev'],"RMtraduit") === FALSE))
+                             {
+                                $dossRM = true;
+                             }
+                        }
+                    }
+                }
+                //return $arrtags;
+                if ($dossRM === false)
+                {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un RM (rapport médical) Spécifié!";}
+                else
+                {
+                    $resp = "allow_RM";
+                }
+                break;
+        }
+        }
+
 
             // verifier si la template a un champ date/heure
                 $datees="";
@@ -189,6 +417,11 @@ class DocumentsController extends Controller
 
                 $array += [ 'templatehtml' => utf8_encode($arrfile['template_html'])];
                 $array += [ 'templatertf' => utf8_encode($arrfile['path'])];
+
+                // ajout identification des tags
+                if (isset($resp)) {$array += [ 'lestags' => utf8_encode($resp)];}
+                // ajout montant gop
+                if (isset($montantgop)) {$array += [ 'montantgop' => utf8_encode($montantgop)];}
 
             // cas remplace et annule doc
             if ($request->has('parent'))

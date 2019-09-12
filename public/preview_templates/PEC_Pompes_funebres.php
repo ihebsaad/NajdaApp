@@ -12,7 +12,7 @@ if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>jazhbrls6fe9flevfnmy6h8diwlvqw2d_PEC_Pompes_fun%C3%A8bres</title>
+<html><head><title>PEC_Pompes_funebres</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <style type="text/css"><!--
@@ -230,7 +230,7 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
     <p><span class=rvts7>*Notre réf. dossier</span><span class=rvts8>: </span><span class=rvts7><input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span><span class=rvts8> </span></p>
     <p><span class=rvts7>*Lieu de départ du corps :</span><span class=rvts8> <input name="CL_lieu_depart_corps" placeholder="Lieu Depart Corps" value="<?php if(isset ($CL_lieu_depart_corps)) echo $CL_lieu_depart_corps; ?>"></input></span></p>
     <p><span class=rvts7>*Destination du corps :</span><span class=rvts8> <input name="CL_lieu_destination_corps" placeholder="Lieu Destination Corps" value="<?php if(isset ($CL_lieu_destination_corps)) echo $CL_lieu_destination_corps; ?>"></input></span></p></span></p>
-    <p><span class=rvts7>*Montant max garanti (TND): </span><span class=rvts8><input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>"></input></span><span class=rvts7>Toutes lettres</span><span class=rvts8> :  <input name="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> </span></p>
+    <p><span class=rvts7>*Montant max garanti (TND): </span><span class=rvts8><input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input></span><span class=rvts7>Toutes lettres</span><span class=rvts8> :  <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> </span> dinars</p>
     <p><span class=rvts9><br></span></p>
     <p class=rvps6><span class=rvts10>Messieurs,</span></p>
     <p class=rvps7><span class=rvts6>Suite</span><span class=rvts11> </span><span class=rvts6>à</span><span class=rvts11> </span><span class=rvts6>votre</span><span class=rvts11> </span><span class=rvts6>devis,</span><span class=rvts11> </span><span class=rvts6>nous</span><span class=rvts11> </span><span class=rvts6>vous</span><span class=rvts11> </span><span class=rvts6>confirmons</span><span class=rvts11> </span><span class=rvts6>notre</span><span class=rvts11> </span><span class=rvts6>prise</span><span class=rvts11> </span><span class=rvts6>en</span><span class=rvts11> </span><span class=rvts6>charge</span><span class=rvts11> </span><span class=rvts6>des</span><span class=rvts11> </span><span class=rvts6>frais</span><span class=rvts11> </span><span class=rvts6>de</span><span class=rvts11> </span><span class=rvts6>rapatriement</span><span class=rvts11> </span><span class=rvts6>du</span><span class=rvts11> </span><span class=rvts6>corps</span><span class=rvts11> </span><span class=rvts6>du</span><span class=rvts11> </span><span class=rvts6>défunt</span><span class=rvts11> </span><span class=rvts6>selon</span><span class=rvts11> </span><span class=rvts6>les</span><span class=rvts11> </span><span class=rvts6>conditions énoncées ci-dessus.</span></p>
@@ -249,5 +249,13 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
     <p class=rvps1><span class=rvts8>Plateau d</span><span class=rvts20>’</span><span class=rvts8>assistance médicale</span></p>
     <p class=rvps1><span class=rvts8>« courrier électronique, sans signature »</span></p>
     <p><span class=rvts2><br></span></p>
+</form>
+<script language="javascript" src="nombre_en_lettre.js"></script>
+<script type="text/javascript">
+    function keyUpHandler(obj){
+            //document.getElementById("CL_montant_toutes_lettres").firstChild.nodeValue =   NumberToLetter(obj.value)
+            document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value)
+        }//fin de keypressHandler
+</script>
 </body></html>
 
