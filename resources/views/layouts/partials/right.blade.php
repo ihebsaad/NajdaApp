@@ -5,7 +5,21 @@ use App\Http\Controllers\TagsController;
 <!--select css-->
     <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+    
+    
+    <style>
 
+   /* #notifications {
+    cursor: pointer;
+    position: fixed;
+    right: 0px;
+    z-index: 9999;
+    top: 50px;
+    margin-bottom: 22px;
+    margin-right: 15px;
+    max-width: 500px;   
+     }*/
+   </style>
 
 <div class="panel panel-danger">
                     <div class="panel-heading">
@@ -15,6 +29,8 @@ use App\Http\Controllers\TagsController;
                             
                         </span>
                     </div>
+
+                    <!--<div id="notifications"></div>-->
 
 
                    <div class="panel-body scrollable-panel" style="display: block;">
@@ -38,7 +54,7 @@ use App\Http\Controllers\TagsController;
 <!--  début tab -+----------------------------------------------------------------------------------------->
                         <ul id="actiontabs" class="nav nav-tabs" style="margin-bottom: 15px;">
                             <li class="active">
-                                <a href="#Missionstab" data-toggle="tab">Missions</a>
+                                <a id="idMissionstab" href="#Missionstab" data-toggle="tab">Missions</a>
                             </li>
                             <li>
                                 <a href="#newMissiontab" data-toggle="tab">Nouvelle Mission</a>
@@ -421,7 +437,7 @@ use App\Http\Controllers\TagsController;
                                         <br><br>
                                         <button  id="idAjoutMiss" type="button"  class="btn btn-success">Ajouter la mission</button>
                                         <br><br><br>
-                                        <button  id="idFinAjoutMiss" type="button"  class="btn btn-danger">Fin ajout de missions</button>
+                                       <!-- <button  id="idFinAjoutMiss" type="button"  class="btn btn-danger">Fin ajout de missions</button>-->
 
                                      <!-- <button id="add"  class="btn btn-primary">Ajax Add</button>-->
                                   </form>
@@ -1407,9 +1423,9 @@ $(document).on("keyup","#InputetatActionMission",function() {
                             title: 'Activation d\'action',
                             html: '<b>'+data+'</b>',
                             type: 'warning',
-                            showCancelButton: false,
-                            confirmButtonText: 'Ok !',
-                            cancelButtonText: 'Non',
+                            showCancelButton: true,
+                            confirmButtonText: 'Traiter maintenant !<br>',
+                            cancelButtonText: 'Consulter ultèrieurement',
                          //   reverseButtons: true
                         }).then((result) => {
                             if (result.value) {
@@ -1422,10 +1438,8 @@ $(document).on("keyup","#InputetatActionMission",function() {
                         
                        // alert(actionk+"/"+ missk+"/"+dossk);
 
-                                      if(count==4)
-                                
+                                      if(count==4)                                
                                          {
-
                                            var NouveaURL;
                                          //alert('{{ url('/') }}');
                                          if(actionk != null && missk !=null && dossk != null)
@@ -1916,7 +1930,13 @@ var hrefidAcheverM;
 
   $("#idFinAjoutMiss").click(function(e){ // On sélectionne le formulaire par son identifiant
  
+    
 
+    var r = confirm("l'appui sur ce bouton termine la phase de création des missions et provoque la perte de tous vos sélections des mots clés dans l\'email ! Voulez vous vraiment finaliser la phase de création de missions ?");
+      
+      if (r == true) {
+       
+      
        var urllocalee=top.location.href;
 
            var poss=urllocalee.indexOf("traitementsBoutonsActions");
@@ -1975,9 +1995,162 @@ var hrefidAcheverM;
         
      //location.reload();
 
+      }
+
 });
 
+
 </script>
+
+<!-- click sur l'onglet missions --> 
+
+
+
+<script>
+
+  $("#idMissionstab").click(function(e){ // On sélectionne le formulaire par son identifiant
+ 
+    
+
+         
+      
+       var urllocalee=top.location.href;
+
+           var poss=urllocalee.indexOf("traitementsBoutonsActions");
+           var res22=urllocalee.indexOf("deleguerMission");
+           var res33=urllocalee.indexOf("deleguerAction");
+           var res44=urllocalee.indexOf("AnnulerMissionCourante");
+           
+           //alert(poss);
+           var countt=0;
+
+           if(poss!= -1)
+           {
+              for (var i = poss; i <100; i++) {
+                
+                  if(urllocalee[i]=='/')
+                  {
+                    countt++;
+                  }
+
+                }
+             
+
+
+
+           }
+
+      if( poss!=-1 && countt!=4 && res22!= -1 && res33!=-1 &&  res44 !=-1 )
+      {
+       location.reload();          
+
+      }
+
+      if(poss==-1)
+      {
+
+        location.reload();   
+
+
+      }
+        if(countt==4 ||  res22!= -1 ||  res33!=-1  || res44 !=-1 )
+      {  
+
+     
+
+        var dosskk= $('#dossierID').val() ;
+        
+        var NouveaURL="{{ url('/') }}"+"/dossiers/view/"+dosskk;
+
+                                           
+        document.location.href=NouveaURL;
+
+
+      }
+     // return redirect('dossiers/view/'.$request->dossierID);
+
+        
+     //location.reload();
+
+  
+
+});
+
+
+
+</script>
+
+
+
+<script>
+
+
+ /* Notify = function(text, callback, close_callback, style) {
+
+  var time = '20000';
+  var $container = $('#notifications');
+  var icon = '<i class="fa fa-info-circle "></i>';
+ 
+  if (typeof style == 'undefined' ) style = 'warning'
+  
+  var html = $('<div class="alert alert-' + style + '  hide">' + icon +  " " + text + '</div>');
+  
+  $('<a>',{
+    text: '×',
+    class: 'button close',
+    style: 'padding-left: 10px;',
+    href: '#',
+    click: function(e){
+      e.preventDefault()
+      close_callback && close_callback()
+      remove_notice()
+    }
+  }).prependTo(html)
+
+  $container.prepend(html)
+  html.removeClass('hide').hide().fadeIn('slow')
+
+  function remove_notice() {
+    html.stop().fadeOut('slow').remove()
+  }
+  
+  var timer =  setInterval(remove_notice, time);
+
+  $(html).hover(function(){
+    clearInterval(timer);
+  }, function(){
+    timer = setInterval(remove_notice, time);
+  });
+  
+  html.on('click', function () {
+    clearInterval(timer)
+    callback && callback()
+    remove_notice()
+  });
+  
+  
+}
+
+$( document ).ready(function() {
+  Notify("Can't Touch This");
+    Notify("Can't Touch This");
+      Notify("Can't Touch This");
+  Notify("Stop! Hammer time", null, null, 'danger');
+
+  Notify("I told you homeboy (You can't touch this)",
+  function () { 
+    alert("clicked notification")
+  },
+  function () { 
+    alert("clicked x")
+  },
+  'success'
+);
+
+});*/
+
+</script>
+
 
 
 

@@ -96,10 +96,32 @@ class MissionController extends Controller
       // return 'ok';
           //dd($request->all());
 
+        
        // dd( $request->all());
         $dossier=Dossier::where("reference_medic",trim($request->get('dossier')))->first();
         //$typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeactauto')))->first();
         $typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeMissauto')))->first();
+
+
+         if($typeMiss->id==30 )/*vérification de client AXA ou IMA de dossier avant de créer une mission de  rapatriement  véhicule sur Cargo*/
+         {
+         $dossi=Dossier::where('id',$request->get('dossierID'))->first();
+         $existe_cli=Client::where('id',$dossi->customer_id)
+                              ->where(function($q){                             
+                               $q->where('name', 'like', '%IMA%')
+                               ->orWhere('name', 'like', '%AXA%');
+                                })                             
+                              ->where('pays','FRANCE')
+                              ->first();
+
+               if(! $existe_cli)
+               {
+
+                      return 'Impossible de céeer la mission : le client de  dossier courant doit être IMA France ou AXA France';
+
+               }
+
+          }                  
 
         
 
@@ -989,7 +1011,7 @@ public function getAjaxDeleguerMission($idmiss)
 
              //$output='';
 
-         if( $miss->type_Mission==6 )
+         if( $miss->type_Mission==6 ) // type taxi
             {
   
         $output.='<input type="hidden" id="idmissionDateSpecM" name="idmissionDateSpec" value="'.$miss->id.'"  />
@@ -1152,6 +1174,170 @@ public function getAjaxDeleguerMission($idmiss)
 
 
       }// fin type taxi
+
+
+       if( $miss->type_Mission==30 ) // type rapatriement véhicule sur Cargo
+            {
+  
+        $output.='<input type="hidden" id="idmissionDateSpecM" name="idmissionDateSpec" value="'.$miss->id.'"  />
+        <input type="hidden" id="NomTypeDateSpecM" name="NomTypeDateSpec" value="arr_prev_dest"  />
+         
+       <h4><b> Dates spécifiques : </b></h4>
+
+       <br>
+          <span style="padding: 0px; font-weight: bold; font-size: 17px;">  la (les) date(s) spécifique(s) à fixer pour cette mission est (sont) : </span>
+        <br>
+       <br>
+       
+        <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
+
+        <div class="row">
+          <br>
+          <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
+          
+          <br><br>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue d\'arrivee de remorqueur au port </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 26 :</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Suivre coordination au port </span>
+          <br>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
+
+        
+            <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
+
+          if($miss->date_spec_affect==1)
+             {
+             $output.='green';
+             }
+             else
+             {
+              $output.= 'red' ;
+             }
+
+            $output.= ';">';
+
+
+             if($miss->date_spec_affect==1)
+
+             {
+              $output.= 'oui, date assignée';
+             }
+             else
+             {
+             $output.='Non, date non assignée' ;
+             }
+             
+             $output.='</span>';
+
+
+
+       $output.='</div>
+        <br>
+        <br>
+             <div class="row">
+
+              <label style="padding: 5px; font-weight: bold; font-size: 15px;">&nbsp;&nbsp; Mettre à jour la date spécifique : </label>';
+
+              $da = (new \DateTime())->format('Y-m-d\TH:i'); 
+
+              $output.='<input id="dateSpecM" type="datetime-local" value="'.$da.'" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec"/>
+            </div>
+
+        <br>
+
+         <div class="row">
+          <div class="col-md-5"> </div>
+
+           <div class="col-md-2"></div>
+
+          <div class="col-md-5">
+         <button id="MajDateSpecM" type="button" style=""> Mettre à jour date spécifique</button> 
+         </div>
+          
+         </div>
+         <br>
+         <br>
+       </div>';
+
+       /* date spécifique pour action 29 départ cargo --------------------------------------------------------*/
+
+
+
+       $output.='<input type="hidden" id="idmissionDateSpecM2" name="idmissionDateSpec2" value="'.$miss->id.'"  />
+        <input type="hidden" id="NomTypeDateSpecM2" name="NomTypeDateSpec2" value="decoll_ou_dep_bat"  />
+         
+       
+       <br>
+       
+        <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
+
+        <div class="row">
+          <br>
+        
+        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure départ sur Cargo </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 29 :</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Vérifier apuration passeport   </span>
+          <br>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
+
+        
+            <span id="idspandateAssNonAssM2" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
+
+          if($miss->date_spec_affect2==1)
+             {
+             $output.='green';
+             }
+             else
+             {
+              $output.= 'red' ;
+             }
+
+            $output.= ';">';
+
+
+             if($miss->date_spec_affect2==1)
+             {
+              $output.= 'oui, date assignée';
+             }
+             else
+             {
+             $output.='Non, date non assignée' ;
+             }
+             
+             $output.='</span>';
+
+
+
+       $output.='</div>
+        <br>
+        <br>
+             <div class="row">
+
+              <label style="padding: 5px; font-weight: bold; font-size: 15px;">&nbsp;&nbsp; Mettre à jour la date spécifique : </label>';
+
+              $da = (new \DateTime())->format('Y-m-d\TH:i'); 
+
+              $output.='<input id="dateSpecM2" type="datetime-local" value="'.$da.'" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec2"/>
+            </div>
+
+        <br>
+
+         <div class="row">
+          <div class="col-md-5"> </div>
+
+           <div class="col-md-2"></div>
+
+          <div class="col-md-5">
+         <button id="MajDateSpecM2" type="button" style=""> Mettre à jour date spécifique</button> 
+         </div>
+          
+         </div>
+         <br>
+    
+       </div>';
+
+
+
+
+      }// fin type rapatriement sur cargo
 
      }
 
