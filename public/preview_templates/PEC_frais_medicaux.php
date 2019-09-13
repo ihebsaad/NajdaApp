@@ -9,9 +9,10 @@ if (isset($_GET['CL_montant_toutes_lettres'])) {$CL_montant_toutes_lettres=$_GET
 if (isset($_GET['CL_text'])) {$CL_text=$_GET['CL_text'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
+if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>939s5ytrudmx5fbhgulj6t4cpgpcsquq_PEC_frais_medicaux</title>
+<html><head><title>PEC_frais_medicaux</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <style type="text/css"><!--
@@ -366,7 +367,7 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p class=rvps4><span class=rvts6>Client : <input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /></span></p>
 <p class=rvps5><span class=rvts6>Nom patient : <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> Prénom :<input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
 <p class=rvps6><span class=rvts6>Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span></p>
-<p class=rvps6><span class=rvts6>Montant maximal prise en charge (TND): <input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>"></input> Toutes lettres : <input name="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input>&nbsp;&nbsp; (conversion chiffres en lettres)&nbsp;&nbsp;&nbsp; </span></p>
+<p class=rvps6><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label>Montant maximal prise en charge (TND): <input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input>&nbsp; </span>Toutes lettres : <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars</p>
 <p class=rvps6><span class=rvts6>Franchise: </span><span class=rvts7>(OUI si montant saisi dans le champs franchise. Sinon NON)</span></p>
 <p class=rvps7><span class=rvts6>Montant de la franchise: </span><span class=rvts8>Franchise_dossier</span><span class=rvts6>&nbsp; (ligne apparait uniquement s</span><span class=rvts9>’</span><span class=rvts6>il y</span><span class=rvts9>’</span><span class=rvts6>a montant saisi dans dossier) </span></p>
 <p class=rvps5><span class=rvts6>Document à signer: </span><span class=rvts7>(OUI si coché dans dossier, sinon NON) </span></p>
@@ -394,4 +395,13 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p class=rvps1><span class=rvts3><input name="agent__name" id="agent__name" placeholder="nom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" > </input></span></p>
 <p><span class=rvts3>Plateau d</span><span class=rvts41>’</span><span class=rvts3>assistance médicale</span></p>
 <p class=rvps1><span class=rvts3>« courrier électronique, sans signature »</span></p>
+</form>
+<script language="javascript" src="nombre_en_lettre.js"></script>
+<script type="text/javascript">
+    function keyUpHandler(obj){
+            if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block";}
+            else {document.getElementById("alertGOP").style.display="none";}
+            document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value)
+        }//fin de keypressHandler
+</script>
 </body></html>

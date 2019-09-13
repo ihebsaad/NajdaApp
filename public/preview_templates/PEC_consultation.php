@@ -197,7 +197,7 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p class=rvps5><span class=rvts5>*Nom patient :</span><span class=rvts6> </span><span class=rvts5><input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span></p>
 <p class=rvps5><span class=rvts5>*Prénom :</span><span class=rvts6> </span><span class=rvts5> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
 <p><span class=rvts2>* </span><span class=rvts7>Notre réf. </span><span class=rvts2>: <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span></p></span></p>
-<p><span class=rvts2>* </span><span class=rvts7>Montant max de prise en charge</span><span class=rvts2> : <input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>"></input> </span><span class=rvts7>Toutes lettres : <input name="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></p>
+<p><span class=rvts2>* </span><span class=rvts7>Montant max de prise en charge</span><span class=rvts2> : <input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>"  onKeyUp=" keyUpHandler(this)"></input> </span><span class=rvts7>Toutes lettres : <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input>&nbsp; </span>dinars</p>
 <p><span class=rvts8><br></span></p>
 <p><span class=rvts2>Nous soussignés, Najda Assistance, nous engageons à prendre en charge, pour le compte de notre client société d</span><span class=rvts9>’</span><span class=rvts2>assistance</span><span class=rvts7>, </span><span class=rvts10>les frais relatifs à la consultation/visite du</span><span class=rvts7><input name="CL_date_heure_visite" placeholder="Date Heure Visite" value="<?php if(isset ($CL_date_heure_visite)) echo $CL_date_heure_visite; ?>"></input></span><span class=rvts2> à votre cabinet (si visite, <input name="CL_adresse" placeholder="Adresse" value="<?php if(isset ($CL_adresse)) echo $CL_adresse ?>"></input>) pour le patient nommé ci-dessus et pour le montant susmentionné.</span></p>
 <p><span class=rvts2><br></span></p>
@@ -219,5 +219,13 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p><span class=rvts2><br></span></p>
 <p><span class=rvts2><br></span></p>
 <p><span class=rvts2><br></span></p>
+</form>
+<script language="javascript" src="nombre_en_lettre.js"></script>
+<script type="text/javascript">
+    function keyUpHandler(obj){
+            //document.getElementById("CL_montant_toutes_lettres").firstChild.nodeValue =   NumberToLetter(obj.value)
+            document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value)
+        }//fin de keypressHandler
+</script>
 </body></html>
 

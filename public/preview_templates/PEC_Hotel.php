@@ -9,9 +9,10 @@ if (isset($_GET['CL_arrangement'])) {$CL_arrangement=$_GET['CL_arrangement'];}
 if (isset($_GET['CL_tarif_convention'])) {$CL_tarif_convention=$_GET['CL_tarif_convention'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
+if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>y1dzt43ubz6popn6u2qnjdwsh925fuzc_PEC_Hotel</title>
+<html><head><title>PEC_Hotel</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <style type="text/css"><!--
@@ -228,7 +229,7 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p class=rvps5><span class=rvts8>Notre réf. dossier</span><span class=rvts7> : </span><span class=rvts6><input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span></p>
 <p class=rvps6><span class=rvts8>Dates de séjour</span><span class=rvts7> : de <input name="CL_debut_sejour" placeholder="Debut Sejour" value="<?php if(isset ($CL_debut_sejour)) echo $CL_debut_sejour; ?>"></input> à <input name="CL_fin_sejour" placeholder="Fin Sejour" value="<?php if(isset ($CL_fin_sejour)) echo $CL_fin_sejour; ?>"></input></span></p>
 <p class=rvps6><span class=rvts8>Arrangement</span><span class=rvts7> :<input name="CL_arrangement" placeholder="Arrangement" value="<?php if(isset ($CL_arrangement)) echo $CL_arrangement; ?>"></input></span></p>
-<p class=rvps6><span class=rvts8>Tarif de convention</span><span class=rvts7> : <input name="CL_tarif_convention" placeholder="Tarif Convention" value="<?php if(isset ($CL_tarif_convention)) echo $CL_tarif_convention; ?>"></input></span></p>
+<p class=rvps6><span class=rvts8>Tarif de convention : </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_tarif_convention" placeholder="Tarif Convention" value="<?php if(isset ($CL_tarif_convention)) echo $CL_tarif_convention; ?>"  onKeyUp=" keyUpHandler(this)"></input></span></p>
 <p class=rvps6><span class=rvts7><br></span></p>
 <p class=rvps6><span class=rvts7><br></span></p>
 <p class=rvps7><span class=rvts7>Messieurs,</span></p>
@@ -246,5 +247,12 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p class=rvps9><span class=rvts6>Service réservations</span></p>
 <p class=rvps1><span class=rvts3>« courrier électronique, sans signature »</span></p>
 <p class=rvps2><span class=rvts3><br></span></p>
+<script type="text/javascript">
+    function keyUpHandler(obj){
+            //document.getElementById("CL_montant_toutes_lettres").firstChild.nodeValue =   NumberToLetter(obj.value)
+            if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block";}
+            else {document.getElementById("alertGOP").style.display="none";}
+        }//fin de keypressHandler
+</script>
 </body></html>
 

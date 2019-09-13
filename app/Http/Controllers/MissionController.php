@@ -89,6 +89,264 @@ class MissionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+
+    public function storeMissionByAjax (Request $request)
+    {
+      // return 'ok';
+          //dd($request->all());
+
+        
+       // dd( $request->all());
+        $dossier=Dossier::where("reference_medic",trim($request->get('dossier')))->first();
+        //$typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeactauto')))->first();
+        $typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeMissauto')))->first();
+
+
+         if($typeMiss->id==30 )/*vérification de client AXA ou IMA de dossier avant de créer une mission de  rapatriement  véhicule sur Cargo*/
+         {
+         $dossi=Dossier::where('id',$request->get('dossierID'))->first();
+         $existe_cli=Client::where('id',$dossi->customer_id)
+                              ->where(function($q){                             
+                               $q->where('name', 'like', '%IMA%')
+                               ->orWhere('name', 'like', '%AXA%');
+                                })                             
+                              ->where('pays','FRANCE')
+                              ->first();
+
+               if(! $existe_cli)
+               {
+
+                      return 'Impossible de céeer la mission : le client de  dossier courant doit être IMA France ou AXA France';
+
+               }
+
+          }                  
+
+        
+
+     
+       //dd($dossier);   
+        
+        
+       
+
+         $Mission = new Mission([
+             'titre' =>trim( $request->get('titre')),
+             'descrip' => trim($request->get('descrip')),
+             'nb_acts_ori'=>$typeMiss->nb_acts,
+             'commentaire' => trim($request->get('commentaire')),
+             'date_deb'=> trim($request->get('datedeb')),
+             'type_Mission' =>$typeMiss->id,
+             'dossier_id' => $dossier->id,
+             'statut_courant' => 'active',
+
+             'realisee'=> 0,
+             'affichee'=>1,
+             'user_id'=>auth::user()->id,
+
+             'type_heu_spec'=> $typeMiss->type_heu_spec,
+             'type_heu_spec_archiv'=> $typeMiss->type_heu_spec,
+             'date_spec_affect'=>0,
+             'date_spec_affect2'=>0,
+             'date_spec_affect3'=>0,
+             'rdv'=> $typeMiss->rdv,
+             'act_rdv'=> $typeMiss->act_rdv,
+             'dep_pour_miss'=> $typeMiss->dep_pour_miss,
+             'act_dep_pour_miss'=> $typeMiss->act_dep_pour_miss,
+             'dep_charge_dest'=> $typeMiss->dep_charge_dest,
+             'act_dep_charge_dest'=> $typeMiss->act_dep_charge_dest,
+             'arr_prev_dest'=> $typeMiss->arr_prev_dest,
+             'act_arr_prev_dest'=> $typeMiss->act_arr_prev_dest,
+             'decoll_ou_dep_bat'=> $typeMiss->decoll_ou_dep_bat,
+             'act_decoll_ou_dep_bat'=> $typeMiss->act_decoll_ou_dep_bat,
+             'arr_av_ou_bat'=> $typeMiss->arr_av_ou_bat,
+             'act_arr_av_ou_bat'=> $typeMiss->act_arr_av_ou_bat,
+              'retour_base'=> $typeMiss->retour_base,
+              'act_retour_base'=> $typeMiss->act_retour_base,
+              'sejour'=>$typeMiss->sejour,
+              'location_voit'=> $typeMiss->location_voit
+        ]);
+
+        $Mission->save();
+
+
+        // mise à jour de table entree col mission_id
+
+        if($request->get('idEntreeMissionOnMarker'))
+        {
+
+          $entree=Entree::where('id',$request->get('idEntreeMissionOnMarker'))->first();
+
+          if($entree && $Mission)
+          {
+          
+            $entree->update(['mission_id'=> $Mission->id]) ;
+
+          }
+
+
+
+
+        }
+
+      //date_default_timezone_set('Africa/Tunis');
+       //setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
+
+          $dtc = (new \DateTime())->format('Y-m-d\TH:i');
+       //dd($Mission->date_deb."  ". $dtc);
+        //dd(time($dtc)."  ".time($request->get('datedeb')));
+         $format = "Y-m-d\TH:i";
+         $dateSys  = \DateTime::createFromFormat($format, $dtc);
+
+         $dateMiss  = \DateTime::createFromFormat($format, $request->get('datedeb'));
+        // dd($dateMiss);
+
+         /*if($dateSys > $dateMiss)
+         {
+               dd("date sys > date miss");
+
+         }
+         else
+         {
+
+          dd("date sys <= date miss");
+         }*/
+
+       if($dateMiss >$dateSys)
+       {
+       //$Mission->update(['affichee'=>0]);
+        $Mission->update(['statut_courant'=>'reportee']);
+
+       //dd($request->get('datedeb')."  ". $dtc);
+       
+       }
+
+       //dd('faux');
+
+
+        //$type_act=DB::table('type_actions')->where('id', $request->get('typeact'));
+       // $type_act=TypeMission::find($request->get('typeactauto'));
+        $type_act= $typeMiss;
+       //dd($type_act->getAttributes());
+
+         $attributes = array_keys($type_act->getOriginal());
+         $valeurs = array_values($type_act->getOriginal());
+         //dd(count($valeurs));
+        // dd($valeurs);
+
+        // echo($attributes[1]);
+        // echo($valeurs[1]);
+           $taille=count($valeurs)-5;
+         for ($k=21; $k<=$taille; $k++)
+           {
+             
+            if($k>21)
+            {
+
+
+
+           if( $valeurs[$k]!= null)
+              {
+
+                 $ActionEC = new ActionEC([
+             'mission_id' =>$Mission->id,
+             'titre' => trim($valeurs[$k]),
+             'type_Mission' => trim($valeurs[1]),
+             'duree' => trim($valeurs[$k+1]),
+             'ordre'=> trim($valeurs[$k+2]),
+             'descrip' => trim($valeurs[$k+3]),
+             'nb_opt'=> trim($valeurs[$k+4]),
+             'opt_choisie'=>0,
+             'igno_ou_non'=> trim($valeurs[$k+5]),
+             'rapl_ou_non'=> trim($valeurs[$k+6]),
+             'num_rappel'=>0,
+             'report_ou_non'=> trim($valeurs[$k+7]),
+             'num_report'=>0,
+             'rapp_doc_ou_non'=>trim($valeurs[$k+8]),
+             'activ_avec_miss'=>trim($valeurs[$k+9]),
+             'realisee'=> false,
+             //'user_id'=> $Mission->user_id,
+             'statut'=>'inactive'
+                                       
+                  ]); 
+                  
+                   $ActionEC->save();
+
+
+              $k+=9;
+              }
+              else
+              {
+                $k=1000;
+              }
+
+              }
+              else // pour la sauvegarde de date de début de la première sous action
+              {
+
+               if($valeurs[$k]!= null)
+               {
+
+                  $ActionEC = new ActionEC([
+             'mission_id' =>$Mission->id,
+             'titre' => trim($valeurs[$k]),
+             'type_Mission' => trim($valeurs[1]),
+             'duree' => trim($valeurs[$k+1]),
+             'ordre'=> trim($valeurs[$k+2]),
+             'descrip' => trim($valeurs[$k+3]),
+              'nb_opt'=> trim($valeurs[$k+4]),
+              'opt_choisie'=>0,
+             'igno_ou_non'=> trim($valeurs[$k+5]),
+             'rapl_ou_non'=> trim($valeurs[$k+6]),
+             'num_rappel'=>0,
+             'report_ou_non'=> trim($valeurs[$k+7]),
+             'num_report'=>0,
+             'rapp_doc_ou_non'=> trim($valeurs[$k+8]),
+               'activ_avec_miss'=>trim($valeurs[$k+9]),
+             'realisee'=> false,
+             //'user_id'=> $Mission->user_id,
+             'date_deb' => $Mission->date_deb,
+             'statut'=>'active'       
+                  ]); 
+                  
+                   $ActionEC->save();
+
+
+               $k+=9;
+             
+              }
+              else
+              {
+                $k=1000;
+              }
+
+
+
+              }
+           }
+
+
+           //mettre à jour le id temporairedes des actions de table actionsEc
+
+           $actionsecs=ActionEC::where('mission_id', $Mission->id)->get();
+
+           foreach ($actionsecs as $k) {
+             $k->update(['action_idt'=>$k->id]);
+             if($k->activ_avec_miss==1)
+             {
+
+                $k->update(['statut'=>'active']);
+
+             }
+           }
+
+
+    return 'Mission créee';
+
+      
+
+    }
  
 
      public function storeTableActionsEnCours(Request $request)
@@ -753,7 +1011,7 @@ public function getAjaxDeleguerMission($idmiss)
 
              //$output='';
 
-         if( $miss->type_Mission==6 )
+         if( $miss->type_Mission==6 ) // type taxi
             {
   
         $output.='<input type="hidden" id="idmissionDateSpecM" name="idmissionDateSpec" value="'.$miss->id.'"  />
@@ -916,6 +1174,170 @@ public function getAjaxDeleguerMission($idmiss)
 
 
       }// fin type taxi
+
+
+       if( $miss->type_Mission==30 ) // type rapatriement véhicule sur Cargo
+            {
+  
+        $output.='<input type="hidden" id="idmissionDateSpecM" name="idmissionDateSpec" value="'.$miss->id.'"  />
+        <input type="hidden" id="NomTypeDateSpecM" name="NomTypeDateSpec" value="arr_prev_dest"  />
+         
+       <h4><b> Dates spécifiques : </b></h4>
+
+       <br>
+          <span style="padding: 0px; font-weight: bold; font-size: 17px;">  la (les) date(s) spécifique(s) à fixer pour cette mission est (sont) : </span>
+        <br>
+       <br>
+       
+        <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
+
+        <div class="row">
+          <br>
+          <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
+          
+          <br><br>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue d\'arrivee de remorqueur au port </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 26 :</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Suivre coordination au port </span>
+          <br>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
+
+        
+            <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
+
+          if($miss->date_spec_affect==1)
+             {
+             $output.='green';
+             }
+             else
+             {
+              $output.= 'red' ;
+             }
+
+            $output.= ';">';
+
+
+             if($miss->date_spec_affect==1)
+
+             {
+              $output.= 'oui, date assignée';
+             }
+             else
+             {
+             $output.='Non, date non assignée' ;
+             }
+             
+             $output.='</span>';
+
+
+
+       $output.='</div>
+        <br>
+        <br>
+             <div class="row">
+
+              <label style="padding: 5px; font-weight: bold; font-size: 15px;">&nbsp;&nbsp; Mettre à jour la date spécifique : </label>';
+
+              $da = (new \DateTime())->format('Y-m-d\TH:i'); 
+
+              $output.='<input id="dateSpecM" type="datetime-local" value="'.$da.'" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec"/>
+            </div>
+
+        <br>
+
+         <div class="row">
+          <div class="col-md-5"> </div>
+
+           <div class="col-md-2"></div>
+
+          <div class="col-md-5">
+         <button id="MajDateSpecM" type="button" style=""> Mettre à jour date spécifique</button> 
+         </div>
+          
+         </div>
+         <br>
+         <br>
+       </div>';
+
+       /* date spécifique pour action 29 départ cargo --------------------------------------------------------*/
+
+
+
+       $output.='<input type="hidden" id="idmissionDateSpecM2" name="idmissionDateSpec2" value="'.$miss->id.'"  />
+        <input type="hidden" id="NomTypeDateSpecM2" name="NomTypeDateSpec2" value="decoll_ou_dep_bat"  />
+         
+       
+       <br>
+       
+        <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
+
+        <div class="row">
+          <br>
+        
+        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure départ sur Cargo </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 29 :</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Vérifier apuration passeport   </span>
+          <br>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
+
+        
+            <span id="idspandateAssNonAssM2" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
+
+          if($miss->date_spec_affect2==1)
+             {
+             $output.='green';
+             }
+             else
+             {
+              $output.= 'red' ;
+             }
+
+            $output.= ';">';
+
+
+             if($miss->date_spec_affect2==1)
+             {
+              $output.= 'oui, date assignée';
+             }
+             else
+             {
+             $output.='Non, date non assignée' ;
+             }
+             
+             $output.='</span>';
+
+
+
+       $output.='</div>
+        <br>
+        <br>
+             <div class="row">
+
+              <label style="padding: 5px; font-weight: bold; font-size: 15px;">&nbsp;&nbsp; Mettre à jour la date spécifique : </label>';
+
+              $da = (new \DateTime())->format('Y-m-d\TH:i'); 
+
+              $output.='<input id="dateSpecM2" type="datetime-local" value="'.$da.'" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec2"/>
+            </div>
+
+        <br>
+
+         <div class="row">
+          <div class="col-md-5"> </div>
+
+           <div class="col-md-2"></div>
+
+          <div class="col-md-5">
+         <button id="MajDateSpecM2" type="button" style=""> Mettre à jour date spécifique</button> 
+         </div>
+          
+         </div>
+         <br>
+    
+       </div>';
+
+
+
+
+      }// fin type rapatriement sur cargo
 
      }
 

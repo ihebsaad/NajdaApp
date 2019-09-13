@@ -1,7 +1,7 @@
 <?php 
 if (! isset($_GET['remplace']))
 {
-	if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
+	//if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
 	if (isset($_GET['dossier'])) {$dossier=$_GET['dossier'];}
 }
 	
@@ -64,6 +64,37 @@ else
 		} else {
 	    echo "0 results agent";
 		}
+
+		// recuperation OM emis par
+		
+		// Najda 
+		if ((stristr($detaildoss['reference_medic'],'N')!== FALSE) && (stristr($detaildoss['reference_medic'],'TN')=== FALSE))
+			{$emispar = "najda";}
+		// VAT 
+		if ((stristr($detaildoss['reference_medic'],'V')!== FALSE) && (stristr($detaildoss['reference_medic'],'TV')=== FALSE))
+			{$emispar = "vat";}
+		// MEDIC 
+		if ((stristr($detaildoss['reference_medic'],'M')!== FALSE) && (stristr($detaildoss['reference_medic'],'TM')=== FALSE) && (stristr($detaildoss['reference_medic'],'MI')=== FALSE))
+			{$emispar = "medicm";}
+		// Transport MEDIC 
+		if (stristr($detaildoss['reference_medic'],'TM')!== FALSE)
+			{$emispar = "medicm";}
+		// Transport VAT
+		if (stristr($detaildoss['reference_medic'],'TV')!== FALSE)
+			{$emispar = "vat";}
+		// Medic International
+		if (stristr($detaildoss['reference_medic'],'MI')!== FALSE)
+			{$emispar = "medici";}
+		// Najda TPA
+		if (stristr($detaildoss['reference_medic'],'TPA')!== FALSE)
+			{$emispar = "najda";}
+		// Transport Najda
+		if (stristr($detaildoss['reference_medic'],'TN')!== FALSE)
+			{$emispar = "najda";}
+		// X-Press
+		if (stristr($detaildoss['reference_medic'],'XP')!== FALSE)
+			{$emispar = "xpress";}
+
 	} else {
 	    echo "0 results dossier";
 	}
@@ -71,7 +102,7 @@ else
 }
 
 // base_hotels(18)_cliniques(8)_hopitaux(9)_ports(72,38-assistance)_aeroports(73) (name/tel)
-$sqltypeprest = "SELECT id,name,phone_home FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id IN (8,9,18,38,72,73))";
+$sqltypeprest = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id IN (8,9,18,38,72,73))";
 
 $resulttp = $conn->query($sqltypeprest);
 if ($resulttp->num_rows > 0) {
@@ -79,7 +110,22 @@ if ($resulttp->num_rows > 0) {
     $array_prest = array();
     while($row = $resulttp->fetch_assoc()) {
         //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
-        $array_prest[] = array('id' => $row["id"],'name' => $row["name"], 'phone_home' => $row["phone_home"]);
+        if (intval($row["ville_id"]) > 0)
+        {
+        	$sqlvilleprest = "SELECT id,name FROM villes WHERE id =".$row['ville_id'];
+        	$resultvprest = $conn->query($sqlvilleprest);
+        	$vprest = $resultvprest->fetch_assoc();
+        	$nnameprest = $row['name']." [".$vprest['name']."]";
+        }
+        elseif (! empty($row["ville"]))
+        {
+			$nnameprest = $row['name']." [".$row['ville']."]";
+        }
+        elseif (empty($row["ville"]))
+        {
+        	$nnameprest = $row['name'];
+        }
+        $array_prest[] = array('id' => $row["id"],'name' => $nnameprest, 'phone_home' => $row["phone_home"]);
     }
     //print_r($array_prest);
 	} else {
@@ -87,14 +133,28 @@ if ($resulttp->num_rows > 0) {
 	}
 
 // hotel clinique hopital
-$sqlhch = "SELECT id,name,phone_home FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id IN (8,9,18))";
+$sqlhch = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id IN (8,9,18))";
 $resulthch = $conn->query($sqlhch);
 if ($resulthch->num_rows > 0) {
     // output data of each row
     $array_presthch = array();
     while($rowhch = $resulthch->fetch_assoc()) {
-        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
-        $array_presthch[] = array('id' => $rowhch["id"],'name' => $rowhch["name"], 'phone_home' => $rowhch["phone_home"]);
+        if (intval($rowhch["ville_id"]) > 0)
+        {
+        	$sqlvilleprest = "SELECT id,name FROM villes WHERE id =".$rowhch['ville_id'];
+        	$resultvprest = $conn->query($sqlvilleprest);
+        	$vprest = $resultvprest->fetch_assoc();
+        	$nnameprest = $rowhch['name']." [".$vprest['name']."]";
+        }
+        elseif (! empty($rowhch["ville"]))
+        {
+			$nnameprest = $rowhch['name']." [".$rowhch['ville']."]";
+        }
+        elseif (empty($rowhch["ville"]))
+        {
+        	$nnameprest = $rowhch['name'];
+        }
+        $array_presthch[] = array('id' => $rowhch["id"],'name' => $nnameprest, 'phone_home' => $rowhch["phone_home"]);
     }
     //print_r($array_prest);
 	} else {
@@ -102,14 +162,28 @@ if ($resulthch->num_rows > 0) {
 	}
 
 // Aeroport Port
-	$sqlap = "SELECT id,name,phone_home FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id IN (72,73))";
+	$sqlap = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id IN (72,73))";
 	$resultap = $conn->query($sqlap);
 	if ($resultap->num_rows > 0) {
 	    // output data of each row
 	    $array_prestap = array();
 	    while($rowap = $resultap->fetch_assoc()) {
-	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
-	        $array_prestap[] = array('id' => $rowap["id"],'name' => $rowap["name"], 'phone_home' => $rowap["phone_home"]);
+	        if (intval($rowap["ville_id"]) > 0)
+	        {
+	        	$sqlvilleprest = "SELECT id,name FROM villes WHERE id =".$rowap['ville_id'];
+	        	$resultvprest = $conn->query($sqlvilleprest);
+	        	$vprest = $resultvprest->fetch_assoc();
+	        	$nnameprest = $rowap['name']." [".$vprest['name']."]";
+	        }
+	        elseif (! empty($rowap["ville"]))
+	        {
+				$nnameprest = $rowap['name']." [".$rowap['ville']."]";
+	        }
+	        elseif (empty($rowap["ville"]))
+	        {
+	        	$nnameprest = $rowap['name'];
+	        }
+	        $array_prestap[] = array('id' => $rowap["id"],'name' => $nnameprest, 'phone_home' => $rowap["phone_home"]);
 	    }
 	    //print_r($array_prest);
 		} else {
@@ -222,6 +296,23 @@ header("Content-Type: text/html;charset=UTF-8");
 		<span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 73 36 90 01</span>
 				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt">
 		<span id="Eligne4" style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">ambulance.transp@medicmultiservices.com</span>
+		<?php } ?>
+
+		<?php if ($emispar == "xpress")   { ?>
+		<div>
+			<p style="margin-left:7px;margin-top:0.55pt; margin-bottom:0pt; widows:0; orphans:0; font-size:5.5pt"><span style="height:0pt; margin-top:-0.35pt; display:block; position:absolute; z-index:0"><img src="xpress.png" width="161" height="98" alt="" style="margin-top:10pt; -aw-left-pos:16pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:-10.4pt; -aw-wrap-type:none; position:absolute" /></span><span style="font-family:'Times New Roman'">&#xa0;</span></p>
+		</div>
+		<br style="clear:both; mso-break-type:section-break" />
+			<p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0.2pt; margin-bottom:0pt; widows:0; orphans:0; font-size:7.5pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p>
+			<p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
+		<span id="Eligne1" style="font-family:'Times New Roman'; font-weight:bold">Rue Mohamed Hamdane</span>
+				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
+		<span id="Eligne2" style="font-family:'Times New Roman'; font-weight:bold">B.P. 41 - 4054 Sousse-Sahloul - Tunisie </span>
+				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
+		<span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 36 003 610</span>
+				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
+		<span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">FAX (+216) 73 820 333</span>
+				</p>
 		<?php } ?>
 
 	<?php } ?>

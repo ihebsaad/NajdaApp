@@ -2,7 +2,7 @@
 <?php 
 use App\User ; 
 use App\Prestataire ;
-use App\Template_doc ;
+use App\Template_doc ; 
 use App\Document ; 
 use App\Client;
 use App\ClientGroupe;
@@ -44,6 +44,7 @@ use App\Adresse;
          // les agents ne voient pas l'aaffectation - à vérifier
          if (Gate::check('isAdmin') || Gate::check('isSupervisor') ) { ?>
 
+
          <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
         <b>Affecté à:</b> 
         <?php 
@@ -64,6 +65,8 @@ use App\Adresse;
             {echo '<a href="#" data-toggle="modal" data-target="#attrmodal">Non affecté</a>';}
             else
             {echo '<b>Non affecté</b>';}
+
+
 
             }
         } ?>
@@ -146,13 +149,13 @@ use App\Adresse;
             <div class="row" style="margin-top:10px">
                 <div class="col-lg-12">
                     <ul class="nav  nav-tabs">
-
+ 
                         <li class="nav-item ">
                             <a class="nav-link  " href="#tab2" data-toggle="tab">
                                <i class="fas a-lg fa-exchange-alt"></i>  Communications
                             </a>
                         </li>
-                        <li class="nav-item ">
+                        <li class="nav-item">
                             <a class="nav-link" href="#tab3" data-toggle="tab">
                                 <i class="fas fa-lg  fa-ambulance"></i>  Prestations
                             </a>
@@ -283,6 +286,7 @@ use App\Adresse;
 
             <div id="tab3" class="tab-pane fade  active in">
                 <ul class="nav  nav-tabs">
+
                     <li class="nav-item active">
                         <a class="nav-link active show" href="#tab32" data-toggle="tab"  onclick=";showinfos2();hideinfos();hideinfos3();">
                             <i class="fas fa-lg  fa-user-md"></i>  Recherche des Prestataires
@@ -293,17 +297,14 @@ use App\Adresse;
                             <i class="fas  fa-lg fa-users"></i>  Optimiseur
                         </a>
                     </li>
-
-                    <li class="nav-item ">
+                    <li class="nav-item">
                         <a class="nav-link   " href="#tab34" data-toggle="tab"  onclick="showinfos();hideinfos2();hideinfos3();">
                             <i class="fas fa-lg  fa-ambulance"></i>  Prestations
                         </a>
                     </li>
 
-
                 </ul>
-
-
+                
                 <div id="tab32" class="tab-pane fade active in  ">
                   <br>
 <?php
@@ -383,8 +384,6 @@ use App\Adresse;
 
     <input type="submit" value="envoyer" class="btn btn-success" style="width:150px"/>
 
-
-
 <?php /* $c=0;?><table><?php $c=0;?>
                             @foreach($prestataires as $prest)
                             <?php $c++; if($c<30) { ?>
@@ -403,7 +402,6 @@ use App\Adresse;
                                 <?php } ?>
                         @endforeach
              </table><?php } */ ?>
-
     <?php if (isset($datasearch)) { ?>
     <div class="row" style="margin-top:15px">  <label>Liste des Prestataires trouvés:</label>
     </div>
@@ -648,14 +646,12 @@ use App\Adresse;
                              </div>
 
 
-
                              <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}">
 
                          </form>
                      </div>
                 </div>
-
-                <div id="tab34" class="tab-pane fade ">
+				<div id="tab34" class="tab-pane fade ">
                     <br>
                     <!--  <span style="background-color:#fcdcd5;color:black;font-weight:bold">Prestation non effectuée </span>  <br>-->
                     <table class="table table-striped" id="mytable" style="width:100%;margin-top:15px;">
@@ -706,7 +702,6 @@ use App\Adresse;
                         </tbody>
                     </table>
                 </div>
-
                 </div>
 
 
@@ -1252,7 +1247,7 @@ reference_customer
                                      </select>
                                   </div>
                                   <div class=" row  " style="margin-top: 15px">
-                                    <div class="col-md-3"><label for="emispar">Émis par</label></div>
+                                    <!--<div class="col-md-3"><label for="emispar">Émis par</label></div>
                                       <select class="form-control" style="width: 230px" required id="emispar" name="emispar" >
                                           <option value="Select">Selectionner</option>
                                           <option value="najda">Najda Assistance </option>
@@ -1260,7 +1255,7 @@ reference_customer
                                           <option value="medict">Medic transport </option>
                                           <option value="vat">VAT transport </option>
                                           <option value="medici">Medic International </option>
-                                     </select>
+                                     </select>-->
                                      <input type="hidden" name="affectea" id="affectea" value="">
                                   </div>
                                   <!--<div class=" row  " style="margin-top: 15px">
@@ -1946,7 +1941,7 @@ reference_customer
       });
 
 </script>
-
+<script src="{{ asset('public/js/nombre_en_lettre.js') }}"></script>
 
 <script>
     function hideinfos() {
@@ -2251,6 +2246,19 @@ function filltemplate(data,tempdoc)
                 
             }
 
+        //verifier les tags du document
+        if(val[0] ==='lestags') 
+            {
+                console.log('les tags: '+val[1] );
+                
+            }
+
+            if(val[0] ==='montantgop') 
+            {
+                console.log('montantgop: '+val[1] );
+                
+            }
+
     });
 
   if (templateexist)
@@ -2260,7 +2268,7 @@ function filltemplate(data,tempdoc)
         var numparam = 0;
         $.each(items, function(index, val) {
             // les champs du document
-            if ((val[0] !=='templatertf') && (val[0] !=='templatehtml') /* && (val[0].indexOf("CL_") == -1)*/ )
+            if ((val[0] !=='templatertf') && (val[0] !=='templatehtml')  && (val[0] !=='lestags') /* && (val[0] !=='montantgop') && (val[0].indexOf("CL_") == -1)*/ )
             {
                 if (numparam == 0)
                 {
@@ -2280,7 +2288,6 @@ function filltemplate(data,tempdoc)
 
 
         //chargement du contenu et affichage du preview du document
-
         document.getElementById('templatefilled').src = html_string;
         $("#templatehtmldoc").modal('show');
 
@@ -2432,10 +2439,21 @@ function filltemplate(data,tempdoc)
                 method:"POST",
                 data:{dossier:dossier,template:tempdoc, _token:_token},
                 success:function(data){
-                     if (data !== 'nogop')
+
+                    console.log(data);
+                     if (typeof data !== "string")
                     {
 
                         filltemplate(data,tempdoc);
+                    }
+                    else if (data.startsWith("notallow"))
+                    {
+                         msg = data.replace("notallow_", "");
+                         Swal.fire({
+                            type: 'error',
+                            title: 'Oups...',
+                            text: msg
+                        });
                     }
                     else
                     {
@@ -2451,6 +2469,11 @@ function filltemplate(data,tempdoc)
          }
     });
 
+//document.getElementById('targetFrame').contentWindow.keyUpHandler();
+function keyUpHandler(){
+           // document.getElementById('dociframe').contentWindow.document.getElementById('CL_montant_toutes_lettres').firstChild.nodeValue  =   NumberToLetter(obj.value)
+           alert('changed');
+        }//fin de keypressHandler
 // fonction du remplissage de la template web du OM
 //https://www.jqueryscript.net/loading/Ajax-Progress-Bar-Plugin-with-jQuery-Bootstrap-progressTimer.html
     $('#genom').click(function(){
@@ -2467,7 +2490,7 @@ function filltemplate(data,tempdoc)
             });
             return false;
         }
-        var emispar = $("#emispar").val();
+        /*var emispar = $("#emispar").val();
         if (emispar==="Select")
         {
              Swal.fire({
@@ -2476,7 +2499,7 @@ function filltemplate(data,tempdoc)
                 text: "Veuillez selectionner l'entitée qui émis l'ordre de mission"
             });
             return false;
-        }
+        }*/
         /*var affectea = $("#affectea").val();
         if (affectea==="Select")
         {
@@ -2496,7 +2519,7 @@ function filltemplate(data,tempdoc)
                         afficheom(data,tempom);
                 }
             });*/
-            afficheom(emispar,tempom,dossier,affectea);
+            afficheom(tempom,dossier,affectea);
 
 
         }else{
@@ -2504,7 +2527,7 @@ function filltemplate(data,tempdoc)
         }
     });
 
-    function afficheom(emispar,tempom,dossier,affectea)
+    function afficheom(tempom,dossier,affectea)
     {
         $("#affectationprest").val("Select").change();
         $("#generateom").modal('hide');
@@ -2512,7 +2535,7 @@ function filltemplate(data,tempdoc)
         {
             affectea = "";
         }
-        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?emispar='+emispar+'&dossier='+dossier+'&affectea='+affectea+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
+        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?dossier='+dossier+'&affectea='+affectea+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
          document.getElementById("omfilled").src = url;
          
         
@@ -2871,7 +2894,7 @@ $urlapp='http://localhost/najdaapp';
             document.getElementById('termine').style.display = 'none';
             document.getElementById('showNext').style.display='none';
             document.getElementById('add2').style.display='none';
-            document.getElementById('add2prest').style.display='none';
+			document.getElementById('add2prest').style.display='none';
             document.getElementById('selectedprest').value=0;
 
 
@@ -2899,9 +2922,8 @@ $urlapp='http://localhost/najdaapp';
             // document.getElementById('termine').style.display = 'none';
             document.getElementById('showNext').style.display='none';
             document.getElementById('add2').style.display='none';
-            document.getElementById('add2prest').style.display='none';
+			document.getElementById('add2prest').style.display='none';
             document.getElementById('selectedprest').value=0;
-
 
 
             toggle('tprest', 'none');
@@ -2923,7 +2945,7 @@ $urlapp='http://localhost/najdaapp';
 
                 document.getElementById('termine').style.display = 'none';
                 document.getElementById('add2').style.display = 'none';
-                document.getElementById('add2prest').style.display='none';
+				document.getElementById('add2prest').style.display='none';
 
                 $.ajax({
                     url:"{{ route('dossiers.listepres') }}",
@@ -2968,7 +2990,7 @@ $urlapp='http://localhost/najdaapp';
         $("#essai2").click(function() {
             document.getElementById('termine').style.display = 'none';
             document.getElementById('add2').style.display = 'block';
-            document.getElementById('add2prest').style.display='block';
+			document.getElementById('add2prest').style.display='block';
             document.getElementById('showNext').style.display = 'block';
             document.getElementById('item1').style.display = 'block';
             document.getElementById('selected').value = 1;
@@ -2989,7 +3011,10 @@ $urlapp='http://localhost/najdaapp';
 
             $("#showNext").click(function() {
             var shownext=false;var infos=false;
-
+            // reinitialiser le champs de statut
+            /*if(document.getElementById('selectedprest').value ==0) {
+                document.getElementById('statutprest').value ='';
+            document.getElementById('detailsprest').value ='';}*/
 
             // si une prestation a èté ajoutée
             if(document.getElementById('idprestation').value >0) {
@@ -3003,7 +3028,7 @@ $urlapp='http://localhost/najdaapp';
             else{shownext=true;}
              if(shownext==true)
               {
-                  if(infos==true){
+            if(infos==true){
                 // enregistrement des infos de prestation  + envoi des emails
 
                 var _token = $('input[name="_token"]').val();
@@ -3018,14 +3043,14 @@ $urlapp='http://localhost/najdaapp';
                     data:{prestation:prestation,prestataire:prestataire,statut:statut,details:details, _token:_token},
                     success:function(data){
 
-                        // reinitialiser le champs de statut
+				// reinitialiser le champs de statut
                         if(document.getElementById('selectedprest').value ==0) {
                             document.getElementById('statutprest').value ='';
                             document.getElementById('detailsprest').value ='';}
 
                     }
                 });
-                      document.getElementById('statutprest').selectedIndex =0;
+				document.getElementById('statutprest').selectedIndex =0;
 
                       if(document.getElementById('idprestation').value >0) {
                           document.getElementById('prestation').style.display='none';
@@ -3033,7 +3058,7 @@ $urlapp='http://localhost/najdaapp';
 
             }
                 document.getElementById('selectedprest').value = 0;
-                  document.getElementById('detailsprest').value='';
+				document.getElementById('detailsprest').value='';
 
                 var selected = document.getElementById('selected').value;
                 var total = document.getElementById('total').value;
@@ -3046,8 +3071,7 @@ $urlapp='http://localhost/najdaapp';
                     document.getElementById('termine').style.display = 'none';
                     document.getElementById('item1').style.display = 'block';
                     document.getElementById('add2').style.display = 'block';
-                    document.getElementById('add2prest').style.display='block';
-
+					document.getElementById('add2prest').style.display='block';
 
                     //document.getElementById('selected').value=1;
                     // $("#selected").val('1');
@@ -3061,16 +3085,14 @@ $urlapp='http://localhost/najdaapp';
                     document.getElementById('item'+(selected)).style.display = 'none';
                     document.getElementById('showNext').style.display = 'none';
                     document.getElementById('add2').style.display = 'none';
-                    document.getElementById('add2prest').style.display='none';
-
+					document.getElementById('add2prest').style.display='none';
 
 
                 } else {
 
                     if ((selected != 0) && (selected <= total + 1)) {
                         document.getElementById('add2').style.display = 'block';
-                        document.getElementById('add2prest').style.display='block';
-
+						document.getElementById('add2prest').style.display='block';
                         document.getElementById('termine').style.display = 'none';
                         document.getElementById('item' + selected).style.display = 'none';
                         document.getElementById('item' + next).style.display = 'block';
@@ -3084,10 +3106,9 @@ $urlapp='http://localhost/najdaapp';
                 }
 
                 if(next>parseInt(total)+1) {
-               //     document.getElementById('item' + selected).style.display = 'none';
+                    // document.getElementById('item' + selected).style.display = 'none';
                 }
-
-                  if( document.getElementById('idprestation').value>0 ){
+				if( document.getElementById('idprestation').value>0 ){
                       document.getElementById('idprestation').value=0
                       document.getElementById('selectedprest').value = 0;
                       document.getElementById('detailsprest').value='';
@@ -3095,31 +3116,21 @@ $urlapp='http://localhost/najdaapp';
                       document.getElementById('statutprest').selectedIndex =0;
 
                   }
-
-
             }
             else{
-                if(document.getElementById('selectedprest').selectedIndex  >0) {
+				if(document.getElementById('selectedprest').selectedIndex  >0) {
+                  Swal.fire({
+                     type: 'error',
+                     title: 'Attendez...',
+                     text: 'SVP Expliquez la raison de ne pas choisir ce prestataire',
 
-                     Swal.fire({
-                         type: 'error',
-                         title: 'Attendez...',
-                         text: 'SVP Expliquez la raison de ne pas choisir ce prestataire',
-
-                     })
-
-
-                 }
-
-
+                 })
 
             }
 
+			}
 
-
-
-
-            });
+        });
 
 
 
