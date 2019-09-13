@@ -1,3 +1,8 @@
 .env
 /composer.json
 /composer.lock
+public/fonts/vendor/bootstrap-sass/bootstrap/glyphicons-halflings-regular.woff2
+public/fonts/vendor/bootstrap-sass/bootstrap/glyphicons-halflings-regular.woff
+public/fonts/vendor/bootstrap-sass/bootstrap/glyphicons-halflings-regular.ttf
+public/fonts/vendor/bootstrap-sass/bootstrap/glyphicons-halflings-regular.svg
+public/fonts/vendor/bootstrap-sass/bootstrap/glyphicons-halflings-regular.eot

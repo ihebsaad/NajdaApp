@@ -31,7 +31,7 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <!----- Push ------->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/push.js/1.0.5/push.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/push.js/1.0.5/push.js"></script>-->
 
 
 <script type="text/javascript">
@@ -144,6 +144,8 @@ if (App::environment('local')) {
     // The environment is local
     $urlapp='http://localhost/najdaapp';
 }?>
+
+
 <script>
 
     $( "#open" ).click(function() {
@@ -193,7 +195,7 @@ if (App::environment('local')) {
 
     // var userId = $('meta[name="userId"]').attr('content')
     Echo.private('App.User.{{Auth::id()}}').notification(  (notification) => {
-
+//alert("tessty");
 
         // extraction du contenu de la notification en format json
         var jsnt = JSON.stringify(notification);
@@ -344,20 +346,20 @@ if (App::environment('local')) {
             }
         });
 
-        Push.create("Nouvelle "+parsed['data']['entree']['type'], {
+   /* Push.create("Nouvelle "+parsed['data']['entree']['type'], {
 
-            body: parsed['data']['entree']['sujet'],
-            icon: "{{ asset('public/img/najda.png') }}",
-            timeout: 5000,
+        body: parsed['data']['entree']['sujet'],
+        icon: "{{ asset('public/img/najda.png') }}",
+        timeout: 5000,
 
-            onClick: function(){
-                // window.focus();
-                // this.close();
-                window.location ='<?php echo $urlapp; ?>/entrees/show/'+parsed['data']['entree']['id'];
+        onClick: function(){
+            // window.focus();
+            // this.close();
+            window.location ='<?php // echo $urlapp; ?>/entrees/show/'+parsed['data']['entree']['id'];
 
-            }
+        }
 
-        });
+    });*/
 
     });
 

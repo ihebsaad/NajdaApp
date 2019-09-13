@@ -159,7 +159,7 @@ class EntreesController extends Controller
         $refdoss = $entree->dossier;
         $entree->save();
         $dossier = Dossier::where('reference_medic','=',$refdoss)->first();
-        
+
         //$dossier=compact($dossier);
         return view('entrees.show',['dossiers' => $dossiers, 'dossier' => $dossier], compact('entree'));
 

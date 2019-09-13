@@ -58,7 +58,11 @@
 <!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
 <script src="{{  URL::asset('public/js/jquery-1.11.1.min.js') }}" type="text/javascript"></script>
 <script src="{{  URL::asset('public/js/app.js') }}" type="text/javascript"></script>
-    <?php
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/push.js/1.0.5/push.js"></script>
+
+
+ <?php
     $urlapp=env('APP_URL');
 
     if (App::environment('local')) {
@@ -147,12 +151,33 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 {
                     //console.log the response
                     console.log('check boite 1 :'+data);
+
+                    if(parseInt(data)>1)
+                    {
+                        Push.create("Nouvelle Notification", {
+
+                            body: 'Nouvelle Notification',
+                            icon: "{{ asset('public/img/najda.png') }}",
+                            timeout: 5000,
+
+                            onClick: function(){
+                                // window.focus();
+                                // this.close();
+                               // window.location ='<?php // echo $urlapp; ?>/entrees/show/'+parsed['data']['entree']['id'];
+
+                            }
+
+                        });
+
+                    }
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails();
                     }, 30000);  //30 secds
                 }
             });
+
+
         }
 
         function checkemails2(){

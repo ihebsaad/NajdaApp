@@ -43,13 +43,23 @@ if (token) {
  * allows your team to easily build robust real-time web applications.
  */
 
-import Echo from 'laravel-echo'
+const production  = 'http://localhost/najdaapp';
+const development = 'http://localhost/najdaapp';
+//const url = (process.env.NODE_ENV ? production : development);
+//const url = (process.env.BASE_URL ? production : development);
+
+
+import Echo from 'laravel-echo';
 
  window.Pusher = require('pusher-js');
 
  window.Echo = new Echo({
+     authEndpoint :'http://localhost/najdaapp/broadcasting/auth',
+     //hostname:'http://localhost/najdaapp/',
      broadcaster: 'pusher',
      key: '10f2013ac245ed0bfe45',
      cluster: 'eu',
      encrypted: false
  });
+
+//const url = window.location.origin;

@@ -9,6 +9,7 @@ use App\Dossier ;
 use App\Notification ;
 $dossiers = Dossier::get();
 
+
 use App\Attachement ;
 use App\Http\Controllers\AttachementsController;
 use App\Http\Controllers\NotificationsController;
@@ -244,8 +245,7 @@ use App\Http\Controllers\TagsController;
                                         </form>
         </div>
 
-        <center> <button  style="margin-bottom:15px" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#annulerAttenteReponse"> Annuler attente de réponse</button></center>
-</div>
+ </div>
 
 <style>
     .invoice{background-color: #fad9da;padding:1px;}
@@ -266,14 +266,6 @@ $users=UsersController::ListeUsers();
 
 ?>
 
- <?php use \App\Http\Controllers\ActionController;
-             
-             $actionsReouRap=ActionController::ListeActionsRepOuRap();
-          
-       /*echo($actionsReouRap);*/
- ?>
-
-
 <style>
 td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
@@ -282,45 +274,8 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
     color: #FFF;
 }
 </style>
-  <!-- modal annuler attente de réponse -->
-<div class="modal fade" id="annulerAttenteReponse" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Annuler Attente Réponse</h4>
-        </div>
-        <div class="modal-body">
-          <p>
-            
-           
-            <table id="tabkkk">
-
-                    <tr> <th></th> <th> Action  </th> <th> Mission  </th><th> Dossier   </th> </tr>
-                  @foreach ( $actionsReouRap as $rr)
-                    <tr> <td style="color: white; font-size: 0px;">{{$rr->id}}</td> <td>{{$rr->titre}}</td> <td>{{ $rr->Mission->titre}}</td> <td>{{$rr->Mission->dossier->reference_medic}}</td>  </tr>
-                   
-                  @endforeach
-                        
-            </table>
-            <!--<input type="button" id="tst" value="OK" onclick="fnselect()" />-->
 
 
-          </p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" id="tst" class="btn btn-default" data-dismiss="modal">Annuler Attente Réponse </button>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Quitter</button>
-        </div>
-      </div>
-  
-
-      
-
-</div>
-      </div>
 
        <script type="text/javascript">
         

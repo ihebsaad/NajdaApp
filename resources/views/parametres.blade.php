@@ -4,6 +4,7 @@
 
     <?php
 
+    use App\TypeMission;
     $user = auth()->user();
     $name=$user->name;
     $iduser=$user->id;
@@ -60,10 +61,16 @@
 
                             ?>
                             <li class="nav-item">
-                                <a class="nav-link <?php if ($user_type=='financier'){echo 'active';}?>" href="#tab4" data-toggle="tab" onclick="showinfos4();hideinfos();hideinfos2();hideinfos3()">
+                                <a class="nav-link <?php if ($user_type=='financier'){echo 'active';}?>" href="#tab4" data-toggle="tab" onclick="showinfos4();hideinfos();hideinfos2();hideinfos3();hideinfos5()">
                                     <i class="fa-lg fas fa-users"></i>  Finances
                                 </a>
                             </li>
+                                <li class="nav-item">
+                                    <a class="nav-link " href="#tab5" data-toggle="tab" onclick="showinfos5();hideinfos();hideinfos2();hideinfos4();hideinfos3()">
+                                        <i class="fa-lg fas fa-gears"></i>  Paramètres Type Missions
+                                    </a>
+                                </li>
+
                             <?php }?>
                         </ul>
 
@@ -228,7 +235,7 @@
                     </div>--->
 <?php }
 
-if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {/*
+if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
 ?>
                     <div id="tab3" class="tab-pane fade <?php if ($user_type=='superviseur'){echo 'in active';}?>" style="display:block">
                         <div class="padding:50px 50px 50px 50px"><br>
@@ -253,15 +260,52 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {/*
                             </ul>
                         </div>
                     </div>
-    <?php */ }
-    if( ($user_type=='financier')  || ( ($user_type=='admin')) ) {
+    <?php  }
+?>
+
+<div id="tab5" class="tab-pane fade   " style="display:block">
+<div class="padding:20px 20px 20px 20px"><br>
+
+    <?php
+    $type_missions = TypeMission::get();
+
+
+    ?>
+
+    <div class="row">
+        <div class="col-md-1" style="width:170px;margin-bottom:10px;">
+       Type de Mission:
+        </div>
+        <div class="col-md-6">
+
+        <select  onchange="LoadTypeM()" id="typemission" class="form control select2"   style="width:650px" >
+        <option></option>
+        <?php
+        foreach($type_missions as $tm)
+        { ?>
+        <option value="<?php echo $tm->id; ?>"><?php  echo $tm->nom_type_Mission; ?> </option>
+
+        <?php  }
+        ?>
+    </select>
+        </div>
+   </div>
+    <div id="data" >
+
+
+    </div>
+
+    </div>
+    </div><!--  Tab 5  -->
+
+ <?php   if( ($user_type=='financier')  || ( ($user_type=='admin')) ) {
 
     ?>
                     <div id="tab4" class="tab-pane fade <?php if ($user_type=='financier'){echo 'in active';}?> " style="display:block">
                         <div class="padding:20px 20px 20px 20px"><br>
                             <h4>Paramètres finances</h4><br>
 
-                            <table class="table">
+                            <table class="table" style="width:600px">
 
                                 <form class="form-horizontal" method="POST"></form>
 
@@ -286,12 +330,35 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {/*
                     </div>
 
     <?php } ?>
+
                     @endsection
+
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <script>
 
-    function hideinfos() {
+    function LoadTypeM() {
+
+         var select = document.getElementById("typemission");
+        var typemission = select.options[select.selectedIndex].value;
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('typesmissions.loading') }}",
+            method: "post",
+
+            data: {typemission: typemission,  _token: _token},
+            success: function (data) {
+
+                $('#data').html(data);
+            }
+        }); // ajax
+
+    }
+
+
+  //   $("#typemission").select2();
+
+     function hideinfos() {
         $('#tab1').css('display','none');
     }
     function hideinfos2() {
@@ -314,6 +381,9 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {/*
     }
     function showinfos4() {
         $('#tab4').css('display','block');
+    }
+    function showinfos5() {
+        $('#tab5').css('display','block');
     }
 
     function changing(elm) {
@@ -360,5 +430,130 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {/*
         });
 
     }
+    function updateDesc(elm) {
+        var champ=elm.id;
+        var typemission= champ.slice(5);
+         var description =document.getElementById(champ).value;
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('typesmissions.updatedesc') }}",
+            method: "POST",
+            data: {  typemission:typemission ,description:description, _token: _token},
+            success: function ( ) {
+                $('#'+champ).animate({
+                    opacity: '0.3',
+                });
+                $('#'+champ).animate({
+                    opacity: '1',
+                });
+
+            }
+        });
+
+    }
+
+    function updateDescAct( ) {
+        var typemission  =document.getElementById('typemission').value;
+        var description =document.getElementById('descrip_act').value;
+       var action= document.getElementById('selectedaction').value;
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('typesmissions.updatedescact') }}",
+            method: "POST",
+            data: {  typemission:typemission ,action:action,description:description, _token: _token},
+            success: function ( ) {
+                $('#descrip_act').animate({
+                    opacity: '0.3',
+                });
+                $('#descrip_act').animate({
+                    opacity: '1',
+                });
+
+            }
+        });
+
+    }
+
+
+    function updateCharge(elm) {
+        var champ=elm.id;
+        var charge=document.getElementById(champ).value;
+        var typemission  =document.getElementById('typemission').value;
+        var action=champ.slice(7);
+
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('typesmissions.updatecharge') }}",
+            method: "POST",
+            data: {  typemission:typemission ,action:action, charge:charge, _token: _token},
+            success: function ( ) {
+                $('#'+champ).animate({
+                    opacity: '0.3',
+                });
+                $('#'+champ).animate({
+                    opacity: '1',
+                });
+
+            }
+        });
+
+    }
+
+    function ShowModal(elm)
+    {
+        var champ=elm.id;
+        var action=champ.slice(4);
+ document.getElementById('selectedaction').value=action;
+ description=document.getElementById(champ).title;
+document.getElementById('descrip_act').value=description;
+         $('#act_description').modal({show:true});
+
+    }
+
 
 </script>
+
+<style>
+    .mytable{padding:20px 20px 20px 20px;border: 1px solid #00aced;margin-bottom: 50px;}
+    .mytable th {background-color: #00aced;color:white;font-weight: 600;text-align: center;height:40px;}
+    .mytable td {text-align: center;height:35px;}
+    .mytable input{text-align: center;}
+</style>
+
+
+<!-- Modal SMS -->
+<div class="modal fade" id="act_description" role="dialog" aria-labelledby="description" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModal7" style="text-align: center">Description de l'action </h2>
+            </div>
+            <form   >
+
+
+
+                <div class="modal-body" style="padding:40px 20px 20px 20px">
+                    <div class="card-body">
+
+
+                        <div class="form-group">
+                            <input type="hidden" id="selectedaction" />
+                            {{ csrf_field() }}
+                            <label for="description">Description:</label>
+                            <textarea onchange="updateDescAct()" style="width:100%;height:400px;" id="descrip_act"  class="form-control" name="description"     ></textarea>
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal" style="margin-left:30px">Fermer</button>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

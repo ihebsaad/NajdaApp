@@ -152,7 +152,39 @@ class TypeMissionController extends Controller
 
         $typeMission->save();
 
-        return redirect('/typesMissions')->with('success', '  has been updated');    }
+        return redirect('/typesMissions')->with('success', '  has been updated');
+    }
+
+    public function updatedesc(Request $request)
+    {
+        $typemission=$request->get('typemission');
+        $contenu=$request->get('description');
+
+        TypeMission::where('id', $typemission)->update(array('des_miss' => $contenu));
+
+    }
+
+    public function updatecharge(Request $request)
+    {
+        $typemission=$request->get('typemission');
+
+        $action=$request->get('action');
+        $charge=$request->get('charge');
+
+        TypeMission::where('id', $typemission)->update(array('duree'.$action => $charge));
+
+    }
+
+    public function updatedescact(Request $request)
+    {
+        $typemission=$request->get('typemission');
+
+        $action=$request->get('action');
+        $description=$request->get('description');
+
+        TypeMission::where('id', $typemission)->update(array('desc_action'.$action => $description));
+
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -168,4 +200,47 @@ class TypeMissionController extends Controller
         return redirect('/typesMissions')->with('success', '  Supprimé');
 
      }
+
+    public function custom_echo($x, $length)
+    {
+        if(strlen($x)<=$length)
+        {
+            return $x;
+        }
+        else
+        {
+            $y=substr($x,0,$length) . '..';
+            return $y;
+        }
+    }
+
+    public   function loading(Request $request)
+    {
+        $id = $request->get('typemission');
+        $TM =TypeMission::find($id);
+        //$TM =TypeMission::where('id',$id)->get();
+
+        $description=$TM['des_miss'];
+        $output='';
+        $output.='<div class="row" style="margin-bottom:15px;" ><div class="col-md-1" style="width:170px" >Description:</div><div class="col-md-6" > <textarea style="width:650px;height: 85px;" onchange="updateDesc(this)" id="desc-'.$id.'" >'.$description.'  </textarea> </div> </div><br>';
+
+        $output.='<table class="mytable"><thead><tr><th style="width:100px">Action </th><th style="width:650px">Titre</th><th style="width:100px">Charge</th></tr></thead>';
+
+
+        $output.='</td>';
+         $nb_acts=$TM->nb_acts;
+        for ($i=1; $i<=$nb_acts;$i++) {
+            $descr='desc_action'.$i;
+            $duree='duree'.$i;
+            $action='action'.$i;
+            $output .= '<tr><td style="width:50px">'.$i.'</td><td style="width:650px;cursor:pointer" onclick="ShowModal(this)" title="'.$TM[$descr].'" class="tdtitre" id="act-'.$i.'"> '.$this->custom_echo($TM[$action],60).'</td><td style="width:100px"><input onchange="updateCharge(this)" style="width:80px" type="number" value="'.$TM[$duree].'" id="action-'.$i.'" /></td></tr>  ';
+
+          }
+
+        $output .= '</table>';
+        return $output;
+
+
+       }
+
 }

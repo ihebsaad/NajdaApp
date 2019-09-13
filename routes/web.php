@@ -417,12 +417,16 @@ Route::post('/Actions/traiterDatesSpecifiques','ActionController@traiterDatesSpe
 
 
 /*** TypeMission**/
-Route::resource('/typesMissions',  'TypeMissionController');
+//Route::resource('/typesMissions',  'TypeMissionController');
 Route::get('/typesMissions', array('as' => 'Missions','uses' => 'TypeMissionController@index'));
 Route::post('/typesMissions/saving','TypeMissionController@saving')->name('typeMissions.saving');
 Route::get('/typesMissions/view/{id}', 'TypeMissionController@view');
 
 Route::post('/TypeMissionAutocomplte','TypeMissionController@getTypeMissionAjax')->name('typeMission.autocomplete');
+Route::post('/typesmissions/loading','TypeMissionController@loading')->name('typesmissions.loading');
+Route::post('/typesmissions/updatedesc','TypeMissionController@updatedesc')->name('typesmissions.updatedesc');
+Route::post('/typesmissions/updatedescact','TypeMissionController@updatedescact')->name('typesmissions.updatedescact');
+Route::post('/typesmissions/updatecharge','TypeMissionController@updatecharge')->name('typesmissions.updatecharge');
 
 /*** EtapeTypeMission**/
 /*Route::resource('/etapestypesMissions',  'EtapesTypeMissionController');
