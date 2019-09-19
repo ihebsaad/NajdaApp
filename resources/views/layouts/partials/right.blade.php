@@ -1235,11 +1235,26 @@ $(document).on("keyup","#InputetatActionMission",function() {
 
 
 </script>
+<style>
+.swal2-confirm{
+  margin-bottom: 30px;
+    margin-top: 20px;
+    <?php
+if ($view_name=='dossiers-view') {
+// echo 'visibility:hidden;' ;
+}
+?>
 
+}
 
-
+</style>
 
 <script>
+<?php if ($view_name=='dossiers-view') { ?>
+// document.getElementsByClassName('swal2-confirm').disabled = true;
+//$('.swal2-confirm').prop('disabled', true);
+<?php }
+?>
  setInterval(function(){ 
      
     $.ajax({
@@ -1309,9 +1324,9 @@ $(document).on("keyup","#InputetatActionMission",function() {
                             title: 'Activation d\'action',
                             html: '<b>'+data+'</b>',
                             type: 'warning',
-                            showCancelButton: false,
-                            confirmButtonText: 'Ok !',
-                            cancelButtonText: 'Non',
+                            showCancelButton: true,
+                            confirmButtonText: 'Traiter maintenant ',
+                            cancelButtonText: 'Consulter ultèrieurement',
                          //   reverseButtons: true
                         }).then((result) => {
                             if (result.value) {

@@ -2573,6 +2573,8 @@ function keyUpHandler(){
                 //'&_token='+_token
                 data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent+'&idMissionDoc='+idMissionDoc,
                 success:function(data){
+
+                   // alert(data);
                      console.log(data);
                     location.reload();
                 },

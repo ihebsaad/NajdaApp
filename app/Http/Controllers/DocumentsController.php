@@ -13,7 +13,8 @@ use App\Dossier ;
 use App\Client ;
 use App\User ;
 use App\Template_doc ;
-use App\Document ;
+use App\Document;
+use App\Mission;
 use DB;
 use WordTemplate;
 
@@ -121,16 +122,36 @@ class DocumentsController extends Controller
                 $titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
             }
 
-
-     /* if (strpos($file, 'PEC_location_Najda_a_VAT') !== false)  
+/*------------------------dates spécifiques-----------------------------------------------------------*/
+      if (strpos($file, 'PEC_Hotel') !== false)  
         {
-            if (isset($_POST['CL_date_fin_location']))
+            if (isset($_POST['CL_fin_sejour']))
             {
-                // maj table
+
+              $format = "Y-m-d\TH:i";              
+              $datespe = \DateTime::createFromFormat($format,$_POST['CL_fin_sejour']);
+
+               $miss=Mission::where('id',$_POST['idMissionDoc'])->first();
+
+                    if($miss->type_Mission==32)// reservation hotel
+                    {
+                     
+                        $miss->update(['date_spec_affect'=>1]); 
+                    
+                        $miss->update(['date_spec_affect2'=>1]); 
+
+                        $miss->update(['h_fin_sejour'=>$datespe]);
+
+                        //return 'date affectée'; 
+                   
+                    }// fin reservation hotel
+              // return  $miss->id ;
             }
-        }*/
+        }
 
        // return $_POST['idMissionDoc'];
+
+/*--------------------------------------------------------fin dates spécifiques---------------------------*/
             
        WordTemplate::export($file, $array, '/documents/'.$refdoss.'/'.$name_file);
           

@@ -19,8 +19,9 @@ class Mission extends Model
         'arr_prev_dest','act_arr_prev_dest','h_arr_prev_dest',
         'decoll_ou_dep_bat','act_decoll_ou_dep_bat','h_decoll_ou_dep_bat',
         'arr_av_ou_bat','act_arr_av_ou_bat','h_arr_av_ou_bat',
-        'retour_base','act_retour_base','h_retour_base','sejour','date_deb_sejour','date_fin_sejour','location_voit',
-        'date_deb_location_voit','date_fin_location_voit',
+        'retour_base','act_retour_base','h_retour_base','deb_sejour','h_deb_sejour','act_deb_sejour','fin_sejour',
+        'h_fin_sejour','act_fin_sejour','deb_location_voit',
+        'h_deb_location_voit','act_deb_location_voit','fin_location_voit','h_fin_location_voit','act_fin_location_voit'
     ];
 
    /* protected $dateFormat = 'Y-m-d H:i';
