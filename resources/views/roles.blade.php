@@ -182,6 +182,7 @@
 
  $debut=$seance->debut;
  $fin=$seance->fin;
+ $date=date('l d/m/Y');
 
 ?>
  <script src="{{  URL::asset('public/js/jquery-1.11.1.min.js') }}" type="text/javascript"></script>
@@ -198,9 +199,11 @@
 <div class="row">
 <div class="col-md-3">
 </div>
-<div class="col-md-6" style="padding:100px 50px 100px 50px">
-    <h1>Bienvenue <?php echo  $name .' '. $lastname; ?></h1><br>
-<h2>Sélectionnez votre/vos rôle(s) pendant cette séance :</h2>
+<div class="col-md-6" style="padding:80px 50px 80px 50px">
+    <h1>Bienvenue <B style="color:#5D9CEC"><?php echo  $name .' '. $lastname; ?></B></h1>
+	<h4>Nous sommes le <b><?php echo $date; ?></b></h4>
+
+<h5>Sélectionnez votre/vos rôle(s) pendant cette séance :</h5>
     <small> (Cliquez sur un rôle attribué pour le demander)</small><br><br><br>
     <input type="hidden" id="par" value="<?php echo $iduser; ?>" >
 {{ csrf_field() }}
