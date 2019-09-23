@@ -238,7 +238,7 @@
 
 					 var urllocale=top.location.href;
 			         var pos=urllocale.indexOf("entrees/show");
-
+                      var res=-1;
                       // alert(pos);
 			         if(pos != -1)
 			         {
@@ -246,15 +246,25 @@
                       
                        var n = urllocale.lastIndexOf("/");
 
+                       var diese=urllocale.lastIndexOf("#");
 
+                       if(diese != -1)
+                       {
+                       	alert(diese);
+                        res = urllocale.substring(n+1,diese);
+                       }
+                       else
+                       {
+                       	res = urllocale.substr(n+1);
+                       }
 
-                       var res = urllocale.substr(n+1);
+                      
 
-                        //alert(res);
+                        alert(res);
 
                         $('#idEntreeMissionOnMarker').val(res);
 
-                       // alert( $('#idEntreeMissionOnMarker').val());
+                        alert( $('#idEntreeMissionOnMarker').val());
 
 			         }
 

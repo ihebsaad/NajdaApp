@@ -123,7 +123,13 @@ class DocumentsController extends Controller
             }
 
 /*------------------------dates spécifiques-----------------------------------------------------------*/
-      if (strpos($file, 'PEC_Hotel') !== false)  
+
+
+if(isset($_POST['idMissionDoc']))
+{
+
+
+      if (strpos($file, 'PEC_Hotel') !== false)  // cas réservation hotilière
         {
             if (isset($_POST['CL_fin_sejour']))
             {
@@ -149,7 +155,39 @@ class DocumentsController extends Controller
             }
         }
 
+           // cas location voiture ; date fin location
+
+        if (strpos($file, 'PEC_location_Najda_a_VAT') !== false || strpos($file, 'PEC_location_VAT_a_Prest') !== false )  // cas location voiture
+        {
+            if (isset($_POST['CL_date_fin_location']))
+            {
+
+              $format = "Y-m-d\TH:i";              
+              $datespe = \DateTime::createFromFormat($format,$_POST['CL_date_fin_location']);
+
+               $miss=Mission::where('id',$_POST['idMissionDoc'])->first();
+
+                    if($miss->type_Mission==46)// reservation hotel
+                    {
+                     
+                        $miss->update(['date_spec_affect'=>1]); 
+                    
+                        $miss->update(['date_spec_affect2'=>1]);
+
+                        $miss->update(['date_spec_affect3'=>1]);  
+
+                        $miss->update(['h_fin_location_voit'=>$datespe]);
+
+                        return 'date affectée'; 
+                   
+                    }
+             
+            }
+        }
+
        // return $_POST['idMissionDoc'];
+
+    }// fin issset (idmissdoc)
 
 /*--------------------------------------------------------fin dates spécifiques---------------------------*/
             

@@ -126,9 +126,17 @@ class MissionController extends Controller
         
 
      
-       //dd($dossier);   
+       //dd($dossier);  
+         $format = "Y-m-d\TH:i";
+  
         
-        
+        $datespecifique= \DateTime::createFromFormat($format, trim($request->get('datedeb')));
+
+           if($typeMiss->id==33 || $typeMiss->id==34 ) // cas de transport MMs et   transport externe
+         {
+
+            $datespecifique=$datespecifique->modify('-2 minutes'); // -24 hours
+         }
        
 
          $Mission = new Mission([
@@ -136,7 +144,7 @@ class MissionController extends Controller
              'descrip' => trim($request->get('descrip')),
              'nb_acts_ori'=>$typeMiss->nb_acts,
              'commentaire' => trim($request->get('commentaire')),
-             'date_deb'=> trim($request->get('datedeb')),
+             'date_deb'=> $datespecifique,
              'type_Mission' =>$typeMiss->id,
              'dossier_id' => $dossier->id,
              'statut_courant' => 'active',
@@ -164,8 +172,8 @@ class MissionController extends Controller
              'act_arr_av_ou_bat'=> $typeMiss->act_arr_av_ou_bat,
               'retour_base'=> $typeMiss->retour_base,
               'act_retour_base'=> $typeMiss->act_retour_base,
-              'sejour'=>$typeMiss->sejour,
-              'location_voit'=> $typeMiss->location_voit
+              'deb_sejour'=>$typeMiss->sejour_deb,
+              'deb_location_voit'=> $typeMiss->location_voit_deb
         ]);
 
         $Mission->save();
@@ -182,9 +190,9 @@ class MissionController extends Controller
           {
           
             $entree->update(['mission_id'=> $Mission->id]) ;
+            $Mission->update(['id_entree'=> $request->get('idEntreeMissionOnMarker')]);
 
           }
-
 
 
 
@@ -196,7 +204,7 @@ class MissionController extends Controller
           $dtc = (new \DateTime())->format('Y-m-d\TH:i');
        //dd($Mission->date_deb."  ". $dtc);
         //dd(time($dtc)."  ".time($request->get('datedeb')));
-         $format = "Y-m-d\TH:i";
+         //$format = "Y-m-d\TH:i";
          $dateSys  = \DateTime::createFromFormat($format, $dtc);
 
          $dateMiss  = \DateTime::createFromFormat($format, $request->get('datedeb'));
@@ -212,6 +220,15 @@ class MissionController extends Controller
 
           dd("date sys <= date miss");
          }*/
+
+         if($typeMiss->id==33 || $typeMiss->id==34 ) // cas de MMs et externe
+         {
+
+           $Mission->update(['date_spec_affect2'=>1]); 
+           $Mission->update(['h_decoll_ou_dep_bat'=>$datespecifique->modify('+2 minutes')]);// +24 hours
+
+
+         }
 
        if($dateMiss >$dateSys)
        {
@@ -357,13 +374,43 @@ class MissionController extends Controller
         $dossier=Dossier::where("reference_medic",trim($request->get('dossier')))->first();
         //$typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeactauto')))->first();
         $typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeMissauto')))->first();
+       
 
+        if($typeMiss->id==30 )/*vérification de client AXA ou IMA de dossier avant de créer une mission de  rapatriement  véhicule sur Cargo*/
+         {
+         $dossi=Dossier::where('id',$request->get('dossierID'))->first();
+         $existe_cli=Client::where('id',$dossi->customer_id)
+                              ->where(function($q){                             
+                               $q->where('name', 'like', '%IMA%')
+                               ->orWhere('name', 'like', '%AXA%');
+                                })                             
+                              ->where('pays','FRANCE')
+                              ->first();
+
+               if(! $existe_cli)
+               {
+
+                      return 'Impossible de céeer la mission : le client de  dossier courant doit être IMA France ou AXA France';
+
+               }
+
+          }         
         
 
      
        //dd($dossier);   
         
+         $format = "Y-m-d\TH:i";
+  
         
+        $datespecifique= \DateTime::createFromFormat($format, trim($request->get('datedeb')));
+
+           if($typeMiss->id==33 || $typeMiss->id==34 ) // cas de transport MMs et   transport externe
+         {
+
+            $datespecifique=$datespecifique->modify('-2 minutes'); // -24 
+         }
+       
        
 
          $Mission = new Mission([
@@ -447,6 +494,14 @@ class MissionController extends Controller
 
           dd("date sys <= date miss");
          }*/
+
+           if($typeMiss->id==33 || $typeMiss->id==34 ) // cas de MMs et externe
+         {
+
+           $Mission->update(['date_spec_affect2'=>1]); 
+           $Mission->update(['h_decoll_ou_dep_bat'=>$datespecifique->modify('+2 minutes')]);
+
+         }
 
        if($dateMiss >$dateSys)
        {
@@ -633,10 +688,21 @@ class MissionController extends Controller
 
    {
 
-  $entree=Entree::where('mission_id','!=',null)->where('mission_id',$idmiss)->first();
+  //$entree=Entree::where('mission_id','!=',null)->where('mission_id',$idmiss)->first();
+
+
+      $id_entree=Mission::where('id',$idmiss)->first()->id_entree;
+
+      if($id_entree)
+      {
+      $entree=Entree::where('id',$id_entree)->first();
+      }
+      else
+      {
+        $entree=null;
+      }
 
         if($entree)
-
         {
 
               $output='<div class="form-group">
@@ -665,7 +731,7 @@ class MissionController extends Controller
           }
           else
           {
-            $output='<div class="form-group"> <h4>Il n\'y a pas de mail génerateur pour cette mission </h4></div>';
+            $output='<div class="form-group"> <h4>Il n\'y a pas du mail génerateur pour cette mission </h4></div>';
 
           }
 
@@ -2388,6 +2454,438 @@ public function getAjaxDeleguerMission($idmiss)
 
 
       }// fin Expertise
+
+       
+ if( $miss->type_Mission==43) // rapatriement de véhicule sur ferry
+            {
+  
+        $output.='<input type="hidden" id="idmissionDateSpecM" name="idmissionDateSpec" value="'.$miss->id.'"  />
+        <input type="hidden" id="NomTypeDateSpecM" name="NomTypeDateSpec" value="decoll_ou_dep_bat"  />
+         
+       <h4><b> Dates spécifiques : </b></h4>
+
+       <br>
+          <span style="padding: 0px; font-weight: bold; font-size: 17px;">  la (les) date(s) spécifique(s) à fixer pour cette mission est (sont) : </span>
+        <br>
+       <br>
+       
+        <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
+
+        <div class="row">
+          <br>
+          <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
+          
+          <br><br>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue de départ du bâteau</span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 11:</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Informer l’assistance du départ effectif  </span>
+          <br>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
+
+        
+            <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
+
+          if($miss->date_spec_affect==1)
+             {
+             $output.='green';
+             }
+             else
+             {
+              $output.= 'red' ;
+             }
+
+            $output.= ';">';
+
+
+             if($miss->date_spec_affect==1)
+
+             {
+              $output.= 'oui, date assignée';
+             }
+             else
+             {
+             $output.='Non, date non assignée' ;
+             }
+             
+             $output.='</span>';
+
+
+
+       $output.='</div>
+        <br>
+        <br>
+             <div class="row">
+
+              <label style="padding: 5px; font-weight: bold; font-size: 15px;">&nbsp;&nbsp; Mettre à jour la date spécifique : </label>';
+
+              $da = (new \DateTime())->format('Y-m-d\TH:i'); 
+
+              $output.='<input id="dateSpecM" type="datetime-local" value="'.$da.'" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec"/>
+            </div>
+
+        <br>
+
+         <div class="row">
+          <div class="col-md-5"> </div>
+
+           <div class="col-md-2"></div>
+
+          <div class="col-md-5">
+         <button id="MajDateSpecM" type="button" style=""> Mettre à jour date spécifique</button> 
+         </div>
+          
+         </div>
+         <br>
+         <br>
+       </div>';
+
+      
+
+
+
+      }// fin rapatriement de véhicule sur ferry
+
+       if( $miss->type_Mission==45) // réparation véhicule
+            {
+  
+        $output.='<input type="hidden" id="idmissionDateSpecM" name="idmissionDateSpec" value="'.$miss->id.'"  />
+        <input type="hidden" id="NomTypeDateSpecM" name="NomTypeDateSpec" value="rdv"  />
+         
+       <h4><b> Dates spécifiques : </b></h4>
+
+       <br>
+          <span style="padding: 0px; font-weight: bold; font-size: 17px;">  la (les) date(s) spécifique(s) à fixer pour cette mission est (sont) : </span>
+        <br>
+       <br>
+       
+        <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
+
+        <div class="row">
+          <br>
+          <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
+          
+          <br><br>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure RDV pour passage assuré </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 8:</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Suivre récupération véhicule </span>
+          <br>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
+
+        
+            <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
+
+          if($miss->date_spec_affect==1)
+             {
+             $output.='green';
+             }
+             else
+             {
+              $output.= 'red' ;
+             }
+
+            $output.= ';">';
+
+
+             if($miss->date_spec_affect==1)
+
+             {
+              $output.= 'oui, date assignée';
+             }
+             else
+             {
+             $output.='Non, date non assignée' ;
+             }
+             
+             $output.='</span>';
+
+
+
+       $output.='</div>
+        <br>
+        <br>
+             <div class="row">
+
+              <label style="padding: 5px; font-weight: bold; font-size: 15px;">&nbsp;&nbsp; Mettre à jour la date spécifique : </label>';
+
+              $da = (new \DateTime())->format('Y-m-d\TH:i'); 
+
+              $output.='<input id="dateSpecM" type="datetime-local" value="'.$da.'" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec"/>
+            </div>
+
+        <br>
+
+         <div class="row">
+          <div class="col-md-5"> </div>
+
+           <div class="col-md-2"></div>
+
+          <div class="col-md-5">
+         <button id="MajDateSpecM" type="button" style=""> Mettre à jour date spécifique</button> 
+         </div>
+          
+         </div>
+         <br>
+         <br>
+       </div>';
+
+      
+
+
+
+      }// fin réparation véhicule
+
+        if( $miss->type_Mission==44 ) // remorquage
+            {
+  
+        $output.='<input type="hidden" id="idmissionDateSpecM" name="idmissionDateSpec" value="'.$miss->id.'"  />
+        <input type="hidden" id="NomTypeDateSpecM" name="NomTypeDateSpec" value="dep_pour_miss"  />
+         
+       <h4><b> Dates spécifiques : </b></h4>
+
+       <br>
+          <span style="padding: 0px; font-weight: bold; font-size: 17px;">  la (les) date(s) spécifique(s) à fixer pour cette mission est (sont) : </span>
+        <br>
+       <br>
+       
+        <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
+
+        <div class="row">
+          <br>
+          <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
+          
+          <br><br>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure départ pour mission </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 10 :</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Suivi </span>
+          <br>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
+
+        
+            <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
+
+          if($miss->date_spec_affect==1)
+             {
+             $output.='green';
+             }
+             else
+             {
+              $output.= 'red' ;
+             }
+
+            $output.= ';">';
+
+
+             if($miss->date_spec_affect==1)
+
+             {
+              $output.= 'oui, date assignée';
+             }
+             else
+             {
+             $output.='Non, date non assignée' ;
+             }
+             
+             $output.='</span>';
+
+
+
+       $output.='</div>
+        <br>
+        <br>
+             <div class="row">
+
+              <label style="padding: 5px; font-weight: bold; font-size: 15px;">&nbsp;&nbsp; Mettre à jour la date spécifique : </label>';
+
+              $da = (new \DateTime())->format('Y-m-d\TH:i'); 
+
+              $output.='<input id="dateSpecM" type="datetime-local" value="'.$da.'" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec"/>
+            </div>
+
+        <br>
+
+         <div class="row">
+          <div class="col-md-5"> </div>
+
+           <div class="col-md-2"></div>
+
+          <div class="col-md-5">
+         <button id="MajDateSpecM" type="button" style=""> Mettre à jour date spécifique</button> 
+         </div>
+          
+         </div>
+         <br>
+         <br>
+       </div>';
+
+       /* date spécifique pour action 11--------------------------------------------------------*/
+
+
+
+       $output.='<input type="hidden" id="idmissionDateSpecM2" name="idmissionDateSpec2" value="'.$miss->id.'"  />
+        <input type="hidden" id="NomTypeDateSpecM2" name="NomTypeDateSpec2" value="retour_base"  />
+         
+       
+       <br>
+       
+        <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
+
+        <div class="row">
+          <br>
+        
+        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure fin mission </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 11 :</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Evaluation </span>
+          <br>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
+
+        
+            <span id="idspandateAssNonAssM2" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
+
+          if($miss->date_spec_affect2==1)
+             {
+             $output.='green';
+             }
+             else
+             {
+              $output.= 'red' ;
+             }
+
+            $output.= ';">';
+
+
+             if($miss->date_spec_affect2==1)
+             {
+              $output.= 'oui, date assignée';
+             }
+             else
+             {
+             $output.='Non, date non assignée' ;
+             }
+             
+             $output.='</span>';
+
+
+
+       $output.='</div>
+        <br>
+        <br>
+             <div class="row">
+
+              <label style="padding: 5px; font-weight: bold; font-size: 15px;">&nbsp;&nbsp; Mettre à jour la date spécifique : </label>';
+
+              $da = (new \DateTime())->format('Y-m-d\TH:i'); 
+
+              $output.='<input id="dateSpecM2" type="datetime-local" value="'.$da.'" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec2"/>
+            </div>
+
+        <br>
+
+         <div class="row">
+          <div class="col-md-5"> </div>
+
+           <div class="col-md-2"></div>
+
+          <div class="col-md-5">
+         <button id="MajDateSpecM2" type="button" style=""> Mettre à jour date spécifique</button> 
+         </div>
+          
+         </div>
+         <br>
+    
+       </div>';
+
+
+
+
+      }// fin remorquage
+
+
+       if( $miss->type_Mission==46) //location voiture
+            {
+  
+        $output.='<input type="hidden" id="idmissionDateSpecM" name="idmissionDateSpec" value="'.$miss->id.'"  />
+        <input type="hidden" id="NomTypeDateSpecM" name="NomTypeDateSpec" value="fin_location_voit"  />
+         
+       <h4><b> Dates spécifiques : </b></h4>
+
+       <br>
+          <span style="padding: 0px; font-weight: bold; font-size: 17px;">  la (les) date(s) spécifique(s) à fixer pour cette mission est (sont) : </span>
+        <br>
+       <br>
+       
+        <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
+
+        <div class="row">
+          <br>
+          <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
+          
+          <br><br>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date fin location  </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> utilisée pour activer ,  </span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;">l\'action 6: Vérification fin ou prolongation ? , l\'action 8: PEC définitive  et l\'action 10: Evaluation </span>
+          <br>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
+
+        
+            <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
+
+          if($miss->date_spec_affect==1)
+             {
+             $output.='green';
+             }
+             else
+             {
+              $output.= 'red' ;
+             }
+
+            $output.= ';">';
+
+
+             if($miss->date_spec_affect==1)
+
+             {
+              $output.= 'oui, date assignée';
+             }
+             else
+             {
+             $output.='Non, date non assignée' ;
+             }
+             
+             $output.='</span>';
+
+
+
+       $output.='</div>
+        <br>
+        <br>
+             <div class="row">
+
+              <label style="padding: 5px; font-weight: bold; font-size: 15px;">&nbsp;&nbsp; Mettre à jour la date spécifique : </label>';
+
+              $da = (new \DateTime())->format('Y-m-d\TH:i'); 
+
+              $output.='<input id="dateSpecM" type="datetime-local" value="'.$da.'" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec"/>
+            </div>
+
+        <br>
+
+         <div class="row">
+          <div class="col-md-5"> </div>
+
+           <div class="col-md-2"></div>
+
+          <div class="col-md-5">
+         <button id="MajDateSpecM" type="button" style=""> Mettre à jour date spécifique</button> 
+         </div>
+          
+         </div>
+         <br>
+         <br>
+       </div>';
+
+      
+
+
+
+      }// fin location voiture
+
+
+
 
      }
 
