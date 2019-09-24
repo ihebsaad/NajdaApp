@@ -153,7 +153,7 @@
         });
 
 
-        <?php $urlapp=env('APP_URL'); ?>
+        <?php $urlapp=env('APP_URL');$urlapp=config('app.url'); ?>
 
         $("#prest").change(function(){
             //  prest = $(this).val();

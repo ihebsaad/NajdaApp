@@ -45,7 +45,7 @@ use App\Entree ;
         background-color: #3e8e41;
     }
 </style>
-<?php  $urlapp=env('APP_URL');
+<?php  $urlapp=env('APP_URL');$urlapp=config('app.url');
 
 if (App::environment('local')) {
     // The environment is local

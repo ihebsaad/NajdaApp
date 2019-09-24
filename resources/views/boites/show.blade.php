@@ -185,6 +185,7 @@ $users=UsersController::ListeUsers();
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/spectrum.css') }}">
 <?php
 $urlapp=env('APP_URL');
+$urlapp=config('app.url');
 
 if (App::environment('local')) {
 // The environment is local

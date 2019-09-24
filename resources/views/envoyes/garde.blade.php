@@ -4,7 +4,7 @@
 		@page { margin-left: 1in; margin-right: 0.69in; margin-top: 0.3in; margin-bottom: 0.07in }
 		p { margin-bottom: 0.1in; direction: ltr; line-height: 120%; text-align: left; orphans: 2; widows: 2 }
 	</style>
-   <?php  $urlapp=env('APP_URL');
+   <?php  $urlapp=env('APP_URL');$urlapp=config('app.url');
 
     if (App::environment('local')) {
         // The environment is local

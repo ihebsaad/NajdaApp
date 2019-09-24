@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/rowReorder.bootstrap.css') }}" />-->
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
 
-<?php  $urlapp=env('APP_URL');
+<?php  $urlapp=env('APP_URL');$urlapp=config('app.url');
 
 if (App::environment('local')) {
     // The environment is local
