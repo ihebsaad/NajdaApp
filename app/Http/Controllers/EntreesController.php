@@ -336,10 +336,10 @@ class EntreesController extends Controller
 
         $message = Parametre::find(1);
 
-        if ($langue=='francais') {
-            return $message['accuse1'];
-        }else{
+        if ($langue=='anglais') {
             return $message['accuse2'];
+        }else{
+            return $message['accuse1'];
         }
 
      }

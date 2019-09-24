@@ -18,15 +18,18 @@
 @section('content')
 
 
-    <?php use \App\Http\Controllers\DossiersController;     ?>
+    <?php use \App\Http\Controllers\DossiersController;
+    use \App\Http\Controllers\EntreesController;
+
+    ?>
     <div class="uper">
         <div class="portlet box grey">
-           <!-- <div class="row">
+             <div class="row">
                 <div class="col-lg-8"> <h4>Liste des dossiers </h4></div>
                 <div class="col-lg-4">
-                 <!--   <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>--><!--
+                    <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
                 </div>
-            </div>-->
+            </div>
         </div>
 
         <!-- debut recherche avancee sur dossiers-->
@@ -246,6 +249,7 @@
     $iduser=$CurrentUser->id;
 
     ?>
+
     <!-- Modal -->
     <div class="modal fade" id="createfolder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -257,52 +261,72 @@
                 <div class="modal-body">
                     <div class="card-body">
 
-                        <form method="post" >
-                            {{ csrf_field() }}
+                        <!--<form method="post" >-->
+                        {{ csrf_field() }}
 
-                            <div class="form-group">
-                                <label for="type">Type :</label>
-                                <select   id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
-                                    <option   value="Medical">Medical</option>
-                                    <option   value="Technique">Technique</option>
-                                    <option   value="Mixte">Mixte</option>
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <label for="type">Type :</label>
+                            <select   id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
+                                <option   value="Medical">Medical</option>
+                                <option   value="Technique">Technique</option>
+                                <option   value="Mixte">Mixte</option>
+                            </select>
+                        </div>
 
-                            <div class="form-group">
-                                <label for="type">Affecté à :</label>
-                                <select id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single" readonly="readonly">
-                                    <option  value="Najda">Najda</option>
-                                    <option   value="VAT">VAT</option>
-                                    <option  value="MEDIC">MEDIC</option>
-                                    <option   value="Transport MEDIC">Transport MEDIC</option>
-                                    <option   value="Transport VAT">Transport VAT</option>
-                                    <option  value="Medic International">Medic International</option>
-                                    <option   value="Najda TPA">Najda TPA</option>
-                                    <option   value="Transport Najda">Transport Najda</option>
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <label for="type">Type d'affectation :</label>
+                            <select id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single"  >
+                                <option  value="Najda">Najda</option>
+                                <option   value="VAT">VAT</option>
+                                <option  value="MEDIC">MEDIC</option>
+                                <option   value="Transport MEDIC">Transport MEDIC</option>
+                                <option   value="Transport VAT">Transport VAT</option>
+                                <option  value="Medic International">Medic International</option>
+                                <option   value="Najda TPA">Najda TPA</option>
+                                <option   value="Transport Najda">Transport Najda</option>
+                            </select>
+                        </div>
 
 
-                            <div class="form-group">
-                                <label for="affecte">Agent:</label>
-                                <select   id="affecte" name="affecte"   class="form-control js-example-placeholder-single">
-                                    @foreach($users as $user  )
-                                        <option
-                                                @if($user->id==$iduser)selected="selected"@endif
+                        <div class="form-group">
+                            <label for="type">Prénom de l'abonné :</label>
+                            <input type="text" id="subscriber_name" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="type">Nom de l'abonné :</label>
+                            <input type="text" id="subscriber_lastname" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="affecte">Agent Affecté :</label>
+                            <select   id="affecte" name="affecte"   class="form-control js-example-placeholder-single">
+                                @foreach($users as $user  )
+                                    <option
+                                            @if($user->id==$iduser)
+                                            selected="selected"
+                                            @endif
 
-                                        value="{{$user->id}}">{{$user->name}}</option>
+                                            value="{{$user->id}}">{{$user->name}}</option>
 
-                                    @endforeach
-                                </select>
-                            </div>
-                         </form>
+                                @endforeach
+                            </select>
+                        </div>
+                        <input type="hidden" value="nouveau" name="statdoss">
+
+
+                        <input type="hidden" value="" name="entree_id" id="entree_id" >
+
+                        <input type="hidden" value="{{Auth::user()->id}}" name="affecteur">
+                        <!-- </form>-->
                     </div>
+
+
+
+
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                    <button type="button" id="add" class="btn btn-primary">Ajouter</button>
+                    <button type="submit" id="add" class="btn btn-primary">Ajouter</button>
                 </div>
             </div>
         </div>

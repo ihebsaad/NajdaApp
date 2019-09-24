@@ -242,8 +242,6 @@ class DossiersController extends Controller
                     $params = Parametre::find(1);
                     $signature = $params["signature"];
 
-
-
                     $contenu=$message.'<br><br>'.$signature;
                     try{
                         Mail::send([], [], function ($message) use ($to,$sujet,$contenu) {
