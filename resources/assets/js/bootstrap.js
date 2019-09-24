@@ -54,7 +54,7 @@ import Echo from 'laravel-echo';
  window.Pusher = require('pusher-js');
 
  window.Echo = new Echo({
-     authEndpoint :'http://localhost/najdaapp/broadcasting/auth',
+    // authEndpoint :'http://localhost/najdaapp/broadcasting/auth',
      //hostname:'http://localhost/najdaapp/',
      broadcaster: 'pusher',
      key: '10f2013ac245ed0bfe45',
