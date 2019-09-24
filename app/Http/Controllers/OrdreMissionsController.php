@@ -114,6 +114,7 @@ class OrdreMissionsController extends Controller
         	
         }
 
+
          // Send data to the view using loadView function of PDF facade
         $pdf = PDF3::loadView('ordremissions.pdfodmtaxi')->setPaper('a4', '');
 
@@ -141,7 +142,45 @@ class OrdreMissionsController extends Controller
 
         // enregistrement dans la base
         //OMTaxi::create([$request->all(),'emplacement'=>$path.$iddoss.'/'.$name.'.pdf']);
-        $omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        if (isset($_POST['affectea'])) {
+	        if ($_POST['affectea'] === "externe")
+	        	{
+	        		if (isset($_POST["prestextern"]))
+	        		{	
+	        			$prestataireom= $_POST["prestextern"];
+	        			$pdf2 = PDF4::loadView('ordremissions.pdfodmtaxi')->setPaper('a4', '');
+	        			 if (isset($prestataireom))
+					        {$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_taxi' => $prestataireom]);}
+					    	else
+					    	{
+					    		$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+					    	}
+
+					    // enregistrement de nouveau attachement
+				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
+				        $attachement = new Attachement([
+
+				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
+				        ]);
+				        $attachement->save();
+	        		}
+	        		else
+			        {
+			        	$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+			        }
+
+	        	}
+	        	else
+			        {
+			        	$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+			        }
+        }
+        else
+        {
+        	$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        }
+
+        
         $result = $omtaxi->update($request->all());
 
 
@@ -380,10 +419,6 @@ class OrdreMissionsController extends Controller
 		        else { $result2 = $omtaxi2->update($request->all()); }
 
         	}
-        	elseif ($_POST['affectea'] === "externe")
-        	{
-
-        	}
         }
 
     }
@@ -408,6 +443,50 @@ class OrdreMissionsController extends Controller
     public function pdfodmtaxi()
     {
     	return view('ordremissions.pdfodmtaxi');
+    }
+
+    //cancelom
+    public function cancelom(Request $request)
+    {
+        $dossier= $request->get('dossier') ;
+        $titre = $request->get('title') ;
+        $parent = $request->get('parent') ;
+        //return "dossier: ".$dossier." titre: ".$titre." parent: ".$parent;
+        if (stristr($titre,'taxi') !== FALSE) 
+        {
+	    	$count = OMTaxi::where('parent',$parent)->count();
+	    	OMTaxi::where('id', $parent)->update(['dernier' => 0]);
+	        $omparent=OMTaxi::where('id', $parent)->first();
+	        $filename='taxi_annulation-'.$parent;
+
+	        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+			$name='OM - '.$name;
+	        $path2='/OrdreMissions/'.$dossier.'/'.$name.'.pdf';
+
+	    	if ((isset($omparent["complete"]) || isset($omparent["affectea"])) || isset($_POST['affectea']))
+	    	{// supprimer attachement precedent (du parent)
+		        Attachement::where('path', '/OrdreMissions/'.$dossier.'/'.$omparent["titre"].'.pdf')->delete();
+		        // enregistrement de nouveau attachement
+	        	
+		        $attachement = new Attachement([
+
+		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
+		        ]);
+		        $attachement->save();
+	    	}
+
+	    	// Send data to the view using loadView function of PDF facade
+	        $pdf = PDF3::loadView('ordremissions.pdfodmtaxi')->setPaper('a4', '');
+
+	        $path= storage_path()."/OrdreMissions/";
+
+	        if (!file_exists($path.$dossier)) {
+	            mkdir($path.$dossier, 0777, true);
+	        }
+	        // If you want to store the generated pdf to the server then you can use the store function
+	        $pdf->save($path.$dossier.'/'.$name.'.pdf');
+	        $omtaxi = OMTaxi::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier]);
+	    }
     }
 
 }

@@ -943,6 +943,144 @@ $interv = PrestationsController::PrestById($prest);
                 </table>
 
             </div>
+<!-- Modal optimiseur prestataire externe-->
+<div class="modal fade" id="optprestataire"  role="dialog" aria-labelledby="exampleModal2" aria-hidden="true" style="z-index:10000!important;left: 20px;">
+    <div class="modal-dialog" role="document" style="width:900px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="optprestatairetitle">Optimiseur de choix des prestataires</h3>
+            </div>
+            <div class="modal-body">
+                <div class="card-body" style="min-height: 650px">
+
+                            <div class="form-group ">
+                                 <label>Gouvernorat de couverture *</label>
+                                 <div class="row">
+                                     <select class="form-control  col-lg-12 " style="width:400px" name="gouvm"    id="gouvcouvm">
+                                         <option></option>
+                                         @foreach($gouvernorats as $aKeyG)
+                                             <option   value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
+                                         @endforeach
+
+                                     </select>
+                                 </div>
+                             </div>
+
+                             <div class="form-group ">
+                                 <div class="row">
+                                     <label>Ville</label>
+                                 </div>
+                                 <div class="row" style=";margin-bottom:10px;"><style>.algolia-places{width:80%;}</style></div>
+                                 <input class="form-control" style="padding-left:5px" type="text"  id="villeprm" />
+                                 <input class="form-control" style="padding-left:5px;" type="hidden"  id="villecodem" />
+
+                             </div>
+                             <script>
+                                 (function() {
+                                     var placesAutocomplete2 = places({
+                                         appId: 'plCFMZRCP0KR',
+                                         apiKey: 'aafa6174d8fa956cd4789056c04735e1',
+                                         container: document.querySelector('#villeprm'),
+
+                                     });
+                                     placesAutocomplete2.on('change', function resultSelected(e) {
+                                         document.querySelector('#villecodem').value = e.suggestion.postcode || '';
+                                     });
+                                 })();
+                             </script>
+
+
+                             <div class="form-group row" >
+                                 <label class=" control-label">Date de prestation <span class="required" aria-required="true"> * </span></label>
+                                 <div class="row">
+                                     <input style="width:200px;" value='<?php echo date('d/m/Y'); ?>' class="form-control datepicker-default " name="pres_datem" id="pres_datem" data-required="1" required="" aria-required="true">
+                                 </div>
+                             </div>
+
+                             <div class="row">
+                                 <span class="btn btn-success" id="rechercherm" >Rechercher <i class="fa fa-loop"></i></span>
+                             </div>
+
+                            <div id="data-m" ><style>#data-m b{text-align:center;}</style>
+
+                             </div>
+                             <!--                         <a href="#" class="hvr-shrink button button-3d button-success button-rounded" style="display:none;margin-top:40px;margin-bottom:30px" id="choisir"><i class="fa fa-check"></i>  Sélectionner</a>-->
+                             <button style="display:none;margin-top:50px;margin-bottom:50px" id="showNext-m" type="button" class="hvr-wobble-horizontal btn btn-lg btn-labeled btn-info">
+                                 Suivant
+                                 <span class="btn-label" style="left: 13px;">
+                                                    <i class="fa fa-chevron-right"></i>
+                                                </span>
+                             </button>
+
+                             <div id="termine-m" style="display:none;height:120px;align:center;">
+                                 <center><br>   Fin de la liste.<br></center>
+
+                                 <button style="margin-bottom: 40px" id="essai2-m" type="button" class="btn btn-labeled btn-default btn-lg hvr-wobble-to-top-right right1">
+                                                <span class="btn-label">
+                                                    <i class="fa fa-refresh"></i>
+                                                </span>
+                                     Réessayez
+                                 </button>
+                             </div>
+                             <input type="hidden" id="selected-m" value="0">
+                             <input type="hidden" id="par-m" value="<?php echo $iduser;?>">
+                             <div class="row">
+                                 <div class="col-md-4">
+                                     <button style="display:none;margin-botom:10px;margin-top:20px" type="button" id="add2-m" class="btn btn-lg btn-primary"><i class="far fa-save"></i> Enregister la prestation</button>
+                                 </div>
+                                 <div class="col-md-4"  id="add2prest-m" style="display:none" >
+                                     <label>Prestataire sélectionné :</label><br>
+                                     <select style="width:350px;margin-top:10px;margin-bottom:10px;" disabled id="selectedprest-m" name="selectedprest-m"  class="form-control col-lg-9 " value=" ">
+                                         <option></option>
+                                         @foreach($prestataires as $prest)
+                                             <option    value="<?php echo $prest->id;?>"> <?php echo $prest->name;?></option>
+                                         @endforeach
+                                     </select>
+                                 </div>
+                                 <div class="col-md-4"></div>
+                             </div>
+
+                             <div class="row">
+                                 <div class="  form-group"  id="prestation-m"  style="display:none">
+                                   <div class="col-md-4">
+                                       <button style="display:none;margin-botom:10px" type="button" id="valide-m" class="btn btn-lg btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
+                                   </div>
+                                     <div class="col-md-4">
+                                         <label>ou bien Prestation non effectuée ? Raison:</label>
+
+                                         <select class="form-control" id="statutprest-m" >
+                                             <option></option>
+                                             <option    value="nonjoignable">Non Joignable </option>
+                                             <option    value="nondisponible">Non Disponible </option>
+                                             <option    value="autre">Autre </option>
+                                         </select>
+
+                                     </div>
+                                     <div class="col-md-4" >
+                                         <textarea type="text" style="display:none;height:60px" class="form-control" Placeholder="Détails"  id="detailsprest-m" ></textarea>
+                                      </div>
+                                     <input type="hidden"  id="idprestation-m" value="0" />
+
+
+                                 </div>
+                             </div>
+
+                             <div class="row">
+                             </div>
+
+
+                             <input id="dossier-m" name="dossier" type="hidden" value="{{ $dossier->id}}">
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal Ouvrir Document-->
 <div class="modal fade" id="opendoc"  role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document" style="width:900px;height: 450px">
@@ -1376,6 +1514,10 @@ reference_customer
                                                     <option value="Transport Najda">Transport Najda</option>
                                                     <option value="Transport Najda">X-Press</option>
                         </select>
+                    </div>
+                    <div id="externaffect" class="col-md-3" style="float: left!important;display: none;">
+                        <input type="hidden" name="idprestselected" id="idprestselected">
+                        <input name="prestselected" id="prestselected" disabled>
                     </div>
                     <div class="col-md-3" style="float: right!important;">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
@@ -2081,6 +2223,47 @@ function annuledoc(titre,iddoc,template)
         }
 }
 
+function annuleom(titre,iddoc)
+{
+
+        var dossier = $('#dossier').val();
+        $("#genomhtml").prop("disabled",false);
+        
+         var r = confirm("Êtes-vous sûr de vouloir Annuler l'ordre de mission: "+titre+" ? ");
+        if (r == true) {
+
+          if ((dossier != '') )
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('ordremissions.cancelom') }}",
+                    method:"POST",
+                    data:{dossier:dossier,title:titre,parent:iddoc, _token:_token},
+                success:function(data){
+
+                    alert(data);
+                    //location.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+                     Swal.fire({
+                        type: 'error',
+                        title: 'Oups...',
+                        text: 'Erreur lors de l`annulation du l`ordre de mission',
+
+                    });
+                    console.log('jqXHR:');
+                    console.log(jqXHR);
+                    console.log('textStatus:');
+                    console.log(textStatus);
+                    console.log('errorThrown:');
+                    console.log(errorThrown);
+                }
+                });
+            }
+        }
+}
+
 // affichage de lhistorique du document
     
     function historiquedoc(doc){
@@ -2603,8 +2786,14 @@ function keyUpHandler(){
         if (affectea == "interne")
         {
           var type_affectation = $("#type_affectation").val();
-        } else {var type_affectation = "";}
+          var nomprestextern = "";
+        } 
+        else {
+            var type_affectation = ""; 
+            var nomprestextern = $("#prestselected").val();
+        }
         
+
         var idparent = '';
          var idMissionOM=$("#idMissionOM").val();
         /*if ($('#templateordrem').val())
@@ -2630,7 +2819,7 @@ function keyUpHandler(){
                 method:"POST",
                 //'&_token='+_token
 
-                data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&affectea='+affectea+'&type_affectation='+type_affectation+'&templatedocument='+tempdoc+'&parent='+idparent+'&idMissionOM='+idMissionOM,
+                data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&affectea='+affectea+'&type_affectation='+type_affectation+'&prestextern='+nomprestextern+'&templatedocument='+tempdoc+'&parent='+idparent+'&idMissionOM='+idMissionOM,
 
                 success:function(data){
                      console.log(data);
@@ -2669,6 +2858,9 @@ function keyUpHandler(){
                 document.getElementById('typeaffect').style.display = 'none';
                 if ($("#affectationprest").val()==="externe")
                 {
+                    
+                    document.getElementById('externaffect').style.display = 'none';
+                    $("#optprestataire").modal('show');
                     $("#affectea").val("externe");
                 }
                 else
@@ -2781,6 +2973,50 @@ $urlapp='http://localhost/najdaapp';
             });
         });
 
+        $('#valide-m').click(function(){
+          var prestation=  document.getElementById('idprestation-m').value;
+          var _token = $('input[name="_token"]').val();
+
+            $.ajax({
+                url:"{{ route('prestations.valide') }}",
+                method:"POST",
+                data:{prestation:prestation, _token:_token},
+                success:function(data){
+                    /*var prest = $('#selectedprest').val();
+                 $.ajax({
+                    url:"{{--route('prestataires.NomPrestatireById') --}}",
+                    method:"POST",
+                    data:{id:prest, _token:_token},
+                    success:function(data){
+                        //document.getElementById('prestselected').value = data;
+                        alert(data);
+                    }
+                 });*/
+
+                    
+                document.getElementById('typeaffect').style.display='none';
+                 //document.getElementById('prestselected').value = document.getElementById('selectedprest-m').value;
+                 var prestvalid=document.getElementById('selectedprest-m').value;
+                 console.log(prestvalid);
+                 var prestvaltext = $("#selectedprest-m option[value='"+prestvalid+"']").text();
+                 console.log("text: "+prestvaltext);
+                 //document.getElementById('prestselected').val = prestvaltext;
+                 $("#prestselected").val(prestvaltext);
+                 
+                 document.getElementById('externaffect').style.display='block';
+                 
+                 $("#affectationprest").prop('disabled', true);
+                 
+                 $('#optprestataire').hide();
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+                }
+
+            });
+        });
+
 
         $('#add2').click(function(){
 
@@ -2811,6 +3047,59 @@ $urlapp='http://localhost/najdaapp';
                     document.getElementById('prestation').style.display='block';
                     document.getElementById('valide').style.display='block';
                     document.getElementById('idprestation').value =prestation;
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+
+                }
+
+            });
+              }else{
+
+             }
+        });
+
+        $('#add2-m').click(function(){
+
+            selected=   document.getElementById('selected-m').value;
+            document.getElementById('selectedprest-m').value = document.getElementById('prestataire_id_'+selected+'-m').value ;
+
+
+            var prestataire = $('#selectedprest-m').val();
+            var dossier_id = $('#dossier-m').val();
+
+            var typeprestom = document.getElementById('templateom').value;
+            var gouvernorat = $('#gouvcouvm').val();
+            //var specialite = $('#specialite').val();
+            /*
+                Taxi: - type:2 - specialite:2
+                Remorquage: - type:1 - specialite:3
+                Ambulance: -type:4 - specialite:4
+            */
+            // TAXI
+            if ((typeprestom==="Taxi")&&(typeprestom !=="")) {typeprest=2; type=2; specialite=2;}
+            // cas remplace
+            var srcomtemp = document.getElementById("omfilled").src;
+            var posomtemp = srcomtemp.indexOf("odm_taxi");
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomtemp != -1)) {typeprest=2; type=2; specialite=2;}
+            var date = $('#pres_datem').val();
+
+            //   gouvcouv
+            if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
+               {
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('prestations.saving') }}",
+                method:"POST",
+                data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
+                success:function(data){
+           var prestation=parseInt(data);
+               /// window.location =data;
+
+                    document.getElementById('prestation-m').style.display='block';
+                    document.getElementById('valide-m').style.display='block';
+                    document.getElementById('idprestation-m').value =prestation;
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -2989,6 +3278,114 @@ $urlapp='http://localhost/najdaapp';
 
         });
 */
+        $("#rechercherm").click(function(){
+
+
+            // document.getElementById('termine').style.display = 'none';
+            document.getElementById('showNext-m').style.display='none';
+            document.getElementById('add2-m').style.display='none';
+            document.getElementById('add2prest-m').style.display='none';
+            document.getElementById('selectedprest-m').value=0;
+
+
+            toggle('tprest2', 'none');
+            var typeprestom=  document.getElementById('templateom').value;
+            
+            /*
+                Taxi: - type:2 - specialite:2
+                Remorquage: - type:1 - specialite:3
+                Ambulance: -type:4 - specialite:4
+            */
+            // TAXI
+            if ((typeprestom==="Taxi")&&(typeprestom !=="")) {typeprest=2; type=2; specialite=2;}
+            // cas remplace
+            var srcomtemp = document.getElementById("omfilled").src;
+            var posomtemp = srcomtemp.indexOf("odm_taxi");
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomtemp != -1)) {typeprest=2; type=2; specialite=2;}
+            //document.getElementById('tprest2-'+typeprest).style.display='block';
+
+            //  prest = $(this).val();
+            document.getElementById('selectedprest-m').value=0;
+
+            //var  type =document.getElementById('typeprest2').value;
+            var  gouv =document.getElementById('gouvcouvm').value;
+            //var  specialite =document.getElementById('specialite').value;
+            var  ville =document.getElementById('villeprm').value;
+            var  postal =document.getElementById('villecodem').value; 
+            //alert (gouv+" | "+ville+" | "+postal);
+            //alert (type+" | "+gouv);
+            //console.log("before ajax");
+            if((type !="")&&(gouv !=""))
+            {
+                var _token = $('input[name="_token"]').val();
+
+                document.getElementById('termine-m').style.display = 'none';
+                document.getElementById('add2-m').style.display = 'none';
+                document.getElementById('add2prest-m').style.display='none';
+                console.log("in ajax");
+                $.ajax({
+                    url:"{{ route('dossiers.listepresm') }}",
+                    method:"post",
+
+                    data:{gouv:gouv,type:type,specialite:specialite,ville:ville,postal:postal, _token:_token},
+                    success:function(data){
+
+
+                        $('#data-m').html(data);
+                        //window.location =data;
+                        console.log("success list prest");
+                        console.log(data);
+                        ////       data.map((item, i) => console.log('Index:', i, 'Id:', item.id));
+                        var  total =document.getElementById('total-m').value;
+
+                        if(parseInt(total)>0)
+                        {
+                            document.getElementById('showNext-m').style.display='block';
+                        }
+
+                    }
+                }); // ajax
+
+            }else{
+                 Swal.fire({
+                    type: 'error',
+                    title: 'oups...',
+                    text: "SVP, Sélectionner le gouvernorat et la spécialité"
+                });
+            }
+        }); // change
+        /*var _token = $('input[name="_token"]').val();
+                    var gouvm = $('iframe[name=omfilled]').contents().find('#select_name').val();
+
+                document.getElementById('termine-m').style.display = 'none';
+                document.getElementById('add2-m').style.display = 'none';
+                document.getElementById('add2prest-m').style.display='none';
+
+                $.ajax({
+                    url:"{{-- route('dossiers.listepresm') --}}",
+                    method:"post",
+
+                    data:{gouv:gouvm,type:type,specialite:specialite,ville:ville,postal:postal, _token:_token},
+                    success:function(data){
+
+
+                        $('#data-m').html(data);
+                        //window.location =data;
+                        console.log(data);
+                        ////       data.map((item, i) => console.log('Index:', i, 'Id:', item.id));
+                        var  total =document.getElementById('total-m').value;
+
+                        if(parseInt(total)>0)
+                        {
+                            document.getElementById('showNext-m').style.display='block';
+                        }
+
+                    }*/
+                //}); 
+        // ajax
+
+
+
 
         $("#essai2").click(function() {
             document.getElementById('termine').style.display = 'none';
@@ -2998,6 +3395,17 @@ $urlapp='http://localhost/najdaapp';
             document.getElementById('item1').style.display = 'block';
             document.getElementById('selected').value = 1;
             document.getElementById('selectedprest').value = 0;
+
+        });
+
+        $("#essai2-m").click(function() {
+            document.getElementById('termine-m').style.display = 'none';
+            document.getElementById('add2-m').style.display = 'block';
+            document.getElementById('add2prest-m').style.display='block';
+            document.getElementById('showNext-m').style.display = 'block';
+            document.getElementById('item1-m').style.display = 'block';
+            document.getElementById('selected-m').value = 1;
+            document.getElementById('selectedprest-m').value = 0;
 
         });
 
@@ -3135,7 +3543,128 @@ $urlapp='http://localhost/najdaapp';
 
         });
 
+$("#showNext-m").click(function() {
+            var shownext=false;var infos=false;
+            // reinitialiser le champs de statut
+            /*if(document.getElementById('selectedprest').value ==0) {
+                document.getElementById('statutprest').value ='';
+            document.getElementById('detailsprest').value ='';}*/
 
+            // si une prestation a èté ajoutée
+            if(document.getElementById('idprestation-m').value >0) {
+                if ((document.getElementById('statutprest-m').value == 'autre') && (document.getElementById('detailsprest-m').value != '')) {
+                    shownext=true;infos=true
+                }
+                if ((document.getElementById('statutprest-m').value == 'nonjoignable') || (document.getElementById('statutprest-m').value == 'nondisponible')) {
+                    shownext=true;infos=true
+                }
+            }
+            else{shownext=true;}
+             if(shownext==true)
+              {
+            if(infos==true){
+                // enregistrement des infos de prestation  + envoi des emails
+
+                var _token = $('input[name="_token"]').val();
+                var  prestation =document.getElementById('idprestation-m').value;
+                var  prestataire =document.getElementById('selectedprest-m').value;
+                var  statut =document.getElementById('statutprest-m').value;
+                var  details =document.getElementById('detailsprest-m').value;
+
+                $.ajax({
+                    url:"{{ route('prestations.updatestatut') }}",
+                    method:"POST",
+                    data:{prestation:prestation,prestataire:prestataire,statut:statut,details:details, _token:_token},
+                    success:function(data){
+
+                // reinitialiser le champs de statut
+                        if(document.getElementById('selectedprest-m').value ==0) {
+                            document.getElementById('statutprest-m').value ='';
+                            document.getElementById('detailsprest-m').value ='';}
+
+                    }
+                });
+                document.getElementById('statutprest-m').selectedIndex =0;
+
+                      if(document.getElementById('idprestation-m').value >0) {
+                          document.getElementById('prestation-m').style.display='none';
+                      }
+
+            }
+                document.getElementById('selectedprest-m').value = 0;
+                document.getElementById('detailsprest-m').value='';
+
+                var selected = document.getElementById('selected-m').value;
+                var total = document.getElementById('total-m').value;
+
+
+                var next = parseInt(selected) + 1;
+                document.getElementById('selected-m').value = next;
+
+                if ((selected == 0)) {
+                    document.getElementById('termine-m').style.display = 'none';
+                    document.getElementById('item1-m').style.display = 'block';
+                    document.getElementById('add2-m').style.display = 'block';
+                    document.getElementById('add2prest-m').style.display='block';
+
+                    //document.getElementById('selected').value=1;
+                    // $("#selected").val('1');
+
+                }
+
+                if ((selected) == (total  )) {
+
+                    document.getElementById('termine-m').style.display = 'block';
+
+                    document.getElementById('item'+(selected)+'-m').style.display = 'none';
+                    document.getElementById('showNext-m').style.display = 'none';
+                    document.getElementById('add2-m').style.display = 'none';
+                    document.getElementById('add2prest-m').style.display='none';
+
+
+                } else {
+
+                    if ((selected != 0) && (selected <= total + 1)) {
+                        document.getElementById('add2-m').style.display = 'block';
+                        document.getElementById('add2prest-m').style.display='block';
+                        document.getElementById('termine-m').style.display = 'none';
+                        document.getElementById('item' + selected+'-m').style.display = 'none';
+                        document.getElementById('item' + next+'-m').style.display = 'block';
+
+
+                        $("#selected-m").val(next);
+
+
+
+                    }
+                }
+
+                if(next>parseInt(total)+1) {
+                    // document.getElementById('item' + selected).style.display = 'none';
+                }
+                if( document.getElementById('idprestation-m').value>0 ){
+                      document.getElementById('idprestation-m').value=0
+                      document.getElementById('selectedprest-m').value = 0;
+                      document.getElementById('detailsprest-m').value='';
+                      document.getElementById('prestation-m').style.display='none';
+                      document.getElementById('statutprest-m').selectedIndex =0;
+
+                  }
+            }
+            else{
+                if(document.getElementById('selectedprest-m').selectedIndex  >0) {
+                  Swal.fire({
+                     type: 'error',
+                     title: 'Attendez...',
+                     text: 'SVP Expliquez la raison de ne pas choisir ce prestataire',
+
+                 })
+
+            }
+
+            }
+
+        });
 
 
 
@@ -3413,7 +3942,12 @@ $urlapp='http://localhost/najdaapp';
         text-overflow: ellipsis;
         max-width:300px;
     }
-
+.swal2-popup.swal2-modal.swal2-show {
+    z-index: 1000000!important;
+}
+.swal2-container.swal2-center.swal2-fade.swal2-shown {
+    z-index: 1000000!important;
+}
 
 
 

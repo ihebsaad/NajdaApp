@@ -911,8 +911,102 @@ class DossiersController extends Controller
 
     }
 
+    public  static function ListePrestataireCitySpec2(Request $request)
+    {
 
-	  public function searchprest(Request $request)
+        $gouv = $request->get('gouv');
+        $type = $request->get('type');
+        $spec = $request->get('specialite');
+        $ville = $request->get('ville');
+        $postal = $request->get('postal');
+        if (intval($postal) >1 &&($ville!='')){
+            $liste =Evaluation::where('gouv',$gouv )
+                ->where('type_prest',$type )
+                ->where('specialite',$spec )
+                ->where('postal',$postal )
+                ->orderBy('priorite','asc')
+                ->orderBy('derniere_prestation','asc')
+                ->get();
+
+        }else{
+            $liste =Evaluation::where('gouv',$gouv )
+                ->where('type_prest',$type )
+                ->where('specialite',$spec )
+                ->where('postal',1 )
+                ->orderBy('priorite','asc')
+                ->orderBy('derniere_prestation','asc')
+                ->get();
+        }
+
+///orderBy(['col1' => 'desc', 'col2' => 'asc', ... ])
+        $tot= count($liste);
+  if ( $tot > 0  ){
+
+      $output='<B style="margin-left:20px;margin-top:20px; "><br>'.$tot.' Résultat(s) trouvé(s)<br></B><br><br>';$c=0;
+      foreach ($liste as $row) {
+          $c++;
+
+
+          $prestataire = $row->prestataire;
+          $priorite = $row->priorite;
+
+          $nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
+          $adresse = app('App\Http\Controllers\PrestatairesController')->ChampById('adresse', $prestataire);
+          $observ = app('App\Http\Controllers\PrestatairesController')->ChampById('observation_prestataire', $prestataire);
+
+
+          $tels =   Adresse::where('nature', 'tel')
+              ->where('parent',$prestataire)
+              ->get();
+
+          $output .= '  <div id="item'.$c . '-m" style="display:none;;padding: 20px 20px 20px 20px; border:3px dotted #4fc1e9">
+                                                                                   
+                             <div class="prestataire form-group">
+                              <input type="hidden" id="prestataire_id_'.$c.'-m" value="'.$prestataire.'">
+                             <input type="hidden" id="nomprest-m" value="'.$nom.'">
+                            <div class="row" style="margin-top:10px;margin-bottom: 20px">
+                                <div class="col-md-8"><span style="color:grey" class="fa  fa-user-md"></span> <B>' . $nom . ' (' . $priorite . ')</b></div>
+                                <div class="col-md-8"><span style="color:grey" class="fa  fa-map-marker"></span>  '.$adresse.'</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8"><span style="color:grey" class="fas  fa-clipboard"></span> '.$observ.'</div>
+                            </div>
+                        </div>                       
+                        <table style="padding-left:5px">';
+
+
+          foreach ($tels as $tel) {
+              $output .= ' <tr>
+                                            <td style="padding-right:8px;"><i class="fa fa-phone"></i> ' . $tel->champ . '</td>
+                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>';?>
+<?php if($tel->typetel=='Mobile') {
+                  $output .= '<td><a onclick="setTel(this);" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
+                    } else
+                      { $output .= '<td></td>';}
+
+                   $output .= '</tr> ';
+          }
+
+
+          $output .='</table> </address>                         
+             </div> ';
+
+
+      }
+      $output=$output.'<input id="total-m" type="hidden" value="'.$c.'"> ';
+
+  }else {
+
+      $output='<B>Aucun élément trouvé !</B>' ;
+  }
+
+
+         return  ($output);
+     //   return json_encode($liste);
+
+    }
+
+    public function searchprest(Request $request)
     {
 
         $datasearch =null;

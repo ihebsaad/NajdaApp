@@ -172,6 +172,7 @@ Route::get('/dossiers/fiche/{id}', 'DossiersController@fiche')->name('dossiers.f
 Route::post('/dossiers/addemail','DossiersController@addemail')->name('dossiers.addemail');
 Route::post('/dossiers/attribution','DossiersController@attribution')->name('dossiers.attribution');
 Route::post('/dossiers/listepres','DossiersController@ListePrestataireCitySpec')->name('dossiers.listepres');
+Route::post('/dossiers/listepresm','DossiersController@ListePrestataireCitySpec2')->name('dossiers.listepresm');
 Route::post('/dossiers/addressadd','DossiersController@addressadd')->name('dossiers.addressadd');
 Route::post('/dossiers/addressadd2','DossiersController@addressadd2')->name('dossiers.addressadd2');
 //Route::post('/searchprest','DossiersController@searchprest')->name('searchprest');
@@ -278,6 +279,8 @@ Route::get('/prestataires/view/{id}', 'PrestatairesController@view');
 Route::post('/prestataires/addeval','PrestatairesController@addeval')->name('prestataires.addeval');
 Route::post('/prestataires/addemail','PrestatairesController@addemail')->name('prestataires.addemail');
 Route::post('/prestataires/addressadd','PrestatairesController@addressadd')->name('prestataires.addressadd');
+Route::post('/prestataires/NomPrestatireById','PrestatairesController@NomPrestatireById')->name('prestataires.NomPrestatireById');
+
 Route::get('/prestataires/destroy/{id}', 'PrestatairesController@destroy');
 
 
@@ -522,5 +525,6 @@ Route::post('/ordremissions/export_pdf_odmtaxi','OrdreMissionsController@export_
 Route::post('/ordremissions/historique','OrdreMissionsController@historique')->name('ordremissions.historique');
 //Route::get('/entrees/sendpdf/{id}', 'EntreesController@sendpdf');
 Route::get('/ordremissions/pdfodmtaxi','OrdreMissionsController@pdfodmtaxi')->name('ordremissions.pdfodmtaxi');
+Route::post('/ordremissions/cancelom','OrdreMissionsController@cancelom')->name('ordremissions.cancelom');
  
  
