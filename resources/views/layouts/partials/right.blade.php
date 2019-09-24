@@ -325,6 +325,22 @@ use App\Http\Controllers\TagsController;
 
                                                  <script> $(document).ready(function(){
 
+                                                   $(document).on("change","#typeMissauto",function() {
+
+                                                if ($(this).val()=="Transports terrestres effectué par entité-sœur MMS" || $(this).val()=="Transport terrestre effectué par prestataire externe")
+                                                {
+                                                  //alert($(this).val());
+                                                  $("#idDateSpecifique").empty().append("<span style='color:red'> la date ci dessous indique la date de départ d'avion <span>");
+                                                }
+                                                else
+                                                {
+
+                                                  $("#idDateSpecifique").empty();
+
+                                                };                                                  ;
+
+                                                });
+
                                                      $("#typeMissauto").select2();
 
                                                      $("#typeactauto").keyup(function(){
@@ -388,6 +404,16 @@ use App\Http\Controllers\TagsController;
                                             </div>
 
                                           </div>
+                                          <div class="form-group">
+                                           <div class="row"> 
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-9">
+                                           <div id="idDateSpecifique"> </div>
+                                            </div>
+                                          </div>
+
+                                        </div>
                                          <div class="form-group">
                                             <?php  $da = (new \DateTime())->format('Y-m-d\TH:i');// $da= date('Y-m-d\TH:m'); ?>
 
@@ -1527,6 +1553,13 @@ var hrefidAcheverM;
            if(data)
            {
 
+
+             $("#myMissionModalReporter1").modal('show');          
+             idAction=jQuery(data).find('.rowkbs').attr("id");
+             dataAction=jQuery(data).find('#'+idAction).html();
+             hrefidAcheverA=jQuery(data).find('#idAchever').attr("href");
+
+
              // alert ("des nouvelles notes sont activées");
               //$("#contenuNotes").prepend(data);
               var sound = document.getElementById("audiokbs");
@@ -1541,11 +1574,7 @@ var hrefidAcheverM;
              $("#hiddenreporterMiss").hide();
             
               
-             $("#myMissionModalReporter1").modal('show');          
-             idAction=jQuery(data).find('.rowkbs').attr("id");
-             dataAction=jQuery(data).find('#'+idAction).html();
-             hrefidAcheverA=jQuery(data).find('#idAchever').attr("href");
-
+            
             
            }
        }

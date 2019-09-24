@@ -22,6 +22,14 @@ use Session;
 class ActionController extends Controller
 {
 
+
+  // varibales pour résoudre le problème de boucle  de workflow remorquage
+
+   public $boucle_remorquage=0; 
+   public $entree_act4_remorquage=0;
+   public $entree_act5_remorquage=0;
+  
+
   // varibales pour résoudre le problème de boucle  de workflow organisation visite médicale
 
    public $boucle_org_vis_med=0; 
@@ -397,6 +405,83 @@ class ActionController extends Controller
 
              }// fin expertise
 
+
+            
+
+           if($miss->type_Mission==43)// rapatriement de véhicule sur ferry
+            {
+
+              if($request->NomTypeDateSpec=="decoll_ou_dep_bat")
+              {
+            
+                $miss->update(['date_spec_affect'=>1]); 
+
+                $miss->update(['h_decoll_ou_dep_bat'=>$datespe]);
+
+                return 'date affectée'; 
+              }  
+
+
+
+             }// fin rapatriement de véhicule sur ferry
+
+             if($miss->type_Mission==45)// réparation véhicule 
+            {
+
+              if($request->NomTypeDateSpec=="rdv")
+              {
+            
+                $miss->update(['date_spec_affect'=>1]); 
+
+                $miss->update(['h_rdv'=>$datespe]);
+
+                return 'date affectée'; 
+              }  
+
+
+
+             }// fin réparation véhicule 
+
+
+              if($miss->type_Mission==44)// remorquage
+            {
+
+              if($request->NomTypeDateSpec=="dep_pour_miss")
+              {
+            
+                $miss->update(['date_spec_affect'=>1]); 
+
+                $miss->update(['h_dep_pour_miss'=>$datespe]);
+
+                return 'date affectée'; 
+              }  
+
+
+
+              if($request->NomTypeDateSpec=="retour_base")
+              {
+            
+                $miss->update(['date_spec_affect2'=>1]); 
+
+                $miss->update(['h_retour_base'=>$datespe]);
+
+                return 'date affectée'; 
+              }     
+
+            }// fin remorquage 
+
+
+             if($miss->type_Mission==46)// location voiture
+            {
+          
+               $miss->update(['date_spec_affect'=>1]);  
+               $miss->update(['date_spec_affect2'=>1]); 
+               $miss->update(['date_spec_affect3'=>1]);
+               $miss->update(['h_fin_location_voit'=>$datespe]);
+               return 'date affectée';   
+           
+
+            }// fin location voiture
 
              
          
@@ -1512,6 +1597,601 @@ class ActionController extends Controller
                           }   // fin Expertise
 
 
+                           // cas Transports terrestres assuré par entité-soeur mms
+ 
+                   if($miss->type_Mission==33) 
+                        {
+
+
+                      if($miss->date_spec_affect2==1 && $miss->h_decoll_ou_dep_bat!=null )
+                         {
+
+                        //dd($miss->h_dep_pour_miss);
+                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
+                        //dd( $datespe1);
+
+                           $datespe = \DateTime::createFromFormat($format,($miss->h_decoll_ou_dep_bat));
+                           // dd( $datespe );
+                         
+                                  
+
+
+                                   // $datespe <= $dateSys && $action25->statut=="faite"
+
+                                    if($datespe <= $dateSys )
+                                    {
+
+                                        $action3=ActionEC::where('mission_id',$miss->id)
+                                                          ->where('statut','!=','rfaite')
+                                                          ->where('ordre',3)
+                                                          ->first();
+                                        //Suivre mission taxi
+                                        if($action3->statut=='inactive')
+                                        {
+
+                                             $action3->update(['statut'=>"active"]);
+                                             $action3->update(['date_deb' => $dateSys]); 
+                                             $action3->update(['user_id'=>Auth::user()->id]);
+                                             $miss-> update(['date_spec_affect2'=>0]);
+
+                                              $output='Activation de l\'action :'. $action3->titre.' | Mission :'. $action3->Mission->titre.' | Dossier : '. $action3->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action3->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action3->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action3->Mission->dossier->id.'"/> ';
+     
+                                           return($output);
+
+                                        
+
+                                        }
+
+                                        // rendre datespec 0
+
+                                       
+                                        
+
+
+
+                                    }
+
+                     
+
+                            
+                            }
+                          }   // fin  cas Transports terrestres assuré par entité-soeur mms
+
+                           // cas Transport terrestre effectué par prestataire externe
+ 
+                   if($miss->type_Mission==34) 
+                        {
+
+
+                      if($miss->date_spec_affect2==1 && $miss->h_decoll_ou_dep_bat!=null )
+                         {
+
+                        //dd($miss->h_dep_pour_miss);
+                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
+                        //dd( $datespe1);
+
+                           $datespe = \DateTime::createFromFormat($format,($miss->h_decoll_ou_dep_bat));
+                           // dd( $datespe );
+                         
+                                  
+
+
+                                   // $datespe <= $dateSys && $action25->statut=="faite"
+
+                                    if($datespe <= $dateSys )
+                                    {
+
+                                        $action2=ActionEC::where('mission_id',$miss->id)
+                                                          ->where('statut','!=','rfaite')
+                                                          ->where('ordre',2)
+                                                          ->first();
+                                        //Suivre mission taxi
+                                        if($action2->statut=='inactive')
+                                        {
+
+                                             $action2->update(['statut'=>"active"]);
+                                             $action2->update(['date_deb' => $dateSys]); 
+                                             $action2->update(['user_id'=>Auth::user()->id]);
+                                             $miss-> update(['date_spec_affect2'=>0]);
+
+                                              $output='Activation de l\'action :'. $action2->titre.' | Mission :'. $action2->Mission->titre.' | Dossier : '. $action2->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action2->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action2->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action2->Mission->dossier->id.'"/> ';
+     
+                                           return($output);
+
+                                        
+
+                                        }
+
+                                        // rendre datespec 0
+
+                                       
+                                        
+
+
+
+                                    }
+
+                     
+
+                            
+                            }
+                          }   // fin  cas Transport terrestre effectué par prestataire externe
+
+
+
+                           // cas rapatriement de véhicule sur ferry
+ 
+                   if($miss->type_Mission==43) 
+                        {
+
+
+                      if($miss->date_spec_affect==1 && $miss->h_decoll_ou_dep_bat!=null )
+                         {
+
+                        //dd($miss->h_dep_pour_miss);
+                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
+                        //dd( $datespe1);
+
+                           $datespe = \DateTime::createFromFormat($format,($miss->h_decoll_ou_dep_bat));
+                           // dd( $datespe );
+                         
+                                  
+
+
+                                
+                                    if($datespe <= $dateSys )
+                                    {
+
+                                        $action11=ActionEC::where('mission_id',$miss->id)
+                                                          ->where('statut','!=','rfaite')
+                                                          ->where('ordre',11)
+                                                          ->first();
+                                        //Suivre mission taxi
+                                        if($action11->statut=='inactive')
+                                        {
+
+                                             $action11->update(['statut'=>"active"]);
+                                             $action11->update(['date_deb' => $dateSys]); 
+                                             $action11->update(['user_id'=>Auth::user()->id]);
+                                             $miss-> update(['date_spec_affect'=>0]);
+
+                                              $output='Activation de l\'action :'. $action11->titre.' | Mission :'. $action11->Mission->titre.' | Dossier : '. $action11->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action11->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action11->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action11->Mission->dossier->id.'"/> ';
+     
+                                           return($output);
+
+                                        
+
+                                        }
+
+                                        // rendre datespec 0
+
+                                       
+                                        
+
+
+
+                                    }
+
+                     
+
+                            
+                            }
+                          }   // fin  rapatriement de véhicule sur ferry
+
+                              // cas réparation véhicule
+ 
+                   if($miss->type_Mission==45) 
+                        {
+
+
+                      if($miss->date_spec_affect==1 && $miss->h_rdv!=null )
+                         {
+
+                        //dd($miss->h_dep_pour_miss);
+                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
+                        //dd( $datespe1);
+
+                           $datespe = \DateTime::createFromFormat($format,($miss->h_rdv));
+                           // dd( $datespe );
+                         
+                                  
+                                    /* Si_appui_fait_action7 & si_heure_systeme> heure H+2 prévue pour passage assuré (heure RDV)  OU si_appui_ignorer_action7 & si_heure_systeme> heure H+2 prévue pour passage assuré (heure RDV)
+                                      */
+
+                                      $action7=ActionEC::where('mission_id',$miss->id)
+                                                          ->where('statut','!=','rfaite')
+                                                          ->where('ordre',7)
+                                                          ->first();
+
+                                
+                                    if(($datespe->modify('+2 minutes') <= $dateSys && $action7->statut="faite") ||  ($datespe->modify('+2 minutes') <= $dateSys && $action7->statut="ignoree"))
+                                    {
+
+                                        $action8=ActionEC::where('mission_id',$miss->id)
+                                                          ->where('statut','!=','rfaite')
+                                                          ->where('ordre',8)
+                                                          ->first();
+                                        //Suivre mission taxi
+                                        if($action8->statut=='inactive')
+                                        {
+
+                                             $action8->update(['statut'=>"active"]);
+                                             $action8->update(['date_deb' => $dateSys]); 
+                                             $action8->update(['user_id'=>Auth::user()->id]);
+                                             $miss-> update(['date_spec_affect'=>0]);
+
+                                              $output='Activation de l\'action :'. $action8->titre.' | Mission :'. $action8->Mission->titre.' | Dossier : '. $action8->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action8->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action8->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action8->Mission->dossier->id.'"/> ';
+     
+                                           return($output);
+
+                                        
+
+                                        }
+
+                                        // rendre datespec 0
+
+                                       
+                                        
+
+
+
+                                    }
+
+                     
+
+                            
+                            }
+                          }   // fin  réparation véhicule
+
+
+
+                           // cas remorquage
+
+                   if($miss->type_Mission==44) 
+                        {
+
+
+                      if($miss->date_spec_affect==1 && $miss->h_dep_pour_miss!=null )
+                         {
+
+                        //dd($miss->h_dep_pour_miss);
+                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
+                        //dd( $datespe1);
+
+                           $datespe = \DateTime::createFromFormat($format,($miss->h_dep_pour_miss));
+                           // dd( $datespe );
+                         
+                             
+
+                                    if($datespe <= $dateSys)
+                                    {
+
+                                        $action10=ActionEC::where('mission_id',$miss->id)
+                                                          ->where('statut','!=','rfaite')
+                                                          ->where('ordre',10)
+                                                          ->first();
+                                        //Suivre mission taxi
+                                        if($action10->statut=='inactive')
+                                        {
+
+                                             $action10->update(['statut'=>"active"]);
+                                             $action10->update(['date_deb' => $dateSys]); 
+                                             $action10->update(['user_id'=>Auth::user()->id]);
+                                             $miss-> update(['date_spec_affect'=>0]);
+
+                                              $output='Activation de l\'action :'. $action10->titre.' | Mission :'. $action10->Mission->titre.' | Dossier : '. $action10->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action10->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action10->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action10->Mission->dossier->id.'"/> ';
+     
+                                           return($output);
+
+                                        
+
+                                        }
+
+                                        // rendre datespec 0
+
+                                       
+                                        
+
+
+
+                                    }
+
+
+
+                              
+
+
+                            
+                            }
+
+
+
+                               // cas affect2
+
+
+                          if($miss->date_spec_affect2==1 && $miss->h_retour_base!=null )
+                         {
+
+                        //dd($miss->h_dep_pour_miss);
+                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
+                        //dd( $datespe1);
+
+                           $datespe = \DateTime::createFromFormat($format,($miss->h_retour_base));
+                           // dd( $datespe );
+                                     
+                     
+                                      // Si_heure_systeme>heure_fin_mission+30min
+
+                                    if($datespe->modify('+3 minutes') <= $dateSys )
+                                    {
+
+                                        $action11=ActionEC::where('mission_id',$miss->id)
+                                                           ->where('statut','!=','rfaite')
+                                                           ->where('ordre',11)
+                                                           ->first();
+                                        //Suivre mission taxi
+                                        if($action11->statut=='inactive')
+                                        {
+
+                                             $action11->update(['statut'=>"active"]);
+                                             $action11->update(['date_deb' => $dateSys]); 
+                                              $action11->update(['user_id'=>Auth::user()->id]);
+                                             $miss->update(['date_spec_affect2'=>0]);
+
+                                              $output='Activation de l\'action :'. $action11->titre.' | Mission :'. $action11->Mission->titre.' | Dossier : '. $action11->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action11->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action11->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action11->Mission->dossier->id.'"/> ';
+     
+                                           return($output);
+
+                                        
+
+                                        }
+
+                                        // rendre datespec 0
+
+                                       
+                                        
+
+
+
+                                    }
+
+
+
+                                
+
+
+                            
+                               }
+
+
+
+                        }     // fin cas remorquage
+
+                        // cas location  voiture
+
+                   if($miss->type_Mission==46) 
+                        {
+
+
+                      if($miss->date_spec_affect==1 && $miss->h_fin_location_voit!=null )
+                         {
+
+                        //dd($miss->h_dep_pour_miss);
+                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
+                        //dd( $datespe1);
+
+                           $datespe = \DateTime::createFromFormat($format,($miss->h_fin_location_voit));
+                           // dd( $datespe );
+                         
+                                      
+
+
+
+
+                                   // si_date_système<date_fin_location-24h (de midi à midi)
+
+
+
+                                    if($datespe->modify('-2 minutes') <= $dateSys )
+                                      
+                                    {
+
+                                        $action6=ActionEC::where('mission_id',$miss->id)
+                                                          ->where('statut','!=','rfaite')
+                                                          ->where('ordre',6)
+                                                          ->first();
+                                        //Suivre mission taxi
+                                        if($action6->statut=='inactive')
+                                        {
+
+                                             $action6->update(['statut'=>"active"]);
+                                             $action6->update(['date_deb' => $dateSys]); 
+                                             $action6->update(['user_id'=>Auth::user()->id]);
+                                             $miss-> update(['date_spec_affect'=>0]);
+
+                                              $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->titre.' | Dossier : '. $action6->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
+     
+                                           return($output);
+
+                                        
+
+                                        }
+
+                                        // rendre datespec 0
+
+                                       
+                                        
+
+
+
+                                    }
+
+
+
+                              
+
+
+                            
+                            }
+
+
+
+                               // cas affect2
+
+
+                          if($miss->date_spec_affect2==1 && $miss->h_fin_location_voit!=null )
+                         {
+
+                        //dd($miss->h_dep_pour_miss);
+                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
+                        //dd( $datespe1);
+
+                           $datespe = \DateTime::createFromFormat($format,($miss->h_fin_location_voit));
+                           // dd( $datespe );
+
+
+                                         // Si_appui_fait_action6 & si_choix_option1_action6 & si_date_système>date_fin_location (midi à midi) OU 
+                                                  //Si_appui_fait_action7 & si_choix_option2_action7 & si_date_système>date_fin_location (midi à midi) Si_appui_fait_Action9 & si_choix_Option2_action9 & si_date_système>date_fin_location (midi à midi)
+
+
+                               $action6=ActionEC::where('mission_id',$miss->id)
+                                                          ->where('statut','!=','rfaite')
+                                                          ->where('ordre',6)
+                                                          ->first();
+
+                                 $action7=ActionEC::where('mission_id',$miss->id)
+                                                          ->where('statut','!=','rfaite')
+                                                          ->where('ordre',7)
+                                                          ->first();
+                                $action9=ActionEC::where('mission_id',$miss->id)
+                                                          ->where('statut','!=','rfaite')
+                                                          ->where('ordre',9)
+                                                          ->first();
+
+
+
+                                   
+
+                                    if($datespe <= $dateSys && 
+                                      (($action6->statut=="faite" && $action6->opt_choisie=="1") ||
+                                      ($action7->statut=="faite" && $action7->opt_choisie=="2") ||
+                                      ($action9->statut=="faite") )
+
+                                      )
+                                     
+                                     
+                                    {
+
+                                         $action8=ActionEC::where('mission_id',$miss->id)
+                                                          ->where('statut','!=','rfaite')
+                                                          ->where('ordre',8)
+                                                          ->first();
+                                        //Suivre mission taxi
+                                        if($action8->statut=='inactive')
+                                        {
+
+                                             $action8->update(['statut'=>"active"]);
+                                             $action8->update(['date_deb' => $dateSys]); 
+                                             $action8->update(['user_id'=>Auth::user()->id]);
+                                             $miss->update(['date_spec_affect2'=>0]);
+
+                                              $output='Activation de l\'action :'. $action8->titre.' | Mission :'. $action8->Mission->titre.' | Dossier : '. $action8->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action8->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action8->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action8->Mission->dossier->id.'"/> ';
+     
+                                           return($output);
+
+                                        
+
+
+
+
+                                        
+
+                                        }
+
+                                        // rendre datespec 0
+
+                                       
+                                        
+
+
+
+                                    }
+
+
+
+                                
+
+
+                            
+                               }
+
+
+                                // cas affect3
+
+
+                          if($miss->date_spec_affect3==1 && $miss->h_fin_location_voit!=null )
+                         {
+
+                        //dd($miss->h_dep_pour_miss);
+                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
+                        //dd( $datespe1);
+
+                           $datespe = \DateTime::createFromFormat($format,($miss->h_fin_location_voit));
+                           // dd( $datespe );
+                                     
+                         
+                                      
+                                    if($datespe <= $dateSys  )
+                                    {
+
+                                        $action10=ActionEC::where('mission_id',$miss->id)
+                                                           ->where('statut','!=','rfaite')
+                                                           ->where('ordre',10)
+                                                           ->first();
+                                        //Suivre mission taxi
+                                        if($action10->statut=='inactive')
+                                        {
+
+                                             $action10->update(['statut'=>"active"]);
+                                             $action10->update(['date_deb' => $dateSys]); 
+                                              $action10->update(['user_id'=>Auth::user()->id]);
+                                             $miss->update(['date_spec_affect3'=>0]);
+
+                                              $output='Activation de l\'action :'. $action10->titre.' | Mission :'. $action10->Mission->titre.' | Dossier : '. $action10->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'. $action10->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action10->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action10->Mission->dossier->id.'"/> ';
+     
+                                           return($output);
+
+
+
+
+                                        
+
+                                        }
+
+                                        // rendre datespec 0
+
+                                       
+                                        
+
+
+
+                                    }
+
+
+
+                                
+
+
+                            
+                               }
+
+
+
+                        }     // fin location voiture
+
+
+
+
 
 
                                 // cas de rdv
@@ -2141,7 +2821,29 @@ class ActionController extends Controller
 //---------------------traitement de boucle--------------------------------///
     
 
+// remorquage
 
+      if($action->Mission->type_Mission==44)
+             {   
+                
+                  if($action->ordre==5)
+                   {
+                   
+                    $this->boucle_remorquage=1; 
+                    $this->entree_act4_remorquage=1;
+                    $this->entree_act5_remorquage=0;
+
+                   }
+
+                   if($action->ordre==6)
+                    {
+                       $this->boucle_remorquage=1; 
+                       $this->entree_act4_remorquage=0;
+                       $this->entree_act5_remorquage=1;                
+
+                    }
+   
+             }
 
  // Cas particulier pour la mission organisiation visite médicale
 
@@ -2407,6 +3109,26 @@ class ActionController extends Controller
 
                switch($at){
 
+
+         case "Location de voiture"://46
+         return $this->Location_de_voiture_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+                  case "Remorquage":// 44
+         return $this->Remorquage_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+                  case "Réparation de véhicule":// 45
+         return $this->Reparation_vehicule_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+                case "Rapatriement de véhicule sur ferry": // 43
+         return $this->Rapatriement_de_vehicule_sur_ferry_DV($option,$idmiss,$idact,$iddoss,$bouton); break; 
+
+                 case "Transport terrestre effectué par prestataire externe": // 34
+           return $this->Transport_terrestre_effectue_par_prestataire_externe_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+
+                case "Transports terrestres effectué par entité-sœur MMS": // 33 
+         return $this->Transports_terrestres_assure_par_MMS_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+         
+
                 case "Organisation visite médicale"://35
          return $this->Organisation_visite_medicale_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
@@ -2570,8 +3292,6 @@ class ActionController extends Controller
 
          
 
-         case "Location de voiture":
-         return $this->Location_de_voiture_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
          
 
@@ -2585,15 +3305,12 @@ class ActionController extends Controller
             
          
 
-         case "Réparation de véhicule":
-         return $this->Reparation_vehicule_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+       
 
-         case "Remorquage":
-         return $this->Remorquage_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+       
 
 
-         case "Rapatriement de véhicule sur ferry":
-         return $this->Rapatriement_de_vehicule_sur_ferry_DV($option,$idmiss,$idact,$iddoss,$bouton); break; 
+         
 
          case "Recherche devis de frais medicaux pour hospitalisation":     
          return $this->Recherche_devis_de_frais_medicaux_pour_hospitalisation_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
@@ -2608,11 +3325,8 @@ class ActionController extends Controller
 
         
               
-        case "Transport terrestre effectué par prestataire externe":
-         return $this->Transport_terrestre_effectue_par_prestataire_externe_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+       
          
-         case "Transports terrestres effectué par entité-sœur MMS":
-         return $this->Transports_terrestres_assure_par_MMS_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
          
 
          */
@@ -7890,7 +8604,7 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
                             // activer Action 7 : Envoyer RM au client 
                                                                                          
                                
-                           if(($action6->statut=="faite"  & $action7->statut =="inactive")  || ($action8->statut=="faite" && $this->boucle_org_vis_med==1 && $entree_act7_org_vis_med==1) )
+                           if(($action6->statut=="faite"  & $action7->statut =="inactive")  || ($action8->statut=="faite" && $this->boucle_org_vis_med==1 && $this->entree_act7_org_vis_med==1) )
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',7)
@@ -8893,18 +9607,11 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
                           // Si_appui_fait_action6 OU 
                           // Si_appui_ignorer_action5 OU 
                           // Si_appui_ignorer_action6
+                                                
 
-
-                       
-
-                            
-
-                            if( (($action1->statut =="faite" && $action1->opt_choisie=="1") ||
-                                 ($action1->statut =="faite" && $action1->opt_choisie=="2" && $action5->statut=="faite" )||
-                                 $action6->statut=="faite" || $action5->statut=="ignoree"||$action6->statut=="ignoree")
-
-
-                              && $action8->statut =="inactive") 
+                            if (((($action1->statut =="faite" && $action1->opt_choisie=="1") ||
+                                 ($action1->statut =="faite" && $action1->opt_choisie=="2" )) && ( $action5->statut=="faite" ||
+                                 $action6->statut=="faite" || $action5->statut=="ignoree"||$action6->statut=="ignoree"))  && $action8->statut =="inactive") 
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',8)
@@ -8951,7 +9658,6 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
 
                                
                  
-
                if($chang==true)
                        {
                        return $this->afficheEtatAction_mision_dossier($idact,$bouton);
@@ -9028,7 +9734,7 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
                                                 
 
                         
-                           if($action2->statut=="faite" && $action2->opt_choisie=="2"  && $action3->statut =="inactive")  
+                           if($action1->statut=="faite" && $action1->opt_choisie=="2"  && $action3->statut =="inactive")  
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',3)
@@ -9046,10 +9752,12 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
                            // Si_appui_fait_action1 & si_choix_option3_action1 OU 
                            //Si_appui_fait_action5 & si_choix_option2_action5
 
-
+ 
+                   
+              
                      
-                           if((($action1->statut=="faite"  && $action1->opt_choisie=="3") ||
-                             ($action5->statut=="faite"  && $action5->opt_choisie=="2") ) && $action4->statut =="inactive")  
+                           if((($action1->statut=="faite"  && $action1->opt_choisie=="3") && $action4->statut =="inactive" )||
+                              ( $this->boucle_remorquage==1 && $this->entree_act4_remorquage==1 && $action5->statut=="faite"  && $action5->opt_choisie=="2") )  
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',4)
@@ -9062,9 +9770,9 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
 
                             // activer Action 5  : Orientation selon réponse assistance                   
 
-                            //                                  
+                            //             ;                          
                                
-                           if(($action3->statut=="faite"  || $action6->statut=="faite") && $action5->statut =="inactive")  
+                           if(($action3->statut=="faite" && $action5->statut =="inactive") || ($action6->statut=="faite" && $this->entree_act5_remorquage==1 &&  $this->boucle_remorquage==1 ) )  
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',5)
@@ -9111,9 +9819,7 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
                            //
 
 
-                       
-
-                            
+                                                   
 
                             if($action6->statut=="faite" && $action6->opt_choisie=="2"  && $action8->statut =="inactive") 
                            {
