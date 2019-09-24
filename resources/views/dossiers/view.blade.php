@@ -155,12 +155,12 @@ use App\Adresse;
                                <i class="fas a-lg fa-exchange-alt"></i>  Communications
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item active show">
                             <a class="nav-link" href="#tab3" data-toggle="tab">
                                 <i class="fas fa-lg  fa-ambulance"></i>  Prestations
                             </a>
                         </li>
-                        <li class="nav-item active show">
+                        <li class="nav-item  ">
                             <a class="nav-link" href="#tab4" data-toggle="tab">
                                 <i class="fas  fa-lg fa-users"></i>  Intervenants
                             </a>

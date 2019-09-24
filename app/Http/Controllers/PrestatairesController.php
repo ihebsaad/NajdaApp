@@ -152,13 +152,13 @@ class PrestatairesController extends Controller
                         'nom' => $request->get('nom'),
                         'prenom' => $request->get('prenom'),
                         'dossier' => $doss,
-                        'prestataire' => $id,
+                        'prestataire_id' => $id,
 
                     ]);
                     $interv->save();
 
 
-                    return url('/dossiers/view/' . $doss.'#tab4')/*->with('success', ' Créé avec succès')*/
+                    return url('/dossiers/view/' . $doss )/*->with('success', ' Créé avec succès')*/
                         ;
                 } else {
                     return url('/prestataires');
