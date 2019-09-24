@@ -126,8 +126,8 @@ use App\Http\Controllers\TagsController;
         </div>
 				                          <?php
                                             // get attachements info from DB
-                                            $attachs = Attachement::get()->where('parent', '=', $entree['id'] );
-                                            $nbattachs = Attachement::where('parent', '=', $entree['id'] )->count();
+                                            $attachs = Attachement::get()->where('parent', '=', $entree['id'] )->where('boite','0');
+                                            $nbattachs = Attachement::where('parent', '=', $entree['id'] )->where('boite','0')->count();
                                             
                                           ?>
     <div id="emailcontent" class="panel-collapse collapse in" aria-expanded="true" style="">

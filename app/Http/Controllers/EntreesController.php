@@ -302,7 +302,7 @@ class EntreesController extends Controller
 
         $attachement = new Attachement([
 
-            'type'=>'pdf','path' => $path2, 'nom' => $name,'boite'=>0,'entree_id'=>$id,'parent'=>$id,
+            'type'=>'pdf','path' => $path2, 'nom' => $name,'boite'=>3,'entree_id'=>$id,'parent'=>$id,
         ]);
         $attachement->save();
 
