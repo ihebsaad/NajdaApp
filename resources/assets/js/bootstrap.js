@@ -43,8 +43,8 @@ if (token) {
  * allows your team to easily build robust real-time web applications.
  */
 
-const production  = 'http://localhost/najdaapp';
-const development = 'http://localhost/najdaapp';
+//const production  = 'http://localhost/najdaapp';
+//const development = 'http://localhost/najdaapp';
 //const url = (process.env.NODE_ENV ? production : development);
 //const url = (process.env.BASE_URL ? production : development);
 

@@ -825,7 +825,7 @@ var development = 'http://localhost/najdaapp';
 window.Pusher = __webpack_require__(33);
 
 window.Echo = new __WEBPACK_IMPORTED_MODULE_0_laravel_echo__["a" /* default */]({
-  authEndpoint: 'http://localhost/najdaapp/broadcasting/auth',
+  // authEndpoint :'http://localhost/najdaapp/broadcasting/auth',
   //hostname:'http://localhost/najdaapp/',
   broadcaster: 'pusher',
   key: '10f2013ac245ed0bfe45',
