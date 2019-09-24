@@ -1060,7 +1060,7 @@ class EmailController extends Controller
                     $type=  $oAttachment->getExtension();
 
                     // verifier si l'attachement pdf contient des mots de facturation
-                    if ( App::environment() === 'production') {
+                    if ( App::environment() != 'local') {
 
                         if ($type=='pdf')
                         {

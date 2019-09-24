@@ -124,6 +124,12 @@ use App\Http\Controllers\TagsController;
                     </div>        
                  </a>
         </div>
+				                          <?php
+                                            // get attachements info from DB
+                                            $attachs = Attachement::get()->where('parent', '=', $entree['id'] );
+                                            $nbattachs = Attachement::where('parent', '=', $entree['id'] )->count();
+                                            
+                                          ?>
     <div id="emailcontent" class="panel-collapse collapse in" aria-expanded="true" style="">
         <div class="panel-body" id="emailnpj">
             <div class="row">
@@ -136,8 +142,8 @@ use App\Http\Controllers\TagsController;
                         <a href="#txtcorps" data-toggle="tab" aria-expanded="true"> Texte Brut</a>
                     </li>
                     <?php }*/ ?>
-                    @if ( $entree['nb_attach']   > 0)
-                        @for ($i = 1; $i <= $entree['nb_attach'] ; $i++)
+                    @if ($nbattachs   > 0)
+                        @for ($i = 1; $i <= $nbattachs   ; $i++)
                             <li>
                                 <a class=" " href="#pj<?php echo $i; ?>" data-toggle="tab" aria-expanded="false">PJ<?php echo $i; ?></a>
                             </li>
@@ -166,12 +172,9 @@ use App\Http\Controllers\TagsController;
                             <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
                             <?php  echo $cont2; ?></p>
                     </div><?php } */ ?>
-                         @if ($entree['nb_attach']  > 0)
-                                          <?php
-                                            // get attachements info from DB
-                                            $attachs = Attachement::get()->where('parent', '=', $entree['id'] );
-                                            
-                                          ?>
+                         @if ($nbattachs   > 0)
+
+							 
                                             @if (!empty($attachs) )
                                             <?php $i=1; ?>
                                             @foreach ($attachs as $att)

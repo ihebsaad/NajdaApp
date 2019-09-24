@@ -1,0 +1,12 @@
+ 
+<Directory />
+        Options FollowSymLinks
+        AllowOverride All
+        Require all granted
+</Directory>
+
+<Directory /usr/share>
+        AllowOverride None
+        Require all granted
+</Directory>
+
