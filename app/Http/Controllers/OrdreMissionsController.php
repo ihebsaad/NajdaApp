@@ -95,8 +95,17 @@ class OrdreMissionsController extends Controller
                     // affecter date  prévue destination ( prévue fin de mission)
                if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))    
         		{
+
                     //$format ='Y-m-d H:i';
-                     $datefinMiss=$omtaxi->dharrivedest;
+                     $datePourSuiviMiss=$omtaxi->dateheuredep;//  CL_heuredateRDV
+                     //str_replace("T"," ",$datePourSuiviMiss);
+                     //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss); 
+                     $datePourSuivi= date('Y-m-d H:i',strtotime($datePourSuiviMiss));
+
+                     //$datePourSuivi = \DateTime::createFromFormat($format, $datePourSuiviMiss);
+
+                    //$format ='Y-m-d H:i';
+                     $datefinMiss=$omtaxi->dateheuredispprev;  //  dharrivedest
                      //str_replace("T"," ",$datePourSuiviMiss);
                      //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss); 
                      $dateFM= date('Y-m-d H:i',strtotime($datefinMiss));
@@ -104,6 +113,7 @@ class OrdreMissionsController extends Controller
                      //$datePourSuivi = \DateTime::createFromFormat($format, $datePourSuiviMiss);
 
                      $miss=Mission::where('id',$_POST['idMissionOM'])->first();
+                     $miss->update(['h_dep_pour_miss'=> $datePourSuivi,'date_spec_affect'=> true]);
                      $miss->update(['h_arr_prev_dest'=>  $dateFM,'date_spec_affect2'=> true]);
                  }
 
@@ -185,10 +195,10 @@ class OrdreMissionsController extends Controller
 
 
 
-        if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))     
+        /*if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))     
         {
          //$format ='Y-m-d H:i';
-         $datePourSuiviMiss=$omtaxi->CL_heuredateRDV;
+         $datePourSuiviMiss=$omtaxi->CL_heuredateRDV;// dhdepbase
          //str_replace("T"," ",$datePourSuiviMiss);
          //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss); 
          $datePourSuivi= date('Y-m-d H:i',strtotime($datePourSuiviMiss));
@@ -197,7 +207,7 @@ class OrdreMissionsController extends Controller
 
          $miss=Mission::where('id',$_POST['idMissionOM'])->first();
          $miss->update(['h_dep_pour_miss'=> $datePourSuivi,'date_spec_affect'=> true]);
-        }       
+        } */      
 
 
 

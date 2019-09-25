@@ -70,16 +70,13 @@
                 </button>
                 <ul class="dropdown-menu pull-right">
                     <li>
-                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'client','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                            Au client </a>
+                  <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'client','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;"> Au Client </a>
                     </li>
                     <li>
-                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                            Au Prestataire </a>
+                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">Au Prestataire </a>
                     </li>
                     <li>
-                        <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                            A l'assuré </a>
+                <a href="{{route('emails.envoimail',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">A l Assuré </a>
                     </li>
 
                 </ul>
@@ -99,16 +96,34 @@
 
                 </button>
      </div>
-     <div class="col-sm-1">
-      <!--<button class="btn btn-default">fax</button>&nbsp-->
-      <button type="button" class="btn btn-default" >
-          <a style="color:black" href="{{url('dossiers/view/'.$dossier->id )}}"> Fax</a>
-      </button>
-     </div>
      <div class="col-sm-2">
-     <button type="button" class="btn btn-default"  >
-                    <a style="color:black" href="{{url('dossiers/view/'.$dossier->id )}}"> Prestation</a>
-                </button>
+      <!--<button class="btn btn-default">fax</button>&nbsp-->
+     <div class="btn-group">
+       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+         <i class="fa fa-envelope"></i>  Fax <i class="fa fa-angle-down"></i>
+      </button>
+
+         <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="{{route('emails.envoifax',['id'=>$dossier->id,'type'=> 'client','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Au client </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.envoifax',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            À l'intervenant </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.envoifax',['id'=>$dossier->id,'type'=> 'libre','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Libre </a>
+                    </li>
+
+                </ul>
+    </div>
+     </div>
+     <div class="col-sm-1">
+     <button type="button" class="btn btn-default" style="margin-right: 1px ;" >
+                    <a style="color:black" href="{{url('dossiers/view/'.$dossier->id )}}"> Prest</a>&nbsp;
+                </button>&nbsp;
      </div>
      <div class="col-sm-2">
       <button type="button" class="btn btn-default"  >
