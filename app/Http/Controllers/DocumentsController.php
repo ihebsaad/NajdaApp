@@ -167,7 +167,7 @@ if(isset($_POST['idMissionDoc']))
 
                $miss=Mission::where('id',$_POST['idMissionDoc'])->first();
 
-                    if($miss->type_Mission==46)// reservation hotel
+                    if($miss->type_Mission==46)// location voiture
                     {
                      
                         $miss->update(['date_spec_affect'=>1]); 
@@ -178,7 +178,7 @@ if(isset($_POST['idMissionDoc']))
 
                         $miss->update(['h_fin_location_voit'=>$datespe]);
 
-                        return 'date affectée'; 
+                        //return 'date affectée'; 
                    
                     }
              
