@@ -76,13 +76,19 @@
 	<?php } ?>
 	</div>
 	<div class="col-md-6" style="text-align: right!important">
-<?php if (isset($_POST['type_affectation'])) { ?>
+		
+
+<?php if (isset($_POST['prestataire_taxi']) && !(isset($_POST['type_affectation'])) && !(isset($_POST['prestextern']))) { ?>
+		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
+			<span id="prestataire_taxi" style="font-family:'Times New Roman'; "><?php echo $_POST['prestataire_taxi']; ?></span>
+<?php } ?>
+<?php if (isset($_POST['type_affectation']) && !(empty($_POST['type_affectation']))) { ?>
 		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
 			<span id="prestataire_taxi" style="font-family:'Times New Roman'; "><?php echo $_POST['type_affectation']; ?></span>
 <?php } ?>
-<?php if (isset($_POST['prestataire_taxi'])) { ?>
+<?php if (isset($_POST['prestextern']) && !(empty($_POST['prestextern']))) { ?>
 		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
-			<span id="prestataire_taxi" style="font-family:'Times New Roman'; "><?php echo $_POST['prestataire_taxi']; ?></span>
+			<span id="prestataire_taxi" style="font-family:'Times New Roman'; "><?php echo $_POST['prestextern']; ?></span>
 <?php } ?>
 			<h1 style="margin-top:8.75pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:20pt"><span style="font-family:'Times New Roman'; text-decoration:underline">ORDRE DE MISSION</span><span style="font-family:'Times New Roman'; text-decoration:underline"> </span><span style="font-family:'Times New Roman'; text-decoration:underline">TAXI</span></h1><p style="margin-top:0.6pt; margin-left:5.85pt; margin-bottom:0pt; text-align:right; widows:0; orphans:0; font-size:8pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
 			<p style="text-align: right!important; margin-top:0.6pt;  font-size:10pt"><span style="font-family:'Times New Roman'">Choix:&#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_choix'])) { echo $_POST['CL_choix']; } ?></span>
