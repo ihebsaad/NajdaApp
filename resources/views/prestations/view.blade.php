@@ -19,7 +19,7 @@
                      <?php use \App\Http\Controllers\PrestationsController;
                       use \App\Http\Controllers\PrestatairesController;     ?>
                      <?php
-                     $urlapp=env('APP_URL');$urlapp=config('app.url');
+                     $urlapp=env('APP_URL'); 
 
                      if (App::environment('local')) {
 // The environment is local

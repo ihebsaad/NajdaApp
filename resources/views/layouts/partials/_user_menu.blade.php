@@ -1,7 +1,14 @@
 <li class="dropdown user user-menu">
     <a href="#" class="dropdown-toggle padding-user" data-toggle="dropdown">
 
-         <i  style="color:#b6cce7" class="fas fa-user-circle fa-4x myuser"></i>
+        <?php      $user = auth()->user();
+        if ($user->user_type=='admin') { ?>
+            <i  style="color:#000000" class="fas fa-user-circle fa-4x myuser"></i>
+
+            <?php   }else{ ?>
+            <i  style="color:#b6cce7" class="fas fa-user-circle fa-4x myuser"></i>
+
+        <?php } ?>
 
     </a>
     <ul class="dropdown-menu">
@@ -22,11 +29,11 @@
                 $suptech=$seance->superviseurtech ;
                 $charge=$seance->chargetransport ;
                 ?>
-                </li><li class=" " style="background-color:black;color:white;text-align:center">
+                </li><li class=" " style="background-color:grey;color:white;text-align:center">
 <?php
         $iduser=Auth::id();
         if ($iduser==$disp) { ?>
-		<span>(le dispatcheur)</span>
+		<span>(dispatcheur)</span><br>
 		<?php }    if ($iduser==$supmedic) { ?>
                 <span>(superviseur medical)<br></span>
                  <?php }

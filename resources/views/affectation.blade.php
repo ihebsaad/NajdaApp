@@ -56,6 +56,7 @@
               use \App\Http\Controllers\UsersController;
               use \App\Http\Controllers\ClientsController;
               $user = auth()->user();
+              $iduser=$user->id;
               $seance =  DB::table('seance')
                   ->where('id','=', 1 )->first();
               $disp=$seance->dispatcheur ;
@@ -88,9 +89,26 @@
       //->where('affecte','<', 1)  ajouter conditions non affectes
               ->get();
 */
+              // changer condition :
+              // dossier par type supervision medic /..
+              //+ Actif et non affectés
+
+              if($iduser==$suptech)
+              {
+
+              }
+
+              if($iduser==$supmedic)
+	          {
+
+              }
+
               $dossiers=  Dossier::
                   whereNull('affecte')
-                  ->orWhere('affecte',0)->get();
+                  ->orWhere('affecte',0)
+
+                  ->get();
+
  ?>
 
   
@@ -152,9 +170,10 @@
                 </div>
                    <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
                        <div class="row" style="margin-bottom:15px;">
-                           <div class="col-md-4" style=";color:#F39C12"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Mixte</b></div>
-                           <div class="col-md-4" style=";color:#52BE80"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Medical</b></div>
-                           <div class="col-md-4" style=";color:#3498DB"><i class="fa fa-lg fa-folder"></i>  <b>Dossier Technique</b></div>
+                           <div class="col-md-3" style="cursor:pointer;color:#F39C12" onclick="showMixtes()"><i class="fa fa-lg fa-folder"></i>  <b  onclick="showMixtes()">Dossier Mixte</b></div>
+                           <div class="col-md-3" style="cursor:pointer;color:#52BE80" onclick="showMedic()" ><i class="fa fa-lg fa-folder"></i>  <b  onclick="showMedic()">Dossier Medical</b></div>
+                           <div class="col-md-4" style="cursor:pointer;color:#3498DB" onclick="showTech()" ><i class="fa fa-lg fa-folder"></i>  <b  onclick="showTech()">Dossier Technique</b></div>
+                           <div class="col-md-2" style="cursor:pointer;color:#000000;font-weight: 600" onclick="showTous()" >  <b  onclick="showTech()">TOUS</b></div>
                        </div>
 
  					<div id="drag-elements">
@@ -165,13 +184,13 @@
 			$idd=$dossier['id'];
             $immatricul=$dossier['vehicule_immatriculation'];
 			$ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-			      <div  id="dossier-<?php echo $idd;?>" class="dossier"  style="margin-top:5px;<?php echo $style;?>" >
+			      <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" >
                 <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <label style="font-size: 15px;"><?php echo $ref;?></label>
 	 	         <div class="infos">  <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
                <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
                   <?php if($immatricul!='') { echo '<small style="font-size:10px">'. $immatricul .'</small>';} ?>
 			
-                     <i style="float:left;color:;margin-top:10px" class="delete fa fa-trash" onclick="Delete('<?php echo $idd;?>')"></i></div>
+                     </div>
 	        </div>
 
 	<?php	}
@@ -206,6 +225,66 @@
 
 
 <script>
+
+
+    function   showMixtes  (){
+
+        var elements = document.getElementsByClassName('dossier');
+        for (var i = 0; i < elements.length; i++){
+           if (elements[i].parentElement.id =='drag-elements')
+           {
+               elements[i].style.display = 'none';
+           }
+        }
+
+        var elements = document.getElementsByClassName('dossier-Mixte');
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.display = 'block';
+        }
+    }
+
+    function   showMedic  (){
+
+        var elements = document.getElementsByClassName('dossier');
+        for (var i = 0; i < elements.length; i++){
+            if (elements[i].parentElement.id =='drag-elements')
+            {
+                elements[i].style.display = 'none';
+            }
+        }
+
+        var elements = document.getElementsByClassName('dossier-Medical');
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.display = 'block';
+        }
+    }
+
+    function   showTech  (){
+
+        var elements = document.getElementsByClassName('dossier');
+        for (var i = 0; i < elements.length; i++){
+            if (elements[i].parentElement.id =='drag-elements')
+            {
+                elements[i].style.display = 'none';
+            }
+        }
+
+        var elements = document.getElementsByClassName('dossier-Technique');
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.display = 'block';
+        }
+    }
+
+    function   showTous  (){
+
+        var elements = document.getElementsByClassName('dossier');
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.display = 'block';
+        }
+
+
+    }
+
     function selectFolder(elm)
     {
         var idelm=elm.id;

@@ -15,16 +15,20 @@
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail </label>
+                        <div class="form-group row">
+                            <label for="login" class="col-md-4 control-label">
+                               Identifiant
+                            </label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+                                <input id="login" type="text"
+                                       class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
+                                       name="login" value="{{ old('username') ?: old('email') }}" required autofocus>
 
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
+                                @if ($errors->has('username') || $errors->has('email'))
+                                    <span class="invalid-feedback">
+                <strong>{{ $errors->first('username') ?: $errors->first('email') }}</strong>
+            </span>
                                 @endif
                             </div>
                         </div>
@@ -43,7 +47,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                      <!--  <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <div class="checkbox">
                                     <label>
@@ -51,7 +55,7 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="form-group">
                             <div class="col-md-8 col-md-offset-4">

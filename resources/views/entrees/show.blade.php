@@ -554,7 +554,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/spectrum.css') }}">
 <?php
-$urlapp=env('APP_URL');$urlapp=config('app.url');
+$urlapp=env('APP_URL'); 
 
 if (App::environment('local')) {
 // The environment is local

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="fr">
+<?php    setlocale(LC_ALL, "fr_FR.UTF-8");    ?>
 <head>
     <title>Najda Assistance</title>
     <meta charset="utf-8">

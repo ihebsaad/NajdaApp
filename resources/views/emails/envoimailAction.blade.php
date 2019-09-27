@@ -206,7 +206,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <?php
     $urlapp=env('APP_URL');
-$urlapp=config('app.url');
+ 
     if (App::environment('local')) {
         // The environment is local
       //  $urlapp='http://localhost/najdaapp';

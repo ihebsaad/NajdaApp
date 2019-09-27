@@ -32,7 +32,7 @@
 use \App\Http\Controllers\UsersController;
    use \App\Http\Controllers\ClientsController;
               use \App\Attachement ;
-              $urlapp=env('APP_URL');$urlapp=config('app.url');
+              $urlapp=env('APP_URL'); 
 
               if (App::environment('local')) {
                   // The environment is local

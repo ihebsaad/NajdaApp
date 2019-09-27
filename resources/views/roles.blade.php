@@ -1,4 +1,6 @@
+<html lang="fr">
 <head>
+
     <link rel="shortcut icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
 <meta charset="UTF-8">
@@ -162,6 +164,7 @@
 
 </style>
 
+
  <?php
 
  use App\Demande;
@@ -182,9 +185,10 @@
 
  $debut=$seance->debut;
  $fin=$seance->fin;
- $date=date('l d/m/Y');
+ setlocale(LC_TIME,'fr_FR','french','French_France.1252','fr_FR.ISO8859-1','fra');
 
-?>
+ $date=date('l d/m/Y');
+ ?>
  <script src="{{  URL::asset('public/js/jquery-1.11.1.min.js') }}" type="text/javascript"></script>
 
 
@@ -698,7 +702,7 @@
      }); //end click
  }
      <?php
-     $urlapp=env('APP_URL');$urlapp=config('app.url');
+     $urlapp=env('APP_URL'); 
 
      if (App::environment('local')) {
          // The environment is local
@@ -933,3 +937,4 @@
      }
 
   </script>
+</html>

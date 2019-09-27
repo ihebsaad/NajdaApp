@@ -5,26 +5,26 @@
 
         </div>
 
-    <div class="navbar ">
+    <div class="navbar "  style="background-color:#636b6f !important">
       <div class="row">
         <div class="col-sm-2 col-md-2 col-lg-2" style="">
-           <a href="{{ route('home')}}" class="logo">
+            <a href="{{ route('entrees.dispatching')}}" class="logo" style="background-color: transparent!important;border:none!important;">
                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
                 <img style="margin-left:-60px;" src="{{  URL::asset('public/img/logo.png') }}" alt="logo" />
             </a>
         </div>
-        <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top: 5px;">
-          <span  id="ndate" class="date" data-month="" data-year="" style="width:70px;height:60px;line-height: 1; padding-top: 15px;">
-                    <span id="numj">13</span>
-           </span>
-        </div>
+
 
         <div style="min-width:100px!important;padding-top:15px;padding-left:0px!important" class="col-sm-1 col-md-1 col-lg-1">
           <p id="njour" style="font-size: 25px; margin-bottom: 0px!important;color: white"></p>
           <div class="time">
         time</div>
         </div>
-
+          <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top: 5px;">
+          <span  id="ndate" class="date" data-month="" data-year="" style="width:70px;height:60px;line-height: 1; padding-top: 15px;">
+                    <span id="numj">13</span>
+           </span>
+          </div>
           @can('isAdmin')
 
               <div  class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
@@ -66,7 +66,7 @@
                                                 Pause
           </a> 
         </div>-->
-        <div class="col-sm-3 col-md-3 col-lg-3" style=" height: 40px!important;padding-top:27px;padding-left:0px ">
+        <div class="col-sm-2 col-md-2 col-lg-2" style=" height: 40px!important;padding-top:27px;padding-left:0px ">
           <form class="search-container" action="{{route('RechercheMulti.test')}}" id="testRecheche" method="POST">
             <input type="text" id="search-bar"  placeholder="Recherche" autocomplete="off" name="qy">
             <a href="#" onclick='document.getElementById("testRecheche").submit()'><img class="search-icon" src="{{ URL::asset('public/img/search-icon.png') }}"></a>
@@ -102,8 +102,16 @@
               </div>
               @endcannot
 -->
+          <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
+
+              <a href="{{ route('entrees.index') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
+                  <span class="fa fa-fw fa-envelope fa-2x"></span>
+              </a>
+
+
+          </div>
         <div class="col-sm-1 col-md-1 col-lg-1">
-          <ul class="nav navbar-nav" style="float: right!important;">
+          <ul class="nav navbar-nav" style=" ">
 
 
                     {{-- User Account --}}

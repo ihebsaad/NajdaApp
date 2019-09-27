@@ -7,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
 
 
-<?php  $urlapp=env('APP_URL');$urlapp=config('app.url');
+<?php  $urlapp=env('APP_URL'); 
 
 if (App::environment('local')) {
     // The environment is local
@@ -51,7 +51,7 @@ if (App::environment('local')) {
                 <tr><?php $type=$entree['type'];?>
 				      <td style="font-size:14px;width:6%"><?php if ($type=='email'){echo '<img width="20" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="20" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="20" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="20" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php echo $entree['type']; ?></td>
                     <td  style="width:10%;font-size:12px;max-width:150px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $entree['destinataire']; ?></td>
-                    <td style="width:10%;font-size:12px;width:10%"><?php echo  date('d/m/Y', strtotime($entree['reception'])) ; ?></td>
+                    <td style="width:10%;font-size:12px;width:10%"><?php echo  date('d/m/Y H:i', strtotime($entree['reception'])) ; ?></td>
                     <td  style="width:10%;font-size:12px;max-width:150px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $entree['emetteur']; ?></td>
                     <td  style="width:35%;font-size:12px;max-width:200px;"><a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:16px;"' ;} ?>  href="{{route('entrees.showdisp',['id'=> $entree['id']] )}}" ><?php echo $entree['sujet'] ; ?></a></td>
                     <td></td>

@@ -67,11 +67,45 @@ class DossiersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($identree)
     {
-        $dossiers = Dossier::get();
+        $entree  = Entree::find($identree);
 
-        return view('dossiers.create',['dossiers' => $dossiers]);
+
+        $cldocs = DB::table('clients_docs')->select('client', 'doc')->get();
+
+        $typesMissions =   DB::table('type_mission')
+                ->get();
+
+
+        //  $clients = DB::table('clients')->select('id', 'name')->get();
+
+        $clients =  DB::table('clients')
+                ->get();
+
+
+
+        $hopitaux =  DB::table('prestataires_type_prestations')
+                ->where('type_prestation_id',8 )
+                ->orwhere('type_prestation_id',9 )
+                ->get();
+
+
+
+        $traitants =  DB::table('prestataires_type_prestations')
+                ->where('type_prestation_id',15 )
+                ->get();
+
+        $hotels =  DB::table('prestataires_type_prestations')
+                ->where('type_prestation_id',18 )
+                ->get();
+
+        $garages = DB::table('prestataires_type_prestations')
+                ->where('type_prestation_id',22 )
+
+                ->get();
+
+        return view('dossiers.create',['entree'=>$entree ,'typesMissions'=>$typesMissions,'clients'=>$clients,'cldocs'=>$cldocs ,'hopitaux'=>$hopitaux ,'traitants'=> $traitants , 'hotels'=>$hotels , 'garages'=>$garages] );
     }
 
     /**
@@ -190,7 +224,6 @@ class DossiersController extends Controller
 
         if ($dossier->save())
         { $iddoss=$dossier->id;
-
 
 
             $user = auth()->user();

@@ -33,6 +33,24 @@
                                 @endif
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="username" class="col-md-4 control-label">
+                                {{ __('Identifiant') }}
+                            </label>
+
+                            <div class="col-md-6">
+                                <input id="username" type="text"  autocomplete="off"
+                                       class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}"
+                                       name="username" value="{{ old('username') }}" required>
+
+                                @if ($errors->has('username'))
+                                    <span class="invalid-feedback">
+                         <strong>{{ $errors->first('username') }}</strong>
+                               </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="email" class="col-md-4 control-label">E-Mail </label>
 

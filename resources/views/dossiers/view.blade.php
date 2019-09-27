@@ -2745,7 +2745,7 @@ function keyUpHandler(){
 
 <?php
 $urlapp=env('APP_URL');
-$urlapp=config('app.url');
+ 
 
 if (App::environment('local')) {
 // The environment is local

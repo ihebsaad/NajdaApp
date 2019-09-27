@@ -1,19 +1,17 @@
 <header class="header">
-<?php
-    $seance =  DB::table('seance')
-        ->where('id','=', 1 )->first();
-    $user = auth()->user();
-    $iduser=$user->id;
-    ?>
+        <?php
+		        $seance =  DB::table('seance')
+            ->where('id','=', 1 )->first();
+		?>
         <div class="collapse bg-grey" id="navbarHeader">
              @include('layouts.partials._top_menu')
 
         </div>
 
-    <div class="navbar ">
+    <div class="navbar "  style="background-color:#4FC1E9 !important">
       <div class="row">
         <div class="col-sm-1 col-md-1 col-lg-1" style="margin-right:60px">
-           <a href="{{ route('home')}}" class="logo">
+           <a href="{{ route('supervision')}}" class="logo" style="background-color: transparent!important;border:none!important;">
                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
                 <img style="margin-left:-60px;" src="{{  URL::asset('public/img/logo.png') }}" alt="logo" />
             </a>
@@ -43,63 +41,20 @@
           @endcan
 
 
-          @cannot('isAdmin')
-              <?php
-              $statut=$user->statut;
-              if( ($seance->superviseurmedic!=$iduser)  && ($seance->superviseurtech!=$iduser))
-              {
-              if($statut==2) { ?>
-              <div  id="pause" class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
-
-
-                  <a href="#"    id="enpause" class="btn btn-danger btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
-                      <span class="fas fa-mug-hot"></span>
-                      <br>
-                      En Pause
-                  </a>
-
-                  <a href="#"  style="display:none" id="dpause" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
-                      <span class="fa fa-fw fa-pause"></span>
-                      <br>
-                      Pause
-                  </a>
-              </div>
-
-                  <?php }else{  ?>
-                  <div  id="pause" class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
-
-                  <a href="#"  id="dpause" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
-                      <span class="fa fa-fw fa-pause"></span>
-                      <br>
-                      Pause
-                  </a>
-
-                  <a href="#"    style="display:none"  id="enpause" class="btn btn-danger btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
-                      <span class="fas fa-mug-hot"></span>
-                      <br>
-                      En Pause
-                  </a>
-
-                  </div>
-
-                  <?php }
-                  } // sup
-                  ?>
-          @endcannot
-
-          <?php
-          if( ($seance->superviseurmedic==$iduser)  || ($seance->superviseurtech==$iduser) ||($user->user_type=='admin'))
-          { ?>
-          <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;margin-left:15px">
-              <a  href="{{ route('supervision') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
-                  <span class="fas fa-fw fa-users-cog"></span>
+		  
+          <div  class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important;margin-left:15px">
+              <a href="{{ route('home') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
+                  <i class="far fa-user"></i>
                   <br>
-                  Supervision
+                  Agent
               </a>
           </div>
-        <?php } ?>
 
-          <div class="col-sm-1 col-md-1 col-lg-2" style=" height: 40px!important;padding-top:27px;padding-left:0px ">
+
+		  
+
+
+        <div class="col-sm-3 col-md-2 col-lg-2" style=" height: 40px!important;padding-top:27px;padding-left:0px ">
           <form class="search-container" action="{{route('RechercheMulti.test')}}" id="testRecheche" method="POST">
             <input type="text" id="search-bar"  placeholder="Recherche" autocomplete="off" name="qy">
             <a href="#" onclick='document.getElementById("testRecheche").submit()'><img class="search-icon" src="{{ URL::asset('public/img/search-icon.png') }}"></a>
@@ -116,7 +71,7 @@
               <span class="fa fa-fw fa-phone fa-2x"></span>
           </a> 
         </div>
-
+        <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
 		 <?php
 
         $disp=$seance->dispatcheur ;
@@ -124,26 +79,20 @@
         $iduser=Auth::id();
         if ($iduser==$disp) {
             ?>
-          <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-
-          <a href="{{ route('entrees.dispatching') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
+			  <a href="{{ route('entrees.dispatching') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
               <span class="  fa-fw    fas    fa-map-signs fa-2x"></span>
           </a>
-          </div>
-
-      <?php } else { ?>
-          <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-
+		<?php } else {?>
           <a href="{{ route('entrees.index') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
               <span class="fa fa-fw fa-envelope fa-2x"></span>
-          </a>
-          </div>
+          </a> 
+	 <?php }  ?>
 
-      <?php }  ?>
 
+        </div>
 
         <div class="col-sm-1 col-md-1 col-lg-1">
-          <ul class="nav navbar-nav" style=" ">
+          <ul class="nav navbar-nav" style="">
                     {{-- User Account --}}
                     @include('layouts.partials._user_menu')
 
@@ -151,42 +100,8 @@
 
         </div>
 
-          @cannot('isAdmin')
 
-          <div class="col-sm-1 col-md-1 col-lg-1" class="overme">
-              <?php
-              $user = auth()->user();
-              $name=$user->name;
-              $lastname=$user->lastname;
-
-              ?>
-
-              <b style="font-size: 12px;color:white;font-weight:600">   <?php echo $name .' '. $lastname; ?></b>
-
-              <?php $disp=$seance->dispatcheur ;
-              $supmedic=$seance->superviseurmedic ;
-              $suptech=$seance->superviseurtech ;
-              $charge=$seance->chargetransport ;
-              ?>
-               <div class=" overme" style="font-size:12px;color:white;text-align:left">
-                  <?php
-                  $iduser=Auth::id();
-                  if ($iduser==$disp) { ?>
-                  <span>Dispatcheur</span><br>
-                  <?php }    if ($iduser==$supmedic) { ?>
-                  <span>Sup Medical</span><br>
-                  <?php }
-                  if ($iduser==$suptech) { ?>
-                      <span>Sup Technique</span><br>
-                  <?php }    if ($iduser==$charge) { ?>
-                  <span>Chargé Trans</span><br>
-                  <?php } ?>
-
-              </div>
-
-          </div>
-        @endcannot
-          <div class="col-sm-1 col-md-1 col-lg-1" class="navbar-toggler" data-toggle="collapse" data-target="#navbarHeader">
+        <div class="col-sm-1 col-md-1 col-lg-1" class="navbar-toggler" data-toggle="collapse" data-target="#navbarHeader">
          <!-- <img class="menu-trigger" src="{{ URL::asset('resources/assets/img/menu-black.png') }}" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation"/>-->
           <div class="menu-icon menu-trigger" class="navbar-toggler" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation" alt="Menu de l'application"  style="zoom:60%;float: right!important; padding-top: 28px">
             <div class="line-1 no-animation"></div>
