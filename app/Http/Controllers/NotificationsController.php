@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Entree ;
 use App\Notification ;
+use Illuminate\Support\Facades\Auth;
 
 
 class NotificationsController extends Controller
@@ -30,4 +31,28 @@ class NotificationsController extends Controller
         }
         
     }
+
+
+    public static function checkNewNotifs()
+    {
+        $user = auth()->user();
+        $iduser=$user->id;
+        $notif = Notification::where('read_at',null)->where('notifiable_id',$iduser)->where('affiche',null)->first();
+
+
+        if ( ($notif)){
+
+            $idn=array_values($notif->getAttributes());
+
+            //dd($idn['0']);
+            Notification::where('id',$idn['0'])
+                ->update(array('affiche' => 1));
+
+
+            return $notif;
+        }else {return null;}
+     }
+
+
+
 }

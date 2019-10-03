@@ -7,13 +7,8 @@
 <body>
 @include('layouts.partials.top')
 
-@include('layouts.partials.news')
-@include('layouts.partials.folders')
-
 <div class="content row">
-<div class="left column col-lg-3" >
-@include('layouts.partials.left')
-</div>
+
          <div id="mainc" class="column col-lg-6">
          @if ($errors->any())
              <div class="alert alert-danger">
@@ -51,7 +46,7 @@
             <!-- /.content -->
         </div>
 
-<div class="right column col-lg-3">
+<div class="right column col-lg-6">
 @include('layouts.partials.rightdossier')
 </div></div><!---->
 @include('layouts.partials.footer')

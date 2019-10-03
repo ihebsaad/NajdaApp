@@ -37,6 +37,13 @@ Route::get('/checkdemandes', 'HomeController@checkdemandes')->name('checkdemande
 Route::get('/checkreponses', 'HomeController@checkreponses')->name('checkreponses');
 
 
+
+
+Route::get('/notifications/checknotifs', 'NotificationsController@checkNewNotifs')->name('notifications.checknotifs');
+
+
+
+
 // Authentication Routes...
 $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
 $this->post('login', 'Auth\LoginController@login');
@@ -55,8 +62,6 @@ $this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 $this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');;
 $this->post('password/reset', 'Auth\ResetPasswordController@reset');
 $this->post('password/reset/{token}', 'Auth\ResetPasswordController@reset');
-
-
 
 
 Route::get('/', array('as' => 'home','uses' => 'HomeController@index'));
@@ -100,7 +105,6 @@ Route::get('/entrees/traiter/{id}', 'EntreesController@traiter');
 Route::get('/entrees/archive/', 'EntreesController@archive')->name('entrees.archive');
 Route::post('/entrees/savecomment','EntreesController@savecomment')->name('entrees.savecomment');
 Route::post('/entrees/dispatchf','EntreesController@dispatchf')->name('entrees.dispatchf');
-
 
 
 /*** Emails **/
@@ -164,6 +168,9 @@ Route::get('/envoyes/brouillons', 'EnvoyesController@brouillons')->name('envoyes
 Route::resource('/dossiers',  'DossiersController');
 Route::get('/dossiers', array('as' => 'dossiers','uses' => 'DossiersController@index'));
 Route::get('/dossiers/saving','DossiersController@saving')->name('dossiers.saving');
+//Route::get('/dossiers/save','DossiersController@save');
+Route::post('/dossiers/save','DossiersController@save')->name('dossiers.save');
+
 Route::get('/dossiers/create/{identree}','DossiersController@create')->name('dossiers.create');
 Route::post('/dossiers/updating','DossiersController@updating')->name('dossiers.updating');
 Route::post('/dossiers/updating2','DossiersController@updating2')->name('dossiers.updating2');
@@ -176,6 +183,7 @@ Route::post('/dossiers/listepres','DossiersController@ListePrestataireCitySpec')
 Route::post('/dossiers/listepresm','DossiersController@ListePrestataireCitySpec2')->name('dossiers.listepresm');
 Route::post('/dossiers/addressadd','DossiersController@addressadd')->name('dossiers.addressadd');
 Route::post('/dossiers/addressadd2','DossiersController@addressadd2')->name('dossiers.addressadd2');
+Route::post('/dossiers/checkexiste','DossiersController@checkexiste')->name('dossiers.checkexiste');
 //Route::post('/searchprest','DossiersController@searchprest')->name('searchprest');
 Route::get('/searchprest','DossiersController@searchprest')->name('searchprest');
 

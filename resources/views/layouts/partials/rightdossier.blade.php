@@ -22,15 +22,13 @@ $urlapp=env('APP_URL');
                         </span>
                     </div>
  
-        <div class="panel-body " style="display: block;padding-top:10px;padding-left:10px;padding-right:10px;">
 
-		
 
-  <div class="panel-body scrollable-panel" style="display: block;">
+  <div class="panel-body scrollable-panel" style="display: block;height:2050px">
 
   				<?php 
-				
-				
+
+
               function custom_echo($x, $length)
               {
                   if(strlen($x)<=$length)
@@ -93,7 +91,7 @@ $urlapp=env('APP_URL');
  									$attachs=$entree['nb_attach'];
 				 
 									?>
-  <div class="agent" id="agent-<?php echo $entree->id;?>"  style="display:none" >
+  <div class="agent" id="agent-<?php echo $entree->id;?>"   >
     <div class="form-group pull-left">
         <?php if ($type=='email'){echo '<img width="15" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="15" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="15" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="15" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php // echo $entree['type']; ?>
  	   </div>
@@ -113,8 +111,8 @@ $urlapp=env('APP_URL');
 
                 </div>
                 <div class="form-group">
-                    <label for="contenu">Contenu:</label>
-                    <div class="form-control" style="overflow:scroll;min-height:400px">
+                    <label for="contenu" id="contenulabel" style="cursor:pointer">Contenu:</label>
+                    <div    id="lecontenu" class="form-control" style=" <?php if($entree->type=='fax'){echo 'display:none';}?>;  overflow:scroll;min-height:400px">
 
                         <?php $contenu= $entree['contenu'];
                         echo ($contenu);  ?>
@@ -199,9 +197,23 @@ $urlapp=env('APP_URL');
   </div>
 					
        </div>
-</div>
-<script>
-  
+
+ <script>
+
+
+     $('#contenulabel').on('click',   function() {
+
+         var   div=document.getElementById('lecontenu');
+          if(div.style.display==='none')
+         {
+             div.style.display='block';
+          }
+         else
+         {
+             div.style.display='none';
+          }
+
+     });
   
 </script>
 

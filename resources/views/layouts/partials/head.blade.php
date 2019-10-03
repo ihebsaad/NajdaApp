@@ -463,6 +463,50 @@ $urlnotif=$urlapp.'/entrees/show/' ;
             });
         }
 
+<?php
+
+?>
+
+        function checkNotifs(){
+            $.ajax({
+                type: "get",
+                url: "<?php echo $urlapp; ?>/notifications/checknotifs",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check new notif   :'+data);
+                 Data=   JSON.stringify(data);
+
+                    if(data )
+                    {
+                        showNotif(data);
+                   /*     Push.create("Nouvelle Notification", {
+
+                            body: 'Nouvelle Notification',
+                            icon: "{{-- asset('public/img/najda.png') --}}",
+                            timeout: 5000,
+
+                            onClick: function(){
+                                // window.focus();
+                                // this.close();
+                                window.location ='<?php //  echo $urlapp; ?>/entrees/show/'+parsed['data']['entree']['id'];
+
+                            }
+
+                        });*/
+
+                    }
+                    //Send another request in n seconds.
+                    setTimeout(function(){
+                        checkNotifs();
+                    }, 10000);  //10 secds
+                }
+            });
+
+        }
+
+
+        checkNotifs();
         checkemails();
         checkemails2();
         checksms();

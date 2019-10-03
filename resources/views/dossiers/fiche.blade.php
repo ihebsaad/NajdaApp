@@ -133,7 +133,7 @@ use  \App\Http\Controllers\DocsController;
 
                             <div class="row">
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Type de dossier</label>
                                         <select  onchange="changing(this);location.reload();"  id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
@@ -143,10 +143,10 @@ use  \App\Http\Controllers\DocsController;
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Affecté à </label>
-                                        <select id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single" readonly="readonly">
+                                        <select id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single" >
                                             <option <?php if ($dossier->type_affectation =='Najda'){echo 'selected="selected"';} ?> value="Najda">Najda</option>
                                             <option <?php if ($dossier->type_affectation =='VAT'){echo 'selected="selected"';} ?> value="VAT">VAT</option>
                                             <option <?php if ($dossier->type_affectation =='MEDIC'){echo 'selected="selected"';} ?> value="MEDIC">MEDIC</option>
@@ -179,7 +179,7 @@ use  \App\Http\Controllers\DocsController;
                                 </div>
 
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Référence Client </label>
                                         <input onchange="changing(this)" type="text" id="reference_customer" name="reference_customer" class="form-control"  value="{{ $dossier->reference_customer }}" >
@@ -196,9 +196,9 @@ use  \App\Http\Controllers\DocsController;
                                     </div>
                                 </div>-->
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="complexite"> Degré de complexité</label>
+                                        <label for="complexite"> Complexité</label>
                                         <select onchange="changing(this)" class="form-control" name="complexite" id="complexite"  >
                                             <option <?php if ($dossier['complexite'] ==1){echo 'selected="selected"';}?> value="1">1</option>
                                             <option <?php if ($dossier['complexite'] ==2){echo 'selected="selected"';}?>value="2">2</option>

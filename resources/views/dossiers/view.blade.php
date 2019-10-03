@@ -476,8 +476,6 @@ use App\Adresse;
                      </div><!--32-->
 
 
-
-
                  <div id="tab33" class="tab-pane fade ">
                     <br> <!-- <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addpres" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une Prestation</b></button>-->
 

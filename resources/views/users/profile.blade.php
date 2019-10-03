@@ -48,8 +48,18 @@
                                         </td>
                                     </tr>
 
+                                    <tr>
+                                        <td class="text-primary">Signature FR</td>
 
+                                        <td>  <textarea id="signature" onchange="changing(this);"  type="text" class="form-control" name="signature"  id="signature"    >{{$user->signature}}</textarea>
+                                        </td>
+                                    </tr>
 
+                                    <tr>
+                                        <td class="text-primary">Signature En</td>
+                                        <td>    <textarea id="signature_en" onchange="changing(this);"  type="text" class="form-control" name="signature_en"  id="signature_en">  {{$user->signature_en}}</textarea>
+                                        </td>
+                                    </tr>
                                 <tr>
                                 <td class="text-primary">Rôle</td>
                                     <td>

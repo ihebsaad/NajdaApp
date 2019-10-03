@@ -42,7 +42,7 @@ use App\Http\Controllers\TagsController;
                                     <button class="btn btn-sm btn-default"><b>REF: {{ $entree['dossier']   }}</b></button>
                                 @endif
                                 @if (empty($entree->dossier))
-                                        <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
+                                        <a   class="btn btn-md btn-success"   href="{{route('dossiers.create',['identree'=> $entree['id']]) }}"  > <i class="fas fa-folder-plus"></i> Créer un Dossier</a>
                                         <button class="btn   " id="showdispl" style="background-color: #c5d6eb;color:#333333;"  ><b><i class="fas fa-folder"></i> Dispatcher</b></button>
                                       <!--  <button id="afffolder" class="btn   " style="background-color: #c5d6eb;color:#333333;"  data-toggle="modal" data-target="#affectfolder"><b><i class="fas fa-folder"></i> Dispatcher</b></button>-->
                                  @endif

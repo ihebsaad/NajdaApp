@@ -188,181 +188,239 @@ if (App::environment('local')) {
 
 <script>
 
-    /*var jsnt = '{"data":{"entree":{"sujet":"blabla", "type":"email", "id":"identree"}},"id":"idnotif","type": "typenotif"}';
-     var parsed = JSON.parse(jsnt);
-     alert(parsed['data']['entree']['type']);
-     console.log(parsed);*/
-
-    // var userId = $('meta[name="userId"]').attr('content')
-    Echo.private('App.User.{{Auth::id()}}').notification(  (notification) => {
+     // var userId = $('meta[name="userId"]').attr('content')
+   ////////////// Echo.private('App.User.{{Auth::id()}}').notification(  (notification) => {
 //alert("tessty");
+  function showNotif(notification) {
+         // extraction du contenu de la notification en format json
+         var jsnt = JSON.stringify(notification);
+         alert(jsnt);
 
-        // extraction du contenu de la notification en format json
-        var jsnt = JSON.stringify(notification);
-    var parsed = JSON.parse(jsnt);
-    //alert("l'ID: "+parsed['data']['entree']['id']+" le sujet: "+parsed['data']['entree']['sujet']);
-    //attribuer type selon type recu
-    var typee = "tremail";var img="";
-    if ((typeof parsed['data']['entree']['type'] !== "undefined") && (parsed['data']['entree']['type'] !== null) && (parsed['data']['entree']['type'] !== ''))
-    {
-        switch (parsed['data']['entree']['type']) {
-            case "email":
-                typee = "tremail";
-                img = '<?php echo $urlapp; ?>/public/img/email.png';
+         var parsed = JSON.parse(jsnt);
 
-                break;
-            case "fax":
-                typee = "trfax";
-                img = '<?php echo $urlapp; ?>/public/img/faxx.png';
+         var parseddata = JSON.parse(parsed['data']);
+      console.log(parseddata);
+         //alert("l'ID: "+parseddata['Entree']['id']+" le sujet: "+parseddata['Entree']['sujet']);
+         //attribuer type selon type recu
+         var typee = "tremail";
+         var img = "";
+         if ((typeof parseddata['Entree']['type'] !== "undefined") && (parseddata['Entree']['type'] !== null) && (parseddata['Entree']['type'] !== '')) {
+             switch (parseddata['Entree']['type']) {
+                 case "email":
+                     typee = "tremail";
+                     img = '<?php echo $urlapp; ?>/public/img/email.png';
 
-                break;
-            case "sms":
-                typee = "trsms";
-                img = '<?php echo $urlapp; ?>/public/img/smss.png';
+                     break;
+                 case "fax":
+                     typee = "trfax";
+                     img = '<?php echo $urlapp; ?>/public/img/faxx.png';
 
-                break;
-            case "phone":
-                typee = "trsms";
-                img = '<?php echo $urlapp; ?>/public/img/tel.png';
+                     break;
+                 case "sms":
+                     typee = "trsms";
+                     img = '<?php echo $urlapp; ?>/public/img/smss.png';
 
-                break;
+                     break;
+                 case "phone":
+                     typee = "trsms";
+                     img = '<?php echo $urlapp; ?>/public/img/tel.png';
 
-            default:
-                typee = "tremail";
-                img = '<?php echo $urlapp; ?>/public/img/email.png';
+                     break;
 
-
-        }
-    }
-    // Vérifier le nom de la vue
-    <?php if (($view_name!='entrees-dispatching')  && ($view_name!='entrees-showdisp') ) { ?>
-
-  <?php  if (($view_name!='supervision')  && ($view_name!='affectation') && ($view_name!='notifs')  && ($view_name!='parametres') ) { ?>
+                 default:
+                     typee = "tremail";
+                     img = '<?php echo $urlapp; ?>/public/img/email.png';
 
 
-        // verifier si la notification est dispatche
-    if ((typeof parsed['data']['entree']['dossier'] !== "undefined") && (parsed['data']['entree']['dossier'] !== null))
-    {
-        // verifier si le dossier exist dans la liste des notifications
-        if( $("#prt_"+parsed['data']['entree']['dossier']).length )
-        {
-            // ajout nouvelle notification sous son dossier
-            $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['sujet'] , "type" : typee, "a_attr":{"href":"{{ asset('entrees/show/') }}"+"/"+parsed['data']['entree']['id']}}, "inside", function(){
-                // animation de nouvelle notification
-                setInterval(function(){
-                    $("#"+parsed['data']['entree']['id']).toggleClass("newnotif");
-                },400);
-                // scroll vers lemplacement de la notification
-                $('#notificationstab').scrollTop(
-                    $("#"+parsed['data']['entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
-                );
-            });
-            $('#jstree').bind("select_node.jstree", function (e, data) {
-                var href = data.node.a_attr.href;
-                document.location.href = href;
-            });
+             }
+         }
+         // Vérifier le nom de la vue
+         <?php if (($view_name != 'entrees-dispatching') && ($view_name != 'entrees-showdisp') ) { ?>
 
-        }
-        else
-        {
-            // cas dossier nest pas dans la liste des notifications
-            // ajout node dossier
-            $('#jstree').jstree().create_node("#" ,  { "id" : "prt_"+parsed['data']['entree']['dossier'], "text" :parsed['data']['entree']['dossier'] , "type" : "default"}, "first", function(){
-            });
-            // ajout nouvelle notification sous son dossier
-            $('#jstree').jstree().create_node("#prt_"+parsed['data']['entree']['dossier'] ,  { "id" : parsed['data']['entree']['id'], "text" :parsed['data']['entree']['sujet'] , "type" : typee, "a_attr":{"href":"{{ asset('entrees/show/') }}"+"/"+parsed['data']['entree']['id']}}, "inside", function(){
-                //ouvrir node dossier
-                $('#jstree').jstree().open_node("#prt_"+parsed['data']['entree']['dossier']);
-                // animation de nouvelle notification
-                setInterval(function(){
-                    $("#"+parsed['data']['entree']['id']).toggleClass("newnotif");
-                },400);
-                // scroll vers lemplacement de la notification
-                $('#notificationstab').scrollTop(
-                    $("#"+parsed['data']['entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
-                );
-            });
-            $('#jstree').bind("select_node.jstree", function (e, data) {
-                var href = data.node.a_attr.href;
-                document.location.href = href;
-            });
-
-        }
-    }
-    else {
-        <?php  if (Session::get('disp') != 0) { ?>
-
-        // ajout de la nouvelle node (notification non dispatche)
-        $('#jstree').jstree().create_node("#", {
-            "id": parsed['data']['entree']['id'],
-            "text": parsed['data']['entree']['sujet'],
-            "type": typee,
-            "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" + parsed['data']['entree']['id']}
-        }, "first", function () {
-            // animation de nouvelle notification
-            setInterval(function () {
-                $("#" + parsed['data']['entree']['id']).toggleClass("newnotif");
-            }, 400);
-            // scroll vers lemplacement de la notification
-            $('#notificationstab').scrollTop(
-                $("#" + parsed['data']['entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
-            );
-        });
-        $('#jstree').bind("select_node.jstree", function (e, data) {
-            var href = data.node.a_attr.href;
-            document.location.href = href;
-        });
-
-        <?php } ?>
-
-    }
-
-    <?php } // end supervision and admin views  ?>
-        <?php }else{ ?>
-         $("#notifdisp").fadeOut('slow');
-        $("#notifdisp").prepend("<li class='overme' style='color:white;padding-left:6px;margin-bottom:15px;background-color:#fd9883;color:white;font-weight:800;'><img width='15' src='" + img + "' /> <a  style=';font-weight:800;font-size:14px;color:white' href='<?php echo $urlapp; ?>/entrees/showdisp/" + parsed['data']['entree']['id'] + "'   ><small style='font-size:12px;color:white;'> " + parsed['data']['entree']['sujet'] + "</small></a><br>                  <label style='font-size:12px'><a style='color:white' href='<?php echo $urlapp; ?>/entrees/showdisp/" + parsed['data']['entree']['id'] + "'  >" + parsed['data']['entree']['emetteur'] + "</a></label><br><label style='font-size:12px'> " + parsed['data']['entree']['created_at'] + "</label></li>");
-        $("#notifdisp").fadeIn('slow');
-
-        $('#idEntreeMissionOnclik').val(parsed['data']['entree']['id']);
+         <?php  if (($view_name != 'supervision') && ($view_name != 'affectation') && ($view_name != 'notifs') && ($view_name != 'missions')  && ($view_name != 'transport')  && ($view_name != 'transportsemaine')  && ($view_name != 'dossiers-create')   ) { ?>
 
 
-        <?php } ?>
+         // verifier si la notification est dispatche
+         if ((typeof parseddata['Entree']['dossier'] !== "undefined") && (parseddata['Entree']['dossier'] !== null)) {
+             // verifier si le dossier exist dans la liste des notifications
+             if ($("#prt_" + parseddata['Entree']['dossier']).length) {
+                 // ajout nouvelle notification sous son dossier
+                 $('#jstree').jstree().create_node("#prt_" + parseddata['Entree']['dossier'], {
+                     "id": parseddata['Entree']['id'],
+                     "text": parseddata['Entree']['sujet'],
+                     "type": typee,
+                     "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" + parseddata['Entree']['id']}
+                 }, "inside", function () {
+                     // animation de nouvelle notification
+                     setInterval(function () {
+                         $("#" + parseddata['Entree']['id']).toggleClass("newnotif");
+                     }, 400);
+                     // scroll vers lemplacement de la notification
+                     $('#notificationstab').scrollTop(
+                         $("#" + parseddata['Entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
+                     );
+                 });
+                 $('#jstree').bind("select_node.jstree", function (e, data) {
+                     var href = data.node.a_attr.href;
+                     document.location.href = href;
+                 });
+
+                 Push.create("Nouvelle Notification", {
+
+                     body: 'Nouvelle Notification',
+                     icon: "{{ asset('public/img/najda.png') }}",
+                     timeout: 5000,
+
+                     onClick: function(){
+                         // window.focus();
+                         // this.close();
+                         window.location ='<?php   echo $urlapp; ?>/entrees/show/'+parseddata['Entree']['id'];
+
+                     }
+
+                 });
+
+             }
+             else {
+                 // cas dossier nest pas dans la liste des notifications
+                 // ajout node dossier
+                 $('#jstree').jstree().create_node("#", {
+                     "id": "prt_" + parseddata['Entree']['dossier'],
+                     "text": parseddata['Entree']['dossier'],
+                     "type": "default"
+                 }, "first", function () {
+                 });
+                 // ajout nouvelle notification sous son dossier
+                 $('#jstree').jstree().create_node("#prt_" + parseddata['Entree']['dossier'], {
+                     "id": parseddata['Entree']['id'],
+                     "text": parseddata['Entree']['sujet'],
+                     "type": typee,
+                     "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" + parseddata['Entree']['id']}
+                 }, "inside", function () {
+                     //ouvrir node dossier
+                     $('#jstree').jstree().open_node("#prt_" + parseddata['Entree']['dossier']);
+                     // animation de nouvelle notification
+                     setInterval(function () {
+                         $("#" + parseddata['Entree']['id']).toggleClass("newnotif");
+                     }, 400);
+                     // scroll vers lemplacement de la notification
+                     $('#notificationstab').scrollTop(
+                         $("#" + parseddata['Entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
+                     );
+                 });
+                 $('#jstree').bind("select_node.jstree", function (e, data) {
+                     var href = data.node.a_attr.href;
+                     document.location.href = href;
+                 });
+
+                 Push.create("Nouvelle Notification", {
+
+                     body: 'Nouvelle Notification',
+                     icon: "{{ asset('public/img/najda.png') }}",
+                     timeout: 5000,
+
+                     onClick: function(){
+                         // window.focus();
+                         // this.close();
+                         window.location ='<?php   echo $urlapp; ?>/entrees/show/'+parseddata['Entree']['id'];
+
+                     }
+
+                 });
+
+
+             }
+         }
+         else {
+             <?php  if (Session::get('disp') != 0) { ?>
+
+             // ajout de la nouvelle node (notification non dispatche)
+             $('#jstree').jstree().create_node("#", {
+                 "id": parseddata['Entree']['id'],
+                 "text": parseddata['Entree']['sujet'],
+                 "type": typee,
+                 "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" + parseddata['Entree']['id']}
+             }, "first", function () {
+                 // animation de nouvelle notification
+                 setInterval(function () {
+                     $("#" + parseddata['Entree']['id']).toggleClass("newnotif");
+                 }, 400);
+                 // scroll vers lemplacement de la notification
+                 $('#notificationstab').scrollTop(
+                     $("#" + parseddata['Entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
+                 );
+             });
+             $('#jstree').bind("select_node.jstree", function (e, data) {
+                 var href = data.node.a_attr.href;
+                 document.location.href = href;
+             });
+
+
+                  Push.create("Nouvelle Notification", {
+
+              body: 'Nouvelle Notification',
+              icon: "{{ asset('public/img/najda.png') }}",
+              timeout: 5000,
+
+              onClick: function(){
+              // window.focus();
+              // this.close();
+              window.location ='<?php   echo $urlapp; ?>/entrees/showdisp/'+parseddata['Entree']['id'];
+
+              }
+
+              });
 
 
 
-        // php if interface = dispatching
+             <?php } ?>
+
+         }
+
+         <?php } // end supervision and admin views  ?>
+         <?php }else{ ?>
+$("#notifdisp").fadeOut('slow');
+         $("#notifdisp").prepend("<li class='overme' style='color:white;padding-left:6px;margin-bottom:15px;background-color:#fd9883;color:white;font-weight:800;'><img width='15' src='" + img + "' /> <a  style=';font-weight:800;font-size:14px;color:white' href='<?php echo $urlapp; ?>/entrees/showdisp/" + parseddata['Entree']['id'] + "'   ><small style='font-size:12px;color:white;'> " + parseddata['Entree']['sujet'] + "</small></a><br>                  <label style='font-size:12px'><a style='color:white' href='<?php echo $urlapp; ?>/entrees/showdisp/" + parseddata['Entree']['id'] + "'  >" + parseddata['Entree']['emetteur'] + "</a></label><br><label style='font-size:12px'> " + ' Maintenant ' + "</label></li>");
+         $("#notifdisp").fadeIn('slow');
+
+         $('#idEntreeMissionOnclik').val(parseddata['Entree']['id']);
+
+
+         <?php } ?>
 
 
 
+         // php if interface = dispatching
 
-        // notification desktop
 
-        Push.config({
-            serviceWorker: "{{asset('public/js/serviceWorker.min.js') }}", // Sets a                      custom service worker script
-            fallback: function(payload) {
-                // Code that executes on browsers with no notification support
-                // "payload" is an object containing the
-                // title, body, tag, and icon of the notification
-            }
-        });
+         // notification desktop
 
-   /* Push.create("Nouvelle "+parsed['data']['entree']['type'], {
+         Push.config({
+             serviceWorker: "{{asset('public/js/serviceWorker.min.js') }}", // Sets a                      custom service worker script
+             fallback: function (payload) {
+                 // Code that executes on browsers with no notification support
+                 // "payload" is an object containing the
+                 // title, body, tag, and icon of the notification
+             }
+         });
 
-        body: parsed['data']['entree']['sujet'],
-        icon: "{{ asset('public/img/najda.png') }}",
-        timeout: 5000,
+         /* Push.create("Nouvelle "+parseddata['Entree']['type'], {
 
-        onClick: function(){
-            // window.focus();
-            // this.close();
-            window.location ='<?php // echo $urlapp; ?>/entrees/show/'+parsed['data']['entree']['id'];
+          body: parseddata['Entree']['sujet'],
+          icon: "{{ asset('public/img/najda.png') }}",
+          timeout: 5000,
 
-        }
+          onClick: function(){
+          // window.focus();
+          // this.close();
+          window.location ='<?php // echo $urlapp; ?>/entrees/show/'+parseddata['Entree']['id'];
 
-    });*/
+          }
 
-    });
+          });*/
 
+         /////// });
+     }
 
 </script>
 

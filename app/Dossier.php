@@ -72,7 +72,7 @@ class Dossier extends Model
 'is_transport',
 'prixtotal',
 'facture_tot',
-
+'benefdiff',
 'parente',
 'parente2',
 'parente3',

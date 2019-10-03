@@ -885,8 +885,6 @@ class EmailController extends Controller
                         //  $user=  DB::table('users')->where('id','=', $userid )->first();
                         $user = User::find($userid);
 
-                        $user->notify(new Notif_Suivi_Doss($entree));
-                        // Notification::send($user, new Notif_Suivi_Doss($entree));
 
                     }
                     else{
@@ -897,7 +895,7 @@ class EmailController extends Controller
 
                         $user = User::find($disp);
                         // $user=  DB::table('users')->where('id','=', $disp )->first();
-                        $user->notify(new Notif_Suivi_Doss($entree));
+
 
                         //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
@@ -1018,8 +1016,6 @@ class EmailController extends Controller
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     $user = User::find($userid);
 
-                    $user->notify(new Notif_Suivi_Doss($entree));
-                    // Notification::send($user, new Notif_Suivi_Doss($entree));
 
                 }
                 else{
@@ -1028,11 +1024,7 @@ class EmailController extends Controller
                         ->where('id','=', 1 )->first();
                     $disp=$seance->dispatcheur ;
 
-                    $user = User::find($disp);
-                    // $user=  DB::table('users')->where('id','=', $disp )->first();
-                    $user->notify(new Notif_Suivi_Doss($entree));
 
-                    //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
                 }
                 $id=$entree->id;
@@ -1480,8 +1472,16 @@ class EmailController extends Controller
         $contenu = $request->get('contenu');
         $files = $request->file('files');
         $attachs = $request->get('attachs');
-        $tot= count($_FILES['files']['name']);
+
+          $tot= count($files['files']['name']);
+
+
       //  $tot2= count($attachs);
+
+        $user = auth()->user();$idu=$user->id;
+        $lg='fr';
+       $signature= $this->getSignatureUser($idu,$lg);
+        $contenu=$contenu.'<br>'.$signature;
 
         $ccimails=array();
         if(isset($cci )) {
@@ -1627,7 +1627,7 @@ class EmailController extends Controller
                'contenu'=> $contenu,
                'nb_attach'=> $count,
                'cc'=> $cc,
-             //  'cci'=> $cci,
+           // 'cci'=> $cci,
                'statut'=> 1,
                'type'=> 'email',
                'dossier'=> $dossier
@@ -2136,47 +2136,19 @@ class EmailController extends Controller
 
     }
 
-    /*
-           $('.itemName').select2({
-               placeholder: 'Sélectionner',
-               ajax: {
-                   url: "{{ route('emails.fetch') }}",
-                   delay: 250,
-                   processResults: function (data) {
-                       return {
-                           results:  $.map(data, function (attachements) {
-                               return {
-                                   text: attachements.nom,
-                                   id: attachements.id
-                               }
-                           })
-                       };
-                   },
-                   cache: true
-               }
-           });
 
-
-
-    public function fetch(Request $request)
+public static function getSignatureUser($id,$lg)
+{
+    $user = User::find($id);
+    if($lg=='en')
     {
+       return $user['signature_en'];
+    }else{
+        return $user['signature'];
 
-        $data = [];
-
-        if($request->has('q')){
-            $search = $request->q;
-
-
-            $data = DB::table("apps_countries")
-                ->select("id","country_name")
-                ->where('country_name','LIKE',"%$search%")
-                ->get();
-        }
-
-
-        return response()->json($data);
     }
 
-    */
+
+}
 
 }

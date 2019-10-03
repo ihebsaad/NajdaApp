@@ -81,7 +81,7 @@
                             <?php if($envoye->type=="email") {?><i class="fa  fa-envelope"></i><?php }?><?php if($envoye->type=="sms") {?><i class="fa fa-lg fa-sms"></i><?php }?><?php if($envoye->type=="whatsapp") {?><i class="fa fa-lg fa-whatsapp"></i><?php }?>
                             <?php if($envoye->type=="tel") {?><i class="fa fa-lg fa-phone-square"></i><?php }?><?php if($envoye->type=="fax") {?><i class="fa fa-lg fa-fax"></i><?php }?><?php if($envoye->type=="rendu") {?><i class="fa fa-lg fa-file-sound-o"></i><?php }?>
 
-                                <?php if( ($envoye->type=="email") ||($envoye->type=="sms") ){ ?><a  href="{{action('EnvoyesController@view', $envoye['id'])}}" >{{$envoye->description}}</a><small style="margin-top:10px;">{{$envoye->destinataire}}</small></div><?php } ?>
+                                <?php if( ($envoye->type=="email") ||($envoye->type=="sms") ){ ?><a  href="{{action('EnvoyesController@view', $envoye['id'])}}" >{{$envoye->sujet}}</a><small style="margin-top:10px;">{{$envoye->destinataire}}</small></div><?php } ?>
                     <?php if($envoye->type=="fax") { ?><a  href="{{action('EnvoyesController@view', $envoye['id'])}}" > FAX </a><small style="margin-top:10px;">{{$envoye->destinataire}}</small></div><?php } ?>
                     <div class="stats">
                         <div class="row">

@@ -85,8 +85,8 @@
         <label for="destinataire">Adresse(s):</label>
         <div class="row">
         <div class="col-md-10">
-            <select id="destinataire"  class="form-control" name="destinataire[]"  multiple >
-                <option></option>
+            <select id="destinataire" required  class="form-control" name="destinataire[]"  multiple >
+                <option>ihebsaad@gmail.com</option>
                 @foreach($listeemails as  $mail)
                     <option   value="<?php echo $mail ;?>"> <?php echo $mail ;?>  <small style="font-size:12px">(<?php echo PrestatairesController::NomByEmail( $mail);?>) - "<?php echo PrestatairesController::QualiteByEmail($mail);?>"</small> </option>
 
@@ -147,7 +147,7 @@
                 <select id="attachs"  class="itemName form-control col-lg-12" style="" name="attachs[]"  multiple  value="$('#attachs').val()">
                     <option></option>
                     @foreach($attachements as $attach)
-                        <option value="<?php echo $attach->id;?>"> <?php echo $attach->nom;?></option>
+                        <option value="<?php echo $attach->id;?>"> <?php echo $attach->nom;?> - <small><?php echo date('d/m/Y H:i', strtotime($attach->created_at)); ?></small></option>
                     @endforeach
                 </select>
             </div>
@@ -325,7 +325,6 @@
 
             }
         });
-
 
 
 

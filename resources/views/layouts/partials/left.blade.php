@@ -109,7 +109,7 @@
                               //$notifications = config('commondata.notifications');
                               $notificationns =  DB::table('notifications')
                               ->where('statut','=', 0 )
-                                         ->where('notifiable_id','=', Auth::id() )
+                                          ->where('notifiable_id','=', Auth::id() )
                                            ->get()->toArray();
 
                               // extraire les informations de l'entree à travers id trouvé dans la notification
