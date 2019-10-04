@@ -796,7 +796,9 @@ $interv = PrestationsController::PrestById($prest);
                </table><br><br><br>
 
            </div>
+<?php
 
+                 ?>
 
                 <div id="tab5" class="tab-pane fade">
 
@@ -814,10 +816,12 @@ $interv = PrestationsController::PrestById($prest);
                         </thead>
                         <tbody>
                         @foreach($attachements as $attach)
-                            <?php if ($attach->boite < 2) {
+                            <?php if ($attach->boite < 3) {
+
+
                             ?>
                             <tr>
-                                <td style="width:15%;"><small><?php echo $attach->created_at;?></small></td>
+                                <td style="width:15%;"><small><?php echo date('d/m/Y H:i', strtotime( $attach->created_at)) ;?></small></td>
                                 <td  class="overme" style="width:30%;"><small><?php /* if ($attach->dossier!=null) {echo 'Fichier externe';}else{*/ echo $attach->nom; /*}*/ ?></small></td>
                                 <td class="overme" style="width:40%;"><small><?php  echo $attach->description;   ?></small></td>
 

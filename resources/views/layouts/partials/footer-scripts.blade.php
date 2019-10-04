@@ -194,7 +194,6 @@ if (App::environment('local')) {
   function showNotif(notification) {
          // extraction du contenu de la notification en format json
          var jsnt = JSON.stringify(notification);
-         alert(jsnt);
 
          var parsed = JSON.parse(jsnt);
 
@@ -222,7 +221,7 @@ if (App::environment('local')) {
 
                      break;
                  case "phone":
-                     typee = "trsms";
+                     typee = "trtel";
                      img = '<?php echo $urlapp; ?>/public/img/tel.png';
 
                      break;
@@ -267,9 +266,9 @@ if (App::environment('local')) {
 
                  Push.create("Nouvelle Notification", {
 
-                     body: 'Nouvelle Notification',
+                     body:  parseddata['Entree']['sujet'],
                      icon: "{{ asset('public/img/najda.png') }}",
-                     timeout: 5000,
+                     timeout: 8000,
 
                      onClick: function(){
                          // window.focus();
@@ -315,9 +314,9 @@ if (App::environment('local')) {
 
                  Push.create("Nouvelle Notification", {
 
-                     body: 'Nouvelle Notification',
+                     body:  parseddata['Entree']['sujet'],
                      icon: "{{ asset('public/img/najda.png') }}",
-                     timeout: 5000,
+                     timeout: 8000,
 
                      onClick: function(){
                          // window.focus();
@@ -358,13 +357,13 @@ if (App::environment('local')) {
 
                   Push.create("Nouvelle Notification", {
 
-              body: 'Nouvelle Notification',
+              body: parseddata['Entree']['sujet'],
               icon: "{{ asset('public/img/najda.png') }}",
-              timeout: 5000,
+              timeout: 8000,
 
               onClick: function(){
-              // window.focus();
-              // this.close();
+
+
               window.location ='<?php   echo $urlapp; ?>/entrees/showdisp/'+parseddata['Entree']['id'];
 
               }

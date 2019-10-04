@@ -89,7 +89,6 @@
                 <option>ihebsaad@gmail.com</option>
                 @foreach($listeemails as  $mail)
                     <option   value="<?php echo $mail ;?>"> <?php echo $mail ;?>  <small style="font-size:12px">(<?php echo PrestatairesController::NomByEmail( $mail);?>) - "<?php echo PrestatairesController::QualiteByEmail($mail);?>"</small> </option>
-
                 @endforeach
              </select>
         </div>
@@ -214,7 +213,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <?php
-    $urlapp=env('APP_URL'); 
+    $urlapp=env('APP_URL');
 
     if (App::environment('local')) {
         // The environment is local

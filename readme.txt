@@ -36,3 +36,6 @@ sudo chmod -R 755 ./vendor
 
 //create 'fonts' folder under 'storage' and make sure your server can access this folder.
   `chmod mode 777 fonts`
+
+
+  // change Cloturee to Cloture on emailsControllers

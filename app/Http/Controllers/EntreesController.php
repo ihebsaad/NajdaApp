@@ -352,23 +352,56 @@ class EntreesController extends Controller
 
         $entree = Entree::find($identree);
 
-        $entree->dossier=$dossier;
 
-        $entree->save();
-
-        // Notification
         $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($dossier);
         $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
 
-        //  $user=  DB::table('users')->where('id','=', $userid )->first();
-      if($userid  >0) {
-          $user = User::find($userid);
 
-          $user->notify(new Notif_Suivi_Doss($entree));
-      }
+        $first=false;
+        // vérifier si c'est la premier dispatché la première fois
+        if($entree->dossier==null)
+        {
+            $first=true;
+
+            $entree->dossier=$dossier;
+
+            $entree->save();
+
+            // Notification
+
+             if($userid  >0) {
+               $user = User::find($userid);
+                $user->notify(new Notif_Suivi_Doss($entree));
+
+            }
+
+
+        }else{
+
+            $entree->dossier=$dossier;
+
+            $entree->save();
+
+            $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($dossier);
+            $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+
+        //mise à jour notifications
+            Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": "'.$identree.'"}}\')')
+              //  ->where('statut','=', 0 )
+                ->delete();
+
+            if($userid  >0) {
+                $user = User::find($userid);
+                $user->notify(new Notif_Suivi_Doss($entree));
+
+            }
+
+        }
+
 
         //return url('/entrees/show/'.$identree)/*->with('success', 'Dossier Créé avec succès')*/;
-        return url('/entrees/dispatching/');
+       if($first) {return url('/entrees/dispatching/');}
+       else{return url('/entrees/');}
 
     }
 

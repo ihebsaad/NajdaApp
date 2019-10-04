@@ -44,8 +44,8 @@ use App\Http\Controllers\TagsController;
                                 @if (empty($entree->dossier))
                                         <a   class="btn btn-md btn-success"   href="{{route('dossiers.create',['identree'=> $entree['id']]) }}"  > <i class="fas fa-folder-plus"></i> Créer un Dossier</a>
                                         <button class="btn   " id="showdispl" style="background-color: #c5d6eb;color:#333333;"  ><b><i class="fas fa-folder"></i> Dispatcher</b></button>
-                                      <!--  <button id="afffolder" class="btn   " style="background-color: #c5d6eb;color:#333333;"  data-toggle="modal" data-target="#affectfolder"><b><i class="fas fa-folder"></i> Dispatcher</b></button>-->
                                  @endif
+
 
                                 <?php    $seance =  DB::table('seance')
                                     ->where('id','=', 1 )->first();
@@ -667,7 +667,7 @@ padding: 5px;
 }
     </style>
 
-   
+
 
 
 @endsection

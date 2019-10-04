@@ -720,12 +720,8 @@ class DossiersController extends Controller
                 ->get();
         });
 
-
         $prestations =   Prestation::where('dossier_id', $id)->get();
        // $emails =   Email::where('parent', $id)->get();
-
-
-
 
         $phones =   Adresse::where('nature', 'teldoss')
             ->where('parent',$id)

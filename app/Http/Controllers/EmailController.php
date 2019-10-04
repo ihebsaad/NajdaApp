@@ -309,14 +309,18 @@ class EmailController extends Controller
                 // message moved
 
         // dispatch
-        $dossiers = DB::table('dossiers')->pluck('reference_medic');
-        $refdossier='';
-        $statut = 0;
-        foreach ($dossiers as $ref) {
+      ///  $dossiers = DB::table('dossiers')->pluck('reference_medic');
 
-                if (   (strpos($sujet, $ref )!==false) || (strpos($contenu, $ref )!==false)    )
+                $dossiers=   Dossier::where('current_status','!=', 'Cloturee' )->get();
+
+
+                $refdossier='';
+        $statut = 0;
+        foreach ($dossiers as $dos) {
+
+                if (   (strpos($sujet, $dos['reference_medic'] )!==false) || (strpos($contenu, $dos['reference_medic'])) || (strpos($sujet, $dos['reference_customer'] )!==false)  || (strpos($contenu, $dos['reference_customer'] )!==false)   )
                 {
-                    $refdossier = $ref;
+                    $refdossier = $dos['reference_medic'];
                     $statut = 1;
                     break;
                 }
@@ -511,14 +515,15 @@ class EmailController extends Controller
 
 
                 // dispatch
-                $dossiers = DB::table('dossiers')->pluck('reference_medic');
+                $dossiers=   Dossier::where('current_status','!=', 'Cloturee' )->get();
+
                 $refdossier='';
                 $statut = 0;
-                foreach ($dossiers as $ref) {
+                foreach ($dossiers as $dos) {
 
-                    if (   (strpos($sujet, $ref )!==false) || (strpos($contenu, $ref )!==false)    )
+                    if (   (strpos($sujet, $dos['reference_medic'] )!==false) || (strpos($contenu, $dos['reference_medic'])) || (strpos($sujet, $dos['reference_customer'] )!==false)  || (strpos($contenu, $dos['reference_customer'] )!==false)   )
                     {
-                        $refdossier = $ref;
+                        $refdossier = $dos['reference_medic'];
                         $statut = 1;
                         break;
                     }
@@ -839,16 +844,16 @@ class EmailController extends Controller
                     // get last id
                     $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
                     // message moved
+                    $dossiers=   Dossier::where('current_status','!=', 'Cloturee' )->get();
 
-                    $dossiers = DB::table('dossiers')->pluck('reference_medic');
 
                     $refdossier='';
                     $statut = 0;
-                    foreach ($dossiers as $ref) {
+                    foreach ($dossiers as $dos) {
 
-                        if (   (strpos($sujet, $ref )!==false) || (strpos($contenu, $ref )!==false)    )
+                        if (   (strpos($sujet, $dos['reference_medic'] )!==false) || (strpos($contenu, $dos['reference_medic'])) || (strpos($sujet, $dos['reference_customer'] )!==false)  || (strpos($contenu, $dos['reference_customer'] )!==false)   )
                         {
-                            $refdossier = $ref;
+                            $refdossier = $dos['reference_medic'];
                             $statut = 1;
                             break;
                         }
@@ -884,6 +889,7 @@ class EmailController extends Controller
 
                         //  $user=  DB::table('users')->where('id','=', $userid )->first();
                         $user = User::find($userid);
+                        $user->notify(new Notif_Suivi_Doss($entree));
 
 
                     }
@@ -896,6 +902,7 @@ class EmailController extends Controller
                         $user = User::find($disp);
                         // $user=  DB::table('users')->where('id','=', $disp )->first();
 
+                        $user->notify(new Notif_Suivi_Doss($entree));
 
                         //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
@@ -973,14 +980,16 @@ class EmailController extends Controller
 
 
                 // dispatch
-                $dossiers = DB::table('dossiers')->pluck('reference_medic');
+                $dossiers=   Dossier::where('current_status','!=', 'Cloturee' )->get();
+
+
                 $refdossier='';
                 $statut = 0;
-                foreach ($dossiers as $ref) {
+                foreach ($dossiers as $dos) {
 
-                    if (   (strpos($sujet, $ref )!==false) || (strpos($contenu, $ref )!==false)    )
+                    if (   (strpos($sujet, $dos['reference_medic'] )!==false) || (strpos($contenu, $dos['reference_medic'])) || (strpos($sujet, $dos['reference_customer'] )!==false)  || (strpos($contenu, $dos['reference_customer'] )!==false)   )
                     {
-                        $refdossier = $ref;
+                        $refdossier = $dos['reference_medic'];
                         $statut = 1;
                         break;
                     }
@@ -1015,6 +1024,7 @@ class EmailController extends Controller
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     $user = User::find($userid);
+                    $user->notify(new Notif_Suivi_Doss($entree));
 
 
                 }
@@ -1023,6 +1033,7 @@ class EmailController extends Controller
                     $seance =  DB::table('seance')
                         ->where('id','=', 1 )->first();
                     $disp=$seance->dispatcheur ;
+                    $user->notify(new Notif_Suivi_Doss($entree));
 
 
 
@@ -1335,8 +1346,8 @@ class EmailController extends Controller
 
 
         $attachements= DB::table('attachements')
-            /*->whereIn('entree_id',$identr )
-            ->orWhereIn('envoye_id',$idenv )*/
+            ->whereIn('entree_id',$identr )
+            ->orWhereIn('envoye_id',$idenv )
             ->Where('dossier','=',$id )
             ->orderBy('created_at', 'desc')
             ->distinct()
@@ -1471,10 +1482,17 @@ class EmailController extends Controller
         $sujet = $request->get('sujet');
         $contenu = $request->get('contenu');
         $files = $request->file('files');
+
         $attachs = $request->get('attachs');
+$tot=false;
 
-          $tot= count($files['files']['name']);
+    if($request->hasFile('files'))
+    {
+        $tot=true;
+    }
+        // $tot= count($_FILES['files']['name']);
 
+        //   $tot= count($files['files']['name']);
 
       //  $tot2= count($attachs);
 
@@ -1498,7 +1516,7 @@ class EmailController extends Controller
        // $to = explode(',', $to);
 
         try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$tot,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails,$tot) {
             $message
 
               //  ->to('saadiheb@gmail.com')
@@ -1543,7 +1561,9 @@ class EmailController extends Controller
 
                 $count=0;
 
-         if(isset($files )) {
+         //if(isset($files )) {
+                if($tot)
+                {
              foreach($files as $file) {
                  $count++;
                  $path=$file->getRealPath();

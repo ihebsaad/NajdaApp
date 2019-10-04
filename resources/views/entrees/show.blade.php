@@ -43,8 +43,9 @@ use App\Http\Controllers\TagsController;
                                 @endif
                                 @if (empty($entree->dossier))
                                         <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
-                                        <button id="afffolder" class="btn   " style="background-color: #c5d6eb;color:#333333;"  data-toggle="modal" data-target="#affectfolder"><b><i class="fas fa-folder"></i> Dispatcher</b></button>
                                  @endif
+
+                                    <button id="afffolder" class="btn   " style="width:180px;background-color: #c5d6eb;color:#333333;"  data-toggle="modal" data-target="#affectfolder"><b><i class="fas fa-folder"></i>  Re-Dispatcher</b></button>
 
                                 <?php    $seance =  DB::table('seance')
                                     ->where('id','=', 1 )->first();
@@ -710,7 +711,37 @@ padding: 5px;
 }
     </style>
 
-   
+<script>
+    // Quit Confirmation
+    //var needToConfirm  = (document.getElementById('commentuser').value =='');
+    window.addEventListener('beforeunload', function (e) {
+             if (document.getElementById('commentuser').value == '') {
+                $('#actiontabs a[href="#infostab"]').trigger('click');
+                $('#btn-cmttag').trigger('click');
+
+                $("#commentuser").css("border", "2px solid red ");
+
+
+                 e.preventDefault();
+                 e.returnValue = 'Ajouter votre commentaire Concernant cet email avant de quitter !';
+
+             }
+
+     });
+    function confirmExit()
+    {
+        if (document.getElementById('commentuser').value =='')
+        {    $('#actiontabs a[href="#infostab"]').trigger('click');
+            $('#btn-cmttag').trigger('click');
+
+        $("#commentuser").css("border", "2px solid red ");
+
+
+        alert( "Ajouter votre commentaire Concernant cet email avant de quitter !") ;
+        return 'Ajouter votre commentaire Concernant cet email avant de quitter !';
+        }
+    }
+</script>
 
 
 @endsection
