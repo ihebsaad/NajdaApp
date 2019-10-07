@@ -1,4 +1,5 @@
 <?php
+if (isset($_GET['prest__imag'])) {$prest__imag=$_GET['prest__imag'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; }
@@ -9,6 +10,7 @@ if (isset($_GET['CL_montant_numerique'])) {$CL_montant_numerique=$_GET['CL_monta
 if (isset($_GET['CL_montant_toutes_lettres'])) {$CL_montant_toutes_lettres=$_GET['CL_montant_toutes_lettres'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
+if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>PEC_frais_imagerie</title>
@@ -206,7 +208,7 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+<p class=rvps1><span class=rvts2><input name="prest__imag" style="width:300px" placeholder="Prestataire centre imagerie" value="<?php if(isset ($prest__imag)) echo $prest__imag; ?>"></input></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps2><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts2>Sousse le <input name="date_heure" type="text" value="<?php if(isset ($date_heure)) echo $date_heure; ?>"></input></span></p>
@@ -218,7 +220,7 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p class=rvps5><span class=rvts5>*Prénom :</span><span class=rvts6> </span><span class=rvts5><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
 <p><span class=rvts7>*Notre réf. dossier</span><span class=rvts8>: <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> </span></p>
 <p><span class=rvts7>*Nature de l</span><span class=rvts9>’</span><span class=rvts7>examen :</span><span class=rvts8> <input name="CL_nature_examen" placeholder="Nature Examen" value="<?php if(isset ($CL_nature_examen)) echo $CL_nature_examen; ?>"></input></span></p>
-<p><span class=rvts7>*Montant garanti (TND): </span><span class=rvts8> <input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input> </span><span class=rvts7>Toutes lettres</span><span class=rvts8> : <input name="CL_montant_toutes_lettres"  id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input></span> dinars</p>
+<p><span class=rvts7>*Montant garanti (TND): </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input> </span><span class=rvts7>Toutes lettres</span><span class=rvts8> : <input name="CL_montant_toutes_lettres"  id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input></span> dinars</p>
 <p><span class=rvts10><br></span></p>
 <p class=rvps1><span class=rvts2>Nous soussignés, </span><span class=rvts11>Najda Assistance</span><span class=rvts2>, nous engageons à prendre en charge, pour le compte de notre client, les frais de l</span><span class=rvts12>’</span><span class=rvts2>imagerie susmentionnée effectué au profit du patient ci-dessus.</span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
@@ -246,6 +248,8 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
     function keyUpHandler(obj){
             //document.getElementById("CL_montant_toutes_lettres").firstChild.nodeValue =   NumberToLetter(obj.value)
             document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value)
+            if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block";}
+            else {document.getElementById("alertGOP").style.display="none";}
         }//fin de keypressHandler
 </script>
 </body></html>

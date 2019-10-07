@@ -307,10 +307,12 @@ if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
         document.getElementById("CL_cout_total").onchange();
         }//fin de keypressHandler
     function calculduree() {
-        var date1 = document.getElementsByName("CL_date_debut_location")[0].value;
-        var date2 = document.getElementById("CL_date_fin_location").value;
+        var inputdate1 = document.getElementsByName("CL_date_debut_location")[0].value;
+        var inputdate2 = document.getElementById("CL_date_fin_location").value;
+        var date1 = inputdate1.substring(0, 10);
+        var date2 = inputdate2.substring(0, 10);
 
-        if (date1.indexOf('/') > -1)
+        /*if (date1.indexOf('/') > -1)
         {
             var date1Parts = date1.split("/"); }
         if (date1.indexOf('-') > -1)
@@ -325,7 +327,9 @@ if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
 
         // month is 0-based, that's why we need dataParts[1] - 1
         var datedeb = new Date(+date1Parts[2], date1Parts[1] - 1, +date1Parts[0]); 
-        var datefin = new Date(+date2Parts[2], date2Parts[1] - 1, +date2Parts[0]); 
+        var datefin = new Date(+date2Parts[2], date2Parts[1] - 1, +date2Parts[0]); */
+        var datedeb = new Date(date1);
+        var datefin = new Date(date2);
 
 
 

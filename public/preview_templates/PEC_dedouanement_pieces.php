@@ -1,4 +1,5 @@
 <?php
+if (isset($_GET['prest__transit'])) {$prest__transit=$_GET['prest__transit'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; }
@@ -250,7 +251,7 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
     <p class=rvps1><span class=rvts1><br></span></p>
     <p class=rvps1><span class=rvts1><br></span></p>
     <p class=rvps1><span class=rvts1><br></span></p>
-    <p class=rvps1><span class=rvts2><br></span></p>
+    <p class=rvps1><span class=rvts2><input name="prest__transit" style="width:300px" placeholder="Prestataire transitaire" value="<?php if(isset ($prest__transit)) echo $prest__transit; ?>"></input></span></p>
     <p class=rvps1><span class=rvts2><br></span></p>
     <p class=rvps1><span class=rvts2><br></span></p>
     <p class=rvps1><span class=rvts2><br></span></p>
