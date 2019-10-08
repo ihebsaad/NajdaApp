@@ -1360,11 +1360,12 @@ class EmailController extends Controller
         }
 
 
-        $attachements= DB::table('attachements')
-            ->whereIn('entree_id',$identr )
-            ->orWhereIn('envoye_id',$idenv )
-            ->Where('dossier','=',$id )
-            ->orderBy('created_at', 'desc')
+        $attachements=   Attachement::where(function ($query) use($identr,$idenv) {
+            $query->whereIn('entree_id',$identr )
+                ->orWhereIn('envoye_id',$idenv );
+        })->orWhere(function ($query) use($id) {
+            $query->Where('dossier','=',$id );
+        })->orderBy('created_at', 'desc')
             ->distinct()
             ->get();
 

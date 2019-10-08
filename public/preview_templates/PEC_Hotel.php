@@ -1,7 +1,8 @@
 <?php
+if (isset($_GET['prest__hotel'])) {$prest__hotel=$_GET['prest__hotel'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
-if (isset($_GET['CL_name_client'])) {$CL_name_client=$_GET['CL_name_client'];}
-if (isset($_GET['CL_lastname_client'])) {$CL_lastname_client=$_GET['CL_lastname_client'];}
+if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];}
+if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname'];}
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
 if (isset($_GET['CL_debut_sejour'])) {$CL_debut_sejour=$_GET['CL_debut_sejour'];}
 if (isset($_GET['CL_fin_sejour'])) {$CL_fin_sejour=$_GET['CL_fin_sejour'];}
@@ -214,7 +215,7 @@ if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
 <p><span class=rvts1><br></span></p>
 <p><span class=rvts1><br></span></p>
 <p><span class=rvts1><br></span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+<p class=rvps1><span class=rvts2><input name="prest__hotel" style="width:300px" placeholder="Prestataire hotel" value="<?php if(isset ($prest__hotel)) echo $prest__hotel; ?>"></input></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps2><span class=rvts3><br></span></p>
 <p class=rvps2><span class=rvts3><br></span></p>
@@ -225,7 +226,7 @@ if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
 <p class=rvps4><span class=rvts4>CONFIRMATION DE RESERVATION PRISE EN CHARGE</span></p>
 <p class=rvps4><span class=rvts4><br></span></p>
 <p class=rvps2><span class=rvts3><br></span></p>
-<p class=rvps5><span class=rvts5>Nom client</span><span class=rvts6> : </span><span class=rvts7> <input name="CL_name_client" placeholder="Name Client" value="<?php if(isset ($CL_name_client)) echo $CL_name_client; ?>"></input></span><span class=rvts6> </span><span class=rvts6> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts8>Prénom</span><span class=rvts7> :<input name="CL_lastname_client" placeholder="LastName Client" value="<?php if(isset ($CL_lastname_client)) echo $CL_lastname_client; ?>"></input></span></p>
+<p class=rvps5><span class=rvts5>Nom client</span><span class=rvts6> : </span><span class=rvts7> <input name="subscriber_lastname" placeholder="Nom Client" value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span><span class=rvts6> </span><span class=rvts6> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts8>Prénom</span><span class=rvts7> :<input name="subscriber_name" placeholder="Prenom Client" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>"></input></span></p>
 <p class=rvps5><span class=rvts8>Notre réf. dossier</span><span class=rvts7> : </span><span class=rvts6><input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span></p>
 <p class=rvps6><span class=rvts8>Dates de séjour</span><span class=rvts7> : de <input type="datetime-local" name="CL_debut_sejour" placeholder="Debut Sejour" value="<?php if(isset ($CL_debut_sejour)) echo $CL_debut_sejour; ?>"></input> à <input  type="datetime-local" name="CL_fin_sejour" placeholder="Fin Sejour" value="<?php if(isset ($CL_fin_sejour)) echo $CL_fin_sejour; ?>"></input></span></p>
 <p class=rvps6><span class=rvts8>Arrangement</span><span class=rvts7> :<input name="CL_arrangement" placeholder="Arrangement" value="<?php if(isset ($CL_arrangement)) echo $CL_arrangement; ?>"></input></span></p>

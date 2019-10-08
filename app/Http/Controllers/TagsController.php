@@ -103,7 +103,10 @@ class TagsController extends Controller
                     if ($request->has('dossier'))
                     {
                         if (! empty($request->get('dossier'))) {
-                            Dossier::where('id', $request->get('dossier'))->update(['GOP' => $identree,'montant_GOP' => $request->get('montant')]);
+                            $infodoss = Dossier::where('id', $request->get('dossier'))->first();
+                            if (empty($infodoss['montant_GOP'])) { $nmontant = $request->get('montant');}
+                            else {$nmontant = intval($infodoss['montant_GOP']) + intval($request->get('montant')) ; }
+                            Dossier::where('id', $request->get('dossier'))->update(['GOP' => $identree,'montant_GOP' => $nmontant]);
                         }
                     }
                 }

@@ -15,6 +15,8 @@ use App\User ;
 use App\Template_doc ;
 use App\Document;
 use App\Mission;
+use App\Prestation;
+use App\Prestataire;
 use DB;
 use WordTemplate;
 
@@ -125,7 +127,7 @@ class DocumentsController extends Controller
 /*------------------------dates spécifiques-----------------------------------------------------------*/
 
 
-if(isset($_POST['idMissionDoc']))
+if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
 {
 
 
@@ -188,6 +190,28 @@ if(isset($_POST['idMissionDoc']))
        // return $_POST['idMissionDoc'];
 
     }// fin issset (idmissdoc)
+
+    // mise a jour montant GOP
+    if (isset($_POST['CL_montant_numerique']) || isset($_POST['CL_montant_total']) )
+    {
+
+     if (isset($_POST['CL_montant_numerique']))
+     {$montantgp = intval($_POST['CL_montant_numerique']); }
+        elseif (isset($_POST['CL_montant_total']))
+        {$montantgp = intval($_POST['CL_montant_total']); }
+
+       $doss = Dossier::where('id', $dossier)->first();
+
+            if($montantgp!==0)
+            {
+             
+               $nmontant = intval($doss['montant_GOP']) - $montantgp;
+               // update gop du dossier
+               Dossier::where('id', $dossier)->update(['montant_GOP' => $nmontant]);
+           
+            }
+     
+    }
 
 /*--------------------------------------------------------fin dates spécifiques---------------------------*/
             
@@ -610,7 +634,7 @@ if(isset($_POST['idMissionDoc']))
                         //verifier quil nest pas un champs libre
                         if ((stristr($champtemp,'[CL_')=== FALSE) && ($champtemp !=='[DATE_HEURE]'))
                         {   
-                            if (($champtemp !=='[CUSTOMER_ID__NAME]') && ($champtemp !=='[AGENT__NAME]'))
+                            if (($champtemp !=='[CUSTOMER_ID__NAME]') && ($champtemp !=='[AGENT__NAME]') && ($champtemp !=='[PREST__HOTEL]') && ($champtemp !=='[PREST__GARAGE]') && ($champtemp !=='[PREST__TRANSIT]') && ($champtemp !=='[PREST__IMAG]') && ($champtemp !=='[PREST__OPTIC]') && ($champtemp !=='[PREST__PHARM]') && ($champtemp !=='[PREST__POMPES]') && ($champtemp !=='[PREST__REEDUC]'))
                             {
                                 $champdb = str_replace('[', '', $champtemp);
                                 $champdb = str_replace(']', '', $champdb);
@@ -647,6 +671,126 @@ if(isset($_POST['idMissionDoc']))
                                     $champtemp = strtolower($champtemp);
                                     $array += [ $champtemp => utf8_encode($valchamp)];
                                 }
+                            }
+                            elseif($champtemp ==='[PREST__HOTEL]')
+                            {
+                                $infoprest = Prestation::where(['dossier_id' => $dossier,'type_prestations_id' => 18])->first();
+                                $idprest = $infoprest['prestataire_id'];
+                                if (isset($idprest) && (!empty($idprest)))
+                                {
+                                    $infohotel = Prestataire::where('id',$idprest)->first();
+                                    $valchamp = $infohotel['name'];
+                                    $champtemp = str_replace('[', '', $champtemp);
+                                    $champtemp = str_replace(']', '', $champtemp);
+                                    $champtemp = strtolower($champtemp);
+                                    $array += [ $champtemp => $valchamp];
+                                }
+
+                            }
+                            elseif($champtemp ==='[PREST__GARAGE]')
+                            {
+                                $infoprest = Prestation::where(['dossier_id' => $dossier,'type_prestations_id' => 22])->first();
+                                $idprest = $infoprest['prestataire_id'];
+                                if (isset($idprest) && (!empty($idprest)))
+                                {
+                                    $infohotel = Prestataire::where('id',$idprest)->first();
+                                    $valchamp = $infohotel['name'];
+                                    $champtemp = str_replace('[', '', $champtemp);
+                                    $champtemp = str_replace(']', '', $champtemp);
+                                    $champtemp = strtolower($champtemp);
+                                    $array += [ $champtemp => $valchamp];
+                                }
+
+                            }
+                            elseif($champtemp ==='[PREST__TRANSIT]')
+                            {
+                                $infoprest = Prestation::where(['dossier_id' => $dossier,'type_prestations_id' => 40])->first();
+                                $idprest = $infoprest['prestataire_id'];
+                                if (isset($idprest) && (!empty($idprest)))
+                                {
+                                    $infohotel = Prestataire::where('id',$idprest)->first();
+                                    $valchamp = $infohotel['name'];
+                                    $champtemp = str_replace('[', '', $champtemp);
+                                    $champtemp = str_replace(']', '', $champtemp);
+                                    $champtemp = strtolower($champtemp);
+                                    $array += [ $champtemp => $valchamp];
+                                }
+
+                            }
+                            elseif($champtemp ==='[PREST__IMAG]')
+                            {
+                                $infoprest = Prestation::where(['dossier_id' => $dossier,'type_prestations_id' => 6])->first();
+                                $idprest = $infoprest['prestataire_id'];
+                                if (isset($idprest) && (!empty($idprest)))
+                                {
+                                    $infohotel = Prestataire::where('id',$idprest)->first();
+                                    $valchamp = $infohotel['name'];
+                                    $champtemp = str_replace('[', '', $champtemp);
+                                    $champtemp = str_replace(']', '', $champtemp);
+                                    $champtemp = strtolower($champtemp);
+                                    $array += [ $champtemp => $valchamp];
+                                }
+
+                            }
+                            elseif($champtemp ==='[PREST__OPTIC]')
+                            {
+                                $infoprest = Prestation::where(['dossier_id' => $dossier,'type_prestations_id' => 60])->first();
+                                $idprest = $infoprest['prestataire_id'];
+                                if (isset($idprest) && (!empty($idprest)))
+                                {
+                                    $infohotel = Prestataire::where('id',$idprest)->first();
+                                    $valchamp = $infohotel['name'];
+                                    $champtemp = str_replace('[', '', $champtemp);
+                                    $champtemp = str_replace(']', '', $champtemp);
+                                    $champtemp = strtolower($champtemp);
+                                    $array += [ $champtemp => $valchamp];
+                                }
+
+                            }
+                            elseif($champtemp ==='[PREST__POMPES]')
+                            {
+                                $infoprest = Prestation::where(['dossier_id' => $dossier,'type_prestations_id' => 32])->first();
+                                $idprest = $infoprest['prestataire_id'];
+                                if (isset($idprest) && (!empty($idprest)))
+                                {
+                                    $infohotel = Prestataire::where('id',$idprest)->first();
+                                    $valchamp = $infohotel['name'];
+                                    $champtemp = str_replace('[', '', $champtemp);
+                                    $champtemp = str_replace(']', '', $champtemp);
+                                    $champtemp = strtolower($champtemp);
+                                    $array += [ $champtemp => $valchamp];
+                                }
+
+                            }
+                            elseif($champtemp ==='[PREST__PHARM]')
+                            {
+                                $infoprest = Prestation::where(['dossier_id' => $dossier,'type_prestations_id' => 64])->first();
+                                $idprest = $infoprest['prestataire_id'];
+                                if (isset($idprest) && (!empty($idprest)))
+                                {
+                                    $infohotel = Prestataire::where('id',$idprest)->first();
+                                    $valchamp = $infohotel['name'];
+                                    $champtemp = str_replace('[', '', $champtemp);
+                                    $champtemp = str_replace(']', '', $champtemp);
+                                    $champtemp = strtolower($champtemp);
+                                    $array += [ $champtemp => $valchamp];
+                                }
+
+                            }
+                            elseif($champtemp ==='[PREST__REEDUC]')
+                            {
+                                $infoprest = Prestation::where(['dossier_id' => $dossier,'type_prestations_id' => 100])->first();
+                                $idprest = $infoprest['prestataire_id'];
+                                if (isset($idprest) && (!empty($idprest)))
+                                {
+                                    $infohotel = Prestataire::where('id',$idprest)->first();
+                                    $valchamp = $infohotel['name'];
+                                    $champtemp = str_replace('[', '', $champtemp);
+                                    $champtemp = str_replace(']', '', $champtemp);
+                                    $champtemp = strtolower($champtemp);
+                                    $array += [ $champtemp => $valchamp];
+                                }
+
                             }
                         }
                         elseif($champtemp ==='[DATE_HEURE]')

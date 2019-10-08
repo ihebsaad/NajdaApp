@@ -454,6 +454,10 @@ class OrdreMissionsController extends Controller
     {
     	return view('ordremissions.pdfodmtaxi');
     }
+    public function pdfcancelomtaxi()
+    {
+    	return view('ordremissions.pdfcancelomtaxi');
+    }
 
     //cancelom
     public function cancelom(Request $request)
@@ -464,7 +468,7 @@ class OrdreMissionsController extends Controller
         //return "dossier: ".$dossier." titre: ".$titre." parent: ".$parent;
         if (stristr($titre,'taxi') !== FALSE) 
         {
-	    	$count = OMTaxi::where('parent',$parent)->count();
+	    	//$count = OMTaxi::where('parent',$parent)->count();
 	    	OMTaxi::where('id', $parent)->update(['dernier' => 0]);
 	        $omparent=OMTaxi::where('id', $parent)->first();
 	        $filename='taxi_annulation-'.$parent;
@@ -485,8 +489,11 @@ class OrdreMissionsController extends Controller
 		        $attachement->save();
 	    	}
 
+	    	/*$nrequest = new Request();
+        	$nrequest->post('omparent',$omparent);*/
+        	compact($omparent);
 	    	// Send data to the view using loadView function of PDF facade
-	        $pdf = PDF3::loadView('ordremissions.pdfodmtaxi')->setPaper('a4', '');
+	        $pdf = PDF3::loadView('ordremissions.pdfcancelomtaxi', ['omparent' => $omparent])->setPaper('a4', '');
 
 	        $path= storage_path()."/OrdreMissions/";
 
@@ -496,6 +503,7 @@ class OrdreMissionsController extends Controller
 	        // If you want to store the generated pdf to the server then you can use the store function
 	        $pdf->save($path.$dossier.'/'.$name.'.pdf');
 	        $omtaxi = OMTaxi::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier]);
+	        return $omparent;
 	    }
     }
 
