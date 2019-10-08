@@ -503,7 +503,7 @@ public function pageRechercheAvancee(Request $request )
 
                             foreach($da as $d )
                             {
-                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname." ".$d->vehicule_immatriculation;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
                                                  $data[]=$d;
@@ -572,7 +572,7 @@ public function pageRechercheAvancee(Request $request )
 
                             foreach($data as $d )
                             {
-                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname." ".$d->vehicule_immatriculation;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
                                                  $datasearch[]=$d;
@@ -616,7 +616,7 @@ public function pageRechercheAvancee(Request $request )
 
                             foreach($da as $d )
                             {
-                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname." ".$d->vehicule_immatriculation;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
                                                  $data[]=$d;
@@ -694,7 +694,7 @@ public function pageRechercheAvancee(Request $request )
 
                             foreach($data as $d )
                             {
-                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname." ".$d->vehicule_immatriculation;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
                                                  $datasearch[]=$d;
@@ -726,7 +726,7 @@ public function pageRechercheAvancee(Request $request )
 
                             foreach($da as $d )
                                     {
-                                             $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                             $c=" ".$d->subscriber_name." ".$d->subscriber_lastname." ".$d->vehicule_immatriculation;
                                               if(stripos( $c,$request->get('nom_benef_search')) )
                                                     {
                                                          $data[]=$d;
@@ -798,7 +798,7 @@ public function pageRechercheAvancee(Request $request )
 
                                     foreach($data as $d )
                                     {
-                                             $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                             $c=" ".$d->subscriber_name." ".$d->subscriber_lastname." ".$d->vehicule_immatriculation;
                                               if(stripos( $c,$request->get('nom_benef_search')) )
                                                     {
                                                          $datasearch[]=$d;
@@ -1017,7 +1017,7 @@ public function pageRechercheAvancee(Request $request )
 
                             foreach($da as $d )
                             {
-                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname." ".$d->vehicule_immatriculation;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
                                                  $data[]=$d;
@@ -1088,7 +1088,7 @@ public function pageRechercheAvancee(Request $request )
 
                             foreach($data as $d )
                             {
-                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname." ".$d->vehicule_immatriculation;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
                                                  $datasearch[]=$d;
@@ -1226,7 +1226,7 @@ public function pageRechercheAvancee(Request $request )
 
                             foreach($da as $d )
                             {
-                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname." ".$d->vehicule_immatriculation;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
                                                  $data[]=$d;
@@ -1303,7 +1303,7 @@ public function pageRechercheAvancee(Request $request )
 
                             foreach($data as $d )
                             {
-                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname." ".$d->vehicule_immatriculation;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
                                                  $datasearch[]=$d;
@@ -1343,7 +1343,7 @@ public function pageRechercheAvancee(Request $request )
 
                                     foreach($da as $d )
                                     {
-                                             $c= " ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                             $c= " ".$d->subscriber_name." ".$d->subscriber_lastname." ".$d->vehicule_immatriculation;
                                               if(stripos( $c,$request->get('nom_benef_search')) )
                                                     {
                                                       //dd("ok");
@@ -1416,7 +1416,7 @@ public function pageRechercheAvancee(Request $request )
 
                                     foreach($data as $d )
                                     {
-                                             $c= " ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                             $c= " ".$d->subscriber_name." ".$d->subscriber_lastname." ".$d->vehicule_immatriculation;
                                               if(stripos( $c,$request->get('nom_benef_search')) )
                                                     {
                                                       //dd("ok");
@@ -1457,7 +1457,7 @@ public function pageRechercheAvancee(Request $request )
 
                             foreach($da as $d )
                             {
-                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname." ".$d->vehicule_immatriculation;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
                                                  $data[]=$d;
@@ -1536,7 +1536,7 @@ public function pageRechercheAvancee(Request $request )
 
                             foreach($data as $d )
                             {
-                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname;
+                                     $c=" ".$d->subscriber_name." ".$d->subscriber_lastname." ".$d->vehicule_immatriculation;
                                       if(stripos( $c,$request->get('nom_benef_search')) )
                                             {
                                                  $datasearch[]=$d;

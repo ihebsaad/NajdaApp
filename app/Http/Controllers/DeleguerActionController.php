@@ -61,7 +61,8 @@ class DeleguerActionController extends Controller
             ]);
 
              $affec->save();
-
+             $affecmhis=new DelegActHis($affec->toArray()); 
+             $affecmhis->save();
                       
                     $dossier=  $act->Mission->dossier;
                    // $dossiers=Dossier::get();
@@ -69,9 +70,10 @@ class DeleguerActionController extends Controller
               
                     $Missions=Auth::user()->activeMissions;
                     
+                  Session::flash('AffectMission',"l'action { ".$act->titre ." } de mission { ".  $act->Mission->typeMission->nom_type_Mission." } de dossier { ".$dossier->reference_medic ."-".
+                    $dossier->subscriber_name." ".$dossier->subscriber_lastname ." } a été déléguée à ".$act->assistant->name." ".$act->assistant->lastname);
 
-
-                Session::flash('AffectMission',"l'action ".$act->titre ." de mission ".  $act->Mission->titre." de dossier ".$dossier->reference_medic ." est déléguée "); 
+                /*Session::flash('AffectMission',"l'action ".$act->titre ." de mission ".  $act->Mission->titre." de dossier ".$dossier->reference_medic ." est déléguée "); */
 
                           
 
@@ -101,20 +103,27 @@ class DeleguerActionController extends Controller
            //$id_doss= Mission::where($affm->id_mission)->first()->id_dossier;
          $id_doss=$affm->id_dossier;
          $doss=Dossier::find($id_doss);
-             $ref_doss=$doss->reference_medic;
-         $titre_miss=Mission::where('id',$affm->id_mission)->first()->titre;
+             //$ref_doss=$doss->reference_medic;
+         //$titre_miss=Mission::where('id',$affm->id_mission)->first()->titre;
+
+       $ref_doss=$doss->reference_medic.'-'.$doss->subscriber_name.' '.$doss->subscriber_lastname;
+         $titre_miss=Mission::where('id',$affm->id_mission)->first()->typeMission->nom_type_Mission;
+
+
          $titre_act=ActionEC::where('id',$affm->id_action)->first()->titre;
 
             if($ref_doss &&  $titre_miss &&  $titre_act )
             {
            
-             $affecmhis=new DelegActHis($affm->toArray()); 
+             //$affecmhis=new DelegActHis($affm->toArray()); 
 
              
-             if( $affecmhis->save() && $affm->delete())
+            // if( $affecmhis->save() && $affm->forceDelete())
+
+              if( $affm->forceDelete())
              {
 
-                    $output='l\'action:'.$titre_act.' de la mission '.$titre_miss.' de dossier de référence '.$ref_doss.' est affectée à vous. Veuillez consulter le panneau des actions déléguées situé à droite';
+                    $output='l\'action: { '.$titre_act.' } de la mission { '.$titre_miss.' } de dossier { '.$ref_doss.' } est affectée à vous. Veuillez consulter le panneau des actions déléguées situé à droite ';
 
              }
 
@@ -122,7 +131,7 @@ class DeleguerActionController extends Controller
 
              {
 
-                    $output='Erreur lors d\'archivage des Notifiactions d\'affectation des actions déléguées. Veuillez contacter l\'     administrateur. vérifiez si quelqu\'un veut vous affecter l\'action:'.$titre_act.' de la mission '.$titre_miss.' de dossier de référence '.$ref_doss ;
+                    $output='Erreur lors d\'archivage des Notifiactions d\'affectation des actions déléguées. Veuillez contacter l\'administrateur. vérifiez si quelqu\'un veut vous affecter l\'action:'.$titre_act.' de la mission '.$titre_miss.' de dossier de référence '.$ref_doss ;
 
              }
 

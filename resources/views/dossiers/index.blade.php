@@ -102,11 +102,11 @@
 
                             <select id="nom_benef_search" name="nom_benef_search" class="form-control select2" >
                                             <option value="">Sélectionner</option>
-                                         @foreach(App\Dossier::distinct()->whereNotNull('subscriber_name')->get(['subscriber_name' , 'subscriber_lastname']) as $c) 
+                                    @foreach(App\Dossier::distinct()->whereNotNull('subscriber_name')->get(['subscriber_name' , 'subscriber_lastname' , 'vehicule_immatriculation' ]) as $c) 
 
-                                                <option value="{{$c->subscriber_name}} {{$c->subscriber_lastname}}">{{$c->subscriber_name}} {{$c->subscriber_lastname}}</option>
+                                                <option value="{{$c->subscriber_name}} {{$c->subscriber_lastname}} {{$c->vehicule_immatriculation}}">{{$c->subscriber_name}} {{$c->subscriber_lastname}}  {{$c->vehicule_immatriculation}} </option>
 
-                                         @endforeach
+                                    @endforeach
 
 
 

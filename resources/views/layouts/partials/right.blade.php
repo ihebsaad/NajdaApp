@@ -131,7 +131,10 @@ use App\Http\Controllers\TagsController;
 
                                          
                                            <h4 class="panel-title">
-                                              <a data-toggle="collapse" href="#collapse{{$Mission->id}}">{{$Mission->dossier->reference_medic}}   {{$Mission->titre}}</a>
+                                              <a data-toggle="collapse" href="#collapse{{$Mission->id}}">{{$Mission->dossier->reference_medic}}-{{$Mission->dossier-> subscriber_name}} {{$Mission->dossier->subscriber_lastname}} <br>
+                                                {{$Mission->typeMission->nom_type_Mission}}
+                                              </a>@if ($Mission->assistant_id!=NULL && $Mission->origin_id!=NULL )
+                                         <span style="color:red"> &nbsp;(déléguée par {{$Mission-> user_origin->name}}&nbsp {{$Mission->user_origin->lastname}} ) </span> @endif
                                            </h4>
                                         </div>
 
@@ -422,12 +425,12 @@ use App\Http\Controllers\TagsController;
                                                     <div class="col-md-9"> <input id="datedeb" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:95%;  text-align: left;" name="datedeb"/></div>
                                                 </div>
                                          </div>
-                                        <div class="form-group">
+                                        <!--<div class="form-group">
                                           <div class="row">
                                               <div class="col-md-3" style="padding-top:5px">     <label for="descrip" style="display: inline-block;  text-align: right; width: 55px;">Description:</label></div>
                                               <div class="col-md-9"><input id="descrip" type="text" class="form-control" style="width:95%;  text-align: left;" name="descrip"/></div>
                                           </div>
-                                        </div>
+                                        </div>-->
                                         </br>
                                        <div class="row">
                                              <div class="col-md-3" style="padding-top:5px"> <label  style=" ;  text-align: left; width: 55px;">Commentaire:</label></div>
@@ -1215,19 +1218,69 @@ if (r == true) {
                type : 'GET',
               // data : 'idw=' + idw,
                success: function(data){
-               
-               
-               location.reload();
+              
+                           
                alert(data);
 
-               //alert(JSON.stringify(data));
-             // $('#contenumodalworkflow').html(data);
 
-             // $('#myworkflow').modal('show');
+                   var urllocalee=top.location.href;
 
-                  //alert(JSON.stringify(retour))   ;
-                 // location.reload();
-            }
+                         var poss=urllocalee.indexOf("traitementsBoutonsActions");
+                         var res22=urllocalee.indexOf("deleguerMission");
+                         var res33=urllocalee.indexOf("deleguerAction");
+                         var res44=urllocalee.indexOf("TraitementAction");
+                         
+                         //alert(poss);
+                         var countt=0;
+
+                         if(poss!= -1)
+                         {
+                            for (var i = poss; i <100; i++) {
+                              
+                                if(urllocalee[i]=='/')
+                                {
+                                  countt++;
+                                }
+
+                              }
+                           
+
+
+
+                         }
+
+                    if( poss!=-1 && countt!=4 && res22!= -1 && res33!=-1 &&  res44 !=-1 )
+                    {
+                     location.reload();          
+
+                    }
+
+                    if(poss==-1)
+                    {
+
+                      location.reload();   
+
+
+                    }
+                      if(countt==4 ||  res22!= -1 ||  res33!=-1  || res44 !=-1 )
+                    {  
+
+                   
+
+                      var dosskk= $('#dossierID').val() ;
+                      
+                      var NouveaURL="{{ url('/') }}"+"/dossiers/view/"+dosskk;
+
+                                                         
+                      document.location.href=NouveaURL;
+
+
+                    }
+
+
+
+
+            }// fin success
 
              
            });
@@ -1281,8 +1334,11 @@ if ($view_name=='dossiers-view') {
 //$('.swal2-confirm').prop('disabled', true);
 <?php }
 ?>
- setInterval(function(){ 
-     
+// setInterval(function(){ 
+
+   function verifier_Rappels_actions_reportees ()
+
+   {     
     $.ajax({
        url : '{{ url('/') }}'+'/activerActionsReporteeOuRappelee',
        type : 'GET',
@@ -1404,12 +1460,22 @@ if ($view_name=='dossiers-view') {
 
             
            }
-       }
-    });
+
+           setTimeout(function(){ 
+
+            verifier_Rappels_actions_reportees();
+
+            }, 15000);
+
+
+       }// fin success
+    });// fin $ajax
    
+}
 
+verifier_Rappels_actions_reportees();
 
-}, 15000);
+//}, 15000);  // fin setInterval
 
 
 </script>
@@ -1417,8 +1483,10 @@ if ($view_name=='dossiers-view') {
 <!--activerAct_des_dates_speciales-->
 <script>
 
- setInterval(function(){ 
-     
+ //setInterval(function(){ 
+   function  activerAct_des_dates_speciales()
+     { 
+
     $.ajax({
        url : '{{ url('/') }}'+'/activerAct_des_dates_speciales',
        type : 'GET',
@@ -1516,14 +1584,21 @@ if ($view_name=='dossiers-view') {
 
             
            }
-       }
-    });
+         setTimeout(function(){          
+
+                activerAct_des_dates_speciales();
+
+           }, 20000);
+
+
+
+       } // fin success
+    }); // fin ajax
    
+}
+//}, 20000); // fin set interval
 
-
-}, 20000);
-
-
+activerAct_des_dates_speciales();
 </script>
 
 
@@ -1537,11 +1612,13 @@ var idMission;
 var datamission;
 var iddropdownM;
 var hrefidAcheverM;
+var idPourRepMiss;
+var daterappelmissh;
 
-    setInterval(function(){
+    //setInterval(function(){
  //alert("Hello"); 
 
- 
+ function getMissionAjaxModal() {
      
     $.ajax({
        url : '{{ url('/') }}'+'/getMissionAjaxModal',
@@ -1558,7 +1635,8 @@ var hrefidAcheverM;
              idAction=jQuery(data).find('.rowkbs').attr("id");
              dataAction=jQuery(data).find('#'+idAction).html();
              hrefidAcheverA=jQuery(data).find('#idAchever').attr("href");
-
+             idPourRepMiss=jQuery(data).find('#'+idPourRepMiss).html();
+             daterappelmissh=jQuery(data).find('#'+daterappelmissh).html();            
 
              // alert ("des nouvelles notes sont activées");
               //$("#contenuNotes").prepend(data);
@@ -1577,12 +1655,20 @@ var hrefidAcheverM;
             
             
            }
+
+            setTimeout(function(){          
+
+                getMissionAjaxModal();
+
+           }, 10000);
+
        }
-    });
+    });// $ajax
    
+}
+getMissionAjaxModal();
 
-
-}, 10000);
+//}, 10000); // fin setInterval
 
     $(document).ready(function() {
     
@@ -1591,7 +1677,7 @@ var hrefidAcheverM;
       $("#contenuMissions").prepend(dataAction);
       $("#"+iddropdown).show();
     
-
+        
         $('#actiontabs a[href="#Missionstab"]').trigger('click');
 
 
@@ -1606,8 +1692,46 @@ var hrefidAcheverM;
 
     });
 
+
+     $(document).on("click","#idOkRepMiss",function() {
+
+          idPourRepMiss=$("#idPourRepMiss").val();
+          //alert(idPourRepMiss);       
+          daterappelmissh = $('#daterappelmissh').val();
+          var _token = $('input[name="_token"]').val();
+
+                           
+                $.ajax({
+                   url : "{{ route('Mission.ReporterMission') }}",
+                   type : 'GET',
+                   //dataType : 'html', // On désire recevoir du HTML
+                   data:{idPourRepMiss:idPourRepMiss,daterappelmissh:daterappelmissh, _token:_token},
+                   success : function(data){ // code_html contient le HTML renvoyé
+                       //alert (data);
+                       if(data)
+                       {
+                           alert(data); 
+
+                           if(String(data).indexOf("Mission reportée")!=-1) 
+                           {              
+                             $("#myMissionModalReporter1").modal('hide');
+                           }
+                         
+                       }
+                   }
+                });
+               
+
+
+
+
+    }); // fin on click
+
+
+
       });
 
+  
 
   </script>
 
@@ -1688,7 +1812,7 @@ var hrefidAcheverM;
 
     //setInterval(function(){
  //alert("Hello"); 
-
+   function getNotificationDeleguerMiss () {
   var userIdConnec = $('meta[name="userId"]').attr('content');
      
     $.ajax({
@@ -1701,35 +1825,58 @@ var hrefidAcheverM;
            if(data)
            {
           
-           // var idUserAffecte=jQuery(data).find('.userAff').attr("id");
-           // var refdoss=jQuery(data).find('.refdoss').attr("id");
-           
+                 
 
-           swal(data);
+          // swal(data);
 
-          // location.reload(); 
-            /* if(idUserAffecte==userIdConnec)
-             {
+           const swalWithBootstrapButtonskbs = Swal.mixin({
+                            customClass: {
+                                confirmButton: 'btn btn-success',
+                                cancelButton: 'btn btn-danger'
+                            },
+                            buttonsStyling: false,
+                        }) ;
 
-                 alert('un nouveau dossier dont la réf : '+refdoss +'est affecté à vous');
-                 location.reload(); 
+                        swalWithBootstrapButtonskbs.fire({
+                            title: 'Délégation Mission',
+                            html: '<b>'+data+'</b>',
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Afficher maintenant !<br>',
+                            cancelButtonText: 'Consulter ultèrieurement',
+                         //   reverseButtons: true
+                        }).then((result) => {
+                            if (result.value) {
+
+                                   window.location.reload(true);
+
+                            }
 
 
-             }*/
-            
+                            }); 
+
+       
               
        
 
             
            }
+
+            setTimeout(function(){          
+
+                getNotificationDeleguerMiss();
+
+           }, 7000);
+
+
        }
     });
    
-
+} 
 
 //}, 7000);
 
-
+getNotificationDeleguerMiss();
 
 
 </script>
@@ -1743,6 +1890,7 @@ var hrefidAcheverM;
 
     //setInterval(function(){
  //alert("Hello"); 
+function  getNotificationDeleguerAct () {
 
   var userIdConnec = $('meta[name="userId"]').attr('content');
      
@@ -1756,29 +1904,54 @@ var hrefidAcheverM;
            if(data)
            {
           
-           // var idUserAffecte=jQuery(data).find('.userAff').attr("id");
-           // var refdoss=jQuery(data).find('.refdoss').attr("id");
-           
+              
 
-           swal(data);
+           //swal(data);
 
-          // location.reload(); 
-            /* if(idUserAffecte==userIdConnec)
-             {
+             const swalWithBootstrapButtonskbs = Swal.mixin({
+                            customClass: {
+                                confirmButton: 'btn btn-success',
+                                cancelButton: 'btn btn-danger'
+                            },
+                            buttonsStyling: false,
+                        }) ;
 
-                 alert('un nouveau dossier dont la réf : '+refdoss +'est affecté à vous');
-                 location.reload(); 
+                        swalWithBootstrapButtonskbs.fire({
+                            title: 'Délégation Action',
+                            html: '<b>'+data+'</b>',
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Afficher maintenant !<br>',
+                            cancelButtonText: 'Consulter ultèrieurement',
+                         //   reverseButtons: true
+                        }).then((result) => {
+                            if (result.value) {
+
+                                   window.location.reload(true);
+
+                            }
 
 
-             }*/
-            
+                            }); 
+
+       
+                          
               
        
 
             
            }
+
+             setTimeout(function(){          
+
+               getNotificationDeleguerAct();
+
+           }, 8000);
        }
     });
+}
+
+getNotificationDeleguerAct ();
    
 
 

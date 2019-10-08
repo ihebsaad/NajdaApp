@@ -20,8 +20,8 @@
   @endif
 
   <p>Action: {{$Action->titre}} </p>
-  <p>Mission: {{$Action->Mission->titre}} </p>
-    <p>Dossier: {{$Action->Mission->dossier->reference_medic}} </p>
+  <p>Mission: {{$Action->Mission->typeMission->nom_type_Mission}} </p>
+    <p>Dossier: {{$Action->Mission->dossier->reference_medic}}-{{$Action->Mission->dossier->subscriber_name}} {{$Action->Mission->dossier->subscriber_lastname}} </p>
 @if($Action->user_id != $Action->assistant_id)
  @if (count($Action->Mission->activeActionEC)>0)
       <p>Liste des actions actives pour la Mission en cours:  </p>

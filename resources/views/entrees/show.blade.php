@@ -118,7 +118,7 @@ use App\Http\Controllers\TagsController;
                     </div>        
                  </a>
         </div>
-		                          <?php
+                                  <?php
                                             // get attachements info from DB
     $attachs = Attachement::get()->where('parent', '=', $entree['id'] )->where('boite','0');
     $nbattachs = Attachement::where('parent', '=', $entree['id'] )->where('boite','0')->count();
@@ -145,7 +145,7 @@ use App\Http\Controllers\TagsController;
                             @endfor
                         @endif
                     </ul>
-					
+                    
                     <div id="myTabContent" class="tab-content" style="background: #ffffff">
                        <?php if ( $entree['type']!='fax') { ?>
                            <div class="tab-pane fade active in" id="mailcorps" style="">
@@ -311,8 +311,8 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
                  
 
-                  @foreach ( $actionsReouRap as $rr)
-                    <tr> <td style="color: white; font-size: 0px;">{{$rr->id}}</td> <td>{{$rr->titre}}</td> <td>{{ $rr->Mission->titre}}</td> <td>{{$rr->Mission->dossier->reference_medic}}</td>  </tr>
+                   @foreach ( $actionsReouRap as $rr)
+                    <tr> <td style="color: white; font-size: 0px;">{{$rr->id}}</td> <td>{{$rr->titre}}</td> <td>{{ $rr->Mission->typeMission->nom_type_Mission}}</td> <td>{{$rr->Mission->dossier->reference_medic}}-{{$rr->Mission->dossier->subscriber_name }} {{$rr->Mission->dossier->subscriber_lastname}}</td>  </tr>
                    
                   @endforeach
 
@@ -339,7 +339,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
 </div>
       </div>
-	<?php }?>
+    <?php }?>
 
        <script type="text/javascript">
         
@@ -653,7 +653,7 @@ $urlapp='http://localhost/najdaapp';
                // console.log(JSON.stringify(data))
             },
             debug : function(e, data) {
-                	//console.log(JSON.stringify(data))
+                    //console.log(JSON.stringify(data))
             }
         });
 

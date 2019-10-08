@@ -815,7 +815,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Reporter l action courante à une date ultérieure </h4>
       </div>
-      <form   action ="{{ url('/traitementsBoutonsActions/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id.'/3')}}">
+      <form  id="formTA" action ="{{ url('/traitementsBoutonsActions/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id.'/3')}}" onsubmit="return false">
       <div class="modal-body">
         <p>
       <div class="form-group">
@@ -958,7 +958,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
    <script>
   
-   $("#kbspaneltitle").append('<?php if($Action) {  echo 'Mission : '.$Action->Mission->titre.'  | Action : '.$Action->titre.'<br><div style ="overflow: hidden ; width: 100%;"> (type de mission  :  '.$Action->type_Mission.'  )</div>' ; }  ?>');
+   $("#kbspaneltitle").append('<?php if($Action) {  echo 'Action: '.$Action->titre.' | Mission : '.$Action->type_Mission.'<br> (Extrait de mission  :  '.$Action->Mission->titre.'  ) | Dossier : '.$Action->Mission->dossier->reference_medic.'-'.$Action->Mission->dossier->subscriber_name.' '.$Action->Mission->dossier->subscriber_lastname.'<br><div style ="overflow: hidden ; width: 100%;"></div>' ; }  ?>');
   </script>
 <!-- enregistrer commentaires sans bouton -->
 <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
@@ -974,8 +974,8 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
        // alert(champ);
         var val =document.getElementById(champ).value;
        // alert(val);
-        //  var type = $('#type').val();
-        //var donnees = $("#formcoments").serialize();
+       //  var type = $('#type').val();
+       //var donnees = $("#formcoments").serialize();
         var donnees = $("#kbsoptionform").serialize();
         
         $.ajax({
@@ -1343,11 +1343,17 @@ i++;
 
   $('#DivRapOuRepAct').show();
 
-  //$('#DivRapOuRepAct').hide();
+ 
 
-
-/* bouton et div de délégation*/
-
+  $(document).on("submit","#formTA",function( event ) {
+  // if ( $( "input:first" ).val() === "correct" ) {
+  //   $( "span" ).text( "Validated..." ).show();
+  //   return;
+  // }
+ alert ("not allowed");
+  //$( "span" ).text( "Not valid!" ).show().fadeOut( 1000 );
+  event.preventDefault();
+});
 
 
 

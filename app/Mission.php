@@ -9,8 +9,8 @@ class Mission extends Model
     //
 
     protected $fillable = [
-        'titre', 'descrip','nb_acts_ori','commentaire', 'date_deb','date_fin', 'statut_courant','realisee','affichee', 'dossier_id','type_Mission', 
-        'user_id','assistant','id_entree','url_doc_gen','equipement' , 'voiture', 'prestataire','intervenant','created_at','updated_at',
+        'titre', 'descrip','nb_acts_ori','commentaire', 'date_deb','date_fin', 'statut_courant','realisee','affichee', 'dossier_id','type_Mission', 'origin_id',
+        'user_id','assistant_id','id_entree','url_doc_gen','equipement' , 'voiture', 'prestataire','intervenant','created_at','updated_at',
         'deleted_at',
         'type_heu_spec','type_heu_spec_archiv','date_spec_affect','date_spec_affect2','date_spec_affect3',
         'rdv','act_rdv','h_rdv',
@@ -65,7 +65,24 @@ public function dossier()
      public function activeActionEC()
     {
         return $this->hasMany('App\ActionEC')->where('statut','active')->orderBy('ordre');
-    }                                                                   
+    }
+
+    public function agent()
+    {
+        return $this->belongsTo('App\User','user_id');
+    }
+
+        public function assistant()
+    {
+        return $this->belongsTo('App\User','assistant_id');
+    }  
+
+     public function user_origin()
+    {
+        return $this->belongsTo('App\User','origin_id');
+    } 
+
+
  
 
 }

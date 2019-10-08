@@ -81,6 +81,38 @@ class MissionController extends Controller
             return redirect('dossiers/view/'.$dossid);
     }
 
+    public function ReporterMission (Request $request)
+    {
+
+
+          $dtc = (new \DateTime())->format('Y-m-d\TH:i');
+
+          $format = "Y-m-d\TH:i";
+          $dateSys = \DateTime::createFromFormat($format, $dtc);
+          $dateRep = \DateTime::createFromFormat($format, $request->get('daterappelmissh'));
+          // dd( $dateRep);
+          if($dateRep<= $dateSys)
+          {
+
+             return ("Erreur: la date de Report doit être supérieure à la date courante");
+
+          }
+          else
+          {
+
+           $miss=Mission::where('id',$request->get('idPourRepMiss'))->first();
+           $miss->update(['date_deb'=>$dateRep]);
+           $miss->update(['statut_courant'=>'reportee']);
+
+           return ("Mission reportée");
+          }
+     /* $dtc = (new \DateTime())->format('Y-m-d H:i');
+      Mission::where('id',$id)->update(['date_deb'=>$dtc]);
+
+         $missR=Mission::where('date_deb','<=', $dtc)*/
+
+    }
+
    
 
     /**
@@ -152,6 +184,7 @@ class MissionController extends Controller
              'realisee'=> 0,
              'affichee'=>1,
              'user_id'=>auth::user()->id,
+             'origin_id'=>auth::user()->id,
 
              'type_heu_spec'=> $typeMiss->type_heu_spec,
              'type_heu_spec_archiv'=> $typeMiss->type_heu_spec,
@@ -426,6 +459,7 @@ class MissionController extends Controller
              'realisee'=> 0,
              'affichee'=>1,
              'user_id'=>auth::user()->id,
+             'origin_id'=>auth::user()->id,
 
              'type_heu_spec'=> $typeMiss->type_heu_spec,
              'type_heu_spec_archiv'=> $typeMiss->type_heu_spec,
@@ -705,7 +739,13 @@ class MissionController extends Controller
         if($entree)
         {
 
-              $output='<div class="form-group">
+              $output='
+                 <div class="form-group">
+                 <label for="date">Date de réception de l\'email : </label>'.
+                 date('d/m/Y H:m', strtotime($entree->reception)) .'
+                 </div>
+              <br>
+              <div class="form-group">
                 
                 <label for="emetteur">emetteur:</label>
                 <input id="emetteur" type="text" class="form-control" name="emetteur"  value="'. $entree->emetteur.'"/>
@@ -724,10 +764,8 @@ class MissionController extends Controller
                 </div>
 
              </div>
-            <div class="form-group">
-                 <label for="date">date:</label>'.
-               date('d/m/Y', strtotime($entree->reception)) .'
-            </div>';
+             <br>
+           ';
           }
           else
           {
@@ -748,8 +786,12 @@ class MissionController extends Controller
 
           if($miss->update(['statut_courant'=>'annulee']))
           {
+            $dtc = (new \DateTime())->format('Y-m-d\TH:i');               
+            $miss->update(['date_fin'=>$dtc]);
 
-           $output= "la mission est annulée";
+           app('App\Http\Controllers\ActionController')->Archiver_mission_actions($idmiss);
+
+           $output= "la mission est annulee";
 
           }
           else
@@ -767,33 +809,29 @@ class MissionController extends Controller
 
     public function AnnulerMissionCourante($iddoss,$idmiss,$idact)
     {
+    
 
-        // $act=Mission::find($idmiss);
+          $Action=ActionEC::find($idact);
+          $act=$Action->Mission;     
+          $dossier=$act->dossier;
+          $dossiers=Dossier::get();
+          $typesMissions=TypeMission::get();
 
-        // $act->update(['statut_courant'=> "annulee", 'realisee' => 1]);
+         $act->update(['statut_courant'=>'annulee']);
+         $dtc = (new \DateTime())->format('Y-m-d\TH:i');               
+         $act->update(['date_fin'=>$dtc]);
 
+         $Actions=$act->Actions;
 
-         $Action=ActionEC::find($idact);
-                    $act=$Action->Mission;     
-                    $dossier=$act->dossier;
-                    $dossiers=Dossier::get();
-                   $typesMissions=TypeMission::get();
+         app('App\Http\Controllers\ActionController')->Archiver_mission_actions($idmiss);
 
-                   $act->update(['statut_courant'=>'annulee']);
-                   $Actions=$act->Actions;
+         $Missions=Auth::user()->activeMissions;
+          
+        Session::flash('messagekbsSucc', 'La mission en cours {'.$act->typeMission->nom_type_Mission.' } de dossier  { '.$act->dossier->reference_medic.'-'.$act->dossier->subscriber_name.' '.$act->dossier->subscriber_lastname .' } est annulée');            
 
-                  // $this->Historiser_actions($idmiss);
+        return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
 
-                   $Missions=Auth::user()->activeMissions;
-                    
-                  Session::flash('messagekbsSucc', 'La mission en cours   '.$act->titre.' de dossier  '.$act->dossier->reference_medic .' est annulée');            
-
-                  return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
-
-        // return redirect('dossiers/view/'.$iddoss);
-
-        // return redirect('/dossier/action/Traitementsousaction/'.$iddoss.'/'.$idact.'/'.$sousactSui->id);
-
+   
     }
 
        public function store(Request $request)
@@ -1041,11 +1079,14 @@ public function getAjaxDeleguerMission($idmiss)
 
           $miss=Mission::where('id',$id)->first();
 
-         $output='<h4><b> <i><u>Nom de mission :</u><i/></span> '.$miss->titre.'</b> </h4> <br>';
+         $output='<h4><b> <i><u>Extrait :</u><i/></span> '.$miss->titre.'</b> </h4> <br>';
 
-         $output.='<h4><b><u> type de  mission : </u>'.$miss->typeMission->nom_type_Mission.'</b> </h4> <br>';
+         $output.='<h4><b><u> Type de  mission : </u>'.$miss->typeMission->nom_type_Mission.'</b> </h4> <br>';
 
          $output.='<h4><b><u> Description de mission : </u>'.$miss->typeMission->des_miss.'</b> </h4> <br>';
+
+          $output.='<h4><b><u> Dossier - Assuré  : </u>'.$miss->dossier->reference_medic.'-'.
+          $miss->dossier->subscriber_name.' '.$miss->dossier->subscriber_lastname.'</b> </h4> <br>';
           
           if($miss->commentaire)
           {
@@ -2119,7 +2160,7 @@ public function getAjaxDeleguerMission($idmiss)
             {
   
         $output.='<input type="hidden" id="idmissionDateSpecM" name="idmissionDateSpec" value="'.$miss->id.'"  />
-        <input type="hidden" id="NomTypeDateSpecM" name="NomTypeDateSpec" value="deb_sejour"  />
+        <input type="hidden" id="NomTypeDateSpecM" name="NomTypeDateSpec" value="fin_sejour"  />
          
        <h4><b> Dates spécifiques : </b></h4>
 
@@ -2137,13 +2178,15 @@ public function getAjaxDeleguerMission($idmiss)
           <br><br>
           <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date fin séjour </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 6 :</span>
           <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Envoyer PEC définitive à notre facturation   </span>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> et l\'action 7 : </span>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;">&nbsp;&nbsp;Evaluation </span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_fin_sejour)
              {
              $output.='green';
              }
@@ -2155,7 +2198,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_fin_sejour)
 
              {
               $output.= 'oui, date assignée';
@@ -2197,84 +2240,7 @@ public function getAjaxDeleguerMission($idmiss)
          <br>
        </div>';
 
-       /* date spécifique pour action 7  --------------------------------------------------------*/
-
-
-
-       $output.='<input type="hidden" id="idmissionDateSpecM2" name="idmissionDateSpec2" value="'.$miss->id.'"  />
-        <input type="hidden" id="NomTypeDateSpecM2" name="NomTypeDateSpec2" value="fin_sejour"  />
-         
-       
-       <br>
-       
-        <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
-
-        <div class="row">
-          <br>
-        
-        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date fin séjour </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 7:</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Evaluation  </span>
-          <br>
-           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
-
-        
-            <span id="idspandateAssNonAssM2" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
-
-          if($miss->date_spec_affect2==1)
-             {
-             $output.='green';
-             }
-             else
-             {
-              $output.= 'red' ;
-             }
-
-            $output.= ';">';
-
-
-             if($miss->date_spec_affect2==1)
-             {
-              $output.= 'oui, date assignée';
-             }
-             else
-             {
-             $output.='Non, date non assignée' ;
-             }
-             
-             $output.='</span>';
-
-
-
-       $output.='</div>
-        <br>
-        <br>
-             <div class="row">
-
-              <label style="padding: 5px; font-weight: bold; font-size: 15px;">&nbsp;&nbsp; Mettre à jour la date spécifique : </label>';
-
-              $da = (new \DateTime())->format('Y-m-d\TH:i'); 
-
-              $output.='<input id="dateSpecM2" type="datetime-local" value="'.$da.'" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec2"/>
-            </div>
-
-        <br>
-
-         <div class="row">
-          <div class="col-md-5"> </div>
-
-           <div class="col-md-2"></div>
-
-          <div class="col-md-5">
-         <button id="MajDateSpecM2" type="button" style=""> Mettre à jour date spécifique</button> 
-         </div>
-          
-         </div>
-         <br>
-    
-       </div>';
-
-
-
+      
 
       }// fin réservation hotel
 
@@ -2925,7 +2891,7 @@ public function getAjaxDeleguerMission($idmiss)
 
                         $output='<div class="modal-header">
                               <button type="button" class="close" data-dismiss="modal">&times;</button>
-                              <h4 id="titleActionRModal" class="modal-title"> Mission:'.$missR->titre.'</h4>
+                              <h4 id="titleActionRModal" class="modal-title"> Mission: '.$missR->typeMission->nom_type_Mission.' | Dossier: '.$missR->dossier->reference_medic.' - '.$missR->dossier->subscriber_name.' '.$missR->dossier->subscriber_lastname.'</h4>
                               </div>
                             
                                <div class="modal-body">
@@ -2953,7 +2919,7 @@ public function getAjaxDeleguerMission($idmiss)
                             <div class="panel-heading" style=" background-color:#DF01D7">
                      
                                <h4 class="panel-title">';
-                                  $output.=' <a data-toggle="collapse" href="#collapse'.$missR->id.'"> '. $missR->titre .'</a>';
+                                  $output.=' <a data-toggle="collapse" href="#collapse'.$missR->id.'"> '.$missR->dossier->reference_medic.' - '.$missR->dossier->subscriber_name.' '.$missR->dossier->subscriber_lastname.'<br>'. $missR->typeMission->nom_type_Mission.'</a>';
                                $output.='</h4>
                             </div>';
 
@@ -2984,13 +2950,14 @@ public function getAjaxDeleguerMission($idmiss)
                             </div>
                             <div id="hiddenreporterMiss">
                             <br>
-                            <form action="'.$burl.'/ReporterMission/'.$missR->id.'" method="GET">
+                           <!-- <form action="'.$burl.'/ReporterMission/'.$missR->id.'" method="GET">-->
                               <center><input id="daterappelmissh" type="datetime-local" value="'.$dtc.'" class="form-control" style="width:50%; flow:right; display: inline-block; text-align: right;" name="daterappelmission"/>
                               </center>
                                <br>
-                              <center><button type="submit" class="btn btn-default" style="width:30%;"> OK </button><center>
-                              </form>
+                              <center><button id="idOkRepMiss" type="submit" class="btn btn-default" style="width:30%;"> OK </button><center>
+                              <!--</form>-->
                               <br>
+                              <input id="idPourRepMiss" type="hidden" value="'.$missR->id.'">
                             </div> ';
 
 
@@ -3118,7 +3085,7 @@ public function getAjaxDeleguerMission($idmiss)
                 $i = 0;
                 $len = count($actk->Actions);
                 //$actko=$actk->Actions->orderBy('ordre','DESC')->get();
-                $actko=ActionEC::where('mission_id',$id)->orderBy('ordre','ASC')->orderBy('num_rappel','DESC')->get();
+                $actko=ActionEC::where('mission_id',$id)->orderBy('ordre','ASC')->orderBy('num_rappel','ASC')->get();
                    $output.='<input id="InputetatActionMission" style="float:right" type="text" placeholder="Recherche.." autocomplete="off"> <br><br>';
                    $output.='<table class="table table-striped">
                   <thead>

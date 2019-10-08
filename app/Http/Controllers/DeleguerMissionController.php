@@ -50,8 +50,9 @@ class DeleguerMissionController extends Controller
          $mission = Mission::find($request->get('delegMissid'));
         
           $agent= $request->get('agent');
+          $mission->update(['user_id' => $agent]);
 
-        if ( $mission->update(['user_id' => $agent]))
+        if ( $mission->update(['assistant_id' => $agent]))
         { 
 
 
@@ -67,7 +68,8 @@ class DeleguerMissionController extends Controller
             ]);
 
              $affec->save();
-
+             $affecmhis=new DelegMissHis($affec->toArray());
+             $affecmhis->save();
                       
                     $dossier= $mission->dossier;
                    // $dossiers=Dossier::get();
@@ -77,7 +79,7 @@ class DeleguerMissionController extends Controller
                     
 
 
-                Session::flash('AffectMission',"la mission ". $mission->titre." de dossier ".$dossier->reference_medic ." est déléguée ");            
+                Session::flash('AffectMission',"La mission { ".  $mission->typeMission->nom_type_Mission." } de dossier { ".$dossier->reference_medic."-".$dossier->subscriber_name." ".$dossier->subscriber_lastname ." } a été déléguée à ".  $mission->assistant->name." ".$mission->assistant->lastname);   
 
                 return view('actions.deleguerMission',['typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
 
@@ -135,25 +137,26 @@ class DeleguerMissionController extends Controller
            //$id_doss= Mission::where($affm->id_mission)->first()->id_dossier;
          $id_doss=$affm->id_dossier;
          $doss=Dossier::find($id_doss);
-             $ref_doss=$doss->reference_medic;
-         $titre_miss=Mission::where('id',$affm->id_mission)->first()->titre;
+         $ref_doss=$doss->reference_medic.'-'.$doss->subscriber_name.' '.$doss->subscriber_lastname;
+         $titre_miss=Mission::where('id',$affm->id_mission)->first()->typeMission->nom_type_Mission;
 
             if($ref_doss &&  $titre_miss )
             {
 
 
-            $affecmhis=new DelegMissHis($affm->toArray()); 
+           // $affecmhis=new DelegMissHis($affm->toArray()); 
 
-             if( $affecmhis->save() && $affm->delete())
+            // if( $affecmhis->save() && $affm->forceDelete())
+               if($affm->forceDelete())
               {
 
-                $output='la mission '.$titre_miss.' de dossier de référence '.$ref_doss.' est affectée à vous';
+                $output='La mission { '.$titre_miss.' } de dossier { '.$ref_doss.' } est affectée à Vous';
 
               }
               else
                {
 
-                  $output='Erreur lors d\'archivage des Notifiactions d\'affectation des missions déléguées. Veuillez contacter l\'     administrateur. vérifiez si quelqu\'un veut vous affecter  la mission '.$titre_miss.' de dossier de référence '.$ref_doss ;
+                  $output='Erreur lors d\'archivage des Notifiactions d\'affectation des missions déléguées. Veuillez contacter l\'administrateur. Vérifiez si quelqu\'un veut vous affecter la mission '.$titre_miss.' de dossier de référence '.$ref_doss ;
 
             
                }
