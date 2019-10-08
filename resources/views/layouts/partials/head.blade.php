@@ -154,10 +154,10 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
                     if(parseInt(data)>1)
                     {
-                        Push.create("Nouvelle Notification", {
+                   /*    Push.create("Nouvelle Notification", {
 
                             body: 'Nouvelle Notification',
-                            icon: "{{ asset('public/img/najda.png') }}",
+                            icon: "{{-- asset('public/img/najda.png') --}}",
                             timeout: 5000,
 
                             onClick: function(){
@@ -168,7 +168,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                             }
 
                         });
-
+                        */
                     }
                     //Send another request in n seconds.
                     setTimeout(function(){
@@ -479,27 +479,32 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
                     if(data )
                     {
-                        showNotif(data);
-                   /*     Push.create("Nouvelle Notification", {
 
-                            body: 'Nouvelle Notification',
-                            icon: "{{-- asset('public/img/najda.png') --}}",
-                            timeout: 5000,
 
-                            onClick: function(){
-                                // window.focus();
-                                // this.close();
-                                window.location ='<?php //  echo $urlapp; ?>/entrees/show/'+parsed['data']['entree']['id'];
+                        $.ajax({
+                            type: "get",
+                            url: "<?php echo $urlapp; ?>/entrees/countnotifs",
+                            success:function(data)
+                            {
+                                console.log('count notif : '+data) ;
+                                var count=parseInt(data);
+                                if(count>0 )
+                                {
+                                    document.getElementById('countnotif').innerHTML=''+count;
+                                }
 
                             }
+                        });
 
-                        });*/
+                        showNotif(data);
+
+
 
                     }
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkNotifs();
-                    }, 10000);  //10 secds
+                    }, 30000);  //20 secds
                 }
             });
 

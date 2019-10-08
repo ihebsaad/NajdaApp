@@ -554,21 +554,15 @@ class DossiersController extends Controller
                 ->get();
 
 
-        $typesMissions = Cache::remember('type_mission',$minutes2,  function () {
-
-            return DB::table('type_mission')
+        $typesMissions =   DB::table('type_mission')
                 ->get();
-        });
 
         $Missions=Dossier::find($id)->activeMissions;
 
        // $typesprestations = TypePrestation::all();
 
-        $typesprestations = Cache::remember('type_prestations',$minutes2,  function () {
-
-            return DB::table('type_prestations')
+        $typesprestations =  DB::table('type_prestations')
                 ->get();
-        });
 
        // $prestataires = Prestataire::all();
 
@@ -578,11 +572,8 @@ class DossiersController extends Controller
                 ->get();
       //  });
 
-        $gouvernorats = Cache::remember('cities',$minutes2,  function () {
-
-            return DB::table('cities')
+        $gouvernorats = DB::table('cities')
                 ->get();
-        });
 
 
 
@@ -695,11 +686,8 @@ class DossiersController extends Controller
         $cldocs = DB::table('clients_docs')->select('client', 'doc')->get();
 
 
-        $typesMissions = Cache::remember('type_mission',$minutes2,  function () {
-
-            return DB::table('type_mission')
+        $typesMissions =  DB::table('type_mission')
                 ->get();
-        });
 
         $Missions=Dossier::find($id)->activeMissions;
 
@@ -714,11 +702,8 @@ class DossiersController extends Controller
 
       //  $clients = DB::table('clients')->select('id', 'name')->get();
 
-        $clients = Cache::remember('clients',$minutes2,  function () {
-
-            return DB::table('clients')
+        $clients = DB::table('clients')
                 ->get();
-        });
 
         $prestations =   Prestation::where('dossier_id', $id)->get();
        // $emails =   Email::where('parent', $id)->get();
@@ -741,40 +726,29 @@ class DossiersController extends Controller
             ->get();
 
         $minutes= 120;
-        $hopitaux = Cache::remember('hopitaux',$minutes,  function () {
-
-            return DB::table('prestataires_type_prestations')
+        $hopitaux =
+            DB::table('prestataires_type_prestations')
                 ->where('type_prestation_id',8 )
                 ->orwhere('type_prestation_id',9 )
                 ->get();
-        });
 
 
-        $traitants = Cache::remember('traitants', $minutes,  function () {
-
-            return DB::table('prestataires_type_prestations')
+        $traitants = DB::table('prestataires_type_prestations')
                 ->where('type_prestation_id',15 )
                 ->get();
-        });
 
      /*   $hotels = DB::table('prestataires_type_prestations')
             ->where('type_prestation_id',18 )
             ->get();
 */
-        $hotels = Cache::remember('hotels', $minutes,  function () {
-
-            return DB::table('prestataires_type_prestations')
+        $hotels = DB::table('prestataires_type_prestations')
                 ->where('type_prestation_id',18 )
                 ->get();
-        });
 
-        $garages = Cache::remember('garages',$minutes,   function () {
-
-            return DB::table('prestataires_type_prestations')
+        $garages =  DB::table('prestataires_type_prestations')
                 ->where('type_prestation_id',22 )
 
                 ->get();
-        });
 
         return view('dossiers.fiche',['cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
 
@@ -923,12 +897,9 @@ class DossiersController extends Controller
     }
 
     public  static function ListeDossiers()
-    { $minutes=60;
-        $dossiers = Cache::remember('dossiers',$minutes,  function () {
-
-            return DB::table('dossiers')
+    {
+        $dossiers = DB::table('dossiers')
                 ->get();
-        });
 
        // $dossiers = Dossier::all();
 

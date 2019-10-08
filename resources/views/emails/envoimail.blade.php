@@ -57,7 +57,7 @@
         </div>
         <div class="col-lg-9 ">
 
-<form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data"   >
+<form id="theform" method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data"  onsubmit="return checkForm(this);"  >
     <input id="dossier" type="hidden" class="form-control" name="dossier"  value="{{$doss}}" />
     <input id="envoye" type="hidden" class="form-control" name="envoye"  value="" />
     <input id="brsaved" type="hidden" class="form-control" name="brsaved"  value="0" />
@@ -127,11 +127,14 @@
         <label for="sujet">Sujet :</label>
         <?php if($type=='prestataire')
         { ?>
-        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - V/Ref(Y/Ref): <?php echo $refclient ?>  - N/Ref(O/Ref): <?php echo $ref ?>"/>
+        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - N/Ref(O/Ref): <?php echo $ref ?>"/>
   <?php }
-        if (($type=='assure')||($type=='client')) {?>
-        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - V/Ref(Y/Ref): <?php echo $refclient ?>   - N/Ref(O/Ref): <?php echo $ref ?>"/>
+        if ($type=='assure') {?>
+        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - N/Ref(O/Ref): <?php echo $ref ?>"/>
 <?php        } ?>
+     <?php   if  ($type=='client') {?>
+        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - V/Ref(Y/Ref): <?php echo $refclient ?>   - N/Ref(O/Ref): <?php echo $ref ?>"/>
+        <?php        } ?>
     </div>
     <div class="form-group">
         <label for="description">Description :</label>
@@ -168,8 +171,7 @@
    {{--   {!! NoCaptcha::display() !!}   --}}
      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-
-    <button  type="submit"  class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
+    <button onclick="resetForm(this.form);" id="SendBtn" type="submit"  name="myButton" class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
 
  </form>
 
@@ -217,10 +219,28 @@
 
     if (App::environment('local')) {
         // The environment is local
-      //  $urlapp='http://localhost/najdaapp';
+        $urlapp='http://localhost/najdaapp';
     }
       ?>
 <script type="text/javascript">
+
+
+    function checkForm(form) // Submit button clicked
+    {
+        //
+        // check form input values
+        //
+
+        form.myButton.disabled = true;
+        form.myButton.value = "Please wait...";
+        return true;
+    }
+
+    function resetForm(form) // Reset button clicked
+    {
+        form.myButton.disabled = false;
+        form.myButton.value = "Submit";
+    }
 
     function visibilite(divId)
     {
@@ -234,7 +254,29 @@
 
     $(document).ready(function(){
 
-    <?php if(  ($type!='prestataire') ||($prest>0) ) {  ?>
+      /*  $('#SendBtn').click(function(){
+            // Ajax request
+            var btn = $(this);
+            btn.prop('disabled', true);
+           // setTimeout(function(){
+           //     btn.prop('disabled', false);
+           // }, 5000);
+        });
+*/
+        $('#theform').submit(function(){
+            $(this).children('input[type=submit]').prop('disabled', true);
+        });
+
+       /* $("#SendBtn").submit(function() {
+            $(this).submit(function() {
+                return false;
+            });
+            return true;
+        });
+*/
+
+
+        <?php if(  ($type!='prestataire') ||($prest>0) ) {  ?>
         $('#modalalert').modal({show:true});
      <?php   }?>
 

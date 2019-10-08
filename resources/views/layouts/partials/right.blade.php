@@ -81,8 +81,8 @@ use App\Http\Controllers\TagsController;
                                 background-color: #00BFFF /*#86B404  #2EFEF7;*/
                               }
                               .panel-heading.ColorerMissionsCourantes{
-                                background-color: #ffd051;
-                                color: red;
+                                background-color: #5d9cec;
+                                color: white;
                               }
 
                               .panel-heading.activeActDeleg {

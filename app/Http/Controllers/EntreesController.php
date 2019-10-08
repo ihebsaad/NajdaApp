@@ -152,9 +152,8 @@ class EntreesController extends Controller
         $entree = Entree::find($id);
         if ($entree->viewed==0 )
         {
-          if( ( $entree->type=='email')||( $entree->type=='sms'))
-          {$this->export_pdf($id);}
-        $entree->viewed=1;
+
+            $entree->viewed=1;
         }
         $refdoss = $entree->dossier;
         $entree->save();
@@ -242,6 +241,12 @@ class EntreesController extends Controller
 
         $notif->statut=1 ;
         $notif->save();
+
+        $entree = Entree::find($id);
+
+        if( ( $entree->type=='email')||( $entree->type=='sms'))
+        { app('App\Http\Controllers\EntreesController')->export_pdf($id);}
+
 
         return redirect('/home')->with('success', '  Traité');
     }
@@ -349,13 +354,10 @@ class EntreesController extends Controller
         $identree   =$request->get('entree');
         $dossier  =$request->get('dossier');
 
-
         $entree = Entree::find($identree);
-
 
         $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($dossier);
         $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
-
 
         $first=false;
         // vérifier si c'est la premier dispatché la première fois
@@ -364,10 +366,12 @@ class EntreesController extends Controller
             $first=true;
 
             $entree->dossier=$dossier;
-
             $entree->save();
 
-            // Notification
+             //mise à jour notifications
+       /*     Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": "'.$identree.'"}}\')')->delete();
+            Log::info('ID Entree : ' . $identree);
+*/
 
              if($userid  >0) {
                $user = User::find($userid);
@@ -375,20 +379,55 @@ class EntreesController extends Controller
 
             }
 
-
         }else{
+           if($first==false)
+            {
+                $entree = Entree::find($identree);
+$doss=  $entree->dossier;
 
-            $entree->dossier=$dossier;
+                $iddossier0 = app('App\Http\Controllers\DossiersController')->IdDossierByRef($doss);
+                $userid0 = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier0);
+
+           $entree->dossier=$dossier;
 
             $entree->save();
-
+/*
             $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($dossier);
             $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
 
-        //mise à jour notifications
-            Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": "'.$identree.'"}}\')')
+            $notifid = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$identree.'}}\')')->get(['id']);
+            $idnotif = array_values($notifid['0']->getAttributes());
+            $idnotification=$idnotif['0'];
+
+            $notif = Notification::find($idnotification);
+            $notif->delete();
+*/
+                $user = User::find($userid0);
+
+                $user->notifications()->whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$identree.'}}\')')->delete();
+
+
+                //mise à jour notifications
+     /*       Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": "'.$identree.'"}}\')')
               //  ->where('statut','=', 0 )
                 ->delete();
+
+*/
+/*
+          $notifid = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$identree.'}}\')')->get(['id']);
+        $idnotif = array_values($notifid['0']->getAttributes());
+        $idnotification=$idnotif['0'];
+
+                Log::info('ID NOTIF : ' . $idnotification);
+
+                $notif = Notification::find($idnotification);
+
+                $notif->delete();
+
+*/
+          //  $notif = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$identree.'}}\')')->first();
+
+            //$notif->delete();
 
             if($userid  >0) {
                 $user = User::find($userid);
@@ -396,7 +435,10 @@ class EntreesController extends Controller
 
             }
 
-        }
+            }
+
+
+       }
 
 
         //return url('/entrees/show/'.$identree)/*->with('success', 'Dossier Créé avec succès')*/;
@@ -407,5 +449,64 @@ class EntreesController extends Controller
 
 
 
+    public static function countnotifs()
+    {
+
+     $count=Entree::where('viewed', 0)
+     ->where('dossier','')
+     ->count();
+
+        return $count;
+
+    }
+
+    public function AjoutCompteRendu(Request $request)
+    {
+        $par=Auth::id();
+        $user = User::find($par);
+
+        $dossier=$request->get('dossier') ;
+        $contenu=$request->get('contenu') ;
+
+        $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($dossier);
+
+        $nomuser=$user->name.' '.$user->lastname;
+
+        $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+        $user2 = User::find($userid);
+        $nomuser2='';
+        if($userid  >0) {
+            $nomuser2=$user2->name.' '.$user2->lastname;
+
+        }
+
+        $date=date('Y-m-d H:i:s.u');
+
+
+        $entree = new Entree([
+            'destinataire' => $nomuser2,
+            'emetteur' => $nomuser,
+            'mailid'=> 'CR-'.date('d-m-Y-H-i-s'),
+            'sujet' =>  'Compte Rendu ',
+            'contenu'=> $contenu ,
+            'reception'=> $date,
+            'type'=> 'tel',
+            'viewed'=>0,
+            'dossier'=>$dossier,
+            'dossierid'=>$iddossier,
+
+        ]);
+
+        $entree->save();
+
+        if($userid  >0) {
+            $user2->notify(new Notif_Suivi_Doss($entree));
+
+        }
+
+
+        Log::info('Création Compte Rendu - Par :'.$nomuser.' - Dossier : '.$dossier);
+
+    }
 
 }

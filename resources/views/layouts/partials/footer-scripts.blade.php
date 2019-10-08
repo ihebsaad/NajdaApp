@@ -184,9 +184,6 @@ if (App::environment('local')) {
 
     });
 
-</script>
-
-<script>
 
      // var userId = $('meta[name="userId"]').attr('content')
    ////////////// Echo.private('App.User.{{Auth::id()}}').notification(  (notification) => {
@@ -243,10 +240,13 @@ if (App::environment('local')) {
          if ((typeof parseddata['Entree']['dossier'] !== "undefined") && (parseddata['Entree']['dossier'] !== null)) {
              // verifier si le dossier exist dans la liste des notifications
              if ($("#prt_" + parseddata['Entree']['dossier']).length) {
+
+                 var reception= parseddata['Entree']['created_at'];
+                var heure=reception.toString().slice(11,16);
                  // ajout nouvelle notification sous son dossier
                  $('#jstree').jstree().create_node("#prt_" + parseddata['Entree']['dossier'], {
                      "id": parseddata['Entree']['id'],
-                     "text": parseddata['Entree']['sujet'],
+                     "text": heure+' '+parseddata['Entree']['sujet'],
                      "type": typee,
                      "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" + parseddata['Entree']['id']}
                  }, "inside", function () {
@@ -286,13 +286,17 @@ if (App::environment('local')) {
                  $('#jstree').jstree().create_node("#", {
                      "id": "prt_" + parseddata['Entree']['dossier'],
                      "text": parseddata['Entree']['dossier'],
-                     "type": "default"
+                     "type": "default",
+                     "a_attr": {"href": "{{ asset('dossiers/view/') }}" + "/" + parseddata['Entree']['dossierid']}
                  }, "first", function () {
                  });
+                 var reception= parseddata['Entree']['created_at'];
+                 var heure=reception.toString().slice(11,16);
+
                  // ajout nouvelle notification sous son dossier
                  $('#jstree').jstree().create_node("#prt_" + parseddata['Entree']['dossier'], {
                      "id": parseddata['Entree']['id'],
-                     "text": parseddata['Entree']['sujet'],
+                     "text": heure+' '+parseddata['Entree']['sujet'],
                      "type": typee,
                      "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" + parseddata['Entree']['id']}
                  }, "inside", function () {
@@ -311,8 +315,7 @@ if (App::environment('local')) {
                      var href = data.node.a_attr.href;
                      document.location.href = href;
                  });
-
-                 Push.create("Nouvelle Notification", {
+                 Push.create("New Notification", {
 
                      body:  parseddata['Entree']['sujet'],
                      icon: "{{ asset('public/img/najda.png') }}",
@@ -333,10 +336,13 @@ if (App::environment('local')) {
          else {
              <?php  if (Session::get('disp') != 0) { ?>
 
+             var reception= parseddata['Entree']['created_at'];
+              var heure=reception.toString().slice(11,16);
+
              // ajout de la nouvelle node (notification non dispatche)
              $('#jstree').jstree().create_node("#", {
                  "id": parseddata['Entree']['id'],
-                 "text": parseddata['Entree']['sujet'],
+                 "text":heure+' '+parseddata['Entree']['sujet'],
                  "type": typee,
                  "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" + parseddata['Entree']['id']}
              }, "first", function () {
@@ -355,14 +361,13 @@ if (App::environment('local')) {
              });
 
 
-                  Push.create("Nouvelle Notification", {
+              Push.create("Nouvelle Notification", {
 
               body: parseddata['Entree']['sujet'],
               icon: "{{ asset('public/img/najda.png') }}",
               timeout: 8000,
 
               onClick: function(){
-
 
               window.location ='<?php   echo $urlapp; ?>/entrees/showdisp/'+parseddata['Entree']['id'];
 
@@ -403,20 +408,7 @@ $("#notifdisp").fadeOut('slow');
              }
          });
 
-         /* Push.create("Nouvelle "+parseddata['Entree']['type'], {
 
-          body: parseddata['Entree']['sujet'],
-          icon: "{{ asset('public/img/najda.png') }}",
-          timeout: 5000,
-
-          onClick: function(){
-          // window.focus();
-          // this.close();
-          window.location ='<?php // echo $urlapp; ?>/entrees/show/'+parseddata['Entree']['id'];
-
-          }
-
-          });*/
 
          /////// });
      }

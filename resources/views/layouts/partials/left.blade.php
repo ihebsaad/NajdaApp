@@ -104,7 +104,7 @@
 
                         <button id="btntree">demo button</button>-->
                         @php
-                            {{
+                            use App\Dossier;{{
                               //session()->put('authuserid',Auth::id());
                               //$notifications = config('commondata.notifications');
                               $notificationns =  DB::table('notifications')
@@ -116,6 +116,8 @@
                               $nnotifs = array();
                               foreach ($notificationns as $i) {
                                 $notifc = json_decode($i->data, true);
+                                $Datenotif=$i->created_at;
+                                $datenotif= date('d/m/y H:i', strtotime($Datenotif)) ;
                                 $entreeid = $notifc['Entree']['id'];
                                 $notifentree = DB::table('entrees')->where('id','=', $entreeid)->get()->toArray();
                                 $row = array();
@@ -156,8 +158,9 @@
                                     });
 
                                     $nassure =$assuree->first();*/
-                                    $nassure['subscriber_name'] = "";
-                                    $nassure['subscriber_lastname'] = "";
+                                    $nassure= Dossier::where('reference_medic',$search)->first();
+                                    /*$nassure['subscriber_name'] = "";
+                                    $nassure['subscriber_lastname'] = "";*/
                                   // fin recuperation nom assuré
                                   echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']." | ".$nassure['subscriber_name']." ".$nassure['subscriber_lastname']."<ul>";
                                   }
@@ -179,7 +182,7 @@
                                 {
                                     switch ($n['type']) {
                                         case "email":
-                                            echo '<li  id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$datenotif.' '.$n['sujet'].'</span></a></li>';
                                             break;
                                         case "fax":
                                             echo '<li id="'.$n['id'].'" rel="trfax" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'"  href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>';

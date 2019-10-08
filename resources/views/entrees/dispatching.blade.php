@@ -27,9 +27,9 @@ if (App::environment('local')) {
             <thead>
             <tr id="headtable">
                 <th style="width:6%">Type</th>
-                <th style="width:10%;max-width:150px">Dest</th>
-                <th style="width:10%">Date</th>
                 <th style="width:10%;max-width:150px">Emetteur</th>
+                <th style="width:10%">Date</th>
+                <th style="width:10%;max-width:150px">Dest</th>
                 <th style="width:35%">Sujet</th>
                 <th class="no-sort" style="width:8%"></th>
 
@@ -38,9 +38,9 @@ if (App::environment('local')) {
             </tr>
             <tr>
                 <th style="width:6%">Type</th>
-                <th style="width:10%;;max-width:150px">Dest</th>
-                <th style="width:10%">Date</th>
                 <th style="width:10%;;max-width:150px">Emetteur</th>
+                <th style="width:10%">Date</th>
+                <th style="width:10%;;max-width:150px">Dest</th>
                 <th style="width:35%;;max-width:200px">Sujet</th>
                 <th id="colmn6" class="no-sort" style="width:8%"></th>
                 <!-- <th style="width:8%" id="colmn6"></th>-->
@@ -50,9 +50,9 @@ if (App::environment('local')) {
             @foreach($entrees as $entree)
                 <tr><?php $type=$entree['type'];?>
 				      <td style="font-size:14px;width:6%"><?php if ($type=='email'){echo '<img width="20" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="20" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="20" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="20" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php echo $entree['type']; ?></td>
-                    <td  style="width:10%;font-size:12px;max-width:150px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $entree['destinataire']; ?></td>
-                    <td style="width:10%;font-size:12px;width:10%"><?php echo  date('d/m/Y H:i', strtotime($entree['reception'])) ; ?></td>
                     <td  style="width:10%;font-size:12px;max-width:150px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $entree['emetteur']; ?></td>
+                    <td style="width:10%;font-size:12px;width:10%"><?php echo  date('d/m/Y H:i', strtotime($entree['reception'])) ; ?></td>
+                    <td  style="width:10%;font-size:12px;max-width:150px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $entree['destinataire']; ?></td>
                     <td  style="width:35%;font-size:12px;max-width:200px;"><a <?php if($entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:16px;"' ;} ?>  href="{{route('entrees.showdisp',['id'=> $entree['id']] )}}" ><?php echo $entree['sujet'] ; ?></a></td>
                     <td></td>
                 </tr>

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Entree extends Model
 {
     //
-    protected $fillable = ['emetteur','sujet','contenu','contenutxt','nb_attach','reception','type','dossier','statut','mailid','mission_id','affecte','notif','viewed','boite','destinataire'];
+    protected $fillable = ['emetteur','sujet','contenu','contenutxt','nb_attach','reception','type','dossier','statut','mailid','mission_id','affecte','notif','viewed','boite','destinataire','dossierid'];
 
 // boite = 0 reception , 1 = envoi
 
@@ -18,12 +18,12 @@ class Entree extends Model
         return $this->hasMany('App\Attachement');
     }
 
-  /*protected $dateFormat = 'Y-m-d H:i';
+  protected $dateFormat = 'Y-m-d H:i';
 
     public function getDateFormat()
     {
         return 'Y-m-d H:i:s.u';
-    }*/
+    }
 
 
 

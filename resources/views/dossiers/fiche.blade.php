@@ -21,7 +21,7 @@ use  \App\Http\Controllers\DocsController;
 
     <div class="col-md-3">
 
-        <h2>Fiche de Dossier:<?php echo   $dossier->reference_medic ;?></h2>
+        <h2> <?php echo   $dossier->reference_medic ;?></h2>
     </div>
 
      <div class="col-md-3">

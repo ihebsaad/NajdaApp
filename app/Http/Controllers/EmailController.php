@@ -314,13 +314,14 @@ class EmailController extends Controller
                 $dossiers=   Dossier::where('current_status','!=', 'Cloturee' )->get();
 
 
-                $refdossier='';
+                $refdossier='';$dossierid=0;
         $statut = 0;
         foreach ($dossiers as $dos) {
 
                 if (   (strpos($sujet, $dos['reference_medic'] )!==false) || (strpos($contenu, $dos['reference_medic'])) || (strpos($sujet, $dos['reference_customer'] )!==false)  || (strpos($contenu, $dos['reference_customer'] )!==false)   )
                 {
                     $refdossier = $dos['reference_medic'];
+                    $dossierid = $dos['id'];
                     $statut = 1;
                     break;
                 }
@@ -338,6 +339,7 @@ class EmailController extends Controller
                      'mailid'=> $mailid,
                      'viewed'=>0,
                      'dossier'=>$refdossier,
+                     'dossierid'=>$dossierid,
                      'statut'=>$statut,
 
                 ]);
@@ -353,9 +355,12 @@ class EmailController extends Controller
                     $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
                  
               //  $user=  DB::table('users')->where('id','=', $userid )->first();
-                     $user = User::find($userid);
+                  if($userid>0){
+                      $user = User::find($userid);
+                      $user->notify(new Notif_Suivi_Doss($entree));
 
-                    $user->notify(new Notif_Suivi_Doss($entree));
+                  }
+
                 // Notification::send($user, new Notif_Suivi_Doss($entree));
                   
                 }
@@ -367,7 +372,7 @@ class EmailController extends Controller
 
                     $user = User::find($disp);
                     // $user=  DB::table('users')->where('id','=', $disp )->first();
-                    $user->notify(new Notif_Suivi_Doss($entree));
+                 if($disp>0){   $user->notify(new Notif_Suivi_Doss($entree));}
 
                   //  Notification::send( $user, new Notif_Suivi_Doss($entree));
                   
@@ -557,11 +562,13 @@ class EmailController extends Controller
                     $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
+                   if($userid>0){
+
                     $user = User::find($userid);
 
                     $user->notify(new Notif_Suivi_Doss($entree));
                     // Notification::send($user, new Notif_Suivi_Doss($entree));
-
+                   }
                 }
                 else{
 
@@ -569,10 +576,11 @@ class EmailController extends Controller
                         ->where('id','=', 1 )->first();
                     $disp=$seance->dispatcheur ;
 
-                    $user = User::find($disp);
-                    // $user=  DB::table('users')->where('id','=', $disp )->first();
-                    $user->notify(new Notif_Suivi_Doss($entree));
-
+                   if($disp>0) {
+                       $user = User::find($disp);
+                       // $user=  DB::table('users')->where('id','=', $disp )->first();
+                       $user->notify(new Notif_Suivi_Doss($entree));
+                   }
                     //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
                 }
@@ -888,8 +896,12 @@ class EmailController extends Controller
                         $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
 
                         //  $user=  DB::table('users')->where('id','=', $userid )->first();
-                        $user = User::find($userid);
-                        $user->notify(new Notif_Suivi_Doss($entree));
+                      if($userid)
+                      {
+                          $user = User::find($userid);
+                          $user->notify(new Notif_Suivi_Doss($entree));
+
+                      }
 
 
                     }
@@ -899,11 +911,12 @@ class EmailController extends Controller
                             ->where('id','=', 1 )->first();
                         $disp=$seance->dispatcheur ;
 
-                        $user = User::find($disp);
-                        // $user=  DB::table('users')->where('id','=', $disp )->first();
+                       if($disp) {
+                           $user = User::find($disp);
+                           // $user=  DB::table('users')->where('id','=', $disp )->first();
 
-                        $user->notify(new Notif_Suivi_Doss($entree));
-
+                           $user->notify(new Notif_Suivi_Doss($entree));
+                       }
                         //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
                     }
@@ -978,10 +991,8 @@ class EmailController extends Controller
                 $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
                 // message moved
 
-
                 // dispatch
                 $dossiers=   Dossier::where('current_status','!=', 'Cloturee' )->get();
-
 
                 $refdossier='';
                 $statut = 0;
@@ -1016,15 +1027,17 @@ class EmailController extends Controller
                 Log::info('Fax reçu de : '.$from.' Dossier: '.$refdossier );
 
                 /*********************/
-                if($refdossier!= ''){
+                if($refdossier!= '') {
 
 
                     $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
                     $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
+                    if ($userid) {
                     $user = User::find($userid);
                     $user->notify(new Notif_Suivi_Doss($entree));
+                    }
 
 
                 }
@@ -1033,8 +1046,10 @@ class EmailController extends Controller
                     $seance =  DB::table('seance')
                         ->where('id','=', 1 )->first();
                     $disp=$seance->dispatcheur ;
-                    $user->notify(new Notif_Suivi_Doss($entree));
-
+                   if($disp>0) {
+                       $user = User::find($disp);
+                       $user->notify(new Notif_Suivi_Doss($entree));
+                   }
 
 
                 }
@@ -1353,6 +1368,20 @@ class EmailController extends Controller
             ->distinct()
             ->get();
 
+
+     /*   $attachements=   Attachement::where(function ($query) use($identr,$idenv) {
+            $query->whereIn('entree_id',$identr )
+                ->orWhereIn('envoye_id',$idenv );
+        })->orWhere(function ($query) use($id) {
+            $query->Where('dossier','=',$id );
+        })->orderBy('created_at', 'desc')
+            ->distinct()
+            ->get();
+
+*/
+
+
+
         return view('emails.envoimail',['refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type]);
     }
 
@@ -1484,12 +1513,12 @@ class EmailController extends Controller
         $files = $request->file('files');
 
         $attachs = $request->get('attachs');
-$tot=false;
+/*$tot=false;
 
     if($request->hasFile('files'))
     {
         $tot=true;
-    }
+    }*/
         // $tot= count($_FILES['files']['name']);
 
         //   $tot= count($files['files']['name']);
@@ -1516,7 +1545,7 @@ $tot=false;
        // $to = explode(',', $to);
 
         try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails,$tot) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails ) {
             $message
 
               //  ->to('saadiheb@gmail.com')
@@ -1561,9 +1590,13 @@ $tot=false;
 
                 $count=0;
 
-         //if(isset($files )) {
-                if($tot)
-                {
+
+
+                if(isset($files )) {
+                // if($tot)
+             //   {
+
+
              foreach($files as $file) {
                  $count++;
                  $path=$file->getRealPath();
@@ -1577,14 +1610,16 @@ $tot=false;
                          'mime' => $file->getMimeType())
                  );
 
+
            // save external files here
 
-                 $attachement = new Attachement([
+                $attachement = new Attachement([
 
                     'type'=>$ext,'path' => $path, 'nom' => $file->getClientOriginalName(),'boite'=>1,'dossier'=>$doss,'envoye_id'=>$envoyeid
                  ]);
 
                  $attachement->save();
+
 
              }
          }

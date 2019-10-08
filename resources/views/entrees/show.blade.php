@@ -56,22 +56,21 @@ use App\Http\Controllers\TagsController;
                                     <a  href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-warning btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Archiver" >
                                   <span class="fa fa-fw fa-archive"></span> Archiver
                                 </a>
-                                    <a  href="{{action('EntreesController@traiter', $entree['id'])}}" class="btn btn-info btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
-                                        <span class="fa fa-fw fa-check"></span> Traité
-                                    </a>
-                                    <a  href="{{action('EntreesController@spam', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
+                                    <a  href="{{action('EntreesController@spam', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme SPAM" >
                                         <span class="fas fa-exclamation-triangle"></span> SPAM
                                     </a>
+                                    <?php } ?>
 
+                                    <a onclick="checkComment()"  class="btn btn-info btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
+                                        <span class="fa fa-fw fa-check"></span> Traité
+                                    </a>
+
+                                    @can('isAdmin')
                                     <a  href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span> Supprimer
                                     </a>
-                                    @if (!empty($entree->dossier))
-                                    <button  id="accuse"   data-toggle="modal" data-target="#sendaccuse" class="btn btn-info btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer l'accusé de reception" >
-                                        <i class="fas fa-mail-bulk"></i> Accusé
-                                    </button>
-                                    @endif
-                                   <?php } ?>
+                                    @endcan
+
                             </div>
                         </div>
 
@@ -712,35 +711,18 @@ padding: 5px;
     </style>
 
 <script>
-    // Quit Confirmation
-    //var needToConfirm  = (document.getElementById('commentuser').value =='');
-    window.addEventListener('beforeunload', function (e) {
-             if (document.getElementById('commentuser').value == '') {
-                $('#actiontabs a[href="#infostab"]').trigger('click');
-                $('#btn-cmttag').trigger('click');
 
-                $("#commentuser").css("border", "2px solid red ");
-
-
-                 e.preventDefault();
-                 e.returnValue = 'Ajouter votre commentaire Concernant cet email avant de quitter !';
-
-             }
-
-     });
-    function confirmExit()
+    function checkComment()
     {
-        if (document.getElementById('commentuser').value =='')
-        {    $('#actiontabs a[href="#infostab"]').trigger('click');
-            $('#btn-cmttag').trigger('click');
+        if (document.getElementById('commentuser').value == '') {
+            alert('Ajouter un commentaire avant de marquer comme traité !');
 
-        $("#commentuser").css("border", "2px solid red ");
-
-
-        alert( "Ajouter votre commentaire Concernant cet email avant de quitter !") ;
-        return 'Ajouter votre commentaire Concernant cet email avant de quitter !';
+        }else{
+           location.href="{{action('EntreesController@traiter', $entree['id'])}}";
         }
     }
+
+
 </script>
 
 

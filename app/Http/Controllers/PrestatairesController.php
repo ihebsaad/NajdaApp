@@ -241,21 +241,12 @@ class PrestatairesController extends Controller
 
          $minutes2= 600;
 
-         $specialites = Cache::remember('specialites',$minutes2,  function () {
+         $specialites =  Specialite::get();
 
-            //return DB::table('specialites')
-            //    ->get();
-            return    Specialite::get();
-
-        });
 
        /// $specialites=Specialite::get();
         //      $typesMissions=TypeMission::get();
-        $gouvernorats = Cache::remember('gouvernorats',$minutes2,  function () {
-
-                 return Citie::get();
-
-        });
+        $gouvernorats =  Citie::get();
 
 
        // $gouvernorats = Citie::get();

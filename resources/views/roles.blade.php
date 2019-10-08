@@ -188,6 +188,7 @@
  setlocale(LC_TIME,'fr_FR','french','French_France.1252','fr_FR.ISO8859-1','fra');
 
  $date=date('l d/m/Y');
+ $date=date('d/m/Y');
  ?>
  <script src="{{  URL::asset('public/js/jquery-1.11.1.min.js') }}" type="text/javascript"></script>
 

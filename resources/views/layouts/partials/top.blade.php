@@ -1,5 +1,6 @@
 <header class="header">
 <?php
+    use App\Entree;
     $seance =  DB::table('seance')
         ->where('id','=', 1 )->first();
     $user = auth()->user();
@@ -112,7 +113,7 @@
           </form>
         </div>
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-          <a href="#" class="btn btn-primary btn-lg btn-responsive phone" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
+          <a id="phoneicon" href="#" class="btn btn-primary btn-lg btn-responsive phone" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
               <span class="fa fa-fw fa-phone fa-2x"></span>
           </a> 
         </div>
@@ -123,11 +124,18 @@
 
         $iduser=Auth::id();
         if ($iduser==$disp) {
-            ?>
+
+          $count=Entree::where('viewed', 0)
+              ->where('dossier','')
+              ->count();
+            if($count==0){$color='btn-success';$icon='fa-map-signs';}
+            else{$color='btn-danger';$icon='fa-map-signs';
+            }
+          ?>
           <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
 
-          <a href="{{ route('entrees.dispatching') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
-              <span class="  fa-fw    fas    fa-map-signs fa-2x"></span>
+          <a href="{{ route('entrees.dispatching') }}" class="btn <?php echo $color; ?> btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
+              <span class="  fa-fw fas <?php echo $icon ; ?> fa-2x"></span><?php  if($count > 0 ){ ?><span id="countnotif" class="label label-warning"><?php echo $count;?></span><?php } ?>
           </a>
           </div>
 
@@ -235,6 +243,40 @@
     </div>
 </div>
 
+
+<div class="modal  " id="crendu" >
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="text-align:center"  id="modalalert0"><center>Compte Rendu </center> </h5>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+
+                    <div class="form-group">
+                        <label for="sujet">Dossier :</label>
+                        <input style="overflow:scroll;" id="dossierid" type="text" class="form-control" name="dossierid"     />
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sujet">Contenu :</label>
+                        <textarea style="overflow:scroll;" id="contenucr"   class="form-control" name="contenucr"    ></textarea>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <a id="ajoutcompter"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <style>
@@ -548,6 +590,13 @@
 
     });
 
+    $('#phoneicon').click(function() {
+
+        $('#crendu').modal({show: true});
+
+    });
+
+
 
     $('#oui').click(function() {
         $('#modalconfirm').modal('hide');
@@ -563,6 +612,28 @@
             success: function (data) {
                 alert('Demande envoyée');
 
+            }
+        });
+
+
+    }); //end click
+
+
+// Ajout Compte Rendu
+    $('#ajoutcompter').click(function() {
+        $('#modalconfirm').modal('hide');
+
+        var _token = $('input[name="_token"]').val();
+        var dossier = document.getElementById('dossierid').value;
+        var contenu = document.getElementById('contenucr').value;
+
+        $.ajax({
+            url: "{{ route('entrees.ajoutcompter') }}",
+            method: "POST",
+            data: { dossier:dossier,contenu:contenu,  _token: _token},
+
+            success: function (data) {
+            alert('Ajouté avec succès');
             }
         });
 

@@ -816,13 +816,12 @@ $interv = PrestationsController::PrestById($prest);
                         </thead>
                         <tbody>
                         @foreach($attachements as $attach)
-                            <?php if ($attach->boite < 3) {
+                            <tr><?php
+                                $type= $attach->type;
 
-
-                            ?>
-                            <tr>
+                                ?>
                                 <td style="width:15%;"><small><?php echo date('d/m/Y H:i', strtotime( $attach->created_at)) ;?></small></td>
-                                <td  class="overme" style="width:30%;"><small><?php /* if ($attach->dossier!=null) {echo 'Fichier externe';}else{*/ echo $attach->nom; /*}*/ ?></small></td>
+                                <td  class="overme" style="cursor:pointer;width:30%;"><small  onclick="modalattach('<?php echo  $attach->nom ?>','<?php  echo URL::asset('storage'.$attach->path) ; ?>','<?php echo $type; ?>');"><?php  echo $attach->nom;  ?></small></td>
                                 <td class="overme" style="width:40%;"><small><?php  echo $attach->description;   ?></small></td>
 
                                 <td style="width:5%;"><small><?php
@@ -861,7 +860,7 @@ $interv = PrestationsController::PrestById($prest);
                                 <td style="width:10%"><small><?php if ($attach->boite>0) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';}else{echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}?></small></td>
 
                             </tr>
-                            <?php } ?>
+
                         @endforeach
 
                         </tbody>
@@ -1804,33 +1803,10 @@ reference_customer
 
 
 
-
 <?php } ?>
 
 
-<!-- Modal -->
-<div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="exampleModalLabel" style="text-align:center"><center>Ajouter une Nouvelle prestation</center></h3>
 
-            </div>
-            <div class="modal-body">
-                <div class="card-body">
-
-
-
-
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -1983,6 +1959,32 @@ reference_customer
         </div>
     </div>
 
+
+
+
+    <!-- Modal Ouvrir Attachement-->
+    <div class="modal fade" id="openattach"  role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="width:900px;height: 450px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="attTitle"></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+
+                        <iframe id="attachiframe" src="" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                         <center>   <img style="max-width:800px" id="imgattach"/></center>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -2109,6 +2111,34 @@ reference_customer
     }
 
 
+    function modalattach(titre,emplacement,type)
+    {
+        document.getElementById('attachiframe').style.display='none';
+        document.getElementById('imgattach').style.display='none';
+          $("#attTitle").text(titre);
+
+        if  (type ==  'pdf')
+        {
+            document.getElementById('attachiframe').src =emplacement;
+            document.getElementById('attachiframe').style.display='block';
+
+            // document.getElementById('attachiframe').src =emplacement;
+        }
+        if ( (type ==  'doc') || ( type ==  'docx'  ) || ( type ==  'xls'  ) || ( type ==  'xlsx'  )  )
+        {document.getElementById('attachiframe').src ="https://view.officeapps.live.com/op/view.aspx?src="+emplacement;
+            document.getElementById('attachiframe').style.display='block';
+        }
+        if ( (type ==  'png') || (type ==  'jpg') ||(type ==  'jpeg' ) )
+        {
+            document.getElementById('imgattach').style.display='block';
+            document.getElementById('imgattach').src =emplacement;
+           // document.getElementById('attachiframe').src =emplacement;
+        }
+
+
+        // cas DOC fichier DOC
+        $("#openattach").modal('show');
+    }
 
 function remplaceom(id,affectea)
 {
@@ -2160,6 +2190,8 @@ function modalodoc(titre,emplacement)
     {document.getElementById('dociframe').src ="https://view.officeapps.live.com/op/view.aspx?src="+emplacement;}
     $("#opendoc").modal('show');
 }
+
+
 function remplacedoc(iddoc,template)
 {
 

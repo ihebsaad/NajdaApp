@@ -2346,6 +2346,15 @@
                         <div   style="overflow:hidden;padding-left:5px;width:100%;height:45px;border:1px solid grey" ><?php echo ( $entree['sujet'] ); ?></div>
                     </div>
                 </div>
+                <div class="row" style="padding-bottom:8px">
+
+                    <div class="col-sm-1 col-md-1 col-lg-1" style="padding-left: 0px;;">
+                        <span><b> Commentaire:</b></span>
+                    </div>
+                    <div class="col-sm-11 col-md-11 col-lg-11"style=" padding-left: 0px;color:black; ">
+                        <div   style="overflow:hidden;padding-left:5px;width:100%;height:45px;border:1px solid grey" ><?php echo ( $entree['commentaire'] ); ?></div>
+                    </div>
+                </div>
             </div>
         </div>
 
