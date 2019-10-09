@@ -342,7 +342,7 @@ if (App::environment('local')) {
                  "id": parseddata['Entree']['id'],
                  "text":heure+' '+parseddata['Entree']['sujet'],
                  "type": typee,
-                 "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" + parseddata['Entree']['id']}
+                 "a_attr": {"href": "{{ asset('entrees/showdisp/') }}" + "/" + parseddata['Entree']['id']}
              }, "first", function () {
                  // animation de nouvelle notification
                  setInterval(function () {

@@ -522,13 +522,14 @@ class EmailController extends Controller
                 // dispatch
                 $dossiers=   Dossier::where('current_status','!=', 'Cloturee' )->get();
 
-                $refdossier='';
+                $refdossier='';$dossierid=0;
                 $statut = 0;
                 foreach ($dossiers as $dos) {
 
                     if (   (strpos($sujet, $dos['reference_medic'] )!==false) || (strpos($contenu, $dos['reference_medic'])) || (strpos($sujet, $dos['reference_customer'] )!==false)  || (strpos($contenu, $dos['reference_customer'] )!==false)   )
                     {
                         $refdossier = $dos['reference_medic'];
+                         $dossierid = $dos['id'];
                         $statut = 1;
                         break;
                     }
@@ -547,6 +548,7 @@ class EmailController extends Controller
                     'mailid'=> 'b2-'.$mailid,
                     'viewed'=>0,
                     'dossier'=>$refdossier,
+                    'dossierid'=>$dossierid,
                     'statut'=>$statut,
 
                 ]);
@@ -855,13 +857,14 @@ class EmailController extends Controller
                     $dossiers=   Dossier::where('current_status','!=', 'Cloturee' )->get();
 
 
-                    $refdossier='';
+                    $refdossier='';$dossierid=0;
                     $statut = 0;
                     foreach ($dossiers as $dos) {
 
                         if (   (strpos($sujet, $dos['reference_medic'] )!==false) || (strpos($contenu, $dos['reference_medic'])) || (strpos($sujet, $dos['reference_customer'] )!==false)  || (strpos($contenu, $dos['reference_customer'] )!==false)   )
                         {
                             $refdossier = $dos['reference_medic'];
+                            $dossierid = $dos['id'];
                             $statut = 1;
                             break;
                         }
@@ -881,6 +884,7 @@ class EmailController extends Controller
                         'reception'=>$date,
                         'type'=>'sms',
                          'dossier'=>$refdossier,
+                         'dossierid'=>$dossierid,
                          'statut'=>$statut,
 
                     ]);
@@ -994,13 +998,14 @@ class EmailController extends Controller
                 // dispatch
                 $dossiers=   Dossier::where('current_status','!=', 'Cloturee' )->get();
 
-                $refdossier='';
+                $refdossier='';$dossierid=0;
                 $statut = 0;
                 foreach ($dossiers as $dos) {
 
                     if (   (strpos($sujet, $dos['reference_medic'] )!==false) || (strpos($contenu, $dos['reference_medic'])) || (strpos($sujet, $dos['reference_customer'] )!==false)  || (strpos($contenu, $dos['reference_customer'] )!==false)   )
                     {
                         $refdossier = $dos['reference_medic'];
+                        $dossierid = $dos['id'];
                         $statut = 1;
                         break;
                     }
@@ -1019,6 +1024,7 @@ class EmailController extends Controller
                     'mailid'=> 'FX-'.$mailid,
                     'viewed'=>0,
                     'dossier'=>$refdossier,
+                    'dossierid'=>$dossierid,
                     'statut'=>$statut,
 
                 ]);
