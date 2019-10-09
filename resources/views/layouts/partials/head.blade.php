@@ -480,6 +480,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     if(data )
                     {
 
+ <?php  if (($view_name != 'supervision') && ($view_name != 'affectation') && ($view_name != 'notifs') && ($view_name != 'missions')  && ($view_name != 'transport')  && ($view_name != 'transportsemaine')  && ($view_name != 'dossiers-create') && ($view_name != 'entrees-dispatching') && ($view_name != 'entrees-showdisp') ) { ?>
 
                         $.ajax({
                             type: "get",
@@ -495,7 +496,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
                             }
                         });
-
+<?php  }  ?>
                         showNotif(data);
 
 

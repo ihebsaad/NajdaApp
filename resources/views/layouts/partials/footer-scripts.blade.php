@@ -106,8 +106,6 @@
         });
 
 
-
-
         $( ".datepicker-default" ).datepicker({
 
             altField: "#datepicker",
@@ -217,7 +215,7 @@ if (App::environment('local')) {
                      img = '<?php echo $urlapp; ?>/public/img/smss.png';
 
                      break;
-                 case "phone":
+                 case "tel":
                      typee = "trtel";
                      img = '<?php echo $urlapp; ?>/public/img/tel.png';
 
@@ -239,7 +237,7 @@ if (App::environment('local')) {
          // verifier si la notification est dispatche
          if ((typeof parseddata['Entree']['dossier'] !== "undefined") && (parseddata['Entree']['dossier'] !== null)) {
              // verifier si le dossier exist dans la liste des notifications
-             if ($("#prt_" + parseddata['Entree']['dossier']).length) {
+              if ($("#prt_" + parseddata['Entree']['dossier']).length) {
 
                  var reception= parseddata['Entree']['created_at'];
                 var heure=reception.toString().slice(11,16);

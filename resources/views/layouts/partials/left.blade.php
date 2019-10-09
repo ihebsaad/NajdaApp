@@ -63,46 +63,20 @@
         </ul>
         <div id="NotificationsTabContent" class="tab-content">
             <div class="tab-pane fade active in  scrollable-panel" id="notificationstab">
-             <!-- (TRI)   <div class="row" style="width: 99%">
-                    <div class="col-xs-9 col-md-9 align-left">
-                        <div class="select">
-                            <select>
-                                <option>Trier par</option>
-                                <option>Temps</option>
-                                <option>Dossier</option>
-                            </select>
-                            <div class="select__arrow"></div>
-                        </div>
-                    </div>
-                    <div class="col-xs-1 col-md-1 pull-right">
-                        <a href="#" class="btn btn-default btn-sm btn-responsive" role="button" id='tte'> </a>
-                    </div>
-                    <div class="col-xs-1 col-md-1 pull-right">
-                        <a href="#" class="btn btn-success btn-sm btn-responsive" role="button"> </a>
-                    </div>
-                    <div class="col-xs-1 col-md-1 pull-right">
-                        <a href="#" class="btn btn-danger btn-sm btn-responsive" role="button"> </a>
-                    </div>
-                </div>     --->
-            @php
-                {{ //print_r(config('commondata.dossiers'));
-                }}
-            @endphp
+
+
             <!-- treeview of notifications -->
                 <div id="jstree">
                     <ul>
-                        <!-- in this example the tree is populated from inline HTML -->
-                        <!--<ul>
-                          <li >Root node 1
-                            <ul>
-                              <li id="child_node_1" type="demo">Child node 1</li>
-                              <li id="D123" type="foldernotifs">Child node 2</li>
-                            </ul>
-                          </li>
-                          <li>Root node 2</li>
-                        </ul>
 
-                        <button id="btntree">demo button</button>-->
+                        <?php
+                        $urlapp=env('APP_URL');
+
+                        if (App::environment('local')) {
+                            // The environment is local
+                            $urlapp='http://localhost/najdaapp';
+                        }?>
+
                         @php
                             use App\Dossier;{{
                               //session()->put('authuserid',Auth::id());
@@ -119,6 +93,7 @@
                                 $Datenotif=$i->created_at;
                                 $datenotif= date('d/m/y H:i', strtotime($Datenotif)) ;
                                 $entreeid = $notifc['Entree']['id'];
+                                $dossierid = $notifc['Entree']['dossierid'];
                                 $notifentree = DB::table('entrees')->where('id','=', $entreeid)->get()->toArray();
                                 $row = array();
                                 $row['id'] = $entreeid;
@@ -145,24 +120,15 @@
                               $notifications = $result;
 
 
-
-
                               foreach ($notifications as $ntf) {
                                 if (!empty($ntf[0]['dossier']))
                                 {
                                   // recuperation nom assuré du dossier
                                     $search = $ntf[0]['dossier'];
-                                    /*$assuree = $dossiers->filter(function($item) use ($search) {
-                                        return stripos($item['reference_medic'],$search) !== false;
 
-                                    });
-
-                                    $nassure =$assuree->first();*/
                                     $nassure= Dossier::where('reference_medic',$search)->first();
-                                    /*$nassure['subscriber_name'] = "";
-                                    $nassure['subscriber_lastname'] = "";*/
                                   // fin recuperation nom assuré
-                                  echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'>".$ntf[0]['dossier']." | ".$nassure['subscriber_name']." ".$nassure['subscriber_lastname']."<ul>";
+                                  echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'><a href='".$urlapp."/dossiers/view/".$dossierid."'>".$ntf[0]['dossier']." | ".$nassure['subscriber_name']." ".$nassure['subscriber_lastname']." </a><ul>";
                                   }
                                 foreach ($ntf as $n) {
 

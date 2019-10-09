@@ -5,6 +5,8 @@
         ->where('id','=', 1 )->first();
     $user = auth()->user();
     $iduser=$user->id;
+
+    $listedossiers = DB::table('dossiers')->get();
     ?>
         <div class="collapse bg-grey" id="navbarHeader">
              @include('layouts.partials._top_menu')
@@ -135,7 +137,7 @@
           <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
 
           <a href="{{ route('entrees.dispatching') }}" class="btn <?php echo $color; ?> btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
-              <span class="  fa-fw fas <?php echo $icon ; ?> fa-2x"></span><?php  if($count > 0 ){ ?><span id="countnotif" class="label label-warning"><?php echo $count;?></span><?php } ?>
+              <span class="  fa-fw fas <?php echo $icon ; ?> fa-2x"></span><?php  if($count > 0 ){ ?><span id="countnotif" class="label label-warning" style="color:black"><?php echo $count;?></span><?php } ?>
           </a>
           </div>
 
@@ -256,7 +258,14 @@
 
                     <div class="form-group">
                         <label for="sujet">Dossier :</label>
-                        <input style="overflow:scroll;" id="dossierid" type="text" class="form-control" name="dossierid"     />
+                        <select   id="dossierid"  style="width:100%;" class="form-control select2" name="dossierid"     >
+                            <option></option>
+                            <?php foreach($listedossiers as $ds)
+
+                            {
+                                echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}     ?>
+                        </select>
+
 
                     </div>
 
@@ -324,27 +333,18 @@
 
 
     function colorerSeq(string,qy) {
-
-
-
         if(qy!='')
         {
-
             var caracSp = ['-', '_', '(',')',' '];
-            //alert(string);
             // For all matching elements
             $(string).each(function() {
 
-
                 var hrefString=$(this).html();
-                //  alert(hrefString);
                 var a1=hrefString.indexOf("\"");
                 var b1=hrefString.lastIndexOf("\"");
                 hrefString=hrefString.substring(a1+1,b1);
-
                 // Get contents of string
                 var myStr = $(this).text();
-                //alert(myStr);
                 // Split myStr into an array of characters
                 myStr = myStr.split("");
                 var dejaEn=false;
@@ -354,69 +354,46 @@
                 var ancien;
                 var kol=false;
                 for (var i = 0, len = myStr.length; i < len; i++) {
-                    //alert(myStr[i]);
-
                     if(qy[0].toUpperCase()==myStr[i].toUpperCase())
                     {
-
                         if(!dejaEn)
                         {
-
                             ancien= myContents ;
                             kol=true;
-                            // an_i=i;
                             noniden="";
-
                             for(var j=0, len2 = qy.length; j<len2; j++)
                             {
-
                                 if(i<len)
                                 {
-
                                     if(qy[j].toUpperCase()==myStr[i].toUpperCase() || caracSp.includes(myStr[i]) )
                                     {
-
                                         if(qy[j].toUpperCase()==myStr[i].toUpperCase())
                                         {
                                             // alert ("bonjour");
                                             myContents += '<span class="single-char char-' + i + '">' + myStr[i] + '</span>';
                                             noniden+= '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
                                             i++;
-                                            //b=true;
                                         }
-
                                         else
                                         {
-                                            //alert ("special");
-
                                             if(caracSp.includes(myStr[i]))
                                             {
-                                                //alert ("special");
-
                                                 i++;
-
                                                 if(qy[j].toUpperCase()==myStr[i].toUpperCase())
                                                 {
                                                     myContents += '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
                                                     myContents += '<span class="single-char char-' + i + '">' + myStr[i] + '</span>';
-
                                                     noniden+= '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
                                                     noniden+= '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-
                                                     i++;
-                                                    //b=true;
                                                 }
                                                 else
                                                 {
                                                     myContents += '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
                                                     noniden+= '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
-
-
                                                 }
-
                                             }
                                         }
-
                                     }
                                     else
                                     {
@@ -424,87 +401,52 @@
                                         myContents += noniden;
                                         myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
                                         j=len2;
-                                        //i=an_i;
-                                        //i++;
                                         kol=false;
                                         ancien= myContents;
-
                                     }
-
                                 }
                                 else
                                 {
                                     myContents=ancien;
                                     j=len2;
-                                    // i=an_i;
                                     kol=false;
-
                                 }
-
-
                             }
-
-
-
                             if(kol)
                             {
                                 i--;
                                 dejaEn=true;
-
                             }
                             else
                             {
-
-                                // i=an_i;
-                                // i--;
-                                dejaEn=false;
-
-                                // myContents=ancien;
-                                // myContents+= noniden;
-
+                                 dejaEn=false;
                             }
-
-
-
                         }
                         else
                         {
-
                             myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-
                         }
-
                     }
                     else
                     {
-
                         myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
                     }
                 }
                 myContents='<a href="'+hrefString+'">'+myContents+'</a>';
                 // Replace original string with constructed html string
                 $(this).html(myContents);
-
-                //alert($(this).html(myContents).text());
             });
         }
-
     }
-
-
-
 
     $(document).ready(function(){
 
         $("#search-bar").keyup(function(){
-
             var qy=$(this).val();
             //alert(qy);
 
             if(qy != ''){
-
                 var _token=$('input[name="_token"]').val();
-
                 $.ajax({
 
                     url:"{{ route('RechercheMulti.autocomplete')}}",
@@ -512,52 +454,19 @@
                     data:{qy:qy, _token:_token},
                     success:function(data)
                     {
-
-
-                        //alert(data);
-
                         $("#kkk").fadeIn();
                         $("#kkk").html(data);
-
-
                         var myStringType=$('.resAutocompRech');
-                        // alert( myStringType.html());
                         colorerSeq(myStringType,qy);
-                        // alert(myStringType);
-
-                        /* $(document).ready(function() {
-                         var myStringType = $('.resAutocompTyoeAct').text();
-                         arrayMe(myStringType);
-                         });*/
-
-
-
                     }
-
-
                 });
-
-
             }
             else
             {
-
-
                 $("#kkk").fadeOut();
-
-
             }
-
-
-
-
         });
-
-
-
     });
-
-
 
 
 </script>
@@ -565,11 +474,8 @@
 <script>
     $(document).on('click','.resAutocompTyoeAct',function(){
 
-        // alert("bonjour");
-
         $("#search-bar").val($(this).text());
         $("#kkk").fadeOut();
-
 
     });
 
@@ -581,8 +487,15 @@
 
 
 </script>
+<!--select css-->
+<link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
 
 <script>
+    $("#dossierid").select2();
 
     $('#dpause').click(function() {
 
@@ -621,7 +534,6 @@
 
 // Ajout Compte Rendu
     $('#ajoutcompter').click(function() {
-        $('#modalconfirm').modal('hide');
 
         var _token = $('input[name="_token"]').val();
         var dossier = document.getElementById('dossierid').value;
@@ -634,6 +546,9 @@
 
             success: function (data) {
             alert('Ajouté avec succès');
+                $('#crendu').modal('hide');
+           //     $('#crendu').modal({show: false});
+
             }
         });
 

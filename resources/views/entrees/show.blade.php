@@ -53,12 +53,15 @@ use App\Http\Controllers\TagsController;
 
                                     $iduser=Auth::id();
                                     if ($iduser==$disp) { ?>
-                                    <a  href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-warning btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Archiver" >
+                                    <a  href="{{action('EntreesController@archiver', $entree['id'])}}" style="color:black" class="btn btn-warning btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Archiver" >
                                   <span class="fa fa-fw fa-archive"></span> Archiver
                                 </a>
+                                   <?php if ($entree['type'] != 'tel'){ ?>
                                     <a  href="{{action('EntreesController@spam', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme SPAM" >
                                         <span class="fas fa-exclamation-triangle"></span> SPAM
                                     </a>
+                                      <?php } ?>
+
                                     <?php } ?>
 
                                     <a onclick="checkComment()"  class="btn btn-info btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
@@ -107,7 +110,7 @@ use App\Http\Controllers\TagsController;
 </div>
 <div class="panel panel-default panelciel " >
         <!--<div class="panel-heading" style="cursor:pointer" data-toggle="collapse" data-parent="#accordion-cat-1" href="#emailcontent" class="" aria-expanded="true">-->
-        <div class="panel-heading" data-parent="#accordion-cat-1" href="#emailcontent" class="">
+        <div class="panel-heading" data-parent="#accordion-cat-1" href="#emailcontent" >
                 <a >
                     <div class="row">
                         <div class="col-sm-6 col-md-6 col-lg-6"style=" padding-left: 0px; ">
@@ -125,12 +128,12 @@ use App\Http\Controllers\TagsController;
 
                                             
                                           ?>
-        <div id="emailcontent" class="panel-collapse collapse in" aria-expanded="true" style="">
+        <div id="emailcontent" class="panel-collapse collapse in" aria-expanded="true" style="min-height:250px">
             <div class="panel-body" id="emailnpj">
                 <div class="row">
                    <ul class="nav nav-pills">
                         <li class="active" >
-                           <?php if ( $entree['type']=='fax') {}else {?> <a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps du mail</a><?php }?>
+                           <?php if ( $entree['type']=='fax') {}else {  if ( $entree['type']!='tel') { ?><a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps du mail</a><?php } }?>
                        </li>
                        <?php /* if ( $entree['type']!='fax') { ?>
                        <li class=" " >
@@ -388,11 +391,11 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
 
 <!-- Modal -->
-<div class="modal fade" id="affectfolder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="affectfolder"   role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 style="text-align:center" class="modal-title" id="exampleModalLabel">Dispatcher</h3>
+                <h3 style="text-align:center" class="modal-title" id="exampleModalLabel">Re-Dispatcher</h3>
 
             </div>
             <div class="modal-body">
@@ -403,12 +406,12 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
                         <div class="form-group">
                             <label for="type">Dossier :</label>
-                         <select id ="affdoss"  class="form-control " style="width: 120px">
+                         <select id ="affdoss"  class="form-control select2" style="width: 100%">
                              <option></option>
                          <?php foreach($dossiers as $ds)
 
                                {
-                               echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
+                               echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}     ?>
                          </select>
                             <br><br><br>
                         </div>
@@ -563,6 +566,8 @@ $urlapp='http://localhost/najdaapp';
 ?>
 <script>
 
+    $("#affdoss").select2();
+
     $( document ).ready(function() {
 
         $('#add').click(function(){
@@ -639,7 +644,6 @@ $urlapp='http://localhost/najdaapp';
             });
 
         });
-
 
 
 

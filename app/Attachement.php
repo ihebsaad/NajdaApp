@@ -8,10 +8,10 @@ class Attachement extends Model
 {
     //
     protected $fillable = ['id','nom','type','entree_id','path','facturation','envoye_id','parent','boite','dossier','description'];
-
+/*
     public function getDateFormat()
     {
         return 'Y-m-d H:i:s.u';
     }
-
+*/
 }

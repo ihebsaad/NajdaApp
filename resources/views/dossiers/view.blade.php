@@ -415,15 +415,6 @@ use App\Adresse;
     <th style="width:15%">Spécialités</th>
     <th style="width:10%">Actions</th>
     </tr>
-   <!-- <tr style="font-size:14px;">
-    <th style="width:20%">Prestataire</th>
-    <th style="width:20%">Type de prestation</th>
-    <th style="width:20%">Gouvernorats</th>
-    <th style="width:10%">Ville</th>
-    <th style="width:20%">Spécialités</th>
-    <th style="width:10%"> </th>
-
-    </tr>-->
     </thead>
     <tbody>
   <?php  foreach($datasearch as $do)
@@ -451,7 +442,6 @@ use App\Adresse;
             <td style="font-size:13px;width:10%"> </td>
 
         </tr>
-
 
      <?php
         foreach ($tels as $tel) {

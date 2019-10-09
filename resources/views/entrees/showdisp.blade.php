@@ -113,7 +113,7 @@ use App\Http\Controllers\TagsController;
 </div>
 <div class="panel panel-default panelciel " >
         <!--<div class="panel-heading" style="cursor:pointer" data-toggle="collapse" data-parent="#accordion-cat-1" href="#emailcontent" class="" aria-expanded="true">-->
-        <div class="panel-heading" data-parent="#accordion-cat-1" href="#emailcontent" class="">
+        <div class="panel-heading" data-parent="#accordion-cat-1" href="#emailcontent" >
                 <a >
                     <div class="row">
                         <div class="col-sm-6 col-md-6 col-lg-6"style=" padding-left: 0px; ">
@@ -131,7 +131,7 @@ use App\Http\Controllers\TagsController;
 
                                             
                                           ?>
-    <div id="emailcontent" class="panel-collapse collapse in" aria-expanded="true" style="">
+    <div id="emailcontent" class="panel-collapse collapse in" aria-expanded="true" style="min-height:250px">
         <div class="panel-body" id="emailnpj">
             <div class="row">
                 <ul class="nav nav-pills">

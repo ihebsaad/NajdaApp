@@ -132,7 +132,7 @@
      </div>
      <div class="col-sm-2">
       <button type="button" class="btn btn-default"  >
-                    <a style="color:black"  href="{{url('dossiers/view/CreerOM/'.$dossier->id.'/'.$Action->Mission->id )}}"> Créer ORM</a>
+                    <a style="color:black"  href="{{url('dossiers/view/CreerOM/'.$dossier->id.'/'.$Action->Mission->id )}}"> Créer OM</a>
                 </button>
      </div>
 
