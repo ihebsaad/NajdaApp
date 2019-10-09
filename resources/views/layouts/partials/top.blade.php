@@ -137,7 +137,7 @@
           <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
 
           <a href="{{ route('entrees.dispatching') }}" class="btn <?php echo $color; ?> btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
-              <span class="  fa-fw fas <?php echo $icon ; ?> fa-2x"></span><?php  if($count > 0 ){ ?><span id="countnotif" class="label label-warning" style="color:black"><?php echo $count;?></span><?php } ?>
+              <span class="  fa-fw fas <?php echo $icon ; ?> fa-2x"></span><?php  if($count > 0 ){ ?><span id="countnotif" class="label label-warning" style="color:black"><?php echo $count;?></span><?php } else{ ?><span id="countnotif" class="label " style="color:black"><?php echo $count;?></span> <?php } ?>
           </a>
           </div>
 
