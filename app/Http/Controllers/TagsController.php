@@ -97,6 +97,7 @@ class TagsController extends Controller
                     default: 
                         $titre = "";
                 }
+                /*
                 if (stristr($abbrev,"GOP")!== false)
                 {
                     // ajout gop dans details dossier
@@ -109,7 +110,7 @@ class TagsController extends Controller
                             Dossier::where('id', $request->get('dossier'))->update(['GOP' => $identree,'montant_GOP' => $nmontant]);
                         }
                     }
-                }
+                }*/
                 if (stristr($abbrev,"Franchise")!== false)
                 {
                     // ajout franchise dans details dossier
@@ -127,6 +128,7 @@ class TagsController extends Controller
                     'entree' => $identree,
                     'contenu' => $request->get('contenu'),
                     'montant' => $request->get('montant'),
+                    'mrestant' => $request->get('montant'),
                     'devise' => $request->get('devise')
                 ]);
                 if ($tag->save())
