@@ -1321,6 +1321,44 @@ $interv = PrestationsController::PrestById($prest);
         </div>
     </div>
 </div>
+<!-- Modal Select GOP -->
+<div class="modal fade" id="selectgopdoc" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal2">Choisir le GOP à utiliser</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+
+                    <div class="form-group">
+                        {{ csrf_field() }}
+
+                        <form id="gopselectform" novalidate="novalidate">
+                            <div class="form-group " >
+                                <label for="gopdoc">Template</label>
+                                <div class=" row  ">
+                                    <select class="form-control select2" style="width: 350px" required id="gopdoc" name="gopdoc" >
+                                   </select>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" id="btngop" class="btn btn-primary">Choisir</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal OM-->
 <div class="modal fade" id="generateom" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -2458,14 +2496,32 @@ function filltemplate(data,tempdoc)
         if(val[0] ==='lestags') 
             {
                 console.log('les tags: '+val[1] );
+                var tagstr = val[1].replace('allow_VERIFglist(','');
+                tagstr = tagstr.substring(0, tagstr.indexOf(")"));
+                //var arr_tags = JSON.parse("[" + tagstr + "]");
+                //var arr_tags = tagstr.split(",");
+                arr_tags = tagstr.split(",");
+                console.log('nouv tags: '+tagstr );
+
+                    // vider select gop options
+                    $('#gopdoc').find('option').remove();
+                    
+                $.each(arr_tags, function(i, field){
+                    var strt = [ field ] + "" ; 
+                    var champgop = strt.split("_");
+                    // ajout des options pour select gop
+                    $('#gopdoc').append(new Option(champgop[2]+" | "+"montant: "+champgop[1], champgop[0]));
+                  console.log('les champs tags: '+strt );
+                });
+                $("#selectgopdoc").modal('show');
                 
             }
 
-            if(val[0] ==='montantgop') 
+        /*if(val[0] ==='montantgop') 
             {
                 console.log('montantgop: '+val[1] );
                 
-            }
+            }*/
 
     });
 
@@ -2572,6 +2628,7 @@ function filltemplate(data,tempdoc)
 
     $(document).ready(function() {
     $("#agent").select2();
+    $("#gopdoc").select2();
     $("#templatedoc").select2();
     $("#selectable").select2 (
         //{ dropdownParent: "#insererprest" }

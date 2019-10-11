@@ -526,7 +526,7 @@ use App\Http\Controllers\TagsController;
                                 </select>
                             </div>
                             <div id="champstags" class="form-group mar-20"></div>
-                            <textarea id="contenutag" name="contenutag" rows="7" class="form-control resize_vertical" placeholder="Entrer le contenu de TAG" data-bv-field="message" style="width: 280px"></textarea></br>
+                            <input id="contenutag" name="contenutag" class="form-control resize_vertical" placeholder="Entrer la description de TAG" data-bv-field="message" style="width: 280px"></input></br>
                             
                              <div class="row text-center">
                               <div class="col-md-4" >
@@ -892,7 +892,7 @@ $('#btn-addtag').click(function(e){
       var dossier = $('input[name="dossieridtag"]').val();
       var tag = $('select[name=tagname]').val();
       var tagtxt = $('select[name=tagname] option:selected').text();
-      var tagcontent = $('textarea#contenutag').val();
+      var tagcontent = $('input#contenutag').val();
       var _token = $('input[name="_token"]').val();
       var urladdtag = $('input[name="urladdtag"]').val();
       var montant= null;
@@ -919,7 +919,7 @@ $('#btn-addtag').click(function(e){
                         // ajouter la nouvelle tag dans la section cmttags
                         $('#accordiontags').append('<div class="row"><div class="col-md-10"><div class="panel panel-default"><div class="panel-heading" ><h4 class="panel-title"><a data-toggle="collapse" href="#collapse'+tag+'">'+tagtxt+'</a></h4></div><div id="collapse'+tag+'" class="panel-collapse collapse"><ul class="list-group">'+limontant+'<li class="list-group-item"><b style="color: #c1c1b7">Contenu: </b>'+tagcontent+'</li></ul></div></div></div></div>');
 
-                        $('textarea#contenutag').val('');
+                        $('input#contenutag').val('');
                         //document.getElementById('tagname').selectedIndex = -1;
                         //$("#tagname").select2("val", "");
                         $('#tagname').val(null).trigger('change');

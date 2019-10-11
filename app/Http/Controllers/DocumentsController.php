@@ -248,7 +248,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
         $templateid = $request->get('template') ;
         $arrfile = Template_doc::where('id', $templateid)->first();
 
-        if (strpos($arrfile['nom'], "PEC") === 0)
+        /* PASTGOP if (strpos($arrfile['nom'], "PEC") === 0)
         {
             // verifier si le GOP existe pour le PEC
             $pecdoss=Dossier::where('id', $dossier)->first();
@@ -258,7 +258,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
             {
                 return 'nogop';
             }
-        }
+        }*/
         // verifier les conditions tags
         //$refdoss = Dossier->RefDossierById($dossier);
         $indossier=Dossier::select('reference_medic','franchise','montant_franchise','GOP','montant_GOP')->where('id',$dossier)->first();
@@ -275,6 +275,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                 $dossfranchise = false;
                 $dossgopmed = false;
                 $dossplafond = false;
+                $arr_gopmed = array();
                 foreach ($entreesdos as $entr) {
                     //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
                     $coltags = Tag::where("entree","=",$entr['id'])->get();
@@ -287,6 +288,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                              //if ($resp === "notallow") {$resp="allow";}
                              if (strpos( $ltag['abbrev'],"GOPmed") !== FALSE)
                              {
+                                $arr_gopmed[]=$ltag['id']."_".$ltag['mrestant']."_".$ltag['contenu'];
                                 $dossgopmed = true;
                              }
                              if (strpos( $ltag['abbrev'],"Franchise") !== FALSE)
@@ -312,7 +314,9 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                 {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP (frais médicaux) Spécifié!";}
                 else
                 {
-                    $resp = "allow_VERIFmontant(".$montantgop.")_GOPmed";
+                    /* PASTGOP $resp = "allow_VERIFmontant(".$montantgop.")_GOPmed";*/
+                    $sgopmed =implode(',', $arr_gopmed);
+                    $resp = "allow_VERIFglist(".$sgopmed.")_GOPmed";
                     if ($dossplafond)
                         {$resp = $resp . "_Plafond";}
                     if ($dossfranchise)
