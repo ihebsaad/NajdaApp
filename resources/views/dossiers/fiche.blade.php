@@ -187,15 +187,7 @@ use  \App\Http\Controllers\DocsController;
 
                                     </div>
                                     </div>
-                                <!--    <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="inputError" class="control-label">Référence *</label>
 
-                                        <div class="input-group-control">
-                                            <input    type="text" id="customer" name="reference_customer" class="form-control"   value="{{ $dossier->reference_customer }}" >
-                                        </div>
-                                    </div>
-                                </div>-->
 
                                 <div class="col-md-2">
                                     <div class="form-group">
@@ -2750,29 +2742,6 @@ function disabling(elm) {
             });
         });
 
-
-
-/*
-        $('#subscriber_name').change(function() {
-            var subscriber_name = $('#subscriber_name').val();
-            var beneficiaire = $('#beneficiaire').val();
-            if( beneficiaire==''){
-                $('#beneficiaire').val(subscriber_name);
-            }
-
-
-        });
-
-        $('#subscriber_lastname').change(function() {
-            var subscriber_lastname = $('#subscriber_lastname').val();
-            var prenom_benef = $('#prenom_benef').val();
-            if( prenom_benef==''){
-                $('#prenom_benef').val(subscriber_lastname);
-            }
-        });
-
-        */
-
     });
 
 
@@ -2924,22 +2893,14 @@ function disabling(elm) {
                 document.getElementById('derniere2').style.display='none';
                 document.getElementById('derniere3').style.display='inline';
             }
-          /*  else
-            {div.style.display='none';     }*/
 
 
         });
 
         $('#btn03moins').click(function() {
             var   div=document.getElementById('adresse2');
-          /*  if(div.style.display==='block')
-            {div.style.display='none';
-                document.getElementById('derniere1').style.display='block';
-                document.getElementById('derniere2').style.display='none';
-                document.getElementById('derniere3').style.display='none';
-                document.getElementById('adresse3').style.display='none';
-            }*/
-            document.getElementById('derniere1').style.display='inline';
+
+               document.getElementById('derniere1').style.display='inline';
             document.getElementById('derniere2').style.display='none';
             document.getElementById('derniere3').style.display='none';
             document.getElementById('adresse2').style.display='none';
@@ -2961,8 +2922,6 @@ function disabling(elm) {
                 document.getElementById('derniere2').style.display='block';
                 document.getElementById('derniere3').style.display='none';
             }
-            /*     else
-             {div.style.display='none';     }*/
 
 
         });
@@ -2979,8 +2938,6 @@ function disabling(elm) {
                 document.getElementById('derniere03').style.display='none';
                 document.getElementById('derniere02').style.display='inline';
             }
-            /* else
-             {div.style.display='none';     }*/
 
 
         });
@@ -2995,9 +2952,6 @@ function disabling(elm) {
                 document.getElementById('derniere02').style.display='none';
                 document.getElementById('derniere03').style.display='inline';
             }
-            /*  else
-             {div.style.display='none';     }*/
-
 
         });
 
@@ -3009,9 +2963,6 @@ function disabling(elm) {
             document.getElementById('derniere03').style.display='none';
             document.getElementById('adresse02').style.display='none';
             document.getElementById('adresse03').style.display='none';
-            /*    else
-             {div.style.display='none';     }*/
-
 
         });
 
@@ -3026,9 +2977,6 @@ function disabling(elm) {
                 document.getElementById('derniere02').style.display='inline';
                 document.getElementById('derniere03').style.display='none';
             }
-            /*     else
-             {div.style.display='none';     }*/
-
 
         });
         //////
@@ -3059,10 +3007,6 @@ function disabling(elm) {
                 document.getElementById('derniere12').style.display='none';
                 document.getElementById('derniere13').style.display='inline';
             }
-            /*  else
-             {div.style.display='none';     }*/
-
-
         });
 
         $('#btn013moins').click(function() {
@@ -3073,10 +3017,6 @@ function disabling(elm) {
             document.getElementById('derniere13').style.display='none';
             document.getElementById('adresse12').style.display='none';
             document.getElementById('adresse13').style.display='none';
-            /*    else
-             {div.style.display='none';     }*/
-
-
         });
 
 
@@ -3090,138 +3030,8 @@ function disabling(elm) {
                 document.getElementById('derniere12').style.display='inline';
                 document.getElementById('derniere13').style.display='none';
             }
-            /*     else
-             {div.style.display='none';     }*/
-
 
         });
-
-
-        $("#typeprest").change(function() {
-
-            document.getElementById('termine').style.display = 'none';
-            document.getElementById('showNext').style.display='none';
-            document.getElementById('choisir').style.display='none';
-            document.getElementById('selectedprest').value=0;
-
-        });
-
-        $("#gouvcouv").change(function(){
-            //  prest = $(this).val();
-            document.getElementById('selectedprest').value=0;
-
-            var  type =document.getElementById('typeprest').value;
-            var  gouv =document.getElementById('gouvcouv').value;
-            if((type !="")&&(gouv !=""))
-            {
-                var _token = $('input[name="_token"]').val();
-
-                document.getElementById('termine').style.display = 'none';
-
-                $.ajax({
-                    url:"{{ route('dossiers.listepres') }}",
-                    method:"post",
-
-                    data:{gouv:gouv,type:type, _token:_token},
-                    success:function(data){
-
-                        //     alert('1'+data);
-                        //   alert('Added successfully');
-                        // alert('2'+JSON.parse((data)));
-                        $('#data').html(data);
-                        //window.location =data;
-                        console.log(data);
-                        ////       data.map((item, i) => console.log('Index:', i, 'Id:', item.id));
-                        var  total =document.getElementById('total').value;
-
-                        if(parseInt(total)>0)
-                        {
-                            document.getElementById('showNext').style.display='block';
-                        }
-
-                    }
-                }); // ajax
-
-            }else{
-                alert('SVP, Sélectionner le gouvernorat et la spécialité');
-            }
-        }); // change
-
-        $("#choisir").click(function() {
-            //selected= document.getElementById('selected').value;
-            selected=    $("#selected").val();
-            document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
-
-
-        });
-
-
-        $("#essai2").click(function() {
-            document.getElementById('termine').style.display = 'none';
-            document.getElementById('choisir').style.display = 'block';
-            document.getElementById('showNext').style.display = 'block';
-            document.getElementById('item1').style.display = 'block';
-            document.getElementById('selected').value = 1;
-            document.getElementById('selectedprest').value = 0;
-
-
-        });
-
-
-        $("#showNext").click(function() {
-            document.getElementById('selectedprest').value = 0;
-
-            var selected = document.getElementById('selected').value;
-            var total = document.getElementById('total').value;
-            //     alert(selected);
-            //    alert(total);
-            var next = parseInt(selected) + 1;
-            document.getElementById('selected').value = next;
-
-            if ((selected == 0)) {
-                document.getElementById('termine').style.display = 'none';
-                document.getElementById('item1').style.display = 'block';
-                document.getElementById('choisir').style.display = 'block';
-
-                //document.getElementById('selected').value=1;
-                // $("#selected").val('1');
-
-            }
-
-            if ((selected) == (total  )) {//alert("Il n y'a plus de prestataires, Ressayez");
-                document.getElementById('termine').style.display = 'block';
-
-                document.getElementById('item'+(selected)).style.display = 'none';
-                document.getElementById('showNext').style.display = 'none';
-                document.getElementById('choisir').style.display = 'none';
-
-
-            } else {
-
-                if ((selected != 0) && (selected <= total + 1)) {
-                    document.getElementById('choisir').style.display = 'block';
-                    document.getElementById('termine').style.display = 'none';
-                    document.getElementById('item' + selected).style.display = 'none';
-                    document.getElementById('item' + next).style.display = 'block';
-
-
-                    $("#selected").val(next);
-
-
-
-                }
-            }
-
-            if(next>parseInt(total)+1) {
-                document.getElementById('item' + selected).style.display = 'none';
-            }
-
-
-        });
-
-
-
-
 
         $('#docs').select2({
             filter: true,
@@ -3232,7 +3042,6 @@ function disabling(elm) {
             }
 
         });
-
 
 
         var $topo1 = $('#docs');
@@ -3336,159 +3145,6 @@ function disabling(elm) {
 </script>
 <style>.headtable{background-color: grey!important;color:white;}
     table{margin-bottom:40px;}
-</style>
-
-
-
-<style>
-
-    section#timeline {
-        width: 80%;
-        margin: 20px auto;
-        position: relative;
-    }
-    section#timeline:before {
-        content: '';
-        display: block;
-        position: absolute;
-        left: 50%;
-        top: 0;
-        margin: 0 0 0 -1px;
-        width: 2px;
-        height: 100%;
-        background: rgba(255,255,255,0.2);
-    }
-    section#timeline article {
-        width: 100%;
-        margin: 0 0 20px 0;
-        position: relative;
-    }
-    section#timeline article:after {
-        content: '';
-        display: block;
-        clear: both;
-    }
-    section#timeline article div.inner {
-        width: 40%;
-        float: left;
-        margin: 5px 0 0 0;
-        border-radius: 6px;
-    }
-    section#timeline article div.inner span.date {
-        display: block;
-        width: 60px;
-        height: 50px;
-        padding: 5px 0;
-        position: absolute;
-        top: 0;
-        left: 50%;
-        margin: 0 0 0 -32px;
-        border-radius: 100%;
-        font-size: 12px;
-        font-weight: 900;
-        text-transform: uppercase;
-        background: white;
-        /* background: #25303B;
-         color: rgba(255,255,255,0.5);
-         border: 2px solid rgba(255,255,255,0.2);
-         box-shadow: 0 0 0 7px #25303B;*/
-    }
-    section#timeline article div.inner span.date span {
-        display: block;
-        text-align: center;
-    }
-    section#timeline article div.inner span.date span.day {
-        font-size: 10px;
-    }
-    section#timeline article div.inner span.date span.month {
-        font-size: 18px;
-    }
-    section#timeline article div.inner span.date span.year {
-        font-size: 10px;
-    }
-    section#timeline article div.inner h2 {
-        padding: 15px;
-        margin: 0;
-        color: #fff;
-        font-size: 20px;
-        text-transform: uppercase;
-        letter-spacing: -1px;
-        border-radius: 6px 6px 0 0;
-        position: relative;
-    }
-    section#timeline article div.inner h2:after {
-        content: '';
-        position: absolute;
-        top: 20px;
-        right: -5px;
-        width: 10px;
-        height: 10px;
-        -webkit-transform: rotate(-45deg);
-    }
-    section#timeline article div.inner p {
-        padding: 15px;
-        margin: 0;
-        font-size: 14px;
-        background: #fff;
-        color: #656565;
-        border-radius: 0 0 6px 6px;
-    }
-
-
-    section#timeline article:nth-child(2n+2) div.inner {
-        /* float: right;*/
-    }
-    section#timeline article:nth-child(2n+2) div.inner h2:after {
-        /*left: -5px;*/
-    }
-
-
-    section#timeline  article div.inner.sent {
-        float: right;
-    }
-    section#timeline article div.inner.sent h2:after {
-        left: -5px;
-    }
-
-
-    section#timeline article  div.inner h2 {
-        background: #e74c3c;
-    }
-    section#timeline article  div.inner h2:after {
-        background: #e74c3c;
-    }
-
-
-    section#timeline article:nth-child(1) div.inner h2 {
-        background: #e74c3c;
-    }
-    section#timeline article:nth-child(1) div.inner h2:after {
-        background: #e74c3c;
-    }
-    section#timeline article:nth-child(2) div.inner h2 {
-        background: #2ecc71;
-    }
-    section#timeline article:nth-child(2) div.inner h2:after {
-        background: #2ecc71;
-    }
-    section#timeline article:nth-child(3) div.inner h2 {
-        background: #e67e22;
-    }
-    section#timeline article:nth-child(3) div.inner h2:after {
-        background: #e67e22;
-    }
-    section#timeline article:nth-child(4) div.inner h2 {
-        background: #1abc9c;
-    }
-    section#timeline article:nth-child(4) div.inner h2:after {
-        background: #1abc9c;
-    }
-    section#timeline article:nth-child(5) div.inner h2 {
-        background: #9b59b6;
-    }
-    section#timeline article:nth-child(5) div.inner h2:after {
-        background: #9b59b6;
-    }
 
 
     .overme {

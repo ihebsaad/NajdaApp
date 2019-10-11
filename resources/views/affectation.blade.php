@@ -60,7 +60,6 @@
               $seance =  DB::table('seance')
                   ->where('id','=', 1 )->first();
               $disp=$seance->dispatcheur ;
-              $sup=$seance->superviseur ;
               $supmedic=$seance->superviseurmedic ;
               $suptech=$seance->superviseurtech ;
               $charge=$seance->chargetransport ;

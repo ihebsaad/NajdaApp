@@ -34,7 +34,7 @@ class Mission extends Model
 
 public function dossier()
     {
-        return $this->belongsTo('App\Dossier');
+        return $this->belongsTo('App\Dossier','dossier_id');
     }
 
  public function typeMission()
@@ -80,9 +80,11 @@ public function dossier()
      public function user_origin()
     {
         return $this->belongsTo('App\User','origin_id');
-    } 
+    }
 
 
- 
+
+
+
 
 }

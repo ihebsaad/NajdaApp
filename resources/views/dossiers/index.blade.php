@@ -159,13 +159,13 @@
              <tr id="headtable">
                 <th style="width:20%">Référence</th>
                 <th style="width:25%">Client</th>
-                <th style="width:20%">Abonné</th>
+                <th style="width:20%">Assuré</th>
                 <th style="width:20%">Etat</th>
               </tr>
             <tr>
                 <th style="width:20%">Référence</th>
                 <th style="width:25%">Client</th>
-                <th style="width:20%">Abonné</th>
+                <th style="width:20%">Assuré</th>
                 <th style="width:20%">Etat</th>
             </tr>
             </thead>
@@ -202,13 +202,13 @@
             <tr id="headtable">
                 <th style="width:20%">Référence</th>
                 <th style="width:25%">Client</th>
-                <th style="width:20%">Abonné</th>
+                <th style="width:20%">Assuré</th>
                 <th style="width:20%">Etat</th>
               </tr>
             <tr>
                 <th style="width:20%">Référence</th>
                 <th style="width:25%">Client</th>
-                <th style="width:20%">Abonné</th>
+                <th style="width:20%">Assuré</th>
                 <th style="width:20%">Etat</th>
             </tr>
             </thead>

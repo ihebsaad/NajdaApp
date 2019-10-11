@@ -33,18 +33,28 @@ use  \App\Http\Controllers\DossiersController ;
     @endif
 
 <div class="row">
-    <div class="col-md-4">
-
-        <h4><?php echo   $dossier->reference_medic .' - '.  DossiersController::FullnameAbnDossierById($dossier->id);?> </h4>
+    <div class="col-md-3">
+<?php  // $doss=  DossiersController::DossiersActifs(); echo json_encode($doss) ; ?>
+        <h4 style="font-weight:bold;"><?php echo   $dossier->reference_medic .' - '.  DossiersController::FullnameAbnDossierById($dossier->id);?> </h4>
     </div>
+    <div class="col-md-2">
+        <b>Statut</b>
+    <input type="hidden" id="dossier" value="<?php echo $dossier->id; ?>">
+        <select  onchange="changing(this);" id="current_status" class="form-control">
+            <option <?php if ($dossier->current_status =='actif'){echo 'selected="selected"';} ?>  value="actif">Actif</option>
+            <option <?php if ($dossier->current_status =='inactif'){echo 'selected="selected"';} ?>  value="inactif">Inactif</option>
+            <option <?php if ($dossier->current_status =='Cloture'){echo 'selected="selected"';} ?> value="Cloture">Clôturé</option>
+            <option <?php if ($dossier->current_status ==''){echo 'selected="selected"';} ?> ></option>
 
-<?php $statut=$dossier->current_status;?>
+        </select>
+
+    <?php $statut=$dossier->current_status;  ?>
+    </div>
      <div class="col-md-2">
 
          <?php
          // les agents ne voient pas l'aaffectation - à vérifier
          if (Gate::check('isAdmin') || Gate::check('isSupervisor') ) { ?>
-
 
          <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
         <b>Affecté à:</b> 
@@ -52,7 +62,7 @@ use  \App\Http\Controllers\DossiersController ;
         $agentname = User::where('id',$dossier->affecte)->first();
         if ((Gate::check('isAdmin') || Gate::check('isSupervisor')) && !empty ($agentname))
             { echo '<a href="#" data-toggle="modal" data-target="#attrmodal">';}
-        echo $agentname['name']; 
+        echo $agentname['name'].' '.$agentname['lastname'];
         if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
             { echo '</a>';}
 
@@ -74,7 +84,7 @@ use  \App\Http\Controllers\DossiersController ;
 
       <?php  } ?>
     </div>
-    <div class="col-md-6" style="text-align: right;padding-right: 35px">
+    <div class="col-md-5" style="text-align: right;padding-right: 35px">
         <div class="page-toolbar">
 
         <div class="btn-group">
@@ -201,10 +211,6 @@ use  \App\Http\Controllers\DossiersController ;
 
                         <section id="timeline">
 
-
-
-                            <?php //echo 'Envoyes '.json_encode($envoyes) ?>
-
                             @if($communins)
                             @foreach($communins as $communin)
 
@@ -281,10 +287,7 @@ use  \App\Http\Controllers\DossiersController ;
                             @endif
 
                         </section>
-
-
             </div>
-
             <div id="tab3" class="tab-pane fade  active in">
                 <ul class="nav  nav-tabs">
 
@@ -305,7 +308,6 @@ use  \App\Http\Controllers\DossiersController ;
                     </li>
 
                 </ul>
-                
                 <div id="tab32" class="tab-pane fade active in  ">
                   <br>
 <?php
@@ -385,24 +387,6 @@ use  \App\Http\Controllers\DossiersController ;
 
     <input type="submit" value="envoyer" class="btn btn-success" style="width:150px"/>
 
-<?php /* $c=0;?><table><?php $c=0;?>
-                            @foreach($prestataires as $prest)
-                            <?php $c++; if($c<30) { ?>
-                            <div id="<?php echo $prest->id; ?>">
-                                <?php
-                                $gouvs=  PrestatairesController::PrestataireGouvs($id);
-                                $typesp=  PrestatairesController::PrestataireTypesP($id);
-                                $specs=  PrestatairesController::PrestataireSpecs($id);
-                                ?>
-                             <tr class="PR-Gouv-<?php // echo $prest->gouv ?>">
-                                    <div class="PR-SP-<?php // echo $prest->specialite ?>">
-                                        <td  class="PR-Postal-<?php // echo $prest->specialite ?>" ><?php  echo  $prest->name;    ?></td>
-                                    </div>
-                                </tr>
-                            </div>
-                                <?php } ?>
-                        @endforeach
-             </table><?php } */ ?>
     <?php if (isset($datasearch)) { ?>
     <div class="row" style="margin-top:15px">  <label>Liste des Prestataires trouvés:</label>
     </div>
@@ -787,9 +771,6 @@ $interv = PrestationsController::PrestById($prest);
                </table><br><br><br>
 
            </div>
-<?php
-
-                 ?>
 
                 <div id="tab5" class="tab-pane fade">
 
@@ -1184,8 +1165,6 @@ $interv = PrestationsController::PrestById($prest);
             </div>
 
             </div>
-
-
 
 
         </div>
@@ -2581,9 +2560,7 @@ function filltemplate(data,tempdoc)
 
             }
         });
-        // } else {
 
-        // }
     }
 
 

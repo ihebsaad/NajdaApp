@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Adresse;
 use App\AffectDoss;
 use App\Evaluation;
+use App\Mission;
 use App\Parametre;
 use App\Prestataire;
 use Illuminate\Support\Facades\Cache;
@@ -49,8 +50,6 @@ class DossiersController extends Controller
      */
     public function index()
     {
-        $minutes= 120;
-
         //      $typesMissions=TypeMission::get();
         // $dossiers = // Cache::remember('dossiers',$minutes,  function () {
 
@@ -60,8 +59,20 @@ class DossiersController extends Controller
         return view('dossiers.index', compact('dossiers'));
     }
 
- 
- 
+    public function inactifs()
+    {
+       $dtc = (new \DateTime())->modify('-2 days')->format('Y-m-d\TH:i');
+
+        $dossiers = Dossier::where('current_status', 'inactif')
+             ->where('updated_at', '<=', $dtc)
+            ->get();
+
+
+        return view('dossiers.inactifs', ['dossiers' => $dossiers]);
+
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -528,7 +539,7 @@ class DossiersController extends Controller
 
         ]);
         $email->save();
-        return url('/dossiers/fihe/'.$parent) ;
+        return url('/dossiers/fiche/'.$parent) ;
     }
 
 
@@ -1333,7 +1344,6 @@ class DossiersController extends Controller
 
     }
 
-
     public function getListe($id)
     {
        // customer_id
@@ -1347,6 +1357,96 @@ class DossiersController extends Controller
 
     }
 
+
+
+    public function rendreActif($iddossier)
+    {
+        Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+
+    }
+
+    public static function DossiersActifs( )
+    {
+
+         $missions=Mission::where('statut_courant','active')->get();
+      //  $missions= DB::table('missions')
+        //    ->where('statut_courant','active')->get();
+
+        $dossiersactifs=array();
+        $dossiersactifsparmissions=array();
+
+       foreach($missions as $Miss)
+        {
+            $dossiersactifsparmissions[]=$Miss->dossier_id;
+        }
+
+       $dossiersdb= Dossier::where('current_status','actif')->pluck('id');
+
+
+        $dossiersactifs = array_merge($dossiersactifsparmissions,$dossiersdb->toArray());
+        $dossiersactifs =array_unique ($dossiersactifs);
+
+          return ($dossiersactifs);
+    }
+
+
+    public static function DossiersInactifs( )
+    {
+
+        $dtc = (new \DateTime())->modify('-2 days')->format('Y-m-d\TH:i');
+
+        $count = Dossier::where('current_status', 'inactif')
+            ->where('updated_at', '<=', $dtc)
+            ->count();
+
+        return $count;
+
+    }
+
+    public static function ActiverDossiers( )
+    {
+        $missions=Mission::where('statut_courant','active')->get();
+
+        $dossiers=Dossier::where('current_status','inactif')
+            ->get();
+
+        $dossiersactifsparmissions=array();
+        foreach($missions as $Miss) {
+            $dossiersactifsparmissions[]=$Miss->dossier_id;
+
+        }
+        foreach($dossiers as $doss)
+        {
+           if( in_array($doss->id,$dossiersactifsparmissions) )
+           {
+               Dossier::where('id',$doss->id)
+                   ->update(array('current_status'=>'actif'));
+           }
+
+        }
+
+
+    }
+
+
+    public static function InactiverDossiers()
+    {
+
+        $dtc = (new \DateTime())->modify('-3 days')->format('Y-m-d\TH:i');
+
+        $dossiers=Dossier::where('current_status','actif')
+             ->where('updated_at','<=', $dtc)
+            ->get();
+
+
+        foreach($dossiers as $d)
+        {
+            Dossier::where('id',$d->id)
+                ->update(array('current_status'=>'actif'));
+
+        }
+
+    }
 
 
 

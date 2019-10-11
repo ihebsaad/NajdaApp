@@ -169,7 +169,7 @@ Route::get('/envoyes/brouillons', 'EnvoyesController@brouillons')->name('envoyes
 
 
 /*** Dossiers **/
-Route::resource('/dossiers',  'DossiersController');
+//Route::resource('/dossiers',  'DossiersController');
 Route::get('/dossiers', array('as' => 'dossiers','uses' => 'DossiersController@index'));
 Route::get('/dossiers/saving','DossiersController@saving')->name('dossiers.saving');
 //Route::get('/dossiers/save','DossiersController@save');
@@ -188,8 +188,12 @@ Route::post('/dossiers/listepresm','DossiersController@ListePrestataireCitySpec2
 Route::post('/dossiers/addressadd','DossiersController@addressadd')->name('dossiers.addressadd');
 Route::post('/dossiers/addressadd2','DossiersController@addressadd2')->name('dossiers.addressadd2');
 Route::post('/dossiers/checkexiste','DossiersController@checkexiste')->name('dossiers.checkexiste');
-//Route::post('/searchprest','DossiersController@searchprest')->name('searchprest');
 Route::get('/searchprest','DossiersController@searchprest')->name('searchprest');
+Route::get('/dossiers/dossiersactifs','DossiersController@DossiersActifs')->name('dossiers.dossiersactifs');
+Route::get('/dossiers/dossiersinactifs','DossiersController@DossiersInactifs')->name('dossiers.dossiersinactifs');
+Route::post('/dossiers/rendreactif','DossiersController@rendreActif')->name('dossiers.rendreactif');
+Route::get('/dossiers/inactifs','DossiersController@inactifs')->name('inactifs');
+Route::get('/dossiers/activerdossiers','DossiersController@ActiverDossiers')->name('activerdossiers');
 
 
 /*** Clients **/

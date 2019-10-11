@@ -391,6 +391,8 @@ class MissionController extends Controller
              }
            }
 
+        Dossier::where('id',$dossier->id)
+            ->update(array('current_status'=>'actif'));
 
     return 'Mission créee';
 

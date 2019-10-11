@@ -111,8 +111,8 @@ class Dossier extends Model
         'type_trans3'
 
     ];
-/*
-    protected $dateFormat = 'Y-m-d H:i:s';
+
+/*    protected $dateFormat = 'Y-m-d H:i:s';
 
     public function getDateFormat()
     {
@@ -130,4 +130,18 @@ class Dossier extends Model
     {
         return $this->hasMany('App\Mission');
     }
+
+
+    public function activeMissions()
+    {
+        return $this->hasMany('App\Mission')->where('statut_courant','active');
+    }
+
+
+
+
+
+
+
+
 }

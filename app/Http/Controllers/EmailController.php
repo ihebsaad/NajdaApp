@@ -364,8 +364,10 @@ class EmailController extends Controller
 
 
                   }
+                    // Activer le dossier
+                    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
 
-                // Notification::send($user, new Notif_Suivi_Doss($entree));
+                    // Notification::send($user, new Notif_Suivi_Doss($entree));
                   
                 }
                 else{
@@ -581,7 +583,13 @@ class EmailController extends Controller
                         Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
                        // Notification::send($user, new Notif_Suivi_Doss($entree));
+
+
                    }
+                    // Activer le dossier
+                    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+
+
                 }
                 else{
 
@@ -917,7 +925,10 @@ class EmailController extends Controller
                       {
                             Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
+
                       }
+                        // Activer le dossier
+                        Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
 
 
                     }
@@ -1058,6 +1069,9 @@ class EmailController extends Controller
                          Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
                     }
+
+                    // Activer le dossier
+                    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
 
 
                 }

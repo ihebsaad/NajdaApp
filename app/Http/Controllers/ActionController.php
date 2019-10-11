@@ -2577,7 +2577,9 @@ class ActionController extends Controller
        // return view('emails.envoifax',['attachements'=>$attachements,'doss'=>$id]);
 
 
-     //
+     // Activer dossier
+        Dossier::where('id', $iddoss )
+            ->update(array('current_status'=>'actif'));
 
      return view('actions.TraitementAction',['act'=>$act,'dossiers' => $dossiers,'attachements'=>$attachements,
         'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action,'doss'=>$dossier->id], compact('dossier'));
@@ -2793,20 +2795,16 @@ class ActionController extends Controller
     public function Bouton_Faire1_ignorer2_reporter3_rappeler4(Request $request, $iddoss,$idmiss,$idact,$bouton)
     {
 
-       // dd($this->cas_MissDocAsigner);
-
-         //return $this->activerActionsReporteeOuRappelee();
-
-        //dd($request->all());
+        // Activer dossier
+        Dossier::where('id', $iddoss )
+            ->update(array('current_status'=>'actif'));
 
          $dtc = (new \DateTime())->format('Y-m-d\TH:i');                         
          $format = "Y-m-d\TH:i";
          $dateSys  = \DateTime::createFromFormat($format, $dtc);
 
-     
-
         $bouton=intval($request->get("numerobouton"));
-       // dd($bouton);
+
 
         $action=ActionEC::where("id",$idact)->first();
         $option=$request->get("optionAction");

@@ -938,4 +938,16 @@
      }
 
   </script>
+
+
+<?php
+
+// Inactiver Dossiers
+\App\Http\Controllers\DossiersController::InactiverDossiers();
+
+//Activer Dossier Inactifs
+\App\Http\Controllers\DossiersController::ActiverDossiers();
+
+
+?>
 </html>

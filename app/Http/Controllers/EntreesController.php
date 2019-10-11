@@ -15,6 +15,8 @@ use App\Attachement ;
 use Illuminate\Support\Facades\Auth;
 use App\Notification;
 use PDF;
+use Illuminate\Support\Facades\Notification as Notification2;
+
 
 class EntreesController extends Controller
 {
@@ -375,7 +377,8 @@ class EntreesController extends Controller
 
              if($userid  >0) {
                $user = User::find($userid);
-                $user->notify(new Notif_Suivi_Doss($entree));
+               // $user->notify(new Notif_Suivi_Doss($entree));
+                 Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
             }
 
@@ -431,7 +434,8 @@ $doss=  $entree->dossier;
 
             if($userid  >0) {
                 $user = User::find($userid);
-                $user->notify(new Notif_Suivi_Doss($entree));
+             //   $user->notify(new Notif_Suivi_Doss($entree));
+                Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
             }
 
@@ -440,6 +444,8 @@ $doss=  $entree->dossier;
 
        }
 
+        // Activer le dossier
+        Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
 
         //return url('/entrees/show/'.$identree)/*->with('success', 'Dossier Créé avec succès')*/;
        if($first) {return url('/entrees/dispatching/');}
@@ -534,9 +540,12 @@ $doss=  $entree->dossier;
         $entree->save();
 
         if($userid  >0) {
-            $user2->notify(new Notif_Suivi_Doss($entree));
-
+          //  $user2->notify(new Notif_Suivi_Doss($entree));
+            Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
         }
+
+        // Activer le dossier
+        Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
 
 
         Log::info('Création Compte Rendu - Par :'.$nomuser.' - Dossier : '.$dossier);
