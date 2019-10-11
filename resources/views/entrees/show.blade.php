@@ -4,7 +4,7 @@
     @parent
 @stop
 <?php
-use App\Tag ;
+use App\Http\Controllers\DossiersController;use App\Tag ;
 use App\Dossier ;
 use App\Notification ;
 $dossiers = Dossier::get();
@@ -37,9 +37,9 @@ use App\Http\Controllers\TagsController;
                         </div>
                     </div>
                         <div class="row" style="padding-right: 10px;margin-top:10px" id="emailbuttons">
-                            <div class="pull-right" style="margin-top: 0px;">
+                            <div class="pull-right" style="margin-top: 0px;"><?php $iddossier=$entree['dossierid'] ; ?>
                                 @if (!empty($entree->dossier))
-                                    <button class="btn btn-sm btn-default"><b>REF: {{ $entree['dossier']   }}</b></button>
+                                    <button class="btn btn-sm btn-default"><b>REF: {{ $entree['dossier']   }} - <?php echo  DossiersController::FullnameAbnDossierById($iddossier); ?></b></button>
                                 @endif
                                 @if (empty($entree->dossier))
                                         <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
@@ -720,6 +720,12 @@ padding: 5px;
     {
         if (document.getElementById('commentuser').value == '') {
             alert('Ajouter un commentaire avant de marquer comme traité !');
+               $('#actiontabs a[href="#infostab"]').trigger('click');
+                $('#btn-cmttag').trigger('click');
+                $('#editbtn').trigger('click');
+            $("#commentuser").css("border", "2px solid red ");
+
+
 
         }else{
            location.href="{{action('EntreesController@traiter', $entree['id'])}}";

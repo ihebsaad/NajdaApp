@@ -541,10 +541,10 @@ use App\Http\Controllers\TagsController;
                       </div>   
                       <div id="cmttag"  style="display:none;margin-top: 30px">
                           <div class="row">
-                            <div class="col-md-6"><label for="commentuser" class="control-label" >Commentaire</label></div>
+                            <div class="col-md-6"><label for="commentuser" class="control-label" >Description</label></div>
                             <div class="col-md-3 pull-right"><button id="editbtn" type="button" class="btn btn-info btn-xs" ><i class="fas fa-lock-open"></i> Modifier</button></div>
                           </div>
-                          <textarea id="commentuser" name="commentuser" rows="7" class="form-control resize_vertical" placeholder="Entrez votre commentaire" readonly >{{ $entree['commentaire']  }}</textarea></br>
+                          <textarea id="commentuser" name="commentuser" rows="7" class="form-control resize_vertical" placeholder="Entrez votre Description" readonly >{{ $entree['commentaire']  }}</textarea></br>
                           <!-- affichage des tags -->
                           <label for="accordiontags" class="control-label" >TAGs</label>
                           <div class="accordion panel-group" id="accordiontags">

@@ -23,8 +23,8 @@ $dossiersaff= DossiersController:: ListeDossiersAffecte();
             @foreach ($dossiersaff as $i) 
             <div class="item">
                 <a class="dossieritem" href="{{url('dossiers/view/'.$i->id )}}" id="{{ $i->id }}" >
-                    <div class="dossiercr well well-gc well-md <?php if($i->id ==$currentdoss){echo 'actived';}?>  " >
-                        <p class="cutlongtext" style="font-size:100%"> {!!$i->subscriber_name!!} <br>
+                    <div style="padding-left:5px!important;padding-top:5px!important; " class="dossiercr well well-gc well-md <?php if($i->id ==$currentdoss){echo 'actived';}?>  " >
+                        <p class="cutlongtext" style="font-size:17px"> {!!$i->subscriber_name!!} <br>
                         {!!$i->subscriber_lastname!!}</p>
                         <h3 class="cutlongtext" style="font-size:20px!important">{{ $i->reference_medic }}</h3>
                     </div>

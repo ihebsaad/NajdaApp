@@ -11,6 +11,7 @@ use App\Adresse;
 ?>
 <?php use \App\Http\Controllers\PrestationsController;
      use  \App\Http\Controllers\PrestatairesController;
+use  \App\Http\Controllers\DossiersController ;
 ?>
 
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
@@ -32,13 +33,13 @@ use App\Adresse;
     @endif
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-4">
 
-        <h2><?php echo   $dossier->reference_medic ;?></h2>
+        <h4><?php echo   $dossier->reference_medic .' - '.  DossiersController::FullnameAbnDossierById($dossier->id);?> </h4>
     </div>
 
 <?php $statut=$dossier->current_status;?>
-     <div class="col-md-3">
+     <div class="col-md-2">
 
          <?php
          // les agents ne voient pas l'aaffectation - à vérifier

@@ -7,6 +7,7 @@ use App\Document ;
 ?>
 <?php use \App\Http\Controllers\PrestationsController;
 use  \App\Http\Controllers\PrestatairesController;
+use  \App\Http\Controllers\DossiersController;
 use  \App\Http\Controllers\DocsController;
 ?>
 
@@ -21,7 +22,7 @@ use  \App\Http\Controllers\DocsController;
 
     <div class="col-md-3">
 
-        <h2> <?php echo   $dossier->reference_medic ;?></h2>
+        <h4> <?php echo   $dossier->reference_medic .' - '. DossiersController::FullnameAbnDossierById($dossier->id);?></h4>
     </div>
 
      <div class="col-md-3">

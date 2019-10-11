@@ -70,14 +70,14 @@ if (App::environment('local')) {
 			foreach($Entrees as $Entree)
 			{$c++;
 			if(($c % 2 )==0){$bg='background-color:#EDEDE9';}else{$bg='background-color:#F9F9F8';}$date=$Entree['reception'];$newDate = date("d/m/Y H:i", strtotime($date));
-            if (isset($entree['id'] ) &&($entree['id']==$Entree->id)){$bg='background-color:#ffd051!important;color: red!important;';}
+            if (isset($entree['id'] ) &&($entree['id']==$Entree->id)&&($view_name == 'entrees-showdisp')){ if($entree['id']>0){$bg='background-color:#5d9cec!important;color: white!important;';$col='color:white';}}else{$col='color:black';}
     $type=$Entree['type'];
 			 echo '<li  class="overme" style=";padding-left:6px;margin-bottom:15px;'.$bg.'" >';
 
 			  if ($type=='email'){echo '<img width="15" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="15" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="15" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="15" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php // echo $entree['type']; ?>
-             <a <?php if($Entree['viewed']==false) {echo 'style="color:#337085!important;font-weight:800;font-size:13px;"' ;} ?>  href="{{action('EntreesController@showdisp', $Entree['id'])}}" ><small style="font-size:11px"><?php echo $Entree['sujet'] ; ?></small></a><br>
-             <label style="font-size:11px"><a style="color:black" href="{{action('EntreesController@showdisp', $Entree['id'])}}" ><?php  echo $entree['emetteur'] . '</a></label><br>
-<label style="font-size:12px">'.$newDate.'</label>';  ?>
+             <a <?php if($Entree['viewed']==false) {echo 'style="font-weight:800;font-size:16px;letter-spacing:1px"' ;}else{ echo'style="font-size:12px;"';} ?>  href="{{action('EntreesController@showdisp', $Entree['id'])}}" ><small style="<?php echo $col;?>"><?php echo $Entree['sujet'] ; ?></small></a><br>
+             <label style="font-size:11px"><a style="<?php echo $col;?>" href="{{action('EntreesController@showdisp', $Entree['id'])}}" ><?php  echo $entree['emetteur'] . '</a></label><br>
+<label style="font-size:12px;'.$col.'">'.$newDate.'</label>';  ?>
 			<?php echo '</li>';
 
 			}

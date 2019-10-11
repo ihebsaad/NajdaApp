@@ -82,8 +82,46 @@ public function __construct()
 
 public function logout(Request $request)
     {
-        // vider les roles de lutilisateur dans la seance avant logout
+
+        // supprimer les affectations
+        $user = auth()->user();
+        $iduser=$user->id;
+
         $seance =   Seance::first();
+        $medic= $seance->superviseurmedic ;
+        $tech= $seance->superviseurtech ;
+        $veilleur= $seance->veilleur;
+
+        if($iduser == $veilleur  )
+        {
+            //interdire de deconnexion veilleur si superviseur(s) non connectés
+            if ( !($medic >0) ||  !($tech >0) )
+            {
+                return redirect('/home')->withErrors([ 'les superviseurs Technique et Medical doivent êtres connectés ']);
+            }
+
+        }
+        else{
+
+            //interdire de deconnexion Superviseues si veilleur non connecté
+
+            if( ($iduser == $medic) || ($iduser== $tech)  ) {
+
+                if ( !($veilleur >0) )
+                {
+                    if (! App::environment('local')) {
+                        return redirect('/home')->withErrors(['Le veilleur doit être connecté']);
+                    }
+                }
+
+            }
+
+            else{
+
+
+
+                // vider les roles de lutilisateur dans la seance avant logout
+
 
         if ($seance->dispatcheur==Auth::id())
         {
@@ -112,9 +150,7 @@ public function logout(Request $request)
 
         $seance->save();
 
-        // supprimer les affectations
-        $user = auth()->user();
-        $iduser=$user->id;
+
 
          $nomuser=$user->name.' '.$user->lastname;
 
@@ -140,5 +176,8 @@ public function logout(Request $request)
         $request->session()->invalidate();
 
         return redirect('/');
+        }
+
+    }
     }
 }

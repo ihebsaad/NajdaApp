@@ -214,17 +214,12 @@
 
     function colorerSeq(string,qy) {
 
-
-
         if(qy!='')
         {
-
             var caracSp = ['-', '_', '(',')',' '];
             //alert(string);
             // For all matching elements
             $(string).each(function() {
-
-
                 var hrefString=$(this).html();
                 //  alert(hrefString);
                 var a1=hrefString.indexOf("\"");
@@ -243,28 +238,19 @@
                 var ancien;
                 var kol=false;
                 for (var i = 0, len = myStr.length; i < len; i++) {
-                    //alert(myStr[i]);
-
                     if(qy[0].toUpperCase()==myStr[i].toUpperCase())
                     {
-
                         if(!dejaEn)
                         {
-
                             ancien= myContents ;
                             kol=true;
-                            // an_i=i;
                             noniden="";
-
                             for(var j=0, len2 = qy.length; j<len2; j++)
                             {
-
                                 if(i<len)
                                 {
-
                                     if(qy[j].toUpperCase()==myStr[i].toUpperCase() || caracSp.includes(myStr[i]) )
                                     {
-
                                         if(qy[j].toUpperCase()==myStr[i].toUpperCase())
                                         {
                                             // alert ("bonjour");
@@ -273,39 +259,28 @@
                                             i++;
                                             //b=true;
                                         }
-
                                         else
                                         {
-                                            //alert ("special");
-
                                             if(caracSp.includes(myStr[i]))
                                             {
-                                                //alert ("special");
-
                                                 i++;
-
                                                 if(qy[j].toUpperCase()==myStr[i].toUpperCase())
                                                 {
                                                     myContents += '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
                                                     myContents += '<span class="single-char char-' + i + '">' + myStr[i] + '</span>';
-
                                                     noniden+= '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
                                                     noniden+= '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-
                                                     i++;
-                                                    //b=true;
                                                 }
                                                 else
                                                 {
                                                     myContents += '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
                                                     noniden+= '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
 
-
                                                 }
 
                                             }
                                         }
-
                                     }
                                     else
                                     {
@@ -313,55 +288,34 @@
                                         myContents += noniden;
                                         myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
                                         j=len2;
-                                        //i=an_i;
-                                        //i++;
                                         kol=false;
                                         ancien= myContents;
-
                                     }
-
                                 }
                                 else
                                 {
                                     myContents=ancien;
                                     j=len2;
-                                    // i=an_i;
                                     kol=false;
-
                                 }
-
-
                             }
-
-
-
                             if(kol)
                             {
                                 i--;
                                 dejaEn=true;
-
                             }
                             else
                             {
-
                                 dejaEn=false;
-
                             }
-
-
-
                         }
                         else
                         {
-
                             myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-
                         }
-
                     }
                     else
                     {
-
                         myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
                     }
                 }
@@ -371,9 +325,7 @@
 
              });
         }
-
     }
-
 
     $(document).ready(function(){
 
@@ -383,70 +335,39 @@
             //alert(qy);
 
             if(qy != ''){
-
                 var _token=$('input[name="_token"]').val();
-
                 $.ajax({
-
                     url:"{{ route('RechercheMulti.autocomplete')}}",
                     method:"POST",
                     data:{qy:qy, _token:_token},
                     success:function(data)
                     {
-
-
-
                         $("#kkk").fadeIn();
                         $("#kkk").html(data);
-
-
-                        var myStringType=$('.resAutocompRech');
+                       var myStringType=$('.resAutocompRech');
                         // alert( myStringType.html());
                         colorerSeq(myStringType,qy);
-
-
                     }
-
-
                 });
-
-
             }
             else
             {
-
-
                 $("#kkk").fadeOut();
-
-
             }
-
-
         });
-
-
-
     });
-
 </script>
 
 <script>
     $(document).on('click','.resAutocompTyoeAct',function(){
 
-        // alert("bonjour");
-
         $("#search-bar").val($(this).text());
         $("#kkk").fadeOut();
-
-
     });
-
 
     $('#search-bar').blur(function() {
         $("#kkk").fadeOut();
     });
-
-
 
 
 

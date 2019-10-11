@@ -44,6 +44,38 @@
     }
 </style>
 
+<?php
+use App\Notification;
+
+$seance =  DB::table('seance')
+    ->where('id','=', 1 )->first();
+$user = auth()->user();
+$iduser=$user->id;
+
+$superviseurmedic=$seance->superviseurmedic ;
+$superviseurtech=$seance->superviseurtech ;
+
+ if ( ($iduser==$superviseurmedic) || ($iduser== $superviseurtech) ) {
+
+$dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
+    $dtc2 = (new \DateTime())->modify('-10 minutes')->format('Y-m-d\TH:i');
+
+    $countO=Notification::where('read_at', null)
+         ->where('created_at','<=', $dtc)
+        ->where('created_at','>', $dtc2)
+        ->count();
+
+
+    $dtc3 = (new \DateTime())->modify('-10 minutes')->format('Y-m-d\TH:i');
+
+    $countR=Notification::where('read_at', null)
+         ->where('created_at','<=', $dtc3)
+        ->count();
+
+}
+
+?>
+
 <div class="panel panel-default"  id="notificationspanel">
     <div class="panel-heading" id="headernotifs">
         <h4 class="panel-title">Notifications</h4>
@@ -52,6 +84,13 @@
             </span>
     </div>
     <div  class="panel-body" style="display: block;">
+<?php        if ( ($iduser==$superviseurmedic) || ($iduser== $superviseurtech) ) {  ?>
+
+    <div id="totnotifs"  class="row pull-right" <?php if(intval($countR) >0){echo 'style="width:40%;padding:8px 8px 8px 8px;background:#fc6e51" '; } else{  if(intval($countO)>0){   echo 'style="width:40%;padding:8px 8px 8px 8px;background:#FFCE54"'; }   }  ?> >
+        <div class="col-md-1 "><a  title="Notification depuis plus de 10 Minutes" href="{{ route('entrees.index') }}" ><span  id="notifrouge" class="label label-danger  " style="color:black"><?php echo $countR ;?></span></a></div>
+        <div class="col-md-1 "><a  title="Notification depuis plus de 5 Minutes" href="{{ route('entrees.index') }}" ><span  id="notiforange" class="label label-warning  " style="color:black"><?php echo $countO ;?></span></a></div>
+    </div>
+        <?php } ?>
         <ul id="tabskbs" class="nav nav-tabs" style="margin-bottom: 15px;">
             <li class="active">
                 <a href="#notificationstab" data-toggle="tab">Notifs</a>

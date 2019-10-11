@@ -28,6 +28,7 @@
                 $supmedic=$seance->superviseurmedic ;
                 $suptech=$seance->superviseurtech ;
                 $charge=$seance->chargetransport ;
+                $veilleur=$seance->veilleur ;
                 ?>
                 </li><li class=" " style="background-color:grey;color:white;text-align:center">
 <?php
@@ -41,8 +42,10 @@
                 <span>(superviseur technique)<br></span>
                 <?php }    if ($iduser==$charge) { ?>
                 <span>(chargé transport)<br></span>
-                <?php } ?>
-
+                <?php }
+                    if ($iduser==$veilleur) { ?>
+    <span>(Veilleur)<br></span>
+    <?php } ?>
         </li>
         <li style="margin-top:8px">
             <a href="{{ route('profile',$iduser) }}">

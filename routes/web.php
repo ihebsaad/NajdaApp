@@ -107,6 +107,8 @@ Route::post('/entrees/savecomment','EntreesController@savecomment')->name('entre
 Route::post('/entrees/dispatchf','EntreesController@dispatchf')->name('entrees.dispatchf');
 Route::post('/entrees/ajoutcompter','EntreesController@AjoutCompteRendu')->name('entrees.ajoutcompter');
 Route::get('/entrees/countnotifs','EntreesController@countnotifs')->name('entrees.countnotifs');
+Route::get('/entrees/countnotifsrouge','EntreesController@countnotifsrouge')->name('entrees.countnotifsrouge');
+Route::get('/entrees/countnotifsorange','EntreesController@countnotifsorange')->name('entrees.countnotifsorange');
 
 
 /*** Emails **/

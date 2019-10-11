@@ -288,8 +288,6 @@ class UsersController extends Controller
         // $dossier->$champ =   $val;
         User::where('id', $id)->update(array($champ => $val));
 
-
-
     }
 
 

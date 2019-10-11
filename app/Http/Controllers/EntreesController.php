@@ -460,6 +460,40 @@ $doss=  $entree->dossier;
 
     }
 
+
+    public static function countnotifsorange()
+    {
+
+        $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
+        $dtc2 = (new \DateTime())->modify('-10 minutes')->format('Y-m-d\TH:i');
+
+        $count=Notification::where('read_at', null)
+            //      ->where('dossier','')
+            ->where('created_at','<=', $dtc)
+            ->where('created_at','>', $dtc2)
+            ->count();
+
+        return $count;
+
+    }
+
+
+
+    public static function countnotifsrouge()
+    {
+
+        $dtc = (new \DateTime())->modify('-10 minutes')->format('Y-m-d\TH:i');
+
+            $count=Notification::where('read_at', null)
+           //      ->where('dossier','')
+            ->where('created_at','<=', $dtc)
+            ->count();
+
+        return $count;
+
+    }
+
+
     public function AjoutCompteRendu(Request $request)
     {
         $par=Auth::id();

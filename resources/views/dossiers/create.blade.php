@@ -33,10 +33,10 @@ use  \App\Http\Controllers\DocsController;
                     <div class="col-md-2">
                         <div class="form-group">
                             <label>Type de dossier</label>
-                            <select  onchange=" "  id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
+                            <select  onchange="hidediv() "  id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
+                                <option   value="Mixte">Mixte</option>
                                 <option  value="Medical">Medical</option>
                                 <option  value="Technique">Technique</option>
-                                <option   value="Mixte">Mixte</option>
                             </select>
                         </div>
                     </div>
@@ -1154,6 +1154,30 @@ use  \App\Http\Controllers\DocsController;
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
 
 <script>
+
+    function hidediv()
+    {
+
+       if (document.getElementById('type_dossier').value=="Mixte")
+       {
+           document.getElementById('medical').style.display = 'block';
+           document.getElementById('technique').style.display = 'block';
+
+       }
+        if (document.getElementById('type_dossier').value=="Medical")
+        {
+            document.getElementById('medical').style.display = 'block';
+            document.getElementById('technique').style.display = 'none';
+        }
+        if (document.getElementById('type_dossier').value=="Technique")
+        {
+            document.getElementById('medical').style.display = 'none';
+            document.getElementById('technique').style.display = 'block';
+        }
+
+
+
+    }
 
     function checkexiste( ) {
 

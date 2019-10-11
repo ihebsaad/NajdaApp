@@ -28,6 +28,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Parametre;
 use Notification;
 
+use Illuminate\Support\Facades\Notification as Notification2;
+
+
 
 class EmailController extends Controller
 {
@@ -350,14 +353,15 @@ class EmailController extends Controller
                 /*********************/
                 if($refdossier!= ''){
 
-
                     $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
                     $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
                  
               //  $user=  DB::table('users')->where('id','=', $userid )->first();
                   if($userid>0){
-                      $user = User::find($userid);
-                      $user->notify(new Notif_Suivi_Doss($entree));
+                    //  $user = User::find($userid);
+                     // $user->notify(new Notif_Suivi_Doss($entree));
+                      Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+
 
                   }
 
@@ -372,7 +376,13 @@ class EmailController extends Controller
 
                     $user = User::find($disp);
                     // $user=  DB::table('users')->where('id','=', $disp )->first();
-                 if($disp>0){   $user->notify(new Notif_Suivi_Doss($entree));}
+                 if($disp>0){
+
+                     // $user->notify(new Notif_Suivi_Doss($entree));
+                     Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+
+                 }
 
                   //  Notification::send( $user, new Notif_Suivi_Doss($entree));
                   
@@ -568,8 +578,9 @@ class EmailController extends Controller
 
                     $user = User::find($userid);
 
-                    $user->notify(new Notif_Suivi_Doss($entree));
-                    // Notification::send($user, new Notif_Suivi_Doss($entree));
+                        Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+
+                       // Notification::send($user, new Notif_Suivi_Doss($entree));
                    }
                 }
                 else{
@@ -581,7 +592,9 @@ class EmailController extends Controller
                    if($disp>0) {
                        $user = User::find($disp);
                        // $user=  DB::table('users')->where('id','=', $disp )->first();
-                       $user->notify(new Notif_Suivi_Doss($entree));
+
+                       Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
                    }
                     //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
@@ -902,8 +915,7 @@ class EmailController extends Controller
                         //  $user=  DB::table('users')->where('id','=', $userid )->first();
                       if($userid)
                       {
-                          $user = User::find($userid);
-                          $user->notify(new Notif_Suivi_Doss($entree));
+                            Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
                       }
 
@@ -919,7 +931,8 @@ class EmailController extends Controller
                            $user = User::find($disp);
                            // $user=  DB::table('users')->where('id','=', $disp )->first();
 
-                           $user->notify(new Notif_Suivi_Doss($entree));
+                            Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
                        }
                         //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
@@ -1041,8 +1054,9 @@ class EmailController extends Controller
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if ($userid) {
-                    $user = User::find($userid);
-                    $user->notify(new Notif_Suivi_Doss($entree));
+
+                         Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+
                     }
 
 
@@ -1053,15 +1067,15 @@ class EmailController extends Controller
                         ->where('id','=', 1 )->first();
                     $disp=$seance->dispatcheur ;
                    if($disp>0) {
-                       $user = User::find($disp);
-                       $user->notify(new Notif_Suivi_Doss($entree));
+
+                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
                    }
 
 
                 }
                 $id=$entree->id;
 
-                ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
                 if($storeid==false){
                     $firstid=$id;
