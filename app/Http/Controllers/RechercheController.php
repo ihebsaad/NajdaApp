@@ -8,6 +8,7 @@ use App\Action;
 use App\Mission;
 use App\Dossier;
 use App\TypeMission;
+use App\User;
 use Auth;
 use DB;
 use Carbon\Carbon;
@@ -84,7 +85,7 @@ class RechercheController extends Controller
         if($request->get('qy'))
         {
           $qery=$request->get('qy');
-          $output='<ul class="dropdown-menu kbsdropdowns" style="height: 250px; overflow-y: auto;" >';
+          $output='<ul class="dropdown-menu kbsdropdowns" style="height: 250px; overflow-y: auto; width:550;" >';
 
  //--------------------------recherche depuis la table Dossier----------------------------------------------
 
@@ -99,9 +100,20 @@ class RechercheController extends Controller
             $output.='<li class="divider"></li>';
             $contenu=true;
           foreach ($data as $row ) {
+
+             if($row->affecte)
+            {
+              $use=User::where('id',$row->affecte )->first();         
+              $affecOuNon=" ( Affecté à ". $use->name." ".$use->lastname." )";
+
+            }
+            else
+            {
+               $affecOuNon=" ( Non Affecté ) ";
+            }
               
              // $urln= URL::to('/');
-              $output.='<li  class="resAutocompRech" style=" align: left; width:400px; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_medic.' (dossier selon la Réf Médic)</a></li>';
+              $output.='<li  class="resAutocompRech" style=" align: left; width:500px; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_medic.' (dossier selon la Réf Médic)'. $affecOuNon.'</a></li>';
           }
 
           $output.='<li class="divider"></li>';
@@ -117,9 +129,19 @@ class RechercheController extends Controller
             $output.='<li class="divider"></li>';
             $contenu=true;
           foreach ($data as $row ) {
-              
+
+            if($row->affecte)
+            {
+              $use=User::where('id',$row->affecte )->first();         
+              $affecOuNon=" ( Affecté à ". $use->name." ".$use->lastname." )";
+
+            }
+            else
+            {
+               $affecOuNon=" ( Non Affecté ) ";
+            }
              // $urln= URL::to('/');
-              $output.='<li  class="resAutocompRech" style=" align: left; width:400px; overflow: hidden; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_customer.' (Dossier selon la Réf client)</a></li>';
+              $output.='<li  class="resAutocompRech" style=" align: left; width:500px; overflow: hidden; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_customer.' (Dossier selon la Réf client) '.$affecOuNon.'</a></li>';
           }
 
           $output.='<li class="divider"></li>';
@@ -135,8 +157,19 @@ class RechercheController extends Controller
             $output.='<li class="divider"></li>';
           $contenu=true;
           foreach ($data as $row ) {
+
+            if($row->affecte)
+            {
+              $use=User::where('id',$row->affecte )->first();         
+              $affecOuNon=" ( Affecté à ". $use->name." ".$use->lastname." )";
+
+            }
+            else
+            {
+               $affecOuNon=" ( Non Affecté ) ";
+            }
               
-              $output.='<li  class="resAutocompRech" style=" align: left; width:400px; overflow: hidden;left:-50px; margin-right:7px;" ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->subscriber_name.'  '. $row->subscriber_lastname.'  (Dossier '.$row->reference_medic.')</a></li>';
+              $output.='<li  class="resAutocompRech" style=" align: left; width:500px; overflow: hidden;left:-50px; margin-right:7px;" ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->subscriber_name.'  '. $row->subscriber_lastname.'  (Dossier '.$row->reference_medic.') '.$affecOuNon.'</a></li>';
           }
 
           $output.='<li class="divider"></li>';
@@ -186,8 +219,19 @@ class RechercheController extends Controller
             $output.='<li class="divider"></li>';
           $contenu=true;
           foreach ( $collectDossierTech as $row ) {
-              
-              $output.='<li  class="resAutocompRech" style=" align: left; width:400px; overflow: hidden;left:-50px; margin-right:7px;" ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->vehicule_immatriculation.' (Dossier selon l\'immatriculation véhivule)</a></li>';
+            
+            if($row->affecte)
+            {
+              $use=User::where('id',$row->affecte )->first();         
+              $affecOuNon=" ( Affecté à ". $use->name." ".$use->lastname." )";
+
+            }
+            else
+            {
+               $affecOuNon=" ( Non Affecté ) ";
+            }
+
+              $output.='<li  class="resAutocompRech" style=" align: left; width:500px; overflow: hidden;left:-50px; margin-right:7px;" ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->vehicule_immatriculation.' (Dossier selon l\'immatriculation véhivule) '.$affecOuNon.'</a></li>';
           }
 
           $output.='<li class="divider"></li>';

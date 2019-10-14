@@ -315,7 +315,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
                  
 
                    @foreach ( $actionsReouRap as $rr)
-                    <tr> <td style="color: white; font-size: 0px;">{{$rr->id}}</td> <td>{{$rr->titre}}</td> <td>{{ $rr->Mission->typeMission->nom_type_Mission}}</td> <td>{{$rr->Mission->dossier->reference_medic}}-{{$rr->Mission->dossier->subscriber_name }} {{$rr->Mission->dossier->subscriber_lastname}}</td>  </tr>
+                    <tr> <td style="color: white; font-size: 0px;">{{$rr->id}}</td> <td>{{$rr->titre}}</td> <td>{{ $rr->Mission->typeMission->nom_type_Mission}}</td> <td>{{$rr->Mission->dossier->reference_medic}} - {{$rr->Mission->dossier->subscriber_name }} {{$rr->Mission->dossier->subscriber_lastname}}</td>  </tr>
                    
                   @endforeach
 
@@ -367,7 +367,6 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
            {
 
           
-
            alert(data);
            location.reload();
 
@@ -376,12 +375,6 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
        }
     });
    
-
-
-
-
-
-
 
 
       });

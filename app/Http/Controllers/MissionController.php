@@ -135,8 +135,9 @@ class MissionController extends Controller
         $typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeMissauto')))->first();
 
 
-         if($typeMiss->id==30 )/*vérification de client AXA ou IMA de dossier avant de créer une mission de  rapatriement  véhicule sur Cargo*/
-         {
+        // if($typeMiss->id==30 )
+          /*vérification de client AXA ou IMA de dossier avant de créer une mission de  rapatriement  véhicule sur Cargo*/
+         /*{
          $dossi=Dossier::where('id',$request->get('dossierID'))->first();
          $existe_cli=Client::where('id',$dossi->customer_id)
                               ->where(function($q){                             
@@ -153,7 +154,7 @@ class MissionController extends Controller
 
                }
 
-          }                  
+          }  */                
 
         
 
@@ -1139,12 +1140,9 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date Départ pour mission </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 6 :</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> suivre mission taxi </span>
-          <br>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date Départ pour mission </span>
+           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
-
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
@@ -1208,18 +1206,13 @@ public function getAjaxDeleguerMission($idmiss)
 
        $output.='<input type="hidden" id="idmissionDateSpecM2" name="idmissionDateSpec2" value="'.$miss->id.'"  />
         <input type="hidden" id="NomTypeDateSpecM2" name="NomTypeDateSpec2" value="arr_prev_dest"  />
-         
-       
-       <br>
-       
-        <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
+         <br>
+       <div style=" border-width:2px; border-style:solid; border-color:black; width: 100%; ">
 
         <div class="row">
           <br>
         
-        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date prévue pour fin de mission </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 7 :</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Evaluation  </span>
-          <br>
+        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date prévue pour fin de mission </span> <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
         
@@ -1304,9 +1297,7 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue d\'arrivee de remorqueur au port </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 26 :</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Suivre coordination au port </span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue d\'arrivée de remorqueur au port </span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -1382,8 +1373,7 @@ public function getAjaxDeleguerMission($idmiss)
         <div class="row">
           <br>
         
-        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure départ sur Cargo </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 29 :</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Vérifier apuration passeport   </span>
+        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure départ sur Cargo </span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -1470,11 +1460,9 @@ public function getAjaxDeleguerMission($idmiss)
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
           <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date décollage d\'avion </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 16 :</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Suivre départ vol </span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date décollage d\'avion </span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
-
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
@@ -1533,9 +1521,6 @@ public function getAjaxDeleguerMission($idmiss)
        </div>';
 
       
-
-
-
       }// fin Ecsorte intern. fournie par MI
 
         if( $miss->type_Mission==27 ) // Rapatriement véhicule avec chauffeur accompagnateur
@@ -1557,9 +1542,7 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue d\'arrivée au port </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 11 :</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Suivre coordination </span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue d\'arrivée au port </span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -1646,12 +1629,10 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date rdv prévu </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 7:</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Suivre dédouanement     </span>
+          
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; Date RDV prévu </span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
-
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
@@ -1734,9 +1715,8 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure du rdv avec le médecin</span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 6:</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Suivre consultation et attendre RM </span>
+         
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure du rdv avec le médecin</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -1823,13 +1803,10 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure de décollage </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 9:</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Evaluation VAT</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure de décollage </span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
-
-        
+       
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
           if($miss->date_spec_affect==1)
@@ -1887,9 +1864,6 @@ public function getAjaxDeleguerMission($idmiss)
        </div>';
 
       
-
-
-
       }// fin Devis transport international sous assistance
 
 
@@ -1913,9 +1887,8 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue d’arrivee (heure atterrissage destination )</span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 8:</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Evaluation </span>
+        
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue d’arrivée (heure d’atterrissage destination )</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2001,9 +1974,7 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue d’arrivee (heure atterrissage destination )</span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 8:</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Confirmer à l’assistance le bon déroulement   </span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue d’arrivée (heure d’atterrissage destination )</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2065,9 +2036,6 @@ public function getAjaxDeleguerMission($idmiss)
        </div>';
 
       
-
-
-
       }// fin Demande d’evasan nationale
 
       if( $miss->type_Mission==22) // escorte de l étranger
@@ -2089,9 +2057,8 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure arrivée du vol</span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 5:</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Appeler l’escorte à son arrivée   </span>
+         
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure arrivée du vol</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2177,11 +2144,8 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date fin séjour </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 6 :</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Envoyer PEC définitive à notre facturation   </span>
-           <span style="padding: 5px; font-weight: bold; font-size: 15px; "> et l\'action 7 : </span>
-           <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;">&nbsp;&nbsp;Evaluation </span>
+          
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date fin séjour </span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2265,9 +2229,7 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure RDV</span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 6:</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Suivre visite et attendre RM </span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure RDV</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2354,9 +2316,8 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure RDV</span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 6:</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Suivre la réalisation de l’expertise </span>
+         
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure RDV</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2443,9 +2404,8 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue de départ du bâteau</span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 11:</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Informer l’assistance du départ effectif  </span>
+         
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue de départ du bâteau</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2531,9 +2491,7 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure RDV pour passage assuré </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 8:</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Suivre récupération véhicule </span>
+        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure RDV pour passage assuré </span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2619,10 +2577,9 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure départ pour mission </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 10 :</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Suivi </span>
-          <br>
+         
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure départ pour mission </span>
+           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
         
@@ -2697,9 +2654,8 @@ public function getAjaxDeleguerMission($idmiss)
         <div class="row">
           <br>
         
-        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure fin mission </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> pour activer l\'action 11 :</span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> Evaluation </span>
-          <br>
+        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure fin mission </span>
+        <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
         
@@ -2783,10 +2739,9 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date fin location  </span><span style="padding: 5px; font-weight: bold; font-size: 15px; "> utilisée pour activer ,  </span>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;">l\'action 6: Vérification fin ou prolongation ? , l\'action 8: PEC définitive  et l\'action 10: Evaluation </span>
-          <br>
+         
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date fin location  </span>
+           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
         

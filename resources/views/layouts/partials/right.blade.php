@@ -131,7 +131,7 @@ use App\Http\Controllers\TagsController;
 
                                          
                                            <h4 class="panel-title">
-                                              <a data-toggle="collapse" href="#collapse{{$Mission->id}}">{{$Mission->dossier->reference_medic}}-{{$Mission->dossier-> subscriber_name}} {{$Mission->dossier->subscriber_lastname}} <br>
+                                              <a data-toggle="collapse" href="#collapse{{$Mission->id}}">{{$Mission->dossier->reference_medic}}&nbsp;-&nbsp;{{$Mission->dossier-> subscriber_name}} {{$Mission->dossier->subscriber_lastname}} <br>
                                                 {{$Mission->typeMission->nom_type_Mission}}
                                               </a>@if ($Mission->assistant_id!=NULL && $Mission->origin_id!=NULL )
                                          <span style="color:red"> &nbsp;(déléguée par {{$Mission-> user_origin->name}}&nbsp {{$Mission->user_origin->lastname}} ) </span> @endif

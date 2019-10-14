@@ -34,8 +34,6 @@ class DeleguerActionController extends Controller
     public function deleguerAction(Request $request)
    {
 
-         //$in=$request->all();
-          //dd($in);
  
           $act = ActionEC::find($request->get('delegActid'));
         
@@ -70,11 +68,10 @@ class DeleguerActionController extends Controller
               
                     $Missions=Auth::user()->activeMissions;
                     
-                  Session::flash('AffectMission',"l'action { ".$act->titre ." } de mission { ".  $act->Mission->typeMission->nom_type_Mission." } de dossier { ".$dossier->reference_medic ."-".
+                  Session::flash('AffectMission',"l'action { ".$act->titre ." } de mission { ".  $act->Mission->typeMission->nom_type_Mission." } de dossier { ".$dossier->reference_medic ." - ".
                     $dossier->subscriber_name." ".$dossier->subscriber_lastname ." } a été déléguée à ".$act->assistant->name." ".$act->assistant->lastname);
 
-                /*Session::flash('AffectMission',"l'action ".$act->titre ." de mission ".  $act->Mission->titre." de dossier ".$dossier->reference_medic ." est déléguée "); */
-
+                
                           
 
                 return view('actions.deleguerMission',['typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
@@ -106,7 +103,7 @@ class DeleguerActionController extends Controller
              //$ref_doss=$doss->reference_medic;
          //$titre_miss=Mission::where('id',$affm->id_mission)->first()->titre;
 
-       $ref_doss=$doss->reference_medic.'-'.$doss->subscriber_name.' '.$doss->subscriber_lastname;
+       $ref_doss=$doss->reference_medic.' - '.$doss->subscriber_name.' '.$doss->subscriber_lastname;
          $titre_miss=Mission::where('id',$affm->id_mission)->first()->typeMission->nom_type_Mission;
 
 
@@ -114,11 +111,7 @@ class DeleguerActionController extends Controller
 
             if($ref_doss &&  $titre_miss &&  $titre_act )
             {
-           
-             //$affecmhis=new DelegActHis($affm->toArray()); 
-
-             
-            // if( $affecmhis->save() && $affm->forceDelete())
+          
 
               if( $affm->forceDelete())
              {
