@@ -14,7 +14,6 @@
             </a>
         </div>
 
-
         <div style="min-width:100px!important;padding-top:15px;padding-left:0px!important" class="col-sm-1 col-md-1 col-lg-1">
           <p id="njour" style="font-size: 25px; margin-bottom: 0px!important;color: white"></p>
           <div class="time">

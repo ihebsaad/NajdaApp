@@ -1110,7 +1110,7 @@ use  \App\Http\Controllers\DocsController;
 
 
                         <div class="form-actions pull-right  col-md-4">
-                            <button type="button" id="editDos" class="btn btn-sm btn-danger">Annuler</button>
+                            <a href="{{route('entrees.index')}}" type="button" id="annuler" class="btn btn-sm btn-danger">Annuler</a>
                         </div>
 
                         <div class="form-actions pull-right col-md-6">
@@ -1213,6 +1213,11 @@ use  \App\Http\Controllers\DocsController;
             $('#bens').css('display','block');
 
         }
+    }
+
+    function  annuler()
+    {
+
     }
 
     function setTel(elm)

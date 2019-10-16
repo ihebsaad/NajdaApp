@@ -324,7 +324,7 @@ class EmailController extends Controller
                 if (   (strpos($sujet, $dos['reference_medic'] )!==false) || (strpos($contenu, $dos['reference_medic'])) || (strpos($sujet, $dos['reference_customer'] )!==false)  || (strpos($contenu, $dos['reference_customer'] )!==false)   )
                 {
                     $refdossier = $dos['reference_medic'];
-                    $dossierid = $dos['id'];
+                    $dossierid = intval($dos['id']);
                     $statut = 1;
                     break;
                 }

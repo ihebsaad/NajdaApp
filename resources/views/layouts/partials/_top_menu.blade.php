@@ -122,7 +122,7 @@
             <a href="{{ route('inactifs') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
                 <span class="fas fa-lg  fa-warning"></span>
                 <br><?php $count= \App\Http\Controllers\DossiersController::DossiersInactifs();?>
-                Dossiers Inactifs <span id="countnotif" class="label label-warning" style="color:black"><?php echo $count  ;?></span>
+                Dossiers Inactifs <span   class="label label-warning" style="color:black"><?php echo $count  ;?></span>
             </a>
         </div>
 

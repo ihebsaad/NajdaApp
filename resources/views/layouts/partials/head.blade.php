@@ -78,6 +78,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
     $(document).ready(function(){
 
+        $('#countnotif').html('500');
 
         $('#enpause').click(function() {
 
@@ -467,6 +468,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
 ?>
 
+
         function checkNotifs(){
             $.ajax({
                 type: "get",
@@ -475,73 +477,11 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 {
                     //console.log the response
                     console.log('check new notif   :'+data);
-                 Data=   JSON.stringify(data);
+               //  Data=   JSON.stringify(data);
 
                     if(data )
-                    {
+                   {
 
-                  <?php      $seance =  DB::table('seance')
-                            ->where('id','=', 1 )->first();
-                        $user = auth()->user();
-                        $iduser=$user->id; ?>
-
- <?php  if (($view_name != 'supervision') && ($view_name != 'affectation') && ($view_name != 'notifs') && ($view_name != 'missions')  && ($view_name != 'transport')  && ($view_name != 'transportsemaine')  && ($view_name != 'dossiers-create') && ($view_name != 'entrees-dispatching') && ($view_name != 'entrees-showdisp') ) { ?>
-                        <?php if($iduser == $seance->dispatcheur)
-                            {  ?>
-                        // count notif dispatcheur
-                        $.ajax({
-                            type: "get",
-                            url: "<?php echo $urlapp; ?>/entrees/countnotifs",
-                            success:function(data)
-                            {
-                                console.log('count notif : '+data) ;
-                                var count=parseInt(data);
-                                if(count>0 )
-                                {
-                                    document.getElementById('countnotif').innerHTML=''+count;
-                                }
-                            }
-                        });
-        <?php   }
-
-                        if ( ($iduser==$seance->superviseurmedic) || ($iduser== $seance->superviseurtech) ) {
-
-                            ?>
-                        // count notif superviseur
-
-                             $.ajax({
-                                type: "get",
-                                url: "<?php echo $urlapp; ?>/entrees/countnotifsorange",
-                                success: function (data) {
-                                    console.log('count notif orange: ' + data);
-                                    var count = parseInt(data);
-                                    if (count > 0) {
-                                        document.getElementById('notiforange').innerHTML = '' + count;
-                                        document.getElementById('totnotifs').style.background = '#FFCE54';
-
-                                    }
-                                }
-                                });
-
-                            $.ajax({
-                                type: "get",
-                                url: "<?php echo $urlapp; ?>/entrees/countnotifsrouge",
-                                success: function (data) {
-                                    console.log('count notif rouge: ' + data);
-                                    var count = parseInt(data);
-                                    if (count > 0) {
-                                        document.getElementById('notifrouge').innerHTML = '' + count;
-                                        document.getElementById('totnotifs').style.background = '#FD9883'  ;
-
-                                    }
-
-                                }
-                            });
-
-<?php
-                } // superviseur
- } // viewname
- ?>
                         showNotif(data);
 
 

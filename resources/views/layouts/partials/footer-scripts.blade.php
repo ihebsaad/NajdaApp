@@ -142,7 +142,9 @@ if (App::environment('local')) {
 
 <script>
 
-    $( "#open" ).click(function() {
+
+
+$( "#open" ).click(function() {
         $(".folders").css("display", "none");
         $(".news").css("display", "none");
         /*   $( ".folders" ).hide( "slow", function() {
@@ -231,7 +233,7 @@ if (App::environment('local')) {
 
 
          // verifier si la notification est dispatche
-         if ((typeof parseddata['Entree']['dossier'] !== "undefined") && (parseddata['Entree']['dossier'] !== null)) {
+         if ((typeof parseddata['Entree']['dossier'] !== "undefined") && (parseddata['Entree']['dossier'] !== null)&& (parseddata['Entree']['dossier'] !== '')) {
              // verifier si le dossier exist dans la liste des notifications
               if ($("#prt_" + parseddata['Entree']['dossier']).length) {
 
@@ -328,17 +330,17 @@ if (App::environment('local')) {
              }
          }
          else {
-             <?php  if (Session::get('disp') != 0) { ?>
+             <?php  if (Session::get('disp') != 0) {   ?>
 
              var reception= parseddata['Entree']['created_at'];
               var heure=reception.toString().slice(11,16);
 
              // ajout de la nouvelle node (notification non dispatche)
-             $('#jstree').jstree().create_node("#", {
+         /*    $('#jstree').jstree().create_node("#", {
                  "id": parseddata['Entree']['id'],
                  "text":heure+' '+parseddata['Entree']['sujet'],
                  "type": typee,
-                 "a_attr": {"href": "{{ asset('entrees/showdisp/') }}" + "/" + parseddata['Entree']['id']}
+                 "a_attr": {"href": "{{-- asset('entrees/showdisp/') --}}" + "/" + parseddata['Entree']['id']}
              }, "first", function () {
                  // animation de nouvelle notification
                  setInterval(function () {
@@ -354,12 +356,12 @@ if (App::environment('local')) {
                  document.location.href = href;
              });
 
-
+*/
               Push.create("Nouvelle Notification", {
 
               body: parseddata['Entree']['sujet'],
               icon: "{{ asset('public/img/najda.png') }}",
-              timeout: 8000,
+              timeout: 15000,
 
               onClick: function(){
 
@@ -371,7 +373,7 @@ if (App::environment('local')) {
 
 
 
-             <?php } ?>
+             <?php   } ?>
 
          }
 

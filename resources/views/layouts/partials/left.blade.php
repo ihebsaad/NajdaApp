@@ -72,6 +72,19 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
          ->where('created_at','<=', $dtc3)
         ->count();
 
+
+
+     $style='';
+
+     if($countR+$countO==0){$style='width:40%;padding:8px 8px 8px 8px;background:white' ;}
+     else{
+         if($countR >0){
+             $style='width:40%;padding:8px 8px 8px 8px;background:#fc6e51';
+         }else{
+             $style='width:40%;padding:8px 8px 8px 8px;background:#FFCE54';
+         }
+     }
+
 }
 
 ?>
@@ -85,8 +98,10 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
     </div>
     <div  class="panel-body" style="display: block;">
 <?php        if ( ($iduser==$superviseurmedic) || ($iduser== $superviseurtech) ) {  ?>
-
-    <div id="totnotifs"  class="row pull-right" <?php if(intval($countR) >0){echo 'style="width:40%;padding:8px 8px 8px 8px;background:#fc6e51" '; } else{  if(intval($countO)>0){   echo 'style="width:40%;padding:8px 8px 8px 8px;background:#FFCE54"'; }   }  ?> >
+<style>
+    #totnotifs{background-color: white;}
+</style>
+       <div id="totnotifs"  class="row pull-right" style="<?php echo $style;?>">
         <div class="col-md-1 "><a  title="Notification depuis plus de 10 Minutes" href="{{ route('entrees.index') }}" ><span  id="notifrouge" class="label label-danger  " style="color:black"><?php echo $countR ;?></span></a></div>
         <div class="col-md-1 "><a  title="Notification depuis plus de 5 Minutes" href="{{ route('entrees.index') }}" ><span  id="notiforange" class="label label-warning  " style="color:black"><?php echo $countO ;?></span></a></div>
     </div>
@@ -209,7 +224,7 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
 
                                switch ($n['type']) {
                                         case "email":
-                                            echo '<li  id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$datenotif.' '.$n['sujet'].'</span></a></li>';
                                             break;
                                         case "fax":
                                             echo '<li  id="'.$n['id'].'" rel="trfax" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'"  href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>';

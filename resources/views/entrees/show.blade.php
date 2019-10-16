@@ -21,7 +21,13 @@ use App\Http\Controllers\TagsController;
 @stop
 @section('content')
 
+    <?php
+    $urlapp=env('APP_URL');
 
+    if (App::environment('local')) {
+        // The environment is local
+        $urlapp='http://localhost/najdaapp';
+    }?>
 <div class="panel panel-default panelciel " style="">
  @if(session()->has('AffectNouveauDossier'))
     <div class="alert alert-success">
@@ -39,7 +45,7 @@ use App\Http\Controllers\TagsController;
                         <div class="row" style="padding-right: 10px;margin-top:10px" id="emailbuttons">
                             <div class="pull-right" style="margin-top: 0px;"><?php $iddossier=$entree['dossierid'] ; ?>
                                 @if (!empty($entree->dossier))
-                                    <button class="btn btn-sm btn-default"><b>REF: {{ $entree['dossier']   }} - <?php echo  DossiersController::FullnameAbnDossierById($iddossier); ?></b></button>
+                                    <button class="btn btn-sm btn-default"><b><a style="color:black" href="<?php echo $urlapp.'/dossiers/fiche/'.$iddossier;?>">REF: {{ $entree['dossier']   }} - <?php echo  DossiersController::FullnameAbnDossierById($iddossier); ?></a></b></button>
                                 @endif
                                 @if (empty($entree->dossier))
                                         <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>

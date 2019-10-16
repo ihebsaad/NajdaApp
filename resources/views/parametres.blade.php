@@ -43,11 +43,11 @@
                                     <i class="fa-lg fas fa-user-clock"></i>  Séance
                                 </a>
                             </li>
-                       <!--     <li class="nav-item">
+                           <li class="nav-item">
                                 <a class="nav-link" href="#tab2" data-toggle="tab" onclick="showinfos2();hideinfos();hideinfos3();hideinfos4()">
                                     <i class="fa-lg fas fa-sliders-h"></i>  Paramètres
                                 </a>
-                            </li>--->
+                            </li>
                             <?php }
 
                             if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) { /*
@@ -199,7 +199,7 @@
                         </div>
                      </div>
 
-               <!--     <div id="tab2" class="tab-pane fade " style="display:block">
+                   <div id="tab2" class="tab-pane fade " style="display:block">
                         <div class="padding:50px 50px 50px 50px"><br>
                         <h4>Paramètres</h4><br>
 
@@ -232,7 +232,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>--->
+                    </div>
 <?php }
 
 if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {

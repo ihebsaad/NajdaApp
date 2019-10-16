@@ -137,7 +137,7 @@
           <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
 
           <a href="{{ route('entrees.dispatching') }}" class="btn <?php echo $color; ?> btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
-              <span class="  fa-fw fas <?php echo $icon ; ?> fa-2x"></span><?php  if($count > 0 ){ ?><span id="countnotif" class="label label-warning" style="color:black"><?php echo $count;?></span><?php } else{ ?><span id="countnotif" class="label " style="color:black"><?php echo $count;?></span> <?php } ?>
+              <span class="  fa-fw fas <?php echo $icon ; ?> fa-2x"></span><?php  if($count > 0 ){ ?><span id="countnotific" class="label label-warning" style="color:black"><?php echo $count;?></span><?php } else{ ?><span id="countnotific" class="label " style="color:black"><?php echo $count;?></span> <?php } ?>
           </a>
           </div>
 
@@ -208,7 +208,6 @@
         </div>
 
 
-             
       </div><!--------------- row -->
     </div>
 
@@ -487,6 +486,20 @@
 
 
 </script>
+<?php
+$urlapp=env('APP_URL');
+
+if (App::environment('local')) {
+    // The environment is local
+    $urlapp='http://localhost/najdaapp';
+}?>
+
+
+<?php
+$seance =  DB::table('seance')
+    ->where('id','=', 1 )->first();
+$user = auth()->user();
+$iduser=$user->id; ?>
 <!--select css-->
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
@@ -554,6 +567,99 @@
 
 
     }); //end click
+
+
+
+
+    function countNotifs() {
+
+        <?php  if (($view_name != 'supervision') && ($view_name != 'affectation') && ($view_name != 'notifs') && ($view_name != 'missions') && ($view_name != 'transport') && ($view_name != 'transportsemaine') && ($view_name != 'dossiers-create') && ($view_name != 'entrees-dispatching') && ($view_name != 'entrees-showdisp') ) { ?>
+        <?php if($iduser == $seance->dispatcheur)
+        {  ?>
+         // count notif dispatcheur
+        console.log('count notif dispatcheur: ');
+        $.ajax({
+            type: "get",
+            url: "<?php echo $urlapp; ?>/entrees/countnotifs",
+            success: function (countdata1) {
+               // console.log('count notif : ' + countdata1);
+              //  alert( 'count Notifs disp'+countdata1);
+
+                // var count=parseInt(data);
+                //  if(count>0 )
+                //  {
+              //  document.getElementById('countnotif').innerHTML =   countdata1;
+              document.getElementById('countnotific').innerHTML =   ''+countdata1;
+           //     $('#countnotif').html('500') ;
+                // document.getElementById('countnotif').innerHTML='500';
+                // }
+            }
+        });
+
+        <?php   }
+
+          if ( ($iduser==$seance->superviseurmedic) || ($iduser== $seance->superviseurtech) ) {
+          // count notif superviseur
+                            ?>
+console.log('count notif Orange: ');
+        document.getElementById('totnotifs').style.background = 'white';
+
+        $.ajax({
+            type: "get",
+            url: "<?php echo $urlapp; ?>/entrees/countnotifsorange",
+            success: function (countdata2) {
+                console.log('count notif orange: ' + countdata2);
+
+                // var count = parseInt(data);
+                //    if (count > 0) {
+                document.getElementById('notiforange').innerHTML = '' + countdata2;
+                document.getElementById('totnotifs').style.background = '#FFCE54';
+
+                // }
+            }
+        });
+
+
+        $.ajax({
+            type: "get",
+            url: "<?php echo $urlapp; ?>/entrees/countnotifsrouge",
+            success: function (countdata3) {
+                console.log('count notif rouge: ' + countdata3);
+                //   var count = parseInt(data);
+                //    if (count > 0) {
+
+                document.getElementById('notifrouge').innerHTML = '' + countdata3;
+                document.getElementById('totnotifs').style.background = '#fc6e51';
+
+                //   }
+
+            }
+        });
+
+
+        <?php
+        } // superviseur
+?>
+        setTimeout(function(){
+            countNotifs();
+        }, 30000);  //30 secds
+
+
+<?php
+        } // viewname
+        ?>
+
+    }    //function
+
+    countNotifs();
+
+
+
+
+
+
+
+
 
 
 </script>

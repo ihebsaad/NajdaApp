@@ -368,6 +368,7 @@ class EntreesController extends Controller
             $first=true;
 
             $entree->dossier=$dossier;
+            $entree->dossierid=$iddossier;
             $entree->save();
 
              //mise à jour notifications
@@ -375,8 +376,20 @@ class EntreesController extends Controller
             Log::info('ID Entree : ' . $identree);
 */
 
-             if($userid  >0) {
+
+       // supression notif from dispatcheur
+            $seance =  DB::table('seance')
+                ->where('id','=', 1 )->first();
+
+            $disp=$seance->dispatcheur;
+            $userD = User::find($disp);
+            $userD->notifications()->whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$identree.'}}\')')->delete();
+
+
+            if($userid  >0) {
                $user = User::find($userid);
+
+
                // $user->notify(new Notif_Suivi_Doss($entree));
                  Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
@@ -386,12 +399,13 @@ class EntreesController extends Controller
            if($first==false)
             {
                 $entree = Entree::find($identree);
-$doss=  $entree->dossier;
+                $doss=  $entree->dossier;
 
                 $iddossier0 = app('App\Http\Controllers\DossiersController')->IdDossierByRef($doss);
                 $userid0 = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier0);
 
-           $entree->dossier=$dossier;
+                $entree->dossier=$dossier;
+                $entree->dossierid=$iddossier;
 
             $entree->save();
 /*
@@ -432,7 +446,11 @@ $doss=  $entree->dossier;
 
             //$notif->delete();
 
-            if($userid  >0) {
+                $iddossier2 = app('App\Http\Controllers\DossiersController')->IdDossierByRef($doss);
+                $userid2 = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier2);
+
+
+                if($userid  >0) {
                 $user = User::find($userid);
              //   $user->notify(new Notif_Suivi_Doss($entree));
                 Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
@@ -452,7 +470,6 @@ $doss=  $entree->dossier;
        else{return url('/entrees/');}
 
     }
-
 
 
     public static function countnotifs()
