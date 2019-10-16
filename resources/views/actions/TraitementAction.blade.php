@@ -49,7 +49,7 @@
   @endif--}}
 
     @if(session()->has('messagekbsFail'))
-    <div class="alert alert-danger">
+    <div class="alert alert-danger" style="background-color:red">
        <center> <h4>{{ session()->get('messagekbsFail') }}</h4></center>
     </div>
   @endif
@@ -139,7 +139,64 @@
 
 
     </div>
+     <br><br>
 
+     <div class="row">
+      @if($Action->Mission->type_Mission==6) {{--Taxi--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date "début mission" et date "arrivée à destination" à compléter dans OM taxi (2ème partie)</h4> </span> 
+     @endif
+       @if($Action->Mission->type_Mission==30) {{--rapatriement véhicule sur Cargo--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d'arrivée de remorqueur au port et heure départ sur Cargo </h4> </span> 
+      @endif
+       @if($Action->Mission->type_Mission==26) {{--Ecsorte intern. fournie par MI--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date décollage d'avion</h4> </span> 
+      @endif
+       @if($Action->Mission->type_Mission==27) {{--Rapatriement véhicule avec chauffeur accompagnateur--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d'arrivée au port</h4> </span> 
+      @endif
+       @if($Action->Mission->type_Mission==12) {{--Dédouanement de pièces--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date rdv prévu </h4> </span> 
+      @endif
+       @if($Action->Mission->type_Mission==11) {{--consultation médicale--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure du rdv avec le médecin</h4> </span> 
+      @endif
+       @if($Action->Mission->type_Mission==16) {{--Devis transport international sous assistance--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure de décollage</h4> </span> 
+      @endif
+       @if($Action->Mission->type_Mission==18) {{--Demande d’evasan internationale--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d’arrivee (heure atterrissage destination )</h4> </span> 
+      @endif
+       @if($Action->Mission->type_Mission==19) {{--Demande d’evasan nationale--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d’arrivee (heure atterrissage destination )</h4> </span> 
+      @endif
+       @if($Action->Mission->type_Mission==22) {{--escorte de l étranger--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure arrivée du vol</h4> </span> 
+      @endif
+        @if($Action->Mission->type_Mission==32) {{--réservation hotel--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date fin séjour</h4> </span> 
+      @endif
+      @if($Action->Mission->type_Mission==35) {{--organisation visite médicale--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date RDV</h4> </span> 
+      @endif
+       @if($Action->Mission->type_Mission==39) {{--Expertise--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date RDV</h4> </span> 
+      @endif
+         @if($Action->Mission->type_Mission==43) {{--rapatriement de véhicule sur ferry--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue de départ du bâteau</h4> </span> 
+      @endif
+         @if($Action->Mission->type_Mission==45) {{--réparation véhicule--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date RDV</h4> </span> 
+      @endif
+       @if($Action->Mission->type_Mission==43) {{--remorquage--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure départ pour mission et heure fin mission </h4> </span> 
+      @endif 
+       @if($Action->Mission->type_Mission==46) {{--location voiture--}} 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date fin location  </h4> </span> 
+      @endif
+      
+     </div>
+
+   
     <!--<div class="row">
        
 
@@ -958,7 +1015,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
    <script>
   
-   $("#kbspaneltitle").append('<?php if($Action) {  echo 'Action: '.$Action->titre.' | Mission : '.$Action->type_Mission.'<br> (Extrait de mission  :  '.$Action->Mission->titre.'  ) | Dossier : '.$Action->Mission->dossier->reference_medic.'-'.$Action->Mission->dossier->subscriber_name.' '.$Action->Mission->dossier->subscriber_lastname.'<br><div style ="overflow: hidden ; width: 100%;"></div>' ; }  ?>');
+   $("#kbspaneltitle").append('<?php if($Action) {  echo 'Action: '.$Action->titre.' | Mission : '.$Action->type_Mission.'<br> (Extrait de mission  :  '.$Action->Mission->titre.'  ) | Dossier : '.$Action->Mission->dossier->reference_medic.' - '.$Action->Mission->dossier->subscriber_name.' '.$Action->Mission->dossier->subscriber_lastname.'<br><div style ="overflow: hidden ; width: 100%;"></div>' ; }  ?>');
   </script>
 <!-- enregistrer commentaires sans bouton -->
 <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->

@@ -36,17 +36,6 @@ class DeleguerMissionController extends Controller
    public function deleguerMission(Request $request)
    {
 
-           // $in=$req->all();
-            //dd($in);
-
-      //  dd($request->all());
-
-        /*"MissDeldossid" => "20386"
-  "delegMissid" => "137"
-  "affecteurmiss" => "3"
-  "statdoss" => "existant"
-  "agent" => "3"*/
-        // dd("existant");
          $mission = Mission::find($request->get('delegMissid'));
         
           $agent= $request->get('agent');
@@ -79,7 +68,7 @@ class DeleguerMissionController extends Controller
                     
 
 
-                Session::flash('AffectMission',"La mission { ".  $mission->typeMission->nom_type_Mission." } de dossier { ".$dossier->reference_medic."-".$dossier->subscriber_name." ".$dossier->subscriber_lastname ." } a été déléguée à ".  $mission->assistant->name." ".$mission->assistant->lastname);   
+                Session::flash('AffectMission',"La mission { ".  $mission->typeMission->nom_type_Mission." } de dossier { ".$dossier->reference_medic." - ".$dossier->subscriber_name." ".$dossier->subscriber_lastname ." } a été déléguée à ".  $mission->assistant->name." ".$mission->assistant->lastname);   
 
                 return view('actions.deleguerMission',['typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
 
@@ -94,35 +83,6 @@ class DeleguerMissionController extends Controller
 
 
 
-    
-
-   
-
-
-
-
-     /*public function affecterDossier($iddoss,$idaffecte,$idaffecteur)
-     {
-         
-
-        
-          // enregistrer la nouvelle affectation dans la table Affectation dossier
-         $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i');
-
-          $affd = new AffectDoss([
-             'util_affecteur' =>trim($idaffecteur),
-             'util_affecte' =>trim($idaffecteur),        
-             
-             'date_affectation'=> trim($dtc),          
-             'id_dossier' => trim($iddoss)
-           
-           ]);
-
-        $affd->save();
-
-
-
-     }*/
 
 
      public function getNotificationDeleguerMiss($userConnect)
@@ -137,7 +97,7 @@ class DeleguerMissionController extends Controller
            //$id_doss= Mission::where($affm->id_mission)->first()->id_dossier;
          $id_doss=$affm->id_dossier;
          $doss=Dossier::find($id_doss);
-         $ref_doss=$doss->reference_medic.'-'.$doss->subscriber_name.' '.$doss->subscriber_lastname;
+         $ref_doss=$doss->reference_medic.' - '.$doss->subscriber_name.' '.$doss->subscriber_lastname;
          $titre_miss=Mission::where('id',$affm->id_mission)->first()->typeMission->nom_type_Mission;
 
             if($ref_doss &&  $titre_miss )
