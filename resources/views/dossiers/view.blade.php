@@ -908,7 +908,7 @@ $interv = PrestationsController::PrestById($prest);
                                         ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important;" id="btnannremp">
-                                                <a style="color:black" href="#" id="annremp" onclick="remplacedoc(<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>);"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
+                                                <a style="color:black" href="#" id="annremp" onclick="remplacedoc(<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>,<?php echo $doc->montantgop; ?>,<?php echo $doc->idtaggop; ?>);"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
                                             </button>
                                         </div>
 
@@ -1469,6 +1469,7 @@ reference_customer
                             <input id="dossdoc" name="dossdoc" type="hidden" value="{{ $dossier->id}}">
                             <input type="hidden" name="templatedocument" id="templatedocument" >
                             <input type="hidden" name="iddocparent" id="iddocparent" >
+                            <input type="hidden" name="idtaggop" id="idtaggop" >
                             <iframe src="#" id="templatefilled" name="templatefilled" style="width:100%;height:100%">content</iframe>
 
                         </form>
@@ -2011,7 +2012,6 @@ reference_customer
             </div>
         </div>
     </div>
-
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -2219,12 +2219,13 @@ function modalodoc(titre,emplacement)
 }
 
 
-function remplacedoc(iddoc,template)
+function remplacedoc(iddoc,template,montantgopprec,idgopprec)
 {
 
         var dossier = $('#dossier').val();
         var tempdoc = template;
         $("#gendochtml").prop("disabled",false);
+        
         if ((dossier != '') )
         {
             var _token = $('input[name="_token"]').val();
@@ -2233,9 +2234,10 @@ function remplacedoc(iddoc,template)
                 method:"POST",
                 data:{dossier:dossier,template:tempdoc,parent:iddoc, _token:_token},
                 success:function(data){
-                        filltemplate(data,tempdoc);
+
                         // set iddocparent value
                         $('#iddocparent').val(iddoc);
+                        filltemplate(data,tempdoc,montantgopprec,idgopprec);
                  }
             });
         }else{
@@ -2436,15 +2438,22 @@ function annuleom(titre,iddoc)
                 }
             });
     }
-function filltemplate(data,tempdoc)
-{
-   // window.location =data; hde gendocform and display template filled
-   $("#generatedoc").modal('hide');
-   //change html template content
-   var templateexist = true;
-   var parsed = data;
+
+
    var items = [];
    var html_string="";
+
+function filltemplate(data,tempdoc,mgopprec,idgopprec)
+{
+   // window.location =data; hde gendocform and display template filled
+   if ($('#generatedoc').hasClass('in'))
+   {$("#generatedoc").modal('hide');}
+   //change html template content
+   var templateexist = true;
+   var needgop =false;
+   var parsed = data;
+
+   items.length = 0;
    $.each(parsed, function(i, field){
       items.push([ i,field ]);
     });
@@ -2508,11 +2517,24 @@ function filltemplate(data,tempdoc)
                     var strt = [ field ] + "" ; 
                     var champgop = strt.split("_");
                     // ajout des options pour select gop
-                    $('#gopdoc').append(new Option(champgop[2]+" | "+"montant: "+champgop[1], champgop[0]));
+                    // verifier s'il ya gop precedent
+                    if (idgopprec == undefined)
+                    {$('#gopdoc').append(new Option(champgop[2]+" | "+"montant: "+champgop[1], champgop[0]));}
+                    else
+                    {
+                        if (mgopprec == undefined)
+                            {var mgop = champgop[1];}
+                        else
+                            {var mgop = parseInt(mgopprec) + parseInt(champgop[1]);}
+                        
+                        $('#gopdoc').append('<option value="'+champgop[0]+'" selected="selected">'+champgop[2]+' | '+'montant: '+mgop+'</option>');
+                    }
                   console.log('les champs tags: '+strt );
                 });
+                needgop =true;
                 $("#selectgopdoc").modal('show');
-                
+                arr_tags = null;   
+                $('#templatedoc').attr('value', ''); 
             }
 
         /*if(val[0] ==='montantgop') 
@@ -2523,7 +2545,8 @@ function filltemplate(data,tempdoc)
 
     });
 
-  if (templateexist)
+  if ((templateexist) && (document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC") === -1) && !(needgop) )
+
     {
 
         // remplissage de la template dans iframe
@@ -2547,11 +2570,11 @@ function filltemplate(data,tempdoc)
             }
         });
 
-
-
+        
         //chargement du contenu et affichage du preview du document
         document.getElementById('templatefilled').src = html_string;
         $("#templatehtmldoc").modal('show');
+
 
 
     }
@@ -2629,6 +2652,50 @@ function filltemplate(data,tempdoc)
     $("#selectable").select2 (
         //{ dropdownParent: "#insererprest" }
         );
+    // btngop gop selectionné
+    $('#btngop').click(function(){
+        $("#selectgopdoc").modal('hide');
+        var gopselected = $('#gopdoc').val();
+        var goptxt = document.getElementById("gopdoc").options[document.getElementById("gopdoc").selectedIndex].text;
+        var montantgop = goptxt.substr(goptxt.indexOf('montant: ')+9);
+        $('#idtaggop').val(gopselected);
+        //alert(goptxt);
+            if ((gopselected !== 'undefined' && gopselected !== null))
+            {
+
+                // remplissage de la template dans iframe
+                var numparam = 0;
+                $.each(items, function(index, val) {
+                    // les champs du document
+                    if ((val[0] !=='templatertf') && (val[0] !=='templatehtml')  && (val[0] !=='lestags') /* && (val[0] !=='montantgop') && (val[0].indexOf("CL_") == -1)*/ )
+                    {
+                        if (numparam == 0)
+                        {
+                            html_string=html_string+'?';
+                        }
+                        else
+                        {
+                            html_string=html_string+'&';
+                        }
+
+                        html_string=html_string+val[0]+'='+val[1];
+
+                        numparam ++;
+                    }
+                });
+
+                // ajout idgop a lurl
+                html_string=html_string+'&idtaggop='+gopselected;
+                // ajout montant a lurl
+                html_string=html_string+'&montantgop='+montantgop;
+
+                //chargement du contenu et affichage du preview du document
+                document.getElementById('templatefilled').src = html_string;
+                $("#templatehtmldoc").modal('show');
+
+
+            }
+        });
 
          $('#envoisms').click(function(){
             var description = $('#ladescription').val();
@@ -2692,9 +2759,11 @@ function filltemplate(data,tempdoc)
         $("#gendochtml").prop("disabled",false);
         // renitialise la val de parentdoc
         $('#iddocparent').attr('value', '');  
+        $('#idtaggop').attr('value', '');  
         if ((dossier != '') )
         {
              var _token = $('input[name="_token"]').val();
+             alert(tempdoc);
             $.ajax({
                 url:"{{ route('documents.htmlfilled') }}",
                 method:"POST",
@@ -2704,7 +2773,6 @@ function filltemplate(data,tempdoc)
                     console.log(data);
                      if (typeof data !== "string")
                     {
-
                         filltemplate(data,tempdoc);
                     }
                     else if (data.startsWith("notallow"))
@@ -2815,12 +2883,18 @@ function keyUpHandler(){
         var dossier = $('#dossdoc').val();
         var tempdoc = $("#templatedocument").val();
         var idparent = '';
+        var idgop = '';
         var idMissionDoc=$("#idMissionDoc").val();
         // verifier si cest le cas de annule et remplace pour sauvegarder lid du parent
         if ($('#iddocparent').val())
         {
             idparent = $('#iddocparent').val();
             console.log('parent: '+idparent);
+        }
+        if ($('#idtaggop').val())
+        {
+            idgop = $('#idtaggop').val();
+            console.log('gopid: '+idgop);
         }
          if($('#idMissionDoc').val()==null)
         {
@@ -2832,7 +2906,7 @@ function keyUpHandler(){
                 url:"{{ route('documents.adddocument') }}",
                 method:"POST",
                 //'&_token='+_token
-                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent+'&idMissionDoc='+idMissionDoc,
+                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent+'&idtaggop='+idgop+'&idMissionDoc='+idMissionDoc,
                 success:function(data){
 
                    // alert(data);
