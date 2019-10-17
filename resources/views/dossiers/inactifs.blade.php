@@ -37,25 +37,24 @@
             <thead >
             <tr id="headtable">
                 <th style="width:20%">Référence</th>
-                <th style="width:25%">Client</th>
                 <th style="width:20%">Assuré</th>
-               </tr>
+                <th style="width:25%">Client</th>
+            </tr>
             <tr>
                 <th style="width:20%">Référence</th>
-                <th style="width:25%">Client</th>
                 <th style="width:20%">Assuré</th>
-             </tr>
+                <th style="width:25%">Client</th>
+            </tr>
             </thead>
             <tbody>
 
             @foreach($dossiers as $dossier)
                 <tr><?php $statut=$dossier['current_status'];  $affecte=$dossier['affecte'];   ?>
                     <td style="width:20%"><a href="{{action('DossiersController@view', $dossier['id'])}}" >{{$dossier->reference_medic}}</a> <a style="color:#a0d468" href="{{action('DossiersController@fiche', $dossier['id'])}}" >Fiche<i class="fa fa-file-txt"></a></td>
-                     <td style="width:25%">
+                     <td style="width:20%"><?php echo '<small>'.$dossier['subscriber_name'] .' '.$dossier['subscriber_lastname'] .'</small>';?></td>
+                    <td style="width:25%">
                         <?php $customer_id= $dossier['customer_id']; echo '<small>'. DossiersController::ClientById($customer_id).'</small>';?>
                     </td>
-                    <td style="width:20%"><?php echo '<small>'.$dossier['subscriber_name'] .' '.$dossier['subscriber_lastname'] .'</small>';?></td>
-
                 </tr>
             @endforeach
             </tbody>

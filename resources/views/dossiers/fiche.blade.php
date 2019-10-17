@@ -123,6 +123,7 @@ use  \App\Http\Controllers\DocsController;
     <section class="content form_layouts">
 
 <br>
+        <B><a class="pull-left"   > <i class="fas fa-lg fa-encelope"></i> Accusé</a></B>
         <B><a class="pull-right" href="{{action('DossiersController@view',$dossier->id)}}"  > <i class="fas fa-lg fa-folder-open"></i> Allez vers Détails du dossier </a></B>
 <br>
   
@@ -850,7 +851,7 @@ use  \App\Http\Controllers\DocsController;
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-4"  id="montantfr">
+                                                        <div class="col-md-4"  id="montantfr"  <?php if(  $dossier->franchise ==0){ ?> style="display:none" <?php  } ?> >
                                                             <div class="form-group">
                                                                 <label class="control-label">Montant Franchise
                                                                 </label>
@@ -861,7 +862,7 @@ use  \App\Http\Controllers\DocsController;
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-4" id="plafondfr">
+                                                        <div class="col-md-4" id="plafondfr" <?php if(  $dossier->franchise ==0){ ?> style="display:none" <?php  } ?> >
                                                             <div class="form-group">
                                                                 <label class="control-label">Plafond
                                                                 </label>

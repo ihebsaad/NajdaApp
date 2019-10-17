@@ -116,7 +116,7 @@
         </div>
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
           <a id="phoneicon" href="#" class="btn btn-primary btn-lg btn-responsive phone" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
-              <span class="fa fa-fw fa-phone fa-2x"></span>
+              <span class="fas fa-fw fas fa-comment-dots fa-2x"></span>
           </a> 
         </div>
 
@@ -125,10 +125,8 @@
         $disp=$seance->dispatcheur ;
 
         $iduser=Auth::id();
-        if ($iduser==$disp) {
 
-          $count=Entree::where('viewed', 0)
-              ->where('dossier','')
+          $count=Entree::where('dossier','')
               ->count();
             if($count==0){$color='btn-success';$icon='fa-map-signs';}
             else{$color='btn-danger';$icon='fa-map-signs';
@@ -141,15 +139,6 @@
           </a>
           </div>
 
-      <?php } else { ?>
-          <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-
-          <a href="{{ route('entrees.index') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
-              <span class="fa fa-fw fa-envelope fa-2x"></span>
-          </a>
-          </div>
-
-      <?php }  ?>
 
 
         <div class="col-sm-1 col-md-1 col-lg-1">
@@ -574,8 +563,8 @@ $iduser=$user->id; ?>
     function countNotifs() {
 
         <?php  if (($view_name != 'supervision') && ($view_name != 'affectation') && ($view_name != 'notifs') && ($view_name != 'missions') && ($view_name != 'transport') && ($view_name != 'transportsemaine') && ($view_name != 'dossiers-create') && ($view_name != 'entrees-dispatching') && ($view_name != 'entrees-showdisp') ) { ?>
-        <?php if($iduser == $seance->dispatcheur)
-        {  ?>
+        <?php // if($iduser == $seance->dispatcheur)
+        //{  ?>
          // count notif dispatcheur
         console.log('count notif dispatcheur: ');
         $.ajax({
@@ -596,7 +585,7 @@ $iduser=$user->id; ?>
             }
         });
 
-        <?php   }
+        <?php  // }
 
           if ( ($iduser==$seance->superviseurmedic) || ($iduser== $seance->superviseurtech) ) {
           // count notif superviseur

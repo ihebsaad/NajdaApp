@@ -270,6 +270,15 @@ class EnvoyesController extends Controller
 
     }
 
+    public static function ChampById($champ,$id)
+    {
+        $env = Envoye::find($id);
+        if (isset($env[$champ])) {
+            return $env[$champ] ;
+        }else{return '';}
+
+    }
+
 
 
 }

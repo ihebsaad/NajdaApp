@@ -1,8 +1,18 @@
+<!--select css-->
+<link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <header class="header">
-        <?php
-		        $seance =  DB::table('seance')
-            ->where('id','=', 1 )->first();
-		?>
+    <?php
+    use App\Entree;
+    $seance =  DB::table('seance')
+        ->where('id','=', 1 )->first();
+    $user = auth()->user();
+    $iduser=$user->id;
+
+    $listedossiers = DB::table('dossiers')->get();
+    ?>
         <div class="collapse bg-grey" id="navbarHeader">
              @include('layouts.partials._top_menu')
 
@@ -67,26 +77,15 @@
           </form>
         </div>
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-          <a id="ajoutcompter" href="#" class="btn btn-primary btn-lg btn-responsive phone" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
-              <span class="fa fa-fw fa-phone fa-2x"></span>
+          <a id="phoneicon"  href="#" class="btn btn-primary btn-lg btn-responsive phone" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
+              <span class="fas fa-fw fas fa-comment-dots fa-2x"></span>
           </a> 
         </div>
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-		 <?php
 
-        $disp=$seance->dispatcheur ;
-
-        $iduser=Auth::id();
-        if ($iduser==$disp) {
-            ?>
 			  <a href="{{ route('entrees.dispatching') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
               <span class="  fa-fw    fas    fa-map-signs fa-2x"></span>
           </a>
-		<?php } else {?>
-          <a href="{{ route('entrees.index') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
-              <span class="fa fa-fw fa-envelope fa-2x"></span>
-          </a> 
-	 <?php }  ?>
 
 
         </div>
@@ -165,7 +164,14 @@
 
                     <div class="form-group">
                         <label for="sujet">Dossier :</label>
-                        <input style="overflow:scroll;" id="dossierid" type="text" class="form-control" name="dossierid"     />
+                        <select   id="dossierid"  style="width:100%;" class="form-control select2" name="dossierid"     >
+                            <option></option>
+                            <?php foreach($listedossiers as $ds)
+
+                            {
+                                echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}     ?>
+                        </select>
+
 
                     </div>
 
@@ -186,6 +192,7 @@
         </div>
     </div>
 </div>
+
 
 
 <style>
@@ -228,6 +235,8 @@
 
     }
 </style>
+
+
 
 <script>
 
@@ -492,6 +501,14 @@
 </script>
 
 <script>
+    $("#dossierid").select2();
+
+
+    $('#phoneicon').click(function() {
+
+        $('#crendu').modal({show: true});
+
+    });
 
     $('#dpause').click(function() {
 
@@ -525,7 +542,6 @@
 
     // Ajout Compte Rendu
     $('#ajoutcompter').click(function() {
-        $('#modalconfirm').modal('hide');
 
         var _token = $('input[name="_token"]').val();
         var dossier = document.getElementById('dossierid').value;
@@ -538,6 +554,9 @@
 
             success: function (data) {
                 alert('Ajouté avec succès');
+                $('#crendu').modal('hide');
+                //     $('#crendu').modal({show: false});
+
             }
         });
 

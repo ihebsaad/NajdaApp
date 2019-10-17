@@ -23,14 +23,6 @@
           </div>
 
 
-        <?php
-        $seance =  DB::table('seance')
-            ->where('id','=', 1 )->first();
-        $disp=$seance->dispatcheur ;
-
-        $iduser=Auth::id();
-        if ($iduser==$disp) {
-            ?>
         <div class="col-sm-2">
             <a href="{{ route('entrees.index') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
                 <span class="fas fa-lg  fa-envelope"></span>
@@ -48,27 +40,8 @@
         </div>
 
 
-        <?php } else{?>
 
-            <div class="col-sm-2">
-            <a href="{{ route('entrees.dispatching') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
-                <span class="fas fa-lg  fa-map-signs"></span>
-                <br>
-            Dispatching
-            </a>
-        </div>
 
-        <div class="col-sm-2">
-            <a href="{{ route('boite') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
-                <span class="fas fa-lg  fa-envelope"></span>
-                <br>
-                Boites et archives
-            </a>
-        </div>
-
-       <?php }
-
-        ?>
 
     </div>
 

@@ -238,11 +238,12 @@ $( "#open" ).click(function() {
               if ($("#prt_" + parseddata['Entree']['dossier']).length) {
 
                  var reception= parseddata['Entree']['created_at'];
+                 var emetteur= parseddata['Entree']['emetteur'];
                 var heure=reception.toString().slice(11,16);
                  // ajout nouvelle notification sous son dossier
                  $('#jstree').jstree().create_node("#prt_" + parseddata['Entree']['dossier'], {
                      "id": parseddata['Entree']['id'],
-                     "text": heure+' '+parseddata['Entree']['sujet'],
+                     "text": heure+' '+emetteur+' '+parseddata['Entree']['sujet'],
                      "type": typee,
                      "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" + parseddata['Entree']['id']}
                  }, "inside", function () {
@@ -287,12 +288,13 @@ $( "#open" ).click(function() {
                  }, "first", function () {
                  });
                  var reception= parseddata['Entree']['created_at'];
+                 var emetteur= parseddata['Entree']['emetteur'];
                  var heure=reception.toString().slice(11,16);
 
                  // ajout nouvelle notification sous son dossier
                  $('#jstree').jstree().create_node("#prt_" + parseddata['Entree']['dossier'], {
                      "id": parseddata['Entree']['id'],
-                     "text": heure+' '+parseddata['Entree']['sujet'],
+                     "text": heure+' '+emetteur+' '+parseddata['Entree']['sujet'],
                      "type": typee,
                      "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" + parseddata['Entree']['id']}
                  }, "inside", function () {

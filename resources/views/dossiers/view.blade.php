@@ -12,6 +12,8 @@ use App\Adresse;
 <?php use \App\Http\Controllers\PrestationsController;
      use  \App\Http\Controllers\PrestatairesController;
 use  \App\Http\Controllers\DossiersController ;
+use  \App\Http\Controllers\EnvoyesController ;
+use  \App\Http\Controllers\EntreesController ;
 ?>
 
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
@@ -789,12 +791,29 @@ $interv = PrestationsController::PrestById($prest);
                         <tbody>
                         @foreach($attachements as $attach)
                             <tr><?php
-                                $type= $attach->type;
+                                $type= $attach->type;    $parent=$attach->parent;
+                                $descriptionEmail='';
+                                $descriptionAttach=$attach->description;
+                                if($attach->entree_id>0){
+                                $descriptionEmail= EntreesController::ChampById('commentaire',$parent);
+                                }
+                                if($attach->envoye_id>0){
+                                $descriptionEmail= EnnvoyesController::ChampById('description',$parent);
+                                }
 
                                 ?>
-                                <td style="width:15%;"><small><?php echo date('d/m/Y H:i', strtotime( $attach->created_at)) ;?></small></td>
+                                <td style="width:15%;"><small><?php if ($attach->boite==3) {
+                                        $datem='';
+                                        if($attach->entree_id>0){
+                                        $datem= EntreesController::ChampById('created_at',$parent);
+                                        }
+                                        if($attach->envoye_id>0){
+                                        $datem= EnnvoyesController::ChampById('created_at',$parent);
+                                        }
+                                        echo date('d/m/Y H:i', strtotime( $datem)) ;
+                                        } else{ echo date('d/m/Y H:i', strtotime( $attach->created_at)) ; }?></small></td>
                                 <td  class="overme" style="cursor:pointer;width:30%;"><small  onclick="modalattach('<?php echo  $attach->nom ?>','<?php  echo URL::asset('storage'.$attach->path) ; ?>','<?php echo $type; ?>');"><?php  echo $attach->nom;  ?></small></td>
-                                <td class="overme" style="width:40%;"><small><?php  echo $attach->description;   ?></small></td>
+                                <td class="overme" style="width:40%;"><small><?php  echo $descriptionAttach.'<br>'.$descriptionEmail  ;  ?></small></td>
 
                                 <td style="width:5%;"><small><?php
                                         $type= $attach->type;
@@ -829,7 +848,7 @@ $interv = PrestationsController::PrestById($prest);
 
 
                                         ?></small></td>
-                                <td style="width:10%"><small><?php if ($attach->boite>0) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';}else{echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}?></small></td>
+                                <td style="width:10%"><small><?php if ($attach->boite==1) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';} if ($attach->boite==0) {echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}  if ($attach->boite==3) {echo 'Généré <br><i style="margin-top:4px;" class="fas fa-lg fa-file-invoice"/>';}   ?></small></td>
 
                             </tr>
 

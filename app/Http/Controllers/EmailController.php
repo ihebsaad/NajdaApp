@@ -314,16 +314,22 @@ class EmailController extends Controller
         // dispatch
       ///  $dossiers = DB::table('dossiers')->pluck('reference_medic');
 
-                $dossiers=   Dossier::where('current_status','!=', 'Cloturee' )->get();
+                $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
 
                 $refdossier='';$dossierid=0;
         $statut = 0;
         foreach ($dossiers as $dos) {
+                $ref=trim(strval($dos['reference_medic']));
+                $refCL=trim(strval($dos['reference_customer']));
+            if ($refCL==''){$refCL='XX';}
 
-                if (   (strpos($sujet, $dos['reference_medic'] )!==false) || (strpos($contenu, $dos['reference_medic'])) || (strpos($sujet, $dos['reference_customer'] )!==false)  || (strpos($contenu, $dos['reference_customer'] )!==false)   )
+            if (   (strpos($sujet, $ref )!==false) ||
+                (strpos($contenu, $ref) !==false ) ||
+                (strpos($sujet, $refCL )!==false && ( strlen($refCL) >4 )  )  ||
+                ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
                 {
-                    $refdossier = $dos['reference_medic'];
+                    $refdossier = trim($dos['reference_medic']);
                     $dossierid = intval($dos['id']);
                     $statut = 1;
                     break;
@@ -532,16 +538,22 @@ class EmailController extends Controller
 
 
                 // dispatch
-                $dossiers=   Dossier::where('current_status','!=', 'Cloturee' )->get();
+                $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
                 $refdossier='';$dossierid=0;
                 $statut = 0;
                 foreach ($dossiers as $dos) {
+                    $ref=trim(strval($dos['reference_medic']));
+                    $refCL=trim(strval($dos['reference_customer']));
+                    if ($refCL==''){$refCL='XX';}
 
-                    if (   (strpos($sujet, $dos['reference_medic'] )!==false) || (strpos($contenu, $dos['reference_medic'])) || (strpos($sujet, $dos['reference_customer'] )!==false)  || (strpos($contenu, $dos['reference_customer'] )!==false)   )
+                    if (   (strpos($sujet, $ref )!==false) ||
+                        (strpos($contenu, $ref) !==false ) ||
+                        (strpos($sujet, $refCL )!==false && ( strlen($refCL) >4 )  )  ||
+                        ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
                     {
-                        $refdossier = $dos['reference_medic'];
-                         $dossierid = $dos['id'];
+                        $refdossier = trim($dos['reference_medic']);
+                        $dossierid = intval($dos['id']);
                         $statut = 1;
                         break;
                     }
@@ -875,17 +887,23 @@ class EmailController extends Controller
                     // get last id
                     $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
                     // message moved
-                    $dossiers=   Dossier::where('current_status','!=', 'Cloturee' )->get();
+                    $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
 
                     $refdossier='';$dossierid=0;
                     $statut = 0;
                     foreach ($dossiers as $dos) {
+                        $ref=trim(strval($dos['reference_medic']));
+                        $refCL=trim(strval($dos['reference_customer']));
+                        if ($refCL==''){$refCL='XX';}
 
-                        if (   (strpos($sujet, $dos['reference_medic'] )!==false) || (strpos($contenu, $dos['reference_medic'])) || (strpos($sujet, $dos['reference_customer'] )!==false)  || (strpos($contenu, $dos['reference_customer'] )!==false)   )
+                        if (   (strpos($sujet, $ref )!==false) ||
+                            (strpos($contenu, $ref) !==false ) ||
+                            (strpos($sujet, $refCL )!==false && ( strlen($refCL) >4 )  )  ||
+                            ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
                         {
-                            $refdossier = $dos['reference_medic'];
-                            $dossierid = $dos['id'];
+                            $refdossier = trim($dos['reference_medic']);
+                            $dossierid = intval($dos['id']);
                             $statut = 1;
                             break;
                         }
@@ -1020,16 +1038,22 @@ class EmailController extends Controller
                 // message moved
 
                 // dispatch
-                $dossiers=   Dossier::where('current_status','!=', 'Cloturee' )->get();
+                $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
                 $refdossier='';$dossierid=0;
                 $statut = 0;
                 foreach ($dossiers as $dos) {
+                    $ref=trim(strval($dos['reference_medic']));
+                    $refCL=trim(strval($dos['reference_customer']));
+                    if ($refCL==''){$refCL='XX';}
 
-                    if (   (strpos($sujet, $dos['reference_medic'] )!==false) || (strpos($contenu, $dos['reference_medic'])) || (strpos($sujet, $dos['reference_customer'] )!==false)  || (strpos($contenu, $dos['reference_customer'] )!==false)   )
+                    if (   (strpos($sujet, $ref )!==false) ||
+                        (strpos($contenu, $ref) !==false ) ||
+                        (strpos($sujet, $refCL )!==false && ( strlen($refCL) >4 )  )  ||
+                        ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
                     {
-                        $refdossier = $dos['reference_medic'];
-                        $dossierid = $dos['id'];
+                        $refdossier = trim($dos['reference_medic']);
+                        $dossierid = intval($dos['id']);
                         $statut = 1;
                         break;
                     }
@@ -2167,7 +2191,7 @@ class EmailController extends Controller
     {
         $dossier = Dossier::find($id);
         if (isset($dossier['reference_medic'])) {
-            return $dossier['reference_medic'];
+            return trim($dossier['reference_medic']);
         }else{return '';}
 
     }

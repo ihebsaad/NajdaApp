@@ -523,13 +523,13 @@ use  \App\Http\Controllers\DocsController;
 
                                                     <label for="nonfranchise" class="">
 
-                                                        <div class="radio radio1" id="uniform-nonfranchise"><span class="checked"><input onclick=" hidingd();" type="radio" name="franchise" id="nonfranchise" value="0"    ></span></div> Non
+                                                        <div class="radio radio1" id="uniform-nonfranchise"><span class="checked"><input onclick="" type="radio" name="franchise" id="nonfranchise" value="0"    ></span></div> Non
                                                     </label>
 
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-4"  id="montantfr">
+                                            <div class="col-md-4"  id="montantfr" style="display:none">
                                                 <div class="form-group">
                                                     <label class="control-label">Montant Franchise
                                                     </label>
@@ -540,7 +540,7 @@ use  \App\Http\Controllers\DocsController;
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-4" id="plafondfr">
+                                            <div class="col-md-4" id="plafondfr"  style="display:none">
                                                 <div class="form-group">
                                                     <label class="control-label">Plafond
                                                     </label>

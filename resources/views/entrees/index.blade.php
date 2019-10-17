@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/rowReorder.bootstrap.css') }}" />-->
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
 
-<?php  $urlapp=env('APP_URL'); 
+<?php  use App\Http\Controllers\DossiersController;$urlapp=env('APP_URL');
 
 if (App::environment('local')) {
     // The environment is local
@@ -52,7 +52,7 @@ if (App::environment('local')) {
                     <td style="width:15%;font-size:12px;width:10%"><?php echo  date('d/m/Y H:i', strtotime($entree['reception'])) ; ?></td>
                     <td  style="width:20%;font-size:12px;max-width:150px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $entree['emetteur']; ?></td>
                     <td  style="width:35%;font-size:12px;max-width:200px;"><a style="<?php echo $style;?>"  <?php if ($entree['dossier']!='') {  ?>   href="<?php echo $urlapp.'/entrees/show/',$entree['id']?>" <?php } else{  ?> href= "<?php echo $urlapp.'/entrees/showdisp/',$entree['id']?>"    <?php } ?>     ><?php echo $entree['sujet'] ; ?></a></td>
-                    <td  style="width:8%;font-size:12px; "><?php echo $entree['dossier'];?></td>
+                    <td  style="width:8%;font-size:12px; "><?php echo $entree['dossier'].' - '.DossiersController::FullnameAbnDossierById($entree['dossierid']);?></td>
                     <td>
                         @can('isAdmin')
                             <a  href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >

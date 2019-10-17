@@ -169,12 +169,7 @@
 
  use App\Demande;
  use     \App\Http\Controllers\UsersController;
-    $haveroles =   DB::table('roles_users')
-            ->where(['user_id' => Auth::id()])
-            ->count();
- //   if ($haveroles > 0)
-  ///  {
-    // use DB;
+
      $seance = DB::table('seance')->first();
 
  $user = auth()->user();

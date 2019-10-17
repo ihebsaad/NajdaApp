@@ -69,10 +69,11 @@ use App\Http\Controllers\TagsController;
                                       <?php } ?>
 
                                     <?php } ?>
-
+                                <?php if ($entree['notif']!=1 ) { ?>
                                     <a onclick="checkComment()"  class="btn btn-info btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
                                         <span class="fa fa-fw fa-check"></span> Traité
                                     </a>
+                                <?php } ?>
 
                                     @can('isAdmin')
                                     <a  href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
@@ -422,7 +423,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="button" id="updatefolder" class="btn btn-primary">Dispatcher</button>
+                <button type="button" id="updatefolder" onclick="document.getElementById('updatefolder').disabled=true" class="btn btn-primary">Dispatcher</button>
             </div>
         </div>
     </div>

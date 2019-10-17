@@ -20,13 +20,7 @@ class CommonDataServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-            $dossiers = Dossier::get();
-            $countries = DB::table('apps_countries')->select('id', 'country_name')->get();
-            //$iduser =Auth::id();
-            //$iduser =  config('commondata.authuserid');
-            /*$iduser = session()->get('authuserid');*/
-        config()->set('commondata.dossiers', $dossiers);
-        //config()->set('commondata.notifications', $result);
+
     }
 
     /**

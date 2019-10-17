@@ -157,7 +157,7 @@ class EntreesController extends Controller
 
             $entree->viewed=1;
         }
-        $refdoss = $entree->dossier;
+        $refdoss = trim($entree->dossier);
         $entree->save();
         $dossier = Dossier::where('reference_medic','=',$refdoss)->first();
 
@@ -173,10 +173,10 @@ class EntreesController extends Controller
         $entree = Entree::find($id);
         if ($entree->viewed==0 )
         {
-            $this->export_pdf($id);
+           // $this->export_pdf($id);
             $entree->viewed=1;
         }
-        $refdoss = $entree->dossier;
+        $refdoss = trim($entree->dossier);
         $entree->save();
         $dossier = Dossier::where('reference_medic','=',$refdoss)->first();
 
@@ -245,12 +245,15 @@ class EntreesController extends Controller
         $notif->save();
 
         $entree = Entree::find($id);
+        $entree->notif=1; //traitée
+        $entree->save();
 
         if( ( $entree->type=='email')||( $entree->type=='sms'))
         { app('App\Http\Controllers\EntreesController')->export_pdf($id);}
 
+      //  return redirect('/home')->with('success', '  Traité');
+        return redirect('/entrees/show/'.$id);
 
-        return redirect('/home')->with('success', '  Traité');
     }
 
 
@@ -465,9 +468,9 @@ class EntreesController extends Controller
         // Activer le dossier
         Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
 
-        //return url('/entrees/show/'.$identree)/*->with('success', 'Dossier Créé avec succès')*/;
-       if($first) {return url('/entrees/dispatching/');}
-       else{return url('/entrees/');}
+       return url('/entrees/show/'.$identree);
+      // if($first) {return url('/entrees/dispatching/');}
+      // else{return url('/entrees/');}
 
     }
 
@@ -475,8 +478,7 @@ class EntreesController extends Controller
     public static function countnotifs()
     {
 
-     $count=Entree::where('viewed', 0)
-     ->where('dossier','')
+     $count=Entree::where('dossier','')
      ->count();
 
         return $count;

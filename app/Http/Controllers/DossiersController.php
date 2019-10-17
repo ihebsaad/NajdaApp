@@ -523,7 +523,7 @@ class DossiersController extends Controller
         $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
         Log::info('[Agent: '.$nomuser.'] Affectation de dossier :'.$ref.' à: '.$nomagent);
 
-      //  return back();
+        return back();
 
     }
 
@@ -829,7 +829,7 @@ class DossiersController extends Controller
     {
         $dossier = Dossier::find($id);
         if (isset($dossier['reference_medic'])) {
-            return $dossier['reference_medic'];
+            return trim($dossier['reference_medic']);
         }else{return '';}
 
     }
@@ -870,7 +870,7 @@ class DossiersController extends Controller
     }
 
     public static function CheckRefExiste($ref)
-    {
+    {   $ref=trim($ref);
         $number =  Dossier::where('reference_medic', $ref)->count('id');
 
         return $number;

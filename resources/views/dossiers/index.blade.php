@@ -108,8 +108,6 @@
 
                                     @endforeach
 
-
-
                              </select>
                         </div>
                         <div class="col-md-4">
@@ -158,14 +156,14 @@
             <thead >
              <tr id="headtable">
                 <th style="width:20%">Référence</th>
-                <th style="width:25%">Client</th>
                 <th style="width:20%">Assuré</th>
-                <th style="width:20%">Etat</th>
+                 <th style="width:25%">Client</th>
+                 <th style="width:20%">Etat</th>
               </tr>
             <tr>
                 <th style="width:20%">Référence</th>
-                <th style="width:25%">Client</th>
                 <th style="width:20%">Assuré</th>
+                <th style="width:25%">Client</th>
                 <th style="width:20%">Etat</th>
             </tr>
             </thead>
@@ -173,11 +171,11 @@
 
             @foreach($datasearch as $do)
                 <tr><?php $statut=$do->current_status;  $affecte=$do->affecte;   ?>
-                    <td style="width:20%"><a href="{{action('DossiersController@view', $do->id )}}" >{{$do->reference_medic}}</a> <a style="color:#a0d468" href="{{action('DossiersController@fiche', $do->id )}}" >Fiche<i class="fa fa-file-txt"></a></td>
-                     <td style="width:25%">
+                    <td style="width:20%"><a href="{{action('DossiersController@view', $do->id )}}" >{{$do->reference_medic}}</a> <a style="color:#a0d468" href="{{action('DossiersController@fiche', $do->id )}}" >Fiche<i class="fa fa-file-txt"/></a></td>
+                    <td style="width:20%"><?php echo '<small>'.$do->subscriber_name .' '.$do->subscriber_lastname .'</small>';?></td>
+                    <td style="width:25%">
                         <?php $customer_id= $do->customer_id ; echo '<small>'. DossiersController::ClientById($customer_id).'</small>';?>
                     </td>
-                    <td style="width:20%"><?php echo '<small>'.$do->subscriber_name .' '.$do->subscriber_lastname .'</small>';?></td>
                     <td style="width:20%"> <?php if($statut=='Cloture'){echo 'Clôturé';} else {
                     if($affecte==0 or ($affecte=='') ){echo '<span style="color:red">Non Affecté !</span>';}else {
                         echo 'En cours <br> Affecté à : '. app('App\Http\Controllers\UsersController')->ChampById('name', $affecte);
@@ -201,14 +199,14 @@
             <thead >
             <tr id="headtable">
                 <th style="width:20%">Référence</th>
-                <th style="width:25%">Client</th>
                 <th style="width:20%">Assuré</th>
+                <th style="width:25%">Client</th>
                 <th style="width:20%">Etat</th>
               </tr>
             <tr>
                 <th style="width:20%">Référence</th>
-                <th style="width:25%">Client</th>
                 <th style="width:20%">Assuré</th>
+                <th style="width:25%">Client</th>
                 <th style="width:20%">Etat</th>
             </tr>
             </thead>
@@ -217,10 +215,10 @@
             @foreach($dossiers as $dossier)
                 <tr><?php $statut=$dossier['current_status'];  $affecte=$dossier['affecte'];   ?>
                     <td style="width:20%"><a href="{{action('DossiersController@view', $dossier['id'])}}" >{{$dossier->reference_medic}}</a> <a style="color:#a0d468" href="{{action('DossiersController@fiche', $dossier['id'])}}" >Fiche<i class="fa fa-file-txt"></a></td>
-                     <td style="width:25%">
+                    <td style="width:20%"><?php echo '<small>'.$dossier['subscriber_name'] .' '.$dossier['subscriber_lastname'] .'</small>';?></td>
+                    <td style="width:25%">
                         <?php $customer_id= $dossier['customer_id']; echo '<small>'. DossiersController::ClientById($customer_id).'</small>';?>
                     </td>
-                    <td style="width:20%"><?php echo '<small>'.$dossier['subscriber_name'] .' '.$dossier['subscriber_lastname'] .'</small>';?></td>
                     <td style="width:20%"> <?php if($statut=='Cloture'){echo 'Clôturé';} else {
                     if($affecte==0 or ($affecte=='') ){echo '<span style="color:red">Non Affecté !</span>';}else {
                         echo 'En cours <br> Affecté à : '. app('App\Http\Controllers\UsersController')->ChampById('name', $affecte);
