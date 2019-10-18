@@ -113,7 +113,7 @@ class RechercheController extends Controller
             }
               
              // $urln= URL::to('/');
-              $output.='<li  class="resAutocompRech" style=" align: left; width:500px; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_medic.' (dossier selon la Réf Médic)'. $affecOuNon.'</a></li>';
+              $output.='<li  class="resAutocompRech" style=" align: left; width:500px; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_medic.' '.$row->subscriber_name.' '.$row->subscriber_lastname.'( Réf. Médicale)'. $affecOuNon.'</a></li>';
           }
 
           $output.='<li class="divider"></li>';
