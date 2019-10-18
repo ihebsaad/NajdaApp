@@ -116,7 +116,7 @@ class ActionController extends Controller
     {
       $actrr=ActionEC::where('id',$idact)->first();
 
-      $output='Annulation erronée';
+      $output='Erreur : Il se peut que vous n\'avez pas sélectionné une action';
 
       if($actrr)
       {
