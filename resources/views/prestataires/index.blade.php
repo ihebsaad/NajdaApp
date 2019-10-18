@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col-lg-6">Prestataires</div>
                 <div class="col-lg-6">
-                    <button id="addprest" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter un Prestataire</b></button>
+                    <a    href="{{route('prestataires.create',['id'=>0])}}" class="btn btn-md btn-success"   ><b><i class="fas fa-plus"></i> Ajouter un Prestataire</b></a>
                 </div>
             </div>
         </div>
@@ -93,47 +93,6 @@
     $iduser=$CurrentUser->id;
 
     ?>
-    <!-- Modal -->
-    <div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ajouter un nouveau Prestataire</h5>
-
-                </div>
-                <div class="modal-body">
-                    <div class="card-body">
-
-                        <form method="post" >
-                            {{ csrf_field() }}
-
-                            <div class="form-group">
-                                <label for="type">Nom :</label>
-                            <input class="form-control" type="text" id="nom" />
-
-                            </div>
-
-                            <div class="form-group">
-                                <label for="type">Prénom :</label>
-                                <input class="form-control" type="text" id="prenom" />
-
-                            </div>
-
-
-                        </form>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                    <button type="button" id="add" class="btn btn-primary">Ajouter</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
 
 
 

@@ -148,6 +148,15 @@ use  \App\Http\Controllers\EntreesController ;
 
                 </button>
             </div>
+
+            <div class="btn-group">
+                <button id="phoneicon"  type="button" class="btn btn-default"  >
+                    <i class="fa fa-comment-dots"></i>
+                    C R
+
+                </button>
+            </div>
+
         </div>
     </div>
     </div>
@@ -161,7 +170,7 @@ use  \App\Http\Controllers\EntreesController ;
 <br>
             <div class="row" style="margin-top:10px">
                 <div class="col-lg-12">
-                    <ul class="nav  nav-tabs">
+                    <ul class="nav  nav-tabs" style="font-size:12px!important;">
  
                         <li class="nav-item ">
                             <a class="nav-link  " href="#tab2" data-toggle="tab">
@@ -174,8 +183,8 @@ use  \App\Http\Controllers\EntreesController ;
                             </a>
                         </li>
                         <li class="nav-item  ">
-                            <a class="nav-link" href="#tab4" data-toggle="tab">
-                                <i class="fas  fa-lg fa-users"></i>  Intervenants
+                            <a class="nav-link" href="#tab4" data-toggle="tab" style="font-size:10px">
+                                <i class="fas  fa-lg fa-users"></i>  Prestataires et Intervenants
                             </a>
                         </li>
                         <li class="nav-item">
@@ -682,9 +691,9 @@ use  \App\Http\Controllers\EntreesController ;
 
            <div id="tab4" href="#tab4" class="tab-pane fade">
                <div class="row">
-                   <div class="col-md-4"><h3 style="margin-bottom:30px">Intervenants</h3></div>
-                   <div class="col-md-4"><button   style="margin-top:15px" id="" class="pull-right btn btn-md btn-default"   data-toggle="modal" data-target="#createinterv"><b><i class="fas fa-plus"></i> Ajouter un Intervenant Libre</b></button></div>
-                   <div class="col-md-4"><button   style="margin-top:15px" id="" class="pull-right btn btn-md btn-success"   data-toggle="modal" data-target="#insererprest"><b><i class="fas fa-plus"></i>  Insérer un Prestataire </b></button></div>
+                   <div class="col-md-4"><h4 style="margin-bottom:30px">Intervenants et Prestataires</h4></div>
+                   <div class="col-md-4"><a   style="margin-top:15px" class="pull-right btn btn-md btn-default"   href="{{route('prestataires.create',['id'=>$dossier->id])}}" ><b><i class="fas fa-plus"></i> Ajouter un Nouvel Intervenant</b></a></div>
+                   <div class="col-md-4"><button   style="margin-top:15px" id="" class="pull-right btn btn-md btn-success"   data-toggle="modal" data-target="#insererprest"><b><i class="fas fa-plus"></i>  Insérer un Intervenant </b></button></div>
                </div>
 <br><B> Intervenants qui ont effectué de(s) prestation(s) </B>
                <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
@@ -798,7 +807,7 @@ $interv = PrestationsController::PrestById($prest);
                                 $descriptionEmail= EntreesController::ChampById('commentaire',$parent);
                                 }
                                 if($attach->envoye_id>0){
-                                $descriptionEmail= EnnvoyesController::ChampById('description',$parent);
+                                $descriptionEmail= EnvoyesController::ChampById('description',$parent);
                                 }
 
                                 ?>
@@ -808,7 +817,7 @@ $interv = PrestationsController::PrestById($prest);
                                         $datem= EntreesController::ChampById('created_at',$parent);
                                         }
                                         if($attach->envoye_id>0){
-                                        $datem= EnnvoyesController::ChampById('created_at',$parent);
+                                        $datem= EnvoyesController::ChampById('created_at',$parent);
                                         }
                                         echo date('d/m/Y H:i', strtotime( $datem)) ;
                                         } else{ echo date('d/m/Y H:i', strtotime( $attach->created_at)) ; }?></small></td>
@@ -2011,6 +2020,55 @@ reference_customer
             </div>
         </div>
     </div>
+<?php     $listedossiers = DB::table('dossiers')->get();
+?>
+
+    <div class="modal  " id="crendu" >
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="text-align:center"  id="modalalert0"><center>Compte Rendu </center> </h5>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+
+                        <div class="form-group">
+                            <label for="sujet">Dossier :</label>
+                            <select   id="iddossier"  style="width:100%;" class="form-control select2" name="dossierid"     >
+                                <option></option>
+                                <?php foreach($listedossiers as $ds)
+
+                                {
+                                echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}     ?>
+                            </select>
+
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emetteur">Interlocuteur :</label>
+                            <input type="text"    id="emetteur"   class="form-control" name="emetteur"    ></textarea>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sujet">Contenu :</label>
+                            <textarea style="overflow:scroll;" id="contenucr"   class="form-control" name="contenucr"    ></textarea>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <a id="ajoutcompter"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
 
@@ -3029,6 +3087,38 @@ $urlapp='http://localhost/najdaapp';
 
     $(function () {
 
+        $("#iddossier").select2();
+
+        $('#phoneicon').click(function() {
+
+            $('#crendu').modal({show: true});
+
+        });
+
+
+        // Ajout Compte Rendu
+        $('#ajoutcompter').click(function() {
+
+            var _token = $('input[name="_token"]').val();
+            var dossier = document.getElementById('iddossier').value;
+            var contenu = document.getElementById('contenucr').value;
+            var emetteur = document.getElementById('emetteur').value;
+
+            $.ajax({
+                url: "{{ route('entrees.ajoutcompter') }}",
+                method: "POST",
+                data: { emetteur:emetteur, dossier:dossier,contenu:contenu,  _token: _token},
+
+                success: function (data) {
+                    alert('Ajouté avec succès');
+                    $('#crendu').modal('hide');
+                    //     $('#crendu').modal({show: false});
+
+                }
+            });
+
+
+        }); //end click
 
         $('#valide').click(function(){
           var prestation=  document.getElementById('idprestation').value;
@@ -3814,6 +3904,9 @@ $("#showNext-m").click(function() {
         document.getElementById('ledestinataire').value=parseInt(num);
 
     }
+
+
+
 
 </script>
 <style>.headtable{background-color: grey!important;color:white;}

@@ -172,9 +172,9 @@ Route::get('/envoyes/brouillons', 'EnvoyesController@brouillons')->name('envoyes
 //Route::resource('/dossiers',  'DossiersController');
 Route::get('/dossiers', array('as' => 'dossiers','uses' => 'DossiersController@index'));
 Route::get('/dossiers/saving','DossiersController@saving')->name('dossiers.saving');
-//Route::get('/dossiers/save','DossiersController@save');
-Route::post('/dossiers/save','DossiersController@save')->name('dossiers.save');
 
+Route::post('/dossiers/save','DossiersController@save')->name('dossiers.save');
+Route::post('/dossiers/sendaccuse','DossiersController@sendaccuse')->name('dossiers.sendaccuse');
 Route::get('/dossiers/create/{identree}','DossiersController@create')->name('dossiers.create');
 Route::post('/dossiers/updating','DossiersController@updating')->name('dossiers.updating');
 Route::post('/dossiers/updating2','DossiersController@updating2')->name('dossiers.updating2');
@@ -299,6 +299,7 @@ Route::post('/prestataires/addressadd','PrestatairesController@addressadd')->nam
 Route::post('/prestataires/NomPrestatireById','PrestatairesController@NomPrestatireById')->name('prestataires.NomPrestatireById');
 
 Route::get('/prestataires/destroy/{id}', 'PrestatairesController@destroy');
+Route::get('/prestataires/create/{id}', 'PrestatairesController@create')->name('prestataires.create');
 
 
 /*** Prestations **/

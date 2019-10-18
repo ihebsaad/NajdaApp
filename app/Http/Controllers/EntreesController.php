@@ -336,12 +336,10 @@ class EntreesController extends Controller
 
     }
 
-    public static function GetParametre($entree)
+    public static function GetParametre($clientid)
     {
 
-         $refdossier = app('App\Http\Controllers\EntreesController')->ChampById('dossier',$entree);
-        $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-        $clientid = app('App\Http\Controllers\DossiersController')->ClientDossierById($iddossier);
+
         $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$clientid);
 
         $message = Parametre::find(1);
@@ -526,6 +524,7 @@ class EntreesController extends Controller
 
         $dossier=$request->get('dossier') ;
         $contenu=$request->get('contenu') ;
+        $emetteur=$request->get('emetteur') ;
 
         $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($dossier);
 
@@ -544,9 +543,9 @@ class EntreesController extends Controller
 
         $entree = new Entree([
             'destinataire' => $nomuser2,
-            'emetteur' => $nomuser,
+            'emetteur' => $emetteur ,
             'mailid'=> 'CR-'.date('d-m-Y-H-i-s'),
-            'sujet' =>  'Compte Rendu ',
+            'sujet' =>  'Compte Rendu écrit par '.$nomuser,
             'contenu'=> $contenu ,
             'reception'=> $date,
             'type'=> 'tel',

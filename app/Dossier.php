@@ -108,7 +108,8 @@ class Dossier extends Model
 
         'type_trans',
         'type_trans2',
-        'type_trans3'
+        'type_trans3',
+        'entree'
 
     ];
 

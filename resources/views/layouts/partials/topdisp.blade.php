@@ -81,8 +81,8 @@
 
 
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-          <a id="ajoutcompter"  href="#" class="btn btn-primary btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style=";margin-left: 20px;margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
-              <span class="fas fa-fw fas fa-comment-dots fa-2x"></span>
+          <a   href="#" class="btn btn-primary btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style=";margin-left: 20px;margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
+              <span class="fas fa-fw fas fa-phone fa-2x"></span>
           </a> 
         </div>
           <!--
@@ -370,28 +370,7 @@
 
 
 
-    // Ajout Compte Rendu
-    $('#ajoutcompter').click(function() {
 
-        var _token = $('input[name="_token"]').val();
-        var dossier = document.getElementById('dossierid').value;
-        var contenu = document.getElementById('contenucr').value;
-
-        $.ajax({
-            url: "{{ route('entrees.ajoutcompter') }}",
-            method: "POST",
-            data: { dossier:dossier,contenu:contenu,  _token: _token},
-
-            success: function (data) {
-                alert('Ajouté avec succès');
-                $('#crendu').modal('hide');
-                //     $('#crendu').modal({show: false});
-
-            }
-        });
-
-
-    }); //end click
 
 
 

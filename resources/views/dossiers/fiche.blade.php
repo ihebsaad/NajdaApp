@@ -1,6 +1,6 @@
 @extends('layouts.mainlayout')
-<?php 
-use App\User ; 
+<?php
+use App\Http\Controllers\EntreesController;use App\User ;
 use App\Template_doc ; 
 use App\Document ; 
 
@@ -35,7 +35,7 @@ use  \App\Http\Controllers\DocsController;
         <?php 
         $agentname = User::where('id',$dossier->affecte)->first();
         if ((Gate::check('isAdmin') || Gate::check('isSupervisor')) && !empty ($agentname))
-            { echo '<a href="#" data-toggle="modal" data-target="#attrmodal">';}
+            { echo '<a href="#" data-toggle="modal" data-target="#attrmodal"><input type="hidden" id="affecte" value="'.$dossier->affecte.'" >';}
         echo $agentname['name']; 
         if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
             { echo '</a>';}
@@ -45,9 +45,9 @@ use  \App\Http\Controllers\DocsController;
         else
         {
             if ((Gate::check('isAdmin') || Gate::check('isSupervisor')))
-            {echo '<a href="#" data-toggle="modal" data-target="#attrmodal">Non affecté</a>';}
+            {echo '<a style="color:#FD9883" href="#" data-toggle="modal" data-target="#attrmodal">Non affecté</a>';}
             else
-            {echo '<b>Non affecté</b>';} 
+            {echo '<b style="color:#FD9883">Non affecté</b>';}
         } ?>
 
          <?php   } ?>
@@ -115,6 +115,14 @@ use  \App\Http\Controllers\DocsController;
 
                 </button>
             </div>
+
+            <div class="btn-group">
+                <button id="phoneicon"  type="button" class="btn btn-default"  >
+                    <i class="fa fa-comment-dots"></i>
+                    C R
+
+                </button>
+            </div>
         </div>
     </div>
     </div>
@@ -123,7 +131,8 @@ use  \App\Http\Controllers\DocsController;
     <section class="content form_layouts">
 
 <br>
-        <B><a class="pull-left"   > <i class="fas fa-lg fa-encelope"></i> Accusé</a></B>
+        <?php if($dossier->affecte>0) {?> <button  class="btn btn-md btn-info pull-left"   data-toggle="modal" data-target="#createAccuse"><b><i class="fas fa-envelope"></i> Envoyer un accusé </b></button><?php } ?>
+
         <B><a class="pull-right" href="{{action('DossiersController@view',$dossier->id)}}"  > <i class="fas fa-lg fa-folder-open"></i> Allez vers Détails du dossier </a></B>
 <br>
   
@@ -222,22 +231,24 @@ use  \App\Http\Controllers\DocsController;
                                                                 <div class="row">
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Nom abonné * </label>
-
-                                                                            <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="subscriber_name" name="subscriber_name" class="form-control" value="{{ $dossier->subscriber_name }}"  >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Prénom *</label>
+                                                                            <label for="inputError" class="control-label">Prénom de l'assuré *</label>
 
                                                                             <div class="input-group-control">
                                                                                 <input onchange="changing(this)" type="text" id="subscriber_lastname" name="subscriber_lastname" class="form-control"  value="{{ $dossier->subscriber_lastname }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
+
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <label for="inputError" class="control-label">Nom </label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input onchange="changing(this)" type="text" id="subscriber_name" name="subscriber_name" class="form-control" value="{{ $dossier->subscriber_name }}"  >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
                                                                             <label for="ben" class="control-label">bénéficiaire différent</label><br>
@@ -254,24 +265,26 @@ use  \App\Http\Controllers\DocsController;
                                                                 </div>
 
                                                                 <div class="row" id="bens" <?php if ($dossier->benefdiff ==0) { ?> style="display:none" <?php }?> >
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Bénéficaire </label>
 
-                                                                            <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="beneficiaire" name="beneficiaire" class="form-control"   value="{{ $dossier->beneficiaire }}" >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Prénom Bénéficaire</label>
+                                                                            <label for="inputError" class="control-label">Prénom du Bénéficaire</label>
 
                                                                             <div class="input-group-control">
                                                                                 <input onchange="changing(this)" type="text" id="prenom_benef" name="prenom_benef" class="form-control"   value="{{ $dossier->prenom_benef }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <label for="inputError" class="control-label">Nom du Bénéficaire </label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input onchange="changing(this)" type="text" id="beneficiaire" name="beneficiaire" class="form-control"   value="{{ $dossier->beneficiaire }}" >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
 
                                                                     <div class="col-md-3">
                                                                         <div class="form-group">
@@ -288,21 +301,22 @@ use  \App\Http\Controllers\DocsController;
 
                                                                     </div>
                                                                 <div class="row" id="ben2" <?php if ($dossier->beneficiaire2 =='') { ?> style="display:none" <?php }?>  >
+
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Bénéficaire 2</label>
+                                                                            <label for="inputError" class="control-label">Prénom du Bénéficaire 2</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="beneficiaire2" name="beneficiaire" class="form-control"   value="{{ $dossier->beneficiaire2 }}" >
+                                                                                <input onchange="changing(this)" type="text" id="prenom_benef2" name="prenom_benef" class="form-control"   value="{{ $dossier->prenom_benef2 }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Prénom Bénéficaire 2</label>
+                                                                            <label for="inputError" class="control-label">Nom du Bénéficaire 2</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="prenom_benef2" name="prenom_benef" class="form-control"   value="{{ $dossier->prenom_benef2 }}" >
+                                                                                <input onchange="changing(this)" type="text" id="beneficiaire2" name="beneficiaire" class="form-control"   value="{{ $dossier->beneficiaire2 }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -321,25 +335,27 @@ use  \App\Http\Controllers\DocsController;
                                                                     </div>
                                                                 </div>
 
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label for="inputError" class="control-label">Prénom du Bénéficaire 3</label>
+
+                                                                        <div class="input-group-control">
+                                                                            <input onchange="changing(this)" type="text" id="prenom_benef3" name="prenom_benef" class="form-control"   value="{{ $dossier->prenom_benef3 }}" >
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
                                                                 <div class="row" id="ben3"  <?php if ($dossier->beneficiaire3 =='') { ?> style="display:none" <?php }?>  >
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Bénéficaire 3 </label>
+                                                                            <label for="inputError" class="control-label">Nom du Bénéficaire 3 </label>
 
                                                                             <div class="input-group-control">
                                                                                 <input onchange="changing(this)" type="text" id="beneficiaire3" name="beneficiaire" class="form-control"   value="{{ $dossier->beneficiaire3 }}">
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Prénom Bénéficaire 3</label>
 
-                                                                            <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="prenom_benef3" name="prenom_benef" class="form-control"   value="{{ $dossier->prenom_benef3 }}" >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
 
                                                                     <div class="col-md-3">
                                                                         <div class="form-group">
@@ -414,7 +430,7 @@ use  \App\Http\Controllers\DocsController;
                                                                     <tbody>
                                                                     @foreach($emailads as $emailad)
                                                                         <tr>
-                                                                            <td style="width:20%;"><?php echo $emailad->nom; ?>  <?php echo $emailad->prenom; ?></td>
+                                                                            <td style="width:20%;"> <?php echo $emailad->prenom; ?> <?php echo $emailad->nom; ?> </td>
                                                                             <td style="width:20%;"><?php echo $emailad->fonction; ?></td>
                                                                             <td style="width:30%;"><?php echo $emailad->mail; ?></td>
                                                                             <td style="width:30%;"><?php echo $emailad->remarque; ?></td>
@@ -581,8 +597,6 @@ use  \App\Http\Controllers\DocsController;
                                                                 </div>
 
 
-
-
                                                                 <div class="row">
                                                                     <div class="form-group col-md-10">
                                                                         <label for="inputError" class="control-label">Adresse étranger</label>
@@ -642,7 +656,7 @@ use  \App\Http\Controllers\DocsController;
                                                                     <div class="col-md-2">
                                                                         <label for="inputError" class="control-label">Autre : </label>
 
-                                                                        <a style="" href="{{ route('prestataires') }}" class="btn btn-default btn-sm" role="button">+ Ajouter</a>
+                                                                        <a style=""  href="{{route('prestataires.create',['id'=>$dossier->id])}}" class="btn btn-default btn-sm" role="button">+ Ajouter</a>
 
                                                                     </div>
                                                                 </div>
@@ -2074,17 +2088,18 @@ $iduser=$CurrentUser->id;
                         <form   id="fggf" name="">
                             {{ csrf_field() }}
 
-                            <div class="form-group " >
-                                <label for="adresse">Nom</label>
-                                <div class=" row  ">
-                                    <input class="form-control" type="text" required id="nome"/>
 
-                                </div>
-                            </div>
                             <div class="form-group " >
                                 <label for="adresse">Prénom</label>
                                 <div class=" row  ">
                                     <input class="form-control" type="text" required id="prenome"/>
+
+                                </div>
+                            </div>
+                            <div class="form-group " >
+                                <label for="adresse">Nom</label>
+                                <div class=" row  ">
+                                    <input class="form-control" type="text" required id="nome"/>
 
                                 </div>
                             </div>
@@ -2148,13 +2163,7 @@ $iduser=$CurrentUser->id;
                         <form   id="fghgf" name="">
                             {{ csrf_field() }}
 
-                            <div class="form-group " >
-                                <label for="adresse">Nom</label>
-                                <div class=" row  ">
-                                    <input class="form-control" type="text" required id="nomt"/>
 
-                                </div>
-                            </div>
                             <div class="form-group " >
                                 <label for="adresse">Prénom</label>
                                 <div class=" row  ">
@@ -2162,7 +2171,13 @@ $iduser=$CurrentUser->id;
 
                                 </div>
                             </div>
+                            <div class="form-group " >
+                                <label for="adresse">Nom</label>
+                                <div class=" row  ">
+                                    <input class="form-control" type="text" required id="nomt"/>
 
+                                </div>
+                            </div>
                             <div class="form-group " >
                                 <label for="adresse">Fonction</label>
                                 <div class=" row  ">
@@ -2283,6 +2298,93 @@ $iduser=$CurrentUser->id;
 
 <?php } ?>
 
+
+<!-- Modal -->
+<div class="modal fade" id="createAccuse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Envoyer un accusé de réception</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+                    {{ csrf_field() }}
+                </div>
+                <div class="form-group">
+
+                    <label for="destinataire">Destinataire:</label>
+                    <input id="emaildestinataire"   class="form-control" name="emaildestinataire"      />
+                </div>
+
+                <div id="formaccuse"  >
+                    {{ csrf_field() }}
+                    <?php $message= EntreesController::GetParametre($dossier->customer_id);
+                    //  echo json_encode($message);?>
+                    <div  style=" width: 540px; height: 450px;" id="message" contenteditable="true" ><?php echo $message   ;?></div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="submit" onclick="document.getElementById('sendaccuse').disabled=true" id="sendaccuse" class="btn btn-primary">Envoyer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal  " id="crendu" >
+    <?php     $listedossiers = DB::table('dossiers')->get();
+?>
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="text-align:center"  id="modalalert0"><center>Compte Rendu </center> </h5>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+
+                    <div class="form-group">
+                        <label for="sujet">Dossier :</label>
+                        <select   id="iddossier"  style="width:100%;" class="form-control select2" name="dossierid"     >
+                            <option></option>
+                            <?php foreach($listedossiers as $ds)
+
+                            {
+                                echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}     ?>
+                        </select>
+
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emetteur">Interlocuteur :</label>
+                        <input type="text"  id="emetteur"   class="form-control" name="emetteur"    ></input>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sujet">Contenu :</label>
+                        <textarea style="overflow:scroll;" id="contenucr"   class="form-control" name="contenucr"    ></textarea>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <a id="ajoutcompter"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -2290,200 +2392,6 @@ $iduser=$CurrentUser->id;
 
 <script>
 
-function remplacedoc(iddoc,template)
-{
-    //alert(iddoc+' | '+template);
-
-        var dossier = $('#dossier').val();
-        var tempdoc = template;
-        $("#gendochtml").prop("disabled",false);
-        if ((dossier != '') )
-        {
-            var _token = $('input[name="_token"]').val();
-            $.ajax({
-                url:"{{ route('documents.htmlfilled') }}",
-                method:"POST",
-                data:{dossier:dossier,template:tempdoc,parent:iddoc, _token:_token},
-                success:function(data){
-                    filltemplate(data,tempdoc);
-                    // set iddocparent value
-                    $('#iddocparent').val(iddoc);
-                    //alert(JSON.stringify(data));
-                }
-            });
-        }else{
-            // alert('ERROR');
-        }
-}
-
-function annuledoc(iddoc,template)
-{
-    //alert(iddoc+' | '+template);
-
-        var dossier = $('#dossier').val();
-        var tempdoc = template;
-        $("#gendochtml").prop("disabled",false);
-        /*if ((dossier != '') )
-        {
-            var _token = $('input[name="_token"]').val();
-            $.ajax({
-                url:"{{ route('documents.htmlfilled') }}",
-                method:"POST",
-                data:{dossier:dossier,template:tempdoc,parent:iddoc,annule:iddoc, _token:_token},
-                success:function(data){
-                    filltemplate(data,tempdoc);
-                    // set iddocparent value
-                    $('#iddocparent').val(iddoc);
-                    //alert(JSON.stringify(data));
-                }
-            });
-        }*/
-        alert(tempdoc);
-}
-
-// affichage de lhistorique du document
-    
-    function historiquedoc(doc){
-        //$("#gendocfromhtml").submit();
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-                url:"{{ route('documents.historique') }}",
-                method:"POST",
-                //'&_token='+_token
-                data:'_token='+_token+'&doc='+doc,
-                success:function(data){
-                    //alert(JSON.stringify(data));
-                    var histdoc = JSON.parse(data);
-                    // vider le contenu du table historique
-                    $("#tabledocshisto tbody").empty();
-                    var items = [];
-                    $.each(histdoc, function(i, field){
-                      items.push([ i,field ]);
-                    });
-                    // affichage template dans iframe
-                    $.each(items, function(index, val) {
-
-                    //titre du document
-                    if (val[0]==0)
-                    {
-                        $("#dochistoname").text(val[1]['titre']);
-                    }
-
-                    //alert(val[0]+" | "+val[1]['emplacement']+" | "+val[1]['updated_at']);
-                    urlf="{{ URL::asset('storage'.'/app/') }}";
-                    aurlf="<a style='color:black' href='"+urlf+"/"+val[1]['emplacement']+"' ><i class='fa fa-download'></i> Télécharger</a>";
-                    $("#tabledocshisto tbody").append("<tr><td>"+val[1]['updated_at']+"</td><td>"+aurlf+"</td></tr>");
-
-                    });
-
-                    $("#modalhistodoc").modal('show');
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    //alert('status code: '+jqXHR.status+' errorThrown: ' + errorThrown + ' jqXHR.responseText: '+jqXHR.responseText);
-                     Swal.fire({
-                        type: 'error',
-                        title: 'oups...',
-                        text: "Erreur lors de recuperation de l historique du document"
-                    });
-                    console.log('jqXHR:');
-                    console.log(jqXHR);
-                    console.log('textStatus:');
-                    console.log(textStatus);
-                    console.log('errorThrown:');
-                    console.log(errorThrown);
-                }
-            });
-    }
-
-function filltemplate(data,tempdoc)
-{
-   // window.location =data; hde gendocform and display template filled
-   $("#generatedoc").modal('hide');
-   //change html template content
-   var templateexist = true;
-   var parsed = JSON.parse(data);
-   var items = [];
-   var html_string="";
-   $.each(parsed, function(i, field){
-      items.push([ i,field ]);
-    });
-   // affichage template dans iframe
-  $.each(items, function(index, val) {
-
-        //recuperer la template html du document
-        if(val[0] ==='templatehtml') 
-            {
-                if ((val[1].includes(undefined)) || (!val[1])) 
-                {
-                    templateexist = false;
-                     Swal.fire({
-                        type: 'error',
-                        title: 'oups...',
-                        text: "la template html du document n'est pas bien défini"
-                    });
-                }
-                else
-                {    
-                    html_string= "{{asset('public/') }}"+"/"+val[1];
-
-                }
-                
-            }
-        //verifier la templte rtf du document
-        if(val[0] ==='templatertf') 
-            {
-                if ((val[1].includes(undefined)) || (!val[1])) 
-                {
-                    $("#gendochtml").prop("disabled",true);
-                     Swal.fire({
-                        type: 'error',
-                        title: 'oups...',
-                        text: "la template rtf du document n'est pas bien défini"
-                    });
-                }
-                else
-                {    
-                    $("#templatedocument").val(tempdoc);
-                }
-                
-            }
-
-    });
-
-  if (templateexist)
-    {
-
-        // remplissage de la template dans iframe
-        var numparam = 0;
-        $.each(items, function(index, val) {
-            // les champs du document
-            if ((val[0] !=='templatertf') && (val[0] !=='templatehtml') /* && (val[0].indexOf("CL_") == -1)*/ )
-            {
-                if (numparam == 0)
-                {
-                    html_string=html_string+'?';
-                }
-                else
-                {
-                    html_string=html_string+'&';
-                }
-
-                html_string=html_string+val[0]+'='+val[1];
-
-                numparam ++;
-            }
-        });
-
-
-
-        //chargement du contenu et affichage du preview du document
-        //alert(html_string);
-        document.getElementById('templatefilled').src = html_string;
-        $("#templatehtmldoc").modal('show');
-
-
-    }
-}
 
     function changing(elm) {
         var champ=elm.id;
@@ -2584,6 +2492,43 @@ function disabling(elm) {
 
 
     $(document).ready(function() {
+
+        $("#iddossier").select2();
+
+        $('#phoneicon').click(function() {
+
+            $('#crendu').modal({show: true});
+
+        });
+
+
+        // Ajout Compte Rendu
+        $('#ajoutcompter').click(function() {
+
+            var _token = $('input[name="_token"]').val();
+            var dossier = document.getElementById('iddossier').value;
+            var contenu = document.getElementById('contenucr').value;
+            var emetteur = document.getElementById('emetteur').value;
+
+            $.ajax({
+                url: "{{ route('entrees.ajoutcompter') }}",
+                method: "POST",
+                data: { emetteur:emetteur, dossier:dossier,contenu:contenu,  _token: _token},
+
+                success: function (data) {
+                    alert('Ajouté avec succès');
+                    $('#crendu').modal('hide');
+                    //     $('#crendu').modal({show: false});
+
+                }
+            });
+
+
+        }); //end click
+
+
+
+
         $("#agent").select2();
         $("#templatedoc").select2();
         $('#emailadd').click(function () {
@@ -2793,6 +2738,35 @@ function disabling(elm) {
     $(function () {
 
 
+        $('#sendaccuse').click(function(){
+            var dossier = $('#dossier').val();
+            var client = $('#customer_id').val();
+            var destinataire = $('#emaildestinataire').val();
+            var refclient = $('#reference_customer').val();
+            var affecte = $('#affecte').val();
+
+
+            var message = $('#message').html();
+
+
+            if (destinataire!='')
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('dossiers.sendaccuse') }}",
+                    method:"POST",
+                    data:{ refclient:refclient,message:message,affecte:affecte,client:client,dossier:dossier,destinataire:destinataire, _token:_token},
+
+                    success:function(data){
+
+                        window.location =data;
+
+                    }
+                });
+            }else{
+                // alert('ERROR');
+            }
+        });
 
 
         $('#add2').click(function(){

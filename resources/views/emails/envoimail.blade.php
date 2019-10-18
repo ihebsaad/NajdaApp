@@ -127,13 +127,13 @@
         <label for="sujet">Sujet :</label>
         <?php if($type=='prestataire')
         { ?>
-        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - N/Ref(O/Ref): <?php echo $ref ?>"/>
+        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - N/Réf(O/Ref): <?php echo $ref ?>"/>
   <?php }
         if ($type=='assure') {?>
-        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - N/Ref(O/Ref): <?php echo $ref ?>"/>
+        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - N/Réf(O/Ref): <?php echo $ref ?>"/>
 <?php        } ?>
      <?php   if  ($type=='client') {?>
-        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - V/Ref(Y/Ref): <?php echo $refclient ?>   - N/Ref(O/Ref): <?php echo $ref ?>"/>
+        <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - V/Réf(Y/Ref): <?php echo $refclient ?>   - N/Réf(O/Ref): <?php echo $ref ?>"/>
         <?php        } ?>
     </div>
     <div class="form-group">
@@ -224,12 +224,8 @@
       ?>
 <script type="text/javascript">
 
-
     function checkForm(form) // Submit button clicked
     {
-        //
-        // check form input values
-        //
 
         form.myButton.disabled = true;
         form.myButton.value = "Please wait...";
@@ -254,26 +250,9 @@
 
     $(document).ready(function(){
 
-      /*  $('#SendBtn').click(function(){
-            // Ajax request
-            var btn = $(this);
-            btn.prop('disabled', true);
-           // setTimeout(function(){
-           //     btn.prop('disabled', false);
-           // }, 5000);
-        });
-*/
         $('#theform').submit(function(){
             $(this).children('input[type=submit]').prop('disabled', true);
         });
-
-       /* $("#SendBtn").submit(function() {
-            $(this).submit(function() {
-                return false;
-            });
-            return true;
-        });
-*/
 
 
         <?php if(  ($type!='prestataire') ||($prest>0) ) {  ?>

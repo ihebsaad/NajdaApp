@@ -27,7 +27,7 @@ use  \App\Http\Controllers\DocsController;
 
             <form id="savefolder"  method="post"  action="{{route('dossiers.save')}}" >
                 {{ csrf_field() }}
-
+                <input type="hidden" name="entree" value="<?php echo $identree;?>" />
                 <div class="row">
 
                     <div class="col-md-2">
@@ -112,7 +112,7 @@ use  \App\Http\Controllers\DocsController;
                                                     <div class="row">
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label for="inputError" class="control-label">Nom abonné * </label>
+                                                                <label for="inputError" class="control-label">Prénom assureé * </label>
 
                                                                 <div class="input-group-control">
                                                                     <input   type="text" id="subscriber_name" name="subscriber_name" class="form-control"    >
@@ -121,7 +121,7 @@ use  \App\Http\Controllers\DocsController;
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label for="inputError" class="control-label">Prénom *</label>
+                                                                <label for="inputError" class="control-label">Nom *</label>
 
                                                                 <div class="input-group-control">
                                                                     <input   type="text" id="subscriber_lastname" name="subscriber_lastname" class="form-control"    >
@@ -146,22 +146,23 @@ use  \App\Http\Controllers\DocsController;
                                                     <div class="row" id="bens"  style="display:none" >
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label for="inputError" class="control-label">Bénéficaire </label>
-
-                                                                <div class="input-group-control">
-                                                                    <input   type="text" id="beneficiaire" name="beneficiaire" class="form-control"     >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Prénom Bénéficaire</label>
+                                                                <label for="inputError" class="control-label">Prénom du Bénéficaire</label>
 
                                                                 <div class="input-group-control">
                                                                     <input   type="text" id="prenom_benef" name="prenom_benef" class="form-control"     >
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">Nom du Bénéficaire </label>
+
+                                                                <div class="input-group-control">
+                                                                    <input   type="text" id="beneficiaire" name="beneficiaire" class="form-control"     >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
@@ -180,22 +181,23 @@ use  \App\Http\Controllers\DocsController;
                                                     <div class="row" id="ben2"   style="display:none"    >
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label for="inputError" class="control-label">Bénéficaire 2</label>
-
-                                                                <div class="input-group-control">
-                                                                    <input   type="text" id="beneficiaire2" name="beneficiaire2" class="form-control"     >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Prénom Bénéficaire 2</label>
+                                                                <label for="inputError" class="control-label">Prénom du Bénéficaire 2</label>
 
                                                                 <div class="input-group-control">
                                                                     <input   type="text" id="prenom_benef2" name="prenom_benef2" class="form-control"     >
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">Nom du Bénéficaire 2</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input   type="text" id="beneficiaire2" name="beneficiaire2" class="form-control"     >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
@@ -211,25 +213,27 @@ use  \App\Http\Controllers\DocsController;
                                                         </div>
                                                     </div>
 
-                                                    <div class="row" id="ben3"  <  style="display:none"    >
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Bénéficaire 3 </label>
+                                                    <div class="row" id="ben3"    style="display:none"    >
 
-                                                                <div class="input-group-control">
-                                                                    <input   type="text" id="beneficiaire3" name="beneficiaire3" class="form-control"   >
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label for="inputError" class="control-label">Prénom Bénéficaire 3</label>
+                                                                <label for="inputError" class="control-label">Prénom du Bénéficaire 3</label>
 
                                                                 <div class="input-group-control">
                                                                     <input   type="text" id="prenom_benef3" name="prenom_benef3" class="form-control"   >
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">Nom du Bénéficaire 3 </label>
+
+                                                                <div class="input-group-control">
+                                                                    <input   type="text" id="beneficiaire3" name="beneficiaire3" class="form-control"   >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">

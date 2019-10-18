@@ -77,11 +77,10 @@ class PrestatairesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        $dossiers = Dossier::all();
 
-        return view('prestataires.create',['dossiers' => $dossiers]);
+        return view('prestataires.create',['folder'=>$id]);
     }
 
 
@@ -133,7 +132,15 @@ class PrestatairesController extends Controller
 
     public function saving(Request $request)
     {
-        if( ($request->get('dossier'))!=null) {
+            // **** prestataires dossiers dans table intervenant
+        // *** importer prestataires
+
+       // $user = auth()->user();
+      //  $nomuser = $user->name . ' ' . $user->name;
+      //  Log::info('[Agent: ' . $nomuser . '] Ajout Intervenant: ' . $reference_medic);
+
+
+        if( ($request->get('dossier'))>0) {
 
          $doss=   $request->get('dossier');
             if (($request->get('nom')) != null) {
@@ -141,12 +148,15 @@ class PrestatairesController extends Controller
                 $prestataire = new Prestataire([
                     'name' => $request->get('nom'),
                     'prenom' => $request->get('prenom'),
+                    'civilite' => $request->get('civilite'),
 
                 ]);
 
 
                 if ($prestataire->save()) {
                     $id = $prestataire->id;
+
+                    $prestataire->update($request->all());
 
                     $interv = new Intervenant([
                         'nom' => $request->get('nom'),
@@ -166,7 +176,7 @@ class PrestatairesController extends Controller
 
             }
         }else{
-
+        // hors dossier
 
             $prestataire = new Prestataire([
                 'name' => $request->get('nom'),
@@ -176,13 +186,13 @@ class PrestatairesController extends Controller
 
             if ($prestataire->save()) {
                 $id = $prestataire->id;
+                $prestataire->update($request->all());
 
                 return url('/prestataires/view/' . $id)/*->with('success', ' Créé avec succès')*/
                     ;
             } else {
                 return url('/prestataires');
             }
-
 
         }
 

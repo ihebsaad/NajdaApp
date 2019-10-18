@@ -116,7 +116,7 @@ class DossiersController extends Controller
 
                 ->get();
 
-        return view('dossiers.create',['entree'=>$entree ,'clients'=>$clients,'hopitaux'=>$hopitaux ,'traitants'=> $traitants , 'hotels'=>$hotels , 'garages'=>$garages] );
+        return view('dossiers.create',['identree'=>$identree,'entree'=>$entree ,'clients'=>$clients,'hopitaux'=>$hopitaux ,'traitants'=> $traitants , 'hotels'=>$hotels , 'garages'=>$garages] );
     }
 
     /**
@@ -225,7 +225,8 @@ class DossiersController extends Controller
         $dossier = new Dossier([
             'type_dossier' => $request->get('type_dossier'),
             'type_affectation' => $type_affectation,
-             'reference_medic' => $reference_medic
+             'reference_medic' => $reference_medic,
+            'entree' => $request->get('entree'),
 
         ]);
 
@@ -393,12 +394,10 @@ class DossiersController extends Controller
                             $message
 
                                 ->to($to)
-
                                 ->subject($sujet)
                                 ->setBody($contenu, 'text/html');
 
                         });
-
 
                    } catch (Exception $ex) {
                         // Debug via $ex->getMessage();
@@ -439,6 +438,55 @@ class DossiersController extends Controller
             }
     }
 
+
+
+    public function sendaccuse(Request $request)
+    {
+        $iddossier=$request->get('dossier');
+        $client=$request->get('client');
+        $affecte=$request->get('affecte');
+        $message=$request->get('message');
+        $refclient=$request->get('refclient');
+        $destinataire=trim($request->get('destinataire'));
+
+        $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$client);
+
+
+        $refdossier = app('App\Http\Controllers\DossiersController')->ChampById('reference_medic',$iddossier);
+        $subscriber_name = app('App\Http\Controllers\DossiersController')->ChampById('subscriber_name',$iddossier);
+        $subscriber_lastname = app('App\Http\Controllers\DossiersController')->ChampById('subscriber_lastname',$iddossier);
+
+
+        $nomabn=  $subscriber_name.' '.$subscriber_lastname;
+
+
+        if ($langue=='francais'){
+            $signature = app('App\Http\Controllers\UsersController')->ChampById('signature',$affecte);
+            $sujet=  $nomabn.'  - V/Réf: '.$refclient .' - N/Réf: '.$refdossier ;
+
+        }else{
+            $signature = app('App\Http\Controllers\UsersController')->ChampById('signature_en',$affecte);
+            $sujet=  $nomabn.'  - Y/Ref: '.$refclient .' - O/Ref: '.$refdossier ;
+
+        }
+
+        $contenu=$message.'<br><br>'.$signature;
+        try{
+            Mail::send([], [], function ($message) use ($destinataire,$sujet,$contenu) {
+                $message
+
+                    ->to($destinataire)
+                    ->subject($sujet)
+                    ->setBody($contenu, 'text/html');
+
+            });
+
+        } catch (Exception $ex) {
+            // Debug via $ex->getMessage();
+            //      echo '<script>alert("Erreur !") </script>' ;
+        }
+
+    }
 
     public function updating(Request $request)
     {

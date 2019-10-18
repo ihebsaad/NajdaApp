@@ -6,7 +6,6 @@
     $user = auth()->user();
     $iduser=$user->id;
 
-    $listedossiers = DB::table('dossiers')->get();
     ?>
         <div class="collapse bg-grey" id="navbarHeader">
              @include('layouts.partials._top_menu')
@@ -115,8 +114,8 @@
           </form>
         </div>
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-          <a id="phoneicon" href="#" class="btn btn-primary btn-lg btn-responsive phone" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
-              <span class="fas fa-fw fas fa-comment-dots fa-2x"></span>
+          <a href="#" class="btn btn-primary btn-lg btn-responsive phone" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px; ">
+              <span class="fas fa-fw fas fa-phone fa-2x"></span>
           </a> 
         </div>
 
@@ -234,46 +233,6 @@
 </div>
 
 
-<div class="modal  " id="crendu" >
-    <div class="modal-dialog" >
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" style="text-align:center"  id="modalalert0"><center>Compte Rendu </center> </h5>
-            </div>
-            <div class="modal-body">
-                <div class="card-body">
-
-
-                    <div class="form-group">
-                        <label for="sujet">Dossier :</label>
-                        <select   id="dossierid"  style="width:100%;" class="form-control select2" name="dossierid"     >
-                            <option></option>
-                            <?php foreach($listedossiers as $ds)
-
-                            {
-                                echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}     ?>
-                        </select>
-
-
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sujet">Contenu :</label>
-                        <textarea style="overflow:scroll;" id="contenucr"   class="form-control" name="contenucr"    ></textarea>
-
-                    </div>
-
-
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <a id="ajoutcompter"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <style>
@@ -497,13 +456,14 @@ $iduser=$user->id; ?>
 
 
 <script>
-    $("#dossierid").select2();
 
     $('#dpause').click(function() {
 
         $('#modalconfirm').modal({show: true});
 
     });
+    /*
+    $("#dossierid").select2();
 
     $('#phoneicon').click(function() {
 
@@ -511,6 +471,29 @@ $iduser=$user->id; ?>
 
     });
 
+    // Ajout Compte Rendu
+    $('#ajoutcompter').click(function() {
+
+        var _token = $('input[name="_token"]').val();
+        var dossier = document.getElementById('dossierid').value;
+        var contenu = document.getElementById('contenucr').value;
+
+        $.ajax({
+            url: "{{ route('entrees.ajoutcompter') }}",
+            method: "POST",
+            data: { dossier:dossier,contenu:contenu,  _token: _token},
+
+            success: function (data) {
+                alert('Ajouté avec succès');
+                $('#crendu').modal('hide');
+                //     $('#crendu').modal({show: false});
+
+            }
+        });
+
+
+    }); //end click
+*/
 
 
     $('#oui').click(function() {
@@ -533,29 +516,6 @@ $iduser=$user->id; ?>
 
     }); //end click
 
-
-// Ajout Compte Rendu
-    $('#ajoutcompter').click(function() {
-
-        var _token = $('input[name="_token"]').val();
-        var dossier = document.getElementById('dossierid').value;
-        var contenu = document.getElementById('contenucr').value;
-
-        $.ajax({
-            url: "{{ route('entrees.ajoutcompter') }}",
-            method: "POST",
-            data: { dossier:dossier,contenu:contenu,  _token: _token},
-
-            success: function (data) {
-            alert('Ajouté avec succès');
-                $('#crendu').modal('hide');
-           //     $('#crendu').modal({show: false});
-
-            }
-        });
-
-
-    }); //end click
 
 
 

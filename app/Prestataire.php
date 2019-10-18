@@ -27,7 +27,8 @@ class Prestataire extends Model
 'mail5',
 'annule',
 'prefixe',
-'prenom'
+'prenom',
+'dossier'
 
 
     ];

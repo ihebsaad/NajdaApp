@@ -6,9 +6,9 @@
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 @section('content')
  
-                <form id="updateform">
+                <form id="updateform"      action="{{route('dossiers.save')}}" >
                     {{ csrf_field() }}
-
+                    <input type="hidden" id="dossier" value="<?php echo $folder;?>"/>
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
@@ -62,7 +62,7 @@
                                         container: document.querySelector('#ville')
                                     });
                                 </script>
-                                <?php    }?>
+
                             </div>
                         </div>
 
@@ -135,13 +135,26 @@
                         </div>
 
                     </div>
+
+
+                    <div class="row" style="margin-bottom:30px">
+
+
+                        <div class="form-actions pull-right  col-md-4">
+                            <a href="{{route('prestataires')}}" type="button" id="annuler" class="btn btn-sm btn-danger">Annuler</a>
+                        </div>
+
+                        <div class="form-actions pull-right col-md-6">
+                            <input type="submit" value="Enregistrer" id="editDos" class="btn btn-sm btn-info"></input>
+                        </div>
+                    </div>
+
                 </form>
 
 
 @endsection
-<style>.headtable{background-color: grey!important;color:white;}
-    table{margin-bottom:40px;}
-</style>
+
+
 
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
