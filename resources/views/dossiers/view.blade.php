@@ -2583,12 +2583,16 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                     {$('#gopdoc').append(new Option(champgop[2]+" | "+"montant: "+champgop[1], champgop[0]));}
                     else
                     {
-                        if (mgopprec == undefined)
-                            {var mgop = champgop[1];}
-                        else
-                            {var mgop = parseInt(mgopprec) + parseInt(champgop[1]);}
-                        
-                        $('#gopdoc').append('<option value="'+champgop[0]+'" selected="selected">'+champgop[2]+' | '+'montant: '+mgop+'</option>');
+                        if (idgopprec == champgop[0])
+                         {   
+                            if (mgopprec == undefined)
+                                {var mgop = champgop[1];}
+                            else
+                                {var mgop = parseInt(mgopprec) + parseInt(champgop[1]);}
+                            
+                            $('#gopdoc').append('<option value="'+champgop[0]+'" selected="selected">'+champgop[2]+' | '+'montant: '+mgop+'</option>');
+                        }
+                        else {$('#gopdoc').append(new Option(champgop[2]+" | "+"montant: "+champgop[1], champgop[0]));}
                     }
                   console.log('les champs tags: '+strt );
                 });
