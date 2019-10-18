@@ -2583,7 +2583,7 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                     {$('#gopdoc').append(new Option(champgop[2]+" | "+"montant: "+champgop[1], champgop[0]));}
                     else
                     {
-                        if (idgopprec == champgop[0])
+                        if (idgopprec === parseInt(champgop[0]))
                          {   
                             if (mgopprec == undefined)
                                 {var mgop = champgop[1];}
