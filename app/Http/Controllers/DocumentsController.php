@@ -60,6 +60,18 @@ class DocumentsController extends Controller
         {
             $array += [ '[PRE_DATEHEURE]' => $_POST['pre_dateheure']];
         }
+        // champ idtag GOP pour PEC
+        if (isset($_POST['idtaggop']))
+        {
+            if (!empty($_POST['idtaggop']) && $_POST['idtaggop']!== null)
+            {
+                $idgop = $_POST['idtaggop'];
+            } 
+            else
+            $idgop = null;  
+        }
+        else
+        {$idgop = null;  }
         
 
             foreach ($champsArray as $champtemp) {
@@ -192,7 +204,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
     }// fin issset (idmissdoc)
 
     // mise a jour montant GOP
-    if (isset($_POST['CL_montant_numerique']) || isset($_POST['CL_montant_total']) )
+    /*if (isset($_POST['CL_montant_numerique']) || isset($_POST['CL_montant_total']) )
     {
 
      if (isset($_POST['CL_montant_numerique']))
@@ -211,6 +223,105 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
            
             }
      
+    }*/
+    if (isset($_POST['idtaggop']))
+    {
+        $idtaggop = $_POST['idtaggop'];
+        if (isset($_POST['CL_montant_numerique']) || isset($_POST['CL_montant_total']) || isset($_POST['CL_tarif_convention']) ) {
+
+             if (isset($_POST['CL_montant_numerique']))
+             {$montantgp = intval($_POST['CL_montant_numerique']); }
+                elseif (isset($_POST['CL_montant_total']))
+                {$montantgp = intval($_POST['CL_montant_total']); }
+               elseif (isset($_POST['CL_tarif_convention']))
+                {$montantgp = intval($_POST['CL_tarif_convention']); }
+
+            if (isset($_POST['parent']) )
+                {
+                    if (!empty($_POST['parent']) && $_POST['parent']!== null)
+                    {
+                        
+                        $parent = $_POST['parent'];
+                        $infoparent = Document::where('id',$parent)->first();
+
+                        if (!(isset($_POST['annule'])))
+                            {
+                                // cas remplacement doc
+                                if ($idtaggop === $infoparent['idtaggop'])
+                                {
+                                    // avec le meme taggop
+                                    $diffmontant = $montantgp - intval($infoparent['montantgop']);
+                                    if ($diffmontant >= 0)
+                                    {
+                                        // update gop du dossier
+                                        $nmntgop =intval($infoparent['montantgop']) - $diffmontant;
+                                        Tag::where('id', $idtaggop)->update(['mrestant' => $nmntgop]);
+                                    }
+                                    else
+                                    {
+                                        // update gop du dossier
+                                        $nmntgop =intval($infoparent['montantgop']) + $diffmontant;
+                                        Tag::where('id', $idtaggop)->update(['mrestant' => $nmntgop]);
+                                    }
+                                }
+                                else
+                                {
+                                    // avec un different taggop
+                                    // maj montant ex tag
+                                    $tagprecinfo = Tag::where('id', $infoparent['idtaggop'])->first();
+                                    $mntgop = intval($tagprecinfo['mrestant']) + intval($infoparent['montantgop']);
+                                    Tag::where('id', $infoparent['idtaggop'])->update(['mrestant' => $mntgop]);
+                                    // maj montant nouveau tag
+                                    $tag = Tag::where('id', $idtaggop)->first();
+                                    if($montantgp>0)
+                                    {
+                                     
+                                       $nmontant = intval($tag['mrestant']) - $montantgp;
+                                       // update gop du dossier
+                                       Tag::where('id', $idtaggop)->update(['mrestant' => $nmontant]);
+                                   
+                                    }
+
+                                }
+                            }
+                       /* in fct canceldoc// else 
+                            {
+                                // cas annulation doc
+                                // maj montant ex tag
+                                    $tagprecinfo = Tag::where('id', $infoparent['idtaggop'])->first();
+                                    $mntgop = intval($tagprecinfo['mrestant']) + intval($infoparent['montantgop']);
+                                    Tag::where('id', $infoparent['idtaggop'])->update(['mrestant' => $mntgop]);
+                            }*/
+                    }
+                    else {       
+                       //cas premiere generation du document
+                       $tag = Tag::where('id', $idtaggop)->first();
+
+                            if($montantgp!==0)
+                            {
+                             
+                               $nmontant = intval($tag['mrestant']) - $montantgp;
+                               // update gop du dossier
+                               Tag::where('id', $idtaggop)->update(['mrestant' => $nmontant]);
+                           
+                            }
+                    }
+                }
+            else {       
+               //cas premiere generation du document
+               $tag = Tag::where('id', $idtaggop)->first();
+
+                    if($montantgp!==0)
+                    {
+                     
+                       $nmontant = intval($tag['mrestant']) - $montantgp;
+                       // update gop du dossier
+                       Tag::where('id', $idtaggop)->update(['mrestant' => $nmontant]);
+                   
+                    }
+            }
+        }
+     
     }
 
 /*--------------------------------------------------------fin dates spécifiques---------------------------*/
@@ -218,7 +329,8 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
        WordTemplate::export($file, $array, '/documents/'.$refdoss.'/'.$name_file);
           
         
-
+       if (isset($montantgp))
+       {
         $doc = new Document([
             'dossier' => $dossier,
             'titre' => $titref,
@@ -226,9 +338,23 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
             'template' => $templateid,
             'parent' => $parent,
             'dernier' => 1,
-            'valchamps' => $valchamps
+            'valchamps' => $valchamps,
+            'idtaggop' => $idgop,
+            'montantgop' => $montantgp
 
-        ]);
+        ]);}
+       else {
+        $doc = new Document([
+            'dossier' => $dossier,
+            'titre' => $titref,
+            'emplacement' => 'documents/'.$refdoss.'/'.$name_file,
+            'template' => $templateid,
+            'parent' => $parent,
+            'dernier' => 1,
+            'valchamps' => $valchamps,
+            'idtaggop' => $idgop
+
+        ]);}
         $doc->save();
         //return $valchamps;
 
@@ -328,6 +454,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                 case "PEC_pharmacie":
                     $dossgopmed = false;
                     $dossplafond = false;
+                    $arr_gopmed = array();
                     foreach ($entreesdos as $entr) {
                         //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
                         $coltags = Tag::where("entree","=",$entr['id'])->get();
@@ -340,6 +467,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                  //if ($resp === "notallow") {$resp="allow";}
                                  if (strpos( $ltag['abbrev'],"GOPmed") !== FALSE)
                                  {
+                                    $arr_gopmed[]=$ltag['id']."_".$ltag['mrestant']."_".$ltag['contenu'];
                                     $dossgopmed = true;
                                  }
                                  if (strpos( $ltag['abbrev'], "Plafond") !== FALSE)
@@ -356,7 +484,8 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                     {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP (frais médicaux) Spécifié!";}
                     else
                     {
-                        $resp = "allow_GOPmed";
+                        $sgopmed =implode(',', $arr_gopmed);
+                        $resp = "allow_VERIFglist(".$sgopmed.")_GOPmed";
                         if ($dossplafond)
                             {$resp = $resp . "_Plafond";}
                     }
@@ -366,6 +495,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                 case "PEC_depannage":
                     $dossgoptn = false;
                     $dossplafondrm = false;
+                    $arr_gopmtn = array();
                     foreach ($entreesdos as $entr) {
                         //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
                         $coltags = Tag::where("entree","=",$entr['id'])->get();
@@ -378,6 +508,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                  //if ($resp === "notallow") {$resp="allow";}
                                  if (strpos( $ltag['abbrev'],"GOPtn") !== FALSE)
                                  {
+                                    $arr_gopmtn[]=$ltag['id']."_".$ltag['mrestant']."_".$ltag['contenu'];
                                     $dossgoptn = true;
                                  }
                                  if (strpos( $ltag['abbrev'], "PlafondRem") !== FALSE)
@@ -394,7 +525,10 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                     {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP (Toutes natures) ou Plafond (Remorquage) Spécifié!";}
                     else
                     {
-                        $resp = "allow_GOPtn_PlafondRem";
+                        $sgoptn =implode(',', $arr_gopmtn);
+                        $resp = "allow_VERIFglist(".$sgoptn.")_GOPtn";
+                        if ($dossplafondrm)
+                            {$resp = $resp . "_PlafondRem";}
                     }
                     break;
 
@@ -413,6 +547,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                 case "PEC_dedouanement_pieces":
                 case "PEC_Cargo":
                 $dossgoptn = false;
+                $arr_gopmtn = array();
                 foreach ($entreesdos as $entr) {
                     //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
                     $coltags = Tag::where("entree","=",$entr['id'])->get();
@@ -422,6 +557,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                         foreach ($coltags as $ltag) {
                              if (strpos( $ltag['abbrev'],"GOPtn") !== FALSE)
                              {
+                                $arr_gopmtn[]=$ltag['id']."_".$ltag['mrestant']."_".$ltag['contenu'];
                                 $dossgoptn = true;
                              }
                         }
@@ -432,7 +568,8 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                 {return "notallow_OPERATION NON AUTORISE: Le dossier n'a pas un GOP (Toutes natures) Spécifié!";}
                 else
                 {
-                    $resp = "allow_GOPtn";
+                    $sgoptn =implode(',', $arr_gopmtn);
+                    $resp = "allow_VERIFglist(".$sgoptn.")_GOPtn";
                 }
                 break;
 
@@ -508,7 +645,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                 // ajout identification des tags
                 if (isset($resp)) {$array += [ 'lestags' => utf8_encode($resp)];}
                 // ajout montant gop
-                if (isset($montantgop)) {$array += [ 'montantgop' => utf8_encode($montantgop)];}
+                //if (isset($montantgop)) {$array += [ 'montantgop' => utf8_encode($montantgop)];}
 
             // cas remplace et annule doc
             if ($request->has('parent'))
@@ -927,6 +1064,11 @@ public function historique(Request $request)
             $i++;
         }
 
+        // maj montant ex tag
+        $tagprecinfo = Tag::where('id', $infoparent['idtaggop'])->first();
+        $mntgop = intval($tagprecinfo['mrestant']) + intval($infoparent['montantgop']);
+        Tag::where('id', $infoparent['idtaggop'])->update(['mrestant' => $mntgop]);
+                                    
         //marque le document precedent comme non dernier
          Document::where('id', $parentdoc)->update(['dernier' => 0]);
         

@@ -11,6 +11,10 @@ if (isset($_GET['CL_dateexamen'])) {$CL_dateexamen=$_GET['CL_dateexamen'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
+if (isset($_GET['idtaggop'])) 
+	{
+		$idtaggop=$_GET['idtaggop']; 
+	}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>PEC_analyses_medicales</title>
@@ -234,6 +238,7 @@ p,ul,ol /* Paragraph Style */
 <body>
 <form id="formchamps">
 <input name="pre_dateheure" type="hidden" value="<?php if(isset ($pre_dateheure)) echo $pre_dateheure; ?>"></input>
+<input name="idtaggop" type="hidden" value="<?php if(isset ($idtaggop)) echo $idtaggop; ?>"></input>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
@@ -273,7 +278,7 @@ p,ul,ol /* Paragraph Style */
 			//document.getElementById("CL_montant_toutes_lettres").firstChild.nodeValue	=	NumberToLetter(obj.value)
 			if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block";}
 			else {document.getElementById("alertGOP").style.display="none";}
-			document.getElementById("CL_montant_toutes_lettres").value	= NumberToLetter(obj.value)
+			document.getElementById("CL_montant_toutes_lettres").value	= NumberToLetter(obj.value);
 		}//fin de keypressHandler
 </script>
 </body></html>

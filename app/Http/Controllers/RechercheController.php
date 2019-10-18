@@ -85,7 +85,7 @@ class RechercheController extends Controller
         if($request->get('qy'))
         {
           $qery=$request->get('qy');
-          $output='<ul class="dropdown-menu kbsdropdowns" style="height: 250px; overflow-y: auto; width:550;" >';
+          $output='<ul class="dropdown-menu kbsdropdowns" style="height: 250px; overflow-y: auto; width:570;" >';
 
  //--------------------------recherche depuis la table Dossier----------------------------------------------
 
@@ -113,7 +113,7 @@ class RechercheController extends Controller
             }
               
              // $urln= URL::to('/');
-              $output.='<li  class="resAutocompRech" style=" align: left; width:500px; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_medic.' (dossier selon la Réf Médic)'. $affecOuNon.'</a></li>';
+              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_medic.' '.$row->subscriber_name.' '.$row->subscriber_lastname.'( Réf. Médicale) ('.$row->current_status.')'. $affecOuNon.'</a></li>';
           }
 
           $output.='<li class="divider"></li>';
@@ -141,7 +141,7 @@ class RechercheController extends Controller
                $affecOuNon=" ( Non Affecté ) ";
             }
              // $urln= URL::to('/');
-              $output.='<li  class="resAutocompRech" style=" align: left; width:500px; overflow: hidden; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_customer.' (Dossier selon la Réf client) '.$affecOuNon.'</a></li>';
+              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; overflow: hidden; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_customer.' ( Réf. client) ('.$row->current_status.')'.$affecOuNon.'</a></li>';
           }
 
           $output.='<li class="divider"></li>';
@@ -169,7 +169,7 @@ class RechercheController extends Controller
                $affecOuNon=" ( Non Affecté ) ";
             }
               
-              $output.='<li  class="resAutocompRech" style=" align: left; width:500px; overflow: hidden;left:-50px; margin-right:7px;" ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->subscriber_name.'  '. $row->subscriber_lastname.'  (Dossier '.$row->reference_medic.') '.$affecOuNon.'</a></li>';
+              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; overflow: hidden;left:-50px; margin-right:7px;" ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->subscriber_name.'  '. $row->subscriber_lastname.'  (Dossier '.$row->reference_medic.') ('.$row->current_status.')'.$affecOuNon.'</a></li>';
           }
 
           $output.='<li class="divider"></li>';
@@ -231,7 +231,7 @@ class RechercheController extends Controller
                $affecOuNon=" ( Non Affecté ) ";
             }
 
-              $output.='<li  class="resAutocompRech" style=" align: left; width:500px; overflow: hidden;left:-50px; margin-right:7px;" ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->vehicule_immatriculation.' (Dossier selon l\'immatriculation véhivule) '.$affecOuNon.'</a></li>';
+              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; overflow: hidden;left:-50px; margin-right:7px;" ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->vehicule_immatriculation.' (Dossier selon l\'immatriculation véhivule) ('.$row->current_status.')'.$affecOuNon.'</a></li>';
           }
 
           $output.='<li class="divider"></li>';

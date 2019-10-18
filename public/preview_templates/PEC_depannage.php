@@ -10,6 +10,10 @@ if (isset($_GET['CL_date_heure_depannage'])) {$CL_date_heure_depannage=$_GET['CL
 if (isset($_GET['CL_lieu_depannage'])) {$CL_lieu_depannage=$_GET['CL_lieu_depannage'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
+if (isset($_GET['idtaggop'])) 
+    {
+        $idtaggop=$_GET['idtaggop']; 
+    }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>9zpxmcfurivwdy9m9da12ps9mhktyd7z_PEC_depannage</title>
@@ -196,6 +200,7 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <body>
 <form id="formchamps">
     <input name="pre_dateheure" type="hidden" value="<?php if(isset ($pre_dateheure)) echo $pre_dateheure; ?>"> </input>
+    <input name="idtaggop" type="hidden" value="<?php if(isset ($idtaggop)) echo $idtaggop; ?>"></input>
 <p><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>

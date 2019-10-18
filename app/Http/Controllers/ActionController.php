@@ -116,7 +116,7 @@ class ActionController extends Controller
     {
       $actrr=ActionEC::where('id',$idact)->first();
 
-      $output='Annulation erronée';
+      $output='Erreur : Il se peut que vous n\'avez pas sélectionné une action';
 
       if($actrr)
       {
@@ -2165,10 +2165,6 @@ class ActionController extends Controller
                                            return($output);
 
 
-
-
-                                        
-
                                         }
 
                                         // rendre datespec 0
@@ -2194,115 +2190,6 @@ class ActionController extends Controller
 
 
 
-
-
-
-                                // cas de rdv
-                                    
-                                 /*if($miss->rdv==1 && $miss->h_rdv!=null )
-                                 {
-
-                              
-                                   $datespe = \DateTime::createFromFormat($format, $miss->$miss->h_rdv);
-
-                                 
-                                    if($miss->type_Mission==11)//consultation médicale
-                                        {
-                                            //activer l'action 6 de consultation médicale  Si_heure_systeme>heure_RDV+2h 
-
-                                            if($datespe->modify('+2 Hour')->format('Y-m-d H:i') < $dateSys)
-                                            {
-
-                                                $action6=ActionEC::where('mission_id',$miss->id)->where('ordre',6);
-                                                if($action6->statut=='inactive')
-                                                {
-
-                                                     $action6->statut="active";
-
-                                                }
-
-
-                                            }
-
-
-
-                                        }
-
-
-                                    
-                                 }
-
-                                 */
-
-                                // cas dpart pour mission
-                                    
-                               /*  if($miss->dep_pour_miss==1 && $miss->h_dep_pour_miss!=null )
-                                 {
-
-                               
-                                   $datespe  = \DateTime::createFromFormat($format, $miss->h_dep_pour_miss);
-
-                                                                     
-                                 }
-
-                            
-                                if($miss->dep_charge_dest==1 && $miss->h_dep_charge_dest!=null )
-                                 {
-
-                                   $format = "Y-m-d\TH:i";
-                                   $dateSys = \DateTime::createFromFormat($format, $dtc);
-                                   $datespe  = \DateTime::createFromFormat($format, $miss->h_dep_charge_dest);
-
-                                 
-                                    
-                                 }*/
-
-
-                          
-                            
-
-                            /*if($miss->arr_prev_dest==1 && $miss->h_arr_prev_dest!=null )
-                                 {
-
-                                
-                                   $datespe  = \DateTime::createFromFormat($format, $miss->h_arr_prev_dest);
-
-                                 
-
-
-                                    
-                                 }*/
-
-                                 
-                           
-
-
-                           /*if($miss->decoll_ou_dep_bat==1 && $miss->h_decoll_ou_dep_bat!=null )
-                                 {
-                                
-                                   $datespe  = \DateTime::createFromFormat($format, $miss->h_decoll_ou_dep_bat);
-                                 
-                                    
-                                 }*/
-
-                           
-
-                                /* if($miss->arr_av_ou_bat==1 && $miss->h_arr_av_ou_bat!=null )
-                                 {
-                                
-                                   $datespe  = \DateTime::createFromFormat($format, $miss->h_arr_av_ou_bat);
-                                 
-                                    
-                                 }*/
-
-
-                                     /*if($miss->retour_base==1 && $miss->h_retour_base!=null )
-                                 {
-                                
-                                   $datespe  = \DateTime::createFromFormat($format, $miss->h_retour_base);
-                                 
-                                    
-                                 }*/
 
 
 
@@ -2361,15 +2248,13 @@ class ActionController extends Controller
                               ->first();            
    if($actionRapp!=null && $actionRepo!=null )
    {
-               if($actionRapp->date_rappel >=  $actionRepo->date_report)
+               if($actionRapp->date_rappel >= $actionRepo->date_report)
                {
                   $upde= ActionEC::find($actionRepo->id);
                      $upde->update(['statut' => 'active']);
 
-                     $output='Activation de l\'action reportée : '.$upde->titre.' | Mission :'.$upde->Mission->titre.' | Dossier : '.$upde->Mission->dossier->reference_medic .'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
-                  
-
-                    // dd($output);
+                     $output='Activation de l\'action reportée : '.$upde->titre.' | Mission :'.$upde->Mission->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname .'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
+                
                      return($output);
                }
                else  
@@ -2377,7 +2262,7 @@ class ActionController extends Controller
                  $upde= ActionEC::find($actionRapp->id);
                      $upde->update(['statut' => 'active']);
 
-                     $output='Rappel  concernant l\'action :'.$upde->titre.' | Mission :'.$upde->Mission->titre.' | Dossier : '.$upde->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
+                     $output='Rappel concernant l\'action :'.$upde->titre.' | Mission :'.$upde->Mission->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
                     // dd($output);
                         return($output);
                 }
@@ -2389,7 +2274,7 @@ class ActionController extends Controller
             $upde= ActionEC::find($actionRapp->id);
              $upde->update(['statut' => 'active']);
 
-             $output='Rappel concernant l\'action :'.$upde->titre.' | Mission :'.$upde->Mission->titre.' | Dossier : '.$upde->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
+             $output='Rappel concernant l\'action :'.$upde->titre.' | Mission :'.$upde->Mission->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
              //dd($output);
                 return($output);
 
@@ -2400,7 +2285,7 @@ class ActionController extends Controller
                     {
                          $upde= ActionEC::find($actionRepo->id);
                          $upde->update(['statut' => 'active']);
-                         $output='Activation de l\'action reportée : '.$upde->titre.' | Mission :'.$upde->Mission->titre.' | Dossier : '.$upde->Mission->dossier->reference_medic.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
+                         $output='Activation de l\'action reportée : '.$upde->titre.' | Mission :'.$upde->Mission ->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
                   
 
                         //dd($output);
@@ -2418,16 +2303,11 @@ class ActionController extends Controller
 
     }
 
-     //dd($output);
+   
        return null;
 
 
-       // recherche des actions actives pour les dates particuliers pour les actions et les missions 
-
-
-
-
-
+       
    }
 
 
@@ -2442,7 +2322,6 @@ class ActionController extends Controller
          $actionR=ActionRappel::where('date_rappel','<=', $dtc)->where('user_id', Auth::user()->id)->orderBy('date_rappel', 'asc')->first();
 
                          $output='';
-
 
 
                        if($actionR){

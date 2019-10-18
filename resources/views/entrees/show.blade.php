@@ -307,19 +307,17 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Annuler Attente Réponse</h4>
+          <h4 class="modal-title"><b>Annuler l'attente de réponse</b></h4>
         </div>
         <div class="modal-body">
           <p>
             
             @if(count($actionsReouRap)!=0)
+            <h5> <b>Veuillez sélectionner une action avant de cliquer le bouton "Annuler Attente Réponse"</b></h5>
+            <br>
             <table id="tabkkk">
                 <tr> <th></th> <th> Action  </th> <th> Mission  </th><th> Dossier   </th> </tr>
 
-
-               
-
-                 
 
                    @foreach ( $actionsReouRap as $rr)
                     <tr> <td style="color: white; font-size: 0px;">{{$rr->id}}</td> <td>{{$rr->titre}}</td> <td>{{ $rr->Mission->typeMission->nom_type_Mission}}</td> <td>{{$rr->Mission->dossier->reference_medic}} - {{$rr->Mission->dossier->subscriber_name }} {{$rr->Mission->dossier->subscriber_lastname}}</td>  </tr>
@@ -340,7 +338,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
           </p>
         </div>
         <div class="modal-footer">
-          <button type="button" id="tst" class="btn btn-default" data-dismiss="modal">Annuler Attente Réponse </button>
+          @if(count($actionsReouRap)!=0) <button type="button" id="tst" class="btn btn-default" data-dismiss="modal">Annuler Attente Réponse </button>  @endif
           <button type="button" class="btn btn-default" data-dismiss="modal">Quitter</button>
         </div>
       </div>
@@ -360,10 +358,12 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
       });
 
       $('#tst').on('click', function(e){
-          var arrid =$("#tabkkk tr.selected td:first").html();
-
-
+          var arrid=-1;
+          arrid =$("#tabkkk tr.selected td:first").html();
+        
+     
            $.ajax({
+       
        url : '{{ url('/') }}'+'/annulerAttenteReponseAction/'+arrid,
        type : 'GET',
        dataType : 'html', // On désire recevoir du HTML
@@ -373,16 +373,19 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
            if(data)
            {
 
-          
            alert(data);
+
+           if(String(data).indexOf("Erreur")== -1)
+           {
            location.reload();
+           }
 
             
            }
        }
     });
    
-
+  
 
       });
 

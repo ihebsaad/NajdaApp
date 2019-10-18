@@ -13,6 +13,10 @@ if (isset($_GET['CL_date_reeduction'])) {$CL_date_reeduction=$_GET['CL_date_reed
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
+if (isset($_GET['idtaggop'])) 
+    {
+        $idtaggop=$_GET['idtaggop']; 
+    }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>PEC_Reeducation</title>
@@ -230,6 +234,7 @@ if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
 <body>
 <form id="formchamps">
     <input name="pre_dateheure" type="hidden" value="<?php if(isset ($pre_dateheure)) echo $pre_dateheure; ?>"> </input>
+<input name="idtaggop" type="hidden" value="<?php if(isset ($idtaggop)) echo $idtaggop; ?>"></input>
 <p><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
