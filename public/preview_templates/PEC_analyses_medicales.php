@@ -1,4 +1,5 @@
 <?php 
+if (isset($_GET['prest__labmed'])) {$prest__labmed=$_GET['prest__labmed'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; }
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];}
@@ -242,7 +243,7 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+<p class=rvps1><span class=rvts2><input name="prest__labmed" style="width:300px" placeholder="Prestataire Laboratoire medicale" value="<?php if(isset ($prest__labmed)) echo $prest__labmed; ?>"></input></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps2><span class=rvts1>Sousse le <input name="date_heure" type="text" value="<?php if(isset ($date_heure)) echo $date_heure; ?>"></input></span></p>

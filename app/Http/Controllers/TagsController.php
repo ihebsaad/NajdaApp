@@ -121,12 +121,24 @@ class TagsController extends Controller
                         }
                     }
                 }
+
+                // supprimer caractere special du contenu tag
+                if ($request->has('contenu'))
+                    {
+                        //$contenutag = $request->get('contenu');
+                        $contenutag = str_replace("_", " ", $request->get('contenu'));
+                        $contenutag = str_replace("|", " ", $request->get('contenu'));
+                    }
+                    else
+                    {
+                        $contenutag = "";
+                    }
                 
                 $tag = new Tag([
                     'abbrev' => $abbrev,
                     'titre' => $titre,
                     'entree' => $identree,
-                    'contenu' => $request->get('contenu'),
+                    'contenu' => $contenutag,
                     'montant' => $request->get('montant'),
                     'mrestant' => $request->get('montant'),
                     'devise' => $request->get('devise')

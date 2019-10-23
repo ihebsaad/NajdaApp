@@ -414,7 +414,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                              //if ($resp === "notallow") {$resp="allow";}
                              if (strpos( $ltag['abbrev'],"GOPmed") !== FALSE)
                              {
-                                $arr_gopmed[]=$ltag['id']."_".$ltag['mrestant']."_".$ltag['contenu'];
+                                $arr_gopmed[]=$ltag['id']."_".$ltag['mrestant']."_".$ltag['contenu']."_".$ltag['updated_at'];
                                 $dossgopmed = true;
                              }
                              if (strpos( $ltag['abbrev'],"Franchise") !== FALSE)
@@ -467,7 +467,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                  //if ($resp === "notallow") {$resp="allow";}
                                  if (strpos( $ltag['abbrev'],"GOPmed") !== FALSE)
                                  {
-                                    $arr_gopmed[]=$ltag['id']."_".$ltag['mrestant']."_".$ltag['contenu'];
+                                    $arr_gopmed[]=$ltag['id']."_".$ltag['mrestant']."_".$ltag['contenu']."_".$ltag['updated_at'];
                                     $dossgopmed = true;
                                  }
                                  if (strpos( $ltag['abbrev'], "Plafond") !== FALSE)
@@ -508,7 +508,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                  //if ($resp === "notallow") {$resp="allow";}
                                  if (strpos( $ltag['abbrev'],"GOPtn") !== FALSE)
                                  {
-                                    $arr_gopmtn[]=$ltag['id']."_".$ltag['mrestant']."_".$ltag['contenu'];
+                                    $arr_gopmtn[]=$ltag['id']."_".$ltag['mrestant']."_".$ltag['contenu']."_".$ltag['updated_at'];
                                     $dossgoptn = true;
                                  }
                                  if (strpos( $ltag['abbrev'], "PlafondRem") !== FALSE)
@@ -557,7 +557,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                         foreach ($coltags as $ltag) {
                              if (strpos( $ltag['abbrev'],"GOPtn") !== FALSE)
                              {
-                                $arr_gopmtn[]=$ltag['id']."_".$ltag['mrestant']."_".$ltag['contenu'];
+                                $arr_gopmtn[]=$ltag['id']."_".$ltag['mrestant']."_".$ltag['contenu']."_".$ltag['updated_at'];
                                 $dossgoptn = true;
                              }
                         }
@@ -775,7 +775,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                         //verifier quil nest pas un champs libre
                         if ((stristr($champtemp,'[CL_')=== FALSE) && ($champtemp !=='[DATE_HEURE]'))
                         {   
-                            if (($champtemp !=='[CUSTOMER_ID__NAME]') && ($champtemp !=='[AGENT__NAME]') && ($champtemp !=='[PREST__HOTEL]') && ($champtemp !=='[PREST__GARAGE]') && ($champtemp !=='[PREST__TRANSIT]') && ($champtemp !=='[PREST__IMAG]') && ($champtemp !=='[PREST__OPTIC]') && ($champtemp !=='[PREST__PHARM]') && ($champtemp !=='[PREST__POMPES]') && ($champtemp !=='[PREST__REEDUC]'))
+                            if (($champtemp !=='[CUSTOMER_ID__NAME]') && ($champtemp !=='[AGENT__NAME]') && ($champtemp !=='[PREST__HOTEL]') && ($champtemp !=='[PREST__GARAGE]') && ($champtemp !=='[PREST__TRANSIT]') && ($champtemp !=='[PREST__IMAG]') && ($champtemp !=='[PREST__OPTIC]') && ($champtemp !=='[PREST__PHARM]') && ($champtemp !=='[PREST__POMPES]') && ($champtemp !=='[PREST__REEDUC]') && ($champtemp !=='[PREST__LABMED]'))
                             {
                                 $champdb = str_replace('[', '', $champtemp);
                                 $champdb = str_replace(']', '', $champdb);
@@ -921,6 +921,21 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             elseif($champtemp ==='[PREST__REEDUC]')
                             {
                                 $infoprest = Prestation::where(['dossier_id' => $dossier,'type_prestations_id' => 100])->first();
+                                $idprest = $infoprest['prestataire_id'];
+                                if (isset($idprest) && (!empty($idprest)))
+                                {
+                                    $infohotel = Prestataire::where('id',$idprest)->first();
+                                    $valchamp = $infohotel['name'];
+                                    $champtemp = str_replace('[', '', $champtemp);
+                                    $champtemp = str_replace(']', '', $champtemp);
+                                    $champtemp = strtolower($champtemp);
+                                    $array += [ $champtemp => $valchamp];
+                                }
+
+                            }
+                            elseif($champtemp ==='[PREST__LABMED]')
+                            {
+                                $infoprest = Prestation::where(['dossier_id' => $dossier,'type_prestations_id' => 7])->first();
                                 $idprest = $infoprest['prestataire_id'];
                                 if (isset($idprest) && (!empty($idprest)))
                                 {
