@@ -911,7 +911,7 @@ $interv = PrestationsController::PrestById($prest);
                                         ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important;" id="btnannremp">
-                                                <a style="color:black" href="#" id="annremp" onclick="remplacedoc(<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>,<?php echo $doc->montantgop; ?>,<?php echo $doc->idtaggop; ?>);"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
+                                                <a style="color:black" href="#" id="annremp" onclick="remplacedoc(<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>,<?php if (! empty($doc->montantgop)) {echo $doc->montantgop;} else {echo '0';} ?>,<?php echo $doc->idtaggop; ?>);"> <i class="far fa-plus-square"></i> Annuler et remplacer</a>
                                             </button>
                                         </div>
 
@@ -1341,7 +1341,7 @@ $interv = PrestationsController::PrestById($prest);
                             <div class="form-group " >
                                 <label for="gopdoc">Template</label>
                                 <div class=" row  ">
-                                    <select class="form-control select2" style="width: 350px" required id="gopdoc" name="gopdoc" >
+                                    <select class="form-control select2" style="width: 420px" required id="gopdoc" name="gopdoc" >
                                    </select>
                                 </div>
                             </div>
@@ -2571,19 +2571,24 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                     
                 $.each(arr_tags, function(i, field){
                     var strt = [ field ] + "" ; 
+                    alert(strt);
                     var champgop = strt.split("_");
                     // ajout des options pour select gop
                     // verifier s'il ya gop precedent
                     if (idgopprec == undefined)
-                    {$('#gopdoc').append(new Option(champgop[2]+" | "+"montant: "+champgop[1], champgop[0]));}
+                    {$('#gopdoc').append(new Option(champgop[2]+" | "+"montant max: "+champgop[1]+" | "+champgop[3], champgop[0]));}
                     else
                     {
-                        if (mgopprec == undefined)
-                            {var mgop = champgop[1];}
-                        else
-                            {var mgop = parseInt(mgopprec) + parseInt(champgop[1]);}
-                        
-                        $('#gopdoc').append('<option value="'+champgop[0]+'" selected="selected">'+champgop[2]+' | '+'montant: '+mgop+'</option>');
+                        if (idgopprec === parseInt(champgop[0]))
+                         {   
+                            if (mgopprec == undefined)
+                                {var mgop = champgop[1];}
+                            else
+                                {var mgop = parseInt(mgopprec) + parseInt(champgop[1]);}
+                            
+                            $('#gopdoc').append('<option value="'+champgop[0]+'" selected="selected">'+champgop[2]+' | '+'montant max: '+mgop+' | '+champgop[3]+'</option>');
+                        }
+                        else {$('#gopdoc').append(new Option(champgop[2]+" | "+"montant max: "+champgop[1]+' | '+champgop[3], champgop[0]));}
                     }
                   console.log('les champs tags: '+strt );
                 });
@@ -2713,7 +2718,8 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
         $("#selectgopdoc").modal('hide');
         var gopselected = $('#gopdoc').val();
         var goptxt = document.getElementById("gopdoc").options[document.getElementById("gopdoc").selectedIndex].text;
-        var montantgop = goptxt.substr(goptxt.indexOf('montant: ')+9);
+        var montantgop = goptxt.substr(goptxt.indexOf('montant max: ')+13);
+        montantgop = montantgop.substr(0 , montantgop.lastIndexOf(" |"));
         $('#idtaggop').val(gopselected);
         //alert(goptxt);
             if ((gopselected !== 'undefined' && gopselected !== null))

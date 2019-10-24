@@ -5,7 +5,7 @@ if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];
 if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; }
 if (isset($_GET['CL_date_debut'])) {$CL_date_debut=$_GET['CL_date_debut'];}
 if (isset($_GET['CL_date_fin'])) {$CL_date_fin=$_GET['CL_date_fin'];}
-if (isset($_GET['CL_base_laouina_aeroport'])) {$CL_base_aouina_aeroport=$_GET['CL_base_aouina_aeroport'];}
+if (isset($_GET['CL_base_laouina_aeroport'])) {$CL_base_laouina_aeroport=$_GET['CL_base_laouina_aeroport'];}
 if (isset($_GET['CL_name_directeur'])) {$CL_name_directeur=$_GET['CL_name_directeur'];}
 if (isset($_GET['CL_cin_directeur'])) {$CL_cin_directeur=$_GET['CL_cin_directeur'];}
 if (isset($_GET['CL_name_medecin'])) {$CL_name_medicin=$_GET['CL_name_medecin'];}
@@ -19,7 +19,7 @@ if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>yfuxakxuymv9r7268g9v03u248tjf5xg_PEC_evasan_armee</title>
+<html><head><title>PEC_evasan_armee</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <style type="text/css"><!--
@@ -212,7 +212,6 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p class=rvps1><span class=rvts6><input name="agent__name" id="agent__name" placeholder="nom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>"/> </span></p>
 <p class=rvps1><span class=rvts6>Plateau d</span><span class=rvts9>’</span><span class=rvts6>assistance Médicale</span></p>
 <p class=rvps5><span class=rvts1><br></span></p>
-<p class=rvps5><span class=rvts6>*voir la possibilité de les extraire selon ordre de mission à envisager</span></p>
 <p><span class=rvts6><br></span></p>
 <p class=rvps6><span class=rvts6> &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
 </body></html>
