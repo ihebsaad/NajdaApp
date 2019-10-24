@@ -19,6 +19,7 @@ use App\Prestation;
 use App\Prestataire;
 use DB;
 use WordTemplate;
+use Breadlesscode\Office\Converter;
 
 class DocumentsController extends Controller
 {
@@ -327,14 +328,24 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
 /*--------------------------------------------------------fin dates spécifiques---------------------------*/
             
        WordTemplate::export($file, $array, '/documents/'.$refdoss.'/'.$name_file);
-          
+
+
+    // creation du fichier PDF
+    $nfsansext = substr($name_file, 0, -3);
+    Converter::file(storage_path().'/app/documents/'.$refdoss.'/'.$name_file) // select a file for convertion
+        ->setLibreofficeBinaryPath('/usr/bin/libreoffice') // binary to the libreoffice binary
+        ->setTemporaryPath(storage_path().'/temp') // temporary directory for convertion
+        ->setTimeout(100) // libreoffice process timeout
+        ->save(storage_path().'/app/documents/'.$refdoss.'/'.$nfsansext.'pdf'); // save as pdf
+
+       // verifier la creation du PDF puis supprimer le fichier DOC generant   
         
        if (isset($montantgp))
        {
         $doc = new Document([
             'dossier' => $dossier,
             'titre' => $titref,
-            'emplacement' => 'documents/'.$refdoss.'/'.$name_file,
+            'emplacement' => 'documents/'.$refdoss.'/'.$nfsansext.'pdf',
             'template' => $templateid,
             'parent' => $parent,
             'dernier' => 1,
@@ -347,7 +358,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
         $doc = new Document([
             'dossier' => $dossier,
             'titre' => $titref,
-            'emplacement' => 'documents/'.$refdoss.'/'.$name_file,
+            'emplacement' => 'documents/'.$refdoss.'/'.$nfsansext.'pdf',
             'template' => $templateid,
             'parent' => $parent,
             'dernier' => 1,
@@ -363,7 +374,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
         // enregistrement de lattachement
         $attachement = new Attachement([
 
-            'type'=>'doc','path' => '/app/documents/'.$refdoss.'/'.$name_file, 'nom' => $name_file,'boite'=>2,'dossier'=>$dossier
+            'type'=>'doc','path' => '/app/documents/'.$refdoss.'/'.$nfsansext.'pdf', 'nom' => $name_file,'boite'=>2,'dossier'=>$dossier
         ]);
         $attachement->save();
     }
@@ -1090,13 +1101,23 @@ public function historique(Request $request)
         /*header('Content-type: application/json');    
         return json_encode($array);*/
         WordTemplate::export($file, $array, '/documents/'.$refdoss.'/'.$name_file);
+
+    // creation du fichier PDF
+    $nfsansext = substr($name_file, 0, -3);
+    Converter::file(storage_path().'/app/documents/'.$refdoss.'/'.$name_file) // select a file for convertion
+        ->setLibreofficeBinaryPath('/usr/bin/libreoffice') // binary to the libreoffice binary
+        ->setTemporaryPath(storage_path().'/temp') // temporary directory for convertion
+        ->setTimeout(100) // libreoffice process timeout
+        ->save(storage_path().'/app/documents/'.$refdoss.'/'.$nfsansext.'pdf'); // save as pdf
+
+       // verifier la creation du PDF puis supprimer le fichier DOC generant  
           
         
 
         $doc = new Document([
             'dossier' => $dossier,
             'titre' => $titref,
-            'emplacement' => 'documents/'.$refdoss.'/'.$name_file,
+            'emplacement' => 'documents/'.$refdoss.'/'.$nfsansext.'pdf',
             'template' => $templateid,
             'parent' => $parentdoc,
             'dernier' => 1,
@@ -1104,6 +1125,13 @@ public function historique(Request $request)
 
         ]);
         $doc->save();
+
+        // enregistrement de lattachement
+        $attachement = new Attachement([
+
+            'type'=>'doc','path' => '/app/documents/'.$refdoss.'/'.$nfsansext.'pdf', 'nom' => $name_file,'boite'=>2,'dossier'=>$dossier
+        ]);
+        $attachement->save();
         return "document annulé avec succès";
     }
 }
