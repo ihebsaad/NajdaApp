@@ -374,7 +374,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
         // enregistrement de lattachement
         $attachement = new Attachement([
 
-            'type'=>'doc','path' => '/app/documents/'.$refdoss.'/'.$nfsansext.'pdf', 'nom' => $name_file,'boite'=>2,'dossier'=>$dossier
+            'type'=>'pdf','path' => '/app/documents/'.$refdoss.'/'.$nfsansext.'pdf', 'nom' => $nfsansext.'pdf','boite'=>2,'dossier'=>$dossier
         ]);
         $attachement->save();
     }
@@ -1129,7 +1129,7 @@ public function historique(Request $request)
         // enregistrement de lattachement
         $attachement = new Attachement([
 
-            'type'=>'doc','path' => '/app/documents/'.$refdoss.'/'.$nfsansext.'pdf', 'nom' => $name_file,'boite'=>2,'dossier'=>$dossier
+            'type'=>'pdf','path' => '/app/documents/'.$refdoss.'/'.$nfsansext.'pdf', 'nom' => $nfsansext.'pdf','boite'=>2,'dossier'=>$dossier
         ]);
         $attachement->save();
         return "document annulé avec succès";
