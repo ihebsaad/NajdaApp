@@ -28,7 +28,8 @@ class Prestataire extends Model
 'annule',
 'prefixe',
 'prenom',
-'dossier'
+'dossier',
+'civilite'
 
 
     ];

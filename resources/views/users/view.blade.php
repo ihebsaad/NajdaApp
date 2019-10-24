@@ -36,8 +36,12 @@
             </td>
         </tr>
         <tr>
-            <td class="text-primary">Login</td>
-            <td> <input readonly id="email" autocomplete="off" onchange="changing(this)" type="email" class="form-control" name="email"  id="email" value="{{ $user->email }}" />          </td>
+            <td class="text-primary">Identifiant</td>
+            <td> <input   id="username" autocomplete="off"  onchange="changing(this)" type="text" class="form-control" name="username" value="{{ $user->username }}" />          </td>
+        </tr>
+        <tr>
+            <td class="text-primary">Mot de passe</td>
+            <td> <input autocomplete="off"   onchange="changing(this)"  type="password" class="form-control" name="password"  id="password"   />          </td>
         </tr>
         <tr>
             <td class="text-primary">Email Boite</td>
@@ -60,42 +64,20 @@
         </tr>
        <?php if($user->user_type!='admin') { ?>
         <tr>
-            <td class="text-primary">Type</td>
+            <td class="text-primary">Qualification</td>
             <td>
                 <select  name="user_type"  id="user_type" onchange="changing(this);"  >
                     <option></option>
-                     <option value="user"  <?php if($user->user_type=='user') {echo'selected="selected"';}?> >Agent Simple</option>
+                     <option value="user"  <?php if($user->user_type=='user') {echo'selected="selected"';}?> >Agent </option>
+                     <option value="autonome"  <?php if($user->user_type=='autonome') {echo'selected="selected"';}?> >Agent autonome </option>
                     <option  value="superviseur"  <?php if($user->user_type=='superviseur') {echo'selected="selected"';}?>  >Superviseur</option>
                     <option  value="financier"  <?php if($user->user_type=='financier') {echo'selected="selected"';}?>  >Financier</option>
+                    <option  value="bureau"  <?php if($user->user_type=='bureau') {echo'selected="selected"';}?>  >Bureau d'ordre</option>
                 </select>
             </td>
         </tr>
 <?php } ?>
-     <!--   <tr>
-            <td class="text-primary">Rôles</td>
-            <td>
-                <select class="itemName form-control col-lg-10" style="" name="roles"  multiple  id="roles" value="{{$user->roles}}">
-                    <option></option>
-                    <?php /* $c=0;if ( count($rolesusers) > 0 ) {
-                    foreach($roles as $aKey){
-                    ?>
-                    <option  <?php if(UsersController::CheckRoleUser($user['id'],$aKey->id)==1){echo 'selected="selected" ';} ?>   value="<?php echo $aKey->id;?>" > <?php echo  $aKey->nom; ?>
-                    </option>
-                    <?php
 
-                    }
-
-                    } else{ ?>
-
-                    @foreach($roles as $aKey)
-                        <option       value="<?php echo $aKey->id;?>"> <?php echo $aKey->nom;?></option>
-                    @endforeach
-
-                    <?php } */ ?>
-
-                </select>
-            </td>
-        </tr>--->
         <tr>
             <td class="text-primary">Signature</td>
             <td>    <textarea style="height:60px" id="signature" onchange="changing(this);"  type="text" class="form-control" name="observation"  id="observation"  ><?php echo  $user->signature ; ?></textarea>
@@ -158,93 +140,6 @@ return 'Pas de résultats';
 }
 
 });
-
-
-var $topo = $('.itemName');
-
-var valArray = ($topo.val()) ? $topo.val() : [];
-
-$topo.change(function() {
-var val = $(this).val(),
-numVals = (val) ? val.length : 0,
-changes;
-if (numVals != valArray.length) {
-var longerSet, shortSet;
-(numVals > valArray.length) ? longerSet = val : longerSet = valArray;
-(numVals > valArray.length) ? shortSet = valArray : shortSet = val;
-//create array of values that changed - either added or removed
-changes = $.grep(longerSet, function(n) {
-return $.inArray(n, shortSet) == -1;
-});
-
-Updating(changes, (numVals > valArray.length) ? 'selected' : 'removed');
-
-}else{
-// if change event occurs and previous array length same as new value array : items are removed and added at same time
-Updating( valArray, 'removed');
-Updating( val, 'selected');
-}
-valArray = (val) ? val : [];
-});
-
-
-
-function Updating(array, type) {
-$.each(array, function(i, item) {
-
-if (type=="selected"){
-
-
-var user = $('#iduser').val();
-var _token = $('input[name="_token"]').val();
-
-$.ajax({
-url: "{{ route('users.createuserrole') }}",
-method: "POST",
-data: {user: user , role:item ,  _token: _token},
-success: function () {
-$('.select2-selection').animate({
-opacity: '0.3',
-});
-$('.select2-selection').animate({
-opacity: '1',
-});
-
-}
-});
-
-}
-
-if (type=="removed"){
-
-var user = $('#iduser').val();
-var _token = $('input[name="_token"]').val();
-
-$.ajax({
-url: "{{ route('users.removeuserrole') }}",
-method: "POST",
-data: {user: user , role:item ,  _token: _token},
-success: function () {
-$( ".select2-selection--multiple" ).hide( "slow", function() {
-// Animation complete.
-});
-$( ".select2-selection--multiple" ).show( "slow", function() {
-// Animation complete.
-});
-}
-});
-
-}
-
-});
-} // updating
-
-
-
-
-
-
-
 
 
 

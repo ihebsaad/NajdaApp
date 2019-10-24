@@ -447,7 +447,7 @@ class DossiersController extends Controller
         $affecte=$request->get('affecte');
         $message=$request->get('message');
         $refclient=$request->get('refclient');
-        $destinataire=trim($request->get('destinataire'));
+        $to=($request->get('destinataire'));
 
         $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$client);
 
@@ -469,16 +469,24 @@ class DossiersController extends Controller
             $sujet=  $nomabn.'  - Y/Ref: '.$refclient .' - O/Ref: '.$refdossier ;
 
         }
+        $prenomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$affecte);
+        $nomagent = app('App\Http\Controllers\UsersController')->ChampById('lastname',$affecte);
 
-        $contenu=$message.'<br><br>'.$signature;
+        $nomcompletagent=$prenomagent.' '.$nomagent ;
+        $contenu=$message.'<br><br>'.$nomcompletagent.'<br>'.$signature;
         try{
-            Mail::send([], [], function ($message) use ($destinataire,$sujet,$contenu) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$contenu) {
                 $message
 
-                    ->to($destinataire)
+                //    ->to($destinataire)
                     ->subject($sujet)
                     ->setBody($contenu, 'text/html');
+                if(isset($to )) {
 
+                    foreach ($to as $t) {
+                        $message->to($t);
+                    }
+                }
             });
 
         } catch (Exception $ex) {
@@ -806,10 +814,79 @@ class DossiersController extends Controller
 
         $garages =  DB::table('prestataires_type_prestations')
                 ->where('type_prestation_id',22 )
-
                 ->get();
 
-        return view('dossiers.fiche',['cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
+
+        $listeemails=array();
+
+        // trouver id client à partir de la référence
+        $cl=app('App\Http\Controllers\DossiersController')->ClientDossierById($id);
+
+        $mail=app('App\Http\Controllers\ClientsController')->ClientChampById('mail',$cl);
+        if($mail!='') { array_push($listeemails,$mail);}
+
+        $mail2=app('App\Http\Controllers\ClientsController')->ClientChampById('mail2',$cl);
+        if($mail2!='') { array_push($listeemails,$mail2);}
+
+        $mail3=app('App\Http\Controllers\ClientsController')->ClientChampById('mail3',$cl);
+        if($mail3!='') { array_push($listeemails,$mail3);}
+
+        $mail4=app('App\Http\Controllers\ClientsController')->ClientChampById('mail4',$cl);
+        if($mail4!='') { array_push($listeemails,$mail4);}
+
+        $mail5=app('App\Http\Controllers\ClientsController')->ClientChampById('mail5',$cl);
+        if($mail5!='') { array_push($listeemails,$mail5);}
+
+        $mail6=app('App\Http\Controllers\ClientsController')->ClientChampById('mail6',$cl);
+        if($mail6!='') { array_push($listeemails,$mail6);}
+
+        $mail7=app('App\Http\Controllers\ClientsController')->ClientChampById('mail7',$cl);
+        if($mail7!='') { array_push($listeemails,$mail7);}
+
+        $mail8=app('App\Http\Controllers\ClientsController')->ClientChampById('mail8',$cl);
+        if($mail8!='') { array_push($listeemails,$mail8);}
+
+        $mail9=app('App\Http\Controllers\ClientsController')->ClientChampById('mail9',$cl);
+        if($mail9!='') { array_push($listeemails,$mail9);}
+
+        $mail10=app('App\Http\Controllers\ClientsController')->ClientChampById('mail10',$cl);
+        if($mail10!='') { array_push($listeemails,$mail10);}
+
+     /*   $gestion_mail1=app('App\Http\Controllers\ClientsController')->ClientChampById('gestion_mail1',$cl);
+        if($gestion_mail1!='') { array_push($listeemails,$gestion_mail1);}
+
+        $gestion_mail2=app('App\Http\Controllers\ClientsController')->ClientChampById('gestion_mail2',$cl);
+        if($gestion_mail2!='') { array_push($listeemails,$gestion_mail2);}
+
+        $qualite_mail1=app('App\Http\Controllers\ClientsController')->ClientChampById('qualite_mail1',$cl);
+        if($qualite_mail1!='') { array_push($listeemails,$qualite_mail1);}
+
+        $qualite_mail2=app('App\Http\Controllers\ClientsController')->ClientChampById('qualite_mail2',$cl);
+        if($qualite_mail2!='') { array_push($listeemails,$qualite_mail2);}
+
+        $reseau_mail1=app('App\Http\Controllers\ClientsController')->ClientChampById('reseau_mail1',$cl);
+        if($reseau_mail1!='') { array_push($listeemails,$reseau_mail1);}
+
+        $reseau_mail2=app('App\Http\Controllers\ClientsController')->ClientChampById('reseau_mail2',$cl);
+        if($reseau_mail2!='') { array_push($listeemails,$reseau_mail2);}
+*/
+
+
+        $emails =   Adresse::where('nature', 'email')
+            ->where('parent',$cl)
+            ->pluck('champ');
+
+        $emails =  $emails->unique();
+
+        if (count($emails)>0) {
+            foreach ($emails as $m) {
+                array_push($listeemails, $m);
+
+            }
+        }
+
+
+        return view('dossiers.fiche',['listeemails'=>$listeemails,'cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
 
 
     }

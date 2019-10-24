@@ -1,4 +1,4 @@
-@extends('layouts.mainlayout')
+@extends('layouts.adminlayout')
 
 @section('content')
     <div class="portlet box grey">

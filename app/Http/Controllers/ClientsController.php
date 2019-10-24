@@ -123,6 +123,8 @@ class ClientsController extends Controller
 
             $parent=$request->get('parent');
             $adresse = new Adresse([
+              //  'nom' => $request->get('nom'),
+              //  'prenom' => $request->get('prenom'),
                 'champ' => $request->get('champ'),
                 'type' => $request->get('type'),
                 'nature' => $request->get('nature'),

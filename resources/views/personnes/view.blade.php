@@ -83,7 +83,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="inputError" class="control-label">Téléphone</label>
-                    <input onchange="changing(this)"  style="" class="form-control " name="tel" id="tel" type="text"   value="{{ $personne->tel }}" >
+                    <input onchange="changing(this)"  style="" class="form-control " name="tel" id="tel" type="number"   value="{{ $personne->tel }}" >
                 </div>
 
             </div>
@@ -97,7 +97,23 @@
             </div>
         </div>
 
+        <div class="row" style="margin-top:20px">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="inputError" class="control-label">Téléphone 2</label>
+                    <input onchange="changing(this)"  style="" class="form-control " name="tel2" id="tel2" type="number"   value="{{ $personne->tel2 }}" >
+                </div>
 
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="inputError" class="control-label">Email</label>
+                    <input onchange="changing(this)"  style="" class="form-control " name="email" id="email" type="email"   value="{{ $personne->email }}" >
+                </div>
+
+            </div>
+        </div>
         <input type="hidden" id="id" class="form-control"   value="{{ $personne->id }}">
     </form>
       </div>

@@ -12,6 +12,8 @@ class Personne extends Model
  'date_fin_indisponibilite',
  'annule',
  'tel',
+      'tel2',
+      'email'
       ];
  
 }

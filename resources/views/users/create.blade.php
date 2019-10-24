@@ -34,16 +34,14 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="username" class="col-md-4 control-label">
-                                {{ __('Identifiant') }}
-                            </label>
+                            <label for="username" class="col-md-4 control-label">Identifiant</label>
 
                             <div class="col-md-6">
-                                <input id="username" type="text"  autocomplete="off"
-                                       class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}"
-                                       name="username" value="{{ old('username') }}" required>
 
-                                @if ($errors->has('username'))
+                                <input  autocomplete="off"  id="username" type="text" class="form-control" name="username" value="{{ old('username') }}" required  >
+
+
+                            @if ($errors->has('username'))
                                     <span class="invalid-feedback">
                          <strong>{{ $errors->first('username') }}</strong>
                                </span>
@@ -51,25 +49,13 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail </label>
 
-                            <div class="col-md-6">
-                                <input  autocomplete="off"  id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
 
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                             <label for="password" class="col-md-4 control-label">Mot de passe</label>
 
                             <div class="col-md-6">
-                                <input  autocomplete="off"  id="password" type="password" class="form-control" name="password" required>
+                                <input  autocomplete="off"   id="password" type="password" class="form-control" name="password" required>
 
                                 @if ($errors->has('password'))
                                     <span class="help-block">
@@ -79,14 +65,15 @@
                             </div>
                         </div>
                         <div class="form-group " style="margin-bottom:30px">
-                            <label for="type" class="col-md-4 control-label">Type</label>
+                            <label for="type" class="col-md-4 control-label">Qualification</label>
 
                             <div class="col-md-6">
                                 <select  name="user_type"  id="type"   >
-                                    <option value="user"   >Agent Simple</option>
+                                    <option value="user"   >Agent </option>
+                                    <option value="autonome"   >Agent autonome</option>
                                     <option  value="superviseur"   >Superviseur</option>
                                     <option  value="financier"    >Financier</option>
-                                    <option  value="admin"    >Administrateur</option>
+                                    <option  value="bureau"    >Bureau d'ordre</option>
                                 </select>
 
                             </div>

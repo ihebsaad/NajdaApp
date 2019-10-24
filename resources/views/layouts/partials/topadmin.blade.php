@@ -80,7 +80,7 @@
         if ($iduser==$disp) {
             ?>
 			  <a href="{{ route('entrees.dispatching') }}" class="btn btn-danger btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
-              <span class="  fa-fw    fas    fa-map-signs fa-2x"></span>
+              <span class="  fa-fw    fas    fa-envelope fa-2x"></span>
           </a>
 		<?php } else {?>
           <a href="{{ route('entrees.index') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">

@@ -1572,17 +1572,6 @@ class EmailController extends Controller
         $files = $request->file('files');
 
         $attachs = $request->get('attachs');
-/*$tot=false;
-
-    if($request->hasFile('files'))
-    {
-        $tot=true;
-    }*/
-        // $tot= count($_FILES['files']['name']);
-
-        //   $tot= count($files['files']['name']);
-
-      //  $tot2= count($attachs);
 
         $user = auth()->user();$idu=$user->id;
         $lg='fr';

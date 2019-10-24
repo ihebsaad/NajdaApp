@@ -18,6 +18,7 @@ class Intervenant extends Model
  'email',
  'tel',
  'statut',
+  'civilite'
       ];
  
 }

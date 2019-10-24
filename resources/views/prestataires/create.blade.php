@@ -6,15 +6,15 @@
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 @section('content')
  
-                <form id="updateform"      action="{{route('dossiers.save')}}" >
+                <form id="updateform"   method="post"   action="{{route('prestataires.saving')}}" >
                     {{ csrf_field() }}
-                    <input type="hidden" id="dossier" value="<?php echo $folder;?>"/>
+                    <input type="hidden" id="dossier" name="dossier" value="<?php echo $folder;?>"/>
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Civilité</label>
-                                <select     class="form-control input" name="civilite" id="civilite"  >
-                                    <option  ></option>
+                                <select     class="form-control " name="civilite" id="civilite"  >
+                                    <option value="" ></option>
                                     <option value="Mr">Mr</option>
                                     <option  value="Mme">Mme</option>
                                     <option value="Mlle">Mlle</option>
@@ -22,10 +22,11 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Nom *</label>
-                                <input   type="text" class="form-control input" name="name" id="name"   >
+                                <input required onchange="checkexiste()"  type="text" class="form-control input" name="name" id="name"   >
                             </div>
                         </div>
                         <div class="col-md-5">
@@ -46,7 +47,14 @@
                         </div>
                     </div>
 
+
                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="inputError" class="control-label">Adresse </label>
+                                <input   type="text" class="form-control input" name="adresse" id="adresse"   >
+                            </div>
+                        </div>
 
                         <div class="col-md-6">
                             <div class="form-group">
@@ -66,53 +74,11 @@
                             </div>
                         </div>
 
-
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="inputError" class="control-label">Adresse </label>
-                                <input   type="text" class="form-control input" name="adresse" id="adresse"   >
-                            </div>
-                        </div>
-
                     </div>
 
                     <div class="row">
 
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="inputError" class="control-label">Mobile 1</label>
-                                <input   type="text" id="phone_cell" class="form-control" name="phone_cell"   >
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="inputError" class="control-label">Mobile 2 </label>
-                                <input   type="text" id="phone_cell2" class="form-control" name="phone_cell2"   >
-                            </div>
-                        </div>
-                     </div>
-
-
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                   <label for="inputError" class="control-label">Email </label>
-                                 <input    type="text" id="mail" class="form-control" name="mail" placeholder="Email"   > <br>
-
-                                 <input    type="text" id="mail2" name="mail2" class="form-control" placeholder="Email2"   ><br>
-
-
-                            </div>
-                        </div>
-
-
-                        <div class="col-md-6">
+                    <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-4">
                                     <label style="padding-top:10px">Actif</label>
@@ -132,12 +98,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
+                    </div>
                     </div>
 
 
-                    <div class="row" style="margin-bottom:30px">
+                    <div class="row" style="margin-bottom:30px;margin-top:50px;">
 
 
                         <div class="form-actions pull-right  col-md-4">
@@ -166,6 +131,35 @@
 
 <script>
 
+    function checkexiste( ) {
+
+        var val =document.getElementById('name').value;
+        //  var type = $('#type').val();
+
+        //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('prestataires.checkexisteprname') }}",
+            method: "POST",
+            data: {   val:val, _token: _token},
+            success: function (data) {
+                if(data>0){
+                    alert('Ce nom existe !');
+                    document.getElementById('name').style.background='#FD9883';
+                    document.getElementById('name').style.color='white';
+                } else{
+                    document.getElementById('name').style.background='white';
+                    document.getElementById('name').style.color='black';
+                }
+
+
+            }
+        });
+        // } else {
+
+        // }
+    }
+
 
     $(function () {
 
@@ -179,6 +173,10 @@
         $('.nav-item a').on('shown.bs.tab', function (e) {
             window.location.hash = e.target.hash;
         })
+
+
+
+
 
 
 

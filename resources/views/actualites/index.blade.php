@@ -24,39 +24,33 @@
                 </div>
             </div>
         </div>
-        <table class="table table-striped" id="mytable" style="">
+        <table class="table table-striped" id="mytable" >
             <thead>
             <tr id="headtable">
                 <th style="width:10%">Num</th>
-                <th style="width:70%;">Description</th>
+                <th style="width:40%;">Description</th>
                 <th style="width:10%;">Statut</th>
-                <th style="width:10%" class="no-sort" style="">Supprimer</th>
+                <th style="width:10%" class="no-sort" >Supprimer</th>
+
               </tr>
-            <tr>
-                <th style="width:10%">Num</th>
-                <th style="width:70%">Description</th>
-                <th style="width:10%;">Statut</th>
-                <th style="width:10%"class="no-sort" style="">Supprimer</th>
-            </tr>
+
             </thead>
             <tbody>
             @foreach($actualites as $actualite)
                 <tr><?php $id= $actualite['id']; ?>
-                    <td  ><?php echo $id ;?></td>
-                    <td  > <?php echo $actualite['description'];?></td>
-                    <td  > <?php $statut=   $actualite['statut'];?>
+                    <td style="width:10%" ><?php echo $id ;?></td>
+                    <td  style="width:40%"> <?php echo $actualite['description'];?></td>
+                    <td style="width:10%" > <?php $statut=   $actualite['statut'];?>
                         <div class="radio" id="uniform-actif">
                             <span class="checked">
                             <input  class="actus-<?php echo $id;?>"  type="checkbox"    id="actus-<?php echo $id;?>"    <?php if ($statut ==1){echo 'checked'; }  ?>  onclick="changing(this,'<?php echo $id; ?>' );"      >
                         </span> Affiché
                         </div>
-
-
                     </td>
-                      <td    >  <a href="{{action('ActualitesController@destroy', $actualite['id'])}}" class="btn btn-sm btn-danger btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Supprimer">
+                      <td style="width:10%"   >  <a href="{{action('ActualitesController@destroy', $actualite['id'])}}" class="btn btn-sm btn-danger btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Supprimer">
                             <i class="fa fa-lg fa-fw fa-trash-alt"></i>
                         </a> </td>
-                 </tr>
+                  </tr>
             @endforeach
             </tbody>
         </table>

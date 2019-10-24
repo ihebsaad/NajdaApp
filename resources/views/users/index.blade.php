@@ -19,27 +19,24 @@
         <tr id="headtable">
             <th>ID</th>
             <th>Nom</th>
-            <th>Email</th>
-            <th>Rôle</th>
-            <th>Status</th>
+            <th>Qualification</th>
+            <th>Statut</th>
             <th>Actions</th>
         </tr>
             <tr>
                 <th>ID</th>
                 <th>Nom</th>
-                <th>Email</th>
-                <th>Rôle</th>
-                <th>Status</th>
+                <th>Qualification</th>
+                <th>Statut</th>
                 <th> </th>
               </tr>
             </thead>
             <tbody>
             @foreach($users as $user)
-                <tr>
+                <tr><?php $qual=$user->user_type; if($qual=='user'){$qual='agent';}?>
                     <td>{{$user->id}}</td>
                      <td><a href="{{action('UsersController@view', $user['id'])}}" >{{$user->name .' '.$user->lastname }}</a></td>
-                    <td>{{$user->email}}</td>
-                    <td>{{$user->user_type}}</td>
+                    <td><?php echo $qual;?></td>
                     <td><?php if ($user->isOnline()){  if($user->statut==0){echo '<span class="label label-success">Connecté</span> ';} else{ echo '<span class="label label-warning">En Pause</span> ';  }    } else{echo '<span class="label label-danger">Hors ligne</span>';}  ?></td>
                   <td>  @can('isAdmin')
                         <a  href="{{action('UsersController@destroy', $user['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >

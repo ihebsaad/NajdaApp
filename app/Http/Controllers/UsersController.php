@@ -55,11 +55,10 @@ class UsersController extends Controller
      */
     public function create()
     {
-        $dossiers = Dossier::all();
 
         if(\Gate::allows('isAdmin'))
         {
-            return view('users.create',['dossiers' => $dossiers]);
+            return view('users.create'  );
 
         }
         else {
@@ -75,7 +74,8 @@ class UsersController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'username' => 'required|string|max:255',
+            'email' => 'string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
     }
@@ -85,6 +85,7 @@ class UsersController extends Controller
         User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'username' => $data['username'],
             'password' => bcrypt($data['password']),
         ]);
 		
@@ -97,7 +98,7 @@ class UsersController extends Controller
         $user = new User([
             'name' => $request->get('name'),
             'lastname' => $request->get('lastname'),
-                'email' => $request->get('email'),
+                'username' => $request->get('username'),
                'user_type'=> $request->get('user_type'),
                'password'=>  bcrypt($request->get('password')),
 
@@ -117,18 +118,16 @@ class UsersController extends Controller
      */
     public function view($id)
     {
-        $roles = Role::all();
+
 
         $user = User::find($id);
-        $dossiers = Dossier::all();
 
-        $rolesusers = DB::table('roles_users')->select('role_id')
-            ->where('user_id','=',$id)
-            ->get();
+
+
 
         //$roles = DB::table('roles')->get();
 
-        return view('users.view',['rolesusers' => $rolesusers,'roles' => $roles,'dossiers'=>$dossiers], compact('user','id'));
+        return view('users.view',  compact('user','id'));
 
     }
 
@@ -283,7 +282,13 @@ class UsersController extends Controller
     {
         $id= $request->get('user');
         $champ= strval($request->get('champ'));
-        $val= $request->get('val');
+        if($champ=='password'){
+            $val= bcrypt(trim($request->get('val')));
+
+        }else{
+            $val= $request->get('val');
+
+        }
         //  $dossier = Dossier::find($id);
         // $dossier->$champ =   $val;
         User::where('id', $id)->update(array($champ => $val));

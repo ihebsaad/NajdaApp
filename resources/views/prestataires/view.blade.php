@@ -55,6 +55,7 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Nom *</label>
@@ -365,8 +366,9 @@
                     <table class="table table-striped"  style="width:100%;margin-top:35px;margin-bottom:35px;font-size:16px;">
                         <thead>
                         <tr class="headtable">
+                            <th style="width:20%">Nom</th>
                             <th style="width:20%">Tel</th>
-                            <th style="width:40%">Remarque</th>
+                            <th style="width:20%">Remarque</th>
                             <th style="width:35%">Type</th>
 
                         </tr>
@@ -375,8 +377,9 @@
                         <tbody>
                         @foreach($tels as $tel)
                             <tr>
+                                <td style="width:20%;"><?php echo $tel->nom.' '.$tel->prenom; ?></td>
                                 <td style="width:20%;"><?php echo $tel->champ; ?></td>
-                                <td style="width:40%;"><?php echo $tel->remarque; ?></td>
+                                <td style="width:20%;"><?php echo $tel->remarque; ?></td>
                                 <td style="width:35%;"><?php echo $tel->typetel.' '; if($tel->typetel=='Mobile') {?> <a onclick="setTel(this);" class="<?php echo $tel->champ;?>" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a><?php } ?>
 
                             </tr>
@@ -398,9 +401,9 @@
                     <table class="table table-striped"  style="width:100%;margin-top:35px;margin-bottom:35px;font-size:16px;">
                         <thead>
                         <tr class="headtable">
+                            <th style="width:20%">Nom</th>
                             <th style="width:20%">Email</th>
-                            <th style="width:20%">Type</th>
-                            <th style="width:50%">Remarque</th>
+                             <th style="width:30%">Remarque</th>
                             <th style="width:10%">Contacter</th>
                         </tr>
 
@@ -408,9 +411,9 @@
                         <tbody>
                         @foreach($emails as $email)
                             <tr>
+                                <td style="width:20%;"><?php echo $email->nom.' '.$email->prenom; ?></td>
                                 <td style="width:20%;"><?php echo $email->champ; ?></td>
-                                <td style="width:20%;"><?php echo $email->type; ?></td>
-                                <td style="width:50%;"><?php echo $email->remarque; ?></td>
+                                 <td style="width:35%;"><?php echo $email->remarque; ?></td>
                                 <td style="width:10%;"><i class="fa fa-envelope"></i></td>
                             </tr>
                         @endforeach
@@ -431,9 +434,9 @@
                     <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
                         <thead>
                         <tr class="headtable">
-                            <th style="width:20%">Tel</th>
-                            <th style="width:20%">Type</th>
-                            <th style="width:50%">Remarque</th>
+                            <th style="width:20%">Nom</th>
+                            <th style="width:20%">Fax</th>
+                             <th style="width:30%">Remarque</th>
                             <th style="width:10%">Contacter</th>
                         </tr>
 
@@ -441,9 +444,9 @@
                         <tbody>
                         @foreach($faxs as $fax)
                             <tr>
+                                <td style="width:20%;"><?php echo $fax->nom.' '.$fax->prenom; ?></td>
                                 <td style="width:20%;"><?php echo $fax->champ; ?></td>
-                                <td style="width:20%;"><?php echo $fax->type; ?></td>
-                                <td style="width:50%;"><?php echo $fax->remarque; ?></td>
+                                 <td style="width:50%;"><?php echo $fax->remarque; ?></td>
                                 <td style="width:10%;"><i class="fa fa-fax"></i></td>
                             </tr>
                         @endforeach
@@ -731,11 +734,24 @@
 
                             <form   id="ff" name="">
                                 {{ csrf_field() }}
+                                <div class="form-group " >
+                                    <label for="adresse">Nom</label>
+                                    <div class=" row  ">
+                                        <input class="form-control" type="text" required id="nomt"/>
 
+                                    </div>
+                                </div>
+                                <div class="form-group " >
+                                    <label for="adresse">Prénom</label>
+                                    <div class=" row  ">
+                                        <input class="form-control" type="text" required id="prenomt"/>
+
+                                    </div>
+                                </div>
                                 <div class="form-group " >
                                     <label for="adresse">Téléphone</label>
                                     <div class=" row  ">
-                                        <input class="form-control" type="text" required id="champ1"/>
+                                        <input class="form-control" type="number" required id="champ1"  onchange="checkexiste(this,'tel')"/>
 
                                     </div>
                                 </div>
@@ -793,11 +809,24 @@
 
                             <form   id="ffll" name="">
                                 {{ csrf_field() }}
+                                <div class="form-group " >
+                                    <label for="adresse">Nom</label>
+                                    <div class=" row  ">
+                                        <input class="form-control" type="text" required id="nome"/>
 
+                                    </div>
+                                </div>
+                                <div class="form-group " >
+                                    <label for="adresse">Prénom</label>
+                                    <div class=" row  ">
+                                        <input class="form-control" type="text" required id="prenome"/>
+
+                                    </div>
+                                </div>
                                 <div class="form-group " >
                                     <label for="adresse">Email</label>
                                     <div class=" row  ">
-                                        <input class="form-control" type="text" required id="champ2"/>
+                                        <input class="form-control" onchange="checkexiste(this,'mail')" type="email" required id="champ2"/>
 
                                     </div>
                                 </div>
@@ -847,9 +876,23 @@
                                 {{ csrf_field() }}
 
                                 <div class="form-group " >
+                                    <label for="adresse">Nom</label>
+                                    <div class=" row  ">
+                                        <input class="form-control" type="text" required id="nomf"/>
+
+                                    </div>
+                                </div>
+                                <div class="form-group " >
+                                    <label for="adresse">Prénom</label>
+                                    <div class=" row  ">
+                                        <input class="form-control" type="text" required id="prenomf"/>
+
+                                    </div>
+                                </div>
+                                <div class="form-group " >
                                     <label for="adresse">Fax</label>
                                     <div class=" row  ">
-                                        <input class="form-control" type="text" required id="champ3"/>
+                                        <input class="form-control" type="number" required id="champ3"   onchange="checkexiste(this,'fax')" />
 
                                     </div>
                                 </div>
@@ -1437,37 +1480,13 @@
 
 
 
-        $('#emailadd').click(function(){
-            var parent = $('#parent').val();
-            var champ = $('#emaildoss').val();
-            var nom = $('#DescrEmail').val();
-            var tel = $('#telmail').val();
-            var qualite = $('#qualite').val();
-            if ((champ != '') )
-            {
-                var _token = $('input[name="_token"]').val();
-                $.ajax({
-                    url:"{{ route('prestataires.addemail') }}",
-                    method:"POST",
-                    data:{parent:parent,champ:champ,nom:nom,tel:tel,qualite:qualite, _token:_token},
-                    success:function(data){
-
-                        //   alert('Added successfully');
-                        window.location =data;
-
-
-                    }
-                });
-            }else{
-                // alert('ERROR');
-            }
-        });
-
 
 
         $('#btnaddtel').click(function(){
 
             var parent = $('#idpres').val();
+            var nom = $('#nomt').val();
+            var prenom = $('#prenomt').val();
             var champ = $('#champ1').val();
             var remarque = $('#remarque1').val();
             var nature = $('#nature1').val();
@@ -1478,7 +1497,7 @@
                 $.ajax({
                     url:"{{ route('prestataires.addressadd') }}",
                     method:"POST",
-                    data:{parent:parent,champ:champ,remarque:remarque,nature:nature,typetel:typetel, _token:_token},
+                    data:{nom:nom,prenom:prenom,parent:parent,champ:champ,remarque:remarque,nature:nature,typetel:typetel, _token:_token},
                     success:function(data){
 
                         //   alert('Added successfully');
@@ -1492,6 +1511,8 @@
         });
 
         $('#btnaddemail').click(function(){
+            var nom = $('#nome').val();
+            var prenom = $('#prenome').val();
             var parent = $('#idpres').val();
             var champ = $('#champ2').val();
             var remarque = $('#remarque2').val();
@@ -1502,7 +1523,7 @@
                 $.ajax({
                     url:"{{ route('prestataires.addressadd') }}",
                     method:"POST",
-                    data:{parent:parent,champ:champ,remarque:remarque,nature:nature, _token:_token},
+                    data:{nom:nom,prenom:prenom,parent:parent,champ:champ,remarque:remarque,nature:nature, _token:_token},
                     success:function(data){
 
                         //   alert('Added successfully');
@@ -1517,6 +1538,8 @@
 
 
         $('#btnaddfax').click(function(){
+            var nom = $('#nomf').val();
+            var prenom = $('#prenomf').val();
             var parent = $('#idpres').val();
             var champ = $('#champ3').val();
             var remarque = $('#remarque3').val();
@@ -1527,7 +1550,7 @@
                 $.ajax({
                     url:"{{ route('prestataires.addressadd') }}",
                     method:"POST",
-                    data:{parent:parent,champ:champ,remarque:remarque,nature:nature, _token:_token},
+                    data:{nom:nom,prenom:prenom,parent:parent,champ:champ,remarque:remarque,nature:nature, _token:_token},
                     success:function(data){
 
                         //   alert('Added successfully');
@@ -1566,5 +1589,35 @@
     }
 
 
+
+    function checkexiste( elm,type) {
+        var id=elm.id;
+        var val =document.getElementById(id).value;
+        //  var type = $('#type').val();
+
+        //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('prestataires.checkexiste') }}",
+            method: "POST",
+            data: {   val:val,type:type, _token: _token},
+            success: function (data) {
+
+                if(data>0){
+                    alert('  Existe deja !');
+                    document.getElementById(id).style.background='#FD9883';
+                    document.getElementById(id).style.color='white';
+                } else{
+                    document.getElementById(id).style.background='white';
+                    document.getElementById(id).style.color='black';
+                }
+
+
+            }
+        });
+        // } else {
+
+        // }
+    }
 
 </script>

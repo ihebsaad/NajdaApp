@@ -37,7 +37,7 @@ use  \App\Http\Controllers\EntreesController ;
 <div class="row">
     <div class="col-md-3">
 <?php  // $doss=  DossiersController::DossiersActifs(); echo json_encode($doss) ; ?>
-        <h4 style="font-weight:bold;"><?php echo   $dossier->reference_medic .' - '.  DossiersController::FullnameAbnDossierById($dossier->id);?> </h4>
+        <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@fiche',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '.  DossiersController::FullnameAbnDossierById($dossier->id);?> </a></h4>
     </div>
     <div class="col-md-2">
         <b>Statut</b>
@@ -201,12 +201,6 @@ use  \App\Http\Controllers\EntreesController ;
                         <li class="nav-item">
                             <a class="nav-link" href="#tab7" data-toggle="tab">
                                 <i class="fas fa-file-import"></i>  OM
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link"   href="{{action('DossiersController@fiche',$dossier->id)}}"  >
-                                <i class="fas fa-lg fa-cog"></i><B> Fiche</B>
                             </a>
                         </li>
 
@@ -1868,17 +1862,18 @@ reference_customer
                                     <?php
 
                                         foreach($prestataires as $prest)
-                                  //  {    foreach($prestations as $pr )
-                                     {
-                                        // $prestat= $pr['prestataire_id'];
+                                      {
+                                     // $prestat= $pr['prestataire_id'];
                                        //$interv = PrestationsController::PrestById($prestat);
                                    //  if ($pr['prestataire_id'] != $inter['id'])
                                     //{ ?>
 
-                                    <option    value="<?php echo $prest->id;?>"> <?php echo $prest->name;?></option>
+                                    <option    value="<?php echo $prest->id;?>"> <?php echo $prest->name .' '.$prest->prenom;?></option>
                               <?php // }
                                    // }
-                                    }?>
+
+                                    }
+                                    ?>
                                  </select>
                             </div>
 

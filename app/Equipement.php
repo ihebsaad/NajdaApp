@@ -13,6 +13,7 @@ class Equipement extends Model
  'date_deb_indisponibilite',
  'date_fin_indisponibilite',
  'annule',
+      'type'
         ];
  
 }

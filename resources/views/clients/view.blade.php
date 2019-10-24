@@ -323,9 +323,9 @@
                             <table class="table table-striped"  style="width:100%;margin-top:35px;margin-bottom:35px;font-size:16px;">
                                 <thead>
                                 <tr class="headtable">
-                                    <th style="width:20%">Tel</th>
+                                     <th style="width:20%">Tel</th>
                                     <th style="width:20%">Type</th>
-                                    <th style="width:50%">Remarque</th>
+                                    <th style="width:30%">Remarque</th>
                                     <th style="width:10%">Contacter</th>
                                 </tr>
 
@@ -333,7 +333,7 @@
                                 <tbody>
                                 @foreach($tels as $tel)
                                     <tr>
-                                        <td style="width:20%;"><?php echo $tel->champ; ?></td>
+                                         <td style="width:20%;"><?php echo $tel->champ; ?></td>
                                         <td style="width:20%;"><?php echo $tel->type; ?></td>
                                         <td style="width:50%;"><?php echo $tel->remarque; ?></td>
                                         <td style="width:10%;"><i class="fa fa-phone"></i></td>
@@ -356,9 +356,9 @@
                             <table class="table table-striped"  style="width:100%;margin-top:35px;margin-bottom:35px;font-size:16px;">
                                 <thead>
                                 <tr class="headtable">
-                                    <th style="width:20%">Email</th>
+                                     <th style="width:20%">Email</th>
                                     <th style="width:20%">Type</th>
-                                    <th style="width:50%">Remarque</th>
+                                    <th style="width:30%">Remarque</th>
                                     <th style="width:10%">Contacter</th>
                                 </tr>
 
@@ -366,7 +366,7 @@
                                 <tbody>
                                 @foreach($emails as $email)
                                     <tr>
-                                        <td style="width:20%;"><?php echo $email->champ; ?></td>
+                                         <td style="width:20%;"><?php echo $email->champ; ?></td>
                                         <td style="width:20%;"><?php echo $email->type; ?></td>
                                         <td style="width:50%;"><?php echo $email->remarque; ?></td>
                                         <td style="width:10%;"><i class="fa fa-envelope"></i></td>
@@ -521,7 +521,7 @@
                                 <thead>
                                 <tr class="headtable">
                                     <th style="width:30%">Entité de facturation</th>
-                                    <th style="width:70%">Adresse Posale complète</th>
+                                    <th style="width:70%">Adresse Postale complète</th>
                                 </tr>
 
                                 </thead>
@@ -584,10 +584,10 @@
                                 <tr class="headtable">
                                     <th style="width:20%">Nom et Prénom</th>
                                     <th style="width:20%">Fonction</th>
-                                    <th style="width:50%">Tel</th>
+                                    <th style="width:10%">Tel</th>
                                     <th style="width:10%">Fax</th>
                                     <th style="width:10%">Email</th>
-                                    <th style="width:10%">Observation</th>
+                                    <th style="width:30%">Observation</th>
                                 </tr>
 
                                 </thead>
@@ -596,10 +596,10 @@
                                     <tr>
                                         <td style="width:20%;"><?php echo $gestion->nom; ?>  <?php echo $reseau->prenom; ?></td>
                                         <td style="width:20%;"><?php echo $gestion->fonction; ?></td>
-                                        <td style="width:50%;"><?php echo $gestion->tel; ?></td>
-                                        <td style="width:50%;"><?php echo $gestion->fax; ?></td>
-                                        <td style="width:50%;"><?php echo $gestion->mail; ?></td>
-                                        <td style="width:50%;"><?php echo $gestion->remarque; ?></td>
+                                        <td style="width:10%;"><?php echo $gestion->tel; ?></td>
+                                        <td style="width:10%;"><?php echo $gestion->fax; ?></td>
+                                        <td style="width:10%;"><?php echo $gestion->mail; ?></td>
+                                        <td style="width:30%;"><?php echo $gestion->remarque; ?></td>
                                     </tr>
                                 @endforeach
 
@@ -908,10 +908,13 @@
                             <form   id="ff" name="">
                                 {{ csrf_field() }}
 
+
+
+
                                 <div class="form-group " >
                                     <label for="adresse">Téléphone</label>
                                     <div class=" row  ">
-                                        <input class="form-control" type="text" required id="champ1"/>
+                                        <input class="form-control" type="number" required id="champ1"  onchange="checkexiste(this,'tel')" />
 
                                     </div>
                                 </div>
@@ -972,10 +975,13 @@
                             <form   id="ffll" name="">
                                 {{ csrf_field() }}
 
+
+
+
                                 <div class="form-group " >
                                     <label for="adresse">Email</label>
                                     <div class=" row  ">
-                                        <input class="form-control" type="text" required id="champ2"/>
+                                        <input class="form-control" type="email" required id="champ2"  onchange="checkexiste(this,'mail')"/>
 
                                     </div>
                                 </div>
@@ -1038,7 +1044,7 @@
                                 <div class="form-group " >
                                     <label for="adresse">Fax</label>
                                     <div class=" row  ">
-                                        <input class="form-control" type="text" required id="champ3"/>
+                                        <input class="form-control" type="text" required id="champ3"  onchange="checkexiste(this,'fax')"/>
 
                                     </div>
                                 </div>
@@ -1174,7 +1180,7 @@
                                 <div class="form-group ">
                                     <label for="code">Tel</label>
                                     <div class="row">
-                                        <input type="text"   class="form-control"  id="telq" />
+                                        <input type="number"   class="form-control"  id="telq"  onchange="checkexiste(this,'tel')" />
 
                                     </div>
                                 </div>
@@ -1182,7 +1188,7 @@
                                 <div class="form-group ">
                                     <label for="code">Fax</label>
                                     <div class="row">
-                                        <input type="text"   class="form-control"  id="faxq" />
+                                        <input type="number"   class="form-control"  id="faxq"  onchange="checkexiste(this,'fax')" />
 
                                     </div>
                                 </div>
@@ -1191,7 +1197,7 @@
                                 <div class="form-group ">
                                     <label for="code">Email</label>
                                     <div class="row">
-                                        <input type="text"   class="form-control"  id="emailq" />
+                                        <input type="text"   class="form-control"  id="emailq"  onchange="checkexiste(this,'mail')"/>
 
                                     </div>
                                 </div>
@@ -1269,7 +1275,7 @@
                                 <div class="form-group ">
                                     <label for="code">Tel</label>
                                     <div class="row">
-                                        <input type="text"   class="form-control"  id="telr" />
+                                        <input type="number"   class="form-control"  id="telr"  onchange="checkexiste(this,'tel')"/>
 
                                     </div>
                                 </div>
@@ -1277,7 +1283,7 @@
                                 <div class="form-group ">
                                     <label for="code">Fax</label>
                                     <div class="row">
-                                        <input type="text"   class="form-control"  id="faxr" />
+                                        <input type="number"   class="form-control"  id="faxr"  onchange="checkexiste(this,'fax')" />
 
                                     </div>
                                 </div>
@@ -1286,7 +1292,7 @@
                                 <div class="form-group ">
                                     <label for="code">Email</label>
                                     <div class="row">
-                                        <input type="text"   class="form-control"  id="emailr" />
+                                        <input type="text"   class="form-control"  id="emailr"  onchange="checkexiste(this,'mail')" />
 
                                     </div>
                                 </div>
@@ -1364,7 +1370,7 @@
                                 <div class="form-group ">
                                     <label for="code">Tel</label>
                                     <div class="row">
-                                        <input type="text"   class="form-control"  id="telg" />
+                                        <input type="number"   class="form-control"  id="telg"  onchange="checkexiste(this,'tel')" />
 
                                     </div>
                                 </div>
@@ -1372,7 +1378,7 @@
                                 <div class="form-group ">
                                     <label for="code">Fax</label>
                                     <div class="row">
-                                        <input type="text"   class="form-control"  id="faxg" />
+                                        <input type="text"   class="form-control"  id="faxg"  onchange="checkexiste(this,'fax')"/>
 
                                     </div>
                                 </div>
@@ -1381,7 +1387,7 @@
                                 <div class="form-group ">
                                     <label for="code">Email</label>
                                     <div class="row">
-                                        <input type="text"   class="form-control"  id="emailg" />
+                                        <input type="text"   class="form-control"  id="emailg"  onchange="checkexiste(this,'mail')" />
 
                                     </div>
                                 </div>
@@ -1423,6 +1429,38 @@
 
 <script>
 
+
+
+    function checkexiste( elm,type) {
+        var id=elm.id;
+        var val =document.getElementById(id).value;
+        //  var type = $('#type').val();
+
+        //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('prestataires.checkexiste') }}",
+            method: "POST",
+            data: {   val:val,type:type, _token: _token},
+            success: function (data) {
+
+                if(data>0){
+                    alert('  Existe deja !');
+                    document.getElementById(id).style.background='#FD9883';
+                    document.getElementById(id).style.color='white';
+                } else{
+                    document.getElementById(id).style.background='white';
+                    document.getElementById(id).style.color='black';
+                }
+
+
+            }
+        });
+        // } else {
+
+        // }
+    }
+
     $(function () {
 
         $('#nature').select2({
@@ -1447,7 +1485,7 @@
 
 
         $('#btnaddtel').click(function(){
-            var parent = $('#parent').val();
+             var parent = $('#parent').val();
             var champ = $('#champ1').val();
             var remarque = $('#remarque1').val();
             var type = $('#type1').val();
@@ -1458,7 +1496,7 @@
                 $.ajax({
                     url:"{{ route('clients.addressadd') }}",
                     method:"POST",
-                    data:{parent:parent,champ:champ,remarque:remarque,nature:nature,type:type, _token:_token},
+                    data:{ parent:parent,champ:champ,remarque:remarque,nature:nature,type:type, _token:_token},
                     success:function(data){
 
                         //   alert('Added successfully');
@@ -1472,7 +1510,7 @@
         });
 
         $('#btnaddemail').click(function(){
-            var parent = $('#parent').val();
+             var parent = $('#parent').val();
             var champ = $('#champ2').val();
             var remarque = $('#remarque2').val();
             var type = $('#type2').val();
@@ -1483,7 +1521,7 @@
                 $.ajax({
                     url:"{{ route('clients.addressadd') }}",
                     method:"POST",
-                    data:{parent:parent,champ:champ,remarque:remarque,nature:nature,type:type, _token:_token},
+                    data:{ parent:parent,champ:champ,remarque:remarque,nature:nature,type:type, _token:_token},
                     success:function(data){
 
                         //   alert('Added successfully');

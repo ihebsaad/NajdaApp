@@ -300,6 +300,8 @@ Route::post('/prestataires/NomPrestatireById','PrestatairesController@NomPrestat
 
 Route::get('/prestataires/destroy/{id}', 'PrestatairesController@destroy');
 Route::get('/prestataires/create/{id}', 'PrestatairesController@create')->name('prestataires.create');
+Route::post('/prestataires/checkexiste', 'PrestatairesController@checkexiste')->name('prestataires.checkexiste');
+Route::post('/prestataires/checkexisteprname', 'PrestatairesController@checkexistePrName')->name('prestataires.checkexisteprname');
 
 
 /*** Prestations **/

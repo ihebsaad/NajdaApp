@@ -72,27 +72,31 @@ class IntervenantsController extends Controller
 
     public function saving(Request $request)
     {
-       $iddoss= intval($request->get('dossier'));
-       $prestataire=$request->get('prestataire');
+        $iddoss = intval($request->get('dossier'));
+        $prestataire = $request->get('prestataire');
 
-        $nom=  app('App\Http\Controllers\PrestatairesController')->ChampById('name',$prestataire);
-        $prenom=app('App\Http\Controllers\PrestatairesController')->ChampById('prenom',$prestataire);
+        $nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
+        $prenom = app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire);
 
+        // vérifier prestataire n existe pas
+        $count = $this->countIntervByDossier($prestataire, $iddoss);
+        if ($count == 0)
+        {
             $intervenant = new Intervenant([
                 'prestataire_id' => $prestataire,
                 'dossier' => $iddoss,
-                'nom' => $nom ,
-                'prenom' =>$prenom ,
+                'nom' => $nom,
+                'prenom' => $prenom,
 
             ]);
-     //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
+        //  if (   ($this->CheckIntervExiste($prestataire,$iddoss)==0) && ($this->CheckPrestationExiste($prestataire,$iddoss)==0 )   ) {
 
-           if ($intervenant->save()) {
+        if ($intervenant->save()) {
 
-               return url('/dossiers/view/' . $iddoss . '#tab4');
-           } else {
-              // return url('/intervenants');
-           }
+            return url('/dossiers/view/' . $iddoss . '#tab4');
+        }
+    }
+
      //  }
     }
 
@@ -191,6 +195,17 @@ class IntervenantsController extends Controller
 
         return $number;
 
+
+    }
+
+    public static function countIntervByDossier($interv,$dossier)
+    {
+
+        $count = Intervenant ::where('prestataire_id',$interv)
+            ->where('dossier','=',$dossier)
+            ->count();
+
+        return $count;
 
     }
 

@@ -22,7 +22,7 @@ use  \App\Http\Controllers\DocsController;
 
     <div class="col-md-3">
 
-        <h4> <?php echo   $dossier->reference_medic .' - '. DossiersController::FullnameAbnDossierById($dossier->id);?></h4>
+        <a> <a  href="{{action('DossiersController@view',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '. DossiersController::FullnameAbnDossierById($dossier->id);?></a></h4>
     </div>
 
      <div class="col-md-3">
@@ -132,9 +132,8 @@ use  \App\Http\Controllers\DocsController;
 
 <br>
         <?php if($dossier->affecte>0) {?> <button  class="btn btn-md btn-info pull-left"   data-toggle="modal" data-target="#createAccuse"><b><i class="fas fa-envelope"></i> Envoyer un accusé </b></button><?php } ?>
-
-        <B><a class="pull-right" href="{{action('DossiersController@view',$dossier->id)}}"  > <i class="fas fa-lg fa-folder-open"></i> Allez vers Détails du dossier </a></B>
-<br>
+         <button  class="btn btn-md btn-info pull-right"   data-toggle="modal" data-target="#observations"><b><i class="fas fa-clipboard"></i> Observations </b></button>
+ <br>
   
                  <div class="form-group" style="margin-top:25px;">
                         {{ csrf_field() }}
@@ -144,7 +143,7 @@ use  \App\Http\Controllers\DocsController;
 
                             <div class="row">
 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Type de dossier</label>
                                         <select  onchange="changing(this);location.reload();"  id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
@@ -154,7 +153,7 @@ use  \App\Http\Controllers\DocsController;
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Affecté à </label>
                                         <select id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single" >
@@ -170,36 +169,9 @@ use  \App\Http\Controllers\DocsController;
                                     </div>
                                 </div>
 
-                                 <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Client </label>
-                                        <select onchange="changing(this);location.reload();" id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"   value="{{ $dossier->customer_id }}" >
-                                            <option value="0">Sélectionner..... </option>
-
-                                            @foreach($clients as $cl  )
-                                                <option
-                                                        @if($dossier->customer_id==$cl->id)selected="selected"@endif
-
-                                                value="{{$cl->id}}">{{$cl->name}}</option>
-
-                                            @endforeach
 
 
-                                        </select>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label>Référence Client </label>
-                                        <input onchange="changing(this)" type="text" id="reference_customer" name="reference_customer" class="form-control"  value="{{ $dossier->reference_customer }}" >
-
-                                    </div>
-                                    </div>
-
-
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="complexite"> Complexité</label>
                                         <select onchange="changing(this)" class="form-control" name="complexite" id="complexite"  >
@@ -215,14 +187,173 @@ use  \App\Http\Controllers\DocsController;
                             <div class="row form">
                                 <div class="col-md-12">
                                     <div class="tab-content">
-                                        <div id="tab_1" class="tab-pane active">
+
+                                        <div class="col-md-12">
+                                            <div class="panel panel-success">
+
+                                            <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a class="accordion-toggle" data-toggle="collapse">
+                                                    Info du Client</a>
+                                            </h4>
+                                        </div>
+                                        <div class="panel-collapse collapse in">
+                                            <div class="panel-body">
+                                                <div class="col-md-12">
+
+                                                    <div class="row">
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Client </label>
+                                                            <select onchange="changing(this);location.reload();" id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"   value="{{ $dossier->customer_id }}" >
+                                                                <option value="0">Sélectionner..... </option>
+
+                                                                @foreach($clients as $cl  )
+                                                                    <option
+                                                                            @if($dossier->customer_id==$cl->id)selected="selected"@endif
+
+                                                                    value="{{$cl->id}}">{{$cl->name}}</option>
+
+                                                                @endforeach
+
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Référence Client </label>
+                                                            <input onchange="changing(this)" type="text" id="reference_customer" name="reference_customer" class="form-control"  value="{{ $dossier->reference_customer }}" >
+
+                                                        </div>
+                                                    </div>
+
+                                                    </div>
+
+                                                    <div class="row">
+                                                            <div class="col-md-9">
+                                                                <div class="form-group">
+                                                                    <label for="inputError" class="control-label">Entité de facturation  </label>
+
+                                                                    <div class="input-group-control">
+                                                                        <select onchange="changing(this)" type="text" id="adresse_facturation" name="adresse_facturation" class="form-control"    >
+                                                                            <option></option>
+                                                                            <option  <?php if ($dossier->adresse_facturation==$entite){echo 'selected="selected"';} ?> value="<?php echo $entite;?>"><?php echo $entite .' <small>'.$adresse.'</small>';?></option>
+                                                                            <?php foreach ($liste as $l)
+                                                                            {?>
+                                                                            <option  <?php  if ($dossier->adresse_facturation==$l->nom ){echo 'selected="selected"';} ?> value="<?php $l->nom;?>" ><?php $l->nom ;?>   <small>  <?php $l->champ;?> </small></option>
+                                                                            <?php
+                                                                            }
+                                                                            ?>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+
+
+                                                        </div>
+
+
+
+                                                        <div class="form-group row ">
+                                                            <h4>Documents à signer</h4>
+                                                            <div class="row">
+                                                            <div class="col-md-9">
+                                                                <div class="form-group">
+
+                                                                    <label for="documents" class="" style="width:80px">   &nbsp;&nbsp;
+                                                                        <div class="radio radio3" id="documents-oui"><span><input onclick="changing(this);" type="radio" name="documents" id="documents" value="1" <?php if ($dossier->documents ==1){echo 'checked';} ?>></span></div> Oui  </label>
+
+                                                                    <label for="nondocuments" class="" style="width:80px">
+
+                                                                    <div class="radio radio3" id="documents-non"><span class="checked"><input onclick="disabling('documents');" type="radio" name="documents" id="documentsnon" value="0"  <?php if ($dossier->documents ==0){echo 'checked';} ?> ></span></div> Non   </label>
+
+                                                                </div>
+                                                            </div>
+                                                            </div>
+                                                            <div class="row" <?php if( $dossier->documents==0){echo 'style="display:none;" ';} ?> id="documentsdiv">
+                                                                <select class="form-control  col-lg-12 itemName " style="width:400px" name="docs"  multiple  id="docs">
+
+                                                                    <option></option>
+                                                                    <?php if ( count($relations1) > 0 ) {?>
+
+                                                                    @foreach($relations1 as $rel  )
+                                                                        @foreach($cldocs as $doc)
+                                                                            <option  @if($rel->doc==$doc->doc)selected="selected"@endif    onclick="createdocdossier('spec<?php echo $doc->doc; ?>')"  value="<?php echo $doc->doc;?>"> <?php echo DocsController::ChampById('nom',$doc->doc);?></option>
+                                                                        @endforeach
+                                                                    @endforeach
+
+                                                                    <?php
+                                                                    } else { ?>
+                                                                    @foreach($cldocs as $doc)
+                                                                        <option    onclick="createdocdossier('spec<?php echo $doc->doc; ?>')"  value="<?php echo $doc->doc;?>"> <?php echo DocsController::ChampById('nom',$doc->doc);?></option>
+                                                                    @endforeach
+
+                                                                    <?php }  ?>
+
+                                                                </select>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+
+                                                                    <label for="franchise" class=""> Franchise &nbsp;&nbsp;
+                                                                        <div class="radio radio1" id="uniform-franchise"><span><input onclick="changing(this);" type="radio" name="franchise" id="franchise" value="1" <?php if ($dossier->franchise ==1){echo 'checked';} ?>></span></div> Oui
+                                                                    </label>
+
+                                                                    <label for="nonfranchise" class="">
+
+                                                                        <div class="radio radio1" id="uniform-nonfranchise"><span class="checked"><input onclick="disabling('franchise');hidingd();" type="radio" name="franchise" id="nonfranchise" value="0"  <?php if ($dossier->franchise ==0){echo 'checked';} ?> ></span></div> Non
+                                                                    </label>
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-4"  id="montantfr"  <?php if(  $dossier->franchise ==0){ ?> style="display:none" <?php  } ?> >
+                                                                <div class="form-group">
+                                                                    <label class="control-label">Montant Franchise
+                                                                    </label>
+
+                                                                    <div class="input-group-control">
+                                                                        <input onchange="changing(this)"  type="text" id="montant_franchise" name="montant_franchise" class="form-control" style="width: 100px;" placeholder="Montant"   value="{{ $dossier->montant_franchise }}" >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-4" id="plafondfr" <?php if(  $dossier->franchise ==0){ ?> style="display:none" <?php  } ?> >
+                                                                <div class="form-group">
+                                                                    <label class="control-label">Plafond
+                                                                    </label>
+
+                                                                    <div class="input-group-control">
+                                                                        <input onchange="changing(this)"  type="text" id="plafond" name="plafond" class="form-control" style="width: 100px;" placeholder="Plafond"   value="{{ $dossier->plafond }}" >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          </div>
+                                        </div>
                                             <div class="col-md-12">
                                                 <div class="panel panel-success">
 
                                                     <div class="panel-heading">
                                                         <h4 class="panel-title">
                                                             <a class="accordion-toggle" data-toggle="collapse">
-                                                                Info Abonné</a>
+                                                                Info Assuré</a>
                                                         </h4>
                                                     </div>
                                                     <div class="panel-collapse collapse in">
@@ -266,15 +397,7 @@ use  \App\Http\Controllers\DocsController;
 
                                                                 <div class="row" id="bens" <?php if ($dossier->benefdiff ==0) { ?> style="display:none" <?php }?> >
 
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Prénom du Bénéficaire</label>
 
-                                                                            <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="prenom_benef" name="prenom_benef" class="form-control"   value="{{ $dossier->prenom_benef }}" >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Nom du Bénéficaire </label>
@@ -284,7 +407,15 @@ use  \App\Http\Controllers\DocsController;
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <label for="inputError" class="control-label">Prénom du Bénéficaire</label>
 
+                                                                            <div class="input-group-control">
+                                                                                <input onchange="changing(this)" type="text" id="prenom_benef" name="prenom_benef" class="form-control"   value="{{ $dossier->prenom_benef }}" >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
 
                                                                     <div class="col-md-3">
                                                                         <div class="form-group">
@@ -304,15 +435,6 @@ use  \App\Http\Controllers\DocsController;
 
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Prénom du Bénéficaire 2</label>
-
-                                                                            <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="prenom_benef2" name="prenom_benef" class="form-control"   value="{{ $dossier->prenom_benef2 }}" >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
                                                                             <label for="inputError" class="control-label">Nom du Bénéficaire 2</label>
 
                                                                             <div class="input-group-control">
@@ -321,6 +443,15 @@ use  \App\Http\Controllers\DocsController;
                                                                         </div>
                                                                     </div>
 
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <label for="inputError" class="control-label">Prénom du Bénéficaire 2</label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input onchange="changing(this)" type="text" id="prenom_benef2" name="prenom_benef" class="form-control"   value="{{ $dossier->prenom_benef2 }}" >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                     <div class="col-md-3">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Parenté </label>
@@ -335,15 +466,6 @@ use  \App\Http\Controllers\DocsController;
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="col-md-4">
-                                                                    <div class="form-group">
-                                                                        <label for="inputError" class="control-label">Prénom du Bénéficaire 3</label>
-
-                                                                        <div class="input-group-control">
-                                                                            <input onchange="changing(this)" type="text" id="prenom_benef3" name="prenom_benef" class="form-control"   value="{{ $dossier->prenom_benef3 }}" >
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
 
                                                                 <div class="row" id="ben3"  <?php if ($dossier->beneficiaire3 =='') { ?> style="display:none" <?php }?>  >
                                                                     <div class="col-md-4">
@@ -356,6 +478,15 @@ use  \App\Http\Controllers\DocsController;
                                                                         </div>
                                                                     </div>
 
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <label for="inputError" class="control-label">Prénom du Bénéficaire 3</label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input onchange="changing(this)" type="text" id="prenom_benef3" name="prenom_benef" class="form-control"   value="{{ $dossier->prenom_benef3 }}" >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
 
                                                                     <div class="col-md-3">
                                                                         <div class="form-group">
@@ -494,25 +625,7 @@ use  \App\Http\Controllers\DocsController;
 
                                                                 </div>
 
-                                                                <div class="row">
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label for="inputError" class="control-label">To </label>
 
-                                                                            <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="to" name="to" class="form-control"   value="{{ $dossier->to }}" >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Guide</label>
-
-                                                                            <div class="input-group-control">
-                                                                                <input onchange="changing(this)"  type="text" id="to_guide" name="to_guide" class="form-control"   value="{{ $dossier->to_guide }}" >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
                                                                     <?php if ($dossier->to_phone !='') { ?>
 
                                                                     <div class="col-md-4">
@@ -554,6 +667,18 @@ use  \App\Http\Controllers\DocsController;
                                                                         </div>
                                                                     </div>
                                                                 </div>
+
+                                                            <div class="row">
+                                                                <div class="form-group col-md-10">
+                                                                    <label for="inputError" class="control-label">Adresse étranger</label>
+
+                                                                    <div class="input-group-control">
+                                                                        <input onchange="changing(this)" type="text" id="adresse_etranger" name="adresse_etranger" class="form-control"   value="{{ $dossier->adresse_etranger }}" >
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
                                                                 <div class="row" id="adresse3"  <?php if ($dossier->subscriber_local_address3 =='') {echo 'style="display:none;"';}  ?> >
                                                                     <div class="form-group col-md-10">
                                                                         <label for="inputError" class="control-label"><label id="derniere3">Dernière</label> Adresse en Tunisie  </label>
@@ -598,18 +723,8 @@ use  \App\Http\Controllers\DocsController;
 
 
                                                                 <div class="row">
-                                                                    <div class="form-group col-md-10">
-                                                                        <label for="inputError" class="control-label">Adresse étranger</label>
 
-                                                                        <div class="input-group-control">
-                                                                            <input onchange="changing(this)" type="text" id="adresse_etranger" name="adresse_etranger" class="form-control"   value="{{ $dossier->adresse_etranger }}" >
-                                                                        </div>
-                                                                    </div>
-
-                                                                    </div>
-                                                                <div class="row">
-
-                                                                    <div class="col-md-5">
+                                                                    <div class="col-md-3">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Ville</label>
 
@@ -626,7 +741,7 @@ use  \App\Http\Controllers\DocsController;
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="col-md-5">
+                                                                    <div class="col-md-4">
                                                                         <!--<div class="form-group">
                                                                             <label for="inputError" class="control-label">Hôtel</label>
 
@@ -653,6 +768,17 @@ use  \App\Http\Controllers\DocsController;
                                                                                 </div>
                                                                             </div>
                                                                     </div>
+
+
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group">
+                                                                            <label for="inputError" class="control-label">Chambre</label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input onchange="changing(this)"  type="text" id="subscriber_local_address_ch" name="subscriber_local_address_ch" class="form-control"   value="{{ $dossier->subscriber_local_address_ch }}" >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                     <div class="col-md-2">
                                                                         <label for="inputError" class="control-label">Autre : </label>
 
@@ -662,23 +788,8 @@ use  \App\Http\Controllers\DocsController;
                                                                 </div>
                                                                     <div class="row">
 
-                                                                    <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Chambre</label>
 
-                                                                            <div class="input-group-control">
-                                                                                <input onchange="changing(this)"  type="text" id="subscriber_local_address_ch" name="subscriber_local_address_ch" class="form-control"   value="{{ $dossier->subscriber_local_address_ch }}" >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Tel Chambre</label>
-                                                                            <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="tel_chambre" name="tel_chambre" class="form-control"   value="{{ $dossier->tel_chambre }}" >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
                                                                             <?php if($dossier->subscriber_mail1 !=''){ ?>
@@ -776,123 +887,7 @@ use  \App\Http\Controllers\DocsController;
                                             </div>-->
                                         </div>
                                         <!--                                    </div>-->
-                                        <div class="col-md-12">
-                                            <div class="panel panel-success">
-                                                <div class="panel-heading">
-                                                    <h4 class="panel-title">
-                                                        <a class="accordion-toggle" data-toggle="collapse">
-                                                            Info Demandeur</a>
-                                                    </h4>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="panel-collapse collapse in">
-                                            <div class="panel-body">
-                                                <div class="col-md-12">
 
-
-                                                    <div class="row">
-                                                        <div class="col-md-9">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Entité de facturation  </label>
-
-                                                                <div class="input-group-control">
-                                                                    <select onchange="changing(this)" type="text" id="adresse_facturation" name="adresse_facturation" class="form-control"    >
-                                                                        <option></option>
-                                                                        <option  <?php if ($dossier->adresse_facturation==$entite){echo 'selected="selected"';} ?> value="<?php echo $entite;?>"><?php echo $entite .' <small>'.$adresse.'</small>';?></option>
-                                                                        <?php foreach ($liste as $l)
-                                                                        {?>
-                                                                            <option  <?php  if ($dossier->adresse_facturation==$l->nom ){echo 'selected="selected"';} ?> value="<?php $l->nom;?>" ><?php $l->nom ;?>   <small>  <?php $l->champ;?> </small></option>
-                                                                       <?php
-                                                                        }
-                                                                        ?>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-
-
-                                                        
-                                                    </div>
-
-
-
-                                                    <div class="form-group row ">
-                                                        <h4>Documents à signer</h4>
-
-
-                                                        <div class="row">
-                                                            <select class="form-control  col-lg-12 itemName " style="width:400px" name="docs"  multiple  id="docs">
-
-
-                                                                <option></option>
-                                                                <?php if ( count($relations1) > 0 ) {?>
-
-                                                                @foreach($relations1 as $rel  )
-                                                                    @foreach($cldocs as $doc)
-                                                                        <option  @if($rel->doc==$doc->doc)selected="selected"@endif    onclick="createdocdossier('spec<?php echo $doc->doc; ?>')"  value="<?php echo $doc->doc;?>"> <?php echo DocsController::ChampById('nom',$doc->doc);?></option>
-                                                                    @endforeach
-                                                                @endforeach
-
-                                                                <?php
-                                                                } else { ?>
-                                                                @foreach($cldocs as $doc)
-                                                                    <option    onclick="createdocdossier('spec<?php echo $doc->doc; ?>')"  value="<?php echo $doc->doc;?>"> <?php echo DocsController::ChampById('nom',$doc->doc);?></option>
-                                                                @endforeach
-
-                                                                <?php }  ?>
-
-                                                            </select>
-
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-
-                                                                <label for="franchise" class=""> Franchise &nbsp;&nbsp;
-                                                                    <div class="radio radio1" id="uniform-franchise"><span><input onclick="changing(this);" type="radio" name="franchise" id="franchise" value="1" <?php if ($dossier->franchise ==1){echo 'checked';} ?>></span></div> Oui
-                                                                </label>
-
-                                                                <label for="nonfranchise" class="">
-
-                                                                    <div class="radio radio1" id="uniform-nonfranchise"><span class="checked"><input onclick="disabling('franchise');hidingd();" type="radio" name="franchise" id="nonfranchise" value="0"  <?php if ($dossier->franchise ==0){echo 'checked';} ?> ></span></div> Non
-                                                                </label>
-
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-4"  id="montantfr"  <?php if(  $dossier->franchise ==0){ ?> style="display:none" <?php  } ?> >
-                                                            <div class="form-group">
-                                                                <label class="control-label">Montant Franchise
-                                                                </label>
-
-                                                                <div class="input-group-control">
-                                                                    <input onchange="changing(this)"  type="text" id="montant_franchise" name="montant_franchise" class="form-control" style="width: 100px;" placeholder="Montant"   value="{{ $dossier->montant_franchise }}" >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-4" id="plafondfr" <?php if(  $dossier->franchise ==0){ ?> style="display:none" <?php  } ?> >
-                                                            <div class="form-group">
-                                                                <label class="control-label">Plafond
-                                                                </label>
-
-                                                                <div class="input-group-control">
-                                                                    <input onchange="changing(this)"  type="text" id="plafond" name="plafond" class="form-control" style="width: 100px;" placeholder="Plafond"   value="{{ $dossier->plafond }}" >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="col-md-12">
                                         <div class="panel panel-success" id="medical" style=" <?php if ($dossier->type_dossier =='Technique'){echo 'display:none';}?>;">
                                             <div class="panel-heading">
@@ -908,13 +903,15 @@ use  \App\Http\Controllers\DocsController;
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="is_hospitalized" class=""> Hospitalisé
-                                                                        <div style="margin-right:20px" class="radio" id="uniform-is_hospitalized"><span><input onclick="changing(this)"  type="radio" name="is_hospitalized" id="is_hospitalized" value="1" <?php if ($dossier->is_hospitalized ==1){echo 'checked';} ?> ></span>Outpatient</div>
-                                                                    </label> <label for="nonis_hospitalized" class=""> <div class="radio" id="uniform-nonis_hospitalized"><span class=""><input onclick="disabling('is_hospitalized')" type="radio" name="is_hospitalized" id="nonis_hospitalized" value="0"  <?php if ($dossier->is_hospitalized ==0){echo 'checked';} ?>  ></span> Inpatient </div>
+                                                                        <div style="margin-right:20px" class="radio radio2" id="uniform-is_hospitalized"><span><input onclick="changing(this)"  type="radio" name="is_hospitalized" id="is_hospitalized" value="1" <?php if ($dossier->is_hospitalized ==1){echo 'checked';} ?> ></span>Outpatient</div>
+                                                                    </label> <label for="nonis_hospitalized" class=""> <div class="radio radio2" id="uniform-nonis_hospitalized"><span class=""><input onclick="disabling('is_hospitalized')" type="radio" name="is_hospitalized" id="nonis_hospitalized" value="0"  <?php if ($dossier->is_hospitalized ==0){echo 'checked';} ?>  ></span> Inpatient </div>
                                                                     </label>
                                                                 </div>
                                                             </div>
 
                                                         </div>
+                                                        <div <?php if ($dossier->is_hospitalized ==1){echo 'style="display:none"';} ?>id="hospital">
+
                                                         <div class="row">
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
@@ -1107,6 +1104,7 @@ use  \App\Http\Controllers\DocsController;
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                     </div>
 <!--
                                                         <div class="row">
                                                             <div class="col-md-3">
@@ -1441,64 +1439,7 @@ use  \App\Http\Controllers\DocsController;
                                         </div>
                                     </div>
 
-                                    <div class="panel panel-success">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
-                                                <a class="accordion-toggle" data-toggle="collapse">
-                                                    Observations</a>
-                                            </h4>
-                                        </div>
-                                        <div class="panel-collapse collapse in">
-                                            <div class="panel-body">
-                                                <label for="form_control_1">Observations de dossier<span class="required"> * </span></label>
 
-                                                <div class="row">
-                                                        <div class="col-md-10">
-                                                            <div class="form-group form-md-line-input form-md-floating-label">
-                                                                <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation" id="observation">{{ $dossier->observation }}</textarea>
-                                                            </div>
-                                                        </div>
-                                                         <div class="col-md-2">
-                                                             <span title="Ajouter une observation " style="width:20px" class=" btn-md" id="btno1" onclick="document.getElementById('obser2').style.display='block'"><i class="fa fa-plus"></i>  </span>
-
-                                                         </div>
-
-                                                    </div>
-                                                <div class="row" id="obser2"  <?php if ($dossier->observation2==''){ echo 'style="display:none"' ;} ?>  >
-                                                    <div class="col-md-10">
-                                                        <div class="form-group form-md-line-input form-md-floating-label">
-                                                             <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation2" id="observation2">{{ $dossier->observation2 }}</textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <span title="Ajouter une observation " style="width:20px" class=" btn-md" id="btno2" onclick="document.getElementById('obser3').style.display='block'"><i class="fa fa-plus"></i>  </span>
-                                                    </div>
-
-                                                </div>
-                                                <div class="row" id="obser3" <?php if ($dossier->observation3==''){ echo 'style="display:none"' ;} ?>>
-                                                    <div class="col-md-10">
-                                                        <div class="form-group form-md-line-input form-md-floating-label">
-                                                            <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation3" id="observation3">{{ $dossier->observation3 }}</textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2"  >
-                                                        <span title="Ajouter une observation " style="width:20px" class=" btn-md" id="btno3" onclick="document.getElementById('obser4').style.display='block'"><i class="fa fa-plus"></i>  </span>
-
-
-                                                    </div>
-
-                                                </div>
-                                                <div class="row" id="obser4" <?php if ($dossier->observation4==''){ echo 'style="display:none"' ;} ?>>
-                                                    <div class="col-md-10">
-                                                        <div class="form-group form-md-line-input form-md-floating-label">
-                                                            <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation4" id="observation4">{{ $dossier->observation4 }}</textarea>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -1510,297 +1451,6 @@ use  \App\Http\Controllers\DocsController;
                     </div>
 
 
- <!--
-                                    <div class="tab-pane" id="tab_transmedic">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="portlet light">
-                                                    <div class="portlet-title">
-                                                        <div class="caption">
-                                                            <i class="icon-list"></i>
-                                                            <span class="caption-subject bold uppercase"> Liste des transports Medic</span>
-                                                        </div>
-                                                        <div class="actions">
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="portlet-body">
-                                                        <div class="table-toolbar">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="btn-group">
-
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                        <div id="medic_ajax_wrapper" class="dataTables_wrapper no-footer"><div class="row"><div class="col-md-6 col-sm-6"><div class="dataTables_length" id="medic_ajax_length"><label>Afficher <select name="medic_ajax_length" aria-controls="medic_ajax" class="form-control input-xsmall input-inline"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> enregistrements</label></div></div><div class="col-md-6 col-sm-6"><div id="medic_ajax_filter" class="dataTables_filter"><label>Rechercher&nbsp;:<input type="search" class="form-control input-small input-inline" placeholder="" aria-controls="medic_ajax"></label></div></div></div><div class="table-scrollable"><table class="table table-striped table-bordered table-hover dataTable no-footer" id="medic_ajax" role="grid" aria-describedby="medic_ajax_info" style="width: 100%;">
-                                                            <thead>
-                                                            <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="medic_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Type de prestation
-                                                                : activer pour trier la colonne par ordre croissant" aria-sort="ascending">
-                                                                    Type de prestation
-                                                                </th><th class="sorting" tabindex="0" aria-controls="medic_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Prix
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Prix
-                                                                </th><th class="sorting" tabindex="0" aria-controls="medic_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Valide
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Valide
-                                                                </th><th class="sorting" tabindex="0" aria-controls="medic_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Référence
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Référence
-                                                                </th><th class="sorting" tabindex="0" aria-controls="medic_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Actions
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Actions
-                                                                </th></tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                            <tr role="row" class="odd"><td class="sorting_1">Ambulances</td><td>29d (75% du tarif) déplacement</td><td><span class="label label-success"> Validé </span></td><td>10521</td><td><div class="btn-group"><center><a data-idpres="67959" data-toggle="tooltip" data-original-title="Editer" class="update_link_pres yellow filter-submit margin-bottom"><i class="fa fa-pencil font-yellow-crusta"></i></a>&nbsp;&nbsp;<a data-idpres="67959" data-toggle="tooltip" data-original-title="Annuler" class="delete_link_pres red filter-submit margin-bottom"><i class="fa fa-trash font-red-thunderbird"></i></a>&nbsp;&nbsp;<a data-idpres="67959" data-toggle="tooltip" data-original-title="Télécharger" class="blue filter-submit margin-bottom" target="_blank" href="http://197.14.53.86:10080/medic/agent/gestionprestations/odm_medic_html/67959"><i class="fa fa-download font-blue"></i></a>&nbsp;&nbsp;<a data-idpres="67959" data-toggle="tooltip" data-original-title="Attacher" data-typeodm="medic" class="save_link_pres blue filter-submit margin-bottom"><i class="fa fa-save font-green"></i></a></center></div></td></tr></tbody>
-                                                        </table></div><div class="row"><div class="col-md-5 col-sm-5"><div class="dataTables_info" id="medic_ajax_info" role="status" aria-live="polite">Affichage de l'élement 1 à 1 sur 1 éléments</div></div><div class="col-md-7 col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="medic_ajax_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="medic_ajax" tabindex="0" id="medic_ajax_previous"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-left"></i></a></li><li class="paginate_button active" aria-controls="medic_ajax" tabindex="0"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#">1</a></li><li class="paginate_button next disabled" aria-controls="medic_ajax" tabindex="0" id="medic_ajax_next"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-right"></i></a></li></ul></div></div></div></div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="tab_transmedic_int">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="portlet light">
-                                                    <div class="portlet-title">
-                                                        <div class="caption">
-                                                            <i class="icon-list"></i>
-                                                            <span class="caption-subject bold uppercase"> Liste des transports Medic International</span>
-                                                        </div>
-                                                        <div class="actions">
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="portlet-body">
-                                                        <div class="table-toolbar">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="btn-group">
-
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                        <div id="medici_ajax_wrapper" class="dataTables_wrapper no-footer"><div class="row"><div class="col-md-6 col-sm-6"><div class="dataTables_length" id="medici_ajax_length"><label>Afficher <select name="medici_ajax_length" aria-controls="medici_ajax" class="form-control input-xsmall input-inline"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> enregistrements</label></div></div><div class="col-md-6 col-sm-6"><div id="medici_ajax_filter" class="dataTables_filter"><label>Rechercher&nbsp;:<input type="search" class="form-control input-small input-inline" placeholder="" aria-controls="medici_ajax"></label></div></div></div><div class="table-scrollable"><table class="table table-striped table-bordered table-hover dataTable no-footer" id="medici_ajax" role="grid" aria-describedby="medici_ajax_info" style="width: 100%;">
-                                                            <thead>
-                                                            <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="medici_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Type de prestation
-                                                                : activer pour trier la colonne par ordre croissant" aria-sort="ascending">
-                                                                    Type de prestation
-                                                                </th><th class="sorting" tabindex="0" aria-controls="medici_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Prix
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Prix
-                                                                </th><th class="sorting" tabindex="0" aria-controls="medici_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Valide
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Valide
-                                                                </th><th class="sorting" tabindex="0" aria-controls="medici_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Référence
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Référence
-                                                                </th><th class="sorting" tabindex="0" aria-controls="medici_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Actions
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Actions
-                                                                </th></tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                            <tr class="odd"><td valign="top" colspan="5" class="dataTables_empty">Aucune donnée disponible dans le tableau</td></tr></tbody>
-                                                        </table></div><div class="row"><div class="col-md-5 col-sm-5"><div class="dataTables_info" id="medici_ajax_info" role="status" aria-live="polite">Affichage de l'élement 0 à 0 sur 0 éléments</div></div><div class="col-md-7 col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="medici_ajax_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="medici_ajax" tabindex="0" id="medici_ajax_previous"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-left"></i></a></li><li class="paginate_button next disabled" aria-controls="medici_ajax" tabindex="0" id="medici_ajax_next"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-right"></i></a></li></ul></div></div></div></div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="tab_transvat">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="portlet light">
-                                                    <div class="portlet-title">
-                                                        <div class="caption">
-                                                            <i class="icon-list"></i>
-                                                            <span class="caption-subject bold uppercase"> Liste des transports VAT</span>
-                                                        </div>
-                                                        <div class="actions">
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="portlet-body">
-                                                        <div class="table-toolbar">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="btn-group">
-
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                        <div id="vat_ajax_wrapper" class="dataTables_wrapper no-footer"><div class="row"><div class="col-md-6 col-sm-6"><div class="dataTables_length" id="vat_ajax_length"><label>Afficher <select name="vat_ajax_length" aria-controls="vat_ajax" class="form-control input-xsmall input-inline"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> enregistrements</label></div></div><div class="col-md-6 col-sm-6"><div id="vat_ajax_filter" class="dataTables_filter"><label>Rechercher&nbsp;:<input type="search" class="form-control input-small input-inline" placeholder="" aria-controls="vat_ajax"></label></div></div></div><div class="table-scrollable"><table class="table table-striped table-bordered table-hover dataTable no-footer" id="vat_ajax" role="grid" aria-describedby="vat_ajax_info" style="width: 100%;">
-                                                            <thead>
-                                                            <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="vat_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Type de prestation
-                                                                : activer pour trier la colonne par ordre croissant" aria-sort="ascending">
-                                                                    Type de prestation
-                                                                </th><th class="sorting" tabindex="0" aria-controls="vat_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Prix
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Prix
-                                                                </th><th class="sorting" tabindex="0" aria-controls="vat_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Valide
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Valide
-                                                                </th><th class="sorting" tabindex="0" aria-controls="vat_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Référence
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Référence
-                                                                </th><th class="sorting" tabindex="0" aria-controls="vat_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Actions
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Actions
-                                                                </th></tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                            <tr class="odd"><td valign="top" colspan="5" class="dataTables_empty">Aucune donnée disponible dans le tableau</td></tr></tbody>
-                                                        </table></div><div class="row"><div class="col-md-5 col-sm-5"><div class="dataTables_info" id="vat_ajax_info" role="status" aria-live="polite">Affichage de l'élement 0 à 0 sur 0 éléments</div></div><div class="col-md-7 col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="vat_ajax_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="vat_ajax" tabindex="0" id="vat_ajax_previous"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-left"></i></a></li><li class="paginate_button next disabled" aria-controls="vat_ajax" tabindex="0" id="vat_ajax_next"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-right"></i></a></li></ul></div></div></div></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="tab-pane" id="tab_transnajda">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="portlet light">
-                                                    <div class="portlet-title">
-                                                        <div class="caption">
-                                                            <i class="icon-list"></i>
-                                                            <span class="caption-subject bold uppercase"> Liste des transports Najda</span>
-                                                        </div>
-                                                        <div class="actions">
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="portlet-body">
-                                                        <div class="table-toolbar">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="btn-group">
-
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                        <div id="najda_ajax_wrapper" class="dataTables_wrapper no-footer"><div class="row"><div class="col-md-6 col-sm-6"><div class="dataTables_length" id="najda_ajax_length"><label>Afficher <select name="najda_ajax_length" aria-controls="najda_ajax" class="form-control input-xsmall input-inline"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> enregistrements</label></div></div><div class="col-md-6 col-sm-6"><div id="najda_ajax_filter" class="dataTables_filter"><label>Rechercher&nbsp;:<input type="search" class="form-control input-small input-inline" placeholder="" aria-controls="najda_ajax"></label></div></div></div><div class="table-scrollable"><table class="table table-striped table-bordered table-hover dataTable no-footer" id="najda_ajax" role="grid" aria-describedby="najda_ajax_info" style="width: 100%;">
-                                                            <thead>
-                                                            <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="najda_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Type de prestation
-                                                                : activer pour trier la colonne par ordre croissant" aria-sort="ascending">
-                                                                    Type de prestation
-                                                                </th><th class="sorting" tabindex="0" aria-controls="najda_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Prix
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Prix
-                                                                </th><th class="sorting" tabindex="0" aria-controls="najda_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Valide
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Valide
-                                                                </th><th class="sorting" tabindex="0" aria-controls="najda_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Référence
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Référence
-                                                                </th><th class="sorting" tabindex="0" aria-controls="najda_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Actions
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Actions
-                                                                </th></tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                            <tr class="odd"><td valign="top" colspan="5" class="dataTables_empty">Aucune donnée disponible dans le tableau</td></tr></tbody>
-                                                        </table></div><div class="row"><div class="col-md-5 col-sm-5"><div class="dataTables_info" id="najda_ajax_info" role="status" aria-live="polite">Affichage de l'élement 0 à 0 sur 0 éléments</div></div><div class="col-md-7 col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="najda_ajax_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="najda_ajax" tabindex="0" id="najda_ajax_previous"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-left"></i></a></li><li class="paginate_button next disabled" aria-controls="najda_ajax" tabindex="0" id="najda_ajax_next"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-right"></i></a></li></ul></div></div></div></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="tab-pane" id="tab_pec">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="portlet light">
-                                                    <div class="portlet-title">
-                                                        <div class="caption">
-                                                            <i class="icon-list"></i>
-                                                            <span class="caption-subject bold uppercase"> Liste des prises en charge</span>
-                                                        </div>
-                                                        <div class="actions">
-                                                            <a href="javascript:;" class="btn btn-circle btn-default" id="addPriseEnCharge"><i class="fa fa-plus"></i> Ajouter </a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="portlet-body">
-                                                        <div class="table-toolbar">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="btn-group">
-
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                        <div id="pec_ajax_wrapper" class="dataTables_wrapper no-footer"><div class="row"><div class="col-md-6 col-sm-6"><div class="dataTables_length" id="pec_ajax_length"><label>Afficher <select name="pec_ajax_length" aria-controls="pec_ajax" class="form-control input-xsmall input-inline"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> enregistrements</label></div></div><div class="col-md-6 col-sm-6"><div id="pec_ajax_filter" class="dataTables_filter"><label>Rechercher&nbsp;:<input type="search" class="form-control input-small input-inline" placeholder="" aria-controls="pec_ajax"></label></div></div></div><div class="table-scrollable"><table class="table table-striped table-bordered table-hover dataTable no-footer" id="pec_ajax" role="grid" aria-describedby="pec_ajax_info" style="width: 100%;">
-                                                            <thead>
-                                                            <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="pec_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Type de prise en charge
-                                                                : activer pour trier la colonne par ordre croissant" aria-sort="ascending">
-                                                                    Type de prise en charge
-                                                                </th><th class="sorting" tabindex="0" aria-controls="pec_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Date de création
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Date de création
-                                                                </th><th class="sorting" tabindex="0" aria-controls="pec_ajax" rowspan="1" colspan="1" aria-label="
-                                                                    Actions
-                                                                : activer pour trier la colonne par ordre croissant">
-                                                                    Actions
-                                                                </th></tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                            <tr class="odd"><td valign="top" colspan="3" class="dataTables_empty">Aucune donnée disponible dans le tableau</td></tr></tbody>
-                                                        </table></div><div class="row"><div class="col-md-5 col-sm-5"><div class="dataTables_info" id="pec_ajax_info" role="status" aria-live="polite">Affichage de l'élement 0 à 0 sur 0 éléments</div></div><div class="col-md-7 col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="pec_ajax_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="pec_ajax" tabindex="0" id="pec_ajax_previous"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-left"></i></a></li><li class="paginate_button next disabled" aria-controls="pec_ajax" tabindex="0" id="pec_ajax_next"><a href="http://197.14.53.86:10080/medic/agent/paneldossier/view/37301#"><i class="fa fa-angle-right"></i></a></li></ul></div></div></div></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-
-                                    -->
-                </div>
-
- 
-  
 
 
 
@@ -2088,18 +1738,18 @@ $iduser=$CurrentUser->id;
                         <form   id="fggf" name="">
                             {{ csrf_field() }}
 
+                            <div class="form-group " >
+                                <label for="adresse">Nom</label>
+                                <div class=" row  ">
+                                    <input class="form-control" type="text" required id="nome"/>
+
+                                </div>
+                            </div>
 
                             <div class="form-group " >
                                 <label for="adresse">Prénom</label>
                                 <div class=" row  ">
                                     <input class="form-control" type="text" required id="prenome"/>
-
-                                </div>
-                            </div>
-                            <div class="form-group " >
-                                <label for="adresse">Nom</label>
-                                <div class=" row  ">
-                                    <input class="form-control" type="text" required id="nome"/>
 
                                 </div>
                             </div>
@@ -2115,7 +1765,7 @@ $iduser=$CurrentUser->id;
                             <div class="form-group ">
                                 <label for="code">Adresse Email</label>
                                 <div class="row">
-                                    <input type="email"   class="form-control"  id="emaildoss" />
+                                    <input type="email"   class="form-control"  id="emaildoss"   onchange="checkexiste(this,'mail')" />
 
                                 </div>
                             </div>
@@ -2164,17 +1814,18 @@ $iduser=$CurrentUser->id;
                             {{ csrf_field() }}
 
 
-                            <div class="form-group " >
-                                <label for="adresse">Prénom</label>
-                                <div class=" row  ">
-                                    <input class="form-control" type="text" required id="prenomt"/>
 
-                                </div>
-                            </div>
                             <div class="form-group " >
                                 <label for="adresse">Nom</label>
                                 <div class=" row  ">
                                     <input class="form-control" type="text" required id="nomt"/>
+
+                                </div>
+                            </div>
+                            <div class="form-group " >
+                                <label for="adresse">Prénom</label>
+                                <div class=" row  ">
+                                    <input class="form-control" type="text" required id="prenomt"/>
 
                                 </div>
                             </div>
@@ -2188,7 +1839,7 @@ $iduser=$CurrentUser->id;
                             <div class="form-group ">
                                 <label for="code">Tel</label>
                                 <div class="row">
-                                    <input type="text"   class="form-control"  id="teldoss" />
+                                    <input type="number"   class="form-control"  id="teldoss"   onchange="checkexiste(this,'tel')"   />
 
                                 </div>
                             </div>
@@ -2299,6 +1950,80 @@ $iduser=$CurrentUser->id;
 <?php } ?>
 
 
+
+
+<!-- Modal -->
+<div class="modal fade" id="observations" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLabel">Observations de dossier</h3>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+                    {{ csrf_field() }}
+
+
+
+
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <div class="form-group form-md-line-input form-md-floating-label">
+                                            <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation" id="observation">{{ $dossier->observation }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <span title="Ajouter une observation " style="width:20px" class=" btn-md" id="btno1" onclick="document.getElementById('obser2').style.display='block'"><i class="fa fa-plus"></i>  </span>
+
+                                    </div>
+
+                                </div>
+                                <div class="row" id="obser2"  <?php if ($dossier->observation2==''){ echo 'style="display:none"' ;} ?>  >
+                                    <div class="col-md-10">
+                                        <div class="form-group form-md-line-input form-md-floating-label">
+                                            <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation2" id="observation2">{{ $dossier->observation2 }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <span title="Ajouter une observation " style="width:20px" class=" btn-md" id="btno2" onclick="document.getElementById('obser3').style.display='block'"><i class="fa fa-plus"></i>  </span>
+                                    </div>
+
+                                </div>
+                                <div class="row" id="obser3" <?php if ($dossier->observation3==''){ echo 'style="display:none"' ;} ?>>
+                                    <div class="col-md-10">
+                                        <div class="form-group form-md-line-input form-md-floating-label">
+                                            <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation3" id="observation3">{{ $dossier->observation3 }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2"  >
+                                        <span title="Ajouter une observation " style="width:20px" class=" btn-md" id="btno3" onclick="document.getElementById('obser4').style.display='block'"><i class="fa fa-plus"></i>  </span>
+
+
+                                    </div>
+
+                                </div>
+                                <div class="row" id="obser4" <?php if ($dossier->observation4==''){ echo 'style="display:none"' ;} ?>>
+                                    <div class="col-md-10">
+                                        <div class="form-group form-md-line-input form-md-floating-label">
+                                            <textarea onchange="changing(this)"  rows="3" class="form-control" name="observation4" id="observation4">{{ $dossier->observation4 }}</textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+</div>
+
+
 <!-- Modal -->
 <div class="modal fade" id="createAccuse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -2315,14 +2040,22 @@ $iduser=$CurrentUser->id;
                 <div class="form-group">
 
                     <label for="destinataire">Destinataire:</label>
-                    <input id="emaildestinataire"   class="form-control" name="emaildestinataire"      />
+
+                    <select id="emaildestinataire"    required  class="form-control" name="destinataire[]" style="width:100%" multiple >
+                        <option>ihebsaad@gmail.com</option>
+                        <option>saadiheb@gmail.com</option>
+                       <?php foreach($listeemails as  $mail)
+                           { ?>
+                            <option   value="<?php echo $mail ;?>"> <?php echo $mail ;?>  <small style="font-size:12px">(<?php echo PrestatairesController::NomByEmail( $mail) .' '.PrestatairesController::PrenomByEmail( $mail)  ;?>)  "</small> </option>
+                        <?php } ?>
+                    </select>
                 </div>
 
                 <div id="formaccuse"  >
                     {{ csrf_field() }}
                     <?php $message= EntreesController::GetParametre($dossier->customer_id);
                     //  echo json_encode($message);?>
-                    <div  style=" width: 540px; height: 450px;" id="message" contenteditable="true" ><?php echo $message   ;?></div>
+                    <div  style="width: 540px; height: 450px;padding:5px 5px 5px 5px;border:1px solid black" id="message" contenteditable="true" ><?php echo $message   ;?></div>
                 </div>
 
 
@@ -2480,7 +2213,14 @@ function disabling(elm) {
                         opacity: '1',
                     });
                 }
-
+                if (elm=='documents'){
+                    $('#documents-non').animate({
+                        opacity: '0.3',
+                    });
+                    $('#documents-non').animate({
+                        opacity: '1',
+                    });
+                }
 
             }
         });
@@ -2704,6 +2444,37 @@ function disabling(elm) {
 
 <script>
 
+
+    function checkexiste( elm,type) {
+        var id=elm.id;
+        var val =document.getElementById(id).value;
+        //  var type = $('#type').val();
+
+        //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('prestataires.checkexiste') }}",
+            method: "POST",
+            data: {   val:val,type:type, _token: _token},
+            success: function (data) {
+
+                if(data>0){
+                    alert('  Existe deja !');
+                    document.getElementById(id).style.background='#FD9883';
+                    document.getElementById(id).style.color='white';
+                } else{
+                    document.getElementById(id).style.background='white';
+                    document.getElementById(id).style.color='black';
+                }
+
+
+            }
+        });
+        // } else {
+
+        // }
+    }
+
     function ajout_prest(elm) {
 
         var prest = elm.id;
@@ -2736,6 +2507,15 @@ function disabling(elm) {
     }
 
     $(function () {
+
+        $('#emaildestinataire').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+        });
 
 
         $('#sendaccuse').click(function(){
@@ -2806,16 +2586,68 @@ function disabling(elm) {
         $('.radio1').click(function() {
 
             var   div=document.getElementById('montantfr');
-            if(div.style.display==='none')
+            var franchise=document.getElementById('franchise').checked;
+            if(franchise)
             {div.style.display='block';	 }
             else
             {div.style.display='none';     }
 
             var   div2=document.getElementById('plafondfr');
-            if(div2.style.display==='none')
+            if(franchise)
             {div2.style.display='block';	 }
             else
             {div2.style.display='none';     }
+        });
+
+
+        $('#is_hospitalized').click(function() {
+
+            var   div=document.getElementById('hospital');
+            var hospital=document.getElementById('nonis_hospitalized').checked;
+
+            if(hospital)
+            {div.style.display='block';	 }
+            else
+            {div.style.display='none';     }
+
+        });
+
+
+        $('#nonis_hospitalized').click(function() {
+
+            var   div=document.getElementById('hospital');
+            var hospital=document.getElementById('nonis_hospitalized').checked;
+
+            if(hospital)
+            {div.style.display='block';	 }
+            else
+            {div.style.display='none';     }
+
+        });
+
+
+        $('#documents').click(function() {
+
+            var   div=document.getElementById('documentsdiv');
+            var docs=document.getElementById('documents').checked;
+
+            if(docs)
+            {div.style.display='block';	 }
+            else
+            {div.style.display='none';     }
+
+        });
+
+        $('#documentsnon').click(function() {
+
+            var   div=document.getElementById('documentsdiv');
+            var docs=document.getElementById('documents').checked;
+
+            if(docs)
+            {div.style.display='block';	 }
+            else
+            {div.style.display='none';     }
+
         });
 
         $('#btn01').click(function() {

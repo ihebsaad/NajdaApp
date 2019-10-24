@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Adresse;
+use App\Intervenant;
 use App\Specialite;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -126,17 +127,14 @@ class PrestationsController extends Controller
                    ->where('gouv',$gouv)
                    ->where('type_prest',$typep)
                    ->where('specialite',$spec)
-                      ->update(['derniere_prestation' => $date])
-                   ;
-           //     $date=date('Y-m-d h:i:s');
-             //  $date="2015-01-01 02:29:14" ;
-             //  $current_date_time = Carbon::now()->toDateTimeString();
+                      ->update(['derniere_prestation' => $date]);
 
-               //$evaluation->derniere_prestation= $date;
-              // $evaluation->evaluation=5;
-            //   $evaluation->save();
-               //   return redirect('/prestations/view/'.$id)->with('success', 'ajouté avec succès ');
-               // return url('/prestations/view/'.$id);
+               // Suppression de la liste 2 de la fiche de dossier (Intervenants Ajoutés Manuellement)
+                Intervenant::where( 'prestataire_id',$prest)
+               ->where('dossier' , $iddoss )
+               ->delete();
+
+
                return $id;
            }
             //

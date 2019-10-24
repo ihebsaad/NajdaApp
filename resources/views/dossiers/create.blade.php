@@ -30,7 +30,7 @@ use  \App\Http\Controllers\DocsController;
                 <input type="hidden" name="entree" value="<?php echo $identree;?>" />
                 <div class="row">
 
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Type de dossier</label>
                             <select  onchange="hidediv() "  id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
@@ -40,7 +40,7 @@ use  \App\Http\Controllers\DocsController;
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Affecté à </label>
                             <select id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single"  >
@@ -56,31 +56,9 @@ use  \App\Http\Controllers\DocsController;
                         </div>
                     </div>
 
+
+
                     <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Client </label>
-                            <select  id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"    >
-                                <option value="0">Sélectionner..... </option>
-
-                                @foreach($clients as $cl  )
-                                    <option
-                                    value="{{$cl->id}}">{{$cl->name}}</option>
-                                @endforeach
-
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Référence Client </label>
-                            <input onchange="checkexiste();"  type="text" id="reference_customer" name="reference_customer" class="form-control"   >
-
-                        </div>
-                    </div>
-
-                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="complexite"> Complexité</label>
                             <select   class="form-control" name="complexite" id="complexite"  >
@@ -100,10 +78,101 @@ use  \App\Http\Controllers\DocsController;
                                 <div class="col-md-12">
                                     <div class="panel panel-success">
 
-                                        <div class="panel-heading">
+
+                                            <div class="panel panel-success">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a class="accordion-toggle" data-toggle="collapse">
+                                                            Info Client</a>
+                                                    </h4>
+                                                </div>
+                                            </div>
+
+                                        <div class="panel-collapse collapse in">
+                                            <div class="panel-body">
+                                                <div class="col-md-12">
+                                                    <div class="row">
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Client </label>
+                                                            <select  id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"    >
+                                                                <option value="0">Sélectionner..... </option>
+
+                                                                @foreach($clients as $cl  )
+                                                                    <option
+                                                                            value="{{$cl->id}}">{{$cl->name}}</option>
+                                                                @endforeach
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Référence du Client </label>
+                                                            <input onchange="checkexiste();"  type="text" id="reference_customer" name="reference_customer" class="form-control"   >
+
+                                                        </div>
+                                                    </div>
+
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+
+                                                                <label for="franchise" class=""> Franchise &nbsp;&nbsp;
+                                                                    <div class="radio radio1" id="uniform-franchise"><span><input   type="radio" name="franchise" id="franchise" value="1"  ></span></div> Oui
+                                                                </label>
+
+                                                                <label for="nonfranchise" class="">
+
+                                                                    <div class="radio radio1" id="uniform-nonfranchise"><span class="checked"><input onclick="" type="radio" name="franchise" id="nonfranchise" value="0"    ></span></div> Non
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-4"  id="montantfr" style="display:none">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Montant Franchise
+                                                                </label>
+
+                                                                <div class="input-group-control">
+                                                                    <input    type="text" id="montant_franchise" name="montant_franchise" class="form-control" style="width: 100px;" placeholder="Montant"     >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-4" id="plafondfr"  style="display:none">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Plafond
+                                                                </label>
+
+                                                                <div class="input-group-control">
+                                                                    <input    type="text" id="plafond" name="plafond" class="form-control" style="width: 100px;" placeholder="Plafond"    >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="panel panel-success">
+
+
+                                    <div class="panel-heading">
                                             <h4 class="panel-title">
                                                 <a class="accordion-toggle" data-toggle="collapse">
-                                                    Info Abonné</a>
+                                                    Info Assuré</a>
                                             </h4>
                                         </div>
                                         <div class="panel-collapse collapse in">
@@ -112,22 +181,23 @@ use  \App\Http\Controllers\DocsController;
                                                     <div class="row">
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label for="inputError" class="control-label">Prénom assureé * </label>
+                                                                <label for="inputError" class="control-label">Nom *</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input   type="text" id="subscriber_name" name="subscriber_name" class="form-control"    >
+                                                                    <input  required type="text" id="subscriber_lastname" name="subscriber_lastname" class="form-control"    >
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label for="inputError" class="control-label">Nom *</label>
+                                                                <label for="inputError" class="control-label">Prénom   * </label>
 
                                                                 <div class="input-group-control">
-                                                                    <input   type="text" id="subscriber_lastname" name="subscriber_lastname" class="form-control"    >
+                                                                    <input  required type="text" id="subscriber_name" name="subscriber_name" class="form-control"    >
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                         <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label for="ben" class="control-label">bénéficiaire différent</label><br>
@@ -144,15 +214,7 @@ use  \App\Http\Controllers\DocsController;
                                                     </div>
 
                                                     <div class="row" id="bens"  style="display:none" >
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Prénom du Bénéficaire</label>
 
-                                                                <div class="input-group-control">
-                                                                    <input   type="text" id="prenom_benef" name="prenom_benef" class="form-control"     >
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label for="inputError" class="control-label">Nom du Bénéficaire </label>
@@ -162,7 +224,15 @@ use  \App\Http\Controllers\DocsController;
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">Prénom du Bénéficaire</label>
 
+                                                                <div class="input-group-control">
+                                                                    <input   type="text" id="prenom_benef" name="prenom_benef" class="form-control"     >
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
@@ -179,15 +249,7 @@ use  \App\Http\Controllers\DocsController;
 
                                                     </div>
                                                     <div class="row" id="ben2"   style="display:none"    >
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Prénom du Bénéficaire 2</label>
 
-                                                                <div class="input-group-control">
-                                                                    <input   type="text" id="prenom_benef2" name="prenom_benef2" class="form-control"     >
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label for="inputError" class="control-label">Nom du Bénéficaire 2</label>
@@ -197,7 +259,15 @@ use  \App\Http\Controllers\DocsController;
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">Prénom du Bénéficaire 2</label>
 
+                                                                <div class="input-group-control">
+                                                                    <input   type="text" id="prenom_benef2" name="prenom_benef2" class="form-control"     >
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
@@ -215,15 +285,7 @@ use  \App\Http\Controllers\DocsController;
 
                                                     <div class="row" id="ben3"    style="display:none"    >
 
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Prénom du Bénéficaire 3</label>
 
-                                                                <div class="input-group-control">
-                                                                    <input   type="text" id="prenom_benef3" name="prenom_benef3" class="form-control"   >
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label for="inputError" class="control-label">Nom du Bénéficaire 3 </label>
@@ -234,6 +296,15 @@ use  \App\Http\Controllers\DocsController;
                                                             </div>
                                                         </div>
 
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">Prénom du Bénéficaire 3</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input   type="text" id="prenom_benef3" name="prenom_benef3" class="form-control"   >
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
@@ -244,55 +315,6 @@ use  \App\Http\Controllers\DocsController;
                                                                 </div>
                                                             </div>
                                                         </div>
-
-                                                    </div>
-
-                                                    <div class="row">
-
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Tel   1</label>
-
-                                                                <div class="input-group-control">
-                                                                    <input   type="text" id="subscriber_phone_cell" name="subscriber_phone_cell" class="form-control"   >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Tel   2</label>
-
-                                                                <div class="input-group-control">
-                                                                    <input   type="text" id="subscriber_phone_domicile" name="subscriber_phone_domicile" class="form-control"   >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">To </label>
-
-                                                                <div class="input-group-control">
-                                                                    <input   type="text" id="to" name="to" class="form-control"    >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Guide</label>
-
-                                                                <div class="input-group-control">
-                                                                    <input    type="text" id="to_guide" name="to_guide" class="form-control"     >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
 
                                                     </div>
 
@@ -322,6 +344,18 @@ use  \App\Http\Controllers\DocsController;
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="row">
+                                                        <div class="form-group col-md-10">
+                                                            <label for="inputError" class="control-label">Adresse étranger</label>
+
+                                                            <div class="input-group-control">
+                                                                <input   type="text" id="adresse_etranger" name="adresse_etranger" class="form-control"    >
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
                                                     <div class="row" id="adresse3" style="display:none;" >
                                                         <div class="form-group col-md-10">
                                                             <label for="inputError" class="control-label"><label id="derniere3">Dernière</label> Adresse en Tunisie  </label>
@@ -365,18 +399,8 @@ use  \App\Http\Controllers\DocsController;
                                                     </div>
 
                                                     <div class="row">
-                                                        <div class="form-group col-md-10">
-                                                            <label for="inputError" class="control-label">Adresse étranger</label>
 
-                                                            <div class="input-group-control">
-                                                                <input   type="text" id="adresse_etranger" name="adresse_etranger" class="form-control"    >
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="row">
-
-                                                        <div class="col-md-5">
+                                                        <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label for="inputError" class="control-label">Ville</label>
 
@@ -394,7 +418,6 @@ use  \App\Http\Controllers\DocsController;
                                                         </div>
 
                                                         <div class="col-md-5">
-
 
 
                                                             <div class="form-group">
@@ -416,11 +439,7 @@ use  \App\Http\Controllers\DocsController;
                                                             </div>
                                                         </div>
 
-
-                                                    </div>
-                                                    <div class="row">
-
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label for="inputError" class="control-label">Chambre</label>
 
@@ -429,138 +448,16 @@ use  \App\Http\Controllers\DocsController;
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="inputError" class="control-label">Tel Chambre</label>
-                                                                <div class="input-group-control">
-                                                                    <input   type="text" id="tel_chambre" name="tel_chambre" class="form-control"    >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
 
-                                                                <label for="inputError" class="control-label">Mail</label>
-                                                                <div class="input-group-control">
-                                                                    <input   type="email" id="subscriber_mail1" name="subscriber_mail1" class="form-control" placeholder="mail 1"    >
-                                                                </div>
+                                                    </div>
 
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-
-                                                                <label for="inputError" class="control-label">Mail 2</label>
-                                                                <div class="input-group-control">
-                                                                    <input   type="email" id="subscriber_mail2" name="subscriber_mail2" class="form-control" placeholder="mail 2"    >
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-
-
-                            </div>
                             <!--                                    </div>-->
-                            <div class="col-md-12">
-                                <div class="panel panel-success">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a class="accordion-toggle" data-toggle="collapse">
-                                                Info Demandeur</a>
-                                        </h4>
+
+                           </div>
+                         </div>
+                     </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="panel-collapse collapse in">
-                                <div class="panel-body">
-                                    <div class="col-md-12">
-
-<!--
-                                        <div class="row">
-                                            <div class="col-md-9">
-                                                <div class="form-group">
-                                                    <label for="inputError" class="control-label">Entité de facturation  </label>
-
-                                                    <div class="input-group-control">
-                                                        <select   type="text" id="adresse_facturation" name="adresse_facturation" class="form-control"    >
-                                                            <option></option>
-                                                            <option   > <small></small></option>
-                                                            <?php /* foreach ($liste as $l)
-                                                            {?>
-                                                            <option  value="<?php $l->nom;?>" ><?php $l->nom ;?>   <small>  <?php $l->champ;?> </small></option>
-                                                            <?php
-                                                            } */
-                                                            ?>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                        </div>
--->
-<!--
-
-                                        <div class="form-group row ">
-                                            <h4>Documents à signer</h4>
-
-
-                                            <div class="row">
-                                                <select class="form-control  col-lg-12 itemName " style="width:400px" name="docs"  multiple  id="docs">
-
-
-
-
-                                                </select>
-
-                                            </div>
-                                        </div>
--->
-
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-
-                                                    <label for="franchise" class=""> Franchise &nbsp;&nbsp;
-                                                        <div class="radio radio1" id="uniform-franchise"><span><input   type="radio" name="franchise" id="franchise" value="1"  ></span></div> Oui
-                                                    </label>
-
-                                                    <label for="nonfranchise" class="">
-
-                                                        <div class="radio radio1" id="uniform-nonfranchise"><span class="checked"><input onclick="" type="radio" name="franchise" id="nonfranchise" value="0"    ></span></div> Non
-                                                    </label>
-
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-4"  id="montantfr" style="display:none">
-                                                <div class="form-group">
-                                                    <label class="control-label">Montant Franchise
-                                                    </label>
-
-                                                    <div class="input-group-control">
-                                                        <input    type="text" id="montant_franchise" name="montant_franchise" class="form-control" style="width: 100px;" placeholder="Montant"     >
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-4" id="plafondfr"  style="display:none">
-                                                <div class="form-group">
-                                                    <label class="control-label">Plafond
-                                                    </label>
-
-                                                    <div class="input-group-control">
-                                                        <input    type="text" id="plafond" name="plafond" class="form-control" style="width: 100px;" placeholder="Plafond"    >
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-md-12">
                             <div class="panel panel-success" id="medical" >
                                 <div class="panel-heading">
@@ -576,13 +473,14 @@ use  \App\Http\Controllers\DocsController;
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="is_hospitalized" class=""> Hospitalisé
-                                                            <div style="margin-right:20px" class="radio" id="uniform-is_hospitalized"><span><input 	type="radio" name="is_hospitalized" id="is_hospitalized" value="1"   ></span>Outpatient</div>
-                                                        </label> <label for="nonis_hospitalized" class=""> <div class="radio" id="uniform-nonis_hospitalized"><span class=""><input onclick="disabling('is_hospitalized')" type="radio" name="is_hospitalized" id="nonis_hospitalized" value="0"    ></span> Inpatient </div>
+                                                            <div style="margin-right:20px" class="radio radio2" id="uniform-is_hospitalized"><span><input    type="radio" name="is_hospitalized" id="is_hospitalized" value="1"   ></span>Outpatient</div>
+                                                        </label> <label for="nonis_hospitalized" class=""> <div class="radio radio2" id="uniform-nonis_hospitalized"><span class=""><input  type="radio" name="is_hospitalized" id="nonis_hospitalized" value="0"     ></span> Inpatient </div>
                                                         </label>
                                                     </div>
                                                 </div>
 
                                             </div>
+                                            <div id="hospital">
                                             <div class="row">
                                                 <div class="col-md-4">
                                                     <div class="form-group">
@@ -754,6 +652,7 @@ use  \App\Http\Controllers\DocsController;
                                                     </div>
                                                 </div>
                                             </div>
+                                      </div><!-- hospital -->
 
                                         </div>
                                     </div>
@@ -1238,16 +1137,43 @@ use  \App\Http\Controllers\DocsController;
         $('.radio1').click(function() {
 
             var   div=document.getElementById('montantfr');
-            if(div.style.display==='none')
+            var franchise=document.getElementById('franchise').checked;
+
+            if(franchise)
             {div.style.display='block';	 }
             else
             {div.style.display='none';     }
 
             var   div2=document.getElementById('plafondfr');
-            if(div2.style.display==='none')
+            if(franchise)
             {div2.style.display='block';	 }
             else
             {div2.style.display='none';     }
+        });
+
+
+        $('#is_hospitalized').click(function() {
+
+            var   div=document.getElementById('hospital');
+            var hospital=document.getElementById('nonis_hospitalized').checked;
+            if(hospital)
+             {div.style.display='block';	 }
+            else
+            {div.style.display='none';     }
+
+        });
+
+
+        $('#nonis_hospitalized').click(function() {
+
+            var   div=document.getElementById('hospital');
+            var hospital=document.getElementById('nonis_hospitalized').checked;
+
+            if(hospital)
+            {div.style.display='block';	 }
+            else
+            {div.style.display='none';     }
+
         });
 
         $('#btn01').click(function() {

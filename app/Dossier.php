@@ -109,17 +109,18 @@ class Dossier extends Model
         'type_trans',
         'type_trans2',
         'type_trans3',
-        'entree'
+        'entree',
+        'documents'
 
     ];
 
-/*    protected $dateFormat = 'Y-m-d H:i:s';
+    protected $dateFormat = 'Y-m-d H:i:s';
 
     public function getDateFormat()
     {
         return 'Y-m-d H:i:s.u';
     }
-*/
+
 /*
  public function activeMissions()
     {

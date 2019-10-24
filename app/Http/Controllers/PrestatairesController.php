@@ -133,68 +133,84 @@ class PrestatairesController extends Controller
     public function saving(Request $request)
     {
             // **** prestataires dossiers dans table intervenant
-        // *** importer prestataires
+        if ($request->get('name') !==null ) {$nom=$request->get('name');}else{$nom='nom';}
+         $prenom= $request->get('prenom');
+        $dossier= $request->get('dossier');
+        if( isset($dossier) && intval($dossier)>0) {
 
-       // $user = auth()->user();
-      //  $nomuser = $user->name . ' ' . $user->name;
-      //  Log::info('[Agent: ' . $nomuser . '] Ajout Intervenant: ' . $reference_medic);
 
-
-        if( ($request->get('dossier'))>0) {
-
-         $doss=   $request->get('dossier');
-            if (($request->get('nom')) != null) {
+                Log::info('01');
 
                 $prestataire = new Prestataire([
-                    'name' => $request->get('nom'),
-                    'prenom' => $request->get('prenom'),
+                    'name' => $nom,
+                    'prenom' => $prenom,
                     'civilite' => $request->get('civilite'),
+                    'dossier' => $dossier,
 
                 ]);
+                Log::info('02');
 
 
                 if ($prestataire->save()) {
                     $id = $prestataire->id;
+                    Log::info('03');
 
                     $prestataire->update($request->all());
 
                     $interv = new Intervenant([
-                        'nom' => $request->get('nom'),
-                        'prenom' => $request->get('prenom'),
-                        'dossier' => $doss,
+                        'nom' => $nom,
+                        'prenom' => $prenom,
+                        'dossier' => $dossier,
                         'prestataire_id' => $id,
 
                     ]);
                     $interv->save();
+                    Log::info('04');
 
+                    return redirect('/dossiers/view/' . $dossier );
 
-                    return url('/dossiers/view/' . $doss )/*->with('success', ' Créé avec succès')*/
-                        ;
                 } else {
-                    return url('/prestataires');
+                    return redirect('/prestataires');
+                    Log::info('05');
+
                 }
 
-            }
+
         }else{
         // hors dossier
 
+            Log::info('06');
+
             $prestataire = new Prestataire([
-                'name' => $request->get('nom'),
-                'prenom' => $request->get('prenom'),
+                'name' => $nom,
+                'prenom' => $prenom,
+                'civilite' => $request->get('civilite'),
+
 
             ]);
+            Log::info('07');
 
             if ($prestataire->save()) {
                 $id = $prestataire->id;
                 $prestataire->update($request->all());
 
-                return url('/prestataires/view/' . $id)/*->with('success', ' Créé avec succès')*/
+                return redirect('/prestataires/view/' . $id)/*->with('success', ' Créé avec succès')*/
                     ;
+                Log::info('08');
+
             } else {
-                return url('/prestataires');
+                return redirect('/prestataires');
+                Log::info('09');
+
             }
+            Log::info('10');
 
         }
+
+          $user = auth()->user();
+           $nomuser = $user->name . ' ' . $user->lastname;
+         Log::info('[Agent: ' . $nomuser . '] Ajout Intervenant: ' . $nom.' '.$prenom);
+
 
     }
 
@@ -332,6 +348,8 @@ class PrestatairesController extends Controller
 
             $parent=$request->get('parent');
             $adresse = new Adresse([
+                'nom' => $request->get('nom'),
+                'prenom' => $request->get('prenom'),
                 'champ' => $request->get('champ'),
                  'nature' => $request->get('nature'),
                 'remarque' => $request->get('remarque'),
@@ -602,10 +620,20 @@ class PrestatairesController extends Controller
 
     public static function NomByEmail($email)
     { $email=  trim($email) ;
-         $Email = Email::where('champ', '=', $email)->first();
+         $Email = Adresse::where('champ', '=', $email)->first();
 
-        if (isset($Email['nom'])) {
-            return $Email['nom'] ;
+        if (isset($Email['nom'])    ) {
+            return $Email['nom'];
+        }else{return '';}
+
+    }
+
+    public static function PrenomByEmail($email)
+    { $email=  trim($email) ;
+        $Email = Adresse::where('champ', '=', $email)->first();
+
+        if (isset($Email['prenom'])   ) {
+            return  $Email['prenom'] ;
         }else{return '';}
 
     }
@@ -656,6 +684,28 @@ class PrestatairesController extends Controller
         if (isset($spec['nom'])) {
             return $spec['nom'] ;
         }else{return '';}
+
+    }
+
+    public static function checkexiste(Request $request)
+    {
+        $val =  trim($request->get('val'));
+        $type=trim($request->get('type'));
+        $count =  Adresse::where('champ', $val)
+            ->orWhere($type,$val)->count();
+
+        return $count;
+
+    }
+
+
+    public static function checkexistePrName(Request $request)
+    {
+        $val =  trim($request->get('val'));
+         $count =  Prestataire::where('name', $val)
+              ->count();
+
+        return $count;
 
     }
 

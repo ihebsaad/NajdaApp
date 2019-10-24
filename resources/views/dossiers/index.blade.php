@@ -27,8 +27,7 @@
              <div class="row">
                 <div class="col-lg-8"> <h4>Liste des dossiers </h4></div>
                 <div class="col-lg-4">
-                    <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
-                </div>
+                 </div>
             </div>
         </div>
 

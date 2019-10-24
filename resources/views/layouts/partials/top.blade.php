@@ -124,11 +124,12 @@
         $disp=$seance->dispatcheur ;
 
         $iduser=Auth::id();
+        if($iduser==$disp){$icon='fa-map-signs';}else{$icon='fa-envelope';}
 
           $count=Entree::where('dossier','')
               ->count();
-            if($count==0){$color='btn-success';$icon='fa-map-signs';}
-            else{$color='btn-danger';$icon='fa-map-signs';
+            if($count==0){$color='btn-success';}
+            else{$color='btn-danger';
             }
           ?>
           <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
