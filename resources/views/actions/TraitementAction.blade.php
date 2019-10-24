@@ -3,26 +3,7 @@
 
 @section('content')
    
-<!--<ul class="nav nav-tabs">
-  <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
-  <li><a data-toggle="tab" href="#menu1">Menu 1</a></li>
-  <li><a data-toggle="tab" href="#menu2">Menu 2</a></li>
-</ul>
 
-<div class="tab-content">
-  <div id="home" class="tab-pane fade in active">
-    <h3>HOME</h3>
-    <p>Some content.</p>
-  </div>
-  <div id="menu1" class="tab-pane fade">
-    <h3>Menu 1</h3>
-    <p>Some content in menu 1.</p>
-  </div>
-  <div id="menu2" class="tab-pane fade">
-    <h3>Menu 2</h3>
-    <p>Some content in menu 2.</p>
-  </div>
-</div>-->
 
 
 <ul class="nav nav-tabs">
@@ -55,7 +36,6 @@
   @endif
     
 
-   <!--<form action="{{ url('dossier/Mission/TraitercommentAction/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}">-->
 
     <br>
      <div class="row">
@@ -127,71 +107,72 @@
      </div>
      <div class="col-sm-2">
       <button type="button" class="btn btn-default"  >
-                    <a style="color:black"  href="{{url('dossiers/view/CreerDoc/'.$dossier->id.'/'.$Action->Mission->id )}}">Créer DOC</a>
+                    <a style="color:black"  href="{{url('dossiers/view/CreerDoc/'.$dossier->id.'/'.$Action->Mission->id )}}">DOC</a>
                 </button>
      </div>
      <div class="col-sm-2">
       <button type="button" class="btn btn-default"  >
-                    <a style="color:black"  href="{{url('dossiers/view/CreerOM/'.$dossier->id.'/'.$Action->Mission->id )}}"> Créer OM</a>
+                    <a style="color:black"  href="{{url('dossiers/view/CreerOM/'.$dossier->id.'/'.$Action->Mission->id )}}"> OM</a>
                 </button>
      </div>
 
 
 
     </div>
-     <br><br>
+    
+    <br><br>
 
      <div class="row">
       @if($Action->Mission->type_Mission==6) {{--Taxi--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date "début mission" et date "arrivée à destination" à compléter dans OM taxi (2ème partie)</h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date "début mission" et date "arrivée à destination" ( à compléter dans OM taxi (2ème partie))</h4> </span> 
      @endif
        @if($Action->Mission->type_Mission==30) {{--rapatriement véhicule sur Cargo--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d'arrivée de remorqueur au port et heure départ sur Cargo </h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d'arrivée de remorqueur au port et heure départ sur Cargo (Heure souhaitée arrivée et heure départ à compléter via OM remorquage ou via  l'interface de description de mission) </h4> </span> 
       @endif
        @if($Action->Mission->type_Mission==26) {{--Ecsorte intern. fournie par MI--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date décollage d'avion</h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date décollage d'avion (à compléter via OM Ambulance)</h4> </span> 
       @endif
        @if($Action->Mission->type_Mission==27) {{--Rapatriement véhicule avec chauffeur accompagnateur--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d'arrivée au port</h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d'arrivée au port (Date RDV à compléter via OM remorquage)</h4> </span> 
       @endif
        @if($Action->Mission->type_Mission==12) {{--Dédouanement de pièces--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date rdv prévu </h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date rdv prévu (à compléter via l'interface de description de mission)</h4> </span> 
       @endif
        @if($Action->Mission->type_Mission==11) {{--consultation médicale--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure du rdv avec le médecin</h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure du RDV avec le médecin (à compléter via a  l'interface de description de mission)</h4> </span> 
       @endif
        @if($Action->Mission->type_Mission==16) {{--Devis transport international sous assistance--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure de décollage</h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure de décollage (à compléter via OM Ambulance et/ou PEC Devis Transport sous assistance)</h4> </span> 
       @endif
        @if($Action->Mission->type_Mission==18) {{--Demande d’evasan internationale--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d’arrivee (heure atterrissage destination )</h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d’arrivée (heure atterrissage destination à compléter via OM ambulance )</h4> </span> 
       @endif
        @if($Action->Mission->type_Mission==19) {{--Demande d’evasan nationale--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d’arrivee (heure atterrissage destination )</h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d’arrivée (heure atterrissage destination (heure de décollage à déterminer via OM ambulance ou/et PEC Evasan Armée ))</h4> </span> 
       @endif
        @if($Action->Mission->type_Mission==22) {{--escorte de l étranger--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure arrivée du vol</h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure arrivée du vol (à insérer via OM Taxi)</h4> </span> 
       @endif
         @if($Action->Mission->type_Mission==32) {{--réservation hotel--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date fin séjour</h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date fin séjour (à insérer via PEC hôtel)</h4> </span> 
       @endif
       @if($Action->Mission->type_Mission==35) {{--organisation visite médicale--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date RDV</h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date RDV (à compléter via l'interface de description de mission )</h4> </span> 
       @endif
        @if($Action->Mission->type_Mission==39) {{--Expertise--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date RDV</h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date RDV (à compléter via PEC expertise)</h4> </span> 
       @endif
          @if($Action->Mission->type_Mission==43) {{--rapatriement de véhicule sur ferry--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue de départ du bâteau</h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue de départ du bâteau (date départ à compléter via OM remorquage 1ère partie)</h4> </span> 
       @endif
          @if($Action->Mission->type_Mission==45) {{--réparation véhicule--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date RDV</h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date RDV (à compléter via l'interface de description de mission )</h4> </span> 
       @endif
        @if($Action->Mission->type_Mission==43) {{--remorquage--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure départ pour mission et heure fin mission </h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure départ pour mission et heure fin mission (Date/Heure départ base et  Date/Heure dispo prévisible à compléter via OM remorquage (2ème partie))</h4> </span> 
       @endif 
        @if($Action->Mission->type_Mission==46) {{--location voiture--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date fin location  </h4> </span> 
+       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date fin location (à compléter via PEC location) </h4> </span> 
       @endif
       
      </div>
@@ -464,11 +445,14 @@ $(document).on('click','.kbstab',function(){
 
         <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalDelegMiss">Déléguer la mission courante</button>
 
+
         
   </div>
       
 
    </div>
+
+
 <!-- les div de délégation-->
 
           <style>
@@ -603,39 +587,16 @@ $('#DivDeleAction').hide();
    </div>
 
 
-
-
-
 </div>
 </div>
+
+<br> <br>
+    <div class="row">
+    
+        <button  type="button" style="float : right;" class="btn btn-info btn-lg" data-toggle="modal" data-target="#ModalWorkLies">Créer une sous mission</button>
+    </div>
 
 <div>
-<!--<input type=text list=browsers >
-<datalist id=browsers >
-   <option> Google
-   <option> IE9
-</datalist>-->
-
-<!--<select>
-  <optgroup label="Swedish Cars">
-    <option value="volvo">Volvo</option>
-    <option value="saab">Saab</option>
-  </optgroup>
-  <optgroup label="German Cars">
-    <option value="mercedes">Mercedes</option>
-    <option value="audi">Audi</option>
-  </optgroup>
-</select>-->
-
-
-<!--<table id="my-table-id" border=1>
- <tbody style="cursor:pointer">
-  <tr><td>row 1 col 1</td> <td>row 1 col 2</td>  <td>row 1 col 3</td></tr>
-  <tr><td>row 2 col 1</td> <td>row 2 col 2</td>  <td>row 2 col 3</td></tr>
-  <tr><td>row 3 col 1</td> <td>row 3 col 2</td>  <td>row 3 col 3</td></tr>
- </tbody>
-</table>-->
-
         
    
 
@@ -762,14 +723,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
                    
                         
             </table>
-            <!--<input type="button" id="tst" value="OK" onclick="fnselect()" />-->
-
-
-
-      
-
-
-
+          
 
           </p>
         </div>
@@ -793,19 +747,12 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
       });
 
 
-
-
-
       </script>
 
 
      {{--@include('emails.envoimailAction');--}}
 
 
-
-
-
-      
     </div>
   </div>
 
@@ -923,13 +870,6 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
       <label for="daterappel" style="display: inline-block;  text-align: left; width:200px;">Saisissez la date de report:</label>
       <input id="daterappel" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:95%;  text-align: right;" name="daterappel"/>
-      </div>
-
-      <div class="form-group">
-        
-
-     <!-- <label for="objetrappel" style="display: inline-block;  text-align: left; width:200px;">Saisissez l'objet de rappel :</label>
-      <input id="objetrappel" type="text" value="" class="form-control" style="width:95%;  text-align: right;" name="objetrappel"/>-->
       </div>
 
 
@@ -1348,6 +1288,155 @@ var hrefidAcheverA;
     </div>
 </div>
 
+<!--modal pour créer les missions liées-->
+<div id="ModalWorkLies" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+
+     <form  id="idFormCreationMissionLie" method="POST" action="#" style="padding-top:30px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Créer une sous mission </h4>
+      </div>
+      <div class="modal-body"><!-- début création mission liée-->
+
+                   
+                                      <div class="form-group">
+                                           {{ csrf_field() }}
+
+                                          <input id="idMissionMere" type="hidden" value="{{$Action->Mission->id}}" class="form-control" style="width:95%;  text-align: left;" name="idMissionMere"/> 
+
+                                        <div class="row">
+                                             <div class="col-md-3" style="padding-top:5px"> <label  style=" ;  text-align: left; width: 55px;">Extrait:</label></div>
+                                             <div class="col-md-9"><input id="titreml" type="text" class="form-control" style="width:95%;  text-align: left !important;" name="titreml"/></div>
+                                       </div>
+                                       <br>
+                                        <!-- input pour l'autocomplete type Mission -->
+                                          <div class="form-group">
+
+                                               <div class="row">
+                                                <div class="col-md-3" style="padding-top:5px">  <label for="typeactauto" style="display: inline-block;  text-align: left; width: 55px;">Type:</label></div>
+                                                <div class="col-md-9" style=" margin-left: -1px ; "> 
+                                           
+
+
+                                          <select id="typeMissLieauto" name="typeMissLieauto" class="form-control select2" style="width:95%; border: 1px solid #ccc; height: 32px">
+                                            <option value="">Sélectionner</option>
+                                         @foreach( $typesMissions as $c) 
+
+                                                <option value="{{$c->nom_type_Mission}}">{{$c->nom_type_Mission}} </option>
+
+                                         @endforeach
+
+
+                                         </select>
+
+
+                                                 <script> 
+                                                  $(document).ready(function(){
+
+                                                         $(document).on("change","#typeMissLieauto",function() {
+
+                                                if ($(this).val()=="Transports terrestres effectué par entité-sœur MMS" || $(this).val()=="Transport terrestre effectué par prestataire externe")
+                                                {
+                                                  //alert($(this).val());
+                                                  $("#idDateSpecifique").empty().append("<span style='color:red'> la date ci dessous indique la date de départ d'avion <span>");
+                                                }
+                                                else
+                                                {
+
+                                                  $("#idDateSpecifiqueml").empty();
+
+                                                };                                                  ;
+
+                                                });
+                                               
+                                                     $("#typeMissLieauto").select2();
+                                                                                                   
+                                                 });
+                                                 
+
+
+                                                  </script>
+
+                                             
+
+                                                </div>
+                                            </div>
+
+                                          </div>
+                                          <div class="form-group">
+                                           <div class="row"> 
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-9">
+                                            <div id="idDateSpecifiqueml"> </div>
+                                            </div>
+                                          </div>
+
+                                        </div>
+                                         <div class="form-group">
+                                            <?php  $da = (new \DateTime())->format('Y-m-d\TH:i');// $da= date('Y-m-d\TH:m'); ?>
+
+                                                <div class="row">
+                                                    <div class="col-md-3" style="padding-top:5px">  <label for="datedeb" style="display: inline-block;  text-align: left; width: 55px;">Date:</label></div>
+                                                    <div class="col-md-9"> <input id="datedebml" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:95%;  text-align: left;" name="datedebml"/></div>
+                                                </div>
+                                         </div>
+                                  
+                                        </br>
+                                       <div class="row">
+                                             <div class="col-md-3" style="padding-top:5px"> <label  style=" ;  text-align: left; width: 55px;">Commentaire:</label></div>
+                                             <div class="col-md-9"><textarea id="commentaireml" class="form-control" style="width:95%;  text-align: left !important;" name="commentaireml"></textarea></div>
+                                       </div>
+                                      </div>
+
+                                           
+
+
+                                      <div class="form-group">
+
+                                           <?php if(isset($dossier)) {  ?>
+                                          
+                                        
+                                          <input id="dossierIDml" type="hidden" class="form-control" value="{{$dossier->id}}" name="dossierIDml"/>
+                                          <input id="hreftopwindowml" type="hidden" class="form-control" value="" name="hreftopwindowml"/>
+                                            
+
+                                    
+
+                                          <?php } else {  ?>
+                                               <div class="row">
+
+                                               <div class="col-md-3" style="padding-top:5px">     <label for="typeact" style="display: inline-block;  text-align: right; width: 40px;">Réf dossier</label></div>
+                                                  <div class="col-md-9"> <input id="dossier" type="text" class="form-control" value="" name="dossier"/></div>
+                                               </div>
+
+                                           <?php } ?>
+
+                                      </div>
+                                       <!--<button  type="submit"  class="btn btn-success">Ajouter</button>-->
+                                        <br><br>
+                                       
+                                        <br><br><br>
+                                       <!-- <button  id="idFinAjoutMiss" type="button"  class="btn btn-danger">Fin ajout de missions</button>-->
+
+                                     <!-- <button id="add"  class="btn btn-primary">Ajax Add</button>-->
+                                 
+       
+      </div><!-- fin creation mission liée -->
+      <div class="modal-footer">
+       <button  id="idAjoutMissLie" type="button"  class="btn btn-success">Ajouter la mission</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+      </div>
+    </div>
+  </form>
+
+  </div>
+</div>
+
 
   
 
@@ -1413,7 +1502,84 @@ i++;
 });
 
 
+</script>
 
+ <script>
+
+  $("#idAjoutMissLie").click(function(e){ // On sélectionne le formulaire par son identifiant
+   // e.preventDefault(); // Le navigateur ne peut pas envoyer le formulaire
+     //alert('ok');
+
+     $("#idAjoutMissLie").prop('disabled', true);
+
+     var en=true;
+
+     if(!$('#idFormCreationMissionLie #titreml').val())
+     {
+
+      alert('vous devez remplir le champs extrait');
+      en=false;
+
+     }
+
+     if(!$('#idFormCreationMissionLie #typeMissLieauto').val())
+     {
+
+      alert('vous devez sélectionner le type de mission');
+      en=false;
+
+     }
+
+  
+
+    if(!$('#idFormCreationMissionLie #dossierIDml').val())
+     {
+
+      alert('vous devez sélectionner un dossier pour créer une mission ou créer une mission à partir d\'un email');
+      en=false;
+
+     }
+     
+ 
+
+   if(en==true)
+   {
+    var donnees = $('#idFormCreationMissionLie').serialize(); // On crée une variable content le formulaire sérialisé
+    if(donnees)
+    {
+    alert(donnees);
+    }
+    var _token = $('input[name="_token"]').val();
+    $.ajax({
+
+           url:"{{ route('Mission.StoreMissionLieByAjax') }}",
+           method:"POST",
+           data : donnees,
+           success:function(data){
+
+         
+                alert(data);
+                 $('#idFormCreationMissionLie #typeMissLieauto').val('');
+                 //$('#idFormCreationMission #typeMissauto option:eq(1)').prop('selected', true);
+                //$('#idFormCreationMission #typeMissauto').text('Sélectionner');
+                $('#idFormCreationMissionLie #titreml').val('');
+                   
+
+                },
+            error: function(jqXHR, textStatus, errorThrown) {
+
+              alert('erreur lors de création de la mission');
+
+
+            }
+
+   
+    });
+  }
+
+   $("#idAjoutMissLie").prop('disabled', false);
+
+});
 
 </script>
 
