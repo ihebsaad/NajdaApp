@@ -68,8 +68,7 @@
     $signature=$parametres->signature ;
     $accuse1=$parametres->accuse1 ;
     $accuse2=$parametres->accuse2 ;
-    $dollar=$parametres->dollar ;
-    $euro=$parametres->euro ;
+
 
 
       use \App\Dossier;
@@ -200,12 +199,16 @@
                               $notifications=UsersController::countnotifsDossier($idd);
 
                             $complexite=$folder['complexite'];
+                            $statutdos=$folder['statut'];
                        $type=$folder['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
                        $ref=$folder['reference_medic'];$abn=$folder['subscriber_lastname'].' '.$folder['subscriber_name'];$idclient=$folder['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
 
                         <li  id="dossier-<?php echo $idd;?>"    style=";padding:10px 10px 10px 10px;color:white;margin-top:20px;<?php echo $style;?>" >
                             <a title="voir la fiche" href="{{action('DossiersController@fiche',$idd)}}"> <span style="color:grey;margin-top:25px" class="fa-li"><i style="color:grey" class="fa fa-folder-open"></i></span></a>
-                           <div class="row">
+                            <div class="row pull-right " style="width:70%">
+                            Affectation: <?php if($statutdos==5){echo 'Manuelle';}else{echo 'Automatique';}  ;?>
+                            </div>
+                            <div class="row">
 
                             <div class="col-md-4">
                                 <label style="font-size: 18px;"><a style="color:white;text-shadow: 1px 1px black" title="voir les détails du dossier" href="{{action('DossiersController@view',$idd)}}"><?php echo $ref;?></a></label>
@@ -222,7 +225,6 @@
                                <div class="col-md-4"  style=" ">
                                    Missions: <?php echo $missions;?><br>
                                    Actions: <?php echo $actions;?>
-
                                </div>
 
 

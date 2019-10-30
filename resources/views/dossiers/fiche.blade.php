@@ -53,6 +53,10 @@ use  \App\Http\Controllers\DocsController;
          <?php   } ?>
 
      </div>
+
+    <?php $statut=$dossier->current_status;
+    if($statut!='Cloture') {
+?>
     <div class="col-md-6" style="text-align: right;padding-right: 35px">
         <div class="page-toolbar">
 
@@ -127,6 +131,8 @@ use  \App\Http\Controllers\DocsController;
     </div>
     </div>
 
+    <?php } ?>
+
 </div>
     <section class="content form_layouts">
 
@@ -169,8 +175,6 @@ use  \App\Http\Controllers\DocsController;
                                     </div>
                                 </div>
 
-
-
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="complexite"> Complexité</label>
@@ -182,7 +186,6 @@ use  \App\Http\Controllers\DocsController;
                                     </div>
                                 </div>
                             </div>
-
 
                             <div class="row form">
                                 <div class="col-md-12">
@@ -254,11 +257,7 @@ use  \App\Http\Controllers\DocsController;
 
                                                             </div>
 
-
-
                                                         </div>
-
-
 
                                                         <div class="form-group row ">
                                                             <h4>Documents à signer</h4>
@@ -324,7 +323,7 @@ use  \App\Http\Controllers\DocsController;
                                                                     </label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="text" id="montant_franchise" name="montant_franchise" class="form-control" style="width: 100px;" placeholder="Montant"   value="{{ $dossier->montant_franchise }}" >
+                                                                        <input onchange="changing(this)"  type="number" id="montant_franchise" name="montant_franchise" class="form-control" style="width: 100px;" placeholder="Montant"   value="{{ $dossier->montant_franchise }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -335,7 +334,7 @@ use  \App\Http\Controllers\DocsController;
                                                                     </label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="text" id="plafond" name="plafond" class="form-control" style="width: 100px;" placeholder="Plafond"   value="{{ $dossier->plafond }}" >
+                                                                        <input onchange="changing(this)"  type="number" id="plafond" name="plafond" class="form-control" style="width: 100px;" placeholder="Plafond"   value="{{ $dossier->plafond }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -941,13 +940,13 @@ use  \App\Http\Controllers\DocsController;
                                                                     </div>
                                         -->
                                                                     <div class="input-group-control">
-                                                                        <select onchange="changing(this);ajout_prest(this);"  type="text" id="medecin_traitant" name="medecin_traitant" class="form-control"   value="{{ $dossier->medecin_traitant }}">
+                                                                        <select onchange="changing(this);ajout_prest(this);"  id="medecin_traitant" name="medecin_traitant" class="form-control"   value="{{ $dossier->medecin_traitant }}">
 
                                                                             <option></option>
                                                                             <?php
 
                                                                             foreach($traitants as $tr)
-                                                                            { if ($dossier->medecin_traitant == PrestatairesController::ChampById('name',$tr->prestataire_id)){ $selected='selected="selected"'; }else{ $selected=''; }
+                                                                            { if (trim($dossier->medecin_traitant) == trim(PrestatairesController::ChampById('name',$tr->prestataire_id))){ $selected='selected="selected"'; }else{ $selected=''; }
                                                                                 if (PrestatairesController::ChampById('name',$tr->prestataire_id)!='') {echo '<option title="'.$tr->prestataire_id.'" '.$selected.' value="'. PrestatairesController::ChampById('name',$tr->prestataire_id).'">'. PrestatairesController::ChampById('name',$tr->prestataire_id).' Fixe: '. PrestatairesController::ChampById('phone_home',$tr->prestataire_id) .' Tel: '.PrestatairesController::ChampById('phone_cell',$tr->prestataire_id) .'</option>';}
                                                                             }
 
@@ -1008,7 +1007,7 @@ use  \App\Http\Controllers\DocsController;
                                                                     <label for="inputError" class="control-label"><label id="derniere03">Dernière</label> structure d’hospitalisation  </label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)" type="text" id="empalcement_medic3" name="medecin_traitant2" class="form-control" value="{{ $dossier->empalcement_medic3 }}" >
+                                                                        <input onchange="changing(this)" type="text" id="empalcement_medic3" name="empalcement_medic3" class="form-control" value="{{ $dossier->empalcement_medic3 }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1238,20 +1237,25 @@ use  \App\Http\Controllers\DocsController;
 
                                                     </div>
 
-                                                    <div class="row">
-                                                        <div class="col-md-4">
+
+
+
+
+                                                    <div class="row"   id="adresse003"  <?php if ($dossier->empalcement3 =='') {echo 'style="display:none;"';}  ?>  >
+                                                        <div class="col-md-5">
                                                             <div class="form-group">
-                                                                <label for="inputError" class="control-label">Dernière adresse d'immobilisation </label>
+                                                                <label for="inputError" class="control-label"><label id="derniere003">Dernière</label> adresse d'immobilisation  </label>
 
                                                                 <div class="input-group-control">
 
-                                                                    <select onchange="changing(this);ajout_prest(this);"  type="text" id="lieu_immobilisation" name="medecin_traitant" class="form-control"   value="{{ $dossier->lieu_immobilisation }}">
+
+                                                                    <select onchange="changing(this);ajout_prest(this);"  type="text" id="empalcement3" name="empalcement3" class="form-control"   value="{{ $dossier->empalcement_medic3 }}">
 
                                                                         <option></option>
                                                                         <?php
 
                                                                         foreach($garages as $gr)
-                                                                        { if ($dossier->lieu_immobilisation == PrestatairesController::ChampById('name',$gr->prestataire_id)){ $selected='selected="selected"'; }else{ $selected=''; }
+                                                                        { if ($dossier->empalcement3 == PrestatairesController::ChampById('name',$gr->prestataire_id)){ $selected='selected="selected"'; }else{ $selected=''; }
                                                                             if (PrestatairesController::ChampById('name',$gr->prestataire_id)!='') {echo '<option  title="'.$gr->prestataire_id.'"  '.$selected.' value="'. PrestatairesController::ChampById('name',$gr->prestataire_id).'">'. PrestatairesController::ChampById('name',$gr->prestataire_id).'</option>';}
                                                                         }
                                                                         ?>
@@ -1259,21 +1263,141 @@ use  \App\Http\Controllers\DocsController;
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label for="inputError" class="control-label">Autre  </label>
+                                                                <label for="inputError" class="control-label">De (Date)</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input onchange="changing(this)"  type="text" id="vehicule_address2" name="vehicule_address2" class="form-control"   value="{{ $dossier->vehicule_address2 }}">
+                                                                    <input   type="text" id="date_debut_emp3"  name='date_debut_emp3' class="form-control datepicker-default" data-format="dd-MM-yyyy hh:mm:ss"  value="{{ $dossier->date_debut_emp3 }}">
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">A (Date)</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input   type="text" id="date_fin_emp3"  name="date_fin_emp3"   class="form-control datepicker-default"   value="{{ $dossier->date_fin_emp3 }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-1" style="padding-top:30px">
+                                                            <span title="cacher l'adresse" style="margin-top:20px;width:20px" class=" btn-md" id="0btn004moins"><i class="fa  fa-minus"></i></span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" id="adresse002"  <?php if ($dossier->empalcement2 =='') {echo 'style="display:none;"';}  ?> >
+                                                        <div class="col-md-5">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label"><label id="derniere002">Dernière</label> adresse d'immobilisation </label>
+                                                                <select onchange="changing(this);ajout_prest(this);"  id="empalcement2" name="empalcement2" class="form-control"   value="{{ $dossier->empalcement2 }}">
+
+                                                                    <option></option>
+                                                                    <?php
+
+                                                                    foreach($garages as $gr)
+                                                                    { if ($dossier->empalcement2 == PrestatairesController::ChampById('name',$gr->prestataire_id)){ $selected='selected="selected"'; }else{ $selected=''; }
+                                                                        if (PrestatairesController::ChampById('name',$gr->prestataire_id)!='') {echo '<option  title="'.$gr->prestataire_id.'"  '.$selected.' value="'. PrestatairesController::ChampById('name',$gr->prestataire_id).'">'. PrestatairesController::ChampById('name',$gr->prestataire_id).'</option>';}
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">De (Date)</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input   type="text" id="date_debut_emp2"  name="date_debut_emp2" class="form-control datepicker-default"    value="{{ $dossier->date_debut_emp2 }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">A (Date)</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input   type="text" id="date_fin_emp2"  name="date_debut_emp2" class="form-control datepicker-default"   value="{{ $dossier->date_fin_emp2 }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1" style="padding-top:30px">
+                                                            <span title="Afficher une autre adresse" style="margin-top:20px;width:20px" class=" btn-md" id="0btn004plus"><i class="fa fa-plus"></i></span>
+                                                            <span title="cacher l'adresse" style="margin-top:20px;width:20px" class=" btn-md" id="0btn003moins"><i class="fa   fa-minus"></i></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row" id="adresse001">
+                                                        <div class="col-md-5">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label"><label id="derniere001">Dernière </label> adresse d'immobilisation  </label>
+
+                                                                <div class="input-group-control">
+                                                                    <select onchange="changing(this);ajout_prest(this);"    id="empalcement" name="empalcement" class="form-control"   value="{{ $dossier->empalcement }}">
+
+                                                                        <option></option>
+                                                                        <?php
+
+                                                                        foreach($garages as $gr)
+                                                                        { if ($dossier->empalcement == PrestatairesController::ChampById('name',$gr->prestataire_id)){ $selected='selected="selected"'; }else{ $selected=''; }
+                                                                            if (PrestatairesController::ChampById('name',$gr->prestataire_id)!='') {echo '<option  title="'.$gr->prestataire_id.'"  '.$selected.' value="'. PrestatairesController::ChampById('name',$gr->prestataire_id).'">'. PrestatairesController::ChampById('name',$gr->prestataire_id).'</option>';}
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">De (Date)</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input   type="text" id="date_debut_emp" name="date_debut_emp"  class="form-control datepicker-default"     value="{{ $dossier->date_debut_emp }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">A (Date)</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input   type="text" id="date_fin_emp" name="date_fin_emp"   class="form-control datepicker-default"    value="{{ $dossier->date_fin_emp }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1" style="padding-top:30px">
+                                                            <div class="col-md-1" style="padding-top:30px">
+                                                                <span title="Afficher une autre adresse" style="margin-top:20px;width:20px" class=" btn-md" id="0btn003plus"><i class="fa   fa-plus"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">Autre adresse  </label>
+
+                                                                <div class="input-group-control">
+
+                                                                    <div class="input-group-control">
+                                                                        <input    type="text" id="vehicule_address2" name="vehicule_address2" class="form-control"   value="<?php echo $dossier->vehicule_address2 ; ?>"  >
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label for="inputError" class="control-label"> Ville / localité</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input onchange="changing(this)" type="text" id="vehicule_address" name="vehicule_address" class="form-control"   value="{{ $dossier->vehicule_address }}" >
+                                                                    <input   type="text" id="vehicule_address" name="vehicule_address" class="form-control"   value="<?php echo $dossier->vehicule_address ; ?>"  >
                                                                 </div>
                                                                 <script>
                                                                     var placesAutocomplete = places({
@@ -1282,6 +1406,25 @@ use  \App\Http\Controllers\DocsController;
                                                                         container: document.querySelector('#vehicule_address')
                                                                     });
                                                                 </script>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">De (Date)</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input   type="text" id="date_debut_vehicule_address" name="date_debut_vehicule_address"  class="form-control datepicker-default"     value="<?php echo $dossier->date_debut_vehicule_address ; ?>"  >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="inputError" class="control-label">A (Date)</label>
+
+                                                                <div class="input-group-control">
+                                                                    <input   type="text" id="date_fin_vehicule_address" name="date_fin_vehicule_address"   class="form-control datepicker-default"  value="<?php echo $dossier->date_fin_vehicule_address ; ?>"  >
+                                                                </div>
                                                             </div>
                                                         </div>
 
@@ -1717,7 +1860,8 @@ $iduser=$CurrentUser->id;
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 <button type="submit" id="attribdoss" class="btn btn-primary">Affecter</button>
             </div>
-                        </form>
+
+          </form>
         </div>
     </div>
 </div>
@@ -2786,6 +2930,72 @@ function disabling(elm) {
             }
 
         });
+
+        ////
+
+
+        $('#0btn003plus').click(function() {
+
+            var   div=document.getElementById('adresse002');
+            if(div.style.display==='none')
+            {div.style.display='block';
+                document.getElementById('derniere001').style.display='none';
+                document.getElementById('derniere003').style.display='none';
+                document.getElementById('derniere002').style.display='inline';
+            }
+            /* else
+             {div.style.display='none';     }*/
+
+
+        });
+
+
+        $('#0btn004plus').click(function() {
+
+            var   div=document.getElementById('adresse003');
+            if(div.style.display==='none')
+            {div.style.display='block';
+                document.getElementById('derniere001').style.display='none';
+                document.getElementById('derniere002').style.display='none';
+                document.getElementById('derniere003').style.display='inline';
+            }
+            /*  else
+             {div.style.display='none';     }*/
+
+
+        });
+
+        $('#0btn003moins').click(function() {
+
+
+            document.getElementById('derniere001').style.display='inline';
+            document.getElementById('derniere002').style.display='none';
+            document.getElementById('derniere003').style.display='none';
+            document.getElementById('adresse002').style.display='none';
+            document.getElementById('adresse003').style.display='none';
+            /*    else
+             {div.style.display='none';     }*/
+
+
+        });
+
+
+        $('#0btn004moins').click(function() {
+
+            var   div=document.getElementById('adresse003');
+            if(div.style.display==='block')
+            {div.style.display='none';
+
+                document.getElementById('derniere001').style.display='none';
+                document.getElementById('derniere002').style.display='inline';
+                document.getElementById('derniere003').style.display='none';
+            }
+            /*     else
+             {div.style.display='none';     }*/
+
+
+        });
+
         //////
 
 

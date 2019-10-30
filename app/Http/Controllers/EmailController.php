@@ -368,6 +368,13 @@ class EmailController extends Controller
                      // $user->notify(new Notif_Suivi_Doss($entree));
                       Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
+                  }
+                  else{
+                      $seance =  DB::table('seance')
+                          ->where('id','=', 1 )->first();
+                      $disp=$seance->dispatcheur ;
+
+                      Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
                   }
                     // Activer le dossier
@@ -596,6 +603,14 @@ class EmailController extends Controller
 
                        // Notification::send($user, new Notif_Suivi_Doss($entree));
 
+
+                   }
+                   else{
+                       $seance =  DB::table('seance')
+                           ->where('id','=', 1 )->first();
+                       $disp=$seance->dispatcheur ;
+
+                       Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
                    }
                     // Activer le dossier
@@ -939,12 +954,21 @@ class EmailController extends Controller
                         $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
 
                         //  $user=  DB::table('users')->where('id','=', $userid )->first();
-                      if($userid)
+                      if($userid>0)
                       {
                             Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
 
                       }
+                      else{
+                          $seance =  DB::table('seance')
+                              ->where('id','=', 1 )->first();
+                          $disp=$seance->dispatcheur ;
+
+                          Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+                      }
+
                         // Activer le dossier
                         Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
 
@@ -1088,9 +1112,17 @@ class EmailController extends Controller
                     $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
-                    if ($userid) {
+                    if ($userid>0) {
 
                          Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+
+                    }
+                    else{
+                        $seance =  DB::table('seance')
+                            ->where('id','=', 1 )->first();
+                        $disp=$seance->dispatcheur ;
+
+                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
                     }
 
@@ -1266,7 +1298,7 @@ class EmailController extends Controller
             $mail10=app('App\Http\Controllers\ClientsController')->ClientChampById('mail10',$cl);
             if($mail10!='') { array_push($listeemails,$mail10);}
 
-            $gestion_mail1=app('App\Http\Controllers\ClientsController')->ClientChampById('gestion_mail1',$cl);
+           /* $gestion_mail1=app('App\Http\Controllers\ClientsController')->ClientChampById('gestion_mail1',$cl);
             if($gestion_mail1!='') { array_push($listeemails,$gestion_mail1);}
 
             $gestion_mail2=app('App\Http\Controllers\ClientsController')->ClientChampById('gestion_mail2',$cl);
@@ -1283,7 +1315,7 @@ class EmailController extends Controller
 
             $reseau_mail2=app('App\Http\Controllers\ClientsController')->ClientChampById('reseau_mail2',$cl);
             if($reseau_mail2!='') { array_push($listeemails,$reseau_mail2);}
-
+*/
 
 
             $emails =   Adresse::where('nature', 'email')

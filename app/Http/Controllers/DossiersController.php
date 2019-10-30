@@ -322,8 +322,6 @@ class DossiersController extends Controller
 
         }
 
-
-
         ///   if ($this->CheckRefExiste($reference_medic) === 0) {
         $dossier = new Dossier([
             'type_dossier' => $request->get('type_dossier'),
@@ -337,7 +335,6 @@ class DossiersController extends Controller
 
         if ($dossier->save())
         { $iddoss=$dossier->id;
-
 
             $user = auth()->user();
             $nomuser=$user->name.' '.$user->name;
@@ -545,8 +542,11 @@ class DossiersController extends Controller
     {
         $id= $request->get('dossierid');
         $agent= $request->get('agent');
+        $stat = $request->get('statut');
+        if(trim($stat)=='inactif'){$statut='inactif';}else{$statut='actif';}
 
-        Dossier::where('id', $id)->update(array('affecte' => $agent));
+        // statut= 5 => dossier affecté manuellement
+        Dossier::where('id', $id)->update(array('affecte' => $agent,'statut'=>5 ,'current_status'=>$statut));
 
         $ref=$this->RefDossierById($id);
 
@@ -1550,14 +1550,13 @@ class DossiersController extends Controller
 
         }
 
-
     }
 
 
     public static function InactiverDossiers()
     {
 
-        $dtc = (new \DateTime())->modify('-3 days')->format('Y-m-d\TH:i');
+        $dtc = (new \DateTime())->modify('-2 days')->format('Y-m-d\TH:i');
 
         $dossiers=Dossier::where('current_status','actif')
              ->where('updated_at','<=', $dtc)
@@ -1567,7 +1566,7 @@ class DossiersController extends Controller
         foreach($dossiers as $d)
         {
             Dossier::where('id',$d->id)
-                ->update(array('current_status'=>'actif'));
+                ->update(array('current_status'=>'inactif'));
 
         }
 

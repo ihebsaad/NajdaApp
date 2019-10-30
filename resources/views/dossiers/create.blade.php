@@ -33,7 +33,7 @@ use  \App\Http\Controllers\DocsController;
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Type de dossier</label>
-                            <select  onchange="hidediv() "  id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
+                            <select required  onchange="hidediv() "  id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
                                 <option   value="Mixte">Mixte</option>
                                 <option  value="Medical">Medical</option>
                                 <option  value="Technique">Technique</option>
@@ -43,7 +43,7 @@ use  \App\Http\Controllers\DocsController;
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Affecté à </label>
-                            <select id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single"  >
+                            <select required id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single"  >
                                 <option  value="Najda">Najda</option>
                                 <option  value="VAT">VAT</option>
                                 <option  value="MEDIC">MEDIC</option>
@@ -96,7 +96,7 @@ use  \App\Http\Controllers\DocsController;
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Client </label>
-                                                            <select  id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"    >
+                                                            <select required id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"    >
                                                                 <option value="0">Sélectionner..... </option>
 
                                                                 @foreach($clients as $cl  )
@@ -112,7 +112,7 @@ use  \App\Http\Controllers\DocsController;
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Référence du Client </label>
-                                                            <input onchange="checkexiste();"  type="text" id="reference_customer" name="reference_customer" class="form-control"   >
+                                                            <input required onchange="checkexiste();"  type="text" id="reference_customer" name="reference_customer" class="form-control"   >
 
                                                         </div>
                                                     </div>
@@ -141,7 +141,7 @@ use  \App\Http\Controllers\DocsController;
                                                                 </label>
 
                                                                 <div class="input-group-control">
-                                                                    <input    type="text" id="montant_franchise" name="montant_franchise" class="form-control" style="width: 100px;" placeholder="Montant"     >
+                                                                    <input    type="number" id="montant_franchise" name="montant_franchise" class="form-control" style="width: 100px;" placeholder="Montant"     >
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -152,7 +152,7 @@ use  \App\Http\Controllers\DocsController;
                                                                 </label>
 
                                                                 <div class="input-group-control">
-                                                                    <input    type="text" id="plafond" name="plafond" class="form-control" style="width: 100px;" placeholder="Plafond"    >
+                                                                    <input    type="number" id="plafond" name="plafond" class="form-control" style="width: 100px;" placeholder="Plafond"    >
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -542,7 +542,7 @@ use  \App\Http\Controllers\DocsController;
                                                         <label for="inputError" class="control-label">Tel Autre Médecin Traitant</label>
 
                                                         <div class="input-group-control">
-                                                            <input   type="text" id="hospital_phone2" name="hospital_phone2" class="form-control"    >
+                                                            <input   type="number" id="hospital_phone2" name="hospital_phone2" class="form-control"    >
                                                         </div>
                                                     </div>
                                                 </div>
@@ -748,14 +748,16 @@ use  \App\Http\Controllers\DocsController;
 
                                             </div>
 
-                                            <div class="row">
-                                                <div class="col-md-4">
+
+
+                                            <div class="row"   id="adresse003"  style="display:none;" >
+                                                <div class="col-md-5">
                                                     <div class="form-group">
-                                                        <label for="inputError" class="control-label">Dernière adresse d'immobilisation </label>
+                                                        <label for="inputError" class="control-label"><label id="derniere003">Dernière</label> adresse d'immobilisation  </label>
 
                                                         <div class="input-group-control">
 
-                                                            <select onchange="changing(this);ajout_prest(this);"  type="text" id="lieu_immobilisation" name="lieu_immobilisation" class="form-control"   >
+                                                            <select   type="text" id="empalcement3" name="empalcement3" class="form-control"   >
 
                                                                 <option></option>
                                                                 <?php
@@ -769,15 +771,137 @@ use  \App\Http\Controllers\DocsController;
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label for="inputError" class="control-label">Autre  </label>
+                                                        <label for="inputError" class="control-label">De (Date)</label>
 
                                                         <div class="input-group-control">
-                                                            <input    type="text" id="vehicule_address2" name="vehicule_address2" class="form-control"   >
+                                                            <input   type="text" id="date_debut_emp3"  name='date_debut_emp3' class="form-control datepicker-default" data-format="dd-MM-yyyy hh:mm:ss"   >
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="inputError" class="control-label">A (Date)</label>
+
+                                                        <div class="input-group-control">
+                                                            <input   type="text" id="date_fin_emp3"  name="date_fin_emp3"   class="form-control datepicker-default"   >
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-1" style="padding-top:30px">
+                                                    <span title="cacher l'adresse" style="margin-top:20px;width:20px" class=" btn-md" id="0btn004moins"><i class="fa  fa-minus"></i></span>
+
+                                                </div>
+                                            </div>
+                                            <div class="row" id="adresse002"  style="display:none;"  >
+                                                <div class="col-md-5">
+                                                    <div class="form-group">
+                                                        <label for="inputError" class="control-label"><label id="derniere002">Dernière</label> adresse d'immobilisation </label>
+
+                                                        <select    type="text" id="empalcement2" name="empalcement2" class="form-control"   >
+
+                                                            <option></option>
+                                                            <?php
+
+                                                            foreach($garages as $gr)
+                                                            {
+                                                                if (PrestatairesController::ChampById('name',$gr->prestataire_id)!='') {echo '<option  title="'.$gr->prestataire_id.'"   value="'. PrestatairesController::ChampById('name',$gr->prestataire_id).'">'. PrestatairesController::ChampById('name',$gr->prestataire_id).'</option>';}
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="inputError" class="control-label">De (Date)</label>
+
+                                                        <div class="input-group-control">
+                                                            <input   type="text" id="date_debut_emp2"  name="date_debut_emp2" class="form-control datepicker-default"    >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="inputError" class="control-label">A (Date)</label>
+
+                                                        <div class="input-group-control">
+                                                            <input   type="text" id="date_fin_emp2"  name="date_fin_emp2" class="form-control datepicker-default"    >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-1" style="padding-top:30px">
+                                                    <span title="Afficher une autre adresse" style="margin-top:20px;width:20px" class=" btn-md" id="0btn004plus"><i class="fa fa-plus"></i></span>
+                                                    <span title="cacher l'adresse" style="margin-top:20px;width:20px" class=" btn-md" id="0btn003moins"><i class="fa   fa-minus"></i></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" id="adresse001">
+                                                <div class="col-md-5">
+                                                    <div class="form-group">
+                                                        <label for="inputError" class="control-label"><label id="derniere001">Dernière </label> adresse d'immobilisation  </label>
+
+                                                        <div class="input-group-control">
+
+                                                            <select    type="text" id="empalcement" name="empalcement" class="form-control"   >
+
+                                                                <option></option>
+                                                                <?php
+
+                                                                foreach($garages as $gr)
+                                                                {
+                                                                    if (PrestatairesController::ChampById('name',$gr->prestataire_id)!='') {echo '<option  title="'.$gr->prestataire_id.'"   value="'. PrestatairesController::ChampById('name',$gr->prestataire_id).'">'. PrestatairesController::ChampById('name',$gr->prestataire_id).'</option>';}
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="inputError" class="control-label">De (Date)</label>
+
+                                                        <div class="input-group-control">
+                                                            <input   type="text" id="date_debut_emp" name="date_debut_emp"  class="form-control datepicker-default"     >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="inputError" class="control-label">A (Date)</label>
+
+                                                        <div class="input-group-control">
+                                                            <input   type="text" id="date_fin_emp" name="date_fin_emp"   class="form-control datepicker-default"    >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-1" style="padding-top:30px">
+                                                    <div class="col-md-1" style="padding-top:30px">
+                                                        <span title="Afficher une autre adresse" style="margin-top:20px;width:20px" class=" btn-md" id="0btn003plus"><i class="fa   fa-plus"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="inputError" class="control-label">Autre adresse  </label>
+
+                                                        <div class="input-group-control">
+
+                                                            <div class="input-group-control">
+                                                                <input    type="text" id="vehicule_address2" name="vehicule_address2" class="form-control"   >
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
                                                 <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label for="inputError" class="control-label"> Ville / localité</label>
@@ -792,6 +916,25 @@ use  \App\Http\Controllers\DocsController;
                                                                 container: document.querySelector('#vehicule_address')
                                                             });
                                                         </script>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label for="inputError" class="control-label">De (Date)</label>
+
+                                                        <div class="input-group-control">
+                                                            <input   type="text" id="date_debut_vehicule_address" name="date_debut_vehicule_address"  class="form-control datepicker-default"     >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label for="inputError" class="control-label">A (Date)</label>
+
+                                                        <div class="input-group-control">
+                                                            <input   type="text" id="date_fin_vehicule_address" name="date_fin_vehicule_address"   class="form-control datepicker-default"    >
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -884,7 +1027,7 @@ use  \App\Http\Controllers\DocsController;
                                                         <label for="inputError" class="control-label">A (Date)</label>
 
                                                         <div class="input-group-control">
-                                                            <input   type="text" id="date_fin_trans2"  class="form-control datepicker-default"  style="padding:6px 3px 6px 3px!important;"   >
+                                                            <input   type="text" id="date_fin_trans2"  name="date_fin_trans2"  class="form-control datepicker-default"  style="padding:6px 3px 6px 3px!important;"   >
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1265,7 +1408,68 @@ use  \App\Http\Controllers\DocsController;
         });
 ///////
 
+        $('#0btn003plus').click(function() {
 
+            var   div=document.getElementById('adresse002');
+            if(div.style.display==='none')
+            {div.style.display='block';
+                document.getElementById('derniere001').style.display='none';
+                document.getElementById('derniere003').style.display='none';
+                document.getElementById('derniere002').style.display='inline';
+            }
+            /* else
+             {div.style.display='none';     }*/
+
+
+        });
+
+
+        $('#0btn004plus').click(function() {
+
+            var   div=document.getElementById('adresse003');
+            if(div.style.display==='none')
+            {div.style.display='block';
+                document.getElementById('derniere001').style.display='none';
+                document.getElementById('derniere002').style.display='none';
+                document.getElementById('derniere003').style.display='inline';
+            }
+            /*  else
+             {div.style.display='none';     }*/
+
+
+        });
+
+        $('#0btn003moins').click(function() {
+
+
+            document.getElementById('derniere001').style.display='inline';
+            document.getElementById('derniere002').style.display='none';
+            document.getElementById('derniere003').style.display='none';
+            document.getElementById('adresse002').style.display='none';
+            document.getElementById('adresse003').style.display='none';
+            /*    else
+             {div.style.display='none';     }*/
+
+
+        });
+
+
+        $('#0btn004moins').click(function() {
+
+            var   div=document.getElementById('adresse003');
+            if(div.style.display==='block')
+            {div.style.display='none';
+
+                document.getElementById('derniere001').style.display='none';
+                document.getElementById('derniere002').style.display='inline';
+                document.getElementById('derniere003').style.display='none';
+            }
+            /*     else
+             {div.style.display='none';     }*/
+
+
+        });
+////
 
         $('#btn003plus').click(function() {
 

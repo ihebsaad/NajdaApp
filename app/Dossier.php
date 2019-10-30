@@ -110,8 +110,21 @@ class Dossier extends Model
         'type_trans2',
         'type_trans3',
         'entree',
-        'documents'
+        'documents',
 
+        'empalcement',
+        'empalcement2',
+        'empalcement3',
+        'date_debut_emp',
+        'date_debut_emp2',
+        'date_debut_emp3',
+        'date_fin_emp',
+        'date_fin_emp2',
+        'date_fin_emp3',
+        'date_debut_vehicule_address',
+        'date_fin_vehicule_address',
+
+        'plafond'
     ];
 
     protected $dateFormat = 'Y-m-d H:i:s';

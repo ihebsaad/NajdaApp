@@ -82,6 +82,36 @@
 
          </div>-->
 
+         <div class="row">
+
+
+             <div class="form-group  ">
+                 <label>Type de prestations</label>
+                 <div class="col-md-6">
+                     <select class="itemName form-control col-lg-6" style="" name="itemName"  multiple  id="typeprest">
+                         <option></option>
+                         <?php if ( count($relations) > 0 ) {?>
+
+                         @foreach($relations as $prest  )
+                             @foreach($typesprestations as $aKey)
+                                 <option  @if($prest->type_prestation_id==$aKey->id)selected="selected"@endif    onclick="createtypeprest('tpr<?php echo $aKey->id; ?>')"  value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
+                             @endforeach
+                         @endforeach
+
+                         <?php
+                         } else { ?>
+                         @foreach($typesprestations as $aKey)
+                             <option    onclick="createtypeprest('tpr<?php echo $aKey->id; ?>')"  value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
+                         @endforeach
+
+                         <?php }  ?>
+
+                     </select>
+
+                 </div>
+             </div>
+         </div>
+
          <div class="form-group ">
              <label>Spécialités</label>
              <div class="row">
@@ -118,72 +148,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Pririoté</label>
-                                <select onchange="changing(this)" id="ordre" name="ordre" class="form-control"   value="{{ $prestataire->ordre }}">
-                                    <option <?php if ($prestataire->ordre ==''){echo 'selected="selected"';} ?> value="0"></option>
-                                    <option  <?php if ($prestataire->ordre =='1'){echo 'selected="selected"';} ?>value="1">1</option>
-                                    <option  <?php if ($prestataire->ordre =='2'){echo 'selected="selected"';} ?>value="2">2</option>
-                                    <option  <?php if ($prestataire->ordre =='3'){echo 'selected="selected"';} ?> value="3">3</option>
 
-                                </select>
-                            </div>
-                        </div>
-                        <!--
-                        <style>.tags{font-size: 13px;}</style>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Type prestation *</label>
-                           <div class="row form-group">
-                           {{--    @foreach($relations as $prest  )
-                                   @foreach($typesprestations as $aKey  )
-                                         @if($prest->type_prestation_id==$aKey->id)
-                                           <?php echo '<span class="tags" id="type'.$aKey->id.'" >'.$aKey->name.' <a onclick="removeprest(this)" id="prest'.$aKey->id.'" href="javascript:"> <i class="fas fa-times-circle "></i> </a></span><br>' ; ?>
-                                       @endif
-                                   @endforeach
-                               @endforeach --}}
-                           </div>
-
-                                <select   id="typepres" name="typepres[]" multiple="multiple" class="form-control select2-offscreen" tabindex="-1" value={{ $prestataire->typepres }}>
-
-                                  {{--  @foreach($relations as $prest  )
-                                        @foreach($typesprestations as $aKey  )
-                                             <option   onclick="createtypeprest('tpr<?php echo $aKey->id; ?>')"  value="{{$aKey->id}}" @if($prest->type_prestation_id==$aKey->id)selected="selected"@endif     >{{$aKey->name}}</option>
-                                         @endforeach
-                                    @endforeach  --}}
-
-                                </select>
-                            </div>
-                        </div>
-                        -->
-                        <div class="form-group  ">
-                            <label>Type de prestations</label>
-                                 <div class="col-md-6">
-                                    <select class="itemName form-control col-lg-6" style="" name="itemName"  multiple  id="typeprest">
-                                        <option></option>
-                                        <?php if ( count($relations) > 0 ) {?>
-
-                                    @foreach($relations as $prest  )
-                                            @foreach($typesprestations as $aKey)
-                                                <option  @if($prest->type_prestation_id==$aKey->id)selected="selected"@endif    onclick="createtypeprest('tpr<?php echo $aKey->id; ?>')"  value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
-                                            @endforeach
-                                        @endforeach
-
-                                        <?php
-                                        } else { ?>
-                                        @foreach($typesprestations as $aKey)
-                                            <option    onclick="createtypeprest('tpr<?php echo $aKey->id; ?>')"  value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
-                                        @endforeach
-
-                                          <?php }  ?>
-
-                                    </select>
-
-                                </div>
-                        </div>
-                    </div>
 
 
                     <div class="row">
@@ -367,9 +332,10 @@
                         <thead>
                         <tr class="headtable">
                             <th style="width:20%">Nom</th>
-                            <th style="width:20%">Tel</th>
+                            <th style="width:10%">Tel</th>
                             <th style="width:20%">Remarque</th>
                             <th style="width:35%">Type</th>
+                            <th style="width:10%">Supprimer</th>
 
                         </tr>
 
@@ -378,10 +344,14 @@
                         @foreach($tels as $tel)
                             <tr>
                                 <td style="width:20%;"><?php echo $tel->nom.' '.$tel->prenom; ?></td>
-                                <td style="width:20%;"><?php echo $tel->champ; ?></td>
+                                <td style="width:10%;"><?php echo $tel->champ; ?></td>
                                 <td style="width:20%;"><?php echo $tel->remarque; ?></td>
                                 <td style="width:35%;"><?php echo $tel->typetel.' '; if($tel->typetel=='Mobile') {?> <a onclick="setTel(this);" class="<?php echo $tel->champ;?>" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a><?php } ?>
-
+                                <td style="width:10%;">
+                                    <a  href="{{action('ClientsController@deleteaddress', $tel->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                        <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                                    </a>
+                                </td>
                             </tr>
                         @endforeach
 
@@ -405,6 +375,7 @@
                             <th style="width:20%">Email</th>
                              <th style="width:30%">Remarque</th>
                             <th style="width:10%">Contacter</th>
+                            <th style="width:10%">Supprimer</th>
                         </tr>
 
                         </thead>
@@ -413,8 +384,13 @@
                             <tr>
                                 <td style="width:20%;"><?php echo $email->nom.' '.$email->prenom; ?></td>
                                 <td style="width:20%;"><?php echo $email->champ; ?></td>
-                                 <td style="width:35%;"><?php echo $email->remarque; ?></td>
+                                 <td style="width:30%;"><?php echo $email->remarque; ?></td>
                                 <td style="width:10%;"><i class="fa fa-envelope"></i></td>
+                                <td style="width:10%;">
+                                    <a  href="{{action('ClientsController@deleteaddress', $email->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                        <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                                    </a>
+                                </td>
                             </tr>
                         @endforeach
 
@@ -438,6 +414,7 @@
                             <th style="width:20%">Fax</th>
                              <th style="width:30%">Remarque</th>
                             <th style="width:10%">Contacter</th>
+                            <th style="width:10%">Supprimer</th>
                         </tr>
 
                         </thead>
@@ -446,8 +423,13 @@
                             <tr>
                                 <td style="width:20%;"><?php echo $fax->nom.' '.$fax->prenom; ?></td>
                                 <td style="width:20%;"><?php echo $fax->champ; ?></td>
-                                 <td style="width:50%;"><?php echo $fax->remarque; ?></td>
+                                 <td style="width:30%;"><?php echo $fax->remarque; ?></td>
                                 <td style="width:10%;"><i class="fa fa-fax"></i></td>
+                                <td style="width:10%;">
+                                    <a  href="{{action('ClientsController@deleteaddress', $tel->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                        <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                                    </a>
+                                </td>
                             </tr>
                         @endforeach
 

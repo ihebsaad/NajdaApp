@@ -40,17 +40,20 @@ use  \App\Http\Controllers\EntreesController ;
         <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@fiche',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '.  DossiersController::FullnameAbnDossierById($dossier->id);?> </a></h4>
     </div>
     <div class="col-md-2">
-        <b>Statut</b>
-    <input type="hidden" id="dossier" value="<?php echo $dossier->id; ?>">
-        <select  onchange="changing(this);" id="current_status" class="form-control">
-            <option <?php if ($dossier->current_status =='actif'){echo 'selected="selected"';} ?>  value="actif">Actif</option>
-            <option <?php if ($dossier->current_status =='inactif'){echo 'selected="selected"';} ?>  value="inactif">Inactif</option>
-            <option <?php if ($dossier->current_status =='Cloture'){echo 'selected="selected"';} ?> value="Cloture">Clôturé</option>
-            <option <?php if ($dossier->current_status ==''){echo 'selected="selected"';} ?> ></option>
+        <b>Statut:</b>
+        <?php $statut=$dossier->current_status;
+        if ($statut =='actif' || $statut =='inactif' ){echo 'Ouvert';}
+        if($statut=='Cloture'){echo 'Clôturé';}
+        ?>
+
+        <input type="hidden" id="dossier" value="<?php echo $dossier->id; ?>">
+    <!--        <select    id="current_status" class="form-control">
+            <option <?php // if ($statut =='actif' || $dossier->current_status =='inactif' ){echo 'selected="selected"';} ?>  value="actif">Ouvert</option>
+            <option <?php // if ($statut=='Cloture'){echo 'selected="selected"';} ?> value="Cloture">Clôturé</option>
+            <option <?php // if ($statut ==''){echo 'selected="selected"';} ?> ></option>
 
         </select>
-
-    <?php $statut=$dossier->current_status;  ?>
+-->
     </div>
      <div class="col-md-2">
 
@@ -89,6 +92,7 @@ use  \App\Http\Controllers\EntreesController ;
     <div class="col-md-5" style="text-align: right;padding-right: 35px">
         <div class="page-toolbar">
 
+          <?php  if(! $statut=='Cloture'){ ?>
         <div class="btn-group">
             <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -142,11 +146,7 @@ use  \App\Http\Controllers\EntreesController ;
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-default" id="newcalldossier">
-                    <i class="fa fa-phone"></i>
-                    Tél
-
-                </button>
+                <button   type="button"   class="btn btn-default"   data-toggle="modal" data-target="#faireappel"><b><i class="fa fa-phone"></i>  Tél</b></button>
             </div>
 
             <div class="btn-group">
@@ -158,12 +158,14 @@ use  \App\Http\Controllers\EntreesController ;
             </div>
 
         </div>
-    </div>
-    </div>
+            <?php  } ?>
 
+        </div>
+    </div>
 
 </div>
-    <section class="content form_layouts">
+
+ <section class="content form_layouts">
 
 
         <div class="container-fluid">
@@ -424,12 +426,13 @@ use  \App\Http\Controllers\EntreesController ;
         ?>
 
         <tr>
-            <td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $id)}}" ><?php echo '<i>'.$prestataire->civilite .'</i> <b>'. $prestataire->name .'</b> '.$prestataire->prenom; ?></a></td>
+            <td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $id)}}" ><?php echo '<i>'.$prestataire->civilite .'</i> <b>'. $prestataire->name .'</b> '.$prestataire->prenom; ?></a>  </td>
             <td style="font-size:12px;width:20%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
             <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
             <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
             <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
-            <td style="font-size:13px;width:10%"> </td>
+            <td style="font-size:13px;width:10%">  <button onclick="init(<?php echo $id;?>)" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> Ajouter une prestation</button>
+            </td>
 
         </tr>
 
@@ -581,6 +584,7 @@ use  \App\Http\Controllers\EntreesController ;
                              <input type="hidden" id="par" value="<?php echo $iduser;?>">
                              <div class="row">
                                  <div class="col-md-4">
+
                                      <button style="display:none;margin-botom:10px;margin-top:20px" type="button" id="add2" class="btn btn-lg btn-primary"><i class="far fa-save"></i> Enregister la prestation</button>
                                  </div>
                                  <div class="col-md-4"  id="add2prest" style="display:none" >
@@ -2068,6 +2072,143 @@ reference_customer
     </div>
 
 
+    <div class="modal  " id="openmodalprest" >
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="text-align:center"  id=" "><center>Ajouter une Prestation </center> </h5>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+
+                        <div class="form-group ">
+                            <label for="selectedprest2">Prestataire :</label>
+                            <select style="width:350px;margin-top:10px;margin-bottom:10px;" disabled id="selectedprest2"  class="form-control   " value=" ">
+                                <option></option>
+                                @foreach($prestataires as $prest)
+                                    <option    value="<?php echo $prest->id;?>"> <?php echo $prest->name;?></option>
+                                @endforeach
+                            </select>
+
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emetteur">Date de Prestation :</label>
+                            <input style="width:200px;" value="<?php echo date('d/m/Y');?>" class="form-control datepicker-default  hasDatepicker" name="pres_date2" id="pres_date2" data-required="1" required="" aria-required="true">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sujet">Autorisé Par :</label>
+                            <select    >
+                                <option value="procedure">Procédure</option>
+                                <option value="nejib">Dr Nejib</option>
+                                <option value="salah">Dr Salah Harzallah</option>
+                            </select>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <a id="ajoutcompter"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--Modal Tel-->
+
+    <div class="modal fade" id="faireappel" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="tel">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Choisir le numéro</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+<?php use App\Intervenant;
+                        ;?>
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="faireappel" novalidate="novalidate">
+
+                                <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}">
+                                <div class="form-group " >
+                                    <label for="emaildoss">Numéro</label>
+                                    <div class=" row  ">
+
+                                        <select class="form-control select2" style="width: 230px"  id="numtel" name="numtel"
+                                        <option value="Select">Selectionner</option>
+                                        <?php
+                                        $tels =Intervenant::where('dossier',$dossier->id)->distinct()->get(['tel']);
+
+                                        $usedtid=array();
+                                        foreach ($tels as $tel) {
+                                        $usedtid[]=$tel['dossier'];
+                                        }
+                                        $inters = Intervenant::get();
+                                        $docwithcl = array();
+
+                                        ?>
+                                        @foreach ($inters as $inter)
+                                            @if (in_array($inter["dossier_id"],$usedtid))
+                                                <option value={{ $inter["tel"] }} >{{ $inter["tel"] }}</option>
+
+
+                                                @endif
+                                                @endforeach
+                                                </select>
+                            </form>
+
+                        </div>
+                    </div>
+
+                    </form>
+                </div>
+
+
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <a  type="button" class="btn btn-primary" href="phone" id="launchPhone">Appeler</a>
+            <script>
+                var url      = '/NajdaApp/vendor/ctxSip/phone/index.php',
+                    features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
+                var session=null;
+                $('#launchPhone').on('click', function(event) {
+                    event.preventDefault();
+
+                    // This is set when the phone is open and removed on close
+                    if (!localStorage.getItem('ctxPhone')) {
+                        window.open(url, 'ctxPhone', features);
+                        return false;
+                    } else {
+                        window.alert('Phone already open.');
+                    }
+                    alert(document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value);
+
+                });
+            </script>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+        </div>
+    </div>
+
+
+    </div>
+    </div>
+
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -3306,6 +3447,53 @@ $urlapp='http://localhost/najdaapp';
              }
         });
 
+        // ajout prestation depuis la recherche
+
+        $('#selectionnerprest').click(function(){
+
+
+            selected=   document.getElementById('selected').value;
+            document.getElementById('selectedprest2').value = document.getElementById('prestataire_id_'+selected).value ;
+
+
+            var prestataire = $('#selectedprest2').val();
+
+            var dossier_id = $('#dossier').val();
+
+            var typeprest = $('#typeprest2').val();
+            var gouvernorat = $('#gouvcouv2').val();
+            var specialite = $('#specialite2').val();
+            var date = $('#pres_date').val();
+
+            //   gouvcouv
+            if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
+            {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('prestations.saving') }}",
+                    method:"POST",
+                    data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
+                    success:function(data){
+                        var prestation=parseInt(data);
+                        /// window.location =data;
+
+                        document.getElementById('prestation').style.display='block';
+                        document.getElementById('valide').style.display='block';
+                        document.getElementById('idprestation').value =prestation;
+
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+
+
+                    }
+
+                });
+            }else{
+
+            }
+        });
+
+
         $('#add2-m').click(function(){
 
             selected=   document.getElementById('selected-m').value;
@@ -3984,7 +4172,12 @@ $("#showNext-m").click(function() {
     }
 
 
+    function init(elm)
+    {
 
+        document.getElementById('selectedprest2').selectedIndex =elm;
+
+    }
 
 </script>
 <style>.headtable{background-color: grey!important;color:white;}

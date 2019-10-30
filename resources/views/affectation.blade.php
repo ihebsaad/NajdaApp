@@ -102,13 +102,51 @@
 
               }
 
-              $dossiers=  Dossier::
-                  whereNull('affecte')
-                  ->orWhere('affecte',0)
+             $dossiers=    Dossier::where('current_status','actif')
+          ->where(function ($query) {
+               $query->whereNull('affecte')
+               ->orWhere('affecte', 0);
 
-                  ->get();
+              })->get();
 
- ?>
+              $Cdossiers=    Dossier::where('current_status','actif')
+                  ->where(function ($query) {
+                      $query->whereNull('affecte')
+                          ->orWhere('affecte', 0);
+
+                  })->count();
+
+           /*   $dossiers=    Dossier::where('current_status','like','actif')
+                 ->Where('affecte','<',1)->get();
+
+              $Cdossiers=   Dossier::where('current_status','like','actif')
+                  ->Where('affecte','<',1)->count();
+*/
+
+
+/*
+              $dossiersI=    Dossier::where('current_status','like','inactif')
+                  ->Where('affecte','<',1)->get();
+
+
+              $CdossiersI=    Dossier::where('current_status','like','inactif')
+                  ->Where('affecte','<',1)->count();
+*/
+              $dossiersI=    Dossier::where('current_status','inactif')
+                  ->where(function ($query) {
+                      $query->whereNull('affecte')
+                          ->orWhere('affecte', 0);
+
+                  })->get();
+
+              $CdossiersI=    Dossier::where('current_status','inactif')
+                  ->where(function ($query) {
+                      $query->whereNull('affecte')
+                          ->orWhere('affecte', 0);
+
+                  })->count();
+
+              ?>
 
   
   				                             <?php $c=0;
@@ -160,8 +198,26 @@
 			<div class="panel panel-danger col-md-5" style="padding:0 ;min-height: 800px ">
                     <div class="panel-heading">
                         <h4 class="panel-title">Dossiers Non Affectés</h4>
-         
+
                     </div>
+
+                <ul class="nav  nav-tabs" style="margin-top:10px;margin-bottom:10px">
+
+                    <li class="nav-item active">
+                        <a class="nav-link   active " href="#panelactifs" data-toggle="tab"  onclick="hideTab2();showTab1()"  >
+                            <i class="fa-lg fas fa-folder-open"></i>  Dossiers Actifs (<?php echo  $Cdossiers ;?>)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#panelainactifs" data-toggle="tab" onclick="hideTab1();showTab2()"  >
+                            <i class="fa-lg fas fa-folder"></i>  Dossiers Inactifs (<?php echo  $CdossiersI ;?>)
+                        </a>
+                    </li>
+                </ul>
+
+                <div id="panelactifs"   class="tab-pane fade  active in ">
+
+
                 <div class="row">
                     <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInput" onkeyup="Searchf()" placeholder="N° de Dossier.." title="Taper"></div>
                     <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInput2" onkeyup="Searchf2()" placeholder="Assuré.." title="Taper"></div>
@@ -178,7 +234,9 @@
  					<div id="drag-elements">
 
 			<?php  $type='';$style='';
-                        foreach($dossiers as $dossier)
+			if($Cdossiers >0)
+			 {
+             foreach($dossiers as $dossier)
 			{ $type=$dossier['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
 			$idd=$dossier['id'];
             $immatricul=$dossier['vehicule_immatriculation'];
@@ -193,6 +251,7 @@
 	        </div>
 
 	<?php	}
+                }
 
 		
 		?>
@@ -200,7 +259,57 @@
 
 
                   </div>
- 
+
+                </div><!--- Panel Inactifs --->
+
+
+                <div id="panelainactifs"  class="tab-pane fade " >
+
+                    <div class="row">
+                        <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInput" onkeyup="ISearchf()" placeholder="N° de Dossier.." title="Taper"></div>
+                        <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInput2" onkeyup="ISearchf2()" placeholder="Assuré.." title="Taper"></div>
+                        <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInput3" onkeyup="ISearchf3()" placeholder="Réf Client.." title="Taper"></div>
+                    </div>
+                    <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
+                        <div class="row" style="margin-bottom:15px;">
+                            <div class="col-md-3" style="cursor:pointer;color:#F39C12" onclick="IshowMixtes()"><i class="fa fa-lg fa-folder"></i>  <b  onclick="showMixtes()">Dossier Mixte</b></div>
+                            <div class="col-md-3" style="cursor:pointer;color:#52BE80" onclick="IshowMedic()" ><i class="fa fa-lg fa-folder"></i>  <b  onclick="showMedic()">Dossier Medical</b></div>
+                            <div class="col-md-4" style="cursor:pointer;color:#3498DB" onclick="IshowTech()" ><i class="fa fa-lg fa-folder"></i>  <b  onclick="showTech()">Dossier Technique</b></div>
+                            <div class="col-md-2" style="cursor:pointer;color:#000000;font-weight: 600" onclick="IshowTous()" >  <b  onclick="IshowTech()">TOUS</b></div>
+                        </div>
+
+                        <div id="drag-elements2">
+
+                            <?php  $type='';$style='';
+                            if($CdossiersI >0)
+                            {
+                            foreach($dossiersI as $dossierI)
+                            { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
+                            $idd=$dossierI['id'];
+                            $immatricul=$dossierI['vehicule_immatriculation'];
+                            $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
+                            <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" >
+                                <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <label style="font-size: 15px;"><?php echo $ref;?></label>
+                                <div class="infos">  <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
+                                    <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
+                                    <?php if($immatricul!='') { echo '<small style="font-size:10px">'. $immatricul .'</small>';} ?>
+
+                                </div>
+                            </div>
+
+                            <?php	}
+                            }
+
+
+                            ?>
+                        </div>
+
+
+                    </div>
+
+                </div><!--- Panel Actifs --->
+
+
             </div><!--panel 2-->
 			
 			
@@ -224,6 +333,20 @@
 
 
 <script>
+
+    function hideTab1() {
+        $('#panelactifs').css('display','none');
+    }
+    function hideTab2() {
+        $('#panelainactifs').css('display','none');
+    }
+
+    function showTab1() {
+        $('#panelactifs').css('display','block');
+    }
+    function showTab2() {
+        $('#panelainactifs').css('display','block');
+    }
 
 
     function   showMixtes  (){
@@ -349,6 +472,124 @@
         }
     }
 
+
+    /************     Inactifs   **************/
+
+
+    function   IshowMixtes  (){
+
+        var elements = document.getElementsByClassName('dossier');
+        for (var i = 0; i < elements.length; i++){
+            if (elements[i].parentElement.id =='drag-elements2')
+            {
+                elements[i].style.display = 'none';
+            }
+        }
+
+        var elements = document.getElementsByClassName('dossier-Mixte');
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.display = 'block';
+        }
+    }
+
+    function   IshowMedic  (){
+
+        var elements = document.getElementsByClassName('dossier');
+        for (var i = 0; i < elements.length; i++){
+            if (elements[i].parentElement.id =='drag-elements2')
+            {
+                elements[i].style.display = 'none';
+            }
+        }
+
+        var elements = document.getElementsByClassName('dossier-Medical');
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.display = 'block';
+        }
+    }
+
+    function   IshowTech  (){
+
+        var elements = document.getElementsByClassName('dossier');
+        for (var i = 0; i < elements.length; i++){
+            if (elements[i].parentElement.id =='drag-elements2')
+            {
+                elements[i].style.display = 'none';
+            }
+        }
+
+        var elements = document.getElementsByClassName('dossier-Technique');
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.display = 'block';
+        }
+    }
+
+    function   IshowTous  (){
+
+        var elements = document.getElementsByClassName('dossier');
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.display = 'block';
+        }
+
+
+    }
+
+
+    function ISearchf() {
+        var input, filter, ul, li, label, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("drag-elements2");
+        li = ul.getElementsByClassName("dossier");
+        for (i = 0; i < li.length; i++) {
+            label = li[i].getElementsByTagName("label")[0];
+            txtValue = label.textContent || label.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+
+
+        }
+    }
+    function ISearchf2() {
+        var input, filter, ul, li, label, i, txtValue;
+        input = document.getElementById("myInput2");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("drag-elements2");
+        li = ul.getElementsByClassName("dossier");
+        for (i = 0; i < li.length; i++) {
+            label = li[i].getElementsByTagName("small")[0];
+            txtValue = label.textContent || label.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+
+
+        }
+    }
+
+    function ISearchf3() {
+        var input, filter, ul, li, label, i, txtValue;
+        input = document.getElementById("myInput3");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("drag-elements2");
+        li = ul.getElementsByClassName("dossier");
+        for (i = 0; i < li.length; i++) {
+            label = li[i].getElementsByTagName("small")[1];
+            txtValue = label.textContent || label.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+
+
+        }
+    }
 </script>
 <script>
  function Delete(ID)
@@ -373,7 +614,8 @@
           }
 
          ?>
-         document.getElementById('drag-elements')
+         document.getElementById('drag-elements'),
+         document.getElementById('drag-elements2')
 
 
      ], {
@@ -381,11 +623,12 @@
      }).on('drop', function (el, target, source) {
           console.log('target: '+target.id);
           console.log(' element: '+el.id);
-          if(target.id=='drag-elements'){
+          if(target.id=='drag-elements' || target.id=='drag-elements2' ){
 
-              var dossdiv=el.id;
+              var dossdiv=el.id;var statut='actif';
 
               var dossier=dossdiv.slice( 8);
+              if(target.id=='drag-elements2'){statut='inactif';}
 
               console.log('DOSSIER : '+dossier);
               var _token = $('input[name="_token"]').val();
@@ -395,7 +638,7 @@
                   $.ajax({
                       url: "{{ route('dossiers.attribution') }}",
                       method: "POST",
-                      data: {  dossierid:dossier ,agent:null, _token: _token},
+                      data: {  dossierid:dossier ,statut:statut,agent:0, _token: _token},
                       success: function ( ) {
                           $('#dossier-'+dossier).animate({
                               opacity: '0.1',
@@ -482,6 +725,7 @@
     .userdiv .dossier label{font-size:18px;}
     .userdiv .dossier .infos{display:none;}
     #drag-elements .dossier .infos{display:block;}
+    #drag-elements2 .dossier .infos{display:block;}
 
     .help{color:skyblue;}
 .tooltip-inner{
@@ -519,7 +763,7 @@ width:300px;
 }
  
 
-#drag-elements {
+#drag-elements , #drag-elements2 {
   display: block;
  /* background-color: #dfdfdf;*/
  border:1px dashed #728D96;
@@ -530,7 +774,7 @@ width:300px;
 
 }
 
-#drag-elements > div {
+#drag-elements > div ,#drag-elements2 > div {
   text-align: center;
   float: left;
   padding: 1em;
@@ -541,14 +785,14 @@ width:300px;
    transition: all .5s ease;
 }
 
-#drag-elements > div:active {
+#drag-elements > div:active ,#drag-elements2 > div:active {
   -webkit-animation: wiggle 0.3s 0s infinite ease-in;
   animation: wiggle 0.3s 0s infinite ease-in;
   opacity: .6;
   border: 2px solid #000;
 }
 
-#drag-elements > div:hover {
+#drag-elements > div:hover ,#drag-elements2 > div:hover  {
   border: 2px solid gray;
   background-color: #e5e5e5;
 }

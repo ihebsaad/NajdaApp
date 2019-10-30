@@ -18,7 +18,7 @@
               <a href="{{ route('prestataires') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                <span class="fa fa-lg fa-fw fa-user-md"></span>
                <br>
-                    Les Prestataires
+                    Les Intervenants
               </a>
           </div>
 
@@ -133,14 +133,20 @@
     <?php
     $parametres =  DB::table('parametres')
         ->where('id','=', 1 )->first();
-    $dollar=$parametres->dollar ;
-    $euro=$parametres->euro ;
+    $dollarA=$parametres->dollar_achat ;
+    $dollarV=$parametres->dollar_vente ;
+    $euroA=$parametres->euro_achat ;
+    $euroV=$parametres->euro_vente ;
     ?>
-    <div class="col-md-2 btn bg-success  btn-md btn-responsive    " style="cursor:default;max-width:180px;margin-left:10px;margin-top:20px;margin-bottom:15px;"  >
-        <span style="color:white;font-size:15px; ">1 Dollar ($) = <?php echo $dollar; ?> <small>dt</small></span><br>
-        <span style="color:white;font-size:15px; ">1 Euro (€) =  <?php echo $euro; ?> <small>dt</small></span>
+    <div class="col-md-4 btn bg-success  btn-md btn-responsive    " style="cursor:default;max-width:230px;margin-left:10px;margin-top:20px;margin-bottom:15px;"  >
+        <span style="color:white;font-size:15px; ">1 Dollar ($) <small>Achat</small>  = <?php echo $dollarA; ?> <small>dt</small></span><br>
+        <span style="color:white;font-size:15px; ">1 Euro (€) <small>Achat</small> =  <?php echo $euroA; ?> <small>dt</small></span>
     </div>
 
+    <div class="col-md-4 btn bg-info  btn-md btn-responsive    " style="cursor:default;max-width:230px;margin-left:10px;margin-top:20px;margin-bottom:15px;"  >
+        <span style="color:white;font-size:15px; ">1 Dollar ($) <small>Vente</small>  = <?php echo $dollarV; ?> <small>dt</small></span><br>
+        <span style="color:white;font-size:15px; ">1 Euro (€) <small>Vente</small>  =  <?php echo $euroV; ?> <small>dt</small></span>
+    </div>
     </div>
 
 

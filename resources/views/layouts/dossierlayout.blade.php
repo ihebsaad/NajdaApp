@@ -9,7 +9,7 @@
 
 <div class="content row">
 
-         <div id="mainc" class="column col-lg-6">
+         <div id="mainc" class="column col-lg-7">
          @if ($errors->any())
              <div class="alert alert-danger">
                  <ul>
@@ -46,7 +46,7 @@
             <!-- /.content -->
         </div>
 
-<div class="right column col-lg-6">
+<div class="right column col-lg-5">
 @include('layouts.partials.rightdossier')
 </div></div><!---->
 @include('layouts.partials.footer')

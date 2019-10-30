@@ -431,6 +431,13 @@ class ClientsController extends Controller
     }
 
 
+    public static function deleteaddress( $id)
+    {
+        $adresse = Adresse::find($id);
+        $adresse->delete();
+        return back();
+
+    }
 
 
 

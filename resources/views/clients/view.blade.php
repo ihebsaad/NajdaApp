@@ -327,6 +327,7 @@
                                     <th style="width:20%">Type</th>
                                     <th style="width:30%">Remarque</th>
                                     <th style="width:10%">Contacter</th>
+                                    <th style="width:10%">Supprimer</th>
                                 </tr>
 
                                 </thead>
@@ -337,6 +338,11 @@
                                         <td style="width:20%;"><?php echo $tel->type; ?></td>
                                         <td style="width:50%;"><?php echo $tel->remarque; ?></td>
                                         <td style="width:10%;"><i class="fa fa-phone"></i></td>
+                                        <td style="width:10%;">
+                                            <a  href="{{action('ClientsController@deleteaddress', $tel->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                                <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
 
@@ -360,6 +366,8 @@
                                     <th style="width:20%">Type</th>
                                     <th style="width:30%">Remarque</th>
                                     <th style="width:10%">Contacter</th>
+                                    <th style="width:10%">Supprimer</th>
+
                                 </tr>
 
                                 </thead>
@@ -370,6 +378,11 @@
                                         <td style="width:20%;"><?php echo $email->type; ?></td>
                                         <td style="width:50%;"><?php echo $email->remarque; ?></td>
                                         <td style="width:10%;"><i class="fa fa-envelope"></i></td>
+                                        <td style="width:10%;">
+                                            <a  href="{{action('ClientsController@deleteaddress', $email->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                                <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
 
@@ -393,6 +406,7 @@
                                     <th style="width:20%">Type</th>
                                     <th style="width:50%">Remarque</th>
                                     <th style="width:10%">Contacter</th>
+                                    <th style="width:10%">Supprimer</th>
                                 </tr>
 
                                 </thead>
@@ -403,6 +417,11 @@
                                         <td style="width:20%;"><?php echo $fax->type; ?></td>
                                         <td style="width:50%;"><?php echo $fax->remarque; ?></td>
                                         <td style="width:10%;"><i class="fa fa-fax"></i></td>
+                                        <td style="width:10%;">
+                                            <a  href="{{action('ClientsController@deleteaddress', $fax->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                                <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
 
@@ -521,7 +540,8 @@
                                 <thead>
                                 <tr class="headtable">
                                     <th style="width:30%">Entité de facturation</th>
-                                    <th style="width:70%">Adresse Postale complète</th>
+                                    <th style="width:60%">Adresse Postale complète</th>
+                                    <th style="width:10%">Supprimer</th>
                                 </tr>
 
                                 </thead>
@@ -529,7 +549,12 @@
                                 @foreach($entites as $entite)
                                     <tr>
                                         <td style="width:30%;"><?php echo $entite->nom; ?></td>
-                                        <td style="width:70%;"><?php echo $entite->champ; ?></td>
+                                        <td style="width:60%;"><?php echo $entite->champ; ?></td>
+                                        <td style="width:10%;">
+                                            <a  href="{{action('ClientsController@deleteaddress', $entite->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                                <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
 
@@ -583,11 +608,13 @@
                                 <thead>
                                 <tr class="headtable">
                                     <th style="width:20%">Nom et Prénom</th>
-                                    <th style="width:20%">Fonction</th>
+                                    <th style="width:10%">Fonction</th>
                                     <th style="width:10%">Tel</th>
                                     <th style="width:10%">Fax</th>
                                     <th style="width:10%">Email</th>
-                                    <th style="width:30%">Observation</th>
+                                    <th style="width:20%">Observation</th>
+                                    <th style="width:10%">Supprimer</th>
+
                                 </tr>
 
                                 </thead>
@@ -595,11 +622,16 @@
                                 @foreach($gestions as $gestion)
                                     <tr>
                                         <td style="width:20%;"><?php echo $gestion->nom; ?>  <?php echo $reseau->prenom; ?></td>
-                                        <td style="width:20%;"><?php echo $gestion->fonction; ?></td>
+                                        <td style="width:10%;"><?php echo $gestion->fonction; ?></td>
                                         <td style="width:10%;"><?php echo $gestion->tel; ?></td>
                                         <td style="width:10%;"><?php echo $gestion->fax; ?></td>
                                         <td style="width:10%;"><?php echo $gestion->mail; ?></td>
-                                        <td style="width:30%;"><?php echo $gestion->remarque; ?></td>
+                                        <td style="width:20%;"><?php echo $gestion->remarque; ?></td>
+                                        <td style="width:10%;">
+                                            <a  href="{{action('ClientsController@deleteaddress', $gestion->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                                <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
 
@@ -712,11 +744,12 @@
                                 <thead>
                                 <tr class="headtable">
                                     <th style="width:20%">Nom et Prénom</th>
-                                    <th style="width:20%">Fonction</th>
-                                    <th style="width:50%">Tel</th>
+                                    <th style="width:10%">Fonction</th>
+                                    <th style="width:10%">Tel</th>
                                     <th style="width:10%">Fax</th>
                                     <th style="width:10%">Email</th>
-                                    <th style="width:10%">Observation</th>
+                                    <th style="width:30%">Observation</th>
+                                    <th style="width:10%">Supprimer</th>
                                 </tr>
 
                                 </thead>
@@ -728,7 +761,12 @@
                                         <td style="width:50%;"><?php echo $qualite->tel; ?></td>
                                         <td style="width:50%;"><?php echo $qualite->fax; ?></td>
                                         <td style="width:50%;"><?php echo $qualite->mail; ?></td>
-                                        <td style="width:50%;"><?php echo $qualite->remarque; ?></td>
+                                        <td style="width:40%;"><?php echo $qualite->remarque; ?></td>
+                                        <td style="width:10%;">
+                                            <a  href="{{action('ClientsController@deleteaddress', $qualite->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                                <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                                            </a>
+                                        </td>
                                      </tr>
                                 @endforeach
 
@@ -840,11 +878,12 @@
                                 <thead>
                                 <tr class="headtable">
                                     <th style="width:20%">Nom et Prénom</th>
-                                    <th style="width:20%">Fonction</th>
-                                    <th style="width:50%">Tel</th>
+                                    <th style="width:10%">Fonction</th>
+                                    <th style="width:10%">Tel</th>
                                     <th style="width:10%">Fax</th>
                                     <th style="width:10%">Email</th>
-                                    <th style="width:10%">Observation</th>
+                                    <th style="width:20%">Observation</th>
+                                    <th style="width:10%">Supprimer</th>
                                 </tr>
 
                                 </thead>
@@ -852,11 +891,16 @@
                                 @foreach($reseaux as $reseau)
                                     <tr>
                                         <td style="width:20%;"><?php echo $reseau->nom; ?>  <?php echo $reseau->prenom; ?></td>
-                                        <td style="width:20%;"><?php echo $reseau->fonction; ?></td>
-                                        <td style="width:50%;"><?php echo $reseau->tel; ?></td>
-                                        <td style="width:50%;"><?php echo $reseau->fax; ?></td>
-                                        <td style="width:50%;"><?php echo $reseau->mail; ?></td>
-                                        <td style="width:50%;"><?php echo $reseau->remarque; ?></td>
+                                        <td style="width:10%;"><?php echo $reseau->fonction; ?></td>
+                                        <td style="width:10%;"><?php echo $reseau->tel; ?></td>
+                                        <td style="width:10%;"><?php echo $reseau->fax; ?></td>
+                                        <td style="width:10%;"><?php echo $reseau->mail; ?></td>
+                                        <td style="width:20%;"><?php echo $reseau->remarque; ?></td>
+                                        <td style="width:10%;">
+                                            <a  href="{{action('ClientsController@deleteaddress', $reseau->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                                <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
 
@@ -1919,3 +1963,4 @@
 <style>.headtable{background-color: grey!important;color:white;}
     table{margin-bottom:40px;}
  </style>
+
