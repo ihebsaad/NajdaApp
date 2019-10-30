@@ -2407,11 +2407,15 @@ function modalodoc(titre,emplacement)
 {
      $("#doctitle").text(titre);
     // cas OM fichier PDF
-    if (emplacement.indexOf("/OrdreMissions/") !== -1 )
-    {document.getElementById('dociframe').src =emplacement;}
+    /*if (emplacement.indexOf("/OrdreMissions/") !== -1 )
+    {*/
+        document.getElementById('dociframe').src =emplacement;
+    /*}
     else
     // cas DOC fichier DOC
-    {document.getElementById('dociframe').src ="https://view.officeapps.live.com/op/view.aspx?src="+emplacement;}
+    {
+        document.getElementById('dociframe').src ="https://view.officeapps.live.com/op/view.aspx?src="+emplacement;
+    }*/
     $("#opendoc").modal('show');
 }
 

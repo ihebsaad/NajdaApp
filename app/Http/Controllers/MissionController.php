@@ -113,6 +113,236 @@ class MissionController extends Controller
 
     }
 
+
+    public function storeMissionLieByAjax (Request $request)
+    {
+      //return 'ok';
+         /*dd($request->all());
+  array:8 [
+  "_token" => "uqsG1F4DSCFvifeXgadyEkZV4kMPYEVSTARzgdyu"
+  "idMissionMere" => "34"
+  "titreml" => "qsdgvdsq"
+  "typeMissLieauto" => "Taxi"
+  "datedebml" => "2019-10-21T11:10"
+  "commentaireml" => "xwbx"
+  "dossierIDml" => "20369"
+  "hreftopwindowml" => null
+]*/
+        
+       // dd( $request->all());
+        //$dossier=Dossier::where("reference_medic",trim($request->get('dossier')))->first();
+        //$typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeactauto')))->first();
+        $typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeMissLieauto')))->first();
+
+        
+       //dd($dossier);  
+         $format = "Y-m-d\TH:i";
+  
+        
+        $datespecifique= \DateTime::createFromFormat($format, trim($request->get('datedebml')));
+
+           if($typeMiss->id==33 || $typeMiss->id==34 ) // cas de transport MMs et   transport externe
+         {
+
+            $datespecifique=$datespecifique->modify('-2 minutes'); // -24 hours
+         }
+       
+
+         $Mission = new Mission([
+             'titre' =>trim( $request->get('titreml')), 
+             'descrip' => trim($request->get('descrip')),
+             'miss_mere_id'=>trim($request->get('idMissionMere')),
+             'nb_acts_ori'=>$typeMiss->nb_acts,
+             'commentaire' => trim($request->get('commentaireml')),
+             'date_deb'=> $datespecifique,
+             'type_Mission' =>$typeMiss->id,
+             'dossier_id' => trim($request->get('dossierIDml')),
+             'statut_courant' => 'active',
+
+             'realisee'=> 0,
+             'affichee'=>1,
+             'user_id'=>auth::user()->id,
+             'origin_id'=>auth::user()->id,
+
+             'type_heu_spec'=> $typeMiss->type_heu_spec,
+             'type_heu_spec_archiv'=> $typeMiss->type_heu_spec,
+             'date_spec_affect'=>0,
+             'date_spec_affect2'=>0,
+             'date_spec_affect3'=>0,
+             'rdv'=> $typeMiss->rdv,
+             'act_rdv'=> $typeMiss->act_rdv,
+             'dep_pour_miss'=> $typeMiss->dep_pour_miss,
+             'act_dep_pour_miss'=> $typeMiss->act_dep_pour_miss,
+             'dep_charge_dest'=> $typeMiss->dep_charge_dest,
+             'act_dep_charge_dest'=> $typeMiss->act_dep_charge_dest,
+             'arr_prev_dest'=> $typeMiss->arr_prev_dest,
+             'act_arr_prev_dest'=> $typeMiss->act_arr_prev_dest,
+             'decoll_ou_dep_bat'=> $typeMiss->decoll_ou_dep_bat,
+             'act_decoll_ou_dep_bat'=> $typeMiss->act_decoll_ou_dep_bat,
+             'arr_av_ou_bat'=> $typeMiss->arr_av_ou_bat,
+             'act_arr_av_ou_bat'=> $typeMiss->act_arr_av_ou_bat,
+              'retour_base'=> $typeMiss->retour_base,
+              'act_retour_base'=> $typeMiss->act_retour_base,
+              'deb_sejour'=>$typeMiss->sejour_deb,
+              'deb_location_voit'=> $typeMiss->location_voit_deb
+        ]);
+
+        $Mission->save();
+
+
+           
+
+          $dtc = (new \DateTime())->format('Y-m-d\TH:i');
+          $dateSys  = \DateTime::createFromFormat($format, $dtc);
+          $dateMiss  = \DateTime::createFromFormat($format, $request->get('datedebml'));
+     
+
+         if($typeMiss->id==33 || $typeMiss->id==34 ) // cas de MMs et externe
+         {
+
+           $Mission->update(['date_spec_affect2'=>1]); 
+           $Mission->update(['h_decoll_ou_dep_bat'=>$datespecifique->modify('+2 minutes')]);// +24 hours
+
+
+         }
+
+       if($dateMiss >$dateSys)
+       {
+       //$Mission->update(['affichee'=>0]);
+        $Mission->update(['statut_courant'=>'reportee']);
+
+       //dd($request->get('datedeb')."  ". $dtc);
+       
+       }
+
+       //dd('faux');
+
+
+        //$type_act=DB::table('type_actions')->where('id', $request->get('typeact'));
+       // $type_act=TypeMission::find($request->get('typeactauto'));
+        $type_act= $typeMiss;
+       //dd($type_act->getAttributes());
+
+         $attributes = array_keys($type_act->getOriginal());
+         $valeurs = array_values($type_act->getOriginal());
+         //dd(count($valeurs));
+        // dd($valeurs);
+
+        // echo($attributes[1]);
+        // echo($valeurs[1]);
+           $taille=count($valeurs)-5;
+         for ($k=27; $k<=$taille; $k++)
+           {
+             
+            if($k>27)
+            {
+
+
+
+           if( $valeurs[$k]!= null)
+              {
+
+                 $ActionEC = new ActionEC([
+             'mission_id' =>$Mission->id,
+             'titre' => trim($valeurs[$k]),
+             'type_Mission' => trim($valeurs[1]),
+             'duree' => trim($valeurs[$k+1]),
+             'ordre'=> trim($valeurs[$k+2]),
+             'descrip' => trim($valeurs[$k+3]),
+             'nb_opt'=> trim($valeurs[$k+4]),
+             'opt_choisie'=>0,
+             'igno_ou_non'=> trim($valeurs[$k+5]),
+             'rapl_ou_non'=> trim($valeurs[$k+6]),
+             'num_rappel'=>0,
+             'report_ou_non'=> trim($valeurs[$k+7]),
+             'num_report'=>0,
+             'rapp_doc_ou_non'=>trim($valeurs[$k+8]),
+             'activ_avec_miss'=>trim($valeurs[$k+9]),
+             'realisee'=> false,
+             //'user_id'=> $Mission->user_id,
+             'statut'=>'inactive'
+                                       
+                  ]); 
+                  
+                   $ActionEC->save();
+
+
+              $k+=9;
+              }
+              else
+              {
+                $k=1000;
+              }
+
+              }
+              else // pour la sauvegarde de date de début de la première sous action
+              {
+
+               if($valeurs[$k]!= null)
+               {
+
+                  $ActionEC = new ActionEC([
+             'mission_id' =>$Mission->id,
+             'titre' => trim($valeurs[$k]),
+             'type_Mission' => trim($valeurs[1]),
+             'duree' => trim($valeurs[$k+1]),
+             'ordre'=> trim($valeurs[$k+2]),
+             'descrip' => trim($valeurs[$k+3]),
+              'nb_opt'=> trim($valeurs[$k+4]),
+              'opt_choisie'=>0,
+             'igno_ou_non'=> trim($valeurs[$k+5]),
+             'rapl_ou_non'=> trim($valeurs[$k+6]),
+             'num_rappel'=>0,
+             'report_ou_non'=> trim($valeurs[$k+7]),
+             'num_report'=>0,
+             'rapp_doc_ou_non'=> trim($valeurs[$k+8]),
+               'activ_avec_miss'=>trim($valeurs[$k+9]),
+             'realisee'=> false,
+             //'user_id'=> $Mission->user_id,
+             'date_deb' => $Mission->date_deb,
+             'statut'=>'active'       
+                  ]); 
+                  
+                   $ActionEC->save();
+
+
+               $k+=9;
+             
+              }
+              else
+              {
+                $k=1000;
+              }
+
+
+
+              }
+           }
+
+
+           //mettre à jour le id temporairedes des actions de table actionsEc
+
+           $actionsecs=ActionEC::where('mission_id', $Mission->id)->get();
+
+           foreach ($actionsecs as $k) {
+             $k->update(['action_idt'=>$k->id]);
+             if($k->activ_avec_miss==1)
+             {
+
+                $k->update(['statut'=>'active']);
+
+             }
+           }
+
+        /*Dossier::where('id',$dossier->id)
+            ->update(array('current_status'=>'actif'));*/
+
+    return 'Mission créee';
+
+      
+
+    }
+
    
 
     /**
@@ -133,30 +363,6 @@ class MissionController extends Controller
         $dossier=Dossier::where("reference_medic",trim($request->get('dossier')))->first();
         //$typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeactauto')))->first();
         $typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeMissauto')))->first();
-
-
-        // if($typeMiss->id==30 )
-          /*vérification de client AXA ou IMA de dossier avant de créer une mission de  rapatriement  véhicule sur Cargo*/
-         /*{
-         $dossi=Dossier::where('id',$request->get('dossierID'))->first();
-         $existe_cli=Client::where('id',$dossi->customer_id)
-                              ->where(function($q){                             
-                               $q->where('name', 'like', '%IMA%')
-                               ->orWhere('name', 'like', '%AXA%');
-                                })                             
-                              ->where('pays','FRANCE')
-                              ->first();
-
-               if(! $existe_cli)
-               {
-
-                      return 'Impossible de céeer la mission : le client de  dossier courant doit être IMA France ou AXA France';
-
-               }
-
-          }  */                
-
-        
 
      
        //dd($dossier);  
@@ -1088,8 +1294,15 @@ public function getAjaxDeleguerMission($idmiss)
 
          $output.='<h4><b><u> Description de mission : </u>'.$miss->typeMission->des_miss.'</b> </h4> <br>';
 
-          $output.='<h4><b><u> Dossier - Assuré  : </u>'.$miss->dossier->reference_medic.'-'.
+          $output.='<h4><b><u> Dossier - Assuré  : </u>'.$miss->dossier->reference_medic.' - '.
           $miss->dossier->subscriber_name.' '.$miss->dossier->subscriber_lastname.'</b> </h4> <br>';
+
+          if($miss->miss_mere_id)
+          {
+            $missmere=Mission::where('id',$miss->miss_mere_id)->first();
+           $output.='<h4><b><u> Sous - mission  : </u>cette mission est une une sous mission de '. $missmere->dossier->reference_medic.' - '.
+          $missmere->dossier->subscriber_name.' '. $missmere->dossier->subscriber_lastname.' - '. $missmere->typeMission->nom_type_Mission.'</b> </h4> <br>';
+          }
           
           if($miss->commentaire)
           {

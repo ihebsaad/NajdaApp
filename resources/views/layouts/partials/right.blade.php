@@ -134,7 +134,10 @@ use App\Http\Controllers\TagsController;
                                               <a data-toggle="collapse" href="#collapse{{$Mission->id}}">{{$Mission->dossier->reference_medic}}&nbsp;-&nbsp;{{$Mission->dossier-> subscriber_name}} {{$Mission->dossier->subscriber_lastname}} <br>
                                                 {{$Mission->typeMission->nom_type_Mission}}
                                               </a>@if ($Mission->assistant_id!=NULL && $Mission->origin_id!=NULL )
-                                         <span style="color:red"> &nbsp;(déléguée par {{$Mission-> user_origin->name}}&nbsp {{$Mission->user_origin->lastname}} ) </span> @endif
+                                         <span style="color:#151515"> &nbsp;(déléguée par {{$Mission-> user_origin->name}}&nbsp {{$Mission->user_origin->lastname}} ) </span> @endif
+
+                                         @if ($Mission->miss_mere_id!=NULL )
+                                         <span style="color:#151515"> &nbsp;(*Sous-Mission*) </span> @endif
                                            </h4>
                                         </div>
 
@@ -1335,6 +1338,7 @@ if ($view_name=='dossiers-view') {
 <?php }
 ?>
 // setInterval(function(){ 
+ $(document).ready(function(){
 
    function verifier_Rappels_actions_reportees ()
 
@@ -1478,10 +1482,10 @@ verifier_Rappels_actions_reportees();
 //}, 15000);  // fin setInterval
 
 
-</script>
 
-<!--activerAct_des_dates_speciales-->
-<script>
+
+//activerAct_des_dates_speciales-->
+
 
  //setInterval(function(){ 
    function  activerAct_des_dates_speciales()
@@ -1599,14 +1603,14 @@ verifier_Rappels_actions_reportees();
 //}, 20000); // fin set interval
 
 activerAct_des_dates_speciales();
-</script>
 
 
 
-</script>
 
-<!-- gestion des rappels des missions (pour les rappels actions voir traitementaction blade)-->
-  <script>
+
+
+// gestion des rappels des missions (pour les rappels actions voir traitementaction blade)
+
 
 var idMission;
 var datamission;
@@ -1670,7 +1674,7 @@ getMissionAjaxModal();
 
 //}, 10000); // fin setInterval
 
-    $(document).ready(function() {
+  
     
     $(document).on("click","#missionOngletaj",function() {
       //alert(datakbs);
@@ -1757,7 +1761,7 @@ getMissionAjaxModal();
 <script type="text/javascript">
   
 
-
+$(document).ready(function() {
 
 
   var userIdConnec = $('meta[name="userId"]').attr('content');
@@ -1803,11 +1807,11 @@ getMissionAjaxModal();
 
 
 
-</script>
 
-<!--  délégation des missions -->
 
-<script type="text/javascript">
+//  délégation des missions -->
+
+
   
 
     //setInterval(function(){
@@ -1879,13 +1883,13 @@ getMissionAjaxModal();
 getNotificationDeleguerMiss();
 
 
-</script>
 
 
 
-<!--  délégation des actions -->
 
-<script type="text/javascript">
+//  délégation des actions -->
+
+
   
 
     //setInterval(function(){
@@ -1960,19 +1964,19 @@ getNotificationDeleguerAct ();
 
 
 
-</script>
 
-<script>
+
+
 
 
   $("#hreftopwindow").val(top.location.href);
   
   
-</script>
 
 
-<!-- gestion de bouton mette à jour date spécifique 1 pour le modal descrip mission -->
- <script>
+
+// gestion de bouton mette à jour date spécifique 1 pour le modal descrip mission -->
+ 
 
   $(document).on("click","#MajDateSpecM",function() {
 
@@ -2017,10 +2021,10 @@ getNotificationDeleguerAct ();
 
 
 
-  </script>
+  
 
-  <!-- gestion de bouton mette à jour date spécifique 2 pour le modal descrip mission -->
- <script>
+  //gestion de bouton mette à jour date spécifique 2 pour le modal descrip mission -->
+ 
 
   $(document).on("click","#MajDateSpecM2",function() {
 
@@ -2065,8 +2069,8 @@ getNotificationDeleguerAct ();
 
 
 
-  </script>
-  <script>
+ 
+  
 
   $("#idAjoutMiss").click(function(e){ // On sélectionne le formulaire par son identifiant
    // e.preventDefault(); // Le navigateur ne peut pas envoyer le formulaire
@@ -2139,11 +2143,11 @@ getNotificationDeleguerAct ();
 
 });
 
-</script>
 
-<!-- bouton fin creation mission-->
 
- <script>
+// bouton fin creation mission-->
+
+
 
   $("#idFinAjoutMiss").click(function(e){ // On sélectionne le formulaire par son identifiant
  
@@ -2217,13 +2221,13 @@ getNotificationDeleguerAct ();
 });
 
 
-</script>
-
-<!-- click sur l'onglet missions --> 
 
 
+// click sur l'onglet missions --> 
 
-<script>
+
+
+
 
   $("#idMissionstab").click(function(e){ // On sélectionne le formulaire par son identifiant
  
@@ -2292,6 +2296,8 @@ getNotificationDeleguerAct ();
   
 
 });
+
+  });
 
 
 
