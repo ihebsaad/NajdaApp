@@ -80,6 +80,8 @@ class RechercheController extends Controller
     {
 
        $contenu=false;
+       $affecOuNon='';
+       $etat='';
        $burl = URL::to("/");
 
         if($request->get('qy'))
@@ -111,9 +113,16 @@ class RechercheController extends Controller
             {
                $affecOuNon=" ( Non Affecté ) ";
             }
-              
+              if($row->current_status=='Cloture')
+              {
+                $etat='clos';
+              }
+              else
+              {
+                 $etat=$row->current_status;
+              }
              // $urln= URL::to('/');
-              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_medic.' '.$row->subscriber_name.' '.$row->subscriber_lastname.'( Réf. Médicale) ('.$row->current_status.')'. $affecOuNon.'</a></li>';
+              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_medic.' '.$row->subscriber_name.' '.$row->subscriber_lastname.'( Réf. Médicale) ('. $etat.')'. $affecOuNon.'</a></li>';
           }
 
           $output.='<li class="divider"></li>';
@@ -140,8 +149,17 @@ class RechercheController extends Controller
             {
                $affecOuNon=" ( Non Affecté ) ";
             }
-             // $urln= URL::to('/');
-              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; overflow: hidden; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_customer.' ( Réf. client) ('.$row->current_status.')'.$affecOuNon.'</a></li>';
+
+              if($row->current_status=='Cloture')
+              {
+                $etat='clos';
+              }
+              else
+              {
+                 $etat=$row->current_status;
+              }
+
+              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; overflow: hidden; left:-50px;"  ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->reference_customer.' ( Réf. client) ('.$etat.')'.$affecOuNon.'</a></li>';
           }
 
           $output.='<li class="divider"></li>';
@@ -168,8 +186,17 @@ class RechercheController extends Controller
             {
                $affecOuNon=" ( Non Affecté ) ";
             }
+
+             if($row->current_status=='Cloture')
+              {
+                $etat='clos';
+              }
+              else
+              {
+                 $etat=$row->current_status;
+              }
               
-              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; overflow: hidden;left:-50px; margin-right:7px;" ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->subscriber_name.'  '. $row->subscriber_lastname.'  (Dossier '.$row->reference_medic.') ('.$row->current_status.')'.$affecOuNon.'</a></li>';
+              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; overflow: hidden;left:-50px; margin-right:7px;" ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->subscriber_name.'  '. $row->subscriber_lastname.'  (Dossier '.$row->reference_medic.') ('.$etat.')'.$affecOuNon.'</a></li>';
           }
 
           $output.='<li class="divider"></li>';
@@ -231,7 +258,16 @@ class RechercheController extends Controller
                $affecOuNon=" ( Non Affecté ) ";
             }
 
-              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; overflow: hidden;left:-50px; margin-right:7px;" ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->vehicule_immatriculation.' (Dossier selon l\'immatriculation véhivule) ('.$row->current_status.')'.$affecOuNon.'</a></li>';
+             if($row->current_status=='Cloture')
+              {
+                $etat='clos';
+              }
+              else
+              {
+                 $etat=$row->current_status;
+              }
+
+              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; overflow: hidden;left:-50px; margin-right:7px;" ><a href="'.$burl.'/dossiers/view/'.$row->id.'">'.$row->vehicule_immatriculation.' (Dossier selon l\'immatriculation véhivule) ('.$etat.')'.$affecOuNon.'</a></li>';
           }
 
           $output.='<li class="divider"></li>';

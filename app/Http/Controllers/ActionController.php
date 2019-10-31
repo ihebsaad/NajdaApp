@@ -2250,8 +2250,9 @@ class ActionController extends Controller
    {
                if($actionRapp->date_rappel >= $actionRepo->date_report)
                {
-                  $upde= ActionEC::find($actionRepo->id);
-                     $upde->update(['statut' => 'active']);
+                  $upde= ActionEC::where('id',$actionRepo->id)->where('statut','!=','rfaite')->first();
+                  $upde->update(['statut' => 'active']);
+                  $upde->update(['date_deb'=> $dtc]);
 
                      $output='Activation de l\'action reportée : '.$upde->titre.' | Mission :'.$upde->Mission->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname .'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
                 
@@ -2259,8 +2260,9 @@ class ActionController extends Controller
                }
                else  
                {
-                 $upde= ActionEC::find($actionRapp->id);
+                 $upde= ActionEC::where('id',$actionRapp->id)->where('statut','!=','rfaite')->first();
                      $upde->update(['statut' => 'active']);
+                      $upde->update(['date_deb'=> $dtc]);
 
                      $output='Rappel concernant l\'action :'.$upde->titre.' | Mission :'.$upde->Mission->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
                     // dd($output);
@@ -2271,8 +2273,9 @@ class ActionController extends Controller
     {
         if($actionRapp!=null)
         {
-            $upde= ActionEC::find($actionRapp->id);
+            $upde= ActionEC::where('id',$actionRapp->id)->where('statut','!=','rfaite')->first();
              $upde->update(['statut' => 'active']);
+              $upde->update(['date_deb'=> $dtc]);
 
              $output='Rappel concernant l\'action :'.$upde->titre.' | Mission :'.$upde->Mission->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
              //dd($output);
@@ -2283,8 +2286,10 @@ class ActionController extends Controller
         {
                if($actionRepo!=null)
                     {
-                         $upde= ActionEC::find($actionRepo->id);
+                         $upde= ActionEC::where('id',$actionRepo->id)->where('statut','!=','rfaite')->first();
                          $upde->update(['statut' => 'active']);
+                         $upde->update(['date_deb'=> $dtc]);
+
                          $output='Activation de l\'action reportée : '.$upde->titre.' | Mission :'.$upde->Mission ->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
                   
 
@@ -2420,7 +2425,8 @@ class ActionController extends Controller
      $act->update(['updated_at'=>$dtc]);
      
      $dossier=$act->dossier;
-     $dossiers=Dossier::all();
+     //$dossiers=Dossier::all();
+     //'dossiers' => $dossiers,
      $typesMissions=TypeMission::get();
      $Missions=Auth::user()->activeMissions;
      $Actions=$act->Actions;
@@ -2457,10 +2463,16 @@ class ActionController extends Controller
 
 
      // Activer dossier
-        Dossier::where('id', $iddoss )
-            ->update(array('current_status'=>'actif'));
+        /*Dossier::where('id', $iddoss )
+            ->update(array('current_status'=>'actif'));*/
 
-     return view('actions.TraitementAction',['act'=>$act,'dossiers' => $dossiers,'attachements'=>$attachements,
+          $dos=Dossier::where('id',$iddoss)->first();
+         if($dos->current_status != 'Cloture')
+         {
+             $dos->update(array('current_status'=>'actif'));
+         }
+
+     return view('actions.TraitementAction',['act'=>$act,'attachements'=>$attachements,
         'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action,'doss'=>$dossier->id], compact('dossier'));
 
     }
@@ -2500,7 +2512,8 @@ class ActionController extends Controller
              $Action=ActionEC::find($idact);
              $act=$Action->Mission;     
              $dossier=$act->dossier;
-             $dossiers=Dossier::get();
+            // $dossiers=Dossier::get();
+             //'dossiers' => $dossiers,
              $typesMissions=TypeMission::get();
              $Missions=Auth::user()->activeMissions;
              $Actions=$act->Actions;
@@ -2516,7 +2529,7 @@ class ActionController extends Controller
            Session::flash('messagekbsSucc', 'l\'action a été mise en attente');
              
 
-     return view('actions.DossierMissionAction',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+     return view('actions.DossierMissionAction',['act'=>$act,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
 
 
         }
@@ -2544,8 +2557,14 @@ class ActionController extends Controller
     {
 
         // Activer dossier
-        Dossier::where('id', $iddoss )
-            ->update(array('current_status'=>'actif'));
+       /* Dossier::where('id', $iddoss )
+            ->update(array('current_status'=>'actif'));*/
+         $dos=Dossier::where('id', $iddoss)->first();
+         if($dos->current_status != 'Cloture')
+         {
+             $dos->update(array('current_status'=>'actif'));
+         }
+
 
          $dtc = (new \DateTime())->format('Y-m-d\TH:i');                         
          $format = "Y-m-d\TH:i";
@@ -2771,6 +2790,7 @@ class ActionController extends Controller
 
                       $action->update(['statut'=>"ignoree"]);
                       $action->update(['user_id'=>auth::user()->id]); 
+                      $action->update(['date_fin' => $dateSys]);
 
                    }  
                    else{
@@ -2778,9 +2798,6 @@ class ActionController extends Controller
 
                              if($bouton==3)  //bouton reporter
                            {
-
-                                                                                  
-                               
 
                                  $dateRepAct  = \DateTime::createFromFormat($format, $request->get('datereport'));
                                  // dd($dateRepAct);
@@ -2795,6 +2812,8 @@ class ActionController extends Controller
                                  {
                                  $action->update(['statut'=>"rfaite"]);
                                  $action->update(['user_id'=>auth::user()->id]);
+                                 $action->update(['rapl_ou_non'=>0]);
+                                 $action->update(['report_ou_non'=>1]);
 
                                  $Naction= new ActionEC($action->toArray());                    
                                  $Naction->save();
@@ -2807,6 +2826,8 @@ class ActionController extends Controller
                                  $n+=1;
                                  $NNaction->update(['num_report'=> $n]);
                                  $NNaction->update(['date_report'=> $dateRepAct]);
+                                 $NNaction->update(['date_deb'=> $dateRepAct]);
+                                 $action->update(['date_fin'=> $dateSys]);
 
                                 
                                 }
@@ -2816,7 +2837,7 @@ class ActionController extends Controller
                            else
                            {
 
-                               if($bouton==4)  //bouton rappeler attente de réponse
+                               if($bouton==4)  //bouton rappeler mise en attente de réponse
                                {
                                                           
                                                                
@@ -2834,6 +2855,8 @@ class ActionController extends Controller
 
                                  $action->update(['statut'=>"rfaite"]);
                                  $action->update(['user_id'=>auth::user()->id]);
+                                 $action->update(['rapl_ou_non'=>1]);
+                                 $action->update(['report_ou_non'=>0]);
 
                                  $Naction= new ActionEC($action->toArray());                    
                                  $Naction->save();
@@ -2844,10 +2867,9 @@ class ActionController extends Controller
                                  $NNaction->update(['num_rappel'=> $n]);
                                  $NNaction->update(['date_rappel'=> $dateRapAct]);
                                  $NNaction->update(['user_id'=>auth::user()->id]);
-
-                             
-
-
+                                 $NNaction->update(['date_deb'=> $dateRapAct]);
+                                // $NNaction->update(['date_fin'=> $dateRapAct]);
+                                 $action->update(['date_fin'=> $dateSys]);
 
                                 }
 
@@ -3457,7 +3479,8 @@ public function fin_mission_si_test_fin($idact,$idmiss)
                    $Action=ActionEC::find($idact);
                    $act=$Action->Mission;     
                    $dossier=$act->dossier;
-                   $dossiers=Dossier::get();
+                  // $dossiers=Dossier::get();
+                   //'dossiers' => $dossiers,
                    $typesMissions=TypeMission::get();
                   
                    $dtc = (new \DateTime())->format('Y-m-d\TH:i');
@@ -3471,9 +3494,9 @@ public function fin_mission_si_test_fin($idact,$idmiss)
                     
 
 
-                  Session::flash('messagekbsSucc', 'La mission en cours { '.$act->typeMission->nom_type_Mission.' } de dossier { '.$act->dossier->reference_medic .'-'.$act->dossier->subscriber_name.' '.$act->dossier->subscriber_lastname.' } est achevée');            
+                  Session::flash('messagekbsSucc', 'La mission en cours { '.$act->typeMission->nom_type_Mission.' } de dossier { '.$act->dossier->reference_medic .' - '.$act->dossier->subscriber_name.' '.$act->dossier->subscriber_lastname.' } est achevée');            
 
-                  return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+                  return view('actions.FinMission',['act'=>$act,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
  }
               
 
@@ -3486,7 +3509,8 @@ public function etat_action_sinon_test_fin($chang,$bouton,$idact)
                              $Action=ActionEC::find($idact);
                              $act=$Action->Mission;     
                              $dossier=$act->dossier;
-                             $dossiers=Dossier::get();
+                            // $dossiers=Dossier::get();
+                             //'dossiers' => $dossiers,
                              $typesMissions=TypeMission::get();
                              $Missions=Auth::user()->activeMissions;
                              $Actions=$act->Actions;
@@ -3502,7 +3526,7 @@ public function etat_action_sinon_test_fin($chang,$bouton,$idact)
                        Session::flash('messagekbsSucc', 'l\'action a été mise en attente');
              
 
-                         return view('actions.DossierMissionAction',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+                         return view('actions.DossierMissionAction',['act'=>$act,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
 
 
 

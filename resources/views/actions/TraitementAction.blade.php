@@ -593,7 +593,7 @@ $('#DivDeleAction').hide();
 <br> <br>
     <div class="row">
     
-        <button  type="button" style="float : right;" class="btn btn-info btn-lg" data-toggle="modal" data-target="#ModalWorkLies">Créer une sous mission</button>
+        <!--<button  type="button" style="float : right;" class="btn btn-info btn-lg" data-toggle="modal" data-target="#ModalWorkLies">Créer une sous mission</button>-->
     </div>
 
 <div>

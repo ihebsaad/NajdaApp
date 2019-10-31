@@ -9,17 +9,65 @@ use App\Http\Controllers\TagsController;
     
     <style>
 
-   /* #notifications {
+    #notificationkbs {
     cursor: pointer;
     position: fixed;
     right: 0px;
     z-index: 9999;
-    top: 50px;
+    bottom: : 0px;
     margin-bottom: 22px;
     margin-right: 15px;
     max-width: 500px;   
-     }*/
+     }
    </style>
+   <script>
+     Notify = function(text, callback, close_callback, style) {
+
+  var time = '120000';
+  var $container = $('#notificationkbs');
+  var icon = '<i class="fa fa-info-circle "></i>';
+ 
+  if (typeof style == 'undefined' ) style = 'warning'
+  
+  var html = $('<div class="alert alert-' + style + '  hide">' + icon +  " " + text + '</div>');
+  
+  $('<a>',{
+    text: '×',
+    class: 'button close',
+    style: 'padding-left: 10px;',
+    href: '#',
+    click: function(e){
+      e.preventDefault()
+      close_callback && close_callback()
+      remove_notice()
+    }
+  }).prependTo(html)
+
+  $container.prepend(html)
+  html.removeClass('hide').hide().fadeIn('slow')
+
+  function remove_notice() {
+    html.stop().fadeOut('slow').remove()
+  }
+  
+  var timer =  setInterval(remove_notice, time);
+
+  $(html).hover(function(){
+    clearInterval(timer);
+  }, function(){
+    timer = setInterval(remove_notice, time);
+  });
+  
+  html.on('click', function () {
+    clearInterval(timer)
+    callback && callback()
+    remove_notice()
+  });
+  
+  
+}
+
+   </script>
 
 <div class="panel panel-danger">
                     <div class="panel-heading">
@@ -30,7 +78,7 @@ use App\Http\Controllers\TagsController;
                         </span>
                     </div>
 
-                    <!--<div id="notifications"></div>-->
+                    <div id="notificationkbs"></div>
 
 
                    <div class="panel-body scrollable-panel" style="display: block;">
@@ -184,10 +232,10 @@ use App\Http\Controllers\TagsController;
                                      
 
 
-                                            <!-- {{-- <a class="workflowkbs" id="<?php echo $Mission->id ?>" style="color:black !important; margin-top: 10px; margin-right: 10px;" data-toggle="modal" data-target="#myworow" title ="Voir Workflow" href="#"><span class="fa fa-2x fa-tasks" style="  margin-right: 20px;" aria-hidden="true"></span>
+                                            <!-- {{-- <a class="workflowkbs" id="<?php // echo $Mission->id ?>" style="color:black !important; margin-top: 10px; margin-right: 10px;" data-toggle="modal" data-target="#myworow" title ="Voir Workflow" href="#"><span class="fa fa-2x fa-tasks" style="  margin-right: 20px;" aria-hidden="true"></span>
                                             </a>
-                                            <input id="workflowh<?php echo $Mission->id ?>" type="hidden" value="{{$Mission->titre}}">
-                                            <input id="workflowht<?php echo $Mission->id ?>" type="hidden" value="{{$Mission->typeMission->nom_type_Mission}}"> --}} --> 
+                                            <input id="workflowh<?php //echo $Mission->id ?>" type="hidden" value="{{$Mission->titre}}">
+                                            <input id="workflowht<?php //echo $Mission->id ?>" type="hidden" value="{{$Mission->typeMission->nom_type_Mission}}"> --}} --> 
 
 
                                              {{-- <a  style="color:black !important; margin-top: 10px; margin-right: 10px;" title ="Voir Workflow" href="{{url('Mission/workflow/'.$Mission->dossier->id.'/'.$Mission->id)}}"><span class="fa fa-2x fa-cogs" style=" margin-top: 10px; margin-right: 20px;" aria-hidden="true"></span>
@@ -288,6 +336,8 @@ use App\Http\Controllers\TagsController;
                                  <input id="idEntreeMissionOnclik" type="hidden" class="form-control" value="" name="idEntreeMissionOnclik"/>
 
                                   <?php if(isset($dossier)) {  ?>
+                                    <?php if($dossier) {  ?>
+                                      <?php if($dossier->current_status != 'Cloture') {  ?>
                                   <form  id="idFormCreationMission" method="post" action="{{route('Missions.storeActionsEC') }}" style="padding-top:30px">
                                    <input id="idEntreeMissionOnMarker" type="hidden" class="form-control" value="" 
                                    name="idEntreeMissionOnMarker"/>
@@ -473,9 +523,15 @@ use App\Http\Controllers\TagsController;
 
                                      <!-- <button id="add"  class="btn btn-primary">Ajax Add</button>-->
                                   </form>
+                                     <?php } else { ?>
+
+                                       <div> <h4 style="color:red;">Vous ne pouvez pas créer des missions dans ce dossier car il est clos.</h4> </div>
+
+                                       <?php } ?><!-- fin if($dossier->current_status)!=cloture-->
+                                     <?php } ?> <!-- fin if($dossier)!=null-->
                                    <?php } else {?>
 
-                                    <div> vous devez sélectionner un dossier pour créer une mission  </div>
+                                    <div> <h4 style="color:red;">Vous devez sélectionner un dossier pour créer une mission </h4> </div>
 
                                      <?php } ?>
                                </div>   
@@ -1425,8 +1481,7 @@ if ($view_name=='dossiers-view') {
                         
                        // alert(actionk+"/"+ missk+"/"+dossk);
 
-                                      if(count==4)
-                                
+                                      if(count==4)                                
                                          {
 
                                            var NouveaURL;
@@ -1459,11 +1514,19 @@ if ($view_name=='dossiers-view') {
                             }); 
 
            
-          
-          
+            Notify("<b>"+data+"</b>",
+                    function () { 
+                      //alert("clicked notification")
+                    },
+                    function () { 
+                      //alert("clicked x")
+                    },
+                    'success'
+                  );
+                            
 
             
-           }
+           }// fin if data
 
            setTimeout(function(){ 
 
@@ -1583,7 +1646,15 @@ verifier_Rappels_actions_reportees();
                             }); 
 
            
-          
+                    Notify("<b>"+data+"</b>",
+                    function () { 
+                     // alert("clicked notification")
+                    },
+                    function () { 
+                      //alert("clicked x")
+                    },
+                    'warning'
+                  );
           
 
             
@@ -1605,10 +1676,6 @@ verifier_Rappels_actions_reportees();
 activerAct_des_dates_speciales();
 
 
-
-
-
-
 // gestion des rappels des missions (pour les rappels actions voir traitementaction blade)
 
 
@@ -1618,6 +1685,7 @@ var iddropdownM;
 var hrefidAcheverM;
 var idPourRepMiss;
 var daterappelmissh;
+//var titleActionRModal;
 
     //setInterval(function(){
  //alert("Hello"); 
@@ -1633,7 +1701,19 @@ var daterappelmissh;
 
            if(data)
            {
+               //jQuery(data).find('#titleActionRModal').html()+
 
+                Notify("<b> Activation d\'une nouvelle Mission </b>",
+                    function () { 
+                     // alert("clicked notification")
+                    },
+                    function () { 
+                      //alert("clicked x")
+                    },
+                    'danger'
+                  );
+                  
+              
 
              $("#myMissionModalReporter1").modal('show');          
              idAction=jQuery(data).find('.rowkbs').attr("id");
@@ -1781,6 +1861,15 @@ $(document).ready(function() {
            
 
            swal(data);
+           Notify("<b>"+data+"</b>",
+                    function () { 
+                     // alert("clicked notification")
+                    },
+                    function () { 
+                      //alert("clicked x")
+                    },
+                    'danger'
+                  );
 
           // location.reload(); 
             /* if(idUserAffecte==userIdConnec)
@@ -1861,7 +1950,15 @@ $(document).ready(function() {
 
        
               
-       
+           Notify("<b>"+data+"</b>",
+                    function () { 
+                     // alert("clicked notification")
+                    },
+                    function () { 
+                      //alert("clicked x")
+                    },
+                    'danger'
+                  );
 
             
            }
@@ -1940,7 +2037,15 @@ function  getNotificationDeleguerAct () {
 
        
                           
-              
+               Notify("<b>"+data+"</b>",
+                    function () { 
+                     // alert("clicked notification")
+                    },
+                    function () { 
+                      //alert("clicked x")
+                    },
+                    'info'
+                  );
        
 
             
@@ -2307,54 +2412,8 @@ getNotificationDeleguerAct ();
 
 <script>
 
-
- /* Notify = function(text, callback, close_callback, style) {
-
-  var time = '20000';
-  var $container = $('#notifications');
-  var icon = '<i class="fa fa-info-circle "></i>';
  
-  if (typeof style == 'undefined' ) style = 'warning'
-  
-  var html = $('<div class="alert alert-' + style + '  hide">' + icon +  " " + text + '</div>');
-  
-  $('<a>',{
-    text: '×',
-    class: 'button close',
-    style: 'padding-left: 10px;',
-    href: '#',
-    click: function(e){
-      e.preventDefault()
-      close_callback && close_callback()
-      remove_notice()
-    }
-  }).prependTo(html)
-
-  $container.prepend(html)
-  html.removeClass('hide').hide().fadeIn('slow')
-
-  function remove_notice() {
-    html.stop().fadeOut('slow').remove()
-  }
-  
-  var timer =  setInterval(remove_notice, time);
-
-  $(html).hover(function(){
-    clearInterval(timer);
-  }, function(){
-    timer = setInterval(remove_notice, time);
-  });
-  
-  html.on('click', function () {
-    clearInterval(timer)
-    callback && callback()
-    remove_notice()
-  });
-  
-  
-}
-
-$( document ).ready(function() {
+/*$( document ).ready(function() {
   Notify("Can't Touch This");
     Notify("Can't Touch This");
       Notify("Can't Touch This");

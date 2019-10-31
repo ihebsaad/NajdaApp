@@ -332,6 +332,9 @@ class MissionController extends Controller
                 $k->update(['statut'=>'active']);
 
              }
+
+               $k->update(['rapl_ou_non'=>0]);
+               $k->update(['report_ou_non'=>0]);
            }
 
         /*Dossier::where('id',$dossier->id)
@@ -519,7 +522,7 @@ class MissionController extends Controller
              'rapl_ou_non'=> trim($valeurs[$k+6]),
              'num_rappel'=>0,
              'report_ou_non'=> trim($valeurs[$k+7]),
-             'num_report'=>0,
+             'num_report'=> 0,
              'rapp_doc_ou_non'=>trim($valeurs[$k+8]),
              'activ_avec_miss'=>trim($valeurs[$k+9]),
              'realisee'=> false,
@@ -558,7 +561,7 @@ class MissionController extends Controller
              'rapl_ou_non'=> trim($valeurs[$k+6]),
              'num_rappel'=>0,
              'report_ou_non'=> trim($valeurs[$k+7]),
-             'num_report'=>0,
+             'num_report'=> 0,
              'rapp_doc_ou_non'=> trim($valeurs[$k+8]),
                'activ_avec_miss'=>trim($valeurs[$k+9]),
              'realisee'=> false,
@@ -596,12 +599,19 @@ class MissionController extends Controller
                 $k->update(['statut'=>'active']);
 
              }
+               $k->update(['num_report'=>0]);
+               $k->update(['rapl_ou_non'=>0]);
+               $k->update(['report_ou_non'=>0]);
+
            }
 
-        Dossier::where('id',$dossier->id)
-            ->update(array('current_status'=>'actif'));
+        $dos=Dossier::where('id',$dossier->id)->first();
+         if($dos->current_status != 'Cloture')
+         {
+             $dos->update(array('current_status'=>'actif'));
+         }
 
-    return 'Mission créee';
+      return 'Mission créee';
 
       
 
@@ -632,7 +642,7 @@ class MissionController extends Controller
                if(! $existe_cli)
                {
 
-                      return 'Impossible de céeer la mission : le client de  dossier courant doit être IMA France ou AXA France';
+                      return 'Impossible de céer la mission : le client de  dossier courant doit être IMA France ou AXA France';
 
                }
 
@@ -1023,7 +1033,8 @@ class MissionController extends Controller
           $Action=ActionEC::find($idact);
           $act=$Action->Mission;     
           $dossier=$act->dossier;
-          $dossiers=Dossier::get();
+         // $dossiers=Dossier::get();
+          //'dossiers' => $dossiers,
           $typesMissions=TypeMission::get();
 
          $act->update(['statut_courant'=>'annulee']);
@@ -1038,7 +1049,7 @@ class MissionController extends Controller
           
         Session::flash('messagekbsSucc', 'La mission en cours {'.$act->typeMission->nom_type_Mission.' } de dossier  { '.$act->dossier->reference_medic.'-'.$act->dossier->subscriber_name.' '.$act->dossier->subscriber_lastname .' } est annulée');            
 
-        return view('actions.FinMission',['act'=>$act,'dossiers' => $dossiers,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+        return view('actions.FinMission',['act'=>$act,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
 
    
     }
@@ -1359,7 +1370,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_dep_pour_miss)
              {
              $output.='green';
              }
@@ -1371,7 +1382,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_dep_pour_miss)
 
              {
               $output.= 'oui, date assignée';
@@ -1431,7 +1442,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM2" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect2==1)
+          if($miss->date_spec_affect2==1 || $miss->h_arr_prev_dest)
              {
              $output.='green';
              }
@@ -1443,7 +1454,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect2==1)
+             if($miss->date_spec_affect2==1 || $miss->h_arr_prev_dest)
 
              {
               $output.= 'oui, date assignée';
@@ -1517,7 +1528,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_arr_prev_dest)
              {
              $output.='green';
              }
@@ -1529,7 +1540,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_arr_prev_dest)
 
              {
               $output.= 'oui, date assignée';
@@ -1593,7 +1604,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM2" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect2==1)
+          if($miss->date_spec_affect2==1 || $miss->h_decoll_ou_dep_bat)
              {
              $output.='green';
              }
@@ -1605,7 +1616,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect2==1)
+             if($miss->date_spec_affect2==1 || $miss->h_decoll_ou_dep_bat)
              {
               $output.= 'oui, date assignée';
              }
@@ -1679,7 +1690,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_decoll_ou_dep_bat)
              {
              $output.='green';
              }
@@ -1691,7 +1702,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_decoll_ou_dep_bat)
 
              {
               $output.= 'oui, date assignée';
@@ -1762,7 +1773,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_rdv)
              {
              $output.='green';
              }
@@ -1774,7 +1785,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_rdv)
 
              {
               $output.= 'oui, date assignée';
@@ -1849,7 +1860,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_rdv)
              {
              $output.='green';
              }
@@ -1861,7 +1872,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_rdv)
 
              {
               $output.= 'oui, date assignée';
@@ -1936,7 +1947,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_rdv)
              {
              $output.='green';
              }
@@ -1948,7 +1959,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_rdv)
 
              {
               $output.= 'oui, date assignée';
@@ -2022,7 +2033,7 @@ public function getAjaxDeleguerMission($idmiss)
        
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_decoll_ou_dep_bat)
              {
              $output.='green';
              }
@@ -2034,7 +2045,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_decoll_ou_dep_bat)
 
              {
               $output.= 'oui, date assignée';
@@ -2108,7 +2119,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_arr_prev_dest)
              {
              $output.='green';
              }
@@ -2120,7 +2131,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_arr_prev_dest)
 
              {
               $output.= 'oui, date assignée';
@@ -2194,7 +2205,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_arr_prev_dest)
              {
              $output.='green';
              }
@@ -2206,7 +2217,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_arr_prev_dest)
 
              {
               $output.= 'oui, date assignée';
@@ -2278,7 +2289,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_arr_av_ou_bat)
              {
              $output.='green';
              }
@@ -2290,7 +2301,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_arr_av_ou_bat)
 
              {
               $output.= 'oui, date assignée';
@@ -2449,7 +2460,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_rdv)
              {
              $output.='green';
              }
@@ -2461,7 +2472,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_rdv)
 
              {
               $output.= 'oui, date assignée';
@@ -2537,7 +2548,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_rdv)
              {
              $output.='green';
              }
@@ -2549,7 +2560,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_rdv)
 
              {
               $output.= 'oui, date assignée';
@@ -2625,7 +2636,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_decoll_ou_dep_bat)
              {
              $output.='green';
              }
@@ -2637,7 +2648,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_decoll_ou_dep_bat)
 
              {
               $output.= 'oui, date assignée';
@@ -2711,7 +2722,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_rdv)
              {
              $output.='green';
              }
@@ -2723,7 +2734,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_rdv)
 
              {
               $output.= 'oui, date assignée';
@@ -2798,7 +2809,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_dep_pour_miss)
              {
              $output.='green';
              }
@@ -2810,7 +2821,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_dep_pour_miss)
 
              {
               $output.= 'oui, date assignée';
@@ -2874,7 +2885,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM2" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect2==1)
+          if($miss->date_spec_affect2==1 || $miss->h_retour_base)
              {
              $output.='green';
              }
@@ -2886,7 +2897,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect2==1)
+             if($miss->date_spec_affect2==1 || $miss->h_retour_base)
              {
               $output.= 'oui, date assignée';
              }
@@ -2960,7 +2971,7 @@ public function getAjaxDeleguerMission($idmiss)
         
             <span id="idspandateAssNonAssM" style="padding: 5px; font-weight: bold; font-size: 15px; color:';
 
-          if($miss->date_spec_affect==1)
+          if($miss->date_spec_affect==1 || $miss->h_fin_location_voit)
              {
              $output.='green';
              }
@@ -2972,7 +2983,7 @@ public function getAjaxDeleguerMission($idmiss)
             $output.= ';">';
 
 
-             if($miss->date_spec_affect==1)
+             if($miss->date_spec_affect==1 || $miss->h_fin_location_voit)
 
              {
               $output.= 'oui, date assignée';
@@ -3247,15 +3258,32 @@ public function getAjaxDeleguerMission($idmiss)
 
       $output='';
 
+      /*$active_acts=ActionEC::where('mission_id',$id)->where('statut','active')->get();
+      
+      if($active_acts)
+      {
+            foreach $active_acts as $key ) {
+
+              $rep_acts =ActionEC::where('ordre', $key->ordre)->where('statut','rfaite')->where('report_ou_non',1)->max('num_report');
+              $rapp_acts=ActionEC::where('ordre', $key->ordre)->where('statut','rfaite')->where('rapl_ou_non',1)->max('num_rappel');
+
+              $somme_rep_rapp=$rep_acts+ $rapp_acts;
+
+            }
+      }*/
+
       if(!$actk->ActionECs->isEmpty())
       {
                    $output='<h4><b>Etat des actions</b></h4><br>';
 
-
+                $dateRapp = null;
+                $dateRep = null;
+                $report=0;
+                $rappel=0;
                 $i = 0;
                 $len = count($actk->Actions);
                 //$actko=$actk->Actions->orderBy('ordre','DESC')->get();
-                $actko=ActionEC::where('mission_id',$id)->orderBy('ordre','ASC')->orderBy('num_rappel','ASC')->get();
+                $actko=ActionEC::where('mission_id',$id)->orderBy('ordre','ASC')->orderBy('num_rappel','ASC')->orderBy('num_report','ASC')->get();
                    $output.='<input id="InputetatActionMission" style="float:right" type="text" placeholder="Recherche.." autocomplete="off"> <br><br>';
                    $output.='<table class="table table-striped">
                   <thead>
@@ -3265,7 +3293,8 @@ public function getAjaxDeleguerMission($idmiss)
                       <th>Date début</th>
                       <th>Date fin</th>
                       <th>Réalisée par</th>
-                      <th>Num rappel</th>
+                      <th>Num rappel/report</th>
+                    
                       <th>commentaire 1</th>
                       <th>commentaire 2</th>
                       <th>commentaire 3</th>
@@ -3286,15 +3315,11 @@ public function getAjaxDeleguerMission($idmiss)
                         if ($i!=0)
                         {
 
+
                         $output.='<tr><td style="overflow: auto;" title="'.$sactions->titre.'"><span style="font-weight : none;">'.$sactions->titre.'</span></td>';
-                        if($sactions->num_rappel == 0)
-                        {
-                        $output.='<td style="overflow: auto;" title="'.$sactions->date_deb.'"><span style="font-weight : none;">'.$sactions->date_deb.'</span></td>';
-                         }
-                         else
-                         {
-                           $output.='<td style="overflow: auto;" title="'.$sactions->date_rappel.'"><span style="font-weight : none;">'.$sactions->date_rappel.'</span></td>';
-                         }
+
+                          $output.='<td style="overflow: auto;" title="'.$sactions->date_deb.'"><span style="font-weight : none;">'.$sactions->date_deb.'</span></td>';
+
 
                         $output.='<td style="overflow: auto;" title="'.$sactions->date_fin.'"><span style="font-weight : none;">'.$sactions->date_fin.'</span></td>';
 
@@ -3309,7 +3334,67 @@ public function getAjaxDeleguerMission($idmiss)
                          $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;"> </span></td>';
 
                         }
+
+                        if($sactions->statut=='active' || $sactions->statut=='inactive' || $sactions->statut=='deleguee' || $sactions->statut=='ignoree' || $sactions->statut=='faite')
+                        {
+
+                            /* $rep_acts =ActionEC::where('ordre', $sactions->ordre)->where('statut','rfaite')->where('report_ou_non',1)->max('num_report');
+                              $rapp_acts=ActionEC::where('ordre', $sactions->ordre)->where('statut','rfaite')->where('rapl_ou_non',1)->max('num_rappel');
+                            if(!$rapp_acts && !$rep_acts)
+                            {
+                              $somme_rep_rapp=0;
+                            }
+                            else
+                            {
+                              if($rapp_acts && $rep_acts )
+                              {
+                               $somme_rep_rapp=$rep_acts+ $rapp_acts+2;                              
+                              }
+                              else
+                              {
+                                if($rep_acts)
+                                {
+                                   $somme_rep_rapp=$rep_acts+1;
+
+                                }
+                                else
+                                {
+                                  if($rapp_acts)
+                                  {
+                                   $somme_rep_rapp=$rapp_acts+1;
+                                  }
+
+
+                                }
+                              }
+
+                            }*/
+
+                            $output.='<td style="overflow: auto;" title=" "><span style="font-weight : none;"> </span></td>' ;
+                             
+
+                        }
+                        else
+                        {
+
+                        if($sactions->rapl_ou_non==1 && $sactions->report_ou_non==0)
+                        {
                         $output.='<td style="overflow: auto;" title="'.$sactions->num_rappel.'"><span style="font-weight : none;">'.$sactions->num_rappel.'</span></td>' ;
+                        }
+                         if($sactions->rapl_ou_non==0 && $sactions->report_ou_non==1)
+                        {
+                        $output.='<td style="overflow: auto;" title="'.$sactions->num_report.'"><span style="font-weight : none;">'.$sactions->num_report.'</span></td>' ;
+                        }
+                         if($sactions->rapl_ou_non==0 && $sactions->report_ou_non==0)
+                        {
+
+
+
+                           $output.='<td style="overflow: auto;" title="'.$sactions->num_report.'"><span style="font-weight : none;">0</span></td>' ;
+
+                        }
+                       }
+
 
                         $output.='<td style="overflow: auto;" title="'.$sactions->comment1.'"><span style="font-weight : none;">'.$sactions->comment1.'</span></td>' ;
                         $output.='<td style="overflow: auto;" title="'.$sactions->comment2.'"><span style="font-weight : none;">'.$sactions->comment2.'</span></td>' ;
@@ -3324,14 +3409,14 @@ public function getAjaxDeleguerMission($idmiss)
                             else{
                                   if($sactions->statut=='reportee')
                                   {
-                                  $output.='<td style="overflow: auto;" title="reportée"><span style="font-weight : none;"> reportée </span></td></tr>' ;
+                                  $output.='<td style="overflow: auto;" title="reportée"><span style="font-weight : none;"> Report </span></td></tr>' ;
                                   }
                                   else
                                   {
 
                                       if($sactions->statut=='rappelee')
                                       {
-                                      $output.='<td style="overflow: auto;" title="mise en attente"><span style="font-weight : none;"> mise en attente </span></td></tr>' ;
+                                      $output.='<td style="overflow: auto;" title="mise en attente"><span style="font-weight : none;"> Rappel </span></td></tr>' ;
                                       }
                                       else
                                       {// cas pour active
@@ -3367,10 +3452,20 @@ public function getAjaxDeleguerMission($idmiss)
 
 
                           }
-                          else
+                          else // si rfaite
                           {
 
-                            $output.='<td style="overflow: auto;" title=" rappelée"><span style="font-weight : none;"> mise en attente</span></td></tr>' ;
+                            if($sactions->rapl_ou_non==1 && $sactions->report_ou_non==0)
+                            {
+                               $output.='<td style="overflow: auto;" title=" Rappel"><span style="font-weight : none;"> Rappel </span></td></tr>' ;
+                            }
+
+                              if($sactions->rapl_ou_non==0 && $sactions->report_ou_non==1)
+                            {
+                               $output.='<td style="overflow: auto;" title=" reportée"><span style="font-weight : none;"> Report </span></td></tr>' ;
+
+                            }
+
                           }
                         }
                         else
