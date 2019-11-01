@@ -1602,6 +1602,7 @@ class EmailController extends Controller
         $sujet = $request->get('sujet');
         $contenu = $request->get('contenu');
         $files = $request->file('files');
+        $from = trim($request->get('from'));
 
         $attachs = $request->get('attachs');
 
@@ -1617,12 +1618,28 @@ class EmailController extends Controller
 
             }
             }
+if ($from=='faxnajdassist@najda-assistance.com')
+{
+    $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+    $swiftTransport->setUsername('faxnajdassist@najda-assistance.com');
+   // $swiftTransport->setUsername('test@najda-assistance.com');
+    $swiftTransport->setPassword('e-solutions2019');
+   // $swiftTransport->setPassword('esol@2109');
 
-        //  array_push($ccimails,'ihebs001@gmail.com' );
-        // ajout de l'addrese de Mr Najib
-        //  array_push($ccimails,'medic.multiservices@topnet.tn' );
+}
+if ($from=='najdassist@gmail.com')
+{
+    $swiftTransport =  new \Swift_SmtpTransport( 'smtp.gmail.com', '587', 'tls');
+    $swiftTransport->setUsername('najdassist@gmail.com');
+    $swiftTransport->setPassword('nejibgyh9kkq');
 
-       // $to = explode(',', $to);
+}
+
+
+        $swiftMailer = new Swift_Mailer($swiftTransport);
+
+        Mail::setSwiftMailer($swiftMailer);
+
 
         try{
             Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails ) {

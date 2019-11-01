@@ -65,11 +65,12 @@
         </div>
 
 
-     <!--   <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-          <a href="#" class="btn btn-primary btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;"> 
+        <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
+          <a id="phonebtn" href="#" class="btn btn-primary btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
               <span class="fa fa-fw fa-phone fa-2x"></span>
           </a> 
-        </div>-->
+        </div>
+
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
 		 <?php
         $seance =  DB::table('seance')
@@ -99,7 +100,7 @@
                 </ul>
         </div>
 
-        <div class="col-sm-1 col-md-1 col-lg-2" class="navbar-toggler" data-toggle="collapse" data-target="#navbarHeader">
+        <div class="col-sm-1 col-md-1 col-lg-1" class="navbar-toggler" data-toggle="collapse" data-target="#navbarHeader">
          <!-- <img class="menu-trigger" src="{{ URL::asset('resources/assets/img/menu-black.png') }}" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation"/>-->
           <div class="menu-icon menu-trigger" class="navbar-toggler" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation" alt="Menu de l'application"  style="zoom:60%;float: right!important; padding-top: 28px">
             <div class="line-1 no-animation"></div>
@@ -113,7 +114,13 @@
 
     </header>
 
+<?php
+$urlapp=env('APP_URL');
 
+if (App::environment('local')) {
+    // The environment is local
+    $urlapp='http://localhost/najdaapp';
+}?>
 
 <style>
     @media  (max-width: 1280px)  /*** 150 % ***/  {
@@ -129,7 +136,6 @@
         .boite,   .date,   .search-icon{display:none;}
     }
 
-
     .single-char {
         color:red;
         cursor:pointer;
@@ -139,16 +145,12 @@
         cursor:pointer;
     }
 
-
     .kbsdropdowns
     {
-
         display:block ;
         position:relative ;
         top:-65px;
         left: -50 px;
-
-
     }
 </style>
 
@@ -156,17 +158,12 @@
 
 
     function colorerSeq(string,qy) {
-
-
-
         if(qy!='')
         {
-
             var caracSp = ['-', '_', '(',')',' '];
             //alert(string);
             // For all matching elements
             $(string).each(function() {
-
 
                 var hrefString=$(this).html();
                 //  alert(hrefString);
@@ -186,57 +183,38 @@
                 var ancien;
                 var kol=false;
                 for (var i = 0, len = myStr.length; i < len; i++) {
-                    //alert(myStr[i]);
-
                     if(qy[0].toUpperCase()==myStr[i].toUpperCase())
                     {
-
                         if(!dejaEn)
                         {
-
                             ancien= myContents ;
                             kol=true;
-                            // an_i=i;
                             noniden="";
-
                             for(var j=0, len2 = qy.length; j<len2; j++)
                             {
-
                                 if(i<len)
                                 {
-
                                     if(qy[j].toUpperCase()==myStr[i].toUpperCase() || caracSp.includes(myStr[i]) )
                                     {
-
                                         if(qy[j].toUpperCase()==myStr[i].toUpperCase())
                                         {
-                                            // alert ("bonjour");
                                             myContents += '<span class="single-char char-' + i + '">' + myStr[i] + '</span>';
                                             noniden+= '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
                                             i++;
-                                            //b=true;
                                         }
-
                                         else
                                         {
-                                            //alert ("special");
-
                                             if(caracSp.includes(myStr[i]))
                                             {
-                                                //alert ("special");
-
                                                 i++;
 
                                                 if(qy[j].toUpperCase()==myStr[i].toUpperCase())
                                                 {
                                                     myContents += '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
                                                     myContents += '<span class="single-char char-' + i + '">' + myStr[i] + '</span>';
-
                                                     noniden+= '<span class="single-char2 char-' + (i-1) + '">' + myStr[i-1] + '</span>';
                                                     noniden+= '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-
                                                     i++;
-                                                    //b=true;
                                                 }
                                                 else
                                                 {
@@ -248,7 +226,6 @@
 
                                             }
                                         }
-
                                     }
                                     else
                                     {
@@ -256,28 +233,17 @@
                                         myContents += noniden;
                                         myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
                                         j=len2;
-                                        //i=an_i;
-                                        //i++;
                                         kol=false;
                                         ancien= myContents;
-
                                     }
-
                                 }
                                 else
                                 {
                                     myContents=ancien;
                                     j=len2;
-                                    // i=an_i;
                                     kol=false;
-
                                 }
-
-
                             }
-
-
-
                             if(kol)
                             {
                                 i--;
@@ -287,25 +253,14 @@
                             else
                             {
 
-                                // i=an_i;
-                                // i--;
                                 dejaEn=false;
-
-                                // myContents=ancien;
-                                // myContents+= noniden;
-
                             }
-
-
 
                         }
                         else
                         {
-
                             myContents += '<span class="single-char2 char-' + i + '">' + myStr[i] + '</span>';
-
                         }
-
                     }
                     else
                     {
@@ -316,15 +271,9 @@
                 myContents='<a href="'+hrefString+'">'+myContents+'</a>';
                 // Replace original string with constructed html string
                 $(this).html(myContents);
-
-                //alert($(this).html(myContents).text());
             });
         }
-
     }
-
-
-
 
     $(document).ready(function(){
 
@@ -344,57 +293,21 @@
                     data:{qy:qy, _token:_token},
                     success:function(data)
                     {
-
-
-                        //alert(data);
-
                         $("#kkk").fadeIn();
                         $("#kkk").html(data);
-
-
                         var myStringType=$('.resAutocompRech');
-                        // alert( myStringType.html());
                         colorerSeq(myStringType,qy);
-                        // alert(myStringType);
-
-                        /* $(document).ready(function() {
-                         var myStringType = $('.resAutocompTyoeAct').text();
-                         arrayMe(myStringType);
-                         });*/
-
-
-
                     }
-
-
                 });
-
 
             }
             else
             {
-
-
                 $("#kkk").fadeOut();
-
-
             }
-
-
-
-
         });
-
-
-
     });
 
-
-
-
-</script>
-
-<script>
     $(document).on('click','.resAutocompTyoeAct',function(){
 
         // alert("bonjour");
@@ -410,8 +323,24 @@
         $("#kkk").fadeOut();
     });
 
+    // phone
+    $('#phonebtn').on('click', function(event) {
+        event.preventDefault();
+        var url      = '<?php echo $urlapp; ?>/public/ctxSip/phone/index.php',
+            features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
+        var session=null;
+        // This is set when the phone is open and removed on close
+        if (!localStorage.getItem('ctxPhone')) {
+            window.open(url, 'ctxPhone', features);
+
+            return false;
+        } else {
+            window.alert('Phone already open.');
+
+        }
+        alert(document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value);
+
+    });
 
 
 </script>
-
-

@@ -17,7 +17,11 @@ class Prestation extends Model
 'gouvernorat',
 'specialite',
  'prestation',
- 'statut'
+ 'statut',
+ 'prestation',
+  'autorise',
+'details',
+'effectue'
 
 ];
 

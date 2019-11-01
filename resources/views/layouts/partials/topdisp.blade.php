@@ -81,7 +81,7 @@
 
 
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-          <a   href="#" class="btn btn-primary btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style=";margin-left: 20px;margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
+          <a id="phonebtn"  href="#" class="btn btn-primary btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style=";margin-left: 20px;margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
               <span class="fas fa-fw fas fa-phone fa-2x"></span>
           </a> 
         </div>
@@ -133,6 +133,13 @@
 
     </header>
 
+<?php
+$urlapp=env('APP_URL');
+
+if (App::environment('local')) {
+    // The environment is local
+    $urlapp='http://localhost/najdaapp';
+}?>
 
 
 <div class="modal  " id="crendu" >
@@ -377,3 +384,25 @@
 </script>
 
 
+<script>
+
+    $('#phonebtn').on('click', function(event) {
+        event.preventDefault();
+        var url      = '<?php echo $urlapp; ?>/public/ctxSip/phone/index.php',
+            features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
+        var session=null;
+        // This is set when the phone is open and removed on close
+        if (!localStorage.getItem('ctxPhone')) {
+            window.open(url, 'ctxPhone', features);
+
+            return false;
+        } else {
+            window.alert('Phone already open.');
+
+        }
+        alert(document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value);
+
+    });
+
+
+</script>

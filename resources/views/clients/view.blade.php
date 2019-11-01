@@ -334,9 +334,9 @@
                                 <tbody>
                                 @foreach($tels as $tel)
                                     <tr>
-                                         <td style="width:20%;"><?php echo $tel->champ; ?></td>
-                                        <td style="width:20%;"><?php echo $tel->type; ?></td>
-                                        <td style="width:50%;"><?php echo $tel->remarque; ?></td>
+                                         <td style="width:20%;"><input   id='tel-champ-<?php echo $tel->id;?>' type="number" style="width:100%" value="<?php echo $tel->champ; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','champ',this)" /></td>
+                                        <td style="width:20%;"><input  id='tel-type-<?php echo $tel->id;?>' style="width:100%" value="<?php echo $tel->type; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','type',this)" /></td>
+                                        <td style="width:50%;"><input   id='tel-rem-<?php echo $tel->id;?>' style="width:100%" value="<?php echo $tel->remarque; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','remarque',this)" /></td>
                                         <td style="width:10%;"><i class="fa fa-phone"></i></td>
                                         <td style="width:10%;">
                                             <a  href="{{action('ClientsController@deleteaddress', $tel->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
@@ -374,9 +374,9 @@
                                 <tbody>
                                 @foreach($emails as $email)
                                     <tr>
-                                         <td style="width:20%;"><?php echo $email->champ; ?></td>
-                                        <td style="width:20%;"><?php echo $email->type; ?></td>
-                                        <td style="width:50%;"><?php echo $email->remarque; ?></td>
+                                         <td style="width:20%;"><input type="email" id='email-champ-<?php echo $email->id;?>' style="width:100%" value="<?php echo $email->champ; ?>" onchange="changingAddress('<?php echo $email->id; ?>','champ',this)" /></td>
+                                        <td style="width:20%;"><input   id='email-type-<?php echo $email->id;?>'  style="width:100%" value="<?php echo $email->type; ?>" onchange="changingAddress('<?php echo $email->id; ?>','type',this)" /></td>
+                                        <td style="width:50%;"><input   id='email-rem-<?php echo $email->id;?>'  style="width:100%" value="<?php echo $email->remarque; ?>" onchange="changingAddress('<?php echo $email->id; ?>','remarque',this)" /></td>
                                         <td style="width:10%;"><i class="fa fa-envelope"></i></td>
                                         <td style="width:10%;">
                                             <a  href="{{action('ClientsController@deleteaddress', $email->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
@@ -413,9 +413,9 @@
                                 <tbody>
                                 @foreach($faxs as $fax)
                                     <tr>
-                                        <td style="width:20%;"><?php echo $fax->champ; ?></td>
-                                        <td style="width:20%;"><?php echo $fax->type; ?></td>
-                                        <td style="width:50%;"><?php echo $fax->remarque; ?></td>
+                                        <td style="width:20%;"><input type="number"   id='fax-champ-<?php echo $fax->id;?>'   style="width:100%" value="<?php echo $fax->champ; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','champ',this)" /></td>
+                                        <td style="width:20%;"><input  id='fax-type-<?php echo $fax->id;?>'   style="width:100%" value="<?php echo $fax->type; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','type',this)" /></td>
+                                        <td style="width:50%;"><input  id='fax-rem-<?php echo $fax->id;?>'   style="width:100%" value="<?php echo $fax->remarque; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','remarque',this)" /></td>
                                         <td style="width:10%;"><i class="fa fa-fax"></i></td>
                                         <td style="width:10%;">
                                             <a  href="{{action('ClientsController@deleteaddress', $fax->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
@@ -548,8 +548,8 @@
                                 <tbody>
                                 @foreach($entites as $entite)
                                     <tr>
-                                        <td style="width:30%;"><?php echo $entite->nom; ?></td>
-                                        <td style="width:60%;"><?php echo $entite->champ; ?></td>
+                                        <td style="width:30%;"><input   id='entite-nom-<?php echo $entite->id;?>'  style="width:100%" value="<?php echo $entite->nom; ?>" onchange="changingAddress('<?php echo $entite->id; ?>','nom',this)" /></td>
+                                        <td style="width:60%;"><input   id='entite-champ-<?php echo $entite->id;?>'  style="width:100%" value="<?php echo $entite->champ; ?>" onchange="changingAddress('<?php echo $entite->id; ?>','champ',this)" /></td>
                                         <td style="width:10%;">
                                             <a  href="{{action('ClientsController@deleteaddress', $entite->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                                 <span class="fa fa-fw fa-trash-alt"></span> Supprimer
@@ -621,12 +621,12 @@
                                 <tbody>
                                 @foreach($gestions as $gestion)
                                     <tr>
-                                        <td style="width:20%;"><?php echo $gestion->nom; ?>  <?php echo $reseau->prenom; ?></td>
-                                        <td style="width:10%;"><?php echo $gestion->fonction; ?></td>
-                                        <td style="width:10%;"><?php echo $gestion->tel; ?></td>
-                                        <td style="width:10%;"><?php echo $gestion->fax; ?></td>
-                                        <td style="width:10%;"><?php echo $gestion->mail; ?></td>
-                                        <td style="width:20%;"><?php echo $gestion->remarque; ?></td>
+                                        <td style="width:20%;"><input  id='gest-nom-<?php echo $gestion->id;?>'    style="width:50%" value="<?php echo $gestion->nom; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','nom',this)" />  <input  id='gest-prenom-<?php echo $gestion->id;?>'  style="width:48%" value="<?php echo $gestion->prenom; ?>" onchange="changingAddress('<?php echo $gestion->prenom; ?>','prenom',this)" /></td>
+                                        <td style="width:10%;"><input  id='gest-fon-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->fonction; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','fonction',this)" /></td>
+                                        <td style="width:10%;"><input type="number" id='gest-tel-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->tel; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','tel',this)" /></td>
+                                        <td style="width:10%;"><input type="number" id='gest-fax-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->fax; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','fax',this)" /></td>
+                                        <td style="width:10%;"><input  type="email" id='gest-mail-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->mail; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','mail',this)" /></td>
+                                        <td style="width:20%;"><input  id='gest-rem-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->remarque; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','remarque',this)" /></td>
                                         <td style="width:10%;">
                                             <a  href="{{action('ClientsController@deleteaddress', $gestion->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                                 <span class="fa fa-fw fa-trash-alt"></span> Supprimer
@@ -756,12 +756,12 @@
                                 <tbody>
                                 @foreach($qualites as $qualite)
                                     <tr>
-                                        <td style="width:20%;"><?php echo $qualite->nom; ?>  <?php echo $qualite->prenom; ?></td>
-                                        <td style="width:20%;"><?php echo $qualite->fonction; ?></td>
-                                        <td style="width:50%;"><?php echo $qualite->tel; ?></td>
-                                        <td style="width:50%;"><?php echo $qualite->fax; ?></td>
-                                        <td style="width:50%;"><?php echo $qualite->mail; ?></td>
-                                        <td style="width:40%;"><?php echo $qualite->remarque; ?></td>
+                                        <td style="width:20%;"><input  id='qual-nom-<?php echo $qualite->id;?>'  style="width:50%" value="<?php echo $qualite->nom; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','nom',this)" />  <input  id='qual-prenom-<?php echo $qualite->id;?>'  style="width:48%" value="<?php echo $qualite->prenom; ?>" onchange="changingAddress('<?php echo $qualite->prenom; ?>','prenom',this)" /></td>
+                                        <td style="width:10%;"><input  id='qual-fon-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->fonction; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','fonction',this)" /></td>
+                                        <td style="width:10%;"><input  type="number" id='qual-tel-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->tel; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','tel',this)" /></td>
+                                        <td style="width:10%;"><input type="number" id='qual-fax-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->fax; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','fax',this)" /></td>
+                                        <td style="width:10%;"><input type="email" id='qual-mail-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->mail; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','mail',this)" /></td>
+                                        <td style="width:20%;"><input  id='qual-rem-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->remarque; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','remarque',this)" /></td>
                                         <td style="width:10%;">
                                             <a  href="{{action('ClientsController@deleteaddress', $qualite->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                                 <span class="fa fa-fw fa-trash-alt"></span> Supprimer
@@ -890,12 +890,12 @@
                                 <tbody>
                                 @foreach($reseaux as $reseau)
                                     <tr>
-                                        <td style="width:20%;"><?php echo $reseau->nom; ?>  <?php echo $reseau->prenom; ?></td>
-                                        <td style="width:10%;"><?php echo $reseau->fonction; ?></td>
-                                        <td style="width:10%;"><?php echo $reseau->tel; ?></td>
-                                        <td style="width:10%;"><?php echo $reseau->fax; ?></td>
-                                        <td style="width:10%;"><?php echo $reseau->mail; ?></td>
-                                        <td style="width:20%;"><?php echo $reseau->remarque; ?></td>
+                                        <td style="width:20%;"><input  id='res-nom-<?php echo $reseau->id;?>'  style="width:50%" value="<?php echo $reseau->nom; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','nom',this)" />  <input id='res-prenom-<?php echo $reseau->id;?>'   style="width:48%" value="<?php echo $reseau->prenom; ?>" onchange="changingAddress('<?php echo $reseau->prenom; ?>','prenom',this)" /></td>
+                                        <td style="width:10%;"><input  id='res-fon-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->fonction; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','fonction',this)" /></td>
+                                        <td style="width:10%;"><input type="number" id='res-tel-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->tel; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','tel',this)" /></td>
+                                        <td style="width:10%;"><input type="number" id='res-fax-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->fax; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','fax',this)" /></td>
+                                        <td style="width:10%;"><input  type="email" id='res-mail-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->mail; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','mail',this)" /></td>
+                                        <td style="width:20%;"><input  id='res-rem-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->remarque; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','remarque',this)" /></td>
                                         <td style="width:10%;">
                                             <a  href="{{action('ClientsController@deleteaddress', $reseau->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                                 <span class="fa fa-fw fa-trash-alt"></span> Supprimer
@@ -1700,7 +1700,7 @@
             var fonction = $('#fonctiong').val();
             var tel = $('#telg').val();
             var email = $('#emailg').val();
-            var fax = $('#faxr').val();
+            var fax = $('#faxg').val();
             var observ = $('#remarqueg').val();
             var nature = $('#nature7').val();
             if ((nom != '') )
@@ -1921,6 +1921,27 @@
 
     }
 
+
+    function changingAddress(id,champ,elm) {
+        var champid=elm.id;
+        var val =document.getElementById(champid).value;
+
+        //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('clients.updateaddress') }}",
+            method: "POST",
+            data: {id: id , champ:champ ,val:val,  _token: _token},
+            success: function (data) {
+                $('#'+champid).animate({
+                    opacity: '0.3',
+                });
+                $('#'+champid).animate({
+                    opacity: '1',
+                });            }
+        });
+
+    }
 
 
 

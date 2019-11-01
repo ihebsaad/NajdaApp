@@ -440,6 +440,21 @@ class ClientsController extends Controller
     }
 
 
+// Modifier les champs des N° tels, fax, Email ...
+    public function updateaddress(Request $request)
+    {
+
+        $id= $request->get('id');
+        $champ= strval($request->get('champ'));
+        $val=strval($request->get('val'));
+         //  $dossier = Dossier::find($id);
+        // $dossier->$champ =   $val;
+        Adresse::where('id', $id)->update(array($champ => $val));
+
+
+
+    }
+
 
 }
 

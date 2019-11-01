@@ -72,25 +72,23 @@
                  </div>
                  <div class="form-group">
                      <label class="control-label">Ville <span class="required" aria-required="true">   </span></label>
-                     <input value="<?php // echo PrestationsController::ChampById('ville',$prestation->id);?>" class="form-control" name="gouvernorat" id="gouvernorat" readonly data-required="1" required="" aria-required="true">
+                     <input  value="{{$prestation->ville}}" class="form-control" name="ville" id="ville" readonly data-required="1" required="" aria-required="true">
                  </div>
                  <div class="form-group">
                             <label>Prix / Fourchette</label>
                             <input onchange="changing(this)" value="{{$prestation->price}}" class="form-control" name="price" id="price">
-                        </div>
-                   <!--     <div class="form-group">
-                            <label>Marge du prix</label>
-                            <input  onchange="changing(this)" value="{{$prestation->marge}}" class="form-control" name="marge" id="marge">
-                        </div>-->
-                    <!--    <div class="form-group">
-                            <div class="checkbox-list">
-                                <label>
-                                    <div class="checker" id="annules"><span><input  onchange="changing2(this)" id="effectue"  <?php if ($prestation->effectue ==1){echo 'checked';} ?> type="checkbox" name="pres_parv"    ></span></div> Parvenue </label>
-                                <label>
-                                    <div class="checker" id="price_invoiceds"><span><input onchange="changing2(this)"  id="price_invoiced"  <?php if ($prestation->price_invoiced ==1){echo 'checked';} ?>  type="checkbox" name="pres_fact"    ></span></div> Facturée au client </label>
-                                <label>
-                                </label></div>
-                        </div>-->
+                 </div>
+                 <?php if ($prestation->autorise !='') {?>
+                 <div class="form-group">
+                     <label>Autorisée par</label>
+                     <input readonly  value="{{strtoupper($prestation->autorise)}}" class="form-control" name="autorise" >
+                 </div>
+                 <?php } ?>
+
+                 <div class="form-group">
+                     <label>Détails  </label>
+                     <textarea  onchange="changing(this)"   class="form-control" name="details" id="details" >{{$prestation->details}}</textarea>
+                 </div>
 
                 </div>
 

@@ -58,6 +58,14 @@
 
     <div class="form-group">
         {{ csrf_field() }}
+        <label for="from">Emetteur:</label>
+        <div class="row">
+            <select class="form-control" name="from" id="from" >
+                <option value="faxnajdassist@najda-assistance.com">faxnajdassist@najda-assistance.com</option>
+                <option value="najdassist@gmail.com">najdassist@gmail.com</option>
+            </select>
+        </div>
+    </div>
         <label for="destinataire">destinataire:</label>
         <div class="row">
         <div class="col-md-10">

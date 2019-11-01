@@ -64,6 +64,15 @@
 
     <div class="form-group">
         {{ csrf_field() }}
+        <label for="from">Emetteur:</label>
+        <div class="row">
+            <select class="form-control" name="from" id="from" >
+                <option value="faxnajdassist@najda-assistance.com">faxnajdassist@najda-assistance.com</option>
+                <option value="najdassist@gmail.com">najdassist@gmail.com</option>
+            </select>
+        </div>
+    </div>
+        <div class="row">
         <label for="destinataire">Destinataire:</label>
         <div class="row">
             <?php if($type=='client')

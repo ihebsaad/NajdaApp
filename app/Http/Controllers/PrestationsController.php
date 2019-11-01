@@ -98,6 +98,10 @@ class PrestationsController extends Controller
         $gouv= intval( $request->get('gouvernorat'));
         $spec= intval( $request->get('specialite'));
         $date=  $request->get('date');
+        $details=  $request->get('details');
+        $autorise=  $request->get('autorise');
+        $effectue=null;
+        if($autorise <>''){$effectue=1;}
 
             $prestation = new Prestation([
            'prestataire_id' =>$prest ,
@@ -106,12 +110,19 @@ class PrestationsController extends Controller
             'gouvernorat' => $gouv,
                 'specialite' => $spec,
                 'date_prestation' => $date,
+                'details' => $details,
+                'autorise' => $autorise,
+                'effectue' => $effectue,
 
             ]);
 
 
            if ($prestation->save())
            {
+               // Envoi de mail
+               if($autorise !=''){
+
+               }
                $user = auth()->user();
                $nomuser=$user->name.' '.$user->name;
 

@@ -209,7 +209,8 @@ Route::post('/clients/updatingnature','ClientsController@updatingnature')->name(
 Route::post('/clients/removenature','ClientsController@removenature')->name('clients.removenature');
 Route::get('/clients/view/{id}', 'ClientsController@view');
 Route::get('/clients/destroy/{id}', 'ClientsController@destroy');
-Route::get('/clients/deleteaddress/{id}', 'ClientsController@deleteaddress')->name('clients.deleteaddress');;
+Route::get('/clients/deleteaddress/{id}', 'ClientsController@deleteaddress')->name('clients.deleteaddress');
+Route::post('/clients/updateaddress', 'ClientsController@updateaddress')->name('clients.updateaddress');
 
 
 /*** Cities -> Gouvernorats  **/

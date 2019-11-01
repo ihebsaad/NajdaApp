@@ -92,7 +92,7 @@ use  \App\Http\Controllers\EntreesController ;
     <div class="col-md-5" style="text-align: right;padding-right: 35px">
         <div class="page-toolbar">
 
-          <?php  if(! $statut=='Cloture'){ ?>
+          <?php  if( $statut!='Cloture'){ ?>
         <div class="btn-group">
             <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -431,7 +431,7 @@ use  \App\Http\Controllers\EntreesController ;
             <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
             <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
             <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
-            <td style="font-size:13px;width:10%">  <button onclick="init(<?php echo $id;?>)" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> Ajouter une prestation</button>
+            <td style="font-size:13px;width:10%">  <button onclick="init('<?php echo $id;?>','<?php echo $prestataire->name.' '.$prestataire->prenom  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> Ajouter une prestation</button>
             </td>
 
         </tr>
@@ -2084,13 +2084,8 @@ reference_customer
 
                         <div class="form-group ">
                             <label for="selectedprest2">Prestataire :</label>
-                            <select style="width:350px;margin-top:10px;margin-bottom:10px;" disabled id="selectedprest2"  class="form-control   " value=" ">
-                                <option></option>
-                                @foreach($prestataires as $prest)
-                                    <option    value="<?php echo $prest->id;?>"> <?php echo $prest->name;?></option>
-                                @endforeach
-                            </select>
-
+                           <input type="hidden" id="selectedprest2" />
+                           <input type="text" readonly class="form-control" id="inputprest" />
 
                         </div>
 
@@ -2101,27 +2096,40 @@ reference_customer
 
                         <div class="form-group">
                             <label for="sujet">Autorisé Par :</label>
-                            <select    >
+                            <select  id="autorise" class="form-control"  style="width:350px" >
                                 <option value="procedure">Procédure</option>
                                 <option value="nejib">Dr Nejib</option>
                                 <option value="salah">Dr Salah Harzallah</option>
+                                <option value="smq">SMQ</option>
+                                <option value="smq">DG</option>
                             </select>
 
                         </div>
+                        <div class="form-group">
+                            <label for="details">Détails   :</label>
+                            <textarea  id="details" class="form-control"  ></textarea>
 
+                        </div>
 
                     </div>
 
                 </div>
                 <div class="modal-footer">
-                    <a id="ajoutcompter"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
+                    <a id="selectionnerprest"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <?php
+    $urlapp=env('APP_URL');
 
+
+    if (App::environment('local')) {
+    // The environment is local
+    $urlapp='http://localhost/najdaapp';
+    }?>
 
     <!--Modal Tel-->
 
@@ -2133,7 +2141,7 @@ reference_customer
 
                 </div>
                 <div class="modal-body">
-                    <div class="card-body">
+                    <div class="card-body" sytle="height:300px">
 <?php use App\Intervenant;
                         ;?>
 
@@ -2142,72 +2150,62 @@ reference_customer
 
                             <form id="faireappel" novalidate="novalidate">
 
-                                <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}">
-                                <div class="form-group " >
-                                    <label for="emaildoss">Numéro</label>
-                                    <div class=" row  ">
+                                <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}" />
+                                     <label for="emaildoss">Numéro</label>
 
-                                        <select class="form-control select2" style="width: 230px"  id="numtel" name="numtel"
-                                        <option value="Select">Selectionner</option>
-                                        <?php
-                                        $tels =Intervenant::where('dossier',$dossier->id)->distinct()->get(['tel']);
-
-                                        $usedtid=array();
-                                        foreach ($tels as $tel) {
-                                        $usedtid[]=$tel['dossier'];
-                                        }
-                                        $inters = Intervenant::get();
-                                        $docwithcl = array();
-
-                                        ?>
-                                        @foreach ($inters as $inter)
-                                            @if (in_array($inter["dossier_id"],$usedtid))
-                                                <option value={{ $inter["tel"] }} >{{ $inter["tel"] }}</option>
-
-
-                                                @endif
-                                                @endforeach
-                                                </select>
+                                <select  class="form-control" id="numtel" name="numtel"   >
+                                    <option value=""></option>
+                                    <option value="123456789">123456789</option>
+                                    <option value="00123456789">00123456789</option>
+                                    <option value="123456789100">123456789100</option>
+                                 </select>
                             </form>
 
                         </div>
                     </div>
 
-                    </form>
                 </div>
 
+                <div class="modal-footer">
+                    <a  type="button" class="btn btn-primary" href="phone" id="launchPhone"  >Appeler</a>
 
+                    <script>
+
+                        $('#launchPhone').on('click', function(event) {
+                            event.preventDefault();
+                            var num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
+                             var url      = '<?php echo $urlapp; ?>/public/ctxSip/phone/index.php?num='+num,
+                                features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
+                            var session=null;
+                            // This is set when the phone is open and removed on close
+                            if (!localStorage.getItem('ctxPhone')) {
+                                window.open(url, 'ctxPhone', features);
+
+                                return false;
+                            } else {
+                                window.alert('Phone already open.');
+
+                            }
+                            alert(document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value);
+
+                        });
+
+
+                        /* window.onload = function(){
+                             window.document.getElementById('numDisplay').value= document.getElementById('numtel').value ;
+                         }*/
+                    </script>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+                </div>
             </div>
 
         </div>
-        <div class="modal-footer">
-            <a  type="button" class="btn btn-primary" href="phone" id="launchPhone">Appeler</a>
-            <script>
-                var url      = '/NajdaApp/vendor/ctxSip/phone/index.php',
-                    features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
-                var session=null;
-                $('#launchPhone').on('click', function(event) {
-                    event.preventDefault();
-
-                    // This is set when the phone is open and removed on close
-                    if (!localStorage.getItem('ctxPhone')) {
-                        window.open(url, 'ctxPhone', features);
-                        return false;
-                    } else {
-                        window.alert('Phone already open.');
-                    }
-                    alert(document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value);
-
-                });
-            </script>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-
-        </div>
-    </div>
-
 
     </div>
-    </div>
+
+
+
 
 @endsection
 
@@ -3294,14 +3292,7 @@ function keyUpHandler(){
 
 @stop
 
-<?php
-$urlapp=env('APP_URL');
- 
 
-if (App::environment('local')) {
-// The environment is local
-$urlapp='http://localhost/najdaapp';
-}?>
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
 
 <script>
@@ -3456,8 +3447,6 @@ $urlapp='http://localhost/najdaapp';
         $('#selectionnerprest').click(function(){
 
 
-            selected=   document.getElementById('selected').value;
-            document.getElementById('selectedprest2').value = document.getElementById('prestataire_id_'+selected).value ;
 
 
             var prestataire = $('#selectedprest2').val();
@@ -3467,7 +3456,9 @@ $urlapp='http://localhost/najdaapp';
             var typeprest = $('#typeprest2').val();
             var gouvernorat = $('#gouvcouv2').val();
             var specialite = $('#specialite2').val();
-            var date = $('#pres_date').val();
+            var date = $('#pres_date2').val();
+            var autorise = $('#autorise').val();
+            var details = $('#details').val();
 
             //   gouvcouv
             if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
@@ -3476,14 +3467,18 @@ $urlapp='http://localhost/najdaapp';
                 $.ajax({
                     url:"{{ route('prestations.saving') }}",
                     method:"POST",
-                    data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
+                    data:{autorise:autorise,details:details,date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
                     success:function(data){
                         var prestation=parseInt(data);
                         /// window.location =data;
 
-                        document.getElementById('prestation').style.display='block';
-                        document.getElementById('valide').style.display='block';
-                        document.getElementById('idprestation').value =prestation;
+                        Swal.fire({
+                            type: 'success',
+                            title: 'Enregistrée...',
+                            text: "Prestation Enregistrée"
+                        });
+                        // window.location =data;
+                        $("#openmodalprest").modal('hide');
 
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
@@ -3493,7 +3488,7 @@ $urlapp='http://localhost/najdaapp';
 
                 });
             }else{
-
+            alert('il manque des informations');
             }
         });
 
@@ -4176,10 +4171,12 @@ $("#showNext-m").click(function() {
     }
 
 
-    function init(elm)
+    function init(id,nom)
     {
 
-        document.getElementById('selectedprest2').selectedIndex =elm;
+        document.getElementById('selectedprest2').value =id;
+        document.getElementById('inputprest').value =nom;
+
 
     }
 

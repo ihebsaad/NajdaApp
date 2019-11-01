@@ -132,8 +132,7 @@
 
             if (val==true){val=1;}
            else{val=0;}
-alert(val);
-             //if ( (val != '')) {
+              //if ( (val != '')) {
             var _token = $('input[name="_token"]').val();
             $.ajax({
                 url: "{{ route('actualites.updating') }}",
