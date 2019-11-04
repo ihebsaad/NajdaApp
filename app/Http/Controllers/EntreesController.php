@@ -234,25 +234,30 @@ class EntreesController extends Controller
 
     public static function traiter( $id)
     {
-
+        $idnotif=0;
         $notifid = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$id.'}}\')')->get(['id']);
-        $idnotif = array_values($notifid['0']->getAttributes());
-        $idnotification=$idnotif['0'];
+       if($notifid!=null) {$idnotif = array_values($notifid['0']->getAttributes());}
+       if($idnotif>0) {
+           $idnotification = $idnotif['0'];
 
-        $notif = Notification::find($idnotification);
+           $notif = Notification::find($idnotification);
 
-        $notif->statut=1 ;
-        $notif->save();
-
+           $notif->statut = 1;
+           $notif->save();
+       }
         $entree = Entree::find($id);
         $entree->notif=1; //traitée
+        $dossid=$entree->dossierid;
         $entree->save();
 
         if( ( $entree->type=='email')||( $entree->type=='sms'))
         { app('App\Http\Controllers\EntreesController')->export_pdf($id);}
 
       //  return redirect('/home')->with('success', '  Traité');
-        return redirect('/entrees/show/'.$id);
+        if($dossid >0) {return redirect('/dossiers/view/'.$dossid.'#tab2');}
+        else{
+            return back();
+         }
 
     }
 

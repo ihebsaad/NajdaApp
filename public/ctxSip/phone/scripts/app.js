@@ -528,9 +528,11 @@ $(document).ready(function() {
             } else if (navigator.getUserMedia) {
                 return true;
             } else {
-                ctxSip.setError(true, 'Unsupported Browser.', 'Your browser does not support the features required for this phone.');
-                window.console.error("WebRTC support not found");
-                return false;
+                //ctxSip.setError(true, 'Unsupported Browser.', 'Your browser does not support the features required for this phone.');
+                //window.console.error("WebRTC support not found");
+                //return false;
+				alert("Naviguateur non supporté!");
+				return true;
             }
         }
     };

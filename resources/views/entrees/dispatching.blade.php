@@ -98,7 +98,7 @@ if (App::environment('local')) {
             var table = $('#mytable').DataTable({
                 "aaSorting": [],
                 orderCellsTop: true,
-                dom: 'Bflrtip',
+                dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
                 responsive:true,
                 buttons: [
 

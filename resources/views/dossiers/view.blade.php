@@ -146,7 +146,23 @@ use  \App\Http\Controllers\EntreesController ;
             </div>
 
             <div class="btn-group">
-                <button   type="button"   class="btn btn-default"   data-toggle="modal" data-target="#faireappel"><b><i class="fa fa-phone"></i>  Tél</b></button>
+                <button   type="button"   class="btn btn-default"  ><b><i class="fa fa-phone"></i>  Tél</b></button>
+
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a  data-toggle="modal" data-target="#faireappel" onclick="ShowNumsCc();" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Au Client  </a>
+                    </li>
+                    <li>
+                        <a data-toggle="modal" data-target="#faireappel" onclick="ShowNumsInt();" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            À l'intervenant </a>
+                    </li>
+                    <li>
+                        <a data-toggle="modal" data-target="#faireappel" onclick="ShowNumsAss();" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            À l'assuré   </a>
+                    </li>
+
+                </ul>
             </div>
 
             <div class="btn-group">
@@ -2158,6 +2174,31 @@ reference_customer
                                     <option value="123456789">123456789</option>
                                     <option value="00123456789">00123456789</option>
                                     <option value="123456789100">123456789100</option>
+                                    <div id="telsassures">
+                                    <?php foreach($phonesDossier   as $phone)
+                                        {
+                                    echo '<option value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
+
+                                    }
+                                    ?>
+                                    </div>
+                                    <div id="telsclients">
+                                        <?php foreach($phonesCl   as $phone)
+                                        {
+                                        echo '<option value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
+
+                                        }
+                                        ?>
+                                    </div>
+                                    <div id="telsintervs">
+                                        <?php foreach($phonesInt   as $phone)
+                                        {
+                                        echo '<option value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
+
+                                        }
+                                        ?>
+                                    </div>
+
                                  </select>
                             </form>
 
@@ -2174,7 +2215,7 @@ reference_customer
                         $('#launchPhone').on('click', function(event) {
                             event.preventDefault();
                             var num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
-                             var url      = '<?php echo $urlapp; ?>/public/ctxSip/phone/index.php?num='+num,
+                             var url      = 'http://192.168.1.249/najdaapp/public/ctxSip/phone/index.php?num='+num,
                                 features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
                             var session=null;
                             // This is set when the phone is open and removed on close
@@ -2217,6 +2258,8 @@ reference_customer
 <script>
 
 //script pour activer l onglet OM si lurl contient le mot CreerOM 
+
+
 
  $(document).ready(function() {
 
@@ -2312,6 +2355,24 @@ reference_customer
 <script src="{{ asset('public/js/nombre_en_lettre.js') }}"></script>
 
 <script>
+
+    function ShowNumsCc() {
+        $('#telsassures').css('display','none');
+        $('#telsintervs').css('display','none');
+        $('#telsclients').css('display','block');
+    }
+
+    function ShowNumsInt() {
+        $('#telsassures').css('display','none');
+        $('#telsintervs').css('display','block');
+        $('#telsclients').css('display','none');
+    }
+    function ShowNumsAss() {
+        $('#telsassures').css('display','block');
+        $('#telsintervs').css('display','none');
+        $('#telsclients').css('display','none');
+    }
+
     function hideinfos() {
         $('#tab31').css('display','none');
     }

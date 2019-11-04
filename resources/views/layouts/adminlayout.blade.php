@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
 <?php    setlocale(LC_ALL, "fr_FR.UTF-8");    ?>
-<head>
-    @include('layouts.partials.head')
+ <head>
+
+    <link rel="shortcut icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
+    <meta charset="UTF-8">
+    <title>Najda Assistances - Admin</title>
+     @include('layouts.partials.head')
 </head>
 <body>
 @include('layouts.partials.topadmin')

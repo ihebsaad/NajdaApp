@@ -1261,7 +1261,7 @@ class EmailController extends Controller
 
         $listeemails=array();
         $prestataires=array();
-
+        $dossier=Dossier::find($id);
 
         if($type=='client')
         {
@@ -1471,9 +1471,7 @@ class EmailController extends Controller
 
 */
 
-
-
-        return view('emails.envoimail',['refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type]);
+        return view('emails.envoimail',['dossier'=>$dossier,'refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type]);
     }
 
     public function envoimailbr($id)
@@ -1603,7 +1601,7 @@ class EmailController extends Controller
         $contenu = $request->get('contenu');
         $files = $request->file('files');
         $from = trim($request->get('from'));
-
+        $description= $request->get('description');
         $attachs = $request->get('attachs');
 
         $user = auth()->user();$idu=$user->id;
@@ -1642,7 +1640,7 @@ if ($from=='najdassist@gmail.com')
 
 
         try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails ) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails,$description ) {
             $message
 
               //  ->to('saadiheb@gmail.com')
@@ -1777,6 +1775,7 @@ if ($from=='najdassist@gmail.com')
                 'par'=> $par,
                'sujet'=> $sujet,
                'contenu'=> $contenu,
+               'description'=> $description,
                'nb_attach'=> $count,
                'cc'=> $cc,
            // 'cci'=> $cci,

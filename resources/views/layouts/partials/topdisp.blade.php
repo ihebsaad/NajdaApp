@@ -101,13 +101,12 @@
               </div>
               @endcannot
 -->
-          <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-
-              <a href="{{ route('entrees.index') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
-                  <span class="fa fa-fw fa-envelope fa-2x"></span>
+          <div  class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important; ">
+              <a href="{{ route('home') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
+                  <i class="far fa-user"></i>
+                  <br>
+                  Agent
               </a>
-
-
           </div>
         <div class="col-sm-1 col-md-1 col-lg-1">
           <ul class="nav navbar-nav" style=" ">
@@ -388,7 +387,7 @@ if (App::environment('local')) {
 
     $('#phonebtn').on('click', function(event) {
         event.preventDefault();
-        var url      = '<?php echo $urlapp; ?>/public/ctxSip/phone/index.php',
+        var url      = 'http://192.168.1.249/najdaapp/public/ctxSip/phone/index.php',
             features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
         var session=null;
         // This is set when the phone is open and removed on close

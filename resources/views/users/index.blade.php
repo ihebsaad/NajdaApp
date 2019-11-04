@@ -83,7 +83,7 @@
 
             var table = $('#mytable').DataTable({
                 orderCellsTop: true,
-                dom: 'Bflrtip',
+                dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
                 responsive:true,
                 buttons: [
 

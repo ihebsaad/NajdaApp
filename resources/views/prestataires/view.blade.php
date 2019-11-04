@@ -344,7 +344,7 @@
                         @foreach($tels as $tel)
                             <tr>
                                 <td style="width:35%;"><input id='tel-nom-<?php echo $tel->id;?>'  style="width:50%" value="<?php echo $tel->nom; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','nom',this)" /> <input  id='tel-prenom-<?php echo $tel->id;?>'   style="width:48%" value="<?php echo $tel->prenom; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','prenom',this)" /></td>
-                                <td style="width:20%;"><input type="number" id='tel-champ-<?php echo $tel->id;?>'  style="width:100%" value="<?php echo $tel->champ; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','champ',this)" /></td>
+                                <td style="width:20%;"><input type="text" pattern="[0-9]" id='tel-champ-<?php echo $tel->id;?>'  style="width:100%" value="<?php echo $tel->champ; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','champ',this)" /></td>
                                 <td style="width:30%;"><input   id='tel-rem-<?php echo $tel->id;?>'   style="width:100%" value="<?php echo $tel->remarque; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','remarque',this)" /></td>
                                 <td style="width:10%;"><input  id='tel-typetel-<?php echo $tel->id;?>'   style="width:100%" value="<?php echo $tel->typetel; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','typetel',this)" /> <?php if($tel->typetel=='Mobile') {?> <a onclick="setTel(this);" class="<?php echo $tel->champ;?>" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a><?php } ?>
                                 <td style="width:5%;">
@@ -422,7 +422,7 @@
                         @foreach($faxs as $fax)
                             <tr>
                                 <td style="width:35%;"><input id='fax-nom-<?php echo $fax->id;?>'  style="width:50%" value="<?php echo $fax->nom; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','nom',this)" /> <input  id='fax-prenom-<?php echo $tel->id;?>'   style="width:48%" value="<?php echo $fax->prenom; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','prenom',this)" /></td>
-                                <td style="width:20%;"><input type="number"  id='fax-champ-<?php echo $fax->id;?>'   style="width:100%" value="<?php echo $fax->champ; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','champ',this)" /></td>
+                                <td style="width:20%;"><input type="text" pattern="[0-9]" id='fax-champ-<?php echo $fax->id;?>'   style="width:100%" value="<?php echo $fax->champ; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','champ',this)" /></td>
                                  <td style="width:30%;"><input   id='fax-rem-<?php echo $fax->id;?>'   style="width:100%" value="<?php echo $fax->remarque; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','remarque',this)" /></td>
                                 <td style="width:10%;"><i class="fa fa-fax"></i></td>
                                 <td style="width:5%;">

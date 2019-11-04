@@ -13,7 +13,9 @@
             <?php use \App\Http\Controllers\ClientsController;     ?>
 
                         <div class="panel">
+
                 <div class="panel-body pan">
+
                     <ul class="nav nav-pills nav-stacked">
                         <li class="active">
 
@@ -56,6 +58,7 @@
             </div>
         </div>
         <div class="col-lg-9 ">
+            <?php if(isset($dossier)){?>   <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@fiche',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossier->id);?> </a></h4><?php } ?>
 
 <form id="theform" method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data"  onsubmit="return checkForm(this);"  >
     <input id="dossier" type="hidden" class="form-control" name="dossier"  value="{{$doss}}" />
@@ -102,7 +105,7 @@
              </select>
         </div>
             <div class="col-md-2">
-                <i id="emailso" onclick="visibilite('autres')" class="fa fa-lg fa-arrow-circle-down" style="margin-right:10px"></i>
+                <i id="emailso" onclick="visibilite('autres')" class="fa fa-lg fa-arrow-circle-down" style="margin-right:10px"></i> (cc,cci)
             </div>
         </div>
     </div>
@@ -147,7 +150,7 @@
     </div>
     <div class="form-group">
         <label for="description">Description :</label>
-        <input id="description" type="text" class="form-control" name="description" required/>
+        <input id="description" type="text" class="form-control" name="description" id="description" required/>
     </div>
 
 

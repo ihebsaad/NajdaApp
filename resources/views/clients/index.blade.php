@@ -51,7 +51,7 @@
                 <tr>
                     <td style="width:20%"><a href="{{action('ClientsController@view', $client['id'])}}" >{{$client->name}}</a></td>
                     <td style="width:15%"><?php $groupeid= $client['groupe']; echo ClientsController::GroupeById($groupeid);?> </td>
-                    <td style="width:15%"><small>{{$client->pays}}</small></td>
+                    <td style="width:15%"><small>{{$client->pays2}}</small></td>
                     <td style="width:20%">
 <?php  $nature = $client['nature'];
                       //echo  $listen[1];
@@ -177,7 +177,7 @@
 
             var table = $('#mytable').DataTable({
                 orderCellsTop: true,
-                dom: 'Bflrtip',
+                dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
                 responsive:true,
                 buttons: [
 

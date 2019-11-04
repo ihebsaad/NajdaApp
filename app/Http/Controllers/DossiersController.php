@@ -679,11 +679,24 @@ class DossiersController extends Controller
 
         $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());
 
-        $phones =   Adresse::where('nature', 'teldoss')
+        $phonesDossier =   Adresse::where('nature', 'teldoss')
             ->where('parent',$id)
             ->get();
 
-        $emailads =   Adresse::where('nature', 'emaildoss')
+        $phonesCl =   Adresse::where('nature', 'tel')
+            ->where('parent',$cl)
+            ->get();
+        $phonesInt=array();
+ foreach ($intervenants as $interv)
+ {
+     $telsInt =   Adresse::where('nature', 'tel')
+         ->where('parent',$interv->Prestataire_id)
+         ->get();
+   //  $phonesInt =   (object)  array_merge((array)$phonesInt,(array)$telsInt) ;
+ }
+
+
+         $emailads =   Adresse::where('nature', 'emaildoss')
             ->where('parent',$id)
             ->get();
 
@@ -734,7 +747,7 @@ class DossiersController extends Controller
 
         $evaluations=DB::table('evaluations')->get();
 
-        return view('dossiers.view',['evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis], compact('dossier'));
+        return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis], compact('dossier'));
 
 
     }

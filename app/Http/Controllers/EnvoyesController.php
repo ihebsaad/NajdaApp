@@ -178,7 +178,11 @@ class EnvoyesController extends Controller
         $dossiers = Dossier::all();
 
         $envoye = Envoye::find($id);
-        return view('envoyes.view',['dossiers' => $dossiers], compact('envoye'));
+        $refdoss=$envoye->dossier;
+        $dossier = Dossier::where('reference_medic',$refdoss)->first();
+
+
+        return view('envoyes.view',['dossiers' => $dossiers,'dossier'=>$dossier], compact('envoye'));
 
     }
 

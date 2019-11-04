@@ -3,50 +3,14 @@
 @section('content')
 
      <div class="row">
-        <div class="col-sm-3 col-md-3">
-            <?php use \App\Http\Controllers\EnvoyesController;     ?>
-            <?php use \App\Http\Controllers\EntreesController;     ?>            <div class="panel">
-                <div class="panel-body pan">
-                    <ul class="nav nav-pills nav-stacked">
 
-                        <li class="">
-                            <a   href="{{ route('boite') }}">
-                                <span class="badge pull-right"></span>
-                                <i class="fa fa-envelope-square fa-fw mrs"></i>
-                                Boîte de réception
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a   href="{{ route('envoyes') }}">
-                                <span class="badge pull-right"><?php  echo EnvoyesController::countenvoyes(); ?></span>
-                                <i class="fa fa-paper-plane fa-fw mrs"></i>
-                                Envoyées
-                            </a>
-                        </li>
-                        <li class="">
-                            <a   href="{{ route('envoyes.brouillons') }}">
-                                <span class="badge badge-orange pull-right"><?php echo EnvoyesController::countbrouillons(); ?></span>
-                                <i class="fa fa-edit fa-fw mrs"></i>
-                                Brouillons
-                            </a>
-                        </li>
-                        <li class="">
-                            <a   href="{{ route('entrees.archive') }}">
-                                <span class="badge badge-orange pull-right"><?php echo EntreesController::countarchives(); ?></span>
-                                <i class="fa fa-archive fa-fw mrs"></i>
-                                Archive
-                            </a>
-                        </li>
-                    </ul>
+        <div class="col-lg-12 ">
+         <?php if(isset($dossier)){?>   <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@fiche',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossier->id);?> </a></h4><?php } ?>
 
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-9 ">
-<?php $type= $envoye['type'];
-            if ($type=='email') { echo ' <H3 style="margin-left:20px;margin-bottom:10px">  <i class="fa fa-lg fa-envelope"></i> Email</H3>'; }
-            if ($type=='sms') { echo ' <H3 style="margin-left:20px;margin-bottom:10px"> <i class="fas fa-lg  fa-sms"></i> SMS</H3>'; }
-            if ($type=='fax') { echo ' <H3 style="margin-left:20px;margin-bottom:10px"> <i class="fa fa-lg fa-fax"></i> FAX</H3>'; }
+        <?php $type= $envoye['type'];
+            if ($type=='email') { echo ' <H3 style="margin-left:20px;margin-bottom:10px">  <i class="fa fa-lg fa-envelope"></i> Email envoyé</H3>'; }
+            if ($type=='sms') { echo ' <H3 style="margin-left:20px;margin-bottom:10px"> <i class="fas fa-lg  fa-sms"></i> SMS envpyé</H3>'; }
+            if ($type=='fax') { echo ' <H3 style="margin-left:20px;margin-bottom:10px"> <i class="fa fa-lg fa-fax"></i> FAX envoyé</H3>'; }
 
     ?>
             <form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data">
@@ -57,29 +21,36 @@
                         <div class="col-md-10">
                             <input id="destinataire" type="text" class="form-control" name="destinataire" required value="{{ $envoye->destinataire }}" />
                         </div>
-                        <div class="col-md-2">
+                      <!--  <div class="col-md-2">
                             <i id="emailso" onclick="visibilite('autres')" class="fa fa-lg fa-arrow-circle-down" style="margin-right:10px"></i>
 
-                        </div>
+                        </div>-->
                     </div>
                 </div>
                 <?php if ($type=='email') {?>
-                <div class="form-group" style="margin-top:10px;">
+               <!-- <div class="form-group" style="margin-top:10px;">
                     <div id="autres" class="row"   >
+                     <?php if($envoye->cc !='') {?>
                         <div class="col-md-1">
                             <label for="cc">CC:</label>
                         </div>
                         <div class="col-md-4">
                             <input id="cc" type="text" class="form-control" name="cc" value="{{ $envoye->cc }}"  />
                         </div>
-                        <div class="col-md-1">
+                         <?php } ?>
+                         <?php if($envoye->cci !='') {?>
+
+                         <div class="col-md-1">
                             <label for="cci">CCI:</label>
                         </div>
                         <div class="col-md-4">
                             <input id="cci" type="text" class="form-control" name="cci" value="{{ $envoye->cci }}"  />
                         </div>
+                         <?php } ?>
+
                     </div>
                 </div>
+                -->
                 <div class="form-group">
                     <label for="sujet">sujet :</label>
                     <input id="sujet" type="text" class="form-control" name="sujet" required value="{{ $envoye->sujet }}"/>

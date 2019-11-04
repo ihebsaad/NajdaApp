@@ -142,7 +142,7 @@
                   "order": [[ 0, "desc" ]],
 
                   orderCellsTop: true,
-                  dom: 'Bflrtip',
+                  dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
                   responsive:true,
                   buttons: [
 

@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
 <?php    setlocale(LC_ALL, "fr_FR.UTF-8");    ?>
+<html lang="fr">
 <head>
+
+    <link rel="shortcut icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
+    <meta charset="UTF-8">
+    <title>Najda Assistances - Dispatcheur</title>
+
     @include('layouts.partials.head')
 </head>
 <body>

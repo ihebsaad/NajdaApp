@@ -3,7 +3,12 @@
 <head>
     @include('layouts.partials.head')
     <?php    setlocale(LC_ALL, "fr_FR.UTF-8");    ?>
-</head>
+
+        <link rel="shortcut icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
+        <link rel="icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
+        <meta charset="UTF-8">
+        <title>Najda Assistances   </title>
+    </head>
 <body>
 @include('layouts.partials.top')
 

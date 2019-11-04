@@ -612,7 +612,7 @@ console.log('count notif Orange: ');
 
     $('#phonebtn').on('click', function(event) {
         event.preventDefault();
-         var url      = '<?php echo $urlapp; ?>/public/ctxSip/phone/index.php',
+         var url      = 'http://192.168.1.249/najdaapp/public/ctxSip/phone/index.php',
             features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
         var session=null;
         // This is set when the phone is open and removed on close
