@@ -67,6 +67,11 @@ public function dossier()
         return $this->hasMany('App\ActionEC')->where('statut','active')->orderBy('ordre');
     }
 
+      public function ActionEC_report_rappel()
+    {
+        return $this->hasMany('App\ActionEC')->where('statut','reportee')->orWhere('statut','rappelee')->orderBy('ordre');
+    }
+
     public function agent()
     {
         return $this->belongsTo('App\User','user_id');
