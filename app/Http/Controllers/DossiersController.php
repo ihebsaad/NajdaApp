@@ -1523,7 +1523,38 @@ class DossiersController extends Controller
     public static function DossiersActifs( )
     {
 
-         $missions=Mission::where('statut_courant','active')->get();
+        $deb_seance_1=(new \DateTime())->format('Y-m-d 08:30:00');
+        $fin_seance_1=(new \DateTime())->format('Y-m-d 15:00:00');
+
+        $deb_seance_2=(new \DateTime())->format('Y-m-d 15:30:00');
+        $fin_seance_2=(new \DateTime())->format('Y-m-d 22:00:00');
+
+        $deb_seance_3=(new \DateTime())->format('Y-m-d 22:30:00');
+        $fin_seance_3=(new \DateTime())->modify('+1 day')->format('Y-m-d 08:00:00');
+
+         
+      
+        $format = "Y-m-d H:i:s";
+        $deb_seance_1 = \DateTime::createFromFormat($format, $deb_seance_1);
+        $fin_seance_1 = \DateTime::createFromFormat($format, $fin_seance_1);
+        
+        $deb_seance_2 = \DateTime::createFromFormat($format,  $deb_seance_2);
+        $fin_seance_2 = \DateTime::createFromFormat($format, $fin_seance_2);
+
+        $deb_seance_3 = \DateTime::createFromFormat($format, $deb_seance_3);
+        $fin_seance_3 = \DateTime::createFromFormat($format, $fin_seance_3);
+
+
+        //dd( $fin_seance_3);
+        //dd($deb_seance_1);
+
+        $format = "Y-m-d H:i:s";
+        $dtc = (new \DateTime())->format('Y-m-d H:i:s');
+        $dateSys = \DateTime::createFromFormat($format, $dtc);
+          /*  $datespe = \DateTime::createFromFormat($format,$request->dateSpec);*/
+
+
+         $missions=Mission::get();
       //  $missions= DB::table('missions')
         //    ->where('statut_courant','active')->get();
 
@@ -1532,17 +1563,226 @@ class DossiersController extends Controller
 
        foreach($missions as $Miss)
         {
-            $dossiersactifsparmissions[]=$Miss->dossier_id;
+           // dd($Miss->ActionEC_report_rappel);
+            $ActionEC_report_rappel=$Miss->ActionEC_report_rappel;
+            //dd($ActionEC_report_rappel);
+            if($ActionEC_report_rappel)
+            {
+                foreach($ActionEC_report_rappel as $actrr)
+                {
+                    if($actrr->statut=="rappelee")
+                    {
+
+                        $daterappel = \DateTime::createFromFormat($format,$actrr->date_rappel);
+
+                        if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $daterappel >= $deb_seance_1 && $daterappel <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $daterappel >= $deb_seance_2 && $daterappel <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $daterappel >= $deb_seance_3 && $daterappel <= $fin_seance_3 ) )
+                        {
+
+                            $dossiersactifsparmissions[]=$Miss->dossier_id;
+                          // remplir tableau info activation dossier
+
+                        }
+
+                    }
+                    else
+                    {
+
+                         if($actrr->statut=="reportee")                    
+                        {
+                            $datereport = \DateTime::createFromFormat($format,$actrr->date_report);
+
+                             if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $datereport >= $deb_seance_1 && $datereport <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $datereport >= $deb_seance_2 && $datereport <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $datereport >= $deb_seance_3 && $datereport <= $fin_seance_3 ) )
+                            {
+
+                                $dossiersactifsparmissions[]=$Miss->dossier_id;
+                              // remplir tableau info activation dossier
+
+                            }
+
+                        }
+                   }
+
+
+                } // fin if parcours des actions d'une seule miss
+            } // fin  if($ActionEC_report_rappel)
+
+            // parcours les dates spécifiques d'activation des actions pour une mission
+           if($Miss->date_spec_affect==1 || $Miss->date_spec_affect2==1 || $Miss->date_spec_affect3==1 )
+           {
+            if($Miss->h_rdv )
+            {
+                $date_spe = \DateTime::createFromFormat($format,$Miss->h_rdv);
+
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                            {
+
+                                $dossiersactifsparmissions[]=$Miss->dossier_id;
+                              // remplir tableau info activation dossier
+
+                            }
+
+
+            }
+
+
+            if($Miss->h_dep_pour_miss)
+            {
+
+                $date_spe = \DateTime::createFromFormat($format,$Miss->h_dep_pour_miss);
+              // dd($deb_seance_3);
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                            {
+
+                                $dossiersactifsparmissions[]=$Miss->dossier_id;
+                              // remplir tableau info activation dossier
+
+                            }
+
+
+            }
+
+            if($Miss->h_dep_charge_dest )
+            {
+                $date_spe = \DateTime::createFromFormat($format,$Miss->h_dep_charge_dest);
+
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                            {
+
+                                $dossiersactifsparmissions[]=$Miss->dossier_id;
+                              // remplir tableau info activation dossier
+
+                            }
+
+
+            }
+            if($Miss->h_arr_prev_dest )
+            {
+                $date_spe = \DateTime::createFromFormat($format,$Miss->h_arr_prev_dest);
+
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                            {
+                                $dossiersactifsparmissions[]=$Miss->dossier_id;
+                              // remplir tableau info activation dossier
+                            }
+
+            }
+              if($Miss->h_decoll_ou_dep_bat)
+            {
+                $date_spe = \DateTime::createFromFormat($format,$Miss->h_decoll_ou_dep_bat);
+
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                            {
+                                $dossiersactifsparmissions[]=$Miss->dossier_id;
+                              // remplir tableau info activation dossier
+                            }
+
+            }
+            if($Miss->h_arr_av_ou_bat)
+            {
+                $date_spe = \DateTime::createFromFormat($format,$Miss->h_arr_av_ou_bat);
+
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                            {
+                                $dossiersactifsparmissions[]=$Miss->dossier_id;
+                              // remplir tableau info activation dossier
+                            }
+
+            }
+
+              if($Miss->h_retour_base)
+            {
+                $date_spe = \DateTime::createFromFormat($format,$Miss->h_retour_base);
+
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                            {
+                                $dossiersactifsparmissions[]=$Miss->dossier_id;
+                              // remplir tableau info activation dossier
+                            }
+
+            }
+
+             if($Miss->h_deb_sejour)
+            {
+                $date_spe = \DateTime::createFromFormat($format,$Miss->h_deb_sejour);
+
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                            {
+                                $dossiersactifsparmissions[]=$Miss->dossier_id;
+                              // remplir tableau info activation dossier
+                            }
+
+            }
+
+            if($Miss->h_fin_sejour)
+            {
+                $date_spe = \DateTime::createFromFormat($format,$Miss->h_fin_sejour);
+
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                            {
+                                $dossiersactifsparmissions[]=$Miss->dossier_id;
+                              // remplir tableau info activation dossier
+                            }
+
+            }
+             if($Miss->h_deb_location_voit)
+            {
+                $date_spe = \DateTime::createFromFormat($format,$Miss->h_deb_location_voit);
+
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                            {
+                                $dossiersactifsparmissions[]=$Miss->dossier_id;
+                              // remplir tableau info activation dossier
+                            }
+
+            }
+
+            if($Miss->h_fin_location_voit)
+            {
+                $date_spe = \DateTime::createFromFormat($format,$Miss->h_fin_location_voit);
+
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                            {
+                                $dossiersactifsparmissions[]=$Miss->dossier_id;
+                              // remplir tableau info activation dossier
+                            }
+
+            }
+
+      
+            // si la mission est reportée
+           
+           }
+           if($Miss->statut_courant=="reportee")
+           {
+           // dd('mission reportee');
+
+             $date_spe = \DateTime::createFromFormat($format,$Miss->date_deb);
+              if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                            {
+
+                              $dossiersactifsparmissions[]=$Miss->dossier_id;
+                              // remplir tableau info activation dossier
+                            }
+
+           }
+
+
+            
         }
 
-       $dossiersdb= Dossier::where('current_status','actif')->pluck('id');
+      // $dossiersdb= Dossier::where('current_status','actif')->pluck('id');
 
 
-        $dossiersactifs = array_merge($dossiersactifsparmissions,$dossiersdb->toArray());
-        $dossiersactifs =array_unique ($dossiersactifs);
+       // $dossiersactifs = array_merge($dossiersactifsparmissions,$dossiersdb->toArray());
+       // $dossiersactifs =array_unique ($dossiersactifs);
 
-          return ($dossiersactifs);
+         // return ($dossiersactifs);
+
+        return array_unique($dossiersactifsparmissions);
+
     }
+
+    
 
 
     public static function DossiersInactifs( )

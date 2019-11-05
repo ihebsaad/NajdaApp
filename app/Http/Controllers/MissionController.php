@@ -611,7 +611,9 @@ class MissionController extends Controller
              $dos->update(array('current_status'=>'actif'));
          }
 
-      return 'Mission créee';
+         $da = (new \DateTime())->format('Y-m-d\TH:i');
+
+      return $da ;
 
       
 

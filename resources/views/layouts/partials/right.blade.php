@@ -2173,7 +2173,6 @@ getNotificationDeleguerAct ();
 
 
 
-
  
   
 
@@ -2181,7 +2180,7 @@ getNotificationDeleguerAct ();
    // e.preventDefault(); // Le navigateur ne peut pas envoyer le formulaire
      //alert('ok');
 
-     $("#idAjoutMiss").prop('disabled', true);
+     $("#idAjoutMiss").attr("disabled", true);
 
      var en=true;
 
@@ -2223,14 +2222,19 @@ getNotificationDeleguerAct ();
            method:"POST",
            data : donnees,
            success:function(data){
-
          
-                alert(data);
+                alert("Mission créee");
+                //alert(data);
                  $('#idFormCreationMission #typeMissauto').val('');
                  //$('#idFormCreationMission #typeMissauto option:eq(1)').prop('selected', true);
                 //$('#idFormCreationMission #typeMissauto').text('Sélectionner');
                 $('#idFormCreationMission #titre').val('');
-                   
+                //$('#typeMissauto option[value=selectkbs]').attr("selected", "selected");
+                $("#idFormCreationMission #typeMissauto").select2("val", "Sélectionner");
+
+                 $('#idFormCreationMission #datedeb').val(data);
+
+                  $('#idFormCreationMission #commentaire').val('');
 
                 },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -2244,7 +2248,7 @@ getNotificationDeleguerAct ();
     });
   }
 
-   $("#idAjoutMiss").prop('disabled', false);
+   $("#idAjoutMiss").attr("disabled",false);
 
 });
 

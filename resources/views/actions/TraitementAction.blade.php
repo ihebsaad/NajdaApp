@@ -119,10 +119,53 @@
 
 
     </div>
+    <form id="kbsoptionform" action="{{ url('/traitementsBoutonsActions/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id.'/1')}}" method="GET">
+
     
     <br><br>
+      <div class="row">
 
-     <div class="row">
+    
+
+         <div class="col-md-3">
+
+          <button id="BouFaiAct" type="submit" class="btn btn-success" style="width: 200px;"> Fait </button>
+
+
+         </div>
+
+    
+
+       <div class="col-md-1">
+     
+
+      </div>
+      
+    
+     <div class="col-md-3">
+
+
+         @if($Action->igno_ou_non != 0)
+         <button id="BouIgnAct" class="btn btn-danger" type="submit" href=""  style="width: 200px;" > <i class="fa fa-close"></i> Ignorer</button>
+         @else
+          <button id="BouIgnAct2" class="btn btn-danger disabled" type="button" style="width: 200px;" ><i class="fa fa-close"></i> Ignorer</button>
+
+         @endif
+
+     </div>
+      <div class="col-md-1">
+     
+
+      </div>
+
+     <div class="col-md-3">
+        
+         <a class="btn btn-danger"  style="width: 200px;" href="{{ url('dossier/Mission/AnnulerMissionCourante/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}" ><i class="fa fa-close"></i> Annuler la mission</a>
+     </div>
+
+   </div>
+
+     <!--<div class="row">
       @if($Action->Mission->type_Mission==6) {{--Taxi--}} 
        <span style="color:red"> <h4> #  Date(s) spécifique(s) : date "début mission" et date "arrivée à destination" ( à compléter dans OM taxi (2ème partie))</h4> </span> 
      @endif
@@ -175,7 +218,7 @@
        <span style="color:red"> <h4> #  Date(s) spécifique(s) : date fin location (à compléter via PEC location) </h4> </span> 
       @endif
       
-     </div>
+     </div>-->
 
    
     <!--<div class="row">
@@ -202,7 +245,7 @@
      <br>
      <div>
 
-       <form id="kbsoptionform" action="{{ url('/traitementsBoutonsActions/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id.'/1')}}" method="GET">
+       <!--<form id="kbsoptionform" action="{{ url('/traitementsBoutonsActions/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id.'/1')}}" method="GET">-->
 
 
       <h4 id="comenttitle">Vous pouvez ajouter un ou plusieurs commentaires :</h4>
@@ -362,67 +405,7 @@ $(document).on('click','.kbstab',function(){
        <br><br>
 
     <!--position des boutons -->
-    <div class="row">
-
-      
-     <!-- <div class="col-md-6">
-          <a href="{{ url('dossier/Mission/EnregistrerEtAllerSuivante/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}" class="btn btn-primary"><i class="fa fa-check"></i>  Marquer la sous-action comme faite et <i class="fa fa-arrow-right"></i> aller à la suivante</a>
-
-      </div>-->
-      <!--<div class="col-md-4">
-          <a href="{{ url('dossier/Mission/EnregistrerEtAllerSuivante/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}" class="btn btn-primary"><i class="fa fa-check"></i>  Faite </a>-->
-
-         <div class="col-md-3">
-
-          <button id="BouFaiAct" type="submit" class="btn btn-success" style="width: 200px;"> Fait </button>
-
-
-         </div>
-
-    
-
-      <!--<div class="col-md-6">
-      <a href="{{ url('dossier/Mission/FinaliserMission/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}" class="btn btn-primary"><i class="fa fa-check-circle"></i>Marquer la sous-action comme faite </a>
-
-      </div>-->
-
-      
-
-
-
-       <div class="col-md-1">
-     
-
-      </div>
-      
-      <!--<div class="col-md-5">
-        
-         <a class="btn btn-danger" href="{{ url('dossier/Mission/AnnulerEtAllerSuivante/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}" ><i class="fa fa-close"></i> Annuler la sous-action et <i class="fa fa-arrow-right"></i> aller à la suivante</a>
-
-     </div>-->
-
-     <div class="col-md-3">
-
-
-         @if($Action->igno_ou_non != 0)
-         <button id="BouIgnAct" class="btn btn-danger" type="submit" href=""  style="width: 200px;" > <i class="fa fa-close"></i> Ignorer</button>
-         @else
-          <button id="BouIgnAct2" class="btn btn-danger disabled" type="button" style="width: 200px;" ><i class="fa fa-close"></i> Ignorer</button>
-
-         @endif
-
-     </div>
-      <div class="col-md-1">
-     
-
-      </div>
-
-     <div class="col-md-3">
-        
-         <a class="btn btn-danger"  style="width: 200px;" href="{{ url('dossier/Mission/AnnulerMissionCourante/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}" ><i class="fa fa-close"></i> Annuler la mission</a>
-     </div>
-
-   </div>
+  
    <br><br>
     <div class="panel panel-default">
   <div class="panel-heading">Délégation</div>
@@ -955,7 +938,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
    <script>
   
-   $("#kbspaneltitle").append('<?php if($Action) {  echo 'Action: '.$Action->titre.' | Mission : '.$Action->type_Mission.'<br> (Extrait de mission  :  '.$Action->Mission->titre.'  ) | Dossier : '.$Action->Mission->dossier->reference_medic.' - '.$Action->Mission->dossier->subscriber_name.' '.$Action->Mission->dossier->subscriber_lastname.'<br><div style ="overflow: hidden ; width: 100%;"></div>' ; }  ?>');
+   $("#kbspaneltitle").append('<?php if($Action) {  echo 'Action: '.$Action->titre.' | Mission : '.$Action->type_Mission.'<br> (Extrait de mission  :  '.$Action->Mission->titre.'  ) |<a  href="'.action('DossiersController@view',$dossier->id).'" > <u>Dossier : '.$Action->Mission->dossier->reference_medic.' - '.$Action->Mission->dossier->subscriber_name.' '.$Action->Mission->dossier->subscriber_lastname.'</u></a><br><div style ="overflow: hidden ; width: 100%;"></div>' ; }  ?>');
   </script>
 <!-- enregistrer commentaires sans bouton -->
 <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
