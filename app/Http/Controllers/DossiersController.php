@@ -665,6 +665,8 @@ class DossiersController extends Controller
 */
         $prestations =   Prestation::where('dossier_id', $id)->get();
         $intervenants =   Intervenant::where('dossier', $id)->get();
+        $inters =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
+        $prests = Prestation::where('dossier_id', $id)->pluck('prestataire_id');
 
 
         $ref=$this->RefDossierById($id);
@@ -686,15 +688,13 @@ class DossiersController extends Controller
         $phonesCl =   Adresse::where('nature', 'tel')
             ->where('parent',$cl)
             ->get();
-        $phonesInt=array();
- foreach ($intervenants as $interv)
- {
-     $telsInt =   Adresse::where('nature', 'tel')
-         ->where('parent',$interv->Prestataire_id)
-         ->get();
-   //  $phonesInt =   (object)  array_merge((array)$phonesInt,(array)$telsInt) ;
- }
+       // $phonesInt=array();
 
+        $intervs = array_merge( $inters->toArray(),$prests->toArray() );
+
+        $phonesInt =   Adresse::where('nature', 'tel')
+            ->whereIn('parent', $intervs)
+            ->get();
 
          $emailads =   Adresse::where('nature', 'emaildoss')
             ->where('parent',$id)
@@ -898,8 +898,25 @@ class DossiersController extends Controller
             }
         }
 
+        $inters =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
+        $prests = Prestation::where('dossier_id', $id)->pluck('prestataire_id');
 
-        return view('dossiers.fiche',['listeemails'=>$listeemails,'cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
+        $phonesDossier =   Adresse::where('nature', 'teldoss')
+            ->where('parent',$id)
+            ->get();
+
+        $phonesCl =   Adresse::where('nature', 'tel')
+            ->where('parent',$cl)
+            ->get();
+
+        $intervs = array_merge( $inters->toArray(),$prests->toArray() );
+
+        $phonesInt =   Adresse::where('nature', 'tel')
+            ->whereIn('parent', $intervs)
+            ->get();
+
+
+        return view('dossiers.fiche',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'listeemails'=>$listeemails,'cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
 
 
     }
@@ -1584,6 +1601,16 @@ class DossiersController extends Controller
         }
 
     }
+
+
+    public function changestatut(Request $request)
+    {
+        $iddossier= $request->get('dossier');
+        $statut= $request->get('statut');
+        Dossier::where('id',$iddossier)->update(array('current_status'=>$statut));
+
+    }
+
 
 
 

@@ -42,8 +42,12 @@ use  \App\Http\Controllers\EntreesController ;
     <div class="col-md-2">
         <b>Statut:</b>
         <?php $statut=$dossier->current_status;
-        if ($statut =='actif' || $statut =='inactif' ){echo 'Ouvert';}
-        if($statut=='Cloture'){echo 'Clôturé';}
+        if ($statut =='actif' || $statut =='inactif' ){
+            echo '<b style="font-size:20px">Ouvert</b> <a style="font-size:13px" title="changer le statut" href="#" data-toggle="modal" data-target="#FermerDoss"> (Fermer)</a>';
+        }
+        if($statut=='Cloture'){
+            echo '<b style="font-size:20px">Clôturé</b> <a style="font-size:13px" title="changer le statut" href="#" data-toggle="modal" data-target="#OuvrirDoss"> (Ouvrir)</a>';
+        }
         ?>
 
         <input type="hidden" id="dossier" value="<?php echo $dossier->id; ?>">
@@ -75,7 +79,7 @@ use  \App\Http\Controllers\EntreesController ;
         <?php }
         else
         {
-            if($statut=='Cloture'){echo 'Dossier Clôturé';} else {
+            if($statut=='Cloture'){ } else {
 
             if ((Gate::check('isAdmin') || Gate::check('isSupervisor')))
             {echo '<a href="#" data-toggle="modal" data-target="#attrmodal">Non affecté</a>';}
@@ -146,7 +150,9 @@ use  \App\Http\Controllers\EntreesController ;
             </div>
 
             <div class="btn-group">
-                <button   type="button"   class="btn btn-default"  ><b><i class="fa fa-phone"></i>  Tél</b></button>
+                <button   type="button"   class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <b><i class="fa fa-phone"></i>  Tél</b><i class="fa fa-angle-down"></i>
+                </button>
 
                 <ul class="dropdown-menu pull-right">
                     <li>
@@ -2049,20 +2055,22 @@ reference_customer
                 <div class="modal-body">
                     <div class="card-body">
 
+                        <input   id="iddossier"  type="hidden"  value="<?php echo $dossier->id ?>" name="dossierid"     />
 
-                        <div class="form-group">
+                       <!-- <div class="form-group">
                             <label for="sujet">Dossier :</label>
+
                             <select   id="iddossier"  style="width:100%;" class="form-control select2" name="dossierid"     >
                                 <option></option>
-                                <?php foreach($listedossiers as $ds)
+                                <?php /* foreach($listedossiers as $ds)
 
                                 {
-                                echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}     ?>
+                                echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}  */ ?>
                             </select>
 
 
                         </div>
-
+                        -->
                         <div class="form-group">
                             <label for="emetteur">Interlocuteur :</label>
                             <input type="text"    id="emetteur"   class="form-control" name="emetteur"    ></textarea>
@@ -2138,6 +2146,55 @@ reference_customer
         </div>
     </div>
 
+
+    <div class="modal  " id="OuvrirDoss" >
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" style="text-align:center"  id=" "><center>Ouvrir le Dossier </center> </h3>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body" style="text-align:center;height:100px"><br>
+                        <center><B> Etes vous sûrs de vouloir Ré-Ouvrir ce Dossier ?</B><br><br></center>
+                        <a id="ouvrirdossier"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >OUI</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button><br>
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal  " id="FermerDoss" >
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" style="text-align:center"  id=" "><center>Fermer le Dossier </center> </h3>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body" style="text-align:center;height:100px"><br>
+                        <center><B> Etes vous sûrs de vouloir Fermer ce Dossier ?</B><br> <br> </center>
+
+                        <a id="fermerdossier"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >OUI</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button><br>
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <?php
     $urlapp=env('APP_URL');
 
@@ -2171,33 +2228,25 @@ reference_customer
 
                                 <select  class="form-control" id="numtel" name="numtel"   >
                                     <option value=""></option>
-                                    <option value="123456789">123456789</option>
-                                    <option value="00123456789">00123456789</option>
-                                    <option value="123456789100">123456789100</option>
-                                    <div id="telsassures">
-                                    <?php foreach($phonesDossier   as $phone)
+                                    <option value="3001">3001</option>
+                                     <?php foreach($phonesDossier   as $phone)
                                         {
-                                    echo '<option value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
+                                    echo '<option class="telsassures" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
 
                                     }
                                     ?>
-                                    </div>
-                                    <div id="telsclients">
-                                        <?php foreach($phonesCl   as $phone)
+                                          <?php foreach($phonesCl   as $phone)
                                         {
-                                        echo '<option value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
+                                        echo '<option class="telsclients" value="'.$phone->champ.'">'.$phone->champ.'   '.$phone->nom.' '.$phone->prenom.' </option>';
 
                                         }
                                         ?>
-                                    </div>
-                                    <div id="telsintervs">
-                                        <?php foreach($phonesInt   as $phone)
+                                         <?php foreach($phonesInt   as $phone)
                                         {
-                                        echo '<option value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
+                                        echo '<option class="telsintervs" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
 
                                         }
                                         ?>
-                                    </div>
 
                                  </select>
                             </form>
@@ -2357,20 +2406,20 @@ reference_customer
 <script>
 
     function ShowNumsCc() {
-        $('#telsassures').css('display','none');
-        $('#telsintervs').css('display','none');
-        $('#telsclients').css('display','block');
+        $('.telsassures').css('display','none');
+        $('.telsintervs').css('display','none');
+        $('.telsclients').css('display','block');
     }
 
     function ShowNumsInt() {
-        $('#telsassures').css('display','none');
-        $('#telsintervs').css('display','block');
-        $('#telsclients').css('display','none');
+        $('.telsassures').css('display','none');
+        $('.telsintervs').css('display','block');
+        $('.telsclients').css('display','none');
     }
     function ShowNumsAss() {
-        $('#telsassures').css('display','block');
-        $('#telsintervs').css('display','none');
-        $('#telsclients').css('display','none');
+        $('.telsassures').css('display','block');
+        $('.telsintervs').css('display','none');
+        $('.telsclients').css('display','none');
     }
 
     function hideinfos() {
@@ -2845,68 +2894,7 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
     }
 }
 
-    function changing(elm) {
-        var champ=elm.id;
 
-        var val =document.getElementById(champ).value;
-        //  var type = $('#type').val();
-        var dossier = $('#dossier').val();
-        //if ( (val != '')) {
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url: "{{ route('dossiers.updating') }}",
-            method: "POST",
-            data: {dossier: dossier , champ:champ ,val:val, _token: _token},
-            success: function (data) {
-                $('#'+champ).animate({
-                    opacity: '0.3',
-                });
-                $('#'+champ).animate({
-                    opacity: '1',
-                });
-
-            }
-        });
-
-    }
-
-
-    function disabling(elm) {
-        var champ=elm;
-
-        var val =0;
-        var dossier = $('#dossier').val();
-        //if ( (val != '')) {
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url: "{{ route('dossiers.updating') }}",
-            method: "POST",
-            data: {dossier: dossier , champ:champ ,val:val, _token: _token},
-            success: function (data) {
-                if (elm=='franchise'){
-                    $('#nonfranchise').animate({
-                        opacity: '0.3',
-                    });
-                    $('#nonfranchise').animate({
-                        opacity: '1',
-                    });
-                }
-                if (elm=='is_hospitalized'){
-                    $('#nonis_hospitalized').animate({
-                        opacity: '0.3',
-                    });
-                    $('#nonis_hospitalized').animate({
-                        opacity: '1',
-                    });
-                }
-
-
-            }
-        });
-        // } else {
-
-        // }
-    }
 
 
 
@@ -2962,6 +2950,48 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
 
             }
         });
+
+
+        // fermerdossier
+        $('#fermerdossier').click(function(){
+            var dossier = $('#dossier').val();
+            var statut ="Cloture";
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('dossiers.changestatut') }}",
+                    method:"POST",
+                    data:{dossier:dossier,statut:statut,  _token:_token},
+                    success:function(data){
+
+                       // window.location =data;
+                        alert("dossier fermé !");
+                        window.location.reload();
+
+                    }
+                });
+
+        });
+
+        // ouvrirdossier
+        $('#ouvrirdossier').click(function(){
+            var dossier = $('#dossier').val();
+            var statut ="actif";
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('dossiers.changestatut') }}",
+                method:"POST",
+                data:{dossier:dossier,statut:statut,  _token:_token},
+                success:function(data){
+
+                    // window.location =data;
+                    alert("dossier Ouvert !");
+                    window.location.reload();
+
+                }
+            });
+
+        });
+
 
          $('#envoisms').click(function(){
             var description = $('#ladescription').val();

@@ -87,8 +87,8 @@
 
              <div class="form-group  ">
                  <label>Type de prestations</label>
-                 <div class="col-md-6">
-                     <select class="itemName form-control col-lg-6" style="" name="itemName"  multiple  id="typeprest">
+                 <div class="row">
+                     <select class="itemName form-control col-lg-6" style="width:100%" name="itemName"  multiple  id="typeprest" onchange="location.reload();">
                          <option></option>
                          <?php if ( count($relations) > 0 ) {?>
 
@@ -114,26 +114,28 @@
 
          <div class="form-group ">
              <label>Spécialités</label>
+
              <div class="row">
-                  <select class="form-control  col-lg-12 itemName " style="width:400px" name="specialite"  multiple  id="specialite" onchange="location.reload();">
+                  <select class="form-control  col-lg-12 itemName " style="width:100%" name="specialite"  multiple  id="specialite" onchange="location.reload();">
 
                      <option></option>
                      <?php if ( count($relations2) > 0 ) { ?>
 
                      @foreach($relations2 as $rel  )
-                         @foreach($specialites as $sp)
+                         @foreach($specialites2 as $sp)
                              <option  @if($rel->specialite==$sp->id)selected="selected"@endif    onclick="createspec('spec<?php echo $sp->id; ?>')"  value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
                          @endforeach
                      @endforeach
 
                      <?php
 
-                     } else { ?>
-                    /* @foreach($specialites as $sp)
-                         <option    onclick="createspec('spec<?php echo $sp->id; ?>')"  value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
-                     @endforeach
+                     }else{
+                       foreach($specialites2 as $sp){ ?>
+                          <option      onclick="createspec('spec<?php echo $sp->id; ?>')"  value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                      <?php }
 
-                     <?php }   ?>
+                      }
+                     ?>
 
                  </select>
 
@@ -575,12 +577,8 @@
                                             @endforeach
 
                                             <?php
-                                            } else { ?>
-                                            @foreach($typesprestations as $aKey)
-                                                <option     value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
-                                            @endforeach
-
-                                            <?php }  ?>
+                                            }
+                                            ?>
                                         </select>
                                     </div>
                                 </div>
@@ -596,18 +594,14 @@
                                             <?php if ( count($relations2) > 0 ) {?>
 
                                             @foreach($relations2 as $rel  )
-                                                @foreach($specialites as $sp)
+                                                @foreach($specialites2 as $sp)
                                                     <?php if($rel->specialite==$sp->id) {  ?>   <option   value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option><?php } ?>
                                                 @endforeach
                                             @endforeach
 
                                             <?php
-                                            } else { ?>
-                                            @foreach($specialites as $sp)
-                                                <option     value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
-                                            @endforeach
-
-                                            <?php }  ?>
+                                            }
+                                            ?>
 
 
                                         </select>
@@ -629,13 +623,8 @@
                                                 @endforeach
 
                                                 <?php
-                                                } else { ?>
-
-                                                @foreach($gouvernorats as $aKeyG)
-                                                    <option     value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
-                                                @endforeach
-
-                                                <?php }  ?>
+                                                }
+                                                ?>
                                             </select>
 
                                     </div>
@@ -1096,58 +1085,58 @@
 
 
 
-/*
-
-    function removeprest(elm) {
-
-        var id= elm.id;
-        var typeprest= id.slice(5);
-        var prestataire = $('#idpres').val();
-
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url: "{{-- route('prestataires.removetypeprest') --}}",
-            method: "POST",
-            data: {prestataire: prestataire , typeprest:typeprest ,  _token: _token},
-            success: function (data) {
-                $('#type'+typeprest).hide( "slow", function() {
-                    // Animation complete.
-                });
-
-
-            }
-        });
-
-    }
-
-
-    function createtypeprest(id) {
-
-         var typeprest= id.slice(3);
-
-
-        var prestataire = $('#idpres').val();
-
-
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url: "{{-- route('prestataires.createtypeprest') --}}",
-            method: "POST",
-            data: {prestataire: prestataire , typeprest:typeprest ,  _token: _token},
-            success: function (data) {
-
-                location.reload();
-
-
-            }
-        });
-
-
-    }
-    */
 
     $(function () {
 
+
+/*
+        function removeprest(elm) {
+
+            var id= elm.id;
+            var typeprest= id.slice(5);
+            var prestataire = $('#idpres').val();
+
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url: "{{-- route('prestataires.removetypeprest') --}}",
+                method: "POST",
+                data: {prestataire: prestataire , typeprest:typeprest ,  _token: _token},
+                success: function (data) {
+                    $('#type'+typeprest).hide( "slow", function() {
+                        // Animation complete.
+                    });
+
+
+                }
+            });
+
+        }
+
+
+        function createtypeprest(id) {
+
+            var typeprest= id.slice(3);
+
+
+            var prestataire = $('#idpres').val();
+
+
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url: "{{-- route('prestataires.createtypeprest') --}}",
+                method: "POST",
+                data: {prestataire: prestataire , typeprest:typeprest ,  _token: _token},
+                success: function (data) {
+
+                    location.reload();
+
+
+                }
+            });
+
+
+        }
+*/
         $('#envoisms').click(function(){
             var description = $('#ladescription').val();
             var destinataire = $('#ledestinataire').val();

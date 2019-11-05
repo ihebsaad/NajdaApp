@@ -251,7 +251,7 @@
 
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="inputError" class="control-label">Email 10</label> <input onchange="changing(this)"  type="text" id="email10" class="form-control" name="email10"  value="{{ $client->mail10 }}">
+                        <label for="inputError" class="control-label">Email 10</label> <input onchange="changing(this)"  type="text" id="mail10" class="form-control" name="email10"  value="{{ $client->mail10 }}">
 
                     </div>
                 </div>
@@ -596,7 +596,7 @@
 
 
 
-                            <div class="row" style="margin-top:30px">
+                            <div class="row" style="margin-top:40px">
                                 <div class="col-md-8">
                                     <h4><i class="fa fa-lg fa-user"></i>  Responsables Gestion</h4>
                                 </div>
@@ -623,7 +623,7 @@
                                 <tbody>
                                 @foreach($gestions as $gestion)
                                     <tr>
-                                        <td style="width:15%;"><input  id='gest-nom-<?php echo $gestion->id;?>'    style="width:100%" value="<?php echo $gestion->nom; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','nom',this)" />  <input  id='gest-prenom-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->prenom; ?>" onchange="changingAddress('<?php echo $gestion->prenom; ?>','prenom',this)" /></td>
+                                        <td style="width:15%;"><input placeholder="Nom"  id='gest-nom-<?php echo $gestion->id;?>'    style="width:100%" value="<?php echo $gestion->nom; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','nom',this)" /><br><input placeholder="Prenom"  id='gest-prenom-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->prenom; ?>" onchange="changingAddress('<?php echo $gestion->prenom; ?>','prenom',this)" /></td>
                                         <td style="width:20%;"><input  id='gest-fon-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->fonction; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','fonction',this)" /></td>
                                         <td style="width:15%;"><input type="text" id='gest-tel-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->tel; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','tel',this)" /></td>
                                         <td style="width:15%;"><input type="text" id='gest-fax-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->fax; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','fax',this)" /></td>
@@ -732,7 +732,7 @@
                             </div>
 
 
-                            <div class="row" style="margin-top:30px">
+                            <div class="row" style="margin-top:40px">
                                 <div class="col-md-8">
                                     <h4><i class="fa fa-lg fa-user"></i>  Responsables Qualité</h4>
                                 </div>
@@ -758,7 +758,7 @@
                                 <tbody>
                                 @foreach($qualites as $qualite)
                                     <tr>
-                                        <td style="width:15%;"><input  id='qual-nom-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->nom; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','nom',this)" />  <input  id='qual-prenom-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->prenom; ?>" onchange="changingAddress('<?php echo $qualite->prenom; ?>','prenom',this)" /></td>
+                                        <td style="width:15%;"><input placeholder="Nom"  id='qual-nom-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->nom; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','nom',this)" /><br><input placeholder="Prenom"   id='qual-prenom-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->prenom; ?>" onchange="changingAddress('<?php echo $qualite->prenom; ?>','prenom',this)" /></td>
                                         <td style="width:20%;"><input  id='qual-fon-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->fonction; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','fonction',this)" /></td>
                                         <td style="width:15%;"><input  type="text" pattern="[0-9]" id='qual-tel-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->tel; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','tel',this)" /></td>
                                         <td style="width:15%;"><input type="text" pattern="[0-9]" id='qual-fax-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->fax; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','fax',this)" /></td>
@@ -866,9 +866,9 @@
 
                             </div>
 
-                            <div class="row" style="margin-top:30px">
+                            <div class="row" style="margin-top:40px">
                                 <div class="col-md-8">
-                                    <h5><i class="fa fa-lg fa-user"></i>  Responsables Réseau</h5>
+                                    <h4><i class="fa fa-lg fa-user"></i>  Responsables Réseau</h4>
                                 </div>
                                 <div class="col-md-4">
                                     <button style="float:right" id="add6" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding6"><b><i class="fa fa-user"></i> Ajouter un responsable Réseau</b></button>
@@ -892,7 +892,7 @@
                                 <tbody>
                                 @foreach($reseaux as $reseau)
                                     <tr>
-                                        <td style="width:15%;"><input  id='res-nom-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->nom; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','nom',this)" />  <input id='res-prenom-<?php echo $reseau->id;?>'   style="width:100%" value="<?php echo $reseau->prenom; ?>" onchange="changingAddress('<?php echo $reseau->prenom; ?>','prenom',this)" /></td>
+                                        <td style="width:15%;"><input placeholder="Nom"  id='res-nom-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->nom; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','nom',this)" /><br><input placeholder="Prenom"  id='res-prenom-<?php echo $reseau->id;?>'   style="width:100%" value="<?php echo $reseau->prenom; ?>" onchange="changingAddress('<?php echo $reseau->prenom; ?>','prenom',this)" /></td>
                                         <td style="width:10%;"><input  id='res-fon-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->fonction; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','fonction',this)" /></td>
                                         <td style="width:15%;"><input type="text" pattern="[0-9]" id='res-tel-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->tel; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','tel',this)" /></td>
                                         <td style="width:15%;"><input type="text" pattern="[0-9]" id='res-fax-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->fax; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','fax',this)" /></td>
@@ -925,7 +925,7 @@
 
     @can('isAdmin')
         <a  href="{{action('ClientsController@destroy', $client->id )}}" class="pull-right btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
-            <span class="fa fa-fw fa-trash-alt"></span>
+            <span class="fa fa-fw fa-trash-alt"></span> Supprimer le client
         </a>
     @endcan
 
@@ -1644,7 +1644,7 @@
             var fax = $('#faxq').val();
             var observ = $('#remarqueq').val();
              var nature = $('#nature5').val();
-            if ((nom != '') )
+            if ( !( (nom == '' ) && (prenom == '' ) && (tel=='') && (fax=='') && (email=='')   ) )
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
@@ -1674,7 +1674,7 @@
             var fax = $('#faxr').val();
             var observ = $('#remarquer').val();
             var nature = $('#nature6').val();
-            if ((nom != '') )
+            if ( !( (nom == '' ) && (prenom == '' ) && (tel=='') && (fax=='') && (email=='')   ) )
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
@@ -1705,7 +1705,7 @@
             var fax = $('#faxg').val();
             var observ = $('#remarqueg').val();
             var nature = $('#nature7').val();
-            if ((nom != '') )
+            if ( !( (nom == '' ) && (prenom == '' ) && (tel=='') && (fax=='') && (email=='')   ) )
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
@@ -1985,5 +1985,6 @@
 </script>
 <style>.headtable{background-color: grey!important;color:white;}
     table{margin-bottom:40px;}
+    textarea{min-height:80px;}
  </style>
 

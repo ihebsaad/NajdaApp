@@ -30,13 +30,13 @@
             <tr id="headtable">
                 <th style="width:10%">ID</th>
                 <th style="width:30%">Spécialité</th>
-                <th style="width:30%">Type de prestation</th>
+                <th style="width:30%">Types de prestation</th>
                  <th style="width:10%">Actions</th>
               </tr>
             <tr>
                 <th style="width:10%">ID</th>
                 <th style="width:30%">Spécialité</th>
-                <th style="width:30%">Type de prestation</th>
+                <th style="width:30%">Types de prestation</th>
                 <th class="no-sort" style="width:10%">Actions</th>
             </tr>
             </thead>
@@ -50,7 +50,7 @@
                 <tr>
                     <td  >{{$specialite->id}}</td>
                     <td  ><a href="{{action('SpecialitesController@view', $specialite['id'])}}" >{{$specialite->nom}}</a></td>
-                    <td  > <?php echo TypePrestationsController::nomById($specialite->type_prestation); ?></td>
+                    <td  > <?php //  echo TypePrestationsController::nomById($specialite->type_prestation); ?></td>
                       <td    >
                           @can('isAdmin')
                               <a  href="{{action('SpecialitesController@destroy', $specialite['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
@@ -93,15 +93,17 @@
                                 <input class="form-control" type="text" id="nom" />
 
                             </div>
-                            <div class=" row form-group">
+                           <!-- <div class=" row form-group">
                                 <label for="type">Type de prestation :</label>
                                 <select class="  form-control col-lg-6"      id="type_prestation">
                                     <option></option>
-                                @foreach($typesprestations as $aKey)
-                                    <option        value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
-                                @endforeach
+                                foreach($typesprestations as $aKey)
+                                {    <option        value="<?php // echo $aKey->id;?>"> <?php // echo $aKey->name;?></option>
+                                }
                                 </select>
-                            </div><br><br>
+                            </div>
+                            -->
+                            <br><br>
 
 
                         </form>

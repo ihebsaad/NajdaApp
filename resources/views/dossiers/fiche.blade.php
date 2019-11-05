@@ -22,7 +22,7 @@ use  \App\Http\Controllers\DocsController;
 
     <div class="col-md-3">
 
-        <a> <a  href="{{action('DossiersController@view',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '. DossiersController::FullnameAbnDossierById($dossier->id);?></a></h4>
+        <a  href="{{action('DossiersController@view',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '. DossiersController::FullnameAbnDossierById($dossier->id);?></a></h4>
     </div>
 
      <div class="col-md-3">
@@ -113,11 +113,25 @@ use  \App\Http\Controllers\DocsController;
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-default" id="newcalldossier">
-                    <i class="fa fa-phone"></i>
-                    Tél
-
+                <button   type="button"   class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <b><i class="fa fa-phone"></i>  Tél</b><i class="fa fa-angle-down"></i>
                 </button>
+
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a  data-toggle="modal" data-target="#faireappel" onclick="ShowNumsCc();" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Au Client  </a>
+                    </li>
+                    <li>
+                        <a data-toggle="modal" data-target="#faireappel" onclick="ShowNumsInt();" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            À l'intervenant </a>
+                    </li>
+                    <li>
+                        <a data-toggle="modal" data-target="#faireappel" onclick="ShowNumsAss();" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            À l'assuré   </a>
+                    </li>
+
+                </ul>
             </div>
 
             <div class="btn-group">
@@ -244,10 +258,10 @@ use  \App\Http\Controllers\DocsController;
                                                                     <div class="input-group-control">
                                                                         <select onchange="changing(this)" type="text" id="adresse_facturation" name="adresse_facturation" class="form-control"    >
                                                                             <option></option>
-                                                                            <option  <?php if ($dossier->adresse_facturation==$entite){echo 'selected="selected"';} ?> value="<?php echo $entite;?>"><?php echo $entite .' <small>'.$adresse.'</small>';?></option>
+                                                                            <option  <?php if ($dossier->adresse_facturation==$entite){echo 'selected="selected"';} ?> value="<?php echo $entite;?>"><?php echo $entite .' - <small>'.$adresse.'</small>';?></option>
                                                                             <?php foreach ($liste as $l)
                                                                             {?>
-                                                                            <option  <?php  if ($dossier->adresse_facturation==$l->nom ){echo 'selected="selected"';} ?> value="<?php $l->nom;?>" ><?php $l->nom ;?>   <small>  <?php $l->champ;?> </small></option>
+                                                                            <option  <?php  if ($dossier->adresse_facturation==$l->nom ){echo 'selected="selected"';} ?> value="<?php echo $l->nom;?>" ><?php echo $l->nom ;?>  - <small>  <?php echo $l->champ;?> </small></option>
                                                                             <?php
                                                                             }
                                                                             ?>
@@ -517,21 +531,26 @@ use  \App\Http\Controllers\DocsController;
                                                                     <tr class="headtable">
                                                                         <th style="width:20%">Nom et Prénom</th>
                                                                         <th style="width:20%">Qualité</th>
-                                                                        <th style="width:10%">Téléphone</th>
-                                                                        <th style="width:30%">Type</th>
-                                                                        <th style="width:20%">Remarque</th>
+                                                                        <th style="width:20%">Téléphone</th>
+                                                                        <th style="width:14%">Type</th>
+                                                                        <th style="width:22%">Remarque</th>
+                                                                        <th style="width:5%">Supp</th>
                                                                     </tr>
 
                                                                     </thead>
                                                                     <tbody>
                                                                     @foreach($phones as $phone)
                                                                         <tr>
-                                                                            <td style="width:20%;"><?php echo $phone->nom; ?>  <?php echo $phone->prenom; ?></td>
-                                                                            <td style="width:20%;"><?php echo $phone->fonction; ?></td>
-                                                                            <td style="width:10%;"><?php echo $phone->tel; ?></td>
-                                                                            <td style="width:30%;"><?php echo $phone->typetel.'<br>'; if($phone->typetel=='Mobile') {?> <a onclick="setTel(this);" class="<?php echo $phone->tel;?>" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i>Envoyer un SMS </a><?php } ?>
+                                                                            <td style="width:20%;"><input placeholder="Nom"  id='tel-nom-<?php echo $phone->id;?>' type="text" pattern="[0-9]" style="width:100%" value="<?php echo $phone->nom; ?>" onchange="changingAddress('<?php echo $phone->id; ?>','nom',this)" /><br><input placeholder="Prenom"   id='tel-prenom-<?php echo $phone->id;?>' type="text" pattern="[0-9]" style="width:100%" value="<?php echo $phone->prenom; ?>" onchange="changingAddress('<?php echo $phone->id; ?>','prenom',this)" /> </td>
+                                                                            <td style="width:20%;"><input   id='tel-fonc-<?php echo $phone->id;?>' type="text"  style="width:100%" value="<?php echo $phone->fonction; ?>" onchange="changingAddress('<?php echo $phone->id; ?>','fonction',this)" /></td>
+                                                                            <td style="width:20%;"><input   id='tel-tel-<?php echo $phone->id;?>' type="text"  style="width:100%" value="<?php echo $phone->tel; ?>" onchange="changingAddress('<?php echo $phone->id; ?>','tel',this)" /></td>
+                                                                            <td style="width:14%;"><input   id='tel-tt-<?php echo $phone->id;?>' type="text"  style="width:100%" value="<?php echo $phone->typetel; ?>" onchange="changingAddress('<?php echo $phone->id; ?>','typetel',this)" /><?php  '<br>'; if($phone->typetel=='Mobile') {?> <a onclick="setTel(this);" class="<?php echo $phone->tel;?>" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i>Envoyer un SMS </a><?php } ?> </td>
+                                                                            <td style="width:22%;"><textarea   id='tel-rem-<?php echo $phone->id;?>'    style="width:100%" onchange="changingAddress('<?php echo $phone->id; ?>','remarque',this)" ><?php echo $phone->remarque; ?></textarea></td>
+                                                                            <td style="width:4%;">
+                                                                                <a  href="{{action('ClientsController@deleteaddress', $phone->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                                                                    <span class="fa fa-fw fa-trash-alt"></span>
+                                                                                </a>
                                                                             </td>
-                                                                            <td style="width:20%;"><?php echo $phone->remarque; ?></td>
                                                                         </tr>
                                                                     @endforeach
 
@@ -551,20 +570,26 @@ use  \App\Http\Controllers\DocsController;
                                                                 <table class="table table-striped"  style="width:100%;margin-top:25px;margin-bottom:25px;font-size:16px;">
                                                                     <thead>
                                                                     <tr class="headtable">
-                                                                        <th style="width:20%">Nom et Prénom</th>
-                                                                        <th style="width:20%">Qualité</th>
+                                                                        <th style="width:30%">Nom et Prénom</th>
+                                                                        <th style="width:26%">Qualité</th>
                                                                         <th style="width:30%">Email</th>
                                                                         <th style="width:10%">Remarque</th>
+                                                                        <th style="width:4%">Supp</th>
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
                                                                     @foreach($emailads as $emailad)
                                                                         <tr>
-                                                                            <td style="width:20%;"> <?php echo $emailad->prenom; ?> <?php echo $emailad->nom; ?> </td>
-                                                                            <td style="width:20%;"><?php echo $emailad->fonction; ?></td>
-                                                                            <td style="width:30%;"><?php echo $emailad->mail; ?></td>
-                                                                            <td style="width:30%;"><?php echo $emailad->remarque; ?></td>
-                                                                        </tr>
+                                                                            <td style="width:30%;"><input placeholder="Nom"   id='em-nom-<?php echo $emailad->id;?>' type="text" pattern="[0-9]" style="width:100%" value="<?php echo $emailad->nom; ?>" onchange="changingAddress('<?php echo $emailad->id; ?>','nom',this)" /><br><input  placeholder="Prenom"  id='em-prenom-<?php echo $emailad->id;?>' type="text" pattern="[0-9]" style="width:100%" value="<?php echo $emailad->prenom; ?>" onchange="changingAddress('<?php echo $emailad->id; ?>','prenom',this)" /> </td>
+                                                                            <td style="width:26%;"><input   id='em-fonc-<?php echo $emailad->id;?>' type="text"  style="width:100%" value="<?php echo $emailad->fonction; ?>" onchange="changingAddress('<?php echo $emailad->id; ?>','fonction',this)" /></td>
+                                                                            <td style="width:30%;"><input   id='em-em-<?php echo $emailad->id;?>' type="text"  style="width:100%" value="<?php echo $emailad->mail; ?>" onchange="changingAddress('<?php echo $emailad->id; ?>','mail',this)" /></td>
+                                                                             <td style="width:10%;"><textarea   id='em-rem-<?php echo $emailad->id;?>'    style="width:100%" onchange="changingAddress('<?php echo $emailad->id; ?>','remarque',this)" ><?php echo $emailad->remarque; ?></textarea></td>
+                                                                            <td style="width:4%;">
+                                                                                <a  href="{{action('ClientsController@deleteaddress', $emailad->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                                                                    <span class="fa fa-fw fa-trash-alt"></span>
+                                                                                </a>
+                                                                            </td>
+                                                                         </tr>
                                                                     @endforeach
 
                                                                     </tbody>
@@ -2224,19 +2249,17 @@ $iduser=$CurrentUser->id;
                 <div class="card-body">
 
 
-                    <div class="form-group">
-                        <label for="sujet">Dossier :</label>
-                        <select   id="iddossier"  style="width:100%;" class="form-control select2" name="dossierid"     >
-                            <option></option>
-                            <?php foreach($listedossiers as $ds)
-
-                            {
-                                echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}     ?>
+                    <input   id="iddossier"  type="hidden"  value="<?php echo $dossier->id ?>" name="dossierid"     />
+                <!-- <div class="form-group">
+                            <label for="sujet">Dossier :</label>
+                            <select   id="iddossier"  style="width:100%;" class="form-control select2" name="dossierid"     >
+                                <option></option>
+                                <?php /* foreach($listedossiers as $ds)
+                                {
+                                echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}  */ ?>
                         </select>
-
-
-                    </div>
-
+                   </div>
+-->
                     <div class="form-group">
                         <label for="emetteur">Interlocuteur :</label>
                         <input type="text"  id="emetteur"   class="form-control" name="emetteur"    ></input>
@@ -2262,12 +2285,120 @@ $iduser=$CurrentUser->id;
 </div>
 
 
+
+<!--Modal Tel-->
+
+<div class="modal fade" id="faireappel" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="tel">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal2">Choisir le numéro</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body" sytle="height:300px">
+                    <?php use App\Intervenant;
+                    ;?>
+
+                    <div class="form-group">
+                        {{ csrf_field() }}
+
+                        <form id="faireappel" novalidate="novalidate">
+
+                            <input id="dossier" name="dossier" type="hidden" value="{{ $dossier->id}}" />
+                            <label for="emaildoss">Numéro</label>
+
+                            <select  class="form-control" id="numtel" name="numtel"   >
+                                <option value=""></option>
+                                <option value="3001">3001</option>
+                                <?php foreach($phonesDossier   as $phone)
+                                {
+                                    echo '<option class="telsassures" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
+
+                                }
+                                ?>
+                                <?php foreach($phonesCl   as $phone)
+                                {
+                                    echo '<option class="telsclients" value="'.$phone->champ.'">'.$phone->champ.'   '.$phone->nom.' '.$phone->prenom.' </option>';
+
+                                }
+                                ?>
+                                <?php foreach($phonesInt   as $phone)
+                                {
+                                    echo '<option class="telsintervs" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
+
+                                }
+                                ?>
+
+                            </select>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <a  type="button" class="btn btn-primary" href="phone" id="launchPhone"  >Appeler</a>
+
+                <script>
+
+                    $('#launchPhone').on('click', function(event) {
+                        event.preventDefault();
+                        var num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
+                        var url      = 'http://192.168.1.249/najdaapp/public/ctxSip/phone/index.php?num='+num,
+                            features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
+                        var session=null;
+                        // This is set when the phone is open and removed on close
+                        if (!localStorage.getItem('ctxPhone')) {
+                            window.open(url, 'ctxPhone', features);
+
+                            return false;
+                        } else {
+                            window.alert('Phone already open.');
+
+                        }
+                        alert(document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value);
+
+                    });
+
+
+                    /* window.onload = function(){
+                     window.document.getElementById('numDisplay').value= document.getElementById('numtel').value ;
+                     }*/
+                </script>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
 
 <script>
+
+    function ShowNumsCc() {
+        $('.telsassures').css('display','none');
+        $('.telsintervs').css('display','none');
+        $('.telsclients').css('display','block');
+    }
+
+    function ShowNumsInt() {
+        $('.telsassures').css('display','none');
+        $('.telsintervs').css('display','block');
+        $('.telsclients').css('display','none');
+    }
+    function ShowNumsAss() {
+        $('.telsassures').css('display','block');
+        $('.telsintervs').css('display','none');
+        $('.telsclients').css('display','none');
+    }
 
 
     function changing(elm) {
@@ -2587,6 +2718,29 @@ function disabling(elm) {
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
 
 <script>
+
+
+    function changingAddress(id,champ,elm) {
+        var champid=elm.id;
+        var val =document.getElementById(champid).value;
+
+        //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('clients.updateaddress') }}",
+            method: "POST",
+            data: {id: id , champ:champ ,val:val,  _token: _token},
+            success: function (data) {
+                $('#'+champid).animate({
+                    opacity: '0.3',
+                });
+                $('#'+champid).animate({
+                    opacity: '1',
+                });            }
+        });
+
+    }
+
 
 
     function checkexiste( elm,type) {
@@ -3175,5 +3329,6 @@ function disabling(elm) {
     padding:6px 3px 6px 3px;
 }
 
+    textarea{min-height:80px;}
 
 </style>

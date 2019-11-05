@@ -272,7 +272,8 @@ class ClientsController extends Controller
     {
         $dossiers = Dossier::all();
         $docs = DB::table('docs')->select('id', 'nom')->get();
-        $relations2 = DB::table('clients_docs')->select('client', 'doc')->get();
+        $relations2 = DB::table('clients_docs')->select('client', 'doc')
+            ->where('client',$id)->get();
 
         $groupes = DB::table('client_groupes')->select('id', 'label')->get();
 

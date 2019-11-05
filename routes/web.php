@@ -194,6 +194,7 @@ Route::get('/dossiers/dossiersinactifs','DossiersController@DossiersInactifs')->
 Route::post('/dossiers/rendreactif','DossiersController@rendreActif')->name('dossiers.rendreactif');
 Route::get('/dossiers/inactifs','DossiersController@inactifs')->name('inactifs');
 Route::get('/dossiers/activerdossiers','DossiersController@ActiverDossiers')->name('activerdossiers');
+Route::post('/dossiers/changestatut','DossiersController@changestatut')->name('dossiers.changestatut');
 
 
 /*** Clients **/
@@ -343,6 +344,8 @@ Route::get('/typeprestations/destroy/{id}', 'TypePrestationsController@destroy')
 Route::get('/specialites', array('as' => 'specialites','uses' => 'SpecialitesController@index'));
  Route::post('/specialites/saving','SpecialitesController@saving')->name('specialites.saving');
 Route::post('/specialites/updating','SpecialitesController@updating')->name('specialites.updating');;
+Route::post('/specialites/createspec','SpecialitesController@createspec')->name('specialites.createspec');
+Route::post('/specialites/removespec','SpecialitesController@removespec')->name('specialites.removespec');
 Route::get('/specialites/view/{id}', 'SpecialitesController@view');
 Route::get('/specialites/destroy/{id}', 'SpecialitesController@destroy');
 

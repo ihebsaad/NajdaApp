@@ -126,8 +126,9 @@ class SpecialitesController extends Controller
 
         $specialite = Specialite::find($id);
         $typesprestations = TypePrestation::get();
-
-        return view('specialites.view',['typesprestations'=>$typesprestations,'dossiers' => $dossiers,'villes'=>$villes], compact('specialite'));
+        $relations =   DB::table('specialites_typeprestations')->select('specialite', 'type_prestation')
+                ->where('specialite',$id)->get();
+        return view('specialites.view',['relations'=>$relations,'typesprestations'=>$typesprestations,'dossiers' => $dossiers,'villes'=>$villes], compact('specialite'));
 
     }
 
@@ -180,8 +181,39 @@ class SpecialitesController extends Controller
         return redirect('/specialites')->with('success', '  Supprimé  ');
     }
 
- 
- 
+
+
+
+    public  function removespec(Request $request)
+    {
+        $specialite= $request->get('specialite');
+        $typep= $request->get('typep');
+
+
+        DB::table('specialites_typeprestations')
+            ->where([
+                ['specialite', '=', $specialite],
+                ['type_prestation', '=', $typep],
+            ])->delete();
+
+
+
+    }
+
+    public  function createspec(Request $request)
+    {
+        $specialite= $request->get('specialite');
+        $typep= $request->get('typep');
+
+
+        DB::table('specialites_typeprestations')->insert(
+            ['specialite' => $specialite,
+                'type_prestation' => $typep]
+        );
+
+
+
+    }
 
 
 }

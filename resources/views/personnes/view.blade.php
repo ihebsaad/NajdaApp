@@ -66,10 +66,10 @@
                 <div class="form-group">
                     <label for="inputError" class="control-label">Type</label>
                     <select onchange="changing(this)"  style="" class="form-control " name="type" id="type"   >
-                        <option  <?php if ($personne->type ==''){echo 'selected="selected"';} ?> ></option>
-                        <option  <?php if ($personne->type =='chauffeur'){echo 'selected="selected"';} ?> >Chauffeur</option>
-                        <option  <?php if ($personne->type =='paramedical'){echo 'selected="selected"';} ?> >Paramédical </option>
-                        <option  <?php if ($personne->type =='autre'){echo 'selected="selected"';} ?> >Autre</option>
+                        <option value="" <?php if ($personne->type ==''){echo 'selected="selected"';} ?> ></option>
+                        <option value="chauffeur"  <?php if ($personne->type =='chauffeur'){echo 'selected="selected"';} ?> >Chauffeur</option>
+                        <option value="paramedical"  <?php if ($personne->type =='paramedical'){echo 'selected="selected"';} ?> >Paramédical </option>
+                        <option value="autre"  <?php if ($personne->type =='autre'){echo 'selected="selected"';} ?> >Autre</option>
                     </select>
                 </div>
 

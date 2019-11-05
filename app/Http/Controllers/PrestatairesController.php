@@ -267,26 +267,18 @@ class PrestatairesController extends Controller
 
          $minutes2= 600;
 
-         $specialites =  Specialite::get();
 
-
-       /// $specialites=Specialite::get();
-        //      $typesMissions=TypeMission::get();
         $gouvernorats =  Citie::get();
 
 
-       // $gouvernorats = Citie::get();
+         $typesprestations = TypePrestation::get();
+        //$typesprestationsid = TypePrestation::select('id');/
 
-    /*    $villes = Cache::remember('villes',$minutes2,  function () {
+        $relations2 = DB::table('specialites_prestataires')->select('specialite')
+            ->where('prestataire_id','=',$id)
+            ->get();
 
-            return DB::table('villes')
-                ->get();
-        });*/
 
-       // $villes=DB::table('villes')
-      //      ->get();
-        $typesprestations = TypePrestation::all();
-        $typesprestationsid = TypePrestation::select('id');
        // $villes = DB::table('cities')->select('id', 'name')->get();
         $villes = Ville::all();
 
@@ -301,9 +293,9 @@ class PrestatairesController extends Controller
             ->where('prestataire_id','=',$id)
             ->get();
 
-        $relations2 = DB::table('specialites_prestataires')->select('specialite')
+        $TypesPrestationIds =DB::table('prestataires_type_prestations')
             ->where('prestataire_id','=',$id)
-            ->get();
+            ->pluck('type_prestation_id');
 
         $prestataire = Prestataire::find($id);
         $prestations =   Prestation::where('prestataire_id', $id)->get();
@@ -323,18 +315,22 @@ class PrestatairesController extends Controller
             ->get();
 
 
-        $specialites =DB::table('specialites')
+    /*    $specialites =DB::table('specialites')
             ->whereIn('type_prestation', $typesprestationsid)
             ->get();
-
-       /* $specialites2 =DB::table('specialites')
-                  ->whereIn('type_prestation', $typesprestationsid)
-            ->get();
 */
+         $specialitesIds =DB::table('specialites_typeprestations')
+                  ->whereIn('type_prestation', $TypesPrestationIds)
+            ->pluck('specialite');
+
+        $specialites2 =DB::table('specialites')
+            ->whereIn('id', $specialitesIds)
+            ->get();
+
         $dossiers = Dossier::where('current_status','<>','Cloture')
              ->get();
 
-        return view('prestataires.view',['dossiers'=>$dossiers,'specialites'=>$specialites,'emails'=>$emails, 'tels'=>$tels, 'faxs'=>$faxs,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'relations2'=>$relations2,'prestations'=>$prestations], compact('prestataire'));
+        return view('prestataires.view',['specialites2'=>$specialites2, 'dossiers'=>$dossiers,/*'specialites'=>$specialites,*/'emails'=>$emails, 'tels'=>$tels, 'faxs'=>$faxs,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'relations2'=>$relations2,'prestations'=>$prestations], compact('prestataire'));
 
     }
 
