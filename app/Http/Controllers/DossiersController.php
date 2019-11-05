@@ -1596,7 +1596,7 @@ class DossiersController extends Controller
             {
                 $date_spe = \DateTime::createFromFormat($format,$Miss->h_rdv);
 
-                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $$date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $$date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
                             {
 
                                 $dossiersactifsparmissions[]=$Miss->dossier_id;
@@ -1610,9 +1610,10 @@ class DossiersController extends Controller
 
             if($Miss->h_dep_pour_miss)
             {
-                $date_spe = \DateTime::createFromFormat($format,$Miss->h_dep_pour_miss);
 
-                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $$date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $$date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                $date_spe = \DateTime::createFromFormat($format,$Miss->h_dep_pour_miss);
+              // dd($deb_seance_3);
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
                             {
 
                                 $dossiersactifsparmissions[]=$Miss->dossier_id;
@@ -1627,7 +1628,7 @@ class DossiersController extends Controller
             {
                 $date_spe = \DateTime::createFromFormat($format,$Miss->h_dep_charge_dest);
 
-                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $$date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $$date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
                             {
 
                                 $dossiersactifsparmissions[]=$Miss->dossier_id;
@@ -1641,7 +1642,7 @@ class DossiersController extends Controller
             {
                 $date_spe = \DateTime::createFromFormat($format,$Miss->h_arr_prev_dest);
 
-                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $$date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $$date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
                             {
                                 $dossiersactifsparmissions[]=$Miss->dossier_id;
                               // remplir tableau info activation dossier
@@ -1652,7 +1653,7 @@ class DossiersController extends Controller
             {
                 $date_spe = \DateTime::createFromFormat($format,$Miss->h_decoll_ou_dep_bat);
 
-                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $$date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $$date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
                             {
                                 $dossiersactifsparmissions[]=$Miss->dossier_id;
                               // remplir tableau info activation dossier
@@ -1663,7 +1664,7 @@ class DossiersController extends Controller
             {
                 $date_spe = \DateTime::createFromFormat($format,$Miss->h_arr_av_ou_bat);
 
-                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $$date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $$date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
                             {
                                 $dossiersactifsparmissions[]=$Miss->dossier_id;
                               // remplir tableau info activation dossier
@@ -1675,7 +1676,7 @@ class DossiersController extends Controller
             {
                 $date_spe = \DateTime::createFromFormat($format,$Miss->h_retour_base);
 
-                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $$date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $$date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
                             {
                                 $dossiersactifsparmissions[]=$Miss->dossier_id;
                               // remplir tableau info activation dossier
@@ -1687,7 +1688,7 @@ class DossiersController extends Controller
             {
                 $date_spe = \DateTime::createFromFormat($format,$Miss->h_deb_sejour);
 
-                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $$date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $$date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
                             {
                                 $dossiersactifsparmissions[]=$Miss->dossier_id;
                               // remplir tableau info activation dossier
@@ -1699,7 +1700,7 @@ class DossiersController extends Controller
             {
                 $date_spe = \DateTime::createFromFormat($format,$Miss->h_fin_sejour);
 
-                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $$date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $$date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
                             {
                                 $dossiersactifsparmissions[]=$Miss->dossier_id;
                               // remplir tableau info activation dossier
@@ -1710,7 +1711,7 @@ class DossiersController extends Controller
             {
                 $date_spe = \DateTime::createFromFormat($format,$Miss->h_deb_location_voit);
 
-                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $$date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $$date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
                             {
                                 $dossiersactifsparmissions[]=$Miss->dossier_id;
                               // remplir tableau info activation dossier
@@ -1722,7 +1723,7 @@ class DossiersController extends Controller
             {
                 $date_spe = \DateTime::createFromFormat($format,$Miss->h_fin_location_voit);
 
-                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $$date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $$date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+                if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
                             {
                                 $dossiersactifsparmissions[]=$Miss->dossier_id;
                               // remplir tableau info activation dossier
@@ -1730,24 +1731,25 @@ class DossiersController extends Controller
 
             }
 
-
+      
             // si la mission est reportée
-           if($Miss->statut_courant=='reportee')
+           
+           }
+           if($Miss->statut_courant=="reportee")
            {
+           // dd('mission reportee');
 
              $date_spe = \DateTime::createFromFormat($format,$Miss->date_deb);
-              if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $$date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $$date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
+              if(( $dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1 && $date_spe >= $deb_seance_1 && $date_spe <= $fin_seance_1 ) || ( $dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2 && $date_spe >= $deb_seance_2 && $date_spe <= $fin_seance_2 ) || ( $dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3 && $date_spe >= $deb_seance_3 && $date_spe <= $fin_seance_3 ) )
                             {
-                                $dossiersactifsparmissions[]=$Miss->dossier_id;
+
+                              $dossiersactifsparmissions[]=$Miss->dossier_id;
                               // remplir tableau info activation dossier
                             }
 
            }
 
 
-
-
-           }
             
         }
 
