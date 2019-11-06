@@ -551,4 +551,7 @@ Route::post('/ordremissions/historique','OrdreMissionsController@historique')->n
 Route::get('/ordremissions/pdfodmtaxi','OrdreMissionsController@pdfodmtaxi')->name('ordremissions.pdfodmtaxi');
 Route::post('/ordremissions/cancelom','OrdreMissionsController@cancelom')->name('ordremissions.cancelom');
  
- 
+Route::get('/ordremissions/pdfodmambulance','OrdreMissionsController@pdfodmambulance')->name('ordremissions.pdfodmambulance');
+Route::post('/ordremissions/export_pdf_odmambulance','OrdreMissionsController@export_pdf_odmambulance')->name('ordremissions.export_pdf_odmambulance');
+Route::get('/ordremissions/pdfodmremorquage','OrdreMissionsController@pdfodmremorquage')->name('ordremissions.pdfodmremorquage');
+Route::post('/ordremissions/export_pdf_odmremorquage','OrdreMissionsController@export_pdf_odmremorquage')->name('ordremissions.export_pdf_odmremorquage'); 
