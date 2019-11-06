@@ -3537,9 +3537,6 @@ function keyUpHandler(){
 
         $('#selectionnerprest').click(function(){
 
-
-
-
             var prestataire = $('#selectedprest2').val();
 
             var dossier_id = $('#dossier').val();

@@ -24,34 +24,32 @@
     $parametres =  DB::table('parametres')
         ->where('id','=', 1 )->first();
 
-    $dollar=$parametres->dollar ;
-    $euro=$parametres->euro ;
 
     $today= date('Y-m-d');
 
     // OM TAXIs
-    $ordres_taxi = \App\OMTaxi::where('CL_heuredateRDV', 'like',$today.'%')
-        ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
-        ->orderBy('CL_heuredateRDV')
+    $ordres_taxi = \App\OMTaxi::where('dhdepartmiss', 'like',$today.'%')
+        ->select('id','dhdepartmiss','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
+        ->orderBy('dhdepartmiss')
         ->get();
 
     //OM Ambul
 
-    $ordres_ambul =   \App\OMAmbulance::where('CL_heuredateRDV', 'like',$today.'%')
-        ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
-        ->orderBy('CL_heuredateRDV')
+    $ordres_ambul =   \App\OMAmbulance::where('dhdepartmiss', 'like',$today.'%')
+        ->select('id','dhdepartmiss','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
+        ->orderBy('dhdepartmiss')
          ->get();
     // OM Remorq
 
-    $ordres_rem =  \App\OMRemorquage::where('CL_heuredateRDV', 'like',$today.'%')
-         ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
-         ->orderBy('CL_heuredateRDV')
+    $ordres_rem =  \App\OMRemorquage::where('dhdepartmiss', 'like',$today.'%')
+         ->select('id','dhdepartmiss','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
+         ->orderBy('dhdepartmiss')
          ->get();
     $oms = array_merge($ordres_taxi->toArray(),$ordres_ambul->toArray(),$ordres_rem->toArray() );
 
     function cmp($a, $b)
     {
-        return strcmp($a["CL_heuredateRDV"], $b["CL_heuredateRDV"]);
+        return strcmp($a["dhdepartmiss"], $b["dhdepartmiss"]);
     }
 
     usort($oms, "cmp");
@@ -92,9 +90,10 @@
                                $color='';$icon='';
                                                       foreach($oms as $o)
                                                       {
-                                                          $ref=$o['reference_medic'];
+                                                          $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
+                                                            $ref=$o['reference_medic'];
                                                           $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                                                          $heure=$o['CL_heure_RDV'];$heure= substr($heure,0,5); $hour=intval(substr($heure,0,2));
+                                                          $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                                           $tel=$o['CL_contacttel'];
                                                           $de=$o['CL_lieuprest_pc'];
                                                           $vers=$o['CL_lieudecharge_dec'];
@@ -116,7 +115,9 @@
                                                           <div class="row" style= "margin-bottom:5px">
                                                               <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-clock"></i> <?php echo $heure; ?></div>
                                                           </div>
-
+                                                          <div class="row" style= "margin-bottom:5px">
+                                                              <div   style="background-color:black;color:white;text-align: center;font-size: 20px"><a href="#" onclick="modalattach('<?php echo 'OM '.ucwords($type).' '.$ref.' '.$benef;?>','<?php echo URL::asset('storage'.$empsub);?>')"><i class="fas fa-file-alt"></i> Ouvrir </a></div>
+                                                          </div>
 
                                                           <div class="row" style="margin-bottom:10px">
                                                               <div class="col-md-12 overme"  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
@@ -147,9 +148,10 @@
                                $color='';$icon='';
                                foreach($oms as $o)
                                {
+                               $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heure=$o['CL_heure_RDV'];$heure= substr($heure,0,5); $hour=intval(substr($heure,0,2));
+                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
@@ -171,7 +173,9 @@
                                    <div class="row" style= "margin-bottom:5px">
                                        <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-clock"></i> <?php echo $heure; ?></div>
                                    </div>
-
+                                   <div class="row" style= "margin-bottom:5px">
+                                       <div   style="background-color:black;color:white;text-align: center;font-size: 20px"><a href="#" onclick="modalattach('<?php echo 'OM '.ucwords($type).' '.$ref.' '.$benef;?>','<?php echo URL::asset('storage'.$empsub);?>')"><i class="fas fa-file-alt"></i> Ouvrir </a></div>
+                                   </div>
 
                                    <div class="row" style="margin-bottom:10px">
                                        <div class="col-md-12 overme"  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
@@ -202,9 +206,10 @@
                                $color='';$icon='';
                                foreach($oms as $o)
                                {
+                               $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heure=$o['CL_heure_RDV'];$heure= substr($heure,0,5); $hour=intval(substr($heure,0,2));
+                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
@@ -226,7 +231,9 @@
                                    <div class="row" style= "margin-bottom:5px">
                                        <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-clock"></i> <?php echo $heure; ?></div>
                                    </div>
-
+                                   <div class="row" style= "margin-bottom:5px">
+                                       <div   style="background-color:black;color:white;text-align: center;font-size: 20px"><a href="#" onclick="modalattach('<?php echo 'OM '.ucwords($type).' '.$ref.' '.$benef;?>','<?php echo URL::asset('storage'.$empsub);?>')"><i class="fas fa-file-alt"></i> Ouvrir </a></div>
+                                   </div>
 
                                    <div class="row" style="margin-bottom:10px">
                                        <div class="col-md-12 overme "  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
@@ -257,9 +264,10 @@
                                $color='';$icon='';
                                foreach($oms as $o)
                                {
+                               $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heure=$o['CL_heure_RDV'];$heure= substr($heure,0,5); $hour=intval(substr($heure,0,2));
+                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
@@ -281,7 +289,9 @@
                                    <div class="row" style= "margin-bottom:5px">
                                        <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-clock"></i> <?php echo $heure; ?></div>
                                    </div>
-
+                                   <div class="row" style= "margin-bottom:5px">
+                                       <div   style="background-color:black;color:white;text-align: center;font-size: 20px"><a href="#" onclick="modalattach('<?php echo 'OM '.ucwords($type).' '.$ref.' '.$benef;?>','<?php echo URL::asset('storage'.$empsub);?>')"><i class="fas fa-file-alt"></i> Ouvrir </a></div>
+                                   </div>
 
                                    <div class="row" style="margin-bottom:10px">
                                        <div class="col-md-12 overme"  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
@@ -311,9 +321,10 @@
                                $color='';$icon='';
                                foreach($oms as $o)
                                {
+                               $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heure=$o['CL_heure_RDV'];$heure= substr($heure,0,5); $hour=intval(substr($heure,0,2));
+                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
@@ -335,7 +346,9 @@
                                    <div class="row" style= "margin-bottom:5px">
                                        <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-clock"></i> <?php echo $heure; ?></div>
                                    </div>
-
+                                   <div class="row" style= "margin-bottom:5px">
+                                       <div   style="background-color:black;color:white;text-align: center;font-size: 20px"><a href="#" onclick="modalattach('<?php echo 'OM '.ucwords($type).' '.$ref.' '.$benef;?>','<?php echo URL::asset('storage'.$empsub);?>')"><i class="fas fa-file-alt"></i> Ouvrir </a></div>
+                                   </div>
 
                                    <div class="row" style="margin-bottom:10px">
                                        <div class="col-md-12 overme "  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
@@ -366,9 +379,10 @@
                                $color='';$icon='';
                                foreach($oms as $o)
                                {
+                               $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heure=$o['CL_heure_RDV'];$heure= substr($heure,0,5); $hour=intval(substr($heure,0,2));
+                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
@@ -390,7 +404,9 @@
                                    <div class="row" style= "margin-bottom:5px">
                                        <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-clock"></i> <?php echo $heure; ?></div>
                                    </div>
-
+                                   <div class="row" style= "margin-bottom:5px">
+                                       <div   style="background-color:black;color:white;text-align: center;font-size: 20px"><a href="#" onclick="modalattach('<?php echo 'OM '.ucwords($type).' '.$ref.' '.$benef;?>','<?php echo URL::asset('storage'.$empsub);?>')"><i class="fas fa-file-alt"></i> Ouvrir </a></div>
+                                   </div>
 
                                    <div class="row" style="margin-bottom:10px">
                                        <div class="col-md-12 overme"  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
@@ -658,6 +674,29 @@
 
 
 
+    <!-- Modal Ouvrir Fichier-->
+    <div class="modal fade" id="openattach"  role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="width:900px;height: 450px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="attTitle" style="text-align:center">OM</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+
+                        <iframe id="attachiframe" src="" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <style>h2{background-color: grey;color:white;height: 40px;padding-top:5px;}
         h2 small{color:#FCFBFB;}
 
@@ -756,52 +795,19 @@
 
 <script>
 
-    function hideinfos() {
-        $('#tab1').css('display','none');
-    }
-    function hideinfos2() {
-        $('#tab2').css('display','none');
-    }
-    function hideinfos3() {
-        $('#tab3').css('display','none');
-    }
-    function hideinfos4() {
-        $('#tab4').css('display','none');
-    }
-    function showinfos() {
-        $('#tab1').css('display','block');
-    }
-    function showinfos2() {
-        $('#tab2').css('display','block');
-    }
-    function showinfos3() {
-        $('#tab3').css('display','block');
-    }
-    function showinfos4() {
-        $('#tab4').css('display','block');
+
+    function modalattach(titre,emplacement)
+    {
+        $("#attTitle").text(titre);
+
+
+            document.getElementById('attachiframe').src =emplacement;
+            document.getElementById('attachiframe').style.display='block';
+
+        $("#openattach").modal('show');
     }
 
-    function changing(elm) {
-        var champ=elm.id;
 
-        var val =document.getElementById(champ).value;
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url: "{{ route('home.parametring') }}",
-            method: "POST",
-            data: {  champ:champ ,val:val, _token: _token},
-            success: function ( ) {
-                $('#'+champ).animate({
-                    opacity: '0.3',
-                });
-                $('#'+champ).animate({
-                    opacity: '1',
-                });
-
-            }
-        });
-
-    }
 
 
 </script>

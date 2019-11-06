@@ -88,9 +88,9 @@
              <div class="form-group  ">
                  <label>Type de prestations</label>
                  <div class="row">
-                     <select class="itemName form-control col-lg-6" style="width:100%" name="itemName"  multiple  id="typeprest" onchange="location.reload();">
+                     <select class="itemName form-control col-lg-6" style="width:100%" name="itemName"  multiple  id="typeprest" >
                          <option></option>
-                         <?php if ( count($relations) > 0 ) {?>
+                         <?php if ( count($relations) > 0 ) { ?>
 
                          @foreach($relations as $prest  )
                              @foreach($typesprestations as $aKey)
@@ -1087,9 +1087,8 @@
 
 
     $(function () {
-
-
 /*
+
         function removeprest(elm) {
 
             var id= elm.id;
@@ -1130,13 +1129,12 @@
 
                     location.reload();
 
-
                 }
             });
 
 
         }
-*/
+  */
         $('#envoisms').click(function(){
             var description = $('#ladescription').val();
             var destinataire = $('#ledestinataire').val();
@@ -1234,7 +1232,6 @@
                 }
 
                 if (type=="removed"){
-
                     var prestataire = $('#idpres').val();
                     var _token = $('input[name="_token"]').val();
 
@@ -1284,7 +1281,8 @@
                 changes;
             if (numVals != valArray.length) {
                 var longerSet, shortSet;
-                (numVals > valArray.length) ? longerSet = val : longerSet = valArray;
+                if(numVals > valArray.length) { longerSet = val }else{ longerSet = valArray;}
+               // (numVals > valArray.length) ? longerSet = val : longerSet = valArray;
                 (numVals > valArray.length) ? shortSet = valArray : shortSet = val;
                 //create array of values that changed - either added or removed
                 changes = $.grep(longerSet, function(n) {
@@ -1304,9 +1302,11 @@
 
 
         function Updating(array, type) {
+
             $.each(array, function(i, item) {
 
                 if (type=="selected"){
+                    alert('selected' +item);
 
                     var prestataire = $('#idpres').val();
                     var _token = $('input[name="_token"]').val();
@@ -1315,21 +1315,27 @@
                         url: "{{ route('prestataires.createtypeprest') }}",
                         method: "POST",
                         data: {prestataire: prestataire , typeprest:item ,  _token: _token},
-                        success: function () {
-                            $('.select2-selection').animate({
-                                opacity: '0.3',
-                            });
-                            $('.select2-selection').animate({
-                                opacity: '1',
-                            });
+                        success: function (data) {
+                            if(data==1){
+                                $('.select2-selection').animate({
+                                    opacity: '0.3',
+                                });
+                                $('.select2-selection').animate({
+                                    opacity: '1',
+                                });
+
+                                location.reload();
+                            }
 
                         }
                     });
 
                 }
 
-                if (type=="removed"){
-           // alert(item);
+                if (type=="removed"){ ////
+                    alert('removed' +item);
+
+                    // alert(item);
                      var prestataire = $('#idpres').val();
                     var _token = $('input[name="_token"]').val();
 
@@ -1344,6 +1350,8 @@
                             $( ".select2-selection--multiple" ).show( "slow", function() {
                                 // Animation complete.
                             });
+                            location.reload();
+
                         }
                     });
 
@@ -1614,5 +1622,33 @@
 
         // }
     }
+
+    $(document).ready(function() {
+        $("#typeprest").select2();
+        $("#typeprest").data('originalvalues', []);
+        $("#typeprest").on('change', function(e) {
+            var that = this;
+            removed = []
+
+            $($(this).data('originalvalues')).each(function(k, v) {
+                if (!$(that).val()) {
+                    removed[removed.length] = v;
+                    return false;
+                }
+                if ($(that).val().indexOf(v) == -1) {
+                    removed[removed.length] = v;
+                }
+            });
+
+
+            if ($(this).val()) {
+                $(this).data('originalvalues', $(this).val());
+            } else {
+                $(this).data('originalvalues', []);
+            }
+
+            alert("-- Removed: " + removed)
+        });
+    });
 
 </script>

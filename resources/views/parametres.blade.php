@@ -347,7 +347,38 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
 
     <?php } ?>
 
-                    @endsection
+
+    <!-- Modal   -->
+    <div class="modal fade" id="act_description" role="dialog" aria-labelledby="description" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModal7" style="text-align: center">Description de l'action </h2>
+                </div>
+                <form   >
+                    <div class="modal-body" style="padding:40px 20px 20px 20px">
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <input type="hidden" id="selectedaction" />
+                                {{ csrf_field() }}
+                                <label for="description">Description:</label>
+                                <textarea onchange="updateDescAct()" style="width:100%;height:400px;" id="descrip_act"  class="form-control" name="description"     ></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal" style="margin-left:30px">Fermer</button>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+ @endsection
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
@@ -536,40 +567,3 @@ document.getElementById('descrip_act').value=description;
     .mytable input{text-align: center;}
 </style>
 
-
-<!-- Modal SMS -->
-<div class="modal fade" id="act_description" role="dialog" aria-labelledby="description" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="exampleModal7" style="text-align: center">Description de l'action </h2>
-            </div>
-            <form   >
-
-
-
-                <div class="modal-body" style="padding:40px 20px 20px 20px">
-                    <div class="card-body">
-
-
-                        <div class="form-group">
-                            <input type="hidden" id="selectedaction" />
-                            {{ csrf_field() }}
-                            <label for="description">Description:</label>
-                            <textarea onchange="updateDescAct()" style="width:100%;height:400px;" id="descrip_act"  class="form-control" name="description"     ></textarea>
-                        </div>
-
-
-
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal" style="margin-left:30px">Fermer</button>
-
-                </div>
-            </form>
-
-        </div>
-    </div>
-</div>

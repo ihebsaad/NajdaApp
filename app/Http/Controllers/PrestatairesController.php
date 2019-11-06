@@ -538,11 +538,17 @@ class PrestatairesController extends Controller
         $prestataire= $request->get('prestataire');
         $typeprest= $request->get('typeprest');
 
-
-        DB::table('prestataires_type_prestations')->insert(
+        $count=DB::table('prestataires_type_prestations')->where(
             ['prestataire_id' => $prestataire,
                 'type_prestation_id' => $typeprest]
-        );
+        )->count();
+        if ($count==0) {
+            DB::table('prestataires_type_prestations')->insert(
+                ['prestataire_id' => $prestataire,
+                    'type_prestation_id' => $typeprest]
+            );
+            return 1;
+        } else{ return 0;}
 
 
 

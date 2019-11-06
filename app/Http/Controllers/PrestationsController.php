@@ -116,15 +116,45 @@ class PrestationsController extends Controller
 
             ]);
 
+             $nomprest= app('App\Http\Controllers\PrestatairesController')->ChampById('civilite',$prest).' '. app('App\Http\Controllers\PrestatairesController')->ChampById('prenom',$prest).' '.  app('App\Http\Controllers\PrestatairesController')->ChampById('name',$prest);
+        $user = auth()->user();
+         $nomuser=$user->name.' '.$user->lastname;
 
-           if ($prestation->save())
+        if ($prestation->save())
            {
                // Envoi de mail
                if($autorise !=''){
+          /*     // $to=array('ihebsaad@gmail.com');
+                $to='ihebsaad@gmail.com';
+                $sujet='Nouvelle prestation effectuée';
+                 $contenu='Bonjour, <br>Nouvelle prestation effectuée.<br>
+                 Date:'.$date.'<br>
+                 Prestataire:'.$nomprest.'<br>
+                 Autorisée Par:'.$autorise.'<br>
+                 Détails:'.$details.'<br>
+                 Créée par :'.$nomuser.'<br>    
+                     ';
+                 $cc=array('ihebs001@gmail.com','saadiheb@gmail.com');
 
+                   Mail::send([], [], function ($message) use ($to,$sujet,$contenu ,$cc  ) {
+                       $message
+                          /// ->to($to ?: [])
+                            ->to($to)
+
+                         ///  ->cc($cc ?: [])
+                           //  ->bcc($ccimails ?: [])
+                           ->subject($sujet)
+                           ->setBody($contenu, 'text/html');
+
+
+                            // foreach ($to as $t) {
+                           //       $message->to($t);
+                           //   }
+
+                   });
+
+*/
                }
-               $user = auth()->user();
-               $nomuser=$user->name.' '.$user->name;
 
                $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($iddoss);
                Log::info('[Agent: '.$nomuser.'] Ajout de prestation pour le dossier: '.$ref);
