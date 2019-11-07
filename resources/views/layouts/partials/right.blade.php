@@ -1064,14 +1064,7 @@ $("#workflowform input:checkbox").change(function() {
 });
 </script>
     <?php
-    $urlapp=env('APP_URL'); 
-
-    if (App::environment('local')) {
-        // The environment is local
-        $urlapp='http://localhost/najdaapp';
-       // $urlapp=env('APP_URL');
-
-    }
+   $urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     ?>
 
     <!-- get modal workflow by ajax -->

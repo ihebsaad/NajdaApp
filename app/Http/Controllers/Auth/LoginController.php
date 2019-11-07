@@ -112,10 +112,8 @@ public function logout(Request $request)
 
                 if ( !($veilleur >0) )
                 {
-                    if (! App::environment('local')) {
-                        return redirect('/home')->withErrors(['Le veilleur doit être connecté']);
-                    }
-                }
+                         return redirect('/home')->withErrors(['Le veilleur doit être connecté']);
+                 }
 
             }
 

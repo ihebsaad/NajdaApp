@@ -4,12 +4,7 @@
 		@page { margin-left: 1in; margin-right: 0.69in; margin-top: 0.3in; margin-bottom: 0.07in }
 		p { margin-bottom: 0.1in; direction: ltr; line-height: 120%; text-align: left; orphans: 2; widows: 2 }
 	</style>
-   <?php  $urlapp=env('APP_URL'); 
-
-    if (App::environment('local')) {
-        // The environment is local
-        $urlapp='http://localhost/najdaapp';
-    }
+   <?php $urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 	?>
 	<div style="width:100%">
 <img src="<?php echo $urlapp ?>/public/img/najda.png" style="width:80px;float: right;margin-right:60px;margin-top:40px;margin-bottom:50px;">

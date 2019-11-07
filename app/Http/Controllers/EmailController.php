@@ -1748,14 +1748,9 @@ if ($from=='najdassist@gmail.com')
 
             }
          }
+ 
+$urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
-
-     $urlapp=env('APP_URL');
-
-    if (App::environment('local')) {
-        // The environment is local
-        $urlapp='http://localhost/najdaapp';
-    }
              //   $urlsending=$urlapp.'/emails/envoimail/'.$doss;
                 $urlsending=$urlapp.'/envoyes';
                 $dossier= $this->RefDossierById($doss);////;

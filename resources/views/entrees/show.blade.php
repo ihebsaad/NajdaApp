@@ -22,12 +22,8 @@ use App\Http\Controllers\TagsController;
 @section('content')
 
     <?php
-    $urlapp=env('APP_URL');
+$urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";?>
 
-    if (App::environment('local')) {
-        // The environment is local
-        $urlapp='http://localhost/najdaapp';
-    }?>
 <div class="panel panel-default panelciel " style="">
  @if(session()->has('AffectNouveauDossier'))
     <div class="alert alert-success">
@@ -438,12 +434,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/spectrum.css') }}">
 <?php
-$urlapp=env('APP_URL'); 
-
-if (App::environment('local')) {
-// The environment is local
-$urlapp='http://localhost/najdaapp';
-}
+$urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 ?>
 <script>
 

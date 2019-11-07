@@ -4,8 +4,7 @@ use App\Http\Controllers\DossiersController;
 
 use App\Dossier ;
 use App\Attachement ;
-$urlapp=env('APP_URL'); 
-
+$urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 ?>
  <?php use \App\Http\Controllers\ClientsController;     ?>
 

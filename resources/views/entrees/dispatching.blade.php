@@ -7,12 +7,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
 
 
-<?php  $urlapp=env('APP_URL'); 
-
-if (App::environment('local')) {
-    // The environment is local
-    $urlapp='http://localhost/najdaapp';
-}
+<?php  $urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 ?>
 
 @section('content')

@@ -698,12 +698,7 @@
      }); //end click
  }
      <?php
-     $urlapp=env('APP_URL'); 
-
-     if (App::environment('local')) {
-         // The environment is local
-         $urlapp='http://localhost/najdaapp';
-     }
+ $urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
        ?>
 
       checkreponses();
