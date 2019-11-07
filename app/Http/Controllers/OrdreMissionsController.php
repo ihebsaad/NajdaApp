@@ -11,6 +11,8 @@ use PDF as PDFcomp;
 use App\OrdreMission ;
 use App\Attachement ;
 use App\OMTaxi;
+use App\OMAmbulance;
+use App\OMRemorquage;
 use App\Mission;
 use App\Dossier;
 
@@ -64,6 +66,12 @@ class OrdreMissionsController extends Controller
         			$parent = $_POST['parent'];
         			$iddoss = $_POST['dossdoc'];
         			$presttaxi = $_POST['type_affectation'];
+        			// type_affect pares remplace ou complete
+        		
+	        		if (isset($_POST["type_affectation_post"]))
+	        		{	
+                    	$presttaxi = $_POST['type_affectation_post'];
+	        		}
         			OMTaxi::where('id', $parent)->update(['dernier' => 0]);
         			$omparent=OMTaxi::where('id', $parent)->first();
         			$filename='taxi_Complet-'.$parent;
@@ -224,12 +232,23 @@ class OrdreMissionsController extends Controller
 				$arequest->request->add(['name' => $subscriber_name_]);
 				$arequest->request->add(['lastname' => $subscriber_lastname_]);
 				$arequest->request->add(['type_dossier' => 'Technique']);
+
+				// entree de creation est 0
+				$arequest->request->add(['entree' => 0]);
+
 				// affecte dossier au agent qui le cree
 				$arequest->request->add(['affecte' => Auth::id()]);
 				$arequest->request->add(['created_by' => Auth::id()]);
 				if (isset($_POST["type_affectation"]))
         		{	
         			$typeaffect = $_POST["type_affectation"];
+        			$arequest->request->add(['type_affectation' => $typeaffect]);
+        		}
+        		// type_affect pares remplace ou complete
+        		
+        		if (isset($_POST["type_affectation_post"]))
+        		{	
+        			$typeaffect = $_POST["type_affectation_post"];
         			$arequest->request->add(['type_affectation' => $typeaffect]);
         		}
 				//ajout nouveau dossier
@@ -431,6 +450,856 @@ class OrdreMissionsController extends Controller
         	}
         }
 
+    }
+
+
+		public function export_pdf_odmambulance(Request $request)
+    {
+
+       
+        //dd($_POST['idMissionOM']);
+        // verifier si remplacement ou annule
+        if (isset($_POST['parent']) && (! empty($_POST['parent'])))
+        {
+        	if (isset($_POST['templatedocument'])&& (! empty($_POST['templatedocument'])))
+        	{
+        		if ($_POST['templatedocument'] === "remplace")
+        		{
+        			//echo "remplacement";
+        			$parent = $_POST['parent'];
+                	$count = OMAmbulance::where('parent',$parent)->count();
+                	OMAmbulance::where('id', $parent)->update(['dernier' => 0]);
+			        $omparent=OMAmbulance::where('id', $parent)->first();
+			        $filename='ambulance_Remplace-'.$parent;
+
+                	if ((isset($omparent["complete"]) || isset($omparent["affectea"])) || isset($_POST['affectea']))
+                	{// supprimer attachement precedent (du parent)
+				        $iddoss = $_POST['dossdoc'];
+				        Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+				        // enregistrement de nouveau attachement
+	                	
+				        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+		        		$name='OM - '.$name;
+				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
+				        $attachement = new Attachement([
+
+				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
+				        ]);
+				        $attachement->save();
+                	}
+
+
+        		    //exit();
+        		}
+        		if ($_POST['templatedocument'] === "complete")
+        		{
+                    //return $_POST['idMissionOM'];
+        			
+	        		// Send data to the view using loadView function of PDF facade
+        			$pdfcomp = PDFcomp::loadView('ordremissions.pdfodmambulance')->setPaper('a4', '');
+        			$parent = $_POST['parent'];
+        			$iddoss = $_POST['dossdoc'];
+        			$prestambulance = $_POST['type_affectation'];
+        			OMAmbulance::where('id', $parent)->update(['dernier' => 0]);
+        			$omparent=OMAmbulance::where('id', $parent)->first();
+        			$filename='ambulance_Complet-'.$parent;
+        			$name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+	        		$name='OM - '.$name;
+	        		$path= storage_path()."/OrdreMissions/";
+
+	        		// generation de fichier pdf
+        			if (!file_exists($path.$iddoss)) {
+			            mkdir($path.$iddoss, 0777, true);
+			        }
+			        $pdfcomp->save($path.$iddoss.'/'.$name.'.pdf');
+
+			        // supprimer attachement precedent (du parent)
+				        Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+				        // enregistrement de nouveau attachement
+				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
+				        $attachement = new Attachement([
+
+				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
+				        ]);
+				        $attachement->save();
+
+        			// enregistrement dans la BD
+        			$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_ambulance' => $prestambulance]);
+        			$result = $omambulance->update($request->all());
+        			//return 'complete action '.$result;
+
+                    // affecter date  prévue destination ( prévue fin de mission)
+               if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))    
+        		{
+                    //$format ='Y-m-d H:i';
+                     $datefinMiss=$omambulance->dharrivedest;
+                     //str_replace("T"," ",$datePourSuiviMiss);
+                     //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss); 
+                     $dateFM= date('Y-m-d H:i',strtotime($datefinMiss));
+
+                     //$datePourSuivi = \DateTime::createFromFormat($format, $datePourSuiviMiss);
+
+                     $miss=Mission::where('id',$_POST['idMissionOM'])->first();
+                     $miss->update(['h_arr_prev_dest'=>  $dateFM,'date_spec_affect2'=> true]);
+                 }
+
+
+                    exit();
+        		}
+        	}
+        	
+        }
+
+
+         // Send data to the view using loadView function of PDF facade
+        $pdf = PDF3::loadView('ordremissions.pdfodmambulance')->setPaper('a4', '');
+
+        $path= storage_path()."/OrdreMissions/";
+
+        $iddoss = $_POST['dossdoc'];
+
+        if (!file_exists($path.$iddoss)) {
+            mkdir($path.$iddoss, 0777, true);
+        }
+        date_default_timezone_set('Africa/Tunis');
+        setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
+        $mc=round(microtime(true) * 1000);
+        $datees = strftime("%d-%B-%Y"."_".$mc); 
+        // nom fichier  - cas nouveau
+        if (empty($_POST['templatedocument']))
+        {
+        	$filename='ambulance_'.$datees;
+	    }
+
+	        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+	        $name='OM - '.$name;
+        // If you want to store the generated pdf to the server then you can use the store function
+        $pdf->save($path.$iddoss.'/'.$name.'.pdf');
+
+        // enregistrement dans la base
+        //OMTaxi::create([$request->all(),'emplacement'=>$path.$iddoss.'/'.$name.'.pdf']);
+        if (isset($_POST['affectea'])) {
+	        if ($_POST['affectea'] === "externe")
+	        	{
+	        		if (isset($_POST["prestextern"]))
+	        		{	
+	        			$prestataireom= $_POST["prestextern"];
+	        			$pdf2 = PDF4::loadView('ordremissions.pdfodmambulance')->setPaper('a4', '');
+	        			 if (isset($prestataireom))
+					        {$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_ambulance' => $prestataireom]);}
+					    	else
+					    	{
+					    		$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+					    	}
+
+					    // enregistrement de nouveau attachement
+				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
+				        $attachement = new Attachement([
+
+				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
+				        ]);
+				        $attachement->save();
+	        		}
+	        		else
+			        {
+			        	$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+			        }
+
+	        	}
+	        	else
+			        {
+			        	$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+			        }
+        }
+        else
+        {
+        	$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        }
+
+        
+        $result = $omambulance->update($request->all());
+
+
+
+        if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))     
+        {
+         //$format ='Y-m-d H:i';
+         $datePourSuiviMiss=$omambulance->CL_heuredateRDV;
+         //str_replace("T"," ",$datePourSuiviMiss);
+         //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss); 
+         $datePourSuivi= date('Y-m-d H:i',strtotime($datePourSuiviMiss));
+
+         //$datePourSuivi = \DateTime::createFromFormat($format, $datePourSuiviMiss);
+
+         $miss=Mission::where('id',$_POST['idMissionOM'])->first();
+         $miss->update(['h_dep_pour_miss'=> $datePourSuivi,'date_spec_affect'=> true]);
+        }       
+
+
+
+        // verification affectation et creation de processus
+        if (isset($_POST['affectea']))
+        {
+        	// affectation en interne
+        	if ($_POST['affectea'] === "interne")
+        	{
+        		$arequest = new \Illuminate\Http\Request();
+        		$subscriber_name_ =$_POST['subscriber_name'];
+        		$subscriber_lastname_ =$_POST['subscriber_lastname'];
+
+				$arequest->request->add(['name' => $subscriber_name_]);
+				$arequest->request->add(['lastname' => $subscriber_lastname_]);
+				$arequest->request->add(['type_dossier' => 'Technique']);
+
+				// entree de creation est 0
+				$arequest->request->add(['entree' => 0]);
+
+				// affecte dossier au agent qui le cree
+				$arequest->request->add(['affecte' => Auth::id()]);
+				$arequest->request->add(['created_by' => Auth::id()]);
+				if (isset($_POST["type_affectation"]))
+        		{	
+        			$typeaffect = $_POST["type_affectation"];
+        			$arequest->request->add(['type_affectation' => $typeaffect]);
+        		}
+        		// type_affect pares remplace ou complete
+        		
+        		if (isset($_POST["type_affectation_post"]))
+        		{	
+        			$typeaffect = $_POST["type_affectation_post"];
+        			$arequest->request->add(['type_affectation' => $typeaffect]);
+        		}
+				//ajout nouveau dossier
+        		$resp = app('App\Http\Controllers\DossiersController')->saving($arequest);
+        		// mettre a jour les autres champs a partir de l'om
+        		
+				$idpos = strpos($resp,"/dossiers/view/")+15;
+				$iddossnew=substr($resp,$idpos);
+
+
+
+				$reqbenef = new \Illuminate\Http\Request();
+        		$reqbenef->request->add(['dossier' => $iddossnew]);
+				$reqbenef->request->add(['champ' => 'beneficiaire']);
+				$reqbenef->request->add(['val' => $subscriber_name_]);
+				app('App\Http\Controllers\DossiersController')->updating($reqbenef);
+
+				$reqpbenef = new \Illuminate\Http\Request();
+        		$reqpbenef->request->add(['dossier' => $iddossnew]);
+				$reqpbenef->request->add(['champ' => 'prenom_benef']);
+				$reqpbenef->request->add(['val' => $subscriber_lastname_]);
+				app('App\Http\Controllers\DossiersController')->updating($reqpbenef);
+
+				if (isset($_POST["CL_contacttel"]))
+				{
+					$reqphone = new \Illuminate\Http\Request();
+					$phoneb = $_POST["CL_contacttel"];
+	        		$reqphone->request->add(['dossier' => $iddossnew]);
+					$reqphone->request->add(['champ' => 'subscriber_phone_cell']);
+					$reqphone->request->add(['val' => $phoneb]);
+					app('App\Http\Controllers\DossiersController')->updating($reqphone);
+				}
+				// lieu prie en charge
+				if (isset($_POST["CL_lieuprest_pc"]))
+				{
+					$reqlieup = new \Illuminate\Http\Request();
+					$CL_lieuprest_pc = $_POST["CL_lieuprest_pc"];
+	        		$reqlieup->request->add(['dossier' => $iddossnew]);
+					$reqlieup->request->add(['champ' => 'subscriber_local_address']);
+					$reqlieup->request->add(['val' => $CL_lieuprest_pc]);
+					app('App\Http\Controllers\DossiersController')->updating($reqlieup);
+				}
+
+				if (isset($_POST["reference_customer"]))
+				{
+					$reqrefc = new \Illuminate\Http\Request();
+					$refcustomer = $_POST["reference_customer"];
+	        		$reqrefc->request->add(['dossier' => $iddossnew]);
+					$reqrefc->request->add(['champ' => 'reference_customer']);
+					$reqrefc->request->add(['val' => $refcustomer]);
+					app('App\Http\Controllers\DossiersController')->updating($reqrefc);
+				}
+				// recuperation des infos du dossier parent
+				$dossparent=Dossier::where('id', $iddoss)->first();
+				// lieu prie en charge
+				if (isset($dossparent["customer_id"]) && ! (empty($dossparent["customer_id"])))
+				{
+					$reqci = new \Illuminate\Http\Request();
+					$customer_id = $dossparent["customer_id"];
+	        		$reqci->request->add(['dossier' => $iddossnew]);
+					$reqci->request->add(['champ' => 'customer_id']);
+					$reqci->request->add(['val' => $customer_id]);
+					app('App\Http\Controllers\DossiersController')->updating($reqci);
+				}
+				if (isset($dossparent["subscriber_phone_domicile"]) && ! (empty($dossparent["subscriber_phone_domicile"])))
+				{
+					$reqpdom = new \Illuminate\Http\Request();
+					$subscriberphone_d = $dossparent["subscriber_phone_domicile"];
+	        		$reqpdom->request->add(['dossier' => $iddossnew]);
+					$reqpdom->request->add(['champ' => 'subscriber_phone_domicile']);
+					$reqpdom->request->add(['val' => $subscriberphone_d]);
+					app('App\Http\Controllers\DossiersController')->updating($reqpdom);
+				}
+				if (isset($dossparent["subscriber_phone_home"]) && ! (empty($dossparent["subscriber_phone_home"])))
+				{
+					$reqphome = new \Illuminate\Http\Request();
+					$subscriberphone_home = $dossparent["subscriber_phone_home"];
+	        		$reqphome->request->add(['dossier' => $iddossnew]);
+					$reqphome->request->add(['champ' => 'subscriber_phone_home']);
+					$reqphome->request->add(['val' => $subscriberphone_home]);
+					app('App\Http\Controllers\DossiersController')->updating($reqphome);
+				}
+				if (isset($dossparent["tel_chambre"]) && ! (empty($dossparent["tel_chambre"])))
+				{
+					$reqtel_chambre = new \Illuminate\Http\Request();
+					$tel_chambre = $dossparent["tel_chambre"];
+	        		$reqtel_chambre->request->add(['dossier' => $iddossnew]);
+					$reqtel_chambre->request->add(['champ' => 'tel_chambre']);
+					$reqtel_chambre->request->add(['val' => $tel_chambre]);
+					app('App\Http\Controllers\DossiersController')->updating($reqtel_chambre);
+				}
+				if (isset($dossparent["subscriber_mail1"]) && ! (empty($dossparent["subscriber_mail1"])))
+				{
+					$reqpmail1 = new \Illuminate\Http\Request();
+					$subscribermail1 = $dossparent["subscriber_mail1"];
+	        		$reqpmail1->request->add(['dossier' => $iddossnew]);
+					$reqpmail1->request->add(['champ' => 'subscriber_mail1']);
+					$reqpmail1->request->add(['val' => $subscribermail1]);
+					app('App\Http\Controllers\DossiersController')->updating($reqpmail1);
+				}
+				if (isset($dossparent["subscriber_mail2"]) && ! (empty($dossparent["subscriber_mail2"])))
+				{
+					$reqpmail2 = new \Illuminate\Http\Request();
+					$subscribermail2 = $dossparent["subscriber_mail2"];
+	        		$reqpmail2->request->add(['dossier' => $iddossnew]);
+					$reqpmail2->request->add(['champ' => 'subscriber_mail2']);
+					$reqpmail2->request->add(['val' => $subscribermail2]);
+					app('App\Http\Controllers\DossiersController')->updating($reqpmail2);
+				}
+				// date arrive et depart
+				if (isset($dossparent["initial_arrival_date"]) && ! (empty($dossparent["initial_arrival_date"])))
+				{
+					$reqidate = new \Illuminate\Http\Request();
+					$initialdate = $dossparent["initial_arrival_date"];
+	        		$reqidate->request->add(['dossier' => $iddossnew]);
+					$reqidate->request->add(['champ' => 'initial_arrival_date']);
+					$reqidate->request->add(['val' => $initialdate]);
+					app('App\Http\Controllers\DossiersController')->updating($reqidate);
+				}
+				if (isset($dossparent["departure"]) && ! (empty($dossparent["departure"])))
+				{
+					$reqdepdate = new \Illuminate\Http\Request();
+					$departure = $dossparent["departure"];
+	        		$reqdepdate->request->add(['dossier' => $iddossnew]);
+					$reqdepdate->request->add(['champ' => 'departure']);
+					$reqdepdate->request->add(['val' => $departure]);
+					app('App\Http\Controllers\DossiersController')->updating($reqdepdate	);
+				}
+				if (isset($dossparent["prestataire_ambulance"]) && ! (empty($dossparent["prestataire_ambulance"])))
+				{
+					$reqprestambulance = new \Illuminate\Http\Request();
+					$prestataire_ambulance = $dossparent["prestataire_ambulance"];
+	        	    $reqprestambulance->request->add(['dossier' => $iddossnew]);
+		          $reqprestambulance->request->add(['champ' => 'prestataire_ambulance']);
+					$reqprestambulance->request->add(['val' => $prestataire_ambulance]);
+					app('App\Http\Controllers\DossiersController')->updating($reqprestambulance	);
+				}
+				// recuperation de reference de nouveau dossier et la changer dans request
+				$dossnouveau=Dossier::where('id', $iddossnew)->select('reference_medic')->first();
+				if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
+				{
+					$nref=$dossnouveau["reference_medic"];
+
+					$requestData = $request->all();
+					$requestData['reference_medic'] = $nref;
+					$requestData['reference_medic2'] = $nref;
+
+
+					/*$request->replace([ 'reference_medic' => $nref]);
+					$request->replace([ 'reference_medic2' => $nref]);*/
+
+
+				}
+					if (isset($requestData))
+					{
+						/*$omn = new OrdreMission();
+
+						$nrequest = $omn->post('ordremissions.pdfodmtaxi',$requestData);
+
+						$nresponse = $nrequest->send();*/
+					// duplication de lom dans le nouveau dossier
+					$pdf2 = PDF4::loadView('ordremissions.pdfodmambulance',['reference_medic' => $nref, 'reference_medic2' => $nref])->setPaper('a4', '');
+					}
+					else
+					{
+					// duplication de lom dans le nouveau dossier
+					$pdf2 = PDF4::loadView('ordremissions.pdfodmambulance')->setPaper('a4', '');
+					}
+
+
+		        if (!file_exists($path.$iddossnew)) {
+		            mkdir($path.$iddossnew, 0777, true);
+		        }
+		        date_default_timezone_set('Africa/Tunis');
+		        setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
+		        $mc=round(microtime(true) * 1000);
+		        $datees = strftime("%d-%B-%Y"."_".$mc); 
+
+		        	$filename='ambulance__'.$datees;
+
+			        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+			        $name='OM - '.$name;
+		        // If you want to store the generated pdf to the server then you can use the store function
+		        $pdf2->save($path.$iddossnew.'/'.$name.'.pdf');
+
+		        // enregistrement dans la base
+
+		        if (isset($typeaffect))
+		        {$omambulance2 = OMAmbulance::create(['emplacement'=>$path.$iddossnew.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossnew, 'prestataire_ambulance' => $typeaffect]);}
+		    	else
+		    	{
+		    		$omambulance2 = OMAmbulance::create(['emplacement'=>$path.$iddossnew.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossnew]);
+		    	}
+		        
+				if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
+				{$result2 = $omambulance2->update($requestData);}
+		        else { $result2 = $omambulance2->update($request->all()); }
+
+        	}
+        }
+
+    }
+
+    
+    public function pdfodmambulance()
+    {
+    	return view('ordremissions.pdfodmambulance');
+    }
+
+    public function export_pdf_odmremorquage(Request $request)
+    {
+
+
+        //dd($_POST['idMissionOM']);
+        // verifier si remplacement ou annule
+        if (isset($_POST['parent']) && (! empty($_POST['parent'])))
+        {
+            if (isset($_POST['templatedocument'])&& (! empty($_POST['templatedocument'])))
+            {
+                if ($_POST['templatedocument'] === "remplace")
+                {
+                    //echo "remplacement";
+                    $parent = $_POST['parent'];
+                    $count = OMRemorquage::where('parent',$parent)->count();
+                    OMAmbulance::where('id', $parent)->update(['dernier' => 0]);
+                    $omparent=OMRemorquage::where('id', $parent)->first();
+                    $filename='remorquage_Remplace-'.$parent;
+
+                    if ((isset($omparent["complete"]) || isset($omparent["affectea"])) || isset($_POST['affectea']))
+                    {// supprimer attachement precedent (du parent)
+                        $iddoss = $_POST['dossdoc'];
+                        Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+                        // enregistrement de nouveau attachement
+
+                        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+                        $name='OM - '.$name;
+                        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
+                        $attachement = new Attachement([
+
+                            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
+                        ]);
+                        $attachement->save();
+                    }
+
+
+                    //exit();
+                }
+                if ($_POST['templatedocument'] === "complete")
+                {
+                    //return $_POST['idMissionOM'];
+
+                    // Send data to the view using loadView function of PDF facade
+                    $pdfcomp = PDFcomp::loadView('ordremissions.pdfodmremorquage')->setPaper('a4', '');
+                    $parent = $_POST['parent'];
+                    $iddoss = $_POST['dossdoc'];
+                    $prestambulance = $_POST['type_affectation'];
+                    // type_affect pares remplace ou complete
+        		
+	        		if (isset($_POST["type_affectation_post"]))
+	        		{	
+                    	$prestambulance = $_POST['type_affectation_post'];
+	        		}
+                    OMAmbulance::where('id', $parent)->update(['dernier' => 0]);
+                    $omparent=OMAmbulance::where('id', $parent)->first();
+                    $filename='ambulance_Complet-'.$parent;
+                    $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+                    $name='OM - '.$name;
+                    $path= storage_path()."/OrdreMissions/";
+
+                    // generation de fichier pdf
+                    if (!file_exists($path.$iddoss)) {
+                        mkdir($path.$iddoss, 0777, true);
+                    }
+                    $pdfcomp->save($path.$iddoss.'/'.$name.'.pdf');
+
+                    // supprimer attachement precedent (du parent)
+                    Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+                    // enregistrement de nouveau attachement
+                    $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
+                    $attachement = new Attachement([
+
+                        'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
+                    ]);
+                    $attachement->save();
+
+                    // enregistrement dans la BD
+                    $omremorquage= OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_ambulance' => $prestambulance]);
+                    $result = $omremorquage->update($request->all());
+                    //return 'complete action '.$result;
+
+                    // affecter date  prévue destination ( prévue fin de mission)
+                    if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))
+                    {
+                        //$format ='Y-m-d H:i';
+                        $datefinMiss=$omremorquage->dharrivedest;
+                        //str_replace("T"," ",$datePourSuiviMiss);
+                        //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss);
+                        $dateFM= date('Y-m-d H:i',strtotime($datefinMiss));
+
+                        //$datePourSuivi = \DateTime::createFromFormat($format, $datePourSuiviMiss);
+
+                        $miss=Mission::where('id',$_POST['idMissionOM'])->first();
+                        $miss->update(['h_arr_prev_dest'=>  $dateFM,'date_spec_affect2'=> true]);
+                    }
+
+
+                    exit();
+                }
+            }
+
+        }
+
+
+        // Send data to the view using loadView function of PDF facade
+        $pdf = PDF3::loadView('ordremissions.pdfodmremorquage')->setPaper('a4', '');
+
+        $path= storage_path()."/OrdreMissions/";
+
+        $iddoss = $_POST['dossdoc'];
+
+        if (!file_exists($path.$iddoss)) {
+            mkdir($path.$iddoss, 0777, true);
+        }
+        date_default_timezone_set('Africa/Tunis');
+        setlocale (LC_TIME, 'fr_FR.utf8','fra');
+        $mc=round(microtime(true) * 1000);
+        $datees = strftime("%d-%B-%Y"."_".$mc);
+        // nom fichier  - cas nouveau
+        if (empty($_POST['templatedocument']))
+        {
+            $filename='remorquage_'.$datees;
+        }
+
+        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+        $name='OM - '.$name;
+        // If you want to store the generated pdf to the server then you can use the store function
+        $pdf->save($path.$iddoss.'/'.$name.'.pdf');
+
+        // enregistrement dans la base
+        //OMTaxi::create([$request->all(),'emplacement'=>$path.$iddoss.'/'.$name.'.pdf']);
+        if (isset($_POST['affectea'])) {
+            if ($_POST['affectea'] === "externe")
+            {
+                if (isset($_POST["prestextern"]))
+                {
+                    $prestataireom= $_POST["prestextern"];
+                    $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage')->setPaper('a4', '');
+                    if (isset($prestataireom))
+                    {$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_remorquage' => $prestataireom]);}
+                    else
+                    {
+                        $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+                    }
+
+                    // enregistrement de nouveau attachement
+                    $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
+                    $attachement = new Attachement([
+
+                        'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
+                    ]);
+                    $attachement->save();
+                }
+                else
+                {
+                    $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+                }
+
+            }
+            else
+            {
+                $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+            }
+        }
+        else
+        {
+            $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        }
+
+
+        $result = $omremorquage->update($request->all());
+
+
+
+        if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))
+        {
+            //$format ='Y-m-d H:i';
+            $datePourSuiviMiss=$omambulance->CL_heuredateRDV;
+            //str_replace("T"," ",$datePourSuiviMiss);
+            //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss);
+            $datePourSuivi= date('Y-m-d H:i',strtotime($datePourSuiviMiss));
+
+            //$datePourSuivi = \DateTime::createFromFormat($format, $datePourSuiviMiss);
+
+            $miss=Mission::where('id',$_POST['idMissionOM'])->first();
+            $miss->update(['h_dep_pour_miss'=> $datePourSuivi,'date_spec_affect'=> true]);
+        }
+
+
+
+        // verification affectation et creation de processus
+        if (isset($_POST['affectea']))
+        {
+            // affectation en interne
+            if ($_POST['affectea'] === "interne")
+            {
+                $arequest = new \Illuminate\Http\Request();
+                $subscriber_name_ =$_POST['subscriber_name'];
+                $subscriber_lastname_ =$_POST['subscriber_lastname'];
+
+                $arequest->request->add(['name' => $subscriber_name_]);
+                $arequest->request->add(['lastname' => $subscriber_lastname_]);
+                $arequest->request->add(['type_dossier' => 'Technique']);
+
+                // entree de creation est 0
+				$arequest->request->add(['entree' => 0]);
+                // affecte dossier au agent qui le cree
+                $arequest->request->add(['affecte' => Auth::id()]);
+                $arequest->request->add(['created_by' => Auth::id()]);
+                if (isset($_POST["type_affectation"]))
+                {
+                    $typeaffect = $_POST["type_affectation"];
+                    $arequest->request->add(['type_affectation' => $typeaffect]);
+                }
+
+                if (isset($_POST["type_affectation_post"]))
+                {
+                	$typeaffect = $_POST["type_affectation_post"];
+                	$arequest->request->add(['type_affectation'=>$typeaffect]);
+                }
+                //ajout nouveau dossier
+                $resp = app('App\Http\Controllers\DossiersController')->saving($arequest);
+                // mettre a jour les autres champs a partir de l'om
+
+                $idpos = strpos($resp,"/dossiers/view/")+15;
+                $iddossnew=substr($resp,$idpos);
+
+
+
+                $reqbenef = new \Illuminate\Http\Request();
+                $reqbenef->request->add(['dossier' => $iddossnew]);
+                $reqbenef->request->add(['champ' => 'beneficiaire']);
+                $reqbenef->request->add(['val' => $subscriber_name_]);
+                app('App\Http\Controllers\DossiersController')->updating($reqbenef);
+
+                $reqpbenef = new \Illuminate\Http\Request();
+                $reqpbenef->request->add(['dossier' => $iddossnew]);
+                $reqpbenef->request->add(['champ' => 'prenom_benef']);
+                $reqpbenef->request->add(['val' => $subscriber_lastname_]);
+                app('App\Http\Controllers\DossiersController')->updating($reqpbenef);
+
+                if (isset($_POST["CL_contacttel"]))
+                {
+                    $reqphone = new \Illuminate\Http\Request();
+                    $phoneb = $_POST["CL_contacttel"];
+                    $reqphone->request->add(['dossier' => $iddossnew]);
+                    $reqphone->request->add(['champ' => 'subscriber_phone_cell']);
+                    $reqphone->request->add(['val' => $phoneb]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqphone);
+                }
+                // lieu prie en charge
+                if (isset($_POST["CL_lieuprest_pc"]))
+                {
+                    $reqlieup = new \Illuminate\Http\Request();
+                    $CL_lieuprest_pc = $_POST["CL_lieuprest_pc"];
+                    $reqlieup->request->add(['dossier' => $iddossnew]);
+                    $reqlieup->request->add(['champ' => 'subscriber_local_address']);
+                    $reqlieup->request->add(['val' => $CL_lieuprest_pc]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqlieup);
+                }
+
+                if (isset($_POST["reference_customer"]))
+                {
+                    $reqrefc = new \Illuminate\Http\Request();
+                    $refcustomer = $_POST["reference_customer"];
+                    $reqrefc->request->add(['dossier' => $iddossnew]);
+                    $reqrefc->request->add(['champ' => 'reference_customer']);
+                    $reqrefc->request->add(['val' => $refcustomer]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqrefc);
+                }
+                // recuperation des infos du dossier parent
+                $dossparent=Dossier::where('id', $iddoss)->first();
+                // lieu prie en charge
+                if (isset($dossparent["customer_id"]) && ! (empty($dossparent["customer_id"])))
+                {
+                    $reqci = new \Illuminate\Http\Request();
+                    $customer_id = $dossparent["customer_id"];
+                    $reqci->request->add(['dossier' => $iddossnew]);
+                    $reqci->request->add(['champ' => 'customer_id']);
+                    $reqci->request->add(['val' => $customer_id]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqci);
+                }
+                if (isset($dossparent["subscriber_phone_domicile"]) && ! (empty($dossparent["subscriber_phone_domicile"])))
+                {
+                    $reqpdom = new \Illuminate\Http\Request();
+                    $subscriberphone_d = $dossparent["subscriber_phone_domicile"];
+                    $reqpdom->request->add(['dossier' => $iddossnew]);
+                    $reqpdom->request->add(['champ' => 'subscriber_phone_domicile']);
+                    $reqpdom->request->add(['val' => $subscriberphone_d]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqpdom);
+                }
+                if (isset($dossparent["subscriber_phone_home"]) && ! (empty($dossparent["subscriber_phone_home"])))
+                {
+                    $reqphome = new \Illuminate\Http\Request();
+                    $subscriberphone_home = $dossparent["subscriber_phone_home"];
+                    $reqphome->request->add(['dossier' => $iddossnew]);
+                    $reqphome->request->add(['champ' => 'subscriber_phone_home']);
+                    $reqphome->request->add(['val' => $subscriberphone_home]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqphome);
+                }
+                if (isset($dossparent["tel_chambre"]) && ! (empty($dossparent["tel_chambre"])))
+                {
+                    $reqtel_chambre = new \Illuminate\Http\Request();
+                    $tel_chambre = $dossparent["tel_chambre"];
+                    $reqtel_chambre->request->add(['dossier' => $iddossnew]);
+                    $reqtel_chambre->request->add(['champ' => 'tel_chambre']);
+                    $reqtel_chambre->request->add(['val' => $tel_chambre]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqtel_chambre);
+                }
+                if (isset($dossparent["subscriber_mail1"]) && ! (empty($dossparent["subscriber_mail1"])))
+                {
+                    $reqpmail1 = new \Illuminate\Http\Request();
+                    $subscribermail1 = $dossparent["subscriber_mail1"];
+                    $reqpmail1->request->add(['dossier' => $iddossnew]);
+                    $reqpmail1->request->add(['champ' => 'subscriber_mail1']);
+                    $reqpmail1->request->add(['val' => $subscribermail1]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqpmail1);
+                }
+                if (isset($dossparent["subscriber_mail2"]) && ! (empty($dossparent["subscriber_mail2"])))
+                {
+                    $reqpmail2 = new \Illuminate\Http\Request();
+                    $subscribermail2 = $dossparent["subscriber_mail2"];
+                    $reqpmail2->request->add(['dossier' => $iddossnew]);
+                    $reqpmail2->request->add(['champ' => 'subscriber_mail2']);
+                    $reqpmail2->request->add(['val' => $subscribermail2]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqpmail2);
+                }
+                // date arrive et depart
+                if (isset($dossparent["initial_arrival_date"]) && ! (empty($dossparent["initial_arrival_date"])))
+                {
+                    $reqidate = new \Illuminate\Http\Request();
+                    $initialdate = $dossparent["initial_arrival_date"];
+                    $reqidate->request->add(['dossier' => $iddossnew]);
+                    $reqidate->request->add(['champ' => 'initial_arrival_date']);
+                    $reqidate->request->add(['val' => $initialdate]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqidate);
+                }
+                if (isset($dossparent["departure"]) && ! (empty($dossparent["departure"])))
+                {
+                    $reqdepdate = new \Illuminate\Http\Request();
+                    $departure = $dossparent["departure"];
+                    $reqdepdate->request->add(['dossier' => $iddossnew]);
+                    $reqdepdate->request->add(['champ' => 'departure']);
+                    $reqdepdate->request->add(['val' => $departure]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqdepdate	);
+                }
+                if (isset($dossparent["prestataire_remorquage"]) && ! (empty($dossparent["prestataire_remorquage"])))
+                {
+                    $reqprestremorquage = new \Illuminate\Http\Request();
+                    $prestataire_remorquage = $dossparent["prestataire_remorquage"];
+                    $reqprestremorquage->request->add(['dossier' => $iddossnew]);
+                    $reqprestremorquage->request->add(['champ' => 'prestataire_ambulance']);
+                    $reqprestremorquage->request->add(['val' => $prestataire_remorquage]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqprestremorquage	);
+                }
+                // recuperation de reference de nouveau dossier et la changer dans request
+                $dossnouveau=Dossier::where('id', $iddossnew)->select('reference_medic')->first();
+                if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
+                {
+                    $nref=$dossnouveau["reference_medic"];
+
+                    $requestData = $request->all();
+                    $requestData['reference_medic'] = $nref;
+                    $requestData['reference_medic2'] = $nref;
+
+
+                    /*$request->replace([ 'reference_medic' => $nref]);
+                    $request->replace([ 'reference_medic2' => $nref]);*/
+
+
+                }
+                if (isset($requestData))
+                {
+                    /*$omn = new OrdreMission();
+
+                    $nrequest = $omn->post('ordremissions.pdfodmremorquage',$requestData);
+
+                    $nresponse = $nrequest->send();*/
+                    // duplication de lom dans le nouveau dossier
+                    $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage',['reference_medic' => $nref, 'reference_medic2' => $nref])->setPaper('a4', '');
+                }
+                else
+                {
+                    // duplication de lom dans le nouveau dossier
+                    $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage')->setPaper('a4', '');
+                }
+
+
+                if (!file_exists($path.$iddossnew)) {
+                    mkdir($path.$iddossnew, 0777, true);
+                }
+                date_default_timezone_set('Africa/Tunis');
+                setlocale (LC_TIME, 'fr_FR.utf8','fra');
+                $mc=round(microtime(true) * 1000);
+                $datees = strftime("%d-%B-%Y"."_".$mc);
+
+                $filename='remorquage__'.$datees;
+
+                $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+                $name='OM - '.$name;
+                // If you want to store the generated pdf to the server then you can use the store function
+                $pdf2->save($path.$iddossnew.'/'.$name.'.pdf');
+
+                // enregistrement dans la base
+
+                if (isset($typeaffect))
+                {$omremorquage2 = OMRemorquage::create(['emplacement'=>$path.$iddossnew.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossnew, 'prestataire_remorquage' => $typeaffect]);}
+                else
+                {
+                    $omremorquage2 = OMRemorquage::create(['emplacement'=>$path.$iddossnew.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossnew]);
+                }
+
+                if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
+                {$result2 = $omremorquage2->update($requestData);}
+                else { $result2 = $omremorquage2->update($request->all()); }
+
+            }
+        }}
+
+
+
+    public function pdfodmremorquage()
+    {
+        return view('ordremissions.pdfodmremorquage');
     }
 
     public function historique(Request $request)

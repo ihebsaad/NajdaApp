@@ -26,6 +26,8 @@ use App\TypePrestation;
 use App\Citie;
 use App\Email;
 use App\OMTaxi;
+use App\OMAmbulance;
+use App\OMRemorquage;
 
 use WordTemplate;
 use Mail;
@@ -251,6 +253,14 @@ class DossiersController extends Controller
         $subscriber_lastname = $request->get('lastname');
         $subscriber_name = $request->get('name');
         $type_affectation = $request->get('type_affectation');
+        if (! empty($request->get('entree')))
+        {
+            $entreedoss = $request->get('entree');
+        }
+        else
+        {
+            $entreedoss = 0;
+        }
         $annee = date('y');
 
 
@@ -330,6 +340,7 @@ class DossiersController extends Controller
             'reference_medic' => $reference_medic,
             'subscriber_lastname' => $subscriber_lastname,
             'subscriber_name' => $subscriber_name,
+            'entree' => $entreedoss,
 
         ]);
 
@@ -743,11 +754,14 @@ class DossiersController extends Controller
         //  $entrees =   Entree::all();
         $documents = Document::where(['dossier' => $id,'dernier' => 1])->get();
         $omtaxis = OMTaxi::where(['dossier' => $id,'dernier' => 1])->get();
+        $omambs = OMAmbulance::where(['dossier' => $id,'dernier' => 1])->get();
+        $omrem = OMRemorquage::where(['dossier' => $id,'dernier' => 1])->get();
         $dossiers = $this->ListeDossiersAffecte();
 
         $evaluations=DB::table('evaluations')->get();
 
-        return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis], compact('dossier'));
+        return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis, 'omambs'=>$omambs, 'omrem'=>$omrem], compact('dossier'));
+
 
 
     }
@@ -1437,11 +1451,16 @@ class DossiersController extends Controller
         //  $entrees =   Entree::all();
         $documents = Document::where(['dossier' => $id,'dernier' => 1])->get();
         $omtaxis = OMTaxi::where(['dossier' => $id,'dernier' => 1])->get();
+        $omambs = OMAmbulance::where(['dossier' => $id,'dernier' => 1])->get();
+        $omrem = OMRemorquage::where(['dossier' => $id,'dernier' => 1])->get();
         $dossiers = $this->ListeDossiersAffecte();
 
         $evaluations=DB::table('evaluations')->get();
 
-        return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis], compact('dossier'));
+return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,
+'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,
+'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis, 'omambs'=>$omambs, 
+'omrem'=>$omrem], compact('dossier'));
 
 
     }
