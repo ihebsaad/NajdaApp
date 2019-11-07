@@ -124,36 +124,37 @@ class PrestationsController extends Controller
            {
                // Envoi de mail
                if($autorise !=''){
-          /*     // $to=array('ihebsaad@gmail.com');
-                $to='ihebsaad@gmail.com';
+                 $to=array('ihebsaad@gmail.com');
+               // $to='ihebsaad@gmail.com';
                 $sujet='Nouvelle prestation effectuée';
                  $contenu='Bonjour, <br>Nouvelle prestation effectuée.<br>
-                 Date:'.$date.'<br>
-                 Prestataire:'.$nomprest.'<br>
-                 Autorisée Par:'.$autorise.'<br>
-                 Détails:'.$details.'<br>
+                 Date: '.$date.'<br>
+                 Prestataire: '.$nomprest.'<br>
+                 Autorisée Par: Mr '.strtoupper($autorise).'<br>
+                 Détails: '.$details.'<br>
                  Créée par :'.$nomuser.'<br>    
                      ';
-                 $cc=array('ihebs001@gmail.com','saadiheb@gmail.com');
+                   $cc=array('ihebs001@gmail.com','saadiheb@gmail.com');
+                 //  $cc=array('chef.plateau@najda-assistance.com','smq@medicmultiservices.com',nejib.karoui@medicmultiservices.com);
 
                    Mail::send([], [], function ($message) use ($to,$sujet,$contenu ,$cc  ) {
                        $message
-                          /// ->to($to ?: [])
-                            ->to($to)
+                           //->to($to ?: [])
+                           // ->to($to)
 
-                         ///  ->cc($cc ?: [])
+                            ->cc($cc ?: [])
                            //  ->bcc($ccimails ?: [])
                            ->subject($sujet)
                            ->setBody($contenu, 'text/html');
 
 
-                            // foreach ($to as $t) {
-                           //       $message->to($t);
-                           //   }
+                             foreach ($to as $t) {
+                                 $message->to($t);
+                              }
 
                    });
 
-*/
+
                }
 
                $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($iddoss);

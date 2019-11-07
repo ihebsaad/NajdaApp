@@ -3392,7 +3392,7 @@ function keyUpHandler(){
 
     $(function () {
 
-        $("#iddossier").select2();
+      //  $("#iddossier").select2();
 
         $('#phoneicon').click(function() {
 

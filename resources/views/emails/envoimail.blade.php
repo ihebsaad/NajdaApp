@@ -117,7 +117,20 @@
                 <label for="cc">CC:</label>
                 </div>
                 <div class="col-md-10">
-                <input id="cc" type="text" class="form-control" name="cc"  />
+                <select id="cc" style="width:100%"   class="itemName form-control" name="cc[]" multiple   >
+                    <option></option>
+                    <option value="saadiheb@gmail.com">IHEB 2 (test)</option>
+                    <option value="ihebs002@gmail.com">IHEB 3 (test)</option>
+                    <option value="vat@medicmultiservices.com">vat@medicmultiservices.com</option>
+                    <option value="fact.vat-groupe@najda-assistance.com">fact.vat-groupe@najda-assistance.com</option>
+                    <option value="finances@medicmultiservices.com">finances@medicmultiservices.com</option>
+                    <option value="dirops@najda-assistance.com">dirops@najda-assistance.com</option>
+                    <option value="controle1@medicmultiservices.com">controle1@medicmultiservices.com</option>
+                    <option value="smq@medicmultiservices.com">smq@medicmultiservices.com</option>
+                    <option value="chef.plateau@najda-assistance.com">chef.plateau@najda-assistance.com</option>
+                    <option value="mohsalah.harzallah@gmail.com">mohsalah.harzallah@gmail.com</option>
+                    <option value="mahmoud.helali@gmail.com">mahmoud.helali@gmail.com</option>
+                    </select>
                 </div>
             </div>
             <div  class="row"  style="margin-bottom:10px" >
@@ -129,6 +142,15 @@
              <option></option>
             <option value="saadiheb@gmail.com">IHEB 2 (test)</option>
             <option value="ihebs002@gmail.com">IHEB 3 (test)</option>
+                <option value="vat@medicmultiservices.com">vat@medicmultiservices.com</option>
+                <option value="fact.vat-groupe@najda-assistance.com">fact.vat-groupe@najda-assistance.com</option>
+                <option value="finances@medicmultiservices.com">finances@medicmultiservices.com</option>
+                <option value="dirops@najda-assistance.com">dirops@najda-assistance.com</option>
+                <option value="controle1@medicmultiservices.com">controle1@medicmultiservices.com</option>
+                <option value="smq@medicmultiservices.com">smq@medicmultiservices.com</option>
+                <option value="chef.plateau@najda-assistance.com">chef.plateau@najda-assistance.com</option>
+                <option value="mohsalah.harzallah@gmail.com">mohsalah.harzallah@gmail.com</option>
+                <option value="mahmoud.helali@gmail.com">mahmoud.helali@gmail.com</option>
             </select>
                 </div>
               </div>
@@ -519,6 +541,14 @@
             }
         });
 
+        $('#cc').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+        });
 
         $('#cci').select2({
             filter: true,

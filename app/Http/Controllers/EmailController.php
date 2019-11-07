@@ -1640,7 +1640,7 @@ if ($from=='najdassist@gmail.com')
 
 
         try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails,$description ) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails,$description,$from ) {
             $message
 
               //  ->to('saadiheb@gmail.com')
@@ -1769,7 +1769,7 @@ if ($from=='najdassist@gmail.com')
            //));
 
                 //  $envoye = new Envoye([
-               'emetteur' => 'test@najda-assistance.com', //env('emailenvoi')
+               'emetteur' => $from, //env('emailenvoi')
                   'destinataire' => $tos,
             //      'destinataire' =>'iheb test',
                 'par'=> $par,
@@ -1777,8 +1777,8 @@ if ($from=='najdassist@gmail.com')
                'contenu'=> $contenu,
                'description'=> $description,
                'nb_attach'=> $count,
-               'cc'=> $cc,
-           // 'cci'=> $cci,
+               'cc'=> json_encode($cc),
+             'cci'=> json_encode($cci),
                'statut'=> 1,
                'type'=> 'email',
                'dossier'=> $dossier
