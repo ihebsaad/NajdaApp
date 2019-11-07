@@ -45,7 +45,7 @@ use App\Entree ;
         background-color: #3e8e41;
     }
 </style>
-<?php  $urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+<?php  $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 ?>
 
 <div class="panel panel-default"  >

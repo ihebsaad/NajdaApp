@@ -1064,7 +1064,7 @@ $("#workflowform input:checkbox").change(function() {
 });
 </script>
     <?php
-   $urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+   $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
     ?>
 
     <!-- get modal workflow by ajax -->

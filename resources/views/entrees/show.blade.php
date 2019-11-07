@@ -22,7 +22,7 @@ use App\Http\Controllers\TagsController;
 @section('content')
 
     <?php
-$urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";?>
+$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
 
 <div class="panel panel-default panelciel " style="">
  @if(session()->has('AffectNouveauDossier'))
@@ -434,7 +434,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/spectrum.css') }}">
 <?php
-$urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 ?>
 <script>
 

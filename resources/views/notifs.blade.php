@@ -32,7 +32,7 @@
 use \App\Http\Controllers\UsersController;
    use \App\Http\Controllers\ClientsController;
               use \App\Attachement ;
-$urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
    
 
               function custom_echo($x, $length)
@@ -117,7 +117,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 }
 
 
-$urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
               if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
 ?>
                         <div class="padding:5px 5px 5px 5px">

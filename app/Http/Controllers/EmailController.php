@@ -1749,7 +1749,7 @@ if ($from=='najdassist@gmail.com')
             }
          }
  
-$urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
              //   $urlsending=$urlapp.'/emails/envoimail/'.$doss;
                 $urlsending=$urlapp.'/envoyes';

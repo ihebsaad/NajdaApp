@@ -4,7 +4,7 @@ use App\Http\Controllers\DossiersController;
 
 use App\Dossier ;
 use App\Attachement ;
-$urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 ?>
  <?php use \App\Http\Controllers\ClientsController;     ?>
 

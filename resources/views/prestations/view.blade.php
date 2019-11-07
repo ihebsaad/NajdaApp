@@ -19,7 +19,7 @@
                      <?php use \App\Http\Controllers\PrestationsController;
                       use \App\Http\Controllers\PrestatairesController;     ?>
                      <?php
-$urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";?>
+$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
                   </div>
                 </div>
 

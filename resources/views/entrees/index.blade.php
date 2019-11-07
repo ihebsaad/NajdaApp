@@ -7,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
 
 <?php  use App\Http\Controllers\DossiersController;
-$urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 ?>
 
 @section('content')

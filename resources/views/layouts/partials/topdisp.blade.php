@@ -133,7 +133,7 @@
     </header>
 
 <?php
-$urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";?>
+$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
 
 
 <div class="modal  " id="crendu" >

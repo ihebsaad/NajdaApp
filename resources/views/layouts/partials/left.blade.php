@@ -124,7 +124,7 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                     <ul>
 
                         <?php
-		$urlapp="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";?>
+		$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
 
                         @php
                             use App\Dossier;{{
