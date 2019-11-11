@@ -20,7 +20,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="inputError" class="control-label">Référence *</label>
+                                <label for="inputError" class="control-label">Référence interne *</label>
                                 <input onchange="changing(this)" type="text" class="form-control input" name="reference" id="reference"  value="{{ $equipement->reference }}">
                             </div>
                         </div>

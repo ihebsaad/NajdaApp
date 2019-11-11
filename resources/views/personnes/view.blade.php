@@ -130,7 +130,7 @@ $dossiers = Dossier::get();
 if ($personne->tel!=''){
     $envoyes = Envoye::orderBy('id', 'desc')->where('type','sms' )->where('destinataire', $personne->tel)->paginate(5);
 }else{
-    $envoyes =array();
+
 }
 
 ?>
@@ -214,11 +214,11 @@ if ($personne->tel!=''){
             </div>
 
                 <div class="modal-body">
-                    <div class="card-body">
+                    <div class="card-body" style="min-height: 100px">
 
 
     <div class="uper">
-
+    <?php if (isset($envoyes)) { ?>
         @foreach($envoyes as $envoye)
             <div class="email">
                 <div class="fav-box">
@@ -249,7 +249,7 @@ if ($personne->tel!=''){
     @endforeach
 
 
-    {{ $envoyes->links() }}
+    <?php  $envoyes->links(); } ?>
 
              </div>
 

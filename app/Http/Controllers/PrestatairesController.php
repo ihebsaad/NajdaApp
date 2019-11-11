@@ -92,12 +92,14 @@ class PrestatairesController extends Controller
     $ville='toutes';$postal=1;}
     else{$ville=$request->get('ville'); $postal=$request->get('postal');}
 
+        $sp=$request->get('specialite');
+    if($sp==''){$sp=0;}
         $eval = new Evaluation([
             'prestataire' => $prest,
             'gouv' => $request->get('gouvernorat'),
             'type_prest' => $request->get('type_prest'),
             'priorite' => $request->get('priorite'),
-            'specialite' => $request->get('specialite'),
+            'specialite' =>$sp ,
             'ville' => $ville,
             'postal' => $postal,
 

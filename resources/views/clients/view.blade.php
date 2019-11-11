@@ -19,44 +19,58 @@
         <div class="modal-body">
 
             <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label for="inputError" class="control-label">Nom *</label>
                         <input onchange="changing(this)"  type="text" class="form-control input" name="name" id="name"   value="{{ $client->name }}">
                     </div>
                 </div>
 
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Nature</label>
 
-            </div>
-            <div class="row">
-                <div class="col-md-6">
+                        <select   class="form-control select2-offscreen" name="nature[]" id="nature" multiple="" tabindex="-1">
+                            <option <?php   if(strpos($client->nature ,'1')!==false) {echo 'selected="selected"';} ?> value="1">Assistance / Assurance</option>
+                            <option <?php   if(strpos($client->nature ,'2')!==false) {echo 'selected="selected"';} ?>value="2">Avionneur</option>
+                            <option <?php   if(strpos($client->nature ,'3')!==false) {echo 'selected="selected"';} ?>value="3">Pétrolier / apparenté</option>
+                            <option <?php   if(strpos($client->nature ,'4')!==false) {echo 'selected="selected"';} ?>value="4">Clinique</option>
+                            <option <?php   if(strpos($client->nature ,'5')!==false) {echo 'selected="selected"';} ?>value="5">Agence de voyage / Hôtel</option>
+                            <option <?php   if(strpos($client->nature ,'6')!==false) {echo 'selected="selected"';} ?>value="6">Autre</option>
+                        </select>
+
+                    </div>
+                </div>
+
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>Groupe</label>
                         <select class="form-control" name="groupe" id="groupe" onchange="changing(this)"   value="{{ $client->groupe }}">
                             <option value="0"></option>
-                        @foreach($groupes as $gr  )
+                            @foreach($groupes as $gr  )
                                 <option
                                         @if($client->groupe==$gr->id)selected="selected"@endif   value="{{$gr->id}}">{{$gr->label}}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
-                <div class="col-md-6">
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Pays</label>
-                      <?php if ( $client->pays !='') { ?>  <input class="form-control" type="text" name="pays" onchange="changing(this)" id="pays"  value="{{ $client->pays }}"> <?php } ?>
+                        <?php if ( $client->pays !='') { ?>  <input class="form-control" type="text" name="pays" onchange="changing(this)" id="pays"  value="{{ $client->pays }}"> <?php } ?>
                         <select class="form-control" id="pays2" class="form-control" onchange="changing(this)" >
                             <option></option>
                             @foreach($countries as $pays  )
-                            <option <?php if ($client->pays2 == $pays->country_name){echo 'selected="selected"';} ?> value="{{$pays->country_name }}">{{$pays->country_name }}</option>
+                                <option <?php if ($client->pays2 == $pays->country_name){echo 'selected="selected"';} ?> value="{{$pays->country_name }}">{{$pays->country_name }}</option>
                             @endforeach
 
                         </select>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Langue 1</label>
                         <select onchange="changing(this)"  class="form-control" name="langue1" id="langue1"  value="{{ $client->langue1 }}">
@@ -66,7 +80,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Langue 2</label>
                         <select onchange="changing(this)"  class="form-control" name="langue2" id="langue2"  value="{{ $client->langue2 }}">
@@ -82,24 +96,8 @@
                         </select>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-7">
-                    <div class="form-group">
-                        <label>Nature</label>
 
-                        <select   class="form-control select2-offscreen" name="nature[]" id="nature" multiple="" tabindex="-1">
-                            <option <?php   if(strpos($client->nature ,'1')!==false) {echo 'selected="selected"';} ?> value="1">Assistance / Assurance</option>
-                            <option <?php   if(strpos($client->nature ,'2')!==false) {echo 'selected="selected"';} ?>value="2">Avionneur</option>
-                            <option <?php   if(strpos($client->nature ,'3')!==false) {echo 'selected="selected"';} ?>value="3">Pétrolier / apparenté</option>
-                            <option <?php   if(strpos($client->nature ,'4')!==false) {echo 'selected="selected"';} ?>value="4">Clinique</option>
-                            <option <?php   if(strpos($client->nature ,'5')!==false) {echo 'selected="selected"';} ?>value="5">Agence de voyage / Hôtel</option>
-                        </select>
-
-                </div>
-                </div>
-
-                <div class="col-md-5">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Actif</label>
                         <div class="radio-list">
@@ -118,7 +116,10 @@
                         </div>
                     </div>
                 </div>
+
             </div>
+
+
 
         </div>
 
@@ -325,7 +326,7 @@
                                 <thead>
                                 <tr class="headtable">
                                      <th style="width:20%">Tel</th>
-                                    <th style="width:20%">Type</th>
+                                    <th style="width:10%">Type</th>
                                     <th style="width:30%">Remarque</th>
                                     <th style="width:10%">Contacter</th>
                                     <th style="width:4%">Supp</th>
@@ -337,7 +338,10 @@
                                 @foreach($tels as $tel)
                                     <tr>
                                          <td style="width:20%;"><input   id='tel-champ-<?php echo $tel->id;?>' type="text" pattern="[0-9]" style="width:100%" value="<?php echo $tel->champ; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','champ',this)" /></td>
-                                        <td style="width:20%;"><input  id='tel-type-<?php echo $tel->id;?>' style="width:100%" value="<?php echo $tel->type; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','type',this)" /></td>
+                                        <td style="width:10%;"><select  id='tel-type-<?php echo $tel->id;?>'   style="width:100%"   onchange="changingAddress('<?php echo $tel->id; ?>','type',this)" >
+                                                <option <?php if($tel->type=='medical'){echo 'selected="selected"';} ?> value="medical">Médical</option>
+                                                <option <?php if($tel->type=='technique'){echo 'selected="selected"';} ?> value="technique">Technique</option>
+                                                <option <?php if($tel->type=='commun'){echo 'selected="selected"';} ?>value="commun">Commun</option></select></td>
                                         <td style="width:50%;"><input   id='tel-rem-<?php echo $tel->id;?>' style="width:100%" value="<?php echo $tel->remarque; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','remarque',this)" /></td>
                                         <td style="width:10%;"><i class="fa fa-phone"></i></td>
                                         <td style="width:10%;">
@@ -365,7 +369,7 @@
                                 <thead>
                                 <tr class="headtable">
                                      <th style="width:20%">Email</th>
-                                    <th style="width:20%">Type</th>
+                                    <th style="width:10%">Type</th>
                                     <th style="width:30%">Remarque</th>
                                     <th style="width:10%">Contacter</th>
                                     <th style="width:4%">Supp</th>
@@ -377,7 +381,10 @@
                                 @foreach($emails as $email)
                                     <tr>
                                          <td style="width:20%;"><input type="email" id='email-champ-<?php echo $email->id;?>' style="width:100%" value="<?php echo $email->champ; ?>" onchange="changingAddress('<?php echo $email->id; ?>','champ',this)" /></td>
-                                        <td style="width:20%;"><input   id='email-type-<?php echo $email->id;?>'  style="width:100%" value="<?php echo $email->type; ?>" onchange="changingAddress('<?php echo $email->id; ?>','type',this)" /></td>
+                                        <td style="width:10%;"><select  id='email-type-<?php echo $email->id;?>'   style="width:100%"   onchange="changingAddress('<?php echo $email->id; ?>','type',this)" >
+                                                <option <?php if($email->type=='medical'){echo 'selected="selected"';} ?> value="medical">Médical</option>
+                                                <option <?php if($email->type=='technique'){echo 'selected="selected"';} ?> value="technique">Technique</option>
+                                                <option <?php if($email->type=='commun'){echo 'selected="selected"';} ?>value="commun">Commun</option></select></td>
                                         <td style="width:50%;"><input   id='email-rem-<?php echo $email->id;?>'  style="width:100%" value="<?php echo $email->remarque; ?>" onchange="changingAddress('<?php echo $email->id; ?>','remarque',this)" /></td>
                                         <td style="width:10%;"><i class="fa fa-envelope"></i></td>
                                         <td style="width:10%;">
@@ -405,7 +412,7 @@
                                 <thead>
                                 <tr class="headtable">
                                     <th style="width:20%">Tel</th>
-                                    <th style="width:20%">Type</th>
+                                    <th style="width:10%">Type</th>
                                     <th style="width:50%">Remarque</th>
                                     <th style="width:10%">Contacter</th>
                                     <th style="width:4%">Supp</th>
@@ -416,7 +423,9 @@
                                 @foreach($faxs as $fax)
                                     <tr>
                                         <td style="width:20%;"><input type="text" pattern="[0-9]"  id='fax-champ-<?php echo $fax->id;?>'   style="width:100%" value="<?php echo $fax->champ; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','champ',this)" /></td>
-                                        <td style="width:20%;"><input  id='fax-type-<?php echo $fax->id;?>'   style="width:100%" value="<?php echo $fax->type; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','type',this)" /></td>
+                                        <td style="width:10%;"><select  id='fax-type-<?php echo $fax->id;?>'   style="width:100%"   onchange="changingAddress('<?php echo $fax->id; ?>','type',this)" ><option <?php if($fax->type=='medical'){echo 'selected="selected"';} ?> value="medical">Médical</option>
+                                                <option <?php if($fax->type=='technique'){echo 'selected="selected"';} ?> value="technique">Technique</option>
+                                                <option <?php if($fax->type=='commun'){echo 'selected="selected"';} ?>value="commun">Commun</option></select></td>
                                         <td style="width:50%;"><input  id='fax-rem-<?php echo $fax->id;?>'   style="width:100%" value="<?php echo $fax->remarque; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','remarque',this)" /></td>
                                         <td style="width:10%;"><i class="fa fa-fax"></i></td>
                                         <td style="width:10%;">
@@ -533,7 +542,7 @@
                                     <h5>Entités de facturations différentes</h5>
                                 </div>
                                 <div class="col-md-4">
-                                    <button style="float:right" id="add4" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding4"><b><i class="fa fa-map-marker"></i> Ajouter une adresse de facturation</b></button>
+                                    <button style="float:right" id="add4" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding4"><b><i class="fa fa-map-marker"></i> Ajouter une entit à facturer</b></button>
                                 </div>
 
                             </div>
@@ -1139,7 +1148,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModal3">Ajouter une adresse de facturation </h5>
+                    <h5 class="modal-title" id="exampleModal3">Ajouter une entité à facturer</h5>
 
                 </div>
                 <div class="modal-body">
@@ -1644,7 +1653,7 @@
             var fax = $('#faxq').val();
             var observ = $('#remarqueq').val();
              var nature = $('#nature5').val();
-            if ( !( (nom == '' ) && (prenom == '' ) && (tel=='') && (fax=='') && (email=='')   ) )
+            if (  (tel!='')  || (email!='')  )
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
@@ -1659,7 +1668,7 @@
                     }
                 });
             }else{
-                // alert('ERROR');
+                 alert("saisir l'email ou le N° Tel");
             }
         });
 
@@ -1674,7 +1683,7 @@
             var fax = $('#faxr').val();
             var observ = $('#remarquer').val();
             var nature = $('#nature6').val();
-            if ( !( (nom == '' ) && (prenom == '' ) && (tel=='') && (fax=='') && (email=='')   ) )
+            if (  (tel!='')  || (email!='')  )
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
@@ -1689,7 +1698,7 @@
                     }
                 });
             }else{
-                // alert('ERROR');
+                alert("saisir l'email ou le N° Tel");
             }
         });
 
@@ -1705,7 +1714,7 @@
             var fax = $('#faxg').val();
             var observ = $('#remarqueg').val();
             var nature = $('#nature7').val();
-            if ( !( (nom == '' ) && (prenom == '' ) && (tel=='') && (fax=='') && (email=='')   ) )
+            if (  (tel!='')  || (email!='')  )
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
@@ -1720,7 +1729,7 @@
                     }
                 });
             }else{
-                // alert('ERROR');
+                alert("saisir l'email ou le N° Tel");
             }
         });
 

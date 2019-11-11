@@ -47,7 +47,7 @@
                         </span> Affiché
                         </div>
                     </td>
-                      <td style="width:10%"   >  <a href="{{action('ActualitesController@destroy', $actualite['id'])}}" class="btn btn-sm btn-danger btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Supprimer">
+                      <td style="width:10%"   >  <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('ActualitesController@destroy', $actualite['id'])}}" class="btn btn-sm btn-danger btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Supprimer">
                             <i class="fa fa-lg fa-fw fa-trash-alt"></i>
                         </a> </td>
                   </tr>

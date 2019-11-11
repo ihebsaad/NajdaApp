@@ -71,7 +71,15 @@
         <div class="row">
             <select class="form-control" name="from" id="from" >
                 <option value="faxnajdassist@najda-assistance.com">faxnajdassist@najda-assistance.com</option>
-                <option value="najdassist@gmail.com">najdassist@gmail.com</option>
+                <option value="24ops@najda-assistance.com">24ops@najda-assistance.com</option>
+                <option value="hotels.vat@medicmultiservices.com">hotels.vat@medicmultiservices.com</option>
+                <option value="assistance@medicmultiservices.com">assistance@medicmultiservices.com</option>
+                <option value="ambulance.transp@medicmultiservices.com">ambulance.transp@medicmultiservices.com</option>
+                <option value="vat.transp@medicmultiservices.com">vat.transp@medicmultiservices.com</option>
+                <option value="international@medicmultiservices.com">international@medicmultiservices.com</option>
+                <option value="tpa@najda-assistance.com">tpa@najda-assistance.com</option>
+                <option value="taxi@najda-assistance.com">taxi@najda-assistance.com</option>
+                <option value="xpress@najda-assistance.com">xpress@najda-assistance.com</option>
             </select>
         </div>
     </div>

@@ -19,7 +19,7 @@
                     <label for="destinataire">destinataire:</label>
                     <div class="row">
                         <div class="col-md-10">
-                            <input id="destinataire" type="text" class="form-control" name="destinataire" required value="{{ $envoye->destinataire }}" />
+                   {{ $envoye->destinataire }}
                         </div>
                       <!--  <div class="col-md-2">
                             <i id="emailso" onclick="visibilite('autres')" class="fa fa-lg fa-arrow-circle-down" style="margin-right:10px"></i>
@@ -28,14 +28,14 @@
                     </div>
                 </div>
                 <?php if ($type=='email') {?>
-               <!-- <div class="form-group" style="margin-top:10px;">
+                <div class="form-group" style="margin-top:10px;">
                     <div id="autres" class="row"   >
                      <?php if($envoye->cc !='') {?>
                         <div class="col-md-1">
                             <label for="cc">CC:</label>
                         </div>
-                        <div class="col-md-4">
-                            <input id="cc" type="text" class="form-control" name="cc" value="{{ $envoye->cc }}"  />
+                        <div class="col-md-5">
+                             {{ $envoye->cc }}
                         </div>
                          <?php } ?>
                          <?php if($envoye->cci !='') {?>
@@ -43,16 +43,16 @@
                          <div class="col-md-1">
                             <label for="cci">CCI:</label>
                         </div>
-                        <div class="col-md-4">
-                            <input id="cci" type="text" class="form-control" name="cci" value="{{ $envoye->cci }}"  />
+                        <div class="col-md-5">
+                            {{ $envoye->cci }}
                         </div>
                          <?php } ?>
 
                     </div>
                 </div>
-                -->
+
                 <div class="form-group">
-                    <label for="sujet">sujet :</label>
+                    <label for="sujet">Sujet :</label>
                     <input id="sujet" type="text" class="form-control" name="sujet" required value="{{ $envoye->sujet }}"/>
                 </div>
                 <?php }?>

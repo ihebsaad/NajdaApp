@@ -181,7 +181,7 @@ class ClientsController extends Controller
 
     public function addressadd3(Request $request)
     {
-        if( ($request->get('nom'))!=null) {
+      //  if( ($request->get('nom'))!=null) {
 
             $parent=$request->get('parent');
             $adresse = new Adresse([
@@ -207,7 +207,7 @@ class ClientsController extends Controller
             else {
                 return url('/clients');
             }
-        }
+     //   }
 
         // return redirect('/clients')->with('success', 'ajouté avec succès');
 

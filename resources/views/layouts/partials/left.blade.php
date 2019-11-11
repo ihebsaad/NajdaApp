@@ -729,6 +729,91 @@ if (isset($dossier))
     });
 
 
+
+    function countNotifs() {
+
+        <?php  if (($view_name != 'supervision') && ($view_name != 'affectation') && ($view_name != 'notifs') && ($view_name != 'missions') && ($view_name != 'transport') && ($view_name != 'transportsemaine') && ($view_name != 'dossiers-create') && ($view_name != 'entrees-dispatching') && ($view_name != 'entrees-showdisp') ) { ?>
+        <?php // if($iduser == $seance->dispatcheur)
+        //{  ?>
+        // count notif dispatcheur
+        console.log('count notif dispatcheur: ');
+        $.ajax({
+            type: "get",
+            url: "<?php echo $urlapp; ?>/entrees/countnotifs",
+            success: function (countdata1) {
+                // console.log('count notif : ' + countdata1);
+                //  alert( 'count Notifs disp'+countdata1);
+
+                // var count=parseInt(data);
+                //  if(count>0 )
+                //  {
+                //  document.getElementById('countnotif').innerHTML =   countdata1;
+                document.getElementById('countnotific').innerHTML =   ''+countdata1;
+                //     $('#countnotif').html('500') ;
+                // document.getElementById('countnotif').innerHTML='500';
+                // }
+            }
+        });
+
+        <?php  // }
+
+          if ( ($iduser==$seance->superviseurmedic) || ($iduser== $seance->superviseurtech) ) {
+          // count notif superviseur
+                            ?>
+console.log('count notif Orange: ');
+        document.getElementById('totnotifs').style.background = 'white';
+
+        $.ajax({
+            type: "get",
+            url: "<?php echo $urlapp; ?>/entrees/countnotifsorange",
+            success: function (countdata2) {
+                console.log('count notif orange: ' + countdata2);
+
+                // var count = parseInt(data);
+                //    if (count > 0) {
+                document.getElementById('notiforange').innerHTML = '' + countdata2;
+                document.getElementById('totnotifs').style.background = '#FFCE54';
+
+                // }
+            }
+        });
+
+
+        $.ajax({
+            type: "get",
+            url: "<?php echo $urlapp; ?>/entrees/countnotifsrouge",
+            success: function (countdata3) {
+                console.log('count notif rouge: ' + countdata3);
+                //   var count = parseInt(data);
+                //    if (count > 0) {
+
+                document.getElementById('notifrouge').innerHTML = '' + countdata3;
+                document.getElementById('totnotifs').style.background = '#fc6e51';
+
+                //   }
+
+            }
+        });
+
+
+        <?php
+        } // superviseur
+?>
+        setTimeout(function(){
+            countNotifs();
+        }, 30000);  //30 secds
+
+
+        <?php
+        } // viewname
+        ?>
+
+    }    //function
+
+    countNotifs();
+
+
+
 </script>
 
 

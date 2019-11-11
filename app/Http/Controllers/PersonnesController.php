@@ -114,10 +114,10 @@ class PersonnesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function view($id)
-    {        $dossiers = Dossier::all();
+    {
 
         $personne = Personne::find($id);
-        return view('personnes.view', compact('personne'),['dossiers'=>$dossiers]);
+        return view('personnes.view', compact('personne'),[ ]);
 
     }
 

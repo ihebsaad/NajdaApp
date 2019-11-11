@@ -28,12 +28,25 @@
     $parametres =  DB::table('parametres')
         ->where('id','=', 1 )->first();
     $signature=$parametres->signature ;
+    $signature2=$parametres->signature2 ;
+    $signature3=$parametres->signature3 ;
+    $signature4=$parametres->signature4 ;
+    $signature5=$parametres->signature5 ;
+    $signature6=$parametres->signature6 ;
+    $signature7=$parametres->signature7 ;
+    $signature8=$parametres->signature8 ;
+    $signature9=$parametres->signature9 ;
     $accuse1=$parametres->accuse1 ;
     $accuse2=$parametres->accuse2 ;
     $dollar_achat=$parametres->dollar_achat ;
     $euro_achat=$parametres->euro_achat ;
     $dollar_vente=$parametres->dollar_vente ;
     $euro_vente=$parametres->euro_vente ;
+    $pass_VAT=$parametres->pass_VAT ;
+    $pass_MEDIC=$parametres->pass_MEDIC ;
+    $pass_TM=$parametres->pass_TM ;
+    $pass_MI=$parametres->pass_MI ;
+    $pass_TV=$parametres->pass_TV ;
 
     ?>
 
@@ -214,25 +227,103 @@
                                 {{ csrf_field() }}
                                 <tbody>
 
+                                 <tr>
+                                    <td style="width:35%" class="text-primary">Signature Najda</td>
+                                    <td style="width:65%">
+                                        <textarea  class="form-control" onchange="changing(this)" id="signature" style="width:520px;height:100px"><?php echo $signature; ?></textarea>
+                                    </td>
+                                </tr>
+                                 <tr>
+                                     <td style="width:35%" class="text-primary">Signature VAT</td>
+                                     <td style="width:65%">
+                                         <textarea  class="form-control" onchange="changing(this)" id="signature2" style="width:520px;height:100px"><?php echo $signature2; ?></textarea>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td style="width:35%" class="text-primary">Signature MEDIC</td>
+                                     <td style="width:65%">
+                                         <textarea  class="form-control" onchange="changing(this)" id="signature3" style="width:520px;height:100px"><?php echo $signature3; ?></textarea>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td style="width:35%" class="text-primary">Signature Transport MEDIC</td>
+                                     <td style="width:65%">
+                                         <textarea  class="form-control" onchange="changing(this)" id="signature4" style="width:520px;height:100px"><?php echo $signature4; ?></textarea>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td style="width:35%" class="text-primary">Signature Transport VAT</td>
+                                     <td style="width:65%">
+                                         <textarea  class="form-control" onchange="changing(this)" id="signature5" style="width:520px;height:100px"><?php echo $signature5; ?></textarea>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td style="width:35%" class="text-primary">Signature Medic International</td>
+                                     <td style="width:65%">
+                                         <textarea  class="form-control" onchange="changing(this)" id="signature6" style="width:520px;height:100px"><?php echo $signature6; ?></textarea>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td style="width:35%" class="text-primary">Signature Najda TPA</td>
+                                     <td style="width:65%">
+                                         <textarea  class="form-control" onchange="changing(this)" id="signature7" style="width:520px;height:100px"><?php echo $signature7; ?></textarea>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td style="width:35%" class="text-primary">Signature Transport Najda</td>
+                                     <td style="width:65%">
+                                         <textarea  class="form-control" onchange="changing(this)" id="signature8" style="width:520px;height:100px"><?php echo $signature8; ?></textarea>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td style="width:35%" class="text-primary">Signature X-Press</td>
+                                     <td style="width:65%">
+                                         <textarea  class="form-control" onchange="changing(this)" id="signature9" style="width:520px;height:100px"><?php echo $signature9; ?></textarea>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                           <td class="text-primary">Mot de Passe boite hotels.vat@medicmultiservices.com</td>
+                                           <td>
+                                               <input  type="password" class="form-control" onchange="changing(this)" id="pass_VAT" style="width:300px"  value="<?php echo $pass_VAT; ?>"  />
+                                           </td>
+                                       </tr>
                                        <tr>
-                                    <td class="text-primary">Signature</td>
-                                    <td>
-                                        <textarea  class="form-control" onchange="changing(this)" id="signature" style="width:520px;height:300px"><?php echo $signature; ?></textarea>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-primary">Accusé Fr</td>
-                                    <td>
-                                        <textarea  class="form-control" onchange="changing(this)" id="accuse1" style="width:520px;height:350px"><?php echo $accuse1 ; ?></textarea>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-primary">Accusé Eng</td>
-                                    <td>
-                                        <textarea  class="form-control" onchange="changing(this)" id="accuse2" style="width:520px;height:350px"><?php echo $accuse2; ?></textarea>
-                                    </td>
-                                </tr>
+                                           <td class="text-primary">Mot de Passe boite assistance@medicmultiservices.com</td>
+                                           <td>
+                                               <input  type="password" class="form-control" onchange="changing(this)" id="pass_MEDIC" style="width:300px"  value="<?php echo $pass_MEDIC; ?>"  />
+                                           </td>
+                                       </tr>
+                                       <tr>
+                                           <td class="text-primary">Mot de Passe boite ambulance.transp@medicmultiservices.com</td>
+                                           <td>
+                                               <input  type="password" class="form-control" onchange="changing(this)" id="pass_TM" style="width:300px"  value="<?php echo $pass_TM; ?>"  />
+                                           </td>
+                                       </tr>
+                                       <tr>
+                                           <td class="text-primary">Mot de Passe boite vat.transp@medicmultiservices.com</td>
+                                           <td>
+                                               <input  type="password" class="form-control" onchange="changing(this)" id="pass_TV" style="width:300px" value="<?php echo $pass_TV; ?>"  />
+                                           </td>
+                                       </tr>
+                                       <tr>
+                                           <td class="text-primary">Mot de Passe boite international@medicmultiservices.com   </td>
+                                           <td>
+                                               <input  type="password" class="form-control" onchange="changing(this)" id="pass_MI" style="width:300px" value="<?php echo $pass_MI; ?>"  />
+                                           </td>
+                                       </tr>
 
+                                       <tr>
+                                           <td class="text-primary">Mail Semi Auto - Création de dossier (Fr)</td>
+                                           <td>
+                                               <textarea  class="form-control" onchange="changing(this)" id="accuse1" style="width:520px;height:350px"><?php echo $accuse1 ; ?></textarea>
+                                           </td>
+                                       </tr>
+                                       <tr>
+                                           <td class="text-primary">Mail Semi Auto - Création de dossier (Eng)</td>
+                                           <td>
+                                               <textarea  class="form-control" onchange="changing(this)" id="accuse2" style="width:520px;height:350px"><?php echo $accuse2; ?></textarea>
+                                           </td>
+                                       </tr>
                                 </tbody>
                             </table>
                         </div>

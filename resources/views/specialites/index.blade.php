@@ -9,6 +9,7 @@
 @section('content')
 
     <?php use \App\Http\Controllers\TypePrestationsController;
+    use \App\Http\Controllers\SpecialitesController;
 ?>
     <style>
         .uper {
@@ -41,16 +42,14 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($specialites as $specialite)
-                <?php
-          
+         <?php foreach($specialites as $specialite){ ?>
 
-                ?>
-
-                <tr>
+        <tr>
                     <td  >{{$specialite->id}}</td>
                     <td  ><a href="{{action('SpecialitesController@view', $specialite['id'])}}" >{{$specialite->nom}}</a></td>
-                    <td  > <?php //  echo TypePrestationsController::nomById($specialite->type_prestation); ?></td>
+                    <td  > <?php    $types= SpecialitesController::SpecialiteTypesPrestations($specialite->id);
+                    foreach($types as $tp){ echo  TypePrestationsController::nomById($tp).', ';} ?>
+                    </td>
                       <td    >
                           @can('isAdmin')
                               <a  href="{{action('SpecialitesController@destroy', $specialite['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
@@ -60,7 +59,7 @@
                       </td>
  
                 </tr>
-            @endforeach
+            <?php }?>
             </tbody>
         </table>
     </div>

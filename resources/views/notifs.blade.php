@@ -71,8 +71,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
     $signature=$parametres->signature ;
     $accuse1=$parametres->accuse1 ;
     $accuse2=$parametres->accuse2 ;
-    $dollar=$parametres->dollar ;
-    $euro=$parametres->euro ;
 
 
       use \App\Dossier;

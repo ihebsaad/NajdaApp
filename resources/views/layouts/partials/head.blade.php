@@ -192,6 +192,39 @@ $urlnotif=$urlapp.'/entrees/show/' ;
             });
         }
 
+        function checkemails3(){
+            $.ajax({
+                type: "get",
+                url: "<?php echo $urlapp; ?>/emails/checkboite2",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check boite 2 : '+data);
+                    //Send another request in n seconds.
+                    setTimeout(function(){
+                        checkemails3();
+                    }, 30000);  //30 secds
+                }
+            });
+        }
+
+
+        function checkemails4(){
+            $.ajax({
+                type: "get",
+                url: "<?php echo $urlapp; ?>/emails/checkboite2",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check boite 2 : '+data);
+                    //Send another request in n seconds.
+                    setTimeout(function(){
+                        checkemails3();
+                    }, 30000);  //30 secds
+                }
+            });
+        }
+
 
         function checkfax(){
             $.ajax({

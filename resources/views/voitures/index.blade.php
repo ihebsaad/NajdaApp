@@ -47,7 +47,7 @@
                     <td  ><a href="{{action('VoituresController@view', $voiture['id'])}}" >{{$voiture->name}}</a></td>
 					<td    >
                         @can('isAdmin')
-                            <a  href="{{action('VoituresController@destroy', $voiture['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                            <a onclick="return confirm('Êtes-vous sûrs ?')" href="{{action('VoituresController@destroy', $voiture['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                 <span class="fa fa-fw fa-trash-alt"></span> Supprimer
                             </a>
                         @endcan

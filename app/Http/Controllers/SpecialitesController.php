@@ -196,8 +196,6 @@ class SpecialitesController extends Controller
                 ['type_prestation', '=', $typep],
             ])->delete();
 
-
-
     }
 
     public  function createspec(Request $request)
@@ -205,16 +203,24 @@ class SpecialitesController extends Controller
         $specialite= $request->get('specialite');
         $typep= $request->get('typep');
 
-
         DB::table('specialites_typeprestations')->insert(
             ['specialite' => $specialite,
                 'type_prestation' => $typep]
         );
 
-
-
     }
 
+    public static function SpecialiteTypesPrestations($specialite)
+    {
+       $types= DB::table('specialites_typeprestations')
+            ->where([
+                ['specialite', '=', $specialite],
+
+            ])->pluck('type_prestation');
+
+       return $types ;
+
+    }
 
 }
 

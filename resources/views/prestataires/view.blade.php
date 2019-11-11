@@ -1,3 +1,4 @@
+
 @extends('layouts.mainlayout')
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -5,9 +6,7 @@
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 @section('content')
-
-
-    <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.1/select2.min.js"></script>-->
+     <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.1/select2.min.js"></script>-->
 
 
     <section class="content form_layouts">
@@ -184,8 +183,10 @@
                             <div class="form-group">
                                 <label>Ville du siège social</label><br>
 
-                                <?php
+                                <input onchange="changing(this)" type="text" class="form-control input" name="ville" id="ville" value="{{ $prestataire->ville }}">
 
+                            <?php
+                                if ($prestataire->ville==''){
                                 if ($prestataire->ville_id >0)
                                     {
 
@@ -197,10 +198,8 @@
 
                                         ?>
 
-                                 <?php    } else {?>
+                                 <?php    }  }?>
 
-
-                                <input onchange="changing(this)" type="text" class="form-control input" name="ville" id="ville" value="{{ $prestataire->ville }}">
 
                                 <script>
                                     var placesAutocomplete = places({
@@ -209,8 +208,7 @@
                                         container: document.querySelector('#ville')
                                     });
                                 </script>
-                                <?php    }?>
-                            </div>
+                             </div>
                         </div>
 
 
@@ -348,7 +346,7 @@
                                 <td style="width:35%;"><input id='tel-nom-<?php echo $tel->id;?>'  style="width:50%" value="<?php echo $tel->nom; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','nom',this)" /> <input  id='tel-prenom-<?php echo $tel->id;?>'   style="width:48%" value="<?php echo $tel->prenom; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','prenom',this)" /></td>
                                 <td style="width:20%;"><input type="text" pattern="[0-9]" id='tel-champ-<?php echo $tel->id;?>'  style="width:100%" value="<?php echo $tel->champ; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','champ',this)" /></td>
                                 <td style="width:30%;"><input   id='tel-rem-<?php echo $tel->id;?>'   style="width:100%" value="<?php echo $tel->remarque; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','remarque',this)" /></td>
-                                <td style="width:10%;"><input  id='tel-typetel-<?php echo $tel->id;?>'   style="width:100%" value="<?php echo $tel->typetel; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','typetel',this)" /> <?php if($tel->typetel=='Mobile') {?> <a onclick="setTel(this);" class="<?php echo $tel->champ;?>" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a><?php } ?>
+                                <td style="width:10%;"><select  id='tel-typetel-<?php echo $tel->id;?>'   style="width:100%"  onchange="changingAddress('<?php echo $tel->id; ?>','typetel',this)" ><option <?php  if($tel->typetel=='Fixe'){echo 'selected="selected"';} ?> value="Fixe">Fixe</option><option <?php  if($tel->typetel=='Mobile'){echo 'selected="selected"';} ?> value="Mobile">Mobile</option></option></select> <?php if($tel->typetel=='Mobile') {?> <a onclick="setTel(this);" class="<?php echo $tel->champ;?>" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a><?php } ?>
                                 <td style="width:5%;">
                                     <a  href="{{action('ClientsController@deleteaddress', $tel->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span>
@@ -562,7 +560,7 @@
 
                                 <input id="prestataire_id" name="prestataire" type="hidden" value="{{ $prestataire->id}}">
                                 <div class="form-group " >
-                                    <label>Type de prestations</label>
+                                    <label>Type de prestations *</label>
                                     <div class=" row  ">
                                         <select class=" form-control col-lg-12  " style="width:400px" name=""    id="typeprestation">
                                             <option></option>
@@ -609,7 +607,7 @@
                                 </div>
 
                                 <div class="form-group ">
-                                    <label>Gouvernorat de couverture</label>
+                                    <label>Gouvernorat de couverture *</label>
                                     <div class="row">
                                         <select class="form-control  col-lg-12 "  style="width:400px" name="gouv"    id="gouvpr">
                                             <option></option>
@@ -653,7 +651,7 @@
                                     </script>
                                 </div>
                                 <div class="form-group ">
-                                    <label>Priorité</label>
+                                    <label>Priorité *</label>
                                     <div class="row">
                                         <input style="padding-left:5px;" type="number" step="1" id="prior" max="10" min="0" value="1" />
                                     </div>
@@ -1461,7 +1459,7 @@
          //   var disponibilite = $('#disp').val();
            // var evaluation = $('#note').val();
             var specialite = $('#specialite2').val();
-             if ((type_prest != '') &&(gouvernorat != '') && (specialite != '') &&(priorite != '') )
+             if ((type_prest != '') &&(gouvernorat != '')  &&(priorite != '') )
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
@@ -1475,12 +1473,15 @@
 
 
                     }
-                });
+                }).fail(function() {
+                alert("erreur lors de l'ajout, vérifier si la priorité existe deja ");
+            });
+                ;
             }else{
                 // alert('ERROR');
+                  alert('insérez les valeurs obligatoires');
             }
-        });
-
+        })
 
 
 

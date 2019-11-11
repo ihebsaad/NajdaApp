@@ -44,7 +44,7 @@
              </tr>
             </thead>
             <tbody>
-            <?php   $listen=array(0=>'',-1=>'All',1=>'Assistance / Assurance',2=>'Avionneur',3=>'Pétrolier / apparenté',4=>'Clinique',5=>'Agence de voyage / Hôtel');
+            <?php   $listen=array(0=>'',-1=>'All',1=>'Assistance / Assurance',2=>'Avionneur',3=>'Pétrolier / apparenté',4=>'Clinique',5=>'Agence de voyage / Hôtel',6=>'Autre');
             ?>
             @foreach($clients as $client)
 
@@ -67,7 +67,7 @@
 
  }
 
-                      ?>
+      ?>
                     </td>
                     <td style="width:10%"><small>{{$client->langue1}}</small></td>
                     <td style="width:10%"><small>{{$client->langue2}}</small></td>

@@ -131,6 +131,13 @@ Route::get('/emails/inbox', 'EmailController@inbox');
 /* mark as readed and save to database */
 Route::get('/emails/check', 'EmailController@check');
 Route::get('/emails/checkboite2', 'EmailController@checkboite2');
+Route::get('/emails/checkboite3', 'EmailController@checkboite3');
+Route::get('/emails/checkboite4', 'EmailController@checkboite4');
+Route::get('/emails/checkboite5', 'EmailController@checkboite5');
+Route::get('/emails/checkboite6', 'EmailController@checkboite6');
+Route::get('/emails/checkboite7', 'EmailController@checkboite7');
+Route::get('/emails/checkboite8', 'EmailController@checkboite8');
+Route::get('/emails/checkboite9', 'EmailController@checkboite9');
 Route::get('/emails/checkfax', 'EmailController@checkfax');
 Route::get('/emails/checksms', 'EmailController@checksms');
 Route::get('/emails/checkboiteperso', 'EmailController@checkboiteperso');
