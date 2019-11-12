@@ -3,8 +3,7 @@
 use App\Http\Controllers\TagsController;
  ?>
 <!--select css-->
-    <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+    
     
     
     <style>
@@ -2407,89 +2406,3 @@ getNotificationDeleguerAct ();
 
 
 
-<script>
-
- 
-/*$( document ).ready(function() {
-  Notify("Can't Touch This");
-    Notify("Can't Touch This");
-      Notify("Can't Touch This");
-  Notify("Stop! Hammer time", null, null, 'danger');
-
-  Notify("I told you homeboy (You can't touch this)",
-  function () { 
-    alert("clicked notification")
-  },
-  function () { 
-    alert("clicked x")
-  },
-  'success'
-);
-
-});*/
-
-</script>
-
-
-
-
-
-<!-- gestion les reports et l'attente de réponse des actions (pour les rappels mission voir right blade)-->
-
-
-
-
-
-  <!--<script>
-$(document).ready(function() {
-  $('.panel-collapse').on('show.bs.collapse', function () {
-    $(this).siblings('.panel-heading').addClass('active');
-  });
-
-  $('.panel-collapse').on('hide.bs.collapse', function () {
-    $(this).siblings('.panel-heading').removeClass('active');
-  });
-});
-</script>-->
-
-
-<!--<script>
-
-$(document).ready(function () {
-    $('.accordion a').click(function () {
-        //removing the previous selected menu state
-        $('.accordion').find('panel-heading.active').removeClass('active');
-        //adding the state for this parent menu
-        $(this).parents("panel-title").addClass('active');
-
-    });
-});
-
-</script>-->
-
-
-
-
-<!--<script>
-
-  // Get the container element
-var btnContainer = document.getElementById("accordion");
-
-// Get all buttons with class="btn" inside the container
-var btns = btnContainer.getElementsByClassName("panel-heading");
-
-// Loop through the buttons and add the active class to the current/clicked button
-for (var i = 0; i < btns.length; i++) {
-  btns[i].addEventListener("click", function() {
-    var current = document.getElementsByClassName("active");
-
-    // If there's no active class
-    if (current.length > 0) { 
-      current[0].className = current[0].className.replace(" active", "");
-    }
-
-    // Add the active class to the current/clicked button
-    this.className += " active";
-  });
-}
-</script>-->
