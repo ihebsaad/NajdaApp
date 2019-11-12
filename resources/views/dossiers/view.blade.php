@@ -3766,7 +3766,7 @@ function keyUpHandler(){
             // AMBULANCE
             if ((typeprestom==="Ambulance")&&(typeprestom !=="")) {typeprest=4; type=4; specialite=4;}
             // REMORQUAGE
-            if ((typeprestom==="Remorquage")&&(typeprestom !=="")) {typeprest=1; type=3; specialite=3;}
+            if ((typeprestom==="Remorquage")&&(typeprestom !=="")) {typeprest=1; type=1; specialite=3;}
             // cas remplace
             var srcomtemp = document.getElementById("omfilled").src;
             var posomtaxitemp = srcomtemp.indexOf("odm_taxi");
@@ -3774,7 +3774,7 @@ function keyUpHandler(){
             var posomremorquagetemp = srcomtemp.indexOf("odm_remorquage");
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomtaxitemp != -1)) {typeprest=2; type=2; specialite=2;}
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomambulancetemp != -1)) {typeprest=4; type=4; specialite=4;}
-            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=3; specialite=3;}
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=1; specialite=3;}
 
 
             var date = $('#pres_datem').val();
@@ -3996,7 +3996,7 @@ function keyUpHandler(){
             // AMBULANCE
             if ((typeprestom==="Ambulance")&&(typeprestom !=="")) {typeprest=4; type=4; specialite=4;}
             // REMORQUAGE
-            if ((typeprestom==="Remorquage")&&(typeprestom !=="")) {typeprest=1; type=3; specialite=3;}
+            if ((typeprestom==="Remorquage")&&(typeprestom !=="")) {typeprest=1; type=1; specialite=3;}
             // cas remplace
             var srcomtemp = document.getElementById("omfilled").src;
             var posomtaxitemp = srcomtemp.indexOf("odm_taxi");
@@ -4004,7 +4004,7 @@ function keyUpHandler(){
             var posomremorquagetemp = srcomtemp.indexOf("odm_remorquage");
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomtaxitemp != -1)) {typeprest=2; type=2; specialite=2;}
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomambulancetemp != -1)) {typeprest=4; type=4; specialite=4;}
-            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=3; specialite=3;}
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=1; specialite=3;}
             //document.getElementById('tprest2-'+typeprest).style.display='block';
 
             //  prest = $(this).val();

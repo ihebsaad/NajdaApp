@@ -37,7 +37,7 @@ if ((isset($_GET['remplace']) || isset($_GET['complete'])) && isset($_GET['paren
 else
 {
 
-    $sql = "SELECT reference_medic, subscriber_name, subscriber_lastname, customer_id, reference_customer,vehicule_type,vehicule_immatriculation, lieu_immobilisation, affecte FROM dossiers WHERE id=".$dossier;
+    $sql = "SELECT reference_medic, subscriber_name, subscriber_lastname, subscriber_phone_cell,subscriber_local_address, customer_id, reference_customer,vehicule_type,vehicule_marque,vehicule_immatriculation, lieu_immobilisation, affecte FROM dossiers WHERE id=".$dossier;
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -416,7 +416,7 @@ header("Content-Type: text/html;charset=UTF-8");
 { ?>
     <input name="vehicule_type" id="vehicule_type" placeholder="type et marque" value="<?php if(! empty($detailom['vehicule_type'])) echo $detailom['vehicule_type']; ?>" />
 <?php }} else { ?>
-    <input name="vehicule_type" id="vehicule_type" placeholder="type et marque" value="<?php if(isset ($detaildoss)) echo $detaildoss['vehicule_type']; ?>" />
+    <input name="vehicule_type" id="vehicule_type" placeholder="type et marque" value="<?php if(isset ($detaildoss)) echo $detaildoss['vehicule_marque']." ".$detaildoss['vehicule_type']; ?>" />
 <?php } ?>
 			</span>
         <span style="font-family:'Times New Roman'; font-weight:bold"> </span><span style="width:2.79pt; display:inline-block">&#xa0;</span><span style="width:36pt; display:inline-block">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">Immatriculation</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">:  </span><span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">
@@ -430,7 +430,7 @@ header("Content-Type: text/html;charset=UTF-8");
 </span></p>
     </div><p style="margin-top:0.6pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'">Etat du véhicule:&#xa0;</span>
         <?php if (isset($detailom)) { ?>
-            <select id="CL_etat_vehicule" name="CL_type_vehicule">
+            <select id="CL_etat_vehicule" name="CL_etat_vehicule">
                 <option value="Panne" <?php if (isset($detailom['CL_etat_vehicule'])) { if ($detailom['CL_etat_vehicule'] === "Panne") {echo "selected";}} ?> >Panne</option>
                 <option value="accidenté" <?php if (isset($detailom['CL_etat_vehicule'])) { if ($detailom['CL_etat_vehicule'] === "accidenté") {echo "selected";}} ?> >accidenté</option>
                 <option value="incendié" <?php if (isset($detailom['CL_etat_vehicule'])) { if ($detailom['CL_etat_vehicule'] === "incendié") {echo "selected";}} ?> >incendié</option>
@@ -461,9 +461,9 @@ header("Content-Type: text/html;charset=UTF-8");
         <input type="text" list="CL_lieuprest_pc" name="CL_lieuprest_pc" <?php if (isset($detailom)) { if (isset($detailom['CL_lieuprest_pc'])) {echo "value='".$detailom['CL_lieuprest_pc']."'";}} ?> />
         <datalist id="CL_lieuprest_pc">
             <?php
-            foreach ($array_prest as $prest) {
-                echo "<option value='".$prest['name']."' telprest='".$prest['phone_home']."'>".$prest['name']."</option>";
-            }
+            //foreach ($array_prest as $prest) {
+                echo "<option value='".$detaildoss['lieu_immobilisation']."' telprest='".$detaildoss['subscriber_phone_cell']."'>".$detaildoss['lieu_immobilisation']."</option>";
+            //}
             ?>
         </datalist>
         <span style="font-family:'Times New Roman'; font-weight:bold">Tel: </span>
@@ -501,6 +501,10 @@ header("Content-Type: text/html;charset=UTF-8");
 <input type="text" list="CL_lieupre" name="CL_lieupre" <?php if (isset($detailom)) { if (isset($detailom['CL_lieupre'])) {echo "value='".$detailom['CL_lieupre']."'";}} ?> />
 <datalist id="CL_lieupre">
 <?php
+if (!empty($detaildoss['subscriber_local_address']))
+{
+    echo "<option value='".$detaildoss['subscriber_local_address']."' telprest='".$detaildoss['subscriber_phone_cell']."'>".$detaildoss['subscriber_local_address']."</option>";
+}
 foreach ($array_presthch as $presthch) {
     echo "<option value='".$presthch['name']."' telprest='".$presthch['phone_home']."'>".$presthch['name']."</option>";
 }
@@ -559,7 +563,7 @@ foreach ($array_prestap as $prestap) {
 				<span style="font-family:'Times New Roman'; font-weight:bold">Départ bateau </span>
 
 				<span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<input type="time" id="CL_heure_D name="CL_heure_D" min="00:00" max="23:59" <?php if (isset($detailom)) { if (isset($detailom['CL_heure_D'])) {echo "value='".date('H:i',strtotime($detailom['CL_heure_D']))."'";}} ?> >
+<input type="time" id="CL_heure_D" name="CL_heure_D" min="00:00" max="23:59" <?php if (isset($detailom)) { if (isset($detailom['CL_heure_D'])) {echo "value='".date('H:i',strtotime($detailom['CL_heure_D']))."'";}} ?> >
 
     </p>
     <?php if (isset($detailom['CB_prerades'])) { if (($detailom['CB_prerades'] === "oui")||($detailom['CB_prerades'] === "on")) { $prerades = true; ?>
@@ -582,28 +586,29 @@ foreach ($array_prestap as $prestap) {
     <span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000"> </span><span style="font-family:'Times New Roman'; font-weight:bold">Type de rapatriement : </span>
 
 
-<select id="CL_type_rapartriement" name="CL_type_rapartriement">
-<?php if (isset($detailom['CL_type_rapartriement'])) { ?>
-    <option value="Conteneur" <?php if (isset($detailom['CL_type_rapartriement'])) { if ($detailom['CL_type_rapartriement'] === "Conteneur") {echo "selected";}} ?> >Conteneur</option>
-    <option value="conventionnel" <?php if (isset($detailom['CL_type_rapartriement'])) { if ($detailom['CL_type_rapartriement'] === "conventionnel") {echo "selected";}} ?> >conventionnel</option>
+<select id="CL_type_rapatriement" name="CL_type_rapatriement">
+<?php if (isset($detailom['CL_type_rapatriement'])) { ?>
+    <option value="Conteneur" <?php if (isset($detailom['CL_type_rapatriement'])) { if ($detailom['CL_type_rapatriement'] === "Conteneur") {echo "selected";}} ?> >Conteneur</option>
+    <option value="conventionnel" <?php if (isset($detailom['CL_type_rapatriement'])) { if ($detailom['CL_type_rapatriement'] === "conventionnel") {echo "selected";}} ?> >conventionnel</option>
 <?php } else { ?>
     <option value="Conteneur" selected>Conteneur</option>
     <option value="conventionnel">conventionnel</option>
 <?php } ?>
 </select>
-    <?php if (isset($detailom['CB_pregoulette']) || isset($detailom['CB_prerades'])) { if ((($detailom['CB_prerades'] === "oui"||($detailom['CB_prerades'] === "on"))) ||(($detailom['CB_prerades'] === "oui"||($detailom['CB_prerades'] === "on")) )){ ?>
-<p id="prerades1" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
+    </span>
+    <?php if (isset($detailom['CB_pregoulette']) || isset($detailom['CB_prerades'])) { if ((($detailom['CB_prerades'] === "oui"||($detailom['CB_prerades'] === "on"))) ||(($detailom['CB_pregoulette'] === "oui"||($detailom['CB_pregoulette'] === "on")) )){ ?>
+<p id="preradeszone" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;">
 <?php } else { ?>
-<p id="prerades2" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;display:none;">
+<p id="preradeszone" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;display:none;">
 <?php } } else { ?>
-    <p id="prerades1" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;display:none;">
+<p id="preradeszone" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;display:none;">
         <?php } ?>
 
         <span style="font-family:'Times New Roman'; font-weight:bold">Heure </span><span style="font-family:'Times New Roman'; font-weight:bold">souhaitée </span><span style="font-family:'Times New Roman'; font-weight:bold">arrivée port: </span>
         <input type="time" id="CL_heurearr" name="CL_heurearr" min="00:00" max="23:59" <?php if (isset($detailom)) { if (isset($detailom['CL_heurearr'])) {echo "value='".date('H:i',strtotime($detailom['CL_heurearr']))."'";}} ?> >
         <span style="font-family:'Times New Roman'"> Si vers Port de la Goulette par défaut heure départ -3 heures, si vers </span><span style="font-family:'Times New Roman'"></span><span style="font-family:'Times New Roman'">Port de Rades par défaut RDV au port à 8h. </span><span style="font-family:'Times New Roman'"></span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"></span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"></span><span style="font-family:'Times New Roman'"> </span></p>
 
-    </span>
+
 
     <p style="margin-top:3.75pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p><div style="margin-top:0pt;clear:both"><p style="margin-left:5.85pt;margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Remarque</span><span style="font-family:'Times New Roman'; font-weight:bold">s</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
             <textarea id="CL_remarque" name="CL_remarque" rows="2" cols="50" placeholder="Remarques">
@@ -814,29 +819,33 @@ foreach ($array_prestap as $prestap) {
         }
         else
         {
-            $("#trpersonnne").hide();
+            $("#trpersonne").hide();
         }
     });
     // CB_preportaeroport
     $("#CB_pregoulette").change(function() {
         if(this.checked) {
             $("#pregoulette").show();
-            $("#prerades1").show();
+            $("#preradeszone").css("display", "block");
         }
         else
         {
             $("#pregoulette").hide();
-            $("#prerades1").hide();
+            //
+            if (! $('#CB_prerades').is(':checked')) {$("#preradeszone").css("display", "none");}
         }
+        /*a1 = $('#CB_pregoulette').is(':checked');
+        a2= $('#CB_prerades').is(':checked');
+        alert("display it: "+a1 +" "+ a2);*/
     });
     $("#CB_prerades").change(function() {
         if(this.checked) {
             $("#prerades").show();
-            $("#prerades1").show();
+            $("#preradeszone").show();
         }
         else
         {$("#prerades").hide();
-            $("#prerades1").hide();
+            $("#preradeszone").hide();
         }
     });
 

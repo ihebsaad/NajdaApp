@@ -875,6 +875,10 @@ class OrdreMissionsController extends Controller
     {
     	return view('ordremissions.pdfodmambulance');
     }
+    public function pdfcancelomambulance()
+    {
+    	return view('ordremissions.pdfcancelomambulance');
+    }
 
     public function export_pdf_odmremorquage(Request $request)
     {
@@ -1301,6 +1305,10 @@ class OrdreMissionsController extends Controller
     {
         return view('ordremissions.pdfodmremorquage');
     }
+    public function pdfcancelomremorquage()
+    {
+    	return view('ordremissions.pdfcancelomremorquage');
+    }
 
     public function historique(Request $request)
     {
@@ -1372,7 +1380,79 @@ class OrdreMissionsController extends Controller
 	        // If you want to store the generated pdf to the server then you can use the store function
 	        $pdf->save($path.$dossier.'/'.$name.'.pdf');
 	        $omtaxi = OMTaxi::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier]);
-	        return $omparent;
+	        return "OM Ambulance annulée avec succès";
+	    }
+	    // annulation om Ambulance
+	    elseif (stristr($titre,'ambulance') !== FALSE)  {
+	    	OMAmbulance::where('id', $parent)->update(['dernier' => 0]);
+	        $omparent=OMAmbulance::where('id', $parent)->first();
+	        $filename='ambulance_annulation-'.$parent;
+
+	        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+			$name='OM - '.$name;
+	        $path2='/OrdreMissions/'.$dossier.'/'.$name.'.pdf';
+
+	        if ((isset($omparent["complete"]) || isset($omparent["affectea"])) || isset($_POST['affectea']))
+	    	{// supprimer attachement precedent (du parent)
+		        Attachement::where('path', '/OrdreMissions/'.$dossier.'/'.$omparent["titre"].'.pdf')->delete();
+		        // enregistrement de nouveau attachement
+	        	
+		        $attachement = new Attachement([
+
+		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
+		        ]);
+		        $attachement->save();
+	    	}
+
+	    	compact($omparent);
+	    	// Send data to the view using loadView function of PDF facade
+	        $pdf = PDF3::loadView('ordremissions.pdfcancelomambulance', ['omparent' => $omparent])->setPaper('a4', '');
+
+	        $path= storage_path()."/OrdreMissions/";
+
+	        if (!file_exists($path.$dossier)) {
+	            mkdir($path.$dossier, 0777, true);
+	        }
+	        // If you want to store the generated pdf to the server then you can use the store function
+	        $pdf->save($path.$dossier.'/'.$name.'.pdf');
+	        $omambu = OMAmbulance::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier]);
+	        return "OM Ambulance annulée avec succès";
+	    }
+	    // annulation om Remorquage
+	    elseif (stristr($titre,'remorquage') !== FALSE)  {
+	    	OMRemorquage::where('id', $parent)->update(['dernier' => 0]);
+	        $omparent=OMRemorquage::where('id', $parent)->first();
+	        $filename='remorquage_annulation-'.$parent;
+
+	        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+			$name='OM - '.$name;
+	        $path2='/OrdreMissions/'.$dossier.'/'.$name.'.pdf';
+
+	        if ((isset($omparent["complete"]) || isset($omparent["affectea"])) || isset($_POST['affectea']))
+	    	{// supprimer attachement precedent (du parent)
+		        Attachement::where('path', '/OrdreMissions/'.$dossier.'/'.$omparent["titre"].'.pdf')->delete();
+		        // enregistrement de nouveau attachement
+	        	
+		        $attachement = new Attachement([
+
+		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
+		        ]);
+		        $attachement->save();
+	    	}
+
+	    	compact($omparent);
+	    	// Send data to the view using loadView function of PDF facade
+	        $pdf = PDF3::loadView('ordremissions.pdfcancelomremorquage', ['omparent' => $omparent])->setPaper('a4', '');
+
+	        $path= storage_path()."/OrdreMissions/";
+
+	        if (!file_exists($path.$dossier)) {
+	            mkdir($path.$dossier, 0777, true);
+	        }
+	        // If you want to store the generated pdf to the server then you can use the store function
+	        $pdf->save($path.$dossier.'/'.$name.'.pdf');
+	        $omrem = OMRemorquage::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier]);
+	        return "OM Remorquage annulée avec succès";
 	    }
     }
 
