@@ -566,3 +566,5 @@ Route::get('/ordremissions/pdfodmambulance','OrdreMissionsController@pdfodmambul
 Route::post('/ordremissions/export_pdf_odmambulance','OrdreMissionsController@export_pdf_odmambulance')->name('ordremissions.export_pdf_odmambulance');
 Route::get('/ordremissions/pdfodmremorquage','OrdreMissionsController@pdfodmremorquage')->name('ordremissions.pdfodmremorquage');
 Route::post('/ordremissions/export_pdf_odmremorquage','OrdreMissionsController@export_pdf_odmremorquage')->name('ordremissions.export_pdf_odmremorquage'); 
+Route::get('/ordremissions/pdfodmmedicinternationnal','OrdreMissionsController@pdfodmmedicinternationnal')->name('ordremissions.pdfodmmedicinternationnal');
+Route::post('/ordremissions/export_pdf_odmmedicinternationnal','OrdreMissionsController@export_pdf_odmmedicinternationnal')->name('ordremissions.export_pdf_odmmedicinternationnal');
