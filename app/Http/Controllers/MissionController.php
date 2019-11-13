@@ -29,6 +29,9 @@ use App\Document ;
 use App\Client ;
 use App\Intervenant ;
 
+ use App\OMAmbulance;
+ use App\OMRemorquage;
+
 
 use App\Prestation;
 use App\TypePrestation;
@@ -3755,6 +3758,8 @@ public function getAjaxDeleguerMission($idmiss)
 */
         $prestations =   Prestation::where('dossier_id', $id)->get();
         $intervenants =   Intervenant::where('dossier', $id)->get();
+        $inters =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
+        $prests = Prestation::where('dossier_id', $id)->pluck('prestataire_id');
 
 
         $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
@@ -3769,11 +3774,22 @@ public function getAjaxDeleguerMission($idmiss)
 
         $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());
 
-        $phones =   Adresse::where('nature', 'teldoss')
+        $phonesDossier =   Adresse::where('nature', 'teldoss')
             ->where('parent',$id)
             ->get();
 
-        $emailads =   Adresse::where('nature', 'emaildoss')
+        $phonesCl =   Adresse::where('nature', 'tel')
+            ->where('parent',$cl)
+            ->get();
+       // $phonesInt=array();
+
+        $intervs = array_merge( $inters->toArray(),$prests->toArray() );
+
+        $phonesInt =   Adresse::where('nature', 'tel')
+            ->whereIn('parent', $intervs)
+            ->get();
+
+         $emailads =   Adresse::where('nature', 'emaildoss')
             ->where('parent',$id)
             ->get();
 
@@ -3820,11 +3836,13 @@ public function getAjaxDeleguerMission($idmiss)
         //  $entrees =   Entree::all();
         $documents = Document::where(['dossier' => $id,'dernier' => 1])->get();
         $omtaxis = OMTaxi::where(['dossier' => $id,'dernier' => 1])->get();
+        $omambs = OMAmbulance::where(['dossier' => $id,'dernier' => 1])->get();
+        $omrem = OMRemorquage::where(['dossier' => $id,'dernier' => 1])->get();
         $dossiers = app('App\Http\Controllers\DossiersController')->ListeDossiersAffecte();
 
         $evaluations=DB::table('evaluations')->get();
 
-        return view('dossiers.view',['evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis, 'missionDocOm'=>$missionDocOm], compact('dossier'));
+        return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis, 'omambs'=>$omambs, 'omrem'=>$omrem], compact('dossier'));
 
 
     }
