@@ -76,7 +76,7 @@
                 <option value="assistance@medicmultiservices.com">assistance@medicmultiservices.com</option>
                 <option value="ambulance.transp@medicmultiservices.com">ambulance.transp@medicmultiservices.com</option>
                 <option value="vat.transp@medicmultiservices.com">vat.transp@medicmultiservices.com</option>
-                <option value="international@medicmultiservices.com">international@medicmultiservices.com</option>
+                <option value="operations@medicinternational.tn">operations@medicinternational.tn</option>
                 <option value="tpa@najda-assistance.com">tpa@najda-assistance.com</option>
                 <option value="taxi@najda-assistance.com">taxi@najda-assistance.com</option>
                 <option value="xpress@najda-assistance.com">xpress@najda-assistance.com</option>
@@ -200,7 +200,7 @@
 
     <div class="form-group form-group-default">
         <label>Attachements Externes</label>
-        <input class="btn btn-danger fileinput-button" id="file" type="file" name="files[]"   multiple>
+        <input  class="btn btn-danger fileinput-button" id="file" type="file" name="files[]"   multiple>
     </div>
 
     <div class="form-group ">

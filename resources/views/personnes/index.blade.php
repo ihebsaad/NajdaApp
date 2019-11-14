@@ -31,11 +31,15 @@
             <tr id="headtable">
                 <th style="width:10%">ID</th>
                 <th style="width:45%">Nom</th>
+                <th style="width:15%">Type</th>
+                <th style="width:15%">Statut</th>
                  <th style="width:10%">Actions</th>
               </tr>
             <tr>
                 <th style="width:10%">ID</th>
                 <th style="width:45%">Nom</th>
+                <th style="width:15%">Type</th>
+                <th style="width:15%">Statut</th>
                  <th class="no-sort" style="width:10%">Actions</th>
             </tr>
             </thead>
@@ -46,6 +50,8 @@
                 <tr>
                     <td  >{{$personne->id}}</td>
                     <td  ><a href="{{action('PersonnesController@view', $personne['id'])}}" >{{$personne->name}}</a></td>
+                    <td  >{{$personne->type}}</td>
+                    <td  ><?php if ($personne->annule ==0){echo 'Actif';}else{echo 'Inactif';} ?></td>
 					<td    >
                         @can('isAdmin')
                             <a  href="{{action('PersonnesController@destroy', $personne['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >

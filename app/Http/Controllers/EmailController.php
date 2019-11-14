@@ -7,6 +7,7 @@ use App\Email;
 use App\Intervenant;
 use App\Notifications\Notif_Suivi_Doss;
 use App\Prestation;
+use Dompdf\Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use DB;
@@ -97,19 +98,18 @@ class EmailController extends Controller
 
 */
         $oClient = new Client([
-            'host'          => 'ssl0.ovh.net',// env('hostreception'),
-            'port'          => '993',// env('portreception'),
+            'host'          => 'pop3.tunet.tn',// env('hostreception'),
+            'port'          => '110',// env('portreception'),
             //    'encryption'    => '',//env('encreception'),
             'validate_cert' => true,
-            'username'      =>'test@najda-assistance.com',
-            'password'      => 'esol@2109',
-            'protocol'      => 'imap'
+            'username'      =>'ambulance.transp1@medicmultiservices.com',
+            'password'      => 'umH01catA+B@Kc15#Pa',
+            'protocol'      => 'pop3'
         ]);
 //Connect to the IMAP Server
         $oClient->connect();
 
         $oFolder = $oClient->getFolder($foldername);
-
 
         $aMessage = $oFolder->messages()->all()->get();
         // Recherche
@@ -811,7 +811,7 @@ class EmailController extends Controller
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
                     'type'=> 'email',
-                    'mailid'=> 'b2-'.$mailid,
+                    'mailid'=> 'b3-'.$mailid,
                     'viewed'=>0,
                     'dossier'=>$refdossier,
                     'dossierid'=>$dossierid,
@@ -974,18 +974,21 @@ class EmailController extends Controller
         $parametres =  DB::table('parametres')
             ->where('id','=', 1 )->first();
         $pass_TM=$parametres->pass_TM ;
+
         $oClient = new Client([
-            'host'          => 'ssl0.ovh.net',// env('hostreception'),
-            'port'          => '993',// env('portreception'),
-            //    'encryption'    => '',//env('encreception'),
-            'validate_cert' => true,
-            'username'      =>'ambulance.transp@medicmultiservices.com',
-            'password'      => $pass_TM,
-            'protocol'      => 'imap'
+            'host'          => 'mail.bmail.tn',
+          //  'host'          => 'pop3.tunet.tn',
+            'port'          => '110',// env('portreception'),
+                'encryption'    => false,//env('encreception'),
+             'validate_cert' => false,
+            'username'      =>'ambulance.transp1@medicmultiservices.com',
+            'password'      => 'umH01catA+B@Kc15#Pa',
+            'protocol'      => 'pop3'
         ]);
 
 //Connect to the IMAP Server
         $oClient->connect();
+
         $aFolder = $oClient->getFolders();
         $storeid=false;$firstid=0;
 
@@ -993,8 +996,10 @@ class EmailController extends Controller
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
         $aMessage = $oFolder->messages()->all()->get();
-        /** @var \Webklex\IMAP\Message $oMessage */
-        foreach ($aMessage as $oMessage) {
+        /** @var \Webklex\IMAP\Message $oMessage */$c=0;
+        foreach ($aMessage as $oMessage) {$c++;
+
+
             //  $nbattachs=10;
 
             $sujet=strval($oMessage->getSubject())  ;
@@ -1006,8 +1011,13 @@ class EmailController extends Controller
             $date= $oMessage->getDate();
             $mailid=$oMessage->getUid();
 
+
+            Log::info('Email date '.$date);
+            Log::info('Email from '.$from);
+
             //Move the current Message to 'INBOX.read'
             if ($oMessage->moveToFolder('read') == true) {
+
                 // get last id
                 $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
                 // message moved
@@ -1045,7 +1055,7 @@ class EmailController extends Controller
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
                     'type'=> 'email',
-                    'mailid'=> 'b2-'.$mailid,
+                    'mailid'=> 'b4-'.$mailid,
                     'viewed'=>0,
                     'dossier'=>$refdossier,
                     'dossierid'=>$dossierid,
@@ -1278,7 +1288,7 @@ class EmailController extends Controller
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
                     'type'=> 'email',
-                    'mailid'=> 'b2-'.$mailid,
+                    'mailid'=> 'b5-'.$mailid,
                     'viewed'=>0,
                     'dossier'=>$refdossier,
                     'dossierid'=>$dossierid,
@@ -1446,8 +1456,8 @@ class EmailController extends Controller
             'port'          => '993',// env('portreception'),
             //    'encryption'    => '',//env('encreception'),
             'validate_cert' => true,
-            'username'      =>'international@medicmultiservices.com',
-            'password'      => $pass_MI,
+            'username'      =>'operations@medicinternational.tn',
+            'password'      => 'axa@mutA+18CN15',
             'protocol'      => 'imap'
         ]);
 
@@ -1503,7 +1513,7 @@ class EmailController extends Controller
                 }
 
                 $entree = new Entree([
-                    'destinataire' => 'international@medicmultiservices.com',
+                    'destinataire' => 'operations@medicinternational.tn',
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
@@ -1512,7 +1522,7 @@ class EmailController extends Controller
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
                     'type'=> 'email',
-                    'mailid'=> 'b2-'.$mailid,
+                    'mailid'=> 'b6-'.$mailid,
                     'viewed'=>0,
                     'dossier'=>$refdossier,
                     'dossierid'=>$dossierid,
@@ -1742,7 +1752,7 @@ class EmailController extends Controller
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
                     'type'=> 'email',
-                    'mailid'=> 'b2-'.$mailid,
+                    'mailid'=> 'b7-'.$mailid,
                     'viewed'=>0,
                     'dossier'=>$refdossier,
                     'dossierid'=>$dossierid,
@@ -1971,7 +1981,7 @@ class EmailController extends Controller
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
                     'type'=> 'email',
-                    'mailid'=> 'b2-'.$mailid,
+                    'mailid'=> 'b8-'.$mailid,
                     'viewed'=>0,
                     'dossier'=>$refdossier,
                     'dossierid'=>$dossierid,
@@ -2203,7 +2213,7 @@ class EmailController extends Controller
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
                     'type'=> 'email',
-                    'mailid'=> 'b2-'.$mailid,
+                    'mailid'=> 'b9-'.$mailid,
                     'viewed'=>0,
                     'dossier'=>$refdossier,
                     'dossierid'=>$dossierid,
@@ -3229,10 +3239,10 @@ class EmailController extends Controller
         $description= $request->get('description');
         $attachs = $request->get('attachs');
 
+    //    dd($request->all()) ;
         $user = auth()->user();$idu=$user->id;
         $lg='fr';
-       $signature= $this->getSignatureUser($idu,$lg);
-        $contenu=$contenu.'<br>'.$signature;
+       $signatureagent= $this->getSignatureUser($idu,$lg);
 
         $ccimails=array();
         if(isset($cci )) {
@@ -3241,7 +3251,10 @@ class EmailController extends Controller
 
             }
             }
-        $fromname="";/*
+        $fromname="";$signatureentite='';
+        $parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+        /*
 if ($from=='faxnajdassist@najda-assistance.com')
 {
     $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
@@ -3251,6 +3264,7 @@ if ($from=='faxnajdassist@najda-assistance.com')
    // $swiftTransport->setPassword('esol@2109');
 
 }*/
+
 if ($from=='najdassist@gmail.com')
 {
     $swiftTransport =  new \Swift_SmtpTransport( 'smtp.gmail.com', '587', 'tls');
@@ -3273,6 +3287,8 @@ if ($from=='najdassist@gmail.com')
             $swiftTransport->setUsername('24ops@najda-assistance.com');
             $swiftTransport->setPassword('j3k47@KnNZ');
             $fromname="Najda Assistance";
+            $signatureentite= $parametres->signature ;
+
 
         }
 
@@ -3282,6 +3298,8 @@ if ($from=='najdassist@gmail.com')
             $swiftTransport->setUsername('tpa@najda-assistance.com');
             $swiftTransport->setPassword('J7k98+HsMH');
             $fromname="Najda Assistance (TPA)";
+            $signatureentite= $parametres->signature7 ;
+
 
         }
         if ($from=='taxi@najda-assistance.com')
@@ -3290,6 +3308,7 @@ if ($from=='najdassist@gmail.com')
             $swiftTransport->setUsername('taxi@najda-assistance.com');
             $swiftTransport->setPassword('TaxiPswD@2019');
             $fromname="Najda Transport";
+            $signatureentite= $parametres->signature8 ;
 
         }
         if ($from=='xpress@najda-assistance.com')
@@ -3298,6 +3317,8 @@ if ($from=='najdassist@gmail.com')
             $swiftTransport->setUsername('xpress@najda-assistance.com');
             $swiftTransport->setPassword('Rem2018@najda');
             $fromname="X-Press remorquage";
+            $signatureentite= $parametres->signature9 ;
+
         }
 
         if ($from=='hotels.vat@medicmultiservices.com')
@@ -3306,30 +3327,59 @@ if ($from=='najdassist@gmail.com')
             $swiftTransport->setUsername('hotels.vat@medicmultiservices.com');
             $swiftTransport->setPassword('NewPswD@2019+');
             $fromname="VAT hôtels";
+            $signatureentite= $parametres->signature2 ;
+
         }
 
         if ($from=='assistance@medicmultiservices.com')
         {
-            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', 'tls');
+            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
             $swiftTransport->setUsername('assistance@medicmultiservices.com');
-            $swiftTransport->setPassword('Nouv@2018+C+15=');
+            $swiftTransport->setPassword('Nouv@2018+C+15');
             $fromname="Medic' Multiservices";
+            $signatureentite= $parametres->signature3 ;
+
         }
 
+        if ($from=='ambulance.transp@medicmultiservices.com')
+        {
+            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25');
+            $swiftTransport->setUsername('ambulance.transp1@medicmultiservices.com');
+            $swiftTransport->setPassword('umH01catA+B@Kc15#Pa');
+            $fromname="Transport MEDIC";
+            $signatureentite= $parametres->signature4 ;
 
-        if ($from=='international@medicmultiservices.com')
+        }
+
+        if ($from=='vat.transp@medicmultiservices.com')
         {
             $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
-            $swiftTransport->setUsername('international@medicmultiservices.com');
-            $swiftTransport->setPassword('axa@mutA+18CN15#Pa');
-            $fromname="Medic' Multiservices";
+            $swiftTransport->setUsername('vat.transp@medicmultiservices.com');
+            $swiftTransport->setPassword('taxiVAt2018@&+15=-');
+            $fromname="Transport VAT";
+            $signatureentite= $parametres->signature5 ;
+
         }
+
+        if ($from=='operations@medicinternational.tn')
+        {
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport->setUsername('operations@medicinternational.tn');
+            $swiftTransport->setPassword('axa@mutA+18CN15');
+            $fromname="Medic' Multiservices";
+            $signatureentite= $parametres->signature6 ;
+
+        }
+
+
+        $contenu=$contenu.'<br>'.$signatureagent.'<br>'.$signatureentite;
 
 
         $swiftMailer = new Swift_Mailer($swiftTransport);
 
         Mail::setSwiftMailer($swiftMailer);
 
+        Log::info('test 1');
 
         try{
             Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails,$description,$from,$fromname ) {
@@ -3373,7 +3423,7 @@ if ($from=='najdassist@gmail.com')
                }
 
                 $user = auth()->user();
-                $nomuser=$user->name.' '.$user->name;
+                $nomuser=$user->name.' '.$user->lastname;
                 Log::info('[Agent: '.$nomuser.'] Envoi de mail '.$sujet);
 
                 $count=0;
@@ -3601,7 +3651,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                 }
 
                 $user = auth()->user();
-                $nomuser=$user->name.' '.$user->name;
+                $nomuser=$user->name.' '.$user->lastname;
                 Log::info('[Agent: '.$nomuser.'] Envoi de Fax à '.$to);
 
                 $urlapp=env('APP_URL');
@@ -3837,7 +3887,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         $envoye->save();
 
                 $user = auth()->user();
-                $nomuser=$user->name.' '.$user->name;
+                $nomuser=$user->name.' '.$user->lastname;
                 Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
 
                 $urlapp=env('APP_URL');

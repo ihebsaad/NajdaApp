@@ -195,11 +195,11 @@ $urlnotif=$urlapp.'/entrees/show/' ;
         function checkemails3(){
             $.ajax({
                 type: "get",
-                url: "<?php echo $urlapp; ?>/emails/checkboite2",
+                url: "<?php echo $urlapp; ?>/emails/checkboite3",
                 success:function(data)
                 {
                     //console.log the response
-                    console.log('check boite 2 : '+data);
+                    console.log('check boite 3 : '+data);
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails3();
@@ -208,23 +208,102 @@ $urlnotif=$urlapp.'/entrees/show/' ;
             });
         }
 
-
+//ambulance.transp1@medicmultiservices.com
         function checkemails4(){
             $.ajax({
                 type: "get",
-                url: "<?php echo $urlapp; ?>/emails/checkboite2",
+                url: "<?php echo $urlapp; ?>/emails/checkboite4",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check boite 4 : '+data);
+                    //Send another request in n seconds.
+                    setTimeout(function(){
+                        checkemails4();
+                    }, 30000);  //30 secds
+                }
+            });
+        }
+
+        function checkemails5(){
+            $.ajax({
+                type: "get",
+                url: "<?php echo $urlapp; ?>/emails/checkboite5",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check boite 5 : '+data);
+                    //Send another request in n seconds.
+                    setTimeout(function(){
+                        checkemails5();
+                    }, 30000);  //30 secds
+                }
+            });
+        }
+
+            //operations@medicinternational.tn
+        function checkemails6(){
+            $.ajax({
+                type: "get",
+                url: "<?php echo $urlapp; ?>/emails/checkboite6",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check boite 6 : '+data);
+                    //Send another request in n seconds.
+                    setTimeout(function(){
+                        checkemails6();
+                    }, 30000);  //30 secds
+                }
+            });
+        }
+
+        function checkemails7(){
+            $.ajax({
+                type: "get",
+                url: "<?php echo $urlapp; ?>/emails/checkboite7",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check boite 7 : '+data);
+                    //Send another request in n seconds.
+                    setTimeout(function(){
+                        checkemails7();
+                    }, 30000);  //30 secds
+                }
+            });
+        }
+
+        function checkemails8(){
+            $.ajax({
+                type: "get",
+                url: "<?php echo $urlapp; ?>/emails/checkboite8",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check boite 8 : '+data);
+                    //Send another request in n seconds.
+                    setTimeout(function(){
+                        checkemails8();
+                    }, 30000);  //30 secds
+                }
+            });
+        }
+        function checkemails9(){
+            $.ajax({
+                type: "get",
+                url: "<?php echo $urlapp; ?>/emails/checkboite9",
                 success:function(data)
                 {
                     //console.log the response
                     console.log('check boite 2 : '+data);
                     //Send another request in n seconds.
                     setTimeout(function(){
-                        checkemails3();
+                        checkemails9();
                     }, 30000);  //30 secds
                 }
             });
         }
-
 
         function checkfax(){
             $.ajax({
@@ -527,7 +606,14 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
         checkNotifs();
         checkemails();
-        checkemails2();
+       // checkemails2();
+      //  checkemails3();
+         checkemails4();
+       // checkemails5();
+       // checkemails6(); // working
+       // checkemails7();
+       // checkemails8();
+       // checkemails9();
         checksms();
         checkboite();
         checkfax();

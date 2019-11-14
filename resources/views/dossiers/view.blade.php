@@ -366,8 +366,8 @@ use  \App\Http\Controllers\EntreesController ;
                             <label>Spécialité</label>
                         </div>
                         <div class="row">
-                            <select class="form-control  col-lg-12 " style="width:400px" name="specialite"  required  id="specialite2">
-                                <option></option>
+                            <select class="form-control  col-lg-12 " style="width:400px" name="specialite"     id="specialite2">
+                                <option value="0"></option>
                                 @foreach($specialites as $sp)
                                     <option  <?php if($specialite==$sp->id){echo 'selected="selected"';}?>  class="tprest2" id="tprest2-<?php echo $sp->type_prestation;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
                                 @endforeach
@@ -414,7 +414,7 @@ use  \App\Http\Controllers\EntreesController ;
 
     <input type="hidden" name="dossier" value="<?php echo $dossier->id; ?>"/>
 
-    <input type="submit" value="envoyer" class="btn btn-success" style="width:150px"/>
+    <input type="submit" value="rechercher" class="btn btn-success" style="width:150px"/>
 
     <?php if (isset($datasearch)) { ?>
     <div class="row" style="margin-top:15px">  <label>Liste des Prestataires trouvés:</label>
@@ -515,11 +515,11 @@ use  \App\Http\Controllers\EntreesController ;
 
                              <div class="form-group ">
                                  <div class="row">
-                                     <label>Spécialité *</label>
+                                     <label>Spécialité </label>
                                  </div>
                                  <div class="row">
                                      <select class="form-control  col-lg-12 " style="width:400px" name="specialite"    id="specialite">
-                                         <option></option>
+                                         <option value="0"></option>
                                          @foreach($specialites as $sp)
                                              <option class="tprest" id="tprest-<?php echo $sp->type_prestation;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
                                          @endforeach

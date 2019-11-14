@@ -88,12 +88,11 @@
                  <label>Type de prestations</label>
                  <div class="row">
                      <select class="itemName form-control col-lg-6" style="width:100%" name="itemName"  multiple  id="typeprest" >
-                         <option></option>
-                         <?php if ( count($relations) > 0 ) { ?>
+                          <?php if ( count($relations) > 0 ) { ?>
 
                          @foreach($relations as $prest  )
                              @foreach($typesprestations as $aKey)
-                                 <option  @if($prest->type_prestation_id==$aKey->id)selected="selected"@endif    onclick="createtypeprest('tpr<?php echo $aKey->id; ?>')"  value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
+                                 <option  <?php if($prest->type_prestation_id==$aKey->id){echo 'selected="selected"';}?>    onclick="createtypeprest('tpr<?php echo $aKey->id; ?>')"  value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
                              @endforeach
                          @endforeach
 
@@ -115,10 +114,9 @@
              <label>Spécialités</label>
 
              <div class="row">
-                  <select class="form-control  col-lg-12 itemName " style="width:100%" name="specialite"  multiple  id="specialite" onchange="location.reload();">
+                  <select class="form-control  col-lg-12 itemName " style="width:100%" name="specialite"  multiple  id="specialite"  >
 
-                     <option></option>
-                     <?php if ( count($relations2) > 0 ) { ?>
+                      <?php if ( count($relations2) > 0 ) { ?>
 
                      @foreach($relations2 as $rel  )
                          @foreach($specialites2 as $sp)
@@ -1085,54 +1083,6 @@
 
 
     $(function () {
-/*
-
-        function removeprest(elm) {
-
-            var id= elm.id;
-            var typeprest= id.slice(5);
-            var prestataire = $('#idpres').val();
-
-            var _token = $('input[name="_token"]').val();
-            $.ajax({
-                url: "{{-- route('prestataires.removetypeprest') --}}",
-                method: "POST",
-                data: {prestataire: prestataire , typeprest:typeprest ,  _token: _token},
-                success: function (data) {
-                    $('#type'+typeprest).hide( "slow", function() {
-                        // Animation complete.
-                    });
-
-
-                }
-            });
-
-        }
-
-
-        function createtypeprest(id) {
-
-            var typeprest= id.slice(3);
-
-
-            var prestataire = $('#idpres').val();
-
-
-            var _token = $('input[name="_token"]').val();
-            $.ajax({
-                url: "{{-- route('prestataires.createtypeprest') --}}",
-                method: "POST",
-                data: {prestataire: prestataire , typeprest:typeprest ,  _token: _token},
-                success: function (data) {
-
-                    location.reload();
-
-                }
-            });
-
-
-        }
-  */
         $('#envoisms').click(function(){
             var description = $('#ladescription').val();
             var destinataire = $('#ledestinataire').val();
@@ -1253,58 +1203,50 @@
         } // updating
 
 
-
-
-
-
         $('#typeprest').select2({
             filter: true,
-        language: {
-            noResults: function () {
-                return 'Pas de résultats';
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
             }
-        }
 
         });
 
+        var $topo5 = $('#typeprest');
 
+        var valArray5 = ($topo5.val()) ? $topo5.val() : [];
 
-        var $topo = $('#typeprest');
-
-        var valArray = ($topo.val()) ? $topo.val() : [];
-
-        $topo.change(function() {
-            var val = $(this).val(),
-                numVals = (val) ? val.length : 0,
+        $topo5.change(function() {
+            var val5 = $(this).val(),
+                numVals5 = (val5) ? val5.length : 0,
                 changes;
-            if (numVals != valArray.length) {
+            if (numVals5 != valArray5.length) {
                 var longerSet, shortSet;
-                if(numVals > valArray.length) { longerSet = val }else{ longerSet = valArray;}
-               // (numVals > valArray.length) ? longerSet = val : longerSet = valArray;
-                (numVals > valArray.length) ? shortSet = valArray : shortSet = val;
+                (numVals5 > valArray5.length) ? longerSet = val5 : longerSet = valArray5;
+                (numVals5 > valArray5.length) ? shortSet = valArray5 : shortSet = val5;
                 //create array of values that changed - either added or removed
                 changes = $.grep(longerSet, function(n) {
                     return $.inArray(n, shortSet) == -1;
                 });
 
-                Updating(changes, (numVals > valArray.length) ? 'selected' : 'removed');
+                UpdatingT(changes, (numVals5 > valArray5.length) ? 'selected' : 'removed');
 
             }else{
                 // if change event occurs and previous array length same as new value array : items are removed and added at same time
-                Updating( valArray, 'removed');
-                Updating( val, 'selected');
+                UpdatingT( valArray5, 'removed');
+                UpdatingT( val5, 'selected');
             }
-            valArray = (val) ? val : [];
+            valArray5 = (val5) ? val5 : [];
         });
 
 
 
-        function Updating(array, type) {
-
+        function UpdatingT(array, type) {
             $.each(array, function(i, item) {
 
                 if (type=="selected"){
-                    alert('selected' +item);
+
 
                     var prestataire = $('#idpres').val();
                     var _token = $('input[name="_token"]').val();
@@ -1313,28 +1255,22 @@
                         url: "{{ route('prestataires.createtypeprest') }}",
                         method: "POST",
                         data: {prestataire: prestataire , typeprest:item ,  _token: _token},
-                        success: function (data) {
-                            if(data==1){
-                                $('.select2-selection').animate({
-                                    opacity: '0.3',
-                                });
-                                $('.select2-selection').animate({
-                                    opacity: '1',
-                                });
-
-                                location.reload();
-                            }
+                        success: function () {
+                            $('.select2-selection').animate({
+                                opacity: '0.3',
+                            });
+                            $('.select2-selection').animate({
+                                opacity: '1',
+                            });
+                            location.reload();
 
                         }
                     });
 
                 }
 
-                if (type=="removed"){ ////
-                    alert('removed' +item);
-
-                    // alert(item);
-                     var prestataire = $('#idpres').val();
+                if (type=="removed"){
+                    var prestataire = $('#idpres').val();
                     var _token = $('input[name="_token"]').val();
 
                     $.ajax({
@@ -1348,6 +1284,7 @@
                             $( ".select2-selection--multiple" ).show( "slow", function() {
                                 // Animation complete.
                             });
+
                             location.reload();
 
                         }
@@ -1624,7 +1561,7 @@
         // }
     }
 
-    $(document).ready(function() {
+  /*  $(document).ready(function() {
         $("#typeprest").select2();
         $("#typeprest").data('originalvalues', []);
         $("#typeprest").on('change', function(e) {
@@ -1651,5 +1588,5 @@
             alert("-- Removed: " + removed)
         });
     });
-
+*/
 </script>

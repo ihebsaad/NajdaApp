@@ -770,11 +770,11 @@ console.log('count notif Orange: ');
                 console.log('count notif orange: ' + countdata2);
 
                 // var count = parseInt(data);
-                //    if (count > 0) {
+                   if (parseInt(countdata2) > 0) {
                 document.getElementById('notiforange').innerHTML = '' + countdata2;
                 document.getElementById('totnotifs').style.background = '#FFCE54';
 
-                // }
+                 }
             }
         });
 
@@ -785,12 +785,12 @@ console.log('count notif Orange: ');
             success: function (countdata3) {
                 console.log('count notif rouge: ' + countdata3);
                 //   var count = parseInt(data);
-                //    if (count > 0) {
+                   if (parseInt(countdata3) > 0) {
 
                 document.getElementById('notifrouge').innerHTML = '' + countdata3;
                 document.getElementById('totnotifs').style.background = '#fc6e51';
 
-                //   }
+                    }
 
             }
         });

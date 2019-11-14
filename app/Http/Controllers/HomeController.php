@@ -473,7 +473,7 @@ return redirect('roles');
     public function parametres()
     {
 
-        if( \Gate::allows('isAdmin')   )
+        if( \Gate::allows('isAdmin')  || \Gate::allows('isFinancier')  )
         {
             $users = User::get();
             return view('parametres',['users'=>$users]);
@@ -489,7 +489,7 @@ return redirect('roles');
 
     public function supervision()
     {
-       if( \Gate::allows('isAdmin') || \Gate::allows('isSupervisor') )
+       if( \Gate::allows('isAdmin') || \Gate::allows('isSupervisor')  )
         {
             $users = User::get();
 

@@ -446,8 +446,8 @@ class ClientsController extends Controller
     {
 
         $id= $request->get('id');
-        $champ= strval($request->get('champ'));
-        $val=strval($request->get('val'));
+        $champ= trim($request->get('champ'));
+        $val=trim($request->get('val'));
          //  $dossier = Dossier::find($id);
         // $dossier->$champ =   $val;
         Adresse::where('id', $id)->update(array($champ => $val));

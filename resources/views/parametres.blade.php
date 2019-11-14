@@ -45,8 +45,15 @@
     $pass_VAT=$parametres->pass_VAT ;
     $pass_MEDIC=$parametres->pass_MEDIC ;
     $pass_TM=$parametres->pass_TM ;
-    $pass_MI=$parametres->pass_MI ;
     $pass_TV=$parametres->pass_TV ;
+
+    $pass_N=$parametres->pass_N ;
+    $pass_TN=$parametres->pass_TN ;
+    $pass_TPA=$parametres->pass_TPA ;
+    $pass_XP=$parametres->pass_XP ;
+    $pass_MI=$parametres->pass_MI ;
+
+
 
     ?>
 
@@ -282,31 +289,56 @@
                                      </td>
                                  </tr>
                                  <tr>
-                                           <td class="text-primary">Mot de Passe boite hotels.vat@medicmultiservices.com</td>
+                                     <td class="text-primary">Mot de Passe boite N <small>24ops@najda-assistance.com</small></td>
+                                     <td>
+                                         <input  type="password" class="form-control" onchange="changing(this)" id="pass_N" style="width:300px" value="<?php echo $pass_N; ?>"  />
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td class="text-primary">Mot de Passe boite TN <small>taxi@najda-assistance.com</small></td>
+                                     <td>
+                                         <input  type="password" class="form-control" onchange="changing(this)" id="pass_TN" style="width:300px" value="<?php echo $pass_TN; ?>"  />
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td class="text-primary">Mot de Passe boite TPA <small>tpa@najda-assistance.com</small></td>
+                                     <td>
+                                         <input  type="password" class="form-control" onchange="changing(this)" id="pass_TPA" style="width:300px" value="<?php echo $pass_TPA; ?>"  />
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td class="text-primary">Mot de Passe boite XP <small>xpress@najda-assistance.com</small></td>
+                                     <td>
+                                         <input  type="password" class="form-control" onchange="changing(this)" id="pass_XP" style="width:300px" value="<?php echo $pass_XP; ?>"  />
+                                     </td>
+                                 </tr>
+
+                                 <tr>
+                                     <td class="text-primary">Mot de Passe boite VAT <small>hotels.vat@medicmultiservices.com</small></td>
                                            <td>
                                                <input  type="password" class="form-control" onchange="changing(this)" id="pass_VAT" style="width:300px"  value="<?php echo $pass_VAT; ?>"  />
                                            </td>
                                        </tr>
                                        <tr>
-                                           <td class="text-primary">Mot de Passe boite assistance@medicmultiservices.com</td>
+                                           <td class="text-primary">Mot de Passe boite MEDIC <small>assistance@medicmultiservices.com</small></td>
                                            <td>
                                                <input  type="password" class="form-control" onchange="changing(this)" id="pass_MEDIC" style="width:300px"  value="<?php echo $pass_MEDIC; ?>"  />
                                            </td>
                                        </tr>
                                        <tr>
-                                           <td class="text-primary">Mot de Passe boite ambulance.transp@medicmultiservices.com</td>
+                                           <td class="text-primary">Mot de Passe boite TM <small>ambulance.transp@medicmultiservices.com</small></td>
                                            <td>
                                                <input  type="password" class="form-control" onchange="changing(this)" id="pass_TM" style="width:300px"  value="<?php echo $pass_TM; ?>"  />
                                            </td>
                                        </tr>
                                        <tr>
-                                           <td class="text-primary">Mot de Passe boite vat.transp@medicmultiservices.com</td>
+                                           <td class="text-primary">Mot de Passe boite TV <small>vat.transp@medicmultiservices.com</small></td>
                                            <td>
                                                <input  type="password" class="form-control" onchange="changing(this)" id="pass_TV" style="width:300px" value="<?php echo $pass_TV; ?>"  />
                                            </td>
                                        </tr>
                                        <tr>
-                                           <td class="text-primary">Mot de Passe boite international@medicmultiservices.com   </td>
+                                           <td class="text-primary">Mot de Passe boite MI <small>operations@medicinternational.tn</small></td>
                                            <td>
                                                <input  type="password" class="form-control" onchange="changing(this)" id="pass_MI" style="width:300px" value="<?php echo $pass_MI; ?>"  />
                                            </td>
@@ -397,13 +429,10 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
 
     ?>
                     <div id="tab4" class="tab-pane fade <?php if ($user_type=='financier'){echo 'in active';}?> " style="display:block">
-                        <div class="padding:20px 20px 20px 20px"><br>
+                        <div class="padding:10px 20px 20px 20px"><br>
                             <h4>Paramètres finances</h4><br>
-
                             <table class="table" style="width:600px">
-
                                 <form class="form-horizontal" method="POST"></form>
-
                                 {{ csrf_field() }}
                                 <tbody>
                                 <tr>

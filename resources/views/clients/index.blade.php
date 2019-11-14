@@ -29,16 +29,18 @@
             <tr id="headtable">
                 <th style="width:20%">Nom</th>
                 <th style="width:15%">Groupe</th>
-                <th style="width:15%">Pays</th>
-                <th style="width:30%">Nature</th>
+                <th style="width:10%">Pays</th>
+                <th style="width:20%">Nature</th>
+                <th style="width:10%">Statut</th>
                 <th style="width:10%"><small>Lang 1</small></th>
                 <th style="width:10%"><small>Lang 2</small></th>
               </tr>
             <tr>
                 <th style="width:20%">Nom</th>
                 <th style="width:15%">Groupe</th>
-                <th style="width:15%">Pays</th>
-                <th style="width:30%">Nature</th>
+                <th style="width:10%">Pays</th>
+                <th style="width:20%">Nature</th>
+                <th style="width:10%">Statut</th>
                 <th style="width:10%">Lang 1</th>
                 <th style="width:10%">Lang 2</th>
              </tr>
@@ -51,7 +53,7 @@
                 <tr>
                     <td style="width:20%"><a href="{{action('ClientsController@view', $client['id'])}}" >{{$client->name}}</a></td>
                     <td style="width:15%"><?php $groupeid= $client['groupe']; echo ClientsController::GroupeById($groupeid);?> </td>
-                    <td style="width:15%"><small>{{$client->pays2}}</small></td>
+                    <td style="width:10%"><small>{{$client->pays2}}</small></td>
                     <td style="width:20%">
 <?php  $nature = $client['nature'];
                       //echo  $listen[1];
@@ -69,6 +71,7 @@
 
       ?>
                     </td>
+                    <td style="width:10%"><?php if ($client->annule ==0){echo 'Actif';}else{echo 'Inactif';} ?></td>
                     <td style="width:10%"><small>{{$client->langue1}}</small></td>
                     <td style="width:10%"><small>{{$client->langue2}}</small></td>
 					

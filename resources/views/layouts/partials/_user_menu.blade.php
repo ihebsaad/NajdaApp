@@ -19,6 +19,7 @@
             $name=$user->name;
             $lastname=$user->lastname;
                 $iduser=$user->id;
+                $type=$user->user_type;
             ?>
 
             <b style="font-size: 16px;color:white;">   <?php echo $name .' '. $lastname; ?></b>
@@ -53,12 +54,15 @@
                 Mon profil
             </a>
         </li>
+        <?php if($type!='financier' && $type!='bureau'){ ?>
         <li style="margin-top:8px">
             <a href="{{ route('roles') }}">
                 <i class="fas fa-fw fa-lg fa-exchange-alt"></i>
                 Changer de rôle(s)
             </a>
         </li>
+        <?php } ?>
+
         <li role="presentation" class="divider"></li>
          <li style="margin-bottom:8px">
             <a href="{{ route('logout') }}">

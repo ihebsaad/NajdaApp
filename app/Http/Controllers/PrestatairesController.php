@@ -521,8 +521,8 @@ class PrestatairesController extends Controller
 
     public  function removetypeprest(Request $request)
     {
-        $prestataire= $request->get('prestataire');
-        $typeprest= $request->get('typeprest');
+        $prestataire= trim($request->get('prestataire'));
+        $typeprest= trim($request->get('typeprest'));
 
 
         DB::table('prestataires_type_prestations')
