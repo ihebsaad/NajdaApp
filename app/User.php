@@ -62,24 +62,8 @@ class User extends Authenticatable
    
      public function notes()
     {
-
-        //$currentDateTime = date('Y-m-d H:i:s');
-        //dd($currentDateTime);
-
-         $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i:s');
-
-         $notes=Note::where('date_rappel','<=', $dtc)->where('user_id', Auth::user()->id)->get();
-
-         //var_dump($notes);
-
-         foreach ($notes as $note) {
-
-             Note::where('id',$note->id)->update(['affichee' => 1]);
-            // dd($note);
-            
-         }
-
-       return $this->hasMany('App\Note')->where('date_rappel','<=', $dtc);
+        
+       return $this->hasMany('App\Note')->where('statut','active');
 
         // return  $notes;
     }

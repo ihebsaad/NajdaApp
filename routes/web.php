@@ -363,7 +363,11 @@ Route::get('/notes', array('as' => 'notes','uses' => 'NotesController@index'));
 Route::post('/notes/updating','NotesController@updating')->name('notes.updating');
 Route::get('/notes/view/{id}', 'NotesController@view');
 Route::post('/Note/store','NotesController@store')->name('Note.store');
-Route::get('/getNotesAjax','NotesController@getNotesAjax');
+Route::get('/getNotesReporteesAjax','NotesController@getNotesReporteesAjax');
+Route::get('/getNotesEnvoyeesAjax/','NotesController@getNotesEnvoyeesAjax');
+Route::get('/getAjaxUsersNote/{id}','NotesController@getAjaxUsersNote');
+Route::get('/EnvoyerNote/','NotesController@EnvoyerNote')->name('Envoyer.Note');
+
 Route::get('/getNotesAjaxModal','NotesController@getNotesAjaxModal');
 Route::get('/SupprimerNoteAjax/{id}','NotesController@SupprimerNoteAjax');
 Route::get('/SupprimerNote/{id}','NotesController@SupprimerNote');
@@ -562,3 +566,5 @@ Route::get('/ordremissions/pdfodmambulance','OrdreMissionsController@pdfodmambul
 Route::post('/ordremissions/export_pdf_odmambulance','OrdreMissionsController@export_pdf_odmambulance')->name('ordremissions.export_pdf_odmambulance');
 Route::get('/ordremissions/pdfodmremorquage','OrdreMissionsController@pdfodmremorquage')->name('ordremissions.pdfodmremorquage');
 Route::post('/ordremissions/export_pdf_odmremorquage','OrdreMissionsController@export_pdf_odmremorquage')->name('ordremissions.export_pdf_odmremorquage'); 
+Route::get('/ordremissions/pdfodmmedicinternationnal','OrdreMissionsController@pdfodmmedicinternationnal')->name('ordremissions.pdfodmmedicinternationnal');
+Route::post('/ordremissions/export_pdf_odmmedicinternationnal','OrdreMissionsController@export_pdf_odmmedicinternationnal')->name('ordremissions.export_pdf_odmmedicinternationnal');

@@ -1348,6 +1348,63 @@ $interv = PrestationsController::PrestById($prest);
                         @endforeach
                     <?php //endif
                             } ?>
+                    <?php if (! ($ommi->isEmpty())) { ?>  
+                        @foreach($ommi as $ommie)
+                            <tr>
+                                <td style=";"><?php echo $ommie->titre; ?></td>
+                                <td style=";">
+                                    <?php
+                                    if ($ommie->parent !== null)
+                                    {
+                                        echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$ommie->parent.');"><i class="far fa-eye"></i> Voir</button>';
+
+                                    }
+                                    else
+                                    {
+                                        echo "Aucun";
+                                    }
+                                    ?>
+                                </td>
+                                <?php
+                                $emppos=strpos($ommie->emplacement, '/OrdreMissions/');
+                                $empsub=substr($ommie->emplacement, $emppos);
+                                $pathomtx = storage_path().$empsub;
+                                //$templatedoc = $doc->template;
+                                ?>
+                                <td>
+                                    <div class="page-toolbar">
+
+                                        <div class="btn-group">
+                                            <?php
+                                            if (stristr($empsub,'annulation')=== FALSE)
+                                            {
+                                            ?>
+                                            <div class="btn-group" style="margin-right: 10px">
+                                                <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important; padding: 6px 6px!important;" id="btnannrempomtomre">
+                                                    <a style="color:black" href="#" id="annrempomtx" onclick="remplaceom(<?php echo $ommie->id; ?>,'<?php echo $ommie->affectea; ?>','ommie');"> <i class="far fa-plus-square"></i> Remplacer</a>
+                                                </button>
+                                            </div>
+
+                                            <div class="btn-group" style="margin-right: 10px">
+                                                <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,214,214) !important; padding: 6px 6px!important;" id="btnannomre">
+                                                    <a style="color:black"  onclick="annuleom('<?php echo $ommie->titre; ?>',<?php echo $ommie->id; ?>);" href="#" > <i class="far fa-window-close"></i> Annuler</a>
+                                                </button>
+                                            </div>
+                                            <?php
+                                            }
+                                            ?>
+                                            <div class="btn-group" style="margin-right: 10px">
+                                                <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important; padding: 6px 6px!important;" id="btntele">
+                                                    <a style="color:black" onclick='modalodoc("<?php echo $ommie->titre; ?>","{{ URL::asset('storage'.$empsub) }}");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    <?php //endif
+                            } ?>
                     </tbody>
                 </table>
 
@@ -1554,6 +1611,7 @@ $interv = PrestationsController::PrestById($prest);
                                           <option value="Taxi">Taxi</option>
                                           <option value="Ambulance">Ambulance</option>
                                           <option value="Remorquage">Remorquage</option>
+                                          <option value="Medic Internationnal">Medic Internationnal</option>
                                       <?php
                                          /* $usedtemplates = Document::where('dossier',$dossier->id)->distinct()->get(['template']);
                                           $usedtid=array();
@@ -2619,6 +2677,8 @@ function remplaceom(id,affectea,verif)
     var url = '<?php echo url('/'); ?>/public/preview_templates/odm_ambulance.php?remplace=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
     if(verif==='omre')
         var url = '<?php echo url('/'); ?>/public/preview_templates/odm_remorquage.php?remplace=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
+    if(verif==='ommie')
+        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_medic_international.php?remplace=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
 
          document.getElementById("omfilled").src = url;
          $("#idomparent").val(id);
@@ -2761,8 +2821,8 @@ function annuleom(titre,iddoc)
                     data:{dossier:dossier,title:titre,parent:iddoc, _token:_token},
                 success:function(data){
 
-                    alert(data);
-                    //location.reload();
+                    //alert(data);
+                    location.reload();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
 
@@ -3314,6 +3374,9 @@ function keyUpHandler(){
         {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_ambulance.php?dossier='+dossier+'&affectea='+affectea+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
         if (tempom === "Remorquage")
         {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_remorquage.php?dossier='+dossier+'&affectea='+affectea+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
+        if (tempom === "Medic Internationnal")
+            {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_medic_international.php?dossier='+dossier+'&affectea='+affectea+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
+
          document.getElementById("omfilled").src = url;
          
         
@@ -3424,6 +3487,8 @@ function keyUpHandler(){
         {var routeom = "{{ route('ordremissions.export_pdf_odmambulance') }}"; }
         if (srctemp.indexOf("/odm_remorquage") !== -1 )
         {var routeom = "{{ route('ordremissions.export_pdf_odmremorquage') }}"; }
+        if (srctemp.indexOf("/odm_medic") !== -1 )
+        {var routeom = "{{ route('ordremissions.export_pdf_odmmedicinternationnal') }}"; }
 
         $.ajax({
                 url:routeom,
@@ -3766,7 +3831,7 @@ function keyUpHandler(){
             // AMBULANCE
             if ((typeprestom==="Ambulance")&&(typeprestom !=="")) {typeprest=4; type=4; specialite=4;}
             // REMORQUAGE
-            if ((typeprestom==="Remorquage")&&(typeprestom !=="")) {typeprest=1; type=3; specialite=3;}
+            if ((typeprestom==="Remorquage")&&(typeprestom !=="")) {typeprest=1; type=1; specialite=3;}
             // cas remplace
             var srcomtemp = document.getElementById("omfilled").src;
             var posomtaxitemp = srcomtemp.indexOf("odm_taxi");
@@ -3774,7 +3839,7 @@ function keyUpHandler(){
             var posomremorquagetemp = srcomtemp.indexOf("odm_remorquage");
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomtaxitemp != -1)) {typeprest=2; type=2; specialite=2;}
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomambulancetemp != -1)) {typeprest=4; type=4; specialite=4;}
-            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=3; specialite=3;}
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=1; specialite=3;}
 
 
             var date = $('#pres_datem').val();
@@ -3996,7 +4061,7 @@ function keyUpHandler(){
             // AMBULANCE
             if ((typeprestom==="Ambulance")&&(typeprestom !=="")) {typeprest=4; type=4; specialite=4;}
             // REMORQUAGE
-            if ((typeprestom==="Remorquage")&&(typeprestom !=="")) {typeprest=1; type=3; specialite=3;}
+            if ((typeprestom==="Remorquage")&&(typeprestom !=="")) {typeprest=1; type=1; specialite=3;}
             // cas remplace
             var srcomtemp = document.getElementById("omfilled").src;
             var posomtaxitemp = srcomtemp.indexOf("odm_taxi");
@@ -4004,7 +4069,7 @@ function keyUpHandler(){
             var posomremorquagetemp = srcomtemp.indexOf("odm_remorquage");
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomtaxitemp != -1)) {typeprest=2; type=2; specialite=2;}
             if(((typeprestom === "") || (typeprestom === "Select"))&&(posomambulancetemp != -1)) {typeprest=4; type=4; specialite=4;}
-            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=3; specialite=3;}
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=1; specialite=3;}
             //document.getElementById('tprest2-'+typeprest).style.display='block';
 
             //  prest = $(this).val();

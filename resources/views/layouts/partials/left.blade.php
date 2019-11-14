@@ -43,6 +43,67 @@
         background-color: #3e8e41;
     }
 </style>
+<style>
+
+    #notificationkbsleft {
+    cursor: pointer;
+    position: fixed;
+    left: 0px;
+    z-index: 9997;
+    bottom: : 0px;
+    margin-bottom: 22px;
+    margin-left: 10px;
+    max-width: 450px;   
+     }
+   </style>
+   <script>
+     NotifyLeft = function(text, callback, close_callback, style) {
+
+  var time = '120000';
+  var $container = $('#notificationkbsleft');
+  var icon = '<i class="fa fa-info-circle "></i>';
+ 
+  if (typeof style == 'undefined' ) style = 'warning'
+  
+  var html = $('<div class="alert alert-' + style + '  hide">' + icon +  " " + text + '</div>');
+  
+  $('<a>',{
+    text: '×',
+    class: 'button close',
+    style: 'padding-left: 10px;',
+    href: '#',
+    click: function(e){
+      e.preventDefault()
+      close_callback && close_callback()
+      remove_notice()
+    }
+  }).prependTo(html)
+
+  $container.prepend(html)
+  html.removeClass('hide').hide().fadeIn('slow')
+
+  function remove_notice() {
+    html.stop().fadeOut('slow').remove()
+  }
+  
+  var timer =  setInterval(remove_notice, time);
+
+  $(html).hover(function(){
+    clearInterval(timer);
+  }, function(){
+    timer = setInterval(remove_notice, time);
+  });
+  
+  html.on('click', function () {
+    clearInterval(timer)
+    callback && callback()
+    remove_notice()
+  });
+  
+  
+}
+
+   </script>
 
 <?php
 use App\Notification;
@@ -88,7 +149,7 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
 }
 
 ?>
-
+<div id="notificationkbsleft"></div>
 <div class="panel panel-default"  id="notificationspanel">
     <div class="panel-heading" id="headernotifs">
         <h4 class="panel-title">Notifications</h4>
@@ -262,16 +323,16 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                             <!--<span style="font-size: 20px;">Ajouter une Note</span>-->
                         </div>
                         <div class="col-md-2">
-                            <a data-toggle="modal" data-target="#AjouterNote" href="javascript:void(0);" class="com_button" title="Ajouter une nouvelle Note"><img width="26" height="26" src="{{ asset('public/img/plus.png') }}"/></a>
+                            <a data-toggle="modal" data-target="#AjouterNote"  class="com_button" title="Ajouter une nouvelle Note"><img width="26" height="26" src="{{ asset('public/img/plus.png') }}"/></a>
                         </div>
 
                     </div>
                     <br>
 
-                    <?php $notes=Auth::user()->notes;?>
-
-
-
+                    <?php $notes=Auth::user()->notes->sortBy(function($t)
+                                        {
+                                          return $t->updated_at;
+                                        })->reverse();?>
 
                     @if($notes)
 
@@ -288,9 +349,10 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                                         <div class="dropdown">
                                             <button class="dropbtn"><i class="glyphicon glyphicon-pencil"></i></button>
                                             <div class="dropdown-content">
-                                                <a href="<?php echo $burl.'/SupprimerNote/'.$note->id ?>">Achever</a>
+                                                <a href="<?php echo $burl.'/SupprimerNote/'.$note->id ?>">Supprimer</a>
                                                 <a href="#" class="ReporterNote2" id="{{$note->id}}">Reporter</a>
                                                 <input id="noteh<?php echo $note->id ?>" type="hidden" class="form-control" value="{{$note->titre}}" name="note"/>
+                                                <a class="idNoteEnvoyerA" id="envoyer{{$note->id}}" href="javascript:void(0)">Envoyer à</a>
                                             </div>
                                         </div>
 
@@ -301,10 +363,15 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                                         <div class="panel panel-default">
                                             <div class="panel-heading <?php /*if($Mission->id ==$currentMission){echo 'active';}
                                                 else {if($Mission->dossier->id==$dosscourant){echo 'ColorerMissionsCourantes' ;}}*/ ?>">
-
+                                               @if($note->user_id==$note->emetteur_id)
                                                 <h4 class="panel-title">
                                                     <a data-toggle="collapse" href="#collapse{{$note->id}}">   {{$note->titre}}</a>
                                                 </h4>
+                                                @else
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" href="#collapse{{$note->id}}">   {{$note->titre}}</a> <span> ( envoyée par {{ $note->emetteur->name}} {{ $note->emetteur->lastname}})</span>
+                                                </h4>
+                                                @endif
                                             </div>
 
                                             <div id="collapse{{$note->id}}" class="panel-collapse collapse in">
@@ -406,7 +473,7 @@ if (isset($dossier))
 <?php } ?>
 
 
-<div class="modal fade" id="AjouterNote" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+<div class="modal fade" id="AjouterNote"  role="dialog" aria-labelledby="basicModal" aria-hidden="true">
 
              <div class="modal-dialog">
              <div class="modal-content">
@@ -415,7 +482,7 @@ if (isset($dossier))
              <h4 class="modal-title" id="myModalLabel">Créer une nouvelle note</h4>
              </div>
 
-             <form action="{{route('Note.store')}}" method="POST">
+             <form id="idFormCreerNote" action="" method="POST">
              <div class="modal-body">
              <!-- début les inputs-->
 
@@ -427,7 +494,7 @@ if (isset($dossier))
                     <label  style=" ;  text-align: left; width: 40px;">Titre:</label>
                   </div>
                    <div class="col-md-8">
-                    <input id="titre" type="text" class="form-control" style="width:80%;  text-align: left !important;" name="titre"/>
+                    <input id="titreNote" type="text" class="form-control" style="width:80%;  text-align: left !important;" name="titreNote" autocomplete="off"/>
                   </div>
               </div>
               </div>
@@ -438,7 +505,7 @@ if (isset($dossier))
                         <label for="descrip" style="display: inline-block;  text-align: right; width: 40px;">Contenu</label>
                       </div>
                       <div class="col-md-8">
-                        <textarea id="descrip" type="text" class="form-control" style="width:80%;  text-align: left;" name="descrip"></textarea>
+                        <textarea id="descripNote" type="text" class="form-control" style="width:80%;  text-align: left;" name="descripNote"></textarea>
                       </div>
                   </div>
               </div>
@@ -447,12 +514,47 @@ if (isset($dossier))
 
               <div class="row">
                 <div class="col-md-4">
-               <?php $da = (new \DateTime())->modify('-1 Hour')->format('Y-m-d\TH:i:s'); ?>
+               <?php $da = (new \DateTime())->format('Y-m-d\TH:i'); ?>
                <label for="daterappel" style="display: inline-block;  text-align: left; width:200px;"> la date de rappel</label>
                </div>
 
               <div class="col-md-8">
-             <input id="daterappel" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:80%; flow:right; display: inline-block; text-align: right;" name="daterappel"/>
+             <input id="daterappelNote" type="datetime-local" value="<?php echo $da ?>" class="form-control" style="width:80%; flow:right; display: inline-block; text-align: right;" name="daterappelNote"/>
+             </div>
+             </div>
+             </div>
+
+
+             <div class="form-group">
+
+              <div class="row">
+                <div class="col-md-4">
+               
+               <label for="daterappel" style="display: inline-block;  text-align: left; width:200px;"> Envoyer à </label>
+               </div>
+
+              <div class="col-md-8">
+          
+
+             <select id="EnvoyerNoteId" name="EnvoyerNoteId" class="form-control select2" style="width: 80%;">
+                                            <option value="">Selectionner</option>
+                                            <?php $agents = App\User::get(); ?>
+                                           
+                                                @foreach ($agents as $agt)
+                                                <?php if (!empty ($agentname)) { ?>
+                                                @if ($agentname["id"] == $agt["id"])
+                                                    <option value={{ $agt["id"] }} selected >{{ $agt["name"] }}</option>
+                                                @else
+                                                    <option value={{ $agt["id"] }} >{{ $agt["name"] }}</option>
+                                                @endif
+                                                
+                                                <?php }
+                                                else
+                                                      {  echo '<option value='.$agt["id"] .' >'.$agt["name"].'</option>';}
+                                                ?>
+                                                @endforeach    
+                </select>
+
              </div>
              </div>
              </div>
@@ -462,7 +564,7 @@ if (isset($dossier))
              </div>
              <div class="modal-footer">
              <a href="#" type="button" class="btn btn-default" data-dismiss="modal">Fermer</a>
-             <button type="submit" class="btn btn-primary">Enregister</button>
+             <button id="idEnregisterNote" type="button" class="btn btn-primary">Enregister</button>
              </div>
 
            </form>
@@ -513,18 +615,164 @@ if (isset($dossier))
 
     </div>
 </div>
+<!-- debut traitement modal notes à envoyer-->
+<div class="modal fade" id="myNoteModalEnvoyer" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" id="EnoyerNotekbs" role="document">
+       
+    </div>
+</div>
+
+<script>
+
+   $(document).on("click",".idNoteEnvoyerA",function() {
+
+          var idwn=$(this).attr("id");
+          idwn=idwn.substring(idwn.indexOf('r')+1);
+        // alert(idwn.substring(idwn.indexOf('r')+1));  
+         // alert('doudou');
+      $.ajax({
+           
+            url : '{{ url('/') }}'+'/getAjaxUsersNote/'+idwn,
+            type : 'GET',
+            dataType : 'html', 
+            success : function(data){
+
+              if (data)
+              {
+                 $('#EnoyerNotekbs').html(data);
+                 $('#myNoteModalEnvoyer').modal('show');
+              }
+
+            }
+
+
+        })
+
+
+    });
+</script>
+
+<script>
+
+   
+    $(document).on("click",".BoutonEnvoyerNote",function() {
+
+     // alert("et oui");  
+       var idwn=$(this).attr("id"); 
+    //   alert(idwn);
+
+     $("#"+idwn).attr("disabled", true);
+     
+     
+    var donnees = $('#idFormUsersNote').serialize(); // On créer une variable content le formulaire sérialisé
+    if(donnees)
+    {
+
+    // alert(donnees);
+
+    }
+
+    //var _token = $('input[name="_token"]').val();
+    $.ajax({
+
+           url:"{{ route('Envoyer.Note') }}",
+           method:"get",
+           data : donnees,
+           success:function(data){
+         
+               // alert("Note créee");
+              alert(data);
+             if(data=="la note est envoyée")
+             {
+
+                        $("#myNoteModalEnvoyer").modal('hide');
+                        location.reload();
+
+             }
+
+                },
+            error: function(jqXHR, textStatus, errorThrown) {
+
+              alert('erreur lors de création de la Note');
+
+
+            }
+
+   
+    });
+
+
+    $("#"+idwn).attr("disabled",false);
+
+
+    });// fin $document clik boutonEnvoyerNote
+
+
+</script>
+
+
 
 
 <script src="{{ URL::asset('resources/assets/js/alertify.js') }}"></script>
 
 <script>
+   $(document).ready(function() {
+
+     setInterval(function(){
+        //alert("Hello");
 
 
-    /*function playSound() {
+        $.ajax({
+            //url : '{{ url('/') }}'+'/getNotesAjaxModal',
+            url : '{{ url('/') }}'+'/getNotesEnvoyeesAjax',
+            type : 'GET',
+            dataType : 'html', // On désire recevoir du HTML
+            success : function(data){ // code_html contient le HTML renvoyé
+                //alert (data);
+
+                if(data)
+                {
+                 
+                    var sound = document.getElementById("audiokbs");
+                    sound.setAttribute('src', "{{URL::asset('public/media/point.mp3')}}");
+                    sound.play();
+
+           
+                  NotifyLeft("<b>"+data+"</b>",
+                    function () { 
+                      //alert("clicked notification")
+                    },
+                    function () { 
+                      //alert("clicked x")
+                    },
+                    'success'
+                  );
+
+                alertify.alert("Réception d\'une nouvelle Note","<h3><i> "+data+"</i></h3>").show();
 
 
-     }*/
+                    /*ropdown).hide();
+                    $("#hiddenreporter").hide();
 
+
+                    $("#myNoteModalReporter1").modal('show');
+                    idNote=jQuery(data).find('.rowkbs').attr("id");
+                    dataNote=jQuery(data).find('#'+idNote).html();
+                    hrefidAchever=jQuery(data).find('#idAchever').attr("href");*/
+
+
+                }
+            }
+        });
+
+
+
+    }, 12000);
+
+   /*  fin de gestion des notes envoyées */
+
+
+    /*  début de gestion des notes reportées */
     var idNote;
     var dataNote;
     var iddropdown;
@@ -534,9 +782,9 @@ if (isset($dossier))
         //alert("Hello");
 
 
-
         $.ajax({
-            url : '{{ url('/') }}'+'/getNotesAjaxModal',
+            //url : '{{ url('/') }}'+'/getNotesAjaxModal',
+            url : '{{ url('/') }}'+'/getNotesReporteesAjax',
             type : 'GET',
             dataType : 'html', // On désire recevoir du HTML
             success : function(data){ // code_html contient le HTML renvoyé
@@ -544,26 +792,31 @@ if (isset($dossier))
 
                 if(data)
                 {
-
-
-                    // alert ("des nouvelles notes sont activées");
-                    //$("#contenuNotes").prepend(data);
+                 
                     var sound = document.getElementById("audiokbs");
                     sound.setAttribute('src', "{{URL::asset('public/media/point.mp3')}}");
                     sound.play();
 
-                    // alertify.alert("Note","Une nouvelle note est activée").show();
+           
+                  NotifyLeft("<b>"+data+"</b>",
+                    function () { 
+                      //alert("clicked notification")
+                    },
+                    function () { 
+                      //alert("clicked x")
+                    },
+                    'success'
+                  );
+                     alertify.alert("Nouvelle Note","<h3><i>"+data+"</i></h3>").show();
 
-                    $("#contenuNotesModal").empty().append(data);
-                    iddropdown=jQuery(data).find('.dropdown').attr("id");
-                    $("#"+iddropdown).hide();
+                    /*ropdown).hide();
                     $("#hiddenreporter").hide();
 
 
                     $("#myNoteModalReporter1").modal('show');
                     idNote=jQuery(data).find('.rowkbs').attr("id");
                     dataNote=jQuery(data).find('#'+idNote).html();
-                    hrefidAchever=jQuery(data).find('#idAchever').attr("href");
+                    hrefidAchever=jQuery(data).find('#idAchever').attr("href");*/
 
 
 
@@ -575,6 +828,8 @@ if (isset($dossier))
 
 
     }, 10000);
+
+  });
 
 
     $(document).ready(function() {
@@ -662,7 +917,9 @@ if (isset($dossier))
             II=ten(date.getMinutes()),
             SS=ten(date.getSeconds());
 
-        return YYYY+'-'+MM+'-'+DD+'T'+HH+':'+II+':'+SS;
+        //return YYYY+'-'+MM+'-'+DD+'T'+HH+':'+II+':'+SS;
+
+        return YYYY+'-'+MM+'-'+DD+'T'+HH+':'+II;
 
 
     };
@@ -696,7 +953,7 @@ if (isset($dossier))
             // alert(k);
 
             //alert(JSON.stringify(data));
-            data+='<div class="row"><div class="col-md-4"><label for="daterappel" style="display: inline-block;  text-align: left; width:200px;"> la nouvelle date de rappel</label></div><div class="col-md-8"> <input id="daterappel" type="datetime-local" value="'+k+'" class="form-control" style="width:80%; flow:right; display: inline-block; text-align: right;" name="daterappelNote"/></div></div>';
+            data+='<div class="row"><div class="col-md-4"><label for="daterappel" style="display: inline-block;  text-align: left; width:200px;"> la nouvelle date de report</label></div><div class="col-md-8"> <input id="daterappel" type="datetime-local" value="'+k+'" class="form-control" style="width:80%; flow:right; display: inline-block; text-align: right;" name="daterappelNote"/></div></div>';
 
 
             data+=' </p></div> <div class="modal-footer"><button id="" type="submit" class="btn btn-default" >Reporter</button><a href="" class="btn btn-default" data-dismiss="modal">Annuler</a>  </div></form>';
@@ -816,7 +1073,82 @@ console.log('count notif Orange: ');
 
 </script>
 
+ <script>
+ $(document).ready(function() {
+ $("#EnvoyerNoteId").select2();
+});
+</script>
+<script type="text/javascript">
 
+   $("#idEnregisterNote").click(function(e){ 
+
+    $("#idEnregisterNote").attr("disabled", true);
+
+     var en=true;
+
+     if(!$('#idFormCreerNote #titreNote').val())
+     {
+
+      alert('vous devez remplir le champs titre de la note');
+      en=false;
+
+     }
+
+     if(!$('#idFormCreerNote #descripNote').val())
+     {
+
+      alert('vous devez saisir le contenu de la note');
+      en=false;
+
+     }
+
+  
+
+ if(en==true)
+   {
+    var donnees = $('#idFormCreerNote').serialize(); // On créer une variable content le formulaire sérialisé
+    var _token = $('input[name="_token"]').val();
+    $.ajax({
+
+           url:"{{route('Note.store')}}",
+           method:"POST",
+           data : donnees,
+           success:function(data){
+
+            //alert(data);
+         
+                alert("Note créee");
+                //alert(data);
+                 $('#idFormCreerNote #descripNote').val('');
+                 //$('#idFormCreationMission #typeMissauto option:eq(1)').prop('selected', true);
+                //$('#idFormCreationMission #typeMissauto').text('Sélectionner');
+                $('#idFormCreerNote #titreNote').val('');
+                //$('#typeMissauto option[value=selectkbs]').attr("selected", "selected");
+                $("#idFormCreerNote #EnvoyerNoteId").select2("val", "Sélectionner");
+
+                 //var curr_date=toDatetimeLocal();
+
+                 $('#idFormCreerNote #daterappelNote').val(data);
+
+     
+                },
+            error: function(jqXHR, textStatus, errorThrown) {
+
+              alert('erreur lors de création de la Note');
+
+
+            }
+
+   
+    });
+  }
+
+   $("#idEnregisterNote").attr("disabled",false);
+
+});
+
+
+</script>
  
 
 
