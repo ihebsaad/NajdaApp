@@ -1099,7 +1099,7 @@
                                 <div class="form-group " >
                                     <label for="adresse">Fax</label>
                                     <div class=" row  ">
-                                        <input class="form-control" type="text" required id="champ3"  onchange="checkexiste(this,'fax')"/>
+                                        <input class="form-control" type="number" required id="champ3"  onchange="checkexiste(this,'fax')"/>
 
                                     </div>
                                 </div>

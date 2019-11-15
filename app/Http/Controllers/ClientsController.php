@@ -32,29 +32,16 @@ class ClientsController extends Controller
      */
     public function index()
     {
-        $minutes= 120;
-        $minutes2= 600;
 
-        //      $typesMissions=TypeMission::get();
-        $dossiers = Cache::remember('dossiers',$minutes,  function () {
 
-            return Dossier::all();
-        });
+        $villes = Ville::all();
 
-        $villes = Cache::remember('villes',$minutes2,  function () {
 
-            return Ville::all();
+        $countries = DB::table('apps_countries')->select('id', 'country_name')->get();
 
-        });
+       $clients = Client::orderBy('created_at', 'desc')->get();
 
-      /*  $clients = Cache::remember('clients',$minutes,  function () {
-
-            return  Client::orderBy('created_at', 'desc')->paginate(10000000);
-
-        });*/
-       $clients = Client::orderBy('created_at', 'desc')->paginate(10000000);
-
-        return view('clients.index',['dossiers' => $dossiers,'villes' => $villes], compact('clients'));
+        return view('clients.index',[ 'countries'=>$countries,'villes' => $villes], compact('clients'));
     }
 
  
@@ -80,8 +67,8 @@ class ClientsController extends Controller
     public function store(Request $request)
     {
         $client = new Client([
-             'nom' =>trim( $request->get('nom')),
-             'typepres' => trim($request->get('typepres')),
+             'nom' =>trim( $request->get('name')),
+             'pays2' => trim($request->get('pays')),
             // 'par'=> $request->get('par'),
 
         ]);
@@ -97,7 +84,7 @@ class ClientsController extends Controller
 
             $client = new Client([
                 'name' => $request->get('name'),
-                'pays' => $request->get('pays'),
+                'pays2' => $request->get('pays'),
 
             ]);
             if ($client->save())

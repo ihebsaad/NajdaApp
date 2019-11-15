@@ -1807,15 +1807,15 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
             
         }
 
-      // $dossiersdb= Dossier::where('current_status','actif')->pluck('id');
+      $dossiersdb= Dossier::where('current_status','actif')->pluck('id');
 
 
-       // $dossiersactifs = array_merge($dossiersactifsparmissions,$dossiersdb->toArray());
-       // $dossiersactifs =array_unique ($dossiersactifs);
+        $dossiersactifs = array_merge($dossiersactifsparmissions,$dossiersdb->toArray());
+      $dossiersactifs =array_unique ($dossiersactifs);
 
-         // return ($dossiersactifs);
+          return ($dossiersactifs);
 
-        return array_unique($dossiersactifsparmissions);
+       // return array_unique($dossiersactifsparmissions);
 
     }
 

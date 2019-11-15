@@ -97,15 +97,17 @@ class EmailController extends Controller
         ]);
 
 */
+
         $oClient = new Client([
-            'host'          => 'pop3.tunet.tn',// env('hostreception'),
-            'port'          => '110',// env('portreception'),
-            //    'encryption'    => '',//env('encreception'),
-            'validate_cert' => true,
-            'username'      =>'ambulance.transp1@medicmultiservices.com',
-            'password'      => 'umH01catA+B@Kc15#Pa',
+            'host'          => 'mail.bmail.tn',// env('hostreception'),
+            'port'          => '995',// env('portreception'),
+            'encryption'    => 'ssl',//env('encreception'),
+            'validate_cert' => false,
+            'username'      =>'vat.transp@medicmultiservices.com',
+            'password'      => 'taxiVAt2018@&+15=-',
             'protocol'      => 'pop3'
         ]);
+
 //Connect to the IMAP Server
         $oClient->connect();
 
@@ -995,9 +997,9 @@ class EmailController extends Controller
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
-        $aMessage = $oFolder->messages()->all()->get();
-        /** @var \Webklex\IMAP\Message $oMessage */$c=0;
-        foreach ($aMessage as $oMessage) {$c++;
+         $aMessage = $oFolder->messages()->all()->get();
+         /** @var \Webklex\IMAP\Message $oMessage */
+        foreach ($aMessage as $oMessage) {
 
 
             //  $nbattachs=10;
@@ -1012,11 +1014,8 @@ class EmailController extends Controller
             $mailid=$oMessage->getUid();
 
 
-            Log::info('Email date '.$date);
-            Log::info('Email from '.$from);
-
             //Move the current Message to 'INBOX.read'
-            if ($oMessage->moveToFolder('read') == true) {
+          //  if ($oMessage->moveToFolder('INBOX.read') == true) {
 
                 // get last id
                 $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
@@ -1197,19 +1196,15 @@ class EmailController extends Controller
                     $oMessage->moveToFolder('INBOX') ;
                 }
 
-
-
-            } else {
-                // error
-                echo 'error';
-            }
-
-
+          /*  } else {
+                 echo 'error moving the email';
+            }*/
         }
         return $firstid;
         // return view('emails.check');
 
     }
+
 // Boite TV
     function checkboite5()
     {
@@ -1218,13 +1213,13 @@ class EmailController extends Controller
         $pass_TV=$parametres->pass_TV ;
 
         $oClient = new Client([
-            'host'          => 'ssl0.ovh.net',// env('hostreception'),
-            'port'          => '993',// env('portreception'),
-            //    'encryption'    => '',//env('encreception'),
-            'validate_cert' => true,
+            'host'          => 'mail.bmail.tn',// env('hostreception'),
+            'port'          => '995',// env('portreception'),
+                 'encryption'    => 'ssl',//env('encreception'),
+            'validate_cert' => false,
             'username'      =>'vat.transp@medicmultiservices.com',
-            'password'      => $pass_TV,
-            'protocol'      => 'imap'
+            'password'      => 'taxiVAt2018@&+15=-',
+            'protocol'      => 'pop3'
         ]);
 
 //Connect to the IMAP Server
@@ -3343,8 +3338,9 @@ if ($from=='najdassist@gmail.com')
 
         if ($from=='ambulance.transp@medicmultiservices.com')
         {
-            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25');
-            $swiftTransport->setUsername('ambulance.transp1@medicmultiservices.com');
+          // $swiftTransport =  new \Swift_SmtpTransport( 'mail.bmail.tn', '25');
+            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25','');
+            $swiftTransport->setUsername('ambulance.transp@medicmultiservices.com');
             $swiftTransport->setPassword('umH01catA+B@Kc15#Pa');
             $fromname="Transport MEDIC";
             $signatureentite= $parametres->signature4 ;

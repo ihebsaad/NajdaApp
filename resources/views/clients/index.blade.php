@@ -117,7 +117,13 @@
 
                             <div class="form-group">
                                 <label for="type">Pays :</label>
-                                <input class="form-control" type="text" id="pays" />
+                                <select class="form-control" id="pays2" class="form-control"    >
+                                    <option></option>
+                                    @foreach($countries as $pays  )
+                                        <option  value="{{$pays->country_name }}">{{$pays->country_name }}</option>
+                                    @endforeach
+
+                                </select>
                             </div>
 
                         </form>
@@ -235,7 +241,7 @@
 
             $('#add').click(function(){
                 var name = $('#name').val();
-                var pays = $('#pays').val();
+                var pays = $('#pays2').val();
                 if ((name != '')&&(pays != '') )
                 {
                     var _token = $('input[name="_token"]').val();

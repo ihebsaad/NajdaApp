@@ -14,6 +14,7 @@ class Client extends Model
 'langue2',
 'nature',
 'pays',
+'pays2',
 'mail',
 'tel',
 'fax',
