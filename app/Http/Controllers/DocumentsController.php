@@ -198,11 +198,47 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                     }
              
             }
-        }
+        }// fin cas location voiture
+
+
+          // cas expertise ; date heure rendez-vous expertise
+
+        if (strpos($file, 'PEC_expertise') !== false || strpos($file, 'PEC_expertise') !== false ) 
+        {
+            if (isset($_POST['CL_date_heure_debut']))
+            {
+
+
+              $format = "Y-m-d\TH:i";              
+              $datespe = \DateTime::createFromFormat($format,$_POST['CL_date_heure_debut']);
+
+               $miss=Mission::where('id',$_POST['idMissionDoc'])->first();
+
+               if($miss)
+               {
+
+                    if($miss->type_Mission==39)// expertise
+                    {
+                     
+                                                 
+                        $miss->update(['date_spec_affect'=>1]); 
+
+                          $miss->update(['h_rdv'=>$datespe]);
+
+                        //return 'date affectée'; 
+                   
+                    }
+                }
+             
+            }
+        }// fin expertise
+
 
        // return $_POST['idMissionDoc'];
 
     }// fin issset (idmissdoc)
+
+// ------------------------fin gestion dates spécifique------------------//
 
     // mise a jour montant GOP
     /*if (isset($_POST['CL_montant_numerique']) || isset($_POST['CL_montant_total']) )
@@ -332,11 +368,11 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
 
     // creation du fichier PDF
     $nfsansext = substr($name_file, 0, -3);
-    Converter::file(storage_path().'/app/documents/'.$refdoss.'/'.$name_file) // select a file for convertion
-        ->setLibreofficeBinaryPath('/usr/bin/libreoffice') // binary to the libreoffice binary
-        ->setTemporaryPath(storage_path().'/temp') // temporary directory for convertion
-        ->setTimeout(100) // libreoffice process timeout
-        ->save(storage_path().'/app/documents/'.$refdoss.'/'.$nfsansext.'pdf'); // save as pdf
+    /*Converter::file(storage_path().'/app/documents/'.$refdoss.'/'.$name_file) 
+        ->setLibreofficeBinaryPath('/usr/bin/libreoffice') 
+        ->setTemporaryPath(storage_path().'/temp') 
+        ->setTimeout(100) 
+        ->save(storage_path().'/app/documents/'.$refdoss.'/'.$nfsansext.'pdf'); */
 
        // verifier la creation du PDF puis supprimer le fichier DOC generant   
         
