@@ -532,16 +532,31 @@ class OrdreMissionsController extends Controller
                     // affecter date  prévue destination ( prévue fin de mission)
                if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))    
         		{
-                    //$format ='Y-m-d H:i';
-                     $datefinMiss=$omambulance->dharrivedest;
-                     //str_replace("T"," ",$datePourSuiviMiss);
-                     //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss); 
-                     $dateFM= date('Y-m-d H:i',strtotime($datefinMiss));
 
-                     //$datePourSuivi = \DateTime::createFromFormat($format, $datePourSuiviMiss);
+        			$miss=Mission::where('id',$_POST['idMissionOM'])->first();
 
-                     $miss=Mission::where('id',$_POST['idMissionOM'])->first();
-                     $miss->update(['h_arr_prev_dest'=>  $dateFM,'date_spec_affect2'=> true]);
+        			if($miss)
+        			{
+
+        				if($miss->type_Mission==16 ) // Début Devis transport international sous assistance
+                         {
+
+
+                         	//dd($miss->type_Mission);
+
+		                    //$format ='Y-m-d H:i';
+		                     /*$heure_decollage=$omambulance->CL_heure_D_A;
+		                     $d=date('Y-m-d ');
+		                     $d+=$heure_decollage;*/
+		                     //dd($d);
+		                     //str_replace("T"," ",$datePourSuiviMiss);
+		                     //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss); 
+		                    /* $datedec= date('Y-m-d H:i',strtotime($d));*/
+
+		                     //$datePourSuivi = \DateTime::createFromFormat($format, $datePourSuiviMiss);
+		                    /*  $miss->update(['h_decoll_ou_dep_bat'=>  $datedec,'date_spec_affect1'=> true]);*/
+		                 }
+                    }
                  }
 
 
@@ -617,24 +632,73 @@ class OrdreMissionsController extends Controller
         	$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         }
 
+
+
+  
+        if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))    
+        		{
+
+        			$miss=Mission::where('id',$_POST['idMissionOM'])->first();
+
+        			if($miss)
+        			{
+
+        				if($miss->type_Mission==16) // Début Devis transport international sous assistance
+                         {
+
+		                    /* $heure_decollage=$_POST['CL_heure_D_A'];		                   
+		                     $d=date('Y-m-d');
+		                     $d=$d.' '.$heure_decollage;
+		            
+		                     $datedec= date('Y-m-d H:i',strtotime($d));
+                           
+		                     $miss->update(['h_decoll_ou_dep_bat'=>  $datedec,'date_spec_affect'=> true]);
+
+		                      return 'ok';
+                             exit();*/
+		                 }
+		                  if($miss->type_Mission==18) // Demande d’evasan internationale ; il faut passer par mission ambulance
+			            {
+
+			            	 /*$heure_atterissage=$_POST['CL_heure_D_A'];		                   
+		                     $d=date('Y-m-d');
+		                     $d=$d.' '.$heure_atterissage;
+		            
+		                     $dateatter= date('Y-m-d H:i',strtotime($d));
+                           
+		                     $miss->update(['h_arr_prev_dest'=>  $dateatter,'date_spec_affect'=> true]);
+
+		                      return 'ok';
+                             exit();*/
+
+
+			            }
+
+			              if($miss->type_Mission==44) //  mission remorquage
+			            {
+
+			            	/* $heure_depart=$_POST['dateheuredep'];	
+			            	 $heure_retour_base=$_POST['dateheuredispprev'];	                   
+		                     $d=date('Y-m-d');
+		                     $d=$d.' '.$heure_atterissage;
+		            
+		                     $dateatter= date('Y-m-d H:i',strtotime($d));
+                           
+		                     $miss->update(['h_arr_prev_dest'=>  $dateatter,'date_spec_affect'=> true]);
+
+		                      return 'ok';
+                             exit();*/
+
+
+			            }
+                    }
+                 }
+
+
         
         $result = $omambulance->update($request->all());
 
 
-
-        if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))     
-        {
-         //$format ='Y-m-d H:i';
-         $datePourSuiviMiss=$omambulance->CL_heuredateRDV;
-         //str_replace("T"," ",$datePourSuiviMiss);
-         //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss); 
-         $datePourSuivi= date('Y-m-d H:i',strtotime($datePourSuiviMiss));
-
-         //$datePourSuivi = \DateTime::createFromFormat($format, $datePourSuiviMiss);
-
-         $miss=Mission::where('id',$_POST['idMissionOM'])->first();
-         $miss->update(['h_dep_pour_miss'=> $datePourSuivi,'date_spec_affect'=> true]);
-        }       
 
 
 
@@ -896,7 +960,7 @@ class OrdreMissionsController extends Controller
                     //echo "remplacement";
                     $parent = $_POST['parent'];
                     $count = OMRemorquage::where('parent',$parent)->count();
-                    OMAmbulance::where('id', $parent)->update(['dernier' => 0]);
+                    OMRemorquage::where('id', $parent)->update(['dernier' => 0]);
                     $omparent=OMRemorquage::where('id', $parent)->first();
                     $filename='remorquage_Remplace-'.$parent;
 
@@ -934,9 +998,9 @@ class OrdreMissionsController extends Controller
 	        		{	
                     	$prestambulance = $_POST['type_affectation_post'];
 	        		}
-                    OMAmbulance::where('id', $parent)->update(['dernier' => 0]);
-                    $omparent=OMAmbulance::where('id', $parent)->first();
-                    $filename='ambulance_Complet-'.$parent;
+                    OMRemorquage::where('id', $parent)->update(['dernier' => 0]);
+                    $omparent=OMRemorquage::where('id', $parent)->first();
+                    $filename='remorquage_Complet-'.$parent;
                     $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
                     $name='OM - '.$name;
                     $path= storage_path()."/OrdreMissions/";
@@ -966,15 +1030,21 @@ class OrdreMissionsController extends Controller
                     if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))
                     {
                         //$format ='Y-m-d H:i';
-                        $datefinMiss=$omremorquage->dharrivedest;
+                        $datedebMiss=$_POST['dateheuredep'];
                         //str_replace("T"," ",$datePourSuiviMiss);
                         //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss);
-                        $dateFM= date('Y-m-d H:i',strtotime($datefinMiss));
+                        $datedebMiss= date('Y-m-d H:i',strtotime($datedebMiss));
+
+                        $datefinMiss=$_POST['dateheuredispprev'];
+                        //str_replace("T"," ",$datePourSuiviMiss);
+                        //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss);
+                        $datefinMiss= date('Y-m-d H:i',strtotime($datefinMiss));
 
                         //$datePourSuivi = \DateTime::createFromFormat($format, $datePourSuiviMiss);
 
                         $miss=Mission::where('id',$_POST['idMissionOM'])->first();
-                        $miss->update(['h_arr_prev_dest'=>  $dateFM,'date_spec_affect2'=> true]);
+                        $miss->update(['h_dep_pour_miss'=>  $datedebMiss,'date_spec_affect'=> true]);
+                        $miss->update(['h_retour_base'=>  $datedebMiss,'date_spec_affect2'=> true]);
                     }
 
 
@@ -1058,15 +1128,15 @@ class OrdreMissionsController extends Controller
         if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))
         {
             //$format ='Y-m-d H:i';
-            $datePourSuiviMiss=$omambulance->CL_heuredateRDV;
+            /*$datePourSuiviMiss=$omambulance->CL_heuredateRDV;*/
             //str_replace("T"," ",$datePourSuiviMiss);
             //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss);
-            $datePourSuivi= date('Y-m-d H:i',strtotime($datePourSuiviMiss));
+            /*$datePourSuivi= date('Y-m-d H:i',strtotime($datePourSuiviMiss));*/
 
             //$datePourSuivi = \DateTime::createFromFormat($format, $datePourSuiviMiss);
 
-            $miss=Mission::where('id',$_POST['idMissionOM'])->first();
-            $miss->update(['h_dep_pour_miss'=> $datePourSuivi,'date_spec_affect'=> true]);
+           /* $miss=Mission::where('id',$_POST['idMissionOM'])->first();
+            $miss->update(['h_dep_pour_miss'=> $datePourSuivi,'date_spec_affect'=> true]);*/
         }
 
 

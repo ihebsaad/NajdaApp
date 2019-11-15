@@ -3032,7 +3032,7 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                     
                 $.each(arr_tags, function(i, field){
                     var strt = [ field ] + "" ; 
-                    alert(strt);
+                   // alert(strt);
                     var champgop = strt.split("_");
                     // ajout des options pour select gop
                     // verifier s'il ya gop precedent
@@ -3267,7 +3267,7 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
         if ((dossier != '') )
         {
              var _token = $('input[name="_token"]').val();
-             alert(tempdoc);
+            // alert(tempdoc);
             $.ajax({
                 url:"{{ route('documents.htmlfilled') }}",
                 method:"POST",
@@ -3416,7 +3416,7 @@ function keyUpHandler(){
         }
         $.ajax({
                 url:"{{ route('documents.adddocument') }}",
-                method:"POST",
+                method:"post",
                 //'&_token='+_token
                 data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent+'&idtaggop='+idgop+'&idMissionDoc='+idMissionDoc,
                 success:function(data){
@@ -3429,7 +3429,7 @@ function keyUpHandler(){
                       Swal.fire({
                         type: 'error',
                         title: 'oups...',
-                        text: "Erreur lors de la generation du document"
+                        text: "Erreur lors de la generation du document:"+jqXHR.responseText
                     });
                     console.log('jqXHR:');
                     console.log(jqXHR);
