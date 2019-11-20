@@ -31,6 +31,7 @@ use App\Intervenant ;
 
  use App\OMAmbulance;
  use App\OMRemorquage;
+ use App\OMMedicInternational;
 
 
 use App\Prestation;
@@ -3838,11 +3839,13 @@ public function getAjaxDeleguerMission($idmiss)
         $omtaxis = OMTaxi::where(['dossier' => $id,'dernier' => 1])->get();
         $omambs = OMAmbulance::where(['dossier' => $id,'dernier' => 1])->get();
         $omrem = OMRemorquage::where(['dossier' => $id,'dernier' => 1])->get();
+        $ommi = OMMedicInternational::where(['dossier' => $id,'dernier' => 1])->get();
+
         $dossiers = app('App\Http\Controllers\DossiersController')->ListeDossiersAffecte();
 
         $evaluations=DB::table('evaluations')->get();
 
-        return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis, 'omambs'=>$omambs, 'omrem'=>$omrem], compact('dossier'));
+        return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis, 'omambs'=>$omambs, 'omrem'=>$omrem,'ommi'=>$ommi,'missionDocOm'=>$missionDocOm], compact('dossier'));
 
 
     }
