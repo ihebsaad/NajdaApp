@@ -527,11 +527,11 @@ class EntreesController extends Controller
         $par=Auth::id();
         $user = User::find($par);
 
-        $dossier=$request->get('dossier') ;
+        $iddossier=$request->get('dossier') ;
         $contenu=$request->get('contenu') ;
         $emetteur=$request->get('emetteur') ;
 
-        $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($dossier);
+        $refdoss = app('App\Http\Controllers\DossiersController')->RefDossierById($iddossier);
 
         $nomuser=$user->name.' '.$user->lastname;
 
@@ -555,7 +555,7 @@ class EntreesController extends Controller
             'reception'=> $date,
             'type'=> 'tel',
             'viewed'=>0,
-            'dossier'=>$dossier,
+            'dossier'=>$refdoss,
             'dossierid'=>$iddossier,
 
         ]);
@@ -571,7 +571,7 @@ class EntreesController extends Controller
         Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
 
 
-        Log::info('Création Compte Rendu - Par :'.$nomuser.' - Dossier : '.$dossier);
+        Log::info('Création Compte Rendu - Par :'.$nomuser.' - Dossier : '.$refdoss);
 
     }
 

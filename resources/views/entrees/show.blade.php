@@ -54,7 +54,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
                                     $disp=$seance->dispatcheur ;
 
                                     $iduser=Auth::id();
-                                    if ($iduser==$disp) { ?>
+                                  //  if ($iduser==$disp) { ?>
                                     <a  href="{{action('EntreesController@archiver', $entree['id'])}}" style="color:black" class="btn btn-warning btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Archiver" >
                                   <span class="fa fa-fw fa-archive"></span> Archiver
                                 </a>
@@ -62,7 +62,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
                                     <a  href="{{action('EntreesController@spam', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme SPAM" >
                                         <span class="fas fa-exclamation-triangle"></span> SPAM
                                     </a>
-                                      <?php } ?>
+                                      <?php //} ?>
 
                                     <?php } ?>
                                 <?php if ($entree['notif']!=1 ) { ?>

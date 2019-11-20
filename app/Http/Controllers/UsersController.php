@@ -463,6 +463,22 @@ class UsersController extends Controller
               elseif ($seance->dispatcheurtel==Auth::id())
               { $seance->dispatcheurtel=NULL;}
 
+        $disptel2 = $request->get('disptel2');
+        Session::put('disptel2', $disptel2);
+        if ($disptel2 !== '0')
+        { $seance->dispatcheurtel2=Auth::id();}
+        elseif ($seance->dispatcheurtel2==Auth::id())
+        { $seance->dispatcheurtel2=NULL;}
+
+
+        $disptel3 = $request->get('disptel3');
+        Session::put('disptel3', $disptel3);
+        if ($disptel3 !== '0')
+        { $seance->dispatcheurtel3=Auth::id();}
+        elseif ($seance->dispatcheurtel3==Auth::id())
+        { $seance->dispatcheurtel3=NULL;}
+
+
 
         $veilleur = $request->get('veilleur');
         Session::put('veilleur', $veilleur);

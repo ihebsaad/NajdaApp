@@ -695,6 +695,7 @@ class DossiersController extends Controller
 
         $phonesDossier =   Adresse::where('nature', 'teldoss')
             ->where('parent',$id)
+            ->where('parenttype','dossier')
             ->get();
 
         $phonesCl =   Adresse::where('nature', 'tel')
@@ -704,7 +705,7 @@ class DossiersController extends Controller
 
         $intervs = array_merge( $inters->toArray(),$prests->toArray() );
 
-        $phonesInt =   Adresse::where('nature', 'tel')
+        $phonesInt =   Adresse::where('nature', 'telinterv')
             ->whereIn('parent', $intervs)
             ->get();
 
@@ -762,6 +763,8 @@ class DossiersController extends Controller
 
         $evaluations=DB::table('evaluations')->get();
 
+
+
         return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis, 'omambs'=>$omambs, 'omrem'=>$omrem,'ommi'=>$ommi], compact('dossier'));
 
 
@@ -770,16 +773,12 @@ class DossiersController extends Controller
 
 
     public function fiche($id)
-    {        $minutes= 120;
-        $minutes2= 600;
-
-
+    {
         $relations1 = DB::table('dossiers_docs')->select('dossier', 'doc')
             ->where('dossier',$id)
             ->get();
   //      $typesMissions=TypeMission::get();
 
-        $cldocs = DB::table('clients_docs')->select('client', 'doc')->get();
 
 
         $typesMissions =  DB::table('type_mission')
@@ -790,6 +789,8 @@ class DossiersController extends Controller
         $dossier = Dossier::find($id);
 
         $cl=$this->ChampById('customer_id',$id);
+        $cldocs = DB::table('clients_docs')->select('client', 'doc')->where('client',$cl)
+            ->get();
 
 
         $entite=app('App\Http\Controllers\ClientsController')->ClientChampById('entite',$cl);
@@ -821,8 +822,7 @@ class DossiersController extends Controller
             ->where('nature','facturation' )
             ->get();
 
-        $minutes= 120;
-        $hopitaux =
+         $hopitaux =
             DB::table('prestataires_type_prestations')
                 ->where('type_prestation_id',8 )
                 ->orwhere('type_prestation_id',9 )
@@ -927,10 +927,12 @@ class DossiersController extends Controller
 
         $intervs = array_merge( $inters->toArray(),$prests->toArray() );
 
-        $phonesInt =   Adresse::where('nature', 'tel')
+        $phonesInt =   Adresse::where('nature', 'telinterv')
             ->whereIn('parent', $intervs)
             ->get();
 
+        $relations2 = DB::table('clients_docs')->select('client', 'doc')
+            ->where('client',$id)->get();
 
         return view('dossiers.fiche',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'listeemails'=>$listeemails,'cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
 

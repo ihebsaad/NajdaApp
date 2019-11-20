@@ -189,7 +189,7 @@
                                     {
 
                                         $villeid=intval($prestataire['ville_id']);
-                                        if (isset($villes[$villeid]['name']) ){$nomv=$villes[$villeid]['name'];}
+                                        if (isset($villes[$villeid]['name']) ){$nomv=$villes[$villeid-1]['name'];}
                                         else{$nomv=$prestataire['ville'];}
 
                                         echo '<label style="font-weight:bold">'. $nomv .'</label>';
@@ -346,7 +346,7 @@
                                 <td style="width:30%;"><input   id='tel-rem-<?php echo $tel->id;?>'   style="width:100%" value="<?php echo $tel->remarque; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','remarque',this)" /></td>
                                 <td style="width:10%;"><select  id='tel-typetel-<?php echo $tel->id;?>'   style="width:100%"  onchange="changingAddress('<?php echo $tel->id; ?>','typetel',this)" ><option <?php  if($tel->typetel=='Fixe'){echo 'selected="selected"';} ?> value="Fixe">Fixe</option><option <?php  if($tel->typetel=='Mobile'){echo 'selected="selected"';} ?> value="Mobile">Mobile</option></option></select> <?php if($tel->typetel=='Mobile') {?> <a onclick="setTel(this);" class="<?php echo $tel->champ;?>" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a><?php } ?>
                                 <td style="width:5%;">
-                                    <a  href="{{action('ClientsController@deleteaddress', $tel->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                    <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('ClientsController@deleteaddress', $tel->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span>
                                     </a>
                                 </td>
@@ -385,7 +385,7 @@
                                  <td style="width:30%;"><input   id='email-rem-<?php echo $email->id;?>'   style="width:100%" value="<?php echo $email->remarque; ?>" onchange="changingAddress('<?php echo $email->id; ?>','remarque',this)" /></td>
                                 <td style="width:10%;"><i class="fa fa-envelope"></i></td>
                                 <td style="width:5%;">
-                                    <a  href="{{action('ClientsController@deleteaddress', $email->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                    <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('ClientsController@deleteaddress', $email->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span>
                                     </a>
                                 </td>
@@ -419,12 +419,12 @@
                         <tbody>
                         @foreach($faxs as $fax)
                             <tr>
-                                <td style="width:35%;"><input id='fax-nom-<?php echo $fax->id;?>'  style="width:50%" value="<?php echo $fax->nom; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','nom',this)" /> <input  id='fax-prenom-<?php echo $tel->id;?>'   style="width:48%" value="<?php echo $fax->prenom; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','prenom',this)" /></td>
+                                <td style="width:35%;"><input id='fax-nom-<?php echo $fax->id;?>'  style="width:50%" value="<?php echo $fax->nom; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','nom',this)" /> <input  id='fax-prenom-<?php echo $fax->id;?>'   style="width:48%" value="<?php echo $fax->prenom; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','prenom',this)" /></td>
                                 <td style="width:20%;"><input type="text" pattern="[0-9]" id='fax-champ-<?php echo $fax->id;?>'   style="width:100%" value="<?php echo $fax->champ; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','champ',this)" /></td>
                                  <td style="width:30%;"><input   id='fax-rem-<?php echo $fax->id;?>'   style="width:100%" value="<?php echo $fax->remarque; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','remarque',this)" /></td>
                                 <td style="width:10%;"><i class="fa fa-fax"></i></td>
                                 <td style="width:5%;">
-                                    <a  href="{{action('ClientsController@deleteaddress', $fax->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                    <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('ClientsController@deleteaddress', $fax->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span>
                                     </a>
                                 </td>
@@ -740,7 +740,7 @@
 
                                     </div>
                                 </div>
-                                <input id="nature1" name="nature" type="hidden" value="tel">
+                                <input id="nature1" name="nature" type="hidden" value="telinterv">
 
 
 
@@ -806,7 +806,7 @@
 
                                     </div>
                                 </div>
-                                <input id="nature2" name="nature" type="hidden" value="email">
+                                <input id="nature2" name="nature" type="hidden" value="emailinterv">
 
 
 
@@ -872,7 +872,7 @@
 
                                     </div>
                                 </div>
-                                <input id="nature3" name="nature" type="hidden" value="fax">
+                                <input id="nature3" name="nature" type="hidden" value="faxinterv">
 
 
 

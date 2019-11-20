@@ -166,6 +166,9 @@
               $supmedic=$seance->superviseurmedic ;
               $suptech=$seance->superviseurtech ;
               $charge=$seance->chargetransport ;
+              $disptel=$seance->dispatcheurtel ;
+              $disptel2=$seance->dispatcheurtel2 ;
+              $disptel3=$seance->dispatcheurtel3 ;
               ?>
                <div class=" overme" style="font-size:12px;color:white;text-align:left">
                   <?php
@@ -179,9 +182,14 @@
                       <span>Sup Technique</span><br>
                   <?php }    if ($iduser==$charge) { ?>
                   <span>Chargé Trans</span><br>
+                  <?php }    if ($iduser==$disptel) { ?>
+                  <span>Disp Tél 1</span><br>
+                  <?php }    if ($iduser==$disptel2) { ?>
+                  <span>Disp Tél 2</span><br>
+                  <?php }    if ($iduser==$disptel3) { ?>
+                  <span>Disp Tél 3</span><br>
                   <?php } ?>
-
-              </div>
+               </div>
 
           </div>
         @endcannot

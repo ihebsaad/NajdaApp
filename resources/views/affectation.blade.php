@@ -148,8 +148,8 @@
 
               ?>
 
-  
-  				                             <?php $c=0;
+
+    <?php $c=0;
                             foreach($users as $user)
                                 { if($c % 2 ==0){$bg=' border:2px dotted black ;';}else{$bg='';}
 								$iduser=$user->id;
@@ -242,8 +242,8 @@
             $immatricul=$dossier['vehicule_immatriculation'];
 			$ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
 			      <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" >
-                <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <label style="font-size: 15px;"><?php echo $ref;?></label>
-	 	         <div class="infos">  <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
+                <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
+	 	         <div class="infos">  <label style="font-size: 15px;"><?php echo $ref;?></label>
                <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
                   <?php if($immatricul!='') { echo '<small style="font-size:10px">'. $immatricul .'</small>';} ?>
 			
@@ -288,9 +288,9 @@
                             $idd=$dossierI['id'];
                             $immatricul=$dossierI['vehicule_immatriculation'];
                             $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-                            <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" >
-                                <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <label style="font-size: 15px;"><?php echo $ref;?></label>
-                                <div class="infos">  <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
+                            <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
+                                <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>-->
+                                <div class="infos"> <label style="font-size: 15px;"><?php echo $ref;?></label>
                                     <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
                                     <?php if($immatricul!='') { echo '<small style="font-size:10px">'. $immatricul .'</small>';} ?>
 

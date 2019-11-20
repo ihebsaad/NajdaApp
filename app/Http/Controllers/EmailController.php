@@ -338,7 +338,7 @@ class EmailController extends Controller
         }
 
                 $entree = new Entree([
-                    'destinataire' => '24ops@najda-assistance.com',
+                    'destinataire' => 'test@najda-assistance.com',
                     'emetteur' => ($from),
                     'sujet' =>  ($sujet),
                  //  'contenutxt'=> $contenubrut ,
@@ -513,8 +513,8 @@ class EmailController extends Controller
             'port'          => '993',// env('portreception'),
             //    'encryption'    => '',//env('encreception'),
             'validate_cert' => true,
-            'username'      =>'faxnajdassist@najda-assistance.com', //hotels.vat@medicmultiservices.com
-            'password'      => $pass_VAT,
+            'username'      =>'24ops1@najda-assistance.com', //hotels.vat@medicmultiservices.com
+            'password'      => 'j3k47@KnNZ',
             'protocol'      => 'imap'
         ]);
 
@@ -570,7 +570,7 @@ class EmailController extends Controller
                 }
 
                 $entree = new Entree([
-                    'destinataire' => 'hotels.vat@medicmultiservices.com',
+                    'destinataire' => '24ops@najda-assistance.com',
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
@@ -3009,7 +3009,7 @@ class EmailController extends Controller
 
            // $emails =   Email::where('parent', $prest)->pluck('champ');
 
-            $emails =   Adresse::where('nature', 'email')
+            $emails =   Adresse::where('nature', 'emailinterv')
                 ->where('parent',$prest)
                 ->pluck('champ');
 
@@ -3178,7 +3178,7 @@ class EmailController extends Controller
                {
 
 
-                   $faxs =   Adresse::where('nature', 'fax')
+                   $faxs =   Adresse::where('nature', 'faxinterv')
                        ->where('parent',$prest)
                        ->pluck('champ');
 
@@ -3367,15 +3367,16 @@ if ($from=='najdassist@gmail.com')
 
         }
 
+        $user = auth()->user();
+        $nomuser=$user->name.' '.$user->lastname;
 
-        $contenu=$contenu.'<br>'.$signatureagent.'<br>'.$signatureentite;
+        $contenu=$contenu.'<br><br>'.$nomuser.'<br>'. $signatureagent.'<br><br>'.$signatureentite;
 
 
         $swiftMailer = new Swift_Mailer($swiftTransport);
 
         Mail::setSwiftMailer($swiftMailer);
 
-        Log::info('test 1');
 
         try{
             Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails,$description,$from,$fromname ) {
@@ -3418,8 +3419,7 @@ if ($from=='najdassist@gmail.com')
 
                }
 
-                $user = auth()->user();
-                $nomuser=$user->name.' '.$user->lastname;
+
                 Log::info('[Agent: '.$nomuser.'] Envoi de mail '.$sujet);
 
                 $count=0;

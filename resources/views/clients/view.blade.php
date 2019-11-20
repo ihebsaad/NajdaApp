@@ -1125,11 +1125,8 @@
                                 </div>
                                 <input id="nature3" name="nature" type="hidden" value="fax">
 
-
-
                             </form>
                         </div>
-
 
                     </div>
 

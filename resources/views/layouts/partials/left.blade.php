@@ -201,7 +201,7 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                               foreach ($notificationns as $i) {
                                 $notifc = json_decode($i->data, true);
                                 $Datenotif=$i->created_at;
-                                $datenotif= date('d/m/y H:i', strtotime($Datenotif)) ;
+                               // $datenotif= date('d/m/y H:i', strtotime($Datenotif)) ;
                                 $entreeid = $notifc['Entree']['id'];
                                 $dossierid = $notifc['Entree']['dossierid'];
                                 $notifentree = DB::table('entrees')->where('id','=', $entreeid)->get()->toArray();
@@ -214,6 +214,8 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                                   $row['type'] = $ni->type;
                                   $row['dossier'] = $ni->dossier;
                                   $row['emetteur'] = $ni->emetteur;
+                                  $row['reception'] = substr ($ni->reception,0,16);
+                                //  $row['reception'] = $ni->reception ;
                                 }
                                 $nnotifs[] = $row;
                               }
@@ -259,16 +261,16 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                                 {
                                     switch ($n['type']) {
                                         case "email":
-                                            echo '<li  id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$datenotif.' '.$n['emetteur'].' '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['reception'].' '.$n['emetteur'].' '.$n['sujet'].'</span></a></li>';
                                             break;
                                         case "fax":
-                                            echo '<li id="'.$n['id'].'" rel="trfax" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'"  href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li id="'.$n['id'].'" rel="trfax" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'"  href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span>  '.$n['reception'].' '.$n['sujet'].'</span></a></li>';
                                             break;
                                         case "tel":
-                                            echo '<li  id="'.$n['id'].'" rel="trtel" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="trtel" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span>  '.$n['reception'].' '.$n['sujet'].'</span></a></li>';
                                             break;
                                         case "sms":
-                                            echo '<li  id="'.$n['id'].'" rel="trsms" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span> '.$n['sujet'].'</span></a></li>';
+                                            echo '<li  id="'.$n['id'].'" rel="trsms" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span>  '.$n['reception'].' '.$n['sujet'].'</span></a></li>';
                                             break;
                                         case "whatsapp":
                                             echo '<li  id="'.$n['id'].'" rel="trwp" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fab fa-whatsapp"></span> '.$n['sujet'].'</span></a></li>';
@@ -452,10 +454,10 @@ if (isset($dossier))
 <script type="text/javascript">
     $( document ).ready(function() {
         // verifier sil existe des notifications pour le dossier courant pour les marquer comme actifs
-        if ($("#prt_{{ $dossier['reference_medic']}}").length > 0) {
+        if ($("#prt_{{ trim($dossier['reference_medic'])}}").length > 0) {
              // scroll vers lemplacement de la notification
             $('html, #notificationstab').animate({
-                scrollTop: $("#prt_{{ $dossier['reference_medic']}}").offset().top
+                scrollTop: $("#prt_{{ trim($dossier['reference_medic'])}}").offset().top
             }, 1000);
             <?php
             if (isset($entree)) {

@@ -20,6 +20,8 @@
     $suptech=$seance->superviseurtech ;
     $charge=$seance->chargetransport ;
     $disptel=$seance->dispatcheurtel ;
+    $disptel2=$seance->dispatcheurtel2 ;
+    $disptel3=$seance->dispatcheurtel3 ;
     $veilleur=$seance->veilleur ;
 
     $debut=$seance->debut ;
@@ -74,14 +76,14 @@
                             </li>
                             <?php }
 
-                            if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) { /*
+                            if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
                             ?>
                             <li class="nav-item">
                                 <a class="nav-link <?php if ($user_type=='superviseur'){echo 'active';}?>" href="#tab3" data-toggle="tab" onclick="showinfos3();hideinfos();hideinfos2();hideinfos4()">
                                     <i class="fa-lg fas fa-users"></i>  Supervision
                                 </a>
                             </li>
-                         <?php */ } if( ($user_type=='financier')  || ( ($user_type=='admin')) ) {
+                         <?php  } if( ($user_type=='financier')  || ( ($user_type=='admin')) ) {
 
                             ?>
                             <li class="nav-item">
@@ -107,15 +109,15 @@
 
                        // ChampById
                           ?>
-                            <table class="table">
+                            <table class="table" style="width:80%">
 
                                 <form class="form-horizontal" method="POST"></form>
 
                                 {{ csrf_field() }}
                                 <tbody>
                                 <tr>
-                                    <td class="text-primary">Début de la séance du jour</td>
-                                    <td>
+                                    <td  style="width:30%" class="text-primary">Début de la séance du jour</td>
+                                    <td  style="width:70%">
                                             <input id="debut" onchange="changingseance(this)" type="text" class="form-control" name="debut" value="<?php echo $debut; ?>">
                                     </td>
                                 </tr>
@@ -129,7 +131,7 @@
                                 <tr>
                                     <td class="text-primary">Superviseur Médical</td>
                                     <td>
-                                        <select   id="superviseurmedic" name="superviseurmedic"   class="form-control js-example-placeholder-single">
+                                        <select  onchange="changingseance(this)"  id="superviseurmedic" name="superviseurmedic"   class="form-control js-example-placeholder-single">
                                             <option    ></option>
                                         @foreach($users as $user  )
                                                 <option
@@ -143,7 +145,7 @@
                                 <tr>
                                     <td class="text-primary">Superviseur Technique</td>
                                     <td>
-                                        <select   id="superviseurtech" name="superviseurtech"   class="form-control js-example-placeholder-single">
+                                        <select  onchange="changingseance(this)" id="superviseurtech" name="superviseurtech"   class="form-control js-example-placeholder-single">
                                             <option    ></option>
                                         @foreach($users as $user  )
                                                 <option
@@ -157,7 +159,7 @@
                                 <tr>
                                     <td class="text-primary">Dispatcheur</td>
                                     <td>
-                                        <select   id="dispatcheur" name="dispatcheur"   class="form-control js-example-placeholder-single">
+                                        <select  onchange="changingseance(this)"  id="dispatcheur" name="dispatcheur"   class="form-control js-example-placeholder-single">
                                             <option    ></option>
                                             @foreach($users as $user  )
                                                 <option
@@ -170,9 +172,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="text-primary">Dispatcheur Téléphonique</td>
+                                    <td class="text-primary">Dispatcheur Téléphonique 1</td>
                                     <td>
-                                        <select   id="dispatcheurtel" name="dispatcheurtel"   class="form-control js-example-placeholder-single">
+                                        <select onchange="changingseance(this)"  id="dispatcheurtel" name="dispatcheurtel"   class="form-control js-example-placeholder-single">
                                             <option    ></option>
                                             @foreach($users as $user  )
                                                 <option
@@ -185,9 +187,39 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td class="text-primary">Dispatcheur Téléphonique 2</td>
+                                    <td>
+                                        <select onchange="changingseance(this)"  id="dispatcheurtel2" name="dispatcheurtel2"   class="form-control js-example-placeholder-single">
+                                            <option    ></option>
+                                            @foreach($users as $user  )
+                                                <option
+                                                        @if($user->id==$disptel2)selected="selected"@endif
+
+                                                value="{{$user->id}}">{{$user->name.' '.$user->lastname}}</option>
+
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-primary">Dispatcheur Téléphonique 3</td>
+                                    <td>
+                                        <select onchange="changingseance(this)"  id="dispatcheurtel3" name="dispatcheurtel3"   class="form-control js-example-placeholder-single">
+                                            <option    ></option>
+                                            @foreach($users as $user  )
+                                                <option
+                                                        @if($user->id==$disptel3)selected="selected"@endif
+
+                                                value="{{$user->id}}">{{$user->name.' '.$user->lastname}}</option>
+
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td class="text-primary">Chargé de transport</td>
                                     <td>
-                                        <select   id="charge" name="charge"   class="form-control js-example-placeholder-single">
+                                        <select onchange="changingseance(this)"  id="charge" name="charge"   class="form-control js-example-placeholder-single">
                                             <option    ></option>
                                             @foreach($users as $user  )
                                                 <option
@@ -205,7 +237,7 @@
                                 <tr>
                                     <td class="text-primary">Veilleur de nuit</td>
                                     <td>
-                                        <select   id="veilleur" name="veilleur"   class="form-control js-example-placeholder-single">
+                                        <select onchange="changingseance(this)"   id="veilleur" name="veilleur"   class="form-control js-example-placeholder-single">
                                             <option    ></option>
                                         @foreach($users as $user  )
                                                 <option
@@ -214,7 +246,8 @@
                                                 value="{{$user->id}}">{{$user->name.' '.$user->lastname}}</option>
 
                                             @endforeach
-                                        </select>                                       </td>
+                                        </select>
+                                    </td>
                                 </tr>
                               <?php  } ?>
                                 </tbody>
@@ -366,20 +399,22 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
 ?>
                     <div id="tab3" class="tab-pane fade <?php if ($user_type=='superviseur'){echo 'in active';}?>" style="display:block">
                         <div class="padding:50px 50px 50px 50px"><br>
-                            <h4>Supervision</h4><br>
-                            <ul style="width:600px;background-color:#F8F7F6;padding:50px 50px 50px 50px">
+                            <h4>Agents connectés</h4><br>
+                            <ul style="width:80%;background-color:#F8F7F6;padding:50px 50px 50px 50px">
 
                             <?php
                             foreach($users as $user)
                                 {
-                                    $role='(Agent)';
-                                    if($user->id==$veilleur){$role='(Veilleur de nuit)';}
-                                    if($user->id==$disp){$role='(Dispatcheur)';}
-                                    if($user->id==$disptel){$role='(Dispatcheur Téléphonique)';}
-                                    if($user->id==$supmedic){$role='(Superviseur Médical)';}
-                                    if($user->id==$suptech){$role='(Superviseur Technique)';}
-                                    if($user->id==$charge){$role='(Chargé de transport)';}
-                                    if($user->type=='admin'){$role='(Administrateur)';}
+                                    $role=' ';
+                                    if($user->id==$veilleur){$role.='(Veilleur de nuit)';}
+                                    if($user->id==$disp){$role.='(Dispatcheur)';}
+                                    if($user->id==$disptel){$role.='(Dispatcheur Téléphonique)';}
+                                    if($user->id==$disptel2){$role.='(Dispatcheur Téléphonique 2)';}
+                                    if($user->id==$disptel3){$role.='(Dispatcheur Téléphonique 3)';}
+                                    if($user->id==$supmedic){$role.='(Superviseur Médical)';}
+                                    if($user->id==$suptech){$role.='(Superviseur Technique)';}
+                                    if($user->id==$charge){$role.='(Chargé de transport)';}
+                                    if($user->user_type=='admin'){$role.='(Administrateur)';}
                                   if($user->isOnline()) { echo  '<li><i class="fa fa-user fa-lg" ></i>   '.$user->name.' '.$user->lastname .' - '. $role.' </li>' ;}
                                 }
                                     ?><br>

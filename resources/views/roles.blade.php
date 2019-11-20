@@ -426,7 +426,89 @@
         ?>
     </label>
 
+    <?php
+    // if (UsersController::CheckRoleUser(Auth::id(),6) > 0)
+    //  {
+    if (empty($seance->dispatcheurtel2) || ($seance->dispatcheurtel2 === Auth::id()))
+    {
+    ?>
+    <label class="check ">Dispatcheur Téléphonique 2
+        <?php
 
+        if ($seance->dispatcheurtel2 === Auth::id()) {  echo '<input type="checkbox" name="disptel2" checked>';} else {
+
+            if (session()->has('disptel2'))
+            {
+                if (Session::get('disptel2') == 0)
+                {
+                    echo '<input type="checkbox" name="disptel2">';
+                }
+                else
+                {
+                    echo '<input type="checkbox" name="disptel2" checked>';
+                }
+            }
+            else
+            {
+                echo '<input type="checkbox" name="disptel2">';
+            }
+
+        }
+        ?>
+        <span class="checkmark"></span>
+        <?php
+        }
+        else
+        {
+        $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheurtel2).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->dispatcheurtel2); ?>
+
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Dispatcheur Téléphonique 2 ','<?php echo $seance->dispatcheurtel2; ?>')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Dispatcheur Téléphonique 2<b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labeldispatcheurtel2"></label></div>
+        <?php }
+        //     }
+        ?>
+    </label>
+
+    <?php
+    // if (UsersController::CheckRoleUser(Auth::id(),6) > 0)
+    //  {
+    if (empty($seance->dispatcheurtel3) || ($seance->dispatcheurtel3 === Auth::id()))
+    {
+    ?>
+    <label class="check ">Dispatcheur Téléphonique 3
+        <?php
+
+        if ($seance->dispatcheurtel3 === Auth::id()) {  echo '<input type="checkbox" name="disptel3" checked>';} else {
+
+            if (session()->has('disptel3'))
+            {
+                if (Session::get('disptel3') == 0)
+                {
+                    echo '<input type="checkbox" name="disptel3">';
+                }
+                else
+                {
+                    echo '<input type="checkbox" name="disptel3" checked>';
+                }
+            }
+            else
+            {
+                echo '<input type="checkbox" name="disptel3">';
+            }
+
+        }
+        ?>
+        <span class="checkmark"></span>
+        <?php
+        }
+        else
+        {
+        $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheurtel3).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->dispatcheurtel3); ?>
+
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Dispatcheur Téléphonique 3 ','<?php echo $seance->dispatcheurtel3; ?>')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Dispatcheur Téléphonique 3<b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labeldispatcheurtel3"></label></div>
+        <?php }
+        //     }
+        ?>
+    </label>
 
     <?php
     // $date_actu =time();
@@ -587,6 +669,12 @@
          var disptel = 0;
          if ($('input[name="disptel"]').is(':checked'))
          {disptel=1;}
+         var disptel2 = 0;
+         if ($('input[name="disptel2"]').is(':checked'))
+         {disptel2=1;}
+         var disptel3 = 0;
+         if ($('input[name="disptel3"]').is(':checked'))
+         {disptel3=1;}
          var admin=0;
          if ($('input[name="admin"]').is(':checked'))
          {admin=1;
@@ -601,7 +689,7 @@
             $.ajax({
                 url:"{{ route('users.sessionroles') }}",
                 method:"POST",
-                data:{disp:disp,supmedic:supmedic,suptech:suptech,chrgtr:chrgtr,disptel:disptel,veilleur:veilleur, _token:_token},
+                data:{disp:disp,supmedic:supmedic,suptech:suptech,chrgtr:chrgtr,disptel:disptel,disptel2:disptel2,disptel3:disptel3,veilleur:veilleur, _token:_token},
                 success:function(data){
 
                     if((supmedic==1)||(suptech==1)){

@@ -1857,26 +1857,23 @@ $iduser=$CurrentUser->id;
                                         <select id="agent" name="agent" class="form-control select2" style="width: 230px">
                                             <option value="Select">Selectionner</option>
                                             <?php $agents = User::get(); ?>
-                                           
-                                                @foreach ($agents as $agt)
-                                                <?php if (!empty ($agentname)) { ?>
+
+                                            @foreach ($agents as $agt)
                                                 @if ($agentname["id"] == $agt["id"])
-                                                    <option value={{ $agt["id"] }} selected >{{ $agt["name"] }}</option>
-                                                @else
-                                                    <option value={{ $agt["id"] }} >{{ $agt["name"] }}</option>
+                                                    <option value={{ $agt["id"] }} selected >{{ $agt["name"].' '.$agt["lastname"] }}</option>
                                                 @endif
-                                                
+                                                <?php if ( $agt->isOnline() &&  $agentname["id"] != $agt["id"]  ) { ?>
+                                                <option value={{ $agt["id"] }} >{{ $agt["name"] .' '.$agt["lastname"] }}</option>
+
                                                 <?php }
-                                                else
-                                                      {  echo '<option value='.$agt["id"] .' >'.$agt["name"].'</option>';}
                                                 ?>
-                                                @endforeach    
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                    </div>
 
+                        </form>
 
                 </div>
 
@@ -1886,7 +1883,6 @@ $iduser=$CurrentUser->id;
                 <button type="submit" id="attribdoss" class="btn btn-primary">Affecter</button>
             </div>
 
-          </form>
         </div>
     </div>
 </div>
@@ -2508,7 +2504,7 @@ function disabling(elm) {
 
     $(document).ready(function() {
 
-        $("#iddossier").select2();
+        //$("#iddossier").select2();
 
         $('#phoneicon').click(function() {
 

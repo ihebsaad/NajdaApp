@@ -53,10 +53,14 @@
             </thead>
             <tbody>
             @foreach($prestataires as $prestataire)
-                <?php $id= $prestataire['id'];
+                <?php $id= $prestataire['id'];$ville='';
+                if($prestataire['ville']!=''){$ville=$prestataire['ville'];}else{
+
+
                      $villeid=intval($prestataire['ville_id']);
-                if (isset($villes[$villeid]['name']) ){$ville=$villes[$villeid]['name'];}
+                if (isset($villes[$villeid]['name']) ){if($villeid>0) {$ville=$villes[$villeid-1]['name'];}}
                 else{$ville=$prestataire['ville'];}
+                }
 
                 $gouvs=  PrestatairesController::PrestataireGouvs($id);
                 $typesp=  PrestatairesController::PrestataireTypesP($id);

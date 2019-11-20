@@ -106,7 +106,7 @@ public function logout(Request $request)
         }
         else{
 
-            //interdire de deconnexion Superviseues si veilleur non connecté
+            //interdire de deconnexion Superviseurs si veilleur non connecté
 
             if( ($iduser == $medic) || ($iduser== $tech)  ) {
 
@@ -160,7 +160,6 @@ public function logout(Request $request)
                             ->where('type_dossier', 'Medical')
                             ->where('type_dossier', 'Mixte')
                             ->update(array('affecte' => $tech));
-
                     }
 
                     }
@@ -264,17 +263,13 @@ public function logout(Request $request)
                     }
 
 
-
                 }
-
 
 
             }
 
 
-
-
-                // vider les roles de lutilisateur dans la seance avant logout
+        // vider les roles de lutilisateur dans la seance avant logout
 
 
         if ($seance->dispatcheur==Auth::id())

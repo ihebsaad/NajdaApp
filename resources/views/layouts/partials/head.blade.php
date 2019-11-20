@@ -149,7 +149,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 success:function(data)
                 {
                     //console.log the response
-                    console.log('check boite 1 :'+data);
+                    console.log('check boite test :'+data);
 
                     if(parseInt(data)>1)
                     {
@@ -190,7 +190,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails2();
-                    }, 30000);  //30 secds
+                    }, 32000);  //32 secds
                 }
             });
         }
@@ -206,7 +206,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails3();
-                    }, 30000);  //30 secds
+                    }, 45000);  //45 secds
                 }
             });
         }
@@ -223,7 +223,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails4();
-                    }, 30000);  //30 secds
+                    }, 40000);  //40 secds
                 }
             });
         }
@@ -239,7 +239,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails5();
-                    }, 30000);  //30 secds
+                    }, 50000);  //50 secds
                 }
             });
         }
@@ -256,7 +256,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails6();
-                    }, 30000);  //30 secds
+                    }, 50000);  //50 secds
                 }
             });
         }
@@ -272,7 +272,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails7();
-                    }, 30000);  //30 secds
+                    }, 50000);  //50 secds
                 }
             });
         }
@@ -288,7 +288,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails8();
-                    }, 30000);  //30 secds
+                    }, 60000);  //60 secds
                 }
             });
         }
@@ -303,7 +303,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails9();
-                    }, 30000);  //30 secds
+                    }, 60000);  //60 secds
                 }
             });
         }
@@ -608,15 +608,15 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
 
         checkNotifs();
-        checkemails();
-       // checkemails2();
-      //  checkemails3();
-         checkemails4();
-       // checkemails5();
-       // checkemails6(); // working
-       // checkemails7();
-       // checkemails8();
-       // checkemails9();
+        checkemails();	//test
+         checkemails2();  // 24ops
+      //  checkemails3(); //MEDIC
+       ///  checkemails4();  //TM
+       // checkemails5();   //TV
+         checkemails6(); // MI
+         checkemails7();   // TPA
+         checkemails8();   //TN
+         checkemails9();  //XPRESS
         checksms();
         checkboite();
         checkfax();

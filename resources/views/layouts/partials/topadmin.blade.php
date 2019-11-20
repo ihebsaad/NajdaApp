@@ -50,7 +50,7 @@
               </a>
           </div>
           <?php }   */ ?>
-        <div class="col-sm-2 col-md-2 col-lg-3" style=" height: 40px!important;padding-top:27px;padding-left:0px ">
+        <div class="col-sm-2 col-md-2 col-lg-2" style=" height: 40px!important;padding-top:27px;padding-left:0px ">
           <form class="search-container" action="{{route('RechercheMulti.test')}}" id="testRecheche" method="POST">
             <input type="text" id="search-bar"  placeholder="Recherche" autocomplete="off" name="qy">
             <a href="#" onclick='document.getElementById("testRecheche").submit()'><img class="search-icon" src="{{ URL::asset('public/img/search-icon.png') }}"></a>
@@ -65,11 +65,11 @@
         </div>
 
 
-        <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
+     <!--   <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
           <a id="phonebtn" href="#" class="btn btn-primary btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Lancer / Recevoir des appels téléphoniques" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
               <span class="fa fa-fw fa-phone fa-2x"></span>
           </a> 
-        </div>
+        </div>-->
 
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
 		 <?php
@@ -99,7 +99,38 @@
 
                 </ul>
         </div>
+          <div class="col-sm-1 col-md-1 col-lg-1" class="overme">
+              <?php
+              $user = auth()->user();
+              $name=$user->name;
+              $lastname=$user->lastname;
 
+              ?>
+
+              <b style="font-size: 12px;color:white;font-weight:600">   <?php echo $name .' '. $lastname; ?></b>
+
+              <?php $disp=$seance->dispatcheur ;
+              $supmedic=$seance->superviseurmedic ;
+              $suptech=$seance->superviseurtech ;
+              $charge=$seance->chargetransport ;
+              ?>
+              <div class=" overme" style="font-size:12px;color:white;text-align:left">
+                  <?php
+                  $iduser=Auth::id();
+                  if ($iduser==$disp) { ?>
+                  <span>Dispatcheur</span><br>
+                  <?php }    if ($iduser==$supmedic) { ?>
+                  <span>Sup Medical</span><br>
+                  <?php }
+                  if ($iduser==$suptech) { ?>
+                  <span>Sup Technique</span><br>
+                  <?php }    if ($iduser==$charge) { ?>
+                  <span>Chargé Trans</span><br>
+                  <?php } ?>
+
+              </div>
+
+          </div>
         <div class="col-sm-1 col-md-1 col-lg-1" class="navbar-toggler" data-toggle="collapse" data-target="#navbarHeader">
          <!-- <img class="menu-trigger" src="{{ URL::asset('resources/assets/img/menu-black.png') }}" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation"/>-->
           <div class="menu-icon menu-trigger" class="navbar-toggler" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation" alt="Menu de l'application"  style="zoom:60%;float: right!important; padding-top: 28px">

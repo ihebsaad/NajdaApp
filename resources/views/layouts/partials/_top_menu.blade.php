@@ -1,3 +1,12 @@
+<?php
+$user = auth()->user();
+ $iduser=$user->id;
+$user_type=$user->user_type;
+
+$seance =  DB::table('seance')
+    ->where('id','=', 1 )->first();
+
+?>
 <div class="container">
     <div class="row">
           <div class="col-sm-2">
@@ -47,7 +56,7 @@
 
     <div class="row">
 
-    @if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
+        <?php      if( ($seance->superviseurmedic==$iduser)  || ($seance->superviseurtech==$iduser) ||($user->user_type=='admin')) { ?>
 
             <div class="col-sm-2">
             <a href="{{ route('supervision') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
@@ -64,8 +73,8 @@
                     Affectations
                 </a>
             </div>
-    @endif
-    </div>
+<?php }
+?>    </div>
 
 @can('isSupervisor')
 

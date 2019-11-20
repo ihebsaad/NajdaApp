@@ -34,6 +34,7 @@ use  \App\Http\Controllers\DocsController;
                         <div class="form-group">
                             <label>Type de dossier</label>
                             <select required  onchange="hidediv() "  id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
+                                <option   value="">Sélectionnez</option>
                                 <option   value="Mixte">Mixte</option>
                                 <option  value="Medical">Medical</option>
                                 <option  value="Technique">Technique</option>
@@ -44,6 +45,7 @@ use  \App\Http\Controllers\DocsController;
                         <div class="form-group">
                             <label>Affecté à </label>
                             <select required id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single"  >
+                                <option   value="">Sélectionnez</option>
                                 <option  value="Najda">Najda</option>
                                 <option  value="VAT">VAT</option>
                                 <option  value="MEDIC">MEDIC</option>
@@ -55,7 +57,6 @@ use  \App\Http\Controllers\DocsController;
                             </select>
                         </div>
                     </div>
-
 
 
                     <div class="col-md-3">

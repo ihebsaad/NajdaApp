@@ -43,7 +43,7 @@ use  \App\Http\Controllers\EntreesController ;
         <b>Statut:</b>
         <?php $statut=$dossier->current_status;
         if ($statut =='actif' || $statut =='inactif' ){
-            echo '<b style="font-size:20px">Ouvert</b> <a style="font-size:13px" title="changer le statut" href="#" data-toggle="modal" data-target="#FermerDoss"> (Fermer)</a>';
+            echo '<b style="font-size:20px">Ouvert</b> <a style="font-size:13px" title="changer le statut" href="#" data-toggle="modal" data-target="#FermerDoss"> (Clôturer)</a>';
         }
         if($statut=='Cloture'){
             echo '<b style="font-size:20px">Clôturé</b> <a style="font-size:13px" title="changer le statut" href="#" data-toggle="modal" data-target="#OuvrirDoss"> (Ouvrir)</a>';
@@ -1859,7 +1859,7 @@ reference_customer
        <form  method="post" action="{{ route('affectation.dossier') }}">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModal2">Affectation dossier</h5>
+                <h5 class="modal-title" id="exampleModal2">Affectation de dossier</h5>
 
             </div>
             <div class="modal-body">
@@ -1882,17 +1882,14 @@ reference_customer
                                             <?php $agents = User::get(); ?>
                                            
                                                 @foreach ($agents as $agt)
-                                                <?php if (!empty ($agentname)) { ?>
                                                 @if ($agentname["id"] == $agt["id"])
-                                                    <option value={{ $agt["id"] }} selected >{{ $agt["name"] }}</option>
-                                                @else
-                                                    <option value={{ $agt["id"] }} >{{ $agt["name"] }}</option>
+                                                    <option value={{ $agt["id"] }} selected >{{ $agt["name"].' '.$agt["lastname"] }}</option>
                                                 @endif
-                                                
+                                                 <?php if ( $agt->isOnline() &&  $agentname["id"] != $agt["id"]  ) { ?>
+                                                    <option value={{ $agt["id"] }} >{{ $agt["name"] .' '.$agt["lastname"] }}</option>
+
                                                 <?php }
-                                                else
-                                                      {  echo '<option value='.$agt["id"] .' >'.$agt["name"].'</option>';}
-                                                ?>
+                                                                   ?>
                                                 @endforeach    
                                         </select>
                                     </div>
@@ -2375,11 +2372,11 @@ reference_customer
         <div class="modal-dialog" >
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title" style="text-align:center"  id=" "><center>Fermer le Dossier </center> </h3>
+                    <h3 class="modal-title" style="text-align:center"  id=" "><center>Clôturer le Dossier </center> </h3>
                 </div>
                 <div class="modal-body">
                     <div class="card-body" style="text-align:center;height:100px"><br>
-                        <center><B> Etes vous sûrs de vouloir Fermer ce Dossier ?</B><br> <br> </center>
+                        <center><B> Etes vous sûrs de vouloir clôturer ce Dossier ?</B><br> <br> </center>
 
                         <a id="fermerdossier"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >OUI</a>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button><br>

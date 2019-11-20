@@ -71,6 +71,24 @@
 
                         </div>
 
+                        <div class="row" style="margin-top:40px">
+                            <?php
+                            use Illuminate\Support\Facades\DB;
+
+                            $relations = DB::table('specialites_typeprestations')
+                                ->where('type_prestation','=',$typeprestation->id)
+                                ->get();
+                            echo 'Spécialités : <br>
+                            <ul>';
+                            foreach($relations as $spec)
+                                {
+                                    echo '<li>'.  \App\Http\Controllers\SpecialitesController::NomSpecialiteById($spec->specialite) .'</li>';
+                            }
+                            echo '</ul>';
+
+                            ?>
+                        </div>
+
 
                         <input type="hidden" id="idtp" class="form-control"   value="{{ $typeprestation->id }}">
              </div>

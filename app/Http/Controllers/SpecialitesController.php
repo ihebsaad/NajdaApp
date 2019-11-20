@@ -222,5 +222,17 @@ class SpecialitesController extends Controller
 
     }
 
+    public static function NomSpecialiteById($id)
+    {
+        $sp = Specialite::find($id);
+        if (isset($sp['nom'])) {
+            return $sp['nom'];
+        }else{return '';}
+
+    }
+
+
+
+
 }
 

@@ -41,7 +41,7 @@ class PrestatairesController extends Controller
          $dossiers = Dossier::all();
 
         $villes = Ville::all();
-        $minutes2=600;
+
       /*  $villes = Cache::remember('villes',$minutes2,  function () {
 
           return DB::table('villes')
@@ -302,17 +302,17 @@ class PrestatairesController extends Controller
         $prestataire = Prestataire::find($id);
         $prestations =   Prestation::where('prestataire_id', $id)->get();
 
-        $evaluations =   Evaluation::where('prestataire', $id)->get();
+        $evaluations =   Evaluation::where('prestataire', $id)->orderBy('priorite','asc')->get();
 
-        $emails =   Adresse::where('nature', 'email')
+        $emails =   Adresse::where('nature', 'emailinterv')
             ->where('parent',$id)
             ->get();
 
-        $tels =   Adresse::where('nature', 'tel')
+        $tels =   Adresse::where('nature', 'telinterv')
             ->where('parent',$id)
             ->get();
 
-        $faxs =   Adresse::where('nature', 'fax')
+        $faxs =   Adresse::where('nature', 'faxinterv')
             ->where('parent',$id)
             ->get();
 
@@ -614,6 +614,15 @@ class PrestatairesController extends Controller
     }
 
     public static function QualiteByEmail($email)
+    { $email=  trim($email) ;
+        $Email = Email::where('champ','=', $email)->first();
+        if (isset($Email['qualite'])) {
+            return $Email['qualite'] ;
+        }else{return '';}
+
+    }
+
+    public static function RemarqueByEmail($email)
     { $email=  trim($email) ;
         $Email = Email::where('champ','=', $email)->first();
         if (isset($Email['qualite'])) {
