@@ -238,7 +238,7 @@ class DossiersController extends Controller
 
 
             $user = auth()->user();
-            $nomuser = $user->name . ' ' . $user->name;
+            $nomuser = $user->name . ' ' . $user->lastname;
             Log::info('[Agent: ' . $nomuser . '] Ajout de dossier: ' . $reference_medic);
         }
 
@@ -349,7 +349,7 @@ class DossiersController extends Controller
         { $iddoss=$dossier->id;
 
             $user = auth()->user();
-            $nomuser=$user->name.' '.$user->name;
+            $nomuser=$user->name.' '.$user->lastname;
             Log::info('[Agent: '.$nomuser.'] Ajout de dossier: '.$reference_medic);
 
             $identree = $request->get('entree');
@@ -587,7 +587,7 @@ class DossiersController extends Controller
 
 
         $user = auth()->user();
-        $nomuser=$user->name.' '.$user->name;
+        $nomuser=$user->name.' '.$user->lastname;
         $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
         Log::info('[Agent: '.$nomuser.'] Affectation de dossier :'.$ref.' à: '.$nomagent);
 
@@ -619,18 +619,9 @@ class DossiersController extends Controller
      */
 
     public function view($id)
-    {        $minutes= 120;
-        $minutes2= 600;
+    {
 
-  //      $typesMissions=TypeMission::get();
-
-     /*   $specialites = Cache::remember('specialites',$minutes2,  function () {
-
-            return DB::table('specialites')
-                ->get();
-        });*/
-      $specialites =DB::table('specialites')
-                ->get();
+      //$specialites =DB::table('specialites')->get();
 
 
         $typesMissions =   DB::table('type_mission')
@@ -764,6 +755,21 @@ class DossiersController extends Controller
         $evaluations=DB::table('evaluations')->get();
 
 
+    // Spécialités des intervenants de dossier
+    /*    $TypesPrestationIds =DB::table('prestataires_type_prestations')
+            ->whereIn('prestataire_id',$intervs)
+            ->pluck('type_prestation_id');
+
+        $specialitesIds =DB::table('specialites_typeprestations')
+            ->whereIn('type_prestation', $TypesPrestationIds)
+            ->pluck('specialite');
+
+        $specialites =DB::table('specialites')
+            ->whereIn('id', $specialitesIds)
+            ->get();
+*/
+         $specialites =DB::table('specialites')->get();
+
 
         return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis, 'omambs'=>$omambs, 'omrem'=>$omrem,'ommi'=>$ommi], compact('dossier'));
 
@@ -799,7 +805,7 @@ class DossiersController extends Controller
 
       //  $clients = DB::table('clients')->select('id', 'name')->get();
 
-        $clients = DB::table('clients')
+        $clients = DB::table('clients')->orderBy('name', 'asc')
                 ->get();
 
         $prestations =   Prestation::where('dossier_id', $id)->get();

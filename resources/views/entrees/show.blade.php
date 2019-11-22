@@ -155,13 +155,13 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
                     <div id="myTabContent" class="tab-content" style="background: #ffffff">
                        <?php if ( $entree['type']!='fax') { ?>
                            <div class="tab-pane fade active in" id="mailcorps" style="">
-                                            <p  id="mailtext" style=" line-height: 25px;"><?php  $content= $entree['contenu'] ; ?>
+                                          <p  id="mailtext" style=" line-height: 25px;"><?php  $content= $entree['contenu'] ; ?>
                                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
                                             <?php  $cont=  str_replace($search,$replace, $content); ?>
                                             <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
-                                            <?php  echo $cont; ?></p>
+                                              <?php  echo $cont; ?></p>
                                         </div><?php } ?>
 
                            <?php /* if ( $entree['type']!='fax') { ?>

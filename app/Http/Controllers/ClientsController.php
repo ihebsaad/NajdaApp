@@ -294,7 +294,6 @@ class ClientsController extends Controller
             ->where('parent',$id)
             ->get();
 
-
         $client = Client::find($id);
         return view('clients.view',['docs'=>$docs,'relations2'=>$relations2 ,'dossiers' => $dossiers,'groupes'=>$groupes,'countries'=>$countries,'emails'=>$emails,'tels'=>$tels,'faxs'=>$faxs,'entites'=>$entites,'qualites'=>$qualites ,'reseaux'=>$reseaux,'gestions'=>$gestions], compact('client'));
 

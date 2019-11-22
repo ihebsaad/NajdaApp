@@ -17,14 +17,17 @@
                  <div class="form-group col-md-6  ">
                      <h3>Prestation</h3>
                      <?php use \App\Http\Controllers\PrestationsController;
-                      use \App\Http\Controllers\PrestatairesController;     ?>
+                      use \App\Http\Controllers\PrestatairesController;
+                      use \App\Http\Controllers\DossiersController;
+
+                      ?>
                      <?php
 $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
                   </div>
                 </div>
 
                          <div class="row" style="margin-top:10px;margin-bottom: 20px">
-                                <div class="col-md-6"><span style="color:#a0d468" class="fa fa-lg fa-folder"></span>  Dossier <a href="<?php echo $urlapp.'/dossiers/view/'.$prestation['dossier_id'].'#tab3' ;?> " >  <?php echo $prestation['dossier_id'] ;?></a></div>
+                                <div class="col-md-6"><span style="color:#a0d468" class="fa fa-lg fa-folder"></span>  Dossier <a href="<?php echo $urlapp.'/dossiers/view/'.$prestation['dossier_id'].'#tab3' ;?> " >  <?php echo DossiersController::RefDossierById($prestation['dossier_id']) .' - '.DossiersController::FullnameAbnDossierById($prestation['dossier_id']) ;?></a></div>
                             </div>
                             <div class="prestataire form-group">
                                 <div class="row" style=";margin-bottom: 5px">

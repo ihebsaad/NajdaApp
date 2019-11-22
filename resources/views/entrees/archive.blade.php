@@ -80,7 +80,7 @@ $dossiers = Dossier::get();
                 @foreach($entrees as $entree)
                     <div class="email">
                         <div class="fav-box">
-                            <a href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-sm btn-danger btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Supprimer">
+                            <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-sm btn-danger btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Supprimer">
                                 <i class="fa fa-lg fa-fw fa-trash-alt"></i>
 
                             </a>

@@ -65,14 +65,16 @@ use  \App\Http\Controllers\EntreesController ;
          // les agents ne voient pas l'aaffectation - à vérifier
          if (Gate::check('isAdmin') || Gate::check('isSupervisor') ) { ?>
 
-         <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
-        <b>Affecté à:</b> 
-        <?php 
-        $agentname = User::where('id',$dossier->affecte)->first();
-        if ((Gate::check('isAdmin') || Gate::check('isSupervisor')) && !empty ($agentname))
-            { echo '<a href="#" data-toggle="modal" data-target="#attrmodal">';}
-        echo $agentname['name'].' '.$agentname['lastname'];
-        if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
+         <?php if ((isset($dossier->affecte)) && (($dossier->affecte>0))) { ?>
+        <b>Affecté à:</b>
+        <?php
+             if($dossier->affecte >0) {$agentname = User::where('id',$dossier->affecte)->first();}else{$agentname=null;}
+        if ((Gate::check('isAdmin') || Gate::check('isSupervisor'))  )
+            { echo '<a href="#" data-toggle="modal" data-target="#attrmodal">';
+              }
+             if( ($dossier->affecte >0)){ echo $agentname['name'].' '.$agentname['lastname'];}
+
+             if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
             { echo '</a>';}
 
         ?>
@@ -120,9 +122,35 @@ use  \App\Http\Controllers\EntreesController ;
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-default" id="sms">
+                <!--<button type="button" class="btn btn-default" id="sms">
                     <a style="color:black" href="{{action('EmailController@sms',$dossier->id)}}"> <i class="fas fa-sms"></i> SMS</a>
+                </button>-->
+
+                <button type="button"  class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-sms"></i> SMS <i class="fa fa-angle-down"></i>
+
                 </button>
+
+
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="{{route('emails.sms',['id'=>$dossier->id,'type'=> 'client','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Au client </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.sms',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            À l'intervenant </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.sms',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            À l'assuré  </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.sms',['id'=>$dossier->id,'type'=> 'libre','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Libre </a>
+                    </li>
+
+                </ul>
             </div>
 
             <div class="btn-group">
@@ -369,7 +397,7 @@ use  \App\Http\Controllers\EntreesController ;
                             <select class="form-control  col-lg-12 " style="width:400px" name="specialite"     id="specialite2">
                                 <option value="0"></option>
                                 @foreach($specialites as $sp)
-                                    <option  <?php if($specialite==$sp->id){echo 'selected="selected"';}?>  class="tprest2" id="tprest2-<?php echo $sp->type_prestation;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                    <option  <?php if($specialite==$sp->id){echo 'selected="selected"';}?>  class="tprest2  tprest2-<?php echo $sp->type_prestation;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
                                 @endforeach
                             </select>
                         </div>
@@ -521,7 +549,7 @@ use  \App\Http\Controllers\EntreesController ;
                                      <select class="form-control  col-lg-12 " style="width:400px" name="specialite"    id="specialite">
                                          <option value="0"></option>
                                          @foreach($specialites as $sp)
-                                             <option class="tprest" id="tprest-<?php echo $sp->type_prestation;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                             <option class="tprest  tprest-<?php echo $sp->type_prestation;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
                                          @endforeach
                                      </select>
                                  </div>
@@ -656,7 +684,7 @@ use  \App\Http\Controllers\EntreesController ;
                      </div>
                 </div>
 				<div id="tab34" class="tab-pane fade ">
-                    <br>
+                    <br><label style="font-weight:bold;color:#FD9883 ">Prestation non effectuée</label><br>
                     <!--  <span style="background-color:#fcdcd5;color:black;font-weight:bold">Prestation non effectuée </span>  <br>-->
                     <table class="table table-striped" id="mytable" style="width:100%;margin-top:15px;">
                         <thead>
@@ -665,8 +693,8 @@ use  \App\Http\Controllers\EntreesController ;
                             <th style="width:20%">Prestataire</th>
                             <th style="width:20%">Type</th>
                             <th style="width:20%">Spécialité</th>
-                            <th style="width:20%">Gouvernorat</th>
-                            <th style="width:10%">Prix</th>
+                            <th style="width:15%">Gouvernorat</th>
+                            <th style="width:10%">Actions</th>
                         </tr>
 
                         </thead>
@@ -679,11 +707,11 @@ use  \App\Http\Controllers\EntreesController ;
                             ?>
 
                             <tr  >
-                                <td style="width:35%; <?php echo $style;?> ">
+                                <td style="width:10%; <?php echo $style;?> ">
                                     <a href="{{action('PrestationsController@view', $prestation['id'])}}" >
                                         <?php  echo $prestation['id']  ; ?>
                                     </a></td>
-                                <td style="width:25%">
+                                <td style="width:20%">
                                     <?php $prest= $prestation['prestataire_id'];
                                     echo PrestationsController::PrestataireById($prest);  ?>
                                 </td>
@@ -695,12 +723,14 @@ use  \App\Http\Controllers\EntreesController ;
                                     <?php $specialite= $prestation['specialite'];
                                     echo PrestationsController::SpecialiteById($specialite);  ?>
                                 </td>
-                                <td style="width:20%;">
+                                <td style="width:15%;">
                                     <?php $gouvernorat= $prestation['gouvernorat'];
                                     echo PrestationsController::GouvById($gouvernorat);  ?>
                                 </td>
-                                <td style="width:20%">{{$prestation->price}}</td>
-
+                                <td style="width:10%;"><a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('PrestationsController@destroy', $prestation->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                        <span class="fa fa-fw fa-trash-alt"></span>
+                                    </a>
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -1882,14 +1912,16 @@ reference_customer
                                             <?php $agents = User::get(); ?>
                                            
                                                 @foreach ($agents as $agt)
-                                                @if ($agentname["id"] == $agt["id"])
-                                                    <option value={{ $agt["id"] }} selected >{{ $agt["name"].' '.$agt["lastname"] }}</option>
-                                                @endif
-                                                 <?php if ( $agt->isOnline() &&  $agentname["id"] != $agt["id"]  ) { ?>
+                                                <?php if ( ($dossier->affecte >0) && $agentname["id"] == $agt["id"]){ ?>
+                                                    <option value={{ $agt["id"] }} selected >{{ $agt["name"].' '.$agt["lastname"] }}</option> <?php
+                                                }else{
+                                                  if ( $agt->isOnline() ) { ?>
+
                                                     <option value={{ $agt["id"] }} >{{ $agt["name"] .' '.$agt["lastname"] }}</option>
 
                                                 <?php }
-                                                                   ?>
+                                                }
+                                                ?>
                                                 @endforeach    
                                         </select>
                                     </div>
@@ -2319,7 +2351,7 @@ reference_customer
                         <div class="form-group">
                             <label for="sujet">Autorisé Par :</label>
                             <select  id="autorise" class="form-control"  style="width:350px" >
-                                <option value="procedure">Procédure</option>
+                                <option value="procedure">Engagé au préalable</option>
                                 <option value="nejib">Dr Nejib</option>
                                 <option value="salah">Dr Salah Harzallah</option>
                                 <option value="smq">SMQ</option>
@@ -3104,6 +3136,12 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
 
 
     $(document).ready(function() {
+    $("#typeprest").select2();
+    $("#typeprest2").select2();
+    $("#specialite").select2();
+    $("#specialite2").select2();
+    $("#gouvcouv").select2();
+    $("#gouvcouv2").select2();
     $("#agent").select2();
     $("#gopdoc").select2();
     $("#templatedoc").select2();
@@ -3944,23 +3982,28 @@ function keyUpHandler(){
             document.getElementById('add2').style.display='none';
 			document.getElementById('add2prest').style.display='none';
             document.getElementById('selectedprest').value=0;
-
-
+            /*
+                // afficher les specialite par type de prestation selectionné
             toggle('tprest', 'none');
            var typeprest=  document.getElementById('typeprest').value;
 
-            document.getElementById('tprest-'+typeprest).style.display='block';
+           // document.getElementById('tprest-'+typeprest).style.display='block';
+            toggle('tprest-'+typeprest, 'block');
+*/
         });
 
 
         $("#typeprest2").change(function() {
 
-
+/*
+            // afficher les specialite par type de prestation selectionné
 
             toggle('tprest2', 'none');
             var typeprest=  document.getElementById('typeprest2').value;
 
-            document.getElementById('tprest2-'+typeprest).style.display='block';
+            //document.getElementById('tprest2-'+typeprest).style.display='block';
+            toggle('tprest2-'+typeprest, 'block');
+*/
         });
 
 

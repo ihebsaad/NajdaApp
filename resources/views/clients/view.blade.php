@@ -524,7 +524,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Entité principale de facturation </label>
-                                        <input onchange="changing(this)" type="text" class="form-control" name="entite" id="entite"  value="{{ $client->entite }}">
+                                        <input onchange="changing(this)" type="text" class="form-control" name="entite" id="entite"  value="{{ $client->entite }}"  placeholder="{{ $client->name }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -542,7 +542,7 @@
                                     <h5>Entités de facturations différentes</h5>
                                 </div>
                                 <div class="col-md-4">
-                                    <button style="float:right" id="add4" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding4"><b><i class="fa fa-map-marker"></i> Ajouter une entit à facturer</b></button>
+                                    <button style="float:right" id="add4" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding4"><b><i class="fa fa-map-marker"></i> Ajouter une entité à facturer</b></button>
                                 </div>
 
                             </div>

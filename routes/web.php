@@ -122,6 +122,7 @@ Route::get('/emails/envoimailbr/{id}','EmailController@envoimailbr')->name('emai
 #Route::get('/emails/envoifax/{id}','EmailController@envoifax')->name('emails.envoifax');
 Route::get('/emails/envoifax/{id}/{type}','EmailController@envoifax')->name('emails.envoifax');
 Route::get('/emails/envoifax/{id}/{type}/{prest}','EmailController@envoifax')->name('emails.envoifax');
+Route::get('/emails/sms/{id}/{type}/{prest}','EmailController@sms')->name('emails.sms');
 
 //Route::post('/emails/searchprest','EmailController@searchprest')->name('emails.searchprest');
 Route::get('/emails/searchprest','EmailController@searchprest')->name('emails.searchprest');
@@ -323,7 +324,9 @@ Route::get('/prestations/view/{id}', 'PrestationsController@view');
 Route::post('/prestations/updating','PrestationsController@updating')->name('prestations.updating');
 Route::post('/prestations/updatestatut','PrestationsController@updatestatut')->name('prestations.updatestatut');
 Route::post('/prestations/valide','PrestationsController@valide')->name('prestations.valide');
-
+Route::get('/prestations/destroy/{id}', 'PrestationsController@destroy');
+Route::get('/prestations/deleteeval/{id}', 'PrestationsController@deleteeval');
+Route::post('/prestations/updatepriorite', 'PrestationsController@updatepriorite')->name('prestations.updatepriorite');
 
 
 

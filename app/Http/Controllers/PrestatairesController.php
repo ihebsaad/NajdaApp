@@ -615,18 +615,27 @@ class PrestatairesController extends Controller
 
     public static function QualiteByEmail($email)
     { $email=  trim($email) ;
-        $Email = Email::where('champ','=', $email)->first();
-        if (isset($Email['qualite'])) {
-            return $Email['qualite'] ;
+        $Email = Adresse::where('champ','=', $email)->first();
+        if (isset($Email['fonction'])) {
+            return $Email['fonction'] ;
         }else{return '';}
 
     }
 
     public static function RemarqueByEmail($email)
     { $email=  trim($email) ;
-        $Email = Email::where('champ','=', $email)->first();
-        if (isset($Email['qualite'])) {
-            return $Email['qualite'] ;
+        $Email = Adresse::where('champ','=', $email)->first();
+        if (isset($Email['remarque'])) {
+            return $Email['remarque'] ;
+        }else{return '';}
+
+    }
+
+    public static function TypeEmail($email)
+    { $email=  trim($email) ;
+        $Email = Adresse::where('champ','=', $email)->first();
+        if (isset($Email['type'])) {
+            return $Email['type'] ;
         }else{return '';}
 
     }

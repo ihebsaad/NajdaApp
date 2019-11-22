@@ -2874,7 +2874,7 @@ class EmailController extends Controller
 
     public function sending()
     {
-        $dossiers = Dossier::all();
+
 
         return view('emails.sending');
     }
@@ -3419,6 +3419,8 @@ if ($from=='najdassist@gmail.com')
 
                }
 
+                $user = auth()->user();
+                $nomuser=$user->name.' '.$user->lastname;
 
                 Log::info('[Agent: '.$nomuser.'] Envoi de mail '.$sujet);
 
@@ -3538,15 +3540,15 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
            //$id=$envoye->id;
           if($envoyeid>0){ $this->export_pdf_send($envoyeid);};
 
-            echo ('<script> window.location.href = "'.$urlsending.'/view/'.$envoyeid.'";</script>') ;
+             echo ('<script> window.location.href = "'.$urlsending.'/view/'.$envoyeid.'";</script>') ;
                 return redirect($urlsending.'/view/'.$envoyeid)->with('success', '  Envoyé ! ');
 
      });
-            var_dump( Mail:: failures());
+          ///  var_dump( Mail:: failures());
 
        } catch (Exception $ex) {
     // Debug via $ex->getMessage();
-     echo '<script>alert("Erreur !") </script>' ;
+    /// echo '<script>alert("Erreur !") </script>' ;
      }
 
 }// end send
@@ -3906,12 +3908,70 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
     }// end send
 
 
-    function sms( $id)
+    function sms( $id,$type,$prest=null)
     {
-        $dossiers = Dossier::all();
+
+        $tels=array();
+        $prestataires=array();
+        $refdem='';$nomabn='';
+        if (isset($prest)){$prest=$prest;}else{$prest=0;}
+
+        if($type=='client')
+        {
+            $cl=app('App\Http\Controllers\DossiersController')->ClientDossierById($id);
+            $refdem=app('App\Http\Controllers\DossiersController')->RefDemDossierById($id);
+
+            $tels =   Adresse::where('nature', 'tel')
+                ->where('parent',$cl)
+                ->pluck('champ');
+
+            $tels =  $tels->unique();
+
+        }
 
 
-        return view('emails.sms', ['doss' => $id,'dossiers'=>$dossiers]);
+
+        if($type=='prestataire')
+        {
+            $prestataires =   Prestation::where('dossier_id', $id)->pluck('prestataire_id');
+            $prestataires = $prestataires->unique();
+
+            $intervenants =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
+
+            // merger prestataire + intervenants
+            $prestataires=$prestataires->merge($intervenants);
+
+            if ($prest!='')
+            {
+
+
+                $tels =   Adresse::where('nature', 'telinterv')
+                    ->where('parent',$prest)
+                    ->pluck('champ');
+
+                $tels =  $tels->unique();
+            }
+
+
+        }
+
+
+        if($type=='assure')
+        {
+            $tels =   Adresse::where('nature', 'teldoss')
+                ->where('typetel','Mobile')
+                ->where('parent',$id)
+                ->pluck('champ');
+
+            $tels =  $tels->unique();
+
+            $nomabn=app('App\Http\Controllers\DossiersController')->FullnameAbnDossierById($id);
+
+        }
+
+
+
+        return view('emails.sms', ['nomabn'=>$nomabn,'doss' => $id,'prestataires'=>$prestataires,'tels'=>$tels,'refdem'=>$refdem,'type'=>$type,'prest'=>$prest]);
 
     }
 

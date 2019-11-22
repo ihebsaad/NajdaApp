@@ -164,7 +164,7 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
 </style>
        <div id="totnotifs"  class="row pull-right" style="<?php echo $style;?>">
         <div class="col-md-1 "><a  title="Notification depuis plus de 10 Minutes" href="{{ route('entrees.index') }}" ><span  id="notifrouge" class="label label-danger  " style="color:black"><?php echo $countR ;?></span></a></div>
-        <div class="col-md-1 "><a  title="Notification depuis plus de 5 Minutes" href="{{ route('entrees.index') }}" ><span  id="notiforange" class="label label-warning  " style="color:black"><?php echo $countO ;?></span></a></div>
+        <div class="col-md-1 "><a  title="Notification depuis plus de 5 Minutes" href="{{ route('entrees.index') }}" ><span  id="notiforange" class="label label-warning  " style="color:black;margin-left:30px"><?php echo $countO ;?></span></a></div>
     </div>
         <?php } ?>
         <ul id="tabskbs" class="nav nav-tabs" style="margin-bottom: 15px;">

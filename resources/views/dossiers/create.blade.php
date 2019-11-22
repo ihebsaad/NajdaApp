@@ -54,6 +54,7 @@ use  \App\Http\Controllers\DocsController;
                                 <option  value="Medic International">Medic International</option>
                                 <option  value="Najda TPA">Najda TPA</option>
                                 <option  value="Transport Najda">Transport Najda</option>
+                                <option  value="X-Press">X-Press</option>
                             </select>
                         </div>
                     </div>

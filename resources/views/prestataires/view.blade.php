@@ -450,12 +450,13 @@
         <table class="table table-striped" id="mytable" style="width:100%">
         <thead>
         <tr id="headtable">
+            <th style="width:10%">ID</th>
             <th style="width:10%">Dossier</th>
             <th style="width:20%">Prestataire</th>
-            <th style="width:20%">Type</th>
-            <th style="width:20%">Spécialité</th>
-            <th style="width:20%">Gouvernorat</th>
-            <th style="width:10%">Prix</th>
+            <th style="width:15%">Type</th>
+            <th style="width:15%">Spécialité</th>
+            <th style="width:15%">Gouvernorat</th>
+             <th style="width:10%">Actions</th>
         </tr>
 
         </thead>
@@ -468,29 +469,35 @@
             if($effectue ==0){$style='background-color:#fcdcd5;';}else{$style='';}
             ?>
 
-            <tr  >
-                <td style="width:35%; <?php echo $style;?> ">
+            <tr > <td style="width:35%; <?php echo $style;?> ">
+                    <a href="{{action('PrestationsController@view', $prestation['id'])}}" >
+                        <?php  echo $prestation['id']  ; ?>
+                    </a></td>
+                <td style="width:10%;   ">
                <a href="{{action('PrestationsController@view', $prestation['id'])}}" >
                         <?php  echo PrestationsController::DossierById($dossid);  ?>
                     </a></td>
-                <td style="width:25%">
+                <td style="width:20%">
                     <?php $prest= $prestation['prestataire_id'];
                     echo PrestationsController::PrestataireById($prest);  ?>
                 </td>
-                <td style="width:20%;">
+                <td style="width:15%;">
                     <?php $typeprest= $prestation['type_prestations_id'];
                     echo PrestationsController::TypePrestationById($typeprest);  ?>
                 </td>
-                <td style="width:20%;">
+                <td style="width:15%;">
                     <?php $specialite= $prestation['specialite'];
                     echo PrestationsController::SpecialiteById($specialite);  ?>
                 </td>
-                <td style="width:20%;">
+                <td style="width:15%;">
                     <?php $gouvernorat= $prestation['gouvernorat'];
                     echo PrestationsController::GouvById($gouvernorat);  ?>
                 </td>
-                <td style="width:20%">{{$prestation->price}}</td>
-
+                <td style="width:10%">{{$prestation->price}}</td>
+                <td><a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('PrestationsController@destroy', $prestation->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                    <span class="fa fa-fw fa-trash-alt"></span>
+                </a>
+                </td>
             </tr>
         @endforeach
         </tbody>
@@ -513,6 +520,7 @@
                         <th style="text-align: center;width:20%">Gouvernorat</th>
                         <th style="text-align: center;width:20%">Ville</th>
                         <th style="text-align: center;width:10%">Priorité</th>
+                        <th style="text-align: center;width:10%">Actions</th>
                      </tr>
 
                     </thead>
@@ -524,7 +532,11 @@
                         <td style="text-align: center;width:20%"><?php echo PrestationsController::GouvById( $eval['gouv']) ;?> </td>
                         <td style="text-align: center;width:20%"><?php echo   $eval['ville'] ;?> </td>
 
-                        <td style="text-align: center;width:10%;"><?php echo $eval['priorite'] ;?></td>
+                        <td style="text-align: center;width:10%;"><input style="text-align:center" id="eval-<?php echo $eval['id']; ?>" onchange="updatePriorite(this,'<?php echo $eval['id']; ?>')" type="number" max="5" min="1" step="1" value="<?php echo $eval['priorite'] ;?>"></td>
+                        <td><a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('PrestationsController@deleteeval', $eval['id']) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                <span class="fa fa-fw fa-trash-alt"></span>
+                            </a>
+                        </td>
                     </tr>
                     @endforeach
                     </tbody>
@@ -978,6 +990,27 @@
 
 
 
+    function updatePriorite(elm,eval){
+        var id=elm.id;
+        var priorite =document.getElementById(id).value;
+
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('prestations.updatepriorite') }}",
+            method: "POST",
+            data: {   eval:eval,priorite:priorite, _token: _token},
+            success: function (data) {
+
+                $('#'+id).animate({
+                    opacity: '0.3',
+                });
+                $('#'+id).animate({
+                    opacity: '1',
+                });
+
+            }
+        });
+    }
 
     function hideinfos() {
         $('#tab01').css('display','none');
@@ -1528,7 +1561,6 @@
         document.getElementById('ledestinataire').value=parseInt(num);
 
     }
-
 
 
     function checkexiste( elm,type) {

@@ -65,24 +65,25 @@
     <input id="envoye" type="hidden" class="form-control" name="envoye"  value="" />
     <input id="brsaved" type="hidden" class="form-control" name="brsaved"  value="0" />
 
-    <div class="form-group">
-        {{ csrf_field() }}
-        <label for="from">Emetteur:</label>
-        <div class="row">
-            <select class="form-control" name="from" id="from" >
-                <option value="faxnajdassist@najda-assistance.com">faxnajdassist@najda-assistance.com</option>
-                <option value="24ops@najda-assistance.com">24ops@najda-assistance.com</option>
-                <option value="hotels.vat@medicmultiservices.com">hotels.vat@medicmultiservices.com</option>
-                <option value="assistance@medicmultiservices.com">assistance@medicmultiservices.com</option>
-                <option value="ambulance.transp@medicmultiservices.com">ambulance.transp@medicmultiservices.com</option>
-                <option value="vat.transp@medicmultiservices.com">vat.transp@medicmultiservices.com</option>
-                <option value="operations@medicinternational.tn">operations@medicinternational.tn</option>
-                <option value="tpa@najda-assistance.com">tpa@najda-assistance.com</option>
-                <option value="taxi@najda-assistance.com">taxi@najda-assistance.com</option>
-                <option value="xpress@najda-assistance.com">xpress@najda-assistance.com</option>
-            </select>
-        </div>
-    </div>
+         {{ csrf_field() }}
+
+    <?php $typea=trim(strtoupper($dossier->type_affectation));
+    $from='';
+    if($typea=='NAJDA'){$from='24ops@najda-assistance.com';}
+    if($typea=='VAT'){$from='hotels.vat@medicmultiservices.com';}
+    if($typea=='MEDIC'){$from='assistance@medicmultiservices.com';}
+    if($typea=='TRANSPORT MEDIC'){$from='ambulance.transp@medicmultiservices.com';}
+    if($typea=='TRANSPORT VAT'){$from='vat.transp@medicmultiservices.com';}
+    if($typea=='MEDIC INTERNATIONAL'){$from='operations@medicinternational.tn';}
+    if($typea=='NAJDA TPA'){$from='tpa@najda-assistance.com';}
+    if($typea=='TRANSPORT NAJDA'){$from='taxi@najda-assistance.com';}
+    if($typea=='X-PRESS'){$from='xpress@najda-assistance.com';}
+
+
+    ?>
+            <input type="hidden"   name="from" id="from" value="<?php echo $from; ?>" />
+
+
         <div class="row">
         <label for="destinataire">Destinataire:</label>
         <div class="row">
@@ -108,7 +109,7 @@
             <select id="destinataire" required  class="form-control" name="destinataire[]"  multiple >
                 <option>ihebsaad@gmail.com</option>
                 @foreach($listeemails as  $mail)
-                    <option   value="<?php echo $mail ;?>"> <?php echo $mail ;?>  <small style="font-size:12px">(<?php echo PrestatairesController::NomByEmail( $mail);?>) - "<?php echo PrestatairesController::QualiteByEmail($mail);?>"</small> </option>
+                    <option   value="<?php echo $mail ;?>"> <?php echo $mail ;?>  <small style="font-size:11px">(<?php echo PrestatairesController::NomByEmail( $mail);?>) - '<?php echo PrestatairesController::QualiteByEmail($mail);?>' ('<?php echo PrestatairesController::TypeEmail($mail);?>' , '<?php echo PrestatairesController::RemarqueByEmail($mail);?>)' </small> </option>
                 @endforeach
              </select>
         </div>

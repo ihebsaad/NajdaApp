@@ -29,14 +29,14 @@ use  \App\Http\Controllers\DocsController;
         <?php
          // les agents ne voient pas l'aaffectation - à vérifier
          if (Gate::check('isAdmin') || Gate::check('isSupervisor') ) { ?>
-        <?php if ((isset($dossier->affecte)) && (!empty($dossier->affecte))) { ?>
+        <?php if ((isset($dossier->affecte)) && (($dossier->affecte>0))) { ?>
 
         <b>Affecté à:</b>
         <?php 
-        $agentname = User::where('id',$dossier->affecte)->first();
-        if ((Gate::check('isAdmin') || Gate::check('isSupervisor')) && !empty ($agentname))
+       if($dossier->affecte >0) {$agentname = User::where('id',$dossier->affecte)->first();}else{$agentname=null;}
+        if ((Gate::check('isAdmin') || Gate::check('isSupervisor')) &&  ($agentname!=null))
             { echo '<a href="#" data-toggle="modal" data-target="#attrmodal"><input type="hidden" id="affecte" value="'.$dossier->affecte.'" >';}
-        echo $agentname['name']; 
+            if( ($dossier->affecte >0)){ echo $agentname['name'].' '.$agentname['lastname'];}
         if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
             { echo '</a>';}
 
@@ -83,9 +83,35 @@ use  \App\Http\Controllers\DocsController;
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-default" id="sms">
+            <!--<button type="button" class="btn btn-default" id="sms">
                     <a style="color:black" href="{{action('EmailController@sms',$dossier->id)}}"> <i class="fas fa-sms"></i> SMS</a>
+                </button>-->
+
+                <button type="button"  class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-sms"></i> SMS <i class="fa fa-angle-down"></i>
+
                 </button>
+
+
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="{{route('emails.sms',['id'=>$dossier->id,'type'=> 'client','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Au client </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.sms',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            À l'intervenant </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.sms',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            À l'assuré  </a>
+                    </li>
+                    <li>
+                        <a href="{{route('emails.sms',['id'=>$dossier->id,'type'=> 'libre','prest'=> 0])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                            Libre </a>
+                    </li>
+
+                </ul>
             </div>
 
             <div class="btn-group">
@@ -185,6 +211,7 @@ use  \App\Http\Controllers\DocsController;
                                             <option <?php if ($dossier->type_affectation =='Medic International'){echo 'selected="selected"';} ?> value="Medic International">Medic International</option>
                                             <option <?php if ($dossier->type_affectation =='Najda TPA'){echo 'selected="selected"';} ?> value="Najda TPA">Najda TPA</option>
                                             <option <?php if ($dossier->type_affectation =='Transport Najda'){echo 'selected="selected"';} ?> value="Transport Najda">Transport Najda</option>
+                                            <option <?php if ($dossier->type_affectation =='X-Press'){echo 'selected="selected"';} ?> value="X-Press">X-Press</option>
                                         </select>
                                     </div>
                                 </div>
@@ -220,7 +247,7 @@ use  \App\Http\Controllers\DocsController;
 
                                                     <div class="row">
 
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-8">
                                                         <div class="form-group">
                                                             <label>Client </label>
                                                             <select onchange="changing(this);location.reload();" id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"   value="{{ $dossier->customer_id }}" >
@@ -256,7 +283,7 @@ use  \App\Http\Controllers\DocsController;
                                                                     <label for="inputError" class="control-label">Entité de facturation  </label>
 
                                                                     <div class="input-group-control">
-                                                                        <select onchange="changing(this)" type="text" id="adresse_facturation" name="adresse_facturation" class="form-control"    >
+                                                                        <select onchange="changing(this);location.reload();" type="text" id="adresse_facturation" name="adresse_facturation" class="form-control <?php if ($dossier->adresse_facturation=='') {echo ' bg-danger';}?>"  >
                                                                             <option></option>
                                                                             <option  <?php if ($dossier->adresse_facturation==$entite){echo 'selected="selected"';} ?> value="<?php echo $entite;?>"><?php echo $entite .' - <small>'.$adresse.'</small>';?></option>
                                                                             <?php foreach ($liste as $l)
@@ -516,7 +543,7 @@ use  \App\Http\Controllers\DocsController;
 
 
 
-                                                                <div class="row" style="margin-top:30px">
+                                                                <div class="row" style="margin-top:50px">
                                                                     <div class="col-md-8">
                                                                         <h4><i class="fa fa-lg fa-user"></i> Numéros Tels</h4>
                                                                     </div>
@@ -547,7 +574,7 @@ use  \App\Http\Controllers\DocsController;
                                                                             <td style="width:14%;"><input   id='tel-tt-<?php echo $phone->id;?>' type="text"  style="width:100%" value="<?php echo $phone->typetel; ?>" onchange="changingAddress('<?php echo $phone->id; ?>','typetel',this)" /><?php  '<br>'; if($phone->typetel=='Mobile') {?> <a onclick="setTel(this);" class="<?php echo $phone->tel;?>" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i>Envoyer un SMS </a><?php } ?> </td>
                                                                             <td style="width:22%;"><textarea   id='tel-rem-<?php echo $phone->id;?>'    style="width:100%" onchange="changingAddress('<?php echo $phone->id; ?>','remarque',this)" ><?php echo $phone->remarque; ?></textarea></td>
                                                                             <td style="width:4%;">
-                                                                                <a  href="{{action('ClientsController@deleteaddress', $phone->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                                                                <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('ClientsController@deleteaddress', $phone->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                                                                     <span class="fa fa-fw fa-trash-alt"></span>
                                                                                 </a>
                                                                             </td>
@@ -557,7 +584,7 @@ use  \App\Http\Controllers\DocsController;
                                                                     </tbody>
                                                                 </table>
 
-                                                                <div class="row" style="margin-top:30px">
+                                                                <div class="row" style="margin-top:50px">
                                                                     <div class="col-md-8">
                                                                         <h4><i class="fa fa-lg fa-user"></i> Emails </h4>
                                                                     </div>
@@ -585,7 +612,7 @@ use  \App\Http\Controllers\DocsController;
                                                                             <td style="width:30%;"><input   id='em-em-<?php echo $emailad->id;?>' type="text"  style="width:100%" value="<?php echo $emailad->mail; ?>" onchange="changingAddress('<?php echo $emailad->id; ?>','mail',this)" /></td>
                                                                              <td style="width:10%;"><textarea   id='em-rem-<?php echo $emailad->id;?>'    style="width:100%" onchange="changingAddress('<?php echo $emailad->id; ?>','remarque',this)" ><?php echo $emailad->remarque; ?></textarea></td>
                                                                             <td style="width:4%;">
-                                                                                <a  href="{{action('ClientsController@deleteaddress', $emailad->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                                                                <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('ClientsController@deleteaddress', $emailad->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                                                                     <span class="fa fa-fw fa-trash-alt"></span>
                                                                                 </a>
                                                                             </td>
@@ -913,6 +940,7 @@ use  \App\Http\Controllers\DocsController;
                                         <!--                                    </div>-->
 
                                     <div class="col-md-12">
+
                                         <div class="panel panel-success" id="medical" style=" <?php if ($dossier->type_dossier =='Technique'){echo 'display:none';}?>;">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
@@ -959,11 +987,8 @@ use  \App\Http\Controllers\DocsController;
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="inputError" class="control-label">Médecin Traitant </label>
-                                                                <!--
-                                                                    <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="text" id="medecin_traitant" name="medecin_traitant" class="form-control"   value="{{ $dossier->medecin_traitant }}" >
-                                                                    </div>
-                                        -->
+
+
                                                                     <div class="input-group-control">
                                                                         <select onchange="changing(this);ajout_prest(this);"  id="medecin_traitant" name="medecin_traitant" class="form-control"   value="{{ $dossier->medecin_traitant }}">
 
@@ -981,24 +1006,7 @@ use  \App\Http\Controllers\DocsController;
                                                                 </div>
                                                             </div>
 
-                                                            <!--  <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label for="inputError" class="control-label">Ch</label>
 
-                                                                    <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="text" id="hospital_ch" name="hospital_ch" class="form-control"   value="{{ $dossier->hospital_ch }}" >
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label for="inputError" class="control-label">Tel </label>
-
-                                                                    <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="text" id="hospital_phone" name="hospital_phone" class="form-control"   value="{{ $dossier->hospital_phone }}" >
-                                                                    </div>
-                                                                </div>
-                                                            </div>-->
 
                                                         </div>
 
@@ -1129,45 +1137,8 @@ use  \App\Http\Controllers\DocsController;
                                                             </div>
                                                         </div>
                                                      </div>
-<!--
-                                                        <div class="row">
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label for="inputError" class="control-label">Adresse Hopital3 </label>
 
-                                                                    <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="text" id="hospital_address3" name="hospital_address3" class="form-control"  value="{{ $dossier->hospital_address3 }}" >
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label for="inputError" class="control-label">Ch3</label>
 
-                                                                    <div class="input-group-control">
-                                                                        <input onchange="changing(this)" type="text" id="hospital_ch3" name="hospital_ch3" class="form-control"  value="{{ $dossier->hospital_ch3 }}" >
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label for="inputError" class="control-label">Tel3 </label>
-
-                                                                    <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="text" id="hospital_phone3" name="hospital_phone3" class="form-control"  value="{{ $dossier->hospital_phone3 }}" >
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label for="inputError" class="control-label">Médecin Traitant3 </label>
-
-                                                                    <div class="input-group-control">
-                                                                        <input onchange="changing(this)" type="text" id="medecin_traitant3" name="medecin_traitant3" class="form-control"   value="{{ $dossier->medecin_traitant3 }}" >
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>-->
                                                     </div>
                                                 </div>
                                             </div>
@@ -1831,25 +1802,27 @@ $iduser=$CurrentUser->id;
         </div>
     </div>
 </div>
-
 <?php if ((Gate::check('isAdmin') || Gate::check('isSupervisor'))) { ?>
 <!-- Modal attribution dossier-->
 <div class="modal fade" id="attrmodal" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModal2">Affectation dossier</h5>
+        <form  method="post" action="{{ route('affectation.dossier') }}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Affectation de dossier</h5>
 
-            </div>
-            <div class="modal-body">
-                <div class="card-body">
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+                        <div class="form-group">
 
 
-                    <div class="form-group">
-                        
-                        <form  method="post" action="{{ route('dossiers.attribution') }}">
                             {{ csrf_field() }}
                             <input id="dossierid" name="dossierid" type="hidden" value="{{ $dossier->id}}">
+                            <input id="affecteurdoss" name="affecteurdoss" type="hidden" value="{{ Auth::user()->id}}">
+                            <input id="statdoss" name="statdoss" type="hidden" value="existant">
+
                             <div class="form-group " >
                                 <div class=" row  ">
                                     <div class="form-group mar-20">
@@ -1857,15 +1830,18 @@ $iduser=$CurrentUser->id;
                                         <select id="agent" name="agent" class="form-control select2" style="width: 230px">
                                             <option value="Select">Selectionner</option>
                                             <?php $agents = User::get(); ?>
+                                          <?php  if($dossier->affecte >0) {$agentname = User::where('id',$dossier->affecte)->first();}else{$agentname=null;}?>
 
                                             @foreach ($agents as $agt)
-                                                @if ($agentname["id"] == $agt["id"])
-                                                    <option value={{ $agt["id"] }} selected >{{ $agt["name"].' '.$agt["lastname"] }}</option>
-                                                @endif
-                                                <?php if ( $agt->isOnline() &&  $agentname["id"] != $agt["id"]  ) { ?>
+                                                <?php if ( ($dossier->affecte >0) && $agentname["id"] == $agt["id"]){ ?>
+                                                <option value={{ $agt["id"] }} selected >{{ $agt["name"].' '.$agt["lastname"] }}</option> <?php
+                                                }else{
+                                                if ( $agt->isOnline() ) { ?>
+
                                                 <option value={{ $agt["id"] }} >{{ $agt["name"] .' '.$agt["lastname"] }}</option>
 
                                                 <?php }
+                                                }
                                                 ?>
                                             @endforeach
                                         </select>
@@ -1873,19 +1849,22 @@ $iduser=$CurrentUser->id;
                                 </div>
                             </div>
 
-                        </form>
+
+                        </div>
+
+
+                    </div>
 
                 </div>
-
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="submit" id="attribdoss" class="btn btn-primary">Affecter</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="submit" id="attribdoss" class="btn btn-primary">Affecter</button>
-            </div>
-
-        </div>
+        </form>
     </div>
 </div>
+
 
 <!-- Modal Email -->
 <div class="modal fade" id="adding7" tabindex="-1" role="dialog" aria-labelledby="exampleModal7" aria-hidden="true">
@@ -2504,7 +2483,7 @@ function disabling(elm) {
 
     $(document).ready(function() {
 
-        //$("#iddossier").select2();
+        $("#customer_id").select2();
 
         $('#phoneicon').click(function() {
 

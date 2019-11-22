@@ -39,12 +39,13 @@ class PrestationsController extends Controller
         $villes = Ville::all();
 
         $prestations = Prestation::orderBy('created_at', 'desc')->paginate(10000000);
-        return view('prestations.index',['dossiers' => $dossiers,'villes' => $villes], compact('prestations'));
+        return view('prestations.index', ['dossiers' => $dossiers, 'villes' => $villes], compact('prestations'));
     }
 
     public function show()
-    {}
- 
+    {
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -54,22 +55,22 @@ class PrestationsController extends Controller
     {
 
         $typesprestations = TypePrestation::all();
-         $gouvernorats = DB::table('cities')->get();
+        $gouvernorats = DB::table('cities')->get();
 
-        return view('prestations.create',['typesprestations' => $typesprestations,'gouvernorats' => $gouvernorats]);
+        return view('prestations.create', ['typesprestations' => $typesprestations, 'gouvernorats' => $gouvernorats]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $prestations = new Prestation([
-             'nom' =>trim( $request->get('nom')),
-             'typepres' => trim($request->get('typepres')),
+            'nom' => trim($request->get('nom')),
+            'typepres' => trim($request->get('typepres')),
             // 'par'=> $request->get('par'),
 
         ]);
@@ -83,7 +84,7 @@ class PrestationsController extends Controller
     public function valide(Request $request)
     {
 
-        $prestation=intval($request->get('prestation'));
+        $prestation = intval($request->get('prestation'));
 
         Prestation::where('id', $prestation)->update(array('effectue' => 1));
 
@@ -92,174 +93,183 @@ class PrestationsController extends Controller
     public function saving(Request $request)
     {
 
-        $iddoss= intval($request->get('dossier_id'));
-        $prest=intval($request->get('prestataire'));
-        $typep= intval( $request->get('typeprest'));
-        $gouv= intval( $request->get('gouvernorat'));
-        $spec= intval( $request->get('specialite'));
-        $date=  $request->get('date');
-        $details=  $request->get('details');
-        $autorise=  $request->get('autorise');
-        $effectue=null;
-        if($autorise <>''){$effectue=1;}
+        $iddoss = intval($request->get('dossier_id'));
+        $prest = intval($request->get('prestataire'));
+        $typep = intval($request->get('typeprest'));
+        $gouv = intval($request->get('gouvernorat'));
+        $spec = intval($request->get('specialite'));
+        $date = $request->get('date');
+        $details = $request->get('details');
+        $autorise = $request->get('autorise');
+        $effectue = null;
+        if ($autorise <> '') {
+            $effectue = 1;
+        }
 
-            $prestation = new Prestation([
-           'prestataire_id' =>$prest ,
-            'dossier_id' => $iddoss ,
-            'type_prestations_id' =>$typep ,
+        $prestation = new Prestation([
+            'prestataire_id' => $prest,
+            'dossier_id' => $iddoss,
+            'type_prestations_id' => $typep,
             'gouvernorat' => $gouv,
-                'specialite' => $spec,
-                'date_prestation' => $date,
-                'details' => $details,
-                'autorise' => $autorise,
-                'effectue' => $effectue,
+            'specialite' => $spec,
+            'date_prestation' => $date,
+            'details' => $details,
+            'autorise' => $autorise,
+            'effectue' => $effectue,
 
-            ]);
+        ]);
 
-             $nomprest= app('App\Http\Controllers\PrestatairesController')->ChampById('civilite',$prest).' '. app('App\Http\Controllers\PrestatairesController')->ChampById('prenom',$prest).' '.  app('App\Http\Controllers\PrestatairesController')->ChampById('name',$prest);
+        $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prest);
         $user = auth()->user();
-         $nomuser=$user->name.' '.$user->lastname;
+        $nomuser = $user->name . ' ' . $user->lastname;
 
-        if ($prestation->save())
-           {
-               // Envoi de mail
-               if($autorise !=''){
-                 $to=array('ihebsaad@gmail.com');
-               // $to='ihebsaad@gmail.com';
-                $sujet='Nouvelle prestation effectuée';
-                 $contenu='Bonjour, <br>Nouvelle prestation effectuée.<br>
-                 Date: '.$date.'<br>
-                 Prestataire: '.$nomprest.'<br>
-                 Autorisée Par: Mr '.strtoupper($autorise).'<br>
-                 Détails: '.$details.'<br>
-                 Créée par :'.$nomuser.'<br>    
+        if ($prestation->save()) {
+            // Envoi de mail
+            if ($autorise != '') {
+                $to = array('ihebsaad@gmail.com');
+                // $to='ihebsaad@gmail.com';
+                $sujet = 'Nouvelle prestation effectuée';
+                $contenu = 'Bonjour, <br>Nouvelle prestation effectuée.<br>
+                 Date: ' . $date . '<br>
+                 Prestataire: ' . $nomprest . '<br>
+                 Autorisée Par: Mr ' . strtoupper($autorise) . '<br>
+                 Détails: ' . $details . '<br>
+                 Créée par :' . $nomuser . '<br>    
                      ';
-                   $cc=array('ihebs001@gmail.com','saadiheb@gmail.com');
-                 //  $cc=array('chef.plateau@najda-assistance.com','smq@medicmultiservices.com',nejib.karoui@medicmultiservices.com);
+                $cc = array('ihebs001@gmail.com', 'saadiheb@gmail.com');
+                //  $cc=array('chef.plateau@najda-assistance.com','smq@medicmultiservices.com',nejib.karoui@medicmultiservices.com);
 
-                   Mail::send([], [], function ($message) use ($to,$sujet,$contenu ,$cc  ) {
-                       $message
-                           //->to($to ?: [])
-                           // ->to($to)
+                Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc) {
+                    $message
+                        //->to($to ?: [])
+                        // ->to($to)
 
-                            ->cc($cc ?: [])
-                           //  ->bcc($ccimails ?: [])
-                           ->subject($sujet)
-                           ->setBody($contenu, 'text/html');
-
-
-                             foreach ($to as $t) {
-                                 $message->to($t);
-                              }
-
-                   });
+                        ->cc($cc ?: [])
+                        //  ->bcc($ccimails ?: [])
+                        ->subject($sujet)
+                        ->setBody($contenu, 'text/html');
 
 
-               }
+                    foreach ($to as $t) {
+                        $message->to($t);
+                    }
 
-               $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($iddoss);
-               Log::info('[Agent: '.$nomuser.'] Ajout de prestation pour le dossier: '.$ref);
+                });
 
 
-               $id=$prestation->id;
-               $date=date('Y-m-d H:i:s');
+            }
+
+            $ref = app('App\Http\Controllers\DossiersController')->RefDossierById($iddoss);
+            Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' . $ref);
+
+
+            $id = $prestation->id;
+            $date = date('Y-m-d H:i:s');
             //   $evaluation = Evaluation::find($prest);
-               $evaluation = //DB::table('evaluations')
-                  Evaluation::where('prestataire',$prest)
-                   ->where('gouv',$gouv)
-                   ->where('type_prest',$typep)
-                   ->where('specialite',$spec)
-                      ->update(['derniere_prestation' => $date]);
+            $evaluation = //DB::table('evaluations')
+                Evaluation::where('prestataire', $prest)
+                    ->where('gouv', $gouv)
+                    ->where('type_prest', $typep)
+                    ->where('specialite', $spec)
+                    ->update(['derniere_prestation' => $date]);
 
-               // Suppression de la liste 2 de la fiche de dossier (Intervenants Ajoutés Manuellement)
-                Intervenant::where( 'prestataire_id',$prest)
-               ->where('dossier' , $iddoss )
-               ->delete();
+            // Suppression de la liste 2 de la fiche de dossier (Intervenants Ajoutés Manuellement)
+            Intervenant::where('prestataire_id', $prest)
+                ->where('dossier', $iddoss)
+                ->delete();
 
 
-               return $id;
-           }
-            //
+            return $id;
+        }
+        //
 
     }
 
     public function updating(Request $request)
     {
 
-        $id= $request->get('prestation');
-        $champ= strval($request->get('champ'));
-       $val= $request->get('val');
+        $id = $request->get('prestation');
+        $champ = strval($request->get('champ'));
+        $val = $request->get('val');
 
 
         Prestation::where('id', $id)->update(array($champ => $val));
 
-      //  $dossier->save();
+        //  $dossier->save();
 
-     ///   return redirect('/dossiers')->with('success', 'Entry has been added');
+        ///   return redirect('/dossiers')->with('success', 'Entry has been added');
 
     }
 
     public function updatestatut(Request $request)
     {
 
-        $id= $request->get('prestation');
-        $statut=  $request->get('statut');
-        $details= $request->get('details');
-        $prestataire= $request->get('prestataire');
+        $id = $request->get('prestation');
+        $statut = $request->get('statut');
+        $details = $request->get('details');
+        $prestataire = $request->get('prestataire');
 
 
         Prestation::where('id', $id)->update(array('statut' => $statut));
-       if($details!=''){ Prestation::where('id', $id)->update(array('details' => $details));}
+        if ($details != '') {
+            Prestation::where('id', $id)->update(array('details' => $details));
+        }
 
-        $to='';$raison='';
-        $sujet='Demande de prestation échouée';
-        if($statut=='nonjoignable'){$raison='Non Joignable';}
-        if($statut=='nondisponbile'){$raison='Non Disponbile';}
-        if($statut=='autre'){$raison=$details;}
-     $nomprest= app('App\Http\Controllers\PrestatairesController')->ChampById('civilite',$prestataire).' '. app('App\Http\Controllers\PrestatairesController')->ChampById('prenom',$prestataire).' '.  app('App\Http\Controllers\PrestatairesController')->ChampById('name',$prestataire);
-        $contenu= "Bonjour ".$nomprest.",<br>
+        $to = '';
+        $raison = '';
+        $sujet = 'Demande de prestation échouée';
+        if ($statut == 'nonjoignable') {
+            $raison = 'Non Joignable';
+        }
+        if ($statut == 'nondisponbile') {
+            $raison = 'Non Disponbile';
+        }
+        if ($statut == 'autre') {
+            $raison = $details;
+        }
+        $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prestataire) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
+        $contenu = "Bonjour " . $nomprest . ",<br>
 une demande de prestation de vos services a échoué pour les raisons suivantes :<br>
-<b>".$raison."</b> <br><br>
+<b>" . $raison . "</b> <br><br>
 Contactez nous pour plus d'informations.<br>
 A bientôt.<br>
 
 ";
 
-        $cc=array();
-        $emails =   Adresse::where('nature', 'email')
-            ->where('parent',$prestataire)
+        $cc = array();
+        $emails = Adresse::where('nature', 'email')
+            ->where('parent', $prestataire)
             ->get();
 
-        foreach($emails as $email) {
-            array_push($cc,$email->champ );
+        foreach ($emails as $email) {
+            array_push($cc, $email->champ);
 
         }
 
-        Mail::send([], [], function ($message) use ($to,$sujet,$contenu ,$cc  ) {
-        $message
-              ->to('saadiheb@gmail.com')
-            // ->to()
+        Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc) {
+            $message
+                ->to('saadiheb@gmail.com')
+                // ->to()
 
-            ->cc($cc ?: [])
-          //  ->bcc($ccimails ?: [])
-            ->subject($sujet)
-            ->setBody($contenu, 'text/html');
-     /*   if (isset($to)) {
+                ->cc($cc ?: [])
+                //  ->bcc($ccimails ?: [])
+                ->subject($sujet)
+                ->setBody($contenu, 'text/html');
+            /*   if (isset($to)) {
 
-            foreach ($to as $t) {
-                $message->to($t);
-            }
-        }*/
-    });
+                   foreach ($to as $t) {
+                       $message->to($t);
+                   }
+               }*/
+        });
 
     }
-
 
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function view($id)
@@ -274,29 +284,28 @@ A bientôt.<br>
         $villes = Ville::all();
         $gouvernorats = DB::table('cities')->get();
 
-        $prestataire=$prestation->prestataire_id;
-        $emails =   Adresse::where('nature', 'email')
-            ->where('parent',$prestataire)
+        $prestataire = $prestation->prestataire_id;
+        $emails = Adresse::where('nature', 'email')
+            ->where('parent', $prestataire)
             ->get();
 
-        $tels =   Adresse::where('nature', 'tel')
-            ->where('parent',$prestataire)
+        $tels = Adresse::where('nature', 'tel')
+            ->where('parent', $prestataire)
             ->get();
 
-        $faxs =   Adresse::where('nature', 'fax')
-            ->where('parent',$prestataire)
+        $faxs = Adresse::where('nature', 'fax')
+            ->where('parent', $prestataire)
             ->get();
 
 
-
-        return view('prestations.view',['emails'=>$emails,'tels'=>$tels,'faxs'=>$faxs,'dossiers'=>$dossiers,'typesprestations'=>$typesprestations,'gouvernorats' => $gouvernorats,'villes'=>$villes], compact('prestation'));
+        return view('prestations.view', ['emails' => $emails, 'tels' => $tels, 'faxs' => $faxs, 'dossiers' => $dossiers, 'typesprestations' => $typesprestations, 'gouvernorats' => $gouvernorats, 'villes' => $villes], compact('prestation'));
 
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -306,14 +315,14 @@ A bientôt.<br>
         $dossiers = Dossier::all();
 
 
-        return view('prestations.edit',['dossiers' => $dossiers], compact('prestations'));
+        return view('prestations.edit', ['dossiers' => $dossiers], compact('prestations'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -321,26 +330,35 @@ A bientôt.<br>
 
         $prestations = Prestations::find($id);
 
-       // if( ($request->get('ref'))!=null) { $prestations->name = $request->get('ref');}
-       // if( ($request->get('type'))!=null) { $prestations->email = $request->get('type');}
-       // if( ($request->get('affecte'))!=null) { $prestations->user_type = $request->get('affecte');}
+        // if( ($request->get('ref'))!=null) { $prestations->name = $request->get('ref');}
+        // if( ($request->get('type'))!=null) { $prestations->email = $request->get('type');}
+        // if( ($request->get('affecte'))!=null) { $prestations->user_type = $request->get('affecte');}
 
         $prestations->save();
 
-        return redirect('/prestations')->with('success', 'mise à jour avec succès');    }
+        return redirect('/prestations')->with('success', 'mise à jour avec succès');
+    }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $prestations = Prestation::find($id);
-        $prestations->delete();
+        $prestation = Prestation::find($id);
+        $prestation->delete();
+        return back();
 
-        return redirect('/prestations')->with('success', '  Supprimé avec succès');
+    }
+
+    public function deleteeval($id)
+    {
+        $eval = Evaluation::find($id);
+        $eval->delete();
+        return back();
+
     }
 
     public static function DossierById($id)
@@ -350,7 +368,9 @@ A bientôt.<br>
 
         if (isset($dossier['reference_medic'])) {
             return $dossier['reference_medic'];
-        }else{return '';}
+        } else {
+            return '';
+        }
     }
 
 
@@ -367,7 +387,9 @@ A bientôt.<br>
         $prestataire = Prestataire::find($id);
         if (isset($prestataire['name'])) {
             return $prestataire['name'];
-        }else{return '';}
+        } else {
+            return '';
+        }
 
     }
 
@@ -376,7 +398,9 @@ A bientôt.<br>
         $typeprestation = TypePrestation::find($id);
         if (isset($typeprestation['name'])) {
             return $typeprestation['name'];
-        }else{return '';}
+        } else {
+            return '';
+        }
 
     }
 
@@ -387,7 +411,9 @@ A bientôt.<br>
 
         if (isset($gouv['name'])) {
             return $gouv['name'];
-        }else{return '';}
+        } else {
+            return '';
+        }
     }
 
 
@@ -397,8 +423,20 @@ A bientôt.<br>
 
         if (isset($sp['nom'])) {
             return $sp['nom'];
-        }else{return '';}
+        } else {
+            return '';
+        }
     }
 
+
+    public static function updatepriorite(Request $request)
+    {
+        $eval = $request->get('eval');
+        $priorite = $request->get('priorite');
+
+
+        Evaluation::where('id', $eval)->update(array('priorite' => $priorite));
+
+    }
 }
 
