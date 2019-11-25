@@ -124,16 +124,17 @@ class Dossier extends Model
         'date_debut_vehicule_address',
         'date_fin_vehicule_address',
 
-        'plafond'
+        'plafond',
+        'user_id'
     ];
-
+/*
     protected $dateFormat = 'Y-m-d H:i:s';
 
     public function getDateFormat()
     {
         return 'Y-m-d H:i:s.u';
     }
-
+*/
 /*
  public function activeMissions()
     {

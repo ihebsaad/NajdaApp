@@ -455,8 +455,8 @@ return redirect('roles');
 
         if( \Gate::allows('isAdmin') || \Gate::allows('isSupervisor') )
         {
-            $entrees = Entree::orderBy('id', 'desc')->where('statut','<','2')->paginate(12);
-            return view('notifs',['entrees'=>$entrees]);
+          //  $entrees = Entree::orderBy('id', 'desc')->where('statut','<','2')->paginate(12);
+            return view('notifs' );
 
         }
         else {
@@ -600,6 +600,11 @@ return redirect('roles');
 
         Parametre::where('id', 1)->update(array($champ => $val));
 
+        $user = auth()->user();
+        $nomuser=$user->name.' '.$user->lastname;
+
+        Log::info('[User: '.$nomuser.'] Modifications des paramètres :'.$champ.' => '.$val);
+
 
     }
 
@@ -610,6 +615,102 @@ return redirect('roles');
         $val= $request->get('val');
 
         Seance::where('id', 1)->update(array($champ => $val));
+
+        $user = auth()->user();
+        $nomuser=$user->name.' '.$user->lastname;
+
+        /*** Modification du role par l'administrateur  => affectation des dossiers automatiques  ****/
+
+        if ( $champ=='superviseurmedic' && $val>0)
+        {
+
+            Dossier::where(function ($query) {
+                $query->where('type_dossier', 'Medical')
+                    ->where('statut', '<>', 5)
+                    ->where('current_status', 'actif');
+            })->orWhere(function ($query) {
+                $query->where('type_dossier', 'Mixte')
+                    ->where('statut', '<>', 5)
+                    ->where('current_status', 'actif');
+            })->update(array('affecte' => $val ));
+            ///  }
+
+            $agent=User::find($val);
+            $nomag=$agent->name.' '.$agent->lastname;
+
+            Log::info('[Admin: '.$nomuser.'] Modifications de la séance  :'.$champ.' => '.$nomag);
+
+        }
+
+        if ( $champ=='superviseurtech' && $val>0)
+        {
+
+            Dossier::where('type_dossier','Technique')
+                ->where('current_status', 'actif')
+                ->where('statut', '<>', 5)
+
+                ///    (['type_dossier' => 'Technique','current_status'=>'<> Cloture'])
+                ->update(array('affecte' => $val));
+
+            $agent=User::find($val);
+            $nomag=$agent->name.' '.$agent->lastname;
+
+            Log::info('[Admin: '.$nomuser.'] Modifications de la séance  :'.$champ.' => '.$nomag);
+
+        }
+
+
+        if ( $champ=='chargetransport' && $val>0)
+        {
+            // affecter tous les dossier TN, TM, TV, XP au chargé transport
+            // vérification Temps
+            ///   if ( ($date_actu >'07:50' && $date_actu < '08:45'  ) || ($date_actu >'14:50' && $date_actu < '15:45'  )   ) {
+
+            Dossier::where(function ($query) {
+                $query->where('reference_medic','like','%TN%')
+                    ->where('statut', '<>', 5)
+                    ->where('current_status', 'actif');
+            })->orWhere(function($query) {
+                $query->where('reference_medic','like','%TM%')
+                    ->where('statut', '<>', 5)
+                    ->where('current_status', 'actif');
+            })->orWhere(function($query) {
+                $query->where('reference_medic','like','%TV%')
+                    ->where('statut', '<>', 5)
+                    ->where('current_status', 'actif');
+            })->orWhere(function($query) {
+                $query->where('reference_medic','like','%XP%')
+                    ->where('statut', '<>', 5)
+                    ->where('current_status', 'actif');
+            })->update(array('affecte' => $val));
+
+            $agent=User::find($val);
+            $nomag=$agent->name.' '.$agent->lastname;
+
+            Log::info('[Admin: '.$nomuser.'] Modifications de la séance  :'.$champ.' => '.$nomag);
+
+        }
+
+        if ( $champ=='veilleur' && $val>0)
+        {
+            // affecter tous les dossiers au veilleur
+            // vérification Temps
+            ///if ( $date_actu < $debut || ($date_actu > $fin) ) {
+
+            Dossier::where('current_status', '!=', 'Cloture')
+                ->where('statut','<>',5)
+                ->update(array('affecte' =>$val));
+
+            $agent=User::find($val);
+            $nomag=$agent->name.' '.$agent->lastname;
+
+            Log::info('[Admin: '.$nomuser.'] Modifications de la séance  :'.$champ.' => '.$nomag);
+
+        }
+
+
+/***/
+
 
 
     }

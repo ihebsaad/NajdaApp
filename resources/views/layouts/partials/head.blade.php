@@ -179,6 +179,23 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
         }
 
+
+        function checkemails1(){
+            $.ajax({
+                type: "get",
+                url: "<?php echo $urlapp; ?>/emails/checkboite1",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check boite 1 : '+data);
+                    //Send another request in n seconds.
+                    setTimeout(function(){
+                        checkemails1();
+                    }, 30000);  //30 secds
+                }
+            });
+        }
+
         function checkemails2(){
             $.ajax({
                 type: "get",
@@ -256,7 +273,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails6();
-                    }, 50000);  //50 secds
+                    }, 52000);  //52 secds
                 }
             });
         }
@@ -272,7 +289,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails7();
-                    }, 50000);  //50 secds
+                    }, 55000);  //55 secds
                 }
             });
         }
@@ -299,11 +316,11 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 success:function(data)
                 {
                     //console.log the response
-                    console.log('check boite 2 : '+data);
+                    console.log('check boite 9 : '+data);
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails9();
-                    }, 60000);  //60 secds
+                    }, 62000);  //62 secds
                 }
             });
         }
@@ -319,7 +336,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkfax();
-                    }, 60000);  //60 secds
+                    }, 65000);  //65 secds
                 }
             });
         }
@@ -609,17 +626,18 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
         checkNotifs();
         checkemails();	//test
-     //    checkemails2();  // 24ops
-      //  checkemails3(); //MEDIC
-       ///  checkemails4();  //TM
-       // checkemails5();   //TV
+      //   checkemails1();  // 24ops
+     //    checkemails2();  // VAT
+     //    checkemails3(); //MEDIC
+      //   checkemails4();  //TM
+       //  checkemails5();   //TV
       //   checkemails6(); // MI
-     //    checkemails7();   // TPA
-      //   checkemails8();   //TN
-      //   checkemails9();  //XPRESS
-      //  checksms();
-      //  checkboite();
-       // checkfax();
-        checkdemandes();
+      //   checkemails7();   // TPA
+       //  checkemails8();   //TN
+       //  checkemails9();  //XPRESS
+        // checksms();
+      //   checkboite();
+      //   checkfax();
+         checkdemandes();
     });
 </script>

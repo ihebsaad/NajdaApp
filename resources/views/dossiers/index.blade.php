@@ -27,6 +27,8 @@
              <div class="row">
                 <div class="col-lg-8"> <h4>Liste des dossiers </h4></div>
                 <div class="col-lg-4">
+                    <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
+
                  </div>
             </div>
         </div>
@@ -258,7 +260,7 @@
                 <div class="modal-body">
                     <div class="card-body">
 
-                        <!--<form method="post" >-->
+                       <form method="post" >
                         {{ csrf_field() }}
 
                         <div class="form-group">
@@ -281,39 +283,25 @@
                                 <option  value="Medic International">Medic International</option>
                                 <option   value="Najda TPA">Najda TPA</option>
                                 <option   value="Transport Najda">Transport Najda</option>
+                                <option  value="X-Press">X-Press</option>
                             </select>
                         </div>
 
 
                         <div class="form-group">
-                            <label for="type">Prénom de l'abonné :</label>
+                            <label for="type">Prénom de l'assuré :</label>
                             <input type="text" id="subscriber_name" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="type">Nom de l'abonné :</label>
+                            <label for="type">Nom de l'assuré :</label>
                             <input type="text" id="subscriber_lastname" class="form-control">
                         </div>
-                        <div class="form-group">
-                            <label for="affecte">Agent Affecté :</label>
-                            <select   id="affecte" name="affecte"   class="form-control js-example-placeholder-single">
-                                @foreach($users as $user  )
-                                    <option
-                                            @if($user->id==$iduser)
-                                            selected="selected"
-                                            @endif
 
-                                            value="{{$user->id}}">{{$user->name}}</option>
 
-                                @endforeach
-                            </select>
-                        </div>
                         <input type="hidden" value="nouveau" name="statdoss">
 
 
-                        <input type="hidden" value="" name="entree_id" id="entree_id" >
-
-                        <input type="hidden" value="{{Auth::user()->id}}" name="affecteur">
-                        <!-- </form>-->
+                         </form>
                     </div>
 
 
@@ -424,16 +412,20 @@
 
 
         $('#add').click(function(){
+            var _token = $('input[name="_token"]').val();
+
             var type_dossier = $('#type_dossier').val();
             var type_affectation = $('#type_affectation').val();
-            var affecte = $('#affecte').val();
-            if ((type_dossier != '')&&(type_affectation != '')&&(affecte != ''))
+            var name = $('#subscriber_lastname').val();
+            var lastname = $('#subscriber_name').val();
+           // var entree = $('#entree_id').val();
+            if ((type_dossier != '')&&(type_affectation != ''))
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url:"{{ route('dossiers.saving') }}",
                     method:"POST",
-                    data:{type_dossier:type_dossier,type_affectation:type_affectation,affecte:affecte, _token:_token},
+                    data:{type_dossier:type_dossier,type_affectation:type_affectation,name:name,lastname:lastname, _token:_token},
                     success:function(data){
 
                         //   alert('Added successfully');

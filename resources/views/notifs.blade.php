@@ -29,7 +29,8 @@
         				
 		  <div class="panel-body" style="display: block;min-height:700px;padding:15px 15px 15px 15px">
 		 <?php
-use \App\Http\Controllers\UsersController;
+              use App\Entree;
+              use \App\Http\Controllers\UsersController;
    use \App\Http\Controllers\ClientsController;
               use \App\Attachement ;
 $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
@@ -118,6 +119,12 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
               if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
 ?>
+              <?php           $today=date('Y-m-d');
+              $entrees = Entree::orderBy('id', 'desc')->where('statut','<','2')
+                  ->where('created_at','like',$today.'%')
+                  ->paginate(12);
+
+              ?>
                         <div class="padding:5px 5px 5px 5px">
                            <!-- <h4>Supervision</h4><br>-->
                             <ul id="tabs" class="nav  nav-tabs"  >
@@ -145,6 +152,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                                 </li>
                             </ul>
 							<br>
+                            <H2>Flux de réception d'Aujourd'hui </H2>
                             <table id="tabusers" style="text-align: center ;background-color:#F8F7F6;padding:5px 5px 5px 5px">
                                 <thead style="text-align:center;font-size:14px;"><th>Type</th><th>Réception</th><th>Emetteur</th><th>Sujet</th><th>Nb attchs</th><th>Dossier</th><th>Affecté à</th><th>Consulté</th></thead>
 								<tbody class="thetable" style="font-size:14px;line-height:30px">

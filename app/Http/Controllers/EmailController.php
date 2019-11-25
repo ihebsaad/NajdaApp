@@ -259,7 +259,7 @@ class EmailController extends Controller
 
     } /// end inbox
 
-// Boite Najda
+// Boite test
     function check()
     {
 /*
@@ -501,20 +501,20 @@ class EmailController extends Controller
 
     } /// end check
 
-// boite Vat
-    function checkboite2()
+    // boite Najda
+    function checkboite1()
     {
         $parametres =  DB::table('parametres')
             ->where('id','=', 1 )->first();
-        $pass_VAT=$parametres->pass_VAT ;
+        $pass_N=$parametres->pass_N ;
 
         $oClient = new Client([
             'host'          => 'ssl0.ovh.net',// env('hostreception'),
             'port'          => '993',// env('portreception'),
             //    'encryption'    => '',//env('encreception'),
             'validate_cert' => true,
-            'username'      =>'24ops1@najda-assistance.com', //hotels.vat@medicmultiservices.com
-            'password'      => 'j3k47@KnNZ',
+            'username'      =>'24ops1@najda-assistance.com',
+            'password'      => $pass_N ,
             'protocol'      => 'imap'
         ]);
 
@@ -534,7 +534,7 @@ class EmailController extends Controller
             $sujet=strval($oMessage->getSubject())  ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
-          //  $contenubrut= $oMessage->getTextBody();
+            //  $contenubrut= $oMessage->getTextBody();
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -574,12 +574,247 @@ class EmailController extends Controller
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
+                    //  'contenutxt'=> $contenubrut,
+                    'contenu'=>  ($contenu) ,
+                    'reception'=> $date,
+                    'nb_attach'=> $nbattachs,
+                    'type'=> 'email',
+                    'mailid'=> 'b1-'.$mailid,
+                    'viewed'=>0,
+                    'dossier'=>$refdossier,
+                    'dossierid'=>$dossierid,
+                    'statut'=>$statut,
+
+                ]);
+
+                $entree->save();
+                Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+
+                /*********************/
+                if($refdossier!= ''){
+
+
+                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                    $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+
+                    //  $user=  DB::table('users')->where('id','=', $userid )->first();
+                    if($userid>0){
+
+                        $user = User::find($userid);
+
+                        Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+
+                        // Notification::send($user, new Notif_Suivi_Doss($entree));
+
+
+                    }
+                    else{
+                        $seance =  DB::table('seance')
+                            ->where('id','=', 1 )->first();
+                        $disp=$seance->dispatcheur ;
+
+                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+                    }
+                    // Activer le dossier
+                    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+
+
+                }
+                else{
+
+                    $seance =  DB::table('seance')
+                        ->where('id','=', 1 )->first();
+                    $disp=$seance->dispatcheur ;
+
+                    if($disp>0) {
+                        $user = User::find($disp);
+                        // $user=  DB::table('users')->where('id','=', $disp )->first();
+
+                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+                    }
+                    //  Notification::send( $user, new Notif_Suivi_Doss($entree));
+
+                }
+
+                $id=$entree->id;
+
+                ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
+
+                if($storeid==false){
+                    $firstid=$id;
+                    $storeid=true;
+                }
+                $aAttachment = $oMessage->getAttachments();
+
+                $aAttachment->each(function ($oAttachment) use ($id){
+                    $path= storage_path()."/Emails/";
+                    /** @var \Webklex\IMAP\Attachment $oAttachment */
+                    if (!file_exists($path.$id)) {
+                        mkdir($path.$id, 0777, true);
+                    }
+                    // save in folder
+                    $oAttachment->save($path.$id);
+                    // save in DB
+
+                    $nom = $oAttachment->getName();
+                    $facturation='';
+                    $type=  $oAttachment->getExtension();
+
+                    // verifier si l'attachement pdf contient des mots de facturation
+                    if ( App::environment() === 'production') {
+
+                        if ($type=='pdf')
+                        {
+                            $path=$path.$id."/".$nom;
+                            $path=realpath($path);
+                            $text = (new Pdf())
+                                ->setPdf($path )
+                                ->text();
+
+                            if(strpos($text,'facturation')!==false)
+                            {
+                                $facturation='facturation';
+                            }
+                            if(strpos($text,'invoice')!==false)
+                            {
+                                $facturation=$facturation.' , '.'invoice';
+                            }
+
+                            if(strpos($text,'plafond')!==false)
+                            {
+                                $facturation=$facturation.' , '.'plafond';
+                            }
+
+                            if(strpos($text,'gop')!==false)
+                            {
+                                $facturation=$facturation.' , '.'gop';
+                            }
+
+
+                        } // end if pdf
+                    } // end if  production
+
+
+                    $path2= '/Emails/'.$id.'/'.$nom ;
+
+                    $attach = new Attachement([
+                        'nom' => $nom,
+                        'type' => $type,
+                        'path'=> $path2,
+                        'parent'=> $id,
+                        'entree_id'=> $id,
+                        'facturation'=> $facturation,
+                        'boite'=> 0,  // 0 = reception, 1 = envoi
+
+                    ]);
+
+                    $attach->save();
+
+                });
+                // récupérer last id une autre fois pour vérifier l'enregistrement
+                $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
+                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
+                if($lastid==$lastid2)
+                {
+                    $oMessage->moveToFolder('INBOX') ;
+                }
+
+
+
+            } else {
+                // error
+                echo 'error';
+            }
+
+
+        }
+        return $firstid;
+        // return view('emails.check');
+
+    }
+
+// boite VAT
+    function checkboite2()
+    {
+        $parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+        $pass_VAT=$parametres->pass_VAT ;
+
+        $oClient = new Client([
+            'host'          => 'mail.bmail.tn',
+            //  'host'          => 'pop3.tunet.tn',
+            'port'          => '110',// env('portreception'),
+            'encryption'    => false,//env('encreception'),
+            'validate_cert' => false,
+            'username'      =>'hotels.vat1@medicmultiservices.com',
+            'password'      => $pass_VAT,
+            'protocol'      => 'pop3'
+        ]);
+
+//Connect to the IMAP Server
+        $oClient->connect();
+        $aFolder = $oClient->getFolders();
+        $storeid=false;$firstid=0;
+
+        //Get all Messages of the current Mailbox $oFolder
+        /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
+        $oFolder = $oClient->getFolder('INBOX');
+        $aMessage = $oFolder->messages()->all()->get();
+        /** @var \Webklex\IMAP\Message $oMessage */
+        foreach ($aMessage as $oMessage) {
+            //  $nbattachs=10;
+
+            $sujet=strval($oMessage->getSubject())  ;
+            $nbattachs= intval($oMessage->getAttachments()->count()) ;
+            $contenu= $oMessage->getHTMLBody(true);
+          //  $contenubrut= $oMessage->getTextBody();
+            //  $from= $oMessage->getFrom()[0]->mail;
+            $from= $oMessage->getSender()[0]->mail;
+            $date= $oMessage->getDate();
+            $mailid=$oMessage->getUid();
+
+            //Move the current Message to 'INBOX.read'
+           // if ($oMessage->moveToFolder('read') == true) {
+                // get last id
+                $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
+                // message moved
+
+
+                // dispatch
+                $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
+
+                $refdossier='';$dossierid=0;
+                $statut = 0;
+                foreach ($dossiers as $dos) {
+                    $ref=trim(strval($dos['reference_medic']));
+                    $refCL=trim(strval($dos['reference_customer']));
+                    if ($refCL==''){$refCL='XX';}
+
+                    if (   (strpos($sujet, $ref )!==false) ||
+                        (strpos($contenu, $ref) !==false ) ||
+                        (strpos($sujet, $refCL )!==false && ( strlen($refCL) >4 )  )  ||
+                        ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
+                    {
+                        $refdossier = trim($dos['reference_medic']);
+                        $dossierid = intval($dos['id']);
+                        $statut = 1;
+                        break;
+                    }
+                }
+
+                $entree = new Entree([
+                    'destinataire' => 'hotels.vat@medicmultiservices.com',
+
+                    'emetteur' => ($from),
+                    'sujet' =>   $sujet ,
                   //  'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
                     'type'=> 'email',
-                    'mailid'=> 'b2-'.$mailid,
+                    'mailid'=> 'b2-'.$date.'-'.$mailid,
                     'viewed'=>0,
                     'dossier'=>$refdossier,
                     'dossierid'=>$dossierid,
@@ -715,18 +950,24 @@ class EmailController extends Controller
                 });
                 // récupérer last id une autre fois pour vérifier l'enregistrement
                 $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-                if($lastid==$lastid2)
-                {
-                    $oMessage->moveToFolder('INBOX') ;
-                }
+            // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
+            /* if($lastid==$lastid2)
+              {
+                  $oMessage->moveToFolder('INBOX') ;
+              }*/
+
+            // si c'est enregistré, supprimer de la boite
+            if($lastid!=$lastid2)
+            {
+                $oMessage->delete() ;
+            }
 
 
 
-            } else {
+        /*    } else {
                 // error
                 echo 'error';
-            }
+            }*/
 
 
         }
@@ -743,13 +984,13 @@ class EmailController extends Controller
             ->where('id','=', 1 )->first();
         $pass_Medic=$parametres->pass_MEDIC ;
         $oClient = new Client([
-            'host'          => 'ssl0.ovh.net',// env('hostreception'),
-            'port'          => '993',// env('portreception'),
-            //    'encryption'    => '',//env('encreception'),
-            'validate_cert' => true,
-            'username'      =>'assistance@medicmultiservices.com',
+            'host'          => 'mail.bmail.tn',// env('hostreception'),
+            'port'          => '110',// env('portreception'),
+            'encryption'    => false,//env('encreception'),
+            'validate_cert' => false,
+            'username'      =>'assistance1@medicmultiservices.com',
             'password'      => $pass_Medic,
-            'protocol'      => 'imap'
+            'protocol'      => 'pop3'
         ]);
 
 //Connect to the IMAP Server
@@ -775,7 +1016,7 @@ class EmailController extends Controller
             $mailid=$oMessage->getUid();
 
             //Move the current Message to 'INBOX.read'
-            if ($oMessage->moveToFolder('read') == true) {
+         //   if ($oMessage->moveToFolder('read') == true) {
                 // get last id
                 $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
                 // message moved
@@ -813,7 +1054,7 @@ class EmailController extends Controller
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
                     'type'=> 'email',
-                    'mailid'=> 'b3-'.$mailid,
+                    'mailid'=> 'b3-'.$date.'-'.$mailid,
                     'viewed'=>0,
                     'dossier'=>$refdossier,
                     'dossierid'=>$dossierid,
@@ -949,18 +1190,23 @@ class EmailController extends Controller
                 });
                 // récupérer last id une autre fois pour vérifier l'enregistrement
                 $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-                if($lastid==$lastid2)
-                {
-                    $oMessage->moveToFolder('INBOX') ;
-                }
+            // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
+            /* if($lastid==$lastid2)
+              {
+                  $oMessage->moveToFolder('INBOX') ;
+              }*/
+
+            // si c'est enregistré, supprimer de la boite
+            if($lastid!=$lastid2)
+            {
+                $oMessage->delete() ;
+            }
 
 
-
-            } else {
+         /*   } else {
                 // error
                 echo 'error';
-            }
+            }*/
 
 
         }
@@ -984,7 +1230,7 @@ class EmailController extends Controller
                 'encryption'    => false,//env('encreception'),
              'validate_cert' => false,
             'username'      =>'ambulance.transp1@medicmultiservices.com',
-            'password'      => 'umH01catA+B@Kc15#Pa',
+            'password'      => $pass_TM,
             'protocol'      => 'pop3'
         ]);
 
@@ -1054,7 +1300,7 @@ class EmailController extends Controller
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
                     'type'=> 'email',
-                    'mailid'=> 'b4-'.$mailid,
+                    'mailid'=> 'b4-'.$date.'-'.$mailid,
                     'viewed'=>0,
                     'dossier'=>$refdossier,
                     'dossierid'=>$dossierid,
@@ -1191,10 +1437,17 @@ class EmailController extends Controller
                 // récupérer last id une autre fois pour vérifier l'enregistrement
                 $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
                 // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-                if($lastid==$lastid2)
+              /* if($lastid==$lastid2)
                 {
                     $oMessage->moveToFolder('INBOX') ;
-                }
+                }*/
+
+            // si c'est enregistré, supprimer de la boite
+            if($lastid!=$lastid2)
+            {
+                $oMessage->delete() ;
+            }
+
 
           /*  } else {
                  echo 'error moving the email';
@@ -1212,13 +1465,14 @@ class EmailController extends Controller
             ->where('id','=', 1 )->first();
         $pass_TV=$parametres->pass_TV ;
 
+
         $oClient = new Client([
-            'host'          => 'mail.bmail.tn',// env('hostreception'),
-            'port'          => '995',// env('portreception'),
-                 'encryption'    => 'ssl',//env('encreception'),
+            'host'          => 'mail.bmail.tn',
+             'port'          => '110',
+            'encryption'    => false,
             'validate_cert' => false,
-            'username'      =>'vat.transp@medicmultiservices.com',
-            'password'      => 'taxiVAt2018@&+15=-',
+            'username'      =>'vat.transp1@medicmultiservices.com',
+            'password'      => $pass_TV,
             'protocol'      => 'pop3'
         ]);
 
@@ -1245,7 +1499,7 @@ class EmailController extends Controller
             $mailid=$oMessage->getUid();
 
             //Move the current Message to 'INBOX.read'
-            if ($oMessage->moveToFolder('read') == true) {
+            //if ($oMessage->moveToFolder('read') == true) {
                 // get last id
                 $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
                 // message moved
@@ -1283,7 +1537,7 @@ class EmailController extends Controller
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
                     'type'=> 'email',
-                    'mailid'=> 'b5-'.$mailid,
+                    'mailid'=> 'b5-'.$date.'-'.$mailid,
                     'viewed'=>0,
                     'dossier'=>$refdossier,
                     'dossierid'=>$dossierid,
@@ -1419,19 +1673,23 @@ class EmailController extends Controller
                 });
                 // récupérer last id une autre fois pour vérifier l'enregistrement
                 $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-                if($lastid==$lastid2)
-                {
-                    $oMessage->moveToFolder('INBOX') ;
-                }
+            // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
+            /* if($lastid==$lastid2)
+              {
+                  $oMessage->moveToFolder('INBOX') ;
+              }*/
 
+            // si c'est enregistré, supprimer de la boite
+            if($lastid!=$lastid2)
+            {
+                $oMessage->delete() ;
+            }
 
-
-            } else {
+         /*   } else {
                 // error
                 echo 'error';
             }
-
+*/
 
         }
         return $firstid;
@@ -1452,7 +1710,7 @@ class EmailController extends Controller
             //    'encryption'    => '',//env('encreception'),
             'validate_cert' => true,
             'username'      =>'operations@medicinternational.tn',
-            'password'      => 'axa@mutA+18CN15',
+            'password'      => $pass_MI,
             'protocol'      => 'imap'
         ]);
 
@@ -1674,7 +1932,9 @@ class EmailController extends Controller
 // boite TPA
     function checkboite7()
     {
-
+        $parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+        $pass_TPA=$parametres->pass_TPA ;
 
         $oClient = new Client([
             'host'          => 'ssl0.ovh.net',// env('hostreception'),
@@ -1682,7 +1942,7 @@ class EmailController extends Controller
             //    'encryption'    => '',//env('encreception'),
             'validate_cert' => true,
             'username'      =>'tpa1@najda-assistance.com',
-            'password'      => 'J7k98+HsMH',
+            'password'      => $pass_TPA,
             'protocol'      => 'imap'
         ]);
 
@@ -1905,13 +2165,17 @@ class EmailController extends Controller
 // Boite TN
     function checkboite8()
     {
+        $parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+        $pass_TN=$parametres->pass_TN ;
+
         $oClient = new Client([
             'host'          => 'ssl0.ovh.net',// env('hostreception'),
             'port'          => '993',// env('portreception'),
             //    'encryption'    => '',//env('encreception'),
             'validate_cert' => true,
             'username'      =>'taxi1@najda-assistance.com',
-            'password'      => 'TaxiPswD@2019',
+            'password'      => $pass_TN,
             'protocol'      => 'imap'
         ]);
 
@@ -1967,7 +2231,7 @@ class EmailController extends Controller
                 }
 
                 $entree = new Entree([
-                    'destinataire' => 'taxi1@najda-assistance.com',
+                    'destinataire' => 'taxi@najda-assistance.com',
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
@@ -2136,6 +2400,10 @@ class EmailController extends Controller
 
     function checkboite9()
     {
+        $parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+        $pass_XP=$parametres->pass_XP ;
+
 
         $oClient = new Client([
             'host'          => 'ssl0.ovh.net',// env('hostreception'),
@@ -2143,7 +2411,7 @@ class EmailController extends Controller
             //    'encryption'    => '',//env('encreception'),
             'validate_cert' => true,
             'username'      =>'xpress@najda-assistance.com',
-            'password'      => 'Rem2018@najda',
+            'password'      => $pass_XP,
             'protocol'      => 'imap'
         ]);
 
@@ -3370,7 +3638,7 @@ if ($from=='najdassist@gmail.com')
         $user = auth()->user();
         $nomuser=$user->name.' '.$user->lastname;
 
-        $contenu=$contenu.'<br><br>'.$nomuser.'<br>'. $signatureagent.'<br><br>'.$signatureentite;
+        $contenu=$contenu.'<br><br>Cordialement / Best regards<br>'.$nomuser.' '. $signatureagent.'<br><br><hr style="float:left;width:40%"><br>'.$signatureentite;
 
 
         $swiftMailer = new Swift_Mailer($swiftTransport);

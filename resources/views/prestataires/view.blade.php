@@ -331,8 +331,8 @@
                         <tr class="headtable">
                             <th style="width:35%">Nom et Prénom</th>
                             <th style="width:20%">Tel</th>
-                            <th style="width:30%">Remarque</th>
-                            <th style="width:10%">Type</th>
+                            <th style="width:20%">Remarque</th>
+                            <th style="width:20%">Type</th>
                             <th style="width:5%">Supp</th>
 
                         </tr>
@@ -341,10 +341,10 @@
                         <tbody>
                         @foreach($tels as $tel)
                             <tr>
-                                <td style="width:35%;"><input id='tel-nom-<?php echo $tel->id;?>'  style="width:50%" value="<?php echo $tel->nom; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','nom',this)" /> <input  id='tel-prenom-<?php echo $tel->id;?>'   style="width:48%" value="<?php echo $tel->prenom; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','prenom',this)" /></td>
-                                <td style="width:20%;"><input type="text" pattern="[0-9]" id='tel-champ-<?php echo $tel->id;?>'  style="width:100%" value="<?php echo $tel->champ; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','champ',this)" /></td>
-                                <td style="width:30%;"><input   id='tel-rem-<?php echo $tel->id;?>'   style="width:100%" value="<?php echo $tel->remarque; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','remarque',this)" /></td>
-                                <td style="width:10%;"><select  id='tel-typetel-<?php echo $tel->id;?>'   style="width:100%"  onchange="changingAddress('<?php echo $tel->id; ?>','typetel',this)" ><option <?php  if($tel->typetel=='Fixe'){echo 'selected="selected"';} ?> value="Fixe">Fixe</option><option <?php  if($tel->typetel=='Mobile'){echo 'selected="selected"';} ?> value="Mobile">Mobile</option></option></select> <?php if($tel->typetel=='Mobile') {?> <a onclick="setTel(this);" class="<?php echo $tel->champ;?>" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a><?php } ?>
+                                <td style="width:35%;"><input id='tel-nom-<?php echo $tel->id;?>'  style="width:100%;font-size:13px" value="<?php echo $tel->nom; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','nom',this)" /><br><input  id='tel-prenom-<?php echo $tel->id;?>'   style="width:100%;font-size:13px" value="<?php echo $tel->prenom; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','prenom',this)" /></td>
+                                <td style="width:20%;"><input type="text" pattern="[0-9]" id='tel-champ-<?php echo $tel->id;?>'  style="width:100%;font-size:13px" value="<?php echo $tel->champ; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','champ',this)" /></td>
+                                <td style="width:20%;"><input   id='tel-rem-<?php echo $tel->id;?>'   style="width:100%;font-size:13px" value="<?php echo $tel->remarque; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','remarque',this)" /></td>
+                                <td style="width:20%;"><select  id='tel-typetel-<?php echo $tel->id;?>'   style="width:100%;font-size:13px"  onchange="changingAddress('<?php echo $tel->id; ?>','typetel',this)" ><option <?php  if($tel->typetel=='Fixe'){echo 'selected="selected"';} ?> value="Fixe">Fixe</option><option <?php  if($tel->typetel=='Mobile'){echo 'selected="selected"';} ?> value="Mobile">Mobile</option></select> <?php if($tel->typetel=='Mobile') {?> <a onclick="setTel(this);" class="<?php echo $tel->champ;?>" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a><?php } ?>
                                 <td style="width:5%;">
                                     <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('ClientsController@deleteaddress', $tel->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span>
@@ -369,10 +369,10 @@
                     <table class="table table-striped"  style="width:100%;margin-top:35px;margin-bottom:35px;font-size:16px;">
                         <thead>
                         <tr class="headtable">
-                            <th style="width:35%">Nom</th>
-                            <th style="width:20%">Email</th>
-                             <th style="width:30%">Remarque</th>
-                            <th style="width:10%">Contacter</th>
+                            <th style="width:25%">Nom</th>
+                            <th style="width:35%">Email</th>
+                             <th style="width:20%">Remarque</th>
+                            <th style="width:5%">Contact</th>
                             <th style="width:5%">Supp</th>
                         </tr>
 
@@ -380,10 +380,10 @@
                         <tbody>
                         @foreach($emails as $email)
                             <tr>
-                                <td style="width:35%;"><input id='email-nom-<?php echo $email->id;?>'  style="width:50%" value="<?php echo $email->nom; ?>" onchange="changingAddress('<?php echo $email->id; ?>','nom',this)" /> <input  id='email-prenom-<?php echo $email->id;?>'   style="width:48%" value="<?php echo $email->prenom; ?>" onchange="changingAddress('<?php echo $email->id; ?>','prenom',this)" /></td>
-                                <td style="width:20%;"><input type="email"  id='email-champ-<?php echo $email->id;?>'   style="width:100%" value="<?php echo $email->champ; ?>" onchange="changingAddress('<?php echo $email->id; ?>','champ',this)" /></td>
-                                 <td style="width:30%;"><input   id='email-rem-<?php echo $email->id;?>'   style="width:100%" value="<?php echo $email->remarque; ?>" onchange="changingAddress('<?php echo $email->id; ?>','remarque',this)" /></td>
-                                <td style="width:10%;"><i class="fa fa-envelope"></i></td>
+                                <td style="width:25%;"><input id='email-nom-<?php echo $email->id;?>'  style="width:100%;font-size:13px" value="<?php echo $email->nom; ?>" onchange="changingAddress('<?php echo $email->id; ?>','nom',this)" /><br><input  id='email-prenom-<?php echo $email->id;?>'   style="width:100%;font-size:13px" value="<?php echo $email->prenom; ?>" onchange="changingAddress('<?php echo $email->id; ?>','prenom',this)" /></td>
+                                <td style="width:35%;"><input type="email"  id='email-champ-<?php echo $email->id;?>'   style="width:100%;font-size:13px" value="<?php echo $email->champ; ?>" onchange="changingAddress('<?php echo $email->id; ?>','champ',this)" /></td>
+                                 <td style="width:30%;"><input   id='email-rem-<?php echo $email->id;?>'   style="width:100%;font-size:13px" value="<?php echo $email->remarque; ?>" onchange="changingAddress('<?php echo $email->id; ?>','remarque',this)" /></td>
+                                <td style="width:5%;"><i class="fa fa-envelope"></i></td>
                                 <td style="width:5%;">
                                     <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('ClientsController@deleteaddress', $email->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span>
@@ -408,10 +408,10 @@
                     <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
                         <thead>
                         <tr class="headtable">
-                            <th style="width:35%">Nom</th>
-                            <th style="width:20%">Fax</th>
+                            <th style="width:25%">Nom</th>
+                            <th style="width:30%">Fax</th>
                              <th style="width:30%">Remarque</th>
-                            <th style="width:10%">Contacter</th>
+                            <th style="width:5%">Contact</th>
                             <th style="width:5%">Supp</th>
                         </tr>
 
@@ -419,10 +419,10 @@
                         <tbody>
                         @foreach($faxs as $fax)
                             <tr>
-                                <td style="width:35%;"><input id='fax-nom-<?php echo $fax->id;?>'  style="width:50%" value="<?php echo $fax->nom; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','nom',this)" /> <input  id='fax-prenom-<?php echo $fax->id;?>'   style="width:48%" value="<?php echo $fax->prenom; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','prenom',this)" /></td>
-                                <td style="width:20%;"><input type="text" pattern="[0-9]" id='fax-champ-<?php echo $fax->id;?>'   style="width:100%" value="<?php echo $fax->champ; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','champ',this)" /></td>
-                                 <td style="width:30%;"><input   id='fax-rem-<?php echo $fax->id;?>'   style="width:100%" value="<?php echo $fax->remarque; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','remarque',this)" /></td>
-                                <td style="width:10%;"><i class="fa fa-fax"></i></td>
+                                <td style="width:25%;"><input id='fax-nom-<?php echo $fax->id;?>'  style="width:100%;font-size:13px" value="<?php echo $fax->nom; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','nom',this)" /><br><input  id='fax-prenom-<?php echo $fax->id;?>'   style="width:100%;font-size:13px" value="<?php echo $fax->prenom; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','prenom',this)" /></td>
+                                <td style="width:30%;"><input type="text" pattern="[0-9]" id='fax-champ-<?php echo $fax->id;?>'   style="width:100%;font-size:13px" value="<?php echo $fax->champ; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','champ',this)" /></td>
+                                 <td style="width:30%;"><input   id='fax-rem-<?php echo $fax->id;?>'   style="width:100%;font-size:13px" value="<?php echo $fax->remarque; ?>" onchange="changingAddress('<?php echo $fax->id; ?>','remarque',this)" /></td>
+                                <td style="width:5%;"><i class="fa fa-fax"></i></td>
                                 <td style="width:5%;">
                                     <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('ClientsController@deleteaddress', $fax->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span>

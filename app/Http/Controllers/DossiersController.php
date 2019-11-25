@@ -225,11 +225,14 @@ class DossiersController extends Controller
 
         }
 
+        $user = auth()->user();
+
         $dossier = new Dossier([
             'type_dossier' => $request->get('type_dossier'),
             'type_affectation' => $type_affectation,
              'reference_medic' => $reference_medic,
             'entree' => $request->get('entree'),
+            'user_id'=>$user->id
 
         ]);
 
@@ -237,7 +240,6 @@ class DossiersController extends Controller
             $iddoss = $dossier->id;
 
 
-            $user = auth()->user();
             $nomuser = $user->name . ' ' . $user->lastname;
             Log::info('[Agent: ' . $nomuser . '] Ajout de dossier: ' . $reference_medic);
         }
@@ -334,6 +336,8 @@ class DossiersController extends Controller
         }
 
         ///   if ($this->CheckRefExiste($reference_medic) === 0) {
+          $user = auth()->user();
+
         $dossier = new Dossier([
             'type_dossier' => $request->get('type_dossier'),
             'type_affectation' => $type_affectation,
@@ -342,13 +346,12 @@ class DossiersController extends Controller
             'subscriber_lastname' => $subscriber_lastname,
             'subscriber_name' => $subscriber_name,
             'entree' => $entreedoss,
-
+            'user_id'=>$user->id
         ]);
 
         if ($dossier->save())
         { $iddoss=$dossier->id;
 
-            $user = auth()->user();
             $nomuser=$user->name.' '.$user->lastname;
             Log::info('[Agent: '.$nomuser.'] Ajout de dossier: '.$reference_medic);
 
@@ -361,63 +364,7 @@ class DossiersController extends Controller
                 Entree::where('id',$identree)
                     ->update(array('dossier' => $reference_medic));
 
-            $nomabn=  $subscriber_name.' '.$subscriber_lastname;
-                $message= $request->get('message');
-                //    $message='test';
-                $send= $request->get('send');
-                if ($send==true)
-                {  //$params=array('entree'=>$entree->id,'message'=>$message);
-               //     app('App\Http\Controllers\EmailController')->accuse($identree,$message);
 
-                  $refdossier = app('App\Http\Controllers\EntreesController')->ChampById('dossier',$identree);
-                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-
-                    $clientid = app('App\Http\Controllers\DossiersController')->ClientDossierById($iddossier);
-                    if ($clientid >0)
-                    {
-                        $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$clientid);
-                        $refclient=app('App\Http\Controllers\ClientsController')->ClientChampById('reference',$clientid);
-
-                        if ($langue=='francais'){
-
-                            $sujet=  $nomabn.'  - V/Ref: '.$refclient .' - N/Ref: '.$refdossier ;
-
-                        }else{
-
-                            $sujet=  $nomabn.'  - Y/Ref: '.$refclient .' - O/Ref: '.$refdossier ;
-
-                        }
-                    } else{
-
-                         $sujet=  $nomabn.'  -    O/Ref: '.$refdossier ;
-                    }
-
-                    $to=  app('App\Http\Controllers\EntreesController')->ChampById('emetteur',$identree);
-
-                    $params = Parametre::find(1);
-                    $signature = $params["signature"];
-
-                    $contenu=$message.'<br><br>'.$signature;
-                    try{
-                        Mail::send([], [], function ($message) use ($to,$sujet,$contenu) {
-                            $message
-
-                                ->to($to)
-                                ->subject($sujet)
-                                ->setBody($contenu, 'text/html');
-
-                        });
-
-                   } catch (Exception $ex) {
-                        // Debug via $ex->getMessage();
-                  //      echo '<script>alert("Erreur !") </script>' ;
-                    }
-
-
-
-
-
-                }// endif send
 
                 $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i');
                 $affec=new AffectDoss([

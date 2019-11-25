@@ -83,6 +83,7 @@ use App\Http\Controllers\TagsController;
         <div id="emailhead" class="panel-collapse collapse in" aria-expanded="true" style="">
             <div class="panel-body">
                 <div class="row" id="displine" style="display:none;padding-left:30px;padding-bottom:15px;padding-top:15px;background-color: #F9F9F8 ">
+                    <span style="margin-bottom:5px">Cliquez sur la référence de dossier parmi la liste à droite:</span><br>
                     <B> Dossier : </B> <input type="text" readonly id="affdoss"  style="width:150px;" />    <button style="margin-left:35px" type="button" id="updatefolder" class="btn btn-primary">Dispatcher</button>
 
                 </div>

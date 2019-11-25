@@ -2,7 +2,8 @@
 <?php
 use App\Http\Controllers\EntreesController;use App\User ;
 use App\Template_doc ; 
-use App\Document ; 
+use App\Document ;
+use \App\Http\Controllers\UsersController;
 
 ?>
 <?php use \App\Http\Controllers\PrestationsController;
@@ -1582,6 +1583,8 @@ use  \App\Http\Controllers\DocsController;
                                 </div>
                             </div>
                             <div class="col-md-12">
+                                <?php $idagent=$dossier->user_id; $creator=UsersController::ChampById('name',$idagent).' '.UsersController::ChampById('lastname',$idagent); $createdat=  date('d/m/Y H:i', strtotime($dossier->created_at ))   ;?>
+                                Dossier créé par <B><?php echo $creator ;?></B> - Date :<?php echo $createdat ?>
                                 <!--   <div class="form-actions right">
                                        <button type="button" id="editDos" class="btn btn-sm btn-info">Enregistrer</button>
                                    </div>-->
@@ -1603,7 +1606,7 @@ use  \App\Http\Controllers\DocsController;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
 
-<?php use \App\Http\Controllers\UsersController;
+<?php
 $users=UsersController::ListeUsers();
 
 $CurrentUser = auth()->user();
@@ -2225,6 +2228,7 @@ $iduser=$CurrentUser->id;
 
 
                     <input   id="iddossier"  type="hidden"  value="<?php echo $dossier->id ?>" name="dossierid"     />
+                    <input   id="refdossier"  type="hidden"  value="<?php echo $dossier->reference_medic ?>" name="refdossier"     />
                 <!-- <div class="form-group">
                             <label for="sujet">Dossier :</label>
                             <select   id="iddossier"  style="width:100%;" class="form-control select2" name="dossierid"     >
@@ -2497,13 +2501,14 @@ function disabling(elm) {
 
             var _token = $('input[name="_token"]').val();
             var dossier = document.getElementById('iddossier').value;
+            var refdossier = document.getElementById('refdossier').value;
             var contenu = document.getElementById('contenucr').value;
             var emetteur = document.getElementById('emetteur').value;
 
             $.ajax({
                 url: "{{ route('entrees.ajoutcompter') }}",
                 method: "POST",
-                data: { emetteur:emetteur, dossier:dossier,contenu:contenu,  _token: _token},
+                data: { emetteur:emetteur, dossier:dossier,refdossier:refdossier,contenu:contenu,  _token: _token},
 
                 success: function (data) {
                     alert('Ajouté avec succès');

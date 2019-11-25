@@ -529,9 +529,10 @@ class EntreesController extends Controller
 
         $iddossier=$request->get('dossier') ;
         $contenu=$request->get('contenu') ;
+        $refdoss=$request->get('refdoss') ;
         $emetteur=$request->get('emetteur') ;
 
-        $refdoss = app('App\Http\Controllers\DossiersController')->RefDossierById($iddossier);
+       // $refdoss = app('App\Http\Controllers\DossiersController')->RefDossierById($iddossier);
 
         $nomuser=$user->name.' '.$user->lastname;
 
@@ -574,5 +575,7 @@ class EntreesController extends Controller
         Log::info('Création Compte Rendu - Par :'.$nomuser.' - Dossier : '.$refdoss);
 
     }
+
+
 
 }

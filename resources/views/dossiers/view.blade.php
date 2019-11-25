@@ -14,6 +14,7 @@ use App\Adresse;
 use  \App\Http\Controllers\DossiersController ;
 use  \App\Http\Controllers\EnvoyesController ;
 use  \App\Http\Controllers\EntreesController ;
+use \App\Http\Controllers\UsersController;
 ?>
 
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
@@ -264,9 +265,10 @@ use  \App\Http\Controllers\EntreesController ;
             <div class="tab-content mar-top">
             
             <div id="tab2" class="tab-pane fade">
+                <?php $idagent=$dossier->user_id; $creator=UsersController::ChampById('name',$idagent).' '.UsersController::ChampById('lastname',$idagent); $createdat=  date('d/m/Y H:i', strtotime($dossier->created_at ))   ;?>
+                Dossier créé par <B><?php echo $creator ;?></B> - Date :<?php echo $createdat ?>
 
-
-                        <section id="timeline">
+                <section id="timeline">
 
                             @if($communins)
                             @foreach($communins as $communin)
@@ -513,7 +515,7 @@ use  \App\Http\Controllers\EntreesController ;
                     <br> <!-- <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addpres" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une Prestation</b></button>-->
 
                      <h3>Ajouter une nouvelle prestation</h3><br>
-                     <?php use \App\Http\Controllers\UsersController;
+                     <?php
                      $users=UsersController::ListeUsers();
 
                      $CurrentUser = auth()->user();
@@ -2285,7 +2287,8 @@ reference_customer
                 <div class="modal-body">
                     <div class="card-body">
 
-                        <input   id="iddossier"  type="hidden"  value="<?php echo $dossier->id ?>" name="dossierid"     />
+                        <input   id="iddossier"  type="hidden"  value="<?php echo $dossier->id ;?>" name="dossierid"     />
+                        <input   id="refdossier"  type="hidden"  value="<?php echo $dossier->reference_medic ;?>" name="refdossier"     />
 
                        <!-- <div class="form-group">
                             <label for="sujet">Dossier :</label>
@@ -3669,13 +3672,14 @@ function keyUpHandler(){
 
             var _token = $('input[name="_token"]').val();
             var dossier = document.getElementById('iddossier').value;
+            var refdossier = document.getElementById('refdossier').value;
             var contenu = document.getElementById('contenucr').value;
             var emetteur = document.getElementById('emetteur').value;
 
             $.ajax({
                 url: "{{ route('entrees.ajoutcompter') }}",
                 method: "POST",
-                data: { emetteur:emetteur, dossier:dossier,contenu:contenu,  _token: _token},
+                data: { emetteur:emetteur, dossier:dossier,refdossier:refdossier,contenu:contenu,  _token: _token},
 
                 success: function (data) {
                     alert('Ajouté avec succès');
@@ -3689,7 +3693,7 @@ function keyUpHandler(){
         }); //end click
 
         $('#valide').click(function(){
-          var prestation=  document.getElementById('idprestation').value;
+            var prestation=  document.getElementById('idprestation').value;
             var _token = $('input[name="_token"]').val();
 
             $.ajax({

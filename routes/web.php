@@ -92,6 +92,7 @@ Route::get('/entrees/boite', array('as' => 'boite','uses' => 'EntreesController@
 Route::get('/entrees/',  'EntreesController@index')->name('entrees.index');
 Route::post('/entrees/saving','EntreesController@saving')->name('entrees.saving');
 Route::get('/entrees/dispatching','EntreesController@dispatching')->name('entrees.dispatching');
+Route::get('/entrees/enregistrements','EntreesController@enregistrements')->name('entrees.enregistrements');
 Route::get('/entrees/view/{id}', 'EntreesController@view');
 Route::get('/entrees/show/{id}', 'EntreesController@show')->name('entrees.show');
 Route::get('/entrees/showdisp/{id}', 'EntreesController@showdisp')->name('entrees.showdisp');
@@ -131,6 +132,7 @@ Route::get('/emails', 'EmailController@index');
 Route::get('/emails/inbox', 'EmailController@inbox');
 /* mark as readed and save to database */
 Route::get('/emails/check', 'EmailController@check');
+Route::get('/emails/checkboite1', 'EmailController@checkboite1');
 Route::get('/emails/checkboite2', 'EmailController@checkboite2');
 Route::get('/emails/checkboite3', 'EmailController@checkboite3');
 Route::get('/emails/checkboite4', 'EmailController@checkboite4');
@@ -179,7 +181,7 @@ Route::get('/envoyes/brouillons', 'EnvoyesController@brouillons')->name('envoyes
 /*** Dossiers **/
 //Route::resource('/dossiers',  'DossiersController');
 Route::get('/dossiers', array('as' => 'dossiers','uses' => 'DossiersController@index'));
-Route::get('/dossiers/saving','DossiersController@saving')->name('dossiers.saving');
+Route::post('/dossiers/saving','DossiersController@saving')->name('dossiers.saving');
 
 Route::post('/dossiers/save','DossiersController@save')->name('dossiers.save');
 Route::post('/dossiers/sendaccuse','DossiersController@sendaccuse')->name('dossiers.sendaccuse');

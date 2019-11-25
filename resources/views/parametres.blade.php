@@ -473,25 +473,25 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
                                 <tr>
                                     <td class="text-primary">1 Euro en dinars (Achat)</td>
                                     <td>
-                                        <input class="form-control" onchange="changing(this)" type="number" step="0.01" id="euro_achat"  style="width:100px" value="<?php echo $euro_achat; ?>" />
+                                        <input class="form-control" onchange="changing(this)" type="number" step="0.01" id="euro_achat"  style="width:100px" value="<?php echo $euro_achat; ?>" /> (TND)
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="text-primary">1 Dollar Américain en dinars (Achat)</td>
                                     <td>
-                                        <input  class="form-control" onchange="changing(this)" type="number" step="0.01"  id="dollar_achat"  style="width:100px" value="<?php echo $dollar_achat; ?>" />
+                                        <input  class="form-control" onchange="changing(this)" type="number" step="0.01"  id="dollar_achat"  style="width:100px" value="<?php echo $dollar_achat; ?>" /> (TND)
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="text-primary">1 Euro en dinars (Vente)</td>
                                     <td>
-                                        <input class="form-control" onchange="changing(this)" type="number" step="0.01" id="euro_vente"  style="width:100px" value="<?php echo $euro_vente; ?>" />
+                                        <input class="form-control" onchange="changing(this)" type="number" step="0.01" id="euro_vente"  style="width:100px" value="<?php echo $euro_vente; ?>" /> (TND)
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="text-primary">1 Dollar Américain en dinars (Vente)</td>
                                     <td>
-                                        <input  class="form-control" onchange="changing(this)" type="number" step="0.01"  id="dollar_vente"  style="width:100px" value="<?php echo $dollar_vente; ?>" />
+                                        <input  class="form-control" onchange="changing(this)" type="number" step="0.01"  id="dollar_vente"  style="width:100px" value="<?php echo $dollar_vente; ?>" /> (TND)
                                     </td>
                                 </tr>
                                 </tbody>
