@@ -541,8 +541,11 @@ class ActionController extends Controller
         ->where('date_spec_affect','=',1)->get();*/
 
 
-        $missionsec= Mission::where('user_id', Auth::user()->id)
-                             ->where('statut_courant',"active")
+        $missionsec= Mission::where('user_id', Auth::user()->id)                             
+                            ->where(function($q){                             
+                               $q->where('statut_courant',"active")
+                               ->orWhere('statut_courant',"deleguee");                             
+                                })
                              ->where('type_heu_spec',1)
                              ->where(function($q){                             
                                $q->whereNotNull('date_spec_affect')
@@ -555,10 +558,7 @@ class ActionController extends Controller
                                ->orWhere('date_spec_affect3','=',1);
                                 })
                              ->get();
-
-
-
-        
+    
      
 
         if($missionsec)
