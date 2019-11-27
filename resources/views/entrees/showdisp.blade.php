@@ -83,8 +83,15 @@ use App\Http\Controllers\TagsController;
         <div id="emailhead" class="panel-collapse collapse in" aria-expanded="true" style="">
             <div class="panel-body">
                 <div class="row" id="displine" style="display:none;padding-left:30px;padding-bottom:15px;padding-top:15px;background-color: #F9F9F8 ">
-                    <span style="margin-bottom:5px">Cliquez sur la référence de dossier parmi la liste à droite:</span><br>
-                    <B> Dossier : </B> <input type="text" readonly id="affdoss"  style="width:150px;" />    <button style="margin-left:35px" type="button" id="updatefolder" class="btn btn-primary">Dispatcher</button>
+                     <B> Dossier : </B>
+                    <select id ="affdoss"  class="form-control " style="width: 150px">
+                        <option></option>
+                        <?php foreach($dossiers as $ds)
+
+                        {
+                            echo '<option title="'.$ds->id.'" value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
+                    </select>
+                       <button style="margin-left:35px" type="button" id="updatefolder" class="btn btn-primary">Dispatcher</button>
 
                 </div>
                 <div class="row" style="font-size:12px;">
@@ -500,9 +507,18 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 <?php
 $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 ?>
+
+<!--select css-->
+<link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+
+<script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
+
 <script>
 
     $( document ).ready(function() {
+        $("#affdoss").select2();
+
 
         $('#add').click(function(){
             var type_dossier = $('#type_dossier').val();
@@ -559,6 +575,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         $('#updatefolder').click(function(){
             var entree = $('#entreeid').val();
             var dossier = $('#affdoss').val();
+            var iddossier = $('#affdoss').find("option:selected").attr("title");
 
             var _token = $('input[name="_token"]').val();
             if(dossier!='')
@@ -566,7 +583,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                 $.ajax({
                 url:"{{ route('entrees.dispatchf') }}",
                 method:"POST",
-                data:{entree:entree,dossier:dossier, _token:_token},
+                data:{entree:entree,dossier:dossier,iddossier:iddossier, _token:_token},
                 success:function(data){
                     window.location =data;
 

@@ -150,6 +150,9 @@ public function logout(Request $request)
                         ->where('type_dossier', 'Medical')
                         ->where('type_dossier', 'Mixte')
                         ->update(array('affecte' => $medic));
+
+
+
                 }else{
 
                     if($tech>0) {

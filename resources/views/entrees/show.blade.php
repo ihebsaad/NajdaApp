@@ -142,7 +142,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
                        <li class=" " >
                               <a href="#txtcorps" data-toggle="tab" aria-expanded="true"> Texte Brut</a>
                        </li>
-                       <?php } */?>
+                       <?php } */
+                       if ( $entree['type']!='tel') { ?>
                         @if ( $nbattachs   > 0)
                             @for ($i = 1; $i <= $nbattachs ; $i++)
                                 <li>
@@ -150,6 +151,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
                                 </li>
                             @endfor
                         @endif
+                       <?php } ?>
                     </ul>
                     
                     <div id="myTabContent" class="tab-content" style="background: #ffffff">

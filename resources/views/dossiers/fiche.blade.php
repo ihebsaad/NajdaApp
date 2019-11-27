@@ -403,23 +403,24 @@ use  \App\Http\Controllers\DocsController;
                                                                 <div class="row">
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
+                                                                            <label for="inputError" class="control-label">Nom de l'assuré </label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input onchange="changing(this)" type="text" id="subscriber_lastname" name="subscriber_lastname" class="form-control" value="{{ $dossier->subscriber_lastname }}"  >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-group">
                                                                             <label for="inputError" class="control-label">Prénom de l'assuré *</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="subscriber_lastname" name="subscriber_lastname" class="form-control"  value="{{ $dossier->subscriber_lastname }}" >
+                                                                                <input onchange="changing(this)" type="text" id="subscriber_name" name="subscriber_name" class="form-control"  value="{{ $dossier->subscriber_name }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label for="inputError" class="control-label">Nom </label>
 
-                                                                            <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="subscriber_name" name="subscriber_name" class="form-control" value="{{ $dossier->subscriber_name }}"  >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
 
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">

@@ -285,9 +285,7 @@ class EmailController extends Controller
 
 //Connect to the IMAP Server
         $oClient->connect();
-        $aFolder = $oClient->getFolders();
-        $storeid=false;$firstid=0;
-
+        $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
@@ -308,9 +306,7 @@ class EmailController extends Controller
 
             //Move the current Message to 'INBOX.read'
             if ($oMessage->moveToFolder('read') == true) {
-                // get last id
-                $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // message moved
+
 
         // dispatch
       ///  $dossiers = DB::table('dossiers')->pluck('reference_medic');
@@ -354,9 +350,11 @@ class EmailController extends Controller
 
                 ]);
 
-                $entree->save();
 
-                Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+                if ($this->checkEmailExiste( $mailid)==0){
+                    $entree->save();
+                    Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+                }
                 /*********************/
                 if($refdossier!= ''){
 
@@ -390,7 +388,7 @@ class EmailController extends Controller
                         ->where('id','=', 1 )->first();
                     $disp=$seance->dispatcheur ;
 
-                    $user = User::find($disp);
+                   // $user = User::find($disp);
                     // $user=  DB::table('users')->where('id','=', $disp )->first();
                  if($disp>0){
 
@@ -408,10 +406,7 @@ class EmailController extends Controller
 
                   //   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
-                    if($storeid==false){
-                    $firstid=$id;
-                    $storeid=true;
-                }
+
                 $aAttachment = $oMessage->getAttachments();
 
                 $aAttachment->each(function ($oAttachment) use ($id){
@@ -479,13 +474,8 @@ class EmailController extends Controller
                     $attach->save();
 
                 });
-                // récupérer last id une autre fois pour vérifier l'enregistrement
-                $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-                if($lastid==$lastid2)
-                {
-                    $oMessage->moveToFolder('INBOX') ;
-                }
+
+
 
 
 
@@ -496,7 +486,7 @@ class EmailController extends Controller
 
 
         }
-        return $firstid;
+        return $id;
        // return view('emails.check');
 
     } /// end check
@@ -520,8 +510,7 @@ class EmailController extends Controller
 
 //Connect to the IMAP Server
         $oClient->connect();
-        $aFolder = $oClient->getFolders();
-        $storeid=false;$firstid=0;
+$id=0;
 
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
@@ -542,9 +531,6 @@ class EmailController extends Controller
 
             //Move the current Message to 'INBOX.read'
             if ($oMessage->moveToFolder('read') == true) {
-                // get last id
-                $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // message moved
 
 
                 // dispatch
@@ -587,8 +573,11 @@ class EmailController extends Controller
 
                 ]);
 
-                $entree->save();
-                Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+                if ($this->checkEmailExiste('b1-'.$mailid)==0){
+                    $entree->save();
+                    Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+                }
+
 
                 /*********************/
                 if($refdossier!= ''){
@@ -640,12 +629,7 @@ class EmailController extends Controller
 
                 $id=$entree->id;
 
-                ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
-                if($storeid==false){
-                    $firstid=$id;
-                    $storeid=true;
-                }
                 $aAttachment = $oMessage->getAttachments();
 
                 $aAttachment->each(function ($oAttachment) use ($id){
@@ -713,13 +697,6 @@ class EmailController extends Controller
                     $attach->save();
 
                 });
-                // récupérer last id une autre fois pour vérifier l'enregistrement
-                $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-                if($lastid==$lastid2)
-                {
-                    $oMessage->moveToFolder('INBOX') ;
-                }
 
 
 
@@ -730,7 +707,7 @@ class EmailController extends Controller
 
 
         }
-        return $firstid;
+        return $id;
         // return view('emails.check');
 
     }
@@ -755,8 +732,7 @@ class EmailController extends Controller
 
 //Connect to the IMAP Server
         $oClient->connect();
-        $aFolder = $oClient->getFolders();
-        $storeid=false;$firstid=0;
+        $id=0;
 
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
@@ -777,9 +753,6 @@ class EmailController extends Controller
 
             //Move the current Message to 'INBOX.read'
            // if ($oMessage->moveToFolder('read') == true) {
-                // get last id
-                $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // message moved
 
 
                 // dispatch
@@ -822,8 +795,10 @@ class EmailController extends Controller
 
                 ]);
 
+            if ($this->checkEmailExiste('b2-'.$date.'-'.$mailid)==0){
                 $entree->save();
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+            }
 
                 /*********************/
                 if($refdossier!= ''){
@@ -877,10 +852,7 @@ class EmailController extends Controller
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
-                if($storeid==false){
-                    $firstid=$id;
-                    $storeid=true;
-                }
+
                 $aAttachment = $oMessage->getAttachments();
 
                 $aAttachment->each(function ($oAttachment) use ($id){
@@ -948,19 +920,6 @@ class EmailController extends Controller
                     $attach->save();
 
                 });
-                // récupérer last id une autre fois pour vérifier l'enregistrement
-                $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
-            // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-            /* if($lastid==$lastid2)
-              {
-                  $oMessage->moveToFolder('INBOX') ;
-              }*/
-
-            // si c'est enregistré, supprimer de la boite
-            if($lastid!=$lastid2)
-            {
-                $oMessage->delete() ;
-            }
 
 
 
@@ -971,7 +930,7 @@ class EmailController extends Controller
 
 
         }
-        return $firstid;
+        return $id;
         // return view('emails.check');
 
     }
@@ -995,9 +954,7 @@ class EmailController extends Controller
 
 //Connect to the IMAP Server
         $oClient->connect();
-        $aFolder = $oClient->getFolders();
-        $storeid=false;$firstid=0;
-
+        $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
@@ -1017,9 +974,6 @@ class EmailController extends Controller
 
             //Move the current Message to 'INBOX.read'
          //   if ($oMessage->moveToFolder('read') == true) {
-                // get last id
-                $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // message moved
 
 
                 // dispatch
@@ -1062,9 +1016,10 @@ class EmailController extends Controller
 
                 ]);
 
+            if ($this->checkEmailExiste('b3-'.$date.'-'.$mailid)==0){
                 $entree->save();
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
-
+            }
                 /*********************/
                 if($refdossier!= ''){
 
@@ -1117,10 +1072,7 @@ class EmailController extends Controller
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
-                if($storeid==false){
-                    $firstid=$id;
-                    $storeid=true;
-                }
+
                 $aAttachment = $oMessage->getAttachments();
 
                 $aAttachment->each(function ($oAttachment) use ($id){
@@ -1188,19 +1140,8 @@ class EmailController extends Controller
                     $attach->save();
 
                 });
-                // récupérer last id une autre fois pour vérifier l'enregistrement
-                $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
-            // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-            /* if($lastid==$lastid2)
-              {
-                  $oMessage->moveToFolder('INBOX') ;
-              }*/
 
-            // si c'est enregistré, supprimer de la boite
-            if($lastid!=$lastid2)
-            {
-                $oMessage->delete() ;
-            }
+
 
 
          /*   } else {
@@ -1210,7 +1151,7 @@ class EmailController extends Controller
 
 
         }
-        return $firstid;
+        return $id;
         // return view('emails.check');
 
     }
@@ -1236,9 +1177,7 @@ class EmailController extends Controller
 
 //Connect to the IMAP Server
         $oClient->connect();
-
-        $aFolder = $oClient->getFolders();
-        $storeid=false;$firstid=0;
+        $id=0;
 
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
@@ -1263,9 +1202,7 @@ class EmailController extends Controller
             //Move the current Message to 'INBOX.read'
           //  if ($oMessage->moveToFolder('INBOX.read') == true) {
 
-                // get last id
-                $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // message moved
+
 
 
                 // dispatch
@@ -1308,8 +1245,10 @@ class EmailController extends Controller
 
                 ]);
 
+            if ($this->checkEmailExiste('b4-'.$date.'-'.$mailid)==0){
                 $entree->save();
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+            }
 
                 /*********************/
                 if($refdossier!= ''){
@@ -1363,10 +1302,6 @@ class EmailController extends Controller
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
-                if($storeid==false){
-                    $firstid=$id;
-                    $storeid=true;
-                }
                 $aAttachment = $oMessage->getAttachments();
 
                 $aAttachment->each(function ($oAttachment) use ($id){
@@ -1434,26 +1369,16 @@ class EmailController extends Controller
                     $attach->save();
 
                 });
-                // récupérer last id une autre fois pour vérifier l'enregistrement
-                $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-              /* if($lastid==$lastid2)
-                {
-                    $oMessage->moveToFolder('INBOX') ;
-                }*/
 
-            // si c'est enregistré, supprimer de la boite
-            if($lastid!=$lastid2)
-            {
-                $oMessage->delete() ;
-            }
+
+
 
 
           /*  } else {
                  echo 'error moving the email';
             }*/
         }
-        return $firstid;
+        return $id;
         // return view('emails.check');
 
     }
@@ -1478,9 +1403,7 @@ class EmailController extends Controller
 
 //Connect to the IMAP Server
         $oClient->connect();
-        $aFolder = $oClient->getFolders();
-        $storeid=false;$firstid=0;
-
+        $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
@@ -1500,9 +1423,7 @@ class EmailController extends Controller
 
             //Move the current Message to 'INBOX.read'
             //if ($oMessage->moveToFolder('read') == true) {
-                // get last id
-                $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // message moved
+
 
 
                 // dispatch
@@ -1545,9 +1466,10 @@ class EmailController extends Controller
 
                 ]);
 
+            if ($this->checkEmailExiste('b5-'.$date.'-'.$mailid)==0){
                 $entree->save();
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
-
+            }
                 /*********************/
                 if($refdossier!= ''){
 
@@ -1600,10 +1522,7 @@ class EmailController extends Controller
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
-                if($storeid==false){
-                    $firstid=$id;
-                    $storeid=true;
-                }
+
                 $aAttachment = $oMessage->getAttachments();
 
                 $aAttachment->each(function ($oAttachment) use ($id){
@@ -1671,19 +1590,6 @@ class EmailController extends Controller
                     $attach->save();
 
                 });
-                // récupérer last id une autre fois pour vérifier l'enregistrement
-                $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
-            // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-            /* if($lastid==$lastid2)
-              {
-                  $oMessage->moveToFolder('INBOX') ;
-              }*/
-
-            // si c'est enregistré, supprimer de la boite
-            if($lastid!=$lastid2)
-            {
-                $oMessage->delete() ;
-            }
 
          /*   } else {
                 // error
@@ -1692,7 +1598,7 @@ class EmailController extends Controller
 */
 
         }
-        return $firstid;
+        return $id;
         // return view('emails.check');
 
     }
@@ -1716,9 +1622,7 @@ class EmailController extends Controller
 
 //Connect to the IMAP Server
         $oClient->connect();
-        $aFolder = $oClient->getFolders();
-        $storeid=false;$firstid=0;
-
+        $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
@@ -1738,9 +1642,7 @@ class EmailController extends Controller
 
             //Move the current Message to 'INBOX.read'
             if ($oMessage->moveToFolder('read') == true) {
-                // get last id
-                $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // message moved
+
 
 
                 // dispatch
@@ -1783,9 +1685,10 @@ class EmailController extends Controller
 
                 ]);
 
-                $entree->save();
-                Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
-
+                if ($this->checkEmailExiste('b6-'.$mailid)==0){
+                    $entree->save();
+                    Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+                }
                 /*********************/
                 if($refdossier!= ''){
 
@@ -1837,10 +1740,7 @@ class EmailController extends Controller
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
-                if($storeid==false){
-                    $firstid=$id;
-                    $storeid=true;
-                }
+
                 $aAttachment = $oMessage->getAttachments();
 
                 $aAttachment->each(function ($oAttachment) use ($id){
@@ -1908,13 +1808,7 @@ class EmailController extends Controller
                     $attach->save();
 
                 });
-                // récupérer last id une autre fois pour vérifier l'enregistrement
-                $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-                if($lastid==$lastid2)
-                {
-                    $oMessage->moveToFolder('INBOX') ;
-                }
+
 
 
 
@@ -1925,7 +1819,7 @@ class EmailController extends Controller
 
 
         }
-        return $firstid;
+        return $id;
         // return view('emails.check');
 
     }
@@ -1948,8 +1842,7 @@ class EmailController extends Controller
 
 //Connect to the IMAP Server
         $oClient->connect();
-        $aFolder = $oClient->getFolders();
-        $storeid=false;$firstid=0;
+        $id=0;
 
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
@@ -1970,9 +1863,7 @@ class EmailController extends Controller
 
             //Move the current Message to 'INBOX.read'
             if ($oMessage->moveToFolder('read') == true) {
-                // get last id
-                $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // message moved
+
 
 
                 // dispatch
@@ -2015,9 +1906,10 @@ class EmailController extends Controller
 
                 ]);
 
-                $entree->save();
-                Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
-
+                if ($this->checkEmailExiste('b7-'.$mailid)==0){
+                    $entree->save();
+                    Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+                }
                 /*********************/
                 if($refdossier!= ''){
 
@@ -2070,10 +1962,7 @@ class EmailController extends Controller
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
-                if($storeid==false){
-                    $firstid=$id;
-                    $storeid=true;
-                }
+
                 $aAttachment = $oMessage->getAttachments();
 
                 $aAttachment->each(function ($oAttachment) use ($id){
@@ -2141,13 +2030,6 @@ class EmailController extends Controller
                     $attach->save();
 
                 });
-                // récupérer last id une autre fois pour vérifier l'enregistrement
-                $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-                if($lastid==$lastid2)
-                {
-                    $oMessage->moveToFolder('INBOX') ;
-                }
 
 
 
@@ -2158,7 +2040,7 @@ class EmailController extends Controller
 
 
         }
-        return $firstid;
+        return $id;
         // return view('emails.check');
 
     }
@@ -2181,9 +2063,7 @@ class EmailController extends Controller
 
 //Connect to the IMAP Server
         $oClient->connect();
-        $aFolder = $oClient->getFolders();
-        $storeid=false;$firstid=0;
-
+        $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
@@ -2203,9 +2083,7 @@ class EmailController extends Controller
 
             //Move the current Message to 'INBOX.read'
             if ($oMessage->moveToFolder('read') == true) {
-                // get last id
-                $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // message moved
+
 
 
                 // dispatch
@@ -2248,8 +2126,10 @@ class EmailController extends Controller
 
                 ]);
 
-                $entree->save();
-                Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+                if ($this->checkEmailExiste('b8-'.$mailid)==0){
+                    $entree->save();
+                    Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+                }
 
                 /*********************/
                 if($refdossier!= ''){
@@ -2303,10 +2183,7 @@ class EmailController extends Controller
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
-                if($storeid==false){
-                    $firstid=$id;
-                    $storeid=true;
-                }
+
                 $aAttachment = $oMessage->getAttachments();
 
                 $aAttachment->each(function ($oAttachment) use ($id){
@@ -2374,13 +2251,6 @@ class EmailController extends Controller
                     $attach->save();
 
                 });
-                // récupérer last id une autre fois pour vérifier l'enregistrement
-                $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-                if($lastid==$lastid2)
-                {
-                    $oMessage->moveToFolder('INBOX') ;
-                }
 
 
 
@@ -2391,7 +2261,7 @@ class EmailController extends Controller
 
 
         }
-        return $firstid;
+        return $id;
         // return view('emails.check');
 
     }
@@ -2417,9 +2287,7 @@ class EmailController extends Controller
 
 //Connect to the IMAP Server
         $oClient->connect();
-        $aFolder = $oClient->getFolders();
-        $storeid=false;$firstid=0;
-
+        $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
@@ -2439,9 +2307,6 @@ class EmailController extends Controller
 
             //Move the current Message to 'INBOX.read'
             if ($oMessage->moveToFolder('read') == true) {
-                // get last id
-                $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // message moved
 
 
                 // dispatch
@@ -2484,9 +2349,10 @@ class EmailController extends Controller
 
                 ]);
 
-                $entree->save();
-                Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
-
+                if ($this->checkEmailExiste('b9-'.$mailid)==0){
+                    $entree->save();
+                    Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+                }
                 /*********************/
                 if($refdossier!= ''){
 
@@ -2537,12 +2403,7 @@ class EmailController extends Controller
 
                 $id=$entree->id;
 
-                ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
-                if($storeid==false){
-                    $firstid=$id;
-                    $storeid=true;
-                }
                 $aAttachment = $oMessage->getAttachments();
 
                 $aAttachment->each(function ($oAttachment) use ($id){
@@ -2610,15 +2471,6 @@ class EmailController extends Controller
                     $attach->save();
 
                 });
-                // récupérer last id une autre fois pour vérifier l'enregistrement
-                $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-                if($lastid==$lastid2)
-                {
-                    $oMessage->moveToFolder('INBOX') ;
-                }
-
-
 
             } else {
                 // error
@@ -2627,7 +2479,7 @@ class EmailController extends Controller
 
 
         }
-        return $firstid;
+        return $id;
         // return view('emails.check');
 
     }
@@ -2654,8 +2506,8 @@ class EmailController extends Controller
 
 //Connect to the IMAP Server
         $oClient->connect();
-        $aFolder = $oClient->getFolders();
-        $storeid=false;$firstid=0;
+            $id=0;
+
 
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
@@ -2677,8 +2529,7 @@ class EmailController extends Controller
 
             //Move the current Message to 'INBOX.read'
             if ($oMessage->moveToFolder('read') == true) {
-                // get last id
-                $lastid= DB::table('boites')->orderBy('id', 'desc')->first();
+
                 // message moved
 
 
@@ -2690,7 +2541,7 @@ class EmailController extends Controller
                     'sujet' =>  ($sujet),
                   //  'contenutxt'=> $contenubrut ,
                      'contenu'=> ($contenu) ,
-                    'mailid'=>  $mailid,
+                    'mailid'=>  'user-'.$iduser.'-'.$mailid,
                     'viewed'=>0,
                     'statut'=>0,
                     'nb_attach'=>$nbattachs,
@@ -2699,15 +2550,14 @@ class EmailController extends Controller
 
                 ]);
 
-                $boite->save();
-                $id=$boite->id;
+                if ($this->checkEmailExiste('user-'.$iduser.'-'.$mailid)==0){
+                    $boite->save();
+                 }
 
-                ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
+                 $id=$boite->id;
 
-                if($storeid==false){
-                    $firstid=$id;
-                    $storeid=true;
-                }
+
+
                 $aAttachment = $oMessage->getAttachments();
 
                 $aAttachment->each(function ($oAttachment) use ($id){
@@ -2741,13 +2591,8 @@ class EmailController extends Controller
                     $attach->save();
 
                 });
-                // récupérer last id une autre fois pour vérifier l'enregistrement
-                $lastid2= DB::table('boites')->orderBy('id', 'desc')->first();
-                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-                if($lastid==$lastid2)
-                {
-                    $oMessage->moveToFolder('INBOX') ;
-                }
+
+
 
             } else {
                 // error
@@ -2755,7 +2600,7 @@ class EmailController extends Controller
             }
 
         }
-        return $firstid;
+        return $id;
         // return view('emails.check');
         } // endif
 
@@ -2778,8 +2623,7 @@ class EmailController extends Controller
 
 
             $oClient->connect();
-
-            $storeid=false;$firstid=0;
+        $id=0;
 
             $oFolder = $oClient->getFolder('INBOX');
             $aMessage = $oFolder->messages()->all()->get();
@@ -2797,9 +2641,8 @@ class EmailController extends Controller
 
                 //Move the current Message to 'INBOX.read'
                 if ($oMessage->moveToFolder('read') == true) {
-                    // get last id
-                    $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
-                    // message moved
+
+                      // message moved
                     $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
 
@@ -2841,8 +2684,11 @@ class EmailController extends Controller
 
                     ]);
 
-                    $entree->save();
-                    Log::info('SMS reçu : '.$sujet.' Dossier: '.$refdossier);
+
+                    if ($this->checkEmailExiste( 'sms-'.$mailid)==0){
+                        $entree->save();
+                        Log::info('SMS reçu : '.$sujet.' Dossier: '.$refdossier);
+                    }
 
                     /*********************/
                     if($refdossier!= ''){
@@ -2893,18 +2739,6 @@ class EmailController extends Controller
 
                     ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
-                    if($storeid==false){
-                        $firstid=$id;
-                        $storeid=true;
-                    }
-
-                    // récupérer last id une autre fois pour vérifier l'enregistrement
-                    $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
-                    // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-                    if($lastid==$lastid2)
-                    {
-                        $oMessage->moveToFolder('INBOX') ;
-                    }
 
                 } else {
                     // error
@@ -2912,7 +2746,7 @@ class EmailController extends Controller
                 }
 
             }
-            return $firstid;
+            return $id;
             // return view('emails.check');
 
 
@@ -2935,8 +2769,7 @@ class EmailController extends Controller
 
 //Connect to the IMAP Server
         $oClient->connect();
-
-        $storeid=false;$firstid=0;
+        $id=0;
 
         $oFolder = $oClient->getFolder('INBOX');
         $aMessage = $oFolder->messages()->all()->get();
@@ -2955,9 +2788,8 @@ class EmailController extends Controller
 
             //Move the current Message to 'INBOX.read'
             if ($oMessage->moveToFolder('read') == true) {
-                // get last id
-                $lastid= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // message moved
+
+                 // message moved
 
                 // dispatch
                 $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
@@ -2999,9 +2831,11 @@ class EmailController extends Controller
 
                 ]);
 
-                $entree->save();
-                Log::info('Fax reçu de : '.$from.' Dossier: '.$refdossier );
 
+                if ($this->checkEmailExiste( 'FX-'.$mailid)==0){
+                    $entree->save();
+                    Log::info('Fax reçu de : '.$from.' Dossier: '.$refdossier );
+                }
                 /*********************/
                 if($refdossier!= '') {
 
@@ -3045,10 +2879,6 @@ class EmailController extends Controller
                 $id=$entree->id;
 
 
-                if($storeid==false){
-                    $firstid=$id;
-                    $storeid=true;
-                }
                 $aAttachment = $oMessage->getAttachments();
 
                 $aAttachment->each(function ($oAttachment) use ($id){
@@ -3116,13 +2946,6 @@ class EmailController extends Controller
                     $attach->save();
 
                 });
-                // récupérer last id une autre fois pour vérifier l'enregistrement
-                $lastid2= DB::table('entrees')->orderBy('id', 'desc')->first();
-                // si lemail n'est pas enregistré dépalcer une autre fois vers l inbox
-                if($lastid==$lastid2)
-                {
-                    $oMessage->moveToFolder('INBOX') ;
-                }
 
 
 
@@ -3133,7 +2956,7 @@ class EmailController extends Controller
 
 
         }
-        return $firstid;
+        return $id;
 
 
     }
@@ -3151,7 +2974,7 @@ class EmailController extends Controller
     {
         if (isset($prest)){$prest=$prest;}else{$prest=0;}
         $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
-        $nomabn=app('App\Http\Controllers\DossiersController')->NomAbnDossierById($id);
+        $nomabn=app('App\Http\Controllers\DossiersController')->FullnameAbnDossierById($id);
         $refdem=app('App\Http\Controllers\DossiersController')->RefDemDossierById($id);
         $refclient=app('App\Http\Controllers\DossiersController')->ChampById('reference_customer',$id);
         $entrees =   Entree::where('dossier', $ref)->get();
@@ -3497,12 +3320,15 @@ class EmailController extends Controller
         $cci = $request->get('cci');
         $sujet = $request->get('sujet');
         $contenu = $request->get('contenu');
-        $files = $request->file('files');
+         $files = $request->file('files');
         $from = trim($request->get('from'));
         $description= $request->get('description');
         $attachs = $request->get('attachs');
 
-    //    dd($request->all()) ;
+
+
+
+       //    dd($request->all()) ;
         $user = auth()->user();$idu=$user->id;
         $lg='fr';
        $signatureagent= $this->getSignatureUser($idu,$lg);
@@ -3991,7 +3817,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         $clientid = app('App\Http\Controllers\DossiersController')->ClientDossierById($iddossier);
         $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$clientid);
 
-        $nomabn=app('App\Http\Controllers\DossiersController')->NomAbnDossierById($iddossier);
+        $nomabn=app('App\Http\Controllers\DossiersController')->FullnameAbnDossierById($iddossier);
 
         $refclient=app('App\Http\Controllers\ClientsController')->ClientChampById('reference',$clientid);
 
@@ -4375,7 +4201,13 @@ public static function getSignatureUser($id,$lg)
 
     }
 
-
 }
+
+    public  function checkEmailExiste( $mailid)
+    {$mailid=trim($mailid);
+        $count =  Entree::where('mailid', $mailid)->count();
+        return $count;
+
+    }
 
 }

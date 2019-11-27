@@ -1,4 +1,4 @@
-@extends('layouts.dossierlayout')
+@extends('layouts.mainlayout')
 <?php
 use App\User ;
 
@@ -27,7 +27,7 @@ use  \App\Http\Controllers\DocsController;
 
             <form id="savefolder"  method="post"  action="{{route('dossiers.save')}}" >
                 {{ csrf_field() }}
-                <input type="hidden" name="entree" value="<?php echo $identree;?>" />
+                <input type="hidden" name="entree" value="0" />
                 <div class="row">
 
                     <div class="col-md-3">

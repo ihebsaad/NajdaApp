@@ -201,7 +201,7 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                               foreach ($notificationns as $i) {
                                 $notifc = json_decode($i->data, true);
                                 $Datenotif=$i->created_at;
-                               // $datenotif= date('d/m/y H:i', strtotime($Datenotif)) ;
+                                $datenotif= date('d/m/y H:i', strtotime($Datenotif)) ;
                                 $entreeid = $notifc['Entree']['id'];
                                 $dossierid = $notifc['Entree']['dossierid'];
                                 $notifentree = DB::table('entrees')->where('id','=', $entreeid)->get()->toArray();

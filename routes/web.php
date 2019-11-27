@@ -186,6 +186,7 @@ Route::post('/dossiers/saving','DossiersController@saving')->name('dossiers.savi
 Route::post('/dossiers/save','DossiersController@save')->name('dossiers.save');
 Route::post('/dossiers/sendaccuse','DossiersController@sendaccuse')->name('dossiers.sendaccuse');
 Route::get('/dossiers/create/{identree}','DossiersController@create')->name('dossiers.create');
+Route::get('/dossiers/add/','DossiersController@add')->name('dossiers.add');
 Route::post('/dossiers/updating','DossiersController@updating')->name('dossiers.updating');
 Route::post('/dossiers/updating2','DossiersController@updating2')->name('dossiers.updating2');
 Route::post('/dossiers/updating3','DossiersController@updating3')->name('dossiers.updating3');

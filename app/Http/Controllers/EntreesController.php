@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Notification;
 use PDF;
 use Illuminate\Support\Facades\Notification as Notification2;
+use PHPUnit\Framework\Exception;
 
 
 class EntreesController extends Controller
@@ -360,11 +361,12 @@ class EntreesController extends Controller
     public   function dispatchf(Request $request)
     {
         $identree   =$request->get('entree');
-        $dossier  =$request->get('dossier');
+        $dossier  =trim($request->get('dossier'));
+        $iddossier  =$request->get('iddossier');
 
         $entree = Entree::find($identree);
 
-        $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($dossier);
+        //$iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($dossier);
         $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
 
         $first=false;
@@ -374,7 +376,7 @@ class EntreesController extends Controller
             $first=true;
 
             $entree->dossier=$dossier;
-            $entree->dossierid=$iddossier;
+            if($iddossier>0){$entree->dossierid=$iddossier;}
             $entree->save();
 
              //mise à jour notifications
@@ -389,12 +391,15 @@ class EntreesController extends Controller
 
             $disp=$seance->dispatcheur;
             $userD = User::find($disp);
-            $userD->notifications()->whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$identree.'}}\')')->delete();
 
+            $count=Notification::where('notifiable_id', $disp)
+                      ->where('dossier',NULL)
+                ->where('entree',  $identree)
+                ->count();
+            // Supprimer la notification de dispatcheur
+            if($count >0){$userD->notifications()->whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$identree.'}}\')')->delete();}
 
             if($userid  >0) {
-               $user = User::find($userid);
-
 
                // $user->notify(new Notif_Suivi_Doss($entree));
                  Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
@@ -411,7 +416,7 @@ class EntreesController extends Controller
                 $userid0 = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier0);
 
                 $entree->dossier=$dossier;
-                $entree->dossierid=$iddossier;
+             if($iddossier>0){ $entree->dossierid=$iddossier;}
 
             $entree->save();
 /*
@@ -529,7 +534,7 @@ class EntreesController extends Controller
 
         $iddossier=$request->get('dossier') ;
         $contenu=$request->get('contenu') ;
-        $refdoss=$request->get('refdoss') ;
+        $refdoss=$request->get('refdossier') ;
         $emetteur=$request->get('emetteur') ;
 
        // $refdoss = app('App\Http\Controllers\DossiersController')->RefDossierById($iddossier);
@@ -575,6 +580,7 @@ class EntreesController extends Controller
         Log::info('Création Compte Rendu - Par :'.$nomuser.' - Dossier : '.$refdoss);
 
     }
+
 
 
 

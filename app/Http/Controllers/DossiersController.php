@@ -122,6 +122,56 @@ class DossiersController extends Controller
         return view('dossiers.create',['identree'=>$identree,'entree'=>$entree ,'clients'=>$clients,'hopitaux'=>$hopitaux ,'traitants'=> $traitants , 'hotels'=>$hotels , 'garages'=>$garages] );
     }
 
+
+
+
+    public function add()
+    {
+
+            $clients =  DB::table('clients')
+            ->get();
+
+        $hopitaux =  DB::table('prestataires_type_prestations')
+            ->where('type_prestation_id',8 )
+            ->orwhere('type_prestation_id',9 )
+            ->get();
+
+        $traitants =  DB::table('prestataires_type_prestations')
+            ->where('type_prestation_id',15 )
+            ->get();
+
+        $hotels =  DB::table('prestataires_type_prestations')
+            ->where('type_prestation_id',18 )
+            ->get();
+
+        $garages = DB::table('prestataires_type_prestations')
+            ->where('type_prestation_id',22 )
+
+            ->get();
+
+        return view('dossiers.add',['clients'=>$clients,'hopitaux'=>$hopitaux ,'traitants'=> $traitants , 'hotels'=>$hotels , 'garages'=>$garages] );
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -232,7 +282,9 @@ class DossiersController extends Controller
             'type_affectation' => $type_affectation,
              'reference_medic' => $reference_medic,
             'entree' => $request->get('entree'),
-            'user_id'=>$user->id
+            'user_id'=>$user->id,
+             'current_status'=>'actif'
+
 
         ]);
 
@@ -346,7 +398,8 @@ class DossiersController extends Controller
             'subscriber_lastname' => $subscriber_lastname,
             'subscriber_name' => $subscriber_name,
             'entree' => $entreedoss,
-            'user_id'=>$user->id
+            'user_id'=>$user->id,
+            'current_status'=>'actif'
         ]);
 
         if ($dossier->save())

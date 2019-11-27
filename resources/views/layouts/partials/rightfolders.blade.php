@@ -60,7 +60,11 @@ use App\Dossier ;
         var idelm=elm.id;
         var ref=idelm.slice(7);
 
-       var dossier=document.getElementById('affdoss').value=ref;
+        document.getElementById('affdoss').value=ref;
+
+        $('#affdoss').val(ref).trigger('change.select2');
+
+
     }
 
 
