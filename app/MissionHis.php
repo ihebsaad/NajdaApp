@@ -10,7 +10,7 @@ class MissionHis extends Model
 
      protected $fillable = [
         'id_origin_miss','titre', 'descrip','miss_mere_id','nb_acts_ori','commentaire', 'date_deb','date_fin', 'statut_courant','realisee','affichee', 'dossier_id','type_Mission', 'origin_id',
-        'user_id','assistant_id','id_entree','url_doc_gen','equipement' , 'voiture', 'prestataire','intervenant','created_at','updated_at',
+        'user_id','assistant_id','emetteur_id','id_entree','url_doc_gen','equipement' , 'voiture', 'prestataire','intervenant','created_at','updated_at',
         'deleted_at',
         'type_heu_spec','type_heu_spec_archiv','date_spec_affect','date_spec_affect2','date_spec_affect3',
         'rdv','act_rdv','h_rdv',
@@ -81,5 +81,10 @@ public function dossier()
     {
         return $this->belongsTo('App\User','origin_id');
     } 
+    
+      public function emetteur()
+    {
+        return $this->belongsTo('App\User','emetteur_id');
+    }
 
 }

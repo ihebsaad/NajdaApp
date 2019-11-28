@@ -419,7 +419,8 @@ class DossiersController extends Controller
 
 
 
-                $dtc = (new \DateTime())->modify('-1 Hour')->format('Y-m-d H:i');
+
+                $dtc = (new \DateTime())->format('Y-m-d H:i');
                 $affec=new AffectDoss([
 
                     'util_affecteur'=>$request->get('affecteur'),
@@ -436,7 +437,7 @@ class DossiersController extends Controller
         //    } //if entree!=""
 
             return url('/dossiers/view/'.$iddoss)/*->with('success', 'Dossier Créé avec succès')*/;
-        //    return url('/dossiers/') ;
+        //   return url('/dossiers/') ;
            // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
            //  return  $iddoss;
 
@@ -547,6 +548,57 @@ class DossiersController extends Controller
         //  $dossier->save();
 
         ///   return redirect('/dossiers')->with('success', 'Entry has been added');
+
+    }
+
+    public function Migration ($iddoss, $iduser_dest)
+    {
+
+          $dossierm=Dossier::where('id', $iddoss)->first();
+
+          if($dossierm)
+          {
+              $missions_doss= $dossierm->Missions; 
+
+              if( $missions_doss)
+              {
+
+                foreach($missions_doss as $md)
+                {
+                        if($md->statut_courant!='deleguee')// reportee ou active
+                        {
+                            $md->update(array('user_id' =>$dossierm->affecte));
+                            
+                            $actions_missions= $md->ActionECs() ;
+
+                           if($actions_missions)
+                           {
+
+                              foreach ($actions_missions as $acts) {
+
+                                if($acts->statut=='reportee' || $acts->statut=='reportee' ||  $acts->statut=='active' )
+                                {
+                                       $acts->update(array('user_id' =>$dossierm->affecte));
+
+                                }
+
+                                  
+                              }
+
+
+                           }
+
+
+
+                        }
+
+                }
+
+
+              }
+
+
+          }
 
     }
 

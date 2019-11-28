@@ -92,10 +92,48 @@ use App\Http\Controllers\TagsController;
                                  // $Missions=$dossier->activeMissions;
 
                                if (true){ 
-                                $Missions=Auth::user()->activeMissions->sortBy(function($t)
+                                /*$MissionsWithoutCurrentId=App\Mission::groupBy('dossier_id',auth::user())*/
+                                $Missions=Auth::user()->activeMissions->groupBy(function ($me) {
+                                     return $me->dossier_id;
+                                   });
+
+                                /*->sortBy(function($t)
                                         {
                                             return $t->updated_at;
                                         })->reverse();
+                               
+                                $Missions=$Missionsk->groupBy(function ($me) {
+                                     return $me->dossier_id;
+                                   })->all();*/
+                               /* dd($Missionsh);
+                                    $missionC=null;
+                                    $missionO=null;
+                                    $missionR=null;
+
+                                foreach ($Missions as $m) {
+                                  if($m->dossier_id==$dossier->id)
+                                  {
+                                     $missionC[]=$m;
+                                  }
+                                  else
+                                  {
+                                    $missionO[]=$m;
+
+                                  }
+
+                                }*/
+
+                                /*function cmp($a, $b) {
+                                            if ($a[2] == $b[2]) {
+                                                    return 0;
+                                            }
+                                            return ($a[2] < $b[2]) ? -1 : 1;
+                                    }
+
+                                  usort($arr,"cmp");*/
+
+                               // dd(array_values($missionO));
+
                             ?>
                   @if ($Missions)
 <!--  début tab -+----------------------------------------------------------------------------------------->
@@ -128,8 +166,8 @@ use App\Http\Controllers\TagsController;
                                 background-color: #00BFFF /*#86B404  #2EFEF7;*/
                               }
                               .panel-heading.ColorerMissionsCourantes{
-                                background-color: #ffd051   /*#5d9cec;*/
-                                color: white;
+                                background-color: #ffd051 !important;  /*#5d9cec;*/
+                                color: red;
                               }
 
                               .panel-heading.activeActDeleg {
@@ -139,11 +177,11 @@ use App\Http\Controllers\TagsController;
                               </style>
                               <?php if (isset($act)){$currentMission=$act->id;}else{$currentMission=0;} ?>
 
-                              <?php if (isset($dossier)){$dosscourant=$dossier->id ;}else{$dosscourant=0;} ?>
+                              <?php if (isset($dossier)){$dosscourant=$dossier->id ; }else{$dosscourant=0;} ?>
                                     
                                     <div class="accordion panel-group" id="accordion">
 
-                                 @if (!$Missions->isEmpty())
+                                 @if ($Missions)
 
                                   <div class="row">
 
@@ -166,22 +204,23 @@ use App\Http\Controllers\TagsController;
                                   @endif
 
                                       <div id ="contenuMissions">
-                                      @foreach ($Missions as $Mission)
-                                      @if ( $Mission->statut_courant =='active')
+                                       @foreach($Missions as $t=>$k)
+                                      @foreach ($k as $Mission)
+                                      @if ( $Mission->statut_courant =='active' || $Mission->statut_courant =='deleguee')
 
                                       <div class="row" style="padding-bottom: 3px;">
                                       <div class="col-md-10">
                                       <div class="panel panel-default">
 
                                         <div class="panel-heading <?php if($Mission->id ==$currentMission){echo 'active';}
-                                        else {if($Mission->dossier->id==$dosscourant){echo 'ColorerMissionsCourantes' ;}}?>">
+                                        else {if($Mission->dossier_id==$dosscourant){ echo 'ColorerMissionsCourantes' ;}}?>">
 
                                          
                                            <h4 class="panel-title">
                                               <a data-toggle="collapse" href="#collapse{{$Mission->id}}">{{$Mission->dossier->reference_medic}}&nbsp;-&nbsp;{{$Mission->dossier-> subscriber_name}} {{$Mission->dossier->subscriber_lastname}} <br>
                                                 {{$Mission->typeMission->nom_type_Mission}}
-                                              </a>@if ($Mission->assistant_id!=NULL && $Mission->origin_id!=NULL )
-                                         <span style="color:#151515"> &nbsp;(déléguée par {{$Mission-> user_origin->name}}&nbsp {{$Mission->user_origin->lastname}} ) </span> @endif
+                                              </a>@if ($Mission->assistant_id != NULL && $Mission->emetteur_id != NULL && $Mission->emetteur_id != $Mission->assistant_id && $Mission->emetteur_id!= $Mission->user_id && $Mission->statut_courant =='deleguee')
+                                         <span style="color:#151515"> &nbsp;(déléguée par {{$Mission-> emetteur->name}}&nbsp {{$Mission->emetteur->lastname}} ) </span> @endif
 
                                          @if ($Mission->miss_mere_id!=NULL )
                                          <span style="color:#151515"> &nbsp;(*Sous-Mission*) </span> @endif
@@ -246,6 +285,7 @@ use App\Http\Controllers\TagsController;
                                     </div>
                                     @endif
 
+                                     @endforeach
                                      @endforeach
 
                                      <br><br>
@@ -1255,7 +1295,13 @@ $('.annulerMission').on('click', function() {
 
 
    var idw=$(this).attr("id");
-   //alert(idw);
+  
+   if(idw.indexOf('a')!= -1)
+   {
+      //alert(idw);
+      idw=idw.substr(1);
+      //alert(idw);
+   }
   // var nomact=$('#workflowh'+idw).attr("value");
    //var typemiss=$('#workflowht'+idw).attr("value");
     //  $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
@@ -1339,7 +1385,7 @@ if (r == true) {
          } 
   
 
-  });
+  });// fin annuler mission
 
 
 
@@ -1401,22 +1447,7 @@ if ($view_name=='dossiers-view') {
            if(data)
            {
 
-             // alert ("des nouvelles notes sont activées");
-              //$("#contenuNotes").prepend(data);
-              //var sound = document.getElementById("audiokbs");
-              //sound.setAttribute('src', "{{URL::asset('public/media/point.mp3')}}");
-             // sound.play();
-
-             // alertify.alert("Note","Une nouvelle note est activée").show();
-
-            /* var r = confirm(data+'\n'+ 'Si vous voulez afficher maintenant les nouvelles actions actives dans l\'onglet des missions cliquez sur OK (Attention  la page sera rechargée et vos données peuvent être perdues !). \n Sinon vous pouvez annuler et consulter les actions ultèrieurement');
-              if (r == true) {
-                location.reload();
-            } else {
-              txt = "You pressed Cancel!";
-             }*/
-
-          
+                    
            var urllocale=top.location.href;
 
            var pos=urllocale.indexOf("traitementsBoutonsActions");
@@ -1933,9 +1964,60 @@ $(document).ready(function() {
                         }).then((result) => {
                             if (result.value) {
 
-                                   window.location.reload(true);
+                                  // window.location.reload(true);
 
-                            }
+                                               var urllocaleee2=top.location.href;
+
+                         var posss2=urllocaleee2.indexOf("traitementsBoutonsActions");
+                         var res2222=urllocaleee2.indexOf("deleguerMission");
+                         var res3332=urllocaleee2.indexOf("deleguerAction");
+                         var res4442=urllocaleee2.indexOf("TraitementAction");
+                         
+                         //alert(poss);
+                         var counttt2=0;
+
+                         if(posss2!= -1)
+                         {
+                            for (var i = posss2; i <100; i++) {
+                              
+                                if(urllocaleee2[i]=='/')
+                                {
+                                  counttt2++;
+                                }
+
+                              }
+                         
+                         }
+
+                    if( posss2!=-1 && counttt2!=4 && res2222!= -1 && res3332!=-1 &&  res4442 !=-1 )
+                    {
+                     location.reload();          
+
+                    }
+
+                    if(posss2==-1)
+                    {
+
+                      location.reload();   
+
+
+                    }
+                      if(counttt2==4 ||  res2222!= -1 ||  res3332!=-1  || res4442 !=-1 )
+                    {  
+
+                   
+
+                      var dosskkk2= $('#dossierID').val() ;
+                      
+                      var NouveaURL2="{{ url('/') }}"+"/dossiers/view/"+dosskkk2;
+
+                                                         
+                      document.location.href=NouveaURL2;
+
+
+                    }
+
+                            }// fin resultvalue
 
 
                             }); 
@@ -1997,10 +2079,7 @@ function  getNotificationDeleguerAct () {
            if(data)
            {
           
-              
-
-           //swal(data);
-
+          
              const swalWithBootstrapButtonskbs = Swal.mixin({
                             customClass: {
                                 confirmButton: 'btn btn-success',
@@ -2020,9 +2099,60 @@ function  getNotificationDeleguerAct () {
                         }).then((result) => {
                             if (result.value) {
 
-                                   window.location.reload(true);
+                                   //window.location.reload(true);
 
-                            }
+                                    var urllocaleee=top.location.href;
+
+                         var posss=urllocaleee.indexOf("traitementsBoutonsActions");
+                         var res222=urllocaleee.indexOf("deleguerMission");
+                         var res333=urllocaleee.indexOf("deleguerAction");
+                         var res444=urllocaleee.indexOf("TraitementAction");
+                         
+                         //alert(poss);
+                         var counttt=0;
+
+                         if(posss!= -1)
+                         {
+                            for (var i = posss; i <100; i++) {
+                              
+                                if(urllocaleee[i]=='/')
+                                {
+                                  counttt++;
+                                }
+
+                              }
+                         
+                         }
+
+                    if( posss!=-1 && counttt!=4 && res222!= -1 && res333!=-1 &&  res444 !=-1 )
+                    {
+                     location.reload();          
+
+                    }
+
+                    if(posss==-1)
+                    {
+
+                      location.reload();   
+
+
+                    }
+                      if(counttt==4 ||  res222!= -1 ||  res333!=-1  || res444 !=-1 )
+                    {  
+
+                   
+
+                      var dosskkk= $('#dossierID').val() ;
+                      
+                      var NouveaURL1="{{ url('/') }}"+"/dossiers/view/"+dosskkk;
+
+                                                         
+                      document.location.href=NouveaURL1;
+
+
+                    }
+
+                            }// fin if result value
 
 
                             }); 
@@ -2211,11 +2341,11 @@ getNotificationDeleguerAct ();
     $.ajax({
 
            url:"{{ route('Mission.StoreMissionByAjax') }}",
-           method:"POST",
+           method:"get",
            data : donnees,
            success:function(data){
          
-                alert("Mission créee");
+                alert("Mission créée");
                 //alert(data);
                  $('#idFormCreationMission #typeMissauto').val('');
                  //$('#idFormCreationMission #typeMissauto option:eq(1)').prop('selected', true);

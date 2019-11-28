@@ -119,7 +119,7 @@
 
 
     </div>
-    <form id="kbsoptionform" action="{{ url('/traitementsBoutonsActions/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id.'/1')}}" method="GET">
+    <form id="kbsoptionform" action="{{ url('/traitementsBoutonsActions/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id.'/1')}}" onSubmit="return confirm('Confirmez vous votre action ?');"  method="GET">
 
     
     <br><br>
@@ -160,65 +160,66 @@
 
      <div class="col-md-3">
         
-         <a class="btn btn-danger"  style="width: 200px;" href="{{ url('dossier/Mission/AnnulerMissionCourante/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}" ><i class="fa fa-close"></i> Annuler la mission</a>
+         <a class="btn btn-danger annulerMission" id="a{{$Action->Mission->id}}" style="width: 200px;" href=" javascript:void(0)" ><i class="fa fa-close"></i> Annuler la mission</a>
      </div>
 
    </div>
+   <br>
 
-     <!--<div class="row">
+     <div class="row">
       @if($Action->Mission->type_Mission==6) {{--Taxi--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date "début mission" et date "arrivée à destination" ( à compléter dans OM taxi (2ème partie))</h4> </span> 
+       <span style="color:red"> <h3> * <u><b>Date(s) spécifique(s) :</b></u></h3> </span>  <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir les dates suivantes dans l'interface de description de mission dès qu'elles seront connues : <br> -  la date "début mission" (date départ base) (2ème partie OM Taxi) <br> - la date/heure "arrivée à destination" (date/heure disponibilité prévisible) (2ème partie OM Taxi) </b></h4></div>
      @endif
        @if($Action->Mission->type_Mission==30) {{--rapatriement véhicule sur Cargo--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d'arrivée de remorqueur au port et heure départ sur Cargo (Heure souhaitée arrivée et heure départ à compléter via OM remorquage ou via  l'interface de description de mission) </h4> </span> 
+       <span style="color:red"> <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir les dates suivantes dans l'interface de description de mission dès qu'elles seront connues :<br> - la date prévue d'arrivée de remorqueur au port (date souhaitée arrivée) (dans 2ème partie OM remorquage)<br> - la date/heure de départ sur Cargo (2ème partie OM remorquage)</b></h4> </div> 
       @endif
        @if($Action->Mission->type_Mission==26) {{--Ecsorte intern. fournie par MI--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date décollage d'avion (à compléter via OM Ambulance)</h4> </span> 
+       <span style="color:red"> <h3>*<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b>Vous devrez saisir la  date suivante dans l'interface de description de mission dès qu'elle sera connue :<br> - la date/heure de décollage d'avion (Date/heure décollage vol)(OM Ambulance)</b></h4> </div> 
       @endif
        @if($Action->Mission->type_Mission==27) {{--Rapatriement véhicule avec chauffeur accompagnateur--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d'arrivée au port (Date RDV à compléter via OM remorquage)</h4> </span> 
+       <span style="color:red"> <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b>Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure prévue d'arrivée au port (Date/heure RDV au port) (OM remorquage)</b></h4> </div> 
       @endif
        @if($Action->Mission->type_Mission==12) {{--Dédouanement de pièces--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date rdv prévu (à compléter via l'interface de description de mission)</h4> </span> 
+       <span style="color:red"> <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure du RDV prévu</b></h4> </div> 
       @endif
        @if($Action->Mission->type_Mission==11) {{--consultation médicale--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure du RDV avec le médecin (à compléter via a  l'interface de description de mission)</h4> </span> 
+       <span style="color:red">  <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue:<br>- date/heure du RDV avec le médecin </b></h4> </div> 
       @endif
        @if($Action->Mission->type_Mission==16) {{--Devis transport international sous assistance--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure de décollage (à compléter via OM Ambulance et/ou PEC Devis Transport sous assistance)</h4> </span> 
+       <span style="color:red"> <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue:<br>- date/heure de décollage (OM Ambulance / PEC Devis Transport sous assistance)</b></h4> </div> 
       @endif
        @if($Action->Mission->type_Mission==18) {{--Demande d’evasan internationale--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d’arrivée (heure atterrissage destination à compléter via OM ambulance )</h4> </span> 
+       <span style="color:red">  <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure prévue d’arrivée (date/heure atterrissage destination) (OM ambulance)</b></h4> </div> 
       @endif
        @if($Action->Mission->type_Mission==19) {{--Demande d’evasan nationale--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue d’arrivée (heure atterrissage destination (heure de décollage à déterminer via OM ambulance ou/et PEC Evasan Armée ))</h4> </span> 
+       <span style="color:red">  <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure prévue d’arrivée (date/heure atterrissage destination) (OM ambulance / PEC Evasan Armée )</b></h4> </div> 
       @endif
        @if($Action->Mission->type_Mission==22) {{--escorte de l étranger--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure arrivée du vol (à insérer via OM Taxi)</h4> </span> 
+       <span style="color:red">  <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure d'arrivée du vol (OM Taxi)</b></h4> </div> 
       @endif
         @if($Action->Mission->type_Mission==32) {{--réservation hotel--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date fin séjour (à insérer via PEC hôtel)</h4> </span> 
+       <span style="color:red"> <h3> *<u> <b>Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure fin de séjour (PEC hôtel)</b></h4> </div> 
       @endif
       @if($Action->Mission->type_Mission==35) {{--organisation visite médicale--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date RDV (à compléter via l'interface de description de mission )</h4> </span> 
+       <span style="color:red"><h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure du RDV </b></h4> </div> 
       @endif
        @if($Action->Mission->type_Mission==39) {{--Expertise--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date RDV (à compléter via PEC expertise)</h4> </span> 
+       <span style="color:red"> <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure du RDV (PEC expertise)</b></h4> </div> 
       @endif
          @if($Action->Mission->type_Mission==43) {{--rapatriement de véhicule sur ferry--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure prévue de départ du bâteau (date départ à compléter via OM remorquage 1ère partie)</h4> </span> 
+       <span style="color:red"> <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure prévue de départ du bâteau (OM remorquage)</b></h4> </div> 
       @endif
          @if($Action->Mission->type_Mission==45) {{--réparation véhicule--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date RDV (à compléter via l'interface de description de mission )</h4> </span> 
+       <span style="color:red"><h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure du RDV (de passage assuré)</b> </h4> </div> 
       @endif
-       @if($Action->Mission->type_Mission==43) {{--remorquage--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : heure départ pour mission et heure fin mission (Date/Heure départ base et  Date/Heure dispo prévisible à compléter via OM remorquage (2ème partie))</h4> </span> 
+       @if($Action->Mission->type_Mission==44) {{--remorquage--}} 
+       <span style="color:red"><h3>*<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir les dates suivantes dans l'interface de description de mission dès qu'elles seront connues :<br>- date/heure départ pour mission (Date/Heure départ base)  (OM remorquage (2ème partie)) <br> - date/heure fin de mission (Date/Heure dispo prévisible) (OM remorquage (2ème partie))</b></h4> </div> 
       @endif 
        @if($Action->Mission->type_Mission==46) {{--location voiture--}} 
-       <span style="color:red"> <h4> #  Date(s) spécifique(s) : date fin location (à compléter via PEC location) </h4> </span> 
+       <span style="color:red"> <h3>*<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure de fin de location (PEC location) </b></h4> </div> 
       @endif
       
-     </div>-->
+     </div>
 
    
     <!--<div class="row">
@@ -238,7 +239,7 @@
    </div>
      </div>-->
     <br>
-    <h3>Étapes à réaliser:</h3>
+    <h3><u>Étapes à réaliser:</u></h3>
     <br>
     <p><textarea readonly style="padding:10px 10px 10px 10px ;border:1px solid #00aced;WIDTH: 100%; height:170px;  font-size: 18px;">{{$Action->descrip}}</textarea>
     </p>
@@ -1171,6 +1172,7 @@ var hrefidAcheverA;
                                             <?php $agents = App\User::get(); ?>
                                            
                                                 @foreach ($agents as $agt)
+                                                @if($agt->isOnline())
                                                 <?php if (!empty ($agentname)) { ?>
                                                 @if ($agentname["id"] == $agt["id"])
                                                     <option value={{ $agt["id"] }} selected >{{ $agt["name"] }}</option>
@@ -1182,6 +1184,7 @@ var hrefidAcheverA;
                                                 else
                                                       {  echo '<option value='.$agt["id"] .' >'.$agt["name"].'</option>';}
                                                 ?>
+                                                @endif
                                                 @endforeach    
                                         </select>
                                     </div>
@@ -1238,6 +1241,7 @@ var hrefidAcheverA;
                                             <?php $agents = App\User::get(); ?>
                                            
                                                 @foreach ($agents as $agt)
+                                                @if($agt->isOnline())
                                                 <?php if (!empty ($agentname)) { ?>
                                                 @if ($agentname["id"] == $agt["id"])
                                                     <option value={{ $agt["id"] }} selected >{{ $agt["name"] }}</option>
@@ -1249,6 +1253,7 @@ var hrefidAcheverA;
                                                 else
                                                       {  echo '<option value='.$agt["id"] .' >'.$agt["name"].'</option>';}
                                                 ?>
+                                                @endif
                                                 @endforeach    
                                         </select>
                                     </div>

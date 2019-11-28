@@ -37,7 +37,8 @@ class User extends Authenticatable
 
      public function activeMissions()
     {
-        return $this->hasMany('App\Mission')->where('statut_courant','active');
+        return $this->hasMany('App\Mission')->orderBy('updated_at','desc');
+       
     }
 
     public function dossier()

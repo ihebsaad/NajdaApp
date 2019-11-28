@@ -404,7 +404,7 @@ Route::get('/Mission/getDescriptionMissionAjax/{id}', 'MissionController@getDesc
 
 Route::get('/dossiers/view/CreerOM/{id}/{idmiss}', 'MissionController@viewDossierMission');
 Route::get('dossiers/view/CreerDoc/{id}/{idmiss}', 'MissionController@viewDossierMission');
-Route::post('/Missions/storeMissionByAjax','MissionController@storeMissionByAjax')->name('Mission.StoreMissionByAjax');
+Route::get('/Missions/storeMissionByAjax','MissionController@storeMissionByAjax')->name('Mission.StoreMissionByAjax');
 Route::post('/Missions/storeMissionLieByAjax','MissionController@storeMissionLieByAjax')->name('Mission.StoreMissionLieByAjax');
 Route::get('/ReporterMission/','MissionController@ReporterMission')->name('Mission.ReporterMission');
 

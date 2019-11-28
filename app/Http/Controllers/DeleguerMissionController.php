@@ -30,30 +30,31 @@ class DeleguerMissionController extends Controller
     }
 
 
-     
-
-
    public function deleguerMission(Request $request)
    {
 
          $mission = Mission::find($request->get('delegMissid'));
         
-          $agent= $request->get('agent');
-          $mission->update(['user_id' => $agent]);
+          $agent= trim($request->get('agent'));
+          $mission->update(['statut_courant' =>'deleguee','user_id' => $agent,'emetteur_id'=> trim($request->get('affecteurmiss'))]);
 
+         
         if ( $mission->update(['assistant_id' => $agent]))
         { 
 
+             if( $mission->assistant_id==$mission->emetteur_id)
+              {
+                $mission->update(['statut_courant' =>'active']);
+              }
 
             $dtc = (new \DateTime())->format('Y-m-d H:i');
             $affec=new DelegMiss([
 
-                  'util_affecteur'=>$request->get('affecteurmiss'),
+                  'util_affecteur'=>trim($request->get('affecteurmiss')),
                   'util_affecte'=>$agent,
                   'id_mission'=>$mission->id,                
-                  'id_dossier'=>$request->get('MissDeldossid'),
+                  'id_dossier'=>trim($request->get('MissDeldossid')),
                   'date_affectation'=>$dtc,
-
             ]);
 
              $affec->save();
@@ -62,27 +63,16 @@ class DeleguerMissionController extends Controller
                       
                     $dossier= $mission->dossier;
                    // $dossiers=Dossier::get();
-                    $typesMissions=TypeMission::get();                   
-              
-                    $Missions=Auth::user()->activeMissions;
-                    
-
+                    $typesMissions=TypeMission::get();          
+                    $Missions=Auth::user()->activeMissions;                
 
                 Session::flash('AffectMission',"La mission { ".  $mission->typeMission->nom_type_Mission." } de dossier { ".$dossier->reference_medic." - ".$dossier->subscriber_name." ".$dossier->subscriber_lastname ." } a été déléguée à ".  $mission->assistant->name." ".$mission->assistant->lastname);   
 
-                return view('actions.deleguerMission',['typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
-
-             
+                return view('actions.deleguerMission',['typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));           
 
         }
 
-
-
-
     }
-
-
-
 
 
      public function getNotificationDeleguerMiss($userConnect)
@@ -93,7 +83,6 @@ class DeleguerMissionController extends Controller
        if($affm != null)
        {
 
-
            //$id_doss= Mission::where($affm->id_mission)->first()->id_dossier;
          $id_doss=$affm->id_dossier;
          $doss=Dossier::find($id_doss);
@@ -102,39 +91,25 @@ class DeleguerMissionController extends Controller
 
             if($ref_doss &&  $titre_miss )
             {
-
-
-           // $affecmhis=new DelegMissHis($affm->toArray()); 
-
-            // if( $affecmhis->save() && $affm->forceDelete())
                if($affm->forceDelete())
               {
-
                 $output='La mission { '.$titre_miss.' } de dossier { '.$ref_doss.' } est affectée à Vous';
-
               }
               else
                {
 
                   $output='Erreur lors d\'archivage des Notifiactions d\'affectation des missions déléguées. Veuillez contacter l\'administrateur. Vérifiez si quelqu\'un veut vous affecter la mission '.$titre_miss.' de dossier de référence '.$ref_doss ;
-
             
                }
             }
-
-           
-          
+                    
         }
 
        return  $output;
 
-
      }
 
  
-
-
-
 
     /**
      * Display a listing of the resource.

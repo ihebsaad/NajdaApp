@@ -363,7 +363,7 @@ class MissionController extends Controller
     public function storeMissionByAjax (Request $request)
     {
       // return 'ok';
-          //dd($request->all());
+         // dd($request->all());
 
         
        // dd( $request->all());
@@ -1016,7 +1016,7 @@ class MissionController extends Controller
 
            app('App\Http\Controllers\ActionController')->Archiver_mission_actions($idmiss);
 
-           $output= "la mission est annulee";
+           $output= "la mission est annulée";
 
           }
           else
@@ -1258,6 +1258,8 @@ public function getAjaxDeleguerMission($idmiss)
                                               $agents = User::get(); 
                                               $agentname='';
                                                 foreach ($agents as $agt){
+                                                  if($agt->isOnline())
+                                                  {
                                                  if (!empty ($agentname)) { 
                                                  if ($agentname["id"] == $agt["id"]) {
                                                $output.=' <option value="'. $agt["id"] .'" selected >'. $agt["name"] .'</option>';
@@ -1272,7 +1274,7 @@ public function getAjaxDeleguerMission($idmiss)
                                                 }
                                                 else
                                                   { $output.= '<option value="'.$agt["id"] .'" >'.$agt["name"].'</option>';}
-                                                
+                                                }
                                                }   
                                        $output.= ' </select>
                                     </div>
@@ -1370,7 +1372,7 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-           <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date Départ pour mission </span>
+           <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure de départ pour mission (date départ base) </span>
            <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
         
@@ -1391,7 +1393,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_dep_pour_miss)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_dep_pour_miss.')';
              }
              else
              {
@@ -1442,7 +1444,7 @@ public function getAjaxDeleguerMission($idmiss)
         <div class="row">
           <br>
         
-        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date prévue pour fin de mission </span> <br>
+        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure prévue pour fin de mission (date disponibilité prévisible) </span> <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
         
@@ -1463,7 +1465,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect2==1 || $miss->h_arr_prev_dest)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_arr_prev_dest.')';
              }
              else
              {
@@ -1527,7 +1529,7 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue d\'arrivée de remorqueur au port </span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure prévue d\'arrivée de remorqueur au port (date souhaitée arrivée)</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -1549,7 +1551,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_arr_prev_dest)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_arr_prev_dest.')';
              }
              else
              {
@@ -1603,7 +1605,7 @@ public function getAjaxDeleguerMission($idmiss)
         <div class="row">
           <br>
         
-        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure départ sur Cargo </span>
+        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure de départ sur Cargo </span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -1624,7 +1626,7 @@ public function getAjaxDeleguerMission($idmiss)
 
              if($miss->date_spec_affect2==1 || $miss->h_decoll_ou_dep_bat)
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_decoll_ou_dep_bat.')';
              }
              else
              {
@@ -1690,7 +1692,7 @@ public function getAjaxDeleguerMission($idmiss)
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
           <br><br>
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date décollage d\'avion </span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure de décollage d\'avion (Date décollage vol) </span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
         
@@ -1711,7 +1713,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_decoll_ou_dep_bat)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_decoll_ou_dep_bat.')';
              }
              else
              {
@@ -1772,7 +1774,7 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue d\'arrivée au port </span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure prévue d\'arrivée au port (date/heure du RDV au port)</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -1794,7 +1796,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_rdv)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_rdv.')';
              }
              else
              {
@@ -1860,7 +1862,7 @@ public function getAjaxDeleguerMission($idmiss)
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
           
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; Date RDV prévu </span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; Date/heure du RDV prévu </span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
         
@@ -1881,7 +1883,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_rdv)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_rdv.')';
              }
              else
              {
@@ -1946,7 +1948,7 @@ public function getAjaxDeleguerMission($idmiss)
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
          
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure du rdv avec le médecin</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure du RDV avec le médecin</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -1966,9 +1968,8 @@ public function getAjaxDeleguerMission($idmiss)
 
 
              if($miss->date_spec_affect==1 || $miss->h_rdv)
-
              {
-              $output.= 'oui, date assignée';
+              $output.= 'Oui, date assignée ('.$miss->h_rdv.')';
              }
              else
              {
@@ -2033,7 +2034,7 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure de décollage </span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure de décollage </span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
        
@@ -2054,7 +2055,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_decoll_ou_dep_bat)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_decoll_ou_dep_bat.')';
              }
              else
              {
@@ -2074,7 +2075,7 @@ public function getAjaxDeleguerMission($idmiss)
 
               $da = (new \DateTime())->format('Y-m-d\TH:i'); 
 
-              $output.='<input id="dateSpecM" type="datetime-local" value="'.$da.'" class="form-control" style="width:50%;  text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec"/>
+              $output.='<input id="dateSpecM" type="datetime-local" value="'.$da.'" class="form-control" style="width:50%; text-align: right; float: right !important; margin-right: 20px;"  name="dateSpec"/>
             </div>
 
         <br>
@@ -2118,7 +2119,7 @@ public function getAjaxDeleguerMission($idmiss)
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
         
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue d’arrivée (heure d’atterrissage destination )</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure prévue d’arrivée (date/heure d’atterrissage destination)</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2140,7 +2141,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_arr_prev_dest)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_arr_prev_dest.')';
              }
              else
              {
@@ -2204,7 +2205,7 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue d’arrivée (heure d’atterrissage destination )</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure prévue d’arrivée (date/heure d’atterrissage destination)</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2226,7 +2227,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_arr_prev_dest)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_arr_prev_dest.')';
              }
              else
              {
@@ -2288,7 +2289,7 @@ public function getAjaxDeleguerMission($idmiss)
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
          
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure arrivée du vol</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure d\'arrivée du vol</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2310,7 +2311,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_arr_av_ou_bat)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_arr_av_ou_bat.')';
              }
              else
              {
@@ -2375,7 +2376,7 @@ public function getAjaxDeleguerMission($idmiss)
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
           
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date fin séjour </span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure de fin  séjour </span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2397,7 +2398,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_fin_sejour)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_fin_sejour.')';
              }
              else
              {
@@ -2459,7 +2460,7 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure RDV</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure du RDV</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2481,7 +2482,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_rdv)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_rdv.')';
              }
              else
              {
@@ -2547,7 +2548,7 @@ public function getAjaxDeleguerMission($idmiss)
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
          
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure RDV</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure du RDV</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2569,7 +2570,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_rdv)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_rdv.')';
              }
              else
              {
@@ -2635,7 +2636,7 @@ public function getAjaxDeleguerMission($idmiss)
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
          
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure prévue de départ du bâteau</span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure prévue de départ du bâteau</span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2657,7 +2658,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_decoll_ou_dep_bat)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_decoll_ou_dep_bat.')';
              }
              else
              {
@@ -2721,7 +2722,7 @@ public function getAjaxDeleguerMission($idmiss)
           <br>
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
-        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure RDV pour passage assuré </span>
+        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure du RDV (de passage de l\'assuré) </span>
           <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2743,7 +2744,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_rdv)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_rdv.')';
              }
              else
              {
@@ -2808,7 +2809,7 @@ public function getAjaxDeleguerMission($idmiss)
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
          
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure départ pour mission </span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure de départ pour mission (départ depuis la base)</span>
            <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2830,7 +2831,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_dep_pour_miss)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_dep_pour_miss.')';
              }
              else
              {
@@ -2884,7 +2885,7 @@ public function getAjaxDeleguerMission($idmiss)
         <div class="row">
           <br>
         
-        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; heure fin mission </span>
+        <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure fin de mission (dispo. prévisible)</span>
         <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2905,7 +2906,7 @@ public function getAjaxDeleguerMission($idmiss)
 
              if($miss->date_spec_affect2==1 || $miss->h_retour_base)
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_retour_base.')';
              }
              else
              {
@@ -2970,7 +2971,7 @@ public function getAjaxDeleguerMission($idmiss)
           <!--<span style="padding: 5px; font-weight: bold; font-size: 18px; color:green ;"> &nbsp;&nbsp; Information(s) :</span>-->
           
          
-          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date fin location  </span>
+          <span style="padding: 5px; font-weight: bold; font-size: 15px; color:red ;"> &nbsp;&nbsp; date/heure de fin de location  </span>
            <br>
            <span style="padding: 5px; font-weight: bold; font-size: 15px; "> &nbsp;&nbsp; Date déja assignée ? : </span> 
 
@@ -2992,7 +2993,7 @@ public function getAjaxDeleguerMission($idmiss)
              if($miss->date_spec_affect==1 || $miss->h_fin_location_voit)
 
              {
-              $output.= 'oui, date assignée';
+              $output.= 'oui, date assignée ('.$miss->h_fin_location_voit.')';
              }
              else
              {
