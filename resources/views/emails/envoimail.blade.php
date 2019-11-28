@@ -78,7 +78,7 @@
                 if($typea=='MEDIC INTERNATIONAL'){$from='operations@medicinternational.tn';}
                 if($typea=='NAJDA TPA'){$from='tpa@najda-assistance.com';}
                 if($typea=='TRANSPORT NAJDA'){$from='taxi@najda-assistance.com';}
-                if($typea=='X-PRESS'){$from='xpress@najda-assistance.com';}
+                if($typea=='X-PRESS'){$from='x-press@najda-assistance.com';}
 
 
                 ?>

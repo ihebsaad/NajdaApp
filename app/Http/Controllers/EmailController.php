@@ -520,7 +520,7 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval($oMessage->getSubject())  ;
+           if($oMessage->getSubject()!=''){$sujet=strval($oMessage->getSubject())  ;}else{$sujet='aucun objet';}
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
             //  $contenubrut= $oMessage->getTextBody();
@@ -576,6 +576,8 @@ $id=0;
                 if ($this->checkEmailExiste('b1-'.$mailid)==0){
                     $entree->save();
                     Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+
+                    //$dataentree=/*$entree->select('id','mailid','emetteur','destinataire','sujet','type','reception','dossier'); */array('id'=>$entree->id,'notifiable_id'=>$entree->notifiable_id,'reception'=>$entree->notifiable_id);
                 }
 
 
@@ -742,7 +744,7 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval($oMessage->getSubject())  ;
+            if($oMessage->getSubject()!=''){ $sujet=strval($oMessage->getSubject());}else{$sujet='aucun objet';}
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
           //  $contenubrut= $oMessage->getTextBody();
@@ -797,6 +799,8 @@ $id=0;
 
             if ($this->checkEmailExiste('b2-'.$date.'-'.$mailid)==0){
                 $entree->save();
+                $oMessage->delete() ;
+
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
             }
 
@@ -952,6 +956,8 @@ $id=0;
             'protocol'      => 'pop3'
         ]);
 
+
+
 //Connect to the IMAP Server
         $oClient->connect();
         $id=0;
@@ -1018,6 +1024,8 @@ $id=0;
 
             if ($this->checkEmailExiste('b3-'.$date.'-'.$mailid)==0){
                 $entree->save();
+                $oMessage->delete() ;
+
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
             }
                 /*********************/
@@ -1247,6 +1255,8 @@ $id=0;
 
             if ($this->checkEmailExiste('b4-'.$date.'-'.$mailid)==0){
                 $entree->save();
+                $oMessage->delete() ;
+
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
             }
 
@@ -1468,6 +1478,8 @@ $id=0;
 
             if ($this->checkEmailExiste('b5-'.$date.'-'.$mailid)==0){
                 $entree->save();
+                $oMessage->delete() ;
+
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
             }
                 /*********************/
@@ -1852,7 +1864,7 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval($oMessage->getSubject())  ;
+          if($oMessage->getSubject()!=''){ $sujet=strval($oMessage->getSubject());}else{$sujet='aucun objet';}
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
             //  $contenubrut= $oMessage->getTextBody();
@@ -2084,8 +2096,6 @@ $id=0;
             //Move the current Message to 'INBOX.read'
             if ($oMessage->moveToFolder('read') == true) {
 
-
-
                 // dispatch
                 $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
@@ -2280,7 +2290,7 @@ $id=0;
             'port'          => '993',// env('portreception'),
             //    'encryption'    => '',//env('encreception'),
             'validate_cert' => true,
-            'username'      =>'xpress@najda-assistance.com',
+            'username'      =>'x-press@najda-assistance.com',
             'password'      => $pass_XP,
             'protocol'      => 'imap'
         ]);
@@ -2332,7 +2342,7 @@ $id=0;
                 }
 
                 $entree = new Entree([
-                    'destinataire' => 'xpress@najda-assistance.com',
+                    'destinataire' => 'x-press@najda-assistance.com',
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
@@ -3400,10 +3410,10 @@ if ($from=='najdassist@gmail.com')
             $signatureentite= $parametres->signature8 ;
 
         }
-        if ($from=='xpress@najda-assistance.com')
+        if ($from=='x-press@najda-assistance.com')
         {
             $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
-            $swiftTransport->setUsername('xpress@najda-assistance.com');
+            $swiftTransport->setUsername('x-press@najda-assistance.com');
             $swiftTransport->setPassword('Rem2018@najda');
             $fromname="X-Press remorquage";
             $signatureentite= $parametres->signature9 ;

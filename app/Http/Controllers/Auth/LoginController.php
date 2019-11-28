@@ -152,7 +152,6 @@ public function logout(Request $request)
                         ->update(array('affecte' => $medic));
 
 
-
                 }else{
 
                     if($tech>0) {
@@ -283,6 +282,14 @@ public function logout(Request $request)
         {
         	$seance->dispatcheurtel=NULL ;
         }
+         if ($seance->dispatcheurte2==Auth::id())
+        {
+        $seance->dispatcheurtel2=NULL ;
+         }
+        if ($seance->dispatcheurtel3==Auth::id())
+         {
+         $seance->dispatcheurtel3=NULL ;
+         }
         if ($seance->superviseurmedic==Auth::id())
         {
         	$seance->superviseurmedic=NULL ;
@@ -301,6 +308,8 @@ public function logout(Request $request)
         }
 
         $seance->save();
+
+//
 
 
 
