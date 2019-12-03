@@ -119,7 +119,7 @@
 
 
     </div>
-    <form id="kbsoptionform" action="{{ url('/traitementsBoutonsActions/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id.'/1')}}" onSubmit="return confirm('Confirmez vous votre action ?');"  method="GET">
+    <form id="kbsoptionform" action="{{ url('/traitementsBoutonsActions/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id.'/1')}}" onSubmit="return confirm('Confirmez-vous votre action ?');"  method="GET">
 
     
     <br><br>
