@@ -543,20 +543,38 @@ if (isset($detailom))
 <?php }
 } else { ?>				
 <input type="checkbox" name="CL_couveuse" id="CL_couveuse" value="oui">
-<?php } ?>					
-					<span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">PSE</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; "> </span>
-<?php  if (isset($detailom))
-{ if (isset($detailom['CL_pse']))
+<?php } ?>	
+
+<span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">&nbsp;&nbsp;PSE</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; "> </span>				
+					
+<?php  if (isset($detailom['CL_pse']))
 	{ if (($detailom['CL_pse'] === "oui")||($detailom['CL_pse'] === "on")) { ?>	
-		<input type="checkbox" name="CL_pse" id="CL_pse" checked value="oui">
-		<?php } else { ?>
-		<input type="checkbox" name="CL_pse" id="CL_pse" value="">
-<?php }} else { ?>
-<input type="checkbox" name="CL_pse" id="CL_pse" value="oui">
-<?php }
+		<input type="checkbox" name="CL_pse" id="CL_pse"  value="oui" checked>
+		<?php } else { $paspse = true;?>
+		<input type="checkbox" name="CL_pse" id="CL_pse" >
+<?php }} else { if (empty($detailom['CL_pse'])) { $paspse = true; ?>
+<input type="checkbox" name="CL_pse" id="CL_pse" >
+<?php 
 } else { ?>				
-<input type="checkbox" name="CL_pse" id="CL_pse" value="oui">
-<?php } ?>			
+<input type="checkbox" name="CL_pse" id="CL_pse" value="oui" checked>
+<?php }} ?>	
+
+<!-- debut ajout khaled-->
+
+<?php if (isset($paspse)) { ?>
+<span id='zonepse' style="display: none;">
+<?php } else { ?>
+<span id='zonepse' >
+<?php } ?>
+				<span style="font-family:'Times New Roman'; font-weight:bold">&nbsp;&nbsp; Nombre max de PSE (choix de 1 à 4)&nbsp; </span>
+<input name="CL_nbpsemax" type="number" id="CL_nbpsemax" min="1" max="4"  <?php if (isset($detailom)) { if (isset($detailom['CL_nbpsemax'])) {echo "value='".$detailom['CL_nbpsemax']."'";}}  ?> >
+	
+</input>	
+
+</span>
+
+
+<!--fin ajout khaled-->		
 	<span style="width:13.57pt; display:inline-block">&#xa0;</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Chaise roulante</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; "> </span>
 <?php  if (isset($detailom))
 { if (isset($detailom['CL_chaise_roulante']))
@@ -625,6 +643,11 @@ if (isset($detailom))
 <input name="CL_nomprenom" id="CL_nomprenom" placeholder="nom et prénom" <?php if (isset($detailom)) { if (isset($detailom['CL_nomprenom'])) {echo "value='".$detailom['CL_nomprenom']."'";}} ?> />
 							<span style="font-family:'Times New Roman'; font-weight:bold">  </span><span style="font-family:'Times New Roman'; font-weight:bold">  Tél</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
 <input name="CL_numtel" placeholder="téléphone" pattern= "^[0–9]$" <?php if (isset($detailom)) { if (isset($detailom['CL_numtel'])) {echo "value='".$detailom['CL_numtel']."'";}} ?> ></input>
+<!--ajout khaled-->
+<span style="font-family:'Times New Roman'; font-weight:bold">  </span>
+<span style="font-family:'Times New Roman'; font-weight:bold">Autres informations</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
+<input name="CL_autresinformations" id="CL_autresinformations" placeholder="" <?php if (isset($detailom)) { if (isset($detailom['CL_autresinformations'])) {echo "value='".$detailom['CL_autresinformations']."'";}} ?> />
+<!--fin ajout khaled-->
 </span>
 </p>
 </div>
@@ -1069,6 +1092,24 @@ foreach ($array_chauff as $chauff) {
 	    	$("#ctransfert1").hide();
 	    }
 	});
+    // ajout khaled
+	// nb pse max 
+	$("#CL_pse").change(function() {
+	    if(this.checked) {
+	        $("#zonepse").show();
+	    }
+	    else
+	    {
+	        $("#zonepse").hide();
+	    }
+	});
+
+    // interdire de modifier le champs number
+	$("[type='number']").keypress(function (evt) {
+    evt.preventDefault();
+});
+
+	// fin ajout khaled
 	
 
 	// accompagnants

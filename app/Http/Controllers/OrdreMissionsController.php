@@ -311,7 +311,26 @@ class OrdreMissionsController extends Controller
 					$customer_id = $dossparent["customer_id"];
 	        		$reqci->request->add(['dossier' => $iddossnew]);
 					$reqci->request->add(['champ' => 'customer_id']);
-					$reqci->request->add(['val' => $customer_id]);
+
+                 if($_POST["emispar"]=="najda"){
+					$reqci->request->add(['val' => 202]);// customer id najda assistance 
+                   }
+
+                   if($_POST["emispar"]=="medici"){
+					$reqci->request->add(['val' => 209]);// customer id medic international 
+                   }
+
+                   if($_POST["emispar"]=="medicm"){
+					$reqci->request->add(['val' => 58]);// customer id medic multi-service
+                   }
+
+                   if($_POST["emispar"]=="vat"){
+					$reqci->request->add(['val' => 59]);// customer id vat
+                   }
+
+
+
+
 					app('App\Http\Controllers\DossiersController')->updating($reqci);
 				}
 				if (isset($dossparent["subscriber_phone_domicile"]) && ! (empty($dossparent["subscriber_phone_domicile"])))
@@ -793,7 +812,25 @@ class OrdreMissionsController extends Controller
 					$customer_id = $dossparent["customer_id"];
 	        		$reqci->request->add(['dossier' => $iddossnew]);
 					$reqci->request->add(['champ' => 'customer_id']);
-					$reqci->request->add(['val' => $customer_id]);
+					//$reqci->request->add(['val' => 202]);// id customer najda assistance
+
+                    if($_POST["emispar"]=="najda"){
+					$reqci->request->add(['val' => 202]);// customer id najda assistance 
+                   }
+
+                   if($_POST["emispar"]=="medici"){
+					$reqci->request->add(['val' => 209]);// customer id medic international 
+                   }
+
+                   if($_POST["emispar"]=="medicm"){
+					$reqci->request->add(['val' => 58]);// customer id medic multi-service
+                   }
+
+                   if($_POST["emispar"]=="vat"){
+					$reqci->request->add(['val' => 59]);// customer id vat
+                   }
+
+
 					app('App\Http\Controllers\DossiersController')->updating($reqci);
 				}
 				if (isset($dossparent["subscriber_phone_domicile"]) && ! (empty($dossparent["subscriber_phone_domicile"])))
@@ -1230,7 +1267,24 @@ class OrdreMissionsController extends Controller
                     $customer_id = $dossparent["customer_id"];
                     $reqci->request->add(['dossier' => $iddossnew]);
                     $reqci->request->add(['champ' => 'customer_id']);
-                    $reqci->request->add(['val' => $customer_id]);
+                    //$reqci->request->add(['val' => 202]);// id customer najda assistance
+                  if($_POST["emispar"]=="najda"){
+					$reqci->request->add(['val' => 202]);// customer id najda assistance 
+                   }
+
+                   if($_POST["emispar"]=="medici"){
+					$reqci->request->add(['val' => 209]);// customer id medic international 
+                   }
+
+                   if($_POST["emispar"]=="medicm"){
+					$reqci->request->add(['val' => 58]);// customer id medic multi-service
+                   }
+
+                   if($_POST["emispar"]=="vat"){
+					$reqci->request->add(['val' => 59]);// customer id vat
+                   }
+
+
                     app('App\Http\Controllers\DossiersController')->updating($reqci);
                 }
                 if (isset($dossparent["subscriber_phone_domicile"]) && ! (empty($dossparent["subscriber_phone_domicile"])))
@@ -1611,7 +1665,24 @@ class OrdreMissionsController extends Controller
                     $customer_id = $dossparent["customer_id"];
                     $reqci->request->add(['dossier' => $iddossnew]);
                     $reqci->request->add(['champ' => 'customer_id']);
-                    $reqci->request->add(['val' => $customer_id]);
+                   // $reqci->request->add(['val' => 202]); //id customer najda assistance
+
+                    if($_POST["emispar"]=="najda"){
+					$reqci->request->add(['val' => 202]);// customer id najda assistance 
+                   }
+
+                   if($_POST["emispar"]=="medici"){
+					$reqci->request->add(['val' => 209]);// customer id medic international 
+                   }
+
+                   if($_POST["emispar"]=="medicm"){
+					$reqci->request->add(['val' => 58]);// customer id medic multi-service
+                   }
+
+                   if($_POST["emispar"]=="vat"){
+					$reqci->request->add(['val' => 59]);// customer id vat
+                   }
+
                     app('App\Http\Controllers\DossiersController')->updating($reqci);
                 }
                 if (isset($dossparent["subscriber_phone_domicile"]) && ! (empty($dossparent["subscriber_phone_domicile"])))
