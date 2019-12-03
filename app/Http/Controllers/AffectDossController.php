@@ -131,13 +131,26 @@ class AffectDossController extends Controller
 
         }
 
+		
+        if ($type_affectation == 'X-Press') {
+            $maxid = $this->GetMaxIdBytype('X-Press');
+            $refd= $this->RefDossierById($maxid);
+            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier+1);
+
+        }
+
+		        $user = auth()->user();
 
      ///   if ($this->CheckRefExiste($reference_medic) === 0) {
-        $dossier = new Dossier([
+    $dossier = new Dossier([
             'type_dossier' => $request->get('type_dossier'),
             'type_affectation' => $type_affectation,
-            'affecte' => $request->get('affecte'),
-            'reference_medic' => $reference_medic,
+             'reference_medic' => $reference_medic,
+            'entree' => $request->get('entree'),
+            'user_id'=>$user->id,
+             'current_status'=>'actif'
+
 
         ]);
         if ($dossier->save())

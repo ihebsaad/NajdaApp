@@ -112,7 +112,13 @@ public function logout(Request $request)
 
                 if ( !($veilleur >0) )
                 {
-                         return redirect('/home')->withErrors(['Le veilleur doit être connecté']);
+                      //   return redirect('/home')->withErrors(['Le veilleur doit être connecté']);
+
+                    $this->guard()->logout();
+
+                    $request->session()->invalidate();
+
+                    return redirect('/');
                  }
 
             }

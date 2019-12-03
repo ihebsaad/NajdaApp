@@ -106,6 +106,7 @@ Route::get('/entrees/traiter/{id}', 'EntreesController@traiter');
 Route::get('/entrees/archive/', 'EntreesController@archive')->name('entrees.archive');
 Route::post('/entrees/savecomment','EntreesController@savecomment')->name('entrees.savecomment');
 Route::post('/entrees/dispatchf','EntreesController@dispatchf')->name('entrees.dispatchf');
+Route::post('/entrees/dispatchf2','EntreesController@dispatchf2')->name('entrees.dispatchf2');
 Route::post('/entrees/ajoutcompter','EntreesController@AjoutCompteRendu')->name('entrees.ajoutcompter');
 Route::get('/entrees/countnotifs','EntreesController@countnotifs')->name('entrees.countnotifs');
 Route::get('/entrees/countnotifsrouge','EntreesController@countnotifsrouge')->name('entrees.countnotifsrouge');

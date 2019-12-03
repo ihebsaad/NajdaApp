@@ -16,6 +16,7 @@ use Webklex\IMAP\Client;
 use App\Entree ;
 use App\Dossier ;
 use App\User ;
+use App\Notif ;
 use App\Attachement ;
 use Mail;
 use Spatie\PdfToText\Pdf;
@@ -314,7 +315,7 @@ class EmailController extends Controller
                 $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
 
-                $refdossier='';$dossierid=0;
+                $refdossier='';$dossierid=0;$nomassure='';
         $statut = 0;
         foreach ($dossiers as $dos) {
                 $ref=trim(strval($dos['reference_medic']));
@@ -328,6 +329,7 @@ class EmailController extends Controller
                 {
                     $refdossier = trim($dos['reference_medic']);
                     $dossierid = intval($dos['id']);
+                    $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
                     $statut = 1;
                     break;
                 }
@@ -353,6 +355,7 @@ class EmailController extends Controller
 
                 if ($this->checkEmailExiste( $mailid)==0){
                     $entree->save();
+                    $id=$entree->id;
                     Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
                 }
                 /*********************/
@@ -365,7 +368,27 @@ class EmailController extends Controller
                   if($userid>0){
                     //  $user = User::find($userid);
                      // $user->notify(new Notif_Suivi_Doss($entree));
-                      Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+                 ////    Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+
+                  if($id>0) {
+                      $notif = new Notif([
+                          'emetteur' => ($from),
+                          'sujet' => ($sujet),
+                          'reception' => $date,
+                          'type' => 'email',
+                          'refdossier' => $refdossier,
+                          'affiche' => -1, // traitée ou non
+                          'dossierid' => $dossierid,
+                          'nomassure' => $nomassure,
+                          'statut' => $statut,  //dispatchée ou non
+                          'entree' => $entree->id,
+                          'user' => $userid
+
+                      ]);
+                      $notif->save();
+                  }
+
+
 
                   }
                   else{
@@ -373,7 +396,25 @@ class EmailController extends Controller
                           ->where('id','=', 1 )->first();
                       $disp=$seance->dispatcheur ;
 
-                      Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                  ////    Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+                      if($id>0) {
+                          $notif = new Notif([
+                              'emetteur' => ($from),
+                              'sujet' => ($sujet),
+                              'reception' => $date,
+                              'type' => 'email',
+                              'refdossier' => $refdossier,
+                              'affiche' => -1, // traitée ou non
+                              'dossierid' => $dossierid,
+                              'nomassure' => $nomassure,
+                              'statut' => $statut,  //dispatchée ou non
+                              'entree' => $entree->id,
+                              'user' => $disp
+
+                          ]);
+                          $notif->save();
+                      }
 
                   }
                     // Activer le dossier
@@ -393,7 +434,26 @@ class EmailController extends Controller
                  if($disp>0){
 
                      // $user->notify(new Notif_Suivi_Doss($entree));
-                     Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                  ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+
+                     if($id>0) {
+                         $notif = new Notif([
+                             'emetteur' => ($from),
+                             'sujet' => ($sujet),
+                             'reception' => $date,
+                             'type' => 'email',
+                             'refdossier' => $refdossier,
+                             'affiche' => -1, // traitée ou non
+                             'dossierid' => $dossierid,
+                             'nomassure' => $nomassure,
+                             'statut' => $statut,  //dispatchée ou non
+                             'entree' => $entree->id,
+                             'user' => $disp
+
+                         ]);
+                         $notif->save();
+                     }
 
 
                  }
@@ -402,7 +462,6 @@ class EmailController extends Controller
                   
                 }
 
-                $id=$entree->id;
 
                   //   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
@@ -536,7 +595,7 @@ $id=0;
                 // dispatch
                 $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
-                $refdossier='';$dossierid=0;
+                $refdossier='';$dossierid=0;$nomassure='';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
                     $ref=trim(strval($dos['reference_medic']));
@@ -550,6 +609,8 @@ $id=0;
                     {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
+                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
+
                         $statut = 1;
                         break;
                     }
@@ -574,7 +635,7 @@ $id=0;
                 ]);
 
                 if ($this->checkEmailExiste('b1-'.$mailid)==0){
-                    $entree->save();
+                    $entree->save(); $id=$entree->id;
                     Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
 
                     //$dataentree=/*$entree->select('id','mailid','emetteur','destinataire','sujet','type','reception','dossier'); */array('id'=>$entree->id,'notifiable_id'=>$entree->notifiable_id,'reception'=>$entree->notifiable_id);
@@ -593,10 +654,26 @@ $id=0;
 
                         $user = User::find($userid);
 
-                        Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+                    ////    Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
-                        // Notification::send($user, new Notif_Suivi_Doss($entree));
 
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $userid
+
+                            ]);
+                            $notif->save();
+                        }
 
                     }
                     else{
@@ -604,7 +681,26 @@ $id=0;
                             ->where('id','=', 1 )->first();
                         $disp=$seance->dispatcheur ;
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                     ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
 
                     }
                     // Activer le dossier
@@ -619,17 +715,35 @@ $id=0;
                     $disp=$seance->dispatcheur ;
 
                     if($disp>0) {
-                        $user = User::find($disp);
-                        // $user=  DB::table('users')->where('id','=', $disp )->first();
+                         // $user=  DB::table('users')->where('id','=', $disp )->first();
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                     ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
 
                     }
                     //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
                 }
 
-                $id=$entree->id;
+
 
 
                 $aAttachment = $oMessage->getAttachments();
@@ -760,7 +874,7 @@ $id=0;
                 // dispatch
                 $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
-                $refdossier='';$dossierid=0;
+                $refdossier='';$dossierid=0;$nomassure='';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
                     $ref=trim(strval($dos['reference_medic']));
@@ -774,6 +888,7 @@ $id=0;
                     {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
+                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
                         $statut = 1;
                         break;
                     }
@@ -799,6 +914,7 @@ $id=0;
 
             if ($this->checkEmailExiste('b2-'.$date.'-'.$mailid)==0){
                 $entree->save();
+                $id=$entree->id;
                 $oMessage->delete() ;
 
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
@@ -814,12 +930,27 @@ $id=0;
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                    if($userid>0){
 
-                    $user = User::find($userid);
 
-                        Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+                     ////   Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
-                       // Notification::send($user, new Notif_Suivi_Doss($entree));
 
+                       if($id>0) {
+                           $notif = new Notif([
+                               'emetteur' => ($from),
+                               'sujet' => ($sujet),
+                               'reception' => $date,
+                               'type' => 'email',
+                               'refdossier' => $refdossier,
+                               'affiche' => -1, // traitée ou non
+                               'dossierid' => $dossierid,
+                               'nomassure' => $nomassure,
+                               'statut' => $statut,  //dispatchée ou non
+                               'entree' => $entree->id,
+                               'user' => $userid
+
+                           ]);
+                           $notif->save();
+                       }
 
                    }
                    else{
@@ -827,8 +958,26 @@ $id=0;
                            ->where('id','=', 1 )->first();
                        $disp=$seance->dispatcheur ;
 
-                       Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                    ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+
+                       if($id>0) {
+                           $notif = new Notif([
+                               'emetteur' => ($from),
+                               'sujet' => ($sujet),
+                               'reception' => $date,
+                               'type' => 'email',
+                               'refdossier' => $refdossier,
+                               'affiche' => -1, // traitée ou non
+                               'dossierid' => $dossierid,
+                               'nomassure' => $nomassure,
+                               'statut' => $statut,  //dispatchée ou non
+                               'entree' => $entree->id,
+                               'user' => $disp
+
+                           ]);
+                           $notif->save();
+                       }
                    }
                     // Activer le dossier
                     Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
@@ -845,14 +994,31 @@ $id=0;
                        $user = User::find($disp);
                        // $user=  DB::table('users')->where('id','=', $disp )->first();
 
-                       Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                    ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+
+                       if($id>0) {
+                           $notif = new Notif([
+                               'emetteur' => ($from),
+                               'sujet' => ($sujet),
+                               'reception' => $date,
+                               'type' => 'email',
+                               'refdossier' => $refdossier,
+                               'affiche' => -1, // traitée ou non
+                               'dossierid' => $dossierid,
+                               'nomassure' => $nomassure,
+                               'statut' => $statut,  //dispatchée ou non
+                               'entree' => $entree->id,
+                               'user' => $disp
+
+                           ]);
+                           $notif->save();
+                       }
                    }
                     //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
                 }
 
-                $id=$entree->id;
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
@@ -985,7 +1151,7 @@ $id=0;
                 // dispatch
                 $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
-                $refdossier='';$dossierid=0;
+                $refdossier='';$dossierid=0;$nomassure='';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
                     $ref=trim(strval($dos['reference_medic']));
@@ -1000,6 +1166,8 @@ $id=0;
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
                         $statut = 1;
+                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
+
                         break;
                     }
                 }
@@ -1023,7 +1191,7 @@ $id=0;
                 ]);
 
             if ($this->checkEmailExiste('b3-'.$date.'-'.$mailid)==0){
-                $entree->save();
+                $entree->save();                $id=$entree->id;
                 $oMessage->delete() ;
 
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
@@ -1040,10 +1208,26 @@ $id=0;
 
                         $user = User::find($userid);
 
-                        Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+                      ////  Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
-                        // Notification::send($user, new Notif_Suivi_Doss($entree));
 
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $userid
+
+                            ]);
+                            $notif->save();
+                        }
 
                     }
                     else{
@@ -1051,7 +1235,25 @@ $id=0;
                             ->where('id','=', 1 )->first();
                         $disp=$seance->dispatcheur ;
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                      ////  Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
 
                     }
                     // Activer le dossier
@@ -1069,14 +1271,30 @@ $id=0;
                         $user = User::find($disp);
                         // $user=  DB::table('users')->where('id','=', $disp )->first();
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                    ////    Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
                     }
                     //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
                 }
 
-                $id=$entree->id;
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
@@ -1216,7 +1434,7 @@ $id=0;
                 // dispatch
                 $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
-                $refdossier='';$dossierid=0;
+                $refdossier='';$dossierid=0;$nomassure='';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
                     $ref=trim(strval($dos['reference_medic']));
@@ -1230,6 +1448,7 @@ $id=0;
                     {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
+                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
                         $statut = 1;
                         break;
                     }
@@ -1255,6 +1474,7 @@ $id=0;
 
             if ($this->checkEmailExiste('b4-'.$date.'-'.$mailid)==0){
                 $entree->save();
+                $id=$entree->id;
                 $oMessage->delete() ;
 
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
@@ -1270,12 +1490,27 @@ $id=0;
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if($userid>0){
 
-                        $user = User::find($userid);
 
-                        Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+                     ////   Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
-                        // Notification::send($user, new Notif_Suivi_Doss($entree));
 
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $userid
+
+                            ]);
+                            $notif->save();
+                        }
 
                     }
                     else{
@@ -1283,8 +1518,25 @@ $id=0;
                             ->where('id','=', 1 )->first();
                         $disp=$seance->dispatcheur ;
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                     ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
                     }
                     // Activer le dossier
                     Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
@@ -1301,14 +1553,31 @@ $id=0;
                         $user = User::find($disp);
                         // $user=  DB::table('users')->where('id','=', $disp )->first();
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                    ////    Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
 
                     }
                     //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
                 }
 
-                $id=$entree->id;
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
@@ -1439,7 +1708,7 @@ $id=0;
                 // dispatch
                 $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
-                $refdossier='';$dossierid=0;
+                $refdossier='';$dossierid=0;$nomassure='';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
                     $ref=trim(strval($dos['reference_medic']));
@@ -1453,6 +1722,7 @@ $id=0;
                     {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
+                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
                         $statut = 1;
                         break;
                     }
@@ -1477,7 +1747,7 @@ $id=0;
                 ]);
 
             if ($this->checkEmailExiste('b5-'.$date.'-'.$mailid)==0){
-                $entree->save();
+                $entree->save();                 $id=$entree->id;
                 $oMessage->delete() ;
 
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
@@ -1492,12 +1762,25 @@ $id=0;
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if($userid>0){
 
-                        $user = User::find($userid);
+                        ////  Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
-                        Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $userid
 
-                        // Notification::send($user, new Notif_Suivi_Doss($entree));
-
+                            ]);
+                            $notif->save();
+                        }
 
                     }
                     else{
@@ -1505,8 +1788,25 @@ $id=0;
                             ->where('id','=', 1 )->first();
                         $disp=$seance->dispatcheur ;
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                     ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
                     }
                     // Activer le dossier
                     Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
@@ -1520,17 +1820,33 @@ $id=0;
                     $disp=$seance->dispatcheur ;
 
                     if($disp>0) {
-                        $user = User::find($disp);
                         // $user=  DB::table('users')->where('id','=', $disp )->first();
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                      ////  Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
 
                     }
                     //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
                 }
 
-                $id=$entree->id;
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
@@ -1660,7 +1976,7 @@ $id=0;
                 // dispatch
                 $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
-                $refdossier='';$dossierid=0;
+                $refdossier='';$dossierid=0;$nomassure='';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
                     $ref=trim(strval($dos['reference_medic']));
@@ -1674,6 +1990,7 @@ $id=0;
                     {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
+                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
                         $statut = 1;
                         break;
                     }
@@ -1698,7 +2015,7 @@ $id=0;
                 ]);
 
                 if ($this->checkEmailExiste('b6-'.$mailid)==0){
-                    $entree->save();
+                    $entree->save();                $id=$entree->id;
                     Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
                 }
                 /*********************/
@@ -1710,12 +2027,27 @@ $id=0;
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if($userid>0){
 
-                        $user = User::find($userid);
 
-                        Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+                    ////    Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
-                        // Notification::send($user, new Notif_Suivi_Doss($entree));
 
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $userid
+
+                            ]);
+                            $notif->save();
+                        }
 
                     }
                     else{
@@ -1723,8 +2055,25 @@ $id=0;
                             ->where('id','=', 1 )->first();
                         $disp=$seance->dispatcheur ;
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                   ////     Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
                     }
                     // Activer le dossier
                     Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
@@ -1738,17 +2087,32 @@ $id=0;
                     $disp=$seance->dispatcheur ;
 
                     if($disp>0) {
-                        $user = User::find($disp);
-                        // $user=  DB::table('users')->where('id','=', $disp )->first();
+                         // $user=  DB::table('users')->where('id','=', $disp )->first();
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                       //// Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
                     }
                     //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
                 }
 
-                $id=$entree->id;
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
@@ -1881,7 +2245,7 @@ $id=0;
                 // dispatch
                 $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
-                $refdossier='';$dossierid=0;
+                $refdossier='';$dossierid=0;$nomassure='';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
                     $ref=trim(strval($dos['reference_medic']));
@@ -1895,6 +2259,7 @@ $id=0;
                     {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
+                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
                         $statut = 1;
                         break;
                     }
@@ -1919,7 +2284,7 @@ $id=0;
                 ]);
 
                 if ($this->checkEmailExiste('b7-'.$mailid)==0){
-                    $entree->save();
+                    $entree->save(); $id=$entree->id;
                     Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
                 }
                 /*********************/
@@ -1932,12 +2297,27 @@ $id=0;
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if($userid>0){
 
-                        $user = User::find($userid);
 
-                        Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+                       //// Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
-                        // Notification::send($user, new Notif_Suivi_Doss($entree));
 
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $userid
+
+                            ]);
+                            $notif->save();
+                        }
 
                     }
                     else{
@@ -1947,6 +2327,24 @@ $id=0;
 
                         Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
                     }
                     // Activer le dossier
                     Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
@@ -1960,17 +2358,34 @@ $id=0;
                     $disp=$seance->dispatcheur ;
 
                     if($disp>0) {
-                        $user = User::find($disp);
-                        // $user=  DB::table('users')->where('id','=', $disp )->first();
+                         // $user=  DB::table('users')->where('id','=', $disp )->first();
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                     ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
                     }
                     //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
                 }
 
-                $id=$entree->id;
+
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
@@ -2099,7 +2514,7 @@ $id=0;
                 // dispatch
                 $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
-                $refdossier='';$dossierid=0;
+                $refdossier='';$dossierid=0;$nomassure='';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
                     $ref=trim(strval($dos['reference_medic']));
@@ -2113,6 +2528,7 @@ $id=0;
                     {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
+                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
                         $statut = 1;
                         break;
                     }
@@ -2137,7 +2553,7 @@ $id=0;
                 ]);
 
                 if ($this->checkEmailExiste('b8-'.$mailid)==0){
-                    $entree->save();
+                    $entree->save();$id=$entree->id;
                     Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
                 }
 
@@ -2151,12 +2567,27 @@ $id=0;
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if($userid>0){
 
-                        $user = User::find($userid);
 
-                        Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+                    ////   Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
-                        // Notification::send($user, new Notif_Suivi_Doss($entree));
 
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $userid
+
+                            ]);
+                            $notif->save();
+                        }
 
                     }
                     else{
@@ -2164,8 +2595,26 @@ $id=0;
                             ->where('id','=', 1 )->first();
                         $disp=$seance->dispatcheur ;
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                     ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
                     }
                     // Activer le dossier
                     Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
@@ -2177,19 +2626,37 @@ $id=0;
                     $seance =  DB::table('seance')
                         ->where('id','=', 1 )->first();
                     $disp=$seance->dispatcheur ;
+                   // $supmedic=$seance->superviseurmedic ;
 
                     if($disp>0) {
-                        $user = User::find($disp);
-                        // $user=  DB::table('users')->where('id','=', $disp )->first();
+                         // $user=  DB::table('users')->where('id','=', $disp )->first();
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                       //// Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
                     }
+
                     //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
                 }
 
-                $id=$entree->id;
+
 
                 ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
@@ -2322,7 +2789,7 @@ $id=0;
                 // dispatch
                 $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
-                $refdossier='';$dossierid=0;
+                $refdossier='';$dossierid=0;$nomassure='';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
                     $ref=trim(strval($dos['reference_medic']));
@@ -2336,6 +2803,7 @@ $id=0;
                     {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
+                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
                         $statut = 1;
                         break;
                     }
@@ -2360,7 +2828,8 @@ $id=0;
                 ]);
 
                 if ($this->checkEmailExiste('b9-'.$mailid)==0){
-                    $entree->save();
+                    $entree->save();                $id=$entree->id;
+
                     Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
                 }
                 /*********************/
@@ -2373,12 +2842,27 @@ $id=0;
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if($userid>0){
 
-                        $user = User::find($userid);
 
-                        Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+                    ////    Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
-                        // Notification::send($user, new Notif_Suivi_Doss($entree));
 
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $userid
+
+                            ]);
+                            $notif->save();
+                        }
 
                     }
                     else{
@@ -2386,8 +2870,26 @@ $id=0;
                             ->where('id','=', 1 )->first();
                         $disp=$seance->dispatcheur ;
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                       //// Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
                     }
                     // Activer le dossier
                     Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
@@ -2401,17 +2903,30 @@ $id=0;
                     $disp=$seance->dispatcheur ;
 
                     if($disp>0) {
-                        $user = User::find($disp);
-                        // $user=  DB::table('users')->where('id','=', $disp )->first();
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                      ////  Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
                     }
-                    //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
                 }
 
-                $id=$entree->id;
 
 
                 $aAttachment = $oMessage->getAttachments();
@@ -2656,7 +3171,7 @@ $id=0;
                     $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
 
-                    $refdossier='';$dossierid=0;
+                    $refdossier='';$dossierid=0;$nomassure='';
                     $statut = 0;
                     foreach ($dossiers as $dos) {
                         $ref=trim(strval($dos['reference_medic']));
@@ -2670,6 +3185,7 @@ $id=0;
                         {
                             $refdossier = trim($dos['reference_medic']);
                             $dossierid = intval($dos['id']);
+                            $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
                             $statut = 1;
                             break;
                         }
@@ -2696,7 +3212,7 @@ $id=0;
 
 
                     if ($this->checkEmailExiste( 'sms-'.$mailid)==0){
-                        $entree->save();
+                        $entree->save();            $id=$entree->id;
                         Log::info('SMS reçu : '.$sujet.' Dossier: '.$refdossier);
                     }
 
@@ -2710,8 +3226,25 @@ $id=0;
                         //  $user=  DB::table('users')->where('id','=', $userid )->first();
                       if($userid>0)
                       {
-                            Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+                          //// Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
+                          if($id>0) {
+                              $notif = new Notif([
+                                  'emetteur' => 'SMS',
+                                  'sujet' => ($sujet),
+                                  'reception' => $date,
+                                  'type' => 'sms',
+                                  'refdossier' => $refdossier,
+                                  'affiche' => -1, // traitée ou non
+                                  'dossierid' => $dossierid,
+                                  'nomassure' => $nomassure,
+                                  'statut' => $statut,  //dispatchée ou non
+                                  'entree' => $entree->id,
+                                  'user' => $userid
+
+                              ]);
+                              $notif->save();
+                          }
 
                       }
                       else{
@@ -2719,7 +3252,26 @@ $id=0;
                               ->where('id','=', 1 )->first();
                           $disp=$seance->dispatcheur ;
 
-                          Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                         //// Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+
+                          if($id>0) {
+                              $notif = new Notif([
+                                  'emetteur' => 'SMS',
+                                  'sujet' => ($sujet),
+                                  'reception' => $date,
+                                  'type' => 'sms',
+                                  'refdossier' => $refdossier,
+                                  'affiche' => -1, // traitée ou non
+                                  'dossierid' => $dossierid,
+                                  'nomassure' => $nomassure,
+                                  'statut' => $statut,  //dispatchée ou non
+                                  'entree' => $entree->id,
+                                  'user' => $disp
+
+                              ]);
+                              $notif->save();
+                          }
 
                       }
 
@@ -2735,17 +3287,31 @@ $id=0;
                         $disp=$seance->dispatcheur ;
 
                        if($disp) {
-                           $user = User::find($disp);
-                           // $user=  DB::table('users')->where('id','=', $disp )->first();
 
-                            Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                         ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+                           if($id>0) {
+                               $notif = new Notif([
+                                   'emetteur' => ('SMS'),
+                                   'sujet' => ($sujet),
+                                   'reception' => $date,
+                                   'type' => 'sms',
+                                   'refdossier' => $refdossier,
+                                   'affiche' => -1, // traitée ou non
+                                   'dossierid' => $dossierid,
+                                   'nomassure' => $nomassure,
+                                   'statut' => $statut,  //dispatchée ou non
+                                   'entree' => $entree->id,
+                                   'user' => $disp
+
+                               ]);
+                               $notif->save();
+                           }
                        }
                         //  Notification::send( $user, new Notif_Suivi_Doss($entree));
 
                     }
 
-                    $id=$entree->id;
 
                     ///   auth2::user()->notify(new Notif_Suivi_Doss($entree));
 
@@ -2804,7 +3370,7 @@ $id=0;
                 // dispatch
                 $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
-                $refdossier='';$dossierid=0;
+                $refdossier='';$dossierid=0;$nomassure='';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
                     $ref=trim(strval($dos['reference_medic']));
@@ -2818,6 +3384,7 @@ $id=0;
                     {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
+                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
                         $statut = 1;
                         break;
                     }
@@ -2843,7 +3410,8 @@ $id=0;
 
 
                 if ($this->checkEmailExiste( 'FX-'.$mailid)==0){
-                    $entree->save();
+                    $entree->save();                $id=$entree->id;
+
                     Log::info('Fax reçu de : '.$from.' Dossier: '.$refdossier );
                 }
                 /*********************/
@@ -2856,7 +3424,25 @@ $id=0;
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if ($userid>0) {
 
-                         Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+                      ////   Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'fax',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $userid
+
+                            ]);
+                            $notif->save();
+                        }
 
                     }
                     else{
@@ -2864,8 +3450,25 @@ $id=0;
                             ->where('id','=', 1 )->first();
                         $disp=$seance->dispatcheur ;
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                     ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'fax',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
                     }
 
                     // Activer le dossier
@@ -2880,13 +3483,29 @@ $id=0;
                     $disp=$seance->dispatcheur ;
                    if($disp>0) {
 
-                        Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                    ////    Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
+                       if($id>0) {
+                           $notif = new Notif([
+                               'emetteur' => ($from),
+                               'sujet' => ($sujet),
+                               'reception' => $date,
+                               'type' => 'fax',
+                               'refdossier' => $refdossier,
+                               'affiche' => -1, // traitée ou non
+                               'dossierid' => $dossierid,
+                               'nomassure' => $nomassure,
+                               'statut' => $statut,  //dispatchée ou non
+                               'entree' => $entree->id,
+                               'user' => $disp
+
+                           ]);
+                           $notif->save();
+                       }
                    }
 
 
                 }
-                $id=$entree->id;
 
 
                 $aAttachment = $oMessage->getAttachments();

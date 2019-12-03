@@ -524,7 +524,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Entité principale de facturation </label>
-                                        <input onchange="changing(this)" type="text" class="form-control" name="entite" id="entite"  value="{{ $client->entite }}"  placeholder="{{ $client->name }}">
+                                        <input onchange="changing(this)" type="text" class="form-control" name="entite" id="entite"  value="<?php if($client->entite ==''){echo $client->name;}else{echo $client->entite; } ?>"  placeholder="<?php echo $client->name ;?>">
                                     </div>
                                 </div>
                                 <div class="col-md-6">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Demande;
+use App\Notif;
 use App\Notification;
 use Illuminate\Support\Facades\Log;
 
@@ -570,7 +571,8 @@ class UsersController extends Controller
     public static function countnotifs($id)
     {
 
-        $number =   Notification::where('notifiable_id','=', $id  )->where('statut','=', 0 )->count();
+       // $number =   Notification::where('notifiable_id','=', $id  )->where('statut','=', 0 )->count();
+        $number =   Notif::where('user', $id  )->where('affiche',  0 )->count();
 
         return $number;
     }
@@ -618,12 +620,9 @@ class UsersController extends Controller
 */
     public static function countnotifsDossier($id)
     {
-        $dossier=Dossier::find($id);
-        $ref=$dossier->reference_medic;
 
-        $number = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"dossier": "'.$ref.'"}}\')')->count(['id']);
-
-
+       // $number = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"dossier": "'.$ref.'"}}\')')->count(['id']);
+        $number = Notif::where('dossierid',$id)->where('affiche',0)->count();
 
         return $number;
     }

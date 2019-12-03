@@ -551,7 +551,7 @@ return redirect('roles');
 
     public function index()
     {
-
+/*
         //  $countries = DB::table('apps_countries')->pluck('id', 'country_name');;
          $typesMissions=TypeMission::get();
         $dossiers = Dossier::get();
@@ -587,6 +587,7 @@ return redirect('roles');
               $result[null][] = $element;
             }
         }
+*/
      //   return view('home', ['countries' => $countries,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'dossiers' => $dossiers,'notifications'=>$result]);
         return view('home'  );
      }

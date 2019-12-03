@@ -58,13 +58,13 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
                                     <a  href="{{action('EntreesController@archiver', $entree['id'])}}" style="color:black" class="btn btn-warning btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Archiver" >
                                   <span class="fa fa-fw fa-archive"></span> Archiver
                                 </a>
-                                   <?php if ($entree['type'] != 'tel'){ ?>
+                                   <?php /* if ($entree['type'] != 'tel'){ ?>
                                     <a  href="{{action('EntreesController@spam', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme SPAM" >
                                         <span class="fas fa-exclamation-triangle"></span> SPAM
                                     </a>
                                       <?php //} ?>
 
-                                    <?php } ?>
+                                    <?php } */ ?>
                                 <?php if ($entree['notif']!=1 ) { ?>
                                     <a onclick="checkComment()"  class="btn btn-info btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
                                         <span class="fa fa-fw fa-check"></span> Traité
@@ -412,7 +412,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
                          <?php foreach($dossiers as $ds)
 
                                {
-                               echo '<option value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}     ?>
+                               echo '<option  title="'.$ds->id.'" value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name.' - '.$ds->subscriber_lastname.' </option>';}     ?>
                          </select>
                             <br><br><br>
                         </div>
@@ -469,13 +469,14 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         $('#updatefolder').click(function(){
             var entree = $('#entreeid').val();
             var dossier = $('#affdoss').val();
+             var iddossier = $('#affdoss').find("option:selected").attr("title");
 
 
             var _token = $('input[name="_token"]').val();
             $.ajax({
-                url:"{{ route('entrees.dispatchf') }}",
+                url:"{{ route('entrees.dispatchf2') }}",
                 method:"POST",
-                data:{entree:entree,dossier:dossier, _token:_token},
+                data:{entree:entree,dossier:dossier,iddossier:iddossier, _token:_token},
                 success:function(data){
 
                     window.location =data;

@@ -52,28 +52,21 @@ use App\Http\Controllers\TagsController;
                                     $disp=$seance->dispatcheur ;
 
                                     $iduser=Auth::id();
-                                    if ($iduser==$disp) { ?>
+                                  //  if ($iduser==$disp) { ?>
                                     <a  href="{{action('EntreesController@archiver', $entree['id'])}}" class="btn btn-warning btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Archiver" >
                                   <span class="fa fa-fw fa-archive"></span> Archiver
                                 </a>
-                                    <a  href="{{action('EntreesController@traiter', $entree['id'])}}" class="btn btn-info btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
-                                        <span class="fa fa-fw fa-check"></span> Traité
-                                    </a>
-                                    <a  href="{{action('EntreesController@spam', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
-                                        <span class="fas fa-exclamation-triangle"></span> SPAM
-                                    </a>
-                                    @can('isAdmin')
-                                    <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
-                                        <span class="fa fa-fw fa-trash-alt"></span> Supprimer
-                                    </a>
-                                     @endcan
 
-                                        @if (!empty($entree->dossier))
-                                    <button  id="accuse"   data-toggle="modal" data-target="#sendaccuse" class="btn btn-info btn-sm btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Envoyer l'accusé de reception" >
-                                        <i class="fas fa-mail-bulk"></i> Accusé
-                                    </button>
-                                    @endif
-                                   <?php } ?>
+
+                                    <!--<a  href="{{action('EntreesController@spam', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Marquer comme traité" >
+                                        <span class="fas fa-exclamation-triangle"></span> SPAM
+                                    </a>-->
+
+                                    @can('isAdmin')
+                                        <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                            <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                                        </a>
+                                    @endcan
                             </div>
                         </div>
 
@@ -581,7 +574,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
             if(dossier!='')
             {
                 $.ajax({
-                url:"{{ route('entrees.dispatchf') }}",
+                url:"{{ route('entrees.dispatchf2') }}",
                 method:"POST",
                 data:{entree:entree,dossier:dossier,iddossier:iddossier, _token:_token},
                 success:function(data){

@@ -317,10 +317,10 @@ class PrestatairesController extends Controller
             ->get();
 
 
-    /*    $specialites =DB::table('specialites')
-            ->whereIn('type_prestation', $typesprestationsid)
+        $specialites =DB::table('specialites')
+           // ->whereIn('type_prestation', $typesprestationsid)
             ->get();
-*/
+
          $specialitesIds =DB::table('specialites_typeprestations')
                   ->whereIn('type_prestation', $TypesPrestationIds)
             ->pluck('specialite');
@@ -332,7 +332,7 @@ class PrestatairesController extends Controller
         $dossiers = Dossier::where('current_status','<>','Cloture')
              ->get();
 
-        return view('prestataires.view',['specialites2'=>$specialites2, 'dossiers'=>$dossiers,/*'specialites'=>$specialites,*/'emails'=>$emails, 'tels'=>$tels, 'faxs'=>$faxs,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'relations2'=>$relations2,'prestations'=>$prestations], compact('prestataire'));
+        return view('prestataires.view',['specialites2'=>$specialites2, 'dossiers'=>$dossiers,'specialites'=>$specialites,'emails'=>$emails, 'tels'=>$tels, 'faxs'=>$faxs,'evaluations'=>$evaluations,'gouvernorats'=>$gouvernorats,'relationsgv'=>$relationsgv,'villes'=>$villes,'typesprestations'=>$typesprestations,'relations'=>$relations,'relations2'=>$relations2,'prestations'=>$prestations], compact('prestataire'));
 
     }
 

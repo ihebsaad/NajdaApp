@@ -456,7 +456,9 @@
             <th style="width:15%">Type</th>
             <th style="width:15%">Spécialité</th>
             <th style="width:15%">Gouvernorat</th>
-             <th style="width:10%">Actions</th>
+            @can('isAdmin')
+            <th style="width:10%">Actions</th>
+                @endcan
         </tr>
 
         </thead>
@@ -493,11 +495,12 @@
                     <?php $gouvernorat= $prestation['gouvernorat'];
                     echo PrestationsController::GouvById($gouvernorat);  ?>
                 </td>
-                <td style="width:10%">{{$prestation->price}}</td>
+                 @can('isAdmin')
                 <td><a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('PrestationsController@destroy', $prestation->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                     <span class="fa fa-fw fa-trash-alt"></span>
                 </a>
                 </td>
+                    @endcan
             </tr>
         @endforeach
         </tbody>
@@ -599,7 +602,7 @@
                                             <option></option>
 
 
-                                            <?php if ( count($relations2) > 0 ) {?>
+                                            <?php /*if ( count($relations2) > 0 ) {?>
 
                                             @foreach($relations2 as $rel  )
                                                 @foreach($specialites2 as $sp)
@@ -608,9 +611,11 @@
                                             @endforeach
 
                                             <?php
-                                            }
+                                            }*/
                                             ?>
-
+                                            @foreach($specialites as $sp)
+                                                <?php {  ?>   <option   value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option><?php } ?>
+                                            @endforeach
 
                                         </select>
                                     </div>
@@ -1153,7 +1158,11 @@
             }
 
         });
-     //   $("#dossier").select2();
+
+        $("#typeprestation").select2();
+
+        $("#specialite2").select2();
+        $("#gouvpr").select2();
 
 
 

@@ -33,6 +33,8 @@ use App\OMMedicInternational;
 use WordTemplate;
 use Mail;
 use App\Notification;
+use App\Notif ;
+
 
 ini_set('memory_limit','1024M');
 
@@ -151,22 +153,6 @@ class DossiersController extends Controller
 
         return view('dossiers.add',['clients'=>$clients,'hopitaux'=>$hopitaux ,'traitants'=> $traitants , 'hotels'=>$hotels , 'garages'=>$garages] );
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -632,10 +618,13 @@ class DossiersController extends Controller
         $affec->save();
 
         //mise à jour notifications
-        Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"dossier": "'.$ref.'"}}\')')
+      /*  Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"dossier": "'.$ref.'"}}\')')
             ->where('statut','=', 0 )
         ->update(array('notifiable_id' => $agent));
 
+*/
+
+        Notif::where('dossierid',$id)->update(array('user'=>$agent,'affiche'=>0,'statut'=>1,'read_at'=> null)) ;
 
 
         $user = auth()->user();
@@ -851,7 +840,11 @@ class DossiersController extends Controller
             ->get();
 
 
-        $entite=app('App\Http\Controllers\ClientsController')->ClientChampById('entite',$cl);
+        $entitecl=app('App\Http\Controllers\ClientsController')->ClientChampById('entite',$cl);
+        $nomcl=app('App\Http\Controllers\ClientsController')->ClientChampById('name',$cl);
+
+         if($entitecl ==''){  $entite=$nomcl;}else{$entite=$entitecl; }
+
         $adresse=app('App\Http\Controllers\ClientsController')->ClientChampById('adresse',$cl);
 
 

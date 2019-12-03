@@ -107,6 +107,7 @@
 
 <?php
 use App\Notification;
+use App\Notif;
 
 $seance =  DB::table('seance')
     ->where('id','=', 1 )->first();
@@ -121,11 +122,15 @@ $superviseurtech=$seance->superviseurtech ;
 $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
     $dtc2 = (new \DateTime())->modify('-10 minutes')->format('Y-m-d\TH:i');
 
-    $countO=Notification::where('read_at', null)
+  /*  $countO=Notification::where('read_at', null)
          ->where('created_at','<=', $dtc)
         ->where('created_at','>', $dtc2)
         ->count();
-
+*/
+     $countO=Notif::where('read_at', null)
+         ->where('created_at','<=', $dtc)
+         ->where('created_at','>', $dtc2)
+         ->count();
 
     $dtc3 = (new \DateTime())->modify('-10 minutes')->format('Y-m-d\TH:i');
 
@@ -133,7 +138,13 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
          ->where('created_at','<=', $dtc3)
         ->count();
 
-
+  /*   $countR=Notif::where('read_at', null)
+         ->where('created_at','<=', $dtc3)
+         ->count();
+*/
+     $countR=Notif::where('read_at', null)
+         ->where('created_at','<=', $dtc3)
+         ->count();
 
      $style='';
 
@@ -182,66 +193,97 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
 
             <!-- treeview of notifications -->
                 <div id="jstree">
-                    <ul>
 
                         <?php
-		$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
+		$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
-                        @php
-                            use App\Dossier;{{
-                              //session()->put('authuserid',Auth::id());
-                              //$notifications = config('commondata.notifications');
-                              $notificationns =  DB::table('notifications')
-                              ->where('statut','=', 0 )
-                                          ->where('notifiable_id','=', Auth::id() )
-                                           ->get()->toArray();
+                              $notifications =  DB::table('notifs')->orderBy('dossierid', 'desc')->orderBy('reception', 'desc')
+                              ->where('affiche','<', 1 )
+                                          ->where('user',  Auth::id() )
+                                           ->get();
 
-                              // extraire les informations de l'entree à travers id trouvé dans la notification
                               $nnotifs = array();
-                              foreach ($notificationns as $i) {
-                                $notifc = json_decode($i->data, true);
-                                $Datenotif=$i->created_at;
-                                $datenotif= date('d/m/y H:i', strtotime($Datenotif)) ;
-                                $entreeid = $notifc['Entree']['id'];
-                                $dossierid = $notifc['Entree']['dossierid'];
-                                $notifentree = DB::table('entrees')->where('id','=', $entreeid)->get()->toArray();
-                                $row = array();
-                                $row['id'] = $entreeid;
-                                //print_r($notifc) ;
-                                $row['read_at']= $i->read_at;
-                                foreach ($notifentree as $ni) {
-                                  $row['sujet'] = $ni->sujet;
-                                  $row['type'] = $ni->type;
-                                  $row['dossier'] = $ni->dossier;
-                                  $row['emetteur'] = $ni->emetteur;
-                                  $row['reception'] = substr ($ni->reception,0,16);
-                                //  $row['reception'] = $ni->reception ;
-                                }
-                                $nnotifs[] = $row;
-                              }
+                              $notifssansdoss = array();
+                              $notifsavecdoss = array();
 
-                              // group notifications by ref dossier
-                              $result = array();
-                              foreach ($nnotifs as $element) {
-                                  if (isset($element['dossier']))
-                                  { $result[$element['dossier']][] = $element; }
-                                  else
-                                  {
-                                    $result[null][] = $element;
-                                  }
-                              }
-                              $notifications = $result;
+                //     echo json_encode($notifications).'<br>';
+
+                    foreach ($notifications as $notif) {
+                            if($notif->dossierid >0){
+                            array_push($notifsavecdoss,$notif);
+                            }else{
+                            array_push($notifssansdoss,$notif);
+                            }
+
+                            }
+
+                 // echo json_encode($notifsavecdoss).'<br>';
+                // echo json_encode($notifssansdoss).'<br>';
+
+
+                            echo '<ul>';
+                            // dossier courant
+                            $dossC=0;
+                        foreach($notifsavecdoss as $i)
+                            {
+                                $id=$i->id;
+                                $Datenotif=$i->reception;
+                                $datenotif= date('d/m/y H:i', strtotime($Datenotif)) ;
+                                $entreeid = $i->entree;
+                                $dossierid = $i->dossierid;
+                                $refdossier = $i->refdossier;
+                                $nomassure = $i->nomassure;
+                                $emetteur = $i->emetteur;
+                                $sujet = $i->sujet;
+                                $type = $i->type;
+                                $read_at = $i->read_at;
+
+                                if($dossC!= $dossierid)
+                               { if($dossC!=0){echo'</ul></li>';}
+                                   echo "<li  class='jstree-open' id='prt_".$dossierid."'><a href='".$urlapp."/dossiers/view/".$dossierid."'>".$refdossier." | ".$nomassure." </a><ul>";
+                               }
+                                if ((empty($read_at))||(is_null($read_at)))
+                                { $newnotif=" class='newnotif'" ;}
+                                else
+                                {$newnotif="" ;}
+
+                                    switch ($type) {
+                                        case "email":
+                                            echo '<li  id="'.$entreeid.'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$id.'" href="'.action('EntreesController@show', $entreeid).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$datenotif.' '.$emetteur.' '.$sujet.'</span></a></li>';
+                                            break;
+                                        case "fax":
+                                            echo '<li id="'.$entreeid.'" rel="trfax" '.$newnotif.'><a class="idEntreePourMiss" id="'.$id.'"  href="'.action('EntreesController@show', $entreeid).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span>  '.$datenotif.' '.$emetteur.' '.$sujet.'</span></a></li>';
+                                            break;
+                                        case "tel":
+                                            echo '<li  id="'.$entreeid.'" rel="trtel" '.$newnotif.'><a class="idEntreePourMiss" id="'.$id.'" href="'.action('EntreesController@show', $entreeid).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$datenotif.' '.$emetteur.' '.$sujet.'</span></a></li>';
+                                            break;
+                                        case "sms":
+                                            echo '<li  id="'.$entreeid.'" rel="trsms" '.$newnotif.'><a class="idEntreePourMiss" id="'.$id.'" href="'.action('EntreesController@show',$entreeid).'" ><span class="cutlongtext"><span class="fas fa-sms"></span> '.$datenotif.' '.$emetteur.' '.$sujet.'</span></a></li>';
+                                            break;
+
+                                           default:
+                                            echo '<li  id="'.$entreeid.'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$id.'" href="'.action('EntreesController@show', $entreeid).'" ><span class="cutlongtext"> '.$datenotif.' '.$emetteur.' '.$sujet.'</span></a></li>';
+                                    } //switch
+
+
+                        if($dossC!= $dossierid )
+                        { //echo '</ul>' ;
+                             }
+                                $dossC= $dossierid;
+
+
+
+                            } // foreach
+echo '</ul>';
+
+/*
+
 
 
                               foreach ($notifications as $ntf) {
-                                if (!empty($ntf[0]['dossier']))
+                                if (!empty($ntf[0]['dossierid']))
                                 {
-                                  // recuperation nom assuré du dossier
-                                    $search = $ntf[0]['dossier'];
-
-                                    $nassure= Dossier::where('reference_medic',$search)->first();
-                                  // fin recuperation nom assuré
-                                  echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossier']."'><a href='".$urlapp."/dossiers/view/".$dossierid."'>".$ntf[0]['dossier']." | ".$nassure['subscriber_name']." ".$nassure['subscriber_lastname']." </a><ul>";
+                                   echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossierid']."'><a href='".$urlapp."/dossiers/view/".$dossierid."'>".$ntf[0]['dossier']." | ".$nassure['subscriber_name']." ".$nassure['subscriber_lastname']." </a><ul>";
                                   }
                                 foreach ($ntf as $n) {
 
@@ -308,9 +350,12 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                               }
                               if (!empty($ntf[0]['dossier'])) {echo '</li>';}
                             }}
-                        @endphp
-                    </ul>
-                </div>
+
+*/
+
+
+?>
+                 </div>
 
             </div>
             <div class="tab-pane fade  scrollable-panel" id="notestab">

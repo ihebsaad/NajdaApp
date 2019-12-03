@@ -70,15 +70,10 @@
                 }
             }
         });
-        $.jstree.defaults.core.themes.variant = "large";
+      //  $.jstree.defaults.core.themes.variant = "large";
 
-        // 8 interact with the tree - either way is OK
-        /*$('#btntree').on('click', function () {
-         $('#jstree').jstree(true).select_node('child_node_1');
-         $('#jstree').jstree('select_node', 'child_node_1');
-         $.jstree.reference('#jstree').select_node('child_node_1');
-         });*/
-        $('#jstree').jstree({
+        //  $('#jstree').jstree();
+      $('#jstree').jstree({
             'core' : {
                 'check_callback' : function (op, node, par, pos, more) {
                     if(more && more.dnd) {
@@ -181,18 +176,20 @@ $( "#open" ).click(function() {
 //alert("tessty");
   function showNotif(notification) {
          // extraction du contenu de la notification en format json
-         var jsnt = JSON.stringify(notification);
+       //  var jsnt = JSON.stringify(notification);
+         var jsnt = notification;
+ 
+      ////   var parsed = JSON.parse(jsnt);
 
-         var parsed = JSON.parse(jsnt);
+        //// var parseddata = JSON.parse(parsed['data']);
+      console.log(notification);
 
-         var parseddata = JSON.parse(parsed['data']);
-      console.log(parseddata);
          //alert("l'ID: "+parseddata['Entree']['id']+" le sujet: "+parseddata['Entree']['sujet']);
          //attribuer type selon type recu
          var typee = "tremail";
          var img = "";
-         if ((typeof parseddata['Entree']['type'] !== "undefined") && (parseddata['Entree']['type'] !== null) && (parseddata['Entree']['type'] !== '')) {
-             switch (parseddata['Entree']['type']) {
+         if ((typeof jsnt.type !== "undefined") && (jsnt.type !== null) && (jsnt.type !== '')) {
+             switch ( jsnt.type) {
                  case "email":
                      typee = "tremail";
                      img = '<?php echo $urlapp; ?>/public/img/email.png';
@@ -228,27 +225,27 @@ $( "#open" ).click(function() {
 
 
          // verifier si la notification est dispatche
-         if ((typeof parseddata['Entree']['dossier'] !== "undefined") && (parseddata['Entree']['dossier'] !== null)&& (parseddata['Entree']['dossier'] !== '')) {
+         if ((typeof jsnt.dossierid !== "undefined") && (jsnt.dossierid!== null)&& (jsnt.dossierid !== '')) {
              // verifier si le dossier exist dans la liste des notifications
-              if ($("#prt_" + parseddata['Entree']['dossier']).length) {
+              if ($("#prt_" + jsnt.dossierid).length) {
 
-                 var reception= parseddata['Entree']['created_at'];
-                 var emetteur= parseddata['Entree']['emetteur'];
+                 var reception= jsnt.reception;
+                 var emetteur= jsnt.emetteur ;
                 var heure=reception.toString().slice(11,16);
                  // ajout nouvelle notification sous son dossier
-                 $('#jstree').jstree().create_node("#prt_" + parseddata['Entree']['dossier'], {
-                     "id": parseddata['Entree']['id'],
-                     "text": heure+' '+emetteur+' '+parseddata['Entree']['sujet'],
+                 $('#jstree').jstree().create_node("#prt_" +  jsnt.dossierid, {
+                     "id":  jsnt.dossierid,
+                     "text": heure+' '+emetteur+' '+ jsnt.sujet,
                      "type": typee,
-                     "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" + parseddata['Entree']['id']}
+                     "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" +  jsnt.entree}
                  }, "inside", function () {
                      // animation de nouvelle notification
                      setInterval(function () {
-                         $("#" + parseddata['Entree']['id']).toggleClass("newnotif");
+                         $("#" + jsnt.entree).toggleClass("newnotif");
                      }, 400);
                      // scroll vers lemplacement de la notification
                      $('#notificationstab').scrollTop(
-                         $("#" + parseddata['Entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
+                         $("#" + jsnt.entree).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
                      );
                  });
                  $('#jstree').bind("select_node.jstree", function (e, data) {
@@ -258,14 +255,14 @@ $( "#open" ).click(function() {
 
                  Push.create("Nouvelle Notification", {
 
-                     body:  parseddata['Entree']['sujet'],
+                     body:  jsnt.sujet,
                      icon: "{{ asset('public/img/najda.png') }}",
                      timeout: 8000,
 
                      onClick: function(){
                          // window.focus();
                          // this.close();
-                         window.location ='<?php   echo $urlapp; ?>/entrees/show/'+parseddata['Entree']['id'];
+                         window.location ='<?php   echo $urlapp; ?>/entrees/show/'+jsnt.entree;
 
                      }
 
@@ -275,34 +272,35 @@ $( "#open" ).click(function() {
              else {
                  // cas dossier nest pas dans la liste des notifications
                  // ajout node dossier
-                 $('#jstree').jstree().create_node("#", {
-                     "id": "prt_" + parseddata['Entree']['dossier'],
-                     "text": parseddata['Entree']['dossier'],
+                $('#jstree').jstree().create_node("#", {
+              //    $('#jstree').jstree().create_node("#prt_" +  jsnt.dossierid, {
+                     "id": "prt_" + jsnt.dossierid,
+                     "text": jsnt.refdossier +' | '+jsnt.nomassure,
                      "type": "default",
-                     "a_attr": {"href": "{{ asset('dossiers/view/') }}" + "/" + parseddata['Entree']['dossierid']}
+                     "a_attr": {"href": "{{ asset('dossiers/view/') }}" + "/" +jsnt.dossierid}
                  }, "first", function () {
                  });
-                 var reception= parseddata['Entree']['created_at'];
-                 var emetteur= parseddata['Entree']['emetteur'];
-                 var heure=reception.toString().slice(11,16);
+                   var reception= jsnt.reception;
+                  var emetteur= jsnt.emetteur ;
+                  var heure=reception.toString().slice(11,16);
 
                  // ajout nouvelle notification sous son dossier
-                 $('#jstree').jstree().create_node("#prt_" + parseddata['Entree']['dossier'], {
-                     "id": parseddata['Entree']['id'],
-                     "text": heure+' '+emetteur+' '+parseddata['Entree']['sujet'],
-                     "type": typee,
-                     "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" + parseddata['Entree']['id']}
-                 }, "inside", function () {
+                  $('#jstree').jstree().create_node("#prt_" +  jsnt.dossierid, {
+                      "id":  jsnt.dossierid,
+                      "text": heure+' '+emetteur+' '+ jsnt.sujet,
+                      "type": typee,
+                      "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" +  jsnt.entree}
+                  }, "inside", function () {
                      //ouvrir node dossier
-                     $('#jstree').jstree().open_node("#prt_" + parseddata['Entree']['dossier']);
+                     $('#jstree').jstree().open_node("#prt_" + jsnt.dossierid);
                      // animation de nouvelle notification
                      setInterval(function () {
-                         $("#" + parseddata['Entree']['id']).toggleClass("newnotif");
+                         $("#" + jsnt.entree).toggleClass("newnotif");
                      }, 400);
                      // scroll vers lemplacement de la notification
-                     $('#notificationstab').scrollTop(
-                         $("#" + parseddata['Entree']['id']).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
-                     );
+                   /*  $('#notificationstab').scrollTop(
+                         $("#" + jsnt.entree).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
+                     );*/
                  });
                  $('#jstree').bind("select_node.jstree", function (e, data) {
                      var href = data.node.a_attr.href;
@@ -310,14 +308,14 @@ $( "#open" ).click(function() {
                  });
                  Push.create("New Notification", {
 
-                     body:  parseddata['Entree']['sujet'],
+                     body:  jsnt.emetteur +' '+ jsnt.sujet,
                      icon: "{{ asset('public/img/najda.png') }}",
                      timeout: 8000,
 
                      onClick: function(){
                          // window.focus();
                          // this.close();
-                         window.location ='<?php   echo $urlapp; ?>/entrees/show/'+parseddata['Entree']['id'];
+                         window.location ='<?php   echo $urlapp; ?>/entrees/show/'+ jsnt.entree;
 
                      }
 
@@ -329,7 +327,7 @@ $( "#open" ).click(function() {
          else {
              <?php  if (Session::get('disp') != 0) {   ?>
 
-             var reception= parseddata['Entree']['created_at'];
+             var reception= jsnt.reception;
               var heure=reception.toString().slice(11,16);
 
              // ajout de la nouvelle node (notification non dispatche)
@@ -354,20 +352,22 @@ $( "#open" ).click(function() {
              });
 
 */
+
+           
               Push.create("Nouvelle Notification", {
 
-              body: parseddata['Entree']['sujet'],
+              body: jsnt.emetteur+' '+jsnt.sujet,
               icon: "{{ asset('public/img/najda.png') }}",
               timeout: 15000,
 
               onClick: function(){
 
-              window.location ='<?php   echo $urlapp; ?>/entrees/showdisp/'+parseddata['Entree']['id'];
+              window.location ='<?php   echo $urlapp; ?>/entrees/showdisp/'+jsnt.entree;
 
               }
 
               });
-
+ 
 
 
              <?php   } ?>
@@ -376,11 +376,11 @@ $( "#open" ).click(function() {
 
          <?php } // end supervision and admin views  ?>
          <?php }else{ ?>
-$("#notifdisp").fadeOut('slow');
-         $("#notifdisp").prepend("<li class='overme' style='color:white;padding-left:6px;margin-bottom:15px;background-color:#fd9883;color:white;font-weight:800;'><img width='15' src='" + img + "' /> <a  style=';font-weight:800;font-size:14px;color:white' href='<?php echo $urlapp; ?>/entrees/showdisp/" + parseddata['Entree']['id'] + "'   ><small style='font-size:12px;color:white;'> " + parseddata['Entree']['sujet'] + "</small></a><br>                  <label style='font-size:12px'><a style='color:white' href='<?php echo $urlapp; ?>/entrees/showdisp/" + parseddata['Entree']['id'] + "'  >" + parseddata['Entree']['emetteur'] + "</a></label><br><label style='font-size:12px'> " + ' Maintenant ' + "</label></li>");
+          $("#notifdisp").fadeOut('slow');
+         $("#notifdisp").prepend("<li class='overme' style='color:white;padding-left:6px;margin-bottom:15px;background-color:#fd9883;color:white;font-weight:800;'><img width='15' src='" + img + "' /> <a  style=';font-weight:800;font-size:14px;color:white' href='<?php echo $urlapp; ?>/entrees/showdisp/" + jsnt.entree + "'   ><small style='font-size:12px;color:white;'> " +jsnt.sujet + "</small></a><br>                  <label style='font-size:12px'><a style='color:white' href='<?php echo $urlapp; ?>/entrees/showdisp/" + jsnt.entree + "'  >" + jsnt.emetteur+ "</a></label><br><label style='font-size:12px'> " + ' Maintenant ' + "</label></li>");
          $("#notifdisp").fadeIn('slow');
 
-         $('#idEntreeMissionOnclik').val(parseddata['Entree']['id']);
+         $('#idEntreeMissionOnclik').val(jsnt.entree);
 
 
          <?php } ?>
@@ -404,6 +404,8 @@ $("#notifdisp").fadeOut('slow');
 
 
          /////// });
+
+
      }
 
 </script>

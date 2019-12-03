@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notif;
 use Illuminate\Http\Request;
 
 use App\Entree ;
@@ -37,17 +38,14 @@ class NotificationsController extends Controller
     {
         $user = auth()->user();
         $iduser=$user->id;
-        $notif = Notification::where('read_at',null)->where('notifiable_id',$iduser)->where('affiche',null)->first();
+       // $notif = Notification::where('read_at',null)->where('notifiable_id',$iduser)->where('affiche',null)->first();
+        $notif = Notif::where('read_at',null)->where('user',$iduser)->where('affiche',-1)->first();
 
 
-        if ( ($notif)){
+        if ( ($notif!=null)){
 
-            $idn=array_values($notif->getAttributes());
-
-            //dd($idn['0']);
-            Notification::where('id',$idn['0'])
-                ->update(array('affiche' => 1));
-
+            Notif::where('id',$notif->id)
+                ->update(array('affiche' => 0));
 
             return $notif;
         }else {return null;}

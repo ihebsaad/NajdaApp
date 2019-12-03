@@ -305,7 +305,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails8();
-                    }, 60000);  //60 secds
+                    }, 15000);  //10 secds
                 }
             });
         }
@@ -633,7 +633,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
        //  checkemails5();   //TV
       //   checkemails6(); // MI
       //   checkemails7();   // TPA
-       //  checkemails8();   //TN
+         checkemails8();   //TN
        //  checkemails9();  //XPRESS
         // checksms();
       //   checkboite();

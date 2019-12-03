@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Notification;
 use PDF;
 use Illuminate\Support\Facades\Notification as Notification2;
+use App\Notif ;
+
 use PHPUnit\Framework\Exception;
 
 
@@ -155,8 +157,10 @@ class EntreesController extends Controller
         $entree = Entree::find($id);
         if ($entree->viewed==0 )
         {
-
             $entree->viewed=1;
+            $date=date('d/m/Y H:i:s');
+            Notif::where('entree',$id)->update(array( 'read_at'=> $date )) ;
+
         }
         $refdoss = trim($entree->dossier);
         $entree->save();
@@ -176,6 +180,8 @@ class EntreesController extends Controller
         {
            // $this->export_pdf($id);
             $entree->viewed=1;
+            $date=date('d/m/Y H:i:s');
+            Notif::where('entree',$id)->update(array( 'read_at'=> $date )) ;
         }
         $refdoss = trim($entree->dossier);
         $entree->save();
@@ -235,7 +241,7 @@ class EntreesController extends Controller
 
     public static function traiter( $id)
     {
-        $idnotif=0;
+      /*  $idnotif=0;
         $notifid = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$id.'}}\')')->get(['id']);
        if($notifid!=null) {$idnotif = array_values($notifid['0']->getAttributes());}
        if($idnotif>0) {
@@ -245,7 +251,11 @@ class EntreesController extends Controller
 
            $notif->statut = 1;
            $notif->save();
-       }
+       }*/
+      $notif=Notif::where('entree',$id)->first();
+        $notif->affiche=1; // Marquer comme traitée
+        $notif->save();
+
         $entree = Entree::find($id);
         $entree->notif=1; //traitée
         $dossid=$entree->dossierid;
@@ -265,16 +275,27 @@ class EntreesController extends Controller
 
     public function destroy($id)
     {
+
+
         $entree = Entree::find($id);
         $entree->delete();
 
-        $notifid = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$id.'}}\')')->get(['id']);
-        $idnotif = array_values($notifid['0']->getAttributes());
-        $idnotification=$idnotif['0'];
-
-        $notif = Notification::find($idnotification);
-
+        // supprimer notif
+        $notif=Notif::where('entree',$id)->first();
         $notif->delete();
+
+
+
+
+        /*  $notifid = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$id.'}}\')')->get(['id']);
+          $idnotif = array_values($notifid['0']->getAttributes());
+          $idnotification=$idnotif['0'];
+
+          $notif = Notification::find($idnotification);
+
+          $notif->delete();*/
+
+
 
         return redirect('/entrees')->with('success', '  Supprimé');
     }
@@ -379,12 +400,6 @@ class EntreesController extends Controller
             if($iddossier>0){$entree->dossierid=$iddossier;}
             $entree->save();
 
-             //mise à jour notifications
-       /*     Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": "'.$identree.'"}}\')')->delete();
-            Log::info('ID Entree : ' . $identree);
-*/
-
-
        // supression notif from dispatcheur
             $seance =  DB::table('seance')
                 ->where('id','=', 1 )->first();
@@ -419,43 +434,13 @@ class EntreesController extends Controller
              if($iddossier>0){ $entree->dossierid=$iddossier;}
 
             $entree->save();
-/*
-            $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($dossier);
-            $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
 
-            $notifid = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$identree.'}}\')')->get(['id']);
-            $idnotif = array_values($notifid['0']->getAttributes());
-            $idnotification=$idnotif['0'];
 
-            $notif = Notification::find($idnotification);
-            $notif->delete();
-*/
                 $user = User::find($userid0);
 
                 $user->notifications()->whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$identree.'}}\')')->delete();
 
 
-                //mise à jour notifications
-     /*       Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": "'.$identree.'"}}\')')
-              //  ->where('statut','=', 0 )
-                ->delete();
-
-*/
-/*
-          $notifid = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$identree.'}}\')')->get(['id']);
-        $idnotif = array_values($notifid['0']->getAttributes());
-        $idnotification=$idnotif['0'];
-
-                Log::info('ID NOTIF : ' . $idnotification);
-
-                $notif = Notification::find($idnotification);
-
-                $notif->delete();
-
-*/
-          //  $notif = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$identree.'}}\')')->first();
-
-            //$notif->delete();
 
                 $iddossier2 = app('App\Http\Controllers\DossiersController')->IdDossierByRef($doss);
                 $userid2 = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier2);
@@ -483,7 +468,50 @@ class EntreesController extends Controller
     }
 
 
-    public static function countnotifs()
+    public   function dispatchf2(Request $request)
+    {
+        $identree = $request->get('entree');
+        $dossier = trim($request->get('dossier'));
+        $iddossier = $request->get('iddossier');
+        $entree = Entree::find($identree);
+
+        // agent lequel le dossier est affecté
+        $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+
+        $nomassure = app('App\Http\Controllers\DossiersController')->FullnameAbnDossierById( $iddossier);
+
+        $entree->dossier=$dossier;
+        if($iddossier>0){$entree->dossierid=$iddossier;}
+        $entree->save();
+        // dossier affecté à un agent
+        if($userid >0)
+        {   // afficher la notification pour l 'agent de dossier et rendre nouvelle (affiche 0, read_at null) dispatché (statut 1)
+            Notif::where('entree',$identree)->update(array('user'=>$userid,'affiche'=>0,'statut'=>1,'read_at'=> null,'dossierid'=>$iddossier,'refdossier'=>$dossier,'nomassure'=>$nomassure)) ;
+        }
+        else{
+            // dossier non affecté à un agent
+            $seance =  DB::table('seance')
+                ->where('id','=', 1 )->first();
+            $disp=$seance->dispatcheur;
+
+            // afficher la notification pour le dispatcheur et rendre nouvelle (affiche 0, read_at null) dispatché (statut 1)
+            Notif::where('entree',$identree)->update(array('user'=>$disp,'affiche'=>0,'statut'=>1,'read_at'=> null,'dossierid'=>$iddossier,'refdossier'=>$dossier,'nomassure'=>$nomassure)) ;
+
+        }
+
+        // Activer le dossier
+        Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+
+        return url('/entrees/show/'.$identree);
+
+
+
+    }
+
+
+
+
+        public static function countnotifs()
     {
 
      $count=Entree::where('dossier','')
@@ -500,11 +528,18 @@ class EntreesController extends Controller
         $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
         $dtc2 = (new \DateTime())->modify('-10 minutes')->format('Y-m-d\TH:i');
 
-        $count=Notification::where('read_at', null)
+      /*  $count=Notification::where('read_at', null)
             //      ->where('dossier','')
             ->where('created_at','<=', $dtc)
             ->where('created_at','>', $dtc2)
-            ->count();
+            ->count();*/
+
+           $count=Notif::where('read_at', null)
+              //      ->where('dossier','')
+              ->where('created_at','<=', $dtc)
+              ->where('created_at','>', $dtc2)
+              ->count();
+
 
         return $count;
 
@@ -517,8 +552,13 @@ class EntreesController extends Controller
 
         $dtc = (new \DateTime())->modify('-10 minutes')->format('Y-m-d\TH:i');
 
-            $count=Notification::where('read_at', null)
+  /*          $count=Notification::where('read_at', null)
            //      ->where('dossier','')
+            ->where('created_at','<=', $dtc)
+            ->count();
+*/
+        $count=Notif::where('read_at', null)
+            //      ->where('dossier','')
             ->where('created_at','<=', $dtc)
             ->count();
 
@@ -542,6 +582,8 @@ class EntreesController extends Controller
         $nomuser=$user->name.' '.$user->lastname;
 
         $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+        $nomassure = app('App\Http\Controllers\DossiersController')->FullnameAbnDossierById(  $iddossier);
+
         $user2 = User::find($userid);
         $nomuser2='';
         if($userid  >0) {
@@ -566,11 +608,54 @@ class EntreesController extends Controller
 
         ]);
 
-        $entree->save();
+        $entree->save();$id=$entree->id;
 
         if($userid  >0) {
           //  $user2->notify(new Notif_Suivi_Doss($entree));
-            Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+           //// Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+
+            if($id>0) {
+                $notif = new Notif([
+                    'emetteur' =>$emetteur,
+                    'sujet' =>'Compte Rendu écrit par '.$nomuser,
+                    'reception' => $date,
+                    'type' => 'tel',
+                    'refdossier' => $refdoss,
+                    'affiche' => 0, // traitée ou non
+                    'dossierid' => $iddossier,
+                    'nomassure' => $nomassure,
+                    'statut' => 1,  //dispatchée ou non
+                    'entree' => $id,
+                    'user' => $userid
+
+                ]);
+                $notif->save();
+            }
+        }else{
+
+
+            if($id>0) {
+
+                $seance =  DB::table('seance')
+                    ->where('id','=', 1 )->first();
+                $disp=$seance->dispatcheur ;
+                $notif = new Notif([
+                    'emetteur' =>$emetteur,
+                    'sujet' =>'Compte Rendu écrit par '.$nomuser,
+                    'reception' => $date,
+                    'type' => 'tel',
+                    'refdossier' => $refdoss,
+                    'affiche' => 0, // traitée ou non
+                    'dossierid' => $iddossier,
+                    'nomassure' => $nomassure,
+                    'statut' => 1,  //dispatchée ou non
+                    'entree' => $id,
+                    'user' => $disp
+
+                ]);
+                $notif->save();
+            }
+
         }
 
         // Activer le dossier
