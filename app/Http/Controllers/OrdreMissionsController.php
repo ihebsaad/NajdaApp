@@ -295,17 +295,19 @@ class OrdreMissionsController extends Controller
 					app('App\Http\Controllers\DossiersController')->updating($reqlieup);
 				}
 
-				if (isset($_POST["reference_customer"]))
-				{
-					$reqrefc = new \Illuminate\Http\Request();
-					$refcustomer = $_POST["reference_customer"];
-	        		$reqrefc->request->add(['dossier' => $iddossnew]);
-					$reqrefc->request->add(['champ' => 'reference_customer']);
-					$reqrefc->request->add(['val' => $refcustomer]);
-					app('App\Http\Controllers\DossiersController')->updating($reqrefc);
-				}
 				// recuperation des infos du dossier parent
-				$dossparent=Dossier::where('id', $iddoss)->first();
+                $dossparent=Dossier::where('id', $iddoss)->first();
+
+                if (isset($_POST["reference_customer"]))
+                {
+                    $reqrefc = new \Illuminate\Http\Request();
+                    //$refcustomer = $_POST["reference_customer"];
+                    $refcustomer = $dossparent["reference_medic"];
+                    $reqrefc->request->add(['dossier' => $iddossnew]);
+                    $reqrefc->request->add(['champ' => 'reference_customer']);
+                    $reqrefc->request->add(['val' => $refcustomer]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqrefc);
+                }
 				// lieu prie en charge
 				if (isset($dossparent["customer_id"]) && ! (empty($dossparent["customer_id"])))
 				{
@@ -796,17 +798,19 @@ class OrdreMissionsController extends Controller
 					app('App\Http\Controllers\DossiersController')->updating($reqlieup);
 				}
 
-				if (isset($_POST["reference_customer"]))
-				{
-					$reqrefc = new \Illuminate\Http\Request();
-					$refcustomer = $_POST["reference_customer"];
-	        		$reqrefc->request->add(['dossier' => $iddossnew]);
-					$reqrefc->request->add(['champ' => 'reference_customer']);
-					$reqrefc->request->add(['val' => $refcustomer]);
-					app('App\Http\Controllers\DossiersController')->updating($reqrefc);
-				}
 				// recuperation des infos du dossier parent
-				$dossparent=Dossier::where('id', $iddoss)->first();
+                $dossparent=Dossier::where('id', $iddoss)->first();
+
+                if (isset($_POST["reference_customer"]))
+                {
+                    $reqrefc = new \Illuminate\Http\Request();
+                    //$refcustomer = $_POST["reference_customer"];
+                    $refcustomer = $dossparent["reference_medic"];
+                    $reqrefc->request->add(['dossier' => $iddossnew]);
+                    $reqrefc->request->add(['champ' => 'reference_customer']);
+                    $reqrefc->request->add(['val' => $refcustomer]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqrefc);
+                }
 				// lieu prie en charge
 				if (isset($dossparent["customer_id"]) && ! (empty($dossparent["customer_id"])))
 				{
@@ -1251,17 +1255,19 @@ class OrdreMissionsController extends Controller
                     app('App\Http\Controllers\DossiersController')->updating($reqlieup);
                 }
 
+                // recuperation des infos du dossier parent
+                $dossparent=Dossier::where('id', $iddoss)->first();
+
                 if (isset($_POST["reference_customer"]))
                 {
                     $reqrefc = new \Illuminate\Http\Request();
-                    $refcustomer = $_POST["reference_customer"];
+                    //$refcustomer = $_POST["reference_customer"];
+                    $refcustomer = $dossparent["reference_medic"];
                     $reqrefc->request->add(['dossier' => $iddossnew]);
                     $reqrefc->request->add(['champ' => 'reference_customer']);
                     $reqrefc->request->add(['val' => $refcustomer]);
                     app('App\Http\Controllers\DossiersController')->updating($reqrefc);
                 }
-                // recuperation des infos du dossier parent
-                $dossparent=Dossier::where('id', $iddoss)->first();
                 // lieu prie en charge
                 if (isset($dossparent["customer_id"]) && ! (empty($dossparent["customer_id"])))
                 {
@@ -1652,17 +1658,19 @@ class OrdreMissionsController extends Controller
                     app('App\Http\Controllers\DossiersController')->updating($reqlieup);
                 }
 
+                // recuperation des infos du dossier parent
+                $dossparent=Dossier::where('id', $iddoss)->first();
+
                 if (isset($_POST["reference_customer"]))
                 {
                     $reqrefc = new \Illuminate\Http\Request();
-                    $refcustomer = $_POST["reference_customer"];
+                    //$refcustomer = $_POST["reference_customer"];
+                    $refcustomer = $dossparent["reference_medic"];
                     $reqrefc->request->add(['dossier' => $iddossnew]);
                     $reqrefc->request->add(['champ' => 'reference_customer']);
                     $reqrefc->request->add(['val' => $refcustomer]);
                     app('App\Http\Controllers\DossiersController')->updating($reqrefc);
                 }
-                // recuperation des infos du dossier parent
-                $dossparent=Dossier::where('id', $iddoss)->first();
                 // lieu prie en charge
                 if (isset($dossparent["customer_id"]) && ! (empty($dossparent["customer_id"])))
                 {
