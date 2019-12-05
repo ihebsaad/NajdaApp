@@ -10,10 +10,12 @@ use PDF as PDF4;
 use PDF as PDFcomp;
 use App\OrdreMission ;
 use App\Attachement ;
+use App\Equipement ;
 use App\OMTaxi;
 use App\OMAmbulance;
 use App\OMRemorquage;
 use App\OMMedicInternational;
+use App\OMMedicEquipement;
 use App\Mission;
 use App\Dossier;
 
@@ -1435,6 +1437,9 @@ class OrdreMissionsController extends Controller
         {
             if (isset($_POST['templatedocument'])&& (! empty($_POST['templatedocument'])))
             {
+                
+
+
                 if ($_POST['templatedocument'] === "remplace")
                 {
                     //echo "remplacement";
@@ -1815,6 +1820,39 @@ class OrdreMissionsController extends Controller
         }
 
 
+        if (isset($_POST['CL_puces']))
+                {// mettre à jour les infos des equipement PUCES SIM
+                	$len = count($_POST['CL_puces']);
+						for ($i=0; $i < $len; $i++)
+						{
+							if ($_POST['CL_puces'][$i] !== "")
+							{
+								
+                    			$parent = $_POST['parent'];
+                    			$idpuce = $_POST['CL_puces'][$i];
+                    			//$count = OMMedicEquipement::where('idom',$parent)->where('idequipement',$idpuce)->count();
+                    			// ajout des puces dans la table ommedic_equipements
+                    			if (isset($result))
+                    			{
+                    				$idom=$ommedicinternationnal->id;
+                    				OMMedicEquipement::create(['idom'=>$idom,'idequipement'=>$idpuce, 'type'=>'puce']);
+                    			}
+                    			if (isset($result2))
+                    			{
+                    				$idom=$ommedicinternationnal2->id;
+                    				OMMedicEquipement::create(['idom'=>$idom,'idequipement'=>$idpuce, 'type'=>'puce']);
+                    			}
+								// mettre à jour la date de dispo de lequipement
+								$d=strtotime($_POST['CL_date_heure_departmission']);
+								$dd=date("d/m/Y", $d);
+
+								$d2=strtotime($_POST['CL_date_heure_arrivebase']);
+								$df=date("d/m/Y", $d2);
+
+	    						Equipement::where('id', $idpuce)->update(['date_deb_indisponibilite' => $dd,'date_fin_indisponibilite' => $df]);
+							}
+						}
+                }
 
 
 

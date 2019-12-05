@@ -1,3 +1,6 @@
+<?php
+use App\Equipement;
+?>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <style type="text/css"><!--
 /*background: #f2f2f2;*/
@@ -719,7 +722,21 @@
 <p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman';font-weight:bold">Date de decollage: &#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_date_decollage'])) { echo $_POST['CL_date_decollage']; } ?></span>
 <p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman';font-weight:bold">Heure de prise en charge annoncée au patient/client : &#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_date_heure_prise'])) { echo $_POST['CL_date_heure_prise']; } ?></span><p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman';font-weight:bold">Heure départ clinique/Hôpital : &#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_date_heure_departclinique'])) { echo $_POST['CL_date_heure_departclinique']; } ?></span>
 <p class=rvps5><span class=rvts46>Vous emportez avec vous :</span></p>
-<p class=rvps11><span class=rvts46>Carte SIM ( </span><span class=rvts42>exple :</span><span class=rvts46> Puce #2&nbsp; )&nbsp;&nbsp; (+)</span></p>
+<p class=rvps11><span class=rvts46>Carte SIM: </span>
+	<?php if (isset($_POST['CL_puces'])) { 
+	
+			$len = count($_POST['CL_puces']);
+			for ($i=0; $i < $len; $i++)
+			{
+				if ($_POST['CL_puces'][$i] !== "")
+				{
+					$puceinfo = Equipement::where(["id"=>$_POST['CL_puces'][$i]])->first();
+					echo '<span class=rvts42>' . $puceinfo['nom']." [".$puceinfo['reference']."]" . '</span>';
+					if ((($i + 1)< $len) && ($_POST['CL_puces'][$i+1] !== "")) echo ", ";
+				}
+			}
+	 } ?>
+</p>
 <p class=rvps11><span class=rvts46>Lot ADL&nbsp; ( </span><span class=rvts42>exple :</span><span class=rvts46> Lot #3&nbsp; )&nbsp; (+)</span></p>
 <p class=rvps11><span class=rvts46>POC&nbsp; ( </span><span class=rvts42>exple :</span><span class=rvts46> POC #1, </span><span class=rvts42>marque</span><span class=rvts46> : yyyyyyyy, </span><span class=rvts42>num. série</span><span class=rvts46> xxxxxxxxxxxx&nbsp; )&nbsp; (+)</span></p>
 <p class=rvps11><span class=rvts46>Equipement&nbsp; ( </span><span class=rvts42>exple :</span><span class=rvts46>&nbsp; Aspirateur num3, </span><span class=rvts42>marque</span><span class=rvts46> : yyyyyyy, </span><span class=rvts42>num. série</span><span class=rvts46> xxxxx&nbsp; )&nbsp; (+)</span></p>
