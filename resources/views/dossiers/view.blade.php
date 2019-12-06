@@ -2746,7 +2746,7 @@ function completeom(id,affectea,verifc)
             document.getElementById('claffect1').style.display = 'none';
             document.getElementById('claffect2').style.display = 'none';
             document.getElementById('typeprest').style.display = 'none';
-            
+            $('#affectea').val(affectea);
         }
         
         $("#templatehtmlom").modal('show');
