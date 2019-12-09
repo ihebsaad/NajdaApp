@@ -168,7 +168,9 @@
 
      <div class="row">
       @if($Action->Mission->type_Mission==6) {{--Taxi--}} 
+        @if($Action->ordre>=1 && $Action->ordre <=5 )
        <span style="color:red"> <h3> * <u><b>Date(s) spécifique(s) :</b></u></h3> </span>  <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir les dates suivantes dans l'interface de description de mission dès qu'elles seront connues : <br> -  la date "début mission" (date départ base) (2ème partie OM Taxi) <br> - la date/heure "arrivée à destination" (date/heure disponibilité prévisible) (2ème partie OM Taxi) </b></h4></div>
+       @endif 
      @endif
        @if($Action->Mission->type_Mission==30) {{--rapatriement véhicule sur Cargo--}} 
        <span style="color:red"> <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir les dates suivantes dans l'interface de description de mission dès qu'elles seront connues :<br> - la date prévue d'arrivée de remorqueur au port (date souhaitée arrivée) (dans 2ème partie OM remorquage)<br> - la date/heure de départ sur Cargo (2ème partie OM remorquage)</b></h4> </div> 

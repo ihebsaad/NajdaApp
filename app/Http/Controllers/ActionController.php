@@ -2598,6 +2598,20 @@ class ActionController extends Controller
           if($bouton==1)//bouton fait
            {
 
+   // controle la non saisie des dates spécifique
+               if($action->Mission->type_Mission==6)
+               {
+                   if($action->ordre==5 && (!$action->Mission->h_dep_pour_miss || !$action->Mission->h_arr_prev_dest))
+                   {
+
+                    return back()->with('messagekbsFail', 'Erreur: Vous devez saisir les dates spécifiques dans le menu Description de mission');
+
+                   }
+
+               }
+
+            
+
            $action->update(['statut'=>"faite"]); 
            $action->update(['date_fin' => $dateSys]);
            $action->update(['user_id'=>auth::user()->id]);
@@ -2779,6 +2793,8 @@ class ActionController extends Controller
 
 
                } 
+
+            
                   
 
            }  // fin bouton fait
