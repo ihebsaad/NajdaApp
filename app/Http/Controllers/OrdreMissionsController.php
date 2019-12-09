@@ -19,6 +19,7 @@ use App\OMMedicInternational;
 use App\OMMedicEquipement;
 use App\Mission;
 use App\Dossier;
+use App\Voiture;
 
 
 class OrdreMissionsController extends Controller
@@ -589,7 +590,61 @@ class OrdreMissionsController extends Controller
 				        $attachement->save();
                 	}
 
+                       // mettre à jour kilométrage véhicule
+                if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['vehicID']))
+                	{
+                		$voiture=Voiture::where('id',$_POST['vehicID'])->first();
+                		if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
 
+                    if($omparent['km_distance'] && $_POST['km_distance'] )
+                    {
+	                	if((int)$_POST['km_distance'] > (int)$omparent['km_distance'])
+	                	{
+	                     
+	                     $voiture->update(['km'=>$km + ((int)$_POST['km_distance']-(int)$omparent['km_distance'])]);
+
+	                	}
+	                	elseif ((int)$_POST['km_distance'] < (int)$omparent['km_distance']) {
+	                
+	                     $voiture->update(['km'=>$km-((int)$omparent['km_distance']-(int)$_POST['km_distance'])]);
+	                	}
+                   }
+                   else
+                   {
+                   	if(! $omparent['km_distance'] && $_POST['km_distance'])
+                   	{
+                    
+	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+	                }
+
+                   }
+
+               }
+               else
+               {
+               	if(! isset($omparent['km_distance']) || Empty($omparent['km_distance']) )
+                	{
+               		  $voiture=Voiture::where('id',$_POST['vehicID'])->first();
+                		if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+                      $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+
+               	}
+
+               }
         		    //exit();
         		}
         		if ($_POST['templatedocument'] === "complete")
@@ -628,6 +683,62 @@ class OrdreMissionsController extends Controller
         			$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_ambulance' => $prestambulance]);
         			$result = $omambulance->update($request->all());
         			//return 'complete action '.$result;
+                  // mettre à jour kilométrage véhicule
+        			//dd('ok');
+        		if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['vehicID']))
+                	{
+                		$voiture=Voiture::where('id',$_POST['vehicID'])->first();
+                		if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+
+                    if($omparent['km_distance'] && $_POST['km_distance'] )
+                    {
+	                	if((int)$_POST['km_distance'] > (int)$omparent['km_distance'])
+	                	{
+	                     
+	                     $voiture->update(['km'=>$km + ((int)$_POST['km_distance']-(int)$omparent['km_distance'])]);
+
+	                	}
+	                	elseif ((int)$_POST['km_distance'] < (int)$omparent['km_distance']) {
+	                
+	                     $voiture->update(['km'=>$km-((int)$omparent['km_distance']-(int)$_POST['km_distance'])]);
+	                	}
+                   }
+                   else
+                   {
+                   	if(! $omparent['km_distance'] && $_POST['km_distance'])
+                   	{
+                    
+	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+	                }
+
+                   }
+
+               }
+               else
+               {
+               	if(! isset($omparent['km_distance']) || Empty($omparent['km_distance']) )
+                	{
+               		  $voiture=Voiture::where('id',$_POST['vehicID'])->first();
+                		if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+                      $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+
+               	}
+
+               }
 
                     // affecter date  prévue destination ( prévue fin de mission)
                if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))    
@@ -1149,22 +1260,19 @@ class OrdreMissionsController extends Controller
                     // affecter date  prévue destination ( prévue fin de mission)
                     if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))
                     {
-                        //$format ='Y-m-d H:i';
-                        $datedebMiss=$_POST['dateheuredep'];
-                        //str_replace("T"," ",$datePourSuiviMiss);
-                        //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss);
+                    
+                        /* $datedebMiss=$_POST['dateheuredep'];
+                       
                         $datedebMiss= date('Y-m-d H:i',strtotime($datedebMiss));
 
                         $datefinMiss=$_POST['dateheuredispprev'];
-                        //str_replace("T"," ",$datePourSuiviMiss);
-                        //$datePourSuivi= date('Y-m-d H:i:s', $datePourSuiviMiss);
+                   
                         $datefinMiss= date('Y-m-d H:i',strtotime($datefinMiss));
 
-                        //$datePourSuivi = \DateTime::createFromFormat($format, $datePourSuiviMiss);
 
                         $miss=Mission::where('id',$_POST['idMissionOM'])->first();
                         $miss->update(['h_dep_pour_miss'=>  $datedebMiss,'date_spec_affect'=> true]);
-                        $miss->update(['h_retour_base'=>  $datedebMiss,'date_spec_affect2'=> true]);
+                        $miss->update(['h_retour_base'=>  $datedebMiss,'date_spec_affect2'=> true]);*/
                     }
 
 
@@ -2129,6 +2237,33 @@ class OrdreMissionsController extends Controller
 		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
 		        ]);
 		        $attachement->save();
+		        // set km véhicule
+
+		        if(isset($omparent['km_distance'])  && isset($omparent['vehicID']))
+                	{
+
+                    if($omparent['km_distance']  && $omparent['vehicID'])
+                    {
+                		$voiture=Voiture::where('id',$omparent['vehicID'])->first();
+                		if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+              		                     
+	                     $voiture->update(['km'=> ((int)$km-(int)$omparent['km_distance'])]);
+	                	
+                   }
+                
+
+               }
+            
+
+
+		        //fin set km vehicule
 	    	}
 
 	    	compact($omparent);
@@ -2143,6 +2278,8 @@ class OrdreMissionsController extends Controller
 	        // If you want to store the generated pdf to the server then you can use the store function
 	        $pdf->save($path.$dossier.'/'.$name.'.pdf');
 	        $omambu = OMAmbulance::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier]);
+
+
 	        return "OM Ambulance annulée avec succès";
 	    }
 	    // annulation om Remorquage

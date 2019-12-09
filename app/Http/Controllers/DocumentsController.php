@@ -157,11 +157,11 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                     if($miss->type_Mission==32)// reservation hotel
                     {
                      
-                        $miss->update(['date_spec_affect'=>1]); 
+                        /*$miss->update(['date_spec_affect'=>1]); 
                     
                         $miss->update(['date_spec_affect2'=>1]); 
 
-                        $miss->update(['h_fin_sejour'=>$datespe]);
+                        $miss->update(['h_fin_sejour'=>$datespe]);*/
 
                         //return 'date affectée'; 
                    
@@ -185,13 +185,13 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                     if($miss->type_Mission==46)// location voiture
                     {
                      
-                        $miss->update(['date_spec_affect'=>1]); 
+                       /* $miss->update(['date_spec_affect'=>1]); 
                     
                         $miss->update(['date_spec_affect2'=>1]);
 
                         $miss->update(['date_spec_affect3'=>1]);  
 
-                        $miss->update(['h_fin_location_voit'=>$datespe]);
+                        $miss->update(['h_fin_location_voit'=>$datespe]);  */
 
                         //return 'date affectée'; 
                    
@@ -221,9 +221,9 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                     {
                      
                                                  
-                        $miss->update(['date_spec_affect'=>1]); 
+                        /* $miss->update(['date_spec_affect'=>1]); 
 
-                          $miss->update(['h_rdv'=>$datespe]);
+                          $miss->update(['h_rdv'=>$datespe]);  */
 
                         //return 'date affectée'; 
                    
