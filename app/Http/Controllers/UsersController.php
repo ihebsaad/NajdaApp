@@ -315,21 +315,21 @@ class UsersController extends Controller
         $date_actu =date("H:i");
         $debut=$seance->debut;
         $fin=$seance->fin;
-        // supprimer les affectations de l utilisateur
-        /*   if ( ($date_actu >'07:50' && $date_actu < '08:45'  ) || ($date_actu >'14:50' && $date_actu < '15:45'  )   ) {
 
-               Dossier::where('affecte', $iduser)
-                   ->update(array('affecte' => NULL));
-           }
 
-     */
 
-    //    if ($typeuser == "agent")
-     //   {
+
             $disp = $request->get('disp');
             Session::put('disp', $disp);
             if ($disp !== '0')
-              { $seance->dispatcheur=Auth::id();}
+              { $seance->dispatcheur=Auth::id();
+
+              // affectation des dossiers inactifs
+                  Dossier::where('current_status','inactif')
+                      //  ->where('statut','<>',5)
+                      ->update(array('affecte' => Auth::id()));
+
+              }
               elseif ($seance->dispatcheur==Auth::id())
               { $seance->dispatcheur=NULL;}
 
@@ -339,17 +339,12 @@ class UsersController extends Controller
               { $seance->superviseurmedic=Auth::id();
 
 
+                  Dossier::where('type_dossier','Medical')
+                      ->where('current_status', 'actif')
+                      ->where('statut', '<>', 5)
 
-                      Dossier::where(function ($query) {
-                          $query->where('type_dossier', 'Medical')
-                              ->where('statut', '<>', 5)
-                              ->where('current_status', 'actif');
-                      })->orWhere(function ($query) {
-                          $query->where('type_dossier', 'Mixte')
-                              ->where('statut', '<>', 5)
-                              ->where('current_status', 'actif');
-                      })->update(array('affecte' => Auth::id()));
-                ///  }
+                      ///    (['type_dossier' => 'Technique','current_status'=>'<> Cloture'])
+                      ->update(array('affecte' => Auth::id()));
 
               }
               elseif ($seance->superviseurmedic==Auth::id())
@@ -360,16 +355,74 @@ class UsersController extends Controller
             if ($suptech !== '0')
               { $seance->superviseurtech=Auth::id();
 
-                  // vérification Temps
-                  ///   if ( ($date_actu >'07:50' && $date_actu < '08:45'  ) || ($date_actu >'14:50' && $date_actu < '15:45'  )   ) {
 
-                  Dossier::where('type_dossier','Technique')
-                      ->where('current_status', 'actif')
-                      ->where('statut', '<>', 5)
+             /*     Dossier::where(function ($query) {
+                      $query->where('type_dossier', 'Technique')
+                          ->where('statut', '<>', 5)
+                          ->where('current_status', 'actif');
+                  })->orWhere(function ($query) {
+                      $query->where('type_dossier', 'Mixte')
+                          ->where('statut', '<>', 5)
+                          ->where('current_status', 'actif');
+                  })->update(array('affecte' => Auth::id()));
+*/
 
-              ///    (['type_dossier' => 'Technique','current_status'=>'<> Cloture'])
-                      ->update(array('affecte' => Auth::id()));
-                  //}
+                  Dossier::where(function ($query)  {
+                      $query->where('reference_medic', 'like', '%N%')
+                          ->where('type_dossier', 'Technique')
+                          ->where('current_status', 'actif')
+                          ->where('statut', '<>', 5);  //auto
+                  })->orWhere(function ($query)   {
+                      $query->where('reference_medic', 'like', '%M%')
+                          ->where('type_dossier', 'Technique')
+                          ->where('current_status', 'actif')
+                          ->where('statut', '<>', 5);
+                  })->orWhere(function ($query)   {
+                      $query->where('reference_medic', 'like', '%VAT%')
+                          ->where('type_dossier', 'Technique')
+                          ->where('current_status', 'actif')
+                          ->where('statut', '<>', 5);
+                  })->orWhere(function ($query)   {
+                      $query->where('reference_medic', 'like', '%MI%')
+                          ->where('type_dossier', 'Technique')
+                          ->where('current_status', 'actif')
+                          ->where('statut', '<>', 5);
+                  })->orWhere(function ($query)   {
+                      $query->where('reference_medic', 'like', '%TPA%')
+                          ->where('type_dossier', 'Technique')
+                          ->where('current_status', 'actif')
+                          ->where('statut', '<>', 5);
+                  })->update(array('affecte' => Auth::id(), 'statut' => 2));
+
+                  // Mixtes
+                  Dossier::where(function ($query)  {
+                      $query->where('reference_medic', 'like', '%N%')
+                          ->where('type_dossier', 'Mixte')
+                          ->where('current_status', 'actif')
+                          ->where('statut', '<>', 5);  //auto
+                  })->orWhere(function ($query)   {
+                      $query->where('reference_medic', 'like', '%M%')
+                          ->where('type_dossier', 'Mixte')
+                          ->where('current_status', 'actif')
+                          ->where('statut', '<>', 5);
+                  })->orWhere(function ($query)   {
+                      $query->where('reference_medic', 'like', '%VAT%')
+                          ->where('type_dossier', 'Mixte')
+                          ->where('current_status', 'actif')
+                          ->where('statut', '<>', 5);
+                  })->orWhere(function ($query)   {
+                      $query->where('reference_medic', 'like', '%MI%')
+                          ->where('type_dossier', 'Mixte')
+                          ->where('current_status', 'actif')
+                          ->where('statut', '<>', 5);
+                  })->orWhere(function ($query)   {
+                      $query->where('reference_medic', 'like', '%TPA%')
+                          ->where('type_dossier', 'Mixte')
+                          ->where('current_status', 'actif')
+                          ->where('statut', '<>', 5);
+                  })->update(array('affecte' => Auth::id(), 'statut' => 2));
+
+
 
               }
               elseif ($seance->superviseurtech==Auth::id())
@@ -380,34 +433,27 @@ class UsersController extends Controller
             if ($chrgtr !== '0')
               { $seance->chargetransport=Auth::id();
 
-              // affecter tous les dossier TN, TM, TV, XP au chargé transport
-                  // vérification Temps
-                  ///   if ( ($date_actu >'07:50' && $date_actu < '08:45'  ) || ($date_actu >'14:50' && $date_actu < '15:45'  )   ) {
+              // affecter tous les dossier TN, TM, TV, XP   actifs au chargé transport
 
                   Dossier::where(function ($query) {
                       $query->where('reference_medic','like','%TN%')
                           ->where('statut', '<>', 5)
-                          ->where('current_status', 'actif');
+                          ->where('current_status','!=', 'Cloture');
                   })->orWhere(function($query) {
                       $query->where('reference_medic','like','%TM%')
                           ->where('statut', '<>', 5)
-                          ->where('current_status', 'actif');
+                          ->where('current_status','!=', 'Cloture');
                   })->orWhere(function($query) {
                       $query->where('reference_medic','like','%TV%')
                           ->where('statut', '<>', 5)
-                          ->where('current_status', 'actif');
+                          ->where('current_status','!=', 'Cloture');
                   })->orWhere(function($query) {
                       $query->where('reference_medic','like','%XP%')
                           ->where('statut', '<>', 5)
-                          ->where('current_status', 'actif');
+                          ->where('current_status','!=', 'Cloture');
                   })->update(array('affecte' => Auth::id()));
-              // }
-             /*     Dossier::where('reference_medic' ,'like','%TN%')
-                  //where('statut', 0)
-                      //->where('type_dossier','Technique')
-                      ->where('current_status','!=','Cloture')
-                      ->update(array('affecte' => Auth::id()));
-*/
+
+
               }
 
               elseif ($seance->chargetransport==Auth::id())
@@ -436,19 +482,15 @@ class UsersController extends Controller
         { $seance->dispatcheurtel3=NULL;}
 
 
-
         $veilleur = $request->get('veilleur');
         Session::put('veilleur', $veilleur);
         if ($veilleur !== '0')
         { $seance->veilleur=Auth::id();
-        // affecter tous les dossiers au veilleur
-            // vérification Temps
-            ///if ( $date_actu < $debut || ($date_actu > $fin) ) {
+        // affecter des dossiers inactifs
 
-                Dossier::where('current_status', '!=', 'Cloture')
-                    ->where('statut','<>',5)
+                Dossier::where('current_status','inactif')
+                  //  ->where('statut','<>',5)
                     ->update(array('affecte' => Auth::id()));
-
 
             //}
         }

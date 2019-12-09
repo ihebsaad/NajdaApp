@@ -7,6 +7,7 @@ use App\Evaluation;
 use App\Mission;
 use App\Parametre;
 use App\Prestataire;
+use App\Seance;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -624,7 +625,7 @@ class DossiersController extends Controller
 
 */
 
-        Notif::where('dossierid',$id)->update(array('user'=>$agent,'affiche'=>0,'statut'=>1,'read_at'=> null)) ;
+       Notif::where('dossierid',$id)->update(array('user'=>$agent,'affiche'=>-1,'statut'=>1,'read_at'=> null)) ;
 
 
         $user = auth()->user();
@@ -1914,9 +1915,20 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
     }
 
-
     public static function InactiverDossiers()
     {
+
+
+        $user = auth()->user();
+        $iduser=$user->id;
+
+        $seance =   Seance::first();
+        $medic= $seance->superviseurmedic ;
+        $tech= $seance->superviseurtech ;
+        $charge= $seance->chargetransport ;
+        $dispatcheur= $seance->dispatcheur ;
+
+
 
         $dtc = (new \DateTime())->modify('-2 days')->format('Y-m-d\TH:i');
 
@@ -1925,15 +1937,47 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
             ->get();
 
 
+
         foreach($dossiers as $d)
         {
-            Dossier::where('id',$d->id)
-                ->update(array('current_status'=>'inactif'));
+            // Affecter les dossiers inactifs au dispatcheur
+            Dossier::where('id',$d->id) // ->where('affecte',0)
+                ->update(array(
+                    'current_status'=>'inactif',
+                    'affecte'=>$dispatcheur
+
+                ));
+
+            // Affecter dossiers Inactifs Transpot au Chargé
+         /*   Dossier::where('id',$d->id) // ->where('affecte',0)
+                ->update(array(
+                    'current_status'=>'inactif',
+                    'affecte'=>$dispatcheur
+
+                ));
+*/
+
+            // Affecter dossiers Inactifs Transpot au Chargé
+
+             Dossier::where(function ($query)use($d) {
+                $query->where('reference_medic','like','%TN%')
+                    ->where('id',$d->id);
+            })->orWhere(function($query)use($d) {
+                $query->where('reference_medic','like','%TM%')
+                    ->where('statut', '<>', 5);
+             })->orWhere(function($query) use($d){
+                $query->where('reference_medic','like','%TV%')
+                    ->where('statut', '<>', 5);
+             })->orWhere(function($query)use($d) {
+                $query->where('reference_medic','like','%XP%')
+                    ->where('statut', '<>', 5);
+             })->update(array('affecte' => $charge));
 
         }
 
-    }
 
+
+    }
 
     public function changestatut(Request $request)
     {
@@ -1942,8 +1986,6 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
         Dossier::where('id',$iddossier)->update(array('current_status'=>$statut));
 
     }
-
-
 
 
 }

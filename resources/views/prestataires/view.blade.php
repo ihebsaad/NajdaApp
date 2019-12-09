@@ -599,24 +599,27 @@
                                     <label>Spécialité</label>
                                     <div class="row">
                                         <select class="form-control  col-lg-12 " style="width:400px" name="specialite2"    id="specialite2">
-                                            <option></option>
+                                            <option value=""></option>
+                                            <?php if ( count($relations2) > 0 ) {
+
+                                            //foreach($relations2 as $rel  )
+                                             //  {
+                                                   foreach($specialites2 as $sp){?>
+                                                    <option     value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                                <?php }
+                                          //  }
 
 
-                                            <?php /*if ( count($relations2) > 0 ) {?>
 
-                                            @foreach($relations2 as $rel  )
-                                                @foreach($specialites2 as $sp)
-                                                    <?php if($rel->specialite==$sp->id) {  ?>   <option   value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option><?php } ?>
-                                                @endforeach
-                                            @endforeach
+                                            }
+                                           else{
+                                            foreach($specialites2 as $sp){ ?>
+                                            <option     onclick="createspec('spec<?php echo $sp->id; ?>')"  value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                            <?php }
 
-                                            <?php
-                                            }*/
+                                            }
+
                                             ?>
-                                            @foreach($specialites as $sp)
-                                                <?php {  ?>   <option   value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option><?php } ?>
-                                            @endforeach
-
                                         </select>
                                     </div>
                                 </div>
@@ -1159,11 +1162,11 @@
 
         });
 
-        $("#typeprestation").select2();
+      /*  $("#typeprestation").select2();
 
         $("#specialite2").select2();
         $("#gouvpr").select2();
-
+*/
 
 
         var $topo1 = $('#specialite');
@@ -1397,6 +1400,7 @@
                             $('.select2-selection').animate({
                                 opacity: '1',
                             });
+                            location.reload();
 
                         }
                     });
@@ -1419,6 +1423,9 @@
                             $( ".select2-selection--multiple" ).show( "slow", function() {
                                 // Animation complete.
                             });
+
+                            location.reload();
+
                         }
                     });
 
@@ -1545,6 +1552,66 @@
                 // alert('ERROR');
             }
         });
+
+
+        $('#typeprestation').change(function() {
+            var typeprestation = $('#typeprestation').val();
+            $("#specialite2").val('');
+
+            var liste ;
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('prestataires.listesprest') }}",
+                method:"POST",
+                data:{typeprestation:typeprestation,  _token:_token},
+                success:function(data){
+                liste=data;
+                    console.log('data : '+data);
+
+                    //   alert('Added successfully');
+
+
+                    $('#specialite2 option').each(function() {
+
+                        $(this).css("display", "none");
+
+
+                    });
+
+
+                    $('#specialite2 option').each(function() {
+                       // console.log(  $(this).val());
+                        for (i=0;i< liste.length ;i++){
+                            if(liste[i]== $(this).val() )
+                            {//alert('1');
+                                $(this).css("display", "block");
+                                break;
+                            }
+                        }
+
+                        /*       if( ! liste.includes($(this).val()))
+                         {
+                         $(this).css("display", "block");
+
+                         }*/
+
+                    });
+
+
+
+
+                }
+            });
+
+
+
+        });
+
+
+
+
+
+
 
 
         var url = document.location.toString();

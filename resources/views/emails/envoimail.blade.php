@@ -4,7 +4,6 @@
 
 
     <link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
-
     <div class="row">
         <div class="col-sm-3 col-md-3">
             <?php use \App\Http\Controllers\EnvoyesController;     ?>
@@ -13,6 +12,7 @@
             <?php use \App\Http\Controllers\ClientsController;     ?>
 
             <div class="panel">
+
 
                 <div class="panel-body pan">
 
@@ -211,10 +211,10 @@
                     <label>Attachements Externes</label>
                     <input  class="btn btn-danger fileinput-button" id="file" type="file" name="files[]"   multiple   >
                 </div>
-
-            {{--   {!! NoCaptcha::display() !!}   --}}
-            <!--  <script src="https://www.google.com/recaptcha/api.js" async defer></script>-->
-
+<!--
+   {{--      {!! NoCaptcha::display() !!}  --}}
+                    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+-->
                 <button onclick=" resetForm(this.form);" id="SendBtn" type="submit"  name="myButton" class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
 
             </form>
@@ -566,7 +566,7 @@ $("#prest").change(function(){
 
         });
     </script>
-    <!---
+<!--
     <script type="text/javascript">
         var onloadCallback = function() {
             console.log("grecaptcha is ready!");
@@ -576,6 +576,6 @@ $("#prest").change(function(){
     <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
             async defer>
     </script>
--->
+    -->
 @endsection
 

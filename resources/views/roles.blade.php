@@ -3,6 +3,8 @@
 
     <link rel="shortcut icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
+ <!--<link href="{{ asset('assets/css/calendardate.css') }}" rel="stylesheet" type="text/css"/>-->
+    <link href="{{ URL::asset('public/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
 <meta charset="UTF-8">
 <title>Najda Assistances - Rôles</title>
 </head>
@@ -173,7 +175,7 @@
      $seance = DB::table('seance')->first();
 
  $user = auth()->user();
- $name=$user->name;
+  $name=$user->name;
  $lastname=$user->lastname;
  $iduser=$user->id;
  $typeuser=$user->user_type;
@@ -592,7 +594,25 @@
 </div>
 
 <div class="col-md-3">
-
+    <?php if (
+        ($seance->superviseurmedic !=$iduser && $seance->superviseurtech != $iduser && $seance->chargetransport != $iduser )
+        || ( $date_actu < $debut || ($date_actu > $fin)  )
+    ) { ?>
+    <a style="margin-top:20px;color:white" href="{{ route('logout') }}"  class="bg-danger btn btn-md">
+        <i class="fa  fa-lg fa-sign-out"></i>
+        Déconnexion
+    </a>
+    <?php
+    }
+    else{ ?>
+        <button disabled style="margin-top:20px;color:white"  title="videz vos rôles avant de quitter" class="bg-danger btn btn-md btn-disabled">
+        <i class="fa  fa-lg fa-sign-out"></i>
+        Déconnexion désactivé
+    </button><br>
+        <small>(Libérez vos rôles de Supervision et Transport)</small>
+   <?php
+    }
+        ?>
 </div>  
   
 </div>
@@ -1019,13 +1039,17 @@
 
 
 <?php
+$heureActuelle=date('H');
+
+
+if($heureActuelle=='08' || $heureActuelle=='15'){
 
 // Inactiver Dossiers
 \App\Http\Controllers\DossiersController::InactiverDossiers();
 
 //Activer Dossier Inactifs
 \App\Http\Controllers\DossiersController::ActiverDossiers();
-
+        }
 
 ?>
 </html>

@@ -324,6 +324,9 @@ class HomeController extends Controller
             { $nomrole = 'dispatcheur';
                 $request->session()->put('disp',0);
 
+                // affecter dossiers ouverts inactifs
+                Dossier::where('current_status', 'inactif')
+                            ->update(array('affecte' => $par, 'statut' => 2));
             }
 
             if ($role== 'Dispatcheur Téléphonique')
@@ -334,16 +337,132 @@ class HomeController extends Controller
             if ($role== 'Superviseur Médical')
             { $nomrole = 'superviseurmedic';
                 $request->session()->put('supmedic',0) ;
+
+
+                // Dossiers medicaux  Auto automatiques
+                Dossier::where('affecte', $vers)
+                    ->where('type_dossier', 'Medical')
+                    ->where('current_status', 'actif')
+                    ->where('statut', '<>',5)
+                    ->update(array('affecte' => $par, 'statut' => 2));
+
             }
 
             if ($role== 'Superviseur Technique')
             { $nomrole = 'superviseurtech';
                 $request->session()->put('suptech',0) ;
+
+                // Dossiers Techniques Auto vers Sup Tech
+           /*     Dossier::where('affecte', $vers)
+                    ->where('type_dossier', 'Mixte')
+                    ->where('current_status', 'actif')
+                    ->where('statut', '<>',5)
+                    ->update(array('affecte' => $par));
+
+                // Dossiers Mixte Auto vers Sup Tech
+
+                Dossier::where('affecte', $vers)
+                    ->where('type_dossier', 'Technique')
+                    ->where('current_status', 'actif')
+                    ->where('statut', '<>',5)  // 5 = manuel
+                    ->update(array('affecte' => $par, 'statut' => 2));
+*/
+
+            //Techniques
+                Dossier::where(function ($query) use ($vers) {
+                    $query->where('reference_medic', 'like', '%N%')
+                        ->where('type_dossier', 'Technique')
+                        ->where('current_status', 'actif')
+                        ->where('statut', '<>',5)  // 5 = manuel
+                        ->where('affecte', $vers);
+                })->orWhere(function ($query) use ($vers) {
+                    $query->where('reference_medic', 'like', '%M%')
+                        ->where('type_dossier', 'Technique')
+                        ->where('current_status', 'actif')
+                        ->where('statut', '<>',5)  // 5 = manuel
+                        ->where('affecte', $vers);
+                })->orWhere(function ($query) use ($vers) {
+                    $query->where('reference_medic', 'like', '%VAT%')
+                        ->where('type_dossier', 'Technique')
+                        ->where('current_status', 'actif')
+                        ->where('statut', '<>',5)  // 5 = manuel
+                        ->where('affecte', $vers);
+                })->orWhere(function ($query) use ($vers) {
+                    $query->where('reference_medic', 'like', '%MI%')
+                        ->where('type_dossier', 'Technique')
+                        ->where('current_status', 'actif')
+                        ->where('statut', '<>',5)  // 5 = manuel
+                        ->where('affecte', $vers);
+                })->orWhere(function ($query) use ($vers) {
+                    $query->where('reference_medic', 'like', '%TPA%')
+                        ->where('type_dossier', 'Technique')
+                        ->where('current_status', 'actif')
+                        ->where('statut', '<>',5)  // 5 = manuel
+                        ->where('affecte', $vers);
+                })->update(array('affecte' => $par, 'statut' => 2));
+
+                // Mixtes
+                Dossier::where(function ($query) use ($vers) {
+                    $query->where('reference_medic', 'like', '%N%')
+                        ->where('type_dossier', 'Mixte')
+                        ->where('current_status', 'actif')
+                        ->where('statut', '<>',5)  // 5 = manuel
+                        ->where('affecte', $vers);
+                })->orWhere(function ($query) use ($vers) {
+                    $query->where('reference_medic', 'like', '%M%')
+                        ->where('type_dossier', 'Mixte')
+                        ->where('current_status', 'actif')
+                        ->where('statut', '<>',5)  // 5 = manuel
+                        ->where('affecte', $vers);
+                })->orWhere(function ($query) use ($vers) {
+                    $query->where('reference_medic', 'like', '%VAT%')
+                        ->where('type_dossier', 'Mixte')
+                        ->where('current_status', 'actif')
+                        ->where('statut', '<>',5)  // 5 = manuel
+                        ->where('affecte', $vers);
+                })->orWhere(function ($query) use ($vers) {
+                    $query->where('reference_medic', 'like', '%MI%')
+                        ->where('type_dossier', 'Mixte')
+                        ->where('current_status', 'actif')
+                        ->where('statut', '<>',5)  // 5 = manuel
+                        ->where('affecte', $vers);
+                })->orWhere(function ($query) use ($vers) {
+                    $query->where('reference_medic', 'like', '%TPA%')
+                        ->where('type_dossier', 'Mixte')
+                        ->where('current_status', 'actif')
+                        ->where('statut', '<>',5)  // 5 = manuel
+                        ->where('affecte', $vers);
+                })->update(array('affecte' => $par, 'statut' => 2));
+
             }
 
             if ($role== 'Chargé de Transport')
             { $nomrole = 'chargetransport';
                 $request->session()->put('chrgtr',0)  ;
+
+                Dossier::where(function ($query) use ($vers) {
+                    $query->where('reference_medic', 'like', '%TN%')
+                        ->where('statut', '<>',5)  // 5 = manuel
+                        ->where('current_status','!=', 'Cloture')
+                        ->where('affecte', $vers);
+                })->orWhere(function ($query) use ($vers) {
+                    $query->where('reference_medic', 'like', '%TM%')
+                        ->where('statut', '<>',5)  // 5 = manuel
+                        ->where('current_status','!=', 'Cloture')
+                        ->where('affecte', $vers);
+                })->orWhere(function ($query) use ($vers) {
+                    $query->where('reference_medic', 'like', '%TV%')
+                        ->where('statut', '<>',5)  // 5 = manuel
+                        ->where('current_status','!=', 'Cloture')
+                        ->where('affecte', $vers);
+                })->orWhere(function ($query) use ($vers) {
+                    $query->where('reference_medic', 'like', '%XP%')
+                        ->where('statut', '<>',5)  // 5 = manuel
+                        ->where('current_status','!=', 'Cloture')
+                        ->where('affecte', $vers);
+                })->update(array('affecte' => $par, 'statut' => 2));
+
+
             }
 
             if ($role== 'Veilleur de Nuit')
@@ -377,7 +496,7 @@ class HomeController extends Controller
 
 
     }
-
+/*
     public function changerroles(Request $request)
     {
         $id=Auth::id();
@@ -438,7 +557,7 @@ return redirect('roles');
             return redirect('login');
 
         }
-    }
+    }*/
 
     public function roles()
     {

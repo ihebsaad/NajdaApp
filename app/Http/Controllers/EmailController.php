@@ -361,9 +361,10 @@ class EmailController extends Controller
                 /*********************/
                 if($refdossier!= ''){
 
-                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-                    $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
-                 
+                   // $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                 //   $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                    $userid=$this->AgentAffecte($dossierid);
+
               //  $user=  DB::table('users')->where('id','=', $userid )->first();
                   if($userid>0){
                     //  $user = User::find($userid);
@@ -418,7 +419,7 @@ class EmailController extends Controller
 
                   }
                     // Activer le dossier
-                    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
                     // Notification::send($user, new Notif_Suivi_Doss($entree));
                   
@@ -646,8 +647,9 @@ $id=0;
                 if($refdossier!= ''){
 
 
-                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-                    $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+                  //  $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                   // $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                    $userid=$this->AgentAffecte($dossierid);
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if($userid>0){
@@ -704,7 +706,7 @@ $id=0;
 
                     }
                     // Activer le dossier
-                    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -924,8 +926,9 @@ $id=0;
                 if($refdossier!= ''){
 
 
-                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-                    $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+                  //  $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                  //  $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                    $userid=$this->AgentAffecte($dossierid);
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                    if($userid>0){
@@ -980,7 +983,7 @@ $id=0;
                        }
                    }
                     // Activer le dossier
-                    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -1200,8 +1203,9 @@ $id=0;
                 if($refdossier!= ''){
 
 
-                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-                    $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+                   // $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                   // $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                    $userid=$this->AgentAffecte($dossierid);
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if($userid>0){
@@ -1257,7 +1261,7 @@ $id=0;
 
                     }
                     // Activer le dossier
-                    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -1484,8 +1488,9 @@ $id=0;
                 if($refdossier!= ''){
 
 
-                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-                    $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+                   // $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                  //  $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                    $userid=$this->AgentAffecte($dossierid);
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if($userid>0){
@@ -1539,7 +1544,7 @@ $id=0;
                         }
                     }
                     // Activer le dossier
-                    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -1756,8 +1761,9 @@ $id=0;
                 if($refdossier!= ''){
 
 
-                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-                    $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+                   // $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                  //  $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                    $userid=$this->AgentAffecte($dossierid);
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if($userid>0){
@@ -1809,7 +1815,7 @@ $id=0;
                         }
                     }
                     // Activer le dossier
-                    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -2021,8 +2027,9 @@ $id=0;
                 /*********************/
                 if($refdossier!= ''){
 
-                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-                    $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+                //    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                  //  $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                    $userid=$this->AgentAffecte($dossierid);
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if($userid>0){
@@ -2076,7 +2083,7 @@ $id=0;
                         }
                     }
                     // Activer le dossier
-                    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -2291,8 +2298,9 @@ $id=0;
                 if($refdossier!= ''){
 
 
-                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-                    $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+                   // $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                  //  $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                    $userid=$this->AgentAffecte($dossierid);
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if($userid>0){
@@ -2347,7 +2355,7 @@ $id=0;
                         }
                     }
                     // Activer le dossier
-                    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -2561,8 +2569,9 @@ $id=0;
                 if($refdossier!= ''){
 
 
-                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-                    $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+                  //  $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                  //  $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                    $userid=$this->AgentAffecte($dossierid);
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if($userid>0){
@@ -2617,7 +2626,7 @@ $id=0;
                         }
                     }
                     // Activer le dossier
-                    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -2836,8 +2845,9 @@ $id=0;
                 if($refdossier!= ''){
 
 
-                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-                    $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+                 //   $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                  //  $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                    $userid=$this->AgentAffecte($dossierid);
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if($userid>0){
@@ -2892,7 +2902,7 @@ $id=0;
                         }
                     }
                     // Activer le dossier
-                    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -3220,8 +3230,9 @@ $id=0;
                     if($refdossier!= ''){
 
 
-                        $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-                        $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+                     //   $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                     //   $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                        $userid=$this->AgentAffecte($dossierid);
 
                         //  $user=  DB::table('users')->where('id','=', $userid )->first();
                       if($userid>0)
@@ -3276,7 +3287,7 @@ $id=0;
                       }
 
                         // Activer le dossier
-                        Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+                        Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                     }
@@ -3418,8 +3429,9 @@ $id=0;
                 if($refdossier!= '') {
 
 
-                    $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-                    $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $iddossier);
+                  //  $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                //    $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                    $userid=$this->AgentAffecte($dossierid);
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
                     if ($userid>0) {
@@ -3472,7 +3484,7 @@ $id=0;
                     }
 
                     // Activer le dossier
-                    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -4836,6 +4848,16 @@ public static function getSignatureUser($id,$lg)
     {$mailid=trim($mailid);
         $count =  Entree::where('mailid', $mailid)->count();
         return $count;
+
+    }
+
+
+    public static function  AgentAffecte($id)
+    {
+        $doss = Dossier::find($id);
+        if (isset($doss['affecte'])) {
+            return $doss['affecte'] ;
+        }else{return 0;}
 
     }
 

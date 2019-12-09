@@ -28,7 +28,7 @@ class BoitesController extends Controller
     {
         $iduser=Auth::id();
 
-        $boites = Boite::orderBy('created_at', 'desc')->where('user',$iduser)->paginate(5);
+        $boites = Boite::orderBy('created_at', 'desc')->where('user',$iduser)->get();
         return view('boites.index', compact('boites'));
     }
 

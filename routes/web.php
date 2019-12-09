@@ -17,7 +17,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/roles', 'HomeController@roles')->name('roles');
 Route::get('/pause', 'HomeController@pause')->name('pause');
-Route::get('/changerroles', 'HomeController@changerroles')->name('changerroles');
+//Route::get('/changerroles', 'HomeController@changerroles')->name('changerroles');
 Route::get('/parametres', 'HomeController@parametres')->name('parametres');
 Route::get('/supervision', 'HomeController@supervision')->name('supervision');
 Route::get('/affectations', 'HomeController@affectation')->name('affectation');
@@ -74,8 +74,9 @@ Route::post('/home/fetch', 'HomeController@fetch')->name('home.fetch');
 
 //affectation dossier dispartcheur
 Route::get('/affectation/',  'AffectDossController@Interface_Affectation_DossierDispatcheur'); 
-Route::post('/affecterDossier',  'AffectDossController@affecterDossier')->name('affectation.dossier'); 
-Route::get('/getNotificationAffectationDoss/{userConnect}', 'AffectDossController@getNotificationAffectationDoss'); 
+//Route::post('/affecterDossier',  'AffectDossController@affecterDossier')->name('affectation.dossier');
+Route::post('/affecterDossier',  'DossiersController@attribution')->name('affectation.dossier');
+Route::get('/getNotificationAffectationDoss/{userConnect}', 'AffectDossController@getNotificationAffectationDoss');
 
 // delegation mission
 Route::post('/deleguerMission/','DeleguerMissionController@deleguerMission')->name('Deleguer.Mission');
@@ -317,6 +318,7 @@ Route::get('/prestataires/destroy/{id}', 'PrestatairesController@destroy');
 Route::get('/prestataires/create/{id}', 'PrestatairesController@create')->name('prestataires.create');
 Route::post('/prestataires/checkexiste', 'PrestatairesController@checkexiste')->name('prestataires.checkexiste');
 Route::post('/prestataires/checkexisteprname', 'PrestatairesController@checkexistePrName')->name('prestataires.checkexisteprname');
+Route::post('/prestataires/listesprest', 'PrestatairesController@listesprest')->name('prestataires.listesprest');
 
 
 /*** Prestations **/

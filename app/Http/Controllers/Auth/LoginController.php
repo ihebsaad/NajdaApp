@@ -15,53 +15,50 @@ use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
-/*
-|--------------------------------------------------------------------------
-| Login Controller
-|--------------------------------------------------------------------------
-|
-| This controller handles authenticating users for the application and
-| redirecting them to your home screen. The controller uses a trait
-| to conveniently provide its functionality to your applications.
-|
-*/
+    /*
+    |--------------------------------------------------------------------------
+    | Login Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller handles authenticating users for the application and
+    | redirecting them to your home screen. The controller uses a trait
+    | to conveniently provide its functionality to your applications.
+    |
+    */
 
-use AuthenticatesUsers;
+    use AuthenticatesUsers;
     protected $username;
 
 
-protected function authenticated(Request $request, $user)
-{
-/*if ( $user->isAdmin() ) {
-    return redirect()->route('dashboard');
-}*/
-    $user = auth()->user();
-    $iduser=$user->id;
-    $type=$user->user_type;
-
-    $nomuser=$user->name.' '.$user->lastname;
-    Log::info('[Agent: '.$nomuser.'] Login ');
-
-    User::where('id', $iduser)->update(array('statut' => '0'));
-
-    if($type=='financier')
+    protected function authenticated(Request $request, $user)
     {
-        return redirect('/parametres');
+        /*if ( $user->isAdmin() ) {
+            return redirect()->route('dashboard');
+        }*/
+        $user = auth()->user();
+        $iduser = $user->id;
+        $type = $user->user_type;
+
+        $nomuser = $user->name . ' ' . $user->lastname;
+        Log::info('[Agent: ' . $nomuser . '] Login ');
+
+        User::where('id', $iduser)->update(array('statut' => '0'));
+
+        if ($type == 'financier') {
+            return redirect('/parametres');
+
+        } else {
+            return redirect('/roles');
+        }
+    }
+
+
+    public function __construct()
+    {
+        $this->middleware('guest', ['except' => 'logout']);
+        $this->username = $this->findUsername();
 
     }
-else
- {
-    return redirect('/roles');
- }
-}
-
-
-public function __construct()
-{
-    $this->middleware('guest', ['except' => 'logout']);
-    $this->username = $this->findUsername();
-
-}
 
     public function findUsername()
     {
@@ -80,271 +77,460 @@ public function __construct()
     }
 
 
-public function logout(Request $request)
+    public function logout(Request $request)
     {
-
-        // supprimer les affectations
         $user = auth()->user();
-        $iduser=$user->id;
+        $iduser = $user->id;
 
-        $seance =   Seance::first();
-        $medic= $seance->superviseurmedic ;
-        $tech= $seance->superviseurtech ;
-        $charge= $seance->chargetransport ;
-        $veilleur= $seance->veilleur;
-        $debut= $seance->debut;
-        $fin= $seance->fin;
+        $seance = Seance::first();
+        $medic = $seance->superviseurmedic;
+        $tech = $seance->superviseurtech;
+        $charge = $seance->chargetransport;
+        $dispatcheur = $seance->dispatcheur;
+        $veilleur = $seance->veilleur;
+        $debut = $seance->debut;
+        $fin = $seance->fin;
+        $date_actu = date("H:i");
 
-        if($iduser == $veilleur  )
-        {
-            //interdire de deconnexion veilleur si superviseur(s) non connectés
-            if ( !($medic >0) &&  !($tech >0) )
-            {
-                return redirect('/home')->withErrors([ 'les superviseurs Technique et Medical doivent êtres connectés ']);
-            }
-
-        }
-        else{
-
-            //interdire de deconnexion Superviseurs si veilleur non connecté
-
-            if( ($iduser == $medic) || ($iduser== $tech)  ) {
-
-                if ( !($veilleur >0) )
-                {
-                      //   return redirect('/home')->withErrors(['Le veilleur doit être connecté']);
-
-                    $this->guard()->logout();
-
-                    $request->session()->invalidate();
-
-                    return redirect('/');
-                 }
-
-            }
-
-            else{
+// 'statut'=>2  affectation automatique
 
 
-               // Dossier::where('affecte', $iduser)
-                //     ->update(array('affecte' => NULL));
+        // Heure de nuit
+        if ($date_actu < $debut || ($date_actu > $fin)) {
+            // L'utilisateur est le veilleur
+            if ($veilleur == $iduser) {
 
-               // si veilleur connecté + heure de nuit => affectation des dossiers de l agent vers le veilleur(Automatique)
-//sinon
-//affectation des dossiers de l agent vers le superviseur:
-//Dossiers mixtes et medical vers Superviseur Medical(Automatique)
-//Dossiers transport vers Chargé de transport si connecté si non vers Superviseur Technique(Automatique)
+                //interdire de deconnexion veilleur si superviseur non connectés
+                if (!($medic > 0) && !($tech > 0)) {
+                    return redirect('/home')->withErrors(['un superviseur doit êtres connecté ']);
+                } else {
+                    // Affectation des dossiers Transport vers charge
+                    if ($charge > 0) {
+                        Dossier::where(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%TN%')
+                                ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%TM%')
+                                ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%TV%')
+                                ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%XP%')
+                                ->where('affecte', $iduser);
+                        })->update(array('affecte' => $charge, 'statut' => 2));
 
-                $date_actu =date("H:i");
-            if (($veilleur>0) &&    ( $date_actu < $debut || ($date_actu > $fin) ))
-            {
-                // affectation des dossiers automatique au veilleur
-                Dossier::where('affecte', $iduser)
-                    ->where('statut','<>',5)
-                    ->where('current_status', 'actif')
-                    ->update(array('affecte' => $veilleur));
+                    }// charge
+                    else {
 
-            }else{
+                        if ($tech > 0) {
+                            Dossier::where(function ($query) use ($iduser) {
+                                $query->where('reference_medic', 'like', '%TN%')
+                                    ->where('affecte', $iduser);
+                            })->orWhere(function ($query) use ($iduser) {
+                                $query->where('reference_medic', 'like', '%TM%')
+                                    ->where('affecte', $iduser);
+                            })->orWhere(function ($query) use ($iduser) {
+                                $query->where('reference_medic', 'like', '%TV%')
+                                    ->where('affecte', $iduser);
+                            })->orWhere(function ($query) use ($iduser) {
+                                $query->where('reference_medic', 'like', '%XP%')
+                                    ->where('affecte', $iduser);
+                            })->update(array('affecte' => $tech, 'statut' => 2));
 
-                // affectation des dossiers automatique au superviseurs et chargé T
-                // statut = 5   dossier affecté automatiquement
-                if($medic>0) {
-                    // Dossiers Mixte et medicaux
-                    Dossier::where('affecte', $iduser)
-                        ->where('current_status', 'actif')
-                        ->where('statut', '<>', 5)
-                        ->where('type_dossier', 'Medical')
-                        ->where('type_dossier', 'Mixte')
-                        ->update(array('affecte' => $medic));
+                        } else {
+
+                            if ($medic > 0) {
+                                Dossier::where(function ($query) use ($iduser) {
+                                    $query->where('reference_medic', 'like', '%TN%')
+                                        ->where('affecte', $iduser);
+                                })->orWhere(function ($query) use ($iduser) {
+                                    $query->where('reference_medic', 'like', '%TM%')
+                                        ->where('affecte', $iduser);
+                                })->orWhere(function ($query) use ($iduser) {
+                                    $query->where('reference_medic', 'like', '%TV%')
+                                        ->where('affecte', $iduser);
+                                })->orWhere(function ($query) use ($iduser) {
+                                    $query->where('reference_medic', 'like', '%XP%')
+                                        ->where('affecte', $iduser);
+                                })->update(array('affecte' => $medic, 'statut' => 2));
+
+                            }
+                        }
+                    }
 
 
-                }else{
+                    // Affectation des dossiers Medic
+                    if ($medic > 0) {
 
-                    if($tech>0) {
-
+                        // Dossiers medicaux vers Sup Medic
                         Dossier::where('affecte', $iduser)
-                            ->where('current_status', 'actif')
-                            ->where('statut', '<>', 5)
                             ->where('type_dossier', 'Medical')
-                            ->where('type_dossier', 'Mixte')
-                            ->update(array('affecte' => $tech));
-                    }
-
-                    }
-                if($tech>0) {
-                    // Dossiers Techniques
-                    Dossier::where('affecte', $iduser)
-                        ->where('current_status', 'actif')
-                        ->where('statut', '<>', 5)
-                        ->where('type_dossier', 'Technique')
-                        ->update(array('affecte' => $tech));
-                }else{
-                    if($medic>0)
-                    {
-                        Dossier::where('affecte', $iduser)
                             ->where('current_status', 'actif')
-                            ->where('statut', '<>', 5)
-                            ->where('type_dossier', 'Technique')
-                            ->update(array('affecte' => $medic));
+                            ->update(array('affecte' => $medic, 'statut' => 2));
 
+                    }// medic
 
-                    }
+                    else {
+                        if ($tech > 0) {
 
-                }
-
-                if($charge>0) {
-                    // Dossiers Transport
-               /*     Dossier::where('affecte', $iduser)
-                        ->where('current_status', 'actif')
-                        ->where('statut', '<>', 5)
-                        ->where('reference_medic','like' ,'T%')
-                        ->where('reference_medic','like' ,'MI%')
-                        ->where('reference_medic','like' ,'XP%')
-                        ->update(array('affecte' => $charge));
-*/
-                    Dossier::where(function ($query) {
-                        $query->where('reference_medic','like','%TN%')
-                            ->where('statut', '<>', 5)
-                            ->where('current_status', 'actif');
-                    })->orWhere(function($query) {
-                        $query->where('reference_medic','like','%TM%')
-                            ->where('statut', '<>', 5)
-                            ->where('current_status', 'actif');
-                    })->orWhere(function($query) {
-                        $query->where('reference_medic','like','%TV%')
-                            ->where('statut', '<>', 5)
-                            ->where('current_status', 'actif');
-                    })->orWhere(function($query) {
-                        $query->where('reference_medic','like','%XP%')
-                            ->where('statut', '<>', 5)
-                            ->where('current_status', 'actif');
-                    })->update(array('affecte' => $charge));
-
-
-                }else{
-
-                    if($medic>0)
-                    {
-                        Dossier::where(function ($query) {
-                            $query->where('reference_medic','like','%TN%')
-                                ->where('statut', '<>', 5)
-                                ->where('current_status', 'actif');
-                        })->orWhere(function($query) {
-                            $query->where('reference_medic','like','%TM%')
-                                ->where('statut', '<>', 5)
-                                ->where('current_status', 'actif');
-                        })->orWhere(function($query) {
-                            $query->where('reference_medic','like','%TV%')
-                                ->where('statut', '<>', 5)
-                                ->where('current_status', 'actif');
-                        })->orWhere(function($query) {
-                            $query->where('reference_medic','like','%XP%')
-                                ->where('statut', '<>', 5)
-                                ->where('current_status', 'actif');
-                        })->update(array('affecte' => $medic));
-
-                    }
-                    else{
-                        if($tech>0)
-                        {
-                            Dossier::where(function ($query) {
-                                $query->where('reference_medic','like','%TN%')
-                                    ->where('statut', '<>', 5)
-                                    ->where('current_status', 'actif');
-                            })->orWhere(function($query) {
-                                $query->where('reference_medic','like','%TM%')
-                                    ->where('statut', '<>', 5)
-                                    ->where('current_status', 'actif');
-                            })->orWhere(function($query) {
-                                $query->where('reference_medic','like','%TV%')
-                                    ->where('statut', '<>', 5)
-                                    ->where('current_status', 'actif');
-                            })->orWhere(function($query) {
-                                $query->where('reference_medic','like','%XP%')
-                                    ->where('statut', '<>', 5)
-                                    ->where('current_status', 'actif');
-                            })->update(array('affecte' => $tech));
-
+                            // Dossiers medicaux vers Sup Medic
+                            Dossier::where('affecte', $iduser)
+                                ->where('type_dossier', 'Medical')
+                                ->where('current_status', 'actif')
+                                ->update(array('affecte' => $medic, 'statut' => 2));
                         }
 
+                    }
+
+                    // Affectation des dossiers Techniques et Mixtes
+                    if ($tech > 0) {
+
+                   /*     // Dossiers Techniques vers Sup Tech
+                        Dossier::where('affecte', $iduser)
+                            ->where('type_dossier', 'Mixte')
+                            ->where('current_status', 'actif')
+                            ->update(array('affecte' => $tech));
+
+                        // Dossiers Mixte vers Sup Tech
+
+                        Dossier::where('affecte', $iduser)
+                            ->where('type_dossier', 'Technique')
+                            ->where('current_status', 'actif')
+                            ->update(array('affecte' => $tech, 'statut' => 2));
+*/
+
+                        // Techniques
+
+                        Dossier::where(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%N%')
+                            ->where('type_dossier', 'Technique')
+                            ->where('current_status', 'actif')
+                            ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%M%')
+                                ->where('type_dossier', 'Technique')
+                                ->where('current_status', 'actif')
+                                ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%VAT%')
+                                ->where('type_dossier', 'Technique')
+                                ->where('current_status', 'actif')
+                                ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%MI%')
+                                ->where('type_dossier', 'Technique')
+                                ->where('current_status', 'actif')
+                                ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%TPA%')
+                                ->where('type_dossier', 'Technique')
+                                ->where('current_status', 'actif')
+                                ->where('affecte', $iduser);
+                        })->update(array('affecte' => $tech, 'statut' => 2));
+
+                    // Mixtes
+                        Dossier::where(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%N%')
+                                ->where('type_dossier', 'Mixte')
+                                ->where('current_status', 'actif')
+                                ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%M%')
+                                ->where('type_dossier', 'Mixte')
+                                ->where('current_status', 'actif')
+                                ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%VAT%')
+                                ->where('type_dossier', 'Mixte')
+                                ->where('current_status', 'actif')
+                                ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%MI%')
+                                ->where('type_dossier', 'Mixte')
+                                ->where('current_status', 'actif')
+                                ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%TPA%')
+                                ->where('type_dossier', 'Mixte')
+                                ->where('current_status', 'actif')
+                                ->where('affecte', $iduser);
+                        })->update(array('affecte' => $tech, 'statut' => 2));
+
+                    }// tech
+
+                    else {
+                        if ($medic > 0) {
+
+                            // Dossiers Techniques vers Sup Tech
+                       /*     Dossier::where('affecte', $iduser)
+                                ->where('type_dossier', 'Mixte')
+                                ->where('current_status', 'actif')
+                                ->update(array('affecte' => $medic, 'statut' => 2));
+
+                            // Dossiers Mixte vers Sup Tech
+
+                            Dossier::where('affecte', $iduser)
+                                ->where('type_dossier', 'Technique')
+                                ->where('current_status', 'actif')
+                                ->update(array('affecte' => $medic, 'statut' => 2));
+*/
+
+                            Dossier::where(function ($query) use ($iduser) {
+                                $query->where('reference_medic', 'like', '%N%')
+                                    ->where('type_dossier', 'Technique')
+                                    ->where('current_status', 'actif')
+                                    ->where('affecte', $iduser);
+                            })->orWhere(function ($query) use ($iduser) {
+                                $query->where('reference_medic', 'like', '%M%')
+                                    ->where('type_dossier', 'Technique')
+                                    ->where('current_status', 'actif')
+                                    ->where('affecte', $iduser);
+                            })->orWhere(function ($query) use ($iduser) {
+                                $query->where('reference_medic', 'like', '%VAT%')
+                                    ->where('type_dossier', 'Technique')
+                                    ->where('current_status', 'actif')
+                                    ->where('affecte', $iduser);
+                            })->orWhere(function ($query) use ($iduser) {
+                                $query->where('reference_medic', 'like', '%MI%')
+                                    ->where('type_dossier', 'Technique')
+                                    ->where('current_status', 'actif')
+                                    ->where('affecte', $iduser);
+                            })->orWhere(function ($query) use ($iduser) {
+                                $query->where('reference_medic', 'like', '%TPA%')
+                                    ->where('type_dossier', 'Technique')
+                                    ->where('current_status', 'actif')
+                                    ->where('affecte', $iduser);
+                            })->update(array('affecte' => $medic, 'statut' => 2));
+
+                            // Mixtes
+                            Dossier::where(function ($query) use ($iduser) {
+                                $query->where('reference_medic', 'like', '%N%')
+                                    ->where('type_dossier', 'Mixte')
+                                    ->where('current_status', 'actif')
+                                    ->where('affecte', $iduser);
+                            })->orWhere(function ($query) use ($iduser) {
+                                $query->where('reference_medic', 'like', '%M%')
+                                    ->where('type_dossier', 'Mixte')
+                                    ->where('current_status', 'actif')
+                                    ->where('affecte', $iduser);
+                            })->orWhere(function ($query) use ($iduser) {
+                                $query->where('reference_medic', 'like', '%VAT%')
+                                    ->where('type_dossier', 'Mixte')
+                                    ->where('current_status', 'actif')
+                                    ->where('affecte', $iduser);
+                            })->orWhere(function ($query) use ($iduser) {
+                                $query->where('reference_medic', 'like', '%MI%')
+                                    ->where('type_dossier', 'Mixte')
+                                    ->where('current_status', 'actif')
+                                    ->where('affecte', $iduser);
+                            })->orWhere(function ($query) use ($iduser) {
+                                $query->where('reference_medic', 'like', '%TPA%')
+                                    ->where('type_dossier', 'Mixte')
+                                    ->where('current_status', 'actif')
+                                    ->where('affecte', $iduser);
+                            })->update(array('affecte' => $medic, 'statut' => 2));
+
+
+                        }// medic
 
                     }
 
 
-                }
+                    // Affectation des dossiers inactifs au dispatcheur
+                    if ($dispatcheur > 0) {
 
+                         Dossier::where('affecte', $iduser)
+                            ->where('current_status', 'inactif')
+                            ->update(array('affecte' => $dispatcheur, 'statut' => 2));
+
+                    }// dispatcheur
+
+
+                }// superviseur connecté
+
+
+                /******  Fin de déconnexion Veilleur  *****/
+
+
+            } else {
+                // L'utilisateur n'est pas le veilleur
+
+                // Affectation tous les dossiers vers le veilleur
+                Dossier::where('affecte', $iduser)
+                    ->update(array('affecte' => $veilleur, 'statut' => 2));
 
             }
+
+        } // Heure de jour
+        else {
+
+
+            // Affectation des dossiers Transport vers charge
+            if ($charge > 0) {
+                Dossier::where(function ($query) use ($iduser) {
+                    $query->where('reference_medic', 'like', '%TN%')
+                        ->where('affecte', $iduser);
+                })->orWhere(function ($query) use ($iduser) {
+                    $query->where('reference_medic', 'like', '%TM%')
+                        ->where('affecte', $iduser);
+                })->orWhere(function ($query) use ($iduser) {
+                    $query->where('reference_medic', 'like', '%TV%')
+                        ->where('affecte', $iduser);
+                })->orWhere(function ($query) use ($iduser) {
+                    $query->where('reference_medic', 'like', '%XP%')
+                        ->where('affecte', $iduser);
+                })->update(array('affecte' => $charge, 'statut' => 2));
+
+            }// charge
+            else {
+
+                if ($tech > 0) {
+                    Dossier::where(function ($query) use ($iduser) {
+                        $query->where('reference_medic', 'like', '%TN%')
+                            ->where('affecte', $iduser);
+                    })->orWhere(function ($query) use ($iduser) {
+                        $query->where('reference_medic', 'like', '%TM%')
+                            ->where('affecte', $iduser);
+                    })->orWhere(function ($query) use ($iduser) {
+                        $query->where('reference_medic', 'like', '%TV%')
+                            ->where('current_status', 'actif');
+                    })->orWhere(function ($query) use ($iduser) {
+                        $query->where('reference_medic', 'like', '%XP%')
+                            ->where('affecte', $iduser);
+                    })->update(array('affecte' => $tech, 'statut' => 2));
+
+                } else {
+
+                    if ($medic > 0) {
+                        Dossier::where(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%TN%')
+                                ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%TM%')
+                                ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%TV%')
+                                ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%XP%')
+                                ->where('affecte', $iduser);
+                        })->update(array('affecte' => $medic, 'statut' => 2));
+
+                    }
+                }
+            }
+
+
+            // Affectation des dossiers Medic
+            if ($medic > 0) {
+
+                // Dossiers medicaux vers Sup Medic
+                Dossier::where('affecte', $iduser)
+                    ->where('type_dossier', 'Medical')
+                    ->where('current_status', 'actif')
+                    ->update(array('affecte' => $medic, 'statut' => 2));
+
+            }// medic
+
+            else {
+                if ($tech > 0) {
+
+                    // Dossiers medicaux vers Sup Medic
+                    Dossier::where('affecte', $iduser)
+                        ->where('type_dossier', 'Medical')
+                        ->where('current_status', 'actif')
+                        ->update(array('affecte' => $medic, 'statut' => 2));
+                }
+
+            }
+
+            // Affectation des dossiers Techniques et Mixtes
+            if ($tech > 0) {
+
+                // Dossiers Techniques vers Sup Tech
+                Dossier::where('affecte', $iduser)
+                    ->where('type_dossier', 'Mixte')
+                    ->where('current_status', 'actif')
+                    ->update(array('affecte' => $tech));
+
+                // Dossiers Mixte vers Sup Tech
+
+                Dossier::where('affecte', $iduser)
+                    ->where('type_dossier', 'Technique')
+                    ->where('current_status', 'actif')
+                    ->update(array('affecte' => $tech, 'statut' => 2));
+
+            }// tech
+
+            else {
+                if ($medic > 0) {
+
+                    // Dossiers Techniques vers Sup Tech
+                    Dossier::where('affecte', $iduser)
+                        ->where('type_dossier', 'Mixte')
+                        ->where('current_status', 'actif')
+                        ->update(array('affecte' => $medic, 'statut' => 2));
+
+                    // Dossiers Mixte vers Sup Tech
+
+                    Dossier::where('affecte', $iduser)
+                        ->where('type_dossier', 'Technique')
+                        ->where('current_status', 'actif')
+                        ->update(array('affecte' => $medic, 'statut' => 2));
+
+                }// tech
+
+            }
+
+
+        }  // heure de jour
 
 
         // vider les roles de lutilisateur dans la seance avant logout
 
 
-        if ($seance->dispatcheur==Auth::id())
-        {
-        	$seance->dispatcheur=NULL ;
+        if ($seance->dispatcheur == Auth::id()) {
+            $seance->dispatcheur = NULL;
         }
-        if ($seance->dispatcheurtel==Auth::id())
-        {
-        	$seance->dispatcheurtel=NULL ;
+        if ($seance->dispatcheurtel == Auth::id()) {
+            $seance->dispatcheurtel = NULL;
         }
-         if ($seance->dispatcheurte2==Auth::id())
-        {
-        $seance->dispatcheurtel2=NULL ;
-         }
-        if ($seance->dispatcheurtel3==Auth::id())
-         {
-         $seance->dispatcheurtel3=NULL ;
-         }
-        if ($seance->superviseurmedic==Auth::id())
-        {
-        	$seance->superviseurmedic=NULL ;
+        if ($seance->dispatcheurte2 == Auth::id()) {
+            $seance->dispatcheurtel2 = NULL;
         }
-        if ($seance->superviseurtech==Auth::id())
-        {
-        	$seance->superviseurtech=NULL ;
+        if ($seance->dispatcheurtel3 == Auth::id()) {
+            $seance->dispatcheurtel3 = NULL;
         }
-        if ($seance->chargetransport==Auth::id())
-        {
-        	$seance->chargetransport=NULL ;
+        if ($seance->superviseurmedic == Auth::id()) {
+            $seance->superviseurmedic = NULL;
         }
-        if ($seance->veilleur==Auth::id())
-        {
-            $seance->veilleur=NULL ;
+        if ($seance->superviseurtech == Auth::id()) {
+            $seance->superviseurtech = NULL;
+        }
+        if ($seance->chargetransport == Auth::id()) {
+            $seance->chargetransport = NULL;
+        }
+        if ($seance->veilleur == Auth::id()) {
+            $seance->veilleur = NULL;
         }
 
         $seance->save();
 
-//
 
+        /*** Déconnexion ***/
+        $nomuser = $user->name . ' ' . $user->lastname;
 
-
-         $nomuser=$user->name.' '.$user->lastname;
-
-        Log::info('[Agent: '.$nomuser.'] Déconnexion ');
-
-/*
-        $date_actu =date("H:i");
-        $debut=$seance->debut;
-        $fin=$seance->fin;
-        // supprimer les affectations de l utilisateur
-         if ( ($date_actu >'07:50' && $date_actu < '08:45'  ) || ($date_actu >'14:50' && $date_actu < '15:45'  )   ) {
-
-            Dossier::where('affecte', $iduser)
-                ->update(array('affecte' => NULL));
-        }
-
-*/
-       // Dossier::where('affecte', $iduser)
-       //     ->update(array('affecte' => NULL));
+        Log::info('[Agent: ' . $nomuser . '] Déconnexion ');
 
         $this->guard()->logout();
 
         $request->session()->invalidate();
 
         return redirect('/');
-        }
 
-    }
-    }
-}
+
+    } //end function
+
+
+} //end class

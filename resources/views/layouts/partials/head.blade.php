@@ -305,7 +305,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                     //Send another request in n seconds.
                     setTimeout(function(){
                         checkemails8();
-                    }, 15000);  //10 secds
+                    }, 60000);  //60 secds
                 }
             });
         }
@@ -625,19 +625,19 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
 
         checkNotifs();
-        checkemails();	//test
-      //   checkemails1();  // 24ops
-     //    checkemails2();  // VAT
-     //    checkemails3(); //MEDIC
+       // checkemails();	//test
+     //    checkemails1();  // 24ops
+       //  checkemails2();  // VAT
+      //   checkemails3(); //MEDIC
       //   checkemails4();  //TM
        //  checkemails5();   //TV
-      //   checkemails6(); // MI
+       //  checkemails6(); // MI
       //   checkemails7();   // TPA
-         checkemails8();   //TN
-       //  checkemails9();  //XPRESS
-        // checksms();
+       //  checkemails8();   //TN
+     //    checkemails9();  //XPRESS
+      //  checksms();
       //   checkboite();
-      //   checkfax();
+       //  checkfax();
          checkdemandes();
     });
 </script>

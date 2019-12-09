@@ -328,6 +328,7 @@ class PrestatairesController extends Controller
         $specialites2 =DB::table('specialites')
             ->whereIn('id', $specialitesIds)
             ->get();
+        $specialites2=$specialites2->unique();
 
         $dossiers = Dossier::where('current_status','<>','Cloture')
              ->get();
@@ -730,6 +731,18 @@ class PrestatairesController extends Controller
         return $count;
 
     }
+
+    public static function listesprest(Request $request)
+    {
+        $typeprest =  $request->get('typeprestation');
+
+
+        $relations = DB::table('specialites_typeprestations')
+            ->where('type_prestation','=',$typeprest)
+            ->pluck('specialite');
+        return $relations;
+    }
+
 
 }
 
