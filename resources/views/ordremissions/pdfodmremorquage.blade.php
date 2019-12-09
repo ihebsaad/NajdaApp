@@ -249,7 +249,14 @@ if (isset($_POST['CB_prerades'])) {if ($_POST['CB_prerades'] === "oui"||($_POST[
 <span style="font-family:'Times New Roman';margin-left:40px;"><?php if (isset($_POST['dhretbaseprev'])) { echo $_POST['dhretbaseprev']; } ?></span>
 			<p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Véhicule: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['lvehicule'])) { echo $_POST['lvehicule']; } ?></span>
-			</p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Chauffeur : </span>
+			</p>
+<p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Carte carburant: </span>
+<span style="font-family:'Times New Roman'"><?php if (isset($_POST['cartecarburant'])) { echo $_POST['cartecarburant']; } ?></span>
+			</p>
+<p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Carte Telepeage: </span>
+<span style="font-family:'Times New Roman'"><?php if (isset($_POST['cartetelepeage'])) { echo $_POST['cartetelepeage']; } ?></span>
+			</p>
+			<p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Chauffeur : </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['lchauff'])) { echo $_POST['lchauff']; } ?></span>
 			</p><p style="margin:0pt 0pt 0pt 20.9pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Heures sup ?: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['heuressup'])) { echo $_POST['heuressup']; } ?></span>

@@ -10,10 +10,13 @@ use PDF as PDF4;
 use PDF as PDFcomp;
 use App\OrdreMission ;
 use App\Attachement ;
+use App\Equipement ;
+use App\Voiture ;
 use App\OMTaxi;
 use App\OMAmbulance;
 use App\OMRemorquage;
 use App\OMMedicInternational;
+use App\OMMedicEquipement;
 use App\Mission;
 use App\Dossier;
 
@@ -293,17 +296,19 @@ class OrdreMissionsController extends Controller
 					app('App\Http\Controllers\DossiersController')->updating($reqlieup);
 				}
 
-				if (isset($_POST["reference_customer"]))
-				{
-					$reqrefc = new \Illuminate\Http\Request();
-					$refcustomer = $_POST["reference_customer"];
-	        		$reqrefc->request->add(['dossier' => $iddossnew]);
-					$reqrefc->request->add(['champ' => 'reference_customer']);
-					$reqrefc->request->add(['val' => $refcustomer]);
-					app('App\Http\Controllers\DossiersController')->updating($reqrefc);
-				}
 				// recuperation des infos du dossier parent
-				$dossparent=Dossier::where('id', $iddoss)->first();
+                $dossparent=Dossier::where('id', $iddoss)->first();
+
+                if (isset($_POST["reference_customer"]))
+                {
+                    $reqrefc = new \Illuminate\Http\Request();
+                    //$refcustomer = $_POST["reference_customer"];
+                    $refcustomer = $dossparent["reference_medic"];
+                    $reqrefc->request->add(['dossier' => $iddossnew]);
+                    $reqrefc->request->add(['champ' => 'reference_customer']);
+                    $reqrefc->request->add(['val' => $refcustomer]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqrefc);
+                }
 				// lieu prie en charge
 				if (isset($dossparent["customer_id"]) && ! (empty($dossparent["customer_id"])))
 				{
@@ -469,6 +474,82 @@ class OrdreMissionsController extends Controller
 
         	}
         }
+
+        if (isset($_POST['idvehic']))
+                {// mettre à jour les infos de vehicule
+
+            		$parent = $_POST['parent'];
+            		// verifier la vehicule precedente assigne
+            		$iomparent = OMTaxi::where('id',$parent)->first();
+					// si la mm ou tout nouvel voiture assigne au om
+					if (($iomparent['idvehic'] === "") || ($iomparent['idvehic'] === $_POST['idvehic']))
+					{	
+						if ($_POST['idvehic'] !== "")
+						{
+							
+	            			$idvoiture = $_POST['idvehic'];
+	            			
+							if (isset($_POST['dhdepartmiss']))
+	                		{
+								if ($_POST['dhdepartmiss'] !== "")
+								{
+									$dep= date('Y-m-d H:i:s.000000', strtotime($_POST['dhdepartmiss']));
+								}
+							}
+
+							if (isset($_POST['dhretbaseprev']))
+	                		{
+								if ($_POST['dhretbaseprev'] !== "")
+								{
+									$ret= date('Y-m-d H:i:s.000000', strtotime($_POST['dhretbaseprev']));
+								}
+							}
+
+							if (isset($ret) && isset($dep))
+	                		{
+								Voiture::where('id', $idvoiture)->update(['date_deb_indisponibilite' => $dep,'date_fin_indisponibilite' => $ret]);
+							}
+						}
+					}
+					// si om parent a  voiture assigne et different
+					if (($iomparent['idvehic'] !== "") && ($iomparent['idvehic'] !== $_POST['idvehic']))
+					{
+						//mettre a jour info nouvelle assignation voiture
+						if ($_POST['idvehic'] !== "")
+						{
+							
+	            			$idvoiture = $_POST['idvehic'];
+	            			
+							if (isset($_POST['dhdepartmiss']))
+	                		{
+								if ($_POST['dhdepartmiss'] !== "")
+								{
+									$dep= date('Y-m-d H:i:s.000000', strtotime($_POST['dhdepartmiss']));
+								}
+							}
+
+							if (isset($_POST['dhretbaseprev']))
+	                		{
+								if ($_POST['dhretbaseprev'] !== "")
+								{
+									$ret= date('Y-m-d H:i:s.000000', strtotime($_POST['dhretbaseprev']));
+								}
+							}
+
+							if (isset($ret) && isset($dep))
+	                		{
+								Voiture::where('id', $idvoiture)->update(['date_deb_indisponibilite' => $dep,'date_fin_indisponibilite' => $ret]);
+							}
+						}
+						//mettre a jour info ancienne assignation voiture
+						if ($iomparent['idvehic'] !== "")
+						{
+							
+								Voiture::where('id', $iomparent['idvehic'])->update(['date_deb_indisponibilite' => NULL,'date_fin_indisponibilite' => NULL]);
+						}
+
+					}
+                }
 
     }
 
@@ -794,17 +875,19 @@ class OrdreMissionsController extends Controller
 					app('App\Http\Controllers\DossiersController')->updating($reqlieup);
 				}
 
-				if (isset($_POST["reference_customer"]))
-				{
-					$reqrefc = new \Illuminate\Http\Request();
-					$refcustomer = $_POST["reference_customer"];
-	        		$reqrefc->request->add(['dossier' => $iddossnew]);
-					$reqrefc->request->add(['champ' => 'reference_customer']);
-					$reqrefc->request->add(['val' => $refcustomer]);
-					app('App\Http\Controllers\DossiersController')->updating($reqrefc);
-				}
 				// recuperation des infos du dossier parent
-				$dossparent=Dossier::where('id', $iddoss)->first();
+                $dossparent=Dossier::where('id', $iddoss)->first();
+
+                if (isset($_POST["reference_customer"]))
+                {
+                    $reqrefc = new \Illuminate\Http\Request();
+                    //$refcustomer = $_POST["reference_customer"];
+                    $refcustomer = $dossparent["reference_medic"];
+                    $reqrefc->request->add(['dossier' => $iddossnew]);
+                    $reqrefc->request->add(['champ' => 'reference_customer']);
+                    $reqrefc->request->add(['val' => $refcustomer]);
+                    app('App\Http\Controllers\DossiersController')->updating($reqrefc);
+                }
 				// lieu prie en charge
 				if (isset($dossparent["customer_id"]) && ! (empty($dossparent["customer_id"])))
 				{
@@ -1249,17 +1332,19 @@ class OrdreMissionsController extends Controller
                     app('App\Http\Controllers\DossiersController')->updating($reqlieup);
                 }
 
+                // recuperation des infos du dossier parent
+                $dossparent=Dossier::where('id', $iddoss)->first();
+
                 if (isset($_POST["reference_customer"]))
                 {
                     $reqrefc = new \Illuminate\Http\Request();
-                    $refcustomer = $_POST["reference_customer"];
+                    //$refcustomer = $_POST["reference_customer"];
+                    $refcustomer = $dossparent["reference_medic"];
                     $reqrefc->request->add(['dossier' => $iddossnew]);
                     $reqrefc->request->add(['champ' => 'reference_customer']);
                     $reqrefc->request->add(['val' => $refcustomer]);
                     app('App\Http\Controllers\DossiersController')->updating($reqrefc);
                 }
-                // recuperation des infos du dossier parent
-                $dossparent=Dossier::where('id', $iddoss)->first();
                 // lieu prie en charge
                 if (isset($dossparent["customer_id"]) && ! (empty($dossparent["customer_id"])))
                 {
@@ -1422,7 +1507,85 @@ class OrdreMissionsController extends Controller
                 else { $result2 = $omremorquage2->update($request->all()); }
 
             }
-        }}
+        }
+
+        if (isset($_POST['idvehic']))
+                {// mettre à jour les infos de vehicule
+
+            		$parent = $_POST['parent'];
+            		// verifier la vehicule precedente assigne
+            		$iomparent = OMRemorquage::where('id',$parent)->first();
+					// si la mm ou tout nouvel voiture assigne au om
+					if (($iomparent['idvehic'] === "") || ($iomparent['idvehic'] === $_POST['idvehic']))
+					{	
+						if ($_POST['idvehic'] !== "")
+						{
+							
+	            			$idvoiture = $_POST['idvehic'];
+	            			
+							if (isset($_POST['dhdepartmiss']))
+	                		{
+								if ($_POST['dhdepartmiss'] !== "")
+								{
+									$dep= date('Y-m-d H:i:s.000000', strtotime($_POST['dhdepartmiss']));
+								}
+							}
+
+							if (isset($_POST['dhretbaseprev']))
+	                		{
+								if ($_POST['dhretbaseprev'] !== "")
+								{
+									$ret= date('Y-m-d H:i:s.000000', strtotime($_POST['dhretbaseprev']));
+								}
+							}
+
+							if (isset($ret) && isset($dep))
+	                		{
+								Voiture::where('id', $idvoiture)->update(['date_deb_indisponibilite' => $dep,'date_fin_indisponibilite' => $ret]);
+							}
+						}
+					}
+					// si om parent a  voiture assigne et different
+					if (($iomparent['idvehic'] !== "") && ($iomparent['idvehic'] !== $_POST['idvehic']))
+					{
+						//mettre a jour info nouvelle assignation voiture
+						if ($_POST['idvehic'] !== "")
+						{
+							
+	            			$idvoiture = $_POST['idvehic'];
+	            			
+							if (isset($_POST['dhdepartmiss']))
+	                		{
+								if ($_POST['dhdepartmiss'] !== "")
+								{
+									$dep= date('Y-m-d H:i:s.000000', strtotime($_POST['dhdepartmiss']));
+								}
+							}
+
+							if (isset($_POST['dhretbaseprev']))
+	                		{
+								if ($_POST['dhretbaseprev'] !== "")
+								{
+									$ret= date('Y-m-d H:i:s.000000', strtotime($_POST['dhretbaseprev']));
+								}
+							}
+
+							if (isset($ret) && isset($dep))
+	                		{
+								Voiture::where('id', $idvoiture)->update(['date_deb_indisponibilite' => $dep,'date_fin_indisponibilite' => $ret]);
+							}
+						}
+						//mettre a jour info ancienne assignation voiture
+						if ($iomparent['idvehic'] !== "")
+						{
+							
+								Voiture::where('id', $iomparent['idvehic'])->update(['date_deb_indisponibilite' => NULL,'date_fin_indisponibilite' => NULL]);
+						}
+
+					}
+                }
+
+    }
 
     public function export_pdf_odmmedicinternationnal(Request $request)
     {
@@ -1435,6 +1598,9 @@ class OrdreMissionsController extends Controller
         {
             if (isset($_POST['templatedocument'])&& (! empty($_POST['templatedocument'])))
             {
+                
+
+
                 if ($_POST['templatedocument'] === "remplace")
                 {
                     //echo "remplacement";
@@ -1647,17 +1813,19 @@ class OrdreMissionsController extends Controller
                     app('App\Http\Controllers\DossiersController')->updating($reqlieup);
                 }
 
+                // recuperation des infos du dossier parent
+                $dossparent=Dossier::where('id', $iddoss)->first();
+
                 if (isset($_POST["reference_customer"]))
                 {
                     $reqrefc = new \Illuminate\Http\Request();
-                    $refcustomer = $_POST["reference_customer"];
+                    //$refcustomer = $_POST["reference_customer"];
+                    $refcustomer = $dossparent["reference_medic"];
                     $reqrefc->request->add(['dossier' => $iddossnew]);
                     $reqrefc->request->add(['champ' => 'reference_customer']);
                     $reqrefc->request->add(['val' => $refcustomer]);
                     app('App\Http\Controllers\DossiersController')->updating($reqrefc);
                 }
-                // recuperation des infos du dossier parent
-                $dossparent=Dossier::where('id', $iddoss)->first();
                 // lieu prie en charge
                 if (isset($dossparent["customer_id"]) && ! (empty($dossparent["customer_id"])))
                 {
@@ -1815,6 +1983,39 @@ class OrdreMissionsController extends Controller
         }
 
 
+        if (isset($_POST['CL_puces']))
+                {// mettre à jour les infos des equipement PUCES SIM
+                	$len = count($_POST['CL_puces']);
+						for ($i=0; $i < $len; $i++)
+						{
+							if ($_POST['CL_puces'][$i] !== "")
+							{
+								
+                    			$parent = $_POST['parent'];
+                    			$idpuce = $_POST['CL_puces'][$i];
+                    			//$count = OMMedicEquipement::where('idom',$parent)->where('idequipement',$idpuce)->count();
+                    			// ajout des puces dans la table ommedic_equipements
+                    			if (isset($result))
+                    			{
+                    				$idom=$ommedicinternationnal->id;
+                    				OMMedicEquipement::create(['idom'=>$idom,'idequipement'=>$idpuce, 'type'=>'puce']);
+                    			}
+                    			if (isset($result2))
+                    			{
+                    				$idom=$ommedicinternationnal2->id;
+                    				OMMedicEquipement::create(['idom'=>$idom,'idequipement'=>$idpuce, 'type'=>'puce']);
+                    			}
+								// mettre à jour la date de dispo de lequipement
+								$d=strtotime($_POST['CL_date_heure_departmission']);
+								$dd=date("d/m/Y", $d);
+
+								$d2=strtotime($_POST['CL_date_heure_arrivebase']);
+								$df=date("d/m/Y", $d2);
+
+	    						Equipement::where('id', $idpuce)->update(['date_deb_indisponibilite' => $dd,'date_fin_indisponibilite' => $df]);
+							}
+						}
+                }
 
 
 
