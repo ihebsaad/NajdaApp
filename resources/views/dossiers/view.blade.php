@@ -974,9 +974,16 @@ $interv = PrestationsController::PrestById($prest);
                                         </div>
 
                                         <div class="btn-group" style="margin-right: 10px">
+<?php
+ if (strstr($doc->titre, 'PEC'))
+                                {
+?>                                            
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,214,214) !important;" id="btnann">
                                                 <a style="color:black"  onclick="annuledoc('<?php echo $doc->titre; ?>',<?php echo $doc->id; ?>,<?php echo $templatedoc; ?>);" href="#" > <i class="far fa-window-close"></i> Annuler</a>
                                             </button>
+                                <?php
+                                            }
+                                        ?>
                                         </div>
                                         <?php
                                             }

@@ -1,10 +1,11 @@
 <?php
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
-if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; }
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; }
+if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];$subscriber_name2=$_GET['subscriber_name']; }
+if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname'];$subscriber_lastname2=$_GET['subscriber_lastname']; }
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
+if (isset($_GET['vehicule_marque'])) {$vehicule_type=$_GET['vehicule_marque'];}
 if (isset($_GET['vehicule_immatriculation'])) {$vehicule_immatriculation=$_GET['vehicule_immatriculation'];}
 if (isset($_GET['subscriber_phone_cell'])) {$subscriber_phone_cell=$_GET['subscriber_phone_cell'];}
 if (isset($_GET['CL_phone'])) {$CL_phone=$_GET['CL_phone'];}
@@ -14,7 +15,15 @@ if (isset($_GET['CL_type_contenneur'])) {$CL_type_contenneur=$_GET['CL_type_cont
 if (isset($_GET['CL_navire'])) {$CL_navire=$_GET['CL_navire'];}
 if (isset($_GET['CL_text'])) {$CL_text=$_GET['CL_text'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
+if (isset($_GET['agent__lastname'])) {$agent__lastname=$_GET['agent__lastname']; }
+if (isset($_GET['agent__signature'])) {$agent__signature=$_GET['agent__signature']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
+if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
+if (isset($_GET['idtaggop'])) 
+    {
+        $idtaggop=$_GET['idtaggop']; 
+    }
+?>
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>aktbe5amb5r5zsea5gbc4ywhyj8423vq_PEC_Cargo+</title>
@@ -261,10 +270,10 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p class=rvps4><span class=rvts4>PRISE EN CHARGE CARGO</span></p>
 <p class=rvps4><span class=rvts5><br></span></p>
 <p><span class=rvts6>Client </span><span class=rvts7>: <input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /></span></p>
-<p class=rvps5><span class=rvts8>Nom Assuré : <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span></p>
-<p><span class=rvts6>Prénom : <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
-<p><span class=rvts6>Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span></p>
-<p><span class=rvts6>Véhicule: <input name="vehicule_type" placeholder="Type et marque du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> </span></p>
+<p class=rvps5><span class=rvts8>Nom Assuré : <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> </span></p>
+<p><span class=rvts6>Prénom : <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span></p>
+<p><span class=rvts6>Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input></span></p>
+<p><span class=rvts6>Véhicule :  <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input> <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> </span></p>
 <p><span class=rvts6>Immatriculation : <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input></span></p>
 <p class=rvps5><span class=rvts8>Téléphone propriétaire</span><span class=rvts9> :<input name="subscriber_phone_cell"id="subscriber_phone_cell" placeholder="num de téléphone du l'abonnée"  value="<?php if(isset ($subscriber_phone_cell)) echo $subscriber_phone_cell; ?>"></input> <input name="CL_phone" placeholder="num de téléphone"  value="<?php if(isset ($CL_phone)) echo $CL_phone; ?>"></input></span></p>
 <p class=rvps6><span class=rvts10>Réception à l</span><span class=rvts11>’</span><span class=rvts10>étranger</span><span class=rvts12> : <input name="CL_cordonnes_etranger" placeholder="Cordonnes etranger" value="<?php if(isset ($CL_cordonnes_etranger)) echo $CL_cordonnes_etranger; ?>"></input></span></p>
@@ -287,7 +296,8 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p><span class=rvts7><br></span></p>
 <p><span class=rvts7><br></span></p>
 <p><span class=rvts7>P/ la Gérante</span></p>
-<p class=rvps1><span class=rvts7><input name="agent__name" id="agent__name" placeholder="nom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" > </input></span></p>
+<p class=rvps1><span class=rvts9><input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($agent__lastname)) echo $agent__lastname; ?>" /> </span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($agent__signature)) echo $agent__signature; ?>" /></span></p>
 <p><span class=rvts7>Plateau d</span><span class=rvts25>’</span><span class=rvts7>assistance technique</span></p>
 <p class=rvps1><span class=rvts7>« courrier électronique, sans signature »</span></p>
 </body></html>

@@ -1,17 +1,21 @@
 <?php
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
-if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; }
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; }
+if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; $subscriber_name2=$_GET['subscriber_name'];  }
+if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname'];$subscriber_lastname2=$_GET['subscriber_lastname']; }
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
 if (isset($_GET['subscriber_phone_cell'])) {$subscriber_phone_cell=$_GET['subscriber_phone_cell'];}
 if (isset($_GET['CL_date_debut_location'])) {$CL_date_debut_location=$_GET['CL_date_debut_location'];}
 if (isset($_GET['CL_heure'])) {$CL_heure=$_GET['CL_heure'];}
 if (isset($_GET['CL_date_fin_location'])) {$CL_date_fin_location=$_GET['CL_date_fin_location'];}
+if (isset($_GET['CL_duree_location'])) {$CL_duree_location=$_GET['CL_duree_location'];}
 if (isset($_GET['CL_adresse_livraison'])) {$CL_adresse_livraison=$_GET['CL_adresse_livraison'];}
 if (isset($_GET['CL_categorie'])) {$CL_categorie=$_GET['CL_categorie'];}
 if (isset($_GET['CL_cout_location'])) {$CL_cout_location=$_GET['CL_cout_location'];}
+if (isset($_GET['CL_cout_total'])) {$CL_cout_total=$_GET['CL_cout_total'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
+if (isset($_GET['agent__lastname'])) {$agent__lastname=$_GET['agent__lastname']; }
+if (isset($_GET['agent__signature'])) {$agent__signature=$_GET['agent__signature']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -266,17 +270,17 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p class=rvps4><span class=rvts4>PRISE EN CHARGE LOCATION DE VOITURE</span></p>
 <p class=rvps4><span class=rvts5><br></span></p>
 <p><span class=rvts6>Client </span><span class=rvts7>: </span><span class=rvts6><input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /></span></p>
-<p class=rvps5><span class=rvts8>Nom Assuré : <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span></p>
-<p><span class=rvts6>Prénom : <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
-<p><span class=rvts6>Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span></p>
+<p class=rvps5><span class=rvts8>Nom Assuré :  <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
+<p><span class=rvts6>Prénom :<input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> </span></p>
+<p><span class=rvts6>Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input></span></p>
 <p class=rvps6><span class=rvts9>Téléphone assuré :</span><span class=rvts8><input name="subscriber_phone_cell"id="subscriber_phone_cell" placeholder="num de téléphone du l'abonnée"  value="<?php if(isset ($subscriber_phone_cell)) echo $subscriber_phone_cell; ?>"></input></span></p>
 <p class=rvps6><span class=rvts9>Date début de location: <input type="datetime-local" name="CL_date_debut_location" placeholder="Date Debut Location" value="<?php if(isset ($CL_date_debut_location)) echo $CL_date_debut_location; ?>"></input>RDV avec l</span><span class=rvts10>’</span><span class=rvts9>assuré: <input name="CL_heure" placeholder="Heure" value="<?php if(isset ($CL_heure)) echo $CL_heure; ?>"></input></span></p>
 <p class=rvps6><span class=rvts9>Date fin de location:  <input type="datetime-local" name="CL_date_fin_location" placeholder="Date Fin Location" value="<?php if(isset ($CL_date_fin_location)) echo $CL_date_fin_location; ?>"></input></span></p>
-<p class=rvps6><span class=rvts9>Durée de la location :</span><span class=rvts11> </span><span class=rvts12>=date_début_location_-_date_fin_location</span></p>
+<p class=rvps6><span class=rvts9>Durée de la location :</span><span class=rvts10> </span><span class=rvts11><input name="CL_duree_location"  id="CL_duree_location" placeholder="Duree Location" value="<?php if(isset ($CL_duree_location)) echo $CL_duree_location; ?>"  onchange=" keyUpHandler(this)"></input></span></p>
 <p class=rvps6><span class=rvts9>Adresse de livraison :  <input name="CL_adresse_livraison" placeholder="Adresse Livraison" value="<?php if(isset ($CL_adresse_livraison)) echo $CL_adresse_livraison; ?>"></input> </span></p>
 <p class=rvps6><span class=rvts9>Type véhicule : <input name="CL_categorie" placeholder="Categorie" value="<?php if(isset ($CL_categorie)) echo $CL_categorie; ?>"></input></span></p>
 <p class=rvps6><span class=rvts9>Coût de location journalier : <input name="CL_cout_location" placeholder="Cout Location" value="<?php if(isset ($CL_cout_location)) echo $CL_cout_location; ?>"></input></span></p>
-<p class=rvps6><span class=rvts9>Coût total : </span><span class=rvts12>numéraire=coût_journalier_x_durée_location</span></p>
+<p class=rvps6><span class=rvts9>Coût total : </span><span  style="display:inline-block; "><input name="CL_cout_total" id="CL_cout_total" placeholder="Cout total Location" value="<?php if(isset ($CL_cout_total)) echo $CL_cout_total; ?>" onKeyUp=" montantverif(this) " ></input></span></p>
 <p class=rvps5><span class=rvts13><br></span></p>
 <p class=rvps7><span class=rvts13>Suite</span><span class=rvts14> </span><span class=rvts13>à</span><span class=rvts14> </span><span class=rvts13>notre</span><span class=rvts14> </span><span class=rvts13>entretien</span><span class=rvts14> </span><span class=rvts13>téléphonique,</span><span class=rvts14> </span><span class=rvts13>nous</span><span class=rvts14> </span><span class=rvts13>vous</span><span class=rvts14> </span><span class=rvts13>confirmons</span><span class=rvts14> </span><span class=rvts13>la</span><span class=rvts14> </span><span class=rvts13>prise</span><span class=rvts14> </span><span class=rvts13>en</span><span class=rvts14> </span><span class=rvts13>charge</span><span class=rvts14> </span><span class=rvts13>des</span><span class=rvts14> </span><span class=rvts13>frais</span><span class=rvts14> </span><span class=rvts13>de</span><span class=rvts14> </span><span class=rvts13>location</span><span class=rvts14> </span><span class=rvts13>d</span><span class=rvts15>’</span><span class=rvts13>une</span><span class=rvts14> </span><span class=rvts13>voiture</span><span class=rvts14> </span><span class=rvts13>tel</span><span class=rvts14> </span><span class=rvts13>que</span><span class=rvts14> </span><span class=rvts13>spécifié</span><span class=rvts14> </span><span class=rvts13>ci-dessus. </span></p>
 <p class=rvps8><span class=rvts13><br></span></p>
@@ -292,9 +296,53 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p><span class=rvts7>Merci de votre collaboration.</span></p>
 <p><span class=rvts7><br></span></p>
 <p><span class=rvts7>P/ la Gérante</span></p>
-<p class=rvps1><span class=rvts7> <input name="agent__name" id="agent__name" placeholder="nom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" > </input></span></p>
-<p><span class=rvts7>Plateau d</span><span class=rvts24>’</span><span class=rvts7>assistance technique</span></p>
+<p class=rvps1><span class=rvts9><input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($agent__lastname)) echo $agent__lastname; ?>" /> </span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($agent__signature)) echo $agent__signature; ?>" /></span></p>
+<span class=rvts7>Plateau d</span><span class=rvts24>’</span><span class=rvts7>assistance technique</span></p>
 <p class=rvps1><span class=rvts7>« courrier électronique, sans signature »</span></p>
 <p class=rvps10><span class=rvts3><br></span></p>
+<script type="text/javascript">
+    function keyUpHandler(obj){
+        var coutloc=document.getElementById("CL_cout_location").value;
+        var dureeloc=document.getElementById("CL_duree_location").value;
+        document.getElementById("CL_cout_total").value = (parseInt(coutloc) * parseInt(dureeloc));
+        document.getElementById("CL_cout_total").onchange();
+        }//fin de keypressHandler
+
+    function calculduree() {
+        var inputdate1 = document.getElementsByName("CL_date_debut_location")[0].value;
+        var inputdate2 = document.getElementById("CL_date_fin_location").value;
+        var date1 = inputdate1.substring(0, 10);
+        var date2 = inputdate2.substring(0, 10);
+
+        /*if (date1.indexOf('/') > -1)
+        {
+            var date1Parts = date1.split("/"); }
+        if (date1.indexOf('-') > -1)
+        {
+            var date1Parts = date1.split("-"); }
+        if (date2.indexOf('/') > -1)
+        {
+            var date2Parts = date2.split("/"); }
+        if (date2.indexOf('-') > -1)
+        {
+            var date2Parts = date2.split("-"); }
+
+        // month is 0-based, that's why we need dataParts[1] - 1
+        var datedeb = new Date(+date1Parts[2], date1Parts[1] - 1, +date1Parts[0]); 
+        var datefin = new Date(+date2Parts[2], date2Parts[1] - 1, +date2Parts[0]); */
+        var datedeb = new Date(date1);
+        var datefin = new Date(date2);
+
+
+
+        diffTime = Math.abs(datefin.getTime() - datedeb.getTime());
+        diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+       // alert(diffDays);
+        document.getElementById("CL_duree_location").value = diffDays;
+        document.getElementById("CL_duree_location").onchange();
+    }
+
+</script>
 </body></html>
 
