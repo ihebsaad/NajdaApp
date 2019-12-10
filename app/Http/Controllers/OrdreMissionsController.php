@@ -19,7 +19,6 @@ use App\OMMedicInternational;
 use App\OMMedicEquipement;
 use App\Mission;
 use App\Dossier;
-use App\Voiture;
 
 
 class OrdreMissionsController extends Controller
