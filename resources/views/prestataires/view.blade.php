@@ -45,7 +45,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Civilité</label>
-                                <select onchange="changing(this)"   class="form-control input" name="civilite" id="civilite"  value="{{ $prestataire->civilite }}">
+                                <select onchange="changing(this);"   class="form-control input" name="civilite" id="civilite"  value="{{ $prestataire->civilite }}">
                                     <option <?php if ($prestataire->civilite ==''){echo 'selected="selected"';} ?>></option>
                                     <option <?php if ($prestataire->civilite =='Mr'){echo 'selected="selected"';} ?> value="Mr">Mr</option>
                                     <option <?php if ($prestataire->civilite =='Mme'){echo 'selected="selected"';} ?>value="Mme">Mme</option>
@@ -58,7 +58,7 @@
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Nom *</label>
-                                <input onchange="changing(this)" type="text" class="form-control input" name="name" id="name"  value="{{ $prestataire->name }}">
+                                <input onchange="changingn(this)" type="text" class="form-control input" name="name" id="name"  value="{{ $prestataire->name }}">
                             </div>
                         </div>
                         <div class="col-md-5">
@@ -556,7 +556,7 @@
 
 
     <!-- Modal Evaluation-->
-    <div class="modal fade" id="createeval" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal fade" id="createeval"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -707,7 +707,7 @@
 
 
     <!-- Modal Tels -->
-    <div class="modal fade" id="adding1" tabindex="-1" role="dialog" aria-labelledby="exampleModal1" aria-hidden="true">
+    <div class="modal fade" id="adding1"    role="dialog" aria-labelledby="exampleModal1" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -782,7 +782,7 @@
 
 
     <!-- Modal email -->
-    <div class="modal fade" id="adding2" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal fade" id="adding2"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -847,7 +847,7 @@
 
 
     <!-- Modal Fax -->
-    <div class="modal fade" id="adding3" tabindex="-1" role="dialog" aria-labelledby="exampleModal3" aria-hidden="true">
+    <div class="modal fade" id="adding3"    role="dialog" aria-labelledby="exampleModal3" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1067,7 +1067,32 @@
         // }
     }
 
+       function changingn(elm) {
+        var champ=elm.id;
 
+        var val =document.getElementById(champ).value;
+        //  var type = $('#type').val();
+        var prestataire = $('#idpres').val();
+         if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('prestataires.updating') }}",
+            method: "POST",
+            data: {prestataire: prestataire , champ:champ ,val:val, _token: _token},
+            success: function (data) {
+                $('#'+champ).animate({
+                    opacity: '0.3',
+                });
+                $('#'+champ).animate({
+                    opacity: '1',
+                });
+
+            }
+        });
+         } else {
+			alert('le nom est obligatoire');
+         }
+    }
 
     function changingAddress(id,champ,elm) {
         var champid=elm.id;

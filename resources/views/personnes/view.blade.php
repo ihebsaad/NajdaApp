@@ -137,7 +137,7 @@ if ($personne->tel!=''){
 
 
 <!-- Modal SMS -->
-<div class="modal fade" id="sendsms" tabindex="-1" role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
+<div class="modal fade" id="sendsms"    role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -205,7 +205,7 @@ if ($personne->tel!=''){
 
 
 <!-- Modal Liste sms -->
-<div class="modal fade" id="listesms" tabindex="-1" role="dialog" aria-labelledby="liste" aria-hidden="true">
+<div class="modal fade" id="listesms"    role="dialog" aria-labelledby="liste" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

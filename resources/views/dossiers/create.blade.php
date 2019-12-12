@@ -186,7 +186,7 @@ use  \App\Http\Controllers\DocsController;
                                                                 <label for="inputError" class="control-label">Nom de l'assuré *</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input  required type="text" id="subscriber_lastname" name="subscriber_lastname" class="form-control"    >
+                                                                    <input  required type="text" id="subscriber_name" name="subscriber_name" class="form-control"    >
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -195,7 +195,7 @@ use  \App\Http\Controllers\DocsController;
                                                                 <label for="inputError" class="control-label">Prénom de l'assuré   * </label>
 
                                                                 <div class="input-group-control">
-                                                                    <input  required type="text" id="subscriber_name" name="subscriber_name" class="form-control"    >
+                                                                    <input  required type="text" id="subscriber_lastname" name="subscriber_lastname" class="form-control"    >
                                                                 </div>
                                                             </div>
                                                         </div>

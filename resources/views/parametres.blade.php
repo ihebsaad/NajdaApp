@@ -219,7 +219,7 @@
                                 <tr>
                                     <td class="text-primary">Chargé de transport</td>
                                     <td>
-                                        <select onchange="changingseance(this)"  id="charge" name="charge"   class="form-control js-example-placeholder-single">
+                                        <select onchange="changingseance(this)"  id="chargetransport" name="chargetransport"   class="form-control js-example-placeholder-single">
                                             <option    ></option>
                                             @foreach($users as $user  )
                                                 <option
@@ -324,56 +324,56 @@
                                  <tr>
                                      <td class="text-primary">Mot de Passe boite N <small>24ops@najda-assistance.com</small></td>
                                      <td>
-                                         <input  type="password" class="form-control" onchange="changing(this)" id="pass_N" style="width:300px" value="<?php echo $pass_N; ?>"  />
+                                         <input  type="text" class="form-control" onchange="changing(this)" id="pass_N" style="width:300px" value="<?php echo $pass_N; ?>"  />
                                      </td>
                                  </tr>
                                  <tr>
                                      <td class="text-primary">Mot de Passe boite TN <small>taxi@najda-assistance.com</small></td>
                                      <td>
-                                         <input  type="password" class="form-control" onchange="changing(this)" id="pass_TN" style="width:300px" value="<?php echo $pass_TN; ?>"  />
+                                         <input  type="text" class="form-control" onchange="changing(this)" id="pass_TN" style="width:300px" value="<?php echo $pass_TN; ?>"  />
                                      </td>
                                  </tr>
                                  <tr>
                                      <td class="text-primary">Mot de Passe boite TPA <small>tpa@najda-assistance.com</small></td>
                                      <td>
-                                         <input  type="password" class="form-control" onchange="changing(this)" id="pass_TPA" style="width:300px" value="<?php echo $pass_TPA; ?>"  />
+                                         <input  type="text" class="form-control" onchange="changing(this)" id="pass_TPA" style="width:300px" value="<?php echo $pass_TPA; ?>"  />
                                      </td>
                                  </tr>
                                  <tr>
-                                     <td class="text-primary">Mot de Passe boite XP <small>xpress@najda-assistance.com</small></td>
+                                     <td class="text-primary">Mot de Passe boite XP <small>x-press@najda-assistance.com</small></td>
                                      <td>
-                                         <input  type="password" class="form-control" onchange="changing(this)" id="pass_XP" style="width:300px" value="<?php echo $pass_XP; ?>"  />
+                                         <input  type="text" class="form-control" onchange="changing(this)" id="pass_XP" style="width:300px" value="<?php echo $pass_XP; ?>"  />
                                      </td>
                                  </tr>
 
                                  <tr>
                                      <td class="text-primary">Mot de Passe boite VAT <small>hotels.vat@medicmultiservices.com</small></td>
                                            <td>
-                                               <input  type="password" class="form-control" onchange="changing(this)" id="pass_VAT" style="width:300px"  value="<?php echo $pass_VAT; ?>"  />
+                                               <input  type="text" class="form-control" onchange="changing(this)" id="pass_VAT" style="width:300px"  value="<?php echo $pass_VAT; ?>"  />
                                            </td>
                                        </tr>
                                        <tr>
                                            <td class="text-primary">Mot de Passe boite MEDIC <small>assistance@medicmultiservices.com</small></td>
                                            <td>
-                                               <input  type="password" class="form-control" onchange="changing(this)" id="pass_MEDIC" style="width:300px"  value="<?php echo $pass_MEDIC; ?>"  />
+                                               <input  type="text" class="form-control" onchange="changing(this)" id="pass_MEDIC" style="width:300px"  value="<?php echo $pass_MEDIC; ?>"  />
                                            </td>
                                        </tr>
                                        <tr>
                                            <td class="text-primary">Mot de Passe boite TM <small>ambulance.transp@medicmultiservices.com</small></td>
                                            <td>
-                                               <input  type="password" class="form-control" onchange="changing(this)" id="pass_TM" style="width:300px"  value="<?php echo $pass_TM; ?>"  />
+                                               <input  type="text" class="form-control" onchange="changing(this)" id="pass_TM" style="width:300px"  value="<?php echo $pass_TM; ?>"  />
                                            </td>
                                        </tr>
                                        <tr>
                                            <td class="text-primary">Mot de Passe boite TV <small>vat.transp@medicmultiservices.com</small></td>
                                            <td>
-                                               <input  type="password" class="form-control" onchange="changing(this)" id="pass_TV" style="width:300px" value="<?php echo $pass_TV; ?>"  />
+                                               <input  type="text" class="form-control" onchange="changing(this)" id="pass_TV" style="width:300px" value="<?php echo $pass_TV; ?>"  />
                                            </td>
                                        </tr>
                                        <tr>
                                            <td class="text-primary">Mot de Passe boite MI <small>operations@medicinternational.tn</small></td>
                                            <td>
-                                               <input  type="password" class="form-control" onchange="changing(this)" id="pass_MI" style="width:300px" value="<?php echo $pass_MI; ?>"  />
+                                               <input  type="text" class="form-control" onchange="changing(this)" id="pass_MI" style="width:300px" value="<?php echo $pass_MI; ?>"  />
                                            </td>
                                        </tr>
 

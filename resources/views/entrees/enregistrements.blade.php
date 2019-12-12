@@ -100,7 +100,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                 $(this).html( '<input class="searchfield" type="text"   />' );
             } );
             var table = $('#mytable').DataTable({
-                "aaSorting": [],
+                //"aaSorting": [],
+				order:[],
                 orderCellsTop: true,
                 dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
                 responsive:true,

@@ -140,6 +140,7 @@
                                     <option value="chef.plateau@najda-assistance.com">chef.plateau@najda-assistance.com</option>
                                     <option value="mohsalah.harzallah@gmail.com">mohsalah.harzallah@gmail.com</option>
                                     <option value="mahmoud.helali@gmail.com">mahmoud.helali@gmail.com</option>
+                                    <option value="24ops@najda-assistance.com">24ops@najda-assistance.com</option>
                                 </select>
                             </div>
                         </div>
@@ -161,7 +162,8 @@
                                     <option value="chef.plateau@najda-assistance.com">chef.plateau@najda-assistance.com</option>
                                     <option value="mohsalah.harzallah@gmail.com">mohsalah.harzallah@gmail.com</option>
                                     <option value="mahmoud.helali@gmail.com">mahmoud.helali@gmail.com</option>
-                                </select>
+                                    <option value="24ops@najda-assistance.com">24ops@najda-assistance.com</option>
+							  </select>
                             </div>
                         </div>
                     </div>
@@ -193,7 +195,8 @@
                             <select id="attachs"  class="itemName form-control col-lg-12" style="" name="attachs[]"  multiple  value="$('#attachs').val()">
                                 <option></option>
                                 @foreach($attachements as $attach)
-                                    <option value="<?php echo $attach->id;?>"> <?php echo $attach->nom;?> - <small><?php echo date('d/m/Y H:i', strtotime($attach->created_at)); ?></small></option>
+                                    <option value="<?php echo $attach->id;?>"> <?php echo $attach->nom;?></option>
+                               <!--     <option value="<?php // echo $attach->id;?>"> <?php //echo $attach->nom;?> - <small><?php // echo date('d/m/Y H:i', strtotime($attach->created_at)); ?></small></option>-->
                                 @endforeach
                             </select>
                         </div>

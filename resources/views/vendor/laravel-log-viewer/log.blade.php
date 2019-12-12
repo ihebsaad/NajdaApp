@@ -66,7 +66,7 @@
                   <span class="fa fa-{{{$log['level_img']}}}" aria-hidden="true"></span>&nbsp;&nbsp;{{$log['level']}}
                 </td>-->
                <!-- <td class="text">{{$log['context']}}</td>-->
-              <td style="width:15%" class=""><?php $date=$log['date']; $datef = new DateTime($date); echo  date_format($datef, 'd/m/Y   H:i'); ?></td>
+              <td style="width:15%" class=""><?php $date=$log['date']; echo $date; //$datef = new DateTime($date); echo  date_format($datef, 'd/m/Y   H:i'); ?></td>
               <td style="width:75%" class="text">
 
                 {{{$log['text']}}}

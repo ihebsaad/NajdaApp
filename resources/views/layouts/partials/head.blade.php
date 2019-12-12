@@ -626,18 +626,18 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
         checkNotifs();
        // checkemails();	//test
-     //    checkemails1();  // 24ops
-       //  checkemails2();  // VAT
-      //   checkemails3(); //MEDIC
-      //   checkemails4();  //TM
-       //  checkemails5();   //TV
-       //  checkemails6(); // MI
-      //   checkemails7();   // TPA
-       //  checkemails8();   //TN
-     //    checkemails9();  //XPRESS
-      //  checksms();
-      //   checkboite();
-       //  checkfax();
+     /*    checkemails1();  // 24ops
+         checkemails2();  // VAT
+         checkemails3(); //MEDIC
+         checkemails4();  //TM
+         checkemails5();   //TV
+         checkemails6(); // MI
+         checkemails7();   // TPA
+         checkemails8();   //TN
+         checkemails9();  //XPRESS
+        checksms();
+         checkboite();
+         checkfax();*/
          checkdemandes();
     });
 </script>

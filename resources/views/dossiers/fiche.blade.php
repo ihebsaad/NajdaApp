@@ -406,7 +406,7 @@ use  \App\Http\Controllers\DocsController;
                                                                             <label for="inputError" class="control-label">Nom de l'assuré </label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="subscriber_lastname" name="subscriber_lastname" class="form-control" value="{{ $dossier->subscriber_lastname }}"  >
+                                                                                <input onchange="changing(this)" type="text" id="subscriber_name" name="subscriber_name" class="form-control" value="{{ $dossier->subscriber_name }}"  >
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -415,7 +415,7 @@ use  \App\Http\Controllers\DocsController;
                                                                             <label for="inputError" class="control-label">Prénom de l'assuré *</label>
 
                                                                             <div class="input-group-control">
-                                                                                <input onchange="changing(this)" type="text" id="subscriber_name" name="subscriber_name" class="form-control"  value="{{ $dossier->subscriber_name }}" >
+                                                                                <input onchange="changing(this)" type="text" id="subscriber_lastname" name="subscriber_lastname" class="form-control"  value="{{ $dossier->subscriber_lastname }}" >
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -550,7 +550,7 @@ use  \App\Http\Controllers\DocsController;
                                                                         <h4><i class="fa fa-lg fa-user"></i> Numéros Tels</h4>
                                                                     </div>
                                                                     <div class="col-md-4">
-                                                                        <span style="float:right" id="addtel" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding6"><b><i class="fa fa-user"></i> Ajouter un numéro de téléphone</b></span>
+                                                                        <span style="float:right" id="addtel" class="btn btn-md btn-default" data-toggle="modal" data-target="#adding6" ><b><i class="fa fa-user"></i> Ajouter un numéro de téléphone</b></span>
                                                                     </div>
 
                                                                 </div>
@@ -588,7 +588,7 @@ use  \App\Http\Controllers\DocsController;
 
                                                                 <div class="row" style="margin-top:50px">
                                                                     <div class="col-md-8">
-                                                                        <h4><i class="fa fa-lg fa-user"></i> Emails </h4>
+                                                                        <h4><i class="fa fa-lg fa-user"></i> Adresses Emails </h4>
                                                                     </div>
                                                                     <div class="col-md-4">
                                                                         <span style="float:right" id="addemail" class="btn btn-md btn-default"   data-toggle="modal" data-target="#adding7"><b><i class="fa fa-user"></i> Ajouter une adresse email</b></span>
@@ -1584,7 +1584,10 @@ use  \App\Http\Controllers\DocsController;
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <?php $idagent=$dossier->user_id; $creator=UsersController::ChampById('name',$idagent).' '.UsersController::ChampById('lastname',$idagent); $createdat=  date('d/m/Y H:i', strtotime($dossier->created_at ))   ;?>
+                                <?php $idagent=$dossier->user_id; $creator=UsersController::ChampById('name',$idagent).' '.UsersController::ChampById('lastname',$idagent);
+                                if($dossier->created==null){ $createdat=  date('d/m/Y H:i', strtotime($dossier->created_at ));}else{
+                                $createdat=  date('d/m/Y H:i', strtotime($dossier->created ));}
+                                ;?>
                                 Dossier créé par <B><?php echo $creator ;?></B> - Date :<?php echo $createdat ?>
                                 <!--   <div class="form-actions right">
                                        <button type="button" id="editDos" class="btn btn-sm btn-info">Enregistrer</button>
@@ -1618,7 +1621,7 @@ $iduser=$CurrentUser->id;
 
 
 <!-- Modal Email
-<div class="modal fade" id="createemail" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="createemail"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -1682,7 +1685,7 @@ $iduser=$CurrentUser->id;
 </div>
 -->
 <!-- Modal Document-->
-<div class="modal fade" id="generatedoc" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="generatedoc"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -1738,7 +1741,7 @@ $iduser=$CurrentUser->id;
     </div>
 </div>
 <!-- Modal template html doc-->
-<div class="modal fade" id="templatehtmldoc" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="templatehtmldoc"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document" style="width:900px;height: 450px">
         <div class="modal-content">
             <div class="modal-header">
@@ -1775,7 +1778,7 @@ $iduser=$CurrentUser->id;
 </div>
 
 <!-- Modal historique doc-->
-<div class="modal fade" id="modalhistodoc" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="modalhistodoc"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document" >
         <div class="modal-content">
             <div class="modal-header">
@@ -1871,7 +1874,7 @@ $iduser=$CurrentUser->id;
 
 
 <!-- Modal Email -->
-<div class="modal fade" id="adding7" tabindex="-1" role="dialog" aria-labelledby="exampleModal7" aria-hidden="true">
+<div class="modal fade" id="adding7"    role="dialog" aria-labelledby="exampleModal7" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -1946,11 +1949,11 @@ $iduser=$CurrentUser->id;
 
 
 <!-- Modal Tel -->
-<div class="modal fade" id="adding6" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="adding6"  role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" >Ajouter une numéro Tel </h5>
+                <h5 class="modal-title" >Ajouter un numéro Tel </h5>
 
             </div>
             <div class="modal-body">
@@ -2028,7 +2031,7 @@ $iduser=$CurrentUser->id;
 
 
 <!-- Modal SMS -->
-<div class="modal fade" id="sendsms" tabindex="-1" role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
+<div class="modal fade" id="sendsms" role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -2098,10 +2101,8 @@ $iduser=$CurrentUser->id;
 <?php } ?>
 
 
-
-
 <!-- Modal -->
-<div class="modal fade" id="observations" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="observations"    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -2173,7 +2174,7 @@ $iduser=$CurrentUser->id;
 
 
 <!-- Modal -->
-<div class="modal fade" id="createAccuse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="createAccuse"    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -2268,7 +2269,7 @@ $iduser=$CurrentUser->id;
 
 <!--Modal Tel-->
 
-<div class="modal fade" id="faireappel" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="faireappel"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="tel">
         <div class="modal-content">
             <div class="modal-header">
@@ -2700,6 +2701,9 @@ function disabling(elm) {
 
 <script>
 
+   /* $('#addtel').click(function () {
+        $('#adding6').modal({show : true});
+    });*/
 
     function changingAddress(id,champ,elm) {
         var champid=elm.id;
@@ -2786,6 +2790,8 @@ function disabling(elm) {
     }
 
     $(function () {
+
+
 
         $('#emaildestinataire').select2({
             filter: true,

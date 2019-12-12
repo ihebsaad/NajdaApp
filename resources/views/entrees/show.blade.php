@@ -71,11 +71,9 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
                                     </a>
                                 <?php } ?>
 
-                                    @can('isAdmin')
                                     <a  href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span> Supprimer
                                     </a>
-                                    @endcan
 
                             </div>
                         </div>

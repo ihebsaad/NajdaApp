@@ -39,7 +39,7 @@ class ClientsController extends Controller
 
         $countries = DB::table('apps_countries')->select('id', 'country_name')->get();
 
-       $clients = Client::orderBy('created_at', 'desc')->get();
+       $clients = Client::orderBy('name', 'asc')->get();
 
         return view('clients.index',[ 'countries'=>$countries,'villes' => $villes], compact('clients'));
     }

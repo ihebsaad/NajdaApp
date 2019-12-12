@@ -35,9 +35,17 @@
               </div>
 
       @endcan
+<?php
+    use App\Entree;
+    $seance =  DB::table('seance')
+        ->where('id','=', 1 )->first();
+    $user = auth()->user();
+    $iduser=$user->id;
 
-          @can('isSupervisor')
-
+    ?>
+           <?php
+          if( ($seance->superviseurmedic==$iduser)  || ($seance->superviseurtech==$iduser) ||($user->user_type=='admin'))
+          { ?>
               <div  class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
                   <a href="{{ route('supervision') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
                       <i class="fas fa-users-cog"></i>
@@ -46,7 +54,7 @@
                   </a>
               </div>
 
-      @endcan
+         <?php } ?>
 
       @cannot('isSupervisor')
           @cannot('isAdmin')

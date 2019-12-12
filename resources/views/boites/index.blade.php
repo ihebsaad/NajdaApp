@@ -26,8 +26,8 @@
             <thead>
             <tr id="headtable">
                 <th style="width:15%">Date</th>
-                <th style="width:30%">Emetteur</th>
-                <th style="width:55%">Sujet</th>
+                <th style="width:20%;max-width:80px">Emetteur</th>
+                <th style="width:35%;max-width:300px">Sujet</th>
             </tr>
             <tr>
                  <th>Emetteur</th>
@@ -38,10 +38,10 @@
             <tbody>
             @foreach($boites as $boite)
                 <tr>
-                    <td style="width:15%"><?php  echo   date('d/m/Y', strtotime($boite->reception)) ; ?></td>
-                    <td style="width:30%">{{$boite->emetteur}}</td>
-                    <td style="width:55%"><a  <?php if($boite['viewed']==0){echo 'style="font-weight:800;"';} ?>href="{{action('BoitesController@show', $boite['id'])}}" ><?php echo $boite['sujet']; ?> </a></td>
-                 </tr>
+                    <td style="width:15%;;font-size:13px"><?php  echo  $boite->reception ;// date('d/m/Y', strtotime($boite->reception)) ; ?></td>
+                    <td class="overme" style="width:20%;max-width:130px;font-size:13px">{{$boite->emetteur}}</td>
+                    <td class="overme" style="width:35%;max-width:350px;;font-size:13px"><a  <?php if($boite['viewed']==0){echo 'style="font-weight:800;"';} ?>href="{{action('BoitesController@show', $boite['id'])}}" ><?php echo $boite['sujet']; ?> </a></td>
+                </tr>
             @endforeach
             </tbody>
         </table>
@@ -81,7 +81,8 @@
             } );
 
             var table = $('#mytable').DataTable({
-                orderCellsTop: true,
+               // orderCellsTop: true,
+			   order:[],
                 dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
                 responsive:true,
                 buttons: [

@@ -62,11 +62,9 @@ use App\Http\Controllers\TagsController;
                                         <span class="fas fa-exclamation-triangle"></span> SPAM
                                     </a>-->
 
-                                    @can('isAdmin')
                                         <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                             <span class="fa fa-fw fa-trash-alt"></span> Supprimer
                                         </a>
-                                    @endcan
                             </div>
                         </div>
 
@@ -328,7 +326,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
 
 <!-- Modal -->
-<div class="modal fade" id="affectfolder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="affectfolder"    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -367,7 +365,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="createfolder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="createfolder"    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -459,7 +457,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
 
 <!-- Modal Accusé -->
-<div class="modal fade" id="sendaccuse" tabindex="-1" role="dialog" aria-labelledby="label" aria-hidden="true">
+<div class="modal fade" id="sendaccuse"    role="dialog" aria-labelledby="label" aria-hidden="true">
     <div class="modal-dialog" >
         <div class="modal-content">
             <div class="modal-header">

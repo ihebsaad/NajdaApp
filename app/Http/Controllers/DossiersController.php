@@ -61,7 +61,7 @@ class DossiersController extends Controller
 
          //   return Dossier::orderBy('created_at', 'desc')->paginate(10000000);
        // });
-        $dossiers = Dossier::orderBy('created_at', 'desc')->paginate(10000000);
+        $dossiers = Dossier::orderBy('created', 'desc')->paginate(10000000);
         return view('dossiers.index', compact('dossiers'));
     }
 
@@ -471,11 +471,19 @@ class DossiersController extends Controller
 
         $nomcompletagent=$prenomagent.' '.$nomagent ;
         $contenu=$message.'<br><br>'.$nomcompletagent.'<br>'.$signature;
+        $cci=array();
+       // array_push($cci,'medic.multiservices@topnet.tn' );///
+        array_push($cci,'saadiheb@gmail.com' );///
+
+        //medic.multiservices@topnet.tn
         try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$contenu) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$cci) {
                 $message
 
                 //    ->to($destinataire)
+                ->cci($cci  ?: [])
+
+                 //   ->cci('medic.multiservices@topnet.tn')
                     ->subject($sujet)
                     ->setBody($contenu, 'text/html');
                 if(isset($to )) {

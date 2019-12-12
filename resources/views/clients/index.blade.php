@@ -96,7 +96,7 @@
 
     ?>
     <!-- Modal -->
-    <div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="create"   role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -186,6 +186,7 @@
 
             var table = $('#mytable').DataTable({
                 orderCellsTop: true,
+				order:[],
                 dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
                 responsive:true,
                 buttons: [

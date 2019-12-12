@@ -68,7 +68,7 @@
                 ?>
 
                 <tr>
-                    <td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $id)}}" ><?php echo '<i>'.$prestataire->civilite .'</i> <b>'. $prestataire->name .'</b> '.$prestataire->prenom; ?></a></td>
+                    <td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $id)}}" ><?php echo ' <b>'. $prestataire->name .'</b> '.$prestataire->prenom; ?></a></td>
                     <td style="font-size:12px;width:20%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
                     <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
                     <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
@@ -76,7 +76,7 @@
                     <td style="font-size:13px;width:10%">
                         @can('isAdmin')
                             <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('PrestatairesController@destroy', $prestataire['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
-                                <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                                <span class="fa fa-fw fa-trash-alt"></span> Supp
                             </a>
                         @endcan</td>
 
@@ -135,7 +135,8 @@
 
             var table = $('#mytable').DataTable({
                 orderCellsTop: true,
-                dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
+               			  order:[],
+ dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
                 responsive:true,
                 buttons: [
 

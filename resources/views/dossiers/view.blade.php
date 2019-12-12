@@ -265,7 +265,13 @@ use \App\Http\Controllers\UsersController;
             <div class="tab-content mar-top">
             
             <div id="tab2" class="tab-pane fade">
-                <?php $idagent=$dossier->user_id; $creator=UsersController::ChampById('name',$idagent).' '.UsersController::ChampById('lastname',$idagent); $createdat=  date('d/m/Y H:i', strtotime($dossier->created_at ))   ;?>
+                <?php $idagent=$dossier->user_id; $creator=UsersController::ChampById('name',$idagent).' '.UsersController::ChampById('lastname',$idagent);
+               if($dossier->created==null){ $createdat=  date('d/m/Y H:i', strtotime($dossier->created_at ));}else{
+                $createdat=  date('d/m/Y H:i', strtotime($dossier->created ));
+                }
+
+
+                ;?>
                 Dossier créé par <B><?php echo $creator ;?></B> - Date :<?php echo $createdat ?>
 
                 <section id="timeline">
@@ -483,7 +489,7 @@ use \App\Http\Controllers\UsersController;
             <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
             <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
             <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
-            <td style="font-size:13px;width:10%">  <button onclick="init('<?php echo $id;?>','<?php echo $prestataire->name.' '.$prestataire->prenom  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> Ajouter une prestation</button>
+            <td style="font-size:13px;width:10%">  <button onclick="init('<?php echo $id;?>','<?php echo $prestataire->name.' '.$prestataire->prenom  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> + Prestation</button>
             </td>
 
         </tr>
@@ -696,7 +702,7 @@ use \App\Http\Controllers\UsersController;
                             <th style="width:20%">Type</th>
                             <th style="width:20%">Spécialité</th>
                             <th style="width:15%">Gouvernorat</th>
-                            <th style="width:10%">Actions</th>
+                            @can('isAdmin')<th style="width:10%">Actions</th>@endcan
                         </tr>
 
                         </thead>
@@ -729,10 +735,11 @@ use \App\Http\Controllers\UsersController;
                                     <?php $gouvernorat= $prestation['gouvernorat'];
                                     echo PrestationsController::GouvById($gouvernorat);  ?>
                                 </td>
-                                <td style="width:10%;"><a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('PrestationsController@destroy', $prestation->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                @can('isAdmin')   <td style="width:10%;"><a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('PrestationsController@destroy', $prestation->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span>
                                     </a>
                                 </td>
+                                    @endcan
                             </tr>
                         @endforeach
                         </tbody>
@@ -753,16 +760,19 @@ use \App\Http\Controllers\UsersController;
                    <tr class="headtable">
 
                        <th style="width:20%">Intervenant</th>
-                       <th style="width:20%;font-size:14px;">Type de prestations</th>
+                       <th style="width:15%;font-size:14px;">Type de prestations</th>
                        <th style="width:15%">Gouvernorats</th>
                        <th style="width:10%">Ville</th>
                        <th style="width:15%">Spécialités</th>
+                       <th style="width:15%">Actions</th>
                    </tr>
 
                    </thead>
                    <tbody>
 
-<?php foreach($prestations as $pr )
+<?php
+$listepr=array();
+foreach($prestations as $pr )
     {          $effectue= $pr['effectue'];
               if($effectue ==1)
                   {
@@ -779,16 +789,18 @@ $interv = PrestationsController::PrestById($prest);
             $typesp=  PrestatairesController::PrestataireTypesP($prest);
             $specs=  PrestatairesController::PrestataireSpecs($prest);
             $ville=PrestatairesController::ChampById('ville',$prest);
-
+        if(!in_array($prest,$listepr)){
             ?> <tr>
-<td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $prest)}}" ><?php echo '<i>'.$interv['civilite'] .'</i> <b>'. $interv['name'] .'</b> '.$interv['prenom']; ?></a></td>
-<td style="font-size:12px;width:20%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
+<td style="font-size:14px;width:20%"><a href="{{action('PrestatairesController@view', $prest)}}" ><?php echo '<i>'.$interv['civilite'] .'</i> <b>'. $interv['name'] .'</b> '.$interv['prenom']; ?></a></td>
+<td style="font-size:12px;width:15%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
 <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
 <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
-<td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td></tr>
-<?php } ?>
+<td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
+<td style="font-size:12px;width:15%"> <button onclick="init('<?php echo $prest;?>','<?php  echo  PrestatairesController::ChampById('name',$prest).' '; echo  PrestatairesController::ChampById('prenom',$prest)  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> Prestation</button></td></tr>
+<?php }
 
-<?php
+}
+array_push($listepr,$pr['prestataire_id']);
 
 }
     ?>
@@ -803,10 +815,11 @@ $interv = PrestationsController::PrestById($prest);
                    <tr class="headtable">
 
                        <th style="width:20%">Intervenant</th>
-                       <th style="width:20%;font-size:14px;">Type de prestations</th>
+                       <th style="width:15%;font-size:14px;">Type de prestations</th>
                        <th style="width:15%">Gouvernorats</th>
                        <th style="width:10%">Ville</th>
                        <th style="width:15%">Spécialités</th>
+                       <th style="width:15%">Actions</th>
                    </tr>
                    </thead>
                    <tbody>
@@ -822,11 +835,14 @@ $interv = PrestationsController::PrestById($prest);
                    $ville= PrestatairesController::ChampById('ville',$prest);
 
                    ?> <tr>
-                       <td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $prest)}}" ><?php echo '<i>'.$interven['civilite'] .'</i> <b>'. $interven['name'] .'</b> '.$interven['prenom']; ?></a></td>
-                       <td style="font-size:12px;width:20%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
+                       <td style="font-size:14px;width:20%"><a href="{{action('PrestatairesController@view', $prest)}}" ><?php echo '<i>'.$interven['civilite'] .'</i> <b>'. $interven['name'] .'</b> '.$interven['prenom']; ?></a></td>
+                       <td style="font-size:12px;width:15%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
                        <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
                        <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
-                       <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td></tr>
+                       <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
+                       <td style="font-size:12px;width:15%"> <button onclick="init('<?php echo $prest;?>','<?php  echo  PrestatairesController::ChampById('name',$prest).' '; echo  PrestatairesController::ChampById('prenom',$prest)  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> Prestation</button></td>
+
+                   </tr>
                    <?php } ?>
 
 
@@ -1459,7 +1475,7 @@ $interv = PrestationsController::PrestById($prest);
 
 
 <!-- Modal Email
-<div class="modal fade" id="createemail" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="createemail"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -1820,7 +1836,7 @@ reference_customer
     </div>
 </div>
 <!-- Modal historique doc-->
-<div class="modal fade" id="modalhistodoc" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="modalhistodoc"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document" >
         <div class="modal-content">
             <div class="modal-header">
@@ -1852,7 +1868,7 @@ reference_customer
     </div>
 </div>
 <!-- Modal historique OM TAXI-->
-<div class="modal fade" id="modalhistoom" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="modalhistoom"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document" >
         <div class="modal-content">
             <div class="modal-header">
@@ -1947,7 +1963,7 @@ reference_customer
 </div>
 
 <!-- Modal Email -->
-<div class="modal fade" id="adding7" tabindex="-1" role="dialog" aria-labelledby="exampleModal7" aria-hidden="true">
+<div class="modal fade" id="adding7"    role="dialog" aria-labelledby="exampleModal7" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -2021,7 +2037,7 @@ reference_customer
 
 
 <!-- Modal Tel -->
-<div class="modal fade" id="adding6" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="adding6"    role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -2148,7 +2164,7 @@ reference_customer
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="createinterv" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="createinterv"    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -2433,7 +2449,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
 
     <!--Modal Tel-->
 
-    <div class="modal fade" id="faireappel" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal fade" id="faireappel"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
         <div class="modal-dialog" role="tel">
             <div class="modal-content">
                 <div class="modal-header">
@@ -3808,7 +3824,7 @@ function keyUpHandler(){
 
             var dossier_id = $('#dossier').val();
 
-            var typeprest = $('#typeprest2').val();
+           // var typeprest = $('#typeprest2').val();
             var gouvernorat = $('#gouvcouv2').val();
             var specialite = $('#specialite2').val();
             var date = $('#pres_date2').val();
@@ -3816,13 +3832,13 @@ function keyUpHandler(){
             var details = $('#details').val();
 
             //   gouvcouv
-            if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
+            if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0) )
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url:"{{ route('prestations.saving') }}",
                     method:"POST",
-                    data:{autorise:autorise,details:details,date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
+                    data:{autorise:autorise,details:details,date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat/*,typeprest:typeprest*/, _token:_token},
                     success:function(data){
                         var prestation=parseInt(data);
                         /// window.location =data;

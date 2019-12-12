@@ -91,8 +91,8 @@
                         <div class="padding:5px 5px 5px 5px"><br>
                            <!-- <h4>Supervision</h4><br>-->
                             <ul id="tabs" class="nav  nav-tabs"  >
-                                <li class=" nav-item active">
-                                    <a class="nav-link active   " href="{{ route('supervision') }}"  >
+                                <li class=" nav-item ">
+                                    <a class="nav-link    " href="{{ route('supervision') }}"  >
                                         <i class="fas fa-lg  fa-users-cog"></i>  Supervision
                                     </a>
                                 </li>
@@ -102,8 +102,8 @@
                                     </a>
                                 </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('missions') }}"  >
+                                <li class="nav-item active">
+                                    <a class="nav-link " href="{{ route('missions') }}"  >
                                         <i class="fas fa-lg  fa-user-cog"></i>  Missions
                                     </a>
                                 </li>

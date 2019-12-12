@@ -3615,7 +3615,7 @@ $id=0;
     {
         if (isset($prest)){$prest=$prest;}else{$prest=0;}
         $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
-        $nomabn=app('App\Http\Controllers\DossiersController')->FullnameAbnDossierById($id);
+        $nomabn=app('App\Http\Controllers\DossiersController')->NomAbnDossierById($id);
         $refdem=app('App\Http\Controllers\DossiersController')->RefDemDossierById($id);
         $refclient=app('App\Http\Controllers\DossiersController')->ChampById('reference_customer',$id);
         $entrees =   Entree::where('dossier', $ref)->get();
@@ -3966,7 +3966,8 @@ $id=0;
         $description= $request->get('description');
         $attachs = $request->get('attachs');
 
-
+        $parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
 
 
        //    dd($request->all()) ;
@@ -3981,6 +3982,10 @@ $id=0;
 
             }
             }
+
+       // ajout de l'adresse de Mr Nejib en cci
+        array_push($ccimails,'medic.multiservices@topnet.tn' );
+
         $fromname="";$signatureentite='';
         $parametres =  DB::table('parametres')
             ->where('id','=', 1 )->first();
@@ -4012,10 +4017,11 @@ if ($from=='najdassist@gmail.com')
         }
 
         if ($from=='24ops@najda-assistance.com')
-        {
-            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+        {        $pass_N=$parametres->pass_N ;
+            // $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('24ops@najda-assistance.com');
-            $swiftTransport->setPassword('j3k47@KnNZ');
+            $swiftTransport->setPassword($pass_N);
             $fromname="Najda Assistance";
             $signatureentite= $parametres->signature ;
 
@@ -4023,80 +4029,82 @@ if ($from=='najdassist@gmail.com')
         }
 
         if ($from=='tpa@najda-assistance.com')
-        {
-            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+        {    $pass_TPA=$parametres->pass_TPA ;
+          //  $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('tpa@najda-assistance.com');
-            $swiftTransport->setPassword('J7k98+HsMH');
+            $swiftTransport->setPassword($pass_TPA);
             $fromname="Najda Assistance (TPA)";
             $signatureentite= $parametres->signature7 ;
 
 
         }
         if ($from=='taxi@najda-assistance.com')
-        {
-            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+        {    $pass_TN=$parametres->pass_TN ;
+          //  $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('taxi@najda-assistance.com');
-            $swiftTransport->setPassword('TaxiPswD@2019');
+            $swiftTransport->setPassword($pass_TN);
             $fromname="Najda Transport";
             $signatureentite= $parametres->signature8 ;
 
         }
         if ($from=='x-press@najda-assistance.com')
-        {
-            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+        {  $pass_XP=$parametres->pass_XP ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('x-press@najda-assistance.com');
-            $swiftTransport->setPassword('Rem2018@najda');
+            $swiftTransport->setPassword($pass_XP);
             $fromname="X-Press remorquage";
             $signatureentite= $parametres->signature9 ;
 
         }
 
         if ($from=='hotels.vat@medicmultiservices.com')
-        {
+        {  $pass_VAT=$parametres->pass_VAT ;
             $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
             $swiftTransport->setUsername('hotels.vat@medicmultiservices.com');
-            $swiftTransport->setPassword('NewPswD@2019+');
+            $swiftTransport->setPassword($pass_VAT);
             $fromname="VAT hôtels";
             $signatureentite= $parametres->signature2 ;
 
         }
 
         if ($from=='assistance@medicmultiservices.com')
-        {
+        {  $pass_MEDIC =$parametres->pass_MEDIC ;
             $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
             $swiftTransport->setUsername('assistance@medicmultiservices.com');
-            $swiftTransport->setPassword('Nouv@2018+C+15');
+            $swiftTransport->setPassword($pass_MEDIC);
             $fromname="Medic' Multiservices";
             $signatureentite= $parametres->signature3 ;
 
         }
 
         if ($from=='ambulance.transp@medicmultiservices.com')
-        {
+        {  $pass_TM=$parametres->pass_TM ;
           // $swiftTransport =  new \Swift_SmtpTransport( 'mail.bmail.tn', '25');
             $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25','');
             $swiftTransport->setUsername('ambulance.transp@medicmultiservices.com');
-            $swiftTransport->setPassword('umH01catA+B@Kc15#Pa');
+            $swiftTransport->setPassword($pass_TM);
             $fromname="Transport MEDIC";
             $signatureentite= $parametres->signature4 ;
 
         }
 
         if ($from=='vat.transp@medicmultiservices.com')
-        {
+        {  $pass_TV=$parametres->pass_TV ;
             $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
             $swiftTransport->setUsername('vat.transp@medicmultiservices.com');
-            $swiftTransport->setPassword('taxiVAt2018@&+15=-');
+            $swiftTransport->setPassword($pass_TV);
             $fromname="Transport VAT";
             $signatureentite= $parametres->signature5 ;
 
         }
 
         if ($from=='operations@medicinternational.tn')
-        {
-            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+        {  $pass_MI=$parametres->pass_MI ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('operations@medicinternational.tn');
-            $swiftTransport->setPassword('axa@mutA+18CN15');
+            $swiftTransport->setPassword($pass_MI);
             $fromname="Medic' Multiservices";
             $signatureentite= $parametres->signature6 ;
 
@@ -4219,7 +4227,10 @@ if ($from=='najdassist@gmail.com')
                  $path=$this->PathattachById($attach);
                   $fullpath=storage_path().$path;
                     $path_parts = pathinfo($fullpath);
-                  $ext=  $path_parts['extension'];
+                    if (isset( $path_parts['extension']))
+                    { $ext=  $path_parts['extension'];}else{
+
+                    }
 
     $name=basename($fullpath);
       $mime_content_type=mime_content_type ($fullpath);

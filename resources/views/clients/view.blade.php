@@ -30,7 +30,7 @@
                     <div class="form-group">
                         <label>Nature</label>
 
-                        <select   class="form-control select2-offscreen" name="nature[]" id="nature" multiple="" tabindex="-1">
+                        <select   class="form-control select2-offscreen" name="nature[]" id="nature" multiple=""   >
                             <option <?php   if(strpos($client->nature ,'1')!==false) {echo 'selected="selected"';} ?> value="1">Assistance / Assurance</option>
                             <option <?php   if(strpos($client->nature ,'2')!==false) {echo 'selected="selected"';} ?>value="2">Avionneur</option>
                             <option <?php   if(strpos($client->nature ,'3')!==false) {echo 'selected="selected"';} ?>value="3">Pétrolier / apparenté</option>
@@ -948,7 +948,7 @@
 
 
     <!-- Modal Tels -->
-    <div class="modal fade" id="adding1" tabindex="-1" role="dialog" aria-labelledby="exampleModal1" aria-hidden="true">
+    <div class="modal fade" id="adding1"   role="dialog" aria-labelledby="exampleModal1" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1015,7 +1015,7 @@
 
 
     <!-- Modal email -->
-    <div class="modal fade" id="adding2" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal fade" id="adding2"  role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1081,7 +1081,7 @@
 
 
     <!-- Modal Fax -->
-    <div class="modal fade" id="adding3" tabindex="-1" role="dialog" aria-labelledby="exampleModal3" aria-hidden="true">
+    <div class="modal fade" id="adding3"   role="dialog" aria-labelledby="exampleModal3" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1141,7 +1141,7 @@
 
 
     <!-- Modal Adresse de facturation -->
-    <div class="modal fade" id="adding4" tabindex="-1" role="dialog" aria-labelledby="exampleModal4" aria-hidden="true">
+    <div class="modal fade" id="adding4"  role="dialog" aria-labelledby="exampleModal4" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1191,7 +1191,7 @@
 
 
     <!-- Modal Qualite -->
-    <div class="modal fade" id="adding5" tabindex="-1" role="dialog" aria-labelledby="exampleModal5" aria-hidden="true">
+    <div class="modal fade" id="adding5"  role="dialog" aria-labelledby="exampleModal5" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1286,7 +1286,7 @@
 
 
     <!-- Modal Reseau -->
-    <div class="modal fade" id="adding6" tabindex="-1" role="dialog" aria-labelledby="exampleModal5" aria-hidden="true">
+    <div class="modal fade" id="adding6"   role="dialog" aria-labelledby="exampleModal5" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1381,7 +1381,7 @@
 
 
     <!-- Modal Reseau -->
-    <div class="modal fade" id="adding7" tabindex="-1" role="dialog" aria-labelledby="exampleModal7" aria-hidden="true">
+    <div class="modal fade" id="adding7"   role="dialog" aria-labelledby="exampleModal7" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
