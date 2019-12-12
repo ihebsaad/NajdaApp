@@ -168,57 +168,88 @@
 
      <div class="row">
       @if($Action->Mission->type_Mission==6) {{--Taxi--}} 
-        @if($Action->ordre>=1 && $Action->ordre <=5 )
+        @if($Action->ordre <=5 )
        <span style="color:red"> <h3> * <u><b>Date(s) spécifique(s) :</b></u></h3> </span>  <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir les dates suivantes dans l'interface de description de mission dès qu'elles seront connues : <br> -  la date "début mission" (date départ base) (2ème partie OM Taxi) <br> - la date/heure "arrivée à destination" (date/heure disponibilité prévisible) (2ème partie OM Taxi) </b></h4></div>
        @endif 
      @endif
        @if($Action->Mission->type_Mission==30) {{--rapatriement véhicule sur Cargo--}} 
+       @if($Action->ordre <=25 )
        <span style="color:red"> <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir les dates suivantes dans l'interface de description de mission dès qu'elles seront connues :<br> - la date prévue d'arrivée de remorqueur au port (date souhaitée arrivée) (dans 2ème partie OM remorquage)<br> - la date/heure de départ sur Cargo (2ème partie OM remorquage)</b></h4> </div> 
+       @endif
       @endif
        @if($Action->Mission->type_Mission==26) {{--Ecsorte intern. fournie par MI--}} 
+       @if($Action->ordre <=15 )
        <span style="color:red"> <h3>*<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b>Vous devrez saisir la  date suivante dans l'interface de description de mission dès qu'elle sera connue :<br> - la date/heure de décollage d'avion (Date/heure décollage vol)(OM Ambulance)</b></h4> </div> 
+       @endif
       @endif
        @if($Action->Mission->type_Mission==27) {{--Rapatriement véhicule avec chauffeur accompagnateur--}} 
+       @if($Action->ordre <=10 )
        <span style="color:red"> <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b>Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure prévue d'arrivée au port (Date/heure RDV au port) (OM remorquage)</b></h4> </div> 
+       @endif
       @endif
        @if($Action->Mission->type_Mission==12) {{--Dédouanement de pièces--}} 
+        @if($Action->ordre <=6 )
        <span style="color:red"> <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure du RDV prévu</b></h4> </div> 
       @endif
+      @endif
        @if($Action->Mission->type_Mission==11) {{--consultation médicale--}} 
+       @if($Action->ordre <=5 )
        <span style="color:red">  <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue:<br>- date/heure du RDV avec le médecin </b></h4> </div> 
       @endif
+      @endif
        @if($Action->Mission->type_Mission==16) {{--Devis transport international sous assistance--}} 
-       <span style="color:red"> <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue:<br>- date/heure de décollage (OM Ambulance / PEC Devis Transport sous assistance)</b></h4> </div> 
+       @if($Action->ordre <=8 )
+       <span style="color:red"> <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue:<br>- date/heure de décollage (OM Ambulance / PEC Devis Transport sous assistance)</b></h4> </div>
+       @endif 
       @endif
        @if($Action->Mission->type_Mission==18) {{--Demande d’evasan internationale--}} 
+        @if($Action->ordre <= 7 )
        <span style="color:red">  <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure prévue d’arrivée (date/heure atterrissage destination) (OM ambulance)</b></h4> </div> 
+       @endif
       @endif
        @if($Action->Mission->type_Mission==19) {{--Demande d’evasan nationale--}} 
+       @if($Action->ordre <= 7)
        <span style="color:red">  <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure prévue d’arrivée (date/heure atterrissage destination) (OM ambulance / PEC Evasan Armée )</b></h4> </div> 
+       @endif
       @endif
        @if($Action->Mission->type_Mission==22) {{--escorte de l étranger--}} 
-       <span style="color:red">  <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure d'arrivée du vol (OM Taxi)</b></h4> </div> 
+        @if($Action->ordre <= 4)
+       <span style="color:red">  <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure d'arrivée du vol (OM Taxi)</b></h4> </div> @endif
       @endif
         @if($Action->Mission->type_Mission==32) {{--réservation hotel--}} 
+        @if($Action->ordre <= 5)
        <span style="color:red"> <h3> *<u> <b>Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure fin de séjour (PEC hôtel)</b></h4> </div> 
       @endif
+      @endif
       @if($Action->Mission->type_Mission==35) {{--organisation visite médicale--}} 
+      @if($Action->ordre <= 5)
        <span style="color:red"><h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure du RDV </b></h4> </div> 
+     @endif
       @endif
        @if($Action->Mission->type_Mission==39) {{--Expertise--}} 
+       @if($Action->ordre <= 5)
        <span style="color:red"> <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure du RDV (PEC expertise)</b></h4> </div> 
       @endif
-         @if($Action->Mission->type_Mission==43) {{--rapatriement de véhicule sur ferry--}} 
+      @endif
+      @if($Action->Mission->type_Mission==43) {{--rapatriement de véhicule sur ferry--}} 
+      @if($Action->ordre <= 10)
        <span style="color:red"> <h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure prévue de départ du bâteau (OM remorquage)</b></h4> </div> 
       @endif
-         @if($Action->Mission->type_Mission==45) {{--réparation véhicule--}} 
+      @endif
+         @if($Action->Mission->type_Mission==45) {{--réparation véhicule--}}
+         @if($Action->ordre <= 7) 
        <span style="color:red"><h3> *<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure du RDV (de passage assuré)</b> </h4> </div> 
       @endif
+      @endif
        @if($Action->Mission->type_Mission==44) {{--remorquage--}} 
+       @if($Action->ordre <= 9) 
        <span style="color:red"><h3>*<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir les dates suivantes dans l'interface de description de mission dès qu'elles seront connues :<br>- date/heure départ pour mission (Date/Heure départ base)  (OM remorquage (2ème partie)) <br> - date/heure fin de mission (Date/Heure dispo prévisible) (OM remorquage (2ème partie))</b></h4> </div> 
       @endif 
+      @endif
        @if($Action->Mission->type_Mission==46) {{--location voiture--}} 
+        @if($Action->ordre <= 5) 
        <span style="color:red"> <h3>*<u><b> Date(s) spécifique(s) :</b></u></h3> </span> <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir la date suivante dans l'interface de description de mission dès qu'elle sera connue :<br>- date/heure de fin de location (PEC location) </b></h4> </div> 
+      @endif
       @endif
       
      </div>
