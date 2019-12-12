@@ -1,19 +1,65 @@
 <?php
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
-if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; }
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; }
+if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; $subscriber_name2=$_GET['subscriber_name'];}
+if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; $subscriber_lastname2=$_GET['subscriber_lastname'];}
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
+if (isset($_GET['CL_periode_hospitalisation'])) {$CL_periode_hospitalisation=$_GET['CL_periode_hospitalisation']; }
+if (isset($_GET['franchise'])) {$franchise=$_GET['franchise']; }
+if (isset($_GET['CL_text_montant'])) {$CL_text_montant=$_GET['CL_text_montant']; }
+if (isset($_GET['montant_franchise'])) {$montant_franchise=$_GET['montant_franchise']; }
+if (isset($_GET['doc_dossier'])) {$doc_dossier=$_GET['doc_dossier']; }
+if (isset($_GET['CB_charge'])) {$CB_charge=$_GET['CB_charge']; }
+if (isset($_GET['CL_charge'])) {$CL_charge=$_GET['CL_charge']; }
 if (isset($_GET['CL_montant_numerique'])) {$CL_montant_numerique=$_GET['CL_montant_numerique'];}
 if (isset($_GET['CL_montant_toutes_lettres'])) {$CL_montant_toutes_lettres=$_GET['CL_montant_toutes_lettres'];}
 if (isset($_GET['CL_text'])) {$CL_text=$_GET['CL_text'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
+if (isset($_GET['agent__lastname'])) {$agent__lastname=$_GET['agent__lastname']; }
+if (isset($_GET['agent__signature'])) {$agent__signature=$_GET['agent__signature']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
 if (isset($_GET['idtaggop'])) 
     {
         $idtaggop=$_GET['idtaggop']; 
     }
+	//Create connection
+$conn = mysqli_connect("localhost","root","","najdadb");
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+ mysqli_query($conn,"set names 'utf8'");
+  $sqlvh = "SELECT dossier,doc FROM dossiers_docs ";
+	$resultvh = $conn->query($sqlvh);
+	if ($resultvh->num_rows > 0) {
+	    // output data of each row
+	    $array_docs = array();
+	    while($rowvh = $resultvh->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_docs[] = array('dossier' => $rowvh["dossier"],'doc' => $rowvh["doc"]);
+	    }
+	    //print_r($array_prest);
+		}
+		 $sqlvhq = "SELECT id,reference_medic FROM dossiers";
+	$resultvhq = $conn->query($sqlvhq);
+	if ($resultvhq->num_rows > 0) {
+	    // output data of each row
+	    $array_dossier = array();
+	    while($rowvhq = $resultvhq->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_dossier[] = array('id' => $rowvhq["id"],'reference_medic' => $rowvhq["reference_medic"]);
+			
+			
+	    }
+	
+	    //print_r($array_prest);
+		}
+	foreach ($array_dossier as $dossier) 
+	{if ($dossier['reference_medic']==$reference_medic ){
+		$id=$dossier['id'];
+	}}	
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>PEC_frais_medicaux</title>
@@ -370,18 +416,54 @@ if (isset($_GET['idtaggop']))
 <p class=rvps3><span class=rvts4>PRISE EN CHARGE DE FRAIS MEDICAUX</span></p>
 <p class=rvps3><span class=rvts5><br></span></p>
 <p class=rvps4><span class=rvts6>Client : <input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /></span></p>
-<p class=rvps5><span class=rvts6>Nom patient : <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> Prénom :<input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
-<p class=rvps6><span class=rvts6>Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span></p>
-<p class=rvps6><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label>Montant maximal prise en charge (TND): <input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input>&nbsp; </span>Toutes lettres : <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars</p>
-<p class=rvps6><span class=rvts6>Franchise: </span><span class=rvts7>(OUI si montant saisi dans le champs franchise. Sinon NON)</span></p>
-<p class=rvps7><span class=rvts6>Montant de la franchise: </span><span class=rvts8>Franchise_dossier</span><span class=rvts6>&nbsp; (ligne apparait uniquement s</span><span class=rvts9>’</span><span class=rvts6>il y</span><span class=rvts9>’</span><span class=rvts6>a montant saisi dans dossier) </span></p>
-<p class=rvps5><span class=rvts6>Document à signer: </span><span class=rvts7>(OUI si coché dans dossier, sinon NON) </span></p>
+<p class=rvps5><span class=rvts6>Nom patient : <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> Prénom : <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> </span></p>
+<p class=rvps6><span class=rvts6>Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input/></span></p>
+<p class=rvps5><span class=rvts5>Montant maximal de prise en charge (TND)</span><span class=rvts6>:&nbsp;</span><span class=rvts9> </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_numerique" placeholder="Montant maximal"  value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input></span><span class=rvts9>&nbsp;&nbsp;&nbsp; </span><span class=rvts5>Toutes lettres</span><span class=rvts6> : <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant en toutes lettres"  value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars</span></p>
+<p class=rvps5><span class=rvts6>Periode de hospitalisation: <input name="CL_periode_hospitalisation" placeholder="periode de hospitalisation"  value="<?php if(isset ($CL_periode_hospitalisation)) echo $CL_periode_hospitalisation; ?>"></input></span></p>
+
+<p class=rvps6><span class=rvts6>Franchise: <input name="franchise" placeholder="franchise"  value="<?php if($franchise==="1")echo "oui"; else echo "non" ?>"></input> </span><span class=rvts7></span></p>
+<?php
+{
+	if ($franchise === "1") { ?>
+<input name="CL_text_montant" type="hidden" placeholder="" value="<?php if(isset($CL_text_montant)) {echo $CL_text_montant;}  if (empty($CL_text_montant)){ echo "Montant de la franchise:" ;}?>"></input>
+<p class=rvps7><span class=rvts6>Montant de la franchise: </span><span class=rvts8><input name="montant_franchise" placeholder="montant franchise"  value="<?php if(isset ($montant_franchise)) echo $montant_franchise; ?>"></input></span><span class=rvts6></span><span class=rvts9></span><span class=rvts6></span><span class=rvts9>’</span><span class=rvts6></span></p>
+<?php
+
+	}else { ?>
+<input name="CL_text_montant" type="hidden" placeholder="" value="<?php if(isset($CL_text_montant)) {echo $CL_text_montant;}  if (empty($CL_text_montant)){ echo "" ;}?>"></input>
+
+<?php } }?>
+
+<p class=rvps5><span class=rvts6>Document à signer: </span><span class=rvts7> <input name="doc_dossier" placeholder=""  value="
+<?php 
+foreach ($array_docs as $doc) 
+{if ( $id==$doc['dossier'] )
+		{echo 'oui'; } 
+	
+	else  {echo  'non';}}  ?> "></input></span></p>
 <p><span class=rvts10>&nbsp; </span></p>
 <p class=rvps5><span class=rvts11>Nous</span><span class=rvts12> </span><span class=rvts11>soussignés,</span><span class=rvts12> </span><span class=rvts11>Najda</span><span class=rvts12> </span><span class=rvts11>Assistance,</span><span class=rvts12> </span><span class=rvts11>nous</span><span class=rvts12> </span><span class=rvts11>engageons</span><span class=rvts12> </span><span class=rvts11>à</span><span class=rvts12> </span><span class=rvts11>prendre</span><span class=rvts12> </span><span class=rvts11>en</span><span class=rvts12> </span><span class=rvts11>charge,</span><span class=rvts12> </span><span class=rvts11>pour</span><span class=rvts12> </span><span class=rvts11>le</span><span class=rvts12> </span><span class=rvts11>compte</span><span class=rvts12> </span><span class=rvts11>de</span><span class=rvts12> </span><span class=rvts11>notre</span><span class=rvts12> </span><span class=rvts11>client</span><span class=rvts13>,</span><span class=rvts12> </span><span class=rvts11>les</span><span class=rvts12> </span><span class=rvts11>frais</span><span class=rvts12> </span><span class=rvts11>médicaux</span><span class=rvts12> </span><span class=rvts11>et</span><span class=rvts12> </span><span class=rvts11>d</span><span class=rvts14>’</span><span class=rvts11>hospitalisation</span><span class=rvts12> </span><span class=rvts11>du</span><span class=rvts12> </span><span class=rvts11>(de</span><span class=rvts12> </span><span class=rvts11>la) patient(e) ci-dessus mentionné(e)</span><span class=rvts15> </span><span class=rvts11>pour le</span><span class=rvts15> </span><span class=rvts11>montant maximal ci-dessus.</span></p>
 <p class=rvps8><span class=rvts11>Merci</span><span class=rvts15> </span><span class=rvts11>de</span><span class=rvts15> </span><span class=rvts11>nous</span><span class=rvts15> </span><span class=rvts11>adresser</span><span class=rvts15> </span><span class=rvts11>votre</span><span class=rvts15> </span><span class=rvts11>facture</span><span class=rvts15> </span><span class=rvts11>originale</span><span class=rvts15> </span><span class=rvts11>dès</span><span class=rvts15> </span><span class=rvts11>que</span><span class=rvts15> </span><span class=rvts11>possible</span><span class=rvts15> </span><span class=rvts11>(et</span><span class=rvts15> </span><span class=rvts11>au</span><span class=rvts15> </span><span class=rvts11>plus</span><span class=rvts15> </span><span class=rvts11>tard</span><span class=rvts15> </span><span class=rvts11>30</span><span class=rvts15> </span><span class=rvts11>jours</span><span class=rvts15> </span><span class=rvts11>après</span><span class=rvts15> </span><span class=rvts11>la</span><span class=rvts15> </span><span class=rvts11>sortie),</span><span class=rvts15> </span><span class=rvts16>accompagnée</span><span class=rvts17> </span><span class=rvts16>de</span><span class=rvts17> </span><span class=rvts16>tous</span><span class=rvts15> </span><span class=rvts16>les</span><span class=rvts15> </span><span class=rvts16>justificatifs</span><span class=rvts15> </span><span class=rvts11>(notamment</span><span class=rvts15> </span><span class=rvts11>articles</span><span class=rvts15> </span><span class=rvts11>de </span><span class=rvts18>pharmacie,</span><span class=rvts19> </span><span class=rvts18>laboratoire,</span><span class=rvts19> </span><span class=rvts18>notes</span><span class=rvts19> </span><span class=rvts18>d</span><span class=rvts20>’</span><span class=rvts18>honoraires,</span><span class=rvts19> </span><span class=rvts18>rapport</span><span class=rvts19> </span><span class=rvts18>médical</span><span class=rvts19> </span><span class=rvts18>avec</span><span class=rvts19> </span><span class=rvts18>codification</span><span class=rvts19> </span><span class=rvts18>précise</span><span class=rvts19> </span><span class=rvts18>des</span><span class=rvts19> </span><span class=rvts18>actes</span><span class=rvts19> </span><span class=rvts18>pratiqués…),</span><span class=rvts19> </span><span class=rvts18>à</span><span class=rvts19> </span><span class=rvts18>notre adresse</span><span class=rvts19> </span><span class=rvts18>ci-dessus,</span><span class=rvts19> </span><span class=rvts18>en</span><span class=rvts19> </span><span class=rvts18>mentionnant</span><span class=rvts19> </span><span class=rvts18>notre</span><span class=rvts19> </span><span class=rvts18>référence</span><span class=rvts19> </span><span class=rvts21>de dossier</span><span class=rvts18>.</span></p>
 <p class=rvps9><span class=rvts13><br></span></p>
-<p class=rvps9><span class=rvts7>Apparait par défaut coché. Case à décocher si extra pris en charge</span></p>
-<p class=rvps9><span class=rvts22>Attention</span><span class=rvts23> </span><span class=rvts24>:</span><span class=rvts23> </span><span class=rvts24>Cette</span><span class=rvts25> </span><span class=rvts24>prise</span><span class=rvts25> </span><span class=rvts24>en</span><span class=rvts23> </span><span class=rvts24>charge</span><span class=rvts25> </span><span class=rvts24>s</span><span class=rvts26>’</span><span class=rvts24>entend</span><span class=rvts25> </span><span class=rvts24>hors</span><span class=rvts25> </span><span class=rvts24>extra</span><span class=rvts25> </span><span class=rvts24>(y</span><span class=rvts25> </span><span class=rvts24>compris</span><span class=rvts25> </span><span class=rvts24>surclassement</span><span class=rvts23> </span><span class=rvts24>de</span><span class=rvts25> </span><span class=rvts24>chambre)</span><span class=rvts23> </span><span class=rvts24>et</span><span class=rvts23> </span><span class=rvts24>conformément</span><span class=rvts23> </span><span class=rvts24>à</span><span class=rvts25> </span><span class=rvts24>la</span><span class=rvts25> </span><span class=rvts24>nomenclature</span><span class=rvts25> </span><span class=rvts24>officielle</span><span class=rvts25> </span><span class=rvts24>des</span><span class=rvts25> </span><span class=rvts24>actes médicaux</span><span class=rvts25> </span><span class=rvts24>et</span><span class=rvts23> </span><span class=rvts24>à</span><span class=rvts25> </span><span class=rvts24>votre</span><span class=rvts25> </span><span class=rvts24>liste</span><span class=rvts25> </span><span class=rvts24>de</span><span class=rvts25> </span><span class=rvts24>prix</span></p>
+<?php if (isset($CB_charge)) { if (($CB_charge === "oui")||($CB_charge === "on")) { $CL_charge = true; ?>
+<input type="checkbox" name="CB_charge" id="CB_charge" value="oui" checked>	
+<?php } else {  ?>
+<input type="checkbox" name="CB_charge" id="CB_charge" >	
+<?php }} else { if (empty($CB_charge)) { ?>
+<input type="checkbox" name="CB_charge" id="CB_charge" >
+<?php } else { $CL_charge = true; ?>	
+<input type="checkbox" name="CB_charge" id="CB_charge" value="oui" checked>
+<?php }} ?>
+					<span style="font-family:'Times New Roman'; font-weight:bold">Attention</span><span style="font-family:'Times New Roman'; font-weight:bold">:</span><span style="font-family:'Times New Roman'; font-weight:bold"></span>
+<?php if (isset($CL_charge)) { ?>			
+<span id="CL_charge" style="display: inline-block;">
+<?php } else { ?>
+<span id="CL_charge" style="display: none;">
+<?php } ?>
+					<span style="font-family:'Times New Roman'; font-weight:bold">,&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">nom et </span><span style="font-family:'Times New Roman'; font-weight:bold">Cette prise en charge s’entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix
+</span>
+
+</span>
 <p class=rvps9><span class=rvts27><br></span></p>
 <p class=rvps9><span class=rvts7>Apparait si coché dans dossier « document à signer » . Sinon tout ce paragraphe n</span><span class=rvts28>’</span><span class=rvts7>apparait pas</span></p>
 <p><span class=rvts29>Attention</span><span class=rvts30> </span><span class=rvts31>:</span><span class=rvts30> </span><span class=rvts32>Cette</span><span class=rvts30> </span><span class=rvts32>prise</span><span class=rvts30> </span><span class=rvts32>en</span><span class=rvts30> </span><span class=rvts32>charge</span><span class=rvts30> </span><span class=rvts32>ne</span><span class=rvts30> </span><span class=rvts32>sera</span><span class=rvts30> </span><span class=rvts32>valable</span><span class=rvts30> </span><span class=rvts32>que</span><span class=rvts30> </span><span class=rvts32>si</span><span class=rvts30> </span><span class=rvts32>la</span><span class=rvts30> </span><span class=rvts32>facture</span><span class=rvts30> </span><span class=rvts32>nous</span><span class=rvts30> </span><span class=rvts32>parvient</span><span class=rvts30> </span><span class=rvts32>accompagnée</span><span class=rvts30> </span><span class=rvts32>de</span><span class=rvts30> </span><span class=rvts29>l</span><span class=rvts33>’</span><span class=rvts29>original</span><span class=rvts30> </span><span class=rvts32>de</span><span class=rvts30>&nbsp;</span><span class=rvts32> </span><span class=rvts34>document désigné dossier</span><span class=rvts32> </span><span class=rvts31>dûment</span><span class=rvts35> </span><span class=rvts31>complétée</span><span class=rvts30> </span><span class=rvts32>et</span><span class=rvts30> </span><span class=rvts32>signée</span><span class=rvts30> </span><span class=rvts32>par</span><span class=rvts30> </span><span class=rvts32>le</span><span class=rvts30> </span><span class=rvts32>(la) patient(e)</span></p>
@@ -397,7 +479,8 @@ if (isset($_GET['idtaggop']))
 <p><span class=rvts3><br></span></p>
 <p><span class=rvts3><br></span></p>
 <p><span class=rvts3>P/ la Gérante</span></p>
-<p class=rvps1><span class=rvts3><input name="agent__name" id="agent__name" placeholder="nom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" > </input></span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($agent__lastname)) echo $agent__lastname; ?>" /></span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($agent__signature)) echo $agent__signature; ?>" /></span></p>
 <p><span class=rvts3>Plateau d</span><span class=rvts41>’</span><span class=rvts3>assistance médicale</span></p>
 <p class=rvps1><span class=rvts3>« courrier électronique, sans signature »</span></p>
 </form>
@@ -408,5 +491,14 @@ if (isset($_GET['idtaggop']))
             else {document.getElementById("alertGOP").style.display="none";}
             document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value)
         }//fin de keypressHandler
+		$("#CB_charge").change(function() {
+	    if(this.checked) {
+	        $("#CL_charge").show();
+	    }
+	    else
+	    {
+	        $("#CL_charge").hide();
+	    }
+	});
 </script>
 </body></html>

@@ -1,14 +1,16 @@
 <?php
 if (isset($_GET['prest__hotel'])) {$prest__hotel=$_GET['prest__hotel'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
-if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];}
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname'];}
+if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];$subscriber_name2=$_GET['subscriber_name'];}
+if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname'];$subscriber_lastname2=$_GET['subscriber_lastname'];}
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
 if (isset($_GET['CL_debut_sejour'])) {$CL_debut_sejour=$_GET['CL_debut_sejour'];}
 if (isset($_GET['CL_fin_sejour'])) {$CL_fin_sejour=$_GET['CL_fin_sejour'];}
 if (isset($_GET['CL_arrangement'])) {$CL_arrangement=$_GET['CL_arrangement'];}
 if (isset($_GET['CL_tarif_convention'])) {$CL_tarif_convention=$_GET['CL_tarif_convention'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
+if (isset($_GET['agent__lastname'])) {$agent__lastname=$_GET['agent__lastname']; }
+if (isset($_GET['agent__signature'])) {$agent__signature=$_GET['agent__signature']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
 if (isset($_GET['idtaggop'])) 
@@ -232,7 +234,7 @@ if (isset($_GET['idtaggop']))
 <p class=rvps4><span class=rvts4><br></span></p>
 <p class=rvps2><span class=rvts3><br></span></p>
 <p class=rvps5><span class=rvts5>Nom client</span><span class=rvts6> : </span><span class=rvts7> <input name="subscriber_lastname" placeholder="Nom Client" value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span><span class=rvts6> </span><span class=rvts6> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts8>Prénom</span><span class=rvts7> :<input name="subscriber_name" placeholder="Prenom Client" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>"></input></span></p>
-<p class=rvps5><span class=rvts8>Notre réf. dossier</span><span class=rvts7> : </span><span class=rvts6><input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span></p>
+<p class=rvps5><span class=rvts8>Notre réf. dossier</span><span class=rvts7> : </span><span class=rvts6><input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_name2" placeholder="Prenom Client" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>"></input><input name="subscriber_lastname2" placeholder="Nom Client" value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input></span></p>
 <p class=rvps6><span class=rvts8>Dates de séjour</span><span class=rvts7> : de <input type="datetime-local" name="CL_debut_sejour" placeholder="Debut Sejour" value="<?php if(isset ($CL_debut_sejour)) echo $CL_debut_sejour; ?>"></input> à <input  type="datetime-local" name="CL_fin_sejour" placeholder="Fin Sejour" value="<?php if(isset ($CL_fin_sejour)) echo $CL_fin_sejour; ?>"></input></span></p>
 <p class=rvps6><span class=rvts8>Arrangement</span><span class=rvts7> :<input name="CL_arrangement" placeholder="Arrangement" value="<?php if(isset ($CL_arrangement)) echo $CL_arrangement; ?>"></input></span></p>
 <p class=rvps6><span class=rvts8>Tarif de convention : </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_tarif_convention" placeholder="Tarif Convention" value="<?php if(isset ($CL_tarif_convention)) echo $CL_tarif_convention; ?>"  onKeyUp=" keyUpHandler(this)"></input></span></p>
@@ -249,7 +251,8 @@ if (isset($_GET['idtaggop']))
 <p><span class=rvts1><br></span></p>
 <p class=rvps8><span class=rvts6>Avec</span><span class=rvts16> </span><span class=rvts6>nos</span><span class=rvts16> </span><span class=rvts6>remerciements</span><span class=rvts16> </span><span class=rvts6>pour</span><span class=rvts16> </span><span class=rvts6>votre</span><span class=rvts16> </span><span class=rvts6>collaboration. </span></p>
 <p class=rvps8><span class=rvts6>P/la Gérante</span></p>
-<p class=rvps1><span class=rvts3> <input name="agent__name" id="agent__name" placeholder="nom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" > </input></span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__name" id="agent__name" placeholder="nom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="prenom du lagent" value="<?php if(isset ($agent__lastname)) echo $agent__lastname; ?>" /></span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($agent__signature)) echo $agent__signature; ?>" /></span></p>
 <p class=rvps9><span class=rvts6>Service réservations</span></p>
 <p class=rvps1><span class=rvts3>« courrier électronique, sans signature »</span></p>
 <p class=rvps2><span class=rvts3><br></span></p>

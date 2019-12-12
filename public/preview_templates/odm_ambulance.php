@@ -916,10 +916,11 @@ foreach ($array_prestap as $prestap) {
 <datalist id="lvehicule">
 <?php
 foreach ($array_vehic as $vehic) {
-	echo "<option value='".$vehic['name']."'  >".$vehic['name']."</option>";
+	echo "<option value='".$vehic['name']."' vehicID='".$vehic['id']."'  >".$vehic['name']."</option>";
 }
 ?>
 </datalist>
+<input name="vehicID" id="vehicID" type="hidden" value="<?php echo $detailom['vehicID']; ?>"></input>
 			</p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Médecin transporteur : </span>
 <!-- affiche pour le moment toute la liste des personnels -->				
 <input  style="float: left;" type="text" list="lmedecin" name="lmedecin"  <?php if (isset($detailom['lmedecin'])) { if (!empty($detailom['lmedecin'])) {echo "value='".$detailom['lmedecin']."'";}} ?> />
@@ -1016,7 +1017,7 @@ foreach ($array_chauff as $chauff) {
 	<div id="compsup" class="col-md-3">
 		<p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="height:0pt; display:block; position:absolute; z-index:-1"><img  width="320" height="195" alt="" style="margin-top:4.21pt; margin-left:7.72pt; -aw-left-pos:24pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:4.5pt; -aw-wrap-type:none; position:absolute"></span><span style="font-family:&#39;Times New Roman&#39;">&nbsp;</span></p><p style="margin-top:5.4pt; margin-left:5.75pt; margin-bottom:0pt; text-indent:15.55pt; line-height:10.05pt; widows:0; orphans:0"><span style="font-family:&#39;Times New Roman&#39;; font-size:9pt; font-weight:bold">Valid.</span><span style="font-family:&#39;Times New Roman&#39;; font-size:9pt; font-weight:bold"> </span><span style="font-family:&#39;Times New Roman&#39;; font-size:9pt; font-weight:bold">superviseur</span></p><p style="margin-top:0pt; margin-bottom:0pt; text-indent:21.3pt; line-height:9.8pt; widows:0; orphans:0">
 <input type="hidden" name="complete" value="1">
-<input name="supervisordate" id="supervisordate" placeholder="2019-05-26 / Hajer LAHOUAR" <?php if (isset($detailom['supervisordate'])) { if (!empty($detailom['supervisordate'])) {echo "value='".$detailom['supervisordate']."'";}} ?> ></input>
+<input name="supervisordate" id="supervisordate" placeholder=" " value="<?php if (isset($detailagtcomp)) {echo $detailagtcomp['name'].' '.$detailagtcomp['lastname'].' / '.date('Y-m-d'); }  ?>" />
 		</p><p style="margin-top:0.05pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin:0pt 0pt 0pt 5.75pt; text-indent:15.55pt; line-height:150%; widows:0; orphans:0; font-size:9pt;font-family:&#39;Times New Roman&#39;; font-weight:bold">OM remis par (date/sign)</p><p style="margin-top:0pt; margin-bottom:0pt; text-indent:21.3pt; line-height:9.8pt; widows:0; orphans:0">
 <input name="remispardate" id="remispardate" placeholder="date/sign" <?php if (isset($detailom['remispardate'])) { if (!empty($detailom['remispardate'])) {echo "value='".$detailom['remispardate']."'";}} ?> ></input>
 		</p><p style="margin:0pt 0pt 0pt 5.75pt; text-indent:15.55pt; line-height:150%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">OM récupéré par (date/sign)</span></p><p style="margin-top:0pt; margin-bottom:0pt; text-indent:21.3pt; line-height:9.8pt; widows:0; orphans:0">
@@ -1038,10 +1039,11 @@ foreach ($array_chauff as $chauff) {
 <datalist id="lvehicule">
 <?php
 foreach ($array_vehic as $vehic) {
-	echo "<option value='".$vehic['name']."'  >".$vehic['name']."</option>";
+	echo "<option value='".$vehic['name']."' vehicID='".$vehic['id']."' >".$vehic['name']."</option>";
 }
 ?>
 </datalist>
+<input name="vehicID" id="vehicID" type="hidden" value="<?php echo $detailom['vehicID']; ?>"></input>	
 			</p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Médecin transporteur : </span>
 <!-- affiche pour le moment toute la liste des personnels -->				
 <input  style="float: left;" type="text" list="lmedecin" name="lmedecin"  <?php if (isset($detailom['lmedecin'])) { if (!empty($detailom['lmedecin'])) {echo "value='".$detailom['lmedecin']."'";}} ?> />
@@ -1172,7 +1174,7 @@ foreach ($array_chauff as $chauff) {
 	});
 
     // interdire de modifier le champs number
-	$("[type='number']").keypress(function (evt) {
+	$("#CL_nbpsemax").keypress(function (evt) {
     evt.preventDefault();
 });
 
@@ -1277,6 +1279,25 @@ foreach ($array_chauff as $chauff) {
 	    }
 	  }
 	}
+
+	/// fill id véhicule on select ambulace
+	document.querySelector('input[list="lvehicule"]').addEventListener('input', onInputvehic);
+
+	function onInputvehic(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("vehicID").value = options[i].getAttribute("vehicID");
+	      break;
+	    }
+	  }
+	}
+
 
 	/// fill phone number on select prest Decharge
 	document.querySelector('input[list="CL_lieudecharge_dec"]').addEventListener('input', onInputdec);

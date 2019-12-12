@@ -2,13 +2,15 @@
 if (isset($_GET['prest__pharm'])) {$prest__pharm=$_GET['prest__pharm'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
-if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; }
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; }
+if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; $subscriber_name2=$_GET['subscriber_name']; }
+if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; $subscriber_lastname2=$_GET['subscriber_lastname'];}
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
 if (isset($_GET['CL_name_medecin'])) {$CL_name_medecin=$_GET['CL_name_medecin'];}
 if (isset($_GET['CL_montant_numerique'])) {$CL_montant_numerique=$_GET['CL_montant_numerique'];}
 if (isset($_GET['CL_montant_toutes_lettres'])) {$CL_montant_toutes_lettres=$_GET['CL_montant_toutes_lettres'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
+if (isset($_GET['agent__lastname'])) {$agent__lastname=$_GET['agent__lastname']; }
+if (isset($_GET['agent__signature'])) {$agent__signature=$_GET['agent__signature']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
 if (isset($_GET['idtaggop'])) 
@@ -193,9 +195,9 @@ if (isset($_GET['idtaggop']))
 <p class=rvps1><span class=rvts5><br></span></p>
 <p class=rvps1><span class=rvts6><br></span></p>
 <p class=rvps1><span class=rvts6>Client : <input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /> </span></p>
-<p class=rvps1><span class=rvts6>Nom patient : </span><span class=rvts7> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span></p>
-<p class=rvps1><span class=rvts6>Prénom : </span><span class=rvts7><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
-<p class=rvps1><span class=rvts6>Notre réf. dossier : </span><span class=rvts7>  <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span></p>
+<p class=rvps1><span class=rvts6>Nom patient : </span><span class=rvts7> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
+<p class=rvps1><span class=rvts6>Prénom : <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> </span><span class=rvts7></span></p>
+<p class=rvps1><span class=rvts6>Notre réf. dossier : </span><span class=rvts7>  <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input> </span></p>
 <p class=rvps1><span class=rvts6>Médecin prescripteur : <input name="CL_name_medecin" placeholder="nom du medecin" value="<?php if(isset ($CL_name_medecin)) echo $CL_name_medecin; ?>"></input></span></p>
 <p class=rvps1><span class=rvts6>Montant (TND): <span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_numerique" placeholder="Montant Numerique" value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input></br></span> Montant toutes lettres : <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input></span> dinars</p>
 <p class=rvps1><span class=rvts6><br></span></p>
@@ -209,7 +211,8 @@ if (isset($_GET['idtaggop']))
 <p><span class=rvts15><br></span></p>
 <p class=rvps5><span class=rvts16>Merci de votre collaboration</span></p>
 <p class=rvps5><span class=rvts16>P/La Gérante</span></p>
-<p class=rvps1><span class=rvts2><input name="agent__name" id="agent__name" placeholder="nom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" > </input></span></p>
+<p class=rvps1><span class=rvts9><input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($agent__lastname)) echo $agent__lastname; ?>" /> </span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($agent__signature)) echo $agent__signature; ?>" /></span></p>
 <p class=rvps1><span class=rvts2>Plateau TPA</span></p>
 <p class=rvps1><span class=rvts2>« courrier électronique, sans signature »</span></p>
 </form>

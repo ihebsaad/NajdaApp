@@ -3,18 +3,25 @@ if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['CL_date_heure_debut'])) {$CL_date_heure_debut=$_GET['CL_date_heure_debut'];}
 if (isset($_GET['CL_date_heure_fin'])) {$CL_date_heure_fin=$_GET['CL_date_heure_fin'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
-if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; }
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; }
-if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
+if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];$subscriber_name2=$_GET['subscriber_name'];$subscriber_name3=$_GET['subscriber_name'];   }
+if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; $subscriber_lastname2=$_GET['subscriber_lastname']; $subscriber_lastname3=$_GET['subscriber_lastname'];}
+if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic'];$reference_medic2=$_GET['reference_medic']; }
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
+if (isset($_GET['vehicule_marque'])) {$vehicule_marque=$_GET['vehicule_marque'];}
 if (isset($_GET['vehicule_immatriculation'])) {$vehicule_immatriculation=$_GET['vehicule_immatriculation'];}
 if (isset($_GET['subscriber_phone_cell'])) {$subscriber_phone_cell=$_GET['subscriber_phone_cell']; }
 if (isset($_GET['CL_lieu_localisation'])) {$CL_lieu_localisation=$_GET['CL_lieu_localisation'];}
-if (isset($_GET['CL_type-expertise'])) {$CL_type_expertise=$_GET['CL_type-expertise'];}
-if (isset($_GET['reference_medic2'])) {$reference_medic2=$_GET['reference_medic2']; }
+if (isset($_GET['CL_type_expertise'])) {$CL_type_expertise=$_GET['CL_type_expertise'];}
 if (isset($_GET['CL_coordonner'])) {$CL_coordonner=$_GET['CL_coordonner'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
+if (isset($_GET['agent__lastname'])) {$agent__lastname=$_GET['agent__lastname']; }
+if (isset($_GET['agent__signature'])) {$agent__signature=$_GET['agent__signature']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
+if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
+if (isset($_GET['idtaggop'])) 
+    {
+        $idtaggop=$_GET['idtaggop']; 
+    }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>taml0bzv01qwdlqbdo97kjxixaeohm1q_PEC_expertise</title>
@@ -337,17 +344,17 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p class=rvps4><span class=rvts8><br></span></p>
 <p class=rvps5><span class=rvts9>Bonjour de Sousse,</span></p>
 <p class=rvps6><span class=rvts9><br></span></p>
-<p class=rvps7><span class=rvts9>Suite</span><span class=rvts10> </span><span class=rvts9>à</span><span class=rvts10> </span><span class=rvts9>notre</span><span class=rvts10> </span><span class=rvts9>conversation</span><span class=rvts10> </span><span class=rvts9>téléphonique,</span><span class=rvts11> </span><span class=rvts9>nous</span><span class=rvts10> </span><span class=rvts9>vous</span><span class=rvts10> </span><span class=rvts9>confirmons</span><span class=rvts10> </span><span class=rvts9>notre</span><span class=rvts10> </span><span class=rvts9>demande</span><span class=rvts10> </span><span class=rvts9>d</span><span class=rvts12>’</span><span class=rvts9>expertise</span><span class=rvts10> </span><span class=rvts9>du</span><span class=rvts10> </span><span class=rvts9>véhicule</span><span class=rvts10> </span><span class=rvts9>en</span><span class=rvts10> </span><span class=rvts9>date du</span><span class=rvts10> <input type="datetime-local" name="CL_date_heure_debut" placeholder="Date Heure Debut" value="<?php if(isset ($CL_date_heure_debut)) echo $CL_date_heure_debut; ?>"></input> à <input type="datetime-local" name="CL_date_heure_fin" placeholder="Date Heure fin" value="<?php if(isset ($CL_date_heure_fin)) echo $CL_date_heure_fin; ?>"></input></span><span class=rvts13>, selon </span><span class=rvts9>les informations ci-dessous relatives à ce dossier :</span></p>
+<p class=rvps7><span class=rvts9>Suite</span><span class=rvts10> </span><span class=rvts9>à</span><span class=rvts10> </span><span class=rvts9>notre</span><span class=rvts10> </span><span class=rvts9>conversation</span><span class=rvts10> </span><span class=rvts9>téléphonique,</span><span class=rvts11> </span><span class=rvts9>nous</span><span class=rvts10> </span><span class=rvts9>vous</span><span class=rvts10> </span><span class=rvts9>confirmons</span><span class=rvts10> </span><span class=rvts9>notre</span><span class=rvts10> </span><span class=rvts9>demande</span><span class=rvts10> </span><span class=rvts9>d</span><span class=rvts12>’</span><span class=rvts9>expertise</span><span class=rvts10> </span><span class=rvts9>du</span><span class=rvts10> </span><span class=rvts9>véhicule</span><span class=rvts10> </span><span class=rvts9>en</span><span class=rvts10> </span><span class=rvts9>date du</span><span class=rvts10> <input name="CL_date_heure_debut" placeholder="Date Heure Debut" value="<?php if(isset ($CL_date_heure_debut)) echo $CL_date_heure_debut; ?>"></input> à <input name="CL_date_heure_fin" placeholder="Date Heure fin" value="<?php if(isset ($CL_date_heure_fin)) echo $CL_date_heure_fin; ?>"></input></span><span class=rvts13>, selon </span><span class=rvts9>les informations ci-dessous relatives à ce dossier :</span></p>
 <p class=rvps8><span class=rvts9><br></span></p>
 <p class=rvps9><span class=rvts14>Client</span><span class=rvts9> : <input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /></span></p>
-<p class=rvps9><span class=rvts15>Nom</span><span class=rvts16> </span><span class=rvts15>assuré</span><span class=rvts17> </span><span class=rvts13>:</span><span class=rvts17>  <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span></p>
-<p class=rvps9><span class=rvts15>Prénom</span><span class=rvts16> </span><span class=rvts15>assuré</span><span class=rvts17> </span><span class=rvts13>:</span><span class=rvts17><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
-<p class=rvps9><span class=rvts15>Notre référence</span><span class=rvts13>: <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span></p>
-<p class=rvps9><span class=rvts15>Type du véhicule</span><span class=rvts17> </span><span class=rvts13>: <input name="vehicule_type" placeholder="Type et marque du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input></span></p>
+<p class=rvps9><span class=rvts15>Nom</span><span class=rvts16> </span><span class=rvts15>assuré</span><span class=rvts17> </span><span class=rvts13>:</span><span class=rvts17> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> </span></p>
+<p class=rvps9><span class=rvts15>Prénom</span><span class=rvts16> </span><span class=rvts15>assuré</span><span class=rvts17> </span><span class=rvts13>:</span><span class=rvts17> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span></p>
+<p class=rvps9><span class=rvts15>Notre référence</span><span class=rvts13>: <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input></span></p>
+<p class=rvps9><span class=rvts15>Type du véhicule</span><span class=rvts17> </span><span class=rvts13>: <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input> <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> </span></p>
 <p class=rvps9><span class=rvts15>Immatriculation</span><span class=rvts17> </span><span class=rvts13>: <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input></span></p>
 <p class=rvps9><span class=rvts15>Contact abonné</span><span class=rvts17> </span><span class=rvts13>:<input name="subscriber_phone_cell" placeholder="téléphone du l'abonnée"  value="<?php if(isset ($subscriber_phone_cell)) echo $subscriber_phone_cell;?>"/></span></p>
 <p class=rvps9><span class=rvts15>Localisation du véhicule</span><span class=rvts13> :<input name="CL_lieu_localisation" placeholder="Lieu Localisation" value="<?php if(isset ($CL_lieu_localisation)) echo $CL_lieu_localisation; ?>"></input></span></p>
-<p class=rvps9><span class=rvts15>Type d</span><span class=rvts18>’</span><span class=rvts15>expertise</span><span class=rvts13> :<input name="CL_type_expertise" placeholder="Type Expertise" value="<?php if(isset ($CL_type_expertise)) echo $CL_type_expertise; ?>"></input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class=rvts15>Référence client</span><span class=rvts13>:  <input name="reference_medic2" id="reference_medic2"placeholder="reference2" value="<?php if(isset ($reference_medic2)) echo $reference_medic2; ?>"></input></span></p>
+<p class=rvps9><span class=rvts15>Type d</span><span class=rvts18>’</span><span class=rvts15>expertise</span><span class=rvts13> :<input name="CL_type_expertise" placeholder="Type Expertise" value="<?php if(isset ($CL_type_expertise)) echo $CL_type_expertise; ?>"></input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class=rvts15>Référence client</span><span class=rvts13>:  <input name="reference_medic2" id="reference_medic2"placeholder="reference2" value="<?php if(isset ($reference_medic2)) echo $reference_medic2; ?>"></input> | <input name="subscriber_name3" id="subscriber_name3" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name3)) echo $subscriber_name3; ?>" /> <input name="subscriber_lastname3" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname3)) echo $subscriber_lastname3; ?>"></input></span></p>
 <p class=rvps9><span class=rvts13>&nbsp;</span><span class=rvts9> (à noter sur le rapport si IMA)&nbsp; </span></p>
 <p class=rvps10><span class=rvts9><br></span></p>
 <p class=rvps11><span class=rvts9>Merci de coordonner avec </span><span class=rvts13><input name="CL_coordonner" placeholder="Coordonner" value="<?php if(isset ($CL_coordonner)) echo $CL_coordonner; ?>"></input> pour convenir de l</span><span class=rvts19>’</span><span class=rvts13>heure du rendez-vous.</span></p>
@@ -362,7 +369,8 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p><span class=rvts29>Merci de votre collaboration.</span></p>
 <p><span class=rvts29><br></span></p>
 <p><span class=rvts29>P/la Gérante</span></p>
-<p class=rvps1><span class=rvts29><input name="agent__name" id="agent__name" placeholder="nom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>"/></span></p>
+<p class=rvps1><span class=rvts9><input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($agent__lastname)) echo $agent__lastname; ?>" /> </span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($agent__signature)) echo $agent__signature; ?>" /></span></p>
 <p><span class=rvts29>Plateau d</span><span class=rvts30>’</span><span class=rvts29>assistance technique</span></p>
 <p class=rvps1><span class=rvts29>« courrier électronique, sans signature »</span></p>
 </body></html>

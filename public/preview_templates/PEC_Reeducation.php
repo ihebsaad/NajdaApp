@@ -2,8 +2,8 @@
 if (isset($_GET['prest__reeduc'])) {$prest__reeduc=$_GET['prest__reeduc'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
-if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; }
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; }
+if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; $subscriber_name2=$_GET['subscriber_name'];}
+if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname'];$subscriber_name2=$_GET['subscriber_lastname']; }
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
 if (isset($_GET['CL_nombre_seance'])) {$CL_nombre_seance=$_GET['CL_nombre_seance'];}
 if (isset($_GET['CL_montant_seance_numerique'])) {$CL_montant_seance_numerique=$_GET['CL_montant_seance_numerique'];}
@@ -11,6 +11,8 @@ if (isset($_GET['CL_montant_toutes_lettres'])) {$CL_montant_toutes_lettres=$_GET
 if (isset($_GET['CL_montant_total'])) {$CL_montant_total=$_GET['CL_montant_total'];}
 if (isset($_GET['CL_date_reeduction'])) {$CL_date_reeduction=$_GET['CL_date_reeduction'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
+if (isset($_GET['agent__lastname'])) {$agent__lastname=$_GET['agent__lastname']; }
+if (isset($_GET['agent__signature'])) {$agent__signature=$_GET['agent__signature']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
 if (isset($_GET['idtaggop'])) 
@@ -252,9 +254,9 @@ if (isset($_GET['idtaggop']))
 <p class=rvps5><span class=rvts4>SEANCES DE REEDUCATION FONCTIONNELLE</span></p>
 <p class=rvps5><span class=rvts5><br></span></p>
 <p class=rvps6><span class=rvts6>*Client :</span><span class=rvts7> </span><span class=rvts6><input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /></span></p>
-<p class=rvps7><span class=rvts6>*Nom patient : <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span></p>
-<p class=rvps7><span class=rvts6>*Prénom : <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
-<p class=rvps1><span class=rvts8>*Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input></span></p>
+<p class=rvps7><span class=rvts6>*Nom patient : <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
+<p class=rvps7><span class=rvts6>*Prénom : <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span></p>
+<p class=rvps1><span class=rvts8>*Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input></span></p>
 <p><span class=rvts9>*</span><span class=rvts8>Nombre de séances</span><span class=rvts9> : <input name="CL_nombre_seance" id="CL_nombre_seance" placeholder="Nombre de Séances" value="<?php if(isset ($CL_nombre_seance)) echo $CL_nombre_seance; ?>" onKeyUp=" calcultotal()"></input> </span><span class=rvts8>Montant/séance (TND): <input name="CL_montant_seance_numerique" id="CL_montant_seance_numerique" width=70% placeholder="Montant Numerique par Séance" value="<?php if(isset ($CL_montant_seance_numerique)) echo $CL_montant_seance_numerique; ?>" onKeyUp=" calcultotal()"></input></span><span class=rvts9> </span></p>
 <p class=rvps6><span class=rvts6>*Montant total (TND): </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_total" id="CL_montant_total" placeholder="Montant total" value="<?php if(isset ($CL_montant_total)) echo $CL_montant_total; ?>" onchange=" keyUpHandler(this)"></input></span> <span class=rvts11>&nbsp;&nbsp; </span><span class=rvts6>Toutes lettres</span><span class=rvts7> :  <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars</span></p>
 <p><span class=rvts12><br></span></p>
@@ -268,7 +270,8 @@ if (isset($_GET['idtaggop']))
 <p class=rvps1><span class=rvts18>Toute facture devra être envoyée accompagnée de la présente prise en charge, ainsi que de l'original de tout document à signer qui l</span><span class=rvts19>’</span><span class=rvts18>accompagnerait.</span></p>
 <p><span class=rvts14><br></span></p>
 <p><span class=rvts9>Cordialement</span></p>
-<p class=rvps1><span class=rvts9><input name="agent__name" id="agent__name" placeholder="nom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" > </input></span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($agent__lastname)) echo $agent__lastname; ?>" /></span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($agent__signature)) echo $agent__signature; ?>" /></span></p>
 <p class=rvps8><span class=rvts7>Plateau TPA</span></p>
 <p class=rvps1><span class=rvts9>« courrier électronique, sans signature »</span></p>
 <p class=rvps9><span class=rvts7><br></span></p>

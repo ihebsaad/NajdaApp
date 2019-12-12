@@ -1,14 +1,20 @@
 <?php
 if (isset($_GET['CL_date_heure_act'])) {$CL_date_heure_act=$_GET['CL_date_heure_act'];}
+if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; }
 if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; }
 if (isset($_GET['CL_pays'])) {$CL_pays=$_GET['CL_pays'];}
 if (isset($_GET['CL_passport'])) {$CL_passport=$_GET['CL_passport'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
+if (isset($_GET['vehicule_marque'])) {$vehicule_marque=$_GET['vehicule_marque'];}
 if (isset($_GET['vehicule_immatriculation'])) {$vehicule_immatriculation=$_GET['vehicule_immatriculation'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
+if (isset($_GET['idtaggop'])) 
+    {
+        $idtaggop=$_GET['idtaggop']; 
+    }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>1sj2w5nrf2cp2hsbevn2rpx6iqrv8wxm_Procu_abonne_pr_Najda_rapat_vhl</title>
@@ -112,7 +118,7 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p><span class=rvts1><br></span></p>
 <p><span class=rvts1><br></span></p>
 <p class=rvps3><span class=rvts1><br></span></p>
-<p class=rvps4><span class=rvts1>Je soussigné  <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> titulaire du passeport <input name="CL_pays" placeholder="Pays" value="<?php if(isset ($CL_pays)) echo $CL_pays; ?>"></input> N° N° <input name="CL_passport" placeholder="Passport" value="<?php if(isset ($CL_passport)) echo $CL_passport; ?>"></input> autorise par la présente la société </span><span class=rvts3>Najda Assistance,</span><span class=rvts1> agissant en tant que correspondant de ma société d</span><span class=rvts4>’</span><span class=rvts1>assistance <input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /> à procéder aux démarches douanières pour le rapatriement de mon véhicule  <input name="vehicule_type" placeholder="Type et marque du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input>.</span></p>
+<p class=rvps4><span class=rvts1>Je soussigné  <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> titulaire du passeport <input name="CL_pays" placeholder="Pays" value="<?php if(isset ($CL_pays)) echo $CL_pays; ?>"></input> N° N° <input name="CL_passport" placeholder="Passport" value="<?php if(isset ($CL_passport)) echo $CL_passport; ?>"></input> autorise par la présente la société </span><span class=rvts3>Najda Assistance,</span><span class=rvts1> agissant en tant que correspondant de ma société d</span><span class=rvts4>’</span><span class=rvts1>assistance <input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /> à procéder aux démarches douanières pour le rapatriement de mon véhicule  <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input>  <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input>.</span></p>
 <p class=rvps3><span class=rvts1><br></span></p>
 <p class=rvps3><span class=rvts1>Dont acte.</span></p>
 <p class=rvps3><span class=rvts1><br></span></p>
