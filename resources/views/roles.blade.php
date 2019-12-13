@@ -262,7 +262,7 @@
 <?php 
      if( ($typeuser=='superviseur') || ($typeuser=='admin'))
       {
-        if (empty($seance->superviseurmedic) || ($seance->superviseurmedic === Auth::id()))
+        if (empty($seance->superviseurmedic) )
         { 
 ?>
     <label class="check ">Superviseur Médical
@@ -304,7 +304,7 @@
 <?php
     if( ($typeuser=='superviseur') || ($typeuser=='admin'))
     {
-        if (empty($seance->superviseurtech) || ($seance->superviseurtech === Auth::id()))
+        if (empty($seance->superviseurtech)  )
         { 
 ?>
     <label class="check ">Superviseur Technique
@@ -348,7 +348,7 @@
 <?php 
    // if (UsersController::CheckRoleUser(Auth::id(),5) > 0)
    //   {
-        if (empty($seance->chargetransport) || ($seance->chargetransport === Auth::id()))
+        if (empty($seance->chargetransport)  )
         { 
 ?>
     <label class="check ">Chargé de Transport

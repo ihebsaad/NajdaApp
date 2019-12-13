@@ -46,10 +46,10 @@ use  \App\Http\Controllers\DocsController;
         <b>Affecté à:</b>
         <?php 
        if($dossier->affecte >0) {$agentname = User::where('id',$dossier->affecte)->first();}else{$agentname=null;}
-        if ((Gate::check('isAdmin') || Gate::check('isSupervisor')) &&  ($agentname!=null))
+        if ((Gate::check('isAdmin') || Gate::check('isSupervisor') || ( $idagent==$iduser)  ) &&  ($agentname!=null) )
             { echo '<a href="#" data-toggle="modal" data-target="#attrmodal"><input type="hidden" id="affecte" value="'.$dossier->affecte.'" >';}
             if( ($dossier->affecte >0)){ echo $agentname['name'].' '.$agentname['lastname'];}
-        if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
+        if(Gate::check('isAdmin') || Gate::check('isSupervisor')|| ( $idagent==$iduser) )
             { echo '</a>';}
 
         ?>
