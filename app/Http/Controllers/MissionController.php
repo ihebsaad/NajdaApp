@@ -392,7 +392,7 @@ class MissionController extends Controller
              'commentaire' => trim($request->get('commentaire')),
              'date_deb'=> $datespecifique,
              'type_Mission' =>$typeMiss->id,
-             'dossier_id' => $dossier->id,
+             'dossier_id' => trim($request->get('dossierID')),
              'statut_courant' => 'active',
 
              'realisee'=> 0,
@@ -609,7 +609,7 @@ class MissionController extends Controller
 
            }
 
-        $dos=Dossier::where('id',$dossier->id)->first();
+        $dos=Dossier::where('id',trim($request->get('dossierID')))->first();
          if($dos->current_status != 'Cloture')
          {
              $dos->update(array('current_status'=>'actif'));
