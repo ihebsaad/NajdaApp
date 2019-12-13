@@ -1999,8 +1999,8 @@ use  \App\Http\Controllers\DocsController;
                                 <label for="code">Type</label>
                                 <div class="row">
                                     <select    class="form-control"  id="typetel"  >
-                                        <option value="Fixe">Fixe</option>
-                                        <option value="Mobile">Mobile</option>
+                                        <option value="Fixe">Mobile</option>
+                                        <option value="Mobile">Fixe</option>
                                     </select>
 
                                 </div>
