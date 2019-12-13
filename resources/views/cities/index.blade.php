@@ -187,6 +187,13 @@
                         .search(this.value)
                         .draw();
                 });
+				
+				
+                $('#mytable thead tr:eq(1) th:eq(' + index + ') input').keyup(delay(function (e) {
+                    console.log('Time elapsed!', this.value);
+                    $(this).blur();
+
+                }, 2000));
             });
 
 

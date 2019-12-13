@@ -82,7 +82,7 @@ use App\Http\Controllers\TagsController;
                         {
                             echo '<option title="'.$ds->id.'" value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
                     </select>
-                       <button style="margin-left:35px" type="button" id="updatefolder" class="btn btn-primary">Dispatcher</button>
+                       <button style="margin-left:35px" type="button" id="updatefolder" onclick="document.getElementById('updatefolder').disabled=true" class="btn btn-primary">Dispatcher</button>
 
                 </div>
                 <div class="row" style="font-size:12px;">

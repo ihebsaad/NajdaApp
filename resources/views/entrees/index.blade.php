@@ -50,11 +50,9 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                     <td  style="width:35%;font-size:12px;max-width:200px;"><a style="<?php echo $style;?>"  <?php if ($entree['dossier']!='') {  ?>   href="<?php echo $urlapp.'/entrees/show/',$entree['id']?>" <?php } else{  ?> href= "<?php echo $urlapp.'/entrees/showdisp/',$entree['id']?>"    <?php } ?>     ><?php echo $entree['sujet'] ; ?></a></td>
                     <td  style="width:8%;font-size:12px; "><?php echo $entree['dossier'].' - '.DossiersController::FullnameAbnDossierById($entree['dossierid']);?></td>
                     <td>
-                        @can('isAdmin')
-                            <a  href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
-                                <span class="fa fa-fw fa-trash-alt"></span> Supprimer
+                             <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                <span class="fa fa-fw fa-trash-alt"></span>
                             </a>
-                        @endcan
 
                     </td>
                 </tr>
@@ -140,12 +138,29 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
             });
 
 // Apply the search
+            function delay(callback, ms) {
+                var timer = 0;
+                return function() {
+                    var context = this, args = arguments;
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        callback.apply(context, args);
+                    }, ms || 0);
+                };
+            }
+			
             table.columns().every(function (index) {
                 $('#mytable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
                     table.column($(this).parent().index() + ':visible')
                         .search(this.value)
                         .draw();
                 });
+				
+                $('#mytable thead tr:eq(1) th:eq(' + index + ') input').keyup(delay(function (e) {
+                    console.log('Time elapsed!', this.value);
+                    $(this).blur();
+
+                }, 2000));
             });
 
 

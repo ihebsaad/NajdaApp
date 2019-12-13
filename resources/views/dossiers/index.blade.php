@@ -404,12 +404,29 @@
         });
 
 // Apply the search
+            function delay(callback, ms) {
+                var timer = 0;
+                return function() {
+                    var context = this, args = arguments;
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        callback.apply(context, args);
+                    }, ms || 0);
+                };
+            }
+			
         table.columns().every(function (index) {
             $('#mytable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
                 table.column($(this).parent().index() + ':visible')
                     .search(this.value)
                     .draw();
             });
+			
+                $('#mytable thead tr:eq(1) th:eq(' + index + ') input').keyup(delay(function (e) {
+                    console.log('Time elapsed!', this.value);
+                    $(this).blur();
+
+                }, 2000));
         });
 
 

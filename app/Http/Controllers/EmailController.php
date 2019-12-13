@@ -592,25 +592,32 @@ $id=0;
             //Move the current Message to 'INBOX.read'
             if ($oMessage->moveToFolder('read') == true) {
 
+        ///     if(strpos($sujet, "[SPAM]" ) ==false) {
 
-                // dispatch
-                $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
-                $refdossier='';$dossierid=0;$nomassure='';
+                    // dispatch
+                $dossiers = Dossier::where('current_status', '!=', 'Cloture')->get();
+
+                $refdossier = '';
+                $dossierid = 0;
+                $nomassure = '';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
-                    $ref=trim(strval($dos['reference_medic']));
-                    $refCL=trim(strval($dos['reference_customer']));
-                    if ($refCL==''){$refCL='XX';}
+                    $ref = trim(strval($dos['reference_medic']));
+                    $refCL = trim(strval($dos['reference_customer']));
+                    if ($refCL == '') {
+                        $refCL = 'XX';
+                    }
 
-                    if (   (strpos($sujet, $ref )!==false) ||
-                        (strpos($contenu, $ref) !==false ) ||
-                        (strpos($sujet, $refCL )!==false && ( strlen($refCL) >4 )  )  ||
-                        ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
-                    {
+
+                    if ((strpos($sujet, $ref) !== false) ||
+                        (strpos($contenu, $ref) !== false) ||
+                        (strpos($sujet, $refCL) !== false && (strlen($refCL) > 4)) ||
+                        (strpos($contenu, $refCL) !== false && (strlen($refCL) > 4))
+                    ) {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
-                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
+                        $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
 
                         $statut = 1;
                         break;
@@ -621,45 +628,46 @@ $id=0;
                     'destinataire' => '24ops@najda-assistance.com',
 
                     'emetteur' => ($from),
-                    'sujet' =>   $sujet ,
+                    'sujet' => $sujet,
                     //  'contenutxt'=> $contenubrut,
-                    'contenu'=>  ($contenu) ,
-                    'reception'=> $date,
-                    'nb_attach'=> $nbattachs,
-                    'type'=> 'email',
-                    'mailid'=> 'b1-'.$mailid,
-                    'viewed'=>0,
-                    'dossier'=>$refdossier,
-                    'dossierid'=>$dossierid,
-                    'statut'=>$statut,
+                    'contenu' => ($contenu),
+                    'reception' => $date,
+                    'nb_attach' => $nbattachs,
+                    'type' => 'email',
+                    'mailid' => 'b1-' . $mailid,
+                    'viewed' => 0,
+                    'dossier' => $refdossier,
+                    'dossierid' => $dossierid,
+                    'statut' => $statut,
 
                 ]);
 
-                if ($this->checkEmailExiste('b1-'.$mailid)==0){
-                    $entree->save(); $id=$entree->id;
-                    Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+                if ($this->checkEmailExiste('b1-' . $mailid) == 0) {
+                    $entree->save();
+                    $id = $entree->id;
+                    Log::info('Email reçu de : ' . $from . ' Dossier: ' . $refdossier);
 
                     //$dataentree=/*$entree->select('id','mailid','emetteur','destinataire','sujet','type','reception','dossier'); */array('id'=>$entree->id,'notifiable_id'=>$entree->notifiable_id,'reception'=>$entree->notifiable_id);
                 }
 
 
                 /*********************/
-                if($refdossier!= ''){
+                if ($refdossier != '') {
 
 
-                  //  $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-                   // $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
-                    $userid=$this->AgentAffecte($dossierid);
+                    //  $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                    // $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                    $userid = $this->AgentAffecte($dossierid);
 
                     //  $user=  DB::table('users')->where('id','=', $userid )->first();
-                    if($userid>0){
+                    if ($userid > 0) {
 
                         $user = User::find($userid);
 
-                    ////    Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+                        ////    Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
 
-                        if($id>0) {
+                        if ($id > 0) {
                             $notif = new Notif([
                                 'emetteur' => ($from),
                                 'sujet' => ($sujet),
@@ -677,16 +685,15 @@ $id=0;
                             $notif->save();
                         }
 
-                    }
-                    else{
-                        $seance =  DB::table('seance')
-                            ->where('id','=', 1 )->first();
-                        $disp=$seance->dispatcheur ;
+                    } else {
+                        $seance = DB::table('seance')
+                            ->where('id', '=', 1)->first();
+                        $disp = $seance->dispatcheur;
 
-                     ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                        ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
 
-                        if($id>0) {
+                        if ($id > 0) {
                             $notif = new Notif([
                                 'emetteur' => ($from),
                                 'sujet' => ($sujet),
@@ -706,23 +713,22 @@ $id=0;
 
                     }
                     // Activer le dossier
-                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
+                    Dossier::where('id', $dossierid)->update(array('current_status' => 'actif'));
 
 
-                }
-                else{
+                } else {
 
-                    $seance =  DB::table('seance')
-                        ->where('id','=', 1 )->first();
-                    $disp=$seance->dispatcheur ;
+                    $seance = DB::table('seance')
+                        ->where('id', '=', 1)->first();
+                    $disp = $seance->dispatcheur;
 
-                    if($disp>0) {
-                         // $user=  DB::table('users')->where('id','=', $disp )->first();
+                    if ($disp > 0) {
+                        // $user=  DB::table('users')->where('id','=', $disp )->first();
 
-                     ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                        ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
 
-                        if($id>0) {
+                        if ($id > 0) {
                             $notif = new Notif([
                                 'emetteur' => ($from),
                                 'sujet' => ($sujet),
@@ -746,52 +752,45 @@ $id=0;
                 }
 
 
-
-
                 $aAttachment = $oMessage->getAttachments();
 
-                $aAttachment->each(function ($oAttachment) use ($id){
-                    $path= storage_path()."/Emails/";
+                $aAttachment->each(function ($oAttachment) use ($id) {
+                    $path = storage_path() . "/Emails/";
                     /** @var \Webklex\IMAP\Attachment $oAttachment */
-                    if (!file_exists($path.$id)) {
-                        mkdir($path.$id, 0777, true);
+                    if (!file_exists($path . $id)) {
+                        mkdir($path . $id, 0777, true);
                     }
                     // save in folder
-                    $oAttachment->save($path.$id);
+                    $oAttachment->save($path . $id);
                     // save in DB
 
                     $nom = $oAttachment->getName();
-                    $facturation='';
-                    $type=  $oAttachment->getExtension();
+                    $facturation = '';
+                    $type = $oAttachment->getExtension();
 
                     // verifier si l'attachement pdf contient des mots de facturation
-                    if ( App::environment() === 'production') {
+                    if (App::environment() === 'production') {
 
-                        if ($type=='pdf')
-                        {
-                            $path=$path.$id."/".$nom;
-                            $path=realpath($path);
+                        if ($type == 'pdf') {
+                            $path = $path . $id . "/" . $nom;
+                            $path = realpath($path);
                             $text = (new Pdf())
-                                ->setPdf($path )
+                                ->setPdf($path)
                                 ->text();
 
-                            if(strpos($text,'facturation')!==false)
-                            {
-                                $facturation='facturation';
+                            if (strpos($text, 'facturation') !== false) {
+                                $facturation = 'facturation';
                             }
-                            if(strpos($text,'invoice')!==false)
-                            {
-                                $facturation=$facturation.' , '.'invoice';
+                            if (strpos($text, 'invoice') !== false) {
+                                $facturation = $facturation . ' , ' . 'invoice';
                             }
 
-                            if(strpos($text,'plafond')!==false)
-                            {
-                                $facturation=$facturation.' , '.'plafond';
+                            if (strpos($text, 'plafond') !== false) {
+                                $facturation = $facturation . ' , ' . 'plafond';
                             }
 
-                            if(strpos($text,'gop')!==false)
-                            {
-                                $facturation=$facturation.' , '.'gop';
+                            if (strpos($text, 'gop') !== false) {
+                                $facturation = $facturation . ' , ' . 'gop';
                             }
 
 
@@ -799,16 +798,16 @@ $id=0;
                     } // end if  production
 
 
-                    $path2= '/Emails/'.$id.'/'.$nom ;
+                    $path2 = '/Emails/' . $id . '/' . $nom;
 
                     $attach = new Attachement([
                         'nom' => $nom,
                         'type' => $type,
-                        'path'=> $path2,
-                        'parent'=> $id,
-                        'entree_id'=> $id,
-                        'facturation'=> $facturation,
-                        'boite'=> 0,  // 0 = reception, 1 = envoi
+                        'path' => $path2,
+                        'parent' => $id,
+                        'entree_id' => $id,
+                        'facturation' => $facturation,
+                        'boite' => 0,  // 0 = reception, 1 = envoi
 
                     ]);
 
@@ -816,7 +815,7 @@ $id=0;
 
                 });
 
-
+      ///      } // verification Spams
 
             } else {
                 // error
@@ -3966,8 +3965,7 @@ $id=0;
         $description= $request->get('description');
         $attachs = $request->get('attachs');
 
-        $parametres =  DB::table('parametres')
-            ->where('id','=', 1 )->first();
+
 
 
        //    dd($request->all()) ;

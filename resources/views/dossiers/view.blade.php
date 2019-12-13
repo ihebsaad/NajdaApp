@@ -323,7 +323,7 @@ use \App\Http\Controllers\UsersController;
 
                                         <span class="cd-date">
 
-                                            <?php echo /*date('d/m/Y H:i', (*/$communin['reception']/*))*/ ; ?> <i class="fa fa-fw fa-clock-o"></i><br>
+                                            <?php echo '..'. /*date('d/m/Y H:i', (*/$communin['reception']/*))*/ ; ?> <i class="fa fa-fw fa-clock-o"></i><br>
 
 
                                         </span>

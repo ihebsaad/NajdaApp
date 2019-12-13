@@ -5,6 +5,7 @@ use App\Adresse;
 use App\AffectDoss;
 use App\Evaluation;
 use App\Mission;
+use App\User;
 use App\Parametre;
 use App\Prestataire;
 use App\Seance;
@@ -36,6 +37,7 @@ use Mail;
 use App\Notification;
 use App\Notif ;
 
+use Swift_Mailer;
 
 ini_set('memory_limit','1024M');
 
@@ -444,6 +446,7 @@ class DossiersController extends Controller
         $affecte=$request->get('affecte');
         $message=$request->get('message');
         $refclient=$request->get('refclient');
+        $from=trim($request->get('from'));
         $to=($request->get('destinataire'));
 
         $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$client);
@@ -469,11 +472,137 @@ class DossiersController extends Controller
         $prenomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$affecte);
         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('lastname',$affecte);
 
-        $nomcompletagent=$prenomagent.' '.$nomagent ;
-        $contenu=$message.'<br><br>'.$nomcompletagent.'<br>'.$signature;
+
         $cci=array();
        // array_push($cci,'medic.multiservices@topnet.tn' );///
-        array_push($cci,'saadiheb@gmail.com' );///
+        array_push($cci,'medic.multiservices@topnet.tn' );///
+
+        $parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+
+        if ($from=='faxnajdassist@najda-assistance.com')
+        {
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport->setUsername('faxnajdassist@najda-assistance.com');
+            $swiftTransport->setPassword('e-solutions2019');
+            $fromname="Fax Najda Ass";
+
+        }
+
+        if ($from=='24ops@najda-assistance.com')
+        {        $pass_N=$parametres->pass_N ;
+            // $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('24ops@najda-assistance.com');
+            $swiftTransport->setPassword($pass_N);
+            $fromname="Najda Assistance";
+            $signatureentite= $parametres->signature ;
+
+
+        }
+
+        if ($from=='tpa@najda-assistance.com')
+        {    $pass_TPA=$parametres->pass_TPA ;
+            //  $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('tpa@najda-assistance.com');
+            $swiftTransport->setPassword($pass_TPA);
+            $fromname="Najda Assistance (TPA)";
+            $signatureentite= $parametres->signature7 ;
+
+
+        }
+        if ($from=='taxi@najda-assistance.com')
+        {    $pass_TN=$parametres->pass_TN ;
+            //  $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('taxi@najda-assistance.com');
+            $swiftTransport->setPassword($pass_TN);
+            $fromname="Najda Transport";
+            $signatureentite= $parametres->signature8 ;
+
+        }
+        if ($from=='x-press@najda-assistance.com')
+        {  $pass_XP=$parametres->pass_XP ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('x-press@najda-assistance.com');
+            $swiftTransport->setPassword($pass_XP);
+            $fromname="X-Press remorquage";
+            $signatureentite= $parametres->signature9 ;
+
+        }
+
+        if ($from=='hotels.vat@medicmultiservices.com')
+        {  $pass_VAT=$parametres->pass_VAT ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
+            $swiftTransport->setUsername('hotels.vat@medicmultiservices.com');
+            $swiftTransport->setPassword($pass_VAT);
+            $fromname="VAT hôtels";
+            $signatureentite= $parametres->signature2 ;
+
+        }
+
+        if ($from=='assistance@medicmultiservices.com')
+        {  $pass_MEDIC =$parametres->pass_MEDIC ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
+            $swiftTransport->setUsername('assistance@medicmultiservices.com');
+            $swiftTransport->setPassword($pass_MEDIC);
+            $fromname="Medic' Multiservices";
+            $signatureentite= $parametres->signature3 ;
+
+        }
+
+        if ($from=='ambulance.transp@medicmultiservices.com')
+        {  $pass_TM=$parametres->pass_TM ;
+            // $swiftTransport =  new \Swift_SmtpTransport( 'mail.bmail.tn', '25');
+            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25','');
+            $swiftTransport->setUsername('ambulance.transp@medicmultiservices.com');
+            $swiftTransport->setPassword($pass_TM);
+            $fromname="Transport MEDIC";
+            $signatureentite= $parametres->signature4 ;
+
+        }
+
+        if ($from=='vat.transp@medicmultiservices.com')
+        {  $pass_TV=$parametres->pass_TV ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
+            $swiftTransport->setUsername('vat.transp@medicmultiservices.com');
+            $swiftTransport->setPassword($pass_TV);
+            $fromname="Transport VAT";
+            $signatureentite= $parametres->signature5 ;
+
+        }
+
+        if ($from=='operations@medicinternational.tn')
+        {  $pass_MI=$parametres->pass_MI ;
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('operations@medicinternational.tn');
+            $swiftTransport->setPassword($pass_MI);
+            $fromname="Medic' Multiservices";
+            $signatureentite= $parametres->signature6 ;
+
+        }
+
+        $swiftMailer = new Swift_Mailer($swiftTransport);
+
+        Mail::setSwiftMailer($swiftMailer);
+
+
+        $nomcompletagent=$prenomagent.' '.$nomagent ;
+
+
+        $user = auth()->user();$idu=$user->id;
+        $lg='fr';
+        $signatureagent= $this->getSignatureUser($idu,$lg);
+
+
+        // $contenu=$message.'<br><br>'.$nomcompletagent.'<br>'.$signature;
+
+        $nomuser=$user->name.' '.$user->lastname;
+
+        $contenu=$message.'<br><br>Cordialement / Best regards<br>'.$nomcompletagent.' '. $signature.'<br><br><hr style="float:left;width:40%"><br>'.$signatureentite;
+
+
 
         //medic.multiservices@topnet.tn
         try{
@@ -481,9 +610,9 @@ class DossiersController extends Controller
                 $message
 
                 //    ->to($destinataire)
-                ->cci($cci  ?: [])
+                ->bcc($cci  ?: [])
 
-                 //   ->cci('medic.multiservices@topnet.tn')
+                  //  ->cci('saadiheb@gmail.com')
                     ->subject($sujet)
                     ->setBody($contenu, 'text/html');
                 if(isset($to )) {
@@ -1478,7 +1607,6 @@ class DossiersController extends Controller
             ->get();
 
 
-
         // Sort the array
         usort($communins, function  ($element1, $element2) {
             $datetime1 = strtotime($element1['reception']);
@@ -1992,6 +2120,21 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
         $iddossier= $request->get('dossier');
         $statut= $request->get('statut');
         Dossier::where('id',$iddossier)->update(array('current_status'=>$statut));
+
+    }
+
+
+
+    public static function getSignatureUser($id,$lg)
+    {
+        $user = User::find($id);
+        if($lg=='en')
+        {
+            return $user['signature_en'];
+        }else{
+            return $user['signature'];
+
+        }
 
     }
 

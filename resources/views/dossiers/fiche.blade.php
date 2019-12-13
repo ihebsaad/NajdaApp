@@ -18,7 +18,18 @@ use  \App\Http\Controllers\DocsController;
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 @section('content')
+    <?php
+    $users=UsersController::ListeUsers();
 
+    $CurrentUser = auth()->user();
+
+    $iduser=$CurrentUser->id;
+
+    ?>
+    <?php $idagent=$dossier->user_id; $creator=UsersController::ChampById('name',$idagent).' '.UsersController::ChampById('lastname',$idagent);
+    if($dossier->created==null){ $createdat=  date('d/m/Y H:i', strtotime($dossier->created_at ));}else{
+        $createdat=  date('d/m/Y H:i', strtotime($dossier->created ));}
+    ;?>
 <div class="row">
 
     <div class="col-md-3">
@@ -29,7 +40,7 @@ use  \App\Http\Controllers\DocsController;
      <div class="col-md-3">
         <?php
          // les agents ne voient pas l'aaffectation - à vérifier
-         if (Gate::check('isAdmin') || Gate::check('isSupervisor') ) { ?>
+         if (Gate::check('isAdmin') || Gate::check('isSupervisor') || ( $idagent==$iduser) ) { ?>
         <?php if ((isset($dossier->affecte)) && (($dossier->affecte>0))) { ?>
 
         <b>Affecté à:</b>
@@ -45,7 +56,7 @@ use  \App\Http\Controllers\DocsController;
         <?php }
         else
         {
-            if ((Gate::check('isAdmin') || Gate::check('isSupervisor')))
+            if ((Gate::check('isAdmin') || Gate::check('isSupervisor') || ( $idagent==$iduser) ))
             {echo '<a style="color:#FD9883" href="#" data-toggle="modal" data-target="#attrmodal">Non affecté</a>';}
             else
             {echo '<b style="color:#FD9883">Non affecté</b>';}
@@ -1584,10 +1595,7 @@ use  \App\Http\Controllers\DocsController;
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <?php $idagent=$dossier->user_id; $creator=UsersController::ChampById('name',$idagent).' '.UsersController::ChampById('lastname',$idagent);
-                                if($dossier->created==null){ $createdat=  date('d/m/Y H:i', strtotime($dossier->created_at ));}else{
-                                $createdat=  date('d/m/Y H:i', strtotime($dossier->created ));}
-                                ;?>
+
                                 Dossier créé par <B><?php echo $creator ;?></B> - Date :<?php echo $createdat ?>
                                 <!--   <div class="form-actions right">
                                        <button type="button" id="editDos" class="btn btn-sm btn-info">Enregistrer</button>
@@ -1610,14 +1618,7 @@ use  \App\Http\Controllers\DocsController;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
 
-<?php
-$users=UsersController::ListeUsers();
 
-$CurrentUser = auth()->user();
-
-$iduser=$CurrentUser->id;
-
-?>
 
 
 <!-- Modal Email
@@ -2187,6 +2188,23 @@ $iduser=$CurrentUser->id;
                     {{ csrf_field() }}
                 </div>
                 <div class="form-group">
+
+                    <?php $typea=trim(strtoupper($dossier->type_affectation));
+                    $from='';
+                    if($typea=='NAJDA'){$from='24ops@najda-assistance.com';}
+                    if($typea=='VAT'){$from='hotels.vat@medicmultiservices.com';}
+                    if($typea=='MEDIC'){$from='assistance@medicmultiservices.com';}
+                    if($typea=='TRANSPORT MEDIC'){$from='ambulance.transp@medicmultiservices.com';}
+                    if($typea=='TRANSPORT VAT'){$from='vat.transp@medicmultiservices.com';}
+                    if($typea=='MEDIC INTERNATIONAL'){$from='operations@medicinternational.tn';}
+                    if($typea=='NAJDA TPA'){$from='tpa@najda-assistance.com';}
+                    if($typea=='TRANSPORT NAJDA'){$from='taxi@najda-assistance.com';}
+                    if($typea=='X-PRESS'){$from='x-press@najda-assistance.com';}
+
+
+                    ?>
+                    <input type="hidden"   name="from" id="from" value="<?php echo $from; ?>" />
+
 
                     <label for="destinataire">Destinataire:</label>
 
@@ -2809,6 +2827,7 @@ function disabling(elm) {
             var destinataire = $('#emaildestinataire').val();
             var refclient = $('#reference_customer').val();
             var affecte = $('#affecte').val();
+            var from = $('#from').val();
 
 
             var message = $('#message').html();
@@ -2820,7 +2839,7 @@ function disabling(elm) {
                 $.ajax({
                     url:"{{ route('dossiers.sendaccuse') }}",
                     method:"POST",
-                    data:{ refclient:refclient,message:message,affecte:affecte,client:client,dossier:dossier,destinataire:destinataire, _token:_token},
+                    data:{ from:from,refclient:refclient,message:message,affecte:affecte,client:client,dossier:dossier,destinataire:destinataire, _token:_token},
 
                     success:function(data){
 

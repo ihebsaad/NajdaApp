@@ -122,14 +122,51 @@
 
             });
 
+            // Restore state
+       /*     var state = table.state.loaded();
+            if ( state ) {
+                table.columns().eq( 0 ).each( function ( colIdx ) {
+                    var colSearch = state.columns[colIdx].search;
+
+                    if ( colSearch.search ) {
+                        $( '#mytable thead tr:eq(1) th:eq(' + index + ') input', table.column( colIdx ).footer() ).val( colSearch.search );
+
+                    }
+                } );
+
+                table.draw();
+            }
+
+*/
+
+            function delay(callback, ms) {
+                var timer = 0;
+                return function() {
+                    var context = this, args = arguments;
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        callback.apply(context, args);
+                    }, ms || 0);
+                };
+            }
 // Apply the search
             table.columns().every(function (index) {
                 $('#mytable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
                     table.column($(this).parent().index() + ':visible')
                         .search(this.value)
                         .draw();
+
+
                 });
+
+                $('#mytable thead tr:eq(1) th:eq(' + index + ') input').keyup(delay(function (e) {
+                    console.log('Time elapsed!', this.value);
+                    $(this).blur();
+
+                }, 2000));
             });
+
+
 
 /*
             $('#add').click(function(){
