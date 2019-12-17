@@ -310,20 +310,31 @@ use \App\Http\Controllers\UsersController;
                                     <h2 style="font-size: 16px"><?php echo $communin['sujet']; ?></h2>
                                     <p class="overme">
 
-                                        <?php if ($communin['boite']==0)
+                                        <?php if ($communin['boite']==0 || $communin['boite']==null)
                                         {  echo '<span class="commsujet" style="font-size:12px"><B>Emetteur: </B>'. $communin['emetteur'].'</span>';
+                                       echo '<span class="cd-date">'.
+                                       $communin['reception'] .'<i class="fa fa-fw fa-clock-o"></i><br>
+                                        </span>';
+                                        }
+
+                                        ?>
+                                             <?php if ($communin['boite']==1  )
+                                            {
+                                           echo '<b>Emetteur : </b>'. UsersController::ChampById('name',$communin['par']) .' '.  UsersController::ChampById('lastname',$communin['par']);
+                                            } ?>
+
+                                            <?php if ($communin['commentaire']!=null)
+                                        {  echo '<br><span style="font-size:12px"><B>Descrip: </B>'. $communin['commentaire'].'</span><br>';
                                         }
                                         ?>
-
-                                        <?php if ($communin['commentaire']!=null)
-                                        {  echo '<span style="font-size:12px"><B>Commentaire: </B>'. $communin['commentaire'].'</span>';
+                                        <?php if ($communin['boite']==1)
+                                        {  echo '<br><span style="font-size:12px"><B>Descrip: </B>'. $communin['description'].'</span><br>';
                                         }
                                         ?>
-
 
                                         <span class="cd-date">
 
-                                            <?php echo '..'. /*date('d/m/Y H:i', (*/$communin['reception']/*))*/ ; ?> <i class="fa fa-fw fa-clock-o"></i><br>
+                                            <?php echo /* date('d/m/Y H:i', (*/$communin['reception']/*))*/ ; ?> <i class="fa fa-fw fa-clock-o"></i><br>
 
 
                                         </span>
@@ -352,6 +363,8 @@ use \App\Http\Controllers\UsersController;
                             @endif
 
                         </section>
+
+                <?php // echo '<br>test entrees <br>'.json_encode($entrees1) .' <br> Envoyés <br>'.json_encode($envoyes1);?>
             </div>
             <div id="tab3" class="tab-pane fade  active in">
                 <ul class="nav  nav-tabs">
@@ -478,7 +491,7 @@ use \App\Http\Controllers\UsersController;
         $typesp=  PrestatairesController::PrestataireTypesP($id);
         $specs=  PrestatairesController::PrestataireSpecs($id);
   $tels=array();
-  $tels =   Adresse::where('nature', 'tel')
+  $tels =   Adresse::where('nature', 'telinterv')
   ->where('parent',$id)
   ->get();
         ?>
@@ -3122,7 +3135,7 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
 
     });
 
-  if ((templateexist) && (document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC") === -1) && !(needgop) )
+    if ((templateexist) && (document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC") === -1 || document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC_location_VAT_a_Prest") !== -1) && !(needgop) )
 
     {
 
@@ -4592,7 +4605,7 @@ $("#showNext-m").click(function() {
 <style>
 
     section#timeline {
-        width: 80%;
+        width: 100%;
         margin: 20px auto;
         position: relative;
     }

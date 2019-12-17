@@ -407,8 +407,6 @@ class DossiersController extends Controller
                     ->update(array('dossier' => $reference_medic));
 
 
-
-
                 $dtc = (new \DateTime())->format('Y-m-d H:i');
                 $affec=new AffectDoss([
 
@@ -856,9 +854,9 @@ class DossiersController extends Controller
 
         $envoyes =   Envoye::where('dossier', $ref)->get();
 
-        $entrees1 =   Entree::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
+        $entrees1 =   Entree::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'asc')->get();
         ///  $entrees1 =$entrees1->sortBy('reception');
-        $envoyes1 =   Envoye::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
+        $envoyes1 =   Envoye::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire','description','par')->orderBy('reception', 'asc')->get();
         ///  $envoyes1 =$envoyes1->sortBy('reception');
 
         $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());
@@ -1493,7 +1491,6 @@ class DossiersController extends Controller
 
         $datasearch =null;
 
-
         if($request->get('dossier'))
         { $id=$request->get('dossier'); }
 
@@ -1568,8 +1565,10 @@ class DossiersController extends Controller
         $adresse=app('App\Http\Controllers\ClientsController')->ClientChampById('adresse',$cl);
 
 
-        $prestations =   Prestation::where('dossier_id', $id)->where('effectue',1)->get();
+        $prestations =   Prestation::where('dossier_id', $id)->get();
         $intervenants =   Intervenant::where('dossier', $id)->get();
+        $inters =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
+        $prests = Prestation::where('dossier_id', $id)->pluck('prestataire_id');
 
 
         $ref=$this->RefDossierById($id);
@@ -1577,15 +1576,16 @@ class DossiersController extends Controller
 
         $envoyes =   Envoye::where('dossier', $ref)->get();
 
-        $entrees1 =   Entree::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
-
-        $envoyes1 =   Envoye::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
+        $entrees1 =   Entree::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'asc')->get();
+        ///  $entrees1 =$entrees1->sortBy('reception');
+        $envoyes1 =   Envoye::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire','description','par')->orderBy('reception', 'asc')->get();
+        ///  $envoyes1 =$envoyes1->sortBy('reception');
 
         $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());
 
-
         $phonesDossier =   Adresse::where('nature', 'teldoss')
             ->where('parent',$id)
+            ->where('parenttype','dossier')
             ->get();
 
         $phonesCl =   Adresse::where('nature', 'tel')
@@ -1593,12 +1593,9 @@ class DossiersController extends Controller
             ->get();
         // $phonesInt=array();
 
-        $inters =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
-        $prests = Prestation::where('dossier_id', $id)->pluck('prestataire_id');
-
         $intervs = array_merge( $inters->toArray(),$prests->toArray() );
 
-        $phonesInt =   Adresse::where('nature', 'tel')
+        $phonesInt =   Adresse::where('nature', 'telinterv')
             ->whereIn('parent', $intervs)
             ->get();
 

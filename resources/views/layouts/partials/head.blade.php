@@ -413,7 +413,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                                 method: "POST",
                                 data: {id:id ,ok:1, _token: _token},
                                 success: function (data) {
-
+                                    location.reload();
 
                                 }
                             });

@@ -7,6 +7,8 @@
     <link href="{{ URL::asset('public/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
 <meta charset="UTF-8">
 <title>Najda Assistances - Rôles</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
 </head>
 <style>
 
@@ -259,8 +261,8 @@
       //  }
         ?>
     </label>
-<?php 
-     if( ($typeuser=='superviseur') || ($typeuser=='admin'))
+<?php  $style='';  if ($seance->superviseurmedic === Auth::id()) {  echo '<input style="display:none" type="checkbox" name="supmedic" checked>';}
+    if( ($typeuser=='superviseur') || ($typeuser=='admin'))
       {
         if (empty($seance->superviseurmedic) )
         { 
@@ -268,7 +270,7 @@
     <label class="check ">Superviseur Médical
         <?php
 
-        if ($seance->superviseurmedic === Auth::id()) {  echo '<input type="checkbox" name="supmedic" checked>';} else {
+     //else {
 
             if (session()->has('supmedic')   )
             {
@@ -286,7 +288,7 @@
                 echo '<input type="checkbox" name="supmedic">';
             }
 
-     }
+  //   }
 
         ?>
         <span class="checkmark"></span>
@@ -294,14 +296,16 @@
         }
         else
         {
-         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->superviseurmedic).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->superviseurmedic); ?>
+        if ($seance->superviseurmedic === Auth::id()) {$style='color:red;';}
 
-        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Superviseur Médical','<?php echo $seance->superviseurmedic; ?>')"  style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Superviseur Médical <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labelsuperviseurmedic"></label></div>
+        $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->superviseurmedic).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->superviseurmedic); ?>
+
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label <?php if (! ($seance->superviseurmedic === $iduser)){ ?>  title="demander ce rôle"  onclick="demande('Superviseur Médical','<?php echo $seance->superviseurmedic; ?>')"  <?php }?> style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer;<?php echo $style;?>">Superviseur Médical <b>( <?php echo $nomagent; ?>  )</b></label>  <label  class="demande" id="labelsuperviseurmedic"></label></div>
      <?php   }
        }
         ?>
     </label>
-<?php
+<?php  $style=''; if ($seance->superviseurtech === Auth::id()) {  echo '<input style="display:none" type="checkbox" name="suptech" checked>';}
     if( ($typeuser=='superviseur') || ($typeuser=='admin'))
     {
         if (empty($seance->superviseurtech)  )
@@ -310,8 +314,7 @@
     <label class="check ">Superviseur Technique
         <?php
 
-        if ($seance->superviseurtech === Auth::id()) {  echo '<input type="checkbox" name="suptech" checked>';} else {
-
+     //else {
         if (session()->has('suptech'))
             {
                 if (Session::get('suptech') == 0)
@@ -328,16 +331,18 @@
                 echo '<input type="checkbox" name="suptech">';
             }
 
-            }
+         //   }
         ?>
         <span class="checkmark"></span>
         <?php
         }
         else
         {
-         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->superviseurtech).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->superviseurtech); ?>
+        if ($seance->superviseurtech === Auth::id()) {$style='color:red;';}
 
-        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Superviseur Technique','<?php echo $seance->superviseurtech; ?>')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Superviseur Technique <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labelsuperviseurtech"></label></div>
+        $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->superviseurtech).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->superviseurtech); ?>
+
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label <?php if (!( $seance->superviseurtech === $iduser)){ ?> title="demander ce rôle"  onclick="demande('Superviseur Technique','<?php echo $seance->superviseurtech; ?>')"  <?php  } ?> style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer;<?php echo $style;?>">Superviseur Technique <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labelsuperviseurtech"></label></div>
       <?php  }
         }
 
@@ -345,8 +350,8 @@
 
         ?>
     </label>
-<?php 
-   // if (UsersController::CheckRoleUser(Auth::id(),5) > 0)
+<?php   $style=''; if ($seance->chargetransport === Auth::id()) {  echo '<input style="display:none" type="checkbox" name="chrgtr" checked>';}
+    // if (UsersController::CheckRoleUser(Auth::id(),5) > 0)
    //   {
         if (empty($seance->chargetransport)  )
         { 
@@ -354,7 +359,7 @@
     <label class="check ">Chargé de Transport
         <?php
 
-        if ($seance->chargetransport === Auth::id()) {  echo '<input type="checkbox" name="chrgtr" checked>';} else {
+      //else {
 
         if (session()->has('chrgtr'))
             {
@@ -372,16 +377,18 @@
                 echo '<input type="checkbox" name="chrgtr">';
             }
 
-            }
+          //  }
         ?>
         <span class="checkmark"></span>
         <?php
         }
         else
         {
-         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->chargetransport).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->chargetransport); ?>
+        if ($seance->chargetransport === Auth::id()) {$style='color:red;';}
 
-        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label  title="demander ce rôle"  onclick="demande('Chargé de Transport','<?php echo $seance->chargetransport; ?>')" style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Chargé de Transport <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labelchargetransport"></label></div>
+        $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->chargetransport).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->chargetransport); ?>
+
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label <?php if (! ($seance->chargetransport === $iduser)){ ?> title="demander ce rôle"  onclick="demande('Chargé de Transport','<?php echo $seance->chargetransport; ?>')"  <?php } ?>  style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer;<?php echo $style;?>">Chargé de Transport <b>( <?php echo $nomagent; ?>  )</b></label><label  class="demande" id="labelchargetransport"></label></div>
         <?php }
     //    }
         ?>
@@ -590,7 +597,8 @@
 
     {{ csrf_field() }}
 <br>
- <button onclick="redirect()" class="btn cust-btn " type="button" id="btn-primary" style="margin-top:50px;font-size: 20PX;letter-spacing: 1px;width:150px">Entrer</button>
+    <button onclick="redirect()" class="btn cust-btn " type="button" id="btn-primary" style="margin-top:50px;font-size: 20PX;letter-spacing: 1px;width:150px">Entrer</button>
+    <button onclick="location.reload()" class="btn cust-btn btn-success " type="button" id="btn-primary" style="margin-left:50px;margin-top:50px;font-size: 20PX;letter-spacing: 1px;width:150px"><i class="fas fa-sync"></i> Refraichir</button>
 </div>
 
 <div class="col-md-3">

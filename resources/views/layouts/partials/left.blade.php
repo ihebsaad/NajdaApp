@@ -108,6 +108,8 @@
 <?php
 use App\Notification;
 use App\Notif;
+use  \App\Http\Controllers\EntreesController ;
+
 
 $seance =  DB::table('seance')
     ->where('id','=', 1 )->first();
@@ -237,12 +239,15 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                                 $sujet = $i->sujet;
                                 $type = $i->type;
                                 $read_at = $i->read_at;
+                                $viewed=EntreesController::ChampById( 'viewed',$entreeid) ;
+      // reverifier si traitée
+if( EntreesController::ChampById( 'notif',$entreeid)!=1 ) {
 
                                 if($dossC!= $dossierid)
                                { if($dossC!=0){echo'</ul></li>';}
                                    echo "<li  class='jstree-open' id='prt_".$dossierid."'><a href='".$urlapp."/dossiers/view/".$dossierid."'>".$refdossier." | ".$nomassure." </a><ul>";
                                }
-                                if ((empty($read_at))||(is_null($read_at)))
+                                if ( $viewed==0)
                                 { $newnotif=" class='newnotif'" ;}
                                 else
                                 {$newnotif="" ;}
@@ -272,7 +277,7 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                                 $dossC= $dossierid;
 
 
-
+}
                             } // foreach
 echo '</ul>';
 

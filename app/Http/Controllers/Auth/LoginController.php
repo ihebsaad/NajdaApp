@@ -208,25 +208,11 @@ class LoginController extends Controller
                             ->where('current_status', 'actif')
                             ->where('affecte', $iduser);
                         })->orWhere(function ($query) use ($iduser) {
-                            $query->where('reference_medic', 'like', '%M%')
+                            $query->where('reference_medic', 'like', '%V%')
                                 ->where('type_dossier', 'Technique')
                                 ->where('current_status', 'actif')
                                 ->where('affecte', $iduser);
-                        })->orWhere(function ($query) use ($iduser) {
-                            $query->where('reference_medic', 'like', '%VAT%')
-                                ->where('type_dossier', 'Technique')
-                                ->where('current_status', 'actif')
-                                ->where('affecte', $iduser);
-                        })->orWhere(function ($query) use ($iduser) {
-                            $query->where('reference_medic', 'like', '%MI%')
-                                ->where('type_dossier', 'Technique')
-                                ->where('current_status', 'actif')
-                                ->where('affecte', $iduser);
-                        })->orWhere(function ($query) use ($iduser) {
-                            $query->where('reference_medic', 'like', '%TPA%')
-                                ->where('type_dossier', 'Technique')
-                                ->where('current_status', 'actif')
-                                ->where('affecte', $iduser);
+
                         })->update(array('affecte' => $tech, 'statut' => 2));
 
                     // Mixtes
@@ -236,25 +222,11 @@ class LoginController extends Controller
                                 ->where('current_status', 'actif')
                                 ->where('affecte', $iduser);
                         })->orWhere(function ($query) use ($iduser) {
-                            $query->where('reference_medic', 'like', '%M%')
+                            $query->where('reference_medic', 'like', '%V%')
                                 ->where('type_dossier', 'Mixte')
                                 ->where('current_status', 'actif')
                                 ->where('affecte', $iduser);
-                        })->orWhere(function ($query) use ($iduser) {
-                            $query->where('reference_medic', 'like', '%VAT%')
-                                ->where('type_dossier', 'Mixte')
-                                ->where('current_status', 'actif')
-                                ->where('affecte', $iduser);
-                        })->orWhere(function ($query) use ($iduser) {
-                            $query->where('reference_medic', 'like', '%MI%')
-                                ->where('type_dossier', 'Mixte')
-                                ->where('current_status', 'actif')
-                                ->where('affecte', $iduser);
-                        })->orWhere(function ($query) use ($iduser) {
-                            $query->where('reference_medic', 'like', '%TPA%')
-                                ->where('type_dossier', 'Mixte')
-                                ->where('current_status', 'actif')
-                                ->where('affecte', $iduser);
+
                         })->update(array('affecte' => $tech, 'statut' => 2));
 
                     }// tech
@@ -531,6 +503,25 @@ class LoginController extends Controller
 
 
     } //end function
+
+
+    public function changerposte(Request $request)
+{
+$user = auth()->user();
+
+    /*** changement de poste ***/
+$nomuser = $user->name . ' ' . $user->lastname;
+
+Log::info('[Agent: ' . $nomuser . '] Changement de poste ');
+
+$this->guard()->logout();
+
+$request->session()->invalidate();
+
+return redirect('/login');
+
+
+} //end function changer poste
 
 
 } //end class

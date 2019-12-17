@@ -30,21 +30,11 @@ use  \App\Http\Controllers\DocsController;
                 <input type="hidden" name="entree" value="<?php echo $identree;?>" />
                 <div class="row">
 
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Type de dossier</label>
-                            <select required  onchange="hidediv() "  id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
-                                <option   value="">Sélectionnez</option>
-                                <option   value="Mixte">Mixte</option>
-                                <option  value="Medical">Medical</option>
-                                <option  value="Technique">Technique</option>
-                            </select>
-                        </div>
-                    </div>
+
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Affecté à </label>
-                            <select required id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single"  >
+                            <select required id="type_affectation" name="type_affectation" class="form-control js-example-placeholder-single"  onchange="changetype();hidediv() "  >
                                 <option   value="">Sélectionnez</option>
                                 <option  value="Najda">Najda</option>
                                 <option  value="VAT">VAT</option>
@@ -59,6 +49,18 @@ use  \App\Http\Controllers\DocsController;
                         </div>
                     </div>
 
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Type de dossier</label>
+                            <select required  onchange="hidediv() "  id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
+                                <option   value="">Sélectionnez</option>
+                                <option   value="Mixte">Mixte</option>
+                                <option  value="Medical">Medical</option>
+                                <option  value="Technique">Technique</option>
+                                <option  value="Transport">Transport</option>
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="col-md-3">
                         <div class="form-group">
@@ -1224,6 +1226,25 @@ use  \App\Http\Controllers\DocsController;
         }
 
 
+
+    }
+
+    function changetype()
+    { var ta= document.getElementById('type_affectation');
+        if (ta.options[ta.selectedIndex].value=="VAT")
+        {
+            document.getElementById('type_dossier').selectedIndex=3;
+        }
+
+        if ((ta.options[ta.selectedIndex].value=="MEDIC")||(ta.options[ta.selectedIndex].value=="Medic International") ||(ta.options[ta.selectedIndex].value=="Najda TPA") )
+        {
+            document.getElementById('type_dossier').selectedIndex=2;
+        }
+
+        if ((ta.options[ta.selectedIndex].value=="Transport Najda")||(ta.options[ta.selectedIndex].value=="Transport MEDIC") ||(ta.options[ta.selectedIndex].value=="Transport VAT") ||(ta.options[ta.selectedIndex].value=="X-Press")     )
+        {
+            document.getElementById('type_dossier').selectedIndex=4;
+        }
 
     }
 

@@ -158,7 +158,7 @@ class EntreesController extends Controller
         if ($entree->viewed==0 )
         {
             $entree->viewed=1;
-            $date=date('d/m/Y H:i:s');
+            $date=date('Y-m-d H:i:s.u');
             Notif::where('entree',$id)->update(array( 'read_at'=> $date )) ;
 
         }

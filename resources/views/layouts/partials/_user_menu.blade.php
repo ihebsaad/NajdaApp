@@ -62,15 +62,15 @@
             </a>
         </li>
         <?php } ?>
-
-     <!--   <li role="presentation" class="divider"></li>
+<!--
+        <li role="presentation" class="divider"></li>
          <li style="margin-bottom:8px">
-            <a href="{{ route('logout') }}">
+            <a href="{{ route('changerposte') }}">
                 <i class="fas fa-fw fa-lg fa-sign-out-alt"></i>
-                Déconnexion
+                Changer le Poste(en cours)
             </a>
-        </li>-->
-
+        </li>
+-->
     </ul>
 </li>
 
