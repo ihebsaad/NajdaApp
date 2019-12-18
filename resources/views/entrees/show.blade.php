@@ -33,7 +33,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
         <div class="panel-heading" style=""   >
                      <div class="row">
                         <div  style=" padding-left: 0px;color:black;font-weight: bold ;">
-                            <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet']; echo ($sujet); ?><span id="hiding" class="pull-right">
+                            <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet']; echo /*iconv_mime_decode(*/$sujet/*); */?><span id="hiding" class="pull-right">
          <i style="color:grey;margin-top:10px"class="fa fa-2x fa-fw clickable fa-chevron-down"></i>
             </span></h4>
                         </div>
@@ -155,7 +155,13 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
                     <div id="myTabContent" class="tab-content" style="background: #ffffff">
                        <?php if ( $entree['type']!='fax') { ?>
                            <div class="tab-pane fade active in" id="mailcorps" style="">
-                                          <p  id="mailtext" style=" line-height: 25px;"><?php  $content= $entree['contenu'] ; ?>
+                                          <p  id="mailtext" style=" line-height: 25px;"><?php
+                                              if($entree['contenu']!= null)
+                                              {$content= nl2br($entree['contenu']) ;}else{
+                                              $content= nl2br($entree['contenutxt']);
+                                              }
+
+                                              ?>
                                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 

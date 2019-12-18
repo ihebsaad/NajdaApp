@@ -160,11 +160,13 @@ class EntreesController extends Controller
             $entree->viewed=1;
             $date=date('Y-m-d H:i:s.u');
             Notif::where('entree',$id)->update(array( 'read_at'=> $date )) ;
+            $entree->save();
 
         }
         $refdoss = trim($entree->dossier);
-        $entree->save();
-        $dossier = Dossier::where('reference_medic','=',$refdoss)->first();
+        $doss = $entree->dossierid;
+
+        $dossier = Dossier::where('id',$doss)->first();
 
         //$dossier=compact($dossier);
         return view('entrees.show',['dossiers' => $dossiers, 'dossier' => $dossier], compact('entree'));

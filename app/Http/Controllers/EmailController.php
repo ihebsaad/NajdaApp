@@ -295,11 +295,11 @@ class EmailController extends Controller
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=($oMessage->getSubject())  ;
+            $sujet=(imap_utf8($oMessage->getSubject()))  ;
 
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
              $contenu= ($oMessage->getHTMLBody(true));
-           // $contenubrut= DB::connection()->getPdo()->quote(utf8_encode(($oMessage->getTextBody())));
+            $contenubrut= DB::connection()->getPdo()->quote(utf8_encode(($oMessage->getTextBody())));
           //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -339,7 +339,7 @@ class EmailController extends Controller
                     'destinataire' => 'test@najda-assistance.com',
                     'emetteur' => ($from),
                     'sujet' =>  ($sujet),
-                 //  'contenutxt'=> $contenubrut ,
+                   'contenutxt'=> $contenubrut ,
                     'contenu'=> ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -580,10 +580,10 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-           if($oMessage->getSubject()!=''){$sujet=strval($oMessage->getSubject())  ;}else{$sujet='aucun objet';}
+           if($oMessage->getSubject()!=''){$sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;}else{$sujet='aucun objet';}
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
-            //  $contenubrut= $oMessage->getTextBody();
+               $contenubrut= $oMessage->getTextBody();
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -629,7 +629,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' => $sujet,
-                    //  'contenutxt'=> $contenubrut,
+                       'contenutxt'=> $contenubrut,
                     'contenu' => ($contenu),
                     'reception' => $date,
                     'nb_attach' => $nbattachs,
@@ -859,10 +859,10 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            if($oMessage->getSubject()!=''){ $sujet=strval($oMessage->getSubject());}else{$sujet='aucun objet';}
+            if($oMessage->getSubject()!=''){ $sujet=strval(imap_utf8($oMessage->getSubject()));}else{$sujet='aucun objet';}
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
-          //  $contenubrut= $oMessage->getTextBody();
+           $contenubrut= $oMessage->getTextBody();
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -900,7 +900,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
-                  //  'contenutxt'=> $contenubrut,
+                    'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -1137,10 +1137,10 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval($oMessage->getSubject())  ;
+            $sujet=strval(imap_utf8($oMessage->getSubject()) ) ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
-            //  $contenubrut= $oMessage->getTextBody();
+               $contenubrut= $oMessage->getTextBody();
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -1179,7 +1179,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
-                    //  'contenutxt'=> $contenubrut,
+                      'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -1418,10 +1418,10 @@ $id=0;
 
             //  $nbattachs=10;
 
-            $sujet=strval($oMessage->getSubject())  ;
+            $sujet=strval(imap_utf8($oMessage->getSubject()) ) ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
-            //  $contenubrut= $oMessage->getTextBody();
+               $contenubrut= $oMessage->getTextBody();
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -1462,7 +1462,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
-                    //  'contenutxt'=> $contenubrut,
+                      'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -1695,10 +1695,10 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval($oMessage->getSubject())  ;
+            $sujet=strval(imap_utf8($oMessage->getSubject()) ) ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
-            //  $contenubrut= $oMessage->getTextBody();
+               $contenubrut= $oMessage->getTextBody();
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -1737,7 +1737,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
-                    //  'contenutxt'=> $contenubrut,
+                       'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -1964,10 +1964,10 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval($oMessage->getSubject())  ;
+            $sujet=strval(imap_utf8($oMessage->getSubject()))  ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
-            //  $contenubrut= $oMessage->getTextBody();
+               $contenubrut= $oMessage->getTextBody();
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -2006,7 +2006,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
-                    //  'contenutxt'=> $contenubrut,
+                       'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -2234,10 +2234,10 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-          if($oMessage->getSubject()!=''){ $sujet=strval($oMessage->getSubject());}else{$sujet='aucun objet';}
+          if($oMessage->getSubject()!=''){ $sujet=strval(imap_utf8($oMessage->getSubject()));}else{$sujet='aucun objet';}
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
-            //  $contenubrut= $oMessage->getTextBody();
+               $contenubrut= $oMessage->getTextBody();
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -2276,7 +2276,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
-                    //  'contenutxt'=> $contenubrut,
+                      'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -2506,10 +2506,10 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval($oMessage->getSubject())  ;
+            $sujet=strval(imap_utf8($oMessage->getSubject()) ) ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
-            //  $contenubrut= $oMessage->getTextBody();
+              $contenubrut= $oMessage->getTextBody();
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -2546,7 +2546,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
-                    //  'contenutxt'=> $contenubrut,
+                     'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -2781,10 +2781,10 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval($oMessage->getSubject())  ;
+            $sujet=strval(imap_utf8($oMessage->getSubject()))  ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
-            //  $contenubrut= $oMessage->getTextBody();
+              $contenubrut= $oMessage->getTextBody();
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
@@ -2822,7 +2822,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
-                    //  'contenutxt'=> $contenubrut,
+                      'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -3051,10 +3051,10 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval($oMessage->getSubject())  ;
+            $sujet=strval(imap_utf8($oMessage->getSubject()) ) ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
              $contenu= $oMessage->getHTMLBody(true);
-         //   $contenubrut= $oMessage->getTextBody();
+            $contenubrut= $oMessage->getTextBody();
 
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
@@ -3073,7 +3073,7 @@ $id=0;
                     'destinataire' =>  'Boite Perso',
                     'emetteur' =>  ($from),
                     'sujet' =>  ($sujet),
-                  //  'contenutxt'=> $contenubrut ,
+                     'contenutxt'=> $contenubrut ,
                      'contenu'=> ($contenu) ,
                     'mailid'=>  'user-'.$iduser.'-'.$mailid,
                     'viewed'=>0,
@@ -3363,7 +3363,7 @@ $id=0;
         foreach ($aMessage as $oMessage) {
 
 
-            $sujet=strval($oMessage->getSubject())  ;
+            $sujet=strval(imap_utf8($oMessage->getSubject()) ) ;
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
            // $contenu= $oMessage->getHTMLBody(true);
             $contenu= $oMessage->getTextBody();
@@ -4226,8 +4226,8 @@ if ($from=='najdassist@gmail.com')
                   $fullpath=storage_path().$path;
                     $path_parts = pathinfo($fullpath);
                     if (isset( $path_parts['extension']))
-                    { $ext=  $path_parts['extension'];}else{
-
+                   { $ext=  $path_parts['extension'];}else{
+$ext="";
                     }
 
     $name=basename($fullpath);
@@ -4370,10 +4370,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                         $path=$this->PathattachById($attach);
                         $fullpath=storage_path().$path;
                         $path_parts = pathinfo($fullpath);
-                        $ext=  $path_parts['extension'];
+                        $ext=''; if(isset ($path_parts['extension'])) {$ext=  $path_parts['extension'];}
 
                         $name=basename($fullpath);
-                        $mime_content_type=mime_content_type ($fullpath);
+                        $mime_content_type=basename(mime_content_type ($fullpath ));
                         $message->attach($fullpath, array(
                                 'as' =>$name,
                                 'mime' => $mime_content_type)
@@ -4396,12 +4396,12 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                 $nomuser=$user->name.' '.$user->lastname;
                 Log::info('[Agent: '.$nomuser.'] Envoi de Fax à '.$to);
 
-                $urlapp=env('APP_URL');
+                 $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
-                if (App::environment('local')) {
+               /* if (App::environment('local')) {
                     // The environment is local
                     $urlapp='http://localhost/najdaapp';
-                }
+                }*/
                 // $urlsending=$urlapp.'/emails/envoifax/'.$doss;
                 $urlsending=$urlapp.'/envoyes';
 
@@ -4632,12 +4632,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                 $nomuser=$user->name.' '.$user->lastname;
                 Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
 
-                $urlapp=env('APP_URL');
+                $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
-                if (App::environment('local')) {
-                    // The environment is local
-                    $urlapp='http://localhost/najdaapp';
-                }
                 //   $urlsending=$urlapp.'/emails/envoimail/'.$doss;
                 $urlsending=$urlapp.'/envoyes';
                  echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;

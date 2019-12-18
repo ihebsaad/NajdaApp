@@ -1191,6 +1191,7 @@ use  \App\Http\Controllers\DocsController;
                                                                     <option <?php if($dossier->vehicule_marque=="HONDA"){echo 'selected="selected"';}?> value="HONDA">HONDA</option>
                                                                     <option <?php if($dossier->vehicule_marque=="HYUNDAI"){echo 'selected="selected"';}?> value="HYUNDAI">HYUNDAI</option>
                                                                     <option <?php if($dossier->vehicule_marque=="IINFINITI"){echo 'selected="selected"';}?> value="IINFINITI">IINFINITI</option>
+                                                                    <option <?php if($dossier->vehicule_marque=="IVECO"){echo 'selected="selected"';}?> value="IVECO">IVECO</option>
                                                                     <option <?php if($dossier->vehicule_marque=="JAGUAR"){echo 'selected="selected"';}?> value="JAGUAR">JAGUAR</option>
                                                                     <option <?php if($dossier->vehicule_marque=="JEEP"){echo 'selected="selected"';}?> value="JEEP">JEEP</option>
                                                                     <option <?php if($dossier->vehicule_marque=="KIA"){echo 'selected="selected"';}?> value="KIA">KIA</option>

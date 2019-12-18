@@ -177,7 +177,9 @@ use App\Http\Controllers\TagsController;
                               </style>
                               <?php if (isset($act)){$currentMission=$act->id;}else{$currentMission=0;} ?>
 
-                              <?php if (isset($dossier)){$dosscourant=$dossier->id ; }else{$dosscourant=0;} ?>
+                              <?php
+                                     if (isset($dossier)){$dosscourant=$dossier->id ;
+                              ;}else{$dosscourant=0;} ?>
                                     
                                     <div class="accordion panel-group" id="accordion">
 

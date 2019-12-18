@@ -43,7 +43,7 @@ use App\Http\Controllers\TagsController;
                                 @endif
                                 @if (empty($entree->dossier))
                                         <a   class="btn btn-md btn-success"   href="{{route('dossiers.create',['identree'=> $entree['id']]) }}"  > <i class="fas fa-folder-plus"></i> Créer un Dossier</a>
-                                        <button class="btn   " id="showdispl" style="background-color: #c5d6eb;color:#333333;"  ><b><i class="fas fa-folder"></i> Dispatcher</b></button>
+                                     <!--   <button class="btn   " id="showdispl" style="background-color: #c5d6eb;color:#333333;"  ><b><i class="fas fa-folder"></i> Dispatcher</b></button>-->
                                  @endif
 
 
@@ -73,7 +73,7 @@ use App\Http\Controllers\TagsController;
         </div>
         <div id="emailhead" class="panel-collapse collapse in" aria-expanded="true" style="">
             <div class="panel-body">
-                <div class="row" id="displine" style="display:none;padding-left:30px;padding-bottom:15px;padding-top:15px;background-color: #F9F9F8 ">
+                <div class="row" id="displine" style="padding-left:30px;padding-bottom:15px;padding-top:15px;background-color: #F9F9F8 ">
                      <B> Dossier : </B>
                     <select id ="affdoss"  class="form-control " style="width: 150px">
                         <option></option>
@@ -153,7 +153,13 @@ use App\Http\Controllers\TagsController;
                 <div id="myTabContent" class="tab-content" style="background: #ffffff">
                     <?php if ( $entree['type']!='fax') { ?>
                     <div class="tab-pane fade active in" id="mailcorps" style="">
-                        <p  id="mailtext" style=" line-height: 25px;"><?php  $content= $entree['contenu'] ; ?>
+                        <p  id="mailtext" style=" line-height: 25px;"><?php
+
+                             if($entree['contenu']!= null)
+                            {$content= nl2br($entree['contenu']) ;}else{
+                            $content= nl2br($entree['contenutxt']) ;
+                            }
+                        ?>
                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 

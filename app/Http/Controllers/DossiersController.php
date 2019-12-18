@@ -63,7 +63,7 @@ class DossiersController extends Controller
 
          //   return Dossier::orderBy('created_at', 'desc')->paginate(10000000);
        // });
-        $dossiers = Dossier::orderBy('created', 'desc')->paginate(10000000);
+        $dossiers = Dossier::orderBy('created_at', 'desc')->paginate(10000000);
         return view('dossiers.index', compact('dossiers'));
     }
 

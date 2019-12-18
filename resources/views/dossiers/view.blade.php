@@ -502,7 +502,7 @@ use \App\Http\Controllers\UsersController;
             <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
             <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
             <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
-            <td style="font-size:13px;width:10%">  <button onclick="init('<?php echo $id;?>','<?php echo $prestataire->name.' '.$prestataire->prenom  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> + Prestation</button>
+            <td style="font-size:13px;width:10%">  <button onclick="init('<?php echo $id;?>','<?php echo addslashes($prestataire->name.' '.$prestataire->prenom)  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> + Prestation</button>
             </td>
 
         </tr>
@@ -809,7 +809,7 @@ $interv = PrestationsController::PrestById($prest);
 <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
 <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
 <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
-<td style="font-size:12px;width:15%"> <button onclick="init('<?php echo $prest;?>','<?php  echo  PrestatairesController::ChampById('name',$prest).' '; echo  PrestatairesController::ChampById('prenom',$prest)  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> Prestation</button></td></tr>
+<td style="font-size:12px;width:15%"> <button onclick="init('<?php echo $prest;?>','<?php  echo addslashes( PrestatairesController::ChampById('name',$prest).' '. PrestatairesController::ChampById('prenom',$prest))  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> Prestation</button></td></tr>
 <?php }
 
 }
@@ -853,7 +853,7 @@ array_push($listepr,$pr['prestataire_id']);
                        <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
                        <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
                        <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
-                       <td style="font-size:12px;width:15%"> <button onclick="init('<?php echo $prest;?>','<?php  echo  PrestatairesController::ChampById('name',$prest).' '; echo  PrestatairesController::ChampById('prenom',$prest)  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> Prestation</button></td>
+                       <td style="font-size:12px;width:15%"> <button onclick="init('<?php echo $prest;?>','<?php  echo  addslashes(PrestatairesController::ChampById('name',$prest).' '. PrestatairesController::ChampById('prenom',$prest))  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> Prestation</button></td>
 
                    </tr>
                    <?php } ?>

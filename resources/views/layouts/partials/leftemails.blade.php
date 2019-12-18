@@ -70,7 +70,7 @@ use App\Entree ;
 			 echo '<li  class="overme" style=";padding-left:6px;margin-bottom:15px;'.$bg.'" >';
 
 			  if ($type=='email'){echo '<img width="15" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="15" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="15" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='phone'){echo '<img width="15" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php // echo $entree['type']; ?>
-             <a <?php if($Entree['viewed']==false) {echo 'style="font-weight:800;font-size:16px;letter-spacing:1px"' ;}else{ echo'style="font-size:12px;"';} ?>  href="{{action('EntreesController@showdisp', $Entree['id'])}}" ><small style="<?php echo $col;?>"><?php echo $Entree['sujet'] ; ?></small></a><br>
+             <a <?php if($Entree['viewed']==false) {echo 'style="font-weight:800;font-size:16px;letter-spacing:1px"' ;}else{ echo'style="font-size:12px;"';} ?>  href="{{action('EntreesController@showdisp', $Entree['id'])}}" ><small style="<?php echo $col;?>"><?php echo /*iconv_mime_decode(*/ $Entree['sujet']/*)*/ ; ?></small></a><br>
              <label style="font-size:11px"><a style="<?php echo $col;?>" href="{{action('EntreesController@showdisp', $Entree['id'])}}" ><?php echo $Entree['emetteur'];?></a></label><br>
 <?php echo '<label style="font-size:12px;'.$col.'">'.$newDate.'</label>';  ?>
 			<?php echo '</li>';
