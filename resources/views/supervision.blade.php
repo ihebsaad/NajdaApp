@@ -148,7 +148,7 @@
                                     $dossiers=UsersController::countaffectes($user->id);
                                     $notifications=UsersController::countnotifs($user->id);
                                     // if($user->type=='admin'){$role='(Administrateur)';}
-									if($user->user_type!='admin'){
+									if($user->id!=1){
 										
                                   if($user->isOnline()) {$style=''; if($dureeactives >20){$style='background-color:#fd9883;color:white;';}    if($user->statut==2){$style='background-color:#FFCE54;color:black;';}
                                       $c++; echo  '<tr class="usertr" onclick="showuser(this);"  id="user-'.$user->id.'" style="font-size:12px;cursor:pointer;'.$style.'" ><td>   '.$user->name.' '.$user->lastname .'</td><td>'.$user->user_type.' </td><td>'. $role.'</td><td>'.$dossiers.'</td><td>'.$missions.'</td><td>'.$actions.' <br>charge : '.$dureeactions.'</td><td>'.$actives.' <br>charge : '.$dureeactives.'</td><td>'.$notifications.'</td>  </tr>' ;}
@@ -182,7 +182,7 @@
 
                     <?php   foreach($users as $user)
                        {
-                       if($user->user_type!='admin'){
+                       if($user->id!=1){
 
                        if($user->isOnline()) {
                            $c++;?>
@@ -203,10 +203,10 @@
                        $type=$folder['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
                        $ref=$folder['reference_medic'];$abn=$folder['subscriber_lastname'].' '.$folder['subscriber_name'];$idclient=$folder['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
 
-                        <li  id="dossier-<?php echo $idd;?>"    style=";padding:10px 10px 10px 10px;color:white;margin-top:20px;<?php echo $style;?>" >
+                        <li  id="dossier-<?php echo $idd;?>"    style=";padding:10px 10px 10px 10px;color:white;margin-top:20px;<?php echo $style; if($statutdos==5){echo ';border:2px solid black;';}?>" >
                             <a title="voir la fiche" href="{{action('DossiersController@fiche',$idd)}}"> <span style="color:grey;margin-top:25px" class="fa-li"><i style="color:grey" class="fa fa-folder-open"></i></span></a>
                             <div class="row pull-right " style="width:70%">
-                            Affectation: <?php if($statutdos==5){echo 'Manuelle';}else{echo 'Automatique';}  ;?>
+                                Affectation: <select style="font-weight:bold;border:1px solid grey;<?php echo $style;?>" id="statut<?php echo $idd;?>" onchange="changingst(this, '<?php echo $idd;?>')"  ><option <?php if($statutdos==5){ echo 'selected="selected"';} ?> value="5">Manuelle</option><option <?php if($statutdos==2){ echo 'selected="selected"';} ?> value="2">Automatique</option></select> <?php // if($statutdos==5){echo 'Manuelle';}else{echo 'Automatique';}  ;?>
                             </div>
                             <div class="row">
 
@@ -253,6 +253,41 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <script>
+
+    function changingst(elm,dossier) {
+        var champ=elm.id;
+
+        var val =document.getElementById(champ).value;
+        //  var type = $('#type').val();
+         //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('dossiers.updating') }}",
+            method: "POST",
+            data: {dossier: dossier , champ:'statut' ,val:val, _token: _token},
+            success: function (data) {
+                $('#'+champ).animate({
+                    opacity: '0.3',
+                });
+                $('#'+champ).animate({
+                    opacity: '1',
+                });
+             //   location.reload();
+                if(val==5){
+                    $('#dossier-'+dossier).css("border","2px solid black");
+                }else{
+                    $('#dossier-'+dossier).css("border","none");
+
+                }
+
+             //   document.getElementById("myDIV").style.
+
+            }
+        });
+        // } else {
+
+        // }
+    }
 
     function hideinfos() {
         $('#tab1').css('display','none');

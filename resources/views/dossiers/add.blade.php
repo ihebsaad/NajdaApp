@@ -8,7 +8,7 @@ use App\Document ;
 use \App\Http\Controllers\PrestationsController;
 use  \App\Http\Controllers\PrestatairesController;
 use  \App\Http\Controllers\DocsController;
-
+  use \App\Http\Controllers\DossiersController;
 ?>
 
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
@@ -21,6 +21,16 @@ use  \App\Http\Controllers\DocsController;
     <div class="row">
             <h2 style="margin-left:50px;">Créer un nouveau Dossier:</h2>
     </div>
+    <?php
+            $maxid=DossiersController::GetMaxIdBytypeN();
+    echo 'Max Id : '.$maxid;
+
+    $tpaff=DossiersController::ChampById('type_affectation',$maxid);
+    echo 'Type Aff :'.$tpaff;
+    $refd= DossiersController::RefDossierById($maxid);
+    echo 'Ref : '.$refd;
+
+    ?>
     <section class="content form_layouts">
 
         <div class="form-group" style="margin-top:25px;">

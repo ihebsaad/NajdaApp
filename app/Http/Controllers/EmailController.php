@@ -4308,6 +4308,11 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                   ]);
 */
 
+        $parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+        $pass_Fax=$parametres->pass_Fax ;
+
+
         $doss = $request->get('dossier');
 
         $nom = $request->get('nom');
@@ -4316,6 +4321,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         $numero = $request->get('numero');
         //  $contenu = $request->get('contenu');
         $attachs = $request->get('attachs');
+        $dossier = $request->get('dossier');
 
         $cc='ihebsaad@gmail.com';
         //  $cc='';
@@ -4329,7 +4335,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
         $swiftTransport =  new \Swift_SmtpTransport( 'smtp.gmail.com', '587', 'tls');
         $swiftTransport->setUsername('najdassist@gmail.com');
-        $swiftTransport->setPassword('nejibgyh9kkq');
+        $swiftTransport->setPassword($pass_Fax);
 
         $swiftMailer = new Swift_Mailer($swiftTransport);
 
@@ -4337,7 +4343,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
 
         try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$attachs,$doss,$cc,$numero,$description,$nom) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$attachs,$doss,$cc,$numero,$description,$nom,$dossier) {
                 $message
                     ->to($to)
                     //   ->cc($cc  ?: [])
@@ -4425,6 +4431,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                         'type'=> 'fax',
                         'nb_attach'=> $count,
                         'description'=> $description,
+                        'dossier'=> $dossier,
                         // 'reception'=> date('d/m/Y H:i:s'),
 
                     ]);
@@ -4595,22 +4602,39 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         ]);
 */
 
+        $parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+        $pass_Fax=$parametres->pass_Fax ;
+
+
         $num = trim($request->get('destinataire'));
         $contenu = trim( $request->get('message'));
         $description = trim( $request->get('description'));
         $doss = trim( $request->get('dossier'));
         $dossier= $this->RefDossierById($doss);////;
 
+        $swiftTransport =  new \Swift_SmtpTransport( 'smtp.gmail.com', '587', 'tls');
+        $swiftTransport->setUsername('najdassist@gmail.com');
+        $swiftTransport->setPassword($pass_Fax);
+
+        $swiftMailer = new Swift_Mailer($swiftTransport);
+
+        Mail::setSwiftMailer($swiftMailer);
+
+
         $from='SMS Najda +216 21 433 463';
         $par=Auth::id();
 
-        try{
-            Mail::send([], [], function ($message) use ($contenu,$dossier,$par,$description,$num,$from) {
-                $message
-                     ->to('ihebsaad@gmail.com')
-                 //    ->to('ecom_plus@tcs.com.tn')
+        $mpass='RF1968';
 
-                    ->subject('sms '.$num.' ECOM1')
+
+
+        try{
+            Mail::send([], [], function ($message) use ($contenu,$dossier,$par,$description,$num,$from,$mpass) {
+                $message
+                   //  ->to('ihebsaad@gmail.com')
+                     ->to('ecom_plus@hotmail.com')
+                    ->subject('sms'.$num.' '.$mpass)
                     ->setBody($contenu );
 
 

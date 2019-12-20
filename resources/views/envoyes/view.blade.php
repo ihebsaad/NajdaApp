@@ -61,6 +61,7 @@
                     <label for="description">Description :</label>
                     <input id="description" type="text" class="form-control" name="description" required value="{{ $envoye->description }}" />
                 </div>
+                <?php if ( $envoye->type != 'fax' ) {?>
                 <div class="form-group ">
                     <label for="contenu">contenu:</label>
                 <div class="form-control" style="overflow:scroll;min-height:200px">
@@ -71,6 +72,7 @@
 
                 </div>
 
+                <?php } ?>
 
             <?php use App\Attachement ;?>
 
@@ -78,8 +80,8 @@
                      <?php if ($envoye['nb_attach']>0){
                     echo '<br>Attachements :<br>';
 
-                    $attachs = Attachement::get()->where('parent', '=', $envoye['id'] )->where('boite', '=', 1 );
-                   // echo json_encode($attachs);
+                    $attachs = Attachement::where('parent',  $envoye['id'] )->where('boite', '=', 1 )->get();
+                  // echo json_encode($attachs);
                    } ?>
 
 

@@ -454,7 +454,7 @@ $("#prest").change(function(){
                     changeeditor();
                 };
 
-                setTimeout(function() { track_change()}, 15000);
+                setTimeout(function() { track_change()}, 5000);
 
             }
 

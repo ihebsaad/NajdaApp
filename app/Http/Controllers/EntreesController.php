@@ -284,7 +284,7 @@ class EntreesController extends Controller
 
         // supprimer notif
         $notif=Notif::where('entree',$id)->first();
-        $notif->delete();
+      if(isset ($notif)) { $notif->delete();}
 
 
 

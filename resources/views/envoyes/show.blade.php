@@ -80,7 +80,7 @@
                     <label for="sujet">sujet :</label>
                     <input id="sujet" type="text" class="form-control" name="sujet" required value="{{ $envoye->sujet }}" />
                 </div>
-                <div class="form-group ">
+               <?php if ( $envoye->type != 'fax' ) {?> <div class="form-group ">
                     <label for="contenu">contenu:</label>
                     <div class="editor" >
                         <textarea id="summernote" style="min-height: 280px;" id="contenu" type="text"  class="textarea tex-com" placeholder="Contenu de l'email ici" name="contenu" required >
@@ -88,7 +88,7 @@
                         </textarea>
                     </div>
                 </div>
-
+                <?php } ?>
                 <div class="form-group form-group-default">
                     <label>Attachements</label>
                     <input id="file" type="file" name="files[]" class="btn btn-danger fileinput-button"  multiple>

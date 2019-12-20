@@ -20,7 +20,7 @@
 
     <?php use \App\Http\Controllers\DossiersController;
     use \App\Http\Controllers\EntreesController;
-
+//echo 'Max Id : '.DossiersController::GetMaxIdBytypeN();
     ?>
     <div class="uper">
         <div class="portlet box grey">

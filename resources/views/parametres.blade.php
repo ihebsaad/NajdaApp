@@ -44,6 +44,7 @@
     $euro_achat=$parametres->euro_achat ;
     $dollar_vente=$parametres->dollar_vente ;
     $euro_vente=$parametres->euro_vente ;
+    $pass_Fax=$parametres->pass_Fax ;
     $pass_VAT=$parametres->pass_VAT ;
     $pass_MEDIC=$parametres->pass_MEDIC ;
     $pass_TM=$parametres->pass_TM ;
@@ -319,6 +320,12 @@
                                      <td style="width:35%" class="text-primary">Signature X-Press</td>
                                      <td style="width:65%">
                                          <textarea  class="form-control" onchange="changing(this)" id="signature9" style="width:520px;height:100px"><?php echo $signature9; ?></textarea>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td class="text-primary">Mot de Passe boite Fax <small>najdassist@gmail.com</small></td>
+                                     <td>
+                                         <input  type="text" class="form-control" onchange="changing(this)" id="pass_Fax" style="width:300px" value="<?php echo $pass_Fax; ?>"  />
                                      </td>
                                  </tr>
                                  <tr>

@@ -295,9 +295,9 @@ use  \App\Http\Controllers\DocsController;
                                                                     <label for="inputError" class="control-label">Entité de facturation  </label>
 
                                                                     <div class="input-group-control">
-                                                                        <select onchange="changing(this);location.reload();" type="text" id="adresse_facturation" name="adresse_facturation" class="form-control <?php if ($dossier->adresse_facturation=='') {echo ' bg-danger';}?>"  >
+                                                                        <select onchange="changing(this);" type="text" id="adresse_facturation" name="adresse_facturation" class="form-control <?php if ($dossier->adresse_facturation=='') {echo ' bg-danger';}?>"  >
                                                                             <option></option>
-                                                                            <option  <?php if ($dossier->adresse_facturation==$entite){echo 'selected="selected"';} ?> value="<?php echo $entite;?>"><?php echo $entite .' - <small>'.$adresse.'</small>';?></option>
+                                                                            <option  <?php if  (trim ($dossier->adresse_facturation)==trim($entite)){echo 'selected="selected"';} ?> value="<?php echo $entite;?>"><?php echo $entite .' - <small>'.$adresse.'</small>';?></option>
                                                                             <?php foreach ($liste as $l)
                                                                             {?>
                                                                             <option  <?php  if ($dossier->adresse_facturation==$l->nom ){echo 'selected="selected"';} ?> value="<?php echo $l->nom;?>" ><?php echo $l->nom ;?>  - <small>  <?php echo $l->champ;?> </small></option>
@@ -2421,6 +2421,7 @@ use  \App\Http\Controllers\DocsController;
                 $('#'+champ).animate({
                     opacity: '1',
                 });
+                if(champ=="adresse_facturation"){location.reload();}
 
             }
         });

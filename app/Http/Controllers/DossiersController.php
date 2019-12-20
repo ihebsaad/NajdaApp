@@ -63,6 +63,7 @@ class DossiersController extends Controller
 
          //   return Dossier::orderBy('created_at', 'desc')->paginate(10000000);
        // });
+
         $dossiers = Dossier::orderBy('created_at', 'desc')->paginate(10000000);
         return view('dossiers.index', compact('dossiers'));
     }
@@ -197,11 +198,30 @@ class DossiersController extends Controller
 
 
         if ($type_affectation == 'Najda') {
-            $maxid = $this->GetMaxIdBytype('Najda');
+            $maxid = $this->GetMaxIdBytypeN( );
+            $tpaff=$this->ChampById('type_affectation',$maxid);
             $refd= $this->RefDossierById($maxid);
-            $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
 
-            $reference_medic = $annee . 'N' . sprintf("%'.05d\n", $num_dossier+1);
+            if((trim($tpaff)=='Najda') ){
+                $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
+            }
+            if((trim($tpaff)=='MEDIC') ){
+                $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
+             }
+             if(trim($tpaff)=='Najda TPA'){
+                $num_dossier=  intval(substr ( $refd , 5  ,   strlen ($refd)) );
+             }
+
+            if(($type_affectation)=='Najda') {
+                $reference_medic = $annee . 'N' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='MEDIC') {
+                $reference_medic = $annee . 'M' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Najda TPA') {
+                $reference_medic = $annee . 'TPA' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+
         }
         if ($type_affectation == 'VAT') {
             $maxid = $this->GetMaxIdBytype('VAT');
@@ -211,12 +231,32 @@ class DossiersController extends Controller
 
         }
         if ($type_affectation == 'MEDIC') {
-            $maxid = $this->GetMaxIdBytype('MEDIC');
+            $maxid = $this->GetMaxIdBytypeN( );
+            $tpaff=$this->ChampById('type_affectation',$maxid);
             $refd= $this->RefDossierById($maxid);
-            $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
-            $reference_medic = $annee . 'M' . sprintf("%'.05d\n", $num_dossier+1);
+
+            if((trim($tpaff)=='Najda') ){
+                $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
+            }
+            if((trim($tpaff)=='MEDIC') ){
+                $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Najda TPA'){
+                $num_dossier=  intval(substr ( $refd , 5  ,   strlen ($refd)) );
+            }
+
+            if(($type_affectation)=='Najda') {
+                $reference_medic = $annee . 'N' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='MEDIC') {
+                $reference_medic = $annee . 'M' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Najda TPA') {
+                $reference_medic = $annee . 'TPA' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
 
         }
+
         if ($type_affectation == 'Transport MEDIC') {
             $maxid = $this->GetMaxIdBytype('Transport MEDIC');
             $refd= $this->RefDossierById($maxid);
@@ -241,10 +281,30 @@ class DossiersController extends Controller
         }
 
         if ($type_affectation == 'Najda TPA') {
-            $maxid = $this->GetMaxIdBytype('Najda TPA');
+
+            $maxid = $this->GetMaxIdBytypeN( );
+            $tpaff=$this->ChampById('type_affectation',$maxid);
             $refd= $this->RefDossierById($maxid);
-            $num_dossier=  intval(substr ( $refd , 5  ,   strlen ($refd)) );
-            $reference_medic = $annee . 'TPA' . sprintf("%'.05d\n", $num_dossier+1);
+
+            if((trim($tpaff)=='Najda') ){
+                $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
+            }
+            if((trim($tpaff)=='MEDIC') ){
+                $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Najda TPA'){
+                $num_dossier=  intval(substr ( $refd , 5  ,   strlen ($refd)) );
+            }
+
+            if(($type_affectation)=='Najda') {
+                $reference_medic = $annee . 'N' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='MEDIC') {
+                $reference_medic = $annee . 'M' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Najda TPA') {
+                $reference_medic = $annee . 'TPA' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
 
         }
 
@@ -291,6 +351,7 @@ class DossiersController extends Controller
         return redirect('/dossiers/fiche/'.$iddoss);
     }
 
+    /*
     public function saving(Request $request )
     {
         $reference_medic = '';
@@ -309,7 +370,7 @@ class DossiersController extends Controller
 
 
         if ($type_affectation == 'Najda') {
-            $maxid = $this->GetMaxIdBytype('Najda');
+            $maxid = $this->GetMaxIdBytypeN();
             $refd= $this->RefDossierById($maxid);
            $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
 
@@ -323,7 +384,7 @@ class DossiersController extends Controller
 
         }
         if ($type_affectation == 'MEDIC') {
-            $maxid = $this->GetMaxIdBytype('MEDIC');
+            $maxid = $this->GetMaxIdBytypeN();
             $refd= $this->RefDossierById($maxid);
            $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
             $reference_medic = $annee . 'M' . sprintf("%'.05d\n", $num_dossier+1);
@@ -353,7 +414,7 @@ class DossiersController extends Controller
         }
 
         if ($type_affectation == 'Najda TPA') {
-            $maxid = $this->GetMaxIdBytype('Najda TPA');
+            $maxid = $this->GetMaxIdBytypeN( );
              $refd= $this->RefDossierById($maxid);
            $num_dossier=  intval(substr ( $refd , 5  ,   strlen ($refd)) );
             $reference_medic = $annee . 'TPA' . sprintf("%'.05d\n", $num_dossier+1);
@@ -423,19 +484,15 @@ class DossiersController extends Controller
 
         //    } //if entree!=""
 
-            return url('/dossiers/view/'.$iddoss)/*->with('success', 'Dossier Créé avec succès')*/;
-        //   return url('/dossiers/') ;
-           // return  redirect()->route('dossiers.view', ['id' =>$iddoss]);
-           //  return  $iddoss;
+            return url('/dossiers/view/'.$iddoss) ;
 
-           } //if dossier save
 
          else {
              return url('/dossiers');
             }
     }
 
-
+*/
 
     public function sendaccuse(Request $request)
     {
@@ -1247,9 +1304,38 @@ class DossiersController extends Controller
 
              return intval($maxid );
 
-
     }
 
+    public static function GetMaxIdBytypeN( )
+    {
+
+     /*   $annee=date('y');
+        $maxid= Dossier::where(function ($query) use ($annee)  {
+               $query->where('type_affectation', 'Najda')
+                   ->where('reference_medic','like', $annee.'%');
+            })->orWhere(function ($query) use ($annee)   {
+               $query->where('type_affectation', 'Najda TPA')
+                    ->where('reference_medic','like', $annee.'%');
+           })->orWhere(function ($query) use ($annee)    {
+               $query->where('type_affectation', 'MEDIC')
+                   ->where('reference_medic','like', $annee.'%');
+           })->max('id');
+*/
+     /*
+        $maxid=Dossier::where('type_affectation', 'Najda')
+        ->orWhere('type_affectation', 'Najda TPA')
+        ->orWhere('type_affectation', 'MEDIC')
+            ->max('id');
+*/
+        $maxid=Dossier::where('reference_medic','like','%N%')
+            ->orWhere('reference_medic','like','%TPA%')
+            ->orWhere('reference_medic','like','%M%')
+            ->max('id');
+
+
+        return intval($maxid );
+
+    }
     public static function ClientById($id)
     {
         $client = Client::find($id);
@@ -1290,7 +1376,7 @@ class DossiersController extends Controller
     {
         $doss = Dossier::find($id);
         if (isset($doss[$champ])) {
-            return $doss[$champ] ;
+            return trim($doss[$champ]) ;
         }else{return '';}
 
     }

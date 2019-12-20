@@ -224,7 +224,9 @@
    // if (UsersController::CheckRoleUser(Auth::id(),2) > 0)
     //  {
         // verifier si le role est vide dans la seance et quil na pas deja le role
-        if (empty($seance->dispatcheur) || ($seance->dispatcheur === Auth::id()))
+
+    $style=''; if ($seance->dispatcheur === Auth::id()) {  echo '<input style="display:none" type="checkbox" name="disp" checked>';}
+        if (empty($seance->dispatcheur)  )
         { 
 ?>
     <label class="check ">Dispatcheur
@@ -254,9 +256,11 @@
         }
         else
         {
-         $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheur).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->dispatcheur); ?>
+        if ($seance->dispatcheur === Auth::id()) {$style='color:red;';}
 
-        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label title="demander ce rôle"  onclick="demande('Dispatcheur Emails','<?php echo $seance->dispatcheur; ?>')"  style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer">Dispatcheur <b>( <?php echo $nomagent; ?>  )</b></label><label class="demande" id="labeldispatcheur"></label></div>
+        $nomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$seance->dispatcheur).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$seance->dispatcheur); ?>
+
+        <div><div style="height:18px;width:18px;top:22px;background-color:lightgrey;display:inline-block;"></div><label  <?php if (! ($seance->dispatcheur === $iduser)){ ?>  title="demander ce rôle"  onclick="demande('Dispatcheur Emails','<?php echo $seance->dispatcheur; ?>')"  <?php } ?> style="display:inline-block;padding-left:5px;font-size:18px;cursor:pointer;<?php echo $style;?>">Dispatcheur <b>( <?php echo $nomagent; ?>  )</b></label><label class="demande" id="labeldispatcheur"></label></div>
       <?php  }
       //  }
         ?>
@@ -603,7 +607,7 @@
 
 <div class="col-md-3">
     <?php if (
-        ($seance->superviseurmedic !=$iduser && $seance->superviseurtech != $iduser && $seance->chargetransport != $iduser )
+        ($seance->superviseurmedic !=$iduser && $seance->superviseurtech != $iduser && $seance->chargetransport != $iduser && $seance->dispatcheur !=$iduser)
         || ( $date_actu < $debut || ($date_actu > $fin)  )
     ) { ?>
     <a style="margin-top:20px;color:white" href="{{ route('logout') }}"  class="bg-danger btn btn-md">
@@ -615,9 +619,9 @@
     else{ ?>
         <button disabled style="margin-top:20px;color:white"  title="videz vos rôles avant de quitter" class="bg-danger btn btn-md btn-disabled">
         <i class="fa  fa-lg fa-sign-out"></i>
-        Déconnexion désactivé
+        Déconnexion désactivée
     </button><br>
-        <small>(Libérez vos rôles de Supervision et Transport)</small>
+        <small>(Libérez les rôles)</small>
    <?php
     }
         ?>

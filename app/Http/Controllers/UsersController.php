@@ -338,13 +338,26 @@ class UsersController extends Controller
             if ($supmedic !== '0')
               { $seance->superviseurmedic=Auth::id();
 
+ // 2 Affect Auto ; 5 Affect Manuel
 
-                  Dossier::where('type_dossier','Medical')
-                      ->where('current_status', 'actif')
-                      ->where('statut', '<>', 5)
-
-                      ///    (['type_dossier' => 'Technique','current_status'=>'<> Cloture'])
-                      ->update(array('affecte' => Auth::id()));
+                  Dossier::where(function ($query)  {
+                      $query->where('reference_medic', 'like', '%N%')
+                          ->where('type_dossier', 'Medical')
+                          ->where('current_status', 'actif')
+                          ->where('statut', '<>', 5);  //auto
+                  })->orWhere(function ($query)   {
+                      $query->where('reference_medic', 'like', '%M%')
+                          ->where('current_status', 'actif')
+                          ->where('statut', '<>', 5);
+                  })->orWhere(function ($query)   {
+                      $query->where('reference_medic', 'like', '%MI%')
+                          ->where('current_status', 'actif')
+                          ->where('statut', '<>', 5);
+                  })->orWhere(function ($query)   {
+                      $query->where('reference_medic', 'like', '%TPA%')
+                          ->where('current_status', 'actif')
+                          ->where('statut', '<>', 5);
+                  })->update(array('affecte' => Auth::id(), 'statut' => 2));
 
               }
               elseif ($seance->superviseurmedic==Auth::id())
@@ -373,26 +386,14 @@ class UsersController extends Controller
                           ->where('current_status', 'actif')
                           ->where('statut', '<>', 5);  //auto
                   })->orWhere(function ($query)   {
-                      $query->where('reference_medic', 'like', '%M%')
-                          ->where('type_dossier', 'Technique')
-                          ->where('current_status', 'actif')
+                      $query->where('reference_medic', 'like', '%V%')
+                           ->where('current_status', 'actif')
                           ->where('statut', '<>', 5);
-                  })->orWhere(function ($query)   {
-                      $query->where('reference_medic', 'like', '%VAT%')
-                          ->where('type_dossier', 'Technique')
-                          ->where('current_status', 'actif')
-                          ->where('statut', '<>', 5);
-                  })->orWhere(function ($query)   {
-                      $query->where('reference_medic', 'like', '%MI%')
-                          ->where('type_dossier', 'Technique')
-                          ->where('current_status', 'actif')
-                          ->where('statut', '<>', 5);
-                  })->orWhere(function ($query)   {
-                      $query->where('reference_medic', 'like', '%TPA%')
-                          ->where('type_dossier', 'Technique')
-                          ->where('current_status', 'actif')
-                          ->where('statut', '<>', 5);
+
                   })->update(array('affecte' => Auth::id(), 'statut' => 2));
+
+
+
 
                   // Mixtes
                   Dossier::where(function ($query)  {
@@ -400,26 +401,7 @@ class UsersController extends Controller
                           ->where('type_dossier', 'Mixte')
                           ->where('current_status', 'actif')
                           ->where('statut', '<>', 5);  //auto
-                  })->orWhere(function ($query)   {
-                      $query->where('reference_medic', 'like', '%M%')
-                          ->where('type_dossier', 'Mixte')
-                          ->where('current_status', 'actif')
-                          ->where('statut', '<>', 5);
-                  })->orWhere(function ($query)   {
-                      $query->where('reference_medic', 'like', '%VAT%')
-                          ->where('type_dossier', 'Mixte')
-                          ->where('current_status', 'actif')
-                          ->where('statut', '<>', 5);
-                  })->orWhere(function ($query)   {
-                      $query->where('reference_medic', 'like', '%MI%')
-                          ->where('type_dossier', 'Mixte')
-                          ->where('current_status', 'actif')
-                          ->where('statut', '<>', 5);
-                  })->orWhere(function ($query)   {
-                      $query->where('reference_medic', 'like', '%TPA%')
-                          ->where('type_dossier', 'Mixte')
-                          ->where('current_status', 'actif')
-                          ->where('statut', '<>', 5);
+
                   })->update(array('affecte' => Auth::id(), 'statut' => 2));
 
 

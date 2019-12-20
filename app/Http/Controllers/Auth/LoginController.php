@@ -108,15 +108,19 @@ class LoginController extends Controller
                     if ($charge > 0) {
                         Dossier::where(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%TN%')
-                                ->where('affecte', $iduser);
+                                ->where('current_status','!=', 'Cloture')
+                            ->where('affecte', $iduser);
                         })->orWhere(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%TM%')
+                                ->where('current_status','!=', 'Cloture')
                                 ->where('affecte', $iduser);
                         })->orWhere(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%TV%')
+                                ->where('current_status','!=', 'Cloture')
                                 ->where('affecte', $iduser);
                         })->orWhere(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%XP%')
+                                ->where('current_status','!=', 'Cloture')
                                 ->where('affecte', $iduser);
                         })->update(array('affecte' => $charge, 'statut' => 2));
 
@@ -126,15 +130,19 @@ class LoginController extends Controller
                         if ($tech > 0) {
                             Dossier::where(function ($query) use ($iduser) {
                                 $query->where('reference_medic', 'like', '%TN%')
+                                    ->where('current_status','!=', 'Cloture')
                                     ->where('affecte', $iduser);
                             })->orWhere(function ($query) use ($iduser) {
                                 $query->where('reference_medic', 'like', '%TM%')
+                                    ->where('current_status','!=', 'Cloture')
                                     ->where('affecte', $iduser);
                             })->orWhere(function ($query) use ($iduser) {
                                 $query->where('reference_medic', 'like', '%TV%')
+                                    ->where('current_status','!=', 'Cloture')
                                     ->where('affecte', $iduser);
                             })->orWhere(function ($query) use ($iduser) {
                                 $query->where('reference_medic', 'like', '%XP%')
+                                    ->where('current_status','!=', 'Cloture')
                                     ->where('affecte', $iduser);
                             })->update(array('affecte' => $tech, 'statut' => 2));
 
@@ -143,15 +151,19 @@ class LoginController extends Controller
                             if ($medic > 0) {
                                 Dossier::where(function ($query) use ($iduser) {
                                     $query->where('reference_medic', 'like', '%TN%')
+                                        ->where('current_status','!=', 'Cloture')
                                         ->where('affecte', $iduser);
                                 })->orWhere(function ($query) use ($iduser) {
                                     $query->where('reference_medic', 'like', '%TM%')
+                                        ->where('current_status','!=', 'Cloture')
                                         ->where('affecte', $iduser);
                                 })->orWhere(function ($query) use ($iduser) {
                                     $query->where('reference_medic', 'like', '%TV%')
+                                        ->where('current_status','!=', 'Cloture')
                                         ->where('affecte', $iduser);
                                 })->orWhere(function ($query) use ($iduser) {
                                     $query->where('reference_medic', 'like', '%XP%')
+                                        ->where('current_status','!=', 'Cloture')
                                         ->where('affecte', $iduser);
                                 })->update(array('affecte' => $medic, 'statut' => 2));
 
@@ -163,22 +175,45 @@ class LoginController extends Controller
                     // Affectation des dossiers Medic
                     if ($medic > 0) {
 
-                        // Dossiers medicaux vers Sup Medic
-                        Dossier::where('affecte', $iduser)
-                            ->where('type_dossier', 'Medical')
-                            ->where('current_status', 'actif')
-                            ->update(array('affecte' => $medic, 'statut' => 2));
+
+                        Dossier::where(function ($query)  {
+                            $query->where('reference_medic', 'like', '%N%')
+                                ->where('type_dossier', 'Medical')
+                                ->where('current_status', 'actif');
+                        })->orWhere(function ($query)   {
+                            $query->where('reference_medic', 'like', '%M%')
+                                ->where('current_status', 'actif');
+                        })->orWhere(function ($query)   {
+                            $query->where('reference_medic', 'like', '%MI%')
+                                ->where('current_status', 'actif');
+                        })->orWhere(function ($query)   {
+                            $query->where('reference_medic', 'like', '%TPA%')
+                                ->where('current_status', 'actif');
+                        })->update(array('affecte' => $medic, 'statut' => 2));
+
 
                     }// medic
 
                     else {
                         if ($tech > 0) {
 
-                            // Dossiers medicaux vers Sup Medic
-                            Dossier::where('affecte', $iduser)
-                                ->where('type_dossier', 'Medical')
-                                ->where('current_status', 'actif')
-                                ->update(array('affecte' => $medic, 'statut' => 2));
+                            // Dossiers medicaux vers Sup Tech
+
+                            Dossier::where(function ($query)  {
+                                $query->where('reference_medic', 'like', '%N%')
+                                    ->where('type_dossier', 'Medical')
+                                    ->where('current_status', 'actif');
+                            })->orWhere(function ($query)   {
+                                $query->where('reference_medic', 'like', '%M%')
+                                    ->where('current_status', 'actif');
+                            })->orWhere(function ($query)   {
+                                $query->where('reference_medic', 'like', '%MI%')
+                                    ->where('current_status', 'actif');
+                            })->orWhere(function ($query)   {
+                                $query->where('reference_medic', 'like', '%TPA%')
+                                    ->where('current_status', 'actif');
+                            })->update(array('affecte' => $tech, 'statut' => 2));
+
                         }
 
                     }
@@ -209,7 +244,6 @@ class LoginController extends Controller
                             ->where('affecte', $iduser);
                         })->orWhere(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%V%')
-                                ->where('type_dossier', 'Technique')
                                 ->where('current_status', 'actif')
                                 ->where('affecte', $iduser);
 
@@ -221,12 +255,6 @@ class LoginController extends Controller
                                 ->where('type_dossier', 'Mixte')
                                 ->where('current_status', 'actif')
                                 ->where('affecte', $iduser);
-                        })->orWhere(function ($query) use ($iduser) {
-                            $query->where('reference_medic', 'like', '%V%')
-                                ->where('type_dossier', 'Mixte')
-                                ->where('current_status', 'actif')
-                                ->where('affecte', $iduser);
-
                         })->update(array('affecte' => $tech, 'statut' => 2));
 
                     }// tech
@@ -254,54 +282,19 @@ class LoginController extends Controller
                                     ->where('current_status', 'actif')
                                     ->where('affecte', $iduser);
                             })->orWhere(function ($query) use ($iduser) {
-                                $query->where('reference_medic', 'like', '%M%')
-                                    ->where('type_dossier', 'Technique')
+                                $query->where('reference_medic', 'like', '%V%')
                                     ->where('current_status', 'actif')
                                     ->where('affecte', $iduser);
-                            })->orWhere(function ($query) use ($iduser) {
-                                $query->where('reference_medic', 'like', '%VAT%')
-                                    ->where('type_dossier', 'Technique')
-                                    ->where('current_status', 'actif')
-                                    ->where('affecte', $iduser);
-                            })->orWhere(function ($query) use ($iduser) {
-                                $query->where('reference_medic', 'like', '%MI%')
-                                    ->where('type_dossier', 'Technique')
-                                    ->where('current_status', 'actif')
-                                    ->where('affecte', $iduser);
-                            })->orWhere(function ($query) use ($iduser) {
-                                $query->where('reference_medic', 'like', '%TPA%')
-                                    ->where('type_dossier', 'Technique')
-                                    ->where('current_status', 'actif')
-                                    ->where('affecte', $iduser);
-                            })->update(array('affecte' => $medic, 'statut' => 2));
 
-                            // Mixtes
+                            })->update(array('affecte' => $tech, 'statut' => 2));
+
+                             // Mixtes
                             Dossier::where(function ($query) use ($iduser) {
                                 $query->where('reference_medic', 'like', '%N%')
                                     ->where('type_dossier', 'Mixte')
                                     ->where('current_status', 'actif')
                                     ->where('affecte', $iduser);
-                            })->orWhere(function ($query) use ($iduser) {
-                                $query->where('reference_medic', 'like', '%M%')
-                                    ->where('type_dossier', 'Mixte')
-                                    ->where('current_status', 'actif')
-                                    ->where('affecte', $iduser);
-                            })->orWhere(function ($query) use ($iduser) {
-                                $query->where('reference_medic', 'like', '%VAT%')
-                                    ->where('type_dossier', 'Mixte')
-                                    ->where('current_status', 'actif')
-                                    ->where('affecte', $iduser);
-                            })->orWhere(function ($query) use ($iduser) {
-                                $query->where('reference_medic', 'like', '%MI%')
-                                    ->where('type_dossier', 'Mixte')
-                                    ->where('current_status', 'actif')
-                                    ->where('affecte', $iduser);
-                            })->orWhere(function ($query) use ($iduser) {
-                                $query->where('reference_medic', 'like', '%TPA%')
-                                    ->where('type_dossier', 'Mixte')
-                                    ->where('current_status', 'actif')
-                                    ->where('affecte', $iduser);
-                            })->update(array('affecte' => $medic, 'statut' => 2));
+                            })->update(array('affecte' => $tech, 'statut' => 2));
 
 
                         }// medic
@@ -397,22 +390,45 @@ class LoginController extends Controller
             // Affectation des dossiers Medic
             if ($medic > 0) {
 
-                // Dossiers medicaux vers Sup Medic
-                Dossier::where('affecte', $iduser)
-                    ->where('type_dossier', 'Medical')
-                    ->where('current_status', 'actif')
-                    ->update(array('affecte' => $medic, 'statut' => 2));
+
+                Dossier::where(function ($query)  {
+                    $query->where('reference_medic', 'like', '%N%')
+                        ->where('type_dossier', 'Medical')
+                        ->where('current_status', 'actif');
+                })->orWhere(function ($query)   {
+                    $query->where('reference_medic', 'like', '%M%')
+                        ->where('current_status', 'actif');
+                })->orWhere(function ($query)   {
+                    $query->where('reference_medic', 'like', '%MI%')
+                        ->where('current_status', 'actif');
+                })->orWhere(function ($query)   {
+                    $query->where('reference_medic', 'like', '%TPA%')
+                        ->where('current_status', 'actif');
+                })->update(array('affecte' => $medic, 'statut' => 2));
+
+
+
 
             }// medic
 
             else {
                 if ($tech > 0) {
 
-                    // Dossiers medicaux vers Sup Medic
-                    Dossier::where('affecte', $iduser)
-                        ->where('type_dossier', 'Medical')
-                        ->where('current_status', 'actif')
-                        ->update(array('affecte' => $medic, 'statut' => 2));
+                    Dossier::where(function ($query)  {
+                        $query->where('reference_medic', 'like', '%N%')
+                            ->where('type_dossier', 'Medical')
+                            ->where('current_status', 'actif');
+                         ///   ->where('statut', '<>', 5);  //auto
+                    })->orWhere(function ($query)   {
+                        $query->where('reference_medic', 'like', '%M%')
+                            ->where('current_status', 'actif');
+                    })->orWhere(function ($query)   {
+                        $query->where('reference_medic', 'like', '%MI%')
+                            ->where('current_status', 'actif');
+                    })->orWhere(function ($query)   {
+                        $query->where('reference_medic', 'like', '%TPA%')
+                            ->where('current_status', 'actif');
+                    })->update(array('affecte' => $tech, 'statut' => 2));
                 }
 
             }
@@ -421,17 +437,25 @@ class LoginController extends Controller
             if ($tech > 0) {
 
                 // Dossiers Techniques vers Sup Tech
-                Dossier::where('affecte', $iduser)
-                    ->where('type_dossier', 'Mixte')
-                    ->where('current_status', 'actif')
-                    ->update(array('affecte' => $tech));
+                Dossier::where(function ($query) use ($iduser) {
+                    $query->where('reference_medic', 'like', '%N%')
+                        ->where('type_dossier', 'Technique')
+                        ->where('current_status', 'actif')
+                        ->where('affecte', $iduser);
+                })->orWhere(function ($query) use ($iduser) {
+                    $query->where('reference_medic', 'like', '%V%')
+                        ->where('current_status', 'actif')
+                        ->where('affecte', $iduser);
+                })->update(array('affecte' => $tech, 'statut' => 2));
 
                 // Dossiers Mixte vers Sup Tech
-
-                Dossier::where('affecte', $iduser)
-                    ->where('type_dossier', 'Technique')
-                    ->where('current_status', 'actif')
-                    ->update(array('affecte' => $tech, 'statut' => 2));
+                // Mixtes
+                Dossier::where(function ($query) use ($iduser) {
+                    $query->where('reference_medic', 'like', '%N%')
+                        ->where('type_dossier', 'Mixte')
+                        ->where('current_status', 'actif')
+                        ->where('affecte', $iduser);
+                })->update(array('affecte' => $tech, 'statut' => 2));
 
             }// tech
 
@@ -439,17 +463,26 @@ class LoginController extends Controller
                 if ($medic > 0) {
 
                     // Dossiers Techniques vers Sup Tech
-                    Dossier::where('affecte', $iduser)
-                        ->where('type_dossier', 'Mixte')
-                        ->where('current_status', 'actif')
-                        ->update(array('affecte' => $medic, 'statut' => 2));
+                    Dossier::where(function ($query) use ($iduser) {
+                        $query->where('reference_medic', 'like', '%N%')
+                            ->where('type_dossier', 'Technique')
+                            ->where('current_status', 'actif')
+                            ->where('affecte', $iduser);
+                    })->orWhere(function ($query) use ($iduser) {
+                        $query->where('reference_medic', 'like', '%V%')
+                            ->where('current_status', 'actif')
+                            ->where('affecte', $iduser);
+
+                    })->update(array('affecte' => $medic, 'statut' => 2));
 
                     // Dossiers Mixte vers Sup Tech
-
-                    Dossier::where('affecte', $iduser)
-                        ->where('type_dossier', 'Technique')
-                        ->where('current_status', 'actif')
-                        ->update(array('affecte' => $medic, 'statut' => 2));
+                    // Mixtes
+                    Dossier::where(function ($query) use ($iduser) {
+                        $query->where('reference_medic', 'like', '%N%')
+                            ->where('type_dossier', 'Mixte')
+                            ->where('current_status', 'actif')
+                            ->where('affecte', $iduser);
+                    })->update(array('affecte' => $medic, 'statut' => 2));
 
                 }// tech
 

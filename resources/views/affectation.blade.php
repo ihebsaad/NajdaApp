@@ -167,7 +167,7 @@
                                     $dossiers=UsersController::countaffectes($user->id);
                                     $notifications=UsersController::countnotifs($user->id);
                                     // if($user->type=='admin'){$role='(Administrateur)';}*/
-									if($user->user_type!='admin'){
+									if($user->id!=1){
 										
                                   if($user->isOnline()) {
 									  $c++; echo  '<div class="userdiv" id="user-'.$iduser.'" style="margin-bottom:30px;'.$bg.'"  >';
@@ -176,9 +176,9 @@
                                       $folders = Dossier::where('affecte','=',$user->id)->get();
   foreach($folders as $folder)
               { $type=$folder['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
-              $idd=$folder['id'];$ref=$folder['reference_medic'];$abn=$folder['subscriber_lastname'].' '.$folder['subscriber_name'];$idclient=$folder['customer_id'];$client= $folder['reference_customer'] /*  ClientsController::ClientChampById('name',$idclient)*/ ;?>
-              <div  id="dossier-<?php echo $idd;?>" class="dossier"  style="margin-top:5px;<?php echo $style;?>" >
-                    <label style="font-size: 18px;"><?php echo $ref;?></label>
+              $statut=$folder['statut']; $idd=$folder['id'];$ref=$folder['reference_medic'];$abn=$folder['subscriber_lastname'].' '.$folder['subscriber_name'];$idclient=$folder['customer_id'];$client= $folder['reference_customer'] /*  ClientsController::ClientChampById('name',$idclient)*/ ;?>
+              <div  id="dossier-<?php echo $idd;?>" class="dossier"  style="margin-top:5px;<?php echo $style; if($statut!=2){ echo';border:2px solid black';}?>" >
+                    <label style="font-size: 18px;"><?php echo $ref ;?></label>
                   <div class="infos">  <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
                       <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small>
 
@@ -239,9 +239,9 @@
              foreach($dossiers as $dossier)
 			{ $type=$dossier['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
 			$idd=$dossier['id'];
-            $immatricul=$dossier['vehicule_immatriculation'];
+            $immatricul=$dossier['vehicule_immatriculation']; $statut=$dossier['statut'];
 			$ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-			      <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" >
+			      <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style; if($statut!=2){ echo';border:2px solid black;';} ?>" >
                 <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
 	 	         <div class="infos">  <label style="font-size: 15px;"><?php echo $ref;?></label>
                <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
@@ -333,6 +333,8 @@
 
 
 <script>
+
+
 
     function hideTab1() {
         $('#panelactifs').css('display','none');
@@ -721,9 +723,9 @@
     .userdiv h3{margin-top:2px!important;}
     .userdiv .delete {display:none;}
 
-    .userdiv   {border:2px dotted grey; padding:5px 5px 5px;opactity:0.1;height:400px;}
+    .userdiv   {border:2px dotted grey; padding:5px 5px 5px;opactity:0.1;height:800px;}
     .userdiv .dossier label{font-size:18px;}
-    .userdiv .dossier .infos{display:none;}
+    .userdiv .dossier .infos small{display:none;}
     #drag-elements .dossier .infos{display:block;}
     #drag-elements2 .dossier .infos{display:block;}
 

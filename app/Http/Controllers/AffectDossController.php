@@ -40,7 +40,7 @@ class AffectDossController extends Controller
       }
 
 
-   public function affecterDossier(Request $request)
+   public function affecterDossier2(Request $request)
    {
 
            // $in=$req->all();
@@ -95,7 +95,7 @@ class AffectDossController extends Controller
 
 
         if ($type_affectation == 'Najda') {
-            $maxid = app('App\Http\Controllers\DossiersController')->GetMaxIdBytype('Najda');
+            $maxid = app('App\Http\Controllers\DossiersController')->GetMaxIdBytypeN();
             $reference_medic = $annee . 'N' . sprintf("%'.04d\n", $maxid+1);
         }
         if ($type_affectation == 'VAT') {
@@ -104,7 +104,7 @@ class AffectDossController extends Controller
 
         }
         if ($type_affectation == 'MEDIC') {
-            $maxid =  app('App\Http\Controllers\DossiersController')->GetMaxIdBytype('MEDIC');
+            $maxid =  app('App\Http\Controllers\DossiersController')->GetMaxIdBytypeN();
             $reference_medic = $annee . 'M' . sprintf("%'.04d\n", $maxid+1);
 
         }
@@ -124,7 +124,7 @@ class AffectDossController extends Controller
 
         }
         if ($type_affectation == 'Najda TPA') {
-            $maxid =  app('App\Http\Controllers\DossiersController')->GetMaxIdBytype('Najda TPA');
+            $maxid =  app('App\Http\Controllers\DossiersController')->GetMaxIdBytypeN('Najda TPA');
             $reference_medic = $annee . 'TPA' . sprintf("%'.04d\n", $maxid+1);
 
         }
