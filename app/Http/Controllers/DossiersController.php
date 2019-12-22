@@ -31,6 +31,7 @@ use App\OMTaxi;
 use App\OMAmbulance;
 use App\OMRemorquage;
 use App\OMMedicInternational;
+use App\Attachement;
 
 use WordTemplate;
 use Mail;
@@ -66,6 +67,64 @@ class DossiersController extends Controller
 
         $dossiers = Dossier::orderBy('created_at', 'desc')->paginate(10000000);
         return view('dossiers.index', compact('dossiers'));
+    }
+
+    function uploadExterneFile(Request $request)
+    {
+
+         $fichier = $request->file('fileExterneDoss');
+         $dossid =  $request->get("ExterneFiledossid");
+         $dossRef =  $request->get("ExterneFiledossRef");
+
+         $Nouveautitrefichier =  $request->get("titrefileExterne");
+         $descfichier =  $request->get("descripfileExterne");
+          $fichier_name="";
+          $fichier_ext= "";
+         if($Nouveautitrefichier)
+         {
+            $fichier_name=$Nouveautitrefichier;
+            $fichier_ext= $fichier->getClientOriginalExtension();
+            if($fichier_ext)
+            {
+               $fichier_name= $fichier_name. '.' .$fichier_ext;
+            }
+         }
+         else
+         {
+           $fichier_name =  $fichier->getClientOriginalName();
+           $fichier_ext= $fichier->getClientOriginalExtension();
+         }
+      // return  $fichier_name;
+      
+
+      $path= storage_path();
+
+                   if (!file_exists($path."/FichiersExternes")) {
+                        mkdir($path."/FichiersExternes", 0777, true);
+                    }
+
+                    $path= storage_path()."/FichiersExternes/";
+
+                    if (!file_exists($path.$dossRef)) {
+                        mkdir($path.$dossRef, 0777, true);
+                    }
+                     
+                     $path=$path.$dossRef;
+                
+                 $attachement = new Attachement([
+
+                            'type'=>$fichier_ext,
+                            'path' => $path.'/'.$fichier_name,
+                             'nom' => $fichier_name,                        
+                             'dossier'=>$dossid,
+                             'description' => $descfichier,
+                        ]);
+                 $attachement->save();                                     
+
+                 $fichier->move($path, $fichier_name);
+
+                return  'ok';         
+    
     }
 
     public function inactifs()
@@ -738,6 +797,7 @@ class DossiersController extends Controller
           if($dossierm)
           {
               $missions_doss= $dossierm->Missions; 
+             // dd($missions_doss);
 
               if( $missions_doss)
               {
@@ -797,6 +857,7 @@ class DossiersController extends Controller
         $iduser=$user->id;
 
         $dtc = (new \DateTime())->format('Y-m-d H:i');
+        //Migration ($id, $agent);
         $affec=new AffectDoss([
 
             'util_affecteur'=>$iduser,
@@ -809,6 +870,8 @@ class DossiersController extends Controller
 
 
         $affec->save();
+
+         
 
         //mise à jour notifications
       /*  Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"dossier": "'.$ref.'"}}\')')

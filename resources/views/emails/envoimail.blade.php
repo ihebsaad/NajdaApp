@@ -2,6 +2,25 @@
 
 @section('content')
 
+    <script src="{{  URL::asset('public/js/upload_files/vpb_uploader.js') }}" type="text/javascript"></script>
+   <!--  <script src="{{  URL::asset('public/js/upload_files/jquery.js') }}" type="text/javascript"></script>
+    <script src="{{  URL::asset('public/js/upload_files/bootstrap.js') }}" type="text/javascript"></script>
+    <script type="text/javascript" charset="utf-8" language="javascript" src="{{  URL::asset('public/js/upload_files/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" charset="utf-8" language="javascript" src="{{  URL::asset('public/js/upload_files/DT_bootstrap.js') }}"></script> --> 
+  
+   
+        <script type="text/javascript">
+$(document).ready(function()
+{
+    // Call the main function
+    new vpb_multiple_file_uploader
+    ({
+        vpb_form_id: "theform", // Form ID
+        autoSubmit: true,
+        vpb_server_url: "upload.php" 
+    });
+});
+</script>
 
     <link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
     <div class="row">
@@ -211,8 +230,23 @@
                     </div>
                 </div>
                 <div class="form-group form-group-default">
-                    <label>Attachements Externes</label>
-                    <input  class="btn btn-danger fileinput-button" id="file" type="file" name="files[]"   multiple   >
+                    <label>Attachements Externes <span style="color:red;">(la taille totale de fichiers ne doit pas dépasser 15 Mo)</span></label>
+                    <!--<input  class="btn btn-danger fileinput-button" id="file" type="file" name="files[]"   multiple   >-->
+                    <input type="file" class="btn btn-danger fileinput-button kfile" name="vasplus_multiple_files[]" id="vasplus_multiple_files" multiple="multiple" style="padding:5px;"/>      
+
+                    <table class="table table-striped table-bordered" style="width:60%; border: none;" id="add_files">
+                   <!--  <thead>
+                        <tr>
+                             <th style="color:blue; text-align:center;">File Name</th>
+                            <th style="color:blue; text-align:center;">Status</th>
+                            <th style="color:blue; text-align:center;">File Size</th> 
+                            <th style="color:blue; text-align:center;">Action</th> 
+                        <tr>
+                    </thead> -->
+                    <tbody>
+                    
+                    </tbody>
+                </table>
                 </div>
 <!--
    {{--      {!! NoCaptcha::display() !!}  --}}
@@ -317,23 +351,37 @@ $("#prest").change(function(){
 
             });
 
+            fileInputk = document.querySelector('#vasplus_multiple_files');
+              fileInputk.addEventListener('change', function(event) {
+                var inputk = event.target;
 
-             $('#file').change(function(){
+                if (inputk.files.length != khaled.length && inputk.files.length==0 )
+                {
+                      // alert ('ddd');
+                       fileInputk.value="";
+                    fileInputk.files= new FileListItem(khaled);
+
+                }
+                  });    
+
+
+
+             /*$('#file').change(function(){
              var fp = $("#file");
-             var lg = fp[0].files.length; // get length
+             var lg = fp[0].files.length;
              var items = fp[0].files;
              var fileSize = 0;
 
              if (lg > 0) {
              for (var i = 0; i < lg; i++) {
-             fileSize = fileSize+items[i].size; // get file size
+             fileSize = fileSize+items[i].size; 
              }
              if(fileSize > 12000000 ) {
              alert('La taille des fichiers ne doit pas dépasser 12 MB');
              $('#file').val('');
              }
              }
-             });
+             });*/
 
 
 

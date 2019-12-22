@@ -539,7 +539,7 @@ use App\Http\Controllers\TagsController;
 
                                            <?php if(isset($dossier)) {  ?>
                                           
-                                          <input id="dossier" type="hidden" class="form-control" value="{{$dossier->reference_medic}}" name="dossier"/>
+                                          <input id="" type="hidden" class="form-control" value="" name="dossier"/>
                                           <input id="dossierID" type="hidden" class="form-control" value="{{$dossier->id}}" name="dossierID"/>
                                           <input id="hreftopwindow" type="hidden" class="form-control" value="" name="hreftopwindow"/>
                                             
@@ -2326,7 +2326,7 @@ getNotificationDeleguerAct ();
 
   
 
-    if(!$('#idFormCreationMission #dossier').val())
+    if(!$('#idFormCreationMission #dossierID').val())
      {
 
       alert('vous devez sélectionner un dossier pour créer une mission ou créer une mission à partir d\'un email');

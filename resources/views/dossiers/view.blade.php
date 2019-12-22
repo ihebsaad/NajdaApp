@@ -865,7 +865,9 @@ array_push($listepr,$pr['prestataire_id']);
            </div>
 
                 <div id="tab5" class="tab-pane fade">
-
+                  <button type="button" style="float:left" class="btn btn-info btn-lg"  id="actualiserAtt">Actualiser la page</button>
+                  <button type="button" style="float:right" class="btn btn-info btn-lg" data-toggle="modal" data-target="#ajouterfichier">Ajouter un fichier</button>
+                  <br><br><br><br>
                     <table class="table table-striped" id="mytable" style=" ;margin-top:15px;">
                         <thead>
                         <tr id="headtable">
@@ -2557,12 +2559,68 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
 
     </div>
 
+    <!-- model pour délégation des missions-->
+
+<div class="modal fade" id="ajouterfichier" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true" >
+    <div class="modal-dialog" role="document">
+       <form  id="formFileExterne" method="post" enctype="multipart/form-data" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="">Ajout d'un fichier dans le dossier courant </h4>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+
+                    <div class="form-group">
+                        
+                          {{ csrf_field() }}
+                                                                                  
+                            <div class="form-group " >
+                                <div class=" row  ">
+                                    <div class="form-group mar-20">
+                                    <label for="fileExterneDoss" class="control-label" style="padding-right: 20px">Fichier : </label>                    
+                                                                
+                                     <input type="file" name="fileExterneDoss" id="fileExterneDoss" /><br><br>
+                                    
+                                      <input id="ExterneFiledossid" name="ExterneFiledossid" type="hidden" value="{{$dossier->id}}">
+                                      <input id="ExterneFiledossRef" name="ExterneFiledossRef" type="hidden" value="{{$dossier->reference_medic}}">
+                                     <label for="titrefileExterne" class="control-label" style="padding-right: 20px">Nouveau nom :</label>
+                                     <input style="WIDTH: 70%;" type="text" name="titrefileExterne" id="titrefileExterne" /> 
+                                     <br> <br>
+                                     <label for="descripfileExterne" class="control-label" style="padding-right: 20px; ">Description : </label><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                     <textarea style="WIDTH: 70%; height:100px;"  name="descripfileExterne" id="descripfileExterne" /> </textarea>
+
+                          <br><br>                              
+                                            
+                    <div id="successUloadExterneFile">
+                    </div>                                                
+                                    </div>
+                                </div>
+                            </div>                    
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="submit" id="UploadExterneFile" class="btn btn-primary">upload</button>
+            </div>
+        </div>
+          </form>
+    </div>
+</div>
+
 
 
 
 @endsection
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+ <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> 
+  <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>  -->
+    <!-- <script src="http://malsup.github.com/jquery.form.js"></script> -->
+
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
 
 <script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
@@ -4596,6 +4654,96 @@ $("#showNext-m").click(function() {
     }
 
 </script>
+<script>
+
+   $(document).on('click','#actualiserAtt',function(e){
+    
+     location.reload();
+
+   });
+ $(document).on("submit","#formFileExterne",function(e) {
+ // $("#formFileExterne").submit(function(e) {
+    e.preventDefault();
+    var en=true;
+     //alert('ok');
+    if(!$('#fileExterneDoss').val())
+     {
+      alert('Vous devez sélectionner un fichier à envoyer');
+      en=false;
+     }
+
+    if(en==true)
+   {
+    //var donnees = $('#formFileExterne').serialize();
+
+    var dataString = new FormData(jQuery(document).find('#formFileExterne')[0]);
+    
+    $.ajax({
+                    type:"post",
+                    url:"{{ route('Upload.ExterneFile')}}",
+                    data:dataString,                  
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() 
+                    {
+                        $("#successUloadExterneFile").html('<div align="left"><img src="{{ URL::asset('public/img/progress.gif')}}" width="100%" height="8%" align="absmiddle" title="Upload...."/></div>');
+                         setTimeout(function() {
+                            
+                                                  },2000);                      
+                       
+                    },
+                    success:function(response) 
+                    {
+                        //alert(response);
+                       $("#successUloadExterneFile").empty().html('<span style="color:green">le fichier est envoyé avec succès</span>');
+
+                    },
+                      error: function(jqXHR, textStatus, errorThrown) {
+
+                        //alert('erreur lors de création de la mission');
+                    $("#successUloadExterneFile").empty().html('<span style="color:red">Erreur lors de l\'envoi du fichier au serveur</span>');
+
+
+            }
+                });
+}
+ });
+
+</script>
+<!-- <script src="http://malsup.github.com/jquery.form.js"></script>
+<script>
+$(document).ready(function(){
+
+    $('#formFilekbs').ajaxForm({
+      beforeSend:function(){
+        $('#success').empty();
+      },
+      uploadProgress:function(event, position, total, percentComplete)
+      {
+        $('.progress-bar').text(percentComplete + '%');
+        $('.progress-bar').css('width', percentComplete + '%');
+      },
+      success:function(data)
+      {
+        if(data.errors)
+        {
+          $('.progress-bar').text('0%');
+          $('.progress-bar').css('width', '0%');
+          $('#success').html('<span class="text-danger"><b>'+data.errors+'</b></span>');
+        }
+        if(data.success)
+        {
+          $('.progress-bar').text('Uploaded');
+          $('.progress-bar').css('width', '100%');
+          $('#success').html('<span class="text-success"><b>'+data.success+'</b></span><br /><br />');
+          //$('#success').append(data.image);
+        }
+      }
+    });
+
+});
+</script> -->
 <style>.headtable{background-color: grey!important;color:white;}
     table{margin-bottom:40px;}
 </style>

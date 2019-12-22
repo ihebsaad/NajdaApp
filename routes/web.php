@@ -210,6 +210,7 @@ Route::post('/dossiers/rendreactif','DossiersController@rendreActif')->name('dos
 Route::get('/dossiers/inactifs','DossiersController@inactifs')->name('inactifs');
 Route::get('/dossiers/activerdossiers','DossiersController@ActiverDossiers')->name('activerdossiers');
 Route::post('/dossiers/changestatut','DossiersController@changestatut')->name('dossiers.changestatut');
+Route::post('/ExternefileUpload/upload', 'DossiersController@uploadExterneFile')->name('Upload.ExterneFile');
 
 
 /*** Clients **/

@@ -3948,6 +3948,7 @@ $id=0;
 
     function send (Request $request)
     {
+      //dd($request->all());
 
       /*  $request->validate([
             'g-recaptcha-response' => 'required|captcha'
@@ -3960,7 +3961,7 @@ $id=0;
         $cci = $request->get('cci');
         $sujet = $request->get('sujet');
         $contenu = $request->get('contenu');
-         $files = $request->file('files');
+         $files = $request->file('vasplus_multiple_files');
         $from = trim($request->get('from'));
         $description= $request->get('description');
         $attachs = $request->get('attachs');
@@ -3997,6 +3998,7 @@ if ($from=='faxnajdassist@najda-assistance.com')
    // $swiftTransport->setPassword('esol@2109');
 
 }*/
+
 
 if ($from=='najdassist@gmail.com')
 {
@@ -4282,7 +4284,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
           // $envoye->save();
            //$id=$envoye->id;
-          if($envoyeid>0){ $this->export_pdf_send($envoyeid);};
+          if($envoyeid>0){ $this->export_pdf_send($envoyeid,$files);};
 
              echo ('<script> window.location.href = "'.$urlsending.'/view/'.$envoyeid.'";</script>') ;
                 return redirect($urlsending.'/view/'.$envoyeid)->with('success', '  Envoyé ! ');
@@ -4517,7 +4519,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
 
 
-    public function export_pdf_send($id)
+    public function export_pdf_send($id, $files)
     {
         // Fetch all customers from database
         $envoye = Envoye::find($id);
@@ -4541,6 +4543,15 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
             'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>1,'envoye_id'=>$id,'parent'=>$id,
         ]);
         $attachement->save();
+        if($files)
+        {
+         foreach($files as $file) {
+           $fichier_name =  $file->getClientOriginalName();
+          $file->move($path.$id, $fichier_name);
+
+         }
+       }
+
     }
 
 
