@@ -69,9 +69,9 @@ class User extends Authenticatable
         // return  $notes;
     }
 
-
+/*
     public function isOnline()
     {
         return Cache::has('user-online-'.$this->id);
-    }
+    }*/
 }
