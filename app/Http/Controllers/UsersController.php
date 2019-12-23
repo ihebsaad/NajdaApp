@@ -15,6 +15,7 @@ use App\Seance ;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Session;
+use Shetabit\Visitor\Traits\Visitor;
 
 class UsersController extends Controller
 {
