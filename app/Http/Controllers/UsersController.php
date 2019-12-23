@@ -393,8 +393,6 @@ class UsersController extends Controller
                   })->update(array('affecte' => Auth::id(), 'statut' => 2));
 
 
-
-
                   // Mixtes
                   Dossier::where(function ($query)  {
                       $query->where('reference_medic', 'like', '%N%')

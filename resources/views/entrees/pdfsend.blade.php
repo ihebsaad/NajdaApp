@@ -2367,7 +2367,16 @@
         echo '<br>Attachements :<br>';
 
 
-        $attachs = Attachement::get()->where('parent', '=', $envoye['id'] )->where('boite', '=', 1 );
+      //  $attachs = Attachement::get()->where('parent', '=', $envoye['id'] )->where('boite', '=', 1 );
+
+        $envid=$envoye['id'];
+        $attachs = Attachement::where(function ($query)  use ($envid) {
+            $query->where('envoye_id',$envid )
+                ->where('boite',  1 );
+        })->orWhere(function ($query) use ($envid )   {
+            $query->where('parent', $envid )
+                ->where('boite',  1 );
+        })->get();
 
         ?>
     @endif

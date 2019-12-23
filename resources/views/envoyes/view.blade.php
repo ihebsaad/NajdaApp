@@ -80,8 +80,20 @@
                      <?php if ($envoye['nb_attach']>0){
                     echo '<br>Attachements :<br>';
 
-                    $attachs = Attachement::where('parent',  $envoye['id'] )->where('boite', '=', 1 )->get();
-                  // echo json_encode($attachs);
+                 //   $attachs = Attachement::where('parent',  $envoye['id'] )->where('boite', '=', 1 )->get();
+
+                $envid=$envoye['id'];
+                    $attachs = Attachement::where(function ($query)  use ($envid) {
+                        $query->where('envoye_id',$envid )
+                      ->where('boite',  1 );
+                     })->orWhere(function ($query) use ($envid )   {
+                        $query->where('parent', $envid )
+                       ->where('boite',  1 );
+                     })->get();
+
+
+
+                    // echo json_encode($attachs);
                    } ?>
 
 
@@ -94,7 +106,7 @@
 
                         </div>
 
-                            <iframe src="{{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                            <iframe src="{{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:440px;border:1px solid grey"></iframe>
 
                         @endforeach
                 @endif

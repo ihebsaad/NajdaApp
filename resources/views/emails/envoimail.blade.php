@@ -475,7 +475,7 @@ $("#prest").change(function(){
                             method:"POST",
                             data:{envoye:envoye,description:description,destinataire:destinataire,contenu:contenu,cc:cc,cci:cci, _token:_token},
                             success:function(data){
-                                //     alert('Brouillon enregistré ');
+                                   alert('Brouillon enregistré ');
 
                                 document.getElementById('envoye').value=data;
                                 document.getElementById('brsaved').value=1;
