@@ -2511,6 +2511,11 @@ function disabling(elm) {
     $(document).ready(function() {
 
         $("#customer_id").select2();
+        $("#medecin_traitant").select2();
+        $("#hospital_address").select2();
+        $("#hotel").select2();
+        $("#vehicule_marque").select2();
+        $("#empalcement").select2();
 
         $('#phoneicon').click(function() {
 

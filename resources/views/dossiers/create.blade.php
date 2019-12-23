@@ -1298,7 +1298,12 @@ use  \App\Http\Controllers\DocsController;
 
     $(function () {
 
-
+        $("#customer_id").select2();
+        $("#medecin_traitant").select2();
+        $("#hospital_address").select2();
+        $("#hotel").select2();
+        $("#vehicule_marque").select2();
+        $("#empalcement").select2();
 
         $('.radio1').click(function() {
 

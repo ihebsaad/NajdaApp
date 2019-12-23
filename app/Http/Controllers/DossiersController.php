@@ -1376,29 +1376,30 @@ class DossiersController extends Controller
     public static function GetMaxIdBytypeN( )
     {
 
-     /*   $annee=date('y');
+        $annee=date('y');
         $maxid= Dossier::where(function ($query) use ($annee)  {
-               $query->where('type_affectation', 'Najda')
-                   ->where('reference_medic','like', $annee.'%');
-            })->orWhere(function ($query) use ($annee)   {
-               $query->where('type_affectation', 'Najda TPA')
-                    ->where('reference_medic','like', $annee.'%');
-           })->orWhere(function ($query) use ($annee)    {
-               $query->where('type_affectation', 'MEDIC')
-                   ->where('reference_medic','like', $annee.'%');
-           })->max('id');
-*/
+            $query->where('type_affectation', 'Najda')
+                ->where('reference_medic','like', $annee.'%');
+        })->orWhere(function ($query) use ($annee)   {
+            $query->where('type_affectation', 'Najda TPA')
+                ->where('reference_medic','like', $annee.'%');
+        })->orWhere(function ($query) use ($annee)    {
+            $query->where('type_affectation', 'MEDIC')
+                ->where('reference_medic','like', $annee.'%');
+        })->max('id');
+
+
      /*
         $maxid=Dossier::where('type_affectation', 'Najda')
         ->orWhere('type_affectation', 'Najda TPA')
         ->orWhere('type_affectation', 'MEDIC')
             ->max('id');
 */
-        $maxid=Dossier::where('reference_medic','like','%N%')
+     /*   $maxid=Dossier::where('reference_medic','like','%N%')
             ->orWhere('reference_medic','like','%TPA%')
             ->orWhere('reference_medic','like','%M%')
             ->max('id');
-
+*/
 
         return intval($maxid );
 

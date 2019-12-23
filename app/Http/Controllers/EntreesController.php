@@ -46,6 +46,15 @@ class EntreesController extends Controller
 
     }
 
+    public function enregistrements()
+    {
+        //
+        $enregs =  DB::table('enregistrements')->orderBy('id', 'desc')->get();
+        return view('entrees.enregistrements',['enregs' => $enregs] );
+
+    }
+
+
     public function dispatching()
     {
         //

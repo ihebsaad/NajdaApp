@@ -4105,7 +4105,7 @@ if ($from=='najdassist@gmail.com')
             $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
             $swiftTransport->setUsername('operations@medicinternational.tn');
             $swiftTransport->setPassword($pass_MI);
-            $fromname="Medic' Multiservices";
+            $fromname="Medic International";
             $signatureentite= $parametres->signature6 ;
 
         }

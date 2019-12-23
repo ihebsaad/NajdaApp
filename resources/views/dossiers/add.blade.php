@@ -22,14 +22,14 @@ use  \App\Http\Controllers\DocsController;
             <h2 style="margin-left:50px;">Créer un nouveau Dossier:</h2>
     </div>
     <?php
-            $maxid=DossiersController::GetMaxIdBytypeN();
-    echo 'Max Id : '.$maxid;
+   /*         $maxid=DossiersController::GetMaxIdBytypeN();
+  echo 'Max Id : '.$maxid;
 
-    $tpaff=DossiersController::ChampById('type_affectation',$maxid);
-    echo 'Type Aff :'.$tpaff;
-    $refd= DossiersController::RefDossierById($maxid);
-    echo 'Ref : '.$refd;
-
+   $tpaff=DossiersController::ChampById('type_affectation',$maxid);
+   echo 'Type Aff :'.$tpaff;
+   $refd= DossiersController::RefDossierById($maxid);
+   echo 'Ref : '.$refd;
+ */
     ?>
     <section class="content form_layouts">
 
@@ -1307,7 +1307,12 @@ use  \App\Http\Controllers\DocsController;
 
     $(function () {
 
-
+        $("#customer_id").select2();
+        $("#medecin_traitant").select2();
+        $("#hospital_address").select2();
+        $("#hotel").select2();
+        $("#vehicule_marque").select2();
+        $("#empalcement").select2();
 
         $('.radio1').click(function() {
 
