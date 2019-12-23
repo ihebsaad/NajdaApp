@@ -1811,8 +1811,9 @@ use  \App\Http\Controllers\DocsController;
         </div>
     </div>
 </div>
-<?php if ((Gate::check('isAdmin') || Gate::check('isSupervisor'))) { ?>
-<!-- Modal attribution dossier-->
+
+
+    <!-- Modal attribution dossier-->
 <div class="modal fade" id="attrmodal" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form  method="post" action="{{ route('affectation.dossier') }}">
@@ -2101,7 +2102,6 @@ use  \App\Http\Controllers\DocsController;
 </div>
 
 
-<?php } ?>
 
 
 <!-- Modal -->
