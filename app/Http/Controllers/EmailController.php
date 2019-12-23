@@ -3948,7 +3948,7 @@ $id=0;
 
     function send (Request $request)
     {
-      //dd($request->all());
+    //  dd($request->all());
 
       /*  $request->validate([
             'g-recaptcha-response' => 'required|captcha'
@@ -4192,26 +4192,43 @@ if ($from=='najdassist@gmail.com')
 
              foreach($files as $file) {
                  $count++;
-                 $path=$file->getRealPath();
+
+                 $fichier_name =  $file->getClientOriginalName();
+                 $path0= storage_path()."/Envoyes/";
+
+                 if (!file_exists($path0.$envoyeid)) {
+                     mkdir($path0.$envoyeid, 0777, true);
+                 }
+
+                 $file->move($path0.$envoyeid, $fichier_name);
+
+              ////   $path=$file->getRealPath();
                //  $chemin=$file->Path();
-                 $ext= $file->extension();
+               ////  $ext= $file->extension();
                //  $name=$file->name();
 
-
-                 $message->attach($path, array(
-                         'as' => $file->getClientOriginalName(), // If you want you can chnage original name to custom name
-                         'mime' => $file->getMimeType())
-                 );
 
 
            // save external files here
 
                 $attachement = new Attachement([
 
-                    'type'=>$ext,'path' => $path, 'nom' => $file->getClientOriginalName(),'boite'=>1,'dossier'=>$doss,'envoye_id'=>$envoyeid
+                    'type'=>$file->getClientOriginalExtension(),'path' => '/Envoyes/'.$envoyeid.'/'.$file->getClientOriginalName(), 'nom' => $file->getClientOriginalName(),'boite'=>1,'dossier'=>$doss,'envoye_id'=>$envoyeid
                  ]);
 
                  $attachement->save();
+
+
+                 $fullpath=$path0.$envoyeid.'/'.$file->getClientOriginalName();
+
+                 $name=basename($fullpath);
+                 $mime_content_type=mime_content_type ($path0.$envoyeid);
+
+                 $message->attach($fullpath, array(
+                         'as' => $name, // If you want you can chnage original name to custom name
+                         'mime' => $mime_content_type)
+                 );
+
 
 
              }
@@ -4286,7 +4303,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
            //$id=$envoye->id;
           if($envoyeid>0){ $this->export_pdf_send($envoyeid,$files);};
 
-             echo ('<script> window.location.href = "'.$urlsending.'/view/'.$envoyeid.'";</script>') ;
+        ////     echo ('<script> window.location.href = "'.$urlsending.'/view/'.$envoyeid.'";</script>') ;
                 return redirect($urlsending.'/view/'.$envoyeid)->with('success', '  Envoyé ! ');
 
      });
@@ -4295,9 +4312,14 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
        } catch (Exception $ex) {
     // Debug via $ex->getMessage();
     /// echo '<script>alert("Erreur !") </script>' ;
+              $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+            return redirect($urlapp.'/envoyes') ;
      }
+        $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
-}// end send
+        return redirect($urlapp.'/envoyes') ;
+
+    }// end send
 
 
 
@@ -4543,14 +4565,15 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
             'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>1,'envoye_id'=>$id,'parent'=>$id,
         ]);
         $attachement->save();
-        if($files)
+
+       /* if($files)
         {
          foreach($files as $file) {
            $fichier_name =  $file->getClientOriginalName();
           $file->move($path.$id, $fichier_name);
 
          }
-       }
+       }*/
 
     }
 

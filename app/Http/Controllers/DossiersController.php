@@ -105,17 +105,19 @@ class DossiersController extends Controller
                     }
 
                     $path= storage_path()."/FichiersExternes/";
+                    $path2=  "/FichiersExternes/";
 
                     if (!file_exists($path.$dossRef)) {
-                        mkdir($path.$dossRef, 0777, true);
+                        mkdir($path.$dossid, 0777, true);
                     }
                      
-                     $path=$path.$dossRef;
-                
+                  $path=$path.$dossid;
+                  $path2=$path2.$dossid;
+
                  $attachement = new Attachement([
 
                             'type'=>$fichier_ext,
-                            'path' => $path.'/'.$fichier_name,
+                            'path' => $path2.'/'.$fichier_name,
                              'nom' => $fichier_name,                        
                              'dossier'=>$dossid,
                              'description' => $descfichier,
