@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Parametre;
 use Notification;
 
+
 use Illuminate\Support\Facades\Notification as Notification2;
 
 
@@ -575,10 +576,10 @@ $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
-       try{ $aMessage = $oFolder->messages()->all()->get();
-       }catch(Exception $ex){
-           
-       }
+      //  $aMessage = $oFolder->messages()->all()->get();
+     //   $aMessage = $oFolder->query()->since(   \Carbon::now()->subDays(5)   )->get();
+        $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')  )->get();
+
         /** @var \Webklex\IMAP\Message $oMessage */
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
