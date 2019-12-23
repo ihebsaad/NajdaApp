@@ -7,6 +7,7 @@
     <?php
 
     use App\TypeMission;
+    use Shetabit\Visitor\Traits\Visitor;
     $user = auth()->user();
     $name=$user->name;
     $iduser=$user->id;
