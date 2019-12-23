@@ -7,7 +7,6 @@
     <?php
 
     use App\TypeMission;
-    use Shetabit\Visitor\Traits\Visitor;
     $user = auth()->user();
     $name=$user->name;
     $iduser=$user->id;
@@ -423,7 +422,7 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
                                     if($user->id==$suptech){$role.='(Superviseur Technique)';}
                                     if($user->id==$charge){$role.='(Chargé de transport)';}
                                     if($user->user_type=='admin'){$role.='(Administrateur)';}
-                                  if(  visitor()->isOnline($user)) { echo  '<li><i class="fa fa-user fa-lg" ></i>   '.$user->name.' '.$user->lastname .' - '. $role.' </li>' ;}
+                                  if($user->isOnline()) { echo  '<li><i class="fa fa-user fa-lg" ></i>   '.$user->name.' '.$user->lastname .' - '. $role.' </li>' ;}
                                 }
                                     ?><br>
 
