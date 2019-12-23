@@ -578,7 +578,7 @@ $id=0;
         $oFolder = $oClient->getFolder('INBOX');
       //  $aMessage = $oFolder->messages()->all()->get();
      //   $aMessage = $oFolder->query()->since(   \Carbon::now()->subDays(5)   )->get();
-        $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')  )->get();
+        $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
 
         /** @var \Webklex\IMAP\Message $oMessage */
         foreach ($aMessage as $oMessage) {
