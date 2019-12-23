@@ -5,6 +5,7 @@ use App\Adresse;
 use App\AffectDoss;
 use App\Evaluation;
 use App\Mission;
+use App\ActionEC;
 use App\User;
 use App\Parametre;
 use App\Prestataire;
@@ -796,7 +797,9 @@ class DossiersController extends Controller
 
           if($dossierm)
           {
-              $missions_doss= $dossierm->Missions; 
+             // $missions_doss= $dossierm->Missions;
+                $missions_doss= Mission::where('dossier_id','=',$dossierm->id)->get();
+
              // dd($missions_doss);
 
               if( $missions_doss)
@@ -808,8 +811,9 @@ class DossiersController extends Controller
                         {
                             $md->update(array('user_id' =>$dossierm->affecte));
                             
-                            $actions_missions= $md->ActionECs() ;
+                           // $actions_missions= $md->ActionECs() ;
 
+                             $actions_missions=ActionEC::where('mission_id','=',$md->id)->get();
                            if($actions_missions)
                            {
 
@@ -857,7 +861,7 @@ class DossiersController extends Controller
         $iduser=$user->id;
 
         $dtc = (new \DateTime())->format('Y-m-d H:i');
-        //Migration ($id, $agent);
+        
         $affec=new AffectDoss([
 
             'util_affecteur'=>$iduser,
@@ -887,7 +891,7 @@ class DossiersController extends Controller
         $nomuser=$user->name.' '.$user->lastname;
         $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
         Log::info('[Agent: '.$nomuser.'] Affectation de dossier :'.$ref.' à: '.$nomagent);
-
+        $this->Migration ($id, $agent);
         return back();
 
     }
