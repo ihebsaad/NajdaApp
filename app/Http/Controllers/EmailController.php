@@ -575,7 +575,10 @@ $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
-        $aMessage = $oFolder->messages()->all()->get();
+       try{ $aMessage = $oFolder->messages()->all()->get();
+       }catch(Exception $ex){
+           
+       }
         /** @var \Webklex\IMAP\Message $oMessage */
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
