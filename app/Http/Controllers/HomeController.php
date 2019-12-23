@@ -15,7 +15,7 @@ use App\Dossier ;
 use Illuminate\Support\Facades\Auth;
 use App\TypeMission;
 use Illuminate\Support\Facades\Log;
-
+use Shetabit\Visitor\Traits\Visitor;
 
 class HomeController extends Controller
 {
