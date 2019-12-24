@@ -203,6 +203,7 @@ class DocumentsController extends Controller
             {
                 $name_file = utf8_encode($arrfile['nom'].'_'.$refdoss.'.doc');
 
+
                 $titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
             }
 
@@ -441,6 +442,8 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                        Tag::where('id', $idtaggop)->update(['mrestant' => $nmontant]);
                    
                     }
+
+                $titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
             }
         }
      
@@ -800,10 +803,12 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                 $array += [ 'templatehtml' => utf8_encode($arrfile['template_html'])];
                 $array += [ 'templatertf' => utf8_encode($arrfile['path'])];
 
+
                 // ajout identification des tags
                 if (isset($resp)) {$array += [ 'lestags' => utf8_encode($resp)];}
                 // ajout montant gop
                 //if (isset($montantgop)) {$array += [ 'montantgop' => utf8_encode($montantgop)];}
+
 
             // cas remplace et annule doc
             if ($request->has('parent'))
@@ -1040,7 +1045,9 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
                             $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
+
                         }}
+
                    // }
                     $i++;
                 }
@@ -1092,6 +1099,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
                                     $array += [ $champtemp => utf8_encode($valchamp)];
+
                                 }
                             }
 							elseif($champtemp ==='[AGENT__LASTNAME]')
@@ -1173,6 +1181,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
                                     $array += [ $champtemp => $valchamp];
+
                                 }
 
                             }
@@ -1344,6 +1353,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
                             $array += [ 'CL_'.$champtemp => utf8_encode($champdb)];
+
                         }}
                     }
             }

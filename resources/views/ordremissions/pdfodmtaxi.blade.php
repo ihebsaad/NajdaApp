@@ -278,6 +278,7 @@ if (isset($_POST['clientIMA'])) { ?>
 <span style="font-family:'Times New Roman';margin-left:40px;"><?php if (isset($_POST['dhretbaseprev'])) { echo $_POST['dhretbaseprev']; } ?></span>
 			<p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Véhicule: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['lvehicule'])) { echo $_POST['lvehicule']; } ?></span>
+
 			</p>
 <p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Carte carburant: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['cartecarburant'])) { echo $_POST['cartecarburant']; } ?></span>
@@ -286,6 +287,7 @@ if (isset($_POST['clientIMA'])) { ?>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['cartetelepeage'])) { echo $_POST['cartetelepeage']; } ?></span>
 			</p>
 			<p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Chauffeur : </span>
+
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['lchauff'])) { echo $_POST['lchauff']; } ?></span>
 			</p><p style="margin:0pt 0pt 0pt 20.9pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Heures sup ?: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['heuressup'])) { echo $_POST['heuressup']; } ?></span>
@@ -302,9 +304,11 @@ if (isset($_POST['clientIMA'])) { ?>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['dhdepartlieu'])) { echo $_POST['dhdepartlieu']; } ?></span>
 		</p><p style="margin:3.65pt 120.4pt 0pt 238.7pt; text-indent:-224.5pt; line-height:189%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Arrivée</span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold"> à</span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold"> destination: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['dharrivedest'])) { echo $_POST['dharrivedest']; } ?></span>
+
 		</p><p style="margin:3.65pt 120.4pt 0pt 238.7pt; text-indent:-224.5pt; line-height:189%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold;">Re</span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold; ">-départ pour retour:</span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold; ">&nbsp; </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['dhredepart'])) { echo $_POST['dhredepart']; } ?></span>
 		</p><p style="margin:3.65pt 120.4pt 0pt 238.7pt; text-indent:-224.5pt; line-height:189%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold;">2</span><span style="font-family:&#39;Times New Roman&#39;; font-size:6pt; font-weight:bold; vertical-align:super;">ème</span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold;"> arrivée destination:</span>
+
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['dh2emearrdest'])) { echo $_POST['dh2emearrdest']; } ?></span>
 		</p><p style="margin:0.55pt 120.4pt 0pt 238.7pt; text-indent:-224.5pt; line-height:95%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Départ</span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold; letter-spacing:-1pt"> </span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">vers </span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">base:</span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['dhdepbase'])) { echo $_POST['dhdepbase']; } ?></span>

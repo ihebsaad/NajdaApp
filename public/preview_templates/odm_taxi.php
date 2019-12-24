@@ -28,8 +28,9 @@ if ((isset($_GET['remplace']) || isset($_GET['complete'])) && isset($_GET['paren
 	if ($resultp->num_rows > 0) {
 	$detailom = $resultp->fetch_assoc();
 	$emispar = $detailom['emispar'];
-	if (isset($_GET['affectea'])) {$affectea=$_GET['affectea'];} else {$affectea = $detailom['affectea'];}
 	
+	if (isset($_GET['affectea'])) {$affectea=$_GET['affectea'];} else {$affectea = $detailom['affectea'];}
+
 	}
 	else { exit("impossible de recuperer les informations de lordre de mission ".$parentom);}
 }
