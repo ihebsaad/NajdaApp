@@ -795,23 +795,18 @@ class DossiersController extends Controller
     public function Migration ($iddoss, $iduser_dest)
     {
 
-          $dossierm=Dossier::where('id', $iddoss)->first();
-
-          if($dossierm)
-          {
-             // $missions_doss= $dossierm->Missions;
-                $missions_doss= Mission::where('dossier_id','=',$dossierm->id)->get();
+             $missions_doss= Mission::where('dossier_id','=',$iddoss)->get();
 
              // dd($missions_doss);
 
-              if( $missions_doss)
+              if($missions_doss)
               {
 
                 foreach($missions_doss as $md)
                 {
                         if($md->statut_courant!='deleguee')// reportee ou active
                         {
-                            $md->update(array('user_id' =>$dossierm->affecte));
+                            $md->update(array('user_id' =>$iduser_dest));
                             
                            // $actions_missions= $md->ActionECs() ;
 
@@ -821,9 +816,9 @@ class DossiersController extends Controller
 
                               foreach ($actions_missions as $acts) {
 
-                                if($acts->statut=='reportee' || $acts->statut=='reportee' ||  $acts->statut=='active' )
+                                if($acts->statut=='reportee' || $acts->statut=='rappelee' ||  $acts->statut=='active' )
                                 {
-                                       $acts->update(array('user_id' =>$dossierm->affecte));
+                                       $acts->update(array('user_id' =>$iduser_dest));
 
                                 }
 
@@ -843,7 +838,7 @@ class DossiersController extends Controller
               }
 
 
-          }
+        
 
     }
 
@@ -863,6 +858,9 @@ class DossiersController extends Controller
         $iduser=$user->id;
 
         $dtc = (new \DateTime())->format('Y-m-d H:i');
+
+
+        $this->Migration ($id, $agent);
         
         $affec=new AffectDoss([
 
@@ -893,7 +891,7 @@ class DossiersController extends Controller
         $nomuser=$user->name.' '.$user->lastname;
         $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
         Log::info('[Agent: '.$nomuser.'] Affectation de dossier :'.$ref.' à: '.$nomagent);
-        $this->Migration ($id, $agent);
+        //$this->Migration ($id, $agent);
         return back();
 
     }
