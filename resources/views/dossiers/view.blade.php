@@ -882,18 +882,18 @@ array_push($listepr,$pr['prestataire_id']);
                         </thead>
                         <tbody>
                         @foreach($attachements as $attach)
-                            <tr><?php
-                                $type= $attach->type;    $parent=$attach->parent;
-                                $descriptionEmail='';
-                                $descriptionAttach=$attach->description;
-                                if($attach->entree_id>0){
-                                $descriptionEmail= EntreesController::ChampById('commentaire',$parent);
-                                }
-                                if($attach->envoye_id>0){
-                                $descriptionEmail= EnvoyesController::ChampById('description',$parent);
-                                }
+<?php                       $type= $attach->type;    $parent=$attach->parent;
+                            $descriptionEmail='';
+                            $descriptionAttach=$attach->description;
+                            if($attach->entree_id>0){
+                            $descriptionEmail= EntreesController::ChampById('commentaire',$parent);
+                            }
+                            if($attach->envoye_id>0){
+                            $descriptionEmail= EnvoyesController::ChampById('description',$parent);
+                            }
+?>
+                            <tr   onclick="modalattach('<?php echo  $attach->nom ?>','<?php  echo URL::asset('storage'.$attach->path) ; ?>','<?php echo $type; ?>');" >
 
-                                ?>
                                 <td style="width:15%;"><small><?php if ($attach->boite==3) {
                                         $datem='';
                                         if($attach->entree_id>0){
@@ -904,7 +904,7 @@ array_push($listepr,$pr['prestataire_id']);
                                         }
                                         echo date('d/m/Y H:i', strtotime( $datem)) ;
                                         } else{ echo date('d/m/Y H:i', strtotime( $attach->created_at)) ; }?></small></td>
-                                <td  class="overme" style="cursor:pointer;width:30%;"><small  onclick="modalattach('<?php echo  $attach->nom ?>','<?php  echo URL::asset('storage'.$attach->path) ; ?>','<?php echo $type; ?>');"><?php  echo $attach->nom;  ?></small></td>
+                                <td class="overme" style="cursor:pointer;width:30%;"><small  ><?php  echo $attach->nom;  ?></small></td>
                                 <td class="overme" style="width:40%;"><small><?php  echo $descriptionAttach.'<br>'.$descriptionEmail  ;  ?></small></td>
 
                                 <td style="width:5%;"><small><?php
