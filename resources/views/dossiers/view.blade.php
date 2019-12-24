@@ -3096,7 +3096,7 @@ function annuleom(titre,iddoc)
             });
     }
 // affichage de lhistorique du om taxi
-    
+    /*
     function historiqueomtx(om){
         //$("#gendocfromhtml").submit();
         var _token = $('input[name="_token"]').val();
@@ -3105,37 +3105,36 @@ function annuleom(titre,iddoc)
                 method:"POST",
                 //'&_token='+_token
                 data:'_token='+_token+'&om='+om,
-                success:function(data){
+                success:function(data) {
                     //alert(JSON.stringify(data));
                     var histom = JSON.parse(data);
                     // vider le contenu du table historique
                     $("#tableomshisto tbody").empty();
                     var items = [];
-                    $.each(histom, function(i, field){
-                      items.push([ i,field ]);
+                    $.each(histom, function (i, field) {
+                        items.push([i, field]);
                     });
                     // affichage template dans iframe
-                    $.each(items, function(index, val) {
+                    $.each(items, function (index, val) {
 
-                    //titre du document
-                    if (val[0]==0)
-                    {
-                        $("#omhistoname").text(val[1]['titre']);
-                    }
+                        //titre du document
+                        if (val[0] == 0) {
+                            $("#omhistoname").text(val[1]['titre']);
+                        }
 
-                    //alert(val[0]+" | "+val[1]['emplacement']+" | "+val[1]['updated_at']);
-                    urlf="{{ URL::asset('storage') }}";
-                    posom=val[1]['emplacement'].indexOf("/OrdreMissions/");
-                    empom=val[1]['emplacement'].slice(posom+1);
-                    aurlf="<a style='color:black' href='"+urlf+"/"+empom+"' ><i class='fa fa-download'></i> Télécharger</a>";
-                    $("#tableomshisto tbody").append("<tr><td>"+val[1]['updated_at']+"</td><td>"+aurlf+"</td></tr>");
+                        //alert(val[0]+" | "+val[1]['emplacement']+" | "+val[1]['updated_at']);
+                        urlf = "{{ URL::asset('storage') }}";
+                        posom = val[1]['emplacement'].indexOf("/OrdreMissions/");
+                        empom = val[1]['emplacement'].slice(posom + 1);
+                        aurlf = "<a style='color:black' href='" + urlf + "/" + empom + "' ><i class='fa fa-download'></i> Télécharger</a>";
+                        $("#tableomshisto tbody").append("<tr><td>" + val[1]['updated_at'] + "</td><td>" + aurlf + "</td></tr>");
 
                     });
-
+                });
 
    var items = [];
    var html_string="";
-
+*/
 function filltemplate(data,tempdoc,mgopprec,idgopprec)
 
 {
@@ -3155,9 +3154,9 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
   $.each(items, function(index, val) {
 
         //recuperer la template html du document
-        if(val[0] ==='templatehtml') 
+        if(val[0] ==='templatehtml')
             {
-                if ((val[1].includes(undefined)) || (!val[1])) 
+                if ((val[1].includes(undefined)) || (!val[1]))
                 {
                     templateexist = false;
 
@@ -3168,17 +3167,17 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                     });
                 }
                 else
-                {    
+                {
                     html_string= "{{asset('public/') }}"+"/"+val[1];
                     //alert(html_string);
 
                 }
-                
+
             }
         //verifier la templte rtf du document
-        if(val[0] ==='templatertf') 
+        if(val[0] ==='templatertf')
             {
-                if ((val[1].includes(undefined)) || (!val[1])) 
+                if ((val[1].includes(undefined)) || (!val[1]))
                 {
                     $("#gendochtml").prop("disabled",true);
                      Swal.fire({
@@ -3188,14 +3187,14 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                     });
                 }
                 else
-                {    
+                {
                     $("#templatedocument").val(tempdoc);
                 }
-                
+
             }
 
         //verifier les tags du document
-        if(val[0] ==='lestags') 
+        if(val[0] ==='lestags')
             {
                 console.log('les tags: '+val[1] );
                 var tagstr = val[1].replace('allow_VERIFglist(','');
@@ -3207,9 +3206,9 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
 
                     // vider select gop options
                     $('#gopdoc').find('option').remove();
-                    
+
                 $.each(arr_tags, function(i, field){
-                    var strt = [ field ] + "" ; 
+                    var strt = [ field ] + "" ;
                    // alert(strt);
                     var champgop = strt.split("_");
                     // ajout des options pour select gop
@@ -3219,12 +3218,12 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                     else
                     {
                         if (idgopprec === parseInt(champgop[0]))
-                         {   
+                         {
                             if (mgopprec == undefined)
                                 {var mgop = champgop[1];}
                             else
                                 {var mgop = parseInt(mgopprec) + parseInt(champgop[1]);}
-                            
+
                             $('#gopdoc').append('<option value="'+champgop[0]+'" selected="selected">'+champgop[2]+' | '+'montant max: '+mgop+' | '+champgop[3]+'</option>');
                         }
                         else {$('#gopdoc').append(new Option(champgop[2]+" | "+"montant max: "+champgop[1]+' | '+champgop[3], champgop[0]));}
@@ -3233,14 +3232,14 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                 });
                 needgop =true;
                 $("#selectgopdoc").modal('show');
-                arr_tags = null;   
-                $('#templatedoc').attr('value', ''); 
+                arr_tags = null;
+                $('#templatedoc').attr('value', '');
             }
 
-        /*if(val[0] ==='montantgop') 
+        /*if(val[0] ==='montantgop')
             {
                 console.log('montantgop: '+val[1] );
-                
+
             }*/
 
     });
@@ -3270,7 +3269,7 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
             }
         });
 
-        
+
         //chargement du contenu et affichage du preview du document
         document.getElementById('templatefilled').src = html_string;
         $("#templatehtmldoc").modal('show');
@@ -3446,8 +3445,8 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
         var tempdoc = $("#templatedoc").val();
         $("#gendochtml").prop("disabled",false);
         // renitialise la val de parentdoc
-        $('#iddocparent').attr('value', '');  
-        $('#idtaggop').attr('value', '');  
+        $('#iddocparent').attr('value', '');
+        $('#idtaggop').attr('value', '');
         if ((dossier != '') )
         {
              var _token = $('input[name="_token"]').val();
@@ -3528,7 +3527,7 @@ function keyUpHandler(){
         }*/
         //$("#gendochtml").prop("disabled",false);
         // renitialise la val de parentdoc
-        //$('#iddocparent').attr('value', '');  
+        //$('#iddocparent').attr('value', '');
         if ((dossier != '') )
         {
             var _token = $('input[name="_token"]').val();
@@ -3567,7 +3566,7 @@ function keyUpHandler(){
 
          document.getElementById("omfilled").src = url;
 
-        
+
         $("#templatehtmlom").modal('show');
         $('#templateordrem').val("");
          if (affectea !== "")
@@ -3641,12 +3640,12 @@ function keyUpHandler(){
         {
           var type_affectation = $("#type_affectation").val();
           var nomprestextern = "";
-        } 
+        }
         else {
-            var type_affectation = ""; 
+            var type_affectation = "";
             var nomprestextern = $("#prestselected").val();
         }
-        
+
 
         var idparent = '';
          var idMissionOM=$("#idMissionOM").val();
@@ -3689,7 +3688,7 @@ function keyUpHandler(){
                      console.log(data);
                     $('#idomparent').val("");
                     $('#templateordrem').val("");
-                    
+
                     if (!$.trim(data))
                     {location.reload();}
                     else
@@ -3722,7 +3721,7 @@ function keyUpHandler(){
                 document.getElementById('typeaffect').style.display = 'none';
                 if ($("#affectationprest").val()==="externe")
                 {
-                    
+
                     document.getElementById('externaffect').style.display = 'none';
                     $("#optprestataire").modal('show');
                     $("#affectea").val("externe");
@@ -3791,6 +3790,8 @@ function keyUpHandler(){
         });
 
 });
+
+
 
 </script>
 

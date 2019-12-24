@@ -431,7 +431,7 @@ class UsersController extends Controller
                       $query->where('reference_medic','like','%XP%')
                           ->where('statut', '<>', 5)
                           ->where('current_status','!=', 'Cloture');
-                  })->update(array('affecte' => Auth::id()));
+                  })->update(array('affecte' => Auth::id(), 'statut' => 2));
 
 
               }
@@ -470,7 +470,7 @@ class UsersController extends Controller
 
                 Dossier::where('current_status','inactif')
                   //  ->where('statut','<>',5)
-                    ->update(array('affecte' => Auth::id()));
+                    ->update(array('affecte' => Auth::id(), 'statut' => 2));
 
             //}
         }
