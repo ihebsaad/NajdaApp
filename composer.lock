@@ -5,6 +5,7 @@
         "This file is @generated automatically"
     ],
     "content-hash": "acd3590ef561e56a14d88be0b6c70be6",
+
     "packages": [
         {
             "name": "anhskohbo/no-captcha",

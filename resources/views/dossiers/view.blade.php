@@ -1248,7 +1248,9 @@ array_push($listepr,$pr['prestataire_id']);
                                         ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important; padding: 6px 6px!important;" id="btnannrempomtx">
+
                                                 <a style="color:black" href="#" id="annrempomtx" onclick="remplaceom(<?php echo $omtx->id; ?>,'<?php echo $omtx->affectea; ?>','omtx');"> <i class="far fa-plus-square"></i> Remplacer</a>
+
                                             </button>
                                         </div>
 
@@ -1266,12 +1268,14 @@ array_push($listepr,$pr['prestataire_id']);
                                         ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(221,221,221) !important; padding: 6px 6px!important;" id="btncomp">
+
                                                 <a style="color:black" onclick='completeom("<?php echo $omtx->id; ?>","<?php echo $omtx->affectea; ?>","omtx");' ><i class="fas fa-pen"></i> Compléter</a>
                                             </button>
                                         </div>
                                         <?php
                                             }}
                                         ?>
+
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important; padding: 6px 6px!important;" id="btntele">
                                                 <a style="color:black" onclick='modalodoc("<?php echo $omtx->titre; ?>","{{ URL::asset('storage'.$empsub) }}");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
@@ -1896,6 +1900,7 @@ reference_customer
 </div>
 <!-- Modal historique OM TAXI-->
 <div class="modal fade" id="modalhistoom"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+
     <div class="modal-dialog" role="document" >
         <div class="modal-content">
             <div class="modal-header">
@@ -3090,12 +3095,49 @@ function annuleom(titre,iddoc)
                 }
             });
     }
+// affichage de lhistorique du om taxi
+    
+    function historiqueomtx(om){
+        //$("#gendocfromhtml").submit();
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+                url:"{{ route('ordremissions.historique') }}",
+                method:"POST",
+                //'&_token='+_token
+                data:'_token='+_token+'&om='+om,
+                success:function(data){
+                    //alert(JSON.stringify(data));
+                    var histom = JSON.parse(data);
+                    // vider le contenu du table historique
+                    $("#tableomshisto tbody").empty();
+                    var items = [];
+                    $.each(histom, function(i, field){
+                      items.push([ i,field ]);
+                    });
+                    // affichage template dans iframe
+                    $.each(items, function(index, val) {
+
+                    //titre du document
+                    if (val[0]==0)
+                    {
+                        $("#omhistoname").text(val[1]['titre']);
+                    }
+
+                    //alert(val[0]+" | "+val[1]['emplacement']+" | "+val[1]['updated_at']);
+                    urlf="{{ URL::asset('storage') }}";
+                    posom=val[1]['emplacement'].indexOf("/OrdreMissions/");
+                    empom=val[1]['emplacement'].slice(posom+1);
+                    aurlf="<a style='color:black' href='"+urlf+"/"+empom+"' ><i class='fa fa-download'></i> Télécharger</a>";
+                    $("#tableomshisto tbody").append("<tr><td>"+val[1]['updated_at']+"</td><td>"+aurlf+"</td></tr>");
+
+                    });
 
 
    var items = [];
    var html_string="";
 
 function filltemplate(data,tempdoc,mgopprec,idgopprec)
+
 {
    // window.location =data; hde gendocform and display template filled
    if ($('#generatedoc').hasClass('in'))
@@ -3128,6 +3170,7 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                 else
                 {    
                     html_string= "{{asset('public/') }}"+"/"+val[1];
+                    //alert(html_string);
 
                 }
                 
@@ -3418,6 +3461,7 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                     console.log(data);
                      if (typeof data !== "string")
                     {
+                        //alert('no gop needed');
                         filltemplate(data,tempdoc);
                     }
                     else if (data.startsWith("notallow"))
@@ -3473,11 +3517,14 @@ function keyUpHandler(){
                 text: "Veuillez selectionner l'entitée qui émis l'ordre de mission"
             });
             return false;
-        }*/
+
+        }
         /*var affectea = $("#affectea").val();
         if (affectea==="Select")
         {
-             return false;
+            alert("Veuillez selectionner à qui sera affecté l'ordre de mission");
+            return false;
+
         }*/
         //$("#gendochtml").prop("disabled",false);
         // renitialise la val de parentdoc
@@ -3519,7 +3566,7 @@ function keyUpHandler(){
             {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_medic_international.php?dossier='+dossier+'&affectea='+affectea+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
 
          document.getElementById("omfilled").src = url;
-         
+
         
         $("#templatehtmlom").modal('show');
         $('#templateordrem').val("");

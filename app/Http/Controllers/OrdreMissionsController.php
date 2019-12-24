@@ -25,9 +25,6 @@ class OrdreMissionsController extends Controller
 {
 	public function export_pdf_odmtaxi(Request $request)
     {
-
-       
-        //dd($_POST['idMissionOM']);
         // verifier si remplacement ou annule
         if (isset($_POST['parent']) && (! empty($_POST['parent'])))
         {
@@ -63,7 +60,6 @@ class OrdreMissionsController extends Controller
         		}
         		if ($_POST['templatedocument'] === "complete")
         		{
-                    //return $_POST['idMissionOM'];
         			
 	        		// Send data to the view using loadView function of PDF facade
         			$pdfcomp = PDFcomp::loadView('ordremissions.pdfodmtaxi')->setPaper('a4', '');
@@ -131,8 +127,6 @@ class OrdreMissionsController extends Controller
         	}
         	
         }
-
-
          // Send data to the view using loadView function of PDF facade
         $pdf = PDF3::loadView('ordremissions.pdfodmtaxi')->setPaper('a4', '');
 
