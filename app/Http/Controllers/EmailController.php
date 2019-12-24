@@ -35,6 +35,9 @@ use Illuminate\Support\Facades\Notification as Notification2;
 
 
 
+ini_set('memory_limit','1024M');
+ini_set('upload_max_filesize','50M');
+
 class EmailController extends Controller
 {
     public function __construct()
@@ -4141,6 +4144,9 @@ if ($from=='najdassist@gmail.com')
         $contenu=$contenu.'<br><br>Cordialement / Best regards<br>'.$nomuser.' '. $signatureagent.'<br><br><hr style="float:left;width:40%"><br>'.$signatureentite;
 
 
+        if($envoyeid>0){ $this->export_pdf_send($envoyeid);};
+
+
         $swiftMailer = new Swift_Mailer($swiftTransport);
 
         Mail::setSwiftMailer($swiftMailer);
@@ -4326,7 +4332,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
           // $envoye->save();
            //$id=$envoye->id;
-          if($envoyeid>0){ $this->export_pdf_send($envoyeid,$files);};
 
         ////     echo ('<script> window.location.href = "'.$urlsending.'/view/'.$envoyeid.'";</script>') ;
                 return redirect($urlsending.'/view/'.$envoyeid)->with('success', '  Envoyé ! ');
@@ -4566,7 +4571,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
 
 
-    public function export_pdf_send($id, $files)
+    public function export_pdf_send($id)
     {
         // Fetch all customers from database
         $envoye = Envoye::find($id);

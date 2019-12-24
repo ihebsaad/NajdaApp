@@ -468,7 +468,7 @@ use \App\Http\Controllers\UsersController;
     <?php if (isset($datasearch)) { ?>
     <div class="row" style="margin-top:15px">  <label>Liste des Prestataires trouvés:</label>
     </div>
-    <table class="table table-striped" id="mytable" style="width:100%">
+    <table class="table table-striped" id="mytable1" style="width:100%">
     <thead>
     <tr id="headtable">
     <th style="width:30%">Prestataire</th>
@@ -707,7 +707,7 @@ use \App\Http\Controllers\UsersController;
 				<div id="tab34" class="tab-pane fade ">
                     <br><label style="font-weight:bold;color:#FD9883 ">Prestation non effectuée</label><br>
                     <!--  <span style="background-color:#fcdcd5;color:black;font-weight:bold">Prestation non effectuée </span>  <br>-->
-                    <table class="table table-striped" id="mytable" style="width:100%;margin-top:15px;">
+                    <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
                         <thead>
                         <tr id="headtable">
                             <th style="width:10%">Numéro</th>
@@ -768,7 +768,7 @@ use \App\Http\Controllers\UsersController;
                    <div class="col-md-4"><button   style="margin-top:15px" id="" class="pull-right btn btn-md btn-success"   data-toggle="modal" data-target="#insererprest"><b><i class="fas fa-plus"></i>  Insérer un Intervenant </b></button></div>
                </div>
 <br><B> Intervenants qui ont effectué de(s) prestation(s) </B>
-               <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
+               <table class="table table-striped" id="mytable3" style="width:100%;margin-top:15px;">
                    <thead>
                    <tr class="headtable">
 
@@ -823,7 +823,7 @@ array_push($listepr,$pr['prestataire_id']);
 
 
                <B> Intervenants Ajoutés Manuellement </B>
-               <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
+               <table class="table table-striped" id="mytable4" style="width:100%;margin-top:15px;">
                    <thead>
                    <tr class="headtable">
 
@@ -865,8 +865,8 @@ array_push($listepr,$pr['prestataire_id']);
            </div>
 
                 <div id="tab5" class="tab-pane fade">
-                  <button type="button" style="float:left" class="btn btn-info btn-lg"  id="actualiserAtt">Actualiser la page</button>
-                  <button type="button" style="float:right" class="btn btn-info btn-lg" data-toggle="modal" data-target="#ajouterfichier">Ajouter un fichier</button>
+                    <button type="button" style="float:left" class="btn btn-info btn-lg"  id="actualiserAtt"><i class="fas fa-sync"></i> Actualiser la page</button>
+                  <button type="button" style="float:right" class="btn btn-info btn-lg" data-toggle="modal" data-target="#ajouterfichier"><i class="fas fa-plus-square"></i> Ajouter un fichier</button>
                   <br><br><br><br>
                     <table class="table table-striped" id="mytable" style=" ;margin-top:15px;">
                         <thead>
@@ -874,11 +874,16 @@ array_push($listepr,$pr['prestataire_id']);
                             <th style="width:15%">Date</th>
                             <th style="width:30%">Titre</th>
                             <th style="width:40%">Description</th>
-
                             <th style="width:5%">type</th>
                             <th style="width:10%">Boite</th>
                         </tr>
-
+                        <tr >
+                            <th style="width:15%">Date</th>
+                            <th style="width:30%">Titre</th>
+                            <th style="width:40%">Description</th>
+                            <th style="width:5%">type</th>
+                            <th style="width:10%">Boite</th>
+                        </tr>
                         </thead>
                         <tbody>
                         @foreach($attachements as $attach)
@@ -940,7 +945,7 @@ array_push($listepr,$pr['prestataire_id']);
 
 
                                         ?></small></td>
-                                <td style="width:10%"><small><?php if ($attach->boite==1) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';} if ($attach->boite==0) {echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}  if ($attach->boite==3) {echo 'Généré <br><i style="margin-top:4px;" class="fas fa-lg fa-file-invoice"/>';}   ?></small></td>
+                                <td style="width:10%"><small><?php if ($attach->boite==1) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';} if ($attach->boite==0) {echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}  if ($attach->boite==3) {echo 'Généré <br><i style="margin-top:4px;" class="fas fa-lg fa-file-invoice"/>';}    if ($attach->boite==4) {echo 'Externe <br><i style="margin-top:4px;" class="fas fa-upload"></i>';} ?></small></td>
 
                             </tr>
 
@@ -2566,7 +2571,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
        <form  id="formFileExterne" method="post" enctype="multipart/form-data" >
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="">Ajout d'un fichier dans le dossier courant </h4>
+                <h4 class="modal-title" id=""><center>Ajouter un fichier dans ce dossier </center></h4>
 
             </div>
             <div class="modal-body">
@@ -2575,27 +2580,31 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
                     <div class="form-group">
                         
                           {{ csrf_field() }}
-                                                                                  
+
+
+                        <input id="ExterneFiledossid" name="ExterneFiledossid" type="hidden" value="{{$dossier->id}}">
+                        <input id="ExterneFiledossRef" name="ExterneFiledossRef" type="hidden" value="{{$dossier->reference_medic}}">
                             <div class="form-group " >
                                 <div class=" row  ">
                                     <div class="form-group mar-20">
-                                    <label for="fileExterneDoss" class="control-label" style="padding-right: 20px">Fichier : </label>                    
-                                                                
-                                     <input type="file" name="fileExterneDoss" id="fileExterneDoss" /><br><br>
-                                    
-                                      <input id="ExterneFiledossid" name="ExterneFiledossid" type="hidden" value="{{$dossier->id}}">
-                                      <input id="ExterneFiledossRef" name="ExterneFiledossRef" type="hidden" value="{{$dossier->reference_medic}}">
-                                     <label for="titrefileExterne" class="control-label" style="padding-right: 20px">Nouveau nom :</label>
-                                     <input style="WIDTH: 70%;" type="text" name="titrefileExterne" id="titrefileExterne" /> 
-                                     <br> <br>
-                                     <label for="descripfileExterne" class="control-label" style="padding-right: 20px; ">Description : </label><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                     <textarea style="WIDTH: 70%; height:100px;"  name="descripfileExterne" id="descripfileExterne" /> </textarea>
 
-                          <br><br>                              
+                                        <div class="form-group " >
+                                        <label for="fileExterneDoss" class=" control-label" style="font-weight:bold">Fichier *</label>
+                                     <input class="from-control" type="file" name="fileExterneDoss" id="fileExterneDoss" />
+                                        </div>
+
+                                        <div class="form-group " >
+                                        <label for="titrefileExterne" class="control-label " style="font-weight:bold">Nouveau nom (optionnel)</label><br>
+                                     <input style="width:100% " type="text" name="titrefileExterne" class="from-control" id="titrefileExterne" />
+                                        </div>
+
+                                     <div class="form-group">
+                                        <label for="descripfileExterne" class=" control-label" style="font-weight:bold">Description (optionnel)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                     <textarea class="form-control" style=" height:100px;"  name="descripfileExterne" id="descripfileExterne" ></textarea>
+                                     </div>
+                          <br>
                                             
-                    <div id="successUloadExterneFile">
+                    <div style="align:center" id="successUloadExterneFile">
                     </div>                                                
                                     </div>
                                 </div>
@@ -2604,8 +2613,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                <button type="submit" id="UploadExterneFile" class="btn btn-primary">upload</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="submit" id="UploadExterneFile" class="btn btn-primary">Télécharger</button>
             </div>
         </div>
           </form>
@@ -3738,10 +3747,6 @@ function keyUpHandler(){
 
 </script>
 
-@section('footer_scripts')
-
-
-@stop
 
 
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
@@ -4860,14 +4865,12 @@ $(document).ready(function(){
         left: -5px;
     }
 
-
     section#timeline article  div.inner h2 {
         background: #e74c3c;
     }
     section#timeline article  div.inner h2:after {
         background: #e74c3c;
     }
-
 
     section#timeline article:nth-child(1) div.inner h2 {
         background: #e74c3c;
@@ -4955,8 +4958,118 @@ $(document).ready(function(){
     z-index: 1000000!important;
 }
 
-
+    .dataTables_filter{
+        float:right;
+    }
 
 </style>
 
 
+
+
+
+
+@section('footer_scripts')
+
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/jquery.dataTables.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/dataTables.bootstrap.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/dataTables.rowReorder.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/dataTables.scroller.js') }}" ></script>
+
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/dataTables.buttons.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/dataTables.responsive.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/buttons.colVis.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/buttons.html5.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/buttons.print.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/buttons.bootstrap.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/buttons.print.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/pdfmake.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/vfs_fonts.js') }}" ></script>
+
+    <style>.searchfield{width:100px;}</style>
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+
+            $('#mytable thead tr:eq(1) th').each( function () {
+                var title = $('#mytable thead tr:eq(0) th').eq( $(this).index() ).text();
+                //  $(this).html( '<input class="searchfield" type="text" placeholder="'+title+'" />' );
+                $(this).html( '<input class="searchfield" type="text"   />' );
+            } );
+
+            var table = $('#mytable').DataTable({
+                "aaSorting": [],
+                orderCellsTop: true,
+                dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
+                responsive:true,
+                buttons: [
+
+                    'csv', 'excel', 'pdf', 'print'
+                ],
+                "columnDefs": [ {
+                    "targets": 'no-sort',
+                    "orderable": false,
+                } ]
+                ,
+                "language":
+                    {
+                        "decimal":        "",
+                        "emptyTable":     "Pas de données",
+                        "info":           "affichage de  _START_ à _END_ de _TOTAL_ entrées",
+                        "infoEmpty":      "affichage 0 à 0 de 0 entrées",
+                        "infoFiltered":   "(Filtrer de _MAX_ total d`entrées)",
+                        "infoPostFix":    "",
+                        "thousands":      ",",
+                        "lengthMenu":     "affichage de _MENU_ entrées",
+                        "loadingRecords": "chargement...",
+                        "processing":     "chargement ...",
+                        "search":         "Recherche:",
+                        "zeroRecords":    "Pas de résultats",
+                        "paginate": {
+                            "first":      "Premier",
+                            "last":       "Dernier",
+                            "next":       "Suivant",
+                            "previous":   "Précédent"
+                        },
+                        "aria": {
+                            "sortAscending":  ": activer pour un tri ascendant",
+                            "sortDescending": ": activer pour un tri descendant"
+                        }
+                    }
+
+            });
+
+// Apply the search
+            function delay(callback, ms) {
+                var timer = 0;
+                return function() {
+                    var context = this, args = arguments;
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        callback.apply(context, args);
+                    }, ms || 0);
+                };
+            }
+
+            table.columns().every(function (index) {
+                $('#mytable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+                    table.column($(this).parent().index() + ':visible')
+                        .search(this.value)
+                        .draw();
+                });
+
+                $('#mytable thead tr:eq(1) th:eq(' + index + ') input').keyup(delay(function (e) {
+                    console.log('Time elapsed!', this.value);
+                    $(this).blur();
+
+                }, 2000));
+            });
+
+
+
+        });
+
+    </script>
+@stop

@@ -21,6 +21,9 @@ use App\Notif ;
 use PHPUnit\Framework\Exception;
 
 
+ini_set('memory_limit','1024M');
+ini_set('upload_max_filesize','50M');
+
 class EntreesController extends Controller
 {
 
