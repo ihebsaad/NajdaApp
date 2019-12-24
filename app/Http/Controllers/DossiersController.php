@@ -107,7 +107,7 @@ class DossiersController extends Controller
                     $path= storage_path()."/FichiersExternes/";
                     $path2=  "/FichiersExternes/";
 
-                    if (!file_exists($path.$dossRef)) {
+                    if (!file_exists($path.$dossid)) {
                         mkdir($path.$dossid, 0777, true);
                     }
                      
