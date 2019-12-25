@@ -189,10 +189,9 @@ use  \App\Http\Controllers\DocsController;
     <section class="content form_layouts">
 
 <br>
-        <?php if($dossier->affecte>0) {?> <button  class="btn btn-md btn-info pull-left"   data-toggle="modal" data-target="#createAccuse"><b><i class="fas fa-envelope"></i> Envoyer un accusé </b></button><?php } ?>
+        <?php if( ($dossier->affecte>0) && ($dossier->accuse!=1) ) {?> <button  class="btn btn-md btn-info pull-left"   data-toggle="modal" data-target="#createAccuse"><b><i class="fas fa-envelope"></i> Accusé N Aff</b></button><?php } ?>
          <button  class="btn btn-md btn-info pull-right"   data-toggle="modal" data-target="#observations"><b><i class="fas fa-clipboard"></i> Observations </b></button>
  <br>
-  
                  <div class="form-group" style="margin-top:25px;">
                         {{ csrf_field() }}
 

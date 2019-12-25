@@ -251,7 +251,7 @@ class DossiersController extends Controller
 
     }
 
-    public function save(Request $request )
+    public function save (Request $request )
     {
 
         $reference_medic = '';
@@ -1024,6 +1024,8 @@ class DossiersController extends Controller
             // Debug via $ex->getMessage();
             //      echo '<script>alert("Erreur !") </script>' ;
         }
+
+         Dossier::where('id', $iddossier)->update(array('accuse' => 1));
 
     }
 
