@@ -6,6 +6,9 @@ use App\Dossier;
 use App\Http\Controllers\Controller;
 use App\Seance;
 use App\User;
+use App\Notif;
+use App\Mission;
+use App\ActionEC;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use Illuminate\Http\Request;
@@ -76,6 +79,73 @@ class LoginController extends Controller
         return $this->username;
     }
 
+     public function migration_miss ($iddoss, $iduser_dest)
+    {
+
+             $missions_doss= Mission::where('dossier_id','=',$iddoss)->get();
+
+             // dd($missions_doss);
+
+              if($missions_doss)
+              {
+
+                foreach($missions_doss as $md)
+                {
+                        if($md->statut_courant!='deleguee')// reportee ou active
+                        {
+                            $md->update(array('user_id' =>$iduser_dest));
+                            
+                           // $actions_missions= $md->ActionECs() ;
+
+                             $actions_missions=ActionEC::where('mission_id','=',$md->id)->get();
+                           if($actions_missions)
+                           {
+
+                              foreach ($actions_missions as $acts) {
+
+                                if($acts->statut=='reportee' || $acts->statut=='rappelee' ||  $acts->statut=='active' )
+                                {
+                                       $acts->update(array('user_id' =>$iduser_dest));
+
+                                }
+
+                                  
+                              }
+
+
+                           }
+
+
+
+                        }
+
+                }
+
+
+              }
+
+    }
+     public function migration_notifs ($iddoss, $iduser_dest)
+    {
+
+        $notifs_doss=Notif::where('dossierid','=',$iddoss)->get();
+
+        if($notifs_doss)
+        {
+            foreach ($notifs_doss as $notif) {
+               
+                 if($notif->affiche < 1) 
+                 {
+
+                     $notif->update(['user'=>$iduser_dest,'affiche'=>-1,'statut'=>1,'read_at'=> null]);
+
+                 }
+            }
+
+        }
+        
+    }
+
 
     public function logout(Request $request)
     {
@@ -106,7 +176,7 @@ class LoginController extends Controller
                 } else {
                     // Affectation des dossiers Transport vers charge
                     if ($charge > 0) {
-                        Dossier::where(function ($query) use ($iduser) {
+                        $dossiers=Dossier::where(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%TN%')
                                 ->where('current_status','!=', 'Cloture')
                             ->where('affecte', $iduser);
@@ -122,13 +192,24 @@ class LoginController extends Controller
                             $query->where('reference_medic', 'like', '%XP%')
                                 ->where('current_status','!=', 'Cloture')
                                 ->where('affecte', $iduser);
-                        })->update(array('affecte' => $charge, 'statut' => 2));
+                        })->get();
+
+                         if($dossiers)
+                         {
+                          $user_dest=$charge;
+                          foreach ($dossiers as $doss) {
+                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                            $this->migration_miss($doss->id,$user_dest);
+                            $this->migration_notifs($doss->id,$user_dest);
+                          }
+                        }
+
 
                     }// charge
                     else {
 
                         if ($tech > 0) {
-                            Dossier::where(function ($query) use ($iduser) {
+                            $dossiers=Dossier::where(function ($query) use ($iduser) {
                                 $query->where('reference_medic', 'like', '%TN%')
                                     ->where('current_status','!=', 'Cloture')
                                     ->where('affecte', $iduser);
@@ -144,12 +225,23 @@ class LoginController extends Controller
                                 $query->where('reference_medic', 'like', '%XP%')
                                     ->where('current_status','!=', 'Cloture')
                                     ->where('affecte', $iduser);
-                            })->update(array('affecte' => $tech, 'statut' => 2));
+                            })->get();
+
+                          if($dossiers)
+                         {
+                          $user_dest=$tech;
+                          foreach ($dossiers as $doss) {
+                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                            $this->migration_miss($doss->id,$user_dest);
+                            $this->migration_notifs($doss->id,$user_dest);
+                          }
+                        }
+
 
                         } else {
 
                             if ($medic > 0) {
-                                Dossier::where(function ($query) use ($iduser) {
+                                $dossiers=Dossier::where(function ($query) use ($iduser) {
                                     $query->where('reference_medic', 'like', '%TN%')
                                         ->where('current_status','!=', 'Cloture')
                                         ->where('affecte', $iduser);
@@ -165,7 +257,18 @@ class LoginController extends Controller
                                     $query->where('reference_medic', 'like', '%XP%')
                                         ->where('current_status','!=', 'Cloture')
                                         ->where('affecte', $iduser);
-                                })->update(array('affecte' => $medic, 'statut' => 2));
+                                })->get();
+
+
+                                if($dossiers)
+                                 {
+                                  $user_dest=$medic;
+                                  foreach ($dossiers as $doss) {
+                                    $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                                    $this->migration_miss($doss->id,$user_dest);
+                                    $this->migration_notifs($doss->id,$user_dest);
+                                  }
+                                }
 
                             }
                         }
@@ -176,7 +279,7 @@ class LoginController extends Controller
                     if ($medic > 0) {
 
 
-                        Dossier::where(function ($query)  {
+                        $dossiers=Dossier::where(function ($query)  {
                             $query->where('reference_medic', 'like', '%N%')
                                 ->where('type_dossier', 'Medical')
                                 ->where('current_status', 'actif');
@@ -189,7 +292,17 @@ class LoginController extends Controller
                         })->orWhere(function ($query)   {
                             $query->where('reference_medic', 'like', '%TPA%')
                                 ->where('current_status', 'actif');
-                        })->update(array('affecte' => $medic, 'statut' => 2));
+                        })->get();
+
+                         if($dossiers)
+                             {
+                              $user_dest=$medic;
+                              foreach ($dossiers as $doss) {
+                                $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                                $this->migration_miss($doss->id,$user_dest);
+                                $this->migration_notifs($doss->id,$user_dest);
+                              }
+                            }
 
 
                     }// medic
@@ -199,7 +312,7 @@ class LoginController extends Controller
 
                             // Dossiers medicaux vers Sup Tech
 
-                            Dossier::where(function ($query)  {
+                            $dossiers=Dossier::where(function ($query)  {
                                 $query->where('reference_medic', 'like', '%N%')
                                     ->where('type_dossier', 'Medical')
                                     ->where('current_status', 'actif');
@@ -212,7 +325,18 @@ class LoginController extends Controller
                             })->orWhere(function ($query)   {
                                 $query->where('reference_medic', 'like', '%TPA%')
                                     ->where('current_status', 'actif');
-                            })->update(array('affecte' => $tech, 'statut' => 2));
+                            })->get();
+
+                             if($dossiers)
+                             {
+                              $user_dest=$tech;
+                              foreach ($dossiers as $doss) {
+                                $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                                $this->migration_miss($doss->id,$user_dest);
+                                $this->migration_notifs($doss->id,$user_dest);
+                              }
+                            }
+
 
                         }
 
@@ -237,7 +361,7 @@ class LoginController extends Controller
 
                         // Techniques
 
-                        Dossier::where(function ($query) use ($iduser) {
+                        $dossiers=Dossier::where(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%N%')
                             ->where('type_dossier', 'Technique')
                             ->where('current_status', 'actif')
@@ -247,15 +371,37 @@ class LoginController extends Controller
                                 ->where('current_status', 'actif')
                                 ->where('affecte', $iduser);
 
-                        })->update(array('affecte' => $tech, 'statut' => 2));
+                        })->get();
+
+                         if($dossiers)
+                             {
+                              $user_dest=$tech;
+                              foreach ($dossiers as $doss) {
+                                $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                                $this->migration_miss($doss->id,$user_dest);
+                                $this->migration_notifs($doss->id,$user_dest);
+                              }
+                            }
+
 
                     // Mixtes
-                        Dossier::where(function ($query) use ($iduser) {
+                        $dossiers=Dossier::where(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%N%')
                                 ->where('type_dossier', 'Mixte')
                                 ->where('current_status', 'actif')
                                 ->where('affecte', $iduser);
-                        })->update(array('affecte' => $tech, 'statut' => 2));
+                        })->get();
+
+                        if($dossiers)
+                             {
+                              $user_dest=$tech;
+                              foreach ($dossiers as $doss) {
+                                $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                                $this->migration_miss($doss->id,$user_dest);
+                                $this->migration_notifs($doss->id,$user_dest);
+                              }
+                            }
+
 
                     }// tech
 
@@ -276,7 +422,7 @@ class LoginController extends Controller
                                 ->update(array('affecte' => $medic, 'statut' => 2));
 */
 
-                            Dossier::where(function ($query) use ($iduser) {
+                            $dossiers=Dossier::where(function ($query) use ($iduser) {
                                 $query->where('reference_medic', 'like', '%N%')
                                     ->where('type_dossier', 'Technique')
                                     ->where('current_status', 'actif')
@@ -286,15 +432,42 @@ class LoginController extends Controller
                                     ->where('current_status', 'actif')
                                     ->where('affecte', $iduser);
 
-                            })->update(array('affecte' => $medic, 'statut' => 2));
+
+                            })->get();
+
+                            if($dossiers)
+                             {
+                              $user_dest=$medic;
+                              foreach ($dossiers as $doss) {
+                                $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                                $this->migration_miss($doss->id,$user_dest);
+                                $this->migration_notifs($doss->id,$user_dest);
+                              }
+                            }
+
+
 
                              // Mixtes
-                            Dossier::where(function ($query) use ($iduser) {
+                           $dossiers=Dossier::where(function ($query) use ($iduser) {
                                 $query->where('reference_medic', 'like', '%N%')
                                     ->where('type_dossier', 'Mixte')
                                     ->where('current_status', 'actif')
                                     ->where('affecte', $iduser);
-                            })->update(array('affecte' => $medic, 'statut' => 2));
+
+
+
+                            })->get();
+
+                             if($dossiers)
+                             {
+                              $user_dest=$medic;
+                              foreach ($dossiers as $doss) {
+                                $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                                $this->migration_miss($doss->id,$user_dest);
+                                $this->migration_notifs($doss->id,$user_dest);
+                              }
+                            }
+
 
 
                         }// medic
@@ -305,9 +478,19 @@ class LoginController extends Controller
                     // Affectation des dossiers inactifs au dispatcheur
                     if ($dispatcheur > 0) {
 
-                         Dossier::where('affecte', $iduser)
+                         $dossiers=Dossier::where('affecte', $iduser)
                             ->where('current_status', 'inactif')
-                            ->update(array('affecte' => $dispatcheur, 'statut' => 2));
+                            ->get();
+
+                            if($dossiers)
+                             {
+                              $user_dest=$dispatcheur;
+                              foreach ($dossiers as $doss) {
+                                $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                                $this->migration_miss($doss->id,$user_dest);
+                                $this->migration_notifs($doss->id,$user_dest);
+                              }
+                            }
 
                     }// dispatcheur
 
@@ -322,8 +505,18 @@ class LoginController extends Controller
                 // L'utilisateur n'est pas le veilleur
 
                 // Affectation tous les dossiers vers le veilleur
-                Dossier::where('affecte', $iduser)
-                    ->update(array('affecte' => $veilleur, 'statut' => 2));
+                $dossiers=Dossier::where('affecte', $iduser)
+                    ->get();
+
+                    if($dossiers)
+                     {
+                      $user_dest=$veilleur;
+                      foreach ($dossiers as $doss) {
+                        $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                        $this->migration_miss($doss->id,$user_dest);
+                        $this->migration_notifs($doss->id,$user_dest);
+                      }
+                    }
 
             }
 
@@ -333,7 +526,7 @@ class LoginController extends Controller
 
             // Affectation des dossiers Transport vers charge
             if ($charge > 0) {
-                Dossier::where(function ($query) use ($iduser) {
+                $dossiers=Dossier::where(function ($query) use ($iduser) {
                     $query->where('reference_medic', 'like', '%TN%')
                         ->where('affecte', $iduser);
                 })->orWhere(function ($query) use ($iduser) {
@@ -345,13 +538,23 @@ class LoginController extends Controller
                 })->orWhere(function ($query) use ($iduser) {
                     $query->where('reference_medic', 'like', '%XP%')
                         ->where('affecte', $iduser);
-                })->update(array('affecte' => $charge, 'statut' => 2));
+                })->get();
+
+                 if($dossiers)
+                     {
+                      $user_dest=$charge;
+                      foreach ($dossiers as $doss) {
+                        $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                        $this->migration_miss($doss->id,$user_dest);
+                        $this->migration_notifs($doss->id,$user_dest);
+                      }
+                    }
 
             }// charge
             else {
 
                 if ($tech > 0) {
-                    Dossier::where(function ($query) use ($iduser) {
+                    $dossiers=Dossier::where(function ($query) use ($iduser) {
                         $query->where('reference_medic', 'like', '%TN%')
                             ->where('affecte', $iduser);
                     })->orWhere(function ($query) use ($iduser) {
@@ -363,12 +566,23 @@ class LoginController extends Controller
                     })->orWhere(function ($query) use ($iduser) {
                         $query->where('reference_medic', 'like', '%XP%')
                             ->where('affecte', $iduser);
-                    })->update(array('affecte' => $tech, 'statut' => 2));
+                    })->get();
+
+                    if($dossiers)
+                     {
+                      $user_dest=$tech;
+                      foreach ($dossiers as $doss) {
+                        $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                        $this->migration_miss($doss->id,$user_dest);
+                        $this->migration_notifs($doss->id,$user_dest);
+                      }
+                    }
+
 
                 } else {
 
                     if ($medic > 0) {
-                        Dossier::where(function ($query) use ($iduser) {
+                        $dossiers=Dossier::where(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%TN%')
                                 ->where('affecte', $iduser);
                         })->orWhere(function ($query) use ($iduser) {
@@ -380,7 +594,17 @@ class LoginController extends Controller
                         })->orWhere(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%XP%')
                                 ->where('affecte', $iduser);
-                        })->update(array('affecte' => $medic, 'statut' => 2));
+                        })->get()(array('affecte' => $medic, 'statut' => 2));
+
+                        if($dossiers)
+                         {
+                          $user_dest=$medic;
+                          foreach ($dossiers as $doss) {
+                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                            $this->migration_miss($doss->id,$user_dest);
+                            $this->migration_notifs($doss->id,$user_dest);
+                          }
+                        }
 
                     }
                 }
@@ -391,7 +615,7 @@ class LoginController extends Controller
             if ($medic > 0) {
 
 
-                Dossier::where(function ($query)  {
+                $dossiers=Dossier::where(function ($query)  {
                     $query->where('reference_medic', 'like', '%N%')
                         ->where('type_dossier', 'Medical')
                         ->where('current_status', 'actif');
@@ -404,9 +628,17 @@ class LoginController extends Controller
                 })->orWhere(function ($query)   {
                     $query->where('reference_medic', 'like', '%TPA%')
                         ->where('current_status', 'actif');
-                })->update(array('affecte' => $medic, 'statut' => 2));
+                })->get();
 
-
+                   if($dossiers)
+                         {
+                          $user_dest=$medic;
+                          foreach ($dossiers as $doss) {
+                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                            $this->migration_miss($doss->id,$user_dest);
+                            $this->migration_notifs($doss->id,$user_dest);
+                          }
+                        }
 
 
             }// medic
@@ -414,7 +646,7 @@ class LoginController extends Controller
             else {
                 if ($tech > 0) {
 
-                    Dossier::where(function ($query)  {
+                    $dossiers=Dossier::where(function ($query)  {
                         $query->where('reference_medic', 'like', '%N%')
                             ->where('type_dossier', 'Medical')
                             ->where('current_status', 'actif');
@@ -428,7 +660,18 @@ class LoginController extends Controller
                     })->orWhere(function ($query)   {
                         $query->where('reference_medic', 'like', '%TPA%')
                             ->where('current_status', 'actif');
-                    })->update(array('affecte' => $tech, 'statut' => 2));
+                    })->get();
+
+                     if($dossiers)
+                         {
+                          $user_dest=$tech;
+                          foreach ($dossiers as $doss) {
+                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                            $this->migration_miss($doss->id,$user_dest);
+                            $this->migration_notifs($doss->id,$user_dest);
+                          }
+                        }
+
                 }
 
             }
@@ -437,7 +680,7 @@ class LoginController extends Controller
             if ($tech > 0) {
 
                 // Dossiers Techniques vers Sup Tech
-                Dossier::where(function ($query) use ($iduser) {
+                $dossiers=Dossier::where(function ($query) use ($iduser) {
                     $query->where('reference_medic', 'like', '%N%')
                         ->where('type_dossier', 'Technique')
                         ->where('current_status', 'actif')
@@ -446,16 +689,37 @@ class LoginController extends Controller
                     $query->where('reference_medic', 'like', '%V%')
                         ->where('current_status', 'actif')
                         ->where('affecte', $iduser);
-                })->update(array('affecte' => $tech, 'statut' => 2));
+                })->get();
+
+                 if($dossiers)
+                         {
+                          $user_dest=$tech;
+                          foreach ($dossiers as $doss) {
+                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                            $this->migration_miss($doss->id,$user_dest);
+                            $this->migration_notifs($doss->id,$user_dest);
+                          }
+                        }
+
 
                 // Dossiers Mixte vers Sup Tech
                 // Mixtes
-                Dossier::where(function ($query) use ($iduser) {
+                $dossiers=Dossier::where(function ($query) use ($iduser) {
                     $query->where('reference_medic', 'like', '%N%')
                         ->where('type_dossier', 'Mixte')
                         ->where('current_status', 'actif')
                         ->where('affecte', $iduser);
-                })->update(array('affecte' => $tech, 'statut' => 2));
+                })->get();
+
+                 if($dossiers)
+                         {
+                          $user_dest=$tech;
+                          foreach ($dossiers as $doss) {
+                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                            $this->migration_miss($doss->id,$user_dest);
+                            $this->migration_notifs($doss->id,$user_dest);
+                          }
+                        }
 
             }// tech
 
@@ -463,7 +727,7 @@ class LoginController extends Controller
                 if ($medic > 0) {
 
                     // Dossiers Techniques vers Sup Tech
-                    Dossier::where(function ($query) use ($iduser) {
+                    $dossiers=Dossier::where(function ($query) use ($iduser) {
                         $query->where('reference_medic', 'like', '%N%')
                             ->where('type_dossier', 'Technique')
                             ->where('current_status', 'actif')
@@ -472,17 +736,37 @@ class LoginController extends Controller
                         $query->where('reference_medic', 'like', '%V%')
                             ->where('current_status', 'actif')
                             ->where('affecte', $iduser);
+                    })->get();
 
-                    })->update(array('affecte' => $medic, 'statut' => 2));
+                    if($dossiers)
+                         {
+                          $user_dest=$medic;
+                          foreach ($dossiers as $doss) {
+                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                            $this->migration_miss($doss->id,$user_dest);
+                            $this->migration_notifs($doss->id,$user_dest);
+                          }
+                        }
 
                     // Dossiers Mixte vers Sup Tech
                     // Mixtes
-                    Dossier::where(function ($query) use ($iduser) {
+                    $dossiers=Dossier::where(function ($query) use ($iduser) {
                         $query->where('reference_medic', 'like', '%N%')
                             ->where('type_dossier', 'Mixte')
                             ->where('current_status', 'actif')
                             ->where('affecte', $iduser);
-                    })->update(array('affecte' => $medic, 'statut' => 2));
+                    })->get();
+
+                    if($dossiers)
+                         {
+                          $user_dest=$medic;
+                          foreach ($dossiers as $doss) {
+                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                            $this->migration_miss($doss->id,$user_dest);
+                            $this->migration_notifs($doss->id,$user_dest);
+                          }
+                        }
+
 
                 }//
 

@@ -1072,7 +1072,30 @@ class DossiersController extends Controller
 
     }
 
-    public function Migration ($iddoss, $iduser_dest)
+      public function migration_notifs ($iddoss, $iduser_dest)
+    {
+
+        $notifs_doss=Notif::where('dossierid','=',$iddoss)->get();
+
+        if($notifs_doss)
+        {
+            foreach ($notifs_doss as $notif) {
+               
+                 if($notif->affiche < 1) 
+                 {
+
+                    $notif->update(['user'=>$iduser_dest,'affiche'=>-1,'statut'=>1,'read_at'=> null]);
+                    //  statut 1 dispatché
+
+                 }
+            }
+
+        }
+        
+    }
+
+
+    public function migration_miss ($iddoss, $iduser_dest)
     {
 
              $missions_doss= Mission::where('dossier_id','=',$iddoss)->get();
@@ -1140,8 +1163,8 @@ class DossiersController extends Controller
         $dtc = (new \DateTime())->format('Y-m-d H:i');
 
 
-        $this->Migration ($id, $agent);
-        
+        $this->migration_miss ($id,$agent);
+                
         $affec=new AffectDoss([
 
             'util_affecteur'=>$iduser,
@@ -1164,7 +1187,7 @@ class DossiersController extends Controller
 
 */
 
-       Notif::where('dossierid',$id)->update(array('user'=>$agent,'affiche'=>-1,'statut'=>1,'read_at'=> null)) ;
+       //Notif::where('dossierid',$id)->update(array('user'=>$agent,'affiche'=>-1,'statut'=>1,'read_at'=> null)) ;
 
 
         $user = auth()->user();

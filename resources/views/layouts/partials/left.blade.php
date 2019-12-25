@@ -136,10 +136,7 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
 
     $dtc3 = (new \DateTime())->modify('-10 minutes')->format('Y-m-d\TH:i');
 
-    $countR=Notification::where('read_at', null)
-         ->where('created_at','<=', $dtc3)
-        ->count();
-
+   
   /*   $countR=Notif::where('read_at', null)
          ->where('created_at','<=', $dtc3)
          ->count();
@@ -205,7 +202,7 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                                            ->get();
 
                               $nnotifs = array();
-                              $notifssansdoss = array();
+                              $notifssansdoss = array(); 
                               $notifsavecdoss = array();
 
                 //     echo json_encode($notifications).'<br>';
