@@ -9,9 +9,7 @@
     ?>
         <div class="collapse bg-grey" id="navbarHeader">
              @include('layouts.partials._top_menu')
-
         </div>
-
     <div class="navbar ">
       <div class="row">
         <div class="col-sm-1 col-md-1 col-lg-1" style="margin-right:60px">
@@ -31,15 +29,13 @@
            </span>
         </div>
 
-
-
       @can('isAdmin')
 
           <div  class="col-sm-1 col-md-1 col-lg-1 " style="padding-top:10px;padding-left:0px!important">
           <a href="{{ route('parametres') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
-                                                <i class="fas fa-user-tie"></i>
-                                                <br>
-                                                Admin
+              <i class="fas fa-user-tie"></i>
+              <br>
+          Admin
           </a> 
         </div>
           @endcan
@@ -96,7 +92,7 @@
               <a  href="{{ route('supervision') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
                   <span class="fas fa-fw fa-users-cog"></span>
                   <br>
-                  Supervision
+                  Superv
               </a>
           </div>
         <?php } ?>

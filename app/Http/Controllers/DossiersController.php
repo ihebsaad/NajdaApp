@@ -260,7 +260,7 @@ class DossiersController extends Controller
         $type_affectation = $request->get('type_affectation');
         $annee = date('y');
 
-
+/*****   SERIE 1 *****/
         if ($type_affectation == 'Najda') {
             $maxid = $this->GetMaxIdBytypeN( );
             $tpaff=$this->ChampById('type_affectation',$maxid);
@@ -287,13 +287,7 @@ class DossiersController extends Controller
             }
 
         }
-        if ($type_affectation == 'VAT') {
-            $maxid = $this->GetMaxIdBytype('VAT');
-            $refd= $this->RefDossierById($maxid);
-            $num_dossier=  intval(substr ( $refd , 5  ,   strlen ($refd)) );
-            $reference_medic = $annee . 'V' . sprintf("%'.05d\n", $num_dossier+1);
 
-        }
         if ($type_affectation == 'MEDIC') {
             $maxid = $this->GetMaxIdBytypeN( );
             $tpaff=$this->ChampById('type_affectation',$maxid);
@@ -318,29 +312,6 @@ class DossiersController extends Controller
             if(($type_affectation)=='Najda TPA') {
                 $reference_medic = $annee . 'TPA' . sprintf("%'.05d\n", $num_dossier + 1);
             }
-
-        }
-
-        if ($type_affectation == 'Transport MEDIC') {
-            $maxid = $this->GetMaxIdBytype('Transport MEDIC');
-            $refd= $this->RefDossierById($maxid);
-            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
-            $reference_medic = $annee . 'TM' . sprintf("%'.05d\n", $num_dossier+1);
-
-        }
-
-        if ($type_affectation == 'Transport VAT') {
-            $maxid = $this->GetMaxIdBytype('Transport VAT');
-            $refd= $this->RefDossierById($maxid);
-            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
-            $reference_medic = $annee . 'TV' . sprintf("%'.05d\n", $num_dossier+1);
-        }
-
-        if ($type_affectation == 'Medic International') {
-            $maxid = $this->GetMaxIdBytype('Medic International');
-            $refd= $this->RefDossierById($maxid);
-            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
-            $reference_medic = $annee . 'MI' . sprintf("%'.05d\n", $num_dossier+1);
 
         }
 
@@ -372,22 +343,329 @@ class DossiersController extends Controller
 
         }
 
-        if ($type_affectation == 'Transport Najda') {
-            $maxid = $this->GetMaxIdBytype('Transport Najda');
+        /*****   SERIE 2 *****/
+
+
+        if ($type_affectation == 'VAT') {
+
+            $maxid = $this->GetMaxIdBytype2( );
+            $tpaff=$this->ChampById('type_affectation',$maxid);
             $refd= $this->RefDossierById($maxid);
-            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
-            $reference_medic = $annee . 'TN' . sprintf("%'.05d\n", $num_dossier+1);
+
+            if((trim($tpaff)=='VAT') ){
+                $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
+            }
+            if((trim($tpaff)=='Transport MEDIC') ){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Transport VAT'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Medic International'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Transport Najda'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='X-Press'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+
+
+            if(($type_affectation)=='VAT') {
+                $reference_medic = $annee . 'V' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport MEDIC') {
+                $reference_medic = $annee . 'TM' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport VAT') {
+                $reference_medic = $annee . 'TV' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Medic International') {
+                $reference_medic = $annee . 'MI' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport Najda') {
+                $reference_medic = $annee . 'TN' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='X-Press') {
+                $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+
+        }
+
+
+        if ($type_affectation == 'Transport MEDIC') {
+
+            $maxid = $this->GetMaxIdBytype2( );
+            $tpaff=$this->ChampById('type_affectation',$maxid);
+            $refd= $this->RefDossierById($maxid);
+
+            if((trim($tpaff)=='VAT') ){
+                $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
+            }
+            if((trim($tpaff)=='Transport MEDIC') ){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Transport VAT'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Medic International'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Transport Najda'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='X-Press'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+
+
+            if(($type_affectation)=='VAT') {
+                $reference_medic = $annee . 'V' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport MEDIC') {
+                $reference_medic = $annee . 'TM' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport VAT') {
+                $reference_medic = $annee . 'TV' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Medic International') {
+                $reference_medic = $annee . 'MI' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport Najda') {
+                $reference_medic = $annee . 'TN' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='X-Press') {
+                $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+
+        }
+
+        if ($type_affectation == 'Transport VAT') {
+
+            $maxid = $this->GetMaxIdBytype2( );
+            $tpaff=$this->ChampById('type_affectation',$maxid);
+            $refd= $this->RefDossierById($maxid);
+
+            if((trim($tpaff)=='VAT') ){
+                $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
+            }
+            if((trim($tpaff)=='Transport MEDIC') ){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Transport VAT'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Medic International'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Transport Najda'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='X-Press'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+
+
+            if(($type_affectation)=='VAT') {
+                $reference_medic = $annee . 'V' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport MEDIC') {
+                $reference_medic = $annee . 'TM' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport VAT') {
+                $reference_medic = $annee . 'TV' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Medic International') {
+                $reference_medic = $annee . 'MI' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport Najda') {
+                $reference_medic = $annee . 'TN' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='X-Press') {
+                $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+
+        }
+
+        if ($type_affectation == 'Medic International') {
+
+            $maxid = $this->GetMaxIdBytype2( );
+            $tpaff=$this->ChampById('type_affectation',$maxid);
+            $refd= $this->RefDossierById($maxid);
+
+            if((trim($tpaff)=='VAT') ){
+                $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
+            }
+            if((trim($tpaff)=='Transport MEDIC') ){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Transport VAT'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Medic International'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Transport Najda'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='X-Press'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+
+
+            if(($type_affectation)=='VAT') {
+                $reference_medic = $annee . 'V' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport MEDIC') {
+                $reference_medic = $annee . 'TM' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport VAT') {
+                $reference_medic = $annee . 'TV' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Medic International') {
+                $reference_medic = $annee . 'MI' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport Najda') {
+                $reference_medic = $annee . 'TN' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='X-Press') {
+                $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+
+        }
+
+
+        if ($type_affectation == 'Transport Najda') {
+
+            $maxid = $this->GetMaxIdBytype2( );
+            $tpaff=$this->ChampById('type_affectation',$maxid);
+            $refd= $this->RefDossierById($maxid);
+
+            if((trim($tpaff)=='VAT') ){
+                $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
+            }
+            if((trim($tpaff)=='Transport MEDIC') ){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Transport VAT'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Medic International'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Transport Najda'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='X-Press'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+
+
+            if(($type_affectation)=='VAT') {
+                $reference_medic = $annee . 'V' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport MEDIC') {
+                $reference_medic = $annee . 'TM' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport VAT') {
+                $reference_medic = $annee . 'TV' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Medic International') {
+                $reference_medic = $annee . 'MI' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport Najda') {
+                $reference_medic = $annee . 'TN' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='X-Press') {
+                $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
 
         }
 
         if ($type_affectation == 'X-Press') {
-            $maxid = $this->GetMaxIdBytype('X-Press');
+
+            $maxid = $this->GetMaxIdBytype2( );
+            $tpaff=$this->ChampById('type_affectation',$maxid);
             $refd= $this->RefDossierById($maxid);
-            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
-            $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier+1);
+
+            if((trim($tpaff)=='VAT') ){
+                $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
+            }
+            if((trim($tpaff)=='Transport MEDIC') ){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Transport VAT'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Medic International'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='Transport Najda'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+            if(trim($tpaff)=='X-Press'){
+                $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            }
+
+
+            if(($type_affectation)=='VAT') {
+                $reference_medic = $annee . 'V' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport MEDIC') {
+                $reference_medic = $annee . 'TM' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport VAT') {
+                $reference_medic = $annee . 'TV' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Medic International') {
+                $reference_medic = $annee . 'MI' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='Transport Najda') {
+                $reference_medic = $annee . 'TN' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+            if(($type_affectation)=='X-Press') {
+                $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
 
         }
 
+/*
+        if ($type_affectation == 'Transport MEDIC') {
+            $maxid = $this->GetMaxIdBytype2();
+            $refd= $this->RefDossierById($maxid);
+            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            $reference_medic = $annee . 'TM' . sprintf("%'.05d\n", $num_dossier+1);
+        }
+
+        if ($type_affectation == 'Transport VAT') {
+            $maxid = $this->GetMaxIdBytype2();
+            $refd= $this->RefDossierById($maxid);
+            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            $reference_medic = $annee . 'TV' . sprintf("%'.05d\n", $num_dossier+1);
+        }
+
+        if ($type_affectation == 'Medic International') {
+            $maxid = $this->GetMaxIdBytype2();
+            $refd= $this->RefDossierById($maxid);
+            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            $reference_medic = $annee . 'MI' . sprintf("%'.05d\n", $num_dossier+1);
+        }
+
+        if ($type_affectation == 'Transport Najda') {
+            $maxid = $this->GetMaxIdBytype2();
+            $refd= $this->RefDossierById($maxid);
+            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            $reference_medic = $annee . 'TN' . sprintf("%'.05d\n", $num_dossier+1);
+        }
+
+        if ($type_affectation == 'X-Press') {
+            $maxid = $this->GetMaxIdBytype2();
+            $refd= $this->RefDossierById($maxid);
+            $num_dossier=  intval(substr ( $refd , 4  ,   strlen ($refd)) );
+            $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier+1);
+        }
+*/
         $user = auth()->user();
 
         $dossier = new Dossier([
@@ -1377,7 +1655,6 @@ class DossiersController extends Controller
 
     public static function GetMaxIdBytypeN( )
     {
-
         $annee=date('y');
         $maxid= Dossier::where(function ($query) use ($annee)  {
             $query->where('type_affectation', 'Najda')
@@ -1390,22 +1667,39 @@ class DossiersController extends Controller
                 ->where('reference_medic','like', $annee.'%');
         })->max('id');
 
+        return intval($maxid );
 
-     /*
-        $maxid=Dossier::where('type_affectation', 'Najda')
-        ->orWhere('type_affectation', 'Najda TPA')
-        ->orWhere('type_affectation', 'MEDIC')
-            ->max('id');
-*/
-     /*   $maxid=Dossier::where('reference_medic','like','%N%')
-            ->orWhere('reference_medic','like','%TPA%')
-            ->orWhere('reference_medic','like','%M%')
-            ->max('id');
-*/
+    }
+
+
+    public static function GetMaxIdBytype2( )
+    {
+        $annee=date('y');
+        $maxid= Dossier::where(function ($query) use ($annee)  {
+            $query->where('type_affectation', 'VAT')
+                ->where('reference_medic','like', $annee.'%');
+        })->orWhere(function ($query) use ($annee)   {
+            $query->where('type_affectation', 'Transport MEDIC')
+                ->where('reference_medic','like', $annee.'%');
+        })->orWhere(function ($query) use ($annee)    {
+            $query->where('type_affectation', 'Transport VAT')
+                ->where('reference_medic','like', $annee.'%');
+       })->orWhere(function ($query) use ($annee)    {
+            $query->where('type_affectation', 'Medic International')
+                ->where('reference_medic','like', $annee.'%');
+        })->orWhere(function ($query) use ($annee)    {
+            $query->where('type_affectation', 'Transport Najda')
+                ->where('reference_medic','like', $annee.'%');
+        })->orWhere(function ($query) use ($annee)    {
+            $query->where('type_affectation', 'X-Press')
+                ->where('reference_medic','like', $annee.'%');
+        })->max('id');
 
         return intval($maxid );
 
     }
+
+
     public static function ClientById($id)
     {
         $client = Client::find($id);

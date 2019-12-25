@@ -286,7 +286,7 @@ class LoginController extends Controller
                                     ->where('current_status', 'actif')
                                     ->where('affecte', $iduser);
 
-                            })->update(array('affecte' => $tech, 'statut' => 2));
+                            })->update(array('affecte' => $medic, 'statut' => 2));
 
                              // Mixtes
                             Dossier::where(function ($query) use ($iduser) {
@@ -294,7 +294,7 @@ class LoginController extends Controller
                                     ->where('type_dossier', 'Mixte')
                                     ->where('current_status', 'actif')
                                     ->where('affecte', $iduser);
-                            })->update(array('affecte' => $tech, 'statut' => 2));
+                            })->update(array('affecte' => $medic, 'statut' => 2));
 
 
                         }// medic
@@ -484,7 +484,7 @@ class LoginController extends Controller
                             ->where('affecte', $iduser);
                     })->update(array('affecte' => $medic, 'statut' => 2));
 
-                }// tech
+                }//
 
             }
 

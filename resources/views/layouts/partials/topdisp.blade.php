@@ -50,7 +50,7 @@
                   <a href="{{ route('supervision') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
                       <i class="fas fa-users-cog"></i>
                       <br>
-                      Supervision
+                      Superv
                   </a>
               </div>
 

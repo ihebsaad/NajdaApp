@@ -22,14 +22,14 @@ use  \App\Http\Controllers\DocsController;
             <h2 style="margin-left:50px;">Créer un nouveau Dossier:</h2>
     </div>
     <?php
-   /*         $maxid=DossiersController::GetMaxIdBytypeN();
+         $maxid=DossiersController::GetMaxIdBytype2();
   echo 'Max Id : '.$maxid;
 
    $tpaff=DossiersController::ChampById('type_affectation',$maxid);
    echo 'Type Aff :'.$tpaff;
    $refd= DossiersController::RefDossierById($maxid);
    echo 'Ref : '.$refd;
- */
+
     ?>
     <section class="content form_layouts">
 

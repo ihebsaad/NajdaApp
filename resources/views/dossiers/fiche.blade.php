@@ -788,7 +788,7 @@ use  \App\Http\Controllers\DocsController;
 
                                                                 <div class="row">
 
-                                                                    <div class="col-md-3">
+                                                                    <div class="col-md-5">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Ville</label>
 
@@ -805,7 +805,7 @@ use  \App\Http\Controllers\DocsController;
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="col-md-4">
+                                                                    <div class="col-md-3">
                                                                         <!--<div class="form-group">
                                                                             <label for="inputError" class="control-label">Hôtel</label>
 
@@ -834,7 +834,7 @@ use  \App\Http\Controllers\DocsController;
                                                                     </div>
 
 
-                                                                    <div class="col-md-3">
+                                                                    <div class="col-md-2">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Chambre</label>
 
@@ -844,7 +844,7 @@ use  \App\Http\Controllers\DocsController;
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-2">
-                                                                        <label for="inputError" class="control-label">Autre : </label>
+                                                                        <label for="inputError" class="control-label">Autre</label>
 
                                                                         <a style=""  href="{{route('prestataires.create',['id'=>$dossier->id])}}" class="btn btn-default btn-sm" role="button">+ Ajouter</a>
 
