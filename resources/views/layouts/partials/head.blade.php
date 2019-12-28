@@ -69,6 +69,8 @@
 $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 $urlnotif=$urlapp.'/entrees/show/' ;
 //$urlnotif = preg_replace('/\s+/', '', $urlnotif);
+
+
 ?>
  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css" />
@@ -413,7 +415,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                                 method: "POST",
                                 data: {id:id ,ok:1, _token: _token},
                                 success: function (data) {
-                                    location.reload();
+
 
                                 }
                             });
@@ -626,7 +628,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
         checkNotifs();
        // checkemails();	//test
-     /*    checkemails1();  // 24ops
+   /*      checkemails1();  // 24ops
          checkemails2();  // VAT
          checkemails3(); //MEDIC
          checkemails4();  //TM

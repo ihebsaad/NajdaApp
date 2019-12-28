@@ -366,7 +366,7 @@ class UsersController extends Controller
                  if($notif->affiche < 1) 
                  {
 
-                     $notif->update(['user'=>$iduser_dest,'affiche'=>-1,'statut'=>1,'read_at'=> null]);
+                     $notif->update(['user'=>$iduser_dest,'statut'=>1,'read_at'=> null]);
 
                  }
             }

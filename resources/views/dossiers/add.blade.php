@@ -22,13 +22,13 @@ use  \App\Http\Controllers\DocsController;
             <h2 style="margin-left:50px;">Créer un nouveau Dossier:</h2>
     </div>
     <?php
-         $maxid=DossiersController::GetMaxIdBytype2();
+     /*    $maxid=DossiersController::GetMaxIdBytype2();
   echo 'Max Id : '.$maxid;
 
    $tpaff=DossiersController::ChampById('type_affectation',$maxid);
    echo 'Type Aff :'.$tpaff;
    $refd= DossiersController::RefDossierById($maxid);
-   echo 'Ref : '.$refd;
+   echo 'Ref : '.$refd;*/
 
     ?>
     <section class="content form_layouts">
@@ -110,7 +110,7 @@ use  \App\Http\Controllers\DocsController;
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Client </label>
-                                                            <select required id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"    >
+                                                            <select required id="customer_id" name="customer_id" class="form-control js-example-placeholder-single"  onchange="setIDPrive()"  >
                                                                 <option value="0">Sélectionner..... </option>
 
                                                                 @foreach($clients as $cl  )
@@ -515,6 +515,7 @@ use  \App\Http\Controllers\DocsController;
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="inputError" class="control-label">Médecin Traitant </label>
@@ -544,6 +545,14 @@ use  \App\Http\Controllers\DocsController;
 
                                                 <div class="col-md-5">
                                                     <div class="form-group">
+                                                        <label for="inputError" class="control-label">Autre adresse  </label>
+                                                        <div class="input-group-control">
+                                                            <input   type="text" id="autre_hospital_address" name="autre_hospital_address" class="form-control"   >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
                                                         <label for="inputError" class="control-label">Autre Médecin Traitant  </label>
 
                                                         <div class="input-group-control">
@@ -551,7 +560,8 @@ use  \App\Http\Controllers\DocsController;
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-5">
+
+                                                <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label for="inputError" class="control-label">Tel Autre Médecin Traitant</label>
 
@@ -1214,6 +1224,14 @@ use  \App\Http\Controllers\DocsController;
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
 
 <script>
+
+    function  setIDPrive()
+    {
+        if (document.getElementById('customer_id').value==60)
+        {
+            document.getElementById('reference_customer').value='<?php echo 'P'.date('y-mdHis');?>';
+        }
+    }
 
     function hidediv()
     {

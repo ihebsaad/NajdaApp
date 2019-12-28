@@ -8,12 +8,14 @@ use App\Tag ;
 use App\Dossier ;
 use App\Notification ;
 $dossiers = Dossier::get();
+Use App\Common;
 
 
 use App\Attachement ;
 use App\Http\Controllers\AttachementsController;
 use App\Http\Controllers\NotificationsController;
-use App\Http\Controllers\TagsController;
+
+
 ?>
 {{-- page level styles --}}
 @section('header_styles')
@@ -32,7 +34,13 @@ use App\Http\Controllers\TagsController;
         <div class="panel-heading" style="">
                     <div class="row">
                         <div  style=" padding-left: 0px;color:black;font-weight: bold ;">
-                            <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet']; echo ($sujet); ?><span id="hiding" class="pull-right">
+                            <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet'];
+
+                                if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows")   ) {
+                                    $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+                                }
+
+                            echo ($sujet); ?><span id="hiding" class="pull-right">
          <i style="color:grey;margin-top:10px"class="fa fa-2x fa-fw clickable fa-chevron-down"></i>
             </span></h4>                        </div>
                     </div>
@@ -123,12 +131,12 @@ use App\Http\Controllers\TagsController;
                     </div>        
                  </a>
         </div>
-				                          <?php
-                                            // get attachements info from DB
+	  <?php
+      // get attachements info from DB
     $attachs = Attachement::get()->where('parent', '=', $entree['id'] )->where('boite','0');
     $nbattachs = Attachement::where('parent', '=', $entree['id'] )->where('boite','0')->count();
 
-                                            
+
                                           ?>
     <div id="emailcontent" class="panel-collapse collapse in" aria-expanded="true" style="min-height:250px">
         <div class="panel-body" id="emailnpj">

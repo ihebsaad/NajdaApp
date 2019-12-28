@@ -109,8 +109,15 @@
 use App\Notification;
 use App\Notif;
 use  \App\Http\Controllers\EntreesController ;
+Use App\Common;
 
-
+/*
+function SstartsWith ($string, $startString)
+{
+    $len = strlen($startString);
+    return (substr($string, 0, $len) === $startString);
+}
+*/
 $seance =  DB::table('seance')
     ->where('id','=', 1 )->first();
 $user = auth()->user();
@@ -234,6 +241,11 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                                 $nomassure = $i->nomassure;
                                 $emetteur = $i->emetteur;
                                 $sujet = $i->sujet;
+
+                                if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows")   ) {
+                                    $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+                                }
+
                                 $type = $i->type;
                                 $read_at = $i->read_at;
                                 $viewed=EntreesController::ChampById( 'viewed',$entreeid) ;

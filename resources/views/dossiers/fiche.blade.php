@@ -1026,6 +1026,15 @@ use  \App\Http\Controllers\DocsController;
 
                                                             <div class="col-md-5">
                                                                 <div class="form-group">
+                                                                    <label for="inputError" class="control-label">Autre adresse  </label>
+                                                                    <div class="input-group-control">
+                                                                        <input   type="text" id="autre_hospital_address" name="autre_hospital_address" class="form-control"   >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
                                                                     <label for="inputError" class="control-label">Autre Médecin Traitant  </label>
 
                                                                     <div class="input-group-control">
@@ -1033,7 +1042,8 @@ use  \App\Http\Controllers\DocsController;
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-5">
+
+                                                            <div class="col-md-3">
                                                                 <div class="form-group">
                                                                     <label for="inputError" class="control-label">Tel Autre Médecin Traitant</label>
 

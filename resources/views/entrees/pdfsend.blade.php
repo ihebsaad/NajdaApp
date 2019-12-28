@@ -2386,7 +2386,7 @@
         @foreach ($attachs as $att)
             <div class="tab-pane fade in" id="pj<?php echo $i; ?>">
 
-                <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a target="_self"  style="font-size: 13px;" href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
+                <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a   style="font-size: 13px;" href="{{ URL::asset('storage'.$att->path) }}" download="{{ URL::asset('storage'.$att->path) }}">Télécharger</a>)</h4>
 
             </div>
         @endforeach

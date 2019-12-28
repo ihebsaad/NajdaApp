@@ -125,7 +125,8 @@ class Dossier extends Model
         'date_fin_vehicule_address',
 
         'plafond',
-        'user_id'
+        'user_id',
+        'autre_hospital_address'
     ];
 
     protected $dateFormat = 'Y-m-d H:i:s';

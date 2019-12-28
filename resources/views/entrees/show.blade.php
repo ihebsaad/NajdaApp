@@ -13,6 +13,8 @@ use App\Attachement ;
 use App\Http\Controllers\AttachementsController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\TagsController;
+Use App\Common;
+
 ?>
 {{-- page level styles --}}
 @section('header_styles')
@@ -22,7 +24,14 @@ use App\Http\Controllers\TagsController;
 @section('content')
 
     <?php
-$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
+$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+
+ /*   function SstartsWith ($string, $startString)
+    {
+        $len = strlen($startString);
+        return (substr($string, 0, $len) === $startString);
+    }*/
+?>
 
 <div class="panel panel-default panelciel " style="">
  @if(session()->has('AffectNouveauDossier'))
@@ -33,7 +42,13 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
         <div class="panel-heading" style=""   >
                      <div class="row">
                         <div  style=" padding-left: 0px;color:black;font-weight: bold ;">
-                            <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet']; echo /*iconv_mime_decode(*/$sujet/*); */?><span id="hiding" class="pull-right">
+                            <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet'];
+
+                                if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows")   ) {
+                                    $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+                                }
+                                echo $sujet;
+                            ?><span id="hiding" class="pull-right">
          <i style="color:grey;margin-top:10px"class="fa fa-2x fa-fw clickable fa-chevron-down"></i>
             </span></h4>
                         </div>
@@ -77,8 +92,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
 
                             </div>
                         </div>
-
-
                  </a>
         </div>
         <div id="emailhead" class="panel-collapse collapse in" aria-expanded="true" style="">
@@ -122,7 +135,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
                     </div>        
                  </a>
         </div>
-                                  <?php
+  <?php
                                             // get attachements info from DB
     $attachs = Attachement::get()->where('parent', '=', $entree['id'] )->where('boite','0');
     $nbattachs = Attachement::where('parent', '=', $entree['id'] )->where('boite','0')->count();
@@ -190,8 +203,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
 
                                                     <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
 
-                                                    
-                                                    
                                                     @switch($att->type)
                                                         @case('docx')
                                                         @case('doc')
@@ -284,9 +295,7 @@ $users=UsersController::ListeUsers();
 
  <?php use \App\Http\Controllers\ActionController;
     if (($dossier)) {
-             
-             $actionsReouRap=ActionController::ListeActionsRepOuRap($dossier->id);
-
+$actionsReouRap=ActionController::ListeActionsRepOuRap($dossier->id);
          
           
        /*echo($actionsReouRap);*/

@@ -263,6 +263,7 @@ class DossiersController extends Controller
 /*****   SERIE 1 *****/
         if ($type_affectation == 'Najda') {
             $maxid = $this->GetMaxIdBytypeN( );
+            if($maxid>0){
             $tpaff=$this->ChampById('type_affectation',$maxid);
             $refd= $this->RefDossierById($maxid);
 
@@ -286,36 +287,43 @@ class DossiersController extends Controller
                 $reference_medic = $annee . 'TPA' . sprintf("%'.05d\n", $num_dossier + 1);
             }
 
+            }// maxid>0
+            else{$reference_medic = $annee . 'N' . sprintf("%'.05d\n",  1);}
         }
 
         if ($type_affectation == 'MEDIC') {
-            $maxid = $this->GetMaxIdBytypeN( );
-            $tpaff=$this->ChampById('type_affectation',$maxid);
-            $refd= $this->RefDossierById($maxid);
+            if($maxid>0) {
+                $maxid = $this->GetMaxIdBytypeN();
+                $tpaff = $this->ChampById('type_affectation', $maxid);
+                $refd = $this->RefDossierById($maxid);
 
-            if((trim($tpaff)=='Najda') ){
-                $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
-            }
-            if((trim($tpaff)=='MEDIC') ){
-                $num_dossier=  intval(substr ( $refd , 3  ,   strlen ($refd)) );
-            }
-            if(trim($tpaff)=='Najda TPA'){
-                $num_dossier=  intval(substr ( $refd , 5  ,   strlen ($refd)) );
-            }
+                if ((trim($tpaff) == 'Najda')) {
+                    $num_dossier = intval(substr($refd, 3, strlen($refd)));
+                }
+                if ((trim($tpaff) == 'MEDIC')) {
+                    $num_dossier = intval(substr($refd, 3, strlen($refd)));
+                }
+                if (trim($tpaff) == 'Najda TPA') {
+                    $num_dossier = intval(substr($refd, 5, strlen($refd)));
+                }
 
-            if(($type_affectation)=='Najda') {
-                $reference_medic = $annee . 'N' . sprintf("%'.05d\n", $num_dossier + 1);
-            }
-            if(($type_affectation)=='MEDIC') {
-                $reference_medic = $annee . 'M' . sprintf("%'.05d\n", $num_dossier + 1);
-            }
-            if(($type_affectation)=='Najda TPA') {
-                $reference_medic = $annee . 'TPA' . sprintf("%'.05d\n", $num_dossier + 1);
-            }
+                if (($type_affectation) == 'Najda') {
+                    $reference_medic = $annee . 'N' . sprintf("%'.05d\n", $num_dossier + 1);
+                }
+                if (($type_affectation) == 'MEDIC') {
+                    $reference_medic = $annee . 'M' . sprintf("%'.05d\n", $num_dossier + 1);
+                }
+                if (($type_affectation) == 'Najda TPA') {
+                    $reference_medic = $annee . 'TPA' . sprintf("%'.05d\n", $num_dossier + 1);
+                }
+            }else{
+                $reference_medic = $annee . 'M' . sprintf("%'.05d\n",  1);
 
+            }
         }
 
         if ($type_affectation == 'Najda TPA') {
+            if($maxid>0) {
 
             $maxid = $this->GetMaxIdBytypeN( );
             $tpaff=$this->ChampById('type_affectation',$maxid);
@@ -340,6 +348,11 @@ class DossiersController extends Controller
             if(($type_affectation)=='Najda TPA') {
                 $reference_medic = $annee . 'TPA' . sprintf("%'.05d\n", $num_dossier + 1);
             }
+
+        }else{
+            $reference_medic = $annee . 'TPA' . sprintf("%'.05d\n",  1);
+
+        }
 
         }
 
@@ -349,7 +362,9 @@ class DossiersController extends Controller
         if ($type_affectation == 'VAT') {
 
             $maxid = $this->GetMaxIdBytype2( );
-            $tpaff=$this->ChampById('type_affectation',$maxid);
+            if($maxid>0) {
+
+                $tpaff=$this->ChampById('type_affectation',$maxid);
             $refd= $this->RefDossierById($maxid);
 
             if((trim($tpaff)=='VAT') ){
@@ -391,13 +406,19 @@ class DossiersController extends Controller
                 $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier + 1);
             }
 
+            }else{
+                $reference_medic = $annee . 'V' . sprintf("%'.05d\n",  1);
+
+            }
         }
 
 
         if ($type_affectation == 'Transport MEDIC') {
 
             $maxid = $this->GetMaxIdBytype2( );
-            $tpaff=$this->ChampById('type_affectation',$maxid);
+            if($maxid>0) {
+
+                $tpaff=$this->ChampById('type_affectation',$maxid);
             $refd= $this->RefDossierById($maxid);
 
             if((trim($tpaff)=='VAT') ){
@@ -437,6 +458,10 @@ class DossiersController extends Controller
             }
             if(($type_affectation)=='X-Press') {
                 $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier + 1);
+            }
+
+             }else{
+            $reference_medic = $annee . 'TM' . sprintf("%'.05d\n",  1);
             }
 
         }
@@ -444,7 +469,9 @@ class DossiersController extends Controller
         if ($type_affectation == 'Transport VAT') {
 
             $maxid = $this->GetMaxIdBytype2( );
-            $tpaff=$this->ChampById('type_affectation',$maxid);
+            if($maxid>0) {
+
+                $tpaff=$this->ChampById('type_affectation',$maxid);
             $refd= $this->RefDossierById($maxid);
 
             if((trim($tpaff)=='VAT') ){
@@ -486,12 +513,17 @@ class DossiersController extends Controller
                 $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier + 1);
             }
 
+        }else{
+    $reference_medic = $annee . 'TV' . sprintf("%'.05d\n",  1);
+            }
         }
 
         if ($type_affectation == 'Medic International') {
 
             $maxid = $this->GetMaxIdBytype2( );
-            $tpaff=$this->ChampById('type_affectation',$maxid);
+            if($maxid>0) {
+
+                $tpaff=$this->ChampById('type_affectation',$maxid);
             $refd= $this->RefDossierById($maxid);
 
             if((trim($tpaff)=='VAT') ){
@@ -532,6 +564,10 @@ class DossiersController extends Controller
             if(($type_affectation)=='X-Press') {
                 $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier + 1);
             }
+
+        }else{
+            $reference_medic = $annee . 'MI' . sprintf("%'.05d\n",  1);
+        }
 
         }
 
@@ -539,7 +575,9 @@ class DossiersController extends Controller
         if ($type_affectation == 'Transport Najda') {
 
             $maxid = $this->GetMaxIdBytype2( );
-            $tpaff=$this->ChampById('type_affectation',$maxid);
+            if($maxid>0) {
+
+                $tpaff=$this->ChampById('type_affectation',$maxid);
             $refd= $this->RefDossierById($maxid);
 
             if((trim($tpaff)=='VAT') ){
@@ -580,13 +618,19 @@ class DossiersController extends Controller
             if(($type_affectation)=='X-Press') {
                 $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier + 1);
             }
+
+        }else{
+            $reference_medic = $annee . 'TN' . sprintf("%'.05d\n",  1);
+        }
 
         }
 
         if ($type_affectation == 'X-Press') {
 
             $maxid = $this->GetMaxIdBytype2( );
-            $tpaff=$this->ChampById('type_affectation',$maxid);
+            if($maxid>0) {
+
+                $tpaff=$this->ChampById('type_affectation',$maxid);
             $refd= $this->RefDossierById($maxid);
 
             if((trim($tpaff)=='VAT') ){
@@ -627,6 +671,10 @@ class DossiersController extends Controller
             if(($type_affectation)=='X-Press') {
                 $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier + 1);
             }
+
+        }else{
+            $reference_medic = $annee . 'XP' . sprintf("%'.05d\n",  1);
+        }
 
         }
 
@@ -1086,7 +1134,7 @@ class DossiersController extends Controller
                  if($notif->affiche < 1) 
                  {
 
-                    $notif->update(['user'=>$iduser_dest,'affiche'=>-1,'statut'=>1,'read_at'=> null]);
+                    $notif->update(['user'=>$iduser_dest,'statut'=>1,'read_at'=> null]);
                     //  statut 1 dispatché
 
                  }
@@ -1692,7 +1740,12 @@ class DossiersController extends Controller
                 ->where('reference_medic','like', $annee.'%');
         })->max('id');
 
-        return intval($maxid );
+        if(intval($maxid)>0){
+            return intval($maxid );
+
+        }else{
+            return 0;
+        }
 
     }
 
@@ -1720,7 +1773,14 @@ class DossiersController extends Controller
                 ->where('reference_medic','like', $annee.'%');
         })->max('id');
 
-        return intval($maxid );
+      //  return intval($maxid );
+
+        if(intval($maxid)>0){
+            return intval($maxid );
+
+        }else{
+            return 0;
+        }
 
     }
 

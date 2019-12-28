@@ -7,7 +7,17 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
 
 <?php  use App\Http\Controllers\DossiersController;
+Use App\Common;
+
 $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+/*
+function SstartsWith ($string, $startString)
+{
+    $len = strlen($startString);
+    return (substr($string, 0, $len) === $startString);
+}
+*/
+
 ?>
 
 @section('content')
@@ -40,14 +50,25 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                 <!-- <th style="width:8%" id="colmn6"></th>-->
             </tr>
             </thead>
-            <tbody>
+            <tbody><?php $c=0; ?>
             @foreach($entrees as $entree)
+<?php // $c++; if($c==1) { ?>
                 <tr><?php $type=$entree['type'];
                     if($entree['viewed']==false) {$style='color:#337085!important;font-weight:800;font-size:16px;' ;}else{$style='';} ?>
                     <td style="font-size:14px;width:6%"><a  href="<?php echo $urlapp.'/entrees/show/',$entree['id']?>"> <?php if ($type=='email'){echo '<img width="20" src="'. $urlapp .'/public/img/email.png" />';} ?><?php if ($type=='fax'){echo '<img width="20" src="'. $urlapp .'/public/img/faxx.png" />';} ?><?php if ($type=='sms'){echo '<img width="20" src="'. $urlapp .'/public/img/smss.png" />';} ?> <?php if ($type=='tel'){echo '<img width="20" src="'. $urlapp .'/public/img/tel.png" />';} ?> <?php echo $entree['type']; ?></a></td>
                     <td style="width:15%;font-size:12px;width:10%"><?php echo  date('d/m/Y H:i', strtotime($entree['reception'])) ; ?></td>
                     <td  style="width:20%;font-size:12px;max-width:150px;overflow:hidden;  text-overflow: ellipsis;"><?php echo $entree['emetteur']; ?></td>
-                    <td  style="width:35%;font-size:12px;max-width:200px;"><a style="<?php echo $style;?>"  <?php if ($entree['dossier']!='') {  ?>   href="<?php echo $urlapp.'/entrees/show/',$entree['id']?>" <?php } else{  ?> href= "<?php echo $urlapp.'/entrees/showdisp/',$entree['id']?>"    <?php } ?>     ><?php echo /* iconv_mime_decode(*/   $entree['sujet']  ; ?></a></td>
+                    <td  style="width:35%;font-size:12px;max-width:200px;"><a style="<?php echo $style;?>"  <?php if ($entree['dossier']!='') {  ?>   href="<?php echo $urlapp.'/entrees/show/',$entree['id']?>" <?php } else{  ?> href= "<?php echo $urlapp.'/entrees/showdisp/',$entree['id']?>"    <?php } ?>     >
+                            <?php
+                          $sujet=trim($entree['sujet']);
+
+                            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows")   ) {
+                                 $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+                            }
+                                 echo $sujet;
+                            ; ?>
+
+                        </a></td>
                     <td  style="width:8%;font-size:12px; "><?php echo $entree['dossier'].' - '.DossiersController::FullnameAbnDossierById($entree['dossierid']);?></td>
                     <td>
                              <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('EntreesController@destroy', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
@@ -56,6 +77,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
                     </td>
                 </tr>
+                <?php // } ?>
             @endforeach
             </tbody>
         </table>
