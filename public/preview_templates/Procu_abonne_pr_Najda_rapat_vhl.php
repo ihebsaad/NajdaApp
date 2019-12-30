@@ -102,6 +102,7 @@ if (isset($_GET['idtaggop']))
 <body>
 <form id="formchamps">
     <input name="pre_dateheure" type="hidden" value="<?php if(isset ($pre_dateheure)) echo $pre_dateheure; ?>"> </input>
+<input name="idtaggop" type="hidden" value="<?php if(isset ($idtaggop)) echo $idtaggop; ?>"></input>
 <p class=rvps1><span class=rvts1> <input name="CL_date_heure_act" placeholder="Date Heure" value="<?php if(isset ($CL_date_heure_act)) echo $CL_date_heure_act; ?>"></input></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p><span class=rvts1><br></span></p>

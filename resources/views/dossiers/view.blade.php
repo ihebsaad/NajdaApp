@@ -502,7 +502,9 @@ use \App\Http\Controllers\UsersController;
             <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
             <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
             <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
+
             <td style="font-size:13px;width:10%">  <button onclick="init('<?php echo $id;?>','<?php echo addslashes($prestataire->name.' '.$prestataire->prenom)  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> + Prestation</button>
+
             </td>
 
         </tr>
@@ -704,7 +706,7 @@ use \App\Http\Controllers\UsersController;
                          </form>
                      </div>
                 </div>
-				<div id="tab34" class="tab-pane fade ">
+                <div id="tab34" class="tab-pane fade ">
                     <br><label style="font-weight:bold;color:#FD9883 ">Prestation non effectuée</label><br>
                     <!--  <span style="background-color:#fcdcd5;color:black;font-weight:bold">Prestation non effectuée </span>  <br>-->
                     <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
@@ -809,7 +811,9 @@ $interv = PrestationsController::PrestById($prest);
 <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
 <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
 <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
+
 <td style="font-size:12px;width:15%"> <button onclick="init('<?php echo $prest;?>','<?php  echo addslashes( PrestatairesController::ChampById('name',$prest).' '. PrestatairesController::ChampById('prenom',$prest))  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> Prestation</button></td></tr>
+
 <?php }
 
 }
@@ -853,7 +857,9 @@ array_push($listepr,$pr['prestataire_id']);
                        <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
                        <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
                        <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
+
                        <td style="font-size:12px;width:15%"> <button onclick="init('<?php echo $prest;?>','<?php  echo  addslashes(PrestatairesController::ChampById('name',$prest).' '. PrestatairesController::ChampById('prenom',$prest))  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> Prestation</button></td>
+
 
                    </tr>
                    <?php } ?>
@@ -1691,33 +1697,7 @@ array_push($listepr,$pr['prestataire_id']);
                                           <option value="Ambulance">Ambulance</option>
                                           <option value="Remorquage">Remorquage</option>
                                           <option value="Medic Internationnal">Medic Internationnal</option>
-                                      <?php
-                                         /* $usedtemplates = Document::where('dossier',$dossier->id)->distinct()->get(['template']);
-                                          $usedtid=array();
-                                          foreach ($usedtemplates as $tempu) {
-                                              $usedtid[]=$tempu['template'];
-                                          }
-                                          $templatesd = Template_doc::get();
-                                          $docwithcl = array();*/
-                                      ?>
-                                          {{--
-                                          @foreach ($templatesd as $tempdoc)
-                                             @if (! in_array($tempdoc["id"],$usedtid))
-                                                  <option value={{ $tempdoc["id"] }} >{{ $tempdoc["nom"] }}</option>
-                                              @endif                                            
-                                          @endforeach
-
-
-                                          nom group client
-nom client
-ref client dossier
-
-dossier:
-customer_id       ---->    clients: name / groupe    ---->    label
-reference_customer
-
-
-                                          --}}
+                                     
                                           
                                      </select>
                                   </div>
@@ -1835,6 +1815,7 @@ reference_customer
                     <div id="claffect2" class="col-md-4" style="float: left!important;">
                         <select id="affectationprest" name="affectationprest" class="form-control" style="width: 230px">
                                                     <option value="Select">Selectionner</option>
+                                                    <option value="mmentite">Meme entite</option>
                                                     <option value="interne">Entite-soeur</option>
                                                     <option value="externe">Prestataire externe</option>
                         </select>
@@ -2626,6 +2607,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
     </div>
 </div>
 
+<input type="hidden" name="cnctuserid" id="cnctuserid" value="<?php echo Auth::user()->id; ?>">
+
 
 
 
@@ -2811,14 +2794,18 @@ function remplaceom(id,affectea,verif)
 {
     document.getElementById('claffect1').style.display = 'block';
     document.getElementById('claffect2').style.display = 'block';
+
+    //ajout id user conncte
+    var cnctuserid = $("#cnctuserid").val();
+
     if(verif==='omtx')
-    var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?remplace=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
+    var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?remplace=1&parent='+id+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
      if(verif==='omamb')
-    var url = '<?php echo url('/'); ?>/public/preview_templates/odm_ambulance.php?remplace=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
+    var url = '<?php echo url('/'); ?>/public/preview_templates/odm_ambulance.php?remplace=1&parent='+id+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
     if(verif==='omre')
-        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_remorquage.php?remplace=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
+        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_remorquage.php?remplace=1&parent='+id+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
     if(verif==='ommie')
-        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_medic_international.php?remplace=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
+        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_medic_international.php?remplace=1&parent='+id+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
 
          document.getElementById("omfilled").src = url;
          $("#idomparent").val(id);
@@ -2839,12 +2826,16 @@ function completeom(id,affectea,verifc)
 {
     document.getElementById('claffect1').style.display = 'block';
     document.getElementById('claffect2').style.display = 'block';
+
+    //ajout id user conncte
+    var cnctuserid = $("#cnctuserid").val();
+
     if(verifc==='omtx')
-    {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?complete=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
+    {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?complete=1&parent='+id+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
     if(verifc==='omamb')
-    {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_ambulance.php?complete=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
+    {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_ambulance.php?complete=1&parent='+id+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
     if(verifc==='omre')
-    {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_remorquage.php?complete=1&parent='+id+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
+    {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_remorquage.php?complete=1&parent='+id+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
          document.getElementById("omfilled").src = url;
          $("#idomparent").val(id);
         $('#templateordrem').val("complete");
@@ -2906,6 +2897,9 @@ function annuledoc(titre,iddoc,template)
 
         var dossier = $('#dossier').val();
         var tempdoc = template;
+        //ajout id user conncte
+        var cnctuserid = $("#cnctuserid").val();
+
         $("#gendochtml").prop("disabled",false);
         
          var r = confirm("Êtes-vous sûr de vouloir Annuler le document: "+titre+" ? ");
@@ -2917,7 +2911,7 @@ function annuledoc(titre,iddoc,template)
                 $.ajax({
                     url:"{{ route('documents.canceldoc') }}",
                     method:"POST",
-                    data:{dossier:dossier,template:tempdoc,parent:iddoc, _token:_token},
+                    data:{dossier:dossier,template:tempdoc,parent:iddoc,iduser:cnctuserid, _token:_token},
                 success:function(data){
 
                     console.log(data);
@@ -2945,6 +2939,8 @@ function annuledoc(titre,iddoc,template)
 
 function annuleom(titre,iddoc)
 {
+        //ajout id user hs change
+        var cnctuserid = $("#cnctuserid").val();
 
         var dossier = $('#dossier').val();
         $("#genomhtml").prop("disabled",false);
@@ -2958,7 +2954,7 @@ function annuleom(titre,iddoc)
                 $.ajax({
                     url:"{{ route('ordremissions.cancelom') }}",
                     method:"POST",
-                    data:{dossier:dossier,title:titre,parent:iddoc, _token:_token},
+                    data:{dossier:dossier,title:titre,parent:iddoc,iduser:cnctuserid, _token:_token},
                 success:function(data){
 
                     //alert(data);
@@ -3194,7 +3190,9 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
             }
 
         //verifier les tags du document
-        if(val[0] ==='lestags')
+
+        if((val[0] ==='lestags') && (val[1].indexOf("VERIFglist") !== -1 ))
+
             {
                 console.log('les tags: '+val[1] );
                 var tagstr = val[1].replace('allow_VERIFglist(','');
@@ -3244,8 +3242,8 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
 
     });
 
-    if ((templateexist) && (document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC") === -1 || document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC_location_VAT_a_Prest") !== -1) && !(needgop) )
-
+// on n'affiche pas liste de gop ici
+    if ((templateexist) && (document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC") === -1 || document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC_location_VAT_a_Prest") !== -1 ) && !(needgop) )
     {
 
         // remplissage de la template dans iframe
@@ -3268,6 +3266,10 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                 numparam ++;
             }
         });
+
+        //ajout id user hs change
+        var cnctuserid = $("#cnctuserid").val();
+        html_string = html_string+"&iduser="+cnctuserid;
 
 
         //chargement du contenu et affichage du preview du document
@@ -3551,18 +3553,22 @@ function keyUpHandler(){
     {
         $("#affectationprest").val("Select").change();
         $("#generateom").modal('hide');
+
+
+        var cnctuserid = $("#cnctuserid").val();
+
         if (affectea === undefined && affectea === null)
         {
             affectea = "";
         }
         if (tempom === "Taxi")
-        {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?dossier='+dossier+'&affectea='+affectea+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
+        {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?dossier='+dossier+'&affectea='+affectea+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
         if (tempom === "Ambulance")
-        {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_ambulance.php?dossier='+dossier+'&affectea='+affectea+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
+        {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_ambulance.php?dossier='+dossier+'&affectea='+affectea+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
         if (tempom === "Remorquage")
-        {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_remorquage.php?dossier='+dossier+'&affectea='+affectea+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
+        {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_remorquage.php?dossier='+dossier+'&affectea='+affectea+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
         if (tempom === "Medic Internationnal")
-            {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_medic_international.php?dossier='+dossier+'&affectea='+affectea+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
+            {var url = '<?php echo url('/'); ?>/public/preview_templates/odm_medic_international.php?dossier='+dossier+'&affectea='+affectea+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';}
 
          document.getElementById("omfilled").src = url;
 
@@ -3725,6 +3731,12 @@ function keyUpHandler(){
                     document.getElementById('externaffect').style.display = 'none';
                     $("#optprestataire").modal('show');
                     $("#affectea").val("externe");
+                }
+                // condition affecte a mm entite <hs change>
+                else if ($("#affectationprest").val()==="mmentite")
+                {
+                   document.getElementById('externaffect').style.display = 'none';
+                   $("#affectea").val("mmentite");
                 }
                 else
                 {
@@ -4131,7 +4143,7 @@ function keyUpHandler(){
             document.getElementById('termine').style.display = 'none';
             document.getElementById('showNext').style.display='none';
             document.getElementById('add2').style.display='none';
-			document.getElementById('add2prest').style.display='none';
+            document.getElementById('add2prest').style.display='none';
             document.getElementById('selectedprest').value=0;
             /*
                 // afficher les specialite par type de prestation selectionné
@@ -4164,7 +4176,7 @@ function keyUpHandler(){
             // document.getElementById('termine').style.display = 'none';
             document.getElementById('showNext').style.display='none';
             document.getElementById('add2').style.display='none';
-			document.getElementById('add2prest').style.display='none';
+            document.getElementById('add2prest').style.display='none';
             document.getElementById('selectedprest').value=0;
 
 
@@ -4187,7 +4199,7 @@ function keyUpHandler(){
 
                 document.getElementById('termine').style.display = 'none';
                 document.getElementById('add2').style.display = 'none';
-				document.getElementById('add2prest').style.display='none';
+                document.getElementById('add2prest').style.display='none';
 
                 $.ajax({
                     url:"{{ route('dossiers.listepres') }}",
@@ -4349,7 +4361,7 @@ function keyUpHandler(){
         $("#essai2").click(function() {
             document.getElementById('termine').style.display = 'none';
             document.getElementById('add2').style.display = 'block';
-			document.getElementById('add2prest').style.display='block';
+            document.getElementById('add2prest').style.display='block';
             document.getElementById('showNext').style.display = 'block';
             document.getElementById('item1').style.display = 'block';
             document.getElementById('selected').value = 1;
@@ -4413,14 +4425,14 @@ function keyUpHandler(){
                     data:{prestation:prestation,prestataire:prestataire,statut:statut,details:details, _token:_token},
                     success:function(data){
 
-				// reinitialiser le champs de statut
+                // reinitialiser le champs de statut
                         if(document.getElementById('selectedprest').value ==0) {
                             document.getElementById('statutprest').value ='';
                             document.getElementById('detailsprest').value ='';}
 
                     }
                 });
-				document.getElementById('statutprest').selectedIndex =0;
+                document.getElementById('statutprest').selectedIndex =0;
 
                       if(document.getElementById('idprestation').value >0) {
                           document.getElementById('prestation').style.display='none';
@@ -4428,7 +4440,7 @@ function keyUpHandler(){
 
             }
                 document.getElementById('selectedprest').value = 0;
-				document.getElementById('detailsprest').value='';
+                document.getElementById('detailsprest').value='';
 
                 var selected = document.getElementById('selected').value;
                 var total = document.getElementById('total').value;
@@ -4441,7 +4453,7 @@ function keyUpHandler(){
                     document.getElementById('termine').style.display = 'none';
                     document.getElementById('item1').style.display = 'block';
                     document.getElementById('add2').style.display = 'block';
-					document.getElementById('add2prest').style.display='block';
+                    document.getElementById('add2prest').style.display='block';
 
                     //document.getElementById('selected').value=1;
                     // $("#selected").val('1');
@@ -4455,14 +4467,14 @@ function keyUpHandler(){
                     document.getElementById('item'+(selected)).style.display = 'none';
                     document.getElementById('showNext').style.display = 'none';
                     document.getElementById('add2').style.display = 'none';
-					document.getElementById('add2prest').style.display='none';
+                    document.getElementById('add2prest').style.display='none';
 
 
                 } else {
 
                     if ((selected != 0) && (selected <= total + 1)) {
                         document.getElementById('add2').style.display = 'block';
-						document.getElementById('add2prest').style.display='block';
+                        document.getElementById('add2prest').style.display='block';
                         document.getElementById('termine').style.display = 'none';
                         document.getElementById('item' + selected).style.display = 'none';
                         document.getElementById('item' + next).style.display = 'block';
@@ -4478,7 +4490,7 @@ function keyUpHandler(){
                 if(next>parseInt(total)+1) {
                     // document.getElementById('item' + selected).style.display = 'none';
                 }
-				if( document.getElementById('idprestation').value>0 ){
+                if( document.getElementById('idprestation').value>0 ){
                       document.getElementById('idprestation').value=0
                       document.getElementById('selectedprest').value = 0;
                       document.getElementById('detailsprest').value='';
@@ -4488,7 +4500,7 @@ function keyUpHandler(){
                   }
             }
             else{
-				if(document.getElementById('selectedprest').selectedIndex  >0) {
+                if(document.getElementById('selectedprest').selectedIndex  >0) {
                   Swal.fire({
                      type: 'error',
                      title: 'Attendez...',
@@ -4498,7 +4510,7 @@ function keyUpHandler(){
 
             }
 
-			}
+            }
 
         });
 
@@ -5011,7 +5023,6 @@ $(document).ready(function(){
     }
 
 </style>
-
 
 
 

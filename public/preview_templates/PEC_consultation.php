@@ -1,4 +1,6 @@
 <?php
+if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
+if (isset($_GET['inter__medecin'])) {$inter__medecin=$_GET['inter__medecin'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];$subscriber_name2=$_GET['subscriber_name'];  }
@@ -12,10 +14,59 @@ if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['agent__lastname'])) {$agent__lastname=$_GET['agent__lastname']; }
 if (isset($_GET['agent__signature'])) {$agent__signature=$_GET['agent__signature']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
+if (isset($_GET['montantgop'])) {$montantgop=$_GET['montantgop'];}
 if (isset($_GET['idtaggop'])) 
     {
         $idtaggop=$_GET['idtaggop']; 
     }
+// Create connection
+// read info from env file
+$lines_array = file("../../.env");
+
+foreach($lines_array as $line) {
+    // username
+    if(strpos($line, 'DB_USERNAME') !== false) {
+        list(, $user) = explode("=", $line);
+        $user = trim(preg_replace('/\s+/', ' ', $user));
+        $user = str_replace(' ', '', $user);
+    }
+    // password
+    if(strpos($line, 'DB_PASSWORD') !== false) {
+        list(, $mdp) = explode("=", $line);
+        $mdp = trim(preg_replace('/\s+/', ' ', $mdp));
+        $mdp = str_replace(' ', '', $mdp);
+    }
+    // database
+    if(strpos($line, 'DB_DATABASE') !== false) {
+        list(, $dbname) = explode("=", $line);
+        $dbname = trim(preg_replace('/\s+/', ' ', $dbname));
+        $dbname = str_replace(' ', '', $dbname);
+    }
+    // hostname
+    if(strpos($line, 'DB_HOST') !== false) {
+        list(, $hostname) = explode("=", $line);
+        $hostname = trim(preg_replace('/\s+/', ' ', $hostname));
+        $hostname = str_replace(' ', '', $hostname);
+    }
+}
+//echo $hostname.",".$user.",".$mdp.",".$dbname."<br>";
+// Create connection
+$conn = mysqli_connect($hostname, $user, $mdp,$dbname);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+mysqli_query($conn,"set names 'utf8'");
+$sqlvh = "SELECT id,name,prenom,civilite,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM intervenants WHERE dossier=".$iddossier." ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 36)";
+
+    $resultvh = $conn->query($sqlvh);
+    if ($resultvh->num_rows > 0) {
+
+        $array_prest = array();
+        while($rowvh = $resultvh->fetch_assoc()) {
+            $array_prest[] = array('id' => $rowvh["id"],'name' => $rowvh["name"],'prenom' => $rowvh["id"],'civilite' => $rowvh["civilite"]);
+        } 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>isq2qntiwti7l6gjvbvp2ptrlkw2og25_PEC_consultation+</title>
@@ -188,11 +239,19 @@ if (isset($_GET['idtaggop']))
 <body>
 <form id="formchamps">
     <input name="pre_dateheure" type="hidden" value="<?php if(isset ($pre_dateheure)) echo $pre_dateheure; ?>"> </input>
+<input name="idtaggop" type="hidden" value="<?php if(isset ($idtaggop)) echo $idtaggop; ?>"></input>
 <p><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+<p class=rvps1><span class=rvts2>
+<input type="text" list="inter__medecin" name="inter__medecin"  value="<?php  if(isset ($inter__medecin)) echo $inter__medecin; ?>" />
+        <datalist id="inter__medecin">
+            <?php
+foreach ($array_prest as $prest) {
+    echo "<option value='".$prest['civilite']." ".$prest['prenom']." ".$prest['name']."' >".$prest['civilite']." ".$prest['prenom']." ".$prest['name']."</option>";}
+?>
+</span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps2><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
 <p class=rvps3><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts2>Sousse le <input name="date_heure" type="text" value="<?php if(isset ($date_heure)) echo $date_heure; ?>"></input></span></p>
@@ -205,7 +264,7 @@ if (isset($_GET['idtaggop']))
 <p><span class=rvts2>* </span><span class=rvts7>Notre réf. </span><span class=rvts2>: <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input> </span></p></span></p>
 <p class=rvps5><span class=rvts5>Montant maximal de prise en charge (TND)</span><span class=rvts6>:&nbsp;</span><span class=rvts9> </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_numerique" placeholder="Montant maximal"  value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input></span><span class=rvts9>&nbsp;&nbsp;&nbsp; </span><span class=rvts5>Toutes lettres</span><span class=rvts6> : <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant en toutes lettres"  value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars</span></p>
 <p><span class=rvts8><br></span></p>
-<p><span class=rvts2>Nous soussignés, Najda Assistance, nous engageons à prendre en charge, pour le compte de notre client société d</span><span class=rvts9>’</span><span class=rvts2>assistance</span><span class=rvts7>, </span><span class=rvts10>les frais relatifs à la consultation/visite du</span><span class=rvts7><input name="CL_date_heure_visite" placeholder="Date Heure Visite" value="<?php if(isset ($CL_date_heure_visite)) echo $CL_date_heure_visite; ?>"></input></span><span class=rvts2> à votre cabinet (si visite, <input name="CL_adresse" placeholder="Adresse" value="<?php if(isset ($CL_adresse)) echo $CL_adresse ?>"></input>) pour le patient nommé ci-dessus et pour le montant susmentionné.</span></p>
+<p><span class=rvts2>Nous soussignés, Najda Assistance, nous engageons à prendre en charge, pour le compte de notre client société d</span><span class=rvts9>’</span><span class=rvts2>assistance</span><span class=rvts7>, </span><span class=rvts10>les frais relatifs à la consultation/visite du </span><span class=rvts7><input name="CL_date_heure_visite" placeholder="Date Heure Visite" value="<?php if(isset ($CL_date_heure_visite)) echo $CL_date_heure_visite; ?>"></input></span><span class=rvts2> à votre cabinet (si visite, <input name="CL_adresse" placeholder="Adresse" value="<?php if(isset ($CL_adresse)) echo $CL_adresse ?>"></input>) pour le patient nommé ci-dessus et pour le montant susmentionné.</span></p>
 <p><span class=rvts2><br></span></p>
 <p><span class=rvts2>Merci de bien vouloir nous adresser votre note d</span><span class=rvts9>’</span><span class=rvts2>honoraires par voie postale dans les 15 jours max après réalisation de la consultation/visite, accompagnée d</span><span class=rvts9>’</span><span class=rvts2>une copie de la présente prise en charge à notre adresse ci-dessus en entête.</span></p>
 <p><span class=rvts2><br></span></p>
@@ -237,4 +296,9 @@ if (isset($_GET['idtaggop']))
 		}//fin de keypressHandler
 </script>
 </body></html>
+<?php
+        }
+else
+{ echo "<h3>Il n'y a pas un intervenant valide pour ce type de document sous le dossier!</h3>";}
+?>
 

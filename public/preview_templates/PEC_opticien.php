@@ -1,4 +1,5 @@
 <?php
+if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['prest__optic'])) {$prest__optic=$_GET['prest__optic'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
@@ -16,6 +17,58 @@ if (isset($_GET['idtaggop']))
     {
         $idtaggop=$_GET['idtaggop']; 
     }
+// Create connection
+// read info from env file
+$lines_array = file("../../.env");
+
+foreach($lines_array as $line) {
+    // username
+    if(strpos($line, 'DB_USERNAME') !== false) {
+        list(, $user) = explode("=", $line);
+        $user = trim(preg_replace('/\s+/', ' ', $user));
+        $user = str_replace(' ', '', $user);
+    }
+    // password
+    if(strpos($line, 'DB_PASSWORD') !== false) {
+        list(, $mdp) = explode("=", $line);
+        $mdp = trim(preg_replace('/\s+/', ' ', $mdp));
+        $mdp = str_replace(' ', '', $mdp);
+    }
+    // database
+    if(strpos($line, 'DB_DATABASE') !== false) {
+        list(, $dbname) = explode("=", $line);
+        $dbname = trim(preg_replace('/\s+/', ' ', $dbname));
+        $dbname = str_replace(' ', '', $dbname);
+    }
+    // hostname
+    if(strpos($line, 'DB_HOST') !== false) {
+        list(, $hostname) = explode("=", $line);
+        $hostname = trim(preg_replace('/\s+/', ' ', $hostname));
+        $hostname = str_replace(' ', '', $hostname);
+    }
+}
+//echo $hostname.",".$user.",".$mdp.",".$dbname."<br>";
+// Create connection
+$conn = mysqli_connect($hostname, $user, $mdp,$dbname);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+mysqli_query($conn,"set names 'utf8'");
+
+// recuperation des prestataires HOTEL ayant prestations dans dossier
+
+$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier.") AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 60)"; 
+
+
+    $resultvh = $conn->query($sqlvh);
+    if ($resultvh->num_rows > 0) {
+
+        $array_prest = array();
+        while($rowvh = $resultvh->fetch_assoc()) {
+            $array_prest[] = array('id' => $rowvh["id"],'name' => $rowvh["name"]  );
+        }
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -180,10 +233,20 @@ if (isset($_GET['idtaggop']))
 <body>
 <form id="formchamps">
     <input name="pre_dateheure" type="hidden" value="<?php if(isset ($pre_dateheure)) echo $pre_dateheure; ?>"> </input>
+<input name="idtaggop" type="hidden" value="<?php if(isset ($idtaggop)) echo $idtaggop; ?>"></input>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
-<p class=rvps1><span class=rvts2><input name="prest__optic" style="width:300px" placeholder="Prestataire opticien" value="<?php if(isset ($prest__optic)) echo $prest__optic; ?>"></input></span></p>
+<p class=rvps1><span class=rvts2> <!--<input name="prest__optic" style="width:300px" placeholder="Prestataire opticien" value="<?php if(isset ($prest__optic)) echo $prest__optic; ?>"></input> -->
+<input type="text" list="prest__optic" name="prest__optic" value="<?php  if(isset ($prest__optic)) echo $prest__optic;?>" />
+        <datalist id="prest__optic">
+            <?php
+foreach ($array_prest as $prest) {
+    
+    echo "<option value='".$prest['name']."' >".$prest['name']."</option>";
+}
+?>
+</span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps2><span class=rvts1>Sousse le <input name="date_heure" type="text" value="<?php if(isset ($date_heure)) echo $date_heure; ?>"></input></span></p>
@@ -231,3 +294,8 @@ if (isset($_GET['idtaggop']))
         }//fin de keypressHandler
 </script>
 </body></html>
+<?php
+        }
+else
+{ echo "<h3>Il n'y a pas un prestataire valide pour ce type de document sous le dossier!</h3>";}
+?>

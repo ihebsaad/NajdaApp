@@ -1,4 +1,7 @@
 <?php
+
+if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
+if (isset($_GET['prest__location_voiture'])) {$prest__location_voiture=$_GET['prest__location_voiture'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; $subscriber_name2=$_GET['subscriber_name'];  }
@@ -17,6 +20,57 @@ if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['agent__lastname'])) {$agent__lastname=$_GET['agent__lastname']; }
 if (isset($_GET['agent__signature'])) {$agent__signature=$_GET['agent__signature']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
+// Create connection
+// read info from env file
+$lines_array = file("../../.env");
+
+foreach($lines_array as $line) {
+    // username
+    if(strpos($line, 'DB_USERNAME') !== false) {
+        list(, $user) = explode("=", $line);
+        $user = trim(preg_replace('/\s+/', ' ', $user));
+        $user = str_replace(' ', '', $user);
+    }
+    // password
+    if(strpos($line, 'DB_PASSWORD') !== false) {
+        list(, $mdp) = explode("=", $line);
+        $mdp = trim(preg_replace('/\s+/', ' ', $mdp));
+        $mdp = str_replace(' ', '', $mdp);
+    }
+    // database
+    if(strpos($line, 'DB_DATABASE') !== false) {
+        list(, $dbname) = explode("=", $line);
+        $dbname = trim(preg_replace('/\s+/', ' ', $dbname));
+        $dbname = str_replace(' ', '', $dbname);
+    }
+    // hostname
+    if(strpos($line, 'DB_HOST') !== false) {
+        list(, $hostname) = explode("=", $line);
+        $hostname = trim(preg_replace('/\s+/', ' ', $hostname));
+        $hostname = str_replace(' ', '', $hostname);
+    }
+}
+//echo $hostname.",".$user.",".$mdp.",".$dbname."<br>";
+// Create connection
+$conn = mysqli_connect($hostname, $user, $mdp,$dbname);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+mysqli_query($conn,"set names 'utf8'");
+
+// recuperation des prestataires HOTEL ayant prestations dans dossier
+
+$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier.") AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 17)"; 
+
+    $resultvh = $conn->query($sqlvh);
+    if ($resultvh->num_rows > 0) {
+
+        $array_prest = array();
+        while($rowvh = $resultvh->fetch_assoc()) {
+            $array_prest[] = array('id' => $rowvh["id"],'name' => $rowvh["name"]  );
+        } 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>0w4wsrxpm0zuxc4sv6kwvhx97h9dw2n5_PEC_location_VAT_a_Prest</title>
@@ -261,7 +315,16 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p><span class=rvts1><br></span></p>
 <p><span class=rvts1><br></span></p>
 <p><span class=rvts1><br></span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+<p class=rvps1><span class=rvts2>
+<input type="text" list="prest__location_voiture" name="prest__location_voiture" value="<?php  if(isset ($prest__location_voiture)) echo $prest__location_voiture;?>"  />
+        <datalist id="prest__location_voiture">
+            <?php
+foreach ($array_prest as $prest) {
+    
+    echo "<option value='".$prest['name']."' >".$prest['name']."</option>";
+}
+?>
+</span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps2><span class=rvts3><br></span></p>
 <p class=rvps2><span class=rvts3><br></span></p>
@@ -274,12 +337,12 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 <p><span class=rvts6>Prénom :<input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> </span></p>
 <p><span class=rvts6>Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input></span></p>
 <p class=rvps6><span class=rvts9>Téléphone assuré :</span><span class=rvts8><input name="subscriber_phone_cell"id="subscriber_phone_cell" placeholder="num de téléphone du l'abonnée"  value="<?php if(isset ($subscriber_phone_cell)) echo $subscriber_phone_cell; ?>"></input></span></p>
-<p class=rvps6><span class=rvts9>Date début de location: <input type="datetime-local" name="CL_date_debut_location" placeholder="Date Debut Location" value="<?php if(isset ($CL_date_debut_location)) echo $CL_date_debut_location; ?>"></input>RDV avec l</span><span class=rvts10>’</span><span class=rvts9>assuré: <input name="CL_heure" placeholder="Heure" value="<?php if(isset ($CL_heure)) echo $CL_heure; ?>"></input></span></p>
-<p class=rvps6><span class=rvts9>Date fin de location:  <input type="datetime-local" name="CL_date_fin_location" placeholder="Date Fin Location" value="<?php if(isset ($CL_date_fin_location)) echo $CL_date_fin_location; ?>"></input></span></p>
+<p class=rvps6><span class=rvts9>Date début de location:<input type="datetime-local" name="CL_date_debut_location" placeholder="Date Debut Location" value="<?php if(isset ($CL_date_debut_location)) echo $CL_date_debut_location; ?>" onKeyUp=" calculduree()"></input></span></p>RDV avec l</span><span class=rvts10>’</span><span class=rvts9>assuré: <input name="CL_heure" placeholder="Heure" value="<?php if(isset ($CL_heure)) echo $CL_heure; ?>"></input></span></p>
+<p class=rvps6><span class=rvts9>Date fin de location: <input type="datetime-local" name="CL_date_fin_location"  id="CL_date_fin_location" placeholder="Date Fin Location" value="<?php if(isset ($CL_date_fin_location)) echo $CL_date_fin_location; ?>" onKeyUp=" calculduree()"></input></span></p>
 <p class=rvps6><span class=rvts9>Durée de la location :</span><span class=rvts10> </span><span class=rvts11><input name="CL_duree_location"  id="CL_duree_location" placeholder="Duree Location" value="<?php if(isset ($CL_duree_location)) echo $CL_duree_location; ?>"  onchange=" keyUpHandler(this)"></input></span></p>
 <p class=rvps6><span class=rvts9>Adresse de livraison :  <input name="CL_adresse_livraison" placeholder="Adresse Livraison" value="<?php if(isset ($CL_adresse_livraison)) echo $CL_adresse_livraison; ?>"></input> </span></p>
 <p class=rvps6><span class=rvts9>Type véhicule : <input name="CL_categorie" placeholder="Categorie" value="<?php if(isset ($CL_categorie)) echo $CL_categorie; ?>"></input></span></p>
-<p class=rvps6><span class=rvts9>Coût de location journalier : <input name="CL_cout_location" placeholder="Cout Location" value="<?php if(isset ($CL_cout_location)) echo $CL_cout_location; ?>"></input></span></p>
+<p class=rvps6><span class=rvts9>Coût de location journalier : <input name="CL_cout_location" id="CL_cout_location" placeholder="Cout Location" value="<?php if(isset ($CL_cout_location)) echo $CL_cout_location; ?>"  onchange=" keyUpHandler(this)" onKeyUp=" keyUpHandler(this) " ></input></span></p>
 <p class=rvps6><span class=rvts9>Coût total : </span><span  style="display:inline-block; "><input name="CL_cout_total" id="CL_cout_total" placeholder="Cout total Location" value="<?php if(isset ($CL_cout_total)) echo $CL_cout_total; ?>" onKeyUp=" montantverif(this) " ></input></span></p>
 <p class=rvps5><span class=rvts13><br></span></p>
 <p class=rvps7><span class=rvts13>Suite</span><span class=rvts14> </span><span class=rvts13>à</span><span class=rvts14> </span><span class=rvts13>notre</span><span class=rvts14> </span><span class=rvts13>entretien</span><span class=rvts14> </span><span class=rvts13>téléphonique,</span><span class=rvts14> </span><span class=rvts13>nous</span><span class=rvts14> </span><span class=rvts13>vous</span><span class=rvts14> </span><span class=rvts13>confirmons</span><span class=rvts14> </span><span class=rvts13>la</span><span class=rvts14> </span><span class=rvts13>prise</span><span class=rvts14> </span><span class=rvts13>en</span><span class=rvts14> </span><span class=rvts13>charge</span><span class=rvts14> </span><span class=rvts13>des</span><span class=rvts14> </span><span class=rvts13>frais</span><span class=rvts14> </span><span class=rvts13>de</span><span class=rvts14> </span><span class=rvts13>location</span><span class=rvts14> </span><span class=rvts13>d</span><span class=rvts15>’</span><span class=rvts13>une</span><span class=rvts14> </span><span class=rvts13>voiture</span><span class=rvts14> </span><span class=rvts13>tel</span><span class=rvts14> </span><span class=rvts13>que</span><span class=rvts14> </span><span class=rvts13>spécifié</span><span class=rvts14> </span><span class=rvts13>ci-dessus. </span></p>
@@ -345,4 +408,9 @@ if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 
 </script>
 </body></html>
+<?php
+        }
+else
+{ echo "<h3>Il n'y a pas un prestataire valide pour ce type de document sous le dossier!</h3>";}
+?>
 

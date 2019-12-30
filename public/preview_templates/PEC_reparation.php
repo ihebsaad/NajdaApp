@@ -1,4 +1,5 @@
 <?php
+if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['prest__garage'])) {$prest__garage=$_GET['prest__garage'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['CL_facture_devis'])) {$CL_facture_devis=$_GET['CL_facture_devis'];}
@@ -18,6 +19,57 @@ if (isset($_GET['idtaggop']))
     {
         $idtaggop=$_GET['idtaggop']; 
     }
+// Create connection
+// read info from env file
+$lines_array = file("../../.env");
+
+foreach($lines_array as $line) {
+    // username
+    if(strpos($line, 'DB_USERNAME') !== false) {
+        list(, $user) = explode("=", $line);
+        $user = trim(preg_replace('/\s+/', ' ', $user));
+        $user = str_replace(' ', '', $user);
+    }
+    // password
+    if(strpos($line, 'DB_PASSWORD') !== false) {
+        list(, $mdp) = explode("=", $line);
+        $mdp = trim(preg_replace('/\s+/', ' ', $mdp));
+        $mdp = str_replace(' ', '', $mdp);
+    }
+    // database
+    if(strpos($line, 'DB_DATABASE') !== false) {
+        list(, $dbname) = explode("=", $line);
+        $dbname = trim(preg_replace('/\s+/', ' ', $dbname));
+        $dbname = str_replace(' ', '', $dbname);
+    }
+    // hostname
+    if(strpos($line, 'DB_HOST') !== false) {
+        list(, $hostname) = explode("=", $line);
+        $hostname = trim(preg_replace('/\s+/', ' ', $hostname));
+        $hostname = str_replace(' ', '', $hostname);
+    }
+}
+//echo $hostname.",".$user.",".$mdp.",".$dbname."<br>";
+// Create connection
+$conn = mysqli_connect($hostname, $user, $mdp,$dbname);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+mysqli_query($conn,"set names 'utf8'");
+
+// recuperation des prestataires HOTEL ayant prestations dans dossier
+
+$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
+
+    $resultvh = $conn->query($sqlvh);
+    if ($resultvh->num_rows > 0) {
+
+        $array_prest = array();
+        while($rowvh = $resultvh->fetch_assoc()) {
+            $array_prest[] = array('id' => $rowvh["id"],'name' => $rowvh["name"]  );
+        }
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -257,7 +309,16 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
-<p class=rvps1><span class=rvts2><input name="prest__garage" style="width:300px" placeholder="Prestataire Garage" value="<?php if(isset ($prest__garage)) echo $prest__garage; ?>"></input></span></p>
+<p class=rvps1><span class=rvts2>  <!--<input name="prest__garage" style="width:300px" placeholder="Prestataire Garage" value="<?php if(isset ($prest__garage)) echo $prest__garage; ?>"></input>-->
+<input type="text" list="prest__garage" name="prest__garage" value="<?php if(isset ($prest__garage)) echo $prest__garage; ?>" />
+        <datalist id="prest__garage">
+            <?php
+foreach ($array_prest as $prest) {
+    
+    echo "<option value='".$prest['name']."' >".$prest['name']."</option>";
+}
+?>
+</span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
     <p class=rvps1><span class=rvts2>Sousse <input name="date_heure" type="text" value="<?php if(isset ($date_heure)) echo $date_heure; ?>"></input></span></p>
@@ -297,4 +358,9 @@ p,ul,ol /* Paragraph Style */
 <p><span class=rvts23><br></span></p>
 <p><span class=rvts23><br></span></p>
 </body></html>
+<?php
+        }
+else
+{ echo "<h3>Il n'y a pas un prestataire valide pour ce type de document sous le dossier!</h3>";}
+?>
 

@@ -1,11 +1,16 @@
 <?php
+if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
+if (isset($_GET['prest__transitaire'])) {$prest__transitaire=$_GET['prest__transitaire'];}
+if (isset($_GET['inter__remor'])) {$inter__remor=$_GET['inter__remor'];}
+
+if (isset($_GET['prest__transitaire'])) {$prest__transitaire=$_GET['prest__transitaire'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];$subscriber_name2=$_GET['subscriber_name']; }
 if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname'];$subscriber_lastname2=$_GET['subscriber_lastname']; }
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
-if (isset($_GET['vehicule_marque'])) {$vehicule_type=$_GET['vehicule_marque'];}
+if (isset($_GET['vehicule_marque'])) {$vehicule_marque=$_GET['vehicule_marque'];}
 if (isset($_GET['vehicule_immatriculation'])) {$vehicule_immatriculation=$_GET['vehicule_immatriculation'];}
 if (isset($_GET['subscriber_phone_cell'])) {$subscriber_phone_cell=$_GET['subscriber_phone_cell'];}
 if (isset($_GET['CL_phone'])) {$CL_phone=$_GET['CL_phone'];}
@@ -23,7 +28,68 @@ if (isset($_GET['idtaggop']))
     {
         $idtaggop=$_GET['idtaggop']; 
     }
-?>
+// Create connection
+// read info from env file
+$lines_array = file("../../.env");
+
+foreach($lines_array as $line) {
+    // username
+    if(strpos($line, 'DB_USERNAME') !== false) {
+        list(, $user) = explode("=", $line);
+        $user = trim(preg_replace('/\s+/', ' ', $user));
+        $user = str_replace(' ', '', $user);
+    }
+    // password
+    if(strpos($line, 'DB_PASSWORD') !== false) {
+        list(, $mdp) = explode("=", $line);
+        $mdp = trim(preg_replace('/\s+/', ' ', $mdp));
+        $mdp = str_replace(' ', '', $mdp);
+    }
+    // database
+    if(strpos($line, 'DB_DATABASE') !== false) {
+        list(, $dbname) = explode("=", $line);
+        $dbname = trim(preg_replace('/\s+/', ' ', $dbname));
+        $dbname = str_replace(' ', '', $dbname);
+    }
+    // hostname
+    if(strpos($line, 'DB_HOST') !== false) {
+        list(, $hostname) = explode("=", $line);
+        $hostname = trim(preg_replace('/\s+/', ' ', $hostname));
+        $hostname = str_replace(' ', '', $hostname);
+    }
+}
+//echo $hostname.",".$user.",".$mdp.",".$dbname."<br>";
+// Create connection
+$conn = mysqli_connect($hostname, $user, $mdp,$dbname);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+mysqli_query($conn,"set names 'utf8'");
+
+// recuperation des prestataires transitaire ayant prestations dans dossier
+
+$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 40)";
+
+    $resultvh = $conn->query($sqlvh);
+    if ($resultvh->num_rows > 0) {
+
+        $array_prest = array();
+        while($rowvh = $resultvh->fetch_assoc()) {
+            $array_prest[] = array('id' => $rowvh["id"],'name' => $rowvh["name"]  );
+        }
+
+$sqlvha = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 1)";
+
+    $resultvha = $conn->query($sqlvha);
+    if ($resultvha->num_rows > 0) {
+
+        $array_presta = array();
+        while($rowvha = $resultvha->fetch_assoc()) {
+            //$array_presta[] = array('prenom' => $rowvha["prenom"],'nom' => $rowvha["nom"]  );
+            $array_presta[] = array('id' => $rowvha["id"],'name' => $rowvha["name"]  );
+        } }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>aktbe5amb5r5zsea5gbc4ywhyj8423vq_PEC_Cargo+</title>
@@ -255,11 +321,21 @@ if (isset($_GET['idtaggop']))
 <body>
 <form id="formchamps">
     <input name="pre_dateheure" type="hidden" value="<?php if(isset ($pre_dateheure)) echo $pre_dateheure; ?>"> </input>
+<input name="idtaggop" type="hidden" value="<?php if(isset ($idtaggop)) echo $idtaggop; ?>"></input>
 <p><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+<p class=rvps1><span class=rvts2>
+<input type="text" list="prest__transitaire" name="prest__transitaire"  value="<?php if(isset ($prest__transitaire)) echo $prest__transitaire; ?>" />
+        <datalist id="prest__transitaire">
+            <?php
+foreach ($array_prest as $prest) {
+    
+    echo "<option value='".$prest['name']."' >".$prest['name']."</option>";
+}
+?>
+</span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <h1 class=rvps2><span class=rvts0><span class=rvts3><br></span></span></h1>
@@ -281,7 +357,15 @@ if (isset($_GET['idtaggop']))
 <p class=rvps5><span class=rvts13><br></span></p>
 <p class=rvps5><span class=rvts9>Suite à notre entretien téléphonique, nous vous confirmons la prise en charge du rapatriement en <input name="CL_type_contenneur" placeholder="Type Contenneur" value="<?php if(isset ($CL_type_contenneur)) echo $CL_type_contenneur; ?>"></input> sur le navire <input name="CL_navire" placeholder="Navire" value="<?php if(isset ($CL_navire)) echo $CL_navire; ?>"></input>qui quittera le port de Rades tel que spécifié ci-dessus.</span></p>
 <p class=rvps7><span class=rvts9><br></span></p>
-<p class=rvps1><span class=rvts7>Comme convenu, le véhicule sera remorqué par notre prestataire </span><span class=rvts14>remorqueur_intervenant_dossier</span><span class=rvts7> vers le port de Rades le « </span><span class=rvts14>date_remorquage_OM_dossier</span><span class=rvts7> ». </span></p>
+<p class=rvps1><span class=rvts7>Comme convenu, le véhicule sera remorqué par notre prestataire </span><span class=rvts14>
+<input type="text" list="inter__remor" name="inter__remor"  value="<?php if(isset ($inter__remor)) echo $inter__remor; ?>" />
+        <datalist id="inter__remor">
+            <?php
+foreach ($array_presta as $presta) {
+    
+    echo "<option value='".$presta['name']."' >".$presta['name']."</option>"; }
+?>
+</span><span class=rvts7> vers le port de Rades le « </span><span class=rvts14>r</span><span class=rvts7> ». </span></p>
 <p class=rvps7><span class=rvts8><br></span></p>
 <p class=rvps5><span class=rvts9>Merci de nous adresser votre facture originale dès que possible (dans un délai max de 30 jours) à l</span><span class=rvts15>’</span><span class=rvts9>adresse ci-dessus, en mentionnant notre référence de dossier.</span></p>
 <p class=rvps8><span class=rvts16>Observations</span><span class=rvts17> :&nbsp; </span><span class=rvts9><input name="CL_text" placeholder="text" value="<?php if(isset ($CL_text)) echo $CL_text; ?>"></input></span></p>
@@ -301,3 +385,8 @@ if (isset($_GET['idtaggop']))
 <p><span class=rvts7>Plateau d</span><span class=rvts25>’</span><span class=rvts7>assistance technique</span></p>
 <p class=rvps1><span class=rvts7>« courrier électronique, sans signature »</span></p>
 </body></html>
+<?php
+        }
+else
+{ echo "<h3>Il n'y a pas un prestataire valide pour ce type de document sous le dossier!</h3>";}
+?>

@@ -1,5 +1,7 @@
 <?php
+if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
+if (isset($_GET['prest__structure'])) {$prest__structure=$_GET['prest__structure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; $subscriber_name2=$_GET['subscriber_name'];}
 if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; $subscriber_lastname2=$_GET['subscriber_lastname'];}
@@ -9,10 +11,12 @@ if (isset($_GET['franchise'])) {$franchise=$_GET['franchise']; }
 if (isset($_GET['CL_text_montant'])) {$CL_text_montant=$_GET['CL_text_montant']; }
 if (isset($_GET['montant_franchise'])) {$montant_franchise=$_GET['montant_franchise']; }
 if (isset($_GET['doc_dossier'])) {$doc_dossier=$_GET['doc_dossier']; }
-if (isset($_GET['CB_charge'])) {$CB_charge=$_GET['CB_charge']; }
-if (isset($_GET['CL_charge'])) {$CL_charge=$_GET['CL_charge']; }
 if (isset($_GET['CL_montant_numerique'])) {$CL_montant_numerique=$_GET['CL_montant_numerique'];}
 if (isset($_GET['CL_montant_toutes_lettres'])) {$CL_montant_toutes_lettres=$_GET['CL_montant_toutes_lettres'];}
+if (isset($_GET['CL_attention'])) {$CL_attention=$_GET['CL_attention'];}
+if (isset($_GET['nom_doc_sig'])) {$nom_doc_sig=$_GET['nom_doc_sig']; }
+if (isset($_GET['CL_nom_doc_sig'])) {$CL_nom_doc_sig=$_GET['CL_nom_doc_sig']; }
+if (isset($_GET['CL_doc_sign'])) {$CL_doc_sig=$_GET['CL_doc_sign']; }
 if (isset($_GET['CL_text'])) {$CL_text=$_GET['CL_text'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['agent__lastname'])) {$agent__lastname=$_GET['agent__lastname']; }
@@ -23,14 +27,46 @@ if (isset($_GET['idtaggop']))
     {
         $idtaggop=$_GET['idtaggop']; 
     }
-	//Create connection
-$conn = mysqli_connect("localhost","root","","najdadb");
+// Create connection
+// read info from env file
+$lines_array = file("../../.env");
+
+foreach($lines_array as $line) {
+    // username
+    if(strpos($line, 'DB_USERNAME') !== false) {
+        list(, $user) = explode("=", $line);
+        $user = trim(preg_replace('/\s+/', ' ', $user));
+        $user = str_replace(' ', '', $user);
+    }
+    // password
+    if(strpos($line, 'DB_PASSWORD') !== false) {
+        list(, $mdp) = explode("=", $line);
+        $mdp = trim(preg_replace('/\s+/', ' ', $mdp));
+        $mdp = str_replace(' ', '', $mdp);
+    }
+    // database
+    if(strpos($line, 'DB_DATABASE') !== false) {
+        list(, $dbname) = explode("=", $line);
+        $dbname = trim(preg_replace('/\s+/', ' ', $dbname));
+        $dbname = str_replace(' ', '', $dbname);
+    }
+    // hostname
+    if(strpos($line, 'DB_HOST') !== false) {
+        list(, $hostname) = explode("=", $line);
+        $hostname = trim(preg_replace('/\s+/', ' ', $hostname));
+        $hostname = str_replace(' ', '', $hostname);
+    }
+}
+//echo $hostname.",".$user.",".$mdp.",".$dbname."<br>";
+// Create connection
+$conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 
 // Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
- mysqli_query($conn,"set names 'utf8'");
+mysqli_query($conn,"set names 'utf8'");
+
   $sqlvh = "SELECT dossier,doc FROM dossiers_docs ";
 	$resultvh = $conn->query($sqlvh);
 	if ($resultvh->num_rows > 0) {
@@ -49,7 +85,21 @@ if (!$conn) {
 	    $array_dossier = array();
 	    while($rowvhq = $resultvhq->fetch_assoc()) {
 	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
-	        $array_dossier[] = array('id' => $rowvhq["id"],'reference_medic' => $rowvhq["reference_medic"]);
+	        $array_dossier[] = array('id' => $rowvhq["id"],'reference_medic' => trim($rowvhq["reference_medic"]));
+			
+			
+	    }
+	
+	    //print_r($array_prest);
+		}
+		 $sqlvhqa = "SELECT id,nom FROM docs";
+	$resultvhqa = $conn->query($sqlvhqa);
+	if ($resultvhqa->num_rows > 0) {
+	    // output data of each row
+	    $array_docssignes = array();
+	    while($rowvhqa = $resultvhqa->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_docssignes[] = array('id' => $rowvhqa["id"],'nom' => $rowvhqa["nom"]);
 			
 			
 	    }
@@ -57,14 +107,38 @@ if (!$conn) {
 	    //print_r($array_prest);
 		}
 	foreach ($array_dossier as $dossier) 
-	{if ($dossier['reference_medic']==$reference_medic ){
+	{if (trim($dossier['reference_medic'])==$reference_medic ){
 		$id=$dossier['id'];
 	}}	
+$sign = 'non';
+	foreach ($array_docs as $doc) 
+{     if ( $id==$doc['dossier'] )
+		{ $sign = 'oui'; 
+	    } 
+	
+	} 
+	foreach ($array_docs as $doc) 
+{     if ( $id==$doc['dossier'] )
+		{  $iddoc=$doc['doc'];} } 
+	
+$sqlstruc = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id  IN (8,9))";
+
+    $resultstruc = $conn->query($sqlstruc);
+    if ($resultstruc->num_rows > 0) {
+
+        $array_struc = array();
+        while($rowstruc = $resultstruc->fetch_assoc()) {
+            $array_struc[] = array('id' => $rowstruc["id"],'name' => $rowstruc["name"]  );
+        }	 
+	
+	
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>PEC_frais_medicaux</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="Content-Style-Type" content="text/css">
+    
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <style type="text/css"><!--
         body {
             margin: 95px 95px 95px 95px;
@@ -408,7 +482,16 @@ if (!$conn) {
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+<p class=rvps1><span class=rvts2>
+<input type="text" list="prest__structure" name="prest__structure"  value="<?php  if(isset ($prest__structure)) echo $prest__structure; ?>" />
+        <datalist id="prest__structure">
+            <?php
+foreach ($array_struc as $struc) {
+    
+    echo "<option value='".$struc['name']."' >".$struc['name']."</option>";
+}
+?>
+</span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps2><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts3>Sousse le <input name="date_heure" type="text" value="<?php if(isset ($date_heure)) echo $date_heure; ?>"></input> </span></p>
@@ -434,40 +517,55 @@ if (!$conn) {
 
 <?php } }?>
 
-<p class=rvps5><span class=rvts6>Document à signer: </span><span class=rvts7> <input name="doc_dossier" placeholder=""  value="
-<?php 
-foreach ($array_docs as $doc) 
-{if ( $id==$doc['dossier'] )
-		{echo 'oui'; } 
-	
-	else  {echo  'non';}}  ?> "></input></span></p>
+<p class=rvps5><span class=rvts6>Document à signer: </span><span class=rvts7> <input name="doc_dossier" id="doc_dossier" placeholder=""  value="
+<?php  { if ($sign=== "oui")  {echo 'oui'; } else  {echo  'non';}}  ?> "></input></span></p>
 <p><span class=rvts10>&nbsp; </span></p>
 <p class=rvps5><span class=rvts11>Nous</span><span class=rvts12> </span><span class=rvts11>soussignés,</span><span class=rvts12> </span><span class=rvts11>Najda</span><span class=rvts12> </span><span class=rvts11>Assistance,</span><span class=rvts12> </span><span class=rvts11>nous</span><span class=rvts12> </span><span class=rvts11>engageons</span><span class=rvts12> </span><span class=rvts11>à</span><span class=rvts12> </span><span class=rvts11>prendre</span><span class=rvts12> </span><span class=rvts11>en</span><span class=rvts12> </span><span class=rvts11>charge,</span><span class=rvts12> </span><span class=rvts11>pour</span><span class=rvts12> </span><span class=rvts11>le</span><span class=rvts12> </span><span class=rvts11>compte</span><span class=rvts12> </span><span class=rvts11>de</span><span class=rvts12> </span><span class=rvts11>notre</span><span class=rvts12> </span><span class=rvts11>client</span><span class=rvts13>,</span><span class=rvts12> </span><span class=rvts11>les</span><span class=rvts12> </span><span class=rvts11>frais</span><span class=rvts12> </span><span class=rvts11>médicaux</span><span class=rvts12> </span><span class=rvts11>et</span><span class=rvts12> </span><span class=rvts11>d</span><span class=rvts14>’</span><span class=rvts11>hospitalisation</span><span class=rvts12> </span><span class=rvts11>du</span><span class=rvts12> </span><span class=rvts11>(de</span><span class=rvts12> </span><span class=rvts11>la) patient(e) ci-dessus mentionné(e)</span><span class=rvts15> </span><span class=rvts11>pour le</span><span class=rvts15> </span><span class=rvts11>montant maximal ci-dessus.</span></p>
 <p class=rvps8><span class=rvts11>Merci</span><span class=rvts15> </span><span class=rvts11>de</span><span class=rvts15> </span><span class=rvts11>nous</span><span class=rvts15> </span><span class=rvts11>adresser</span><span class=rvts15> </span><span class=rvts11>votre</span><span class=rvts15> </span><span class=rvts11>facture</span><span class=rvts15> </span><span class=rvts11>originale</span><span class=rvts15> </span><span class=rvts11>dès</span><span class=rvts15> </span><span class=rvts11>que</span><span class=rvts15> </span><span class=rvts11>possible</span><span class=rvts15> </span><span class=rvts11>(et</span><span class=rvts15> </span><span class=rvts11>au</span><span class=rvts15> </span><span class=rvts11>plus</span><span class=rvts15> </span><span class=rvts11>tard</span><span class=rvts15> </span><span class=rvts11>30</span><span class=rvts15> </span><span class=rvts11>jours</span><span class=rvts15> </span><span class=rvts11>après</span><span class=rvts15> </span><span class=rvts11>la</span><span class=rvts15> </span><span class=rvts11>sortie),</span><span class=rvts15> </span><span class=rvts16>accompagnée</span><span class=rvts17> </span><span class=rvts16>de</span><span class=rvts17> </span><span class=rvts16>tous</span><span class=rvts15> </span><span class=rvts16>les</span><span class=rvts15> </span><span class=rvts16>justificatifs</span><span class=rvts15> </span><span class=rvts11>(notamment</span><span class=rvts15> </span><span class=rvts11>articles</span><span class=rvts15> </span><span class=rvts11>de </span><span class=rvts18>pharmacie,</span><span class=rvts19> </span><span class=rvts18>laboratoire,</span><span class=rvts19> </span><span class=rvts18>notes</span><span class=rvts19> </span><span class=rvts18>d</span><span class=rvts20>’</span><span class=rvts18>honoraires,</span><span class=rvts19> </span><span class=rvts18>rapport</span><span class=rvts19> </span><span class=rvts18>médical</span><span class=rvts19> </span><span class=rvts18>avec</span><span class=rvts19> </span><span class=rvts18>codification</span><span class=rvts19> </span><span class=rvts18>précise</span><span class=rvts19> </span><span class=rvts18>des</span><span class=rvts19> </span><span class=rvts18>actes</span><span class=rvts19> </span><span class=rvts18>pratiqués…),</span><span class=rvts19> </span><span class=rvts18>à</span><span class=rvts19> </span><span class=rvts18>notre adresse</span><span class=rvts19> </span><span class=rvts18>ci-dessus,</span><span class=rvts19> </span><span class=rvts18>en</span><span class=rvts19> </span><span class=rvts18>mentionnant</span><span class=rvts19> </span><span class=rvts18>notre</span><span class=rvts19> </span><span class=rvts18>référence</span><span class=rvts19> </span><span class=rvts21>de dossier</span><span class=rvts18>.</span></p>
-<p class=rvps9><span class=rvts13><br></span></p>
-<?php if (isset($CB_charge)) { if (($CB_charge === "oui")||($CB_charge === "on")) { $CL_charge = true; ?>
-<input type="checkbox" name="CB_charge" id="CB_charge" value="oui" checked>	
-<?php } else {  ?>
-<input type="checkbox" name="CB_charge" id="CB_charge" >	
-<?php }} else { if (empty($CB_charge)) { ?>
-<input type="checkbox" name="CB_charge" id="CB_charge" >
-<?php } else { $CL_charge = true; ?>	
-<input type="checkbox" name="CB_charge" id="CB_charge" value="oui" checked>
-<?php }} ?>
-					<span style="font-family:'Times New Roman'; font-weight:bold">Attention</span><span style="font-family:'Times New Roman'; font-weight:bold">:</span><span style="font-family:'Times New Roman'; font-weight:bold"></span>
-<?php if (isset($CL_charge)) { ?>			
-<span id="CL_charge" style="display: inline-block;">
-<?php } else { ?>
-<span id="CL_charge" style="display: none;">
-<?php } ?>
-					<span style="font-family:'Times New Roman'; font-weight:bold">,&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">nom et </span><span style="font-family:'Times New Roman'; font-weight:bold">Cette prise en charge s’entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix
-</span>
-
-</span>
 <p class=rvps9><span class=rvts27><br></span></p>
-<p class=rvps9><span class=rvts7>Apparait si coché dans dossier « document à signer » . Sinon tout ce paragraphe n</span><span class=rvts28>’</span><span class=rvts7>apparait pas</span></p>
-<p><span class=rvts29>Attention</span><span class=rvts30> </span><span class=rvts31>:</span><span class=rvts30> </span><span class=rvts32>Cette</span><span class=rvts30> </span><span class=rvts32>prise</span><span class=rvts30> </span><span class=rvts32>en</span><span class=rvts30> </span><span class=rvts32>charge</span><span class=rvts30> </span><span class=rvts32>ne</span><span class=rvts30> </span><span class=rvts32>sera</span><span class=rvts30> </span><span class=rvts32>valable</span><span class=rvts30> </span><span class=rvts32>que</span><span class=rvts30> </span><span class=rvts32>si</span><span class=rvts30> </span><span class=rvts32>la</span><span class=rvts30> </span><span class=rvts32>facture</span><span class=rvts30> </span><span class=rvts32>nous</span><span class=rvts30> </span><span class=rvts32>parvient</span><span class=rvts30> </span><span class=rvts32>accompagnée</span><span class=rvts30> </span><span class=rvts32>de</span><span class=rvts30> </span><span class=rvts29>l</span><span class=rvts33>’</span><span class=rvts29>original</span><span class=rvts30> </span><span class=rvts32>de</span><span class=rvts30>&nbsp;</span><span class=rvts32> </span><span class=rvts34>document désigné dossier</span><span class=rvts32> </span><span class=rvts31>dûment</span><span class=rvts35> </span><span class=rvts31>complétée</span><span class=rvts30> </span><span class=rvts32>et</span><span class=rvts30> </span><span class=rvts32>signée</span><span class=rvts30> </span><span class=rvts32>par</span><span class=rvts30> </span><span class=rvts32>le</span><span class=rvts30> </span><span class=rvts32>(la) patient(e)</span></p>
+<?php
+{ if (isset($CL_attention))
+	{ if (($CL_attention === "oui")||($CL_attention === "on")) { 
+     $test='oui';
+	 ?>	
+		<input type="checkbox" name="CL_attention" id="CL_attention" checked value="oui">
+		
+		<?php } else { ?>
+		<input type="checkbox" name="CL_attention" id="CL_attention" checked value="">
+		
+<?php }} else { ?>
+<input type="checkbox" name="CL_attention" id="CL_attention" checked value="oui">
+
+<?php }
+} ?>
+
+<p class="rvps9" id ="pattention"><span class=rvts22>Attention</span><span class=rvts23> </span><span class=rvts24>:</span><span class=rvts23> </span><span class=rvts24>Cette</span><span class=rvts25> </span><span class=rvts24>prise</span><span class=rvts25> </span><span class=rvts24>en</span><span class=rvts23> </span><span class=rvts24>charge</span><span class=rvts25> </span><span class=rvts24>s</span><span class=rvts26>’</span><span class=rvts24>entend</span><span class=rvts25> </span><span class=rvts24>hors</span><span class=rvts25> </span><span class=rvts24>extra</span><span class=rvts25> </span><span class=rvts24>(y</span><span class=rvts25> </span><span class=rvts24>compris</span><span class=rvts25> </span><span class=rvts24>surclassement</span><span class=rvts23> </span><span class=rvts24>de</span><span class=rvts25> </span><span class=rvts24>chambre)</span><span class=rvts23> </span><span class=rvts24>et</span><span class=rvts23> </span><span class=rvts24>conformément</span><span class=rvts23> </span><span class=rvts24>à</span><span class=rvts25> </span><span class=rvts24>la</span><span class=rvts25> </span><span class=rvts24>nomenclature</span><span class=rvts25> </span><span class=rvts24>officielle</span><span class=rvts25> </span><span class=rvts24>des</span><span class=rvts25> </span><span class=rvts24>actes médicaux</span><span class=rvts25> </span><span class=rvts24>et</span><span class=rvts23> </span><span class=rvts24>à</span><span class=rvts25> </span><span class=rvts24>votre</span><span class=rvts25> </span><span class=rvts24>liste</span><span class=rvts25> </span><span class=rvts24>de</span><span class=rvts25> </span><span class=rvts24>prix</span></p>
+<p class=rvps9><span class=rvts27><br></span></p>
+
+<?php
+{ 
+	if ($sign=== "oui") { ?>
+
+<p><span class=rvts29>Attention</span><span class=rvts30> </span><span class=rvts31>:</span><span class=rvts30> </span><span class=rvts32>Cette</span><span class=rvts30> </span><span class=rvts32>prise</span><span class=rvts30> </span><span class=rvts32>en</span><span class=rvts30> </span><span class=rvts32>charge</span><span class=rvts30> </span><span class=rvts32>ne</span><span class=rvts30> </span><span class=rvts32>sera</span><span class=rvts30> </span><span class=rvts32>valable</span><span class=rvts30> </span><span class=rvts32>que</span><span class=rvts30> </span><span class=rvts32>si</span><span class=rvts30> </span><span class=rvts32>la</span><span class=rvts30> </span><span class=rvts32>facture</span><span class=rvts30> </span><span class=rvts32>nous</span><span class=rvts30> </span><span class=rvts32>parvient</span><span class=rvts30> </span><span class=rvts32>accompagnée</span><span class=rvts30> </span><span class=rvts32>de</span><span class=rvts30> </span><span class=rvts29>l</span><span class=rvts33>’</span><span class=rvts29>original</span><span class=rvts30> </span><span class=rvts32>de</span><span class=rvts30>&nbsp;</span><span class=rvts32> </span><span class=rvts34><input name="CL_nom_doc_sig" id="CL_nom_doc_sig" placeholder=""  value="
+<?php  
+if(isset($CL_nom_doc_sig)) {echo $CL_nom_doc_sig;} 
+foreach ($array_docssignes as $docsigne) 
+{     if ( $iddoc==$docsigne['id'] )
+		{ echo $docsigne['nom']; 
+	      } else  {echo '';}}   ?> " ></input></span></span><span class=rvts32> </span><span class=rvts31>dûment</span><span class=rvts35> </span><span class=rvts31>complétée</span><span class=rvts30> </span><span class=rvts32>et</span><span class=rvts30> </span><span class=rvts32>signée</span><span class=rvts30> </span><span class=rvts32>par</span><span class=rvts30> </span><span class=rvts32>le</span><span class=rvts30> </span><span class=rvts32>(la) patient(e)</span></p>
 <p><span class=rvts32><br></span></p>
+<?php
+
+	} else { 
+?>
+<input name="CL_nom_doc_sig" type="hidden" placeholder="" value="<?php if(isset($CL_nom_doc_sig)) {echo $CL_nom_doc_sig;}  ?>"></input>
+<?php
+
+	} } 
+?>
+
+<input name="CL_doc_sig" type="hidden" placeholder="" value="<?php if(isset($CL_doc_sig)) {echo $CL_doc_sig;} if ($sign==="oui"){ echo 'Attention : Cette prise en charge ne sera valable que si la facture nous parvient accompagnée de l’original de '   ;} else { echo '' ;}?>"></input>
+<input name="CL_doc_sign" type="hidden" placeholder="" value="<?php if(isset($CL_doc_sign)) {echo $CL_doc_sign;} if ($sign==="oui"){ echo 'dûment  complétée  et  signée  par  le  (la) patient(e)'   ;} else { echo '' ;}?>"></input>
 <p class=rvps9><span class=rvts16>Observations:</span><span class=rvts11> <input name="CL_text" placeholder="text" value="<?php if(isset ($CL_text)) echo $CL_text; ?>"></input></span></p>
 <p><span class=rvts32><br></span></p>
 <p><span class=rvts36><br></span></p>
@@ -491,14 +589,21 @@ foreach ($array_docs as $doc)
             else {document.getElementById("alertGOP").style.display="none";}
             document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value)
         }//fin de keypressHandler
-		$("#CB_charge").change(function() {
-	    if(this.checked) {
-	        $("#CL_charge").show();
-	    }
-	    else
-	    {
-	        $("#CL_charge").hide();
-	    }
-	});
+	// statut malade checkbox
+    $("#CL_attention").change(function() {
+        if(this.checked) {
+            $("#pattention").show();
+        }
+        else
+        {
+            $("#pattention").hide();
+        }
+    });	
 </script>
 </body></html>
+<?php
+        }
+else
+{ echo "<h3>Il n'y a pas un prestataire valide pour ce type de document sous le dossier!</h3>";}
+?>
+
