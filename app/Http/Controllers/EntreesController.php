@@ -267,8 +267,8 @@ class EntreesController extends Controller
            $notif->save();
        }*/
       $notif=Notif::where('entree',$id)->first();
-        $notif->affiche=1; // Marquer comme traitée
-        $notif->delete();
+      //  $notif->affiche=1; // Marquer comme traitée
+      if(isset($notif)) { $notif->delete();}
 
         $entree = Entree::find($id);
         $entree->notif=1; //traitée

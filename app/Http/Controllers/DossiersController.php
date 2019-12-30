@@ -292,8 +292,9 @@ class DossiersController extends Controller
         }
 
         if ($type_affectation == 'MEDIC') {
-            if($maxid>0) {
                 $maxid = $this->GetMaxIdBytypeN();
+            if($maxid>0) {
+
                 $tpaff = $this->ChampById('type_affectation', $maxid);
                 $refd = $this->RefDossierById($maxid);
 
@@ -323,9 +324,8 @@ class DossiersController extends Controller
         }
 
         if ($type_affectation == 'Najda TPA') {
-            if($maxid>0) {
-
             $maxid = $this->GetMaxIdBytypeN( );
+            if($maxid>0) {
             $tpaff=$this->ChampById('type_affectation',$maxid);
             $refd= $this->RefDossierById($maxid);
 
@@ -1134,7 +1134,7 @@ class DossiersController extends Controller
                  if($notif->affiche < 1) 
                  {
 
-                    $notif->update(['user'=>$iduser_dest,'statut'=>1,'read_at'=> null]);
+                    $notif->update(['user'=>$iduser_dest,'statut'=>1]);
                     //  statut 1 dispatché
 
                  }

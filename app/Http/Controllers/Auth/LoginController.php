@@ -137,7 +137,7 @@ class LoginController extends Controller
                  if($notif->affiche < 1) 
                  {
 
-                     $notif->update(['user'=>$iduser_dest,'statut'=>1,'read_at'=> null]);
+                     $notif->update(['user'=>$iduser_dest,'statut'=>1 ]);
 
                  }
             }
@@ -528,15 +528,19 @@ class LoginController extends Controller
             if ($charge > 0) {
                 $dossiers=Dossier::where(function ($query) use ($iduser) {
                     $query->where('reference_medic', 'like', '%TN%')
+                        ->where('current_status','!=','Cloture' )
                         ->where('affecte', $iduser);
                 })->orWhere(function ($query) use ($iduser) {
                     $query->where('reference_medic', 'like', '%TM%')
+                        ->where('current_status','!=','Cloture' )
                         ->where('affecte', $iduser);
                 })->orWhere(function ($query) use ($iduser) {
                     $query->where('reference_medic', 'like', '%TV%')
+                        ->where('current_status','!=','Cloture' )
                         ->where('affecte', $iduser);
                 })->orWhere(function ($query) use ($iduser) {
                     $query->where('reference_medic', 'like', '%XP%')
+                        ->where('current_status','!=','Cloture' )
                         ->where('affecte', $iduser);
                 })->get();
 
@@ -556,15 +560,19 @@ class LoginController extends Controller
                 if ($tech > 0) {
                     $dossiers=Dossier::where(function ($query) use ($iduser) {
                         $query->where('reference_medic', 'like', '%TN%')
+                            ->where('current_status','!=','Cloture' )
                             ->where('affecte', $iduser);
                     })->orWhere(function ($query) use ($iduser) {
                         $query->where('reference_medic', 'like', '%TM%')
+                            ->where('current_status','!=','Cloture' )
                             ->where('affecte', $iduser);
                     })->orWhere(function ($query) use ($iduser) {
                         $query->where('reference_medic', 'like', '%TV%')
+                            ->where('current_status','!=','Cloture' )
                             ->where('current_status', 'actif');
                     })->orWhere(function ($query) use ($iduser) {
                         $query->where('reference_medic', 'like', '%XP%')
+                            ->where('current_status','!=','Cloture' )
                             ->where('affecte', $iduser);
                     })->get();
 
@@ -584,15 +592,19 @@ class LoginController extends Controller
                     if ($medic > 0) {
                         $dossiers=Dossier::where(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%TN%')
+                                ->where('current_status','!=','Cloture' )
                                 ->where('affecte', $iduser);
                         })->orWhere(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%TM%')
+                                ->where('current_status','!=','Cloture' )
                                 ->where('affecte', $iduser);
                         })->orWhere(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%TV%')
+                                ->where('current_status','!=','Cloture' )
                                 ->where('affecte', $iduser);
                         })->orWhere(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%XP%')
+                                ->where('current_status','!=','Cloture' )
                                 ->where('affecte', $iduser);
                         })->get()(array('affecte' => $medic, 'statut' => 2));
 
