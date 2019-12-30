@@ -1,4 +1,7 @@
 <?php
+if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
+if (isset($_GET['inter__garage'])) {$inter__garage=$_GET['inter__garage'];}
+if (isset($_GET['inter__expert'])) {$inter__expert=$_GET['inter__expert'];}
 if (isset($_GET['ville'])) {$ville=$_GET['ville'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
@@ -19,6 +22,63 @@ if (isset($_GET['idtaggop']))
     {
         $idtaggop=$_GET['idtaggop']; 
     }
+// Create connection
+// read info from env file
+$lines_array = file("../../.env");
+
+foreach($lines_array as $line) {
+    // username
+    if(strpos($line, 'DB_USERNAME') !== false) {
+        list(, $user) = explode("=", $line);
+        $user = trim(preg_replace('/\s+/', ' ', $user));
+        $user = str_replace(' ', '', $user);
+    }
+    // password
+    if(strpos($line, 'DB_PASSWORD') !== false) {
+        list(, $mdp) = explode("=", $line);
+        $mdp = trim(preg_replace('/\s+/', ' ', $mdp));
+        $mdp = str_replace(' ', '', $mdp);
+    }
+    // database
+    if(strpos($line, 'DB_DATABASE') !== false) {
+        list(, $dbname) = explode("=", $line);
+        $dbname = trim(preg_replace('/\s+/', ' ', $dbname));
+        $dbname = str_replace(' ', '', $dbname);
+    }
+    // hostname
+    if(strpos($line, 'DB_HOST') !== false) {
+        list(, $hostname) = explode("=", $line);
+        $hostname = trim(preg_replace('/\s+/', ' ', $hostname));
+        $hostname = str_replace(' ', '', $hostname);
+    }
+}
+//echo $hostname.",".$user.",".$mdp.",".$dbname."<br>";
+// Create connection
+$conn = mysqli_connect($hostname, $user, $mdp,$dbname);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+mysqli_query($conn,"set names 'utf8'");
+
+// recuperation des prestataires HOTEL ayant prestations dans dossier
+$sqlvha = "SELECT id,name,prenom,civilite,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM intervenants WHERE dossier=".$iddossier." ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 23)";
+    $resultvha = $conn->query($sqlvha);
+    if ($resultvha->num_rows > 0) {
+
+        $array_presta = array();
+        while($rowvha = $resultvha->fetch_assoc()) {
+            $array_presta[] = array('id' => $rowvha["id"],'name' => $rowvha["name"] ,'prenom' => $rowvha["prenom"],'civilite' => $rowvha["civilite"]);
+        } }
+$sqlvh = "SELECT id,name,phone_home,ville,prenom,civilite,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM intervenants WHERE dossier=".$iddossier." ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
+    $resultvh = $conn->query($sqlvh);
+    if ($resultvh->num_rows > 0) {
+
+        $array_prest = array();
+        while($rowvh = $resultvh->fetch_assoc()) {
+            $array_prest[] = array('id' => $rowvh["id"],'name' => $rowvh["name"] ,'prenom' => $rowvh["prenom"],'civilite' => $rowvh["civilite"]  );
+        } 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>udkqi3flwg5nkz2dpw1k40uwz1qad6iz_Orientation_vehicule_accidente_pr_expertise_Rev</title>
@@ -236,13 +296,23 @@ if (isset($_GET['idtaggop']))
 <body>
 <form id="formchamps">
     <input name="pre_dateheure" type="hidden" value="<?php if(isset ($pre_dateheure)) echo $pre_dateheure; ?>"> </input>
+<input name="idtaggop" type="hidden" value="<?php if(isset ($idtaggop)) echo $idtaggop; ?>"></input>
 <p><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+
+<p class=rvps1><span class=rvts2>
+<input type="text" list="inter__garage" name="inter__garage"  value="<?php  if(isset ($inter__garage)) echo $inter__garage; ?>"  />
+        <datalist id="inter__garage">
+            <?php
+foreach ($array_prest as $prest) {
+    
+    echo "<option value='".$prest['civilite']." ".$prest['prenom']." ".$prest['name']."' >".$prest['civilite']." ".$prest['prenom']." ".$prest['name']."</option>";}
+?>
+</span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <h1 class=rvps2><span class=rvts0><span class=rvts3><br></span></span></h1>
 <p class=rvps3><span class=rvts4>Orientation de véhicule accidenté</span></p>
@@ -256,7 +326,15 @@ if (isset($_GET['idtaggop']))
 " value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input>   immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> et</span><span class=rvts6> </span><span class=rvts5>appartenant</span><span class=rvts9> </span><span class=rvts5>à</span><span class=rvts9> </span><span class=rvts5>notre</span><span class=rvts9> </span><span class=rvts5>client(e)</span><span class=rvts5> Mr/Mme <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input>(tél :<input name="subscriber_phone_cell" placeholder="téléphone du l'abonnée"  value="<?php if(isset ($subscriber_phone_cell)) echo $subscriber_phone_cell;?>"/> )</span></p>
 <p class=rvps1><span class=rvts7><br></span></p>
 <ul class=list2>
-    <li style="margin-left: 0px" class=rvps6><span class=rvts7>Notre expert Mr </span><span class=rvts9>nom expert_intervenant_dossier </span><span class=rvts7>passera à votre garage pour expertiser le véhicule le <input name="CL_date_heure_exp" placeholder="Date et heure" value="<?php if(isset ($CL_date_heure_exp)) echo $CL_date_heure_exp; ?>"></input></span></li>
+    <li style="margin-left: 0px" class=rvps6><span class=rvts7>Notre expert Mr </span><span class=rvts9>
+<input type="text" list="inter__expert" name="inter__expert"  value="<?php  if(isset ($inter__expert)) echo $inter__expert; ?>" />
+        <datalist id="inter__expert">
+            <?php
+foreach ($array_presta as $presta) {
+    
+  echo "<option value='".$presta['prenom']." ".$presta['name']."' >".$presta['prenom']." ".$presta['name']."</option>"; }
+?>
+</span><span class=rvts7>passera à votre garage pour expertiser le véhicule le <input name="CL_date_heure_exp" placeholder="Date et heure" value="<?php if(isset ($CL_date_heure_exp)) echo $CL_date_heure_exp; ?>"></input></span></li>
 </ul>
 <p class=rvps7><span class=rvts7><br></span></p>
 <p class=rvps7><span class=rvts10>Notre référence dossier :</span><span class=rvts7><input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input></span></p>
@@ -277,3 +355,9 @@ if (isset($_GET['idtaggop']))
 <p><span class=rvts15><br></span></p>
 <p><span class=rvts17><br></span></p>
 </body></html>
+<?php
+        }
+else
+{ echo "<h3>Il n'y a pas un intervenant valide pour ce type de document sous le dossier!</h3>";}
+?>
+

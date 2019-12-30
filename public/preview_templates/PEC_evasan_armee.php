@@ -24,14 +24,47 @@ if (isset($_GET['idtaggop']))
     {
         $idtaggop=$_GET['idtaggop']; 
     }
-	// Create connection
-$conn = mysqli_connect("localhost","root","","najdadb");
+
+// Create connection
+// read info from env file
+$lines_array = file("../../.env");
+
+foreach($lines_array as $line) {
+    // username
+    if(strpos($line, 'DB_USERNAME') !== false) {
+        list(, $user) = explode("=", $line);
+        $user = trim(preg_replace('/\s+/', ' ', $user));
+        $user = str_replace(' ', '', $user);
+    }
+    // password
+    if(strpos($line, 'DB_PASSWORD') !== false) {
+        list(, $mdp) = explode("=", $line);
+        $mdp = trim(preg_replace('/\s+/', ' ', $mdp));
+        $mdp = str_replace(' ', '', $mdp);
+    }
+    // database
+    if(strpos($line, 'DB_DATABASE') !== false) {
+        list(, $dbname) = explode("=", $line);
+        $dbname = trim(preg_replace('/\s+/', ' ', $dbname));
+        $dbname = str_replace(' ', '', $dbname);
+    }
+    // hostname
+    if(strpos($line, 'DB_HOST') !== false) {
+        list(, $hostname) = explode("=", $line);
+        $hostname = trim(preg_replace('/\s+/', ' ', $hostname));
+        $hostname = str_replace(' ', '', $hostname);
+    }
+}
+//echo $hostname.",".$user.",".$mdp.",".$dbname."<br>";
+// Create connection
+$conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 
 // Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 mysqli_query($conn,"set names 'utf8'");
+
 $sqlvh = "SELECT id,name,immarticulation,type,fonction FROM voitures";
 	$resultvh = $conn->query($sqlvh);
 	if ($resultvh->num_rows > 0) {
@@ -202,6 +235,7 @@ $sqlvh = "SELECT id,name,immarticulation,type,fonction FROM voitures";
 <body>
 <form id="formchamps">
     <input name="pre_dateheure" type="hidden" value="<?php if(isset ($pre_dateheure)) echo $pre_dateheure; ?>"> </input>
+<input name="idtaggop" type="hidden" value="<?php if(isset ($idtaggop)) echo $idtaggop; ?>"></input>
 <p class=rvps1><span class=rvts1><br></span></p>
 
 <p class=rvps1><span class=rvts2><br></span></p>
@@ -237,7 +271,7 @@ $sqlvh = "SELECT id,name,immarticulation,type,fonction FROM voitures";
 foreach ($array_vehic as $vehic) {
 	if (strstr($vehic['name'], 'ambulance' ) || strstr($vehic['type'], 'ambulance' )|| strstr($vehic['fonction'], 'ambulance' ) )
 		{
-	echo "<option value='".$vehic['immarticulation']."'  >".$vehic['immarticulation']."</option>";
+	echo "<option value='".$vehic['immarticulation']."'  >".$vehic['name']."</option>";
 } }
 
 ?>

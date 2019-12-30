@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <body>
 <div class="row" style="margin-bottom: -120px">
 	<div id="entetelogo" class="col-md-3" style="zoom:70%!important">
@@ -76,8 +76,16 @@
 	<?php } ?>
 	</div>
 	<div class="col-md-6" style="text-align: right!important">
-		
-
+<!-- type_affectation_post est proritaire ? -->		
+<?php if (isset($_POST['type_affectation_post']) && !(empty($_POST['type_affectation_post']))) { ?>
+		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
+			<span id="prestataire_ambulance" style="font-family:'Times New Roman'; "><?php echo $_POST['type_affectation_post']; ?></span>
+<?php } else { ?>
+<!-- cas mm entite -->
+<?php if (isset($prestataire_ambulance) && !(empty($prestataire_ambulance))) { ?>
+		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
+			<span id="prestataire_ambulance" style="font-family:'Times New Roman'; "><?php echo $prestataire_ambulance; ?></span>
+<?php } ?>
 <?php if (isset($_POST['prestataire_ambulance']) && !(isset($_POST['type_affectation'])) && !(isset($_POST['prestextern']))) { ?>
 		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
 			<span id="prestataire_ambulance" style="font-family:'Times New Roman'; "><?php echo $_POST['prestataire_ambulance']; ?></span>
@@ -89,7 +97,7 @@
 <?php if (isset($_POST['prestextern']) && !(empty($_POST['prestextern']))) { ?>
 		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
 			<span id="prestataire_taxi" style="font-family:'Times New Roman'; "><?php echo $_POST['prestextern']; ?></span>
-<?php } ?>
+<?php }} ?>
 			<h1 style="margin-top:8.75pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:20pt"><span style="font-family:'Times New Roman'; text-decoration:underline">ORDRE DE MISSION</span><span style="font-family:'Times New Roman'; text-decoration:underline"> </span><span style="font-family:'Times New Roman'; text-decoration:underline">AMBULANCE</span></h1><p style="margin-top:0.6pt; margin-left:5.85pt; margin-bottom:0pt; text-align:right; widows:0; orphans:0; font-size:8pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
 			<p style="text-align: right!important; margin-top:0.6pt;  font-size:10pt"><span style="font-family:'Times New Roman'">Transfert:&#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_transfert'])) { echo $_POST['CL_transfert']; } else {echo "non";} ?></span>
 				<span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">        </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">K</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">m approximatif</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">&#xa0;</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">: </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt"> </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_km_approximatif'])) { echo $_POST['CL_km_approximatif']; } ?></span>
@@ -331,7 +339,7 @@ if (isset($_POST['clientIMA'])) { ?>
 <?php // fin bloc completer 
 } ?>
 <div id="signatureagent">
-<?php if (isset($_POST['affectea'])) { if ($_POST['affectea'] === "interne") { ?>
+<?php if (isset($_POST['affectea'])) { if (($_POST['affectea'] === "interne") || ($_POST['affectea'] === "mmentite")) { ?>
 
 <p style="margin-top:8.85pt; margin-right:4.95pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Merci de votre </span><span style="font-family:'Times New Roman'; font-weight:bold">c</span><span style="font-family:'Times New Roman'; font-weight:bold">ollaboration. </span></p>
 
@@ -339,7 +347,7 @@ if (isset($_POST['clientIMA'])) { ?>
 
 <span style="font-family:'Times New Roman'; font-weight:bold; color:#000"><?php if (isset($_POST['agent'])) { echo $_POST['agent']; } ?></span>
 
-</p><p style="margin-top:0.05pt; margin-right:434.35pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Plateau d’assistance médicale</span></p><p style="margin-top:0.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">« courrier</span><span style="font-family:'Times New Roman'; font-weight:bold"> électronique, sans signature »</span></p>
+</p><p style="margin-top:0.05pt; margin-right:434.35pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Plateau d’assistance <?php if (isset($_POST['signagent'])) { echo $_POST['signagent']; } ?></span></p><p style="margin-top:0.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">« courrier</span><span style="font-family:'Times New Roman'; font-weight:bold"> électronique, sans signature »</span></p>
 
 <?php } }?>
 </div>

@@ -36,7 +36,7 @@ class DocumentsController extends Controller
             
             $champsArray = explode(',', $arrfile['champs']);
 
-            $refdoss = $infodossier["reference_medic"];
+            $refdoss = trim($infodossier["reference_medic"]);
             
             $array = array();
 
@@ -86,77 +86,87 @@ class DocumentsController extends Controller
                     $array += [ $champtemp => $valchamp];
 
                 }
-					elseif($champtemp ==='[MONTANT_FRANCHISE]')
-						{
-							
-								 $iddossier = $infodossier['id'];
+                    elseif($champtemp ==='[MONTANT_FRANCHISE]')
+                        {
+                            
+                                 $iddossier = $infodossier['id'];
                                 if (! empty($iddossier) && $iddossier!==null)
                                 {   
                                     $infocustomer = Dossier::where('id', $iddossier)->first();
                                     $valchamp = $infodossier['montant_franchise'];
-									if (! empty($valchamp) && $valchamp!==null)
-									{ $champform = str_replace('[', '', $champtemp);
+                                    if (! empty($valchamp) && $valchamp!==null)
+                                    { $champform = str_replace('[', '', $champtemp);
                                      $champform = str_replace(']', '',  $champform);
                                      $champform = strtolower( $champform);
-									 $valchamp = $_POST[$champform];
+                                     $valchamp = $_POST[$champform];
                                      $array += [ $champtemp => $valchamp];
-									}
-									else
-							       {
-									$champform = str_replace('[', '', $champtemp);
+                                    }
+                                    else
+                                   {
+                                    $champform = str_replace('[', '', $champtemp);
                                      $champform = str_replace(']', '',  $champform);
                                      $champform = strtolower( $champform);
-								        $valchamp='';
-								         $array += [ $champtemp =>  $valchamp];
-								
-							       }	
-									 
+                                        $valchamp='';
+                                         $array += [ $champtemp =>  $valchamp];
+                                
+                                   }    
+                                     
                                 }
-								
-					    }
-						
+                                
+                        }
+                        
                 elseif(stristr($champtemp,'[CL_')!== FALSE)
                 {if (stristr($champtemp,'[CL_accidente')== TRUE )
-				        {if(isset($_POST['CL_accidente']))
-							{$valchamp='Accidente';
+                        {if(isset($_POST['CL_accidente']))
+                            {$valchamp='Accidente';
                              $array += [ $champtemp => $valchamp];
-						}
-						else
-							{
-							$valchamp='';
+                        }
+                        else
+                            {
+                            $valchamp='';
                             $array += [ $champtemp => $valchamp];
-							}}
-				 elseif (stristr($champtemp,'[CL_enpanne')== TRUE )
-				        {if(isset($_POST['CL_enpanne']))
-							{$valchamp='En panne';
+                            }}
+                 elseif (stristr($champtemp,'[CL_enpanne')== TRUE )
+                        {if(isset($_POST['CL_enpanne']))
+                            {$valchamp='En panne';
                              $array += [ $champtemp => $valchamp];
-						}
-						else
-							{
-							$valchamp='';
+                        }
+                        else
+                            {
+                            $valchamp='';
                             $array += [ $champtemp => $valchamp];
-							}}
-							elseif (stristr($champtemp,'[CL_incendie')== TRUE )
-				        {if(isset($_POST['CL_incendie']))
-							{$valchamp='Incendie';
+                            }}
+                            elseif (stristr($champtemp,'[CL_incendie')== TRUE )
+                        {if(isset($_POST['CL_incendie']))
+                            {$valchamp='Incendie';
                              $array += [ $champtemp => $valchamp];
-						}
-						else
-							{
-							$valchamp='';
+                        }
+                        else
+                            {
+                            $valchamp='';
                             $array += [ $champtemp => $valchamp];
-							}}
-							elseif (stristr($champtemp,'[CL_intact')== TRUE )
-				        {if(isset($_POST['CL_intact']))
-							{$valchamp='Intact';
+                            }}
+                            elseif (stristr($champtemp,'[CL_intact')== TRUE )
+                        {if(isset($_POST['CL_intact']))
+                            {$valchamp='Intact';
                              $array += [ $champtemp => $valchamp];
-						}
-						else
-							{
-							$valchamp='';
+                        }
+                        else
+                            {
+                            $valchamp='';
                             $array += [ $champtemp => $valchamp];
-							}}
-					else
+                            }}
+elseif (stristr($champtemp,'[CL_attention')== TRUE )
+                        {if(isset($_POST['CL_attention']))
+                            {$valchamp='Attention : Cette prise en charge s’entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix';
+                             $array += [ $champtemp => $valchamp];
+                        }
+                        else
+                            {
+                            $valchamp='';
+                            $array += [ $champtemp => $valchamp];
+                            }}
+                    else
                     //champ libre
                   {  $champdb = str_replace('[CL_', '', $champtemp);
                     $champdb = str_replace(']', '', $champdb);
@@ -164,7 +174,7 @@ class DocumentsController extends Controller
 
                     $valchamp=$_POST['CL_'.$champdb];
                     $array += [ $champtemp => $valchamp];
-					}
+                    }
 
                 }
 
@@ -242,7 +252,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
 
            // cas location voiture ; date fin location
 
-        if (strpos($file, 'PEC_location_Najda_a_VAT') !== false || strpos($file, 'PEC_location_VAT_a_Prest') !== false )  // cas location voiture
+/*        if (strpos($file, 'PEC_location_Najda_a_VAT') !== false || strpos($file, 'PEC_location_VAT_a_Prest') !== false )  
         {
             if (isset($_POST['CL_date_fin_location']))
             {
@@ -255,21 +265,21 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                     if($miss->type_Mission==46)// location voiture
                     {
                      
-                       /* $miss->update(['date_spec_affect'=>1]); 
+                       $miss->update(['date_spec_affect'=>1]); 
                     
                         $miss->update(['date_spec_affect2'=>1]);
 
                         $miss->update(['date_spec_affect3'=>1]);  
 
-                        $miss->update(['h_fin_location_voit'=>$datespe]);  */
+                        $miss->update(['h_fin_location_voit'=>$datespe]);  
 
                         //return 'date affectée'; 
                    
                     }
              
             }
-        }// fin cas location voiture
-
+     }// fin cas location voiture  
+*/
 
           // cas expertise ; date heure rendez-vous expertise
 
@@ -352,12 +362,10 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                     $montantgp = $montantgp / floatval($paramdev['dollar_achat']);
 
             // verifier si le montant est reel
-            if (is_float($montantgp)) {
-                // rondre 3 num apres virgule --- i guess is not php
-                /*var num = Number(0.005);
-                var roundedString = num.toFixed(2);
-                var rounded = Number(roudedString);*/
-            }
+            /*if (is_float($montantgp)) {
+                // rondre 3 num apres virgule
+                $montantgp = round($montantgp, 6);
+            }*/
 
             if (isset($_POST['parent']) )
                 {
@@ -522,8 +530,8 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
         }*/
         // verifier les conditions tags
         //$refdoss = Dossier->RefDossierById($dossier);
-        $indossier=Dossier::select('reference_medic','franchise','montant_franchise','GOP','montant_GOP')->where('id',$dossier)->first();
-        $refdoss = $indossier['reference_medic'];
+        $infodossier=Dossier::select('reference_medic','franchise','montant_franchise','GOP','montant_GOP')->where('id',$dossier)->first();
+        $refdoss = trim($infodossier['reference_medic']);
         $entreesdos=Entree::where("dossier",$refdoss)->get();
         $paramapp=Parametre::select('euro_achat','dollar_achat')->first();
         
@@ -550,16 +558,16 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                              //if ($resp === "notallow") {$resp="allow";}
                              if (strpos( $ltag['abbrev'],"GOPmed") !== FALSE)
                              {
+                                $dossgopmed = true;
                                 // VERIFICATION DEVISE GOP
                                     if ( $ltag['devise'] === "TND") 
-                                    $Montanttag = $ltag['mrestant'];
+                                    {$Montanttag = $ltag['mrestant'];}
                                     if ( $ltag['devise'] === "EUR")
-                                        $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['euro_achat']);
+                                       { $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['euro_achat']);}
                                     if ( $ltag['devise'] === "USD")
-                                        $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['dollar_achat']);
+                                       { $Montanttag = intval($ltag['mrestant']) * floatval($paramapp['dollar_achat']);}
 
                                 $arr_gopmed[]=$ltag['id']."_".$Montanttag."_".$ltag['contenu']."_".$ltag['updated_at'];
-                                $dossgopmed = true;
                              }
                              if (strpos( $ltag['abbrev'],"Franchise") !== FALSE)
                              {
@@ -890,7 +898,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                 $champtemp = strtolower($champtemp);
                                 $array += [ $champtemp => utf8_encode($valchamp)];
                             }
-							elseif($champtemp ==='[AGENT__SIGNATURE]')
+                            elseif($champtemp ==='[AGENT__SIGNATURE]')
                             {
                                 
 
@@ -917,7 +925,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                 $champtemp = strtolower($champtemp);
                                 $array += [ $champtemp => utf8_encode($valchamp)];
                             }
-							elseif($champtemp ==='[AGENT__LASTNAME]')
+                            elseif($champtemp ==='[AGENT__LASTNAME]')
                             {
                                 
 
@@ -945,33 +953,33 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                 $array += [ $champtemp => utf8_encode($valchamp)];
                             }
                         }
-						elseif($champtemp ==='[MONTANT_FRANCHISE]')
-						{
-															 $iddossier = $infodossier['id'];
+                        elseif($champtemp ==='[MONTANT_FRANCHISE]')
+                        {
+                                                             $iddossier = $infodossier['id'];
                                 if (! empty($iddossier) && $iddossier!==null)
                                 {   
                                     $infodossier = Dossier::where('id', $iddossier)->first();
                                     $valchamp = $infodossier['montant_franchise'];
-									if (! empty($valchamp) && $valchamp!==null)
-									{$champtemp = str_replace('[', '', $champtemp);
+                                    if (! empty($valchamp) && $valchamp!==null)
+                                    {$champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
                                     $array += [ $champtemp => utf8_encode($valchamp)];
-									}
-									else
-							       {
-									   $champtemp = str_replace('[', '', $champtemp);
+                                    }
+                                    else
+                                   {
+                                       $champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
-								        $valchamp='';
-								         $array += [ $champtemp => $valchamp];
-								
-							       }	
-									 
+                                        $valchamp='';
+                                         $array += [ $champtemp => $valchamp];
+                                
+                                   }    
+                                     
                                 }
-													
+                                                    
                         }
-						
+                        
                         elseif($champtemp ==='[DATE_HEURE]')
                         {
                             //champ date/heure
@@ -991,46 +999,56 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                         }
                         elseif(stristr($champtemp,'[CL_')!== FALSE)
                         {if (stristr($champtemp,'[CL_accidente')== TRUE )
-				        {if(isset($_POST['CL_accidente']))
-							{$valchamp='Accidente';
+                        {if(isset($_POST['CL_accidente']))
+                            {$valchamp='Accidente';
                              $array += [ $champtemp => $valchamp];
-						}
-						else
-							{
-							$valchamp='';
+                        }
+                        else
+                            {
+                            $valchamp='';
                             $array += [ $champtemp => $valchamp];
-							}}
-				 elseif (stristr($champtemp,'[CL_enpanne')== TRUE )
-				        {if(isset($_POST['CL_enpanne']))
-							{$valchamp='En panne';
+                            }}
+                 elseif (stristr($champtemp,'[CL_enpanne')== TRUE )
+                        {if(isset($_POST['CL_enpanne']))
+                            {$valchamp='En panne';
                              $array += [ $champtemp => $valchamp];
-						}
-						else
-							{
-							$valchamp='';
+                        }
+                        else
+                            {
+                            $valchamp='';
                             $array += [ $champtemp => $valchamp];
-							}}
-							elseif (stristr($champtemp,'[CL_incendie')== TRUE )
-				        {if(isset($_POST['CL_incendie']))
-							{$valchamp='Incendie';
+                            }}
+                            elseif (stristr($champtemp,'[CL_incendie')== TRUE )
+                        {if(isset($_POST['CL_incendie']))
+                            {$valchamp='Incendie';
                              $array += [ $champtemp => $valchamp];
-						}
-						else
-							{
-							$valchamp='';
+                        }
+                        else
+                            {
+                            $valchamp='';
                             $array += [ $champtemp => $valchamp];
-							}}
-							elseif (stristr($champtemp,'[CL_intact')== TRUE )
-				        {if(isset($_POST['CL_intact']))
-							{$valchamp='Intact';
+                            }}
+                            elseif (stristr($champtemp,'[CL_intact')== TRUE )
+                        {if(isset($_POST['CL_intact']))
+                            {$valchamp='Intact';
                              $array += [ $champtemp => $valchamp];
-						}
-						else
-							{
-							$valchamp='';
+                        }
+                        else
+                            {
+                            $valchamp='';
                             $array += [ $champtemp => $valchamp];
-							}}
-					else
+                            }}
+                elseif (stristr($champtemp,'[CL_attention')== TRUE )
+                        {if(isset($_POST['CL_attention']))
+                            {$valchamp='Attention : Cette prise en charge s’entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix';
+                             $array += [ $champtemp => $valchamp];
+                        }
+                        else
+                            {
+                            $valchamp='';
+                            $array += [ $champtemp => $valchamp];
+                            }}
+                    else
                     //champ libre
                   {
                             //champ libre
@@ -1102,7 +1120,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
 
                                 }
                             }
-							elseif($champtemp ==='[AGENT__LASTNAME]')
+                            elseif($champtemp ==='[AGENT__LASTNAME]')
                             {
                                 $idagent = $infodossier['affecte'];
                                 if (! empty($idagent) && $idagent!==null)
@@ -1115,7 +1133,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                     $array += [ $champtemp => utf8_encode($valchamp)];
                                 }
                             }
-							 elseif($champtemp ==='[AGENT__SIGNATURE]')
+                             elseif($champtemp ==='[AGENT__SIGNATURE]')
                             {
                                 $idagent = $infodossier['affecte'];
                                 if (! empty($idagent) && $idagent!==null)
@@ -1128,32 +1146,32 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                     $array += [ $champtemp => utf8_encode($valchamp)];
                                 }
                             }
-							elseif($champtemp ==='[MONTANT_FRANCHISE]')
-						{
-															 $iddossier = $infodossier['id'];
+                            elseif($champtemp ==='[MONTANT_FRANCHISE]')
+                        {
+                                                             $iddossier = $infodossier['id'];
                                 if (! empty($iddossier) && $iddossier!==null)
                                 {   
                                     $infocustomer = Dossier::where('id', $iddossier)->first();
                                     $valchamp = $infodossier['montant_franchise'];
-									if (! empty($valchamp) && $valchamp!==null)
-									{$champtemp = str_replace('[', '', $champtemp);
+                                    if (! empty($valchamp) && $valchamp!==null)
+                                    {$champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
                                     $array += [ $champtemp => utf8_encode($valchamp)];
-									}
-									else
-							       {$champtemp = str_replace('[', '', $champtemp);
+                                    }
+                                    else
+                                   {$champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
-								        $valchamp='';
-								         $array += [ $champtemp => $valchamp];
-								
-							       }	
-									 
+                                        $valchamp='';
+                                         $array += [ $champtemp => $valchamp];
+                                
+                                   }    
+                                     
                                 }
-											
+                                            
                         }
-						
+                        
                             elseif($champtemp ==='[PREST__HOTEL]')
                             {
                                 $infoprest = Prestation::where(['dossier_id' => $dossier,'type_prestations_id' => 18])->first();
@@ -1301,49 +1319,59 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                         }
                         elseif(stristr($champtemp,'[CL_')!== FALSE)
                         { if (stristr($champtemp,'[CL_accidente')== TRUE )
-				        {if(isset($_POST['CL_accidente']))
-							{$valchamp='Accidente';
+                        {if(isset($_POST['CL_accidente']))
+                            {$valchamp='Accidente';
                              $array += [ $champtemp => $valchamp];
-						}
-						else
-							{
-							$valchamp='';
+                        }
+                        else
+                            {
+                            $valchamp='';
                             $array += [ $champtemp => $valchamp];
-							}}
-				 elseif (stristr($champtemp,'[CL_enpanne')== TRUE )
-				        {if(isset($_POST['CL_enpanne']))
-							{$valchamp='En panne';
+                            }}
+                 elseif (stristr($champtemp,'[CL_enpanne')== TRUE )
+                        {if(isset($_POST['CL_enpanne']))
+                            {$valchamp='En panne';
                              $array += [ $champtemp => $valchamp];
-						}
-						else
-							{
-							$valchamp='';
+                        }
+                        else
+                            {
+                            $valchamp='';
                             $array += [ $champtemp => $valchamp];
-							}}
-							elseif (stristr($champtemp,'[CL_incendie')== TRUE )
-				        {if(isset($_POST['CL_incendie']))
-							{$valchamp='Incendie';
+                            }}
+                            elseif (stristr($champtemp,'[CL_incendie')== TRUE )
+                        {if(isset($_POST['CL_incendie']))
+                            {$valchamp='Incendie';
                              $array += [ $champtemp => $valchamp];
-						}
-						else
-							{
-							$valchamp='';
+                        }
+                        else
+                            {
+                            $valchamp='';
                             $array += [ $champtemp => $valchamp];
-							}}
-							elseif (stristr($champtemp,'[CL_intact')== TRUE )
-				        {if(isset($_POST['CL_intact']))
-							{$valchamp='Intact';
+                            }}
+                            elseif (stristr($champtemp,'[CL_intact')== TRUE )
+                        {if(isset($_POST['CL_intact']))
+                            {$valchamp='Intact';
                              $array += [ $champtemp => $valchamp];
-						}
-						else
-							{
-							$valchamp='';
+                        }
+                        else
+                            {
+                            $valchamp='';
                             $array += [ $champtemp => $valchamp];
-							}}
-					else
+                            }}
+elseif (stristr($champtemp,'[CL_attention')== TRUE )
+                        {if(isset($_POST['CL_attention']))
+                            {$valchamp='Attention : Cette prise en charge s’entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix';
+                             $array += [ $champtemp => $valchamp];
+                        }
+                        else
+                            {
+                            $valchamp='';
+                            $array += [ $champtemp => $valchamp];
+                            }}
+                    else
                     //champ libre
                   {
-								
+                                
                             //champ libre
                             $champdb = str_replace('[CL_', '', $champtemp);
                             $champdb = str_replace(']', '', $champdb);
@@ -1358,6 +1386,8 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                     }
             }
 
+            // envoie ID_DOSSIER au preview
+            $array += [ 'ID_DOSSIER' => $dossier];
             
             //header('Content-type: application/json');    
             //return json_encode($array);
@@ -1386,9 +1416,15 @@ public function historique(Request $request)
         $dossier= $request->get('dossier') ;
         $templateid = $request->get('template') ;
         $parentdoc = $request->get('parent') ;
+        $iduser = $request->get('iduser') ;
+
+        $infoagent = User::where('id', $iduser)->first();
+        $nomagent = $infoagent['lastname'];
+        $prenomagent = $infoagent['name'];
+        $signagent = $infoagent['signature'];
 
         $infodossier = Dossier::where('id', $dossier)->first();
-        $refdoss = $infodossier["reference_medic"];
+        $refdoss = trim($infodossier["reference_medic"]);
 
         $arrfile = Template_doc::where('id', $templateid)->first();
         // template annulation
@@ -1414,7 +1450,7 @@ public function historique(Request $request)
             /*if (stristr($champtemp,'2]')=== FALSE)
             {*/
                 //verifier quil nest pas un champs libre
-                if ((stristr($champtemp,'[CL_')=== FALSE) && ($champtemp !=='[DATE_HEURE]'))
+                if ((stristr($champtemp,'[CL_')=== FALSE) && ($champtemp !=='[DATE_HEURE]') && ($champtemp !=='[AGENT__NAME]') && ($champtemp !=='[AGENT__LASTNAME]') && ($champtemp !=='[AGENT__SIGNATURE]'))
                 {   
                     if (array_key_exists($i,$champsparentArray))
                     {
@@ -1440,9 +1476,28 @@ public function historique(Request $request)
                     $array += [ '[PRE_DATEHEURE]' => $valchamp];
 
                 }
+                // mettre prenom agent connecte
+                elseif($champtemp ==='[AGENT__NAME]')
+                {
+                    //champ nom agent
+                    $array += [ $champtemp => $prenomagent];
+
+                }// mettre nom agent connecte
+                elseif($champtemp ==='[AGENT__LASTNAME]')
+                {
+                    //champ nom agent
+                    $array += [ $champtemp => $nomagent];
+
+                }// mettre signature agent connecte
+                elseif($champtemp ==='[AGENT__SIGNATURE]')
+                {
+                    //champ nom agent
+                    $array += [ $champtemp => $signagent];
+
+                }
                 elseif(stristr($champtemp,'[CL_')!== FALSE)
-				{ 
-					
+                { 
+                    
                       //champ libre
                     if (array_key_exists($i,$champsparentArray))
                     {

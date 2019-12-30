@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use Spatie\PdfToText\Pdf;
+use PDF as PDFomme;
 use PDF as PDF3;
 use PDF as PDF4;
 use PDF as PDFcomp;
@@ -70,7 +71,8 @@ class OrdreMissionsController extends Controller
         		
 	        		if (isset($_POST["type_affectation_post"]))
 	        		{	
-                    	$presttaxi = $_POST['type_affectation_post'];
+                    	if ($_POST["type_affectation_post"] !== "Select")
+        				{$presttaxi = $_POST['type_affectation_post'];}
 	        		}
         			OMTaxi::where('id', $parent)->update(['dernier' => 0]);
         			$omparent=OMTaxi::where('id', $parent)->first();
@@ -235,15 +237,17 @@ class OrdreMissionsController extends Controller
 				$arequest->request->add(['created_by' => Auth::id()]);
 				if (isset($_POST["type_affectation"]))
         		{	
-        			$typeaffect = $_POST["type_affectation"];
-        			$arequest->request->add(['type_affectation' => $typeaffect]);
+        			if ($_POST["type_affectation"] !== "Select")
+        			{$typeaffect = $_POST["type_affectation"];
+        			$arequest->request->add(['type_affectation' => $typeaffect]);}
         		}
         		// type_affect pares remplace ou complete
         		
         		if (isset($_POST["type_affectation_post"]))
         		{	
-        			$typeaffect = $_POST["type_affectation_post"];
-        			$arequest->request->add(['type_affectation' => $typeaffect]);
+        			if ($_POST["type_affectation_post"] !== "Select")
+        			{$typeaffect = $_POST["type_affectation_post"];
+        			$arequest->request->add(['type_affectation' => $typeaffect]);}
         		}
 				//ajout nouveau dossier
         		$resp = app('App\Http\Controllers\DossiersController')->saving($arequest);
@@ -556,6 +560,7 @@ class OrdreMissionsController extends Controller
         	{
         		if ($_POST['templatedocument'] === "remplace")
         		{
+        			//type_affectation_post
         			//echo "remplacement";
         			$parent = $_POST['parent'];
                 	$count = OMAmbulance::where('parent',$parent)->count();
@@ -618,7 +623,7 @@ class OrdreMissionsController extends Controller
                }
                else
                {
-               	if(! isset($omparent['km_distance']) || Empty($omparent['km_distance']) )
+               	if( isset($omparent['km_distance']) && !Empty($omparent['km_distance']) && !Empty($_POST['vehicID']) )
                 	{
                		  $voiture=Voiture::where('id',$_POST['vehicID'])->first();
                 		if($voiture->km)
@@ -634,8 +639,24 @@ class OrdreMissionsController extends Controller
                	}
 
                }
-        		    //exit();
-        		}
+                /* bloc test */
+                if ($_POST['affectea'] !== "interne")
+        		{
+	               	$name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+			        $name='OM - '.$name;
+	                $path= storage_path()."/OrdreMissions/";
+	        		$iddoss = $_POST['dossdoc'];
+	        		$prestataireom= $omparent['prestataire_ambulance'];
+	        		$affectea = $omparent['affectea'];
+	        		$dataprest =array('prestataire_ambulance' => $prestataireom,'affectea' => $affectea);
+	        		$pdf = PDFomme::loadView('ordremissions.pdfodmambulance',$dataprest)->setPaper('a4', '');
+	        		$pdf->save($path.$iddoss.'/'.$name.'.pdf');
+	                $omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_ambulance' => $prestataireom, 'affectea'=>$affectea]);
+	                $result = $omambulance->update($request->all());
+                // end bloc test
+                exit();}
+        		// end remplace
+        	   }
         		if ($_POST['templatedocument'] === "complete")
         		{
                     //return $_POST['idMissionOM'];
@@ -644,7 +665,11 @@ class OrdreMissionsController extends Controller
         			$pdfcomp = PDFcomp::loadView('ordremissions.pdfodmambulance')->setPaper('a4', '');
         			$parent = $_POST['parent'];
         			$iddoss = $_POST['dossdoc'];
-        			$prestambulance = $_POST['type_affectation'];
+        			// type_affectation_post est proritaire ? -->	hs change
+        			if (isset($_POST['type_affectation_post']) && !(empty($_POST['type_affectation_post']))) 
+        			{ $prestambulance = $_POST['type_affectation_post'];
+					} else { 
+						$prestambulance = $_POST['type_affectation'];}
         			OMAmbulance::where('id', $parent)->update(['dernier' => 0]);
         			$omparent=OMAmbulance::where('id', $parent)->first();
         			$filename='ambulance_Complet-'.$parent;
@@ -712,7 +737,7 @@ class OrdreMissionsController extends Controller
                }
                else
                {
-               	if(! isset($omparent['km_distance']) || Empty($omparent['km_distance']) )
+               	if(isset($omparent['km_distance']) && !Empty($omparent['km_distance']) && !Empty($_POST['vehicID'])  )
                 	{
                		  $voiture=Voiture::where('id',$_POST['vehicID'])->first();
                 		if($voiture->km)
@@ -795,6 +820,41 @@ class OrdreMissionsController extends Controller
         // enregistrement dans la base
         //OMTaxi::create([$request->all(),'emplacement'=>$path.$iddoss.'/'.$name.'.pdf']);
         if (isset($_POST['affectea'])) {
+        	// affectation en interne om privée meme entitee <hs change>
+        	if ($_POST['affectea'] === "mmentite")
+        	{
+        		$iddossom= $_POST["dossdoc"];
+        		//$dossierom=Dossier::where('id', $iddossom)->first();
+        		$dossierom= Dossier::where('id', $iddossom)->select('type_affectation')->first();
+        		$prestataireom=$dossierom['type_affectation'];
+    			
+    			 if (isset($prestataireom))
+			        {
+			        	// changer le var post
+			        	$reqmmentite = new \Illuminate\Http\Request();
+	                    $reqmmentite->request->add(['prestataire_ambulance' => $prestataireom]);
+	                    app('App\Http\Controllers\OrdreMissionsController')->pdfodmambulance($reqmmentite);
+
+			        	$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddossom.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossom, 'prestataire_ambulance' => $prestataireom,'complete'=>1]);
+			        }
+			    	else
+			    	{
+			    		$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddossom.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossom,'prestataire_ambulance' => $dossierom["type_affectation"]]);
+			    	}
+			    
+        		$result = $omambulance->update($request->all());
+
+			    $pdf2 = PDFomme::loadView('ordremissions.pdfodmambulance',['prestataire_ambulance' => $prestataireom])->setPaper('a4', '');
+			    // enregistrement de nouveau attachement
+		        $path2='/OrdreMissions/'.$iddossom.'/'.$name.'.pdf';
+		        $attachement = new Attachement([
+
+		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossom,
+		        ]);
+		        $attachement->save();
+		        exit();
+        	}
+        	// affectation en externe
 	        if ($_POST['affectea'] === "externe")
 	        	{
 	        		if (isset($_POST["prestextern"]))
@@ -899,12 +959,10 @@ class OrdreMissionsController extends Controller
         $result = $omambulance->update($request->all());
 
 
-
-
-
         // verification affectation et creation de processus
         if (isset($_POST['affectea']))
         {
+
         	// affectation en interne
         	if ($_POST['affectea'] === "interne")
         	{
@@ -924,15 +982,21 @@ class OrdreMissionsController extends Controller
 				$arequest->request->add(['created_by' => Auth::id()]);
 				if (isset($_POST["type_affectation"]))
         		{	
-        			$typeaffect = $_POST["type_affectation"];
-        			$arequest->request->add(['type_affectation' => $typeaffect]);
+        			if ($_POST["type_affectation"] !== "Select")
+        			{	
+        				$typeaffect = $_POST["type_affectation"];
+        			    $arequest->request->add(['type_affectation' => $typeaffect]);
+        			}
         		}
         		// type_affect pares remplace ou complete
         		
         		if (isset($_POST["type_affectation_post"]))
         		{	
-        			$typeaffect = $_POST["type_affectation_post"];
-        			$arequest->request->add(['type_affectation' => $typeaffect]);
+        			if ($_POST["type_affectation_post"] !== "Select")
+        			{	
+        				$typeaffect = $_POST["type_affectation_post"];
+        				$arequest->request->add(['type_affectation' => $typeaffect]);
+        			}
         		}
 				//ajout nouveau dossier
         		$resp = app('App\Http\Controllers\DossiersController')->saving($arequest);
@@ -1151,6 +1215,7 @@ class OrdreMissionsController extends Controller
 		        else { $result2 = $omambulance2->update($request->all()); }
 
         	}
+        	
         }
 
     }
@@ -1216,7 +1281,10 @@ class OrdreMissionsController extends Controller
         		
 	        		if (isset($_POST["type_affectation_post"]))
 	        		{	
-                    	$prestambulance = $_POST['type_affectation_post'];
+                    	if ($_POST["type_affectation_post"] !== "Select")
+        				{
+                    		$prestambulance = $_POST['type_affectation_post'];
+                    	}
 	        		}
                     OMRemorquage::where('id', $parent)->update(['dernier' => 0]);
                     $omparent=OMRemorquage::where('id', $parent)->first();
@@ -1379,14 +1447,18 @@ class OrdreMissionsController extends Controller
                 $arequest->request->add(['created_by' => Auth::id()]);
                 if (isset($_POST["type_affectation"]))
                 {
-                    $typeaffect = $_POST["type_affectation"];
-                    $arequest->request->add(['type_affectation' => $typeaffect]);
+                    
+                    if ($_POST["type_affectation"] !== "Select")
+        			{$typeaffect = $_POST["type_affectation"];
+                    $arequest->request->add(['type_affectation' => $typeaffect]);}
                 }
 
                 if (isset($_POST["type_affectation_post"]))
                 {
-                	$typeaffect = $_POST["type_affectation_post"];
-                	$arequest->request->add(['type_affectation'=>$typeaffect]);
+                	
+                	if ($_POST["type_affectation_post"] !== "Select")
+        			{$typeaffect = $_POST["type_affectation_post"];
+                	$arequest->request->add(['type_affectation'=>$typeaffect]);}
                 }
                 //ajout nouveau dossier
                 $resp = app('App\Http\Controllers\DossiersController')->saving($arequest);
@@ -1538,7 +1610,7 @@ class OrdreMissionsController extends Controller
                     $reqprestremorquage = new \Illuminate\Http\Request();
                     $prestataire_remorquage = $dossparent["prestataire_remorquage"];
                     $reqprestremorquage->request->add(['dossier' => $iddossnew]);
-                    $reqprestremorquage->request->add(['champ' => 'prestataire_ambulance']);
+                    $reqprestremorquage->request->add(['champ' => 'prestataire_remorquage']);
                     $reqprestremorquage->request->add(['val' => $prestataire_remorquage]);
                     app('App\Http\Controllers\DossiersController')->updating($reqprestremorquage	);
                 }
@@ -1866,8 +1938,9 @@ class OrdreMissionsController extends Controller
                 $arequest->request->add(['created_by' => Auth::id()]);
                 if (isset($_POST["type_affectation"]))
                 {
-                    $typeaffect = $_POST["type_affectation"];
-                    $arequest->request->add(['type_affectation' => $typeaffect]);
+                    if ($_POST["type_affectation"] !== "Select")
+        			{$typeaffect = $_POST["type_affectation"];
+                    $arequest->request->add(['type_affectation' => $typeaffect]);}
                 }
                 //ajout nouveau dossier
                 $resp = app('App\Http\Controllers\DossiersController')->saving($arequest);

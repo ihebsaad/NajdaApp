@@ -11,6 +11,10 @@ if (isset($_GET['DB_HOST'])) {$dbHost=$_GET['DB_HOST'];}
 if (isset($_GET['DB_DATABASE'])) {$dbname=$_GET['DB_DATABASE'];}
 if (isset($_GET['DB_USERNAME'])) {$dbuser=$_GET['DB_USERNAME'];}
 if (isset($_GET['DB_PASSWORD'])) {$dbpass=$_GET['DB_PASSWORD'];}
+
+//recuperation iduser connecte
+if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
+
 // Create connection
 $conn = mysqli_connect($dbHost, $dbuser, $dbpass,$dbname);
 
@@ -29,20 +33,47 @@ if ((isset($_GET['remplace']) || isset($_GET['complete'])) && isset($_GET['paren
     if ($resultp->num_rows > 0) {
         $detailom = $resultp->fetch_assoc();
         $emispar = $detailom['emispar'];
+    $dossier = $detailom['dossier'];
         if (isset($_GET['affectea'])) {$affectea=$_GET['affectea'];} else {$affectea = $detailom['affectea'];}
 
     }
     else { exit("impossible de recuperer les informations de lordre de mission ".$parentom);}
+
+    // infos agent
+    
+
+        $sqlagt = "SELECT name,lastname FROM users WHERE id=".$iduser;
+        $resultagt = $conn->query($sqlagt);
+        if ($resultagt->num_rows > 0) {
+        // output data of each row
+        $detailagtcomp = $resultagt->fetch_assoc();
+        
+        } else {
+        echo "0 results agent";
+        }
+
+        // recuperer type dossier pour la signature (medicale ou technique)
+        $sqlsign = "SELECT type_dossier FROM dossiers WHERE id=".$detailom['dossier'];
+            $resultsign = $conn->query($sqlsign);
+
+            if ($resultsign->num_rows > 0) {
+                // output data of each row
+                $agtsign = $resultsign->fetch_assoc();
+                $signaturetype = strtolower($agtsign['type_dossier']);
+            }
 }
 else
 {
 
-    $sql = "SELECT reference_medic, subscriber_name, subscriber_lastname, subscriber_phone_cell,subscriber_local_address, customer_id, reference_customer,vehicule_type,vehicule_marque,vehicule_immatriculation, lieu_immobilisation, affecte FROM dossiers WHERE id=".$dossier;
+    $sql = "SELECT reference_medic, subscriber_name, subscriber_lastname, subscriber_phone_cell,subscriber_local_address, customer_id, reference_customer,vehicule_type,vehicule_marque,vehicule_immatriculation, lieu_immobilisation, affecte,type_dossier FROM dossiers WHERE id=".$dossier;
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         // output data of each row
         $detaildoss = $result->fetch_assoc();
+
+        // recuperer type dossier pour la signature (medicale ou technique)
+        $signaturetype = strtolower($detaildoss['type_dossier']);
 
         // infos client
         $sqlcl = "SELECT name, groupe FROM clients WHERE id=".$detaildoss['customer_id'];
@@ -56,7 +87,7 @@ else
         }
 
         // infos agent
-        $sqlagt = "SELECT name FROM users WHERE id=".$detaildoss['affecte'];
+        $sqlagt = "SELECT name, lastname FROM users WHERE id=".$iduser;
         $resultagt = $conn->query($sqlagt);
         if ($resultagt->num_rows > 0) {
             // output data of each row
@@ -65,6 +96,8 @@ else
         } else {
             echo "0 results agent";
         }
+
+        
 
         // recuperation OM emis par
 
@@ -102,8 +135,8 @@ else
 
 }
 
-// base_hotels(18)_cliniques(8)_hopitaux(9)_ports(72,38-assistance)_aeroports(73) (name/tel)
-$sqltypeprest = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id IN (72))";
+// base_hotels(18)_cliniques(8)_hopitaux(9)_ports(72,38-assistance)_aeroports(73) (name/tel) garage (22)
+$sqltypeprest = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id IN (72,22))";
 
 $resulttp = $conn->query($sqltypeprest);
 if ($resulttp->num_rows > 0) {
@@ -190,6 +223,38 @@ if ($resultap->num_rows > 0) {
 } else {
     echo "0 results prestataires ap";
 }
+
+
+$sqlgg = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM specialites_prestataires WHERE specialite IN (116))";
+$resultgg = $conn->query($sqlgg);
+if ( mysqli_num_rows($resultgg)) {
+    // output data of each row
+    $array_prestgg = array();
+    while($row = $resultgg->fetch_assoc()) {
+        if (intval($row["ville_id"]) > 0)
+        {
+            $sqlvilleprest = "SELECT id,name FROM villes WHERE id =".$row['ville_id'];
+            $resultvpre = $conn->query($sqlvilleprest);
+            $vprest = $resultvprest->fetch_assoc();
+            $nnameprest = $row['name']." [".$vprest['name']."]";
+        }
+        elseif (! empty($row["ville"]))
+        {
+            $nnameprest = $row['name']." [".$row['ville']."]";
+        }
+
+        elseif (empty($row["ville"]))
+        {
+            $nnameprest = $row['name'];
+        }
+        $array_prestgg[] = array('id' => $row["id"],'name' => $nnameprest, 'phone_home' => $row["phone_home"]);
+    }
+    //print_r($array_prest);
+} else {
+    echo "0 results prestataires gg";
+}
+
+
 // vehicules - vehic
 $sqlvh = "SELECT id,name FROM voitures";
 $resultvh = $conn->query($sqlvh);
@@ -214,6 +279,32 @@ if ($resultchauff->num_rows > 0) {
     }
     //print_r($array_prest);
 }
+
+
+$sqldossier = "SELECT reference_medic,type_dossier FROM dossiers";
+$resultdossier= $conn->query($sqldossier);
+if ($resultdossier->num_rows > 0) {
+    // output data of each row
+    $array_dossier = array();
+    while($rowdossier = $resultdossier->fetch_assoc()) {
+        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+          $array_dossier[] = array('reference_medic' => $rowdossier["reference_medic"],'type_dossier' => $rowdossier["type_dossier"]);
+    }
+    //print_r($array_prest);
+}
+
+$sqlspec = "SELECT id,nom FROM specialites WHERE id IN (SELECT specialite FROM specialites_typeprestations WHERE type_prestation IN (1))";
+$resultspec= $conn->query($sqlspec);
+if ($resultspec->num_rows > 0) {
+    // output data of each row
+    $array_spec = array();
+    while($rowspec = $resultspec->fetch_assoc()) {
+        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+          $array_spec[] = array('id' => $rowspec["id"],'nom' => $rowspec["nom"]);
+    }
+    //print_r($array_prest);
+}
+
 header("Content-Type: text/html;charset=UTF-8");
 ?>
 <html>
@@ -327,11 +418,20 @@ header("Content-Type: text/html;charset=UTF-8");
 
         <h1 style="margin-top:8.75pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:20pt"><span style="font-family:'Times New Roman'; text-decoration:underline">ORDRE DE MISSION</span><span style="font-family:'Times New Roman'; text-decoration:underline"> </span><span style="font-family:'Times New Roman'; text-decoration:underline">REMORQUAGE</span></h1><p style="margin-top:0.6pt; margin-left:5.85pt; margin-bottom:0pt; text-align:right; widows:0; orphans:0; font-size:8pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
         <p style="margin-top:0.6pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'"></span>
-
+            <span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">        </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">S</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">pecialite Remorqueur</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">&#xa0;</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">: </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt"> </span>
+       <input type="text" list="CL_spec" name="CL_spec" <?php if (isset($detailom)) { if (isset($detailom['CL_spec'])) {echo "value='".$detailom['CL_spec']."'";}} ?> />
+        <datalist id="CL_spec">
+            <?php
+foreach ($array_spec as $spec) {
+    
+    echo "<option value='".$spec['nom']."' telprest='".$spec['nom']."'>".$spec['nom']."</option>";
+}
+?>
+        </datalist>
             <span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">        </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">K</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">m approximatif</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">&#xa0;</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">: </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt"> </span>
             <input name="CL_km_approximatif" type="number" id="CL_km_approximatif" min="0" max="10000" <?php if (isset($detailom)) { if (isset($detailom['CL_km_approximatif'])) {echo "value='".$detailom['CL_km_approximatif']."'";}} ?> >
-            <span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">   </span><span style="font-family:'Times New Roman'; font-weight:bold">     </span><span style="font-family:'Times New Roman'; font-weight:bold">T</span><span style="font-family:'Times New Roman'; font-weight:bold">arif annoncé</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">? </span>
-            <input name="CL_tarif" type="number" id="CL_tarif" <?php if (isset($detailom)) { if (isset($detailom['CL_tarif'])) {echo "value='".$detailom['CL_tarif']."'";}} ?> >
+            <span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">   </span><span style="font-family:'Times New Roman'; font-weight:bold">     </span><span style="font-family:'Times New Roman'; font-weight:bold">M</span><span style="font-family:'Times New Roman'; font-weight:bold">ontant Max</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
+            <input name="CL_montant_max" type="number" id="CL_montant_max" <?php if (isset($detailom)) { if (isset($detailom['CL_montant_max'])) {echo "value='".$detailom['CL_montant_max']."'";}} ?> >
             <span style="font-family:'Times New Roman'; font-weight:bold">                                     </span></p>
         <?php  // Si client IMA
         if (isset($detailom))
@@ -412,7 +512,7 @@ header("Content-Type: text/html;charset=UTF-8");
 </span></p>
         <span style="font-family:'Times New Roman'; font-weight:bold">Vehicule (marqrue et type):</span><span style="font-family:'Times New Roman'; color:#ff0000">&#xa0;
 <?php  if (isset($detailom))
-{ if (isset($detailom['subscriber_name']))
+{ if (isset($detailom['vehicule_type']))
 { ?>
     <input name="vehicule_type" id="vehicule_type" placeholder="type et marque" value="<?php if(! empty($detailom['vehicule_type'])) echo $detailom['vehicule_type']; ?>" />
 <?php }} else { ?>
@@ -459,21 +559,41 @@ header("Content-Type: text/html;charset=UTF-8");
 
     <p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p><p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">Trajet</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">:</span><span style="font-family:'Times New Roman'; font-weight:bold">  </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu prise en charge</span><span style="font-family:'Times New Roman'">: </span>
         <input type="text" list="CL_lieuprest_pc" name="CL_lieuprest_pc" <?php if (isset($detailom)) { if (isset($detailom['CL_lieuprest_pc'])) {echo "value='".$detailom['CL_lieuprest_pc']."'";}} ?> />
-        <datalist id="CL_lieuprest_pc">
+        <!--<datalist id="CL_lieuprest_pc">
             <?php
             //foreach ($array_prest as $prest) {
-                echo "<option value='".$detaildoss['lieu_immobilisation']."' telprest='".$detaildoss['subscriber_phone_cell']."'>".$detaildoss['lieu_immobilisation']."</option>";
+                //echo "<option value='".$detaildoss['lieu_immobilisation']."' telprest='".$detaildoss['subscriber_phone_cell']."'>".$detaildoss['lieu_immobilisation']."</option>";
             //}
+            ?>
+        </datalist>-->
+        <datalist id="CL_lieuprest_pc">
+           <?php
+            foreach ($array_prest as $prest) {
+                echo "<option value='".$prest['name']."' telprest='".$prest['phone_home']."'>".$prest['name']."</option>";
+            }
+           foreach ($array_prestgg as $prestg) {
+           echo "<option value='".$prestg['name']."' telprest='".$prestg['phone_home']."'>".$prestg['name']."</option>";
+           }
             ?>
         </datalist>
         <span style="font-family:'Times New Roman'; font-weight:bold">Tel: </span>
         <input name="CL_prestatairetel_pc" id="CL_prestatairetel_pc" placeholder="Téléphone du prestataire" pattern= "^[0–9]$" <?php if (isset($detailom)) { if (isset($detailom['CL_prestatairetel_pc'])) {echo "value='".$detailom['CL_prestatairetel_pc']."'";}} ?> ></input>
         <span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">    </span></p><p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:Wingdings; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold; color:#0070c0"> </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu décharge: </span>
         <input type="text" list="CL_lieudecharge_dec" name="CL_lieudecharge_dec" <?php if (isset($detailom)) { if (isset($detailom['CL_lieudecharge_dec'])) {echo "value='".$detailom['CL_lieudecharge_dec']."'";}} ?> />
+        <!--<datalist id="CL_lieudecharge_dec">
+            <?php
+            /*foreach ($array_prest as $prest) {
+                echo "<option value='".$prest['name']."' telprest='".$prest['phone_home']."'>".$prest['name']."</option>";
+            }*/
+            ?>
+        </datalist>-->
         <datalist id="CL_lieudecharge_dec">
             <?php
             foreach ($array_prest as $prest) {
                 echo "<option value='".$prest['name']."' telprest='".$prest['phone_home']."'>".$prest['name']."</option>";
+            }
+            foreach ($array_prestgg as $prestg) {
+             echo "<option value='".$prestg['name']."' telprest='".$prestg['phone_home']."'>".$prestg['name']."</option>";
             }
             ?>
         </datalist>
@@ -563,7 +683,7 @@ foreach ($array_prestap as $prestap) {
 				<span style="font-family:'Times New Roman'; font-weight:bold">Départ bateau </span>
 
 				<span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<input type="time" id="CL_heure_D name="CL_heure_D" min="00:00" max="23:59" <?php if (isset($detailom)) { if (isset($detailom['CL_heure_D'])) {echo "value='".date('H:i',strtotime($detailom['CL_heure_D']))."'";}} ?> >
+<input type="time" id="CL_heure_D" name="CL_heure_D" min="00:00" max="23:59" <?php if (isset($detailom)) { if (isset($detailom['CL_heure_D'])) {echo "value='".date('H:i',strtotime($detailom['CL_heure_D']))."'";}} ?> >
 
     </p>
     <?php if (isset($detailom['CB_prerades'])) { if (($detailom['CB_prerades'] === "oui")||($detailom['CB_prerades'] === "on")) { $prerades = true; ?>
@@ -595,12 +715,13 @@ foreach ($array_prestap as $prestap) {
     <option value="conventionnel">conventionnel</option>
 <?php } ?>
 </select>
-    <?php if (isset($detailom['CB_pregoulette']) || isset($detailom['CB_prerades'])) { if ((($detailom['CB_prerades'] === "oui"||($detailom['CB_prerades'] === "on"))) ||(($detailom['CB_prerades'] === "oui"||($detailom['CB_prerades'] === "on")) )){ ?>
-<p id="prerades1" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
+    </span>
+    <?php if (isset($detailom['CB_pregoulette']) || isset($detailom['CB_prerades'])) { if ((($detailom['CB_prerades'] === "oui"||($detailom['CB_prerades'] === "on"))) ||(($detailom['CB_pregoulette'] === "oui"||($detailom['CB_pregoulette'] === "on")) )){ ?>
+<p id="preradeszone" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;">
 <?php } else { ?>
-<p id="prerades2" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;display:none;">
+<p id="preradeszone" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;display:none;">
 <?php } } else { ?>
-    <p id="prerades1" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;display:none;">
+<p id="preradeszone" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;display:none;">
         <?php } ?>
 
         <span style="font-family:'Times New Roman'; font-weight:bold">Heure </span><span style="font-family:'Times New Roman'; font-weight:bold">souhaitée </span><span style="font-family:'Times New Roman'; font-weight:bold">arrivée port: </span>
@@ -645,11 +766,11 @@ foreach ($array_prestap as $prestap) {
                 <div id="compsup" class="col-md-3">
                     <p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="height:0pt; display:block; position:absolute; z-index:-1"><img  width="320" height="195" alt="" style="margin-top:4.21pt; margin-left:7.72pt; -aw-left-pos:24pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:4.5pt; -aw-wrap-type:none; position:absolute"></span><span style="font-family:&#39;Times New Roman&#39;">&nbsp;</span></p><p style="margin-top:5.4pt; margin-left:5.75pt; margin-bottom:0pt; text-indent:15.55pt; line-height:10.05pt; widows:0; orphans:0"><span style="font-family:&#39;Times New Roman&#39;; font-size:9pt; font-weight:bold">Valid.</span><span style="font-family:&#39;Times New Roman&#39;; font-size:9pt; font-weight:bold"> </span><span style="font-family:&#39;Times New Roman&#39;; font-size:9pt; font-weight:bold">superviseur</span></p><p style="margin-top:0pt; margin-bottom:0pt; text-indent:21.3pt; line-height:9.8pt; widows:0; orphans:0">
                         <input type="hidden" name="complete" value="1">
-                        <input name="supervisordate" id="supervisordate" placeholder="2019-05-26 / Hajer LAHOUAR" <?php if (isset($detailom['supervisordate'])) { if (!empty($detailom['supervisordate'])) {echo "value='".$detailom['supervisordate']."'";}} ?> ></input>
+                        <input name="supervisordate" id="supervisordate" placeholder=" " value="<?php if (isset($detailagtcomp)) {echo $detailagtcomp['name'].' '.$detailagtcomp['lastname'].' / '.date('Y-m-d'); }  ?>" />
                     </p><p style="margin-top:0.05pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin:0pt 0pt 0pt 5.75pt; text-indent:15.55pt; line-height:150%; widows:0; orphans:0; font-size:9pt;font-family:&#39;Times New Roman&#39;; font-weight:bold">OM remis par (date/sign)</p><p style="margin-top:0pt; margin-bottom:0pt; text-indent:21.3pt; line-height:9.8pt; widows:0; orphans:0">
-                        <input name="remispardate" id="remispardate" placeholder="date/sign" <?php if (isset($detailom['remispardate'])) { if (!empty($detailom['remispardate'])) {echo "value='".$detailom['remispardate']."'";}} ?> ></input>
+                        <input name="remispardate" id="remispardate" readonly placeholder="date/sign" <?php if (isset($detailom['remispardate'])) { if (!empty($detailom['remispardate'])) {echo "value='".$detailom['remispardate']."'";}} ?> ></input>
                     </p><p style="margin:0pt 0pt 0pt 5.75pt; text-indent:15.55pt; line-height:150%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">OM récupéré par (date/sign)</span></p><p style="margin-top:0pt; margin-bottom:0pt; text-indent:21.3pt; line-height:9.8pt; widows:0; orphans:0">
-                        <input name="recuperepardate" id="recuperepardate" placeholder="date/sign" <?php if (isset($detailom['recuperepardate'])) { if (!empty($detailom['recuperepardate'])) {echo "value='".$detailom['recuperepardate']."'";}} ?> ></input>
+                        <input name="recuperepardate" id="recuperepardate" readonly placeholder="date/sign" <?php if (isset($detailom['recuperepardate'])) { if (!empty($detailom['recuperepardate'])) {echo "value='".$detailom['recuperepardate']."'";}} ?> ></input>
                     </p></div>
                 <div class="col-md-3">
                 </div>
@@ -718,7 +839,7 @@ foreach ($array_prestap as $prestap) {
                 <div id="compsup" class="col-md-3">
                     <p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="height:0pt; display:block; position:absolute; z-index:-1"><img  width="320" height="195" alt="" style="margin-top:4.21pt; margin-left:7.72pt; -aw-left-pos:24pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:4.5pt; -aw-wrap-type:none; position:absolute"></span><span style="font-family:&#39;Times New Roman&#39;">&nbsp;</span></p><p style="margin-top:5.4pt; margin-left:5.75pt; margin-bottom:0pt; text-indent:15.55pt; line-height:10.05pt; widows:0; orphans:0"><span style="font-family:&#39;Times New Roman&#39;; font-size:9pt; font-weight:bold">Valid.</span><span style="font-family:&#39;Times New Roman&#39;; font-size:9pt; font-weight:bold"> </span><span style="font-family:&#39;Times New Roman&#39;; font-size:9pt; font-weight:bold">superviseur</span></p><p style="margin-top:0pt; margin-bottom:0pt; text-indent:21.3pt; line-height:9.8pt; widows:0; orphans:0">
                         <input type="hidden" name="complete" value="1">
-                        <input name="supervisordate" id="supervisordate" placeholder="2019-05-26 / Hajer LAHOUAR" <?php if (isset($detailom['supervisordate'])) { if (!empty($detailom['supervisordate'])) {echo "value='".$detailom['supervisordate']."'";}} ?> ></input>
+                        <input name="supervisordate" id="supervisordate" placeholder=" " value="<?php if (isset($detailagtcomp)) {echo $detailagtcomp['name'].' '.$detailagtcomp['lastname'].' / '.date('Y-m-d'); }  ?>" />
                     </p><p style="margin-top:0.05pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin:0pt 0pt 0pt 5.75pt; text-indent:15.55pt; line-height:150%; widows:0; orphans:0; font-size:9pt;font-family:&#39;Times New Roman&#39;; font-weight:bold">OM remis par (date/sign)</p><p style="margin-top:0pt; margin-bottom:0pt; text-indent:21.3pt; line-height:9.8pt; widows:0; orphans:0">
                         <input name="remispardate" id="remispardate" placeholder="date/sign" <?php if (isset($detailom['remispardate'])) { if (!empty($detailom['remispardate'])) {echo "value='".$detailom['remispardate']."'";}} ?> ></input>
                     </p><p style="margin:0pt 0pt 0pt 5.75pt; text-indent:15.55pt; line-height:150%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">OM récupéré par (date/sign)</span></p><p style="margin-top:0pt; margin-bottom:0pt; text-indent:21.3pt; line-height:9.8pt; widows:0; orphans:0">
@@ -792,9 +913,15 @@ foreach ($array_prestap as $prestap) {
         <div id="signatureagent">
             <p style="margin-top:8.85pt; margin-right:4.95pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Merci de votre </span><span style="font-family:'Times New Roman'; font-weight:bold">c</span><span style="font-family:'Times New Roman'; font-weight:bold">ollaboration. </span></p><p style="margin-top:0pt; margin-right:447.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">P/la Gérante</span></p><p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; widows:0; orphans:0; font-size:10pt">
 
-                <span style="font-family:'Times New Roman'; font-weight:bold; color:#000"> <?php if (isset($detailagt)) {echo $detailagt['name']; } if (isset($detailom)) { if (isset($detailom['agent'])) {echo $detailom['agent'];}}?> </span>
-                <input name="agent" id="agent" type="hidden" value="<?php if (isset($detailagt)) {echo $detailagt['name']; } if (isset($detailom)) { if (isset($detailom['agent'])) {echo $detailom['agent'];}} ?>"></input>
-            </p><p style="margin-top:0.05pt; margin-right:434.35pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Plateau d’assistance médicale</span></p><p style="margin-top:0.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">« courrier</span><span style="font-family:'Times New Roman'; font-weight:bold"> électronique, sans signature »</span></p>
+                <span style="font-family:'Times New Roman'; font-weight:bold; color:#000"> <?php if (isset($detailagt)) {echo $detailagt['name'].' '.$detailagt['lastname']; } if (isset($detailom)) { if (isset($detailom['agent'])) {echo $detailom['agent'];}}?> </span>
+                <input name="agent" id="agent" type="hidden" value="<?php if (isset($detailagt)) {echo $detailagt['name'].' '.$detailagt['lastname']; } if (isset($detailom)) { if (isset($detailom['agent'])) {echo $detailom['agent'];}} ?>"></input>
+            </p><p style="margin-top:0.05pt; margin-right:434.35pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Plateau d’assistance 
+<?php
+if (isset($signaturetype)) 
+    {
+        echo $signaturetype; 
+        echo '<input name="signagent" id="signagent" type="hidden" value="'.$signaturetype.'"></input>';}
+?></span></p><p style="margin-top:0.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">« courrier</span><span style="font-family:'Times New Roman'; font-weight:bold"> électronique, sans signature »</span></p>
         </div>
 </form>
 <script type="text/javascript">
@@ -825,22 +952,26 @@ foreach ($array_prestap as $prestap) {
     $("#CB_pregoulette").change(function() {
         if(this.checked) {
             $("#pregoulette").show();
-            $("#prerades1").show();
+            $("#preradeszone").css("display", "block");
         }
         else
         {
             $("#pregoulette").hide();
-            $("#prerades1").hide();
+            //
+            if (! $('#CB_prerades').is(':checked')) {$("#preradeszone").css("display", "none");}
         }
+        /*a1 = $('#CB_pregoulette').is(':checked');
+        a2= $('#CB_prerades').is(':checked');
+        alert("display it: "+a1 +" "+ a2);*/
     });
     $("#CB_prerades").change(function() {
         if(this.checked) {
             $("#prerades").show();
-            $("#prerades1").show();
+            $("#preradeszone").show();
         }
         else
         {$("#prerades").hide();
-            $("#prerades1").hide();
+            $("#preradeszone").hide();
         }
     });
 
@@ -884,3 +1015,4 @@ foreach ($array_prestap as $prestap) {
 </body>
 
 </html>
+

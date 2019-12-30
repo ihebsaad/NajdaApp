@@ -10,6 +10,9 @@ if (isset($_GET['DB_HOST'])) {$dbHost=$_GET['DB_HOST'];}
 if (isset($_GET['DB_DATABASE'])) {$dbname=$_GET['DB_DATABASE'];}
 if (isset($_GET['DB_USERNAME'])) {$dbuser=$_GET['DB_USERNAME'];}
 if (isset($_GET['DB_PASSWORD'])) {$dbpass=$_GET['DB_PASSWORD'];}
+
+//recuperation iduser connecte
+if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 // Create connection
 $conn = mysqli_connect($dbHost, $dbuser, $dbpass,$dbname);
 
@@ -35,14 +38,9 @@ if ((isset($_GET['remplace']) || isset($_GET['complete'])) && isset($_GET['paren
 	else { exit("impossible de recuperer les informations de lordre de mission ".$parentom);}
 
 	// infos agent
-	$sqlid = "SELECT reference_medic, subscriber_name, subscriber_lastname, customer_id, reference_customer, affecte FROM dossiers WHERE id=".$dossier;
-	$resultid = $conn->query($sqlid);
+	
 
-	if ($resultid->num_rows > 0) {
-	    // output data of each row
-	    $detaildossid = $resultid->fetch_assoc();
-
-	    $sqlagt = "SELECT name,lastname FROM users WHERE id=".$detaildossid['affecte'];
+	    $sqlagt = "SELECT name,lastname FROM users WHERE id=".$iduser;
 		$resultagt = $conn->query($sqlagt);
 		if ($resultagt->num_rows > 0) {
 	    // output data of each row
@@ -51,17 +49,30 @@ if ((isset($_GET['remplace']) || isset($_GET['complete'])) && isset($_GET['paren
 		} else {
 	    echo "0 results agent";
 		}
-	}
+
+		// recuperer type dossier pour la signature (medicale ou technique)
+		$sqlsign = "SELECT type_dossier FROM dossiers WHERE id=".$detailom['dossier'];
+			$resultsign = $conn->query($sqlsign);
+
+			if ($resultsign->num_rows > 0) {
+			    // output data of each row
+			    $agtsign = $resultsign->fetch_assoc();
+			    $signaturetype = strtolower($agtsign['type_dossier']);
+			}
 }
 else
 {
 
-	$sql = "SELECT reference_medic, subscriber_name, subscriber_lastname, customer_id, reference_customer, affecte FROM dossiers WHERE id=".$dossier;
+	$sql = "SELECT reference_medic, subscriber_name, subscriber_lastname, customer_id, reference_customer, affecte, type_dossier FROM dossiers WHERE id=".$dossier;
 	$result = $conn->query($sql);
 
 	if ($result->num_rows > 0) {
 	    // output data of each row
 	    $detaildoss = $result->fetch_assoc();
+
+	    // recuperer type dossier pour la signature (medicale ou technique)
+		$signaturetype = strtolower($detaildoss['type_dossier']);
+		
 
 	    // infos client
 	    $sqlcl = "SELECT name, groupe FROM clients WHERE id=".$detaildoss['customer_id'];
@@ -75,7 +86,7 @@ else
 		}
 
 		// infos agent
-	    $sqlagt = "SELECT name,lastname FROM users WHERE id=".$detaildoss['affecte'];
+	    $sqlagt = "SELECT name,lastname FROM users WHERE id=".$iduser;
 		$resultagt = $conn->query($sqlagt);
 		if ($resultagt->num_rows > 0) {
 	    // output data of each row
@@ -1144,7 +1155,13 @@ foreach ($array_chauff as $chauff) {
 <span style="font-family:'Times New Roman'; font-weight:bold; color:#000"> <?php if (isset($detailagt)) {echo $detailagt['name'].' '.$detailagt['lastname']; } if (isset($detailom)) { if (isset($detailom['agent'])) {echo $detailom['agent'];}}?> </span>
 <input name="agent" id="agent" type="hidden" value="<?php if (isset($detailagt)) {echo $detailagt['name'].' '.$detailagt['lastname']; } if (isset($detailom)) { if (isset($detailom['agent'])) {echo $detailom['agent'];}} ?>"></input>
 
-</p><p style="margin-top:0.05pt; margin-right:434.35pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Plateau d’assistance médicale</span></p><p style="margin-top:0.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">« courrier</span><span style="font-family:'Times New Roman'; font-weight:bold"> électronique, sans signature »</span></p>
+</p><p style="margin-top:0.05pt; margin-right:434.35pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Plateau d’assistance 
+<?php
+if (isset($signaturetype)) 
+	{
+		echo $signaturetype; 
+		echo '<input name="signagent" id="signagent" type="hidden" value="'.$signaturetype.'"></input>';}
+?></span></p><p style="margin-top:0.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">« courrier</span><span style="font-family:'Times New Roman'; font-weight:bold"> électronique, sans signature »</span></p>
 </div>
 </form>
 <script type="text/javascript">
@@ -1174,7 +1191,7 @@ foreach ($array_chauff as $chauff) {
 	});
 
     // interdire de modifier le champs number
-	$("#CL_nbpsemax").keypress(function (evt) {
+	$("[name='CL_nbpsemax']").keypress(function (evt) {
     evt.preventDefault();
 });
 
