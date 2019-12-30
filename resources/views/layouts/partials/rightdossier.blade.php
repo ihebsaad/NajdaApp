@@ -113,8 +113,13 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                     <label for="contenu" id="contenulabel" style="cursor:pointer">Contenu:</label>
                     <div    id="lecontenu" class="form-control" style=" <?php if($entree->type=='fax'){echo 'display:none';}?>;  overflow:scroll;min-height:400px">
 
-                        <?php $contenu= $entree['contenu'];
-                        echo ($contenu);  ?>
+                        <?php
+
+                        if($entree['contenu']!= null)
+                        {$content= nl2br($entree['contenu']) ;}else{
+                        $content= nl2br($entree['contenutxt']);
+                        }
+                        echo ($content);  ?>
                     </div>
 
                     @if ($entree['nb_attach']  > 0)

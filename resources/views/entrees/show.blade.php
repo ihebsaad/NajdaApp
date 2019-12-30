@@ -59,8 +59,9 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                                     <button class="btn btn-sm btn-default"><b><a style="color:black" href="<?php echo $urlapp.'/dossiers/fiche/'.$iddossier;?>">REF: {{ $entree['dossier']   }} - <?php echo  DossiersController::FullnameAbnDossierById($iddossier); ?></a></b></button>
                                 @endif
                                 @if (empty($entree->dossier))
-                                        <button id="addfolder" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfolder"><b><i class="fas fa-folder-plus"></i> Créer un Dossier</b></button>
-                                 @endif
+                                     <a   class="btn btn-md btn-success"   href="{{route('dossiers.create',['identree'=> $entree['id']]) }}"  > <i class="fas fa-folder-plus"></i> Créer un Dossier</a>
+
+                                @endif
 
                                     <button id="afffolder" class="btn   " style="width:180px;background-color: #c5d6eb;color:#333333;"  data-toggle="modal" data-target="#affectfolder"><b><i class="fas fa-folder"></i>  Re-Dispatcher</b></button>
 

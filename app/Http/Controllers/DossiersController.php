@@ -1051,7 +1051,7 @@ class DossiersController extends Controller
 
         //medic.multiservices@topnet.tn
         try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$cci) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$cci,$from,$fromname) {
                 $message
 
                 //    ->to($destinataire)
@@ -1059,7 +1059,9 @@ class DossiersController extends Controller
 
                   //  ->cci('saadiheb@gmail.com')
                     ->subject($sujet)
-                    ->setBody($contenu, 'text/html');
+                    ->setBody($contenu, 'text/html')
+                    ->setFrom([$from => $fromname]);
+
                 if(isset($to )) {
 
                     foreach ($to as $t) {
