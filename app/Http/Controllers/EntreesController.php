@@ -421,8 +421,8 @@ class EntreesController extends Controller
               ->setLibreofficeBinaryPath('/usr/bin/libreoffice') // binary to the libreoffice binary
               ->setTemporaryPath(storage_path().'/temp') // temporary directory for convertion
               ->setTimeout(100) // libreoffice process timeout
-              ->save(storage_path().'/Emails/'.$id.'/'.$withoutExt.'pdf'); // save as pdf
-                 $suppfichiers[]=storage_path().'/Emails/'.$id.'/'.$withoutExt.'pdf';
+              ->save(storage_path().'/Emails/'.$id.'/'.$withoutExt.'.pdf'); // save as pdf
+                 $suppfichiers[]=storage_path().'/Emails/'.$id.'/'.$withoutExt.'.pdf';
                 }
 
               }
