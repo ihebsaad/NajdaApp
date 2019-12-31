@@ -42,6 +42,7 @@ use App\Notif ;
 use Swift_Mailer;
 
 ini_set('memory_limit','1024M');
+ini_set('upload_max_filesize','50M');
 
 
 class DossiersController extends Controller
@@ -121,6 +122,7 @@ class DossiersController extends Controller
                              'nom' => $fichier_name,                        
                              'dossier'=>$dossid,
                              'description' => $descfichier,
+                             'boite' => 4,
                         ]);
                  $attachement->save();                                     
 
