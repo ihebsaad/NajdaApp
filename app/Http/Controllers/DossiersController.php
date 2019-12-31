@@ -1205,7 +1205,8 @@ class DossiersController extends Controller
         if(trim($stat)=='inactif'){$statut='inactif';}else{$statut='actif';}
 
         // statut= 5 => dossier affecté manuellement
-        Dossier::where('id', $id)->update(array('affecte' => $agent,'statut'=>5 ,'current_status'=>$statut));
+
+         Dossier::where('id', $id)->update(array('affecte' => $agent,'statut'=>5 ,'current_status'=>$statut));
 
         $ref=$this->RefDossierById($id);
 

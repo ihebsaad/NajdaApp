@@ -393,9 +393,14 @@ class UsersController extends Controller
               { $seance->dispatcheur=Auth::id();
 
               // affectation des dossiers inactifs
+                  Dossier::setTimestamps(false);
+
                   Dossier::where('current_status','inactif')
                       //  ->where('statut','<>',5)
-                      ->update(array('affecte' => Auth::id()));
+                      ->update(array('affecte' => Auth::id() ));
+                ///  'updated_at' => false
+                  /// ->timestamps = false;
+                   Dossier::setTimestamps(true);
 
               }
               elseif ($seance->dispatcheur==Auth::id())
@@ -490,7 +495,7 @@ class UsersController extends Controller
                           ->where('current_status', 'actif')
                           ->where('statut', '<>', 5);  //auto
 
-                  })->get();
+                  })->update(array('affecte' => $user_dest, 'statut' => 2));
 
                   if($dossiers)
                  {
@@ -534,6 +539,8 @@ class UsersController extends Controller
 
                   })->get();
 
+                  Dossier::setTimestamps(false);
+
                   if($dossiers)
                  {
                   $user_dest=Auth::id();
@@ -543,6 +550,7 @@ class UsersController extends Controller
                     $this->migration_notifs($doss->id,$user_dest);
                   }
                 }
+                  Dossier::setTimestamps(true);
 
 
 
@@ -580,12 +588,14 @@ class UsersController extends Controller
         { $seance->veilleur=Auth::id();
         // affecter des dossiers inactifs
 
-               $dossiers=Dossier::where('current_status','inactif')
+            Dossier::setTimestamps(false);
+            $dossiers=Dossier::where('current_status','inactif')
                   //  ->where('statut','<>',5)
-
                     ->get();
+            Dossier::setTimestamps(true);
 
-                  if($dossiers)
+
+            if($dossiers)
                  {
                   $user_dest=Auth::id();
                   foreach ($dossiers as $doss) {

@@ -7,7 +7,6 @@ class Dossier extends Model
 {
     protected $fillable = ['id', 'created_by', 'affecte','created','created_at',
 
-
 'subscriber_name',
 'subscriber_lastname',
 'adresse_etranger',
@@ -129,6 +128,8 @@ class Dossier extends Model
         'autre_hospital_address'
     ];
 
+    public $timestamps  ;
+
     protected $dateFormat = 'Y-m-d H:i:s';
 
     public function getDateFormat()
@@ -157,8 +158,10 @@ class Dossier extends Model
 
 
 
-
-
+    public static  function setTimestamps($val)
+    {
+        $timestamps = $val;
+    }
 
 
 }

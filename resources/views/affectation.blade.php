@@ -723,7 +723,7 @@
     .userdiv h3{margin-top:2px!important;}
     .userdiv .delete {display:none;}
 
-    .userdiv   {border:2px dotted grey; padding:5px 5px 5px;opactity:0.1;height:800px;}
+    .userdiv   {border:2px dotted grey; padding:5px 5px 5px;opactity:0.1;height:1300px;}
     .userdiv .dossier label{font-size:18px;}
     .userdiv .dossier .infos small{display:none;}
     #drag-elements .dossier .infos{display:block;}

@@ -194,7 +194,9 @@ class LoginController extends Controller
                                 ->where('affecte', $iduser);
                         })->get();
 
-                         if($dossiers)
+                        Dossier::setTimestamps(false);
+
+                        if($dossiers)
                          {
                           $user_dest=$charge;
                           foreach ($dossiers as $doss) {
@@ -203,6 +205,7 @@ class LoginController extends Controller
                             $this->migration_notifs($doss->id,$user_dest);
                           }
                         }
+                        Dossier::setTimestamps(true);
 
 
                     }// charge
@@ -227,7 +230,9 @@ class LoginController extends Controller
                                     ->where('affecte', $iduser);
                             })->get();
 
-                          if($dossiers)
+                            Dossier::setTimestamps(false);
+
+                            if($dossiers)
                          {
                           $user_dest=$tech;
                           foreach ($dossiers as $doss) {
@@ -236,6 +241,7 @@ class LoginController extends Controller
                             $this->migration_notifs($doss->id,$user_dest);
                           }
                         }
+                            Dossier::setTimestamps(true);
 
 
                         } else {
@@ -259,6 +265,7 @@ class LoginController extends Controller
                                         ->where('affecte', $iduser);
                                 })->get();
 
+                                Dossier::setTimestamps(false);
 
                                 if($dossiers)
                                  {
@@ -269,6 +276,8 @@ class LoginController extends Controller
                                     $this->migration_notifs($doss->id,$user_dest);
                                   }
                                 }
+                                Dossier::setTimestamps(true);
+
 
                             }
                         }
@@ -481,6 +490,7 @@ class LoginController extends Controller
                          $dossiers=Dossier::where('affecte', $iduser)
                             ->where('current_status', 'inactif')
                             ->get();
+                        Dossier::setTimestamps(false);
 
                             if($dossiers)
                              {
@@ -491,6 +501,8 @@ class LoginController extends Controller
                                 $this->migration_notifs($doss->id,$user_dest);
                               }
                             }
+                        Dossier::setTimestamps(true);
+
 
                     }// dispatcheur
 
@@ -505,8 +517,10 @@ class LoginController extends Controller
                 // L'utilisateur n'est pas le veilleur
 
                 // Affectation tous les dossiers vers le veilleur
+
                 $dossiers=Dossier::where('affecte', $iduser)
                     ->get();
+                Dossier::setTimestamps(false);
 
                     if($dossiers)
                      {
@@ -517,6 +531,7 @@ class LoginController extends Controller
                         $this->migration_notifs($doss->id,$user_dest);
                       }
                     }
+                Dossier::setTimestamps(true);
 
             }
 
@@ -544,7 +559,9 @@ class LoginController extends Controller
                         ->where('affecte', $iduser);
                 })->get();
 
-                 if($dossiers)
+                Dossier::setTimestamps(false);
+
+                if($dossiers)
                      {
                       $user_dest=$charge;
                       foreach ($dossiers as $doss) {
@@ -553,6 +570,7 @@ class LoginController extends Controller
                         $this->migration_notifs($doss->id,$user_dest);
                       }
                     }
+                Dossier::setTimestamps(true);
 
             }// charge
             else {
@@ -576,6 +594,8 @@ class LoginController extends Controller
                             ->where('affecte', $iduser);
                     })->get();
 
+                    Dossier::setTimestamps(false);
+
                     if($dossiers)
                      {
                       $user_dest=$tech;
@@ -585,6 +605,7 @@ class LoginController extends Controller
                         $this->migration_notifs($doss->id,$user_dest);
                       }
                     }
+                    Dossier::setTimestamps(true);
 
 
                 } else {
@@ -608,6 +629,8 @@ class LoginController extends Controller
                                 ->where('affecte', $iduser);
                         })->get()(array('affecte' => $medic, 'statut' => 2));
 
+                        Dossier::setTimestamps(false);
+
                         if($dossiers)
                          {
                           $user_dest=$medic;
@@ -617,6 +640,7 @@ class LoginController extends Controller
                             $this->migration_notifs($doss->id,$user_dest);
                           }
                         }
+                        Dossier::setTimestamps(true);
 
                     }
                 }

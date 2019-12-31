@@ -159,7 +159,7 @@ class RechercheController extends Controller
                  $etat=$row->current_status;
               }
 
-              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; overflow: hidden; left:-50px;"  ><a href="'.$burl.'/dossiers/fiche/'.$row->id.'">'.$row->reference_customer.' ( Réf. client) ('.$etat.')'.$affecOuNon.'</a></li>';
+              $output.='<li  class="resAutocompRech" style=" align: left; width:570px; overflow: hidden; left:-50px;"  ><a href="'.$burl.'/dossiers/fiche/'.$row->id.'">'.$row->reference_customer.' ( Réf. client) (Réf: '.$row->reference_medic.') ('.$etat.')'.$affecOuNon.'</a></li>';
           }
 
           $output.='<li class="divider"></li>';
