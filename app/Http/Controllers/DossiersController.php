@@ -1124,7 +1124,7 @@ class DossiersController extends Controller
 
     }
 
-      public function migration_notifs ($iddoss, $iduser_dest)
+    public function migration_notifs ($iddoss, $iduser_dest)
     {
 
         $notifs_doss=Notif::where('dossierid','=',$iddoss)->get();

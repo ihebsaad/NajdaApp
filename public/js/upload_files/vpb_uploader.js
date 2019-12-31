@@ -1,8 +1,9 @@
 
 khaled=[];
 
-
-
+kf=0;
+nump=0;
+ii=0;
    
 function vpb_multiple_file_uploader(vpb_configuration_settings)
 {
@@ -158,11 +159,19 @@ function vpb_multiple_file_uploader(vpb_configuration_settings)
 					{
 						vpb_file_icon = '<img src="images/general.png" align="absmiddle" border="0" alt="" />';
 					}
-					
+					var reader = new FileReader();
+					nom_limit=this.vpb_files[i].name.substring(0, 40);
+					tab=this.vpb_files[i];
+					nomn=this.vpb_files[i].name;
+					//urlk=this.vpb_files[i].mozFullPath;
+					//alert(urlk);
 					//Assign browsed files to a variable so as to later display them below
-					vpb_added_files_displayer += '<tr id="add_fileID'+vpb_file_id+'" class="'+new_classc+'"><td>'+vpb_file_icon+' '+this.vpb_files[i].name.substring(0, 40)+'</td><td>'+vpb_actual_fileSize+'</td><td><span id="remove'+vpb_file_id+'"><span style="color:red; cursor: pointer;" class="vpb_files_remove_left_inner" onclick="vpb_remove_this_file(\''+vpb_file_id+'\',\''+this.vpb_files[i].name+'\');">x</span></span></td></tr></div>';
-					khaled.push(this.vpb_files[i]) ;
+					//reader.onload = function(ee) {
+					vpb_added_files_displayer += '<tr id="add_fileID'+vpb_file_id+'" class="'+new_classc+'"><td><a href="javascript:void(0)" id="file'+nomn+'" class="fileupkbs"  >'+' '+nom_limit+'</a></td><td>'+vpb_actual_fileSize+'</td><td><span id="remove'+vpb_file_id+'"><span style="color:red; cursor: pointer;" class="vpb_files_remove_left_inner" onclick="vpb_remove_this_file(\''+vpb_file_id+'\',\''+nomn+'\');">x</span></span></td></tr></div>';
+					khaled.push(tab);
 				    //alert(khaled[khaled.length-1].name);
+				   //  }
+				    // reader.readAsDataURL(this.vpb_files[i]);
 				}
 			}
 			//Display browsed files on the screen to the user who wants to upload them
@@ -315,6 +324,12 @@ function FileListItem(a) {
 
 function vpb_remove_this_file(id, filename)
 {
+
+/* if (window.File && window.FileReader && window.FileList && window.Blob) {
+  alert(' Great success! All the File APIs are supported.');
+} else {
+  alert('The File APIs are not fully supported in this browser.');
+}*/
 	
 		$("#vpb_removed_files").append('<input type="hidden" id="'+id+'" value="'+id+'">');
 		//$("#add_fileID"+id).slideUp();
@@ -339,4 +354,93 @@ function vpb_remove_this_file(id, filename)
 	return false;
 }
 
-  
+// Loaded via <script> tag, create shortcut to access PDF.js exports.
+var pdfjsLib = window['pdfjs-dist/build/pdf'];
+// The workerSrc property shall be specified.
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+ var nump=0;
+ var pageNumber = 1;
+ var thePDF = null;
+  $(document).on('click','.fileupkbs', function() {
+
+
+   var idfile=$(this).attr("id");
+   idfile=idfile.substr(4);
+   //alert(idfile);
+     var file;
+   for(var k=0; k<khaled.length; k++){
+
+			if(khaled[k].name===idfile)
+			{
+               
+               file = khaled[k];
+			}
+			
+	     }
+
+
+   
+	if(file.type == "application/pdf"){
+		var fileReader = new FileReader();  
+		fileReader.onload = function() {
+			var pdfData = new Uint8Array(this.result);
+			// Using DocumentInitParameters object to load binary data.
+			var loadingTask = pdfjsLib.getDocument({data: pdfData});
+			//var numPages = doc.numPages;
+			loadingTask.promise.then(function(pdf) {
+			kdelete =jQuery(document).find("#pdfbody");
+			kdelete.empty();
+			 // alert('PDF loaded');
+			  //alert(pdf.numPages);
+			  // Fetch the first page
+              nump=pdf.numPages;
+              
+                thePDF=pdf; 
+			  pageNumber = 1;
+			  pdf.getPage(pageNumber).then( handlePages);
+
+			
+			$('#voirfichier').modal('show');
+			}, function (reason) {
+			  // PDF loading error
+			  console.error(reason);
+			});
+		};
+		fileReader.readAsArrayBuffer(file);
+	}
+
+
+  });
+
+function handlePages (page) {
+//alert('Page loaded');
+//alert(kf);
+var scale = 1.5;
+var viewport = page.getViewport({scale: scale});
+//jQuery("#pdfbody").append('<canvas id=pdfViewer'+kf+'></canvas>');
+kapend =jQuery(document).find("#pdfbody");
+kapend.append('<canvas id=pdfViewer'+pageNumber+'></canvas>');
+// Prepare canvas using PDF page dimensions
+var canvas = $("#pdfViewer"+pageNumber)[0];
+//canvas = jQuery("#pdfbody").createElement( "canvas" );
+var context = canvas.getContext('2d');
+canvas.height = viewport.height;
+canvas.width = viewport.width;
+
+// Render PDF page into canvas context
+var renderContext = {
+  canvasContext: context,
+  viewport: viewport
+};
+var renderTask = page.render(renderContext);
+//jQuery("#pdfbody").appendChild( canvas );
+
+ pageNumber++;
+    if ( thePDF !== null && pageNumber <= nump )
+    {
+        thePDF.getPage( pageNumber ).then( handlePages );
+    }
+				
+
+
+}

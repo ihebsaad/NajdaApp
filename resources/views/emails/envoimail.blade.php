@@ -2,7 +2,12 @@
 
 @section('content')
 
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+
+
     <script src="{{  URL::asset('public/js/upload_files/vpb_uploader.js') }}" type="text/javascript"></script>
+
+
    <!--  <script src="{{  URL::asset('public/js/upload_files/jquery.js') }}" type="text/javascript"></script>
     <script src="{{  URL::asset('public/js/upload_files/bootstrap.js') }}" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8" language="javascript" src="{{  URL::asset('public/js/upload_files/jquery.dataTables.js') }}"></script>
@@ -258,6 +263,26 @@ $(document).ready(function()
 
         </div>
     </div>
+
+   
+ <!-- Modal Document-->
+    <div class="modal fade" id="voirfichier" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Aperçu de document</h4>
+        </div>
+        <div id="pdfbody" class="modal-body" style=" height: 700px; overflow-y: scroll;">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
     <!-- Modal Document-->
     <div class="modal  " id="modalalert" >
