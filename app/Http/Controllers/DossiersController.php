@@ -1217,7 +1217,8 @@ class DossiersController extends Controller
 
 
         $this->migration_miss ($id,$agent);
-                
+        $this->migration_notifs ($id,$agent);
+
         $affec=new AffectDoss([
 
             'util_affecteur'=>$iduser,
@@ -1367,7 +1368,7 @@ class DossiersController extends Controller
         usort($communins, function  ($element1, $element2) {
             $datetime1 = strtotime($element1['reception']);
             $datetime2 = strtotime($element2['reception']);
-            return $datetime1 - $datetime2;
+            return $datetime2 - $datetime1;
         }
 
         );

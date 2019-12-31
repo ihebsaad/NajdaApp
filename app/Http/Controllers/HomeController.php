@@ -15,6 +15,9 @@ use App\Dossier ;
 use Illuminate\Support\Facades\Auth;
 use App\TypeMission;
 use Illuminate\Support\Facades\Log;
+use App\Mission;
+use App\Notif;
+use App\ActionEC;
 
 
 class HomeController extends Controller

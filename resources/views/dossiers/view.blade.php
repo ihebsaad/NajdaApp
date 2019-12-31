@@ -85,10 +85,9 @@ use \App\Http\Controllers\UsersController;
             if($statut=='Cloture'){ } else {
 
             if ((Gate::check('isAdmin') || Gate::check('isSupervisor')))
-            {echo '<a href="#" data-toggle="modal" data-target="#attrmodal">Non affecté</a>';}
+            {echo '<a href="#" data-toggle="modal" data-target="#attrmodal">merci cliquer pour affecter</a>';}
             else
-            {echo '<b>Non affecté</b>';}
-
+            {echo '<b>merci cliquer pour affecter</b>';}
 
 
             }

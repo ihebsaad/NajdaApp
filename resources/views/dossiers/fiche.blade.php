@@ -57,9 +57,9 @@ use  \App\Http\Controllers\DocsController;
         else
         {
             if ((Gate::check('isAdmin') || Gate::check('isSupervisor') || ( $idagent==$iduser) ))
-            {echo '<a style="color:#FD9883" href="#" data-toggle="modal" data-target="#attrmodal">Non affecté</a>';}
+            {echo '<a style="color:#FD9883" href="#" data-toggle="modal" data-target="#attrmodal">merci cliquer pour affecter</a>';}
             else
-            {echo '<b style="color:#FD9883">Non affecté</b>';}
+            {echo '<b style="color:#FD9883">merci cliquer pour affecter</b>';}
         } ?>
 
          <?php   } ?>
