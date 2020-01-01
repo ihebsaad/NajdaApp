@@ -1527,7 +1527,7 @@ var head = document.getElementsByTagName('head')[0];
 var script = document.createElement('script');
 script.type = 'text/javascript';
 
-    script.src = 'http://192.168.1.249/najdatest/public/webphone/najdaapp/webphone/webphone_api.js';
+    script.src = 'https://najdaapp.enterprise-esolutions.com/public/webphone/najdaapp/webphone/webphone_api.js';
 
 head.appendChild(script);
 
@@ -1536,7 +1536,7 @@ head.appendChild(script);
 $('#phonebtn1').on('click', function(event) {
                            
                          
-                                window.open('http://192.168.1.249/najdatest/public/webphone/najdaapp/webphone/samples/mobile.html');
+                                window.open('https://najdaapp.enterprise-esolutions.com/public/webphone/najdaapp/webphone/samples/mobile.html');
 
                                
 
