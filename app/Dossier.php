@@ -126,9 +126,12 @@ class Dossier extends Model
         'plafond',
         'user_id',
         'autre_hospital_address',
+
         'specialite_TPA',
         'ID_assure',
-        'chambre_hoptial'
+        'chambre_hoptial',
+        'devise_plafond',
+        'devise_franchise'
     ];
 
     public $timestamps  ;

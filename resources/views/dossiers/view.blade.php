@@ -1830,7 +1830,7 @@ array_push($listepr,$pr['prestataire_id']);
                                                     <option value="Medic International">Medic International</option>
                                                     <option value="Najda TPA">Najda TPA</option>
                                                     <option value="Transport Najda">Transport Najda</option>
-                                                    <option value="Transport Najda">X-Press</option>
+                                                    <option value="X-Press">X-Press</option>
                         </select>
                     </div>
                     <div id="externaffect" class="col-md-3" style="float: left!important;display: none;">
@@ -3126,10 +3126,10 @@ function annuleom(titre,iddoc)
 
                     });
                 });
-
+*/
    var items = [];
    var html_string="";
-*/
+
 function filltemplate(data,tempdoc,mgopprec,idgopprec)
 
 {

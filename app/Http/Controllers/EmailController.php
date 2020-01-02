@@ -272,13 +272,12 @@ class EmailController extends Controller
 
     } /// end inbox
 
-// Boite test
+/*
   function fusion_attachements_recus ($aAttachment,$id)
   {
         
                 $aAttachment->each(function ($oAttachment) use ($id) {
                     $path = storage_path() . "/Emails/";
-                    /** @var \Webklex\IMAP\Attachment $oAttachment */
                     if (!file_exists($path . $id)) {
                         mkdir($path . $id, 0777, true);
                     }
@@ -398,6 +397,7 @@ class EmailController extends Controller
                 });
 
               }
+              */
     function check()
     {
 /*
@@ -3794,6 +3794,7 @@ $id=0;
         if (isset($prest)){$prest=$prest;}else{$prest=0;}
         $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
         $nomabn=app('App\Http\Controllers\DossiersController')->NomAbnDossierById($id);
+        $nomabnC=app('App\Http\Controllers\DossiersController')->FullnameAbnDossierById($id);
         $refdem=app('App\Http\Controllers\DossiersController')->RefDemDossierById($id);
         $refclient=app('App\Http\Controllers\DossiersController')->ChampById('reference_customer',$id);
         $entrees =   Entree::where('dossier', $ref)->get();
@@ -4011,7 +4012,7 @@ $id=0;
 
 */
 
-        return view('emails.envoimail',['dossier'=>$dossier,'refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type]);
+        return view('emails.envoimail',['dossier'=>$dossier,'refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,$nomabnC=>'nomabnC','refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type]);
     }
 
     public function envoimailbr($id)
@@ -4295,7 +4296,7 @@ if ($from=='najdassist@gmail.com')
         $contenu=$contenu.'<br><br>Cordialement / Best regards<br>'.$nomuser.' '. $signatureagent.'<br><br><hr style="float:left;width:40%"><br>'.$signatureentite;
 
 
-        if($envoyeid>0){ $this->export_pdf_send($envoyeid,$files,$attachs);};
+        if($envoyeid>0){ $this->export_pdf_send($envoyeid,$files,$attachs,$from,$fromname,$to);};
          //dd('pk');
 
         $swiftMailer = new Swift_Mailer($swiftTransport);
@@ -4316,7 +4317,6 @@ if ($from=='najdassist@gmail.com')
          ->setBody($contenu, 'text/html')
                 ->setFrom([$from => $fromname]);
                 if(isset($to )) {
-
                     foreach ($to as $t) {
                         $message->to($t);
                      }
@@ -4726,12 +4726,12 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
 
 
-    public function export_pdf_send($id,$files,$attachs)
+    public function export_pdf_send($id,$files,$attachs,$from,$fromname,$to)
     {
         // Fetch all customers from database
         $envoye = Envoye::find($id);
          // Send data to the view using loadView function of PDF facade
-        $pdf = PDF2::loadView('entrees.pdfsend', ['envoye' => $envoye])->setPaper('a4', '');
+        $pdf = PDF2::loadView('entrees.pdfsend', ['envoye' => $envoye,'from'=>$from,'fromname'=>$fromname,'to'=>$to])->setPaper('a4', '');
 
         $path= storage_path()."/Envoyes/";
 
@@ -4752,204 +4752,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         $attachement->save();
 
 
-
-        /*fusion pdf*/
-        /*$pdfFile1Path = storage_path().'/Envoyes/62/ENV - hhj.pdf';
-        $pdfFile2Path = storage_path().'/Envoyes/62/PEC_frais_imagerie_15N0012.pdf';
-        $pdfm =  PDFMerger::init();
-        $pdfm->addPDF($pdfFile1Path, 'all');
-        $pdfm->addPDF($pdfFile2Path, 'all');
-        $pathForTheMergedPdf = storage_path().'/Envoyes/62/result.pdf';
-        $pdfm->merge();
-        $pdfm->save($pathForTheMergedPdf, "file");*/
-
-        /*conversion image*/
-       /* $image = storage_path().'/Envoyes/62/piano.jpg';
-        $withoutExt = preg_replace('/\.[^.\s]{3,4}$/', '', $image);
-        $pdfName = $withoutExt.".pdf";
-        //$pdf = new FPDF();
-        FPDF::AddPage();
-        FPDF::Image($image,5,10,180);
-        FPDF::Output('F',$pdfName);*/
-
-        /*delete file*/
-         /*$myFile = storage_path().'/Envoyes/62/result.pdf';
-        if(File::exists($myFile))
-        {
-            File::delete($myFile);
-        }*/
-
-         /*$new_path=storage_path().'/Envoyes/63/piano.pdf' ;
-         $old_path=storage_path().'/Envoyes/62/piano.pdf' ;
-        if(File::exists($old_path) && ! File::exists($new_path) )
-        {
-          \File::copy($old_path, $new_path);
-         File::move($old_path, $new_path); // couper
-        }
-      */
-       if($files || $attachs)
-       {
-          $pdfmerger = PDFMerger::init();
-          $corpemail = storage_path().$path2;
-          $pdfmerger->addPDF($corpemail,'all');
-          $suppfichiers=array();
-          $image_ext = array('jpeg', 'jpg', 'png', 'gif');
-          $doc_ex_liboff= array('doc', 'docx', 'odt', 'pdf', 'dot', 'wri','602', 'txt', 'sdw', 'sgl', 'vor', 'wpd','wps', 'html', 'htm', 'jdt', 'jtt', 'hwp', 'pdb', 'pages', 'cwk', 'rtf', 'xls', 'ods', 'numbers', 'dif', 'gnm', 'gnumeric', 'wk1', 'wks', '123', 'wk3','wk4', 'xlw', 'xlt', 'pxl', 'wb2', 'wq1',
-        'wq2', 'sdc', 'vor', 'slk', 'xlts', 'xlsm','xlsx','svg', 'odg','ppt', 'pptx', 'odp', 'kth', 'key', 'pps', 'pot', 'pcd', 'sda', 'sdd','sdp', 'vor', 'pot', 'potx', 'ppsx','ppsm' );
-
-        if($files)
-        {
-         foreach($files as $file) {
-
-          $fichier_ext=$file->getClientOriginalExtension();
-
-          if( strtolower($fichier_ext) != 'pdf' )
-          {
-            // si une image 
-           if( in_array( strtolower($fichier_ext),  $image_ext)  )
-              {
-                \File::copy($file->getRealPath(), storage_path().'/Envoyes/'.$id.'/'.$file->getClientOriginalName());
-                $image = storage_path().'/Envoyes/'.$id.'/'.$file->getClientOriginalName();
-                $withoutExt = preg_replace('/\.[^.\s]{3,4}$/', '', $image);
-                $pdfName = $withoutExt.".pdf";
-                $fpdf= new FPDF();
-                $fpdf->AddPage();
-                $fpdf->Image($image,5,10,180);
-                $fpdf->Output('F',$pdfName);
-                $pdfmerger->addPDF($pdfName,'all');
-                $suppfichiers[]=$pdfName;
-
-              }// fin image
-              else
-              {// extension traité par libre office
-
-                if( in_array( strtolower($fichier_ext), $doc_ex_liboff) )
-                {
-
-                if (!file_exists(storage_path().'/Envoyes/'.$id.'/'.$file->getClientOriginalName())) {
-                \File::copy($file->getRealPath(), storage_path() .'/Envoyes/'.$id.'/'.$file->getClientOriginalName());
-                 }
-               $withoutExt = preg_replace('/\.[^.\s]{3,4}$/', '',$file->getClientOriginalName());
-               Converter::file(storage_path() .'/Envoyes/'.$id.'/'.$file->getClientOriginalName()) // file for convertion
-              ->setLibreofficeBinaryPath('/usr/bin/libreoffice') // binary to the libreoffice binary
-              ->setTemporaryPath(storage_path().'/temp') // temporary directory for convertion
-              ->setTimeout(100) // libreoffice process timeout
-              ->save(storage_path().'/Envoyes/'.$id.'/'.$withoutExt.'.pdf'); // save as pdf
-                $suppfichiers[]=storage_path().'/Envoyes/'.$id.'/'.$withoutExt.'.pdf';
-
-                }
-
-              }
-
-
-          }
-          else // si le fichier est deja pdf
-          {
-            \File::copy($file->getRealPath(), storage_path().'/Envoyes/'.$id.'/'.$file->getClientOriginalName());
-             $fichierpdf=storage_path().'/Envoyes/'.$id.'/'.$file->getClientOriginalName();
-             $pdfmerger->addPDF($fichierpdf,'all');
-
-          }
- 
-          //$fichier_name =  $file->getClientOriginalName();
-         // $file->move($path.$id, $fichier_name);
-
-         }
-        }
-        if($attachs)
-        {
-            
-         foreach($attachs as $atta) {
-           $att=Attachement::find($atta);
-          // dd($att);
-          if(isset($att->type))
-          {
-          $fichier_ext=$att->type;
-          }
-          else
-          {
-            $fichier_ext='vide';
-          }
-
-          if( strtolower($fichier_ext) != 'pdf' )
-          {
-            // si une image 
-           if( in_array( strtolower($fichier_ext),  $image_ext)  )
-              {
-                 if (!file_exists(storage_path().'/Envoyes/'.$id.'/'.$att->nom)) {
-                \File::copy(storage_path().$att->path, storage_path().'/Envoyes/'.$id.'/'.$att->nom);
-                 }
-                $image = storage_path().'/Envoyes/'.$id.'/'.$att->nom;
-                $withoutExt = preg_replace('/\.[^.\s]{3,4}$/', '', $image);
-                $pdfName = $withoutExt.".pdf";
-                $fpdf= new FPDF();
-                $fpdf->AddPage();
-                $fpdf->Image($image,5,10,180);
-                $fpdf->Output('F',$pdfName);
-                $pdfmerger->addPDF($pdfName,'all');
-                $suppfichiers[]=$pdfName;
-
-              }// fin image
-              else
-              {// extension traité par libre office
-
-                if( in_array( strtolower($fichier_ext), $doc_ex_liboff) )
-                {
-
-                if (!file_exists(storage_path().'/Envoyes/'.$id.'/'.$att->nom)) {
-                \File::copy(storage_path().$att->path, storage_path().'/Envoyes/'.$id.'/'.$att->nom);
-                 }
-               $withoutExt = preg_replace('/\.[^.\s]{3,4}$/', '',$att->nom);
-               Converter::file(storage_path().'/Envoyes/'.$id.'/'.$att->nom) // file for convertion
-              ->setLibreofficeBinaryPath('/usr/bin/libreoffice') // binary to the libreoffice binary
-              ->setTemporaryPath(storage_path().'/temp') // temporary directory for convertion
-              ->setTimeout(100) // libreoffice process timeout
-              ->save(storage_path().'/Envoyes/'.$id.'/'.$withoutExt.'.pdf'); // save as pdf
-                 $suppfichiers[]=storage_path().'/Envoyes/'.$id.'/'.$withoutExt.'.pdf';
-                }
-
-              }
-
-
-          }
-          else // si le fichier est deja pdf
-          {
-               if (!file_exists(storage_path().'/Envoyes/'.$id.'/'.$att->nom)) {
-
-            \File::copy(storage_path().$att->path, storage_path().'/Envoyes/'.$id.'/'.$att->nom);
-          }
-             $fichierpdf=storage_path().'/Envoyes/'.$id.'/'.$att->nom;
-             $pdfmerger->addPDF($fichierpdf,'all');
-
-          }
- 
-          //$fichier_name =  $file->getClientOriginalName();
-         // $file->move($path.$id, $fichier_name);
-
-         }
-
-
-        }// fin attachement
-
-        $pathForTheMergedPdf = storage_path().'/Envoyes/'.$id.'/'.$name.'_final.pdf';
-        $pdfmerger->merge();
-        $pdfmerger->save($pathForTheMergedPdf, "file");
-
-        $attachement->update(['path'=>'/Envoyes/'.$id.'/'.$name.'_final.pdf','nom'=>$name.'_final.pdf']);
-
-        foreach ($suppfichiers as $sf) {
-          File::delete($sf);
-        }
-
-      }
-
-      // affiche tous les noms de dossier
-        //$arr=array();
-      //-----------------------------------------------------------
-
-
-   
-     
 
     }
 

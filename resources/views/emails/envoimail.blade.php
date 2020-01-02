@@ -193,6 +193,24 @@ $(document).ready(function()
                     </div>
                 </div>
 
+              <?php  if($typea=='NAJDA TPA'){
+                 ?>
+                <div class="form-group">
+                    <label for="sujet">Sujet :</label>
+                    <?php if($type=='prestataire')
+                    { ?>
+                    <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabnC ?> - N/Réf(O/Ref): <?php echo $ref ?>"/>
+                    <?php }
+                    if ($type=='assure') {?>
+                    <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabnC ?> - N/Réf(O/Ref): <?php echo $ref ?>"/>
+                    <?php        } ?>
+                    <?php   if  ($type=='client') {?>
+                    <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabnC ?> - V/Réf(Y/Ref): <?php echo $refclient ?>   - N/Réf(O/Ref): <?php echo $ref ?>"/>
+                    <?php        } ?>
+                </div>
+
+            <?php }else{  ?>
+
                 <div class="form-group">
                     <label for="sujet">Sujet :</label>
                     <?php if($type=='prestataire')
@@ -206,6 +224,9 @@ $(document).ready(function()
                     <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - V/Réf(Y/Ref): <?php echo $refclient ?>   - N/Réf(O/Ref): <?php echo $ref ?>"/>
                     <?php        } ?>
                 </div>
+
+                <?php    }
+                ?>
                 <div class="form-group">
                     <label for="description">Description :</label>
                     <input id="description" type="text" class="form-control" name="description" id="description" required/>
