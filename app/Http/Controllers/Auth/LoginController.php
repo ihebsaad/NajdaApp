@@ -194,7 +194,7 @@ class LoginController extends Controller
                                 ->where('affecte', $iduser);
                         })->get();
 
-                        Dossier::setTimestamps(false);
+                     //   Dossier::setTimestamps(false);
 
                         if($dossiers)
                          {
@@ -205,7 +205,7 @@ class LoginController extends Controller
                             $this->migration_notifs($doss->id,$user_dest);
                           }
                         }
-                        Dossier::setTimestamps(true);
+                      //  Dossier::setTimestamps(true);
 
 
                     }// charge
@@ -230,7 +230,7 @@ class LoginController extends Controller
                                     ->where('affecte', $iduser);
                             })->get();
 
-                            Dossier::setTimestamps(false);
+                       //     Dossier::setTimestamps(false);
 
                             if($dossiers)
                          {
@@ -241,7 +241,7 @@ class LoginController extends Controller
                             $this->migration_notifs($doss->id,$user_dest);
                           }
                         }
-                            Dossier::setTimestamps(true);
+                        //    Dossier::setTimestamps(true);
 
 
                         } else {
@@ -265,7 +265,7 @@ class LoginController extends Controller
                                         ->where('affecte', $iduser);
                                 })->get();
 
-                                Dossier::setTimestamps(false);
+                             //   Dossier::setTimestamps(false);
 
                                 if($dossiers)
                                  {
@@ -276,7 +276,7 @@ class LoginController extends Controller
                                     $this->migration_notifs($doss->id,$user_dest);
                                   }
                                 }
-                                Dossier::setTimestamps(true);
+                             //   Dossier::setTimestamps(true);
 
 
                             }
@@ -490,7 +490,7 @@ class LoginController extends Controller
                          $dossiers=Dossier::where('affecte', $iduser)
                             ->where('current_status', 'inactif')
                             ->get();
-                        Dossier::setTimestamps(false);
+                   //     Dossier::setTimestamps(false);
 
                             if($dossiers)
                              {
@@ -501,7 +501,7 @@ class LoginController extends Controller
                                 $this->migration_notifs($doss->id,$user_dest);
                               }
                             }
-                        Dossier::setTimestamps(true);
+                   //     Dossier::setTimestamps(true);
 
 
                     }// dispatcheur
@@ -520,7 +520,7 @@ class LoginController extends Controller
 
                 $dossiers=Dossier::where('affecte', $iduser)
                     ->get();
-                Dossier::setTimestamps(false);
+               // Dossier::setTimestamps(false);
 
                     if($dossiers)
                      {
@@ -531,7 +531,7 @@ class LoginController extends Controller
                         $this->migration_notifs($doss->id,$user_dest);
                       }
                     }
-                Dossier::setTimestamps(true);
+              //  Dossier::setTimestamps(true);
 
             }
 
@@ -559,7 +559,7 @@ class LoginController extends Controller
                         ->where('affecte', $iduser);
                 })->get();
 
-                Dossier::setTimestamps(false);
+            //    Dossier::setTimestamps(false);
 
                 if($dossiers)
                      {
@@ -570,7 +570,7 @@ class LoginController extends Controller
                         $this->migration_notifs($doss->id,$user_dest);
                       }
                     }
-                Dossier::setTimestamps(true);
+              //  Dossier::setTimestamps(true);
 
             }// charge
             else {
@@ -594,7 +594,7 @@ class LoginController extends Controller
                             ->where('affecte', $iduser);
                     })->get();
 
-                    Dossier::setTimestamps(false);
+               //     Dossier::setTimestamps(false);
 
                     if($dossiers)
                      {
@@ -605,7 +605,7 @@ class LoginController extends Controller
                         $this->migration_notifs($doss->id,$user_dest);
                       }
                     }
-                    Dossier::setTimestamps(true);
+                //    Dossier::setTimestamps(true);
 
 
                 } else {
@@ -629,7 +629,7 @@ class LoginController extends Controller
                                 ->where('affecte', $iduser);
                         })->get()(array('affecte' => $medic, 'statut' => 2));
 
-                        Dossier::setTimestamps(false);
+                  //      Dossier::setTimestamps(false);
 
                         if($dossiers)
                          {
@@ -640,7 +640,7 @@ class LoginController extends Controller
                             $this->migration_notifs($doss->id,$user_dest);
                           }
                         }
-                        Dossier::setTimestamps(true);
+                //        Dossier::setTimestamps(true);
 
                     }
                 }

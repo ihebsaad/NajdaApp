@@ -330,7 +330,7 @@ class HomeController extends Controller
                 // affecter dossiers ouverts inactifs
                 $dossiers=Dossier::where('current_status','inactif')
                     ->get();
-                Dossier::setTimestamps(false);
+           //     Dossier::setTimestamps(false);
 
                 if($dossiers)
                 {
@@ -340,7 +340,7 @@ class HomeController extends Controller
                         $this->migration_notifs($doss->id,$par);
                     }
                 }
-                Dossier::setTimestamps(true);
+           //     Dossier::setTimestamps(true);
 
             }
 
@@ -458,7 +458,7 @@ class HomeController extends Controller
 
                 })->get();
 
-                Dossier::setTimestamps(false);
+          //      Dossier::setTimestamps(false);
 
                 if($dossiers)
                 {
@@ -468,7 +468,7 @@ class HomeController extends Controller
                         $this->migration_notifs($doss->id,$par);
                     }
                 }
-                Dossier::setTimestamps(true);
+            //    Dossier::setTimestamps(true);
 
             }
 
@@ -479,7 +479,7 @@ class HomeController extends Controller
                 // affecter dossiers ouverts inactifs
                 $dossiers=Dossier::where('current_status','inactif')
                     ->get();
-                Dossier::setTimestamps(false);
+            //    Dossier::setTimestamps(false);
 
                 if($dossiers)
                 {
@@ -489,7 +489,7 @@ class HomeController extends Controller
                         $this->migration_notifs($doss->id,$par);
                     }
                 }
-                Dossier::setTimestamps(true);
+             //   Dossier::setTimestamps(true);
 
 
             }
@@ -846,7 +846,7 @@ return redirect('roles');
 
             })->get();
 
-            Dossier::setTimestamps(false);
+       //     Dossier::setTimestamps(false);
 
             if($dossiers)
             {
@@ -856,7 +856,7 @@ return redirect('roles');
                     $this->migration_notifs($doss->id,$val);
                 }
             }
-            Dossier::setTimestamps(true);
+       //     Dossier::setTimestamps(true);
 
 
             $agent=User::find($val);
@@ -872,7 +872,7 @@ return redirect('roles');
 
             $dossiers=Dossier::where('current_status','inactif')
                 ->get();
-            Dossier::setTimestamps(false);
+       //     Dossier::setTimestamps(false);
 
             if($dossiers)
             {
@@ -882,7 +882,7 @@ return redirect('roles');
                     $this->migration_notifs($doss->id,$val);
                 }
             }
-            Dossier::setTimestamps(true);
+      //      Dossier::setTimestamps(true);
 
             $agent=User::find($val);
             $nomag=$agent->name.' '.$agent->lastname;
@@ -896,7 +896,7 @@ return redirect('roles');
             // affecter dossiers ouverts inactifs
             $dossiers=Dossier::where('current_status','inactif')
                 ->get();
-            Dossier::setTimestamps(false);
+         //   Dossier::setTimestamps(false);
 
             if($dossiers)
             {
@@ -906,7 +906,7 @@ return redirect('roles');
                     $this->migration_notifs($doss->id,$val);
                 }
             }
-            Dossier::setTimestamps(true);
+         //   Dossier::setTimestamps(true);
 
             $agent=User::find($val);
             $nomag=$agent->name.' '.$agent->lastname;

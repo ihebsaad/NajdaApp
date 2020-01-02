@@ -393,14 +393,14 @@ class UsersController extends Controller
               { $seance->dispatcheur=Auth::id();
 
               // affectation des dossiers inactifs
-                  Dossier::setTimestamps(false);
+             //     Dossier::setTimestamps(false);
 
                   Dossier::where('current_status','inactif')
                       //  ->where('statut','<>',5)
                       ->update(array('affecte' => Auth::id() ));
                 ///  'updated_at' => false
                   /// ->timestamps = false;
-                   Dossier::setTimestamps(true);
+             //      Dossier::setTimestamps(true);
 
               }
               elseif ($seance->dispatcheur==Auth::id())
@@ -539,7 +539,7 @@ class UsersController extends Controller
 
                   })->get();
 
-                  Dossier::setTimestamps(false);
+                //  Dossier::setTimestamps(false);
 
                   if($dossiers)
                  {
@@ -550,7 +550,7 @@ class UsersController extends Controller
                     $this->migration_notifs($doss->id,$user_dest);
                   }
                 }
-                  Dossier::setTimestamps(true);
+               //   Dossier::setTimestamps(true);
 
 
 
@@ -588,11 +588,11 @@ class UsersController extends Controller
         { $seance->veilleur=Auth::id();
         // affecter des dossiers inactifs
 
-            Dossier::setTimestamps(false);
+         //   Dossier::setTimestamps(false);
             $dossiers=Dossier::where('current_status','inactif')
                   //  ->where('statut','<>',5)
                     ->get();
-            Dossier::setTimestamps(true);
+         //   Dossier::setTimestamps(true);
 
 
             if($dossiers)
