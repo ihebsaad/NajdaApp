@@ -291,30 +291,26 @@ class EntreesController extends Controller
 
     }
 
+    public function destroy2($id)
+    {
+        $entree = Entree::find($id);
+        $entree->delete();
+
+        // supprimer notif
+        $notif=Notif::where('entree',$id)->first();
+        if(isset ($notif)) { $notif->delete();}
+
+        return redirect('/entrees/dispatching')->with('success', '  Supprimé');
+    }
 
     public function destroy($id)
     {
-
-
         $entree = Entree::find($id);
         $entree->delete();
 
         // supprimer notif
         $notif=Notif::where('entree',$id)->first();
       if(isset ($notif)) { $notif->delete();}
-
-
-
-
-        /*  $notifid = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"id": '.$id.'}}\')')->get(['id']);
-          $idnotif = array_values($notifid['0']->getAttributes());
-          $idnotification=$idnotif['0'];
-
-          $notif = Notification::find($idnotification);
-
-          $notif->delete();*/
-
-
 
         return redirect('/entrees')->with('success', '  Supprimé');
     }
@@ -634,7 +630,8 @@ class EntreesController extends Controller
         public static function countnotifs()
     {
 
-     $count=Entree::where('dossier','')
+     $count=Entree::where('statut','<','2')
+         ->where('dossier','=','')
      ->count();
 
         return $count;

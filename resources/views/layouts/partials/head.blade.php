@@ -628,7 +628,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
         checkNotifs();
        // checkemails();	//test
-   /*      checkemails1();  // 24ops
+       /*  checkemails1();  // 24ops
          checkemails2();  // VAT
          checkemails3(); //MEDIC
          checkemails4();  //TM

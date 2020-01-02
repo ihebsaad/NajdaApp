@@ -4296,7 +4296,6 @@ if ($from=='najdassist@gmail.com')
         $contenu=$contenu.'<br><br>Cordialement / Best regards<br>'.$nomuser.' '. $signatureagent.'<br><br><hr style="float:left;width:40%"><br>'.$signatureentite;
 
 
-        if($envoyeid>0){ $this->export_pdf_send($envoyeid,$files,$attachs,$from,$fromname,$to);};
          //dd('pk');
 
         $swiftMailer = new Swift_Mailer($swiftTransport);
@@ -4304,7 +4303,7 @@ if ($from=='najdassist@gmail.com')
         Mail::setSwiftMailer($swiftMailer);
 
 
-        try{
+    ////    try{
             Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails,$description,$from,$fromname ) {
             $message
 
@@ -4489,20 +4488,25 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
            //$id=$envoye->id;
 
         ////     echo ('<script> window.location.href = "'.$urlsending.'/view/'.$envoyeid.'";</script>') ;
-                return redirect($urlsending.'/view/'.$envoyeid)->with('success', '  Envoyé ! ');
 
      });
-          ///  var_dump( Mail:: failures());
+        $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+        $urlsending=$urlapp.'/envoyes';
+        if($envoyeid>0){ $this->export_pdf_send($envoyeid,$files,$attachs,$from,$fromname,$to,$contenu);};
 
-       } catch (Exception $ex) {
+        return redirect($urlsending.'/view/'.$envoyeid)->with('success', '  Envoyé ! ');
+
+        ///  var_dump( Mail:: failures());
+
+    /*   } catch (Exception $ex) {
     // Debug via $ex->getMessage();
     /// echo '<script>alert("Erreur !") </script>' ;
               $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
             return redirect($urlapp.'/envoyes') ;
-     }
-        $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+     }*/
+     //   $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
-        return redirect($urlapp.'/envoyes') ;
+     //   return redirect($urlapp.'/envoyes') ;
 
     }// end send
 
@@ -4725,13 +4729,12 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
     }// end accuse
 
 
-
-    public function export_pdf_send($id,$files,$attachs,$from,$fromname,$to)
+    public function export_pdf_send($id,$files,$attachs,$from,$fromname,$to,$contenu)
     {
         // Fetch all customers from database
         $envoye = Envoye::find($id);
          // Send data to the view using loadView function of PDF facade
-        $pdf = PDF2::loadView('entrees.pdfsend', ['envoye' => $envoye,'from'=>$from,'fromname'=>$fromname,'to'=>$to])->setPaper('a4', '');
+        $pdf = PDF2::loadView('entrees.pdfsend', ['envoye' => $envoye,'from'=>$from,'fromname'=>$fromname,'to'=>$to,'contenu'=>$contenu])->setPaper('a4', '');
 
         $path= storage_path()."/Envoyes/";
 

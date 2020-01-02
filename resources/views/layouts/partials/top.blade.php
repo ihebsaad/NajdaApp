@@ -122,8 +122,8 @@
         $iduser=Auth::id();
         if($iduser==$disp){$icon='fa-map-signs';}else{$icon='fa-envelope';}
 
-          $count=Entree::where('dossier','')
-              ->count();
+          $count=Entree::where('statut','<','2')
+              ->where('dossier','=','')->count();
             if($count==0){$color='btn-success';}
             else{$color='btn-danger';
             }

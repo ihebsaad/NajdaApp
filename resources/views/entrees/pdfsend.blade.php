@@ -2330,7 +2330,7 @@
                         <span><b>DE: </b></span>
                     </div>
                     <div class="col-sm-11 col-md-11 col-lg-11 " style="padding-left: 0px;">
-                        <div   style="overflow:hidden;padding-left:5px;width:100%;height:25px;border:1px solid grey"   ><?php echo $from .'-'. $fromname ; ?></div>
+                        <div   style="overflow:hidden;padding-left:5px;width:100%;height:25px;border:1px solid grey"   ><?php echo $fromname .' - '. $from   ; ?></div>
                     </div>
                 </div>
                 <div class="row" style="padding-bottom:8px">
@@ -2348,11 +2348,16 @@
                     </div>
                 </div>
                 <?php if($envoye['cc'] !='') {?>
-                <div class="col-md-1">
-                    <label for="cc">CC:</label>
-                </div>
-                <div class="col-md-5">
-                    <?php echo $envoye['cc'] ; ?>
+                <div class="row" style="padding-bottom:8px">
+                    <div class="col-sm-1 col-md-1 col-lg-1" style=" padding-left: 0px; ">
+                        <span><b>CC: </b></span>
+                    </div>
+                    <div class="col-sm-11 col-md-11 col-lg-11 " style="padding-left: 0px;">
+                        <div   style="overflow:hidden;padding-left:5px;width:100%;height:45px;border:1px solid grey"   >
+                            <?php
+                           echo $envoye['cc']; ?>
+                        </div>
+                    </div>
                 </div>
                 <?php } ?>
                 <div class="row" style="padding-bottom:8px">

@@ -77,7 +77,7 @@
             <?php use App\Attachement ;?>
 
 
-                     <?php if ($envoye['nb_attach']>0){
+                     <?php // if ($envoye['nb_attach']>0){
                     echo '<br>Attachements :<br>';
 
                  //   $attachs = Attachement::where('parent',  $envoye['id'] )->where('boite', '=', 1 )->get();
@@ -93,8 +93,9 @@
 
 
 
-                    // echo json_encode($attachs);
-                   } ?>
+
+                 //  }
+                ?>
 
 
                 @if (!empty($attachs) )
