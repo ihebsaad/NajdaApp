@@ -278,7 +278,7 @@ $(document).ready(function()
    {{--      {!! NoCaptcha::display() !!}  --}}
                     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 -->
-                <button onclick=" resetForm(this.form);" id="SendBtn" type="submit"  name="myButton" class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
+                <button onclick=" resetForm(this.form);" id="SendBtn" type="submit" disabled  name="myButton" class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
 
             </form>
 
@@ -346,6 +346,13 @@ $(document).ready(function()
     ?>
     <script type="text/javascript">
 
+      /*  function checkBr()
+        {
+            if(document.getElementById('brsaved').value==1){
+                alert();
+                document.getElementById('SendBtn').disabled=false;
+            }
+        }*/
         function checkForm(form) // Submit button clicked
         {
 
@@ -454,7 +461,7 @@ $("#prest").change(function(){
 
                             document.getElementById('envoye').value=data;
                             document.getElementById('brsaved').value=1;
-
+                            document.getElementById('SendBtn').disabled=false;
                         }
                     });
                 }else{
@@ -473,6 +480,8 @@ $("#prest").change(function(){
 
                                 document.getElementById('envoye').value=data;
                                 document.getElementById('brsaved').value=1;
+                                document.getElementById('SendBtn').disabled=false;
+
 
                             }
                         });
@@ -506,6 +515,7 @@ $("#prest").change(function(){
 
                             document.getElementById('envoye').value=data;
                             document.getElementById('brsaved').value=1;
+                            document.getElementById('SendBtn').disabled=false;
 
                         }
                     });
@@ -525,6 +535,7 @@ $("#prest").change(function(){
 
                                 document.getElementById('envoye').value=data;
                                 document.getElementById('brsaved').value=1;
+                                document.getElementById('SendBtn').disabled=false;
 
                             }
                         });
@@ -590,6 +601,7 @@ $("#prest").change(function(){
 
                             document.getElementById('envoye').value = data;
                             document.getElementById('brsaved').value = 1;
+                            document.getElementById('SendBtn').disabled=false;
 
                         }
                     });
@@ -616,6 +628,8 @@ $("#prest").change(function(){
                             //     alert('Brouillon enregistré ');
                             document.getElementById('envoye').value = data;
                             document.getElementById('brsaved').value = 1;
+                            document.getElementById('SendBtn').disabled=false;
+
                         }
                     });
 

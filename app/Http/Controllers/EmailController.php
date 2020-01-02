@@ -4293,7 +4293,7 @@ if ($from=='najdassist@gmail.com')
         $user = auth()->user();
         $nomuser=$user->name.' '.$user->lastname;
 
-        $contenu=$contenu.'<br><br>Cordialement / Best regards<br>'.$nomuser.' '. $signatureagent.'<br><br><hr style="float:left;width:40%"><br>'.$signatureentite;
+        $contenu=$contenu.'<br><br>Cordialement / Best regards<br>'.$nomuser.' '. $signatureagent.'<br><br><hr style="float:left;"><br><br>'.$signatureentite;
 
 
          //dd('pk');
