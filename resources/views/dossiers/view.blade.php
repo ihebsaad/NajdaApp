@@ -1842,7 +1842,7 @@ array_push($listepr,$pr['prestataire_id']);
                     </div>
                     <div class="col-md-3" style="float: right!important;">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        <button type="button" id="genomhtml" class="btn btn-primary">Générer</button>
+                        <button type="button" id="genomhtml" onclick="document.getElementById('genomhtml').disabled=true" class="btn btn-primary">Générer</button>
                     </div>
                 </div>
             </div>

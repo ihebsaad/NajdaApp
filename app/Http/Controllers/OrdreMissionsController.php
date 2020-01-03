@@ -1712,10 +1712,11 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                     // duplication de lom dans le nouveau dossier
                     $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage')->setPaper('a4', '');
                 }
+                
+                $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
 
-
-                if (!file_exists($path.$iddossnew)) {
-                    mkdir($path.$iddossnew, 0777, true);
+                if (!file_exists($emplacOM)) {
+                    mkdir($emplacOM, 0777, true);
                 }
                 date_default_timezone_set('Africa/Tunis');
                 setlocale (LC_TIME, 'fr_FR.utf8','fra');

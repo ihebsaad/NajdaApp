@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 <body>
-<div class="row" style="margin-bottom: -120px">
+<div class="row" style="margin-bottom: -120px;padding-bottom: 10px">
 	<div id="entetelogo" class="col-md-3" style="zoom:70%!important">
 	<?php if (isset($_POST['emispar'])) {  ?>
 		<?php if ($_POST['emispar'] == "najda") { ?>
@@ -72,12 +72,36 @@
 				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt">
 		<span id="Eligne4" style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">ambulance.transp@medicmultiservices.com</span>
 		<?php } ?>
-
+		<?php if ($_POST['emispar'] == "xpress")   { ?>
+        <div>
+    <p style="margin-left:7px;margin-top:0.55pt; margin-bottom:0pt; widows:0; orphans:0; font-size:5.5pt"><span style="height:0pt; margin-top:-2.35pt; display:block; position:absolute; z-index:0"><img src="{{ asset('public/preview_templates/xpress.png') }}" width="161" height="98" alt="" style=" -aw-left-pos:16pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:-10.4pt; -aw-wrap-type:none; position:absolute" /></span><span style="font-family:'Times New Roman'">&#xa0;</span></p>
+    </div>
+    <p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0.2pt; margin-bottom:0pt; widows:0; orphans:0; font-size:7.5pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p>
+    <p style="margin-top:20px; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
+        <span id="Eligne1" style="font-family:'Times New Roman'; font-weight:bold">Rue Mohamed Hamdane</span>
+    </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
+        <span id="Eligne2" style="font-family:'Times New Roman'; font-weight:bold">B.P. 41 - 4054 Sousse-Sahloul - Tunisie </span>
+    </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
+        <span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 36 003 610</span>
+    </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
+        <span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">FAX (+216) 73 820 333</span>
+    </p>
+    <?php } ?>
 	<?php } ?>
 	</div>
 	<div class="col-md-6" style="text-align: right!important">
 		
 
+<!-- type_affectation_post est proritaire ? -->		
+<?php if (isset($_POST['type_affectation_post']) && !(empty($_POST['type_affectation_post']))) { ?>
+		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
+			<span id="prestataire_remorquage" style="font-family:'Times New Roman'; "><?php echo $_POST['type_affectation_post']; ?></span>
+<?php } else { ?>
+<!-- cas mm entite -->
+<?php if (isset($prestataire_remorquage) && !(empty($prestataire_remorquage))) { ?>
+		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
+			<span id="prestataire_remorquage" style="font-family:'Times New Roman'; "><?php echo $prestataire_remorquage; ?></span>
+<?php } ?>
 <?php if (isset($_POST['prestataire_remorquage']) && !(isset($_POST['type_affectation'])) && !(isset($_POST['prestextern']))) { ?>
 		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
 			<span id="prestataire_remorquage" style="font-family:'Times New Roman'; "><?php echo $_POST['prestataire_remorquage']; ?></span>
@@ -89,7 +113,7 @@
 <?php if (isset($_POST['prestextern']) && !(empty($_POST['prestextern']))) { ?>
 		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
 			<span id="prestataire_remorquage" style="font-family:'Times New Roman'; "><?php echo $_POST['prestextern']; ?></span>
-<?php } ?>
+<?php }} ?>
 			<h1 style="margin-top:8.75pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:20pt"><span style="font-family:'Times New Roman'; text-decoration:underline">ORDRE DE MISSION</span><span style="font-family:'Times New Roman'; text-decoration:underline"> </span><span style="font-family:'Times New Roman'; text-decoration:underline">REMORQUAGE</span></h1><p style="margin-top:0.6pt; margin-left:5.85pt; margin-bottom:0pt; text-align:right; widows:0; orphans:0; font-size:8pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
 
 				<span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">        </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">K</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">m approximatif</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">&#xa0;</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">: </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt"> </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_km_approximatif'])) { echo $_POST['CL_km_approximatif']; } ?></span>
@@ -99,7 +123,7 @@ if (isset($_POST['clientIMA'])) { ?>
 				<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#000"><?php print($_POST['clientIMA']); ?></span></p>
 <?php } ?>
 				<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Pour</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.7pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">le: </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_heuredateRDV'])) { $DHsansT =str_replace('T',' ',$_POST['CL_heuredateRDV']); echo $DHsansT; } ?></span>
-					<span style="font-family:'Times New Roman'; font-weight:bold;">  </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.85pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Dimanche</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.9pt">   </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_Dimanche'])) { echo $_POST['CL_Dimanche']; } else {echo "non";} ?></span> <span style="width:18.05pt; display:inline-block"></span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Férié</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.8pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_Ferie'])) { echo $_POST['CL_Ferie']; } else {echo "non";} ?></span>    <span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Nuit</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.25pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">: </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_Nuit'])) { echo $_POST['CL_Nuit']; } else {echo "non";} ?></span>
+					<span style="font-family:'Times New Roman'; font-weight:bold;">  </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.85pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Dimanche</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.9pt">   </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_Dimanche'])) { echo $_POST['CL_Dimanche']; } else {echo "non";} ?></span> <span style="width:7.05pt; display:inline-block"></span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Férié</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.8pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_Ferie'])) { echo $_POST['CL_Ferie']; } else {echo "non";} ?></span>    <span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">Nuit</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-0.25pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">: </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_Nuit'])) { echo $_POST['CL_Nuit']; } else {echo "non";} ?></span>
 				</p>
 	</div>
 </div>
@@ -120,11 +144,15 @@ if (isset($_POST['clientIMA'])) { ?>
 	</p>
 </div>
 <div class="row" style=" margin-left: 0px; ">
-	<p style="margin-top:6.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Etat du véhicule</span><span style="font-family:'Times New Roman'; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_etat_vehicule'])) { echo $_POST['CL_etat_vehicule']; } ?></span>
+	<p style="margin-top:6.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
+	<span style="font-family:'Times New Roman'; font-weight:bold">Boite de vitesse</span><span style="font-family:'Times New Roman'; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_automatique_normal'])) { echo $_POST['CL_automatique_normal']; } ?>
+		</span>
+
+		<span style="font-family:'Times New Roman'; font-weight:bold">Etat du véhicule</span><span style="font-family:'Times New Roman'; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_etat_vehicule'])) { echo $_POST['CL_etat_vehicule']; } ?></span>
 
 </div>
 <div class="row" style=" margin-left: 0px; ">
-	<p style="margin-top:6.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Boite de vitesse</span><span style="font-family:'Times New Roman'; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_automatique_normal'])) { echo $_POST['CL_automatique_normal']; } ?></span>
+	<p style="margin-top:6.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
 
 </div>
 <div class="row" style=" margin-left: 0px; ">
@@ -133,7 +161,7 @@ if (isset($_POST['clientIMA'])) { ?>
 				 </span><span style="font-family:'Times New Roman'">Qualité</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">: </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_qualite'])) { echo $_POST['CL_qualite']; } ?></span>
 				</p>
 </div>
-<p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p><p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">Trajet</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">:</span><span style="font-family:'Times New Roman'; font-weight:bold">  </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu prise en charge</span><span style="font-family:'Times New Roman'">: </span>
+<p style="margin-top:2.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">Trajet</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold; text-decoration:underline">:</span><span style="font-family:'Times New Roman'; font-weight:bold">  </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu prise en charge</span><span style="font-family:'Times New Roman'">: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_lieuprest_pc'])) { echo $_POST['CL_lieuprest_pc']; } ?></span>
 				<span style="font-family:'Times New Roman'; font-weight:bold">Tel: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_prestatairetel_pc'])) { echo $_POST['CL_prestatairetel_pc']; } ?></span>
@@ -194,10 +222,9 @@ if (isset($_POST['CB_prerades'])) {if ($_POST['CB_prerades'] === "oui"||($_POST[
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_heurearr'])) { echo $_POST['CL_heurearr']; } ?></span>
 					<span style="font-family:'Times New Roman'"> Si vers Port de la Goulette par défaut heure départ -3 heures si vers </span><span style="font-family:'Times New Roman'">l’</span><span style="font-family:'Times New Roman'">Port de Rades par défaut RDV au port à 8h. </span><span style="font-family:'Times New Roman'"></span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"></span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"> </span>
 </p>
-<p style="margin-top:0pt; margin-left:6.9pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
 <?php }} ?>
 
-<p style="margin-top:3.75pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p><div style="margin-top:0pt;clear:both"></div><p style="margin-left:5.85pt;margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Remarque</span><span style="font-family:'Times New Roman'; font-weight:bold">s</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
+<div style="margin-top:0pt;clear:both"></div><p style="margin-left:5.85pt;margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Remarque</span><span style="font-family:'Times New Roman'; font-weight:bold">s</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_remarque'])) { echo $_POST['CL_remarque']; } ?></span>
 					</p>
 <?php if (isset($_POST['affectea'])) { if ($_POST['affectea'] === "interne") { ?>						
