@@ -4486,7 +4486,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
      });
         $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         $urlsending=$urlapp.'/envoyes';
-        if($envoyeid>0){ $this->export_pdf_send($envoyeid,$from,$fromname,$to,$contenu);};
+        if($envoyeid>0){ $this->export_pdf_send($envoyeid,$from,$fromname,$to,$contenu,$files,$attachs);};
 
         // activer le dossier
         Dossier::where('id', $doss)->update(array('current_status' => 'actif'));
