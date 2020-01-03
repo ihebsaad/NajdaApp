@@ -2403,7 +2403,7 @@ array_push($listepr,$pr['prestataire_id']);
 
                 </div>
                 <div class="modal-footer">
-                    <a id="selectionnerprest"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</a>
+                    <button id="selectionnerprest"  onclick="document.getElementById('selectionnerprest').disabled=true"      class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >Ajouter</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button>
                 </div>
             </div>
@@ -3362,7 +3362,7 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                     success:function(data){
 
                        // window.location =data;
-                        alert("dossier fermé !");
+                        alert("opération envoyée !");
                         window.location.reload();
 
                     }
@@ -3988,14 +3988,15 @@ function keyUpHandler(){
                     method:"POST",
                     data:{autorise:autorise,details:details,date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat/*,typeprest:typeprest*/, _token:_token},
                     success:function(data){
-                        var prestation=parseInt(data);
+                      //  var prestation=parseInt(data);
                         /// window.location =data;
 
-                        Swal.fire({
+                      /*  Swal.fire({
                             type: 'success',
                             title: 'Enregistrée...',
                             text: "Prestation Enregistrée"
-                        });
+                        });*/
+                      alert('prestation ajoutée');
                         // window.location =data;
                         $("#openmodalprest").modal('hide');
 

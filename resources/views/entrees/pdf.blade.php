@@ -2358,7 +2358,9 @@
             </div>
         </div>
 
-        <div   style="overflow:hidden;border:1px solid #d6eef7; padding:20px 20px 20px 20px; min-height: 400px!important;"> <?php  $content= $entree['contenu'] ;
+        <div   style="overflow:hidden;border:1px solid #d6eef7; padding:20px 20px 20px 20px; min-height: 400px!important;"> <?php
+
+            $content= $entree['contenu'] ;
            // echo utf8_encode($content) ;
             echo  ($content) ;
             ?>

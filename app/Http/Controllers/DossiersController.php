@@ -1109,7 +1109,7 @@ class DossiersController extends Controller
             ]);
             $envoye->save();
             $idenv = $envoye->id;
-
+            $files=array();$attachs=array();
             app('App\Http\Controllers\EmailController')->export_pdf_send($idenv,$from,$fromname,$to,$contenu) ;
 
             Log::info('Envoi Accusé N Aff par : ' . $nomuser . ' Dossier: ' . $refdossier);
@@ -1289,7 +1289,7 @@ class DossiersController extends Controller
         $user = auth()->user();
         $nomuser=$user->name.' '.$user->lastname;
         $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
-        Log::info('[Agent: '.$nomuser.'] Affectation de dossier :'.$ref.' à: '.$nomagent);
+        Log::info('[Agent: '.$nomuser.'] - Affectation de dossier :'.$ref.' à: '.$nomagent);
         //$this->Migration ($id, $agent);
         return back();
 
@@ -2697,8 +2697,17 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
     {
         $iddossier= $request->get('dossier');
         $statut= $request->get('statut');
-        Dossier::where('id',$iddossier)->update(array('current_status'=>$statut));
-
+         $count= Mission::where('dossier_id',$iddossier)
+             ->where('statut_courant','!=','annulee')
+             ->where('statut_courant','!=','achevee')
+             ->count();
+            if($statut=='Cloture'){
+                if($count==0){
+                Dossier::where('id',$iddossier)->update(array('current_status'=>$statut));
+                }
+            }else{
+              Dossier::where('id',$iddossier)->update(array('current_status'=>$statut));
+                }
     }
 
 

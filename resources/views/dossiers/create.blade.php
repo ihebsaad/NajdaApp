@@ -1247,7 +1247,7 @@ use  \App\Http\Controllers\DocsController;
 
     function changetype()
     { var ta= document.getElementById('type_affectation');
-        if (ta.options[ta.selectedIndex].value=="VAT")
+        if ( (ta.options[ta.selectedIndex].value=="VAT" ) ||(ta.options[ta.selectedIndex].value=="X-Press")     )
         {
             document.getElementById('type_dossier').selectedIndex=3;
         }
@@ -1257,7 +1257,7 @@ use  \App\Http\Controllers\DocsController;
             document.getElementById('type_dossier').selectedIndex=2;
         }
 
-        if ((ta.options[ta.selectedIndex].value=="Transport Najda")||(ta.options[ta.selectedIndex].value=="Transport MEDIC") ||(ta.options[ta.selectedIndex].value=="Transport VAT") ||(ta.options[ta.selectedIndex].value=="X-Press")     )
+        if ((ta.options[ta.selectedIndex].value=="Transport Najda")||(ta.options[ta.selectedIndex].value=="Transport MEDIC") ||(ta.options[ta.selectedIndex].value=="Transport VAT")    )
         {
             document.getElementById('type_dossier').selectedIndex=4;
         }
