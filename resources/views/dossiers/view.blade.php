@@ -52,30 +52,28 @@ use \App\Http\Controllers\UsersController;
         ?>
 
         <input type="hidden" id="dossier" value="<?php echo $dossier->id; ?>">
-    <!--        <select    id="current_status" class="form-control">
-            <option <?php // if ($statut =='actif' || $dossier->current_status =='inactif' ){echo 'selected="selected"';} ?>  value="actif">Ouvert</option>
-            <option <?php // if ($statut=='Cloture'){echo 'selected="selected"';} ?> value="Cloture">Clôturé</option>
-            <option <?php // if ($statut ==''){echo 'selected="selected"';} ?> ></option>
 
-        </select>
--->
     </div>
      <div class="col-md-2">
 
          <?php
+         $idagent=$dossier->user_id;
+         $CurrentUser = auth()->user();
+
+         $iduser=$CurrentUser->id;
          // les agents ne voient pas l'aaffectation - à vérifier
-         if (Gate::check('isAdmin') || Gate::check('isSupervisor') ) { ?>
+         if (Gate::check('isAdmin') || Gate::check('isSupervisor') || ( $idagent==$iduser) ) { ?>
 
          <?php if ((isset($dossier->affecte)) && (($dossier->affecte>0))) { ?>
         <b>Affecté à:</b>
         <?php
              if($dossier->affecte >0) {$agentname = User::where('id',$dossier->affecte)->first();}else{$agentname=null;}
-        if ((Gate::check('isAdmin') || Gate::check('isSupervisor'))  )
+        if ((Gate::check('isAdmin') || Gate::check('isSupervisor') || ( $idagent==$iduser)  )  )
             { echo '<a href="#" data-toggle="modal" data-target="#attrmodal">';
               }
              if( ($dossier->affecte >0)){ echo $agentname['name'].' '.$agentname['lastname'];}
 
-             if(Gate::check('isAdmin') || Gate::check('isSupervisor'))
+             if(Gate::check('isAdmin') || Gate::check('isSupervisor') || ( $idagent==$iduser) )
             { echo '</a>';}
 
         ?>
@@ -89,11 +87,15 @@ use \App\Http\Controllers\UsersController;
             else
             {echo '<b>merci cliquer pour affecter</b>';}
 
-
             }
         } ?>
 
-      <?php  } ?>
+      <?php  } else{
+             if($dossier->affecte >0) {$agentname = User::where('id',$dossier->affecte)->first();}else{$agentname=null;}
+             echo 'Affecté à : ';
+               echo $agentname['name'].' '.$agentname['lastname'];
+
+             }?>
     </div>
     <div class="col-md-5" style="text-align: right;padding-right: 35px">
         <div class="page-toolbar">

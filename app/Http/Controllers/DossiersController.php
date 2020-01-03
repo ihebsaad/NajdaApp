@@ -1112,6 +1112,8 @@ class DossiersController extends Controller
 
             app('App\Http\Controllers\EmailController')->export_pdf_send($idenv,$from,$fromname,$to,$contenu) ;
 
+            Log::info('Envoi Accusé N Aff par : ' . $nomuser . ' Dossier: ' . $refdossier);
+
         } catch (Exception $ex) {
             // Debug via $ex->getMessage();
             //      echo '<script>alert("Erreur !") </script>' ;

@@ -4487,6 +4487,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         $urlsending=$urlapp.'/envoyes';
         if($envoyeid>0){ $this->export_pdf_send($envoyeid,$from,$fromname,$to,$contenu);};
 
+        // activer le dossier
+        Dossier::where('id', $doss)->update(array('current_status' => 'actif'));
+
+
         return redirect($urlsending.'/view/'.$envoyeid)->with('success', '  Envoyé ! ');
 
         ///  var_dump( Mail:: failures());
@@ -4641,6 +4645,9 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                         // 'reception'=> date('d/m/Y H:i:s'),
 
                     ]);
+
+                    // activer le dossier
+                    Dossier::where('id', $doss)->update(array('current_status' => 'actif'));
 
                     $envoye->save();
                     $id=$envoye->id;
@@ -4863,6 +4870,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                 $user = auth()->user();
                 $nomuser=$user->name.' '.$user->lastname;
                 Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+
+                // activer le dossier
+                Dossier::where('id', $doss)->update(array('current_status' => 'actif'));
+
 
                 $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 

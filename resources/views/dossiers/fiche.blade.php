@@ -37,7 +37,22 @@ use  \App\Http\Controllers\DocsController;
         <a  href="{{action('DossiersController@view',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '. DossiersController::FullnameAbnDossierById($dossier->id);?></a></h4>
     </div>
 
-     <div class="col-md-3">
+    <div class="col-md-2">
+        <b>Statut:</b>
+        <?php $statut=$dossier->current_status;
+        if ($statut =='actif' || $statut =='inactif' ){
+            echo '<b style="font-size:20px">Ouvert</b> <a style="font-size:13px" title="changer le statut" href="#" data-toggle="modal" data-target="#FermerDoss"> (Clôturer)</a>';
+        }
+        if($statut=='Cloture'){
+            echo '<b style="font-size:20px">Clôturé</b> <a style="font-size:13px" title="changer le statut" href="#" data-toggle="modal" data-target="#OuvrirDoss"> (Ouvrir)</a>';
+        }
+        ?>
+
+        <input type="hidden" id="dossier" value="<?php echo $dossier->id; ?>">
+
+    </div>
+
+     <div class="col-md-2">
         <?php
          // les agents ne voient pas l'aaffectation - à vérifier
          if (Gate::check('isAdmin') || Gate::check('isSupervisor') || ( $idagent==$iduser) ) { ?>
@@ -62,14 +77,18 @@ use  \App\Http\Controllers\DocsController;
             {echo '<b style="color:#FD9883">merci cliquer pour affecter</b>';}
         } ?>
 
-         <?php   } ?>
+            <?php  } else{
+                if($dossier->affecte >0) {$agentname = User::where('id',$dossier->affecte)->first();}else{$agentname=null;}
+                echo 'Affecté à : ';
+               echo $agentname['name'].' '.$agentname['lastname'];
 
+             }?>
      </div>
 
     <?php $statut=$dossier->current_status;
     if($statut!='Cloture') {
 ?>
-    <div class="col-md-6" style="text-align: right;padding-right: 35px">
+    <div class="col-md-5" style="text-align: right;padding-right: 35px">
         <div class="page-toolbar">
 
         <div class="btn-group">
@@ -2385,6 +2404,54 @@ use  \App\Http\Controllers\DocsController;
     </div>
 
 </div>
+
+
+    <div class="modal  " id="OuvrirDoss" >
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" style="text-align:center"  id=" "><center>Ouvrir le Dossier </center> </h3>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body" style="text-align:center;height:100px"><br>
+                        <center><B> Etes vous sûrs de vouloir Ré-Ouvrir ce Dossier ?</B><br><br></center>
+                        <a id="ouvrirdossier"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >OUI</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button><br>
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal  " id="FermerDoss" >
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" style="text-align:center"  id=" "><center>Clôturer le Dossier </center> </h3>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body" style="text-align:center;height:100px"><br>
+                        <center><B> Etes vous sûrs de vouloir clôturer ce Dossier ?</B><br> <br> </center>
+
+                        <a id="fermerdossier"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >OUI</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button><br>
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
 
