@@ -339,7 +339,7 @@ if (isset($_POST['clientIMA'])) { ?>
 <?php // fin bloc completer 
 } ?>
 <div id="signatureagent">
-<?php if (isset($_POST['affectea'])) { if (($_POST['affectea'] === "interne") || ($_POST['affectea'] === "mmentite")) { ?>
+<?php //if (isset($_POST['affectea'])) { if (($_POST['affectea'] === "interne") || ($_POST['affectea'] === "mmentite")) { ?>
 
 <p style="margin-top:8.85pt; margin-right:4.95pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Merci de votre </span><span style="font-family:'Times New Roman'; font-weight:bold">c</span><span style="font-family:'Times New Roman'; font-weight:bold">ollaboration. </span></p>
 
@@ -347,8 +347,8 @@ if (isset($_POST['clientIMA'])) { ?>
 
 <span style="font-family:'Times New Roman'; font-weight:bold; color:#000"><?php if (isset($_POST['agent'])) { echo $_POST['agent']; } ?></span>
 
-</p><p style="margin-top:0.05pt; margin-right:434.35pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Plateau d’assistance <?php if (isset($_POST['signagent'])) { echo $_POST['signagent']; } ?></span></p><p style="margin-top:0.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">« courrier</span><span style="font-family:'Times New Roman'; font-weight:bold"> électronique, sans signature »</span></p>
+</p><p style="margin-top:0.05pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Plateau d’assistance <?php if (isset($_POST['signagent'])) { echo trim($_POST['signagent']); } ?></span></p><p style="margin-top:0.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">« courrier</span><span style="font-family:'Times New Roman'; font-weight:bold"> électronique, sans signature »</span></p>
 
-<?php } }?>
+<?php //} }?>
 </div>
 			</body>

@@ -128,7 +128,7 @@ class DocumentsController extends Controller
                             }}
                  elseif (stristr($champtemp,'[CL_enpanne')== TRUE )
                         {if(isset($_POST['CL_enpanne']))
-                            {$valchamp='En panne';
+                            {$valchamp='Enpanne';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
@@ -743,7 +743,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                 break;
 
                 
-                case "RM_anglais":
+                /*case "RM_anglais":
                 $dossRMtraduit = false;
                 foreach ($entreesdos as $entr) {
                     //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
@@ -792,7 +792,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                 {
                     $resp = "allow_RM";
                 }
-                break;
+                break;*/
         }
         }
 
@@ -999,45 +999,57 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                         }
                         elseif(stristr($champtemp,'[CL_')!== FALSE)
                         {if (stristr($champtemp,'[CL_accidente')== TRUE )
-                        {if(isset($_POST['CL_accidente']))
-                            {$valchamp='Accidente';
-                             $array += [ $champtemp => $valchamp];
-                        }
-                        else
+                        {if (array_key_exists($i,$champsparentArray))
                             {
-                            $valchamp='';
-                            $array += [ $champtemp => $valchamp];
-                            }}
+                                $valchamp = $champsparentArray[$i];
+                            }
+                            else
+                                { $valchamp = "undefined index";}
+
+                            $champtemp = str_replace('[CL_', '', $champtemp);
+                            $champtemp = str_replace(']', '', $champtemp);
+                            $champtemp = strtolower($champtemp);
+                            $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
+                        }
                  elseif (stristr($champtemp,'[CL_enpanne')== TRUE )
-                        {if(isset($_POST['CL_enpanne']))
-                            {$valchamp='En panne';
-                             $array += [ $champtemp => $valchamp];
-                        }
-                        else
+                        {if (array_key_exists($i,$champsparentArray))
                             {
-                            $valchamp='';
-                            $array += [ $champtemp => $valchamp];
-                            }}
+                                $valchamp = $champsparentArray[$i];
+                            }
+                            else
+                                { $valchamp = "undefined index";}
+
+                            $champtemp = str_replace('[CL_', '', $champtemp);
+                            $champtemp = str_replace(']', '', $champtemp);
+                            $champtemp = strtolower($champtemp);
+                            $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
+                        }
                             elseif (stristr($champtemp,'[CL_incendie')== TRUE )
-                        {if(isset($_POST['CL_incendie']))
-                            {$valchamp='Incendie';
-                             $array += [ $champtemp => $valchamp];
-                        }
-                        else
+                        {if (array_key_exists($i,$champsparentArray))
                             {
-                            $valchamp='';
-                            $array += [ $champtemp => $valchamp];
-                            }}
+                                $valchamp = $champsparentArray[$i];
+                            }
+                            else
+                                { $valchamp = "undefined index";}
+
+                            $champtemp = str_replace('[CL_', '', $champtemp);
+                            $champtemp = str_replace(']', '', $champtemp);
+                            $champtemp = strtolower($champtemp);
+                            $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
+                        }
                             elseif (stristr($champtemp,'[CL_intact')== TRUE )
-                        {if(isset($_POST['CL_intact']))
-                            {$valchamp='Intact';
-                             $array += [ $champtemp => $valchamp];
-                        }
-                        else
+                        {if (array_key_exists($i,$champsparentArray))
                             {
-                            $valchamp='';
-                            $array += [ $champtemp => $valchamp];
-                            }}
+                                $valchamp = $champsparentArray[$i];
+                            }
+                            else
+                                { $valchamp = "undefined index";}
+
+                            $champtemp = str_replace('[CL_', '', $champtemp);
+                            $champtemp = str_replace(']', '', $champtemp);
+                            $champtemp = strtolower($champtemp);
+                            $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
+                        }
                 elseif (stristr($champtemp,'[CL_attention')== TRUE )
                         {if(isset($_POST['CL_attention']))
                             {$valchamp='Attention : Cette prise en charge s’entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix';
@@ -1330,7 +1342,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             }}
                  elseif (stristr($champtemp,'[CL_enpanne')== TRUE )
                         {if(isset($_POST['CL_enpanne']))
-                            {$valchamp='En panne';
+                            {$valchamp='Enpanne';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
