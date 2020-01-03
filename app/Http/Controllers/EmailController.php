@@ -4730,7 +4730,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
     }// end accuse
 
 
-    public function export_pdf_send($id, $from,$fromname,$to,$contenu)
+    public function export_pdf_send($id, $from,$fromname,$to,$contenu,$files,$attachs)
     {
         // Fetch all customers from database
         $envoye = Envoye::find($id);

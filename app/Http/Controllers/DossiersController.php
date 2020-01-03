@@ -1110,7 +1110,7 @@ class DossiersController extends Controller
             $envoye->save();
             $idenv = $envoye->id;
             $files=array();$attachs=array();
-            app('App\Http\Controllers\EmailController')->export_pdf_send($idenv,$from,$fromname,$to,$contenu) ;
+            app('App\Http\Controllers\EmailController')->export_pdf_send($idenv,$from,$fromname,$to,$contenu,$files,$attachs) ;
 
             Log::info('Envoi Accusé N Aff par : ' . $nomuser . ' Dossier: ' . $refdossier);
 
