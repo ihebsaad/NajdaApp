@@ -4485,7 +4485,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
      });
         $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         $urlsending=$urlapp.'/envoyes';
-        if($envoyeid>0){ $this->export_pdf_send($envoyeid,$files,$attachs,$from,$fromname,$to,$contenu);};
+        if($envoyeid>0){ $this->export_pdf_send($envoyeid,$from,$fromname,$to,$contenu);};
 
         return redirect($urlsending.'/view/'.$envoyeid)->with('success', '  Envoyé ! ');
 
@@ -4722,7 +4722,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
     }// end accuse
 
 
-    public function export_pdf_send($id,$files,$attachs,$from,$fromname,$to,$contenu)
+    public function export_pdf_send($id, $from,$fromname,$to,$contenu)
     {
         // Fetch all customers from database
         $envoye = Envoye::find($id);

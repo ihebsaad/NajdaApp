@@ -134,15 +134,15 @@ class Dossier extends Model
         'devise_franchise'
     ];
 
-    public $timestamps  ;
+ /*   public $timestamps    ;
 
-    protected $dateFormat = 'Y-m-d H:i:s';
+   protected $dateFormat = 'Y-m-d H:i:s';
 
     public function getDateFormat()
     {
         return 'Y-m-d H:i:s.u';
     }
-
+*/
 /*
  public function activeMissions()
     {
@@ -160,6 +160,8 @@ class Dossier extends Model
     {
         return $this->hasMany('App\Mission')->where('statut_courant','active');
     }
+
+
 
 
 

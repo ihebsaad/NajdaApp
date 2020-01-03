@@ -1048,10 +1048,10 @@ class DossiersController extends Controller
         $contenu=$message.'<br><br>Cordialement / Best regards<br>'.$nomcompletagent.' '. $signature.'<br><br><hr style="float:left;width:40%"><br>'.$signatureentite;
 
 
-
+$dest='';
         //medic.multiservices@topnet.tn
         try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$cci,$from,$fromname) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$cci,$from,$fromname,$dest) {
                 $message
 
                 //    ->to($destinataire)
@@ -1066,16 +1066,43 @@ class DossiersController extends Controller
 
                     foreach ($to as $t) {
                         $message->to($t);
+                        $dest.=$t.';';
                     }
                 }
             });
+
+
+            Dossier::where('id', $iddossier)->update(array('accuse' => 1));
+
+            $envoye  = new Envoye([
+                //   $champ => $val
+                //));
+
+                //  $envoye = new Envoye([
+                'emetteur' => $from, //env('emailenvoi')
+                'destinataire' => $dest,
+                //      'destinataire' =>'iheb test',
+                'par'=> $idu,
+                'sujet'=> $sujet,
+                'contenu'=> $contenu,
+                'description'=> 'Accusé N Aff',
+                'nb_attach'=> 0,
+                //   'cc'=> $ccsadd,
+                //   'cci'=> $ccisadd,
+                'statut'=> 1,
+                'type'=> 'email',
+                'dossier'=> $iddossier
+
+            ]);
+            $envoye->save();
+            $idenv = $envoye->id;
+
+            app('App\Http\Controllers\EmailController')->export_pdf_send($idenv,$from,$fromname,$to,$contenu) ;
 
         } catch (Exception $ex) {
             // Debug via $ex->getMessage();
             //      echo '<script>alert("Erreur !") </script>' ;
         }
-
-         Dossier::where('id', $iddossier)->update(array('accuse' => 1));
 
     }
 
