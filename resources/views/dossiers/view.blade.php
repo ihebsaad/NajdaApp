@@ -3335,6 +3335,9 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
                 html_string=html_string+'&idtaggop='+gopselected;
                 // ajout montant a lurl
                 html_string=html_string+'&montantgop='+montantgop;
+                //ajout id user hs change
+                var cnctuserid = $("#cnctuserid").val();
+                html_string = html_string+"&iduser="+cnctuserid;
 
                 //chargement du contenu et affichage du preview du document
                 document.getElementById('templatefilled').src = html_string;

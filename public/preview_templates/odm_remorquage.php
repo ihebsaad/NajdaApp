@@ -530,7 +530,7 @@ foreach ($array_spec as $spec) {
 </span></p>
     </div><p style="margin-top:0.6pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'">Etat du véhicule:&#xa0;</span>
         <?php if (isset($detailom)) { ?>
-            <select id="CL_etat_vehicule" name="CL_type_vehicule">
+            <select id="CL_etat_vehicule" name="CL_etat_vehicule">
                 <option value="Panne" <?php if (isset($detailom['CL_etat_vehicule'])) { if ($detailom['CL_etat_vehicule'] === "Panne") {echo "selected";}} ?> >Panne</option>
                 <option value="accidenté" <?php if (isset($detailom['CL_etat_vehicule'])) { if ($detailom['CL_etat_vehicule'] === "accidenté") {echo "selected";}} ?> >accidenté</option>
                 <option value="incendié" <?php if (isset($detailom['CL_etat_vehicule'])) { if ($detailom['CL_etat_vehicule'] === "incendié") {echo "selected";}} ?> >incendié</option>
@@ -752,7 +752,7 @@ foreach ($array_prestap as $prestap) {
 
 
         <?php if (isset($affectea)){ if ($affectea === "interne") { echo '<input name="affectea" id="affectea" type="hidden" value="interne"></input>'; }} ?>
-        <p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic; color:#ff0000">Veuillez SVP nous rappeler après réception de cet ordre de mission pour nous donner le nom et numéro de téléphone de l’ambulancier chargé de cette mission.</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic; color:#ff0000"> Et appeler en cours de mission pour indiquer d’éventuelles attentes ou changements ou évènements imprévus pendant la mission. </span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">              </span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic"> </span></p><p style="margin-top:0pt; margin-bottom:0pt; line-height:125%; widows:0; orphans:0; font-size:8pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
+        <p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic; color:#ff0000">Veuillez SVP nous rappeler après réception de cet ordre de mission pour nous donner le nom et numéro de téléphone du chauffeur chargé de cette mission.</span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic; color:#ff0000"> Et appeler en cours de mission pour indiquer d’éventuelles attentes ou changements ou évènements imprévus pendant la mission. </span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic">              </span><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic"> </span></p><p style="margin-top:0pt; margin-bottom:0pt; line-height:125%; widows:0; orphans:0; font-size:8pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
 
         <div id="prestexterne" <?php if (isset($affectea)){ if ($affectea === "interne") { echo 'style="display:none"'; }} ?>>
             <?php if (isset($affectea)){ if ($affectea === "externe") { echo '<input name="affectea" id="affectea" type="hidden" value="externe"></input>'; }} ?>
@@ -919,7 +919,7 @@ foreach ($array_prestap as $prestap) {
 <?php
 if (isset($signaturetype)) 
     {
-        echo $signaturetype; 
+        echo trim($signaturetype); 
         echo '<input name="signagent" id="signagent" type="hidden" value="'.$signaturetype.'"></input>';}
 ?></span></p><p style="margin-top:0.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">« courrier</span><span style="font-family:'Times New Roman'; font-weight:bold"> électronique, sans signature »</span></p>
         </div>

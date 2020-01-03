@@ -224,17 +224,18 @@ class OrdreMissionsController extends Controller
         		$arequest = new \Illuminate\Http\Request();
         		$subscriber_name_ =$_POST['subscriber_name'];
         		$subscriber_lastname_ =$_POST['subscriber_lastname'];
+			$cnctagent = Auth::id();
 
-				$arequest->request->add(['name' => $subscriber_name_]);
-				$arequest->request->add(['lastname' => $subscriber_lastname_]);
+				/*$arequest->request->add(['name' => $subscriber_name_]);
+				$arequest->request->add(['lastname' => $subscriber_lastname_]);*/
 				$arequest->request->add(['type_dossier' => 'Technique']);
 
 				// entree de creation est 0
 				$arequest->request->add(['entree' => 0]);
 
 				// affecte dossier au agent qui le cree
-				$arequest->request->add(['affecte' => Auth::id()]);
-				$arequest->request->add(['created_by' => Auth::id()]);
+				/*$arequest->request->add(['affecte' => Auth::id()]);
+				$arequest->request->add(['created_by' => Auth::id()]);*/
 				if (isset($_POST["type_affectation"]))
         		{	
         			if ($_POST["type_affectation"] !== "Select")
@@ -250,22 +251,45 @@ class OrdreMissionsController extends Controller
         			$arequest->request->add(['type_affectation' => $typeaffect]);}
         		}
 				//ajout nouveau dossier
-        		$resp = app('App\Http\Controllers\DossiersController')->saving($arequest);
-        		// mettre a jour les autres champs a partir de l'om
-        		
-				$idpos = strpos($resp,"/dossiers/view/")+15;
+        		$resp = app('App\Http\Controllers\DossiersController')->save($arequest);
+        		// mettre a jour les autres champs a partir de lom
+				$idpos = strpos($resp,"/dossiers/fiche/")+16;
 				$iddossnew=substr($resp,$idpos);
+$iddnew = (string) $iddossnew;
 
+			$reqsubname = new \Illuminate\Http\Request();
+$reqsubname->request->add(['dossier' => $iddnew]);
+				$reqsubname->request->add(['champ' => 'subscriber_name']);
+				$reqsubname->request->add(['val' => $subscriber_name_]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsubname);
 
+				$reqsublname = new \Illuminate\Http\Request();
+$reqsublname->request->add(['dossier' => $iddnew]);
+				$reqsublname->request->add(['champ' => 'subscriber_lastname']);
+				$reqsublname->request->add(['val' => $subscriber_lastname_]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublname);
+
+				// affecte dossier au agent qui le cree
+				$reqaffectea = new \Illuminate\Http\Request();
+$reqaffectea->request->add(['dossier' => $iddnew]);
+				$reqaffectea->request->add(['champ' => 'affecte']);
+				$reqaffectea->request->add(['val' => $cnctagent]);
+				app('App\Http\Controllers\DossiersController')->updating($reqaffectea);
+
+				$reqcreaa = new \Illuminate\Http\Request();
+$reqcreaa->request->add(['dossier' => $iddnew]);
+				$reqcreaa->request->add(['champ' => 'created_by']);
+				$reqcreaa->request->add(['val' => $cnctagent]);
+				app('App\Http\Controllers\DossiersController')->updating($reqcreaa);
 
 				$reqbenef = new \Illuminate\Http\Request();
-        		$reqbenef->request->add(['dossier' => $iddossnew]);
+$reqbenef->request->add(['dossier' => $iddnew]);
 				$reqbenef->request->add(['champ' => 'beneficiaire']);
 				$reqbenef->request->add(['val' => $subscriber_name_]);
 				app('App\Http\Controllers\DossiersController')->updating($reqbenef);
 
 				$reqpbenef = new \Illuminate\Http\Request();
-        		$reqpbenef->request->add(['dossier' => $iddossnew]);
+$reqpbenef->request->add(['dossier' => $iddnew]);
 				$reqpbenef->request->add(['champ' => 'prenom_benef']);
 				$reqpbenef->request->add(['val' => $subscriber_lastname_]);
 				app('App\Http\Controllers\DossiersController')->updating($reqpbenef);
@@ -274,7 +298,7 @@ class OrdreMissionsController extends Controller
 				{
 					$reqphone = new \Illuminate\Http\Request();
 					$phoneb = $_POST["CL_contacttel"];
-	        		$reqphone->request->add(['dossier' => $iddossnew]);
+$reqphone->request->add(['dossier' => $iddnew]);
 					$reqphone->request->add(['champ' => 'subscriber_phone_cell']);
 					$reqphone->request->add(['val' => $phoneb]);
 					app('App\Http\Controllers\DossiersController')->updating($reqphone);
@@ -284,7 +308,7 @@ class OrdreMissionsController extends Controller
 				{
 					$reqlieup = new \Illuminate\Http\Request();
 					$CL_lieuprest_pc = $_POST["CL_lieuprest_pc"];
-	        		$reqlieup->request->add(['dossier' => $iddossnew]);
+$reqlieup->request->add(['dossier' => $iddnew]);
 					$reqlieup->request->add(['champ' => 'subscriber_local_address']);
 					$reqlieup->request->add(['val' => $CL_lieuprest_pc]);
 					app('App\Http\Controllers\DossiersController')->updating($reqlieup);
@@ -298,7 +322,7 @@ class OrdreMissionsController extends Controller
                     $reqrefc = new \Illuminate\Http\Request();
                     //$refcustomer = $_POST["reference_customer"];
                     $refcustomer = $dossparent["reference_medic"];
-                    $reqrefc->request->add(['dossier' => $iddossnew]);
+$reqrefc->request->add(['dossier' => $iddnew]);
                     $reqrefc->request->add(['champ' => 'reference_customer']);
                     $reqrefc->request->add(['val' => $refcustomer]);
                     app('App\Http\Controllers\DossiersController')->updating($reqrefc);
@@ -308,7 +332,7 @@ class OrdreMissionsController extends Controller
 				{
 					$reqci = new \Illuminate\Http\Request();
 					$customer_id = $dossparent["customer_id"];
-	        		$reqci->request->add(['dossier' => $iddossnew]);
+$reqci->request->add(['dossier' => $iddnew]);
 					$reqci->request->add(['champ' => 'customer_id']);
 
                  if($_POST["emispar"]=="najda"){
@@ -336,7 +360,7 @@ class OrdreMissionsController extends Controller
 				{
 					$reqpdom = new \Illuminate\Http\Request();
 					$subscriberphone_d = $dossparent["subscriber_phone_domicile"];
-	        		$reqpdom->request->add(['dossier' => $iddossnew]);
+$reqpdom->request->add(['dossier' => $iddnew]);
 					$reqpdom->request->add(['champ' => 'subscriber_phone_domicile']);
 					$reqpdom->request->add(['val' => $subscriberphone_d]);
 					app('App\Http\Controllers\DossiersController')->updating($reqpdom);
@@ -345,7 +369,7 @@ class OrdreMissionsController extends Controller
 				{
 					$reqphome = new \Illuminate\Http\Request();
 					$subscriberphone_home = $dossparent["subscriber_phone_home"];
-	        		$reqphome->request->add(['dossier' => $iddossnew]);
+$reqphome->request->add(['dossier' => $iddnew]);
 					$reqphome->request->add(['champ' => 'subscriber_phone_home']);
 					$reqphome->request->add(['val' => $subscriberphone_home]);
 					app('App\Http\Controllers\DossiersController')->updating($reqphome);
@@ -354,7 +378,7 @@ class OrdreMissionsController extends Controller
 				{
 					$reqtel_chambre = new \Illuminate\Http\Request();
 					$tel_chambre = $dossparent["tel_chambre"];
-	        		$reqtel_chambre->request->add(['dossier' => $iddossnew]);
+$reqtel_chambre->request->add(['dossier' => $iddnew]);
 					$reqtel_chambre->request->add(['champ' => 'tel_chambre']);
 					$reqtel_chambre->request->add(['val' => $tel_chambre]);
 					app('App\Http\Controllers\DossiersController')->updating($reqtel_chambre);
@@ -363,7 +387,7 @@ class OrdreMissionsController extends Controller
 				{
 					$reqpmail1 = new \Illuminate\Http\Request();
 					$subscribermail1 = $dossparent["subscriber_mail1"];
-	        		$reqpmail1->request->add(['dossier' => $iddossnew]);
+$reqpmail1->request->add(['dossier' => $iddnew]);
 					$reqpmail1->request->add(['champ' => 'subscriber_mail1']);
 					$reqpmail1->request->add(['val' => $subscribermail1]);
 					app('App\Http\Controllers\DossiersController')->updating($reqpmail1);
@@ -372,7 +396,7 @@ class OrdreMissionsController extends Controller
 				{
 					$reqpmail2 = new \Illuminate\Http\Request();
 					$subscribermail2 = $dossparent["subscriber_mail2"];
-	        		$reqpmail2->request->add(['dossier' => $iddossnew]);
+$reqpmail2->request->add(['dossier' => $iddnew]);
 					$reqpmail2->request->add(['champ' => 'subscriber_mail2']);
 					$reqpmail2->request->add(['val' => $subscribermail2]);
 					app('App\Http\Controllers\DossiersController')->updating($reqpmail2);
@@ -382,7 +406,7 @@ class OrdreMissionsController extends Controller
 				{
 					$reqidate = new \Illuminate\Http\Request();
 					$initialdate = $dossparent["initial_arrival_date"];
-	        		$reqidate->request->add(['dossier' => $iddossnew]);
+$reqidate->request->add(['dossier' => $iddnew]);
 					$reqidate->request->add(['champ' => 'initial_arrival_date']);
 					$reqidate->request->add(['val' => $initialdate]);
 					app('App\Http\Controllers\DossiersController')->updating($reqidate);
@@ -391,7 +415,7 @@ class OrdreMissionsController extends Controller
 				{
 					$reqdepdate = new \Illuminate\Http\Request();
 					$departure = $dossparent["departure"];
-	        		$reqdepdate->request->add(['dossier' => $iddossnew]);
+$reqdepdate->request->add(['dossier' => $iddnew]);
 					$reqdepdate->request->add(['champ' => 'departure']);
 					$reqdepdate->request->add(['val' => $departure]);
 					app('App\Http\Controllers\DossiersController')->updating($reqdepdate	);
@@ -400,7 +424,7 @@ class OrdreMissionsController extends Controller
 				{
 					$reqprestaxi = new \Illuminate\Http\Request();
 					$prestataire_taxi = $dossparent["prestataire_taxi"];
-	        		$reqprestaxi->request->add(['dossier' => $iddossnew]);
+$reqprestaxi->request->add(['dossier' => $iddnew]);
 					$reqprestaxi->request->add(['champ' => 'prestataire_taxi']);
 					$reqprestaxi->request->add(['val' => $prestataire_taxi]);
 					app('App\Http\Controllers\DossiersController')->updating($reqprestaxi	);
@@ -969,52 +993,72 @@ class OrdreMissionsController extends Controller
         		$arequest = new \Illuminate\Http\Request();
         		$subscriber_name_ =$_POST['subscriber_name'];
         		$subscriber_lastname_ =$_POST['subscriber_lastname'];
+$cnctagent = Auth::id();
 
-				$arequest->request->add(['name' => $subscriber_name_]);
-				$arequest->request->add(['lastname' => $subscriber_lastname_]);
+				/*$arequest->request->add(['name' => $subscriber_name_]);
+				$arequest->request->add(['lastname' => $subscriber_lastname_]);*/
 				$arequest->request->add(['type_dossier' => 'Technique']);
 
 				// entree de creation est 0
 				$arequest->request->add(['entree' => 0]);
 
 				// affecte dossier au agent qui le cree
-				$arequest->request->add(['affecte' => Auth::id()]);
-				$arequest->request->add(['created_by' => Auth::id()]);
+				/*$arequest->request->add(['affecte' => Auth::id()]);
+				$arequest->request->add(['created_by' => Auth::id()]);*/
 				if (isset($_POST["type_affectation"]))
         		{	
         			if ($_POST["type_affectation"] !== "Select")
-        			{	
-        				$typeaffect = $_POST["type_affectation"];
-        			    $arequest->request->add(['type_affectation' => $typeaffect]);
-        			}
+        			{$typeaffect = $_POST["type_affectation"];
+        			$arequest->request->add(['type_affectation' => $typeaffect]);}
         		}
         		// type_affect pares remplace ou complete
         		
         		if (isset($_POST["type_affectation_post"]))
         		{	
         			if ($_POST["type_affectation_post"] !== "Select")
-        			{	
-        				$typeaffect = $_POST["type_affectation_post"];
-        				$arequest->request->add(['type_affectation' => $typeaffect]);
-        			}
+        			{$typeaffect = $_POST["type_affectation_post"];
+        			$arequest->request->add(['type_affectation' => $typeaffect]);}
         		}
 				//ajout nouveau dossier
-        		$resp = app('App\Http\Controllers\DossiersController')->saving($arequest);
-        		// mettre a jour les autres champs a partir de l'om
-        		
-				$idpos = strpos($resp,"/dossiers/view/")+15;
+        		$resp = app('App\Http\Controllers\DossiersController')->save($arequest);
+        		// mettre a jour les autres champs a partir de lom
+				$idpos = strpos($resp,"/dossiers/fiche/")+16;
 				$iddossnew=substr($resp,$idpos);
+$iddnew = (string) $iddossnew;
 
+			$reqsubname = new \Illuminate\Http\Request();
+$reqsubname->request->add(['dossier' => $iddnew]);
+				$reqsubname->request->add(['champ' => 'subscriber_name']);
+				$reqsubname->request->add(['val' => $subscriber_name_]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsubname);
 
+				$reqsublname = new \Illuminate\Http\Request();
+$reqsublname->request->add(['dossier' => $iddnew]);
+				$reqsublname->request->add(['champ' => 'subscriber_lastname']);
+				$reqsublname->request->add(['val' => $subscriber_lastname_]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublname);
+
+				// affecte dossier au agent qui le cree
+				$reqaffectea = new \Illuminate\Http\Request();
+$reqaffectea->request->add(['dossier' => $iddnew]);
+				$reqaffectea->request->add(['champ' => 'affecte']);
+				$reqaffectea->request->add(['val' => $cnctagent]);
+				app('App\Http\Controllers\DossiersController')->updating($reqaffectea);
+
+				$reqcreaa = new \Illuminate\Http\Request();
+$reqcreaa->request->add(['dossier' => $iddnew]);
+				$reqcreaa->request->add(['champ' => 'created_by']);
+				$reqcreaa->request->add(['val' => $cnctagent]);
+				app('App\Http\Controllers\DossiersController')->updating($reqcreaa);
 
 				$reqbenef = new \Illuminate\Http\Request();
-        		$reqbenef->request->add(['dossier' => $iddossnew]);
+$reqbenef->request->add(['dossier' => $iddnew]);
 				$reqbenef->request->add(['champ' => 'beneficiaire']);
 				$reqbenef->request->add(['val' => $subscriber_name_]);
 				app('App\Http\Controllers\DossiersController')->updating($reqbenef);
 
 				$reqpbenef = new \Illuminate\Http\Request();
-        		$reqpbenef->request->add(['dossier' => $iddossnew]);
+$reqpbenef->request->add(['dossier' => $iddnew]);
 				$reqpbenef->request->add(['champ' => 'prenom_benef']);
 				$reqpbenef->request->add(['val' => $subscriber_lastname_]);
 				app('App\Http\Controllers\DossiersController')->updating($reqpbenef);
@@ -1435,52 +1479,75 @@ class OrdreMissionsController extends Controller
                 $arequest = new \Illuminate\Http\Request();
                 $subscriber_name_ =$_POST['subscriber_name'];
                 $subscriber_lastname_ =$_POST['subscriber_lastname'];
+$cnctagent = Auth::id();
 
-                $arequest->request->add(['name' => $subscriber_name_]);
-                $arequest->request->add(['lastname' => $subscriber_lastname_]);
-                $arequest->request->add(['type_dossier' => 'Technique']);
+				/*$arequest->request->add(['name' => $subscriber_name_]);
+				$arequest->request->add(['lastname' => $subscriber_lastname_]);*/
+				$arequest->request->add(['type_dossier' => 'Technique']);
 
-                // entree de creation est 0
+				// entree de creation est 0
 				$arequest->request->add(['entree' => 0]);
-                // affecte dossier au agent qui le cree
-                $arequest->request->add(['affecte' => Auth::id()]);
-                $arequest->request->add(['created_by' => Auth::id()]);
-                if (isset($_POST["type_affectation"]))
-                {
-                    
-                    if ($_POST["type_affectation"] !== "Select")
+
+				// affecte dossier au agent qui le cree
+				/*$arequest->request->add(['affecte' => Auth::id()]);
+				$arequest->request->add(['created_by' => Auth::id()]);*/
+				if (isset($_POST["type_affectation"]))
+        		{	
+        			if ($_POST["type_affectation"] !== "Select")
         			{$typeaffect = $_POST["type_affectation"];
-                    $arequest->request->add(['type_affectation' => $typeaffect]);}
-                }
-
-                if (isset($_POST["type_affectation_post"]))
-                {
-                	
-                	if ($_POST["type_affectation_post"] !== "Select")
+        			$arequest->request->add(['type_affectation' => $typeaffect]);}
+        		}
+        		// type_affect pares remplace ou complete
+        		
+        		if (isset($_POST["type_affectation_post"]))
+        		{	
+        			if ($_POST["type_affectation_post"] !== "Select")
         			{$typeaffect = $_POST["type_affectation_post"];
-                	$arequest->request->add(['type_affectation'=>$typeaffect]);}
-                }
-                //ajout nouveau dossier
-                $resp = app('App\Http\Controllers\DossiersController')->saving($arequest);
-                // mettre a jour les autres champs a partir de l'om
+        			$arequest->request->add(['type_affectation' => $typeaffect]);}
+        		}
+				//ajout nouveau dossier
+        		$resp = app('App\Http\Controllers\DossiersController')->save($arequest);
+        		// mettre a jour les autres champs a partir de lom
+				$idpos = strpos($resp,"/dossiers/fiche/")+16;
+				$iddossnew=substr($resp,$idpos);
+$iddnew = (string) $iddossnew;
 
-                $idpos = strpos($resp,"/dossiers/view/")+15;
-                $iddossnew=substr($resp,$idpos);
+			$reqsubname = new \Illuminate\Http\Request();
+$reqsubname->request->add(['dossier' => $iddnew]);
+				$reqsubname->request->add(['champ' => 'subscriber_name']);
+				$reqsubname->request->add(['val' => $subscriber_name_]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsubname);
 
+				$reqsublname = new \Illuminate\Http\Request();
+$reqsublname->request->add(['dossier' => $iddnew]);
+				$reqsublname->request->add(['champ' => 'subscriber_lastname']);
+				$reqsublname->request->add(['val' => $subscriber_lastname_]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublname);
 
+				// affecte dossier au agent qui le cree
+				$reqaffectea = new \Illuminate\Http\Request();
+$reqaffectea->request->add(['dossier' => $iddnew]);
+				$reqaffectea->request->add(['champ' => 'affecte']);
+				$reqaffectea->request->add(['val' => $cnctagent]);
+				app('App\Http\Controllers\DossiersController')->updating($reqaffectea);
 
-                $reqbenef = new \Illuminate\Http\Request();
-                $reqbenef->request->add(['dossier' => $iddossnew]);
-                $reqbenef->request->add(['champ' => 'beneficiaire']);
-                $reqbenef->request->add(['val' => $subscriber_name_]);
-                app('App\Http\Controllers\DossiersController')->updating($reqbenef);
+				$reqcreaa = new \Illuminate\Http\Request();
+$reqcreaa->request->add(['dossier' => $iddnew]);
+				$reqcreaa->request->add(['champ' => 'created_by']);
+				$reqcreaa->request->add(['val' => $cnctagent]);
+				app('App\Http\Controllers\DossiersController')->updating($reqcreaa);
 
-                $reqpbenef = new \Illuminate\Http\Request();
-                $reqpbenef->request->add(['dossier' => $iddossnew]);
-                $reqpbenef->request->add(['champ' => 'prenom_benef']);
-                $reqpbenef->request->add(['val' => $subscriber_lastname_]);
-                app('App\Http\Controllers\DossiersController')->updating($reqpbenef);
+				$reqbenef = new \Illuminate\Http\Request();
+$reqbenef->request->add(['dossier' => $iddnew]);
+				$reqbenef->request->add(['champ' => 'beneficiaire']);
+				$reqbenef->request->add(['val' => $subscriber_name_]);
+				app('App\Http\Controllers\DossiersController')->updating($reqbenef);
 
+				$reqpbenef = new \Illuminate\Http\Request();
+$reqpbenef->request->add(['dossier' => $iddnew]);
+				$reqpbenef->request->add(['champ' => 'prenom_benef']);
+				$reqpbenef->request->add(['val' => $subscriber_lastname_]);
+				app('App\Http\Controllers\DossiersController')->updating($reqpbenef);
                 if (isset($_POST["CL_contacttel"]))
                 {
                     $reqphone = new \Illuminate\Http\Request();
@@ -1929,40 +1996,76 @@ class OrdreMissionsController extends Controller
                 $arequest = new \Illuminate\Http\Request();
                 $subscriber_name_ =$_POST['subscriber_name'];
                 $subscriber_lastname_ =$_POST['subscriber_lastname'];
+$cnctagent = Auth::id();
 
-                $arequest->request->add(['name' => $subscriber_name_]);
-                $arequest->request->add(['lastname' => $subscriber_lastname_]);
-                $arequest->request->add(['type_dossier' => 'Technique']);
-                // affecte dossier au agent qui le cree
-                $arequest->request->add(['affecte' => Auth::id()]);
-                $arequest->request->add(['created_by' => Auth::id()]);
-                if (isset($_POST["type_affectation"]))
-                {
-                    if ($_POST["type_affectation"] !== "Select")
+				/*$arequest->request->add(['name' => $subscriber_name_]);
+				$arequest->request->add(['lastname' => $subscriber_lastname_]);*/
+				$arequest->request->add(['type_dossier' => 'Technique']);
+
+				// entree de creation est 0
+				$arequest->request->add(['entree' => 0]);
+
+				// affecte dossier au agent qui le cree
+				/*$arequest->request->add(['affecte' => Auth::id()]);
+				$arequest->request->add(['created_by' => Auth::id()]);*/
+				if (isset($_POST["type_affectation"]))
+        		{	
+        			if ($_POST["type_affectation"] !== "Select")
         			{$typeaffect = $_POST["type_affectation"];
-                    $arequest->request->add(['type_affectation' => $typeaffect]);}
-                }
-                //ajout nouveau dossier
-                $resp = app('App\Http\Controllers\DossiersController')->saving($arequest);
-                // mettre a jour les autres champs a partir de l'om
+        			$arequest->request->add(['type_affectation' => $typeaffect]);}
+        		}
+        		// type_affect pares remplace ou complete
+        		
+        		if (isset($_POST["type_affectation_post"]))
+        		{	
+        			if ($_POST["type_affectation_post"] !== "Select")
+        			{$typeaffect = $_POST["type_affectation_post"];
+        			$arequest->request->add(['type_affectation' => $typeaffect]);}
+        		}
+				//ajout nouveau dossier
+        		$resp = app('App\Http\Controllers\DossiersController')->save($arequest);
+        		// mettre a jour les autres champs a partir de lom
+				$idpos = strpos($resp,"/dossiers/fiche/")+16;
+				$iddossnew=substr($resp,$idpos);
+$iddnew = (string) $iddossnew;
 
-                $idpos = strpos($resp,"/dossiers/view/")+15;
-                $iddossnew=substr($resp,$idpos);
+			$reqsubname = new \Illuminate\Http\Request();
+$reqsubname->request->add(['dossier' => $iddnew]);
+				$reqsubname->request->add(['champ' => 'subscriber_name']);
+				$reqsubname->request->add(['val' => $subscriber_name_]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsubname);
 
+				$reqsublname = new \Illuminate\Http\Request();
+$reqsublname->request->add(['dossier' => $iddnew]);
+				$reqsublname->request->add(['champ' => 'subscriber_lastname']);
+				$reqsublname->request->add(['val' => $subscriber_lastname_]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublname);
 
+				// affecte dossier au agent qui le cree
+				$reqaffectea = new \Illuminate\Http\Request();
+$reqaffectea->request->add(['dossier' => $iddnew]);
+				$reqaffectea->request->add(['champ' => 'affecte']);
+				$reqaffectea->request->add(['val' => $cnctagent]);
+				app('App\Http\Controllers\DossiersController')->updating($reqaffectea);
 
-                $reqbenef = new \Illuminate\Http\Request();
-                $reqbenef->request->add(['dossier' => $iddossnew]);
-                $reqbenef->request->add(['champ' => 'beneficiaire']);
-                $reqbenef->request->add(['val' => $subscriber_name_]);
-                app('App\Http\Controllers\DossiersController')->updating($reqbenef);
+				$reqcreaa = new \Illuminate\Http\Request();
+$reqcreaa->request->add(['dossier' => $iddnew]);
+				$reqcreaa->request->add(['champ' => 'created_by']);
+				$reqcreaa->request->add(['val' => $cnctagent]);
+				app('App\Http\Controllers\DossiersController')->updating($reqcreaa);
 
-                $reqpbenef = new \Illuminate\Http\Request();
-                $reqpbenef->request->add(['dossier' => $iddossnew]);
-                $reqpbenef->request->add(['champ' => 'prenom_benef']);
-                $reqpbenef->request->add(['val' => $subscriber_lastname_]);
-                app('App\Http\Controllers\DossiersController')->updating($reqpbenef);
+				$reqbenef = new \Illuminate\Http\Request();
+$reqbenef->request->add(['dossier' => $iddnew]);
+				$reqbenef->request->add(['champ' => 'beneficiaire']);
+				$reqbenef->request->add(['val' => $subscriber_name_]);
+				app('App\Http\Controllers\DossiersController')->updating($reqbenef);
 
+				$reqpbenef = new \Illuminate\Http\Request();
+$reqpbenef->request->add(['dossier' => $iddnew]);
+				$reqpbenef->request->add(['champ' => 'prenom_benef']);
+				$reqpbenef->request->add(['val' => $subscriber_lastname_]);
+				app('App\Http\Controllers\DossiersController')->updating($reqpbenef);
+				
                 if (isset($_POST["CL_contacttel"]))
                 {
                     $reqphone = new \Illuminate\Http\Request();
