@@ -877,16 +877,14 @@ array_push($listepr,$pr['prestataire_id']);
                         <thead>
                         <tr id="headtable">
                             <th style="width:15%">Date</th>
-                            <th style="width:30%">Titre</th>
-                            <th style="width:40%">Description</th>
-                            <th style="width:5%">type</th>
+                            <th style="width:20%">Titre</th>
+                            <th style="width:20%">Description</th>
                             <th style="width:10%">Boite</th>
                         </tr>
                         <tr >
                             <th style="width:15%">Date</th>
-                            <th style="width:30%">Titre</th>
-                            <th style="width:40%">Description</th>
-                            <th style="width:5%">type</th>
+                            <th style="width:20%">Titre</th>
+                            <th style="width:20%">Description</th>
                             <th style="width:10%">Boite</th>
                         </tr>
                         </thead>
@@ -914,10 +912,8 @@ array_push($listepr,$pr['prestataire_id']);
                                         }
                                         echo date('d/m/Y H:i', strtotime( $datem)) ;
                                         } else{ echo date('d/m/Y H:i', strtotime( $attach->created_at)) ; }?></small></td>
-                                <td class="overme" style="cursor:pointer;width:30%;"><small  ><?php  echo $attach->nom;  ?></small></td>
-                                <td class="overme" style="width:40%;"><small><?php  echo $descriptionAttach.'<br>'.$descriptionEmail  ;  ?></small></td>
-
-                                <td style="width:5%;"><small><?php
+                                <td class="overme" style="cursor:pointer;width:20%;"><small  >
+                                        <?php
                                         $type= $attach->type;
                                         switch ($type) {
                                         case 'pdf':
@@ -949,7 +945,12 @@ array_push($listepr,$pr['prestataire_id']);
                                         }
 
 
-                                        ?></small></td>
+                                        ?>
+                                        <?php  echo $attach->nom;  ?></small>
+
+                                </td>
+                                <td class="overme" style="width:20%;"><small><?php  echo $descriptionAttach.'<br>'.$descriptionEmail  ;  ?></small></td>
+
                                 <td style="width:10%"><small><?php if ($attach->boite==1) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';} if ($attach->boite==0) {echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}  if ($attach->boite==3) {echo 'Généré <br><i style="margin-top:4px;" class="fas fa-lg fa-file-invoice"/>';}    if ($attach->boite==4) {echo 'Externe <br><i style="margin-top:4px;" class="fas fa-upload"></i>';} ?></small></td>
 
                             </tr>
@@ -5008,7 +5009,7 @@ $(document).ready(function(){
         overflow:hidden;
         white-space:nowrap;
         text-overflow: ellipsis;
-        max-width:300px;
+        max-width:250px!important;
     }
 .swal2-popup.swal2-modal.swal2-show {
     z-index: 1000000!important;

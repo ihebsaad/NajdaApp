@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
@@ -88,7 +88,7 @@ class EnvoyesController extends Controller
         $par=Auth::id();
 
         $envoye = new Envoye([
-            'emetteur' => '242ops1@najda-assistance.com', //env('emailenvoi')
+            'emetteur' => '24ops1@najda-assistance.com', //env('emailenvoi')
             //'destinataire' => trim ($request->get('destinataire')),
             'destinataire' => '',
             'sujet' => trim ($request->get('sujet')),
@@ -116,7 +116,7 @@ class EnvoyesController extends Controller
 
 
         $envoye = new Envoye([
-            'emetteur' => '242ops1@najda-assistance.com', //env('emailenvoi')
+            'emetteur' => '24ops1@najda-assistance.com', //env('emailenvoi')
          //   'destinataire' => trim ($request->get('destinataire')),
             'destinataire' => '',
             'contenu'=> trim ($request->get('contenu')),

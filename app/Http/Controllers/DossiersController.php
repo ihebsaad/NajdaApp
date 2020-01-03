@@ -1048,10 +1048,9 @@ class DossiersController extends Controller
         $contenu=$message.'<br><br>Cordialement / Best regards<br>'.$nomcompletagent.' '. $signature.'<br><br><hr style="float:left;width:40%"><br>'.$signatureentite;
 
 
-$dest='';
         //medic.multiservices@topnet.tn
         try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$cci,$from,$fromname,$dest) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$cci,$from,$fromname) {
                 $message
 
                 //    ->to($destinataire)
@@ -1066,12 +1065,26 @@ $dest='';
 
                     foreach ($to as $t) {
                         $message->to($t);
-                        $dest.=$t.';';
                     }
                 }
             });
 
+            $tos='';
+            if (count($to)>1){
 
+                // $tos= implode("|",$to .'');
+
+                foreach ($to as $t2) {
+                    $tos.= app('App\Http\Controllers\PrestatairesController')->NomByEmail( $t2) .' ('.$t2.'); ';
+                }
+
+
+            }else {
+                // $tos =  $to[0];
+                //  $tos =  $to[0];
+                $tos.= app('App\Http\Controllers\PrestatairesController')->NomByEmail( $to[0]) .' ('.$to[0].'); ';
+
+            }
             Dossier::where('id', $iddossier)->update(array('accuse' => 1));
 
             $envoye  = new Envoye([
@@ -1080,7 +1093,7 @@ $dest='';
 
                 //  $envoye = new Envoye([
                 'emetteur' => $from, //env('emailenvoi')
-                'destinataire' => $dest,
+                'destinataire' => $tos,
                 //      'destinataire' =>'iheb test',
                 'par'=> $idu,
                 'sujet'=> $sujet,
@@ -1091,7 +1104,7 @@ $dest='';
                 //   'cci'=> $ccisadd,
                 'statut'=> 1,
                 'type'=> 'email',
-                'dossier'=> $iddossier
+                'dossier'=> $refdossier
 
             ]);
             $envoye->save();

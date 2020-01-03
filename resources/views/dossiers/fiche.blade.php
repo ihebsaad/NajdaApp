@@ -2850,7 +2850,7 @@ function disabling(elm) {
             var message = $('#message').html();
 
 
-            if (destinataire!='')
+            if (destinataire !=null)
             {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
@@ -2865,7 +2865,8 @@ function disabling(elm) {
                     }
                 });
             }else{
-                // alert('ERROR');
+                  alert('sélectionnez le destinataire !');
+                document.getElementById('sendaccuse').disabled=false;
             }
         });
 
