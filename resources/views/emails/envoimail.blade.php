@@ -256,7 +256,7 @@ $(document).ready(function()
                     </div>
                 </div>
                 <div class="form-group form-group-default">
-                    <label>Attachements Externes <span style="color:red;">(la taille totale de fichiers ne doit pas dépasser 15 Mo)</span></label>
+                    <label>Attachements Externes <span style="color:red;">(la taille totale de fichiers ne doit pas dépasser 25 Mo)</span></label>
                     <!--<input  class="btn btn-danger fileinput-button" id="file" type="file" name="files[]"   multiple   >-->
                     <input type="file" class="btn btn-danger fileinput-button kfile" name="vasplus_multiple_files[]" id="vasplus_multiple_files" multiple="multiple" style="padding:5px;"/>      
 
