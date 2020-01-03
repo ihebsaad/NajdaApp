@@ -404,6 +404,7 @@ header("Content-Type: text/html;charset=UTF-8");
         <span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 36 003 610</span>
     </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
         <span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">FAX (+216) 73 820 333</span>
+        <p style="margin-top:0.2pt; margin-bottom:0pt; widows:0; orphans:0; font-size:7.5pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p>
     </p>
     <?php } ?>
 
@@ -528,7 +529,10 @@ foreach ($array_spec as $spec) {
     <input name="vehicule_immatriculation" placeholder="Imm" value="<?php if(isset ($detaildoss)) echo $detaildoss['vehicule_immatriculation']; ?>"></input>
 <?php } ?>
 </span></p>
-    </div><p style="margin-top:0.6pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'">Etat du véhicule:&#xa0;</span>
+    </div><p style="margin-top:0.6pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
+<span style="font-family:'Times New Roman'; font-weight:bold">Boite de vitesse : </span>
+        <input name="CL_automatique_normal" id="CL_automatique_normal" placeholder="Automatique ou Normal" <?php if (isset($detailom)) { if (isset($detailom['CL_automatique_normal'])) {echo "value='".$detailom['CL_automatique_normal']."'";}} ?> >
+        <span style="font-family:'Times New Roman'">Etat du véhicule:&#xa0;</span>
         <?php if (isset($detailom)) { ?>
             <select id="CL_etat_vehicule" name="CL_etat_vehicule">
                 <option value="Panne" <?php if (isset($detailom['CL_etat_vehicule'])) { if ($detailom['CL_etat_vehicule'] === "Panne") {echo "selected";}} ?> >Panne</option>
@@ -544,8 +548,7 @@ foreach ($array_spec as $spec) {
                 <option value="Intact">Intact</option>
             </select>
         <?php } ?>
-        <span style="font-family:'Times New Roman'; font-weight:bold">Boite de vitesse : </span>
-        <input name="CL_automatique_normal" id="CL_automatique_normal" placeholder="Automatique ou Normal" <?php if (isset($detailom)) { if (isset($detailom['CL_automatique_normal'])) {echo "value='".$detailom['CL_automatique_normal']."'";}} ?> >
+        </p>
         <div class="row" style=" margin-left: 0px; ">
     <p style="margin-top:4.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">RDV pour </span><span style="font-family:'Times New Roman'; font-weight:bold"> le remorquage </span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
         <input type="time" id="CL_heure_RDV" name="CL_heure_RDV" min="00:00" max="23:59"  <?php if (isset($detailom)) { if (isset($detailom['CL_heure_RDV'])) {echo "value='".date('H:i',strtotime($detailom['CL_heure_RDV']))."'";}} ?> >
