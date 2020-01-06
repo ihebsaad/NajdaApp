@@ -127,14 +127,16 @@ class Dossier extends Model
         'user_id',
         'autre_hospital_address',
 
+        'is_plafond',
         'specialite_TPA',
         'ID_assure',
         'chambre_hoptial',
+
         'devise_plafond',
         'devise_franchise'
     ];
 
- /*   public $timestamps    ;
+ /*   public $timestamps    ; 
 
    protected $dateFormat = 'Y-m-d H:i:s';
 
@@ -142,7 +144,7 @@ class Dossier extends Model
     {
         return 'Y-m-d H:i:s.u';
     }
-*/
+
 /*
  public function activeMissions()
     {

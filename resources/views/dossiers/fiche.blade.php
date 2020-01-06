@@ -213,9 +213,9 @@ use  \App\Http\Controllers\PrestatairesController;
 <br>
         <?php if( ($dossier->affecte>0) && ($dossier->accuse!=1) ) {?> <button  class="btn btn-md btn-info pull-left"   data-toggle="modal" data-target="#createAccuse"><b><i class="fas fa-envelope"></i> Accusé N Aff</b></button><?php } ?>
          <button  class="btn btn-md btn-info pull-right"   data-toggle="modal" data-target="#observations"><b><i class="fas fa-clipboard"></i> Observations </b></button>
-        <?php  if($dossier->entree >0 ) { ?>
+        <?php  if($dossier->entree >0 ) { /* ?>
         <button style="margin-right:30px;margin-left:30px;" class="btn btn-md btn-info pull-right"   data-toggle="modal" data-target="#EntreeGen"><b><i class="fas fa-mail-bulk"></i> Email Géner</b></button>
-        <?php } ?>
+        <?php  */} ?>
  <br>
                  <div class="form-group" style="margin-top:25px;">
                         {{ csrf_field() }}
@@ -405,20 +405,70 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-md-4" id="plafondfr" <?php if(  $dossier->franchise ==0){ ?> style="display:none" <?php  } ?> >
+                                                            <div class="col-md-2"  id="devisefr"  <?php if(  $dossier->franchise ==0){ ?> style="display:none" <?php  } ?> >
                                                                 <div class="form-group">
-                                                                    <label class="control-label">Plafond
+                                                                    <label class="control-label">Devise
                                                                     </label>
 
                                                                     <div class="input-group-control">
-                                                                        <input onchange="changing(this)"  type="number" id="plafond" name="plafond" class="form-control" style="width: 100px;" placeholder="Plafond"   value="{{ $dossier->plafond }}" >
+                                                                        <select onchange="changing(this)"   id="devise_franchise" name="devise_franchise" class="form-control"    style="width:100px"  >
+                                                                            <option <?php if(  $dossier->devise_franchise =='TND'){ echo'selected="selected"';}?> value="TND">TND</option>
+                                                                            <option <?php if(  $dossier->devise_franchise =='EUR'){ echo'selected="selected"';}?>  value="EUR">EUR</option>
+                                                                            <option <?php if(  $dossier->devise_franchise =='USD'){ echo'selected="selected"';}?>  value="USD">USD</option>
+                                                                        </select>
                                                                     </div>
                                                                 </div>
                                                             </div>
 
                                                         </div>
 
+                                                    <div class="row">
+
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+
+                                                                <label for="is_plafond" class=""> Plafond &nbsp;&nbsp;
+                                                                    <div class="radio radio1" id="uniform-franchise"><span><input onclick="changing(this);" type="radio" name="is_plafond" id="is_plafond" value="1" <?php if ($dossier->is_plafond ==1){echo 'checked';} ?>></span></div> Oui
+                                                                </label>
+
+                                                                <label for="nonplafond" class="">
+
+                                                                    <div class="radio radio1" id="uniform-nonplafond"><span class="checked"><input onclick="disabling('is_plafond');hidingd2();" type="radio" name="is_plafond" id="nonplafond" value="0"  <?php if ($dossier->is_plafond ==0){echo 'checked';} ?> ></span></div> Non
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+
+                                                    <div class="col-md-4" id="plafondmt" <?php if(  $dossier->is_plafond ==0){ ?> style="display:none" <?php  } ?> >
+                                                        <div class="form-group">
+                                                            <label class="control-label">Montant Plafond
+                                                            </label>
+
+                                                            <div class="input-group-control">
+                                                                <input onchange="changing(this)"  type="number" id="plafond" name="plafond" class="form-control" style="width: 100px;" placeholder="Plafond"   value="{{ $dossier->plafond }}" >
+                                                            </div>
+                                                        </div>
                                                     </div>
+
+                                                        <div class="col-md-4"  id="plafonddv"  <?php if(  $dossier->plafond ==0){ ?> style="display:none" <?php  } ?> >
+                                                            <div class="form-group">
+                                                                <label class="control-label">Devise
+                                                                </label>
+
+                                                                <div class="input-group-control">
+                                                                    <select onchange="changing(this)"   id="devise_plafond" name="devise_plafond" class="form-control"  style="width:100px"    >
+                                                                        <option <?php if(  $dossier->devise_plafond =='TND'){ echo'selected="selected"';}?> value="TND">TND</option>
+                                                                        <option <?php if(  $dossier->devise_plafond =='EUR'){ echo'selected="selected"';}?> value="EUR">EUR</option>
+                                                                        <option <?php if(  $dossier->devise_plafond =='USD'){ echo'selected="selected"';}?> value="USD">USD</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                </div>
+
+
+                                            </div>
                                                 </div>
                                             </div>
                                           </div>
@@ -810,9 +860,10 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 </div>
 
 
+
                                                                 <div class="row">
 
-                                                                    <div class="col-md-5">
+                                                                    <div class="col-md-12">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Ville</label>
 
@@ -828,8 +879,12 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                             </script>
                                                                         </div>
                                                                     </div>
+                                                                </div>
+                                                                <div class="row">
 
-                                                                    <div class="col-md-3">
+
+
+                                                                    <div class="col-md-7">
                                                                         <!--<div class="form-group">
                                                                             <label for="inputError" class="control-label">Hôtel</label>
 
@@ -858,7 +913,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                     </div>
 
 
-                                                                    <div class="col-md-2">
+                                                                    <div class="col-md-3">
                                                                         <div class="form-group">
                                                                             <label for="inputError" class="control-label">Chambre</label>
 
@@ -1002,7 +1057,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                                         <div <?php if ($dossier->is_hospitalized ==1){echo 'style="display:none"';} ?>id="hospital">
 
                                                         <div class="row">
-                                                            <div class="col-md-4">
+                                                            <div class="col-md-8">
                                                                 <div class="form-group">
                                                                     <label for="inputError" class="control-label">Hôspitalisé à </label>
 
@@ -1021,7 +1076,33 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6">
+
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label for="inputError" class="control-label">Chambre  </label>
+                                                                    <div class="input-group-control">
+                                                                        <input   type="text" id="chambre_hoptial" name="chambre_hoptial" class="form-control"  onchange="changing(this);"  value="{{ $dossier->chambre_hoptial }}" >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                        </div>
+
+                                                            <div class="row">
+                                                                <div class="col-md-8">
+                                                                    <div class="form-group">
+                                                                        <label for="inputError" class="control-label">Autre adresse  </label>
+                                                                        <div class="input-group-control">
+                                                                            <input   onchange="changing(this);" type="text" id="autre_hospital_address" name="autre_hospital_address" class="form-control"   value="{{ $dossier->autre_hospital_address }}" >
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        <div class="row">
+
+                                                            <div class="col-md-5">
                                                                 <div class="form-group">
                                                                     <label for="inputError" class="control-label">Médecin Traitant </label>
 
@@ -1042,22 +1123,6 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                     </div>
                                                                 </div>
                                                             </div>
-
-
-
-                                                        </div>
-
-                                                        <div class="row">
-
-                                                            <div class="col-md-5">
-                                                                <div class="form-group">
-                                                                    <label for="inputError" class="control-label">Autre adresse  </label>
-                                                                    <div class="input-group-control">
-                                                                        <input   type="text" id="autre_hospital_address" name="autre_hospital_address" class="form-control"   >
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="inputError" class="control-label">Autre Médecin Traitant  </label>
@@ -1070,7 +1135,7 @@ use  \App\Http\Controllers\PrestatairesController;
 
                                                             <div class="col-md-3">
                                                                 <div class="form-group">
-                                                                    <label for="inputError" class="control-label">Tel Autre Médecin Traitant</label>
+                                                                    <label for="inputError" class="control-label">Tel Autre M T</label>
 
                                                                     <div class="input-group-control">
                                                                         <input onchange="changing(this)" type="text" id="hospital_phone2" name="hospital_phone2" class="form-control"   value="{{ $dossier->hospital_phone2 }}" >
@@ -1183,7 +1248,47 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                     </div>
+                                                           <?php if( trim($dossier->type_affectation)=='Najda TPA') {?>
+                                                            <div class="row">
+
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label for="tpa" class="control-label"> ID Assuré  </label>
+
+                                                                        <div class="input-group-control">
+                                                                            <input onchange="changing(this)" type="number" id="ID_assure"    class="form-control" value="{{ $dossier->ID_assure }}" >
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-8">
+                                                                    <div class="form-group">
+                                                                        <label for="tpa" class="control-label"> Spécialité Médicale </label>
+
+                                                                      <?php  $specsTPA = DB::table('specialites_typeprestations')
+                                                                        ->where('type_prestation',15)  // medcecin traitant
+                                                                        ->get();
+
+                                                                        ?>
+                                                                        <div class="input-group-control">
+                                                                            <select id="specialite_TPA"    class="form-control" value="{{ $dossier->specialite_TPA }}" >
+                                                                                <option value=""></option>
+                                                                              <?php  foreach($specsTPA as $spec)
+                                                                                {
+                                                                                    $nomSpec=\App\Http\Controllers\SpecialitesController::NomSpecialiteById($spec->specialite);
+                                                                                    if($dossier->specialite_TPA==$nomSpec){$selected='selected="selected"';}else{$selected='';}
+                                                                                    echo '<option  '.$selected.'   value="'.$nomSpec.'" >'. $nomSpec  .'</option>';
+                                                                                }
+                                                                                ?>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+                                                          <?php }?>
+                                                        </div>
 
 
                                                     </div>
@@ -1624,7 +1729,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div><br><br>
 
 
                                 </div>
@@ -2461,7 +2566,7 @@ use  \App\Http\Controllers\PrestatairesController;
 
 
    <?php  if($dossier->entree >0 ) {
-
+/*
    $entree= Entree::where('id',$dossier->entree)->get();
    $entree=    Entree::find($dossier->entree);
    ?>
@@ -2639,8 +2744,9 @@ use  \App\Http\Controllers\PrestatairesController;
     </div>
 
 
-    <?php
+    <?php */
     }
+
     ?>
 
 @endsection
@@ -2776,6 +2882,7 @@ function disabling(elm) {
 
     $(document).ready(function() {
 
+        $("#specialite_TPA").select2();
         $("#customer_id").select2();
         $("#medecin_traitant").select2();
         $("#hospital_address").select2();
@@ -3164,18 +3271,33 @@ function disabling(elm) {
 
         $('.radio1').click(function() {
 
-            var   div=document.getElementById('montantfr');
+            var   el1=document.getElementById('montantfr');
+            var   el2=document.getElementById('devisefr');
             var franchise=document.getElementById('franchise').checked;
+            var plaf=document.getElementById('is_plafond').checked;
             if(franchise)
-            {div.style.display='block';	 }
+            {
+                el1.style.display='block';
+                el2.style.display='block';
+            }
             else
-            {div.style.display='none';     }
+            {
+                el1.style.display='none';
+                el2.style.display='none';
+            }
 
-            var   div2=document.getElementById('plafondfr');
-            if(franchise)
-            {div2.style.display='block';	 }
+            var   el3=document.getElementById('plafondmt');
+            var   el4=document.getElementById('plafonddv');
+            if(plaf)
+            {
+                el3.style.display='block';
+                el4.style.display='block';
+            }
             else
-            {div2.style.display='none';     }
+            {
+                el3.style.display='none';
+                el4.style.display='none';
+            }
         });
 
 

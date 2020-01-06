@@ -138,35 +138,84 @@ use  \App\Http\Controllers\DocsController;
                                                             <div class="form-group">
 
                                                                 <label for="franchise" class=""> Franchise &nbsp;&nbsp;
-                                                                    <div class="radio radio1" id="uniform-franchise"><span><input   type="radio" name="franchise" id="franchise" value="1"  ></span></div> Oui
+                                                                    <div class="radio radio1" id="uniform-franchise"><span><input  type="radio" name="franchise" id="franchise" value="1" ></span></div> Oui
                                                                 </label>
 
                                                                 <label for="nonfranchise" class="">
 
-                                                                    <div class="radio radio1" id="uniform-nonfranchise"><span class="checked"><input onclick="" type="radio" name="franchise" id="nonfranchise" value="0"    ></span></div> Non
+                                                                    <div class="radio radio1" id="uniform-nonfranchise"><span class="checked"><input  type="radio" name="franchise" id="nonfranchise" value="0"   ></span></div> Non
                                                                 </label>
 
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-4"  id="montantfr" style="display:none">
+                                                        <div class="col-md-4"  id="montantfr" style="display:none" >
                                                             <div class="form-group">
                                                                 <label class="control-label">Montant Franchise
                                                                 </label>
 
                                                                 <div class="input-group-control">
-                                                                    <input    type="number" id="montant_franchise" name="montant_franchise" class="form-control" style="width: 100px;" placeholder="Montant"     >
+                                                                    <input   type="number" id="montant_franchise" name="montant_franchise" class="form-control" style="width: 100px;" placeholder="Montant"    >
                                                                 </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-4" id="plafondfr"  style="display:none">
+                                                        <div class="col-md-2"  id="devisefr"   style="display:none"  >
                                                             <div class="form-group">
-                                                                <label class="control-label">Plafond
+                                                                <label class="control-label">Devise
                                                                 </label>
 
                                                                 <div class="input-group-control">
-                                                                    <input    type="number" id="plafond" name="plafond" class="form-control" style="width: 100px;" placeholder="Plafond"    >
+                                                                    <select    id="devise_franchise" name="devise_franchise" class="form-control"    style="width:100px"  >
+                                                                        <option   value="TND">TND</option>
+                                                                        <option    value="EUR">EUR</option>
+                                                                        <option   value="USD">USD</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+
+                                                                <label for="is_plafond" class=""> Plafond &nbsp;&nbsp;
+                                                                    <div class="radio radio1" id="uniform-franchise"><span><input   type="radio" name="is_plafond" id="is_plafond" value="1" ></span></div> Oui
+                                                                </label>
+
+                                                                <label for="nonplafond" class="">
+
+                                                                    <div class="radio radio1" id="uniform-nonplafond"><span class="checked"><input  type="radio" name="is_plafond" id="nonplafond" value="0"    ></span></div> Non
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-4" id="plafondmt"   style="display:none"  >
+                                                            <div class="form-group">
+                                                                <label class="control-label">Montant Plafond
+                                                                </label>
+
+                                                                <div class="input-group-control">
+                                                                    <input   type="number" id="plafond" name="plafond" class="form-control" style="width: 100px;" placeholder="Plafond"    >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-4"  id="plafonddv"   style="display:none"  >
+                                                            <div class="form-group">
+                                                                <label class="control-label">Devise
+                                                                </label>
+
+                                                                <div class="input-group-control">
+                                                                    <select    id="devise_plafond" name="devise_plafond" class="form-control"  style="width:100px"    >
+                                                                        <option  value="TND">TND</option>
+                                                                        <option   value="EUR">EUR</option>
+                                                                        <option   value="USD">USD</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -495,83 +544,94 @@ use  \App\Http\Controllers\DocsController;
 
                                             </div>
                                             <div id="hospital">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="inputError" class="control-label">Hôspitalisé à </label>
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <div class="form-group">
+                                                            <label for="inputError" class="control-label">Hôspitalisé à </label>
 
-                                                        <div class="input-group-control">
-                                                            <select onchange="changing(this);ajout_prest(this);"  type="text" id="hospital_address" name="hospital_address" class="form-control"   >
+                                                            <div class="input-group-control">
+                                                                <select   id="hospital_address" name="hospital_address" class="form-control"   >
 
-                                                                <option></option>
-                                                                <?php
+                                                                    <option></option>
+                                                                    <?php
 
-                                                                foreach($hopitaux as $hp)
-                                                                {
-                                                                    if( PrestatairesController::ChampById('name',$hp->prestataire_id)!=''){ echo '<option title="'.$hp->prestataire_id.'"  value="'.   PrestatairesController::ChampById('name',$hp->prestataire_id).'">'.   PrestatairesController::ChampById('name',$hp->prestataire_id).'</option>';}
-                                                                }
-                                                                ?>
-                                                            </select>
+                                                                    foreach($hopitaux as $hp)
+                                                                    {
+                                                                    if( PrestatairesController::ChampById('name',$hp->prestataire_id)!=''){ echo '<option title="'.$hp->prestataire_id.'"   value="'.   PrestatairesController::ChampById('name',$hp->prestataire_id).'">'.   PrestatairesController::ChampById('name',$hp->prestataire_id).'</option>';}
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="inputError" class="control-label">Chambre  </label>
+                                                            <div class="input-group-control">
+                                                                <input   type="text" id="chambre_hoptial" name="chambre_hoptial" class="form-control"     >
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <div class="form-group">
+                                                            <label for="inputError" class="control-label">Autre adresse  </label>
+                                                            <div class="input-group-control">
+                                                                <input     type="text" id="autre_hospital_address" name="autre_hospital_address" class="form-control"    >
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="inputError" class="control-label">Médecin Traitant </label>
+                                                <div class="row">
+
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label for="inputError" class="control-label">Médecin Traitant </label>
 
 
-                                                        <div class="input-group-control">
-                                                            <select onchange=""  type="text" id="medecin_traitant" name="medecin_traitant" class="form-control"    >
+                                                            <div class="input-group-control">
+                                                                <select   id="medecin_traitant" name="medecin_traitant" class="form-control"   >
 
-                                                                <option></option>
-                                                                <?php
+                                                                    <option></option>
+                                                                    <?php
 
-                                                                foreach($traitants as $tr)
-                                                                {
+                                                                    foreach($traitants as $tr)
+                                                                    {
                                                                     if (PrestatairesController::ChampById('name',$tr->prestataire_id)!='') {echo '<option title="'.$tr->prestataire_id.'"  value="'. PrestatairesController::ChampById('name',$tr->prestataire_id).'">'. PrestatairesController::ChampById('name',$tr->prestataire_id).' Fixe: '. PrestatairesController::ChampById('phone_home',$tr->prestataire_id) .' Tel: '.PrestatairesController::ChampById('phone_cell',$tr->prestataire_id) .'</option>';}
-                                                                }
+                                                                    }
 
-                                                                ?>
-                                                            </select>
+                                                                    ?>
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="inputError" class="control-label">Autre Médecin Traitant  </label>
 
-
-                                            </div>
-
-                                            <div class="row">
-
-                                                <div class="col-md-5">
-                                                    <div class="form-group">
-                                                        <label for="inputError" class="control-label">Autre adresse  </label>
-                                                        <div class="input-group-control">
-                                                            <input   type="text" id="autre_hospital_address" name="autre_hospital_address" class="form-control"   >
+                                                            <div class="input-group-control">
+                                                                <input  type="text" id="medecin_traitant2" name="medecin_traitant2" class="form-control"   >
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="inputError" class="control-label">Autre Médecin Traitant  </label>
 
-                                                        <div class="input-group-control">
-                                                            <input   type="text" id="medecin_traitant2" name="medecin_traitant2" class="form-control"   >
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="inputError" class="control-label">Tel Autre M T</label>
+
+                                                            <div class="input-group-control">
+                                                                <input   type="text" id="hospital_phone2" name="hospital_phone2" class="form-control"    >
+                                                            </div>
                                                         </div>
                                                     </div>
+
                                                 </div>
-
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label for="inputError" class="control-label">Tel Autre Médecin Traitant</label>
-
-                                                        <div class="input-group-control">
-                                                            <input   type="number" id="hospital_phone2" name="hospital_phone2" class="form-control"    >
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
 
 
                                             <div class="row"   id="adresse03"  style="display:none;" >
@@ -1334,19 +1394,33 @@ use  \App\Http\Controllers\DocsController;
 
         $('.radio1').click(function() {
 
-            var   div=document.getElementById('montantfr');
+            var   el1=document.getElementById('montantfr');
+            var   el2=document.getElementById('devisefr');
             var franchise=document.getElementById('franchise').checked;
-
+            var plaf=document.getElementById('is_plafond').checked;
             if(franchise)
-            {div.style.display='block';	 }
+            {
+                el1.style.display='block';
+                el2.style.display='block';
+            }
             else
-            {div.style.display='none';     }
+            {
+                el1.style.display='none';
+                el2.style.display='none';
+            }
 
-            var   div2=document.getElementById('plafondfr');
-            if(franchise)
-            {div2.style.display='block';	 }
+            var   el3=document.getElementById('plafondmt');
+            var   el4=document.getElementById('plafonddv');
+            if(plaf)
+            {
+                el3.style.display='block';
+                el4.style.display='block';
+            }
             else
-            {div2.style.display='none';     }
+            {
+                el3.style.display='none';
+                el4.style.display='none';
+            }
         });
 
 

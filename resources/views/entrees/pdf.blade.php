@@ -2360,8 +2360,11 @@
 
         <div   style="overflow:hidden;border:1px solid #d6eef7; padding:20px 20px 20px 20px; min-height: 400px!important;"> <?php
 
-            $content= $entree['contenu'] ;
-           // echo utf8_encode($content) ;
+if ($entree['contenu']== null){
+    $content= nl2br($entree['contenutxt']);}else{$content= $entree['contenu'];
+}
+
+
             echo  ($content) ;
             ?>
         </div>

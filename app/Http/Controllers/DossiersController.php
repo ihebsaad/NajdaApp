@@ -901,9 +901,11 @@ class DossiersController extends Controller
         $subscriber_name = app('App\Http\Controllers\DossiersController')->ChampById('subscriber_name',$iddossier);
         $subscriber_lastname = app('App\Http\Controllers\DossiersController')->ChampById('subscriber_lastname',$iddossier);
 
-
-        $nomabn=  $subscriber_name.' '.$subscriber_lastname;
-
+        if ($from=='tpa@najda-assistance.com') {
+            $nomabn = $subscriber_name . ' ' . $subscriber_lastname;
+        }else{
+            $nomabn = $subscriber_name ;
+        }
 
         if ($langue=='francais'){
             $signature = app('App\Http\Controllers\UsersController')->ChampById('signature',$affecte);
@@ -1038,14 +1040,14 @@ class DossiersController extends Controller
 
         $user = auth()->user();$idu=$user->id;
         $lg='fr';
-        $signatureagent= $this->getSignatureUser($idu,$lg);
+        $signatureagent= $this->getSignatureUser($affecte,$lg);
 
 
         // $contenu=$message.'<br><br>'.$nomcompletagent.'<br>'.$signature;
 
         $nomuser=$user->name.' '.$user->lastname;
 
-        $contenu=$message.'<br><br>Cordialement / Best regards<br>'.$nomcompletagent.' '. $signature.'<br><br><hr style="float:left;width:40%"><br>'.$signatureentite;
+        $contenu=$message.'<br><br>Cordialement / Best regards<br>'.$nomcompletagent.' '. $signatureagent.'<br><br><hr style="float:left;width:40%"><br>'.$signatureentite;
 
 
         //medic.multiservices@topnet.tn
