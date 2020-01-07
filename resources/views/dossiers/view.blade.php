@@ -3988,15 +3988,15 @@ function keyUpHandler(){
                     method:"POST",
                     data:{autorise:autorise,details:details,date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat/*,typeprest:typeprest*/, _token:_token},
                     success:function(data){
-                      //  var prestation=parseInt(data);
+                        //var prestation=parseInt(data);
                         /// window.location =data;
 
-                      /*  Swal.fire({
+                        /*Swal.fire({
                             type: 'success',
                             title: 'Enregistrée...',
                             text: "Prestation Enregistrée"
                         });*/
-                      alert('prestation ajoutée');
+                        alert('prestation ajoutée');
                         // window.location =data;
                         $("#openmodalprest").modal('hide');
 

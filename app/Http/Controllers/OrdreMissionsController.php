@@ -255,6 +255,8 @@ class OrdreMissionsController extends Controller
         		// mettre a jour les autres champs a partir de lom
 				$idpos = strpos($resp,"/dossiers/fiche/")+16;
 				$iddossnew=substr($resp,$idpos);
+				$posretour = stripos($iddossnew, "<!DOCTYPE")-4;
+				$iddossnew = substr($iddossnew,0, $posretour);
 $iddnew = (string) $iddossnew;
 
 			$reqsubname = new \Illuminate\Http\Request();
@@ -461,21 +463,22 @@ $reqprestaxi->request->add(['dossier' => $iddnew]);
 					$pdf2 = PDF4::loadView('ordremissions.pdfodmtaxi')->setPaper('a4', '');
 					}
 
+$emplacOM = storage_path()."/OrdreMissions/".$iddnew;
 
-		        if (!file_exists($path.$iddossnew)) {
-		            mkdir($path.$iddossnew, 0777, true);
-		        }
-		        date_default_timezone_set('Africa/Tunis');
-		        setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
-		        $mc=round(microtime(true) * 1000);
-		        $datees = strftime("%d-%B-%Y"."_".$mc); 
+                if (!file_exists($emplacOM)) {
+                    mkdir($emplacOM, 0777, true);
+                }
+                date_default_timezone_set('Africa/Tunis');
+                setlocale (LC_TIME, 'fr_FR.utf8','fra');
+                $mc=round(microtime(true) * 1000);
+                $datees = strftime("%d-%B-%Y"."_".$mc);
 
 		        	$filename='taxi_'.$datees;
 
 			        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
 			        $name='OM - '.$name;
 		        // If you want to store the generated pdf to the server then you can use the store function
-		        $pdf2->save($path.$iddossnew.'/'.$name.'.pdf');
+		        $pdf2->save($path.$iddnew.'/'.$name.'.pdf');
 
 		        // enregistrement dans la base
 
@@ -1024,6 +1027,8 @@ $cnctagent = Auth::id();
         		// mettre a jour les autres champs a partir de lom
 				$idpos = strpos($resp,"/dossiers/fiche/")+16;
 				$iddossnew=substr($resp,$idpos);
+				$posretour = stripos($iddossnew, "<!DOCTYPE")-4;
+				$iddossnew = substr($iddossnew,0, $posretour);
 $iddnew = (string) $iddossnew;
 
 			$reqsubname = new \Illuminate\Http\Request();
@@ -1067,7 +1072,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 				{
 					$reqphone = new \Illuminate\Http\Request();
 					$phoneb = $_POST["CL_contacttel"];
-	        		$reqphone->request->add(['dossier' => $iddossnew]);
+	        		$reqphone->request->add(['dossier' => $iddnew]);
 					$reqphone->request->add(['champ' => 'subscriber_phone_cell']);
 					$reqphone->request->add(['val' => $phoneb]);
 					app('App\Http\Controllers\DossiersController')->updating($reqphone);
@@ -1077,7 +1082,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 				{
 					$reqlieup = new \Illuminate\Http\Request();
 					$CL_lieuprest_pc = $_POST["CL_lieuprest_pc"];
-	        		$reqlieup->request->add(['dossier' => $iddossnew]);
+	        		$reqlieup->request->add(['dossier' => $iddnew]);
 					$reqlieup->request->add(['champ' => 'subscriber_local_address']);
 					$reqlieup->request->add(['val' => $CL_lieuprest_pc]);
 					app('App\Http\Controllers\DossiersController')->updating($reqlieup);
@@ -1230,13 +1235,15 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 					}
 
 
-		        if (!file_exists($path.$iddossnew)) {
-		            mkdir($path.$iddossnew, 0777, true);
-		        }
-		        date_default_timezone_set('Africa/Tunis');
-		        setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
-		        $mc=round(microtime(true) * 1000);
-		        $datees = strftime("%d-%B-%Y"."_".$mc); 
+		        $emplacOM = storage_path()."/OrdreMissions/".$iddossnew;
+
+                if (!file_exists($emplacOM)) {
+                    mkdir($emplacOM, 0777, true);
+                }
+                date_default_timezone_set('Africa/Tunis');
+                setlocale (LC_TIME, 'fr_FR.utf8','fra');
+                $mc=round(microtime(true) * 1000);
+                $datees = strftime("%d-%B-%Y"."_".$mc);
 
 		        	$filename='ambulance__'.$datees;
 
@@ -1510,6 +1517,8 @@ $cnctagent = Auth::id();
         		// mettre a jour les autres champs a partir de lom
 				$idpos = strpos($resp,"/dossiers/fiche/")+16;
 				$iddossnew=substr($resp,$idpos);
+				$posretour = stripos($iddossnew, "<!DOCTYPE")-4;
+				$iddossnew = substr($iddossnew,0, $posretour);
 $iddnew = (string) $iddossnew;
 
 			$reqsubname = new \Illuminate\Http\Request();
@@ -1562,7 +1571,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                 {
                     $reqlieup = new \Illuminate\Http\Request();
                     $CL_lieuprest_pc = $_POST["CL_lieuprest_pc"];
-                    $reqlieup->request->add(['dossier' => $iddossnew]);
+$reqlieup->request->add(['dossier' => $iddnew]);
                     $reqlieup->request->add(['champ' => 'subscriber_local_address']);
                     $reqlieup->request->add(['val' => $CL_lieuprest_pc]);
                     app('App\Http\Controllers\DossiersController')->updating($reqlieup);
@@ -1679,7 +1688,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                     $reqprestremorquage->request->add(['dossier' => $iddossnew]);
                     $reqprestremorquage->request->add(['champ' => 'prestataire_remorquage']);
                     $reqprestremorquage->request->add(['val' => $prestataire_remorquage]);
-                    app('App\Http\Controllers\DossiersController')->updating($reqprestremorquage	);
+                    app('App\Http\Controllers\DossiersController')->updating($reqprestremorquage);
                 }
                 // recuperation de reference de nouveau dossier et la changer dans request
                 $dossnouveau=Dossier::where('id', $iddossnew)->select('reference_medic')->first();
@@ -2028,6 +2037,8 @@ $cnctagent = Auth::id();
         		// mettre a jour les autres champs a partir de lom
 				$idpos = strpos($resp,"/dossiers/fiche/")+16;
 				$iddossnew=substr($resp,$idpos);
+				$posretour = stripos($iddossnew, "<!DOCTYPE")-4;
+				$iddossnew = substr($iddossnew,0, $posretour);
 $iddnew = (string) $iddossnew;
 
 			$reqsubname = new \Illuminate\Http\Request();
