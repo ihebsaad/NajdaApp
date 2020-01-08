@@ -912,8 +912,8 @@ array_push($listepr,$pr['prestataire_id']);
                             $descriptionEmail='';
                             $userID=$attach->user;
 
-                $PrenomAgent App\Http\Controllers\UsersController::ChampById('name',$userID);
-                $NomAgent = App\Http\Controllers\UsersController::ChampById('lastname',$userID);
+                $PrenomAgent =UsersController::ChampById('name',$userID);
+                $NomAgent = UsersController::ChampById('lastname',$userID);
                 $NomcA=$PrenomAgent.' '.$NomAgent;
                 $filesize=$attach->filesize;
                             $tailleA=formatBytes($filesize);
