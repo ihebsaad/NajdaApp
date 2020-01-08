@@ -111,8 +111,13 @@ class DossiersController extends Controller
                     if (!file_exists($path.$dossid)) {
                         mkdir($path.$dossid, 0777, true);
                     }
-                     
-                  $path=$path.$dossid;
+
+        $user = auth()->user();
+        $userid=$user->id;
+        $fullpath=$path.$dossid.'/'.$fichier_name ;
+        $filesize= filesize($fullpath) ;
+
+        $path=$path.$dossid;
                   $path2=$path2.$dossid;
 
                  $attachement = new Attachement([
@@ -123,6 +128,9 @@ class DossiersController extends Controller
                              'dossier'=>$dossid,
                              'description' => $descfichier,
                              'boite' => 4,
+                              'user'=> $userid,
+                              'fullpath'=> $fullpath,
+                              'filesize'=> $filesize
                         ]);
                  $attachement->save();                                     
 

@@ -948,12 +948,11 @@ $id=0;
                    $path2= '/Emails/'.$id.'/'.$nom ;
 
                     // filesize
-
                     $fullpath=storage_path().$path2;
-                    $filesize=100;
-               //     $filesize= filesize($fullpath) ;
-                 //   $filesize  = File::size($fullpath);
-                 //   $filesize= Storage::size($fullpath);
+                    $filesize= filesize($fullpath) ;
+
+                    // taille sup 10Ko pour ignorer les petites imgaes
+                    if($filesize > 10000){
 
                     $attach = new Attachement([
                         'nom' => $nom,
@@ -964,11 +963,13 @@ $id=0;
                         'facturation'=> $facturation,
                         'boite'=> 0,  // 0 = reception, 1 = envoi
                         'filesize'=> $filesize,
-                        'fullpath'=> $fullpath,
+                      //  'fullpath'=> $fullpath,
 
                     ]);
 
                     $attach->save();
+                    }
+
 
                 });
 
@@ -1239,22 +1240,31 @@ $id=0;
                         } // end if pdf
                     } // end if  production
 
-                    // Taille
 
                     $path2= '/Emails/'.$id.'/'.$nom ;
 
-                    $attach = new Attachement([
-                        'nom' => $nom,
-                        'type' => $type,
-                        'path'=> $path2,
-                        'parent'=> $id,
-                        'entree_id'=> $id,
-                        'facturation'=> $facturation,
-                        'boite'=> 0,  // 0 = reception, 1 = envoi
+                    // filesize
+                    $fullpath=storage_path().$path2;
+                    $filesize= filesize($fullpath) ;
 
-                    ]);
+                    // taille sup 10Ko pour ignorer les petites imgaes
+                    if($filesize > 10000){
 
-                    $attach->save();
+                        $attach = new Attachement([
+                            'nom' => $nom,
+                            'type' => $type,
+                            'path'=> $path2,
+                            'parent'=> $id,
+                            'entree_id'=> $id,
+                            'facturation'=> $facturation,
+                            'boite'=> 0,  // 0 = reception, 1 = envoi
+                            'filesize'=> $filesize,
+                      //      'fullpath'=> $fullpath,
+
+                        ]);
+
+                        $attach->save();
+                    }
 
                 });
 
@@ -1522,19 +1532,28 @@ $id=0;
 
                     $path2= '/Emails/'.$id.'/'.$nom ;
 
-                    $attach = new Attachement([
-                        'nom' => $nom,
-                        'type' => $type,
-                        'path'=> $path2,
-                        'parent'=> $id,
-                        'entree_id'=> $id,
-                        'facturation'=> $facturation,
-                        'boite'=> 0,  // 0 = reception, 1 = envoi
+                    // filesize
+                    $fullpath=storage_path().$path2;
+                    $filesize= filesize($fullpath) ;
 
-                    ]);
+                    // taille sup 10Ko pour ignorer les petites imgaes
+                    if($filesize > 10000){
 
-                    $attach->save();
+                        $attach = new Attachement([
+                            'nom' => $nom,
+                            'type' => $type,
+                            'path'=> $path2,
+                            'parent'=> $id,
+                            'entree_id'=> $id,
+                            'facturation'=> $facturation,
+                            'boite'=> 0,  // 0 = reception, 1 = envoi
+                            'filesize'=> $filesize,
+                    //        'fullpath'=> $fullpath,
 
+                        ]);
+
+                        $attach->save();
+                    }
                 });
 
 
@@ -1804,21 +1823,30 @@ $id=0;
                         } // end if pdf
                     } // end if  production
 
-
                     $path2= '/Emails/'.$id.'/'.$nom ;
 
-                    $attach = new Attachement([
-                        'nom' => $nom,
-                        'type' => $type,
-                        'path'=> $path2,
-                        'parent'=> $id,
-                        'entree_id'=> $id,
-                        'facturation'=> $facturation,
-                        'boite'=> 0,  // 0 = reception, 1 = envoi
+                    // filesize
+                    $fullpath=storage_path().$path2;
+                    $filesize= filesize($fullpath) ;
 
-                    ]);
+                    // taille sup 10Ko pour ignorer les petites imgaes
+                    if($filesize > 10000){
 
-                    $attach->save();
+                        $attach = new Attachement([
+                            'nom' => $nom,
+                            'type' => $type,
+                            'path'=> $path2,
+                            'parent'=> $id,
+                            'entree_id'=> $id,
+                            'facturation'=> $facturation,
+                            'boite'=> 0,  // 0 = reception, 1 = envoi
+                            'filesize'=> $filesize,
+                    //       'fullpath'=> $fullpath,
+
+                        ]);
+
+                        $attach->save();
+                    }
 
                 });
 
@@ -2080,19 +2108,29 @@ $id=0;
 
                     $path2= '/Emails/'.$id.'/'.$nom ;
 
-                    $attach = new Attachement([
-                        'nom' => $nom,
-                        'type' => $type,
-                        'path'=> $path2,
-                        'parent'=> $id,
-                        'entree_id'=> $id,
-                        'facturation'=> $facturation,
-                        'boite'=> 0,  // 0 = reception, 1 = envoi
 
-                    ]);
+                    // filesize
+                    $fullpath=storage_path().$path2;
+                    $filesize= filesize($fullpath) ;
 
-                    $attach->save();
+                    // taille sup 10Ko pour ignorer les petites imgaes
+                    if($filesize > 10000){
 
+                        $attach = new Attachement([
+                            'nom' => $nom,
+                            'type' => $type,
+                            'path'=> $path2,
+                            'parent'=> $id,
+                            'entree_id'=> $id,
+                            'facturation'=> $facturation,
+                            'boite'=> 0,  // 0 = reception, 1 = envoi
+                            'filesize'=> $filesize,
+                     //       'fullpath'=> $fullpath,
+
+                        ]);
+
+                        $attach->save();
+                    }
                 });
 
          /*   } else {
@@ -2346,22 +2384,30 @@ $id=0;
                         } // end if pdf
                     } // end if  production
 
-
                     $path2= '/Emails/'.$id.'/'.$nom ;
 
-                    $attach = new Attachement([
-                        'nom' => $nom,
-                        'type' => $type,
-                        'path'=> $path2,
-                        'parent'=> $id,
-                        'entree_id'=> $id,
-                        'facturation'=> $facturation,
-                        'boite'=> 0,  // 0 = reception, 1 = envoi
+                    // filesize
+                    $fullpath=storage_path().$path2;
+                    $filesize= filesize($fullpath) ;
 
-                    ]);
+                    // taille sup 10Ko pour ignorer les petites imgaes
+                    if($filesize > 10000){
 
-                    $attach->save();
+                        $attach = new Attachement([
+                            'nom' => $nom,
+                            'type' => $type,
+                            'path'=> $path2,
+                            'parent'=> $id,
+                            'entree_id'=> $id,
+                            'facturation'=> $facturation,
+                            'boite'=> 0,  // 0 = reception, 1 = envoi
+                            'filesize'=> $filesize,
+                      //      'fullpath'=> $fullpath,
 
+                        ]);
+
+                        $attach->save();
+                    }
                 });
 
 
@@ -2622,22 +2668,30 @@ $id=0;
                         } // end if pdf
                     } // end if  production
 
-
                     $path2= '/Emails/'.$id.'/'.$nom ;
 
-                    $attach = new Attachement([
-                        'nom' => $nom,
-                        'type' => $type,
-                        'path'=> $path2,
-                        'parent'=> $id,
-                        'entree_id'=> $id,
-                        'facturation'=> $facturation,
-                        'boite'=> 0,  // 0 = reception, 1 = envoi
+                    // filesize
+                    $fullpath=storage_path().$path2;
+                    $filesize= filesize($fullpath) ;
 
-                    ]);
+                    // taille sup 10Ko pour ignorer les petites imgaes
+                    if($filesize > 10000){
 
-                    $attach->save();
+                        $attach = new Attachement([
+                            'nom' => $nom,
+                            'type' => $type,
+                            'path'=> $path2,
+                            'parent'=> $id,
+                            'entree_id'=> $id,
+                            'facturation'=> $facturation,
+                            'boite'=> 0,  // 0 = reception, 1 = envoi
+                            'filesize'=> $filesize,
+                      //      'fullpath'=> $fullpath,
 
+                        ]);
+
+                        $attach->save();
+                    }
                 });
 
 
@@ -2896,21 +2950,31 @@ $id=0;
                         } // end if pdf
                     } // end if  production
 
-
                     $path2= '/Emails/'.$id.'/'.$nom ;
 
-                    $attach = new Attachement([
-                        'nom' => $nom,
-                        'type' => $type,
-                        'path'=> $path2,
-                        'parent'=> $id,
-                        'entree_id'=> $id,
-                        'facturation'=> $facturation,
-                        'boite'=> 0,  // 0 = reception, 1 = envoi
+                    // filesize
+                    $fullpath=storage_path().$path2;
+                    $filesize= filesize($fullpath) ;
 
-                    ]);
+                    // taille sup 10Ko pour ignorer les petites imgaes
+                    if($filesize > 10000){
 
-                    $attach->save();
+                        $attach = new Attachement([
+                            'nom' => $nom,
+                            'type' => $type,
+                            'path'=> $path2,
+                            'parent'=> $id,
+                            'entree_id'=> $id,
+                            'facturation'=> $facturation,
+                            'boite'=> 0,  // 0 = reception, 1 = envoi
+                            'filesize'=> $filesize,
+                   //         'fullpath'=> $fullpath,
+
+                        ]);
+
+                        $attach->save();
+                    }
+
 
                 });
 
@@ -3170,18 +3234,28 @@ $id=0;
 
                     $path2= '/Emails/'.$id.'/'.$nom ;
 
-                    $attach = new Attachement([
-                        'nom' => $nom,
-                        'type' => $type,
-                        'path'=> $path2,
-                        'parent'=> $id,
-                        'entree_id'=> $id,
-                        'facturation'=> $facturation,
-                        'boite'=> 0,  // 0 = reception, 1 = envoi
+                    // filesize
+                    $fullpath=storage_path().$path2;
+                    $filesize= filesize($fullpath) ;
 
-                    ]);
+                    // taille sup 10Ko pour ignorer les petites imgaes
+                    if($filesize > 10000){
 
-                    $attach->save();
+                        $attach = new Attachement([
+                            'nom' => $nom,
+                            'type' => $type,
+                            'path'=> $path2,
+                            'parent'=> $id,
+                            'entree_id'=> $id,
+                            'facturation'=> $facturation,
+                            'boite'=> 0,  // 0 = reception, 1 = envoi
+                            'filesize'=> $filesize,
+                       //     'fullpath'=> $fullpath,
+
+                        ]);
+
+                        $attach->save();
+                    }
 
                 });
 
@@ -3757,19 +3831,28 @@ $id=0;
 
                     $path2= '/Emails/'.$id.'/'.$nom ;
 
-                    $attach = new Attachement([
-                        'nom' => $nom,
-                        'type' => $type,
-                        'path'=> $path2,
-                        'parent'=> $id,
-                        'entree_id'=> $id,
-                        'facturation'=> $facturation,
-                        'boite'=> 0,  // 0 = reception, 1 = envoi
+                    // filesize
+                    $fullpath=storage_path().$path2;
+                    $filesize= filesize($fullpath) ;
 
-                    ]);
+                    // taille sup 10Ko pour ignorer les petites imgaes
+                    if($filesize > 10000){
 
-                    $attach->save();
+                        $attach = new Attachement([
+                            'nom' => $nom,
+                            'type' => $type,
+                            'path'=> $path2,
+                            'parent'=> $id,
+                            'entree_id'=> $id,
+                            'facturation'=> $facturation,
+                            'boite'=> 0,  // 0 = reception, 1 = envoi
+                            'filesize'=> $filesize,
+                     //       'fullpath'=> $fullpath,
 
+                        ]);
+
+                        $attach->save();
+                    }
                 });
 
 
@@ -4404,7 +4487,7 @@ if ($from=='najdassist@gmail.com')
 
                 $attachement = new Attachement([
 
-                    'type'=>$file->getClientOriginalExtension(),'path' => '/Envoyes/'.$envoyeid.'/'.$file->getClientOriginalName(), 'nom' => $file->getClientOriginalName(),'boite'=>1,'dossier'=>$doss,'envoye_id'=>$envoyeid,'parent'=>$envoyeid
+                    'type'=>$file->getClientOriginalExtension(),'path' => '/Envoyes/'.$envoyeid.'/'.$file->getClientOriginalName(), 'nom' => $file->getClientOriginalName(),'boite'=>1,'dossier'=>$doss,'envoye_id'=>$envoyeid,'parent'=>$envoyeid,'user'=>Auth::id()
                  ]);
 
                  $attachement->save();
@@ -4450,7 +4533,7 @@ $ext="";
               // DB::table('attachements')->insert([
                    $attachement = new Attachement([
 
-                       'type'=>$ext,'path' => $path, 'nom' => $name,'boite'=>1,'dossier'=>$doss,'parent'=>$envoyeid,'envoye_id'=>$envoyeid
+                       'type'=>$ext,'path' => $path, 'nom' => $name,'boite'=>1,'dossier'=>$doss,'parent'=>$envoyeid,'envoye_id'=>$envoyeid,'user'=>Auth::id()
                ]);
                     $attachement->save();
 
@@ -5029,10 +5112,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         $pdf->save($path.'/'.$name.'.pdf');
 
         $path2='/Covers/'.$name.'.pdf';
-
+// boite 6 garde Fax
         $attachement = new Attachement([
 
-            'type'=>'pdf','path' => $path2, 'nom' => $name,'boite'=>4, 'parent'=>$sujet.'date-'.$date,
+            'type'=>'pdf','path' => $path2, 'nom' => $name,'boite'=>6, 'parent'=>$sujet.'date-'.$date,
         ]);
 
         $attachement->save();

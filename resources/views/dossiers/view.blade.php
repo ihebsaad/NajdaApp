@@ -15,6 +15,22 @@ use  \App\Http\Controllers\DossiersController ;
 use  \App\Http\Controllers\EnvoyesController ;
 use  \App\Http\Controllers\EntreesController ;
 use \App\Http\Controllers\UsersController;
+
+
+
+function formatBytes($bytes, $precision = 2) {
+    $units = array('O', 'KO', 'MO', 'GO', 'TO');
+
+    $bytes = max($bytes, 0);
+    $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+    $pow = min($pow, count($units) - 1);
+
+    // Uncomment one of the following alternatives
+    // $bytes /= pow(1024, $pow);
+    // $bytes /= (1 << (10 * $pow));
+
+    return round($bytes, $precision) . ' ' . $units[$pow];
+}
 ?>
 
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
@@ -894,6 +910,14 @@ array_push($listepr,$pr['prestataire_id']);
                         @foreach($attachements as $attach)
 <?php                       $type= $attach->type;    $parent=$attach->parent;
                             $descriptionEmail='';
+                            $userID=$attach->user;
+
+                $PrenomAgent App\Http\Controllers\UsersController::ChampById('name',$userID);
+                $NomAgent = App\Http\Controllers\UsersController::ChampById('lastname',$userID);
+                $NomcA=$PrenomAgent.' '.$NomAgent;
+                $filesize=$attach->filesize;
+                            $tailleA=formatBytes($filesize);
+
                             $descriptionAttach=$attach->description;
                             if($attach->entree_id>0){
                             $descriptionEmail= EntreesController::ChampById('commentaire',$parent);
@@ -951,7 +975,7 @@ array_push($listepr,$pr['prestataire_id']);
                                         <?php  echo $attach->nom;  ?></small>
 
                                 </td>
-                                <td  onclick="modalattach2('<?php echo $attach->id ; ?>','<?php echo addslashes($descriptionAttach) ;?>','<?php echo addslashes($attach->nom) ; ?>')" class="overme" style="width:20%;"><small><?php  echo $descriptionAttach.'<br>'.$descriptionEmail  ;  ?></small></td>
+                                <td  onclick="modalattach2('<?php echo $attach->id ; ?>','<?php echo addslashes($descriptionAttach) ;?>','<?php echo addslashes($attach->nom) ; ?>','<?php echo $tailleA ;?>','<?php echo addslashes($NomcA);?>')" class="overme" style="width:20%;"><small><?php  echo $descriptionAttach.'<br>'.$descriptionEmail  ;  ?></small></td>
 
                                 <td style="width:10%"><small><?php if ($attach->boite==1) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';} if ($attach->boite==0) {echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}  if ($attach->boite==3) {echo 'Généré <br><i style="margin-top:4px;" class="fas fa-lg fa-file-invoice"/>';}    if ($attach->boite==4) {echo 'Externe <br><i style="margin-top:4px;" class="fas fa-upload"></i>';}  if ($attach->boite==7) {echo ' Envoi Fax<i class="fas a-lg fa-level-up-alt" />';}     ?></small></td>
 
@@ -2317,6 +2341,15 @@ array_push($listepr,$pr['prestataire_id']);
                 </div>
                 <div class="modal-body">
                     <div class="card-body"><br>
+
+                        <div class="row">
+                            <div class="col-md-6 pull-left" >
+                                Créé par :<span id="fileCreator"></span>
+                            </div>
+                            <div class="col-md-6 pull-right" >
+                            Taille :<span id="filSize"></span>
+                            </div>
+                        </div><br>
                         <input type="hidden" id="selectedAttach"  />
                         <label >Description :</label>
                         <center><textarea id="descAttach" onchange="updateDesc()" class="form-control" ></textarea> </center><br><br>
@@ -2820,11 +2853,13 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
         $("#openattach").modal('show');
     }
 
-    function modalattach2(id,description,titre)
+    function modalattach2(id,description,titre,taille,par)
     {          $("#attTitle2").text(titre);
 
         document.getElementById('selectedAttach').value=id;
         document.getElementById('descAttach').value=description;
+        document.getElementById('fileCreator').innerHTML=par;
+        document.getElementById('fileSize').innerHTML=taille;
 
         $("#openattachDesc").modal('show');
 
