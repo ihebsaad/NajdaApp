@@ -752,9 +752,9 @@ class DossiersController extends Controller
           $dossier->update($request->all());
         //  $iddoss
         if($entreeid >0) {
-            return redirect('/dossiers/fiche/' . $iddoss);
-        }else{
             return redirect('/dossiers/update/' . $iddoss);
+        }else{
+            return redirect('/dossiers/fiche/' . $iddoss);
 
         }
     }
