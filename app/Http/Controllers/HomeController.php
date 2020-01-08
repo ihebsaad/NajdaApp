@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Attachement;
 use App\Demande;
 use App\Entree;
 use App\Parametre;
@@ -10,6 +11,7 @@ use App\User;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Searchable\Search;
 use App\Dossier ;
 use Illuminate\Support\Facades\Auth;
@@ -1017,4 +1019,33 @@ return redirect('roles');
 
     }
 
-}
+
+    public function updateattach(Request $request)
+    {
+
+        $attach = ($request->get('attach'));
+        $descrip = $request->get('descrip');
+
+        Attachement::where('id', $attach)->update(array('description' => $descrip));
+
+      //  $user = auth()->user();
+      //  $nomuser = $user->name . ' ' . $user->lastname;
+    }
+
+    public function deleteattach(Request $request)
+    {
+        $id = $request->get('attach');
+
+        $attach = Attachement::find($id);
+        $attach->delete();
+$url=storage_path().$attach->path ;
+      //  unlink($attach->path);
+        unlink(  $url);
+
+        return back();
+
+    }
+
+
+
+    }

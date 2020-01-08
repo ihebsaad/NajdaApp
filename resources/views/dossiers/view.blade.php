@@ -902,9 +902,9 @@ array_push($listepr,$pr['prestataire_id']);
                             $descriptionEmail= EnvoyesController::ChampById('description',$parent);
                             }
 ?>
-                            <tr   onclick="modalattach('<?php echo  $attach->nom ?>','<?php  echo URL::asset('storage'.$attach->path) ; ?>','<?php echo $type; ?>');" >
+                            <tr    >
 
-                                <td style="width:15%;"><small><?php if ($attach->boite==3) {
+                                <td style="width:15%;"><small><?php /*if ($attach->boite==3) {
                                         $datem='';
                                         if($attach->entree_id>0){
                                         $datem= EntreesController::ChampById('created_at',$parent);
@@ -913,8 +913,8 @@ array_push($listepr,$pr['prestataire_id']);
                                         $datem= EnvoyesController::ChampById('created_at',$parent);
                                         }
                                         echo date('d/m/Y H:i', strtotime( $datem)) ;
-                                        } else{ echo date('d/m/Y H:i', strtotime( $attach->created_at)) ; }?></small></td>
-                                <td class="overme" style="cursor:pointer;width:20%;"><small  >
+                                        } else{*/ echo date('d/m/Y H:i', strtotime( $attach->created_at)) ;/* }*/ ?></small></td>
+                                <td class="overme" style="cursor:pointer;width:20%;"   onclick="modalattach('<?php echo  $attach->nom ?>','<?php  echo URL::asset('storage'.$attach->path) ; ?>','<?php echo $type; ?>');"    ><small  >
                                         <?php
                                         $type= $attach->type;
                                         switch ($type) {
@@ -951,9 +951,9 @@ array_push($listepr,$pr['prestataire_id']);
                                         <?php  echo $attach->nom;  ?></small>
 
                                 </td>
-                                <td class="overme" style="width:20%;"><small><?php  echo $descriptionAttach.'<br>'.$descriptionEmail  ;  ?></small></td>
+                                <td  onclick="modalattach2('<?php echo $attach->id ; ?>','<?php echo $descriptionAttach ;?>','<?php echo $attach->nom ; ?>')" class="overme" style="width:20%;"><small><?php  echo $descriptionAttach.'<br>'.$descriptionEmail  ;  ?></small></td>
 
-                                <td style="width:10%"><small><?php if ($attach->boite==1) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';} if ($attach->boite==0) {echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}  if ($attach->boite==3) {echo 'Généré <br><i style="margin-top:4px;" class="fas fa-lg fa-file-invoice"/>';}    if ($attach->boite==4) {echo 'Externe <br><i style="margin-top:4px;" class="fas fa-upload"></i>';} ?></small></td>
+                                <td style="width:10%"><small><?php if ($attach->boite==1) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';} if ($attach->boite==0) {echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}  if ($attach->boite==3) {echo 'Généré <br><i style="margin-top:4px;" class="fas fa-lg fa-file-invoice"/>';}    if ($attach->boite==4) {echo 'Externe <br><i style="margin-top:4px;" class="fas fa-upload"></i>';}  if ($attach->boite==7) {echo ' Envoi Fax<i class="fas a-lg fa-level-up-alt" />';}     ?></small></td>
 
                             </tr>
 
@@ -2306,8 +2306,36 @@ array_push($listepr,$pr['prestataire_id']);
         </div>
     </div>
 
-    
-<?php     $listedossiers = DB::table('dossiers')->get();?>
+
+
+    <!-- Modal Ouvrir Attachement Desc-->
+    <div class="modal fade" id="openattachDesc"  role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="document" style=" ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="attTitle2"></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body"><br>
+                        <input type="hidden" id="selectedAttach"  />
+                        <label >Description :</label>
+                        <center><textarea id="descAttach" onchange="updateDesc()" class="form-control" ></textarea> </center><br><br>
+                        <button onclick="deleteattach()" type="button" class="btn btn-danger pull-right"><i class="fa fa-trash" ></i> Supprimer l'attachement</button>
+                        <br><br>
+                     </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <?php     $listedossiers = DB::table('dossiers')->get();?>
 
     <div class="modal  " id="crendu" >
         <div class="modal-dialog" >
@@ -2790,6 +2818,16 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
 
         // cas DOC fichier DOC
         $("#openattach").modal('show');
+    }
+
+    function modalattach2(id,description,titre)
+    {          $("#attTitle2").text(titre);
+
+        document.getElementById('selectedAttach').value=id;
+        document.getElementById('descAttach').value=description;
+
+        $("#openattachDesc").modal('show');
+
     }
 
 function remplaceom(id,affectea,verif)
@@ -3818,11 +3856,46 @@ function keyUpHandler(){
 
 <script>
 
+    function deleteattach() {
+        var attach= document.getElementById('selectedAttach').value;
+         var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('deleteattach') }}",
+            method: "POST",
+            data: {  attach:attach , _token: _token},
+            success: function ( ) {
+             location.reload()
 
+            }
+        });
+
+    }
+    function updateDesc() {
+        var attach= document.getElementById('selectedAttach').value;
+        var descrip = document.getElementById('descAttach').value;
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('updateattach') }}",
+            method: "POST",
+            data: {  attach:attach ,descrip:descrip, _token: _token},
+            success: function ( ) {
+                $('#descAttach').animate({
+                    opacity: '0.3',
+                });
+                $('#descAttach').animate({
+                    opacity: '1',
+                });
+
+            }
+        });
+
+    }
 
     $(function () {
 
       //  $("#iddossier").select2();
+
+
 
         $('#phoneicon').click(function() {
 

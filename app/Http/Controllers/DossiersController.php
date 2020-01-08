@@ -1593,24 +1593,7 @@ class DossiersController extends Controller
         $mail10=app('App\Http\Controllers\ClientsController')->ClientChampById('mail10',$cl);
         if($mail10!='') { array_push($listeemails,$mail10);}
 
-     /*   $gestion_mail1=app('App\Http\Controllers\ClientsController')->ClientChampById('gestion_mail1',$cl);
-        if($gestion_mail1!='') { array_push($listeemails,$gestion_mail1);}
 
-        $gestion_mail2=app('App\Http\Controllers\ClientsController')->ClientChampById('gestion_mail2',$cl);
-        if($gestion_mail2!='') { array_push($listeemails,$gestion_mail2);}
-
-        $qualite_mail1=app('App\Http\Controllers\ClientsController')->ClientChampById('qualite_mail1',$cl);
-        if($qualite_mail1!='') { array_push($listeemails,$qualite_mail1);}
-
-        $qualite_mail2=app('App\Http\Controllers\ClientsController')->ClientChampById('qualite_mail2',$cl);
-        if($qualite_mail2!='') { array_push($listeemails,$qualite_mail2);}
-
-        $reseau_mail1=app('App\Http\Controllers\ClientsController')->ClientChampById('reseau_mail1',$cl);
-        if($reseau_mail1!='') { array_push($listeemails,$reseau_mail1);}
-
-        $reseau_mail2=app('App\Http\Controllers\ClientsController')->ClientChampById('reseau_mail2',$cl);
-        if($reseau_mail2!='') { array_push($listeemails,$reseau_mail2);}
-*/
 
 
         $emails =   Adresse::where('nature', 'email')
@@ -1651,6 +1634,160 @@ class DossiersController extends Controller
 
     }
 
+
+
+
+    public function update($id)
+    {
+        $relations1 = DB::table('dossiers_docs')->select('dossier', 'doc')
+            ->where('dossier',$id)
+            ->get();
+        //      $typesMissions=TypeMission::get();
+
+        $typesMissions =  DB::table('type_mission')
+            ->get();
+
+        $Missions=Dossier::find($id)->activeMissions;
+
+        $dossier = Dossier::find($id);
+
+        $cl=$this->ChampById('customer_id',$id);
+        $cldocs = DB::table('clients_docs')->select('client', 'doc')->where('client',$cl)
+            ->get();
+
+
+        $entitecl=app('App\Http\Controllers\ClientsController')->ClientChampById('entite',$cl);
+        $nomcl=app('App\Http\Controllers\ClientsController')->ClientChampById('name',$cl);
+
+        if($entitecl ==''){  $entite=$nomcl;}else{$entite=$entitecl; }
+
+        $adresse=app('App\Http\Controllers\ClientsController')->ClientChampById('adresse',$cl);
+
+
+        //  $clients = DB::table('clients')->select('id', 'name')->get();
+
+        $clients = DB::table('clients')->orderBy('name', 'asc')
+            ->get();
+
+        $prestations =   Prestation::where('dossier_id', $id)->get();
+        // $emails =   Email::where('parent', $id)->get();
+
+        $phones =   Adresse::where('nature', 'teldoss')
+            ->where('parent',$id)
+            ->get();
+
+        $emailads =   Adresse::where('nature', 'emaildoss')
+            ->where('parent',$id)
+            ->get();
+
+
+        $dossiers = $this->ListeDossiersAffecte();
+
+
+        $liste = DB::table('adresses')
+            ->where('parent',$cl )
+            ->where('nature','facturation' )
+            ->get();
+
+        $hopitaux =
+            DB::table('prestataires_type_prestations')
+                ->where('type_prestation_id',8 )
+                ->orwhere('type_prestation_id',9 )
+                ->get();
+
+
+        $traitants = DB::table('prestataires_type_prestations')
+            ->where('type_prestation_id',15 )
+            ->get();
+
+        $hotels = DB::table('prestataires_type_prestations')
+            ->where('type_prestation_id',18 )
+            ->get();
+
+        $garages =  DB::table('prestataires_type_prestations')
+            ->where('type_prestation_id',22 )
+            ->get();
+
+
+        $listeemails=array();
+
+        // trouver id client à partir de la référence
+        $cl=app('App\Http\Controllers\DossiersController')->ClientDossierById($id);
+
+        $mail=app('App\Http\Controllers\ClientsController')->ClientChampById('mail',$cl);
+        if($mail!='') { array_push($listeemails,$mail);}
+
+        $mail2=app('App\Http\Controllers\ClientsController')->ClientChampById('mail2',$cl);
+        if($mail2!='') { array_push($listeemails,$mail2);}
+
+        $mail3=app('App\Http\Controllers\ClientsController')->ClientChampById('mail3',$cl);
+        if($mail3!='') { array_push($listeemails,$mail3);}
+
+        $mail4=app('App\Http\Controllers\ClientsController')->ClientChampById('mail4',$cl);
+        if($mail4!='') { array_push($listeemails,$mail4);}
+
+        $mail5=app('App\Http\Controllers\ClientsController')->ClientChampById('mail5',$cl);
+        if($mail5!='') { array_push($listeemails,$mail5);}
+
+        $mail6=app('App\Http\Controllers\ClientsController')->ClientChampById('mail6',$cl);
+        if($mail6!='') { array_push($listeemails,$mail6);}
+
+        $mail7=app('App\Http\Controllers\ClientsController')->ClientChampById('mail7',$cl);
+        if($mail7!='') { array_push($listeemails,$mail7);}
+
+        $mail8=app('App\Http\Controllers\ClientsController')->ClientChampById('mail8',$cl);
+        if($mail8!='') { array_push($listeemails,$mail8);}
+
+        $mail9=app('App\Http\Controllers\ClientsController')->ClientChampById('mail9',$cl);
+        if($mail9!='') { array_push($listeemails,$mail9);}
+
+        $mail10=app('App\Http\Controllers\ClientsController')->ClientChampById('mail10',$cl);
+        if($mail10!='') { array_push($listeemails,$mail10);}
+
+
+        $emails =   Adresse::where('nature', 'email')
+            ->where('parent',$cl)
+            ->pluck('champ');
+
+        $emails =  $emails->unique();
+
+        if (count($emails)>0) {
+            foreach ($emails as $m) {
+                array_push($listeemails, $m);
+
+            }
+        }
+
+        $inters =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
+        $prests = Prestation::where('dossier_id', $id)->pluck('prestataire_id');
+
+        $phonesDossier =   Adresse::where('nature', 'teldoss')
+            ->where('parent',$id)
+            ->get();
+
+        $phonesCl =   Adresse::where('nature', 'tel')
+            ->where('parent',$cl)
+            ->get();
+
+        $intervs = array_merge( $inters->toArray(),$prests->toArray() );
+
+        $phonesInt =   Adresse::where('nature', 'telinterv')
+            ->whereIn('parent', $intervs)
+            ->get();
+
+     //   $relations2 = DB::table('clients_docs')->select('client', 'doc')
+       //     ->where('client',$id)->get();
+        $entree=null;
+        if($dossier->entree >0 ) {$entree  = Entree::find($dossier->entree);}
+
+        return view('dossiers.update',['entree'=> $entree,'phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'listeemails'=>$listeemails,'cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
+
+
+    }
+
+
+
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -1673,7 +1810,7 @@ class DossiersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+   /* public function update(Request $request, $id)
     {
 
         $dossier = Dossier::find($id);
@@ -1685,7 +1822,7 @@ class DossiersController extends Controller
         $dossier->save();
 
         return redirect('/dossiers')->with('success', '  has been updated');    }
-
+*/
     /**
      * Remove the specified resource from storage.
      *

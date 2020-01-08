@@ -4006,7 +4006,7 @@ $id=0;
 
 */
 
-        return view('emails.envoimail',['dossier'=>$dossier,'refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,$nomabnC=>'nomabnC','refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type]);
+        return view('emails.envoimail',['dossier'=>$dossier,'refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'nomabnC'=>$nomabnC,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type]);
     }
 
     public function envoimailbr($id)
@@ -4536,7 +4536,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
         $cc='ihebsaad@gmail.com';
         //  $cc='';
-            $to='ihebsaad@gmail.com';
+        //    $to='ihebsaad@gmail.com';
          $to='envoifax@najda-assistance.com';
          // nom sans espace
         $nom2 = str_replace(' ', '', $nom);
@@ -4549,12 +4549,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         $swiftTransport->setPassword($pass_Fax);
 
         $swiftMailer = new Swift_Mailer($swiftTransport);
+         Mail::setSwiftMailer($swiftMailer);
 
-        Mail::setSwiftMailer($swiftMailer);
 
-
-        try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$attachs,$doss,$cc,$numero,$description,$nom,$dossier) {
+             Mail::send([], [], function ($message) use ($to,$sujet,$attachs,$doss,$cc,$numero,$description,$nom,$dossier) {
                 $message
                     ->to($to)
                     //   ->cc($cc  ?: [])
@@ -4600,8 +4598,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
 
                         $attachement = new Attachement([
-
-                            'type'=>$ext,'path' => $path, 'nom' => $name,'boite'=>1,'dossier'=>$doss
+                        // boite 7 fax envoyé
+                            'type'=>$ext,'path' => $path, 'nom' => $name,'boite'=>7,'dossier'=>$doss ,'description'=>$description
                         ]);
                         $attachement->save();
 
@@ -4613,62 +4611,73 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                 $nomuser=$user->name.' '.$user->lastname;
                 Log::info('[Agent: '.$nomuser.'] Envoi de Fax à '.$to);
 
-                 $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
                /* if (App::environment('local')) {
                     // The environment is local
                     $urlapp='http://localhost/najdaapp';
                 }*/
                 // $urlsending=$urlapp.'/emails/envoifax/'.$doss;
-                $urlsending=$urlapp.'/envoyes';
-
-                if (Mail::failures()) {
-                    //     echo ('<script> window.location.href = "http://localhost/najdaapp/emails/sending";</script>') ;
-                    //    return redirect('http://localhost/najdaapp/emails/sending')->with('fail', ' Echec ! ');
 
 
-                }else{
 // save email sent
 
-                    $par=Auth::id();
-                    $envoye = new Envoye([
-                        'emetteur' => 'najdassist@gmail.com', //env('emailenvoi')
-                        'destinataire' => $nom .'-'.$numero,
-                        'par'=> $par,
-                        'sujet'=> 'Fax - '.$sujet,
-                        'contenu'=> '',
-                        'attachements'=> $count,
-                        'statut'=> 1,
-                        'type'=> 'fax',
-                        'nb_attach'=> $count,
-                        'description'=> $description,
-                        'dossier'=> $dossier,
-                        // 'reception'=> date('d/m/Y H:i:s'),
-
-                    ]);
-
-                    // activer le dossier
-                    Dossier::where('id', $doss)->update(array('current_status' => 'actif'));
-
-                    $envoye->save();
-                    $id=$envoye->id;
                     //// $this->export_pdf_send($id);
 
-                    echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
-                    return redirect($urlsending)->with('success', '  Envoyé ! ');
-
-
-                }
 
 
             });
 
-        } catch (Exception $ex) {
-            // Debug via $ex->getMessage();
 
-            return "We've got errors!";
+        $par=Auth::id();
+        $envoye = new Envoye([
+            'emetteur' => 'najdassist@gmail.com', //env('emailenvoi')
+            'destinataire' => $nom .'-'.$numero,
+            'par'=> $par,
+            'sujet'=> 'Fax - '.$sujet,
+            'contenu'=> '',
+         //   'attachements'=> $count,
+            'statut'=> 1,
+            'type'=> 'fax',
+         //   'nb_attach'=> $count,
+            'description'=> $description,
+            'dossier'=> $dossier,
+            // 'reception'=> date('d/m/Y H:i:s'),
+
+        ]);
+
+        // activer le dossier
+        Dossier::where('id', $doss)->update(array('current_status' => 'actif'));
+
+        $envoye->save();
+        $id=$envoye->id;
+
+        // enregistrement attachs
+
+        foreach($attachs as $attach) {
+            $path=$this->PathattachById($attach);
+            $fullpath=storage_path().$path;
+            $path_parts = pathinfo($fullpath);
+            $ext=''; if(isset ($path_parts['extension'])) {$ext=  $path_parts['extension'];}
+
+            $name=basename($fullpath);
+
+            $attachement = new Attachement([
+
+                'type'=>$ext,'path' => $path, 'nom' => $name,'boite'=>1,'dossier'=>$doss,'parent'=>$id
+            ]);
+            $attachement->save();
+
 
         }
+
+
+
+        $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+
+        $urlsending=$urlapp.'/envoyes';
+
+        return redirect($urlsending.'/view/'.$id)->with('success', '  Envoyé ! ');
+
 
     }// end send
 
@@ -5105,8 +5114,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                 $nomuser=$user->name.' '.$user->lastname;
                 Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
 
-                // activer le dossier
-                Dossier::where('id', $doss)->update(array('current_status' => 'actif'));
 
 
                 $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";

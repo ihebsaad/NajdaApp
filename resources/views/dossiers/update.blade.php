@@ -1,4 +1,4 @@
-@extends('layouts.mainlayout')
+@extends('layouts.dossierlayout')
 <?php
 use App\Http\Controllers\EntreesController;use App\User ;
 use App\Template_doc ; 
@@ -213,11 +213,9 @@ use  \App\Http\Controllers\PrestatairesController;
 <br>
         <?php if( ($dossier->affecte>0) && ($dossier->accuse!=1) ) {?> <button  class="btn btn-md btn-info pull-left"   data-toggle="modal" data-target="#createAccuse"><b><i class="fas fa-envelope"></i> Accusé N Aff</b></button><?php } ?>
          <button  class="btn btn-md btn-info pull-right"   data-toggle="modal" data-target="#observations"><b><i class="fas fa-clipboard"></i> Observations </b></button>
-        <?php  if($dossier->entree >0 ) {
-        $entree  = Entree::find($dossier->entree);
-        if (isset($entree)){ ?>
-        <a href="{{action('DossiersController@update',$dossier->id)}}" style="margin-right:30px;margin-left:30px;" class="btn btn-md btn-info pull-right"    ><b><i class="fas fa-mail-bulk"></i> Email Géner</b></a>
-        <?php   }} ?>
+        <?php  if($dossier->entree >0 ) { /* ?>
+        <button style="margin-right:30px;margin-left:30px;" class="btn btn-md btn-info pull-right"   data-toggle="modal" data-target="#EntreeGen"><b><i class="fas fa-mail-bulk"></i> Email Géner</b></button>
+        <?php  */} ?>
  <br>
                  <div class="form-group" style="margin-top:25px;">
                         {{ csrf_field() }}

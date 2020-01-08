@@ -35,6 +35,8 @@ Route::post('/removereponsepause', 'HomeController@removereponsepause')->name('h
 Route::post('/affecterrole', 'HomeController@affecterrole')->name('home.affecterrole');
 Route::get('/checkdemandes', 'HomeController@checkdemandes')->name('checkdemandes');
 Route::get('/checkreponses', 'HomeController@checkreponses')->name('checkreponses');
+Route::post('/updateattach', 'HomeController@updateattach')->name('updateattach');
+Route::post('/deleteattach', 'HomeController@deleteattach')->name('deleteattach');
 
 
 
@@ -197,6 +199,7 @@ Route::post('/dossiers/updating2','DossiersController@updating2')->name('dossier
 Route::post('/dossiers/updating3','DossiersController@updating3')->name('dossiers.updating3');
 Route::get('/dossiers/view/{id}', 'DossiersController@view')->name('dossiers.view');
 Route::get('/dossiers/fiche/{id}', 'DossiersController@fiche')->name('dossiers.fiche');
+Route::get('/dossiers/update/{id}', 'DossiersController@update')->name('dossiers.update');
 Route::post('/dossiers/addemail','DossiersController@addemail')->name('dossiers.addemail');
 Route::post('/dossiers/attribution','DossiersController@attribution')->name('dossiers.attribution');
 Route::post('/dossiers/listepres','DossiersController@ListePrestataireCitySpec')->name('dossiers.listepres');

@@ -5,7 +5,7 @@
      <div class="row">
 
         <div class="col-lg-12 ">
-         <?php if(isset($dossier)){?>   <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@fiche',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossier->id);?> </a></h4><?php } ?>
+         <?php if(isset($envoye['dossier'])){?>   <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@fiche',$envoye['dossier'])}}" ><?php  echo   App\Http\Controllers\DossiersController::RefDossierById($envoye['dossier']) .' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($envoye['dossier'] );?> </a></h4><br><?php } ?>
 
         <?php $type= $envoye['type'];
             if ($type=='email') { echo ' <H3 style="margin-left:20px;margin-bottom:10px">  <i class="fa fa-lg fa-envelope"></i> Email envoyé</H3>'; }
