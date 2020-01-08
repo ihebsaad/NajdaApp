@@ -914,7 +914,7 @@ array_push($listepr,$pr['prestataire_id']);
                                         }
                                         echo date('d/m/Y H:i', strtotime( $datem)) ;
                                         } else{*/ echo date('d/m/Y H:i', strtotime( $attach->created_at)) ;/* }*/ ?></small></td>
-                                <td class="overme" style="cursor:pointer;width:20%;"   onclick="modalattach('<?php echo  $attach->nom ?>','<?php  echo URL::asset('storage'.$attach->path) ; ?>','<?php echo $type; ?>');"    ><small  >
+                                <td class="overme" style="cursor:pointer;width:20%;"   onclick="modalattach('<?php echo addslashes($attach->nom); ?>','<?php  echo URL::asset('storage'.addslashes($attach->path)) ; ?>','<?php echo $type; ?>');"    ><small  >
                                         <?php
                                         $type= $attach->type;
                                         switch ($type) {
@@ -951,7 +951,7 @@ array_push($listepr,$pr['prestataire_id']);
                                         <?php  echo $attach->nom;  ?></small>
 
                                 </td>
-                                <td  onclick="modalattach2('<?php echo $attach->id ; ?>','<?php echo $descriptionAttach ;?>','<?php echo $attach->nom ; ?>')" class="overme" style="width:20%;"><small><?php  echo $descriptionAttach.'<br>'.$descriptionEmail  ;  ?></small></td>
+                                <td  onclick="modalattach2('<?php echo $attach->id ; ?>','<?php echo addslashes($descriptionAttach) ;?>','<?php echo addslashes($attach->nom) ; ?>')" class="overme" style="width:20%;"><small><?php  echo $descriptionAttach.'<br>'.$descriptionEmail  ;  ?></small></td>
 
                                 <td style="width:10%"><small><?php if ($attach->boite==1) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';} if ($attach->boite==0) {echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}  if ($attach->boite==3) {echo 'Généré <br><i style="margin-top:4px;" class="fas fa-lg fa-file-invoice"/>';}    if ($attach->boite==4) {echo 'Externe <br><i style="margin-top:4px;" class="fas fa-upload"></i>';}  if ($attach->boite==7) {echo ' Envoi Fax<i class="fas a-lg fa-level-up-alt" />';}     ?></small></td>
 
@@ -2320,7 +2320,7 @@ array_push($listepr,$pr['prestataire_id']);
                         <input type="hidden" id="selectedAttach"  />
                         <label >Description :</label>
                         <center><textarea id="descAttach" onchange="updateDesc()" class="form-control" ></textarea> </center><br><br>
-                        <button onclick="deleteattach()" type="button" class="btn btn-danger pull-right"><i class="fa fa-trash" ></i> Supprimer l'attachement</button>
+                        <button onclick=" deleteattach()" type="button" class="btn btn-danger pull-right"><i class="fa fa-trash" ></i> Supprimer l'attachement</button>
                         <br><br>
                      </div>
 
@@ -3859,15 +3859,19 @@ function keyUpHandler(){
     function deleteattach() {
         var attach= document.getElementById('selectedAttach').value;
          var _token = $('input[name="_token"]').val();
-        $.ajax({
-            url: "{{ route('deleteattach') }}",
-            method: "POST",
-            data: {  attach:attach , _token: _token},
-            success: function ( ) {
-             location.reload()
+       if ( confirm("Etes vous sûrs ?")){
+           $.ajax({
+               url: "{{ route('deleteattach') }}",
+               method: "POST",
+               data: {  attach:attach , _token: _token},
+               success: function ( ) {
+                   location.reload()
 
-            }
-        });
+               }
+           });
+
+
+       }
 
     }
     function updateDesc() {

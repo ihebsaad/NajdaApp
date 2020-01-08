@@ -595,7 +595,9 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                 }
             });
 
-            }else{alert('Sélectionnez un dossier');}
+            }else{alert('Sélectionnez un dossier');
+                document.getElementById('updatefolder').disabled=false;
+            }
 
         });
 

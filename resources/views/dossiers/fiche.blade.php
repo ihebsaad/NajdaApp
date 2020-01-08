@@ -2050,7 +2050,7 @@ use  \App\Http\Controllers\PrestatairesController;
                             </div>
 
                             <div class="form-group " >
-                                <label for="adresse">Fonction</label>
+                                <label for="adresse">Qualité</label>
                                 <div class=" row  ">
                                     <input class="form-control" type="text" required id="fonctione"/>
 
@@ -2125,7 +2125,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                 </div>
                             </div>
                             <div class="form-group " >
-                                <label for="adresse">Fonction</label>
+                                <label for="adresse">Qualité</label>
                                 <div class=" row  ">
                                     <input class="form-control" type="text" required id="fonctiont"/>
 

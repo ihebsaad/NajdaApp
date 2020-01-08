@@ -26,6 +26,7 @@ use App\Envoye ;
 use PDF as PDF2;
 use Illuminate\Support\Facades\Auth;
 
+
  use Auth as auth2 ;
 use App\Parametre;
 use Notification;
@@ -946,6 +947,14 @@ $id=0;
 
                    $path2= '/Emails/'.$id.'/'.$nom ;
 
+                    // filesize
+
+                    $fullpath=storage_path().$path2;
+                    $filesize=100;
+               //     $filesize= filesize($fullpath) ;
+                 //   $filesize  = File::size($fullpath);
+                 //   $filesize= Storage::size($fullpath);
+
                     $attach = new Attachement([
                         'nom' => $nom,
                         'type' => $type,
@@ -954,6 +963,8 @@ $id=0;
                          'entree_id'=> $id,
                         'facturation'=> $facturation,
                         'boite'=> 0,  // 0 = reception, 1 = envoi
+                        'filesize'=> $filesize,
+                        'fullpath'=> $fullpath,
 
                     ]);
 
@@ -1228,6 +1239,7 @@ $id=0;
                         } // end if pdf
                     } // end if  production
 
+                    // Taille
 
                     $path2= '/Emails/'.$id.'/'.$nom ;
 

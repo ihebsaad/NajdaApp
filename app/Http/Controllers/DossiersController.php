@@ -733,12 +733,30 @@ class DossiersController extends Controller
 
             $nomuser = $user->name . ' ' . $user->lastname;
             Log::info('[Agent: ' . $nomuser . '] Ajout de dossier: ' . $reference_medic);
+
+            // dispatch Email au dossier
+           $entreeid= $request->get('entree');
+           if($entreeid >0)
+           {    Entree::where('id',$entreeid)->update(array(
+               'dossier' => $reference_medic,
+               'dossierid' => $iddoss,
+               'statut'=> 1
+
+               )
+           );
+           }
+
         }
 
 
           $dossier->update($request->all());
         //  $iddoss
-        return redirect('/dossiers/fiche/'.$iddoss);
+        if($entreeid >0) {
+            return redirect('/dossiers/fiche/' . $iddoss);
+        }else{
+            return redirect('/dossiers/update/' . $iddoss);
+
+        }
     }
 
     /*
