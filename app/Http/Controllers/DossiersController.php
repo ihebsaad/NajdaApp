@@ -744,6 +744,12 @@ class DossiersController extends Controller
 
                )
            );
+
+           // dispatch Attachements
+            Attachement::where('parent',$entreeid)->update(array(
+                 'dossier' => $iddoss,
+
+            ));
            }
 
         }
