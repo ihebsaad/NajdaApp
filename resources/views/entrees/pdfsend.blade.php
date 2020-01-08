@@ -2341,7 +2341,7 @@
                         <div   style="overflow:hidden;padding-left:5px;width:100%;height:45px;border:1px solid grey"   >
                          <?php   if(isset($to )) {
                             foreach ($to as $t) {
-                           echo $t.'<br>';
+                           echo $t.' ; ';
                             }
                             }     ?>
                         </div>
