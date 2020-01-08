@@ -292,10 +292,12 @@ if (isset($omparent['CB_prerades'])) {if ($omparent['CB_prerades'] === "oui"||($
 <?php // fin bloc completer 
 } ?>
 <div id="signatureagent">
+<?php if (isset($omparent['affectea'])) { if ($omparent['affectea'] === "externe") { ?>
 <p style="margin-top:8.85pt; margin-right:4.95pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Merci de votre </span><span style="font-family:'Times New Roman'; font-weight:bold">c</span><span style="font-family:'Times New Roman'; font-weight:bold">ollaboration. </span></p><p style="margin-top:0pt; margin-right:447.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">P/la Gérante</span></p><p style="margin-top:0pt; margin-bottom:0pt; text-align:justify; widows:0; orphans:0; font-size:10pt">
 
 <span style="font-family:'Times New Roman'; font-weight:bold; color:#000"><?php if (isset($omparent['agent'])) { echo $omparent['agent']; } ?></span>
 
 </p><p style="margin-top:0.05pt; margin-right:434.35pt; margin-bottom:0pt; line-height:115%; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Plateau d’assistance médicale</span></p><p style="margin-top:0.1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">« courrier</span><span style="font-family:'Times New Roman'; font-weight:bold"> électronique, sans signature »</span></p>
+<?php } } ?>
 </div>
 			</body>
