@@ -1,4 +1,4 @@
-@extends('layouts.mainlayout')
+﻿@extends('layouts.mainlayout')
 <?php 
 use App\User ; 
 use App\Prestataire ;
@@ -1019,7 +1019,7 @@ array_push($listepr,$pr['prestataire_id']);
 
                                         <div class="btn-group" style="margin-right: 10px">
 <?php
- if (strstr($doc->titre, 'PEC'))
+ if ((! strstr($doc->titre, 'Demande_refoulement'))  && (! strstr($doc->titre, 'Procu_abonne_pr_Najda_rapat_vhl')))
                                 {
 ?>                                            
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,214,214) !important;" id="btnann">
@@ -1601,18 +1601,18 @@ array_push($listepr,$pr['prestataire_id']);
                                     <select class="form-control select2" style="width: 350px" required id="templatedoc" name="templatedoc" >
                                         <option value="Select">Selectionner</option>
                                     <?php
-                                        $usedtemplates = Document::where('dossier',$dossier->id)->distinct()->get(['template']);
+                                       /* $usedtemplates = Document::where('dossier',$dossier->id)->distinct()->get(['template']);
                                         $usedtid=array();
                                         foreach ($usedtemplates as $tempu) {
                                             $usedtid[]=$tempu['template'];
-                                        }
-                                        $templatesd = Template_doc::get();
+                                        }*/
+                                        $templatesd = Template_doc::orderBy('nom','asc')->get();
                                         $docwithcl = array();
                                     ?>
                                         @foreach ($templatesd as $tempdoc)
-                                           @if (! in_array($tempdoc["id"],$usedtid))
-                                                <option value={{ $tempdoc["id"] }} >{{ $tempdoc["nom"] }}</option>
-                                            @endif                                            
+                                         
+                                      <option value={{ $tempdoc["id"] }} >{{ $tempdoc["nom"] }}</option>
+                                                                                
                                         @endforeach
                                         
                                    </select>

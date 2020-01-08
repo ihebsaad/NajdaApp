@@ -201,21 +201,23 @@ elseif (stristr($champtemp,'[CL_attention')== TRUE )
             }
 
         //$name_file = $arrfile['nom'].'_'.$refdoss.'.doc';
-        if (isset($count)) 
-            {
+       // if (isset($count)) 
+           // {
                 date_default_timezone_set('Africa/Tunis');
                 setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
-                $datees = strftime("%d-%B-%Y"."_"."%H-%M"); 
-                $name_file = utf8_encode($arrfile['nom'].'_'.$refdoss.'_'.$datees.'.doc');
-                $titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
-            }
+                $mc=round(microtime(true) * 1000);
+                $datees = strftime("%d-%B-%Y"."_".$mc); 
+                $datesc = strftime("%d-%B-%Y"); 				
+                $name_file = utf8_encode($arrfile['nom'].'_'.$datees.'.doc');
+                $titref =utf8_encode($arrfile['nom'].'_'.$datesc);
+           /* }
         else 
             {
                 $name_file = utf8_encode($arrfile['nom'].'_'.$refdoss.'.doc');
 
 
                 $titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
-            }
+            }*/
 
 /*------------------------dates spécifiques-----------------------------------------------------------*/
 
@@ -468,7 +470,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
         ->setLibreofficeBinaryPath('/usr/bin/libreoffice') // binary to the libreoffice binary
         ->setTemporaryPath(storage_path().'/temp') // temporary directory for convertion
         ->setTimeout(100) // libreoffice process timeout
-        ->save(storage_path().'/app/documents/'.$refdoss.'/'.$nfsansext.'pdf'); // save as pdf
+        ->save(storage_path().'/app/documents/'.$refdoss.'/'.$nfsansext.'pdf'); // save as pdf 
 
        // verifier la creation du PDF puis supprimer le fichier DOC generant   
         
@@ -477,7 +479,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
         $doc = new Document([
             'dossier' => $dossier,
             'titre' => $titref,
-            'emplacement' => 'documents/'.$refdoss.'/'.$nfsansext.'pdf',
+            'emplacement' => 'documents/'.$refdoss.'/'.$fda.'pdf',
             'template' => $templateid,
             'parent' => $parent,
             'dernier' => 1,
@@ -1551,7 +1553,7 @@ public function historique(Request $request)
         ->setLibreofficeBinaryPath('/usr/bin/libreoffice') // binary to the libreoffice binary
         ->setTemporaryPath(storage_path().'/temp') // temporary directory for convertion
         ->setTimeout(100) // libreoffice process timeout
-        ->save(storage_path().'/app/documents/'.$refdoss.'/'.$nfsansext.'pdf'); // save as pdf
+        ->save(storage_path().'/app/documents/'.$refdoss.'/'.$nfsansext.'pdf'); // save as pdf 
 
        // verifier la creation du PDF puis supprimer le fichier DOC generant  
           
