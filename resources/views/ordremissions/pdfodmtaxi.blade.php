@@ -78,6 +78,16 @@
 	<div class="col-md-6" style="text-align: right!important">
 		
 
+<!-- type_affectation_post est proritaire ? -->		
+<?php if (isset($_POST['type_affectation_post']) && !(empty($_POST['type_affectation_post']))) { ?>
+		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
+			<span id="prestataire_taxi" style="font-family:'Times New Roman'; "><?php echo $_POST['type_affectation_post']; ?></span>
+<?php } else { ?>
+<!-- cas mm entite -->
+<?php if (isset($prestataire_taxi) && !(empty($prestataire_taxi))) { ?>
+		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
+			<span id="prestataire_taxi" style="font-family:'Times New Roman'; "><?php echo $prestataire_taxi; ?></span>
+<?php } ?>
 <?php if (isset($_POST['prestataire_taxi']) && !(isset($_POST['type_affectation'])) && !(isset($_POST['prestextern']))) { ?>
 		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
 			<span id="prestataire_taxi" style="font-family:'Times New Roman'; "><?php echo $_POST['prestataire_taxi']; ?></span>
@@ -89,7 +99,8 @@
 <?php if (isset($_POST['prestextern']) && !(empty($_POST['prestextern']))) { ?>
 		<span style="font-family:'Times New Roman';font-weight: bold;">Prestataire: </span>
 			<span id="prestataire_taxi" style="font-family:'Times New Roman'; "><?php echo $_POST['prestextern']; ?></span>
-<?php } ?>
+<?php }} ?>
+
 			<h1 style="margin-top:8.75pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:20pt"><span style="font-family:'Times New Roman'; text-decoration:underline">ORDRE DE MISSION</span><span style="font-family:'Times New Roman'; text-decoration:underline"> </span><span style="font-family:'Times New Roman'; text-decoration:underline">TAXI</span></h1><p style="margin-top:0.6pt; margin-left:5.85pt; margin-bottom:0pt; text-align:right; widows:0; orphans:0; font-size:8pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
 			<p style="text-align: right!important; margin-top:0.6pt;  font-size:10pt"><span style="font-family:'Times New Roman'">Choix:&#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_choix'])) { echo $_POST['CL_choix']; } ?></span>
 				<span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">        </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">K</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">m approximatif</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">&#xa0;</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">: </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt"> </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_km_approximatif'])) { echo $_POST['CL_km_approximatif']; } ?></span>

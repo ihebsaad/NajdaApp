@@ -56,7 +56,22 @@ class OrdreMissionsController extends Controller
 				        $attachement->save();
                 	}
 
-
+                	/* bloc test */
+                if ($_POST['affectea'] !== "interne")
+        		{
+	               	$name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+			        $name='OM - '.$name;
+	                $path= storage_path()."/OrdreMissions/";
+	        		$iddoss = $_POST['dossdoc'];
+	        		$prestataireom= $omparent['prestataire_taxi'];
+	        		$affectea = $omparent['affectea'];
+	        		$dataprest =array('prestataire_taxi' => $prestataireom,'affectea' => $affectea);
+	        		$pdf = PDFomme::loadView('ordremissions.pdfodmtaxi',$dataprest)->setPaper('a4', '');
+	        		$pdf->save($path.$iddoss.'/'.$name.'.pdf');
+	                $omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_taxi' => $prestataireom, 'affectea'=>$affectea]);
+	                $result = $omtaxi->update($request->all());
+                // end bloc test
+                exit();}
         		    //exit();
         		}
         		if ($_POST['templatedocument'] === "complete")
@@ -66,14 +81,12 @@ class OrdreMissionsController extends Controller
         			$pdfcomp = PDFcomp::loadView('ordremissions.pdfodmtaxi')->setPaper('a4', '');
         			$parent = $_POST['parent'];
         			$iddoss = $_POST['dossdoc'];
-        			$presttaxi = $_POST['type_affectation'];
-        			// type_affect pares remplace ou complete
-        		
-	        		if (isset($_POST["type_affectation_post"]))
-	        		{	
-                    	if ($_POST["type_affectation_post"] !== "Select")
-        				{$presttaxi = $_POST['type_affectation_post'];}
-	        		}
+        			// type_affectation_post est proritaire ? -->	hs change
+        			if (isset($_POST['type_affectation_post']) && !(empty($_POST['type_affectation_post']))) 
+        			{ $presttaxi = $_POST['type_affectation_post'];
+					} else { 
+						$presttaxi = $_POST['type_affectation'];}
+
         			OMTaxi::where('id', $parent)->update(['dernier' => 0]);
         			$omparent=OMTaxi::where('id', $parent)->first();
         			$filename='taxi_Complet-'.$parent;
@@ -154,9 +167,44 @@ class OrdreMissionsController extends Controller
         // If you want to store the generated pdf to the server then you can use the store function
         $pdf->save($path.$iddoss.'/'.$name.'.pdf');
 
-        // enregistrement dans la base
-        //OMTaxi::create([$request->all(),'emplacement'=>$path.$iddoss.'/'.$name.'.pdf']);
         if (isset($_POST['affectea'])) {
+
+			// affectation en interne om privée meme entitee <hs change>
+        	if ($_POST['affectea'] === "mmentite")
+        	{
+        		$iddossom= $_POST["dossdoc"];
+        		//$dossierom=Dossier::where('id', $iddossom)->first();
+        		$dossierom= Dossier::where('id', $iddossom)->select('type_affectation')->first();
+        		$prestataireom=$dossierom['type_affectation'];
+    			
+    			 if (isset($prestataireom))
+			        {
+			        	// changer le var post
+			        	$reqmmentite = new \Illuminate\Http\Request();
+	                    $reqmmentite->request->add(['prestataire_taxi' => $prestataireom]);
+	                    app('App\Http\Controllers\OrdreMissionsController')->pdfodmtaxi($reqmmentite);
+
+			        	$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddossom.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossom, 'prestataire_taxi' => $prestataireom,'complete'=>1]);
+			        }
+			    	else
+			    	{
+			    		$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddossom.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossom,'prestataire_taxi' => $dossierom["type_affectation"]]);
+			    	}
+			    
+        		$result = $omtaxi->update($request->all());
+
+			    $pdf2 = PDFomme::loadView('ordremissions.pdfodmambulance',['prestataire_taxi' => $prestataireom])->setPaper('a4', '');
+			    // enregistrement de nouveau attachement
+		        $path2='/OrdreMissions/'.$iddossom.'/'.$name.'.pdf';
+		        $attachement = new Attachement([
+
+		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossom,
+		        ]);
+		        $attachement->save();
+		        exit();
+        	}
+
+        	// affectation en externe
 	        if ($_POST['affectea'] === "externe")
 	        	{
 	        		if (isset($_POST["prestextern"]))
@@ -181,21 +229,24 @@ class OrdreMissionsController extends Controller
 	        		else
 			        {
 			        	$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+			        	$result = $omtaxi->update($request->all());
 			        }
 
 	        	}
+	        	/* verifier si le bloc est necessaire
 	        	else
 			        {
 			        	$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
-			        }
+			        }*/
         }
         else
         {
         	$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        	$result = $omtaxi->update($request->all());
         }
 
         
-        $result = $omtaxi->update($request->all());
+        
 
 
 
@@ -221,10 +272,21 @@ class OrdreMissionsController extends Controller
         	// affectation en interne
         	if ($_POST['affectea'] === "interne")
         	{
+        		// creation om pour le dossier courant
+        		if (isset($_POST["type_affectation"]))
+        		{
+        			$prestomtx = $_POST["type_affectation"];
+        			$omtaxi = OMTaxi::create(['prestataire_taxi'=>$prestomtx,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        		} else {
+        			$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        		}
+			    $result = $omtaxi->update($request->all());
+
+			    // creation nouveau dossier et l'om assigné
         		$arequest = new \Illuminate\Http\Request();
         		$subscriber_name_ =$_POST['subscriber_name'];
         		$subscriber_lastname_ =$_POST['subscriber_lastname'];
-			$cnctagent = Auth::id();
+$cnctagent = Auth::id();
 
 				/*$arequest->request->add(['name' => $subscriber_name_]);
 				$arequest->request->add(['lastname' => $subscriber_lastname_]);*/
@@ -844,8 +906,6 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
         // If you want to store the generated pdf to the server then you can use the store function
         $pdf->save($path.$iddoss.'/'.$name.'.pdf');
 
-        // enregistrement dans la base
-        //OMTaxi::create([$request->all(),'emplacement'=>$path.$iddoss.'/'.$name.'.pdf']);
         if (isset($_POST['affectea'])) {
         	// affectation en interne om privée meme entitee <hs change>
         	if ($_POST['affectea'] === "mmentite")
@@ -906,17 +966,22 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
 	        		else
 			        {
 			        	$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+			        	$result = $omambulance->update($request->all());
 			        }
 
 	        	}
+	        	/* verifier si le bloc est necessaire
 	        	else
 			        {
 			        	$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+			        	$result = $omambulance->update($request->all());
 			        }
+			        */
         }
         else
         {
         	$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        	$result = $omambulance->update($request->all());
         }
 
 
@@ -983,7 +1048,7 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
 
 
         
-        $result = $omambulance->update($request->all());
+        
 
 
         // verification affectation et creation de processus
@@ -993,6 +1058,17 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
         	// affectation en interne
         	if ($_POST['affectea'] === "interne")
         	{
+        		// creation om pour le dossier courant
+        		if (isset($_POST["type_affectation"]))
+        		{
+        			$prestomamb = $_POST["type_affectation"];
+        			$omambulance = OMAmbulance::create(['prestataire_ambulance'=>$prestomamb,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        		} else {
+        			$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        		}
+			    $result = $omambulance->update($request->all());
+
+			    // creation nouveau dossier et l'om assigné
         		$arequest = new \Illuminate\Http\Request();
         		$subscriber_name_ =$_POST['subscriber_name'];
         		$subscriber_lastname_ =$_POST['subscriber_lastname'];
@@ -1316,7 +1392,22 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                         $attachement->save();
                     }
 
-
+                    /* bloc test */
+	                if ($_POST['affectea'] !== "interne")
+	        		{
+		               	$name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+				        $name='OM - '.$name;
+		                $path= storage_path()."/OrdreMissions/";
+		        		$iddoss = $_POST['dossdoc'];
+		        		$prestataireom= $omparent['prestataire_remorquage'];
+		        		$affectea = $omparent['affectea'];
+		        		$dataprest =array('prestataire_remorquage' => $prestataireom,'affectea' => $affectea);
+		        		$pdf = PDFomme::loadView('ordremissions.pdfodmremorquage',$dataprest)->setPaper('a4', '');
+		        		$pdf->save($path.$iddoss.'/'.$name.'.pdf');
+		                $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_remorquage' => $prestataireom, 'affectea'=>$affectea]);
+		                $result = $omremorquage->update($request->all());
+	                // end bloc test
+	                exit();}
                     //exit();
                 }
                 if ($_POST['templatedocument'] === "complete")
@@ -1361,7 +1452,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                     $attachement->save();
 
                     // enregistrement dans la BD
-                    $omremorquage= OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_ambulance' => $prestambulance]);
+                    $omremorquage= OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_remorquage' => $prestambulance]);
                     $result = $omremorquage->update($request->all());
                     //return 'complete action '.$result;
 
@@ -1416,9 +1507,42 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
         // If you want to store the generated pdf to the server then you can use the store function
         $pdf->save($path.$iddoss.'/'.$name.'.pdf');
 
-        // enregistrement dans la base
-        //OMTaxi::create([$request->all(),'emplacement'=>$path.$iddoss.'/'.$name.'.pdf']);
         if (isset($_POST['affectea'])) {
+        	// affectation en interne om privée meme entitee <hs change>
+        	if ($_POST['affectea'] === "mmentite")
+        	{
+        		$iddossom= $_POST["dossdoc"];
+        		//$dossierom=Dossier::where('id', $iddossom)->first();
+        		$dossierom= Dossier::where('id', $iddossom)->select('type_affectation')->first();
+        		$prestataireom=$dossierom['type_affectation'];
+    			
+    			 if (isset($prestataireom))
+			        {
+			        	// changer le var post
+			        	$reqmmentite = new \Illuminate\Http\Request();
+	                    $reqmmentite->request->add(['prestataire_remorquage' => $prestataireom]);
+	                    app('App\Http\Controllers\OrdreMissionsController')->pdfodremorquage($reqmmentite);
+
+			        	$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddossom.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossom, 'prestataire_remorquage' => $prestataireom,'complete'=>1]);
+			        }
+			    	else
+			    	{
+			    		$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddossom.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossom,'prestataire_remorquage' => $dossierom["type_affectation"]]);
+			    	}
+			    
+        		$result = $omremorquage->update($request->all());
+
+			    $pdf2 = PDFomme::loadView('ordremissions.pdfodmremorquage',['prestataire_remorquage' => $prestataireom])->setPaper('a4', '');
+			    // enregistrement de nouveau attachement
+		        $path2='/OrdreMissions/'.$iddossom.'/'.$name.'.pdf';
+		        $attachement = new Attachement([
+
+		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossom,
+		        ]);
+		        $attachement->save();
+		        exit();
+        	}
+
             if ($_POST['affectea'] === "externe")
             {
                 if (isset($_POST["prestextern"]))
@@ -1443,21 +1567,24 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                 else
                 {
                     $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+                    $result = $omremorquage->update($request->all());
                 }
 
             }
+            /* verifier si le bloc est necessaire
             else
             {
                 $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
-            }
+            }*/
         }
         else
         {
             $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        	$result = $omremorquage->update($request->all());
         }
 
 
-        $result = $omremorquage->update($request->all());
+        
 
 
 
@@ -1483,6 +1610,17 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
             // affectation en interne
             if ($_POST['affectea'] === "interne")
             {
+                // creation om pour le dossier courant
+        		if (isset($_POST["type_affectation"]))
+        		{
+        			$prestomrem = $_POST["type_affectation"];
+        			$omremorquage = OMRemorquage::create(['prestataire_remorquage'=>$prestomrem,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        		} else {
+        			$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        		}
+			    $result = $omremorquage->update($request->all());
+
+			    // creation nouveau dossier et l'om assigné
                 $arequest = new \Illuminate\Http\Request();
                 $subscriber_name_ =$_POST['subscriber_name'];
                 $subscriber_lastname_ =$_POST['subscriber_lastname'];
