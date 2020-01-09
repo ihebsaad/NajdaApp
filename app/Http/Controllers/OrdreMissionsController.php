@@ -218,6 +218,8 @@ class OrdreMissionsController extends Controller
 					    		$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
 					    	}
 
+					    	$result = $omtaxi->update($request->all());
+
 					    // enregistrement de nouveau attachement
 				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
 				        $attachement = new Attachement([
@@ -955,6 +957,8 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
 					    		$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
 					    	}
 
+					    	$result = $omambulance->update($request->all());
+					    	
 					    // enregistrement de nouveau attachement
 				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
 				        $attachement = new Attachement([
@@ -1521,7 +1525,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 			        	// changer le var post
 			        	$reqmmentite = new \Illuminate\Http\Request();
 	                    $reqmmentite->request->add(['prestataire_remorquage' => $prestataireom]);
-	                    app('App\Http\Controllers\OrdreMissionsController')->pdfodremorquage($reqmmentite);
+	                    app('App\Http\Controllers\OrdreMissionsController')->pdfodmremorquage($reqmmentite);
 
 			        	$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddossom.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossom, 'prestataire_remorquage' => $prestataireom,'complete'=>1]);
 			        }
@@ -1556,6 +1560,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                         $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
                     }
 
+                    $result = $omremorquage->update($request->all());
                     // enregistrement de nouveau attachement
                     $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
                     $attachement = new Attachement([
