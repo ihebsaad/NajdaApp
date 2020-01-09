@@ -112,13 +112,17 @@ class DossiersController extends Controller
                         mkdir($path.$dossid, 0777, true);
                     }
 
+        $path=$path.$dossid;
+        $path2=$path2.$dossid;
+
+        $fichier->move($path, $fichier_name);
+
         $user = auth()->user();
         $userid=$user->id;
-        $fullpath=$path.$dossid.'/'.$fichier_name ;
+        $fullpath=$path.'/'.$fichier_name ;
         $filesize= filesize($fullpath) ;
 
-        $path=$path.$dossid;
-                  $path2=$path2.$dossid;
+
 
                  $attachement = new Attachement([
 
@@ -134,7 +138,6 @@ class DossiersController extends Controller
                         ]);
                  $attachement->save();                                     
 
-                 $fichier->move($path, $fichier_name);
 
                 return  'ok';         
     

@@ -142,124 +142,151 @@ use App\Http\Controllers\NotificationsController;
         <div class="panel-body" id="emailnpj">
             <div class="row">
                 <ul class="nav nav-pills">
-                    <li class="active" >
-                        <?php if ( $entree['type']=='fax') {}else {?> <a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps du mail</a><?php }?>
+                    <li class="<?php if($entree['contenu']!=null){echo 'active ';} ?>" >
+                        <?php if ( $entree['type']=='fax') {}else {  if ( $entree['type']!='tel') { ?><a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps HTML du mail</a><?php } }?>
+                    </li>
+                    <li class="<?php if($entree['contenu']==null){echo 'active ';} ?> " >
+                        <?php if ( $entree['type']=='fax') {}else {  if ( $entree['type']!='tel') { ?><a href="#mailcorps2" data-toggle="tab" aria-expanded="true">Texte Brute</a><?php } }?>
                     </li>
                     <?php /* if ( $entree['type']!='fax') { ?>
-                    <li class=" " >
-                        <a href="#txtcorps" data-toggle="tab" aria-expanded="true"> Texte Brut</a>
-                    </li>
-                    <?php }*/ ?>
-                    @if ($nbattachs   > 0)
-                        @for ($i = 1; $i <= $nbattachs   ; $i++)
+                       <li class=" " >
+                              <a href="#txtcorps" data-toggle="tab" aria-expanded="true"> Texte Brut</a>
+                       </li>
+                       <?php } */
+                    if ( $entree['type']!='tel') { ?>
+                    @if ( $nbattachs   > 0)
+                        @for ($i = 1; $i <= $nbattachs ; $i++)
                             <li>
                                 <a class=" " href="#pj<?php echo $i; ?>" data-toggle="tab" aria-expanded="false">PJ<?php echo $i; ?></a>
                             </li>
                         @endfor
                     @endif
+                    <?php } ?>
                 </ul>
+
                 <div id="myTabContent" class="tab-content" style="background: #ffffff">
                     <?php if ( $entree['type']!='fax') { ?>
-                    <div class="tab-pane fade active in" id="mailcorps" style="">
+                    <div class="tab-pane fade <?php if($entree['contenu']!=null){echo 'active in';} ?> " id="mailcorps" style="">
                         <p  id="mailtext" style=" line-height: 25px;"><?php
+                            if($entree['contenu']!= null)
+                            {$content= nl2br($entree['contenu']) ;
 
-                             if($entree['contenu']!= null)
-                            {$content= nl2br($entree['contenu']) ;}else{
-                            $content= nl2br($entree['contenutxt']) ;
-                            }
-                        ?>
+                            ?>
                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
                             <?php  $cont=  str_replace($search,$replace, $content); ?>
-                            <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
                             <?php  echo $cont; ?></p>
-                    </div><?php } ?>
 
-                    <?php /* if ( $entree['type']!='fax') { ?>
-                    <div class="tab-pane fade   in" id="txtcorps" style="">
-                        <p  id="mailtext2" style=" line-height: 25px;"><?php  $contenttxt= utf8_decode($entree['contenutxt']) ; ?>
+                        <?php } ?>
+
+                    </div>
+
+                    <div class="tab-pane fade  <?php if($entree['contenu']==null){echo 'active in';} ?>" id="mailcorps2" style="">
+                        <p  id="mailtext2" style=" line-height: 25px;"><?php
+                            if($entree['contenutxt']!= null)
+                            {$content2= nl2br($entree['contenutxt']) ;
+
+                            ?>
                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
-                            <?php  $cont2=  str_replace($search,$replace, $contenttxt); ?>
-                            <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
+                            <?php  $cont2=  str_replace($search,$replace, $content2); ?>
                             <?php  echo $cont2; ?></p>
-                    </div><?php } */ ?>
-                         @if ($nbattachs   > 0)
 
-                                            @if (!empty($attachs) )
-                                            <?php $i=1; ?>
-                                            @foreach ($attachs as $att)
-                                                <div class="tab-pane fade in <?php  if ( ($entree['type']=='fax')&&($i==1)) {echo 'active';}?>" id="pj<?php echo $i; ?>">
-                                                    <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
-                                                    @switch($att->type)
-                                                        @case('docx')
-                                                        @case('doc')
-                                                        @case('dot')
-                                                        @case('dotx')
-                                                        @case('docm')
-                                                        @case('odt')
-                                                        @case('pot')
-                                                        @case('potm')
-                                                        @case('pps')
-                                                        @case('ppsm')
-                                                        @case('ppt')
-                                                        @case('pptm')
-                                                        @case('pptx')
-                                                        @case('ppsx')
-                                                        @case('odp')
-                                                        @case('xls')
-                                                        @case('xlsx')
-                                                        @case('xlsm')
-                                                        @case('xlsb')
-                                                        @case('ods')
-                                                            <iframe src="https://view.officeapps.live.com/op/view.aspx?src={{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
-                                                            @break
+                        <?php }; ?>
+                    </div><?php } ?>
 
-                                                        @case('pdf')
-                                                    <?php
 
-                                                      $fact=$att->facturation;
-                                                    if ($fact!='')
-                                                    {
-                                                        echo '<span class="pdfnotice"> Ce document contient le(s) mots important(s) suivant(s) : <b>'.$fact.'</b></span>';
-                                                    }
+                    <?php // } ?>
+                    <?php /* if ( $entree['type']!='fax') { ?>
+                           <div class="tab-pane fade   in" id="txtcorps" style="">
+                               <p  id="mailtext2" style=" line-height: 25px;"><?php  $contenttxt= $entree['contenutxt'] ; ?>
+                                   <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
+                                   <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
-                                                    ?>
+                                   <?php  $cont2=  str_replace($search,$replace, $contenttxt); ?>
+                                   <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
+                                   <?php  echo $cont2; ?></p>
+                           </div><?php } */ ?>
 
-                                                            <iframe src="{{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
-                                                            @break
+                    @if ($nbattachs > 0)
 
-                                                        @case('jpg')
-                                                        @case('jpeg')
-                                                        @case('gif')
-                                                        @case('png')
-                                                        @case('bmp')
-                                                            <img src="{{ URL::asset('storage'.$att->path) }}" class="mx-auto d-block" style="max-width: 100%!important;"> 
-                                                            @break
-                                                               
-                                                        @default
-                                                            <span>Type de fichier non reconnu ... </span>
-                                                    @endswitch
-                                                    
-                                                </div>
-                                                <?php $i++; ?>
-                                            @endforeach
+                        @if (!empty($attachs) )
+                            <?php $i=1; ?>
+                            @foreach ($attachs as $att)
+                                <div class="tab-pane fade in <?php  if ( ($entree['type']=='fax')&&($i==1)) {echo 'active';}?>" id="pj<?php echo $i; ?>">
 
-                                            @endif
+                                    <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
 
-                                        @endif
-                    </div>
+                                    @switch($att->type)
+                                    @case('docx')
+                                    @case('doc')
+                                    @case('dot')
+                                    @case('dotx')
+                                    @case('docm')
+                                    @case('odt')
+                                    @case('pot')
+                                    @case('potm')
+                                    @case('pps')
+                                    @case('ppsm')
+                                    @case('ppt')
+                                    @case('pptm')
+                                    @case('pptx')
+                                    @case('ppsx')
+                                    @case('odp')
+                                    @case('xls')
+                                    @case('xlsx')
+                                    @case('xlsm')
+                                    @case('xlsb')
+                                    @case('ods')
+                                    <iframe src="https://view.officeapps.live.com/op/view.aspx?src={{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                                    @break
+
+                                    @case('pdf')
+                                    <?php
+
+                                    $fact=$att->facturation;
+                                    if ($fact!='')
+                                    {
+                                    echo '<span class="pdfnotice"> Ce document contient le(s) mots important(s) suivant(s) : <b>'.$fact.'</b></span>';
+                                    }
+
+                                    ?>
+
+                                    <iframe src="{{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                                    @break
+
+                                    @case('jpg')
+                                    @case('jpeg')
+                                    @case('gif')
+                                    @case('png')
+                                    @case('bmp')
+                                    <img src="{{ URL::asset('storage'.$att->path) }}" class="mx-auto d-block" style="max-width: 100%!important;">
+                                    @break
+
+                                    @default
+                                    <span>Type de fichier non reconnu ... </span>
+                                    @endswitch
+
+                                </div>
+                                <?php $i++; ?>
+                            @endforeach
+
+                        @endif
+
+                    @endif
                 </div>
             </div>
-                                        <form method="post">
-                                                    {{ csrf_field() }}
-                                                    <input id="entreeid" type="hidden" name="entree" value="<?php echo $entree['id']; ?>" />
-                                                    <input id="urladdtag" type="hidden" name="urladdtag" value="{{ route('tags.addnew') }}" />
-                                                    <input id="urldeletetag" type="hidden" name="urldeletetag" value="{{ route('tags.deletetag') }}" />
-                                        </form>
         </div>
+        <form method="post">
+            {{ csrf_field() }}
+            <input id="entreeid" type="hidden" name="entree" value="<?php echo $entree['id']; ?>" />
+            <input id="urladdtag" type="hidden" name="urladdtag" value="{{ route('tags.addnew') }}" />
+            <input id="urldeletetag" type="hidden" name="urldeletetag" value="{{ route('tags.deletetag') }}" />
+        </form>
+    </div>
+
 
  </div>
 

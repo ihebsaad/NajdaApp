@@ -4485,15 +4485,17 @@ if ($from=='najdassist@gmail.com')
 
            // save external files here
 
-                $attachement = new Attachement([
 
-                    'type'=>$file->getClientOriginalExtension(),'path' => '/Envoyes/'.$envoyeid.'/'.$file->getClientOriginalName(), 'nom' => $file->getClientOriginalName(),'boite'=>1,'dossier'=>$doss,'envoye_id'=>$envoyeid,'parent'=>$envoyeid,'user'=>Auth::id()
+                 $fullpath=$path0.$envoyeid.'/'.$file->getClientOriginalName();
+$filesize= filesize($fullpath);
+
+                 $attachement = new Attachement([
+
+                    'type'=>$file->getClientOriginalExtension(),'path' => '/Envoyes/'.$envoyeid.'/'.$file->getClientOriginalName(), 'nom' => $file->getClientOriginalName(),'boite'=>1,'dossier'=>$doss,'envoye_id'=>$envoyeid,'parent'=>$envoyeid,'user'=>Auth::id(),'filesize'=>$filesize
                  ]);
 
                  $attachement->save();
 
-
-                 $fullpath=$path0.$envoyeid.'/'.$file->getClientOriginalName();
 
                  $name=basename($fullpath);
                  $mime_content_type=mime_content_type ($path0.$envoyeid);
@@ -4520,7 +4522,7 @@ if ($from=='najdassist@gmail.com')
                     $path_parts = pathinfo($fullpath);
                     if (isset( $path_parts['extension']))
                    { $ext=  $path_parts['extension'];}else{
-$ext="";
+                $ext="";
                     }
 
     $name=basename($fullpath);
@@ -4529,14 +4531,14 @@ $ext="";
                          'as' =>$name,
                          'mime' => $mime_content_type)
                 );
+                    $filesize= filesize($fullpath);
 
               // DB::table('attachements')->insert([
                    $attachement = new Attachement([
 
-                       'type'=>$ext,'path' => $path, 'nom' => $name,'boite'=>1,'dossier'=>$doss,'parent'=>$envoyeid,'envoye_id'=>$envoyeid,'user'=>Auth::id()
+                       'type'=>$ext,'path' => $path, 'nom' => $name,'boite'=>1,'dossier'=>$doss,'parent'=>$envoyeid,'envoye_id'=>$envoyeid,'user'=>Auth::id(),'filesize'=>$filesize
                ]);
                     $attachement->save();
-
 
             }
          }

@@ -147,8 +147,11 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
             <div class="panel-body" id="emailnpj">
                 <div class="row">
                    <ul class="nav nav-pills">
-                        <li class="active" >
-                           <?php if ( $entree['type']=='fax') {}else {  if ( $entree['type']!='tel') { ?><a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps du mail</a><?php } }?>
+                        <li class="<?php if($entree['contenu']!=null){echo 'active ';} ?>" >
+                           <?php if ( $entree['type']=='fax') {}else {  if ( $entree['type']!='tel') { ?><a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps HTML du mail</a><?php } }?>
+                       </li>
+                       <li class="<?php if($entree['contenu']==null){echo 'active ';} ?> " >
+                           <?php if ( $entree['type']=='fax') {}else {  if ( $entree['type']!='tel') { ?><a href="#mailcorps2" data-toggle="tab" aria-expanded="true">Texte Brute</a><?php } }?>
                        </li>
                        <?php /* if ( $entree['type']!='fax') { ?>
                        <li class=" " >
@@ -168,22 +171,39 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                     
                     <div id="myTabContent" class="tab-content" style="background: #ffffff">
                        <?php if ( $entree['type']!='fax') { ?>
-                           <div class="tab-pane fade active in" id="mailcorps" style="">
+                           <div class="tab-pane fade <?php if($entree['contenu']!=null){echo 'active in';} ?> " id="mailcorps" style="">
                                           <p  id="mailtext" style=" line-height: 25px;"><?php
                                               if($entree['contenu']!= null)
-                                              {$content= nl2br($entree['contenu']) ;}else{
-                                              $content= nl2br($entree['contenutxt']);
-                                              }
+                                              {$content= nl2br($entree['contenu']) ;
 
                                               ?>
                                             <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
                                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
                                             <?php  $cont=  str_replace($search,$replace, $content); ?>
-                                            <?php // $cont=  str_replace("invoice","<b>invoice</b>", $content); ?>
                                               <?php  echo $cont; ?></p>
-                                        </div><?php } ?>
 
+                           <?php } ?>
+
+                                        </div>
+
+                           <div class="tab-pane fade  <?php if($entree['contenu']==null){echo 'active in';} ?>" id="mailcorps2" style="">
+                               <p  id="mailtext2" style=" line-height: 25px;"><?php
+                                   if($entree['contenutxt']!= null)
+                                   {$content2= nl2br($entree['contenutxt']) ;
+
+                                   ?>
+                                   <?php  $search= array('facture','invoice','facturation','invoicing','plafond','max','maximum'); ?>
+                                   <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
+
+                                   <?php  $cont2=  str_replace($search,$replace, $content2); ?>
+                                   <?php  echo $cont2; ?></p>
+
+                           <?php }; ?>
+                           </div><?php } ?>
+
+
+                           <?php // } ?>
                            <?php /* if ( $entree['type']!='fax') { ?>
                            <div class="tab-pane fade   in" id="txtcorps" style="">
                                <p  id="mailtext2" style=" line-height: 25px;"><?php  $contenttxt= $entree['contenutxt'] ; ?>

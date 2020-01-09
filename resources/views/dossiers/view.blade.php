@@ -17,20 +17,14 @@ use  \App\Http\Controllers\EntreesController ;
 use \App\Http\Controllers\UsersController;
 
 
-
-function formatBytes($bytes, $precision = 2) {
-    $units = array('O', 'KO', 'MO', 'GO', 'TO');
-
-    $bytes = max($bytes, 0);
-    $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-    $pow = min($pow, count($units) - 1);
-
-    // Uncomment one of the following alternatives
-    // $bytes /= pow(1024, $pow);
-    // $bytes /= (1 << (10 * $pow));
-
-    return round($bytes, $precision) . ' ' . $units[$pow];
+function formatBytes($size){
+    $base = log($size) / log(1024);
+    $suffix = array("", " KO", " MO", " GO", " TO");
+    $f_base = floor($base);
+    return round(pow(1024, $base - floor($base)), 1) . $suffix[$f_base];
 }
+
+
 ?>
 
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
@@ -38,11 +32,11 @@ function formatBytes($bytes, $precision = 2) {
 <!--select css-->
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
-
+<!--
 <link href="//demo.chandra-admin.com/assets/vendors/Buttons/css/buttons.css" rel="stylesheet">
 <link href="//demo.chandra-admin.com/assets/vendors/hover/hover.css" rel="stylesheet">
 <link href="//demo.chandra-admin.com/assets/css/custom_css/advbuttons.css" rel="stylesheet">
-
+-->
 
 @section('content')
     @if(session()->has('AffectDossier'))
@@ -911,12 +905,14 @@ array_push($listepr,$pr['prestataire_id']);
 <?php                       $type= $attach->type;    $parent=$attach->parent;
                             $descriptionEmail='';
                             $userID=$attach->user;
-
+            if($userID>0){
                 $PrenomAgent =UsersController::ChampById('name',$userID);
                 $NomAgent = UsersController::ChampById('lastname',$userID);
-                $NomcA=$PrenomAgent.' '.$NomAgent;
+                $NomcA=$PrenomAgent.' '.$NomAgent;}
+                else{ $NomcA='Système';}
                 $filesize=$attach->filesize;
-                            $tailleA=formatBytes($filesize);
+                        if($filesize >0)
+                         { $tailleA=formatBytes($filesize);}else{$tailleA='';}
 
                             $descriptionAttach=$attach->description;
                             if($attach->entree_id>0){
@@ -975,7 +971,7 @@ array_push($listepr,$pr['prestataire_id']);
                                         <?php  echo $attach->nom;  ?></small>
 
                                 </td>
-                                <td  onclick="modalattach2('<?php echo $attach->id ; ?>','<?php echo addslashes($descriptionAttach) ;?>','<?php echo addslashes($attach->nom) ; ?>','<?php echo $tailleA ;?>','<?php echo addslashes($NomcA);?>')" class="overme" style="width:20%;"><small><?php  echo $descriptionAttach.'<br>'.$descriptionEmail  ;  ?></small></td>
+                                <td  style="cursor:pointer" onclick="modalattach2('<?php echo $attach->id ; ?>','<?php echo addslashes($descriptionAttach) ;?>','<?php echo addslashes($attach->nom) ; ?>','<?php echo $tailleA ;?>','<?php echo addslashes($NomcA);?>')" class="overme" style="width:20%;"><small><?php  echo $descriptionAttach.'<br>'.$descriptionEmail  ;  ?></small></td>
 
                                 <td style="width:10%"><small><?php if ($attach->boite==1) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';} if ($attach->boite==0) {echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}  if ($attach->boite==3) {echo 'Généré <br><i style="margin-top:4px;" class="fas fa-lg fa-file-invoice"/>';}    if ($attach->boite==4) {echo 'Externe <br><i style="margin-top:4px;" class="fas fa-upload"></i>';}  if ($attach->boite==7) {echo ' Envoi Fax<i class="fas a-lg fa-level-up-alt" />';}     ?></small></td>
 
@@ -2344,14 +2340,14 @@ array_push($listepr,$pr['prestataire_id']);
 
                         <div class="row">
                             <div class="col-md-6 pull-left" >
-                                Créé par :<span id="fileCreator"></span>
+                                <b>Créé par : </b><span id="fileCreator"></span>
                             </div>
                             <div class="col-md-6 pull-right" >
-                            Taille :<span id="filSize"></span>
+                                <b>Taille : </b><span id="fileSize"></span>
                             </div>
                         </div><br>
                         <input type="hidden" id="selectedAttach"  />
-                        <label >Description :</label>
+                        <label ><b>Description :</b></label>
                         <center><textarea id="descAttach" onchange="updateDesc()" class="form-control" ></textarea> </center><br><br>
                         <button onclick=" deleteattach()" type="button" class="btn btn-danger pull-right"><i class="fa fa-trash" ></i> Supprimer l'attachement</button>
                         <br><br>

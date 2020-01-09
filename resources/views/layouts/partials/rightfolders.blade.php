@@ -31,7 +31,10 @@ use App\Dossier ;
 
 
                         <ul style="list-style: none" id="myUL">
-	   <?php $dossiers = Dossier::all();
+	   <?php //$dossiers = Dossier::all();
+                            $dossiers =    Dossier::where('current_status','!=', 'Cloture')
+                                ->orderBy('created_at', 'desc')
+                                ->get();
 	/*   Dossier::orderBy('id', 'desc')
             ->where('statut','=','');
 		*/	
