@@ -18,7 +18,16 @@ class Action extends Model
 
   public function Mission()
     {
-        return $this->belongsTo('App\Mission');
+        return $this->belongsTo('App\MissionHis');
+    }
+
+      public function agent()
+    {
+        return $this->belongsTo('App\User','user_id');
+    }
+        public function assistant()
+    {
+        return $this->belongsTo('App\User','assistant_id');
     }
 
 

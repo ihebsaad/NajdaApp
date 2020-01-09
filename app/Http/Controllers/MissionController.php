@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Mission;
+use App\MissionHis;
 use App\TypeMission;
 use App\Action;
 use App\ActionEC;
@@ -161,6 +162,7 @@ class MissionController extends Controller
              'date_deb'=> $datespecifique,
              'type_Mission' =>$typeMiss->id,
              'dossier_id' => trim($request->get('dossierIDml')),
+             'nom_type_miss' =>$typeMiss->nom_type_Mission,
              'statut_courant' => 'active',
 
              'realisee'=> 0,
@@ -393,6 +395,7 @@ class MissionController extends Controller
              'date_deb'=> $datespecifique,
              'type_Mission' =>$typeMiss->id,
              'dossier_id' => trim($request->get('dossierID')),
+             'nom_type_miss' =>$typeMiss->nom_type_Mission,
              'statut_courant' => 'active',
 
              'realisee'=> 0,
@@ -1002,6 +1005,65 @@ class MissionController extends Controller
 
    }
 
+   public function  getMailGeneratorByAjaxMAch ($idmiss)
+
+   {
+
+  //$entree=Entree::where('mission_id','!=',null)->where('mission_id',$idmiss)->first();
+
+
+      $id_entree=MissionHis::where('id_origin_miss',$idmiss)->first()->id_entree;
+
+      if($id_entree)
+      {
+      $entree=Entree::where('id',$id_entree)->first();
+      }
+      else
+      {
+        $entree=null;
+      }
+
+        if($entree)
+        {
+
+              $output='
+                 <div class="form-group">
+                 <label for="date">Date de réception de l\'email : </label>'.
+                 date('d/m/Y H:m', strtotime($entree->reception)) .'
+                 </div>
+              <br>
+              <div class="form-group">
+                
+                <label for="emetteur">emetteur:</label>
+                <input id="emetteur" type="text" class="form-control" name="emetteur"  value="'. $entree->emetteur.'"/>
+            </div>
+            <div class="form-group">
+            <label for="sujet">sujet :</label>
+            <input style="overflow:scroll;" id="sujet" type="text" class="form-control" name="sujet"  value="'.$entree->sujet.'" />
+
+            </div>
+            <div class="form-group">
+                <label for="contenu">contenu:</label>
+                <div class="form-control" style="overflow:scroll;min-height:200px">'.
+
+               $entree->contenu.'
+             
+                </div>
+
+             </div>
+             <br>
+           ';
+          }
+          else
+          {
+            $output='<div class="form-group"> <h4>Il n\'y a pas du mail génerateur pour cette mission </h4></div>';
+
+          }
+
+   return  $output;
+
+   }
+
     public function AnnulerMissionCouranteByAjax($idmiss)
     {
         
@@ -1262,18 +1324,18 @@ public function getAjaxDeleguerMission($idmiss)
                                                   {
                                                  if (!empty ($agentname)) { 
                                                  if ($agentname["id"] == $agt["id"]) {
-                                               $output.=' <option value="'. $agt["id"] .'" selected >'. $agt["name"] .'</option>';
+                                               $output.=' <option value="'. $agt["id"] .'" selected >'. $agt["name"] .' '.$agt["lastname"].'</option>';
                                                 }
                                                 else
                                                 {
-                                                 $output.=' <option value="'.$agt["id"] .'" >'. $agt["name"] .'</option>';
+                                                 $output.=' <option value="'.$agt["id"] .'" >'. $agt["name"] .' '.$agt["lastname"].'</option>';
                                                 }
                                                
                                                 
                                                 
                                                 }
                                                 else
-                                                  { $output.= '<option value="'.$agt["id"] .'" >'.$agt["name"].'</option>';}
+                                                  { $output.= '<option value="'.$agt["id"] .'" >'.$agt["name"].' '.$agt["lastname"].'</option>';}
                                                 }
                                                }   
                                        $output.= ' </select>
@@ -3288,7 +3350,7 @@ public function getAjaxDeleguerMission($idmiss)
                 $report=0;
                 $rappel=0;
                 $i = 0;
-                $len = count($actk->Actions);
+                //$len = count($actk->Actions);
                 //$actko=$actk->Actions->orderBy('ordre','DESC')->get();
                 $actko=ActionEC::where('mission_id',$id)->orderBy('ordre','ASC')->orderBy('num_rappel','ASC')->orderBy('num_report','ASC')->get();
                    $output.='<input id="InputetatActionMission" style="float:right" type="text" placeholder="Recherche.." autocomplete="off"> <br><br>';
@@ -3299,12 +3361,12 @@ public function getAjaxDeleguerMission($idmiss)
                       <th>Action</th>
                       <th>Date début</th>
                       <th>Date fin</th>
-                      <th>Réalisée par</th>
-                      <th>Num rappel/report</th>
+                      <th>Utilisateur</th>
+                      <th>Num rappel /report</th>
                     
-                      <th>commentaire 1</th>
-                      <th>commentaire 2</th>
-                      <th>commentaire 3</th>
+                      <th>comment. 1</th>
+                      <th>comment. 2</th>
+                      <th>comment. 3</th>
 
                       <th>Statut</th>
 
@@ -3345,41 +3407,8 @@ public function getAjaxDeleguerMission($idmiss)
                         if($sactions->statut=='active' || $sactions->statut=='inactive' || $sactions->statut=='deleguee' || $sactions->statut=='ignoree' || $sactions->statut=='faite')
                         {
 
-                            /* $rep_acts =ActionEC::where('ordre', $sactions->ordre)->where('statut','rfaite')->where('report_ou_non',1)->max('num_report');
-                              $rapp_acts=ActionEC::where('ordre', $sactions->ordre)->where('statut','rfaite')->where('rapl_ou_non',1)->max('num_rappel');
-                            if(!$rapp_acts && !$rep_acts)
-                            {
-                              $somme_rep_rapp=0;
-                            }
-                            else
-                            {
-                              if($rapp_acts && $rep_acts )
-                              {
-                               $somme_rep_rapp=$rep_acts+ $rapp_acts+2;                              
-                              }
-                              else
-                              {
-                                if($rep_acts)
-                                {
-                                   $somme_rep_rapp=$rep_acts+1;
-
-                                }
-                                else
-                                {
-                                  if($rapp_acts)
-                                  {
-                                   $somme_rep_rapp=$rapp_acts+1;
-                                  }
-
-
-                                }
-                              }
-
-                            }*/
-
-                            $output.='<td style="overflow: auto;" title=" "><span style="font-weight : none;"> </span></td>' ;
+                          $output.='<td style="overflow: auto;" title=" "><span style="font-weight : none;"> </span></td>' ;
                              
-
                         }
                         else
                         {
@@ -3411,7 +3440,7 @@ public function getAjaxDeleguerMission($idmiss)
                           {
                             if($sactions->statut=='deleguee')
                             {
-                            $output.='<td style="overflow: auto;" title="déléguée à '.$sactions->assistant->name. ' '.$sactions->assistant->lastname.'"><span style="font-weight : none; color:red"> déléguée à '.$sactions->assistant->name.' '.$sactions->assistant->lastname.'</span></td></tr>' ;
+                            $output.='<td style="overflow: auto;" title="déléguée à '.$sactions->assistant->name.' '.$sactions->assistant->lastname.'"><span style="font-weight : none; color:red"> déléguée à '.$sactions->assistant->name.' '.$sactions->assistant->lastname.'</span></td></tr>' ;
                             }
                             else{
                                   if($sactions->statut=='reportee')
@@ -3452,6 +3481,208 @@ public function getAjaxDeleguerMission($idmiss)
                                       }
 
 
+
+                                  }
+
+                                }
+
+
+                          }
+                          else // si rfaite
+                          {
+
+                            if($sactions->rapl_ou_non==1 && $sactions->report_ou_non==0)
+                            {
+                               $output.='<td style="overflow: auto;" title=" Rappel"><span style="font-weight : none;"> Rappel </span></td></tr>' ;
+                            }
+
+                              if($sactions->rapl_ou_non==0 && $sactions->report_ou_non==1)
+                            {
+                               $output.='<td style="overflow: auto;" title=" reportée"><span style="font-weight : none;"> Report </span></td></tr>' ;
+
+                            }
+
+                          }
+                        }
+                        else
+                        {
+
+
+
+
+                        }
+                   
+
+                    }
+                    if($i==0)
+                    {
+                       $output.='<tr><td><span style="font-weight : bold;">Pas d\'actions</span></td></tr>' ;
+
+                    }
+
+
+                   $output.=' </tbody> </table>';
+
+
+         }
+
+   return $output;
+
+    }
+
+
+    // tableau des etats des actions de la mission
+      public function getAjaxWorkflowMach($id)
+    {
+    
+      $misshis=MissionHis::where('id_origin_miss',$id)->first();
+
+      if($misshis)
+      {
+         $actko=Action::where('mission_id',$misshis->id_origin_miss)->orderBy('ordre','ASC')->orderBy('num_rappel','ASC')->orderBy('num_report','ASC')->get();
+      }
+      $output='';
+
+
+      if($actko)
+      {
+                   $output='<h4><b>Etat des actions</b></h4><br>';
+
+                $dateRapp = null;
+                $dateRep = null;
+                $report=0;
+                $rappel=0;
+                $i = 0;
+                //$len = count($actk->Actions);
+                //$actko=$actk->Actions->orderBy('ordre','DESC')->get();
+                
+                   $output.='<input id="InputetatActionMission" style="float:right" type="text" placeholder="Recherche.." autocomplete="off"> <br><br>';
+                   $output.='<table class="table table-striped">
+                  <thead>
+                    <tr>
+
+                      <th>Action</th>
+                      <th>Date début</th>
+                      <th>Date fin</th>
+                      <th>Utilisateur</th>
+                      <th>Num rappel /report</th>
+                    
+                      <th>comment. 1</th>
+                      <th>comment. 2</th>
+                      <th>comment. 3</th>
+
+                      <th>Statut</th>
+
+                    </tr>
+                  </thead>
+                  
+                  <tbody id="tabetatActionMission">';
+
+                  foreach ($actko as $sactions)
+                     { 
+
+                           $i++;      
+                   
+                     //$output.='<div class="row">' ;
+                        if ($i!=0)
+                        {
+
+
+                        $output.='<tr><td style="overflow: auto;" title="'.$sactions->titre.'"><span style="font-weight : none;">'.$sactions->titre.'</span></td>';
+
+                          $output.='<td style="overflow: auto;" title="'.$sactions->date_deb.'"><span style="font-weight : none;">'.$sactions->date_deb.'</span></td>';
+
+
+                        $output.='<td style="overflow: auto;" title="'.$sactions->date_fin.'"><span style="font-weight : none;">'.$sactions->date_fin.'</span></td>';
+
+                        if($sactions->user_id!=null)
+                        {
+
+                        $output.='<td style="overflow: auto;" title="'.$sactions->agent->name.' '.$sactions->agent->lastname.'"><span style="font-weight : none;">'.$sactions->agent->name.' '.$sactions->agent->lastname.'</span></td>';
+                        }
+                        else
+                        {
+
+                         $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;"> </span></td>';
+
+                        }
+
+                        if($sactions->statut=='faite' || $sactions->statut=='inactive' || $sactions->statut=='deleguee' || $sactions->statut=='ignoree' || $sactions->statut=='active')
+                        {
+
+                            
+
+                            $output.='<td style="overflow: auto;" title=" "><span style="font-weight : none;"> </span></td>' ;
+                             
+
+                        }
+                        else
+                        {
+
+                        if($sactions->rapl_ou_non==1 && $sactions->report_ou_non==0)
+                        {
+                        $output.='<td style="overflow: auto;" title="'.$sactions->num_rappel.'"><span style="font-weight : none;">'.$sactions->num_rappel.'</span></td>' ;
+                        }
+                         if($sactions->rapl_ou_non==0 && $sactions->report_ou_non==1)
+                        {
+                        $output.='<td style="overflow: auto;" title="'.$sactions->num_report.'"><span style="font-weight : none;">'.$sactions->num_report.'</span></td>' ;
+                        }
+                         if($sactions->rapl_ou_non==0 && $sactions->report_ou_non==0)
+                        {
+
+
+
+                           $output.='<td style="overflow: auto;" title="'.$sactions->num_report.'"><span style="font-weight : none;">0</span></td>' ;
+
+                        }
+                       }
+
+
+                        $output.='<td style="overflow: auto;" title="'.$sactions->comment1.'"><span style="font-weight : none;">'.$sactions->comment1.'</span></td>' ;
+                        $output.='<td style="overflow: auto;" title="'.$sactions->comment2.'"><span style="font-weight : none;">'.$sactions->comment2.'</span></td>' ;
+                        $output.='<td style="overflow: auto;" title="'.$sactions->comment3.'"><span style="font-weight : none;">'.$sactions->comment3.'</span></td>' ;
+
+                         if ($sactions->statut!='rfaite')
+                          {
+                            if($sactions->statut=='deleguee')
+                            {
+                            $output.='<td style="overflow: auto;" title="déléguée à '.$sactions->assistant->name.' '.$sactions->assistant->lastname.'"><span style="font-weight : none; color:red"> déléguée à '.$sactions->assistant->name.' '.$sactions->assistant->lastname.'</span></td></tr>' ;
+                            }
+                            else{
+                                  if($sactions->statut=='reportee')
+                                  {
+                                  $output.='<td style="overflow: auto;" title="reportée"><span style="font-weight : none;"> Report </span></td></tr>' ;
+                                  }
+                                  else
+                                  {
+
+                                      if($sactions->statut=='rappelee')
+                                      {
+                                      $output.='<td style="overflow: auto;" title="mise en attente"><span style="font-weight : none;"> Rappel </span></td></tr>' ;
+                                      }
+                                      else
+                                      {// cas pour active
+
+                                            if($sactions->statut=='active')
+                                          {
+                                          $output.='<td style="overflow: auto;" title="en cours (active)"><span style="font-weight : none;"> en cours (active) </span></td></tr>' ;
+                                          }
+                                          else
+                                          {
+
+                                            if($sactions->statut=='ignoree')
+                                              {
+                                              $output.='<td style="overflow: auto;" title="ignorée"><span style="font-weight : none;"> ignorée </span></td></tr>' ;
+                                              }
+                                              else
+                                              {
+
+                                               $output.='<td style="overflow: auto;" title="'.$sactions->statut.'"><span style="font-weight : none;"> '.$sactions->statut.' </span></td></tr>' ;
+                                              }
+
+                                          }
+
+                                      }
 
                                   }
 
