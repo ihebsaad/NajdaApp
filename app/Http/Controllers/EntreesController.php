@@ -477,9 +477,10 @@ class EntreesController extends Controller
         // Activer le dossier
         Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
 
-       return url('/entrees/show/'.$identree);
-      // if($first) {return url('/entrees/dispatching/');}
-      // else{return url('/entrees/');}
+      // return url('/entrees/show/'.$identree);
+
+        return url('/entrees/dispatching');
+
 
     }
 
@@ -518,7 +519,8 @@ class EntreesController extends Controller
         // Activer le dossier
         Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
 
-        return url('/entrees/show/'.$identree);
+        //return url('/entrees/show/'.$identree);
+        return url('/entrees/dispatching');
 
 
 
@@ -632,9 +634,11 @@ class EntreesController extends Controller
            //// Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
 
             if($id>0) {
+                // check same user
+              if($userid=!$par)  {
                 $notif = new Notif([
-                    'emetteur' =>$emetteur,
-                    'sujet' =>'Compte Rendu écrit par '.$nomuser,
+                    'emetteur' => $emetteur,
+                    'sujet' => 'Compte Rendu écrit par ' . $nomuser,
                     'reception' => $date,
                     'type' => 'tel',
                     'refdossier' => $refdoss,
@@ -647,6 +651,7 @@ class EntreesController extends Controller
 
                 ]);
                 $notif->save();
+            }// user
             }
         }else{
 
@@ -656,6 +661,8 @@ class EntreesController extends Controller
                 $seance =  DB::table('seance')
                     ->where('id','=', 1 )->first();
                 $disp=$seance->dispatcheur ;
+                if($userid=!$disp)  {
+
                 $notif = new Notif([
                     'emetteur' =>$emetteur,
                     'sujet' =>'Compte Rendu écrit par '.$nomuser,
@@ -671,7 +678,8 @@ class EntreesController extends Controller
 
                 ]);
                 $notif->save();
-            }
+                                      }
+                     }
 
         }
 

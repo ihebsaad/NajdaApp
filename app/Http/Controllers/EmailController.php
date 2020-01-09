@@ -601,7 +601,7 @@ class EmailController extends Controller
 
                 $aAttachment = $oMessage->getAttachments();
 
-                $aAttachment->each(function ($oAttachment) use ($id){
+                $aAttachment->each(function ($oAttachment) use ($id,$date){
                     $path= storage_path()."/Emails/";
                     /** @var \Webklex\IMAP\Attachment $oAttachment */
                     if (!file_exists($path.$id)) {
@@ -763,7 +763,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' => $sujet,
-                       'contenutxt'=> $contenubrut,
+                    'contenutxt'=> $contenubrut,
                     'contenu' => ($contenu),
                     'reception' => $date,
                     'nb_attach' => $nbattachs,
@@ -896,7 +896,7 @@ $id=0;
 
                 $aAttachment = $oMessage->getAttachments();
 
-                $aAttachment->each(function ($oAttachment) use ($id){
+                $aAttachment->each(function ($oAttachment) use ($id,$date){
                     $path= storage_path()."/Emails/";
                     /** @var \Webklex\IMAP\Attachment $oAttachment */
                     if (!file_exists($path.$id)) {
@@ -963,6 +963,7 @@ $id=0;
                         'facturation'=> $facturation,
                         'boite'=> 0,  // 0 = reception, 1 = envoi
                         'filesize'=> $filesize,
+                        'created_at'=> $date,
                       //  'fullpath'=> $fullpath,
 
                     ]);
@@ -1192,7 +1193,7 @@ $id=0;
 
                 $aAttachment = $oMessage->getAttachments();
 
-                $aAttachment->each(function ($oAttachment) use ($id){
+            $aAttachment->each(function ($oAttachment) use ($id,$date){
                     $path= storage_path()."/Emails/";
                     /** @var \Webklex\IMAP\Attachment $oAttachment */
                     if (!file_exists($path.$id)) {
@@ -1260,6 +1261,8 @@ $id=0;
                             'boite'=> 0,  // 0 = reception, 1 = envoi
                             'filesize'=> $filesize,
                       //      'fullpath'=> $fullpath,
+                            'created_at'=> $date,
+
 
                         ]);
 
@@ -1481,7 +1484,7 @@ $id=0;
 
                 $aAttachment = $oMessage->getAttachments();
 
-                $aAttachment->each(function ($oAttachment) use ($id){
+            $aAttachment->each(function ($oAttachment) use ($id,$date){
                     $path= storage_path()."/Emails/";
                     /** @var \Webklex\IMAP\Attachment $oAttachment */
                     if (!file_exists($path.$id)) {
@@ -1549,6 +1552,8 @@ $id=0;
                             'boite'=> 0,  // 0 = reception, 1 = envoi
                             'filesize'=> $filesize,
                     //        'fullpath'=> $fullpath,
+                            'created_at'=> $date,
+
 
                         ]);
 
@@ -1775,7 +1780,7 @@ $id=0;
 
                 $aAttachment = $oMessage->getAttachments();
 
-                $aAttachment->each(function ($oAttachment) use ($id){
+            $aAttachment->each(function ($oAttachment) use ($id,$date){
                     $path= storage_path()."/Emails/";
                     /** @var \Webklex\IMAP\Attachment $oAttachment */
                     if (!file_exists($path.$id)) {
@@ -1842,6 +1847,8 @@ $id=0;
                             'boite'=> 0,  // 0 = reception, 1 = envoi
                             'filesize'=> $filesize,
                     //       'fullpath'=> $fullpath,
+                            'created_at'=> $date,
+
 
                         ]);
 
@@ -2057,7 +2064,7 @@ $id=0;
 
                 $aAttachment = $oMessage->getAttachments();
 
-                $aAttachment->each(function ($oAttachment) use ($id){
+            $aAttachment->each(function ($oAttachment) use ($id,$date){
                     $path= storage_path()."/Emails/";
                     /** @var \Webklex\IMAP\Attachment $oAttachment */
                     if (!file_exists($path.$id)) {
@@ -2126,6 +2133,8 @@ $id=0;
                             'boite'=> 0,  // 0 = reception, 1 = envoi
                             'filesize'=> $filesize,
                      //       'fullpath'=> $fullpath,
+                            'created_at'=> $date,
+
 
                         ]);
 
@@ -2336,7 +2345,7 @@ $id=0;
 
                 $aAttachment = $oMessage->getAttachments();
 
-                $aAttachment->each(function ($oAttachment) use ($id){
+                $aAttachment->each(function ($oAttachment) use ($id,$date){
                     $path= storage_path()."/Emails/";
                     /** @var \Webklex\IMAP\Attachment $oAttachment */
                     if (!file_exists($path.$id)) {
@@ -2403,6 +2412,8 @@ $id=0;
                             'boite'=> 0,  // 0 = reception, 1 = envoi
                             'filesize'=> $filesize,
                       //      'fullpath'=> $fullpath,
+                            'created_at'=> $date,
+
 
                         ]);
 
@@ -2620,7 +2631,7 @@ $id=0;
 
                 $aAttachment = $oMessage->getAttachments();
 
-                $aAttachment->each(function ($oAttachment) use ($id){
+                $aAttachment->each(function ($oAttachment) use ($id,$date){
                     $path= storage_path()."/Emails/";
                     /** @var \Webklex\IMAP\Attachment $oAttachment */
                     if (!file_exists($path.$id)) {
@@ -2687,6 +2698,8 @@ $id=0;
                             'boite'=> 0,  // 0 = reception, 1 = envoi
                             'filesize'=> $filesize,
                       //      'fullpath'=> $fullpath,
+                            'created_at'=> $date,
+
 
                         ]);
 
@@ -2902,7 +2915,7 @@ $id=0;
 
                 $aAttachment = $oMessage->getAttachments();
 
-                $aAttachment->each(function ($oAttachment) use ($id){
+                $aAttachment->each(function ($oAttachment) use ($id,$date){
                     $path= storage_path()."/Emails/";
                     /** @var \Webklex\IMAP\Attachment $oAttachment */
                     if (!file_exists($path.$id)) {
@@ -2969,6 +2982,8 @@ $id=0;
                             'boite'=> 0,  // 0 = reception, 1 = envoi
                             'filesize'=> $filesize,
                    //         'fullpath'=> $fullpath,
+                            'created_at'=> $date,
+
 
                         ]);
 
@@ -3183,7 +3198,7 @@ $id=0;
 
                 $aAttachment = $oMessage->getAttachments();
 
-                $aAttachment->each(function ($oAttachment) use ($id){
+                $aAttachment->each(function ($oAttachment) use ($id,$date){
                     $path= storage_path()."/Emails/";
                     /** @var \Webklex\IMAP\Attachment $oAttachment */
                     if (!file_exists($path.$id)) {
@@ -3251,6 +3266,8 @@ $id=0;
                             'boite'=> 0,  // 0 = reception, 1 = envoi
                             'filesize'=> $filesize,
                        //     'fullpath'=> $fullpath,
+                            'created_at'=> $date,
+
 
                         ]);
 
@@ -3349,7 +3366,7 @@ $id=0;
 
                 $aAttachment = $oMessage->getAttachments();
 
-                $aAttachment->each(function ($oAttachment) use ($id){
+                $aAttachment->each(function ($oAttachment) use ($id,$date){
                     $path= storage_path()."/Boites/";
                     /** @var \Webklex\IMAP\Attachment $oAttachment */
                     if (!file_exists($path.$id)) {
@@ -3780,7 +3797,7 @@ $id=0;
 
                 $aAttachment = $oMessage->getAttachments();
 
-                $aAttachment->each(function ($oAttachment) use ($id){
+                $aAttachment->each(function ($oAttachment) use ($id,$date){
                     $path= storage_path()."/Emails/";
                     /** @var \Webklex\IMAP\Attachment $oAttachment */
                     if (!file_exists($path.$id)) {
@@ -3848,6 +3865,7 @@ $id=0;
                             'boite'=> 0,  // 0 = reception, 1 = envoi
                             'filesize'=> $filesize,
                      //       'fullpath'=> $fullpath,
+                            'created_at'=> $date,
 
                         ]);
 
