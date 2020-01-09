@@ -273,6 +273,11 @@ function formatBytes($bytes, $precision = 2) {
                                 <i class="fas fa-file-import"></i>  OM
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tab8" data-toggle="tab" onclick=";showinfos81();hideinfos82()">
+                                <i class="fas fa-tasks"></i> Missions
+                            </a>
+                        </li>
 
 
                     </ul>
@@ -1521,6 +1526,136 @@ array_push($listepr,$pr['prestataire_id']);
 
             </div>
 
+            <div id="tab8" class="tab-pane fade">
+                <ul class="nav  nav-tabs">
+
+                    <li class="nav-item active">
+                        <a class="nav-link active show" href="#tab81" data-toggle="tab"  onclick=";showinfos81();hideinfos82()">
+                            <i class="fas fa-lg  fa-user-md"></i>  Missions actives + reportées + déléguées
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tab82" data-toggle="tab"  onclick="showinfos82();hideinfos81();">
+                            <i class="fas  fa-lg fa-users"></i>  Missions achevées + annulées
+                        </a>
+                    </li>
+               
+                </ul>
+
+                <div id="tab81" class="tab-pane fade active in  ">
+                    <br>
+                   Missions actives + reportées + déléguées
+                   <br>
+
+                    <br><br><br>
+                    <table class="table table-striped" id="mytableMA" style="margin-top:15px;">
+                        <thead>
+                        <tr id="headtable">
+                            <th style="width:15%">Extrait (titre)</th>
+                            <th style="width:25%">Type</th>
+                            <th style="width:15%">Date début // Date fin</th>
+                            <th style="width:15%">Commentaire</th>
+                            <th style="width:10%">statut</th>
+                             <th style="width:20%">Créateur</th>
+                            <th style="width:10%">Actions /Source</th>
+                        </tr>
+                        <tr>
+                           <th style="width:15%">Extrait (titre)</th>
+                            <th style="width:25%">Type</th>
+                            <th style="width:15%">Date début // Date fin</th>
+                            <th style="width:15%">Commentaire</th>
+                            <th style="width:10%">statut</th>
+                             <th style="width:20%">Créateur</th>
+                            <th style="width:10%">Actions /Source</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                             <?php $missionsACVD=App\Mission::where('dossier_id',$dossier->id)->orderBy('date_deb','desc')->get();?>
+                     @if ($missionsACVD)                                       
+                       @foreach ($missionsACVD as $macvd)     
+                            <tr><td style="width:15%;"><small>{{$macvd->titre}} </small></td>
+                                @if($macvd->nom_type_miss)
+                                <td style="width:25%;"><small>{{$macvd->nom_type_miss}} </small></td>
+                                @else
+                                <td style="width:25%;"><small>{{$macvd->typeMission->nom_type_Mission}} </small></td>
+                                @endif
+                           
+                            <td style="width:15%;"><small>{{$macvd->date_deb}}//{{$macvd->date_fin}} </small></td>
+                            <td style="width:15%;"><small>{{$macvd->commentaire}} </small></td>
+                            @if($macvd->statut_courant=='reportee')
+                            <td style="width:10%;"><small>reportée</small></td>
+                            @endif
+                             @if($macvd->statut_courant=='deleguee')
+                            <td style="width:10%;"><small>déléguée </small></td>
+                            @endif
+                            @if($macvd->statut_courant=='active')
+                            <td style="width:10%;"><small>active</small></td>
+                            @endif
+                             <td style="width:15%;"><small>{{$macvd->agent->name}} {{$macvd->agent->lastname}}</small></td>
+                            <td style="width:10%;"><button type="button" id="macvd{{$macvd->id}}" class="btn btn-primary panelciel macvd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick=""> Actions</button><br>
+                                <button type="button" id="macvdo{{$macvd->id}}" class="btn btn-primary panelciel mailGenermacvd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick=""> Source</button></td></tr>
+                       @endforeach
+                     @endif    
+                        </tbody>
+
+                 </table>
+                </div> 
+                <div id="tab82" class="tab-pane fade  ">
+                    <br>
+                     Missions achevées + annulées
+                     <br>
+                      <br><br><br>
+                    <table class="table table-striped" id="mytableMACC" style=" margin-top:15px;">
+                        <thead>
+                        <tr id="headtable">
+                            <th style="width:15%">Extrait (titre)</th>
+                            <th style="width:25%">Type</th>
+                            <th style="width:15%">Date début //Date fin</th>
+                            <th style="width:15%">Commentaire</th>
+                            <th style="width:10%">statut</th>
+                             <th style="width:20%">Créateur</th>
+                            <th style="width:10%">Actions /Source</th>
+                        </tr>
+                        <tr>
+                           <th style="width:15%">Extrait (titre)</th>
+                            <th style="width:25%">Type</th>
+                            <th style="width:15%">Date début //Date fin</th>
+                            <th style="width:15%">Commentaire</th>
+                            <th style="width:10%">statut</th>
+                             <th style="width:20%">Créateur</th>
+                            <th style="width:10%">Actions /Source</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                    <?php $missionsHIVD=App\MissionHis::where('dossier_id',$dossier->id)->orderBy('date_deb','desc')->get();?>
+                     @if ($missionsHIVD)                                       
+                       @foreach ($missionsHIVD as $mhivd)     
+                            <tr><td style="width:15%;"><small>{{$mhivd->titre}} </small></td>
+                                 @if($mhivd->nom_type_miss)
+                                <td style="width:25%;"><small>{{$mhivd->nom_type_miss}} </small></td>
+                                @else
+                                <td style="width:25%;"><small>{{$mhivd->typeMission->nom_type_Mission}} </small></td>
+                                @endif
+                            <td style="width:15%;"><small>{{$mhivd->date_deb}}//{{$mhivd->date_fin}} </small></td>
+                            <td style="width:15%;"><small>{{$mhivd->commentaire}} </small></td>
+                             @if($mhivd->statut_courant=='achevee')
+                            <td style="width:10%;"><small>achevée</small></td>
+                            @endif
+                             @if($mhivd->statut_courant=='annulee')
+                            <td style="width:10%;"><small>annulée </small></td>
+                            @endif
+                           <td style="width:15%;"><small>{{$mhivd->agent->name}} {{$mhivd->agent->lastname}}</small></td>
+                            <td style="width:10%;"><button type="button" id="mhivd{{$mhivd->id_origin_miss}}" class="btn btn-primary panelciel mhivd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick="">Actions</button><br>
+                                <button type="button" id="mhivdo{{$mhivd->id_origin_miss}}" class="btn btn-primary panelciel mailGenermhivd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick="">Source</button></td></tr>
+                       @endforeach
+                     @endif    
+                        </tbody>
+
+                 </table>
+                </div> 
+
+             </div> <!--fin tab missions-->
+
             </div>
 
 
@@ -1938,6 +2073,29 @@ array_push($listepr,$pr['prestataire_id']);
         </div>
     </div>
 </div>
+
+ <div class="modal fade" id="myworkflowMAA" role="dialog" >
+    <div class="modal-dialog modal-lg" >
+    
+      <!-- Modal content-->
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 id="titleworkflowmodalMAA" class="modal-title"></h4>
+        </div>
+        <div class="modal-body">       
+
+  <div id="contenumodalworkflowMAA" style="background-color: #ABF8F8;padding:5px 5px 5px 5px" >
+        
+  </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+      
+    </div>
+  </div> <!-- fin modal workflow-->
 
 <?php if ((Gate::check('isAdmin') || Gate::check('isSupervisor'))) { ?>
 <!-- Modal attribution dossier-->
@@ -2821,6 +2979,20 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
     }
     function showinfos3() {
         $('#tab33').css('display','block');
+    }
+    function hideinfos81()
+    {
+     $('#tab81').css('display','none');
+    }
+    function hideinfos82()
+    {
+     $('#tab82').css('display','none');
+    }
+    function showinfos81() {
+        $('#tab81').css('display','block');
+    }
+    function showinfos82() {
+        $('#tab82').css('display','block');
     }
 
 
@@ -5249,4 +5421,311 @@ $(document).ready(function(){
         });
 
     </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+
+            $('#mytableMA thead tr:eq(1) th').each( function () {
+                var title = $('#mytableMA thead tr:eq(0) th').eq( $(this).index() ).text();
+                //  $(this).html( '<input class="searchfield" type="text" placeholder="'+title+'" />' );
+                $(this).html( '<input class="searchfield" type="text"   />' );
+            } );
+
+            var table = $('#mytableMA').DataTable({
+                "aaSorting": [],
+                orderCellsTop: true,
+                dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
+                responsive:true,
+                buttons: [
+
+                    'csv', 'excel', 'pdf', 'print'
+                ],
+                "columnDefs": [ {
+                    "targets": 'no-sort',
+                    "orderable": false,
+                } ]
+                ,
+                "language":
+                    {
+                        "decimal":        "",
+                        "emptyTable":     "Pas de données",
+                        "info":           "affichage de  _START_ à _END_ de _TOTAL_ entrées",
+                        "infoEmpty":      "affichage 0 à 0 de 0 entrées",
+                        "infoFiltered":   "(Filtrer de _MAX_ total d`entrées)",
+                        "infoPostFix":    "",
+                        "thousands":      ",",
+                        "lengthMenu":     "affichage de _MENU_ entrées",
+                        "loadingRecords": "chargement...",
+                        "processing":     "chargement ...",
+                        "search":         "Recherche:",
+                        "zeroRecords":    "Pas de résultats",
+                        "paginate": {
+                            "first":      "Premier",
+                            "last":       "Dernier",
+                            "next":       "Suivant",
+                            "previous":   "Précédent"
+                        },
+                        "aria": {
+                            "sortAscending":  ": activer pour un tri ascendant",
+                            "sortDescending": ": activer pour un tri descendant"
+                        }
+                    }
+
+            });
+
+              function delay(callback, ms) {
+                var timer = 0;
+                return function() {
+                    var context = this, args = arguments;
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        callback.apply(context, args);
+                    }, ms || 0);
+                };
+            }
+
+
+            table.columns().every(function (index) {
+                $('#mytableMA thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+                    table.column($(this).parent().index() + ':visible')
+                        .search(this.value)
+                        .draw();
+                });
+
+                $('#mytableMA thead tr:eq(1) th:eq(' + index + ') input').keyup(delay(function (e) {
+                    console.log('Time elapsed!', this.value);
+                    $(this).blur();
+
+                }, 2000));
+            });
+
+
+
+        });
+
+    </script>
+
+     <script type="text/javascript">
+        $(document).ready(function() {
+
+
+            $('#mytableMACC thead tr:eq(1) th').each( function () {
+                var title = $('#mytableMACC thead tr:eq(0) th').eq( $(this).index() ).text();
+                //  $(this).html( '<input class="searchfield" type="text" placeholder="'+title+'" />' );
+                $(this).html( '<input class="searchfield" type="text"   />' );
+            } );
+
+            var table = $('#mytableMACC').DataTable({
+                "aaSorting": [],
+                orderCellsTop: true,
+                dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
+                responsive:true,
+                buttons: [
+
+                    'csv', 'excel', 'pdf', 'print'
+                ],
+                "columnDefs": [ {
+                    "targets": 'no-sort',
+                    "orderable": false,
+                } ]
+                ,
+                "language":
+                    {
+                        "decimal":        "",
+                        "emptyTable":     "Pas de données",
+                        "info":           "affichage de  _START_ à _END_ de _TOTAL_ entrées",
+                        "infoEmpty":      "affichage 0 à 0 de 0 entrées",
+                        "infoFiltered":   "(Filtrer de _MAX_ total d`entrées)",
+                        "infoPostFix":    "",
+                        "thousands":      ",",
+                        "lengthMenu":     "affichage de _MENU_ entrées",
+                        "loadingRecords": "chargement...",
+                        "processing":     "chargement ...",
+                        "search":         "Recherche:",
+                        "zeroRecords":    "Pas de résultats",
+                        "paginate": {
+                            "first":      "Premier",
+                            "last":       "Dernier",
+                            "next":       "Suivant",
+                            "previous":   "Précédent"
+                        },
+                        "aria": {
+                            "sortAscending":  ": activer pour un tri ascendant",
+                            "sortDescending": ": activer pour un tri descendant"
+                        }
+                    }
+
+            });
+
+              function delay(callback, ms) {
+                var timer = 0;
+                return function() {
+                    var context = this, args = arguments;
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        callback.apply(context, args);
+                    }, ms || 0);
+                };
+            }
+
+
+            table.columns().every(function (index) {
+                $('#mytableMACC thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+                    table.column($(this).parent().index() + ':visible')
+                        .search(this.value)
+                        .draw();
+                });
+
+                $('#mytableMACC thead tr:eq(1) th:eq(' + index + ') input').keyup(delay(function (e) {
+                    console.log('Time elapsed!', this.value);
+                    $(this).blur();
+
+                }, 2000));
+            });
+
+
+
+        });
+
+    </script>
+
+<script type="text/javascript">
+   
+ $(document).on('click','.macvd', function() {
+
+   var macvd=$(this).attr("id");
+    macvd=macvd.substr(5);
+  //alert(idw);
+   //var nomact=$('#workflowh'+macvd).attr("value");
+ 
+  // var typemiss=$('#workflowht'+macvd).attr("value");
+     // $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
+
+           $.ajax({
+
+               url: "<?php echo $urlapp; ?>/Mission/getAjaxWorkflow/"+macvd,
+               type : 'GET',
+              // data : 'idw=' + idw,
+               success: function(data){
+               
+              // alert(data);
+
+               //alert(JSON.stringify(data));
+              $('#contenumodalworkflowMAA').empty().html(data);
+
+              $('#myworkflowMAA').modal('show');
+
+                  //alert(JSON.stringify(retour))   ;
+                 // location.reload();
+            }
+
+             
+           });
+
+  });
+  </script>
+  
+  <script type="text/javascript">
+   
+ $(document).on('click','.mhivd', function() {
+
+   var mhivd=$(this).attr("id");
+    mhivd=mhivd.substr(5);
+ // alert(mhivd);
+   //var nomact=$('#workflowh'+macvd).attr("value");
+ 
+  // var typemiss=$('#workflowht'+macvd).attr("value");
+     // $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
+
+           $.ajax({
+
+               url: "<?php echo $urlapp; ?>/Mission/getAjaxWorkflowMach/"+mhivd,
+               type : 'GET',
+              // data : 'idw=' + idw,
+               success: function(data){
+               
+              // alert(data);
+
+               //alert(JSON.stringify(data));
+              $('#contenumodalworkflowMAA').empty().html(data);
+
+              $('#myworkflowMAA').modal('show');
+
+                  //alert(JSON.stringify(retour))   ;
+                 // location.reload();
+            }
+
+             
+           });
+
+  });
+  </script>
+<script>
+   $(document).on('click','.mailGenermacvd', function() {
+   var mailGenermacvd=$(this).attr("id");
+    mailGenermacvd=mailGenermacvd.substr(6);
+   //alert( mailGenermacvd);
+   /*var nomact=$('#workflowh'+idw).attr("value");
+   var typemiss=$('#workflowht'+idw).attr("value");
+      $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');*///ou la methode html
+
+           $.ajax({
+
+               url: "<?php echo $urlapp; ?>/Mission/getMailGenerator/"+mailGenermacvd,
+               type : 'GET',
+              // data : 'idw=' + idw,
+               success: function(data){
+               
+              //alert(data);
+
+               //alert(JSON.stringify(data));
+               $('#contenumodalworkflowMAA').empty().html(data);
+
+              $('#myworkflowMAA').modal('show');
+
+                  //alert(JSON.stringify(retour))   ;
+                 // location.reload();
+            }
+
+             
+           });
+
+  });
+
+  </script>
+
+  <script>
+   $(document).on('click','.mailGenermhivd', function() {
+   var mailGenermhivd=$(this).attr("id");
+    mailGenermhivd=mailGenermhivd.substr(6);
+  // alert(mailGenermhivd);
+   /*var nomact=$('#workflowh'+idw).attr("value");
+   var typemiss=$('#workflowht'+idw).attr("value");
+      $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');*///ou la methode html
+
+           $.ajax({
+
+               url: "<?php echo $urlapp; ?>/Mission/getMailGeneratorMAch/"+mailGenermhivd,
+               type : 'GET',
+              // data : 'idw=' + idw,
+               success: function(data){
+               
+              //alert(data);
+
+               //alert(JSON.stringify(data));
+             $('#contenumodalworkflowMAA').empty().html(data);
+
+              $('#myworkflowMAA').modal('show');
+
+                  //alert(JSON.stringify(retour))   ;
+                 // location.reload();
+            }
+
+             
+           });
+
+  });
+
+  </script>
 @stop

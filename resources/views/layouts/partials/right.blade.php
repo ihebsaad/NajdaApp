@@ -253,11 +253,11 @@ use App\Http\Controllers\TagsController;
                                         <div class="dropdown" style="float:right;">
                                           <button class="dropbtn"><span class="fa fa-2x fa-tasks" aria-hidden="true"></span></button>
                                           <div class="dropdown-content" style="right:0;">
-                                          <a class="DescripMission" id="<?php echo $Mission->id ?>" href="#">Descrip. Mission</a>
-                                          <a class="etatAction" id="<?php echo $Mission->id ?>" href="#">Voir état actions</a>
-                                          <a class="mailGenerateur" id="<?php echo $Mission->id ?>" href="#">Mail générateur</a>
-                                          <a class="deleguerMission" id="<?php echo $Mission->id ?>" href="#">Déléguer Mission</a>
-                                          <a class="annulerMission" id="<?php echo $Mission->id ?>" href="#">Annuler Mission</a>
+                                          <a class="DescripMission" id="<?php echo $Mission->id ?>" href="javascript:void(0)">Descrip. Mission</a>
+                                          <a class="etatAction" id="<?php echo $Mission->id ?>" href="javascript:void(0)">Voir état actions</a>
+                                          <a class="mailGenerateur" id="<?php echo $Mission->id ?>" href="javascript:void(0)">Mail générateur</a>
+                                          <a class="deleguerMission" id="<?php echo $Mission->id ?>" href="javascript:void(0)">Déléguer Mission</a>
+                                          <a class="annulerMission" id="<?php echo $Mission->id ?>" href="javascript:void(0)">Annuler Mission</a>
 
                                            <input id="workflowh<?php echo $Mission->id ?>" type="hidden" value="{{$Mission->titre}}">
                                             <input id="workflowht<?php echo $Mission->id ?>" type="hidden" value="{{$Mission->typeMission->nom_type_Mission}}">
@@ -558,7 +558,7 @@ use App\Http\Controllers\TagsController;
                                       </div>
                                        <!--<button  type="submit"  class="btn btn-success">Ajouter</button>-->
                                         <br><br>
-                                        <button  id="idAjoutMiss" type="button"  class="btn btn-success">Ajouter la mission</button>
+                                        <button  id="idAjoutMiss" type="button" onClick="this.disabled=true; creerNouvelleMission();" class="btn btn-success">Ajouter la mission</button>
                                         <br><br><br>
                                        <!-- <button  id="idFinAjoutMiss" type="button"  class="btn btn-danger">Fin ajout de missions</button>-->
 
@@ -870,15 +870,15 @@ use App\Http\Controllers\TagsController;
           <h4 id="titleworkflowmodal" class="modal-title"></h4>
         </div>
         <div class="modal-body">
-          <p>
+         
 
-  <div id="contenumodalworkflow" style="background-color: #ABF8F8;padding:15px 15px 15px 15px" >
+  <div id="contenumodalworkflow" style="background-color: #ABF8F8;padding:5px 5px 5px 5px" >
 
                
   </div>
 
 
-          </p>
+       
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
@@ -907,6 +907,89 @@ use App\Http\Controllers\TagsController;
 
 <script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
  <script type="text/javascript">
+  
+ function creerNouvelleMission(){
+
+ // $("#idAjoutMiss").click(function(e){ // On sélectionne le formulaire par son identifiant
+   // e.preventDefault(); // Le navigateur ne peut pas envoyer le formulaire
+     //alert('ok');
+
+     //$("#idAjoutMiss").attr("disabled", true);
+     //document.getElementById('idAjoutMiss').disabled=true;
+      // $(document).on('')
+     var en=true;
+
+     if(!$('#idFormCreationMission #titre').val())
+     {
+
+      alert('vous devez remplir le champs extrait');
+      en=false;
+
+     }
+
+     if(!$('#idFormCreationMission #typeMissauto').val())
+     {
+
+      alert('vous devez sélectionner le type de mission');
+      en=false;
+
+     }
+
+  
+
+    if(!$('#idFormCreationMission #dossierID').val())
+     {
+
+      alert('vous devez sélectionner un dossier pour créer une mission ou créer une mission à partir d\'un email');
+      en=false;
+
+     }
+     
+ 
+
+   if(en==true)
+   {
+    var donnees = $('#idFormCreationMission').serialize(); // On créer une variable content le formulaire sérialisé
+    var _token = $('input[name="_token"]').val();
+    $.ajax({
+
+           url:"{{ route('Mission.StoreMissionByAjax') }}",
+           method:"get",
+           data : donnees,
+           success:function(data){
+         
+                alert("Mission créée");
+                //alert(data);
+                 $('#idFormCreationMission #typeMissauto').val('');
+                 //$('#idFormCreationMission #typeMissauto option:eq(1)').prop('selected', true);
+                //$('#idFormCreationMission #typeMissauto').text('Sélectionner');
+                $('#idFormCreationMission #titre').val('');
+                //$('#typeMissauto option[value=selectkbs]').attr("selected", "selected");
+                $("#idFormCreationMission #typeMissauto").select2("val", "Sélectionner");
+
+                 $('#idFormCreationMission #datedeb').val(data);
+
+                  $('#idFormCreationMission #commentaire').val('');
+
+                },
+            error: function(jqXHR, textStatus, errorThrown) {
+
+              alert('erreur lors de création de la mission');
+
+
+            }
+
+   
+    });
+  }
+
+  //$("#idAjoutMiss").attr("disabled",false);
+   document.getElementById('idAjoutMiss').disabled=false;
+
+//});
+}
+
+
      $(document).ready(function(){
     var maxField = 10; //Input fields increment limitation
     var addButton = $('.add_button'); //Add button selector
@@ -1187,15 +1270,17 @@ $('.DescripMission').on('click', function() {
 
 
 //-- script click etat action
- $('.etatAction').on('click', function() {
+ //$('.etatAction').on('click', function() {
+
+   $(document).on('click','.etatAction', function() {
 
 
    var idw=$(this).attr("id");
   // alert(idw);
-   var nomact=$('#workflowh'+idw).attr("value");
-   //alert
-   var typemiss=$('#workflowht'+idw).attr("value");
-      $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
+   //var nomact=$('#workflowh'+idw).attr("value");
+  
+   //var typemiss=$('#workflowht'+idw).attr("value");
+      //$("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
 
            $.ajax({
 
@@ -1223,9 +1308,9 @@ $('.DescripMission').on('click', function() {
 
  // script click doc générateur
 
- $('.mailGenerateur').on('click', function() {
+ //$('.mailGenerateur').on('click', function() {
 
-
+ $(document).on('click','.mailGenerateur', function() {
    var idw=$(this).attr("id");
    //alert(idw);
    var nomact=$('#workflowh'+idw).attr("value");
@@ -2299,82 +2384,6 @@ getNotificationDeleguerAct ();
 
  
   
-
-  $("#idAjoutMiss").click(function(e){ // On sélectionne le formulaire par son identifiant
-   // e.preventDefault(); // Le navigateur ne peut pas envoyer le formulaire
-     //alert('ok');
-
-     $("#idAjoutMiss").attr("disabled", true);
-
-     var en=true;
-
-     if(!$('#idFormCreationMission #titre').val())
-     {
-
-      alert('vous devez remplir le champs extrait');
-      en=false;
-
-     }
-
-     if(!$('#idFormCreationMission #typeMissauto').val())
-     {
-
-      alert('vous devez sélectionner le type de mission');
-      en=false;
-
-     }
-
-  
-
-    if(!$('#idFormCreationMission #dossierID').val())
-     {
-
-      alert('vous devez sélectionner un dossier pour créer une mission ou créer une mission à partir d\'un email');
-      en=false;
-
-     }
-     
- 
-
-   if(en==true)
-   {
-    var donnees = $('#idFormCreationMission').serialize(); // On créer une variable content le formulaire sérialisé
-    var _token = $('input[name="_token"]').val();
-    $.ajax({
-
-           url:"{{ route('Mission.StoreMissionByAjax') }}",
-           method:"get",
-           data : donnees,
-           success:function(data){
-         
-                alert("Mission créée");
-                //alert(data);
-                 $('#idFormCreationMission #typeMissauto').val('');
-                 //$('#idFormCreationMission #typeMissauto option:eq(1)').prop('selected', true);
-                //$('#idFormCreationMission #typeMissauto').text('Sélectionner');
-                $('#idFormCreationMission #titre').val('');
-                //$('#typeMissauto option[value=selectkbs]').attr("selected", "selected");
-                $("#idFormCreationMission #typeMissauto").select2("val", "Sélectionner");
-
-                 $('#idFormCreationMission #datedeb').val(data);
-
-                  $('#idFormCreationMission #commentaire').val('');
-
-                },
-            error: function(jqXHR, textStatus, errorThrown) {
-
-              alert('erreur lors de création de la mission');
-
-
-            }
-
-   
-    });
-  }
-
-   $("#idAjoutMiss").attr("disabled",false);
-
-});
 
 
 

@@ -410,7 +410,7 @@ echo '</ul>';
                                         <div class="dropdown">
                                             <button class="dropbtn"><i class="glyphicon glyphicon-pencil"></i></button>
                                             <div class="dropdown-content">
-                                                <a href="<?php echo $burl.'/SupprimerNote/'.$note->id ?>">Supprimer</a>
+                                                <a href="<?php echo $burl.'/SupprimerNote/'.$note->id ?>">Marquer comme lue</a>
                                                 <a href="#" class="ReporterNote2" id="{{$note->id}}">Reporter</a>
                                                 <input id="noteh<?php echo $note->id ?>" type="hidden" class="form-control" value="{{$note->titre}}" name="note"/>
                                                 <a class="idNoteEnvoyerA" id="envoyer{{$note->id}}" href="javascript:void(0)">Envoyer à</a>

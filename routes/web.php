@@ -405,11 +405,14 @@ Route::post('/Mission/updateworkflow/', 'MissionController@updateWorkflow');
 Route::get('/Mission/RendreInactive/{id}/{dossid}', 'MissionController@RendreInactive');
 Route::get('/Mission/RendreAchevee/{id}/{dossid}', 'MissionController@RendreAchevee');
 Route::get('/Mission/getAjaxWorkflow/{id}', 'MissionController@getAjaxWorkflow');
+Route::get('/Mission/getAjaxWorkflowMach/{id}', 'MissionController@getAjaxWorkflowMach');
 Route::get('/dossier/Mission/AnnulerMissionCourante/{iddoss}/{idact}/{idsousact}' , 'MissionController@AnnulerMissionCourante');
 Route::get('/getMissionAjaxModal', 'MissionController@getMissionsAjaxModal');
 Route::get('/Mission/getAjaxDeleguerMission/{id}', 'MissionController@getAjaxDeleguerMission');
 Route::get('/Mission/AnnulerMissionCouranteByAjax/{id}', 'MissionController@AnnulerMissionCouranteByAjax');
 Route::get('/Mission/getMailGenerator/{id}', 'MissionController@getMailGeneratorByAjax');
+Route::get('/Mission/getMailGeneratorMAch/{id}', 'MissionController@getMailGeneratorByAjaxMAch');
+
 Route::get('/Mission/getDescriptionMissionAjax/{id}', 'MissionController@getDescriptionMissionAjax');
 
 Route::get('/dossiers/view/CreerOM/{id}/{idmiss}', 'MissionController@viewDossierMission');

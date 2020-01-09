@@ -477,20 +477,23 @@ public function getAjaxUsersNote($idnote)
                                               $agents = User::get(); 
                                               $agentname='';
                                                 foreach ($agents as $agt){
+                                                  if($agt->isOnline())
+                                                  {
                                                  if (!empty ($agentname)) { 
                                                  if ($agentname["id"] == $agt["id"]) {
-                                               $output.=' <option value="'. $agt["id"] .'" selected >'. $agt["name"] .'</option>';
+                                               $output.=' <option value="'. $agt["id"] .'" selected >'. $agt["name"].' '.$agt["lastname"].'</option>';
                                                 }
                                                 else
                                                 {
-                                                 $output.=' <option value="'.$agt["id"] .'" >'. $agt["name"] .'</option>';
+                                                 $output.=' <option value="'.$agt["id"] .'" >'. $agt["name"].' '.$agt["lastname"] .'</option>';
                                                 }
                                                
                                                 
                                                 
                                                 }
                                                 else
-                                                  { $output.= '<option value="'.$agt["id"] .'" >'.$agt["name"].'</option>';}
+                                                  { $output.= '<option value="'.$agt["id"] .'" >'.$agt["name"].' '.$agt["lastname"].'</option>';}
+                                              }
                                                 
                                                }   
                                        $output.= ' </select>
