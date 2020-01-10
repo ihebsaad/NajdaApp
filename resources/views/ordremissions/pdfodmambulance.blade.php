@@ -239,7 +239,7 @@ if (isset($_POST['clientIMA'])) { ?>
 <p style="margin-top:3.75pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p><div style="margin-top:0pt;clear:both"></div><p style="margin-left:5.85pt;margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Remarque</span><span style="font-family:'Times New Roman'; font-weight:bold">s</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_remarque'])) { echo $_POST['CL_remarque']; } ?></span>
 					</p>
-<?php if (isset($_POST['affectea'])) { if ($_POST['affectea'] === "interne") { ?>						
+<?php if (isset($_POST['affectea'])) { if (($_POST['affectea'] === "interne") || ($_POST['affectea'] === "mmentite")) {  ?>						
 <div id="prestinterne" >
 					<p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; padding-bottom:1pt; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; ">&#xa0;</span></p><p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;border-top: 1.5pt solid #000000;padding-top:10px"><span style="font-family:'Times New Roman'; font-weight:bold">Origine de la demande: </span><span style="font-family:'Times New Roman'; font-weight:bold; ">
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['client_dossier'])) { echo $_POST['client_dossier']; } ?></span></span><span style="font-family:'Times New Roman'; font-weight:bold">   Date demande: </span>

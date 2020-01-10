@@ -207,7 +207,7 @@ elseif (stristr($champtemp,'[CL_attention')== TRUE )
                 setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
                 $mc=round(microtime(true) * 1000);
                 $datees = strftime("%d-%B-%Y"."_".$mc); 
-                $datesc = strftime("%d-%B-%Y"); 				
+                $datesc = strftime("%d-%B-%Y");                 
                 $name_file = utf8_encode($arrfile['nom'].'_'.$datees.'.doc');
                 $titref =utf8_encode($arrfile['nom'].'_'.$datesc);
            /* }
@@ -453,20 +453,21 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                    
                     }
 
-                $titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
+                //$titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
+        $titref =utf8_decode($arrfile['nom'].'_'.$refdoss);
             }
         }
      
     }
 
 /*--------------------------------------------------------fin dates spécifiques---------------------------*/
-            
-       WordTemplate::export($file, $array, '/documents/'.$refdoss.'/'.$name_file);
+       $Arrayd = array_map("utf8_decode", $array ); 
+       WordTemplate::export($file,$Arrayd, '/documents/'.$refdoss.'/'.$name_file);
 
 
     // creation du fichier PDF
     $nfsansext = substr($name_file, 0, -3);
-    Converter::file(storage_path().'/app/documents/'.$refdoss.'/'.$name_file) // select a file for convertion
+  Converter::file(storage_path().'/app/documents/'.$refdoss.'/'.$name_file) // select a file for convertion
         ->setLibreofficeBinaryPath('/usr/bin/libreoffice') // binary to the libreoffice binary
         ->setTemporaryPath(storage_path().'/temp') // temporary directory for convertion
         ->setTimeout(100) // libreoffice process timeout
@@ -479,7 +480,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
         $doc = new Document([
             'dossier' => $dossier,
             'titre' => $titref,
-            'emplacement' => 'documents/'.$refdoss.'/'.$fda.'pdf',
+            'emplacement' => 'documents/'.$refdoss.'/'.$nfsansext.'pdf',
             'template' => $templateid,
             'parent' => $parent,
             'dernier' => 1,
@@ -846,7 +847,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp => utf8_encode($valchamp)];
+                                $array += [ $champtemp => $valchamp];
                             }
                             elseif($champtemp ==='[CUSTOMER_ID__NAME]')
                             {
@@ -871,7 +872,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp => utf8_encode($valchamp)];
+                                $array += [ $champtemp => $valchamp];
                             }
                             elseif($champtemp ==='[AGENT__NAME]')
                             {
@@ -898,7 +899,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp => utf8_encode($valchamp)];
+                                $array += [ $champtemp => $valchamp];
                             }
                             elseif($champtemp ==='[AGENT__SIGNATURE]')
                             {
@@ -952,7 +953,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp => utf8_encode($valchamp)];
+                                $array += [ $champtemp => $valchamp];
                             }
                         }
                         elseif($champtemp ==='[MONTANT_FRANCHISE]')
@@ -996,7 +997,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             }
                             else
                                 { $valchamp = "undefined index";}
-                            $array += [ 'pre_dateheure' => utf8_encode($valchamp)];
+                            $array += [ 'pre_dateheure' => $valchamp];
 
                         }
                         elseif(stristr($champtemp,'[CL_')!== FALSE)
@@ -1011,7 +1012,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             $champtemp = str_replace('[CL_', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
+                            $array += [ 'CL_'.$champtemp => $valchamp];
                         }
                  elseif (stristr($champtemp,'[CL_enpanne')== TRUE )
                         {if (array_key_exists($i,$champsparentArray))
@@ -1024,7 +1025,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             $champtemp = str_replace('[CL_', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
+                            $array += [ 'CL_'.$champtemp => $valchamp];
                         }
                             elseif (stristr($champtemp,'[CL_incendie')== TRUE )
                         {if (array_key_exists($i,$champsparentArray))
@@ -1037,7 +1038,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             $champtemp = str_replace('[CL_', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
+                            $array += [ 'CL_'.$champtemp => $valchamp];
                         }
                             elseif (stristr($champtemp,'[CL_intact')== TRUE )
                         {if (array_key_exists($i,$champsparentArray))
@@ -1050,7 +1051,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             $champtemp = str_replace('[CL_', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
+                            $array += [ 'CL_'.$champtemp => $valchamp];
                         }
                 elseif (stristr($champtemp,'[CL_attention')== TRUE )
                         {if(isset($_POST['CL_attention']))
@@ -1076,7 +1077,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             $champtemp = str_replace('[CL_', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ 'CL_'.$champtemp => utf8_encode($valchamp)];
+                            $array += [ 'CL_'.$champtemp => $valchamp];
 
                         }}
 
@@ -1394,7 +1395,7 @@ elseif (stristr($champtemp,'[CL_attention')== TRUE )
                             $champtemp = str_replace('[', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ 'CL_'.$champtemp => utf8_encode($champdb)];
+                            $array += [ 'CL_'.$champtemp =>$champdb];
 
                         }}
                     }
@@ -1402,11 +1403,14 @@ elseif (stristr($champtemp,'[CL_attention')== TRUE )
 
             // envoie ID_DOSSIER au preview
             $array += [ 'ID_DOSSIER' => $dossier];
-            
+           //header("Content-type: application/json; charset=utf-8");
+ 
             //header('Content-type: application/json');    
             //return json_encode($array);
-            return response() -> json($array, 200, ['Content-type'=> 'application/json; charset=utf-8'], JSON_UNESCAPED_UNICODE);
-        
+        return response()->json($array, 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+       JSON_UNESCAPED_UNICODE); 
+      // return $array;
+       
     }
 
 public function historique(Request $request)
@@ -1545,11 +1549,13 @@ public function historique(Request $request)
         
         /*header('Content-type: application/json');    
         return json_encode($array);*/
-        WordTemplate::export($file, $array, '/documents/'.$refdoss.'/'.$name_file);
+
+        $Arrayd = array_map("utf8_decode", $array ); 
+        WordTemplate::export($file, $Arrayd, '/documents/'.$refdoss.'/'.$name_file);
 
     // creation du fichier PDF
     $nfsansext = substr($name_file, 0, -3);
-    Converter::file(storage_path().'/app/documents/'.$refdoss.'/'.$name_file) // select a file for convertion
+  Converter::file(storage_path().'/app/documents/'.$refdoss.'/'.$name_file) // select a file for convertion
         ->setLibreofficeBinaryPath('/usr/bin/libreoffice') // binary to the libreoffice binary
         ->setTemporaryPath(storage_path().'/temp') // temporary directory for convertion
         ->setTimeout(100) // libreoffice process timeout
