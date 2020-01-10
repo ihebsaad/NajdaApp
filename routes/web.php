@@ -21,6 +21,7 @@ Route::get('/pause', 'HomeController@pause')->name('pause');
 Route::get('/parametres', 'HomeController@parametres')->name('parametres');
 Route::get('/supervision', 'HomeController@supervision')->name('supervision');
 Route::get('/affectations', 'HomeController@affectation')->name('affectation');
+Route::get('/affectations2', 'HomeController@affectation2')->name('affectation2');
 Route::get('/missions', 'HomeController@missions')->name('missions');
 Route::get('/notifs', 'HomeController@notifs')->name('notifs');
 Route::get('/transport', 'HomeController@transport')->name('transport');

@@ -334,6 +334,8 @@ class EntreesController extends Controller
         // Fetch all customers from database
 
         $entree = Entree::find($id);
+        $date=$entree->reception;
+
           compact('entree');
         // Send data to the view using loadView function of PDF facade
         $pdf = PDF::loadView('entrees.pdf', ['entree' => $entree])->setPaper('a4', '');
@@ -354,7 +356,7 @@ class EntreesController extends Controller
 
         $attachement = new Attachement([
 
-            'type'=>'pdf','path' => $path2, 'nom' => $name,'boite'=>3,'entree_id'=>$id,'parent'=>$id,
+            'type'=>'pdf','path' => $path2, 'nom' => $name,'boite'=>3,'entree_id'=>$id,'parent'=>$id,'user'=>Auth::id(),'created_at'=>$date
         ]);
         $attachement->save();
  

@@ -58,6 +58,8 @@
     $suptech=$seance->superviseurtech ;
     $charge=$seance->chargetransport ;
     $disptel=$seance->dispatcheurtel ;
+              $disptel2=$seance->dispatcheurtel2 ;
+              $disptel3=$seance->dispatcheurtel3 ;
     $veilleur=$seance->veilleur ;
 
     $debut=$seance->debut ;
@@ -117,17 +119,21 @@
                                 <span   class=" " style="margin-left:10px;margin-right:30px;marign-top:25px;padding:5px 5px 5px 5px;text-align:center;background-color:#fd9883;color:white;width:150px;">Grande charge</span>
                                 <span    class=" " style="margin-left:10px;margin-right:30px;marign-top:25px;padding:5px 5px 5px 5px;text-align:center;background-color:#FFCE54;color:black;width:150px;">En pause</span>
                                </div>
-                                <thead style="text-align:center;font-size:13px;"><th>Agent</th><th>Type</th><th>Rôle Principal</th><th>Dossiers Affectés</th><th>Missions</th><th>Actions </th><th>Actions Actives</th><th>Notifications</th></thead>
+                                <thead style="text-align:center;font-size:13px;"><th>Agent</th><th>Type</th><th>Rôle(s)</th><th>Dossiers Affectés</th><th>Missions</th><th>Actions </th><th>Actions Actives</th><th>Notifications</th></thead>
                             <?php $c=0;
                             foreach($users as $user)
                                 { if($c % 2 ==0){$bg='background-color:#dddcda!important';}else{$bg='';}
-                                    $role='Agent';
-                                    if($user->id==$charge){$role='Chargé de transport';}
-                                    if($user->id==$disp){$role='Dispatcheur';}
-                                    if($user->id==$disptel){$role='Dispatcheur Téléphonique';}
-                                    if($user->id==$supmedic){$role='Superviseur Médical';}
-                                    if($user->id==$suptech){$role='Superviseur Technique';}
-                                    if($user->id==$veilleur){$role='Veilleur de nuit';}
+
+
+                                    $role=' ';
+                                    if($user->id==$veilleur){$role.='(Veilleur de nuit)';}
+                                    if($user->id==$disp){$role.='(Dispatcheur)';}
+                                    if($user->id==$disptel){$role.='(Dispatcheur Téléphonique)';}
+                                    if($user->id==$disptel2){$role.='(Dispatcheur Téléphonique 2)';}
+                                    if($user->id==$disptel3){$role.='(Dispatcheur Téléphonique 3)';}
+                                    if($user->id==$supmedic){$role.='(Superviseur Médical)';}
+                                    if($user->id==$suptech){$role.='(Superviseur Technique)';}
+                                    if($user->id==$charge){$role.='(Chargé de transport)';}
 
 
 									$missions=UsersController::countmissions($user->id);

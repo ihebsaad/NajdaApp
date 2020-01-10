@@ -136,7 +136,7 @@ class Dossier extends Model
         'devise_franchise'
     ];
 
- /*   public $timestamps    ; 
+ /*   public $timestamps    ;
 
    protected $dateFormat = 'Y-m-d H:i:s';
 
@@ -144,7 +144,7 @@ class Dossier extends Model
     {
         return 'Y-m-d H:i:s.u';
     }
-
+*/
 /*
  public function activeMissions()
     {
