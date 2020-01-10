@@ -64,8 +64,6 @@
               $suptech=$seance->superviseurtech ;
               $charge=$seance->chargetransport ;
               $disptel=$seance->dispatcheurtel ;
-              $disptel2=$seance->dispatcheurtel2 ;
-              $disptel3=$seance->dispatcheurtel3 ;
               $veilleur=$seance->veilleur ;
 
 
@@ -118,61 +116,57 @@
 
                   })->count();
 
-              //  ajouter références dossiers ici *********
+           /*   $dossiers=    Dossier::where('current_status','like','actif')
+                 ->Where('affecte','<',1)->get();
+
+              $Cdossiers=   Dossier::where('current_status','like','actif')
+                  ->Where('affecte','<',1)->count();
+*/
 
 
-              // sup medic
-     $dossiersSM=    Dossier::where('affecte',$supmedic)
-                  ->where('statut',2)
-                       ->get();
+/*
+              $dossiersI=    Dossier::where('current_status','like','inactif')
+                  ->Where('affecte','<',1)->get();
 
-              $CdossiersSM=    Dossier::where('affecte',$supmedic)
-                  ->where('statut',2)
-                  ->count();
-                // sup tech
-              $dossiersST=    Dossier::where('affecte',$suptech)
-                  ->where('statut',2)
-                  ->get();
 
-              $CdossiersST=    Dossier::where('affecte',$suptech)
-                  ->where('statut',2)
-                  ->count();
-            // charge
-              $dossiersC=    Dossier::where('affecte',$charge)
-                  ->where('statut',2)
-                  ->get();
+              $CdossiersI=    Dossier::where('current_status','like','inactif')
+                  ->Where('affecte','<',1)->count();
+*/
+              $dossiersI=    Dossier::where('current_status','inactif')
+                  ->where(function ($query) {
+                      $query->whereNull('affecte')
+                          ->orWhere('affecte', 0);
 
-              $CdossiersC=    Dossier::where('affecte',$charge)
-                  ->where('statut',2)
-                  ->count();
-            // dispatcheur
-              $dossiersDisp=    Dossier::where('affecte',$disp)
-                  ->where('statut',2)
-                  ->get();
+                  })->get();
 
-              $CdossiersDisp=    Dossier::where('affecte',$disp)
-                  ->where('statut',2)
-                  ->count();
+              $CdossiersI=    Dossier::where('current_status','inactif')
+                  ->where(function ($query) {
+                      $query->whereNull('affecte')
+                          ->orWhere('affecte', 0);
+
+                  })->count();
 
               ?>
 
 
     <?php $c=0;
-       foreach($users as $user)
-        { if($c % 2 ==0){$bg=' border:2px dotted black ;';}else{$bg='';}
-		 $iduser=$user->id;
-              $role=' ';
-              if($user->id==$veilleur){$role.='(Veilleur de nuit) ';}
-              if($user->id==$disp){$role.='(Dispatcheur) ';}
-              if($user->id==$disptel){$role.='(Dispatcheur Téléphonique) ';}
-              if($user->id==$disptel2){$role.='(Dispatcheur Téléphonique 2) ';}
-              if($user->id==$disptel3){$role.='(Dispatcheur Téléphonique 3) ';}
-              if($user->id==$supmedic){$role.='(Superviseur Médical) ';}
-              if($user->id==$suptech){$role.='(Superviseur Technique) ';}
-              if($user->id==$charge){$role.='(Chargé de transport) ';}
-
-
-
+                            foreach($users as $user)
+                                { if($c % 2 ==0){$bg=' border:2px dotted black ;';}else{$bg='';}
+								$iduser=$user->id;
+                                     $role='Agent';
+                                    if($user->id==$charge){$role='Chargé de transport';}
+                                    if($user->id==$disp){$role='Dispatcheur';}
+                                    if($user->id==$disptel){$role='Dispatcheur Téléphonique';}
+                                    if($user->id==$supmedic){$role='Superviseur Médical';}
+                                    if($user->id==$suptech){$role='Superviseur Technique';}
+                                    if($user->id==$veilleur){$role='Veilleur de nuit';}
+									/*
+									$missions=UsersController::countmissions($user->id);
+									$actions=UsersController::countactions($user->id);
+									$actives=UsersController::countactionsactives($user->id);
+                                    $dossiers=UsersController::countaffectes($user->id);
+                                    $notifications=UsersController::countnotifs($user->id);
+                                    // if($user->type=='admin'){$role='(Administrateur)';}*/
 									if($user->id!=1){
 										
                                   if($user->isOnline()) {
@@ -210,34 +204,18 @@
                 <ul class="nav  nav-tabs" style="margin-top:10px;margin-bottom:10px">
 
                     <li class="nav-item active">
-                        <a class="nav-link   active " href="#panelnonaff" data-toggle="tab"  onclick="showTab1();hideTab2();hideTab3();hideTab4();hideTab5();"  >
-                            <i class="fa-lg fas fa-folder-open"></i>  Non affectés  (<?php echo  $Cdossiers ;?>)
+                        <a class="nav-link   active " href="#panelactifs" data-toggle="tab"  onclick="hideTab2();showTab1()"  >
+                            <i class="fa-lg fas fa-folder-open"></i>  Dossiers Actifs (<?php echo  $Cdossiers ;?>)
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#panelsupmedic" data-toggle="tab" onclick="hideTab1();showTab2();hideTab3();hideTab4();hideTab5();"  >
-                            <i class="fa-lg fas fa-folder"></i>  Superviseur Médical (<?php $CdossiersSM ;?>)
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#panelsuptech" data-toggle="tab" onclick="hideTab1();showTab3();hideTab2();hideTab4();hideTab5();"  >
-                            <i class="fa-lg fas fa-folder"></i>  Superviseur Technique (<?php echo $CdossiersST ;?>)
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#panelcharge" data-toggle="tab" onclick="hideTab1();showTab4();hideTab2();hideTab3();hideTab5();"  >
-                            <i class="fa-lg fas fa-folder"></i>  Chargé Trans (<?php echo $CdossiersC ;?>)
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#paneldisp" data-toggle="tab" onclick="hideTab1();showTab5();hideTab2();hideTab3();hideTab4();"  >
-                            <i class="fa-lg fas fa-folder"></i>  Dispatcheur  (<?php echo  $CdossiersDisp ;?>)
+                        <a class="nav-link" href="#panelainactifs" data-toggle="tab" onclick="hideTab1();showTab2()"  >
+                            <i class="fa-lg fas fa-folder"></i>  Dossiers Inactifs (<?php echo  $CdossiersI ;?>)
                         </a>
                     </li>
                 </ul>
 
-                <div id="panelnonaff"   class="tab-pane fade  active in ">
+                <div id="panelactifs"   class="tab-pane fade  active in ">
 
 
                 <div class="row">
@@ -282,10 +260,10 @@
 
                   </div>
 
-                </div><!--- Panel non affectés --->
+                </div><!--- Panel Inactifs --->
 
 
-                <div id="panelsupmedic"  class="tab-pane fade " >
+                <div id="panelainactifs"  class="tab-pane fade " >
 
                     <div class="row">
                         <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInput" onkeyup="ISearchf()" placeholder="N° de Dossier.." title="Taper"></div>
@@ -303,9 +281,9 @@
                         <div id="drag-elements2">
 
                             <?php  $type='';$style='';
-                            if($CdossiersSM >0)
+                            if($CdossiersI >0)
                             {
-                            foreach($dossiersSM as $dossierI)
+                            foreach($dossiersI as $dossierI)
                             { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
                             $idd=$dossierI['id'];
                             $immatricul=$dossierI['vehicule_immatriculation'];
@@ -329,149 +307,7 @@
 
                     </div>
 
-                </div><!--- Panel Sup Tech --->
-
-
-                <div id="panelsuptech"  class="tab-pane fade " >
-
-                    <div class="row">
-                        <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInput" onkeyup="ISearchf()" placeholder="N° de Dossier.." title="Taper"></div>
-                        <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInput2" onkeyup="ISearchf2()" placeholder="Assuré.." title="Taper"></div>
-                        <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInput3" onkeyup="ISearchf3()" placeholder="Réf Client.." title="Taper"></div>
-                    </div>
-                    <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
-                        <div class="row" style="margin-bottom:15px;">
-                            <div class="col-md-3" style="cursor:pointer;color:#F39C12" onclick="IshowMixtes()"><i class="fa fa-lg fa-folder"></i>  <b  onclick="showMixtes()">Dossier Mixte</b></div>
-                            <div class="col-md-3" style="cursor:pointer;color:#52BE80" onclick="IshowMedic()" ><i class="fa fa-lg fa-folder"></i>  <b  onclick="showMedic()">Dossier Medical</b></div>
-                            <div class="col-md-4" style="cursor:pointer;color:#3498DB" onclick="IshowTech()" ><i class="fa fa-lg fa-folder"></i>  <b  onclick="showTech()">Dossier Technique</b></div>
-                            <div class="col-md-2" style="cursor:pointer;color:#000000;font-weight: 600" onclick="IshowTous()" >  <b  onclick="IshowTech()">TOUS</b></div>
-                        </div>
-
-                        <div id="drag-elements2">
-
-                            <?php  $type='';$style='';
-                            if($CdossiersST >0)
-                            {
-                            foreach($dossiersST as $dossierI)
-                            { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
-                            $idd=$dossierI['id'];
-                            $immatricul=$dossierI['vehicule_immatriculation'];
-                            $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-                            <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
-                                <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>-->
-                                <div class="infos"> <label style="font-size: 15px;"><?php echo $ref;?></label>
-                                    <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
-                                    <?php if($immatricul!='') { echo '<small style="font-size:10px">'. $immatricul .'</small>';} ?>
-
-                                </div>
-                            </div>
-
-                            <?php	}
-                            }
-
-
-                            ?>
-                        </div>
-
-
-                    </div>
-
-                </div><!--- Panel Sup Tech --->
-
-
-
-                <div id="panelcharge"  class="tab-pane fade " >
-
-                    <div class="row">
-                        <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInput" onkeyup="ISearchf()" placeholder="N° de Dossier.." title="Taper"></div>
-                        <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInput2" onkeyup="ISearchf2()" placeholder="Assuré.." title="Taper"></div>
-                        <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInput3" onkeyup="ISearchf3()" placeholder="Réf Client.." title="Taper"></div>
-                    </div>
-                    <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
-                        <div class="row" style="margin-bottom:15px;">
-                            <div class="col-md-3" style="cursor:pointer;color:#F39C12" onclick="IshowMixtes()"><i class="fa fa-lg fa-folder"></i>  <b  onclick="showMixtes()">Dossier Mixte</b></div>
-                            <div class="col-md-3" style="cursor:pointer;color:#52BE80" onclick="IshowMedic()" ><i class="fa fa-lg fa-folder"></i>  <b  onclick="showMedic()">Dossier Medical</b></div>
-                            <div class="col-md-4" style="cursor:pointer;color:#3498DB" onclick="IshowTech()" ><i class="fa fa-lg fa-folder"></i>  <b  onclick="showTech()">Dossier Technique</b></div>
-                            <div class="col-md-2" style="cursor:pointer;color:#000000;font-weight: 600" onclick="IshowTous()" >  <b  onclick="IshowTech()">TOUS</b></div>
-                        </div>
-
-                        <div id="drag-elements2">
-
-                            <?php  $type='';$style='';
-                            if($CdossiersC >0)
-                            {
-                            foreach($dossiersC as $dossierI)
-                            { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
-                            $idd=$dossierI['id'];
-                            $immatricul=$dossierI['vehicule_immatriculation'];
-                            $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-                            <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
-                                <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>-->
-                                <div class="infos"> <label style="font-size: 15px;"><?php echo $ref;?></label>
-                                    <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
-                                    <?php if($immatricul!='') { echo '<small style="font-size:10px">'. $immatricul .'</small>';} ?>
-
-                                </div>
-                            </div>
-
-                            <?php	}
-                            }
-
-
-                            ?>
-                        </div>
-
-
-                    </div>
-
-                </div><!--- Panel Chargé --->
-
-
-                <div id="paneldisp"  class="tab-pane fade " >
-
-                    <div class="row">
-                        <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInput" onkeyup="ISearchf()" placeholder="N° de Dossier.." title="Taper"></div>
-                        <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInput2" onkeyup="ISearchf2()" placeholder="Assuré.." title="Taper"></div>
-                        <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInput3" onkeyup="ISearchf3()" placeholder="Réf Client.." title="Taper"></div>
-                    </div>
-                    <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
-                        <div class="row" style="margin-bottom:15px;">
-                            <div class="col-md-3" style="cursor:pointer;color:#F39C12" onclick="IshowMixtes()"><i class="fa fa-lg fa-folder"></i>  <b  onclick="showMixtes()">Dossier Mixte</b></div>
-                            <div class="col-md-3" style="cursor:pointer;color:#52BE80" onclick="IshowMedic()" ><i class="fa fa-lg fa-folder"></i>  <b  onclick="showMedic()">Dossier Medical</b></div>
-                            <div class="col-md-4" style="cursor:pointer;color:#3498DB" onclick="IshowTech()" ><i class="fa fa-lg fa-folder"></i>  <b  onclick="showTech()">Dossier Technique</b></div>
-                            <div class="col-md-2" style="cursor:pointer;color:#000000;font-weight: 600" onclick="IshowTous()" >  <b  onclick="IshowTech()">TOUS</b></div>
-                        </div>
-
-                        <div id="drag-elements2">
-
-                            <?php  $type='';$style='';
-                            if($CdossiersDisp >0)
-                            {
-                            foreach($dossiersDisp as $dossierI)
-                            { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
-                            $idd=$dossierI['id'];
-                            $immatricul=$dossierI['vehicule_immatriculation'];
-                            $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-                            <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
-                                <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>-->
-                                <div class="infos"> <label style="font-size: 15px;"><?php echo $ref;?></label>
-                                    <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
-                                    <?php if($immatricul!='') { echo '<small style="font-size:10px">'. $immatricul .'</small>';} ?>
-
-                                </div>
-                            </div>
-
-                            <?php	}
-                            }
-
-
-                            ?>
-                        </div>
-
-
-                    </div>
-
-                </div><!--- Panel supmedic --->
+                </div><!--- Panel Actifs --->
 
 
             </div><!--panel 2-->
@@ -501,35 +337,17 @@
 
 
     function hideTab1() {
-        $('#panelnonaff').css('display','none');
+        $('#panelactifs').css('display','none');
     }
     function hideTab2() {
-        $('#panelsupmedic').css('display','none');
-    }
-    function hideTab3() {
-        $('#panelsuptech').css('display','none');
-    }
-    function hideTab4() {
-        $('#panelcharge').css('display','none');
-    }
-    function hideTab5() {
-        $('#paneldisp').css('display','none');
+        $('#panelainactifs').css('display','none');
     }
 
     function showTab1() {
-        $('#panelnonaff').css('display','block');
+        $('#panelactifs').css('display','block');
     }
     function showTab2() {
-        $('#panelsupmedic').css('display','block');
-    }
-    function showTab3() {
-        $('#panelsuptech').css('display','block');
-    }
-    function showTab4() {
-        $('#panelcharge').css('display','block');
-    }
-    function showTab5() {
-        $('#paneldisp').css('display','block');
+        $('#panelainactifs').css('display','block');
     }
 
 
@@ -905,7 +723,7 @@
     .userdiv h3{margin-top:2px!important;}
     .userdiv .delete {display:none;}
 
-    .userdiv   {border:2px dotted grey; padding:5px 5px 5px;opactity:0.1;height:1300px;}
+    .userdiv   {border:2px dotted grey; padding:5px 5px 5px;opactity:0.1;height:800px;}
     .userdiv .dossier label{font-size:18px;}
     .userdiv .dossier .infos small{display:none;}
     #drag-elements .dossier .infos{display:block;}

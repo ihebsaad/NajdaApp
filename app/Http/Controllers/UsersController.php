@@ -495,7 +495,7 @@ class UsersController extends Controller
                           ->where('current_status', 'actif')
                           ->where('statut', '<>', 5);  //auto
 
-                  })->update(array('affecte' => $user_dest, 'statut' => 2));
+                  })->get();
 
                   if($dossiers)
                  {
