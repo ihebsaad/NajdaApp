@@ -1001,14 +1001,18 @@ $id=0;
         $pass_VAT=$parametres->pass_VAT ;
 
         $oClient = new Client([
-            'host'          => 'mail.bmail.tn',
-            //  'host'          => 'pop3.tunet.tn',
-            'port'          => '110',// env('portreception'),
-            'encryption'    => false,//env('encreception'),
+          ///  'host'          => 'mail.bmail.tn',
+         ///   'port'          => '110',// env('portreception'),
+         ///   'encryption'    => true,//env('encreception'),
+       ///    'username'      =>'hotels.vat1@medicmultiservices.com',
+
+            'host'          => 'ssl0.ovh.net',
+            'port'          => '993',// env('portreception'),
             'validate_cert' => false,
-            'username'      =>'hotels.vat1@medicmultiservices.com',
+            'username'      =>'hotels.vat@najda-assistance.com',
             'password'      => $pass_VAT,
-            'protocol'      => 'pop3'
+            'protocol'      => 'imap'
+      ///      'protocol'      => 'pop3'
         ]);
 
 //Connect to the IMAP Server
@@ -1035,7 +1039,7 @@ $id=0;
             $mailid=$oMessage->getUid();
 
             //Move the current Message to 'INBOX.read'
-           // if ($oMessage->moveToFolder('read') == true) {
+           if ($oMessage->moveToFolder('read') == true) {
 
 
                 // dispatch
@@ -1082,7 +1086,7 @@ $id=0;
             if ($this->checkEmailExiste('b2-'.$date.'-'.$mailid)==0){
                 $entree->save();
                 $id=$entree->id;
-                $oMessage->delete() ;
+              //  $oMessage->delete() ;
 
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
             }
@@ -1273,10 +1277,10 @@ $id=0;
 
 
 
-        /*    } else {
+          } else {
                 // error
                 echo 'error';
-            }*/
+            }
 
 
         }
@@ -1293,13 +1297,13 @@ $id=0;
             ->where('id','=', 1 )->first();
         $pass_Medic=$parametres->pass_MEDIC ;
         $oClient = new Client([
-            'host'          => 'mail.bmail.tn',// env('hostreception'),
-            'port'          => '110',// env('portreception'),
-            'encryption'    => false,//env('encreception'),
+            'host'          => 'ssl0.ovh.net',
+            'port'          => '993',// env('portreception'),
             'validate_cert' => false,
-            'username'      =>'assistance1@medicmultiservices.com',
+        //    'username'      =>'assistance1@medicmultiservices.com',
+            'username'      =>'assistance@najda-assistance.com',
             'password'      => $pass_Medic,
-            'protocol'      => 'pop3'
+            'protocol'      => 'imap'
         ]);
 
 
@@ -1327,7 +1331,7 @@ $id=0;
             $mailid=$oMessage->getUid();
 
             //Move the current Message to 'INBOX.read'
-         //   if ($oMessage->moveToFolder('read') == true) {
+          if ($oMessage->moveToFolder('read') == true) {
 
 
                 // dispatch
@@ -1374,7 +1378,7 @@ $id=0;
 
             if ($this->checkEmailExiste('b3-'.$date.'-'.$mailid)==0){
                 $entree->save();                $id=$entree->id;
-                $oMessage->delete() ;
+              //  $oMessage->delete() ;
 
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
             }
@@ -1564,10 +1568,10 @@ $id=0;
 
 
 
-         /*   } else {
+           } else {
                 // error
                 echo 'error';
-            }*/
+            }
 
 
         }
@@ -1585,14 +1589,12 @@ $id=0;
         $pass_TM=$parametres->pass_TM ;
 
         $oClient = new Client([
-            'host'          => 'mail.bmail.tn',
-          //  'host'          => 'pop3.tunet.tn',
-            'port'          => '110',// env('portreception'),
-                'encryption'    => false,//env('encreception'),
-             'validate_cert' => false,
-            'username'      =>'ambulance.transp1@medicmultiservices.com',
+            'host'          => 'ssl0.ovh.net',
+            'port'          => '993',// env('portreception'),
+            'validate_cert' => false,
+            'username'      =>'ambulance.transp@najda-assistance.com',
             'password'      => $pass_TM,
-            'protocol'      => 'pop3'
+            'protocol'      => 'imap'
         ]);
 
 //Connect to the IMAP Server
@@ -1622,7 +1624,7 @@ $id=0;
 
 
             //Move the current Message to 'INBOX.read'
-          //  if ($oMessage->moveToFolder('INBOX.read') == true) {
+          if ($oMessage->moveToFolder('INBOX.read') == true) {
 
 
 
@@ -1671,7 +1673,7 @@ $id=0;
             if ($this->checkEmailExiste('b4-'.$date.'-'.$mailid)==0){
                 $entree->save();
                 $id=$entree->id;
-                $oMessage->delete() ;
+              //  $oMessage->delete() ;
 
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
             }
@@ -1861,9 +1863,9 @@ $id=0;
 
 
 
-          /*  } else {
+           } else {
                  echo 'error moving the email';
-            }*/
+            }
         }
         return $id;
         // return view('emails.check');
@@ -1877,15 +1879,13 @@ $id=0;
             ->where('id','=', 1 )->first();
         $pass_TV=$parametres->pass_TV ;
 
-
         $oClient = new Client([
-            'host'          => 'mail.bmail.tn',
-             'port'          => '110',
-            'encryption'    => false,
+            'host'          => 'ssl0.ovh.net',
+            'port'          => '993',// env('portreception'),
             'validate_cert' => false,
-            'username'      =>'vat.transp1@medicmultiservices.com',
+            'username'      =>'vat.transp@najda-assistance.com',
             'password'      => $pass_TV,
-            'protocol'      => 'pop3'
+            'protocol'      => 'imap'
         ]);
 
 //Connect to the IMAP Server
@@ -1911,7 +1911,7 @@ $id=0;
             $mailid=$oMessage->getUid();
 
             //Move the current Message to 'INBOX.read'
-            //if ($oMessage->moveToFolder('read') == true) {
+            if ($oMessage->moveToFolder('read') == true) {
 
 
 
@@ -1958,7 +1958,7 @@ $id=0;
 
             if ($this->checkEmailExiste('b5-'.$date.'-'.$mailid)==0){
                 $entree->save();                 $id=$entree->id;
-                $oMessage->delete() ;
+              //  $oMessage->delete() ;
 
                 Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
             }
@@ -2142,11 +2142,11 @@ $id=0;
                     }
                 });
 
-         /*   } else {
+           } else {
                 // error
                 echo 'error';
             }
-*/
+
 
         }
         return $id;
@@ -2166,7 +2166,7 @@ $id=0;
             'port'          => '993',// env('portreception'),
             //    'encryption'    => '',//env('encreception'),
             'validate_cert' => true,
-            'username'      =>'operations@medicinternational.tn',
+            'username'      =>'operations1@medicinternational.tn',
             'password'      => $pass_MI,
             'protocol'      => 'imap'
         ]);
@@ -3021,7 +3021,7 @@ $id=0;
             'port'          => '993',// env('portreception'),
             //    'encryption'    => '',//env('encreception'),
             'validate_cert' => true,
-            'username'      =>'x-press@najda-assistance.com',
+            'username'      =>'x-press1@najda-assistance.com',
             'password'      => $pass_XP,
             'protocol'      => 'imap'
         ]);

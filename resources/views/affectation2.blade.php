@@ -170,10 +170,16 @@
 									if($user->id!=1){
 										
                                   if($user->isOnline()) {
-									  $c++; echo  '<div class="userdiv" id="user-'.$iduser.'" style="margin-bottom:30px;'.$bg.'"  >';
+              $folders = Dossier::where('affecte','=',$user->id)->get();
+                $countF=count($folders);
+              $taille='400px;';
+                if($countF < 40 || $countF == 40 ){$taille='600px';}
+                if($countF > 40 && $countF < 80){$taille='1000px';}
+                if($countF >80){$taille='1400px';}
+                if($countF >120){$taille='1800px';}
+              $c++; echo  '<div class="userdiv" id="user-'.$iduser.'" style="margin-bottom:30px;'.$bg.';height:'.$taille.';"  >';
 									  echo '<h3>'.$user->name.'  '.$user->lastname.' <small> ('.$role.')</small> </h3>';
 
-                                      $folders = Dossier::where('affecte','=',$user->id)->get();
   foreach($folders as $folder)
               { $type=$folder['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
               $statut=$folder['statut']; $idd=$folder['id'];$ref=$folder['reference_medic'];$abn=$folder['subscriber_lastname'].' '.$folder['subscriber_name'];$idclient=$folder['customer_id'];$client= $folder['reference_customer'] /*  ClientsController::ClientChampById('name',$idclient)*/ ;?>
@@ -723,7 +729,7 @@
     .userdiv h3{margin-top:2px!important;}
     .userdiv .delete {display:none;}
 
-    .userdiv   {border:2px dotted grey; padding:5px 5px 5px;opactity:0.1;height:800px;}
+    .userdiv   {border:2px dotted grey; padding:5px 5px 5px;opactity:0.1;/*height:800px;*/}
     .userdiv .dossier label{font-size:18px;}
     .userdiv .dossier .infos small{display:none;}
     #drag-elements .dossier .infos{display:block;}
