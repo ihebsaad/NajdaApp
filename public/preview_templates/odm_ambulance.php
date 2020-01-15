@@ -708,7 +708,7 @@ foreach ($array_prest as $prest) {
 				<span style="font-family:'Times New Roman'; font-weight:bold">Tel: </span>
 <input name="CL_prestatairetel_pc" id="CL_prestatairetel_pc" placeholder="Téléphone du prestataire" pattern= "^[0–9]$" <?php if (isset($detailom)) { if (isset($detailom['CL_prestatairetel_pc'])) {echo "value='".$detailom['CL_prestatairetel_pc']."'";}} ?> ></input>
 				<span style="font-family:'Times New Roman'; font-weight:bold; color:#ff0000">    </span></p><p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:Wingdings; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold; color:#0070c0"> </span><span style="font-family:'Times New Roman'; font-weight:bold">Lieu décharge: </span>
-<input type="text" list="CL_lieudecharge_dec" name="CL_lieudecharge_dec" <?php if (isset($detailom)) { if (isset($detailom['CL_lieudecharge_dec'])) {echo "value='".$detailom['CL_lieudecharge_dec']."'";}} ?> />
+<input type="text" list="CL_lieudecharge_dec" name="CL_lieudecharge_dec"  <?php if (isset($detailom)) { if (isset($detailom['CL_lieudecharge_dec'])) {echo "value='".$detailom['CL_lieudecharge_dec']."'";}} ?> />
 <datalist id="CL_lieudecharge_dec">
 <?php
 foreach ($array_prest as $prest) {
@@ -1296,7 +1296,7 @@ if (isset($signaturetype))
 	    }
 	  }
 	}
-
+<?php if (isset($detailom)){ if (isset($detailom['complete'])) { ?>
 	/// fill id véhicule on select ambulace
 	document.querySelector('input[list="lvehicule"]').addEventListener('input', onInputvehic);
 
@@ -1314,8 +1314,26 @@ if (isset($signaturetype))
 	    }
 	  }
 	}
+<?php }} ?>
+<?php if (isset($_GET['complete']) ){ ?>
+	/// fill id véhicule on select ambulace
+	document.querySelector('input[list="lvehicule"]').addEventListener('input', onInputvehic);
 
+	function onInputvehic(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
 
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("vehicID").value = options[i].getAttribute("vehicID");
+	      break;
+	    }
+	  }
+	}
+<?php } ?>
 	/// fill phone number on select prest Decharge
 	document.querySelector('input[list="CL_lieudecharge_dec"]').addEventListener('input', onInputdec);
 
