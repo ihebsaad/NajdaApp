@@ -1,12 +1,15 @@
 @extends('layouts.mainlayout')
-
+<?php // use DB; ?>
 @section('content')
 
      <div class="row">
 
         <div class="col-lg-12 ">
          <?php if(isset($envoye['dossier'])){
-             $dossierid=App\Http\Controllers\DossiersController::IdDossierByRef($envoye['dossier']);
+           // $dossierid=App\Http\Controllers\DossiersController::IdDossierByRef(trim($envoye['dossier']));
+            $dosss=    DB::table('dossiers')->where('reference_medic','like','%'.trim($envoye['dossier'].'%'))->first();
+            $dossierid= $dosss->id;
+
              ?>   <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@fiche',$dossierid)}}" ><?php  echo   $envoye['dossier'].' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossierid );?> </a></h4><br><?php } ?>
 
         <?php $type= $envoye['type'];
@@ -121,6 +124,7 @@
 
         </div>
     </div>
+
 
     <script type="text/javascript">
 

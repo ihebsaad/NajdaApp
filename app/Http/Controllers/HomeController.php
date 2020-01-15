@@ -671,6 +671,17 @@ return redirect('roles');
 
     }
 
+    public function affectation3()
+    {
+
+        if(\Gate::allows('isAdmin') || \Gate::allows('isSupervisor')  ) {
+            $users = User::get();
+
+            return view('affectation3', ['users' => $users]);
+        }else{ return back();}
+
+    }
+
     public function transport()
     {
 

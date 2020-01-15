@@ -453,6 +453,7 @@ class EmailController extends Controller
                 $ref=trim(strval($dos['reference_medic']));
                 $refCL=trim(strval($dos['reference_customer']));
             if ($refCL==''){$refCL='XX';}
+            if ($ref==''){$ref='dossiervide';}
 
             if (   (strpos($sujet, $ref )!==false) ||
                 (strpos($contenu, $ref) !==false ) ||
@@ -1051,6 +1052,7 @@ $id=0;
                     $ref=trim(strval($dos['reference_medic']));
                     $refCL=trim(strval($dos['reference_customer']));
                     if ($refCL==''){$refCL='XX';}
+                    if ($ref==''){$ref='dossiervide';}
 
                     if (   (strpos($sujet, $ref )!==false) ||
                         (strpos($contenu, $ref) !==false ) ||
@@ -1343,6 +1345,7 @@ $id=0;
                     $ref=trim(strval($dos['reference_medic']));
                     $refCL=trim(strval($dos['reference_customer']));
                     if ($refCL==''){$refCL='XX';}
+                    if ($ref==''){$ref='dossiervide';}
 
                     if (   (strpos($sujet, $ref )!==false) ||
                         (strpos($contenu, $ref) !==false ) ||
@@ -1638,6 +1641,7 @@ $id=0;
                     $ref=trim(strval($dos['reference_medic']));
                     $refCL=trim(strval($dos['reference_customer']));
                     if ($refCL==''){$refCL='XX';}
+                    if ($ref==''){$ref='dossiervide';}
 
                     if (   (strpos($sujet, $ref )!==false) ||
                         (strpos($contenu, $ref) !==false ) ||
@@ -1924,6 +1928,7 @@ $id=0;
                     $ref=trim(strval($dos['reference_medic']));
                     $refCL=trim(strval($dos['reference_customer']));
                     if ($refCL==''){$refCL='XX';}
+                    if ($ref==''){$ref='dossiervide';}
 
                     if (   (strpos($sujet, $ref )!==false) ||
                         (strpos($contenu, $ref) !==false ) ||
@@ -2207,6 +2212,7 @@ $id=0;
                     $ref=trim(strval($dos['reference_medic']));
                     $refCL=trim(strval($dos['reference_customer']));
                     if ($refCL==''){$refCL='XX';}
+                    if ($ref==''){$ref='dossiervide';}
 
                     if (   (strpos($sujet, $ref )!==false) ||
                         (strpos($contenu, $ref) !==false ) ||
@@ -2489,6 +2495,7 @@ $id=0;
                     $ref=trim(strval($dos['reference_medic']));
                     $refCL=trim(strval($dos['reference_customer']));
                     if ($refCL==''){$refCL='XX';}
+                    if ($ref==''){$ref='dossiervide';}
 
                     if (   (strpos($sujet, $ref )!==false) ||
                         (strpos($contenu, $ref) !==false ) ||
@@ -2771,6 +2778,7 @@ $id=0;
                     $ref=trim(strval($dos['reference_medic']));
                     $refCL=trim(strval($dos['reference_customer']));
                     if ($refCL==''){$refCL='XX';}
+                    if ($ref==''){$ref='dossiervide';}
 
                     if (   (strpos($sujet, $ref )!==false) ||
                         (strpos($contenu, $ref) !==false ) ||
@@ -3061,6 +3069,7 @@ $id=0;
                     $ref=trim(strval($dos['reference_medic']));
                     $refCL=trim(strval($dos['reference_customer']));
                     if ($refCL==''){$refCL='XX';}
+                    if ($ref==''){$ref='dossiervide';}
 
                     if (   (strpos($sujet, $ref )!==false) ||
                         (strpos($contenu, $ref) !==false ) ||
@@ -3459,6 +3468,7 @@ $id=0;
                         $ref=trim(strval($dos['reference_medic']));
                         $refCL=trim(strval($dos['reference_customer']));
                         if ($refCL==''){$refCL='XX';}
+                        if ($ref==''){$ref='dossiervide';}
 
                         if (   (strpos($sujet, $ref )!==false) ||
                             (strpos($contenu, $ref) !==false ) ||
@@ -3662,6 +3672,7 @@ $id=0;
                     $ref=trim(strval($dos['reference_medic']));
                     $refCL=trim(strval($dos['reference_customer']));
                     if ($refCL==''){$refCL='XX';}
+                    if ($ref==''){$ref='dossiervide';}
 
                     if (   (strpos($sujet, $ref )!==false) ||
                         (strpos($contenu, $ref) !==false ) ||
@@ -4223,14 +4234,20 @@ $id=0;
             array_push($idenv,$env->id );
 
         }
+ 
+           $attachements=   Attachement::where(function ($query) use($identr,$idenv) {
+               $query->whereIn('entree_id',$identr )
+                   ->orWhereIn('envoye_id',$idenv );
+           })->orWhere(function ($query) use($id) {
+               $query->Where('dossier','=',$id );
+           })->orderBy('created_at', 'desc')
+               ->distinct()
+               ->get();
 
-        $attachements= DB::table('attachements')
-            ->whereIn('entree_id',$identr )
-            ->orWhereIn('envoye_id',$idenv )
-            ->orderBy('created_at', 'desc')
-            ->get();
 
-        return view('emails.envoifax',['attachements'=>$attachements,'doss'=>$id,'prest'=>$prest,'faxs'=>$faxs,'type'=>$type,'prestataires'=>$prestataires,'refdem'=>$refdem]);
+
+
+           return view('emails.envoifax',['attachements'=>$attachements,'doss'=>$id,'prest'=>$prest,'faxs'=>$faxs,'type'=>$type,'prestataires'=>$prestataires,'refdem'=>$refdem]);
     }
 
     function send (Request $request)

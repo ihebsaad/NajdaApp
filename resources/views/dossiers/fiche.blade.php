@@ -2925,6 +2925,49 @@ function disabling(elm) {
         }); //end click
 
 
+        // fermerdossier
+        $('#fermerdossier').click(function(){
+            var dossier = $('#dossier').val();
+            var statut ="Cloture";
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('dossiers.changestatut') }}",
+                method:"POST",
+                data:{dossier:dossier,statut:statut,  _token:_token},
+                success:function(data){
+
+                    // window.location =data;
+                    alert("opération envoyée !");
+                    window.location.reload();
+
+                }
+            });
+
+        });
+
+        // ouvrirdossier
+        $('#ouvrirdossier').click(function(){
+            var dossier = $('#dossier').val();
+            var statut ="actif";
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('dossiers.changestatut') }}",
+                method:"POST",
+                data:{dossier:dossier,statut:statut,  _token:_token},
+                success:function(data){
+
+                    // window.location =data;
+                    alert("dossier Ouvert !");
+                    window.location.reload();
+
+                }
+            });
+
+        });
+
+
+
+
 
 
         $("#agent").select2();

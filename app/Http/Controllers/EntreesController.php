@@ -47,7 +47,8 @@ class EntreesController extends Controller
     public function index()
     {
         //
-        $entrees = Entree::orderBy('id', 'desc')->where('statut','<','2')->paginate(10000000);
+    //    $entrees = Entree::orderBy('id', 'desc')->where('statut','<','2')->paginate(10000000);
+        $entrees = Entree::orderBy('reception', 'desc')->where('statut','<','2')->paginate(10000000);
         $dossiers = Dossier::all();
 
         return view('entrees.index',['dossiers' => $dossiers], compact('entrees'));
@@ -66,7 +67,7 @@ class EntreesController extends Controller
     public function dispatching()
     {
         //
-        $entrees = Entree::orderBy('id', 'desc')
+        $entrees = Entree::orderBy('reception', 'desc')
             ->where('statut','<','2')
             ->where('dossier','=','')
             ->paginate(10000000);

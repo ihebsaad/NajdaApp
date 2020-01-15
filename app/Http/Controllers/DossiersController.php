@@ -1874,7 +1874,10 @@ class DossiersController extends Controller
 
     public static function IdDossierByRef($ref)
     {
-        $dossier =  Dossier::where('reference_medic',$ref)->first();
+        //$dossier =  Dossier::where('reference_medic',$ref)->get();
+
+        $dossier =    DB::table('dossiers')->where('reference_medic','=',$ref)->pluck('id');
+
         if (isset($dossier['id'])) {
             return $dossier['id'];
         }else{return '';}
