@@ -1363,6 +1363,117 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 
     public function export_pdf_odmremorquage(Request $request)
     {
+    	// MAJ disponibilite vehicule
+
+        if (isset($_POST['idvehic']))
+                {// mettre à jour les infos de vehicule
+
+                	// verifier si l'om a un parent om
+            		if (isset($_POST['parent']) && ! empty($_POST['parent']))
+					{
+	            		$parent = $_POST['parent'];
+	            		// verifier la vehicule precedente assigne
+	            		$iomparent = OMRemorquage::where('id',$parent)->first();
+						// si la mm ou tout nouvel voiture assigne au om
+						if (($iomparent['idvehic'] === "") || ($iomparent['idvehic'] === $_POST['idvehic']))
+						{	
+							if ($_POST['idvehic'] !== "")
+							{
+								
+		            			$idvoiture = $_POST['idvehic'];
+		            			
+								if (isset($_POST['dateheuredep']))
+		                		{
+									if ($_POST['dateheuredep'] !== "")
+									{
+										$dep= date('Y-m-d H:i:s.000000', strtotime($_POST['dateheuredep']));
+									}
+								}
+
+								if (isset($_POST['dhretbaseprev']))
+		                		{
+									if ($_POST['dhretbaseprev'] !== "")
+									{
+										$ret= date('Y-m-d H:i:s.000000', strtotime($_POST['dhretbaseprev']));
+									}
+								}
+
+								if (isset($ret) && isset($dep))
+		                		{
+									Voiture::where('id', $idvoiture)->update(['date_deb_indisponibilite' => $dep,'date_fin_indisponibilite' => $ret]);
+								}
+							}
+						}
+						// si om parent a  voiture assigne et different
+						if (($iomparent['idvehic'] !== "") && ($iomparent['idvehic'] !== $_POST['idvehic']))
+						{
+							//mettre a jour info nouvelle assignation voiture
+							if ($_POST['idvehic'] !== "")
+							{
+								
+		            			$idvoiture = $_POST['idvehic'];
+		            			
+								if (isset($_POST['dateheuredep']))
+		                		{
+									if ($_POST['dateheuredep'] !== "")
+									{
+										$dep= date('Y-m-d H:i:s.000000', strtotime($_POST['dateheuredep']));
+									}
+								}
+
+								if (isset($_POST['dhretbaseprev']))
+		                		{
+									if ($_POST['dhretbaseprev'] !== "")
+									{
+										$ret= date('Y-m-d H:i:s.000000', strtotime($_POST['dhretbaseprev']));
+									}
+								}
+
+								if (isset($ret) && isset($dep))
+		                		{
+									Voiture::where('id', $idvoiture)->update(['date_deb_indisponibilite' => $dep,'date_fin_indisponibilite' => $ret]);
+								}
+							}
+							//mettre a jour info ancienne assignation voiture
+							if ($iomparent['idvehic'] !== "")
+							{
+								
+									Voiture::where('id', $iomparent['idvehic'])->update(['date_deb_indisponibilite' => NULL,'date_fin_indisponibilite' => NULL]);
+							}
+
+						}
+					}
+					else
+						// om sans parent
+					{
+						if ($_POST['idvehic'] !== "")
+							{
+								
+		            			$idvoiture = $_POST['idvehic'];
+		            			
+								if (isset($_POST['dateheuredep']))
+		                		{
+									if ($_POST['dateheuredep'] !== "")
+									{
+										$dep= date('Y-m-d H:i:s.000000', strtotime($_POST['dateheuredep']));
+									}
+								}
+
+								if (isset($_POST['dhretbaseprev']))
+		                		{
+									if ($_POST['dhretbaseprev'] !== "")
+									{
+										$ret= date('Y-m-d H:i:s.000000', strtotime($_POST['dhretbaseprev']));
+									}
+								}
+
+								if (isset($ret) && isset($dep))
+		                		{
+									Voiture::where('id', $idvoiture)->update(['date_deb_indisponibilite' => $dep,'date_fin_indisponibilite' => $ret]);
+								}
+							}
+					}
+                }
 
 
         //dd($_POST['idMissionOM']);
@@ -1898,81 +2009,6 @@ $reqlieup->request->add(['dossier' => $iddnew]);
             }
         }
 
-        if (isset($_POST['idvehic']))
-                {// mettre à jour les infos de vehicule
-
-            		$parent = $_POST['parent'];
-            		// verifier la vehicule precedente assigne
-            		$iomparent = OMRemorquage::where('id',$parent)->first();
-					// si la mm ou tout nouvel voiture assigne au om
-					if (($iomparent['idvehic'] === "") || ($iomparent['idvehic'] === $_POST['idvehic']))
-					{	
-						if ($_POST['idvehic'] !== "")
-						{
-							
-	            			$idvoiture = $_POST['idvehic'];
-	            			
-							if (isset($_POST['dhdepartmiss']))
-	                		{
-								if ($_POST['dhdepartmiss'] !== "")
-								{
-									$dep= date('Y-m-d H:i:s.000000', strtotime($_POST['dhdepartmiss']));
-								}
-							}
-
-							if (isset($_POST['dhretbaseprev']))
-	                		{
-								if ($_POST['dhretbaseprev'] !== "")
-								{
-									$ret= date('Y-m-d H:i:s.000000', strtotime($_POST['dhretbaseprev']));
-								}
-							}
-
-							if (isset($ret) && isset($dep))
-	                		{
-								Voiture::where('id', $idvoiture)->update(['date_deb_indisponibilite' => $dep,'date_fin_indisponibilite' => $ret]);
-							}
-						}
-					}
-					// si om parent a  voiture assigne et different
-					if (($iomparent['idvehic'] !== "") && ($iomparent['idvehic'] !== $_POST['idvehic']))
-					{
-						//mettre a jour info nouvelle assignation voiture
-						if ($_POST['idvehic'] !== "")
-						{
-							
-	            			$idvoiture = $_POST['idvehic'];
-	            			
-							if (isset($_POST['dhdepartmiss']))
-	                		{
-								if ($_POST['dhdepartmiss'] !== "")
-								{
-									$dep= date('Y-m-d H:i:s.000000', strtotime($_POST['dhdepartmiss']));
-								}
-							}
-
-							if (isset($_POST['dhretbaseprev']))
-	                		{
-								if ($_POST['dhretbaseprev'] !== "")
-								{
-									$ret= date('Y-m-d H:i:s.000000', strtotime($_POST['dhretbaseprev']));
-								}
-							}
-
-							if (isset($ret) && isset($dep))
-	                		{
-								Voiture::where('id', $idvoiture)->update(['date_deb_indisponibilite' => $dep,'date_fin_indisponibilite' => $ret]);
-							}
-						}
-						//mettre a jour info ancienne assignation voiture
-						if ($iomparent['idvehic'] !== "")
-						{
-							
-								Voiture::where('id', $iomparent['idvehic'])->update(['date_deb_indisponibilite' => NULL,'date_fin_indisponibilite' => NULL]);
-						}
-
-					}
-                }
 
     }
 

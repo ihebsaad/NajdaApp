@@ -172,7 +172,6 @@ class VoituresController extends Controller
     }
 
  
- 
 
 
 }
