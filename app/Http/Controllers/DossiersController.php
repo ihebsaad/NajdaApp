@@ -2874,13 +2874,15 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
     {
         $iddossier= $request->get('dossier');
         $statut= $request->get('statut');
+        $sanssuite= intval($request->get('sanssuite'));
+
          $count= Mission::where('dossier_id',$iddossier)
              ->where('statut_courant','!=','annulee')
              ->where('statut_courant','!=','achevee')
              ->count();
             if($statut=='Cloture'){
                 if($count==0){
-                Dossier::where('id',$iddossier)->update(array('current_status'=>$statut));
+                Dossier::where('id',$iddossier)->update(array('current_status'=>$statut ,'sanssuite'=>$sanssuite));
                 }
             }else{
               Dossier::where('id',$iddossier)->update(array('current_status'=>$statut));

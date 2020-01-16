@@ -141,8 +141,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
     $attachs = Attachement::get()->where('parent', '=', $entree['id'] )->where('boite','0');
     $nbattachs = Attachement::where('parent', '=', $entree['id'] )->where('boite','0')->count();
 
-                                            
-                                          ?>
+                                                                                      ?>
         <div id="emailcontent" class="panel-collapse collapse in" aria-expanded="true" style="min-height:250px">
             <div class="panel-body" id="emailnpj">
                 <div class="row">
@@ -172,7 +171,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                     <div id="myTabContent" class="tab-content" style="background: #ffffff">
                        <?php if ( $entree['type']!='fax') { ?>
                            <div class="tab-pane fade <?php if($entree['contenu']!=null){echo 'active in';} ?> " id="mailcorps" style="">
-                                          <p  id="mailtext" style=" line-height: 25px;"><?php
+                               <section>
+                               <p  id="mailtext" style=" line-height: 25px;"><?php
                                               if($entree['contenu']!= null)
                                               {$content= nl2br($entree['contenu']) ;
 
@@ -182,12 +182,14 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
                                             <?php  $cont=  str_replace($search,$replace, $content); ?>
                                               <?php  echo $cont; ?></p>
+                               </section>
 
                            <?php } ?>
 
                                         </div>
 
                            <div class="tab-pane fade  <?php if($entree['contenu']==null){echo 'active in';} ?>" id="mailcorps2" style="">
+                               <section>
                                <p  id="mailtext2" style=" line-height: 25px;"><?php
                                    if($entree['contenutxt']!= null)
                                    {$content2= nl2br($entree['contenutxt']) ;
@@ -198,6 +200,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
                                    <?php  $cont2=  str_replace($search,$replace, $content2); ?>
                                    <?php  echo $cont2; ?></p>
+                               </section>
 
                            <?php }; ?>
                            </div><?php } ?>

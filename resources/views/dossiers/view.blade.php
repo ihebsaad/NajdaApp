@@ -2656,9 +2656,13 @@ array_push($listepr,$pr['prestataire_id']);
                     <h3 class="modal-title" style="text-align:center"  id=" "><center>Clôturer le Dossier </center> </h3>
                 </div>
                 <div class="modal-body">
-                    <div class="card-body" style="text-align:center;height:100px"><br>
+                    <div class="card-body" style="text-align:center;height:200px"><br>
                         <center><B> Etes vous sûrs de vouloir clôturer ce Dossier ?</B><br> <br> </center>
+                        <center><label  style="width:250px;text-align:center;margin-bottom:50px;" class="check "> Fermer Sans suite
+                            <input type="checkbox" id="sanssuite" class="form-control">
+                            <span class="checkmark"   ></span>
 
+                            </label></center>
                         <a id="fermerdossier"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >OUI</a>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button><br>
 
@@ -3595,11 +3599,18 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
         $('#fermerdossier').click(function(){
             var dossier = $('#dossier').val();
             var statut ="Cloture";
+            var sanssuite=0;
+            if ($('#sanssuite').is(':checked'))
+            {sanssuite=1;}
+            else{
+                sanssuite=0;
+            }
+
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
                     url:"{{ route('dossiers.changestatut') }}",
                     method:"POST",
-                    data:{dossier:dossier,statut:statut,  _token:_token},
+                    data:{dossier:dossier,statut:statut,sanssuite:sanssuite,  _token:_token},
                     success:function(data){
 
                        // window.location =data;
@@ -5102,6 +5113,78 @@ $(document).ready(function(){
 
 
 <style>
+
+    /* The check */
+    .check {
+        display: block;
+        position: relative;
+        padding-left: 25px;
+        margin-bottom: 12px;
+        padding-right: 15px;
+        cursor: pointer;
+        font-size: 18px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide the browser's default checkbox */
+    .check input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 3px;
+        left: 0;
+        height: 18px;
+        width: 18px;
+        background-color: #fff ;
+        border-color:#5D9CEC;
+        border-style:solid;
+        border-width:2px;
+    }
+
+
+
+    /* When the checkbox is checked, add a blue background */
+    .check input:checked ~ .checkmark {
+        background-color: #fff  ;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .check input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .check .checkmark:after {
+        left: 5px;
+        top: 1px;
+        width: 5px;
+        height: 10px;
+        border: solid ;
+        border-color:#5D9CEC;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+
+
+
 
     section#timeline {
         width: 100%;

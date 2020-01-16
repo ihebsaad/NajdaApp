@@ -2358,7 +2358,8 @@
             </div>
         </div>
 
-        <div   style="overflow:hidden;border:1px solid #d6eef7; padding:20px 20px 20px 20px; min-height: 400px!important;"> <?php
+        <div   style="overflow:hidden;border:1px solid #d6eef7; padding:20px 20px 20px 20px; min-height: 400px!important;">
+        <section>   <?php
 
 if ($entree['contenu']== null){
     $content= nl2br($entree['contenutxt']);}else{$content= $entree['contenu'];
@@ -2366,7 +2367,8 @@ if ($entree['contenu']== null){
 
 
             echo  ($content) ;
-            ?>
+            ?></section>
+
         </div>
 
        <?php use App\Attachement ;?>

@@ -167,7 +167,7 @@ use App\Http\Controllers\NotificationsController;
                 <div id="myTabContent" class="tab-content" style="background: #ffffff">
                     <?php if ( $entree['type']!='fax') { ?>
                     <div class="tab-pane fade <?php if($entree['contenu']!=null){echo 'active in';} ?> " id="mailcorps" style="">
-                        <p  id="mailtext" style=" line-height: 25px;"><?php
+                       <section> <p  id="mailtext" style=" line-height: 25px;"><?php
                             if($entree['contenu']!= null)
                             {$content= nl2br($entree['contenu']) ;
 
@@ -177,13 +177,13 @@ use App\Http\Controllers\NotificationsController;
 
                             <?php  $cont=  str_replace($search,$replace, $content); ?>
                             <?php  echo $cont; ?></p>
-
+                       </section>
                         <?php } ?>
 
                     </div>
 
                     <div class="tab-pane fade  <?php if($entree['contenu']==null){echo 'active in';} ?>" id="mailcorps2" style="">
-                        <p  id="mailtext2" style=" line-height: 25px;"><?php
+                       <section> <p  id="mailtext2" style=" line-height: 25px;"><?php
                             if($entree['contenutxt']!= null)
                             {$content2= nl2br($entree['contenutxt']) ;
 
@@ -193,7 +193,7 @@ use App\Http\Controllers\NotificationsController;
 
                             <?php  $cont2=  str_replace($search,$replace, $content2); ?>
                             <?php  echo $cont2; ?></p>
-
+                       </section>
                         <?php }; ?>
                     </div><?php } ?>
 

@@ -133,10 +133,12 @@ class Dossier extends Model
         'chambre_hoptial',
 
         'devise_plafond',
-        'devise_franchise'
+        'devise_franchise',
+        'sanssuite'
+
     ];
 
- /*   public $timestamps    ;
+ /*   public $timestamps    ; 
 
    protected $dateFormat = 'Y-m-d H:i:s';
 
@@ -144,7 +146,7 @@ class Dossier extends Model
     {
         return 'Y-m-d H:i:s.u';
     }
-*/
+
 /*
  public function activeMissions()
     {

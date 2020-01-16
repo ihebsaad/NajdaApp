@@ -722,6 +722,30 @@ $id=0;
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
+
+
+
+            /***** Verification date ******/
+            $format = "Y-m-d H:i:s";
+
+            $dt1 = (new \DateTime())->modify('+50 minutes')->format($format);
+            $dt2 = (new \DateTime())->modify('-50 minutes')->format($format);
+
+            //  $datem=$date->format($format);
+
+            $dt01 = \DateTime::createFromFormat($format, $dt1);
+            $dt02 = \DateTime::createFromFormat($format, $dt2);
+            $dtM = \DateTime::createFromFormat($format, $date);
+            if($dtM < $dt01  && $dtM > $dt02 ){
+                $date= $oMessage->getDate();
+
+            }else{
+                $date=date('Y-m-d H:i:s');
+            }
+            /**********/
+
+
+
             $mailid=$oMessage->getUid();
 
             //Move the current Message to 'INBOX.read'
@@ -730,7 +754,7 @@ $id=0;
         ///     if(strpos($sujet, "[SPAM]" ) ==false) {
 
 
-                    // dispatch
+               /******** dispatching   *********/
                 $dossiers = Dossier::where('current_status', '!=', 'Cloture')->get();
 
                 $refdossier = '';
@@ -740,24 +764,63 @@ $id=0;
                 foreach ($dossiers as $dos) {
                     $ref = trim(strval($dos['reference_medic']));
                     $refCL = trim(strval($dos['reference_customer']));
+                    $immatr = trim(strval($dos['vehicule_immatriculation']));
+
+                    if ($ref == '') {
+                        $ref = 'dossiervide';
+                    }
                     if ($refCL == '') {
-                        $refCL = 'XX';
+                        $refCL = 'XXX';
+                    }
+                    if ($immatr == '') {
+                        $immatr = 'nonvehicule';
                     }
 
+                    $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
+                    //$sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
 
-                    if ((strpos($sujet, $ref) !== false) ||
-                        (strpos($contenu, $ref) !== false) ||
-                        (strpos($sujet, $refCL) !== false && (strlen($refCL) > 4)) ||
-                        (strpos($contenu, $refCL) !== false && (strlen($refCL) > 4))
-                    ) {
+
+                    if ((strpos($sujetPreg, $ref) !== false) ||
+                        (strpos($contenu, $ref) !== false) )
+                    {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
                         $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
 
                         $statut = 1;
                         break;
-                    }
+                    }else{
+                        if (
+                            (strpos($sujetPreg, $refCL) !== false && (strlen($refCL) > 4)) ||
+                            (strpos($contenu, $refCL) !== false && (strlen($refCL) > 4))
+                        ){
+                            // ref client
+                            $refdossier = trim($dos['reference_medic']);
+                            $dossierid = intval($dos['id']);
+                            $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                            $statut = 1;
+                            break;
+
+                        }else{
+                        // immatriculation
+
+                            if((strpos($sujetPreg, $immatr) !== false) ||
+                                (strpos($contenu, $immatr) !== false)
+                            ){
+                                $refdossier = trim($dos['reference_medic']);
+                                $dossierid = intval($dos['id']);
+                                $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                                $statut = 1;
+                                break;
+
+                            }
+                        }
+                    } //else 2
+
                 }
+                /**********  END Dispatching   **********/
 
                 $entree = new Entree([
                     'destinataire' => '24ops@najda-assistance.com',
@@ -1037,35 +1100,100 @@ $id=0;
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
+
+
+            /***** Verification date ******/
+            $format = "Y-m-d H:i:s";
+
+            $dt1 = (new \DateTime())->modify('+50 minutes')->format($format);
+            $dt2 = (new \DateTime())->modify('-50 minutes')->format($format);
+
+            //  $datem=$date->format($format);
+
+            $dt01 = \DateTime::createFromFormat($format, $dt1);
+            $dt02 = \DateTime::createFromFormat($format, $dt2);
+            $dtM = \DateTime::createFromFormat($format, $date);
+            if($dtM < $dt01  && $dtM > $dt02 ){
+                $date= $oMessage->getDate();
+
+            }else{
+                $date=date('Y-m-d H:i:s');
+            }
+            /**********/
+
+
             $mailid=$oMessage->getUid();
 
             //Move the current Message to 'INBOX.read'
            if ($oMessage->moveToFolder('read') == true) {
 
 
-                // dispatch
-                $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
+               /******** dispatching   *********/
+               $dossiers = Dossier::where('current_status', '!=', 'Cloture')->get();
 
-                $refdossier='';$dossierid=0;$nomassure='';
-                $statut = 0;
-                foreach ($dossiers as $dos) {
-                    $ref=trim(strval($dos['reference_medic']));
-                    $refCL=trim(strval($dos['reference_customer']));
-                    if ($refCL==''){$refCL='XX';}
-                    if ($ref==''){$ref='dossiervide';}
+               $refdossier = '';
+               $dossierid = 0;
+               $nomassure = '';
+               $statut = 0;
+               foreach ($dossiers as $dos) {
+                   $ref = trim(strval($dos['reference_medic']));
+                   $refCL = trim(strval($dos['reference_customer']));
+                   $immatr = trim(strval($dos['vehicule_immatriculation']));
 
-                    if (   (strpos($sujet, $ref )!==false) ||
-                        (strpos($contenu, $ref) !==false ) ||
-                        (strpos($sujet, $refCL )!==false && ( strlen($refCL) >4 )  )  ||
-                        ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
-                    {
-                        $refdossier = trim($dos['reference_medic']);
-                        $dossierid = intval($dos['id']);
-                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
-                        $statut = 1;
-                        break;
-                    }
-                }
+                   if ($ref == '') {
+                       $ref = 'dossiervide';
+                   }
+                   if ($refCL == '') {
+                       $refCL = 'XXX';
+                   }
+                   if ($immatr == '') {
+                       $immatr = 'nonvehicule';
+                   }
+
+                   $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
+
+
+                   if ((strpos($sujetPreg, $ref) !== false) ||
+                       (strpos($contenu, $ref) !== false) )
+                   {
+                       $refdossier = trim($dos['reference_medic']);
+                       $dossierid = intval($dos['id']);
+                       $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                       $statut = 1;
+                       break;
+                   }else{
+                       if (
+                           (strpos($sujetPreg, $refCL) !== false && (strlen($refCL) > 4)) ||
+                           (strpos($contenu, $refCL) !== false && (strlen($refCL) > 4))
+                       ){
+                           // ref client
+                           $refdossier = trim($dos['reference_medic']);
+                           $dossierid = intval($dos['id']);
+                           $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                           $statut = 1;
+                           break;
+
+                       }else{
+                           // immatriculation
+
+                           if((strpos($sujetPreg, $immatr) !== false) ||
+                               (strpos($contenu, $immatr) !== false)
+                           ){
+                               $refdossier = trim($dos['reference_medic']);
+                               $dossierid = intval($dos['id']);
+                               $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                               $statut = 1;
+                               break;
+
+                           }
+                       }
+                   } //else 2
+
+               }
+               /**********  END Dispatching   **********/
 
                 $entree = new Entree([
                     'destinataire' => 'hotels.vat@medicmultiservices.com',
@@ -1330,36 +1458,100 @@ $id=0;
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
+
+
+            /***** Verification date ******/
+            $format = "Y-m-d H:i:s";
+
+            $dt1 = (new \DateTime())->modify('+50 minutes')->format($format);
+            $dt2 = (new \DateTime())->modify('-50 minutes')->format($format);
+
+            //  $datem=$date->format($format);
+
+            $dt01 = \DateTime::createFromFormat($format, $dt1);
+            $dt02 = \DateTime::createFromFormat($format, $dt2);
+            $dtM = \DateTime::createFromFormat($format, $date);
+            if($dtM < $dt01  && $dtM > $dt02 ){
+                $date= $oMessage->getDate();
+
+            }else{
+                $date=date('Y-m-d H:i:s');
+            }
+            /**********/
+
+
             $mailid=$oMessage->getUid();
 
             //Move the current Message to 'INBOX.read'
           if ($oMessage->moveToFolder('read') == true) {
 
 
-                // dispatch
-                $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
+              /******** dispatching   *********/
+              $dossiers = Dossier::where('current_status', '!=', 'Cloture')->get();
 
-                $refdossier='';$dossierid=0;$nomassure='';
-                $statut = 0;
-                foreach ($dossiers as $dos) {
-                    $ref=trim(strval($dos['reference_medic']));
-                    $refCL=trim(strval($dos['reference_customer']));
-                    if ($refCL==''){$refCL='XX';}
-                    if ($ref==''){$ref='dossiervide';}
+              $refdossier = '';
+              $dossierid = 0;
+              $nomassure = '';
+              $statut = 0;
+              foreach ($dossiers as $dos) {
+                  $ref = trim(strval($dos['reference_medic']));
+                  $refCL = trim(strval($dos['reference_customer']));
+                  $immatr = trim(strval($dos['vehicule_immatriculation']));
 
-                    if (   (strpos($sujet, $ref )!==false) ||
-                        (strpos($contenu, $ref) !==false ) ||
-                        (strpos($sujet, $refCL )!==false && ( strlen($refCL) >4 )  )  ||
-                        ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
-                    {
-                        $refdossier = trim($dos['reference_medic']);
-                        $dossierid = intval($dos['id']);
-                        $statut = 1;
-                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
+                  if ($ref == '') {
+                      $ref = 'dossiervide';
+                  }
+                  if ($refCL == '') {
+                      $refCL = 'XXX';
+                  }
+                  if ($immatr == '') {
+                      $immatr = 'nonvehicule';
+                  }
 
-                        break;
-                    }
-                }
+                  $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
+
+
+                  if ((strpos($sujetPreg, $ref) !== false) ||
+                      (strpos($contenu, $ref) !== false) )
+                  {
+                      $refdossier = trim($dos['reference_medic']);
+                      $dossierid = intval($dos['id']);
+                      $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                      $statut = 1;
+                      break;
+                  }else{
+                      if (
+                          (strpos($sujetPreg, $refCL) !== false && (strlen($refCL) > 4)) ||
+                          (strpos($contenu, $refCL) !== false && (strlen($refCL) > 4))
+                      ){
+                          // ref client
+                          $refdossier = trim($dos['reference_medic']);
+                          $dossierid = intval($dos['id']);
+                          $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                          $statut = 1;
+                          break;
+
+                      }else{
+                          // immatriculation
+
+                          if((strpos($sujetPreg, $immatr) !== false) ||
+                              (strpos($contenu, $immatr) !== false)
+                          ){
+                              $refdossier = trim($dos['reference_medic']);
+                              $dossierid = intval($dos['id']);
+                              $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                              $statut = 1;
+                              break;
+
+                          }
+                      }
+                  } //else 2
+
+              }
+              /**********  END Dispatching   **********/
 
                 $entree = new Entree([
                     'destinataire' => 'assistance@medicmultiservices.com',
@@ -1632,29 +1824,73 @@ $id=0;
 
 
 
-                // dispatch
-                $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
+              /******** dispatching   *********/
+              $dossiers = Dossier::where('current_status', '!=', 'Cloture')->get();
 
-                $refdossier='';$dossierid=0;$nomassure='';
-                $statut = 0;
-                foreach ($dossiers as $dos) {
-                    $ref=trim(strval($dos['reference_medic']));
-                    $refCL=trim(strval($dos['reference_customer']));
-                    if ($refCL==''){$refCL='XX';}
-                    if ($ref==''){$ref='dossiervide';}
+              $refdossier = '';
+              $dossierid = 0;
+              $nomassure = '';
+              $statut = 0;
+              foreach ($dossiers as $dos) {
+                  $ref = trim(strval($dos['reference_medic']));
+                  $refCL = trim(strval($dos['reference_customer']));
+                  $immatr = trim(strval($dos['vehicule_immatriculation']));
 
-                    if (   (strpos($sujet, $ref )!==false) ||
-                        (strpos($contenu, $ref) !==false ) ||
-                        (strpos($sujet, $refCL )!==false && ( strlen($refCL) >4 )  )  ||
-                        ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
-                    {
-                        $refdossier = trim($dos['reference_medic']);
-                        $dossierid = intval($dos['id']);
-                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
-                        $statut = 1;
-                        break;
-                    }
-                }
+                  if ($ref == '') {
+                      $ref = 'dossiervide';
+                  }
+                  if ($refCL == '') {
+                      $refCL = 'XXX';
+                  }
+                  if ($immatr == '') {
+                      $immatr = 'nonvehicule';
+                  }
+
+                  $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
+
+
+                  if ((strpos($sujetPreg, $ref) !== false) ||
+                      (strpos($contenu, $ref) !== false) )
+                  {
+                      $refdossier = trim($dos['reference_medic']);
+                      $dossierid = intval($dos['id']);
+                      $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                      $statut = 1;
+                      break;
+                  }else{
+                      if (
+                          (strpos($sujetPreg, $refCL) !== false && (strlen($refCL) > 4)) ||
+                          (strpos($contenu, $refCL) !== false && (strlen($refCL) > 4))
+                      ){
+                          // ref client
+                          $refdossier = trim($dos['reference_medic']);
+                          $dossierid = intval($dos['id']);
+                          $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                          $statut = 1;
+                          break;
+
+                      }else{
+                          // immatriculation
+
+                          if((strpos($sujetPreg, $immatr) !== false) ||
+                              (strpos($contenu, $immatr) !== false)
+                          ){
+                              $refdossier = trim($dos['reference_medic']);
+                              $dossierid = intval($dos['id']);
+                              $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                              $statut = 1;
+                              break;
+
+                          }
+                      }
+                  } //else 2
+
+              }
+              /**********  END Dispatching   **********/
+
 
                 $entree = new Entree([
                     'destinataire' => 'ambulance.transp@medicmultiservices.com',
@@ -1912,6 +2148,29 @@ $id=0;
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
+
+
+
+            /***** Verification date ******/
+            $format = "Y-m-d H:i:s";
+
+            $dt1 = (new \DateTime())->modify('+50 minutes')->format($format);
+            $dt2 = (new \DateTime())->modify('-50 minutes')->format($format);
+
+            //  $datem=$date->format($format);
+
+            $dt01 = \DateTime::createFromFormat($format, $dt1);
+            $dt02 = \DateTime::createFromFormat($format, $dt2);
+            $dtM = \DateTime::createFromFormat($format, $date);
+            if($dtM < $dt01  && $dtM > $dt02 ){
+                $date= $oMessage->getDate();
+
+            }else{
+                $date=date('Y-m-d H:i:s');
+            }
+            /**********/
+
+
             $mailid=$oMessage->getUid();
 
             //Move the current Message to 'INBOX.read'
@@ -1919,29 +2178,73 @@ $id=0;
 
 
 
-                // dispatch
-                $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
+                /******** dispatching   *********/
+                $dossiers = Dossier::where('current_status', '!=', 'Cloture')->get();
 
-                $refdossier='';$dossierid=0;$nomassure='';
+                $refdossier = '';
+                $dossierid = 0;
+                $nomassure = '';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
-                    $ref=trim(strval($dos['reference_medic']));
-                    $refCL=trim(strval($dos['reference_customer']));
-                    if ($refCL==''){$refCL='XX';}
-                    if ($ref==''){$ref='dossiervide';}
+                    $ref = trim(strval($dos['reference_medic']));
+                    $refCL = trim(strval($dos['reference_customer']));
+                    $immatr = trim(strval($dos['vehicule_immatriculation']));
 
-                    if (   (strpos($sujet, $ref )!==false) ||
-                        (strpos($contenu, $ref) !==false ) ||
-                        (strpos($sujet, $refCL )!==false && ( strlen($refCL) >4 )  )  ||
-                        ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
+                    if ($ref == '') {
+                        $ref = 'dossiervide';
+                    }
+                    if ($refCL == '') {
+                        $refCL = 'XXX';
+                    }
+                    if ($immatr == '') {
+                        $immatr = 'nonvehicule';
+                    }
+
+                    $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
+
+
+                    if ((strpos($sujetPreg, $ref) !== false) ||
+                        (strpos($contenu, $ref) !== false) )
                     {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
-                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
+                        $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
                         $statut = 1;
                         break;
-                    }
+                    }else{
+                        if (
+                            (strpos($sujetPreg, $refCL) !== false && (strlen($refCL) > 4)) ||
+                            (strpos($contenu, $refCL) !== false && (strlen($refCL) > 4))
+                        ){
+                            // ref client
+                            $refdossier = trim($dos['reference_medic']);
+                            $dossierid = intval($dos['id']);
+                            $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                            $statut = 1;
+                            break;
+
+                        }else{
+                            // immatriculation
+
+                            if((strpos($sujetPreg, $immatr) !== false) ||
+                                (strpos($contenu, $immatr) !== false)
+                            ){
+                                $refdossier = trim($dos['reference_medic']);
+                                $dossierid = intval($dos['id']);
+                                $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                                $statut = 1;
+                                break;
+
+                            }
+                        }
+                    } //else 2
+
                 }
+                /**********  END Dispatching   **********/
+
 
                 $entree = new Entree([
                     'destinataire' => 'vat.transp@medicmultiservices.com',
@@ -2196,6 +2499,29 @@ $id=0;
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
+
+
+
+            /***** Verification date ******/
+            $format = "Y-m-d H:i:s";
+
+            $dt1 = (new \DateTime())->modify('+50 minutes')->format($format);
+            $dt2 = (new \DateTime())->modify('-50 minutes')->format($format);
+
+            //  $datem=$date->format($format);
+
+            $dt01 = \DateTime::createFromFormat($format, $dt1);
+            $dt02 = \DateTime::createFromFormat($format, $dt2);
+            $dtM = \DateTime::createFromFormat($format, $date);
+            if($dtM < $dt01  && $dtM > $dt02 ){
+                $date= $oMessage->getDate();
+
+            }else{
+                $date=date('Y-m-d H:i:s');
+            }
+            /**********/
+
+
             $mailid=$oMessage->getUid();
 
             //Move the current Message to 'INBOX.read'
@@ -2203,29 +2529,74 @@ $id=0;
 
 
 
-                // dispatch
-                $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
+                /******** dispatching   *********/
+                $dossiers = Dossier::where('current_status', '!=', 'Cloture')->get();
 
-                $refdossier='';$dossierid=0;$nomassure='';
+                $refdossier = '';
+                $dossierid = 0;
+                $nomassure = '';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
-                    $ref=trim(strval($dos['reference_medic']));
-                    $refCL=trim(strval($dos['reference_customer']));
-                    if ($refCL==''){$refCL='XX';}
-                    if ($ref==''){$ref='dossiervide';}
+                    $ref = trim(strval($dos['reference_medic']));
+                    $refCL = trim(strval($dos['reference_customer']));
+                    $immatr = trim(strval($dos['vehicule_immatriculation']));
 
-                    if (   (strpos($sujet, $ref )!==false) ||
-                        (strpos($contenu, $ref) !==false ) ||
-                        (strpos($sujet, $refCL )!==false && ( strlen($refCL) >4 )  )  ||
-                        ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
+                    if ($ref == '') {
+                        $ref = 'dossiervide';
+                    }
+                    if ($refCL == '') {
+                        $refCL = 'XXX';
+                    }
+                    if ($immatr == '') {
+                        $immatr = 'nonvehicule';
+                    }
+
+                    $sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
+
+
+                    if ((strpos($sujetPreg, $ref) !== false) ||
+                        (strpos($contenu, $ref) !== false) )
                     {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
-                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
+                        $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
                         $statut = 1;
                         break;
-                    }
+                    }else{
+                        if (
+                            (strpos($sujetPreg, $refCL) !== false && (strlen($refCL) > 4)) ||
+                            (strpos($contenu, $refCL) !== false && (strlen($refCL) > 4))
+                        ){
+                            // ref client
+                            $refdossier = trim($dos['reference_medic']);
+                            $dossierid = intval($dos['id']);
+                            $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                            $statut = 1;
+                            break;
+
+                        }else{
+                            // immatriculation
+
+                            if((strpos($sujetPreg, $immatr) !== false) ||
+                                (strpos($contenu, $immatr) !== false)
+                            ){
+                                $refdossier = trim($dos['reference_medic']);
+                                $dossierid = intval($dos['id']);
+                                $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                                $statut = 1;
+                                break;
+
+                            }
+                        }
+                    } //else 2
+
                 }
+                /**********  END Dispatching   **********/
+
+
 
                 $entree = new Entree([
                     'destinataire' => 'operations@medicinternational.tn',
@@ -2479,6 +2850,30 @@ $id=0;
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
+
+
+            /***** Verification date ******/
+            $format = "Y-m-d H:i:s";
+
+            $dt1 = (new \DateTime())->modify('+50 minutes')->format($format);
+            $dt2 = (new \DateTime())->modify('-50 minutes')->format($format);
+
+            //  $datem=$date->format($format);
+
+            $dt01 = \DateTime::createFromFormat($format, $dt1);
+            $dt02 = \DateTime::createFromFormat($format, $dt2);
+            $dtM = \DateTime::createFromFormat($format, $date);
+            if($dtM < $dt01  && $dtM > $dt02 ){
+                $date= $oMessage->getDate();
+
+            }else{
+                $date=date('Y-m-d H:i:s');
+            }
+            /**********/
+
+
+
+
             $mailid=$oMessage->getUid();
 
             //Move the current Message to 'INBOX.read'
@@ -2486,29 +2881,74 @@ $id=0;
 
 
 
-                // dispatch
-                $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
+                /******** dispatching   *********/
+                $dossiers = Dossier::where('current_status', '!=', 'Cloture')->get();
 
-                $refdossier='';$dossierid=0;$nomassure='';
+                $refdossier = '';
+                $dossierid = 0;
+                $nomassure = '';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
-                    $ref=trim(strval($dos['reference_medic']));
-                    $refCL=trim(strval($dos['reference_customer']));
-                    if ($refCL==''){$refCL='XX';}
-                    if ($ref==''){$ref='dossiervide';}
+                    $ref = trim(strval($dos['reference_medic']));
+                    $refCL = trim(strval($dos['reference_customer']));
+                    $immatr = trim(strval($dos['vehicule_immatriculation']));
 
-                    if (   (strpos($sujet, $ref )!==false) ||
-                        (strpos($contenu, $ref) !==false ) ||
-                        (strpos($sujet, $refCL )!==false && ( strlen($refCL) >4 )  )  ||
-                        ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
+                    if ($ref == '') {
+                        $ref = 'dossiervide';
+                    }
+                    if ($refCL == '') {
+                        $refCL = 'XXX';
+                    }
+                    if ($immatr == '') {
+                        $immatr = 'nonvehicule';
+                    }
+
+                    $sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
+
+
+                    if ((strpos($sujetPreg, $ref) !== false) ||
+                        (strpos($contenu, $ref) !== false) )
                     {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
-                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
+                        $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
                         $statut = 1;
                         break;
-                    }
+                    }else{
+                        if (
+                            (strpos($sujetPreg, $refCL) !== false && (strlen($refCL) > 4)) ||
+                            (strpos($contenu, $refCL) !== false && (strlen($refCL) > 4))
+                        ){
+                            // ref client
+                            $refdossier = trim($dos['reference_medic']);
+                            $dossierid = intval($dos['id']);
+                            $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                            $statut = 1;
+                            break;
+
+                        }else{
+                            // immatriculation
+
+                            if((strpos($sujetPreg, $immatr) !== false) ||
+                                (strpos($contenu, $immatr) !== false)
+                            ){
+                                $refdossier = trim($dos['reference_medic']);
+                                $dossierid = intval($dos['id']);
+                                $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                                $statut = 1;
+                                break;
+
+                            }
+                        }
+                    } //else 2
+
                 }
+                /**********  END Dispatching   **********/
+
+
 
                 $entree = new Entree([
                     'destinataire' => 'tpa@najda-assistance.com',
@@ -2764,34 +3204,101 @@ $id=0;
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
+
+
+            /***** Verification date ******/
+            $format = "Y-m-d H:i:s";
+
+            $dt1 = (new \DateTime())->modify('+50 minutes')->format($format);
+            $dt2 = (new \DateTime())->modify('-50 minutes')->format($format);
+
+            //  $datem=$date->format($format);
+
+            $dt01 = \DateTime::createFromFormat($format, $dt1);
+            $dt02 = \DateTime::createFromFormat($format, $dt2);
+            $dtM = \DateTime::createFromFormat($format, $date);
+            if($dtM < $dt01  && $dtM > $dt02 ){
+                $date= $oMessage->getDate();
+
+            }else{
+                $date=date('Y-m-d H:i:s');
+            }
+            /**********/
+
+
             $mailid=$oMessage->getUid();
 
             //Move the current Message to 'INBOX.read'
             if ($oMessage->moveToFolder('read') == true) {
 
-                // dispatch
-                $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
+                /******** dispatching   *********/
+                $dossiers = Dossier::where('current_status', '!=', 'Cloture')->get();
 
-                $refdossier='';$dossierid=0;$nomassure='';
+                $refdossier = '';
+                $dossierid = 0;
+                $nomassure = '';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
-                    $ref=trim(strval($dos['reference_medic']));
-                    $refCL=trim(strval($dos['reference_customer']));
-                    if ($refCL==''){$refCL='XX';}
-                    if ($ref==''){$ref='dossiervide';}
+                    $ref = trim(strval($dos['reference_medic']));
+                    $refCL = trim(strval($dos['reference_customer']));
+                    $immatr = trim(strval($dos['vehicule_immatriculation']));
 
-                    if (   (strpos($sujet, $ref )!==false) ||
-                        (strpos($contenu, $ref) !==false ) ||
-                        (strpos($sujet, $refCL )!==false && ( strlen($refCL) >4 )  )  ||
-                        ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
+                    if ($ref == '') {
+                        $ref = 'dossiervide';
+                    }
+                    if ($refCL == '') {
+                        $refCL = 'XXX';
+                    }
+                    if ($immatr == '') {
+                        $immatr = 'nonvehicule';
+                    }
+
+                    $sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
+
+
+                    if ((strpos($sujetPreg, $ref) !== false) ||
+                        (strpos($contenu, $ref) !== false) )
                     {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
-                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
+                        $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
                         $statut = 1;
                         break;
-                    }
+                    }else{
+                        if (
+                            (strpos($sujetPreg, $refCL) !== false && (strlen($refCL) > 4)) ||
+                            (strpos($contenu, $refCL) !== false && (strlen($refCL) > 4))
+                        ){
+                            // ref client
+                            $refdossier = trim($dos['reference_medic']);
+                            $dossierid = intval($dos['id']);
+                            $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                            $statut = 1;
+                            break;
+
+                        }else{
+                            // immatriculation
+
+                            if((strpos($sujetPreg, $immatr) !== false) ||
+                                (strpos($contenu, $immatr) !== false)
+                            ){
+                                $refdossier = trim($dos['reference_medic']);
+                                $dossierid = intval($dos['id']);
+                                $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                                $statut = 1;
+                                break;
+
+                            }
+                        }
+                    } //else 2
+
                 }
+                /**********  END Dispatching   **********/
+
+
 
                 $entree = new Entree([
                     'destinataire' => 'taxi@najda-assistance.com',
@@ -3054,35 +3561,101 @@ $id=0;
             //  $from= $oMessage->getFrom()[0]->mail;
             $from= $oMessage->getSender()[0]->mail;
             $date= $oMessage->getDate();
+
+
+            /***** Verification date ******/
+            $format = "Y-m-d H:i:s";
+
+            $dt1 = (new \DateTime())->modify('+50 minutes')->format($format);
+            $dt2 = (new \DateTime())->modify('-50 minutes')->format($format);
+
+            //  $datem=$date->format($format);
+
+            $dt01 = \DateTime::createFromFormat($format, $dt1);
+            $dt02 = \DateTime::createFromFormat($format, $dt2);
+            $dtM = \DateTime::createFromFormat($format, $date);
+            if($dtM < $dt01  && $dtM > $dt02 ){
+                $date= $oMessage->getDate();
+
+            }else{
+                $date=date('Y-m-d H:i:s');
+            }
+            /**********/
+
+
+
             $mailid=$oMessage->getUid();
 
             //Move the current Message to 'INBOX.read'
             if ($oMessage->moveToFolder('read') == true) {
 
 
-                // dispatch
-                $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
+                /******** dispatching   *********/
+                $dossiers = Dossier::where('current_status', '!=', 'Cloture')->get();
 
-                $refdossier='';$dossierid=0;$nomassure='';
+                $refdossier = '';
+                $dossierid = 0;
+                $nomassure = '';
                 $statut = 0;
                 foreach ($dossiers as $dos) {
-                    $ref=trim(strval($dos['reference_medic']));
-                    $refCL=trim(strval($dos['reference_customer']));
-                    if ($refCL==''){$refCL='XX';}
-                    if ($ref==''){$ref='dossiervide';}
+                    $ref = trim(strval($dos['reference_medic']));
+                    $refCL = trim(strval($dos['reference_customer']));
+                    $immatr = trim(strval($dos['vehicule_immatriculation']));
 
-                    if (   (strpos($sujet, $ref )!==false) ||
-                        (strpos($contenu, $ref) !==false ) ||
-                        (strpos($sujet, $refCL )!==false && ( strlen($refCL) >4 )  )  ||
-                        ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
+                    if ($ref == '') {
+                        $ref = 'dossiervide';
+                    }
+                    if ($refCL == '') {
+                        $refCL = 'XXX';
+                    }
+                    if ($immatr == '') {
+                        $immatr = 'nonvehicule';
+                    }
+
+                    $sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
+
+
+                    if ((strpos($sujetPreg, $ref) !== false) ||
+                        (strpos($contenu, $ref) !== false) )
                     {
                         $refdossier = trim($dos['reference_medic']);
                         $dossierid = intval($dos['id']);
-                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
+                        $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
                         $statut = 1;
                         break;
-                    }
+                    }else{
+                        if (
+                            (strpos($sujetPreg, $refCL) !== false && (strlen($refCL) > 4)) ||
+                            (strpos($contenu, $refCL) !== false && (strlen($refCL) > 4))
+                        ){
+                            // ref client
+                            $refdossier = trim($dos['reference_medic']);
+                            $dossierid = intval($dos['id']);
+                            $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                            $statut = 1;
+                            break;
+
+                        }else{
+                            // immatriculation
+
+                            if((strpos($sujetPreg, $immatr) !== false) ||
+                                (strpos($contenu, $immatr) !== false)
+                            ){
+                                $refdossier = trim($dos['reference_medic']);
+                                $dossierid = intval($dos['id']);
+                                $nomassure = $dos['subscriber_name'] . ' ' . $dos['subscriber_lastname'];
+
+                                $statut = 1;
+                                break;
+
+                            }
+                        }
+                    } //else 2
+
                 }
+                /**********  END Dispatching   **********/
 
                 $entree = new Entree([
                     'destinataire' => 'x-press@najda-assistance.com',
@@ -4234,7 +4807,7 @@ $id=0;
             array_push($idenv,$env->id );
 
         }
- 
+
            $attachements=   Attachement::where(function ($query) use($identr,$idenv) {
                $query->whereIn('entree_id',$identr )
                    ->orWhereIn('envoye_id',$idenv );
