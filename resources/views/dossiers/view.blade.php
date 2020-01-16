@@ -3042,6 +3042,17 @@ function remplaceom(id,affectea,verif)
     document.getElementById('claffect1').style.display = 'block';
     document.getElementById('claffect2').style.display = 'block';
 
+    
+        if (affectea !== undefined && affectea !== null && affectea !== '')
+        {
+            //$("#affectationprest").val(affectea).change();
+            document.getElementById('claffect1').style.display = 'none';
+            document.getElementById('claffect2').style.display = 'none';
+            document.getElementById('typeprest').style.display = 'none';
+            $('#affectea').val(affectea);
+            
+        }
+
     //ajout id user conncte
     var cnctuserid = $("#cnctuserid").val();
 
@@ -3057,14 +3068,6 @@ function remplaceom(id,affectea,verif)
          document.getElementById("omfilled").src = url;
          $("#idomparent").val(id);
         $('#templateordrem').val("remplace");
-        if (affectea !== undefined && affectea !== null && affectea !== '')
-        {
-            //$("#affectationprest").val(affectea).change();
-            document.getElementById('claffect1').style.display = 'none';
-            document.getElementById('claffect2').style.display = 'none';
-            document.getElementById('typeprest').style.display = 'none';
-            
-        }
         
         $("#templatehtmlom").modal('show');
  }
