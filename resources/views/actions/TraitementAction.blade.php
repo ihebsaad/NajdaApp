@@ -116,31 +116,20 @@
                 </button>
      </div>
 
-
-
     </div>
-    <form id="kbsoptionform" action="{{ url('/traitementsBoutonsActions/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id.'/1')}}" onSubmit="return confirm('Confirmez-vous votre action ?');"  method="GET">
-
+    <form id="kbsoptionform" action="{{ url('/traitementsBoutonsActions/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id.'/1')}}" onSubmit="return confirm('Confirmez-vous votre action ?');"  method="post">
     
     <br><br>
       <div class="row">
-
-    
-
-         <div class="col-md-3">
+     <div class="col-md-3">
 
           <button id="BouFaiAct" type="submit" class="btn btn-success" style="width: 200px;"> Fait </button>
 
-
          </div>
-
-    
 
        <div class="col-md-1">
      
-
-      </div>
-      
+      </div>     
     
      <div class="col-md-3">
 
@@ -254,23 +243,7 @@
       
      </div>
 
-   
-    <!--<div class="row">
-       
-
-   <div class="col-md-3">
-    <button class="btn " style="float:right;margin-right:5px;" title="creer un Rappel" data-toggle="modal" data-target="#ReporterA" >Reporter action<br>
-     <i style="margin-top:8px" class="fa fa-2x fa-clock"> </i> </button>
-   </div>
-
-
-    
-
-    <div class="col-md-3">
-    <button id ="rappelerk"class="btn " style="float:right;margin-right:5px;" title="Reporter la sous-action courante à une date ultérieure" data-toggle="modal" data-target="#RappelerA" >Attente de réponse<br>
-     <i style="margin-top:8px" class="fa fa-2x fa-history"> </i></button>
-   </div>
-     </div>-->
+  
     <br>
     <h3><u>Étapes à réaliser:</u></h3>
     <br>
@@ -279,13 +252,11 @@
      <br>
      <div>
 
-       <!--<form id="kbsoptionform" action="{{ url('/traitementsBoutonsActions/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id.'/1')}}" method="GET">-->
-
-
+   
       <h4 id="comenttitle">Vous pouvez ajouter un ou plusieurs commentaires :</h4>
       <br>
 
-      <!--<form  id="formcoments" action="{{ url('dossier/Mission/TraitercommentAction/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}">-->
+      
 
          {{ csrf_field() }}
        <div class="com_wrapper">
@@ -326,28 +297,13 @@
     <?php } ?>
     </div>
 
-    
-           <!-- <center><button  id="Enrcommentaire" type="submit" >Enregistrer Commentaires</button></center>-->
-
-
+  
     </div>
     <br><br>
     <!-- postion des otions et les boutons radios -->
     
     <div class="row">
 
-      <!--<div class="col-md-4">
-       <h4>option 1  &nbsp<input type="radio" name="gender" value="male"></h4>
-      </div>
-     
-
-      <div class="col-md-4">
-       <h4>option 2  &nbsp<input type="radio" name="gender" value="male"></h4>
-      </div>
-
-      <div class="col-md-4">
-      <h4>option 3  &nbsp<input type="radio" name="gender" value="male"></h4>
-      </div>-->
 
       @if($Action->nb_opt != 0)
       <h4> Vous devez sélectionner une option: <select name="optionAction">
@@ -372,7 +328,6 @@
     
      </ul>
 <style>
-
 
 
 </style>
@@ -461,12 +416,9 @@ $(document).on('click','.kbstab',function(){
         </button>-->
 
         <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalDelegMiss">Déléguer la mission courante</button>
-
-
-        
+       
   </div>
-      
-
+  
    </div>
 
 
@@ -639,10 +591,6 @@ $('#DivDeleAction').hide();
       <div class="col-md-1">
       </div>
 
-     <!-- <div class="col-md-5">
-
-        <a class="btn btn-danger" href="{{ url('dossier/Mission/AnnulerMissionCourante/'.$Action->Mission->dossier->id.'/'.$Action->Mission->id.'/'.$Action->id)}}" ><i class="fa fa-close"></i>  Annuler la Mission courante</a>
-      </div>-->
      
      </div>
 
@@ -903,19 +851,6 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
   </div>
  </div>
 
-<script>
-
-  /*$('#idrappelerk').on('click',function() {
-    $(this).prop("disabled",true);
-   });
-
- $('#idrappeler').click(function(e) { 
-  $('#kbsoptionform').submit();
-});*/
-
-</script>
-
-
 
 <!-- fin tous modals-->
 
@@ -924,49 +859,6 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
 <!--  scrpts de confirmation avavnt de quitter la page --> 
 
-<script>
-/*$(function() {
-  $('a').click(function(e) {
-     e.preventDefault();
-     var url = $(this).attr('href');
-     var urllocal=window.location;
-     //alert(urllocal);
-     if (url.indexOf('#') == -1)
-      {
-
-        if( urllocal != url)
-        {
-
-
-           if (!confirm("Enregister votre travail avant de quitter (Si vous voulez rester sur la meme page et enregistrer votre traveil cliquer sur OK)") ){ 
-            
-          window.location.replace(url);
-          }
-            
-         
-        }
-     
-      }
-    
-  });
-});*/
-
-
-/*$(function() {
-  $('a').click(function(e) {
-     e.preventDefault();
-     var url = $(this).attr('href');
-     $.ajax(....)
-        .done(function() {
-           window.location = url;
-        });
-        .fail(function(r) {
-           alert('unable to save data');
-        });
-  });
-});*/
-
- </script>
 
 <!-- script pour mettre à jour le titre de panel en milieu-->
 
@@ -1057,86 +949,9 @@ $('#MajDateSpec').click(function(){
     });
      
 
-
-
-
   </script>
 
-
-
-  <script>
-/*
-var idAction;
-var dataAction;
-var iddropdownA;
-var hrefidAcheverA;
-
-    setInterval(function(){ //alert("Hello"); 
-     
-    $.ajax({
-       url : '{{ url('/') }}'+'/getActionAjaxModal',
-       type : 'GET',
-       dataType : 'html', // On désire recevoir du HTML
-       success : function(data){ // code_html contient le HTML renvoyé
-           //alert (data);
-
-           if(data)
-           {
-
-             // alert ("des nouvelles notes sont activées");
-              //$("#contenuNotes").prepend(data);
-              var sound = document.getElementById("audiokbs");
-              sound.setAttribute('src', "{{URL::asset('public/media/point.mp3')}}");
-              sound.play();
-
-             // alertify.alert("Note","Une nouvelle note est activée").show();
-
-             $("#contenuActionsModal").empty().append(data);
-             iddropdown=jQuery(data).find('.dropdown').attr("id");
-             $("#"+iddropdown).hide();
-             $("#hiddenreporterAct").hide();
-            
-              
-             $("#myActionModalReporter1").modal('show');          
-             idAction=jQuery(data).find('.rowkbs').attr("id");
-             dataAction=jQuery(data).find('#'+idAction).html();
-             hrefidAcheverA=jQuery(data).find('#idAchever').attr("href");
-
-            
-           }
-       }
-    });
-   
-
-
-}, 10000);
-
-    $(document).ready(function() {
-    
-    $(document).on("click","#actionOngletaj",function() {
-      //alert(datakbs);
-      $("#contenuActions").prepend(dataAction);
-      $("#"+iddropdown).show();
-    
-
-        $('#actiontabs a[href="#Missionstab"]').trigger('click');
-
-
-    });
-
-  
-
-     $(document).on("click","#reporterHideA",function() {
-       
-       $("#hiddenreporterA").toggle();  
-
-
-    });
-
-      });
-
-*/
-  </script>
+ 
 
 <div class="modal fade" id="myActionModalReporter1" role="dialog" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog">
@@ -1354,11 +1169,10 @@ var hrefidAcheverA;
 
                                          </select>
 
-
                                                  <script> 
                                                   $(document).ready(function(){
 
-                                                         $(document).on("change","#typeMissLieauto",function() {
+                                                  $(document).on("change","#typeMissLieauto",function() {
 
                                                 if ($(this).val()=="Transports terrestres effectué par entité-sœur MMS" || $(this).val()=="Transport terrestre effectué par prestataire externe")
                                                 {
@@ -1379,10 +1193,7 @@ var hrefidAcheverA;
                                                  });
                                                  
 
-
                                                   </script>
-
-                                             
 
                                                 </div>
                                             </div>
@@ -1459,33 +1270,6 @@ var hrefidAcheverA;
 </div>
 
 
-  
-
-
-
-<script>
-
-  /*var i=0;
-
-  setInterval(function(){
-
-
-         //$("#conff").html(i);
-    // More code using $ as alias to jQuery
-    $("#myModalk").modal('show').append("i");
-   
-  
- //alert("Hello"); 
-
- 
-     
-   
-   
-i++;
-
-}, 5000);*/
-
-  </script>
   <script>
 
   $('#BouFaiAct').on('click',function() {
@@ -1550,7 +1334,6 @@ i++;
       en=false;
 
      }
-
   
 
     if(!$('#idFormCreationMissionLie #dossierIDml').val())
@@ -1603,10 +1386,6 @@ i++;
 });
 
 </script>
-
-
-
- 
 
 @endsection
 

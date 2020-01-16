@@ -137,7 +137,7 @@ class MissionController extends Controller
        // dd( $request->all());
         //$dossier=Dossier::where("reference_medic",trim($request->get('dossier')))->first();
         //$typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeactauto')))->first();
-        $typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeMissLieauto')))->first();
+        $typeMiss=TypeMission::where('id',trim($request->get('typeMissLieauto')))->first();
 
         
        //dd($dossier);  
@@ -250,8 +250,10 @@ class MissionController extends Controller
 
                  $ActionEC = new ActionEC([
              'mission_id' =>$Mission->id,
+              'mission_id_org'=>$Mission->id,
              'titre' => trim($valeurs[$k]),
              'type_Mission' => trim($valeurs[1]),
+             'id_type_miss'=> $typeMiss->id,
              'duree' => trim($valeurs[$k+1]),
              'ordre'=> trim($valeurs[$k+2]),
              'descrip' => trim($valeurs[$k+3]),
@@ -289,8 +291,10 @@ class MissionController extends Controller
 
                   $ActionEC = new ActionEC([
              'mission_id' =>$Mission->id,
+             'mission_id_org'=>$Mission->id,
              'titre' => trim($valeurs[$k]),
              'type_Mission' => trim($valeurs[1]),
+             'id_type_miss'=> $typeMiss->id,
              'duree' => trim($valeurs[$k+1]),
              'ordre'=> trim($valeurs[$k+2]),
              'descrip' => trim($valeurs[$k+3]),
@@ -346,7 +350,7 @@ class MissionController extends Controller
         /*Dossier::where('id',$dossier->id)
             ->update(array('current_status'=>'actif'));*/
 
-    return 'Mission créee';
+    return 'Mission créée';
 
       
 
@@ -364,14 +368,8 @@ class MissionController extends Controller
 
     public function storeMissionByAjax (Request $request)
     {
-      // return 'ok';
-         // dd($request->all());
-
-        
-       // dd( $request->all());
-        $dossier=Dossier::where("reference_medic",trim($request->get('dossier')))->first();
-        //$typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeactauto')))->first();
-        $typeMiss=TypeMission::where('nom_type_Mission',trim($request->get('typeMissauto')))->first();
+  
+        $typeMiss=TypeMission::where('id',trim($request->get('typeMissauto')))->first();
 
      
        //dd($dossier);  
@@ -382,7 +380,6 @@ class MissionController extends Controller
 
            if($typeMiss->id==33 || $typeMiss->id==34 ) // cas de transport MMs et   transport externe
          {
-
             $datespecifique=$datespecifique->modify('-2 minutes'); // -24 hours
          }
        
@@ -429,47 +426,12 @@ class MissionController extends Controller
         $Mission->save();
 
 
-        // mise à jour de table entree col mission_id
-
-        if($request->get('idEntreeMissionOnMarker'))
-        {
-
-          $entree=Entree::where('id',$request->get('idEntreeMissionOnMarker'))->first();
-
-          if($entree && $Mission)
-          {
-          
-            $entree->update(['mission_id'=> $Mission->id]) ;
-            $Mission->update(['id_entree'=> $request->get('idEntreeMissionOnMarker')]);
-
-          }
-
-
-
-        }
-
-      //date_default_timezone_set('Africa/Tunis');
-       //setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
-
           $dtc = (new \DateTime())->format('Y-m-d\TH:i');
-       //dd($Mission->date_deb."  ". $dtc);
-        //dd(time($dtc)."  ".time($request->get('datedeb')));
-         //$format = "Y-m-d\TH:i";
+     
          $dateSys  = \DateTime::createFromFormat($format, $dtc);
 
          $dateMiss  = \DateTime::createFromFormat($format, $request->get('datedeb'));
-        // dd($dateMiss);
-
-         /*if($dateSys > $dateMiss)
-         {
-               dd("date sys > date miss");
-
-         }
-         else
-         {
-
-          dd("date sys <= date miss");
-         }*/
+    
 
          if($typeMiss->id==33 || $typeMiss->id==34 ) // cas de MMs et externe
          {
@@ -485,25 +447,16 @@ class MissionController extends Controller
        //$Mission->update(['affichee'=>0]);
         $Mission->update(['statut_courant'=>'reportee']);
 
-       //dd($request->get('datedeb')."  ". $dtc);
-       
+           
        }
 
-       //dd('faux');
-
-
-        //$type_act=DB::table('type_actions')->where('id', $request->get('typeact'));
-       // $type_act=TypeMission::find($request->get('typeactauto'));
         $type_act= $typeMiss;
-       //dd($type_act->getAttributes());
+    
 
          $attributes = array_keys($type_act->getOriginal());
          $valeurs = array_values($type_act->getOriginal());
-         //dd(count($valeurs));
-        // dd($valeurs);
+       
 
-        // echo($attributes[1]);
-        // echo($valeurs[1]);
            $taille=count($valeurs)-5;
          for ($k=27; $k<=$taille; $k++)
            {
@@ -511,15 +464,15 @@ class MissionController extends Controller
             if($k>27)
             {
 
-
-
            if( $valeurs[$k]!= null)
               {
 
                  $ActionEC = new ActionEC([
              'mission_id' =>$Mission->id,
+             'mission_id_org'=>$Mission->id,
              'titre' => trim($valeurs[$k]),
-             'type_Mission' => trim($valeurs[1]),
+             'type_Mission' => trim($valeurs[1]),             
+             'id_type_miss'=> $typeMiss->id,
              'duree' => trim($valeurs[$k+1]),
              'ordre'=> trim($valeurs[$k+2]),
              'descrip' => trim($valeurs[$k+3]),
@@ -540,7 +493,6 @@ class MissionController extends Controller
                   
                    $ActionEC->save();
 
-
               $k+=9;
               }
               else
@@ -557,8 +509,10 @@ class MissionController extends Controller
 
                   $ActionEC = new ActionEC([
              'mission_id' =>$Mission->id,
+             'mission_id_org'=>$Mission->id,
              'titre' => trim($valeurs[$k]),
              'type_Mission' => trim($valeurs[1]),
+             'id_type_miss'=> $typeMiss->id,
              'duree' => trim($valeurs[$k+1]),
              'ordre'=> trim($valeurs[$k+2]),
              'descrip' => trim($valeurs[$k+3]),
@@ -579,7 +533,6 @@ class MissionController extends Controller
                   
                    $ActionEC->save();
 
-
                $k+=9;
              
               }
@@ -587,8 +540,6 @@ class MissionController extends Controller
               {
                 $k=1000;
               }
-
-
 
               }
            }
@@ -612,11 +563,32 @@ class MissionController extends Controller
 
            }
 
+
+
         $dos=Dossier::where('id',trim($request->get('dossierID')))->first();
          if($dos->current_status != 'Cloture')
          {
              $dos->update(array('current_status'=>'actif'));
          }
+
+             // mise à jour de table entree col mission_id
+
+        if($request->get('idEntreeMissionOnMarker'))
+        {
+
+          $entree=Entree::where('id',$request->get('idEntreeMissionOnMarker'))->first();
+
+          if($entree && $Mission)
+          {
+          
+            $entree->update(['mission_id'=> $Mission->id]) ;
+            $Mission->update(['id_entree'=> $request->get('idEntreeMissionOnMarker')]);
+
+          }
+
+
+
+        }
 
          $da = (new \DateTime())->format('Y-m-d\TH:i');
 
@@ -1066,8 +1038,28 @@ class MissionController extends Controller
 
     public function AnnulerMissionCouranteByAjax($idmiss)
     {
+      $output='';
+      $Actionsk=ActionEC::where('mission_id',$idmiss)->get();
+       $miss=Mission::where('id',$idmiss)->first();
+       
+       if($miss && $Actionsk )
+       {
+        foreach ($Actionsk as $k ) {
+           
+             $k->forceDelete();
+         } 
         
-        $output='';
+         $miss->forceDelete();
+         $output= "la mission est annulée";
+       }
+       else
+       {
+         $output= "Erreur lors de l'annulation de la mission ";
+       }
+
+        return $output;
+        
+        /*$output='';
          
           $miss=Mission::find($idmiss);
 
@@ -1089,7 +1081,10 @@ class MissionController extends Controller
           }
 
 
-        return $output;
+        return $output;*/
+
+
+
 
 
     }
@@ -3320,26 +3315,12 @@ public function getAjaxDeleguerMission($idmiss)
 // tableau des etats des actions de la mission
       public function getAjaxWorkflow($id)
     {
-
-     // $_GET['idw'];
+ 
 
       $actk=Mission::find($id);
 
       $output='';
 
-      /*$active_acts=ActionEC::where('mission_id',$id)->where('statut','active')->get();
-      
-      if($active_acts)
-      {
-            foreach $active_acts as $key ) {
-
-              $rep_acts =ActionEC::where('ordre', $key->ordre)->where('statut','rfaite')->where('report_ou_non',1)->max('num_report');
-              $rapp_acts=ActionEC::where('ordre', $key->ordre)->where('statut','rfaite')->where('rapl_ou_non',1)->max('num_rappel');
-
-              $somme_rep_rapp=$rep_acts+ $rapp_acts;
-
-            }
-      }*/
 
       if(!$actk->ActionECs->isEmpty())
       {
@@ -3423,8 +3404,6 @@ public function getAjaxDeleguerMission($idmiss)
                         }
                          if($sactions->rapl_ou_non==0 && $sactions->report_ou_non==0)
                         {
-
-
 
                            $output.='<td style="overflow: auto;" title="'.$sactions->num_report.'"><span style="font-weight : none;">0</span></td>' ;
 
@@ -3906,8 +3885,7 @@ public function getAjaxDeleguerMission($idmiss)
     { $minutes2=600;
         $typeMissions = Cache::remember('type_mission',$minutes2,  function () {
 
-            return DB::table('type_mission')
-                ->get();
+            return DB::table('type_mission')->select('id','nom_type_Mission')->get();
         });
       //  $typeMissions=TypeMission::all();
         return $typeMissions;

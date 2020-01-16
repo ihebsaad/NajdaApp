@@ -219,9 +219,10 @@ use App\Http\Controllers\TagsController;
 
                                          
                                            <h4 class="panel-title">
-                                              <a data-toggle="collapse" href="#collapse{{$Mission->id}}">{{$Mission->dossier->reference_medic}}&nbsp;-&nbsp;{{$Mission->dossier-> subscriber_name}} {{$Mission->dossier->subscriber_lastname}} <br>
+                                              <a href="{{action('DossiersController@view',$Mission->dossier->id)}}"> {{$Mission->dossier->reference_medic}}&nbsp;-&nbsp;{{$Mission->dossier-> subscriber_name}} {{$Mission->dossier->subscriber_lastname}}</a>
+                                             <br>
                                                 {{$Mission->typeMission->nom_type_Mission}}
-                                              </a>@if ($Mission->assistant_id != NULL && $Mission->emetteur_id != NULL && $Mission->emetteur_id != $Mission->assistant_id && $Mission->emetteur_id!= $Mission->user_id && $Mission->statut_courant =='deleguee')
+                                               <a data-toggle="collapse" href="#collapse{{$Mission->id}}">&nbsp; --</a>@if ($Mission->assistant_id != NULL && $Mission->emetteur_id != NULL && $Mission->emetteur_id != $Mission->assistant_id && $Mission->emetteur_id!= $Mission->user_id && $Mission->statut_courant =='deleguee')
                                          <span style="color:#151515"> &nbsp;(déléguée par {{$Mission-> emetteur->name}}&nbsp {{$Mission->emetteur->lastname}} ) </span> @endif
 
                                          @if ($Mission->miss_mere_id!=NULL )
@@ -405,7 +406,7 @@ use App\Http\Controllers\TagsController;
                                             <option value="">Sélectionner</option>
                                          @foreach( $typesMissions as $c) 
 
-                                                <option value="{{$c->nom_type_Mission}}">{{$c->nom_type_Mission}} </option>
+                                          <option value="{{$c->id}}">{{$c->nom_type_Mission}} </option>
 
                                          @endforeach
 
@@ -954,7 +955,7 @@ use App\Http\Controllers\TagsController;
     $.ajax({
 
            url:"{{ route('Mission.StoreMissionByAjax') }}",
-           method:"get",
+           method:"post",
            data : donnees,
            success:function(data){
          
@@ -1207,7 +1208,7 @@ $(document).ready(function() {
 
            $.ajax({
 
-               url: "<?php echo $urlapp; ?>/Mission/getAjaxWorkflow/"+idw,
+              // url: "<?php //echo $urlapp; ?>/Mission/getAjaxWorkflow/"+idw,
                type : 'GET',
               // data : 'idw=' + idw,
                success: function(data){
@@ -1237,17 +1238,17 @@ $(document).ready(function() {
 $('.DescripMission').on('click', function() {
 
 
-   var idw=$(this).attr("id");
+   var idwde=$(this).attr("id");
   // alert(idw);
-   var nomact=$('#workflowh'+idw).attr("value");
+   var nomact=$('#workflowh'+idwde).attr("value");
    //alert
-   var typemiss=$('#workflowht'+idw).attr("value");
+   var typemiss=$('#workflowht'+idwde).attr("value");
       $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
 
            $.ajax({
 
-               url: "<?php echo $urlapp; ?>/Mission/getDescriptionMissionAjax/"+idw,
-               type : 'GET',
+               url: "<?php echo $urlapp; ?>/Mission/getDescriptionMissionAjax/"+idwde,
+               type : 'get',
               // data : 'idw=' + idw,
                success: function(data){
                
@@ -1275,17 +1276,19 @@ $('.DescripMission').on('click', function() {
    $(document).on('click','.etatAction', function() {
 
 
-   var idw=$(this).attr("id");
+   var idwe=$(this).attr("id");
   // alert(idw);
    //var nomact=$('#workflowh'+idw).attr("value");
   
    //var typemiss=$('#workflowht'+idw).attr("value");
       //$("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
+      // var _token = $('input[name="_token"]').val();
 
            $.ajax({
 
-               url: "<?php echo $urlapp; ?>/Mission/getAjaxWorkflow/"+idw,
-               type : 'GET',
+               url: '{{ url('/') }}'+'/Mission/getAjaxWorkflow/'+idwe,
+               type : 'get',
+               //data:{idwe:idwe, _token:_token},
               // data : 'idw=' + idw,
                success: function(data){
                
@@ -1311,16 +1314,16 @@ $('.DescripMission').on('click', function() {
  //$('.mailGenerateur').on('click', function() {
 
  $(document).on('click','.mailGenerateur', function() {
-   var idw=$(this).attr("id");
+   var idwg=$(this).attr("id");
    //alert(idw);
-   var nomact=$('#workflowh'+idw).attr("value");
-   var typemiss=$('#workflowht'+idw).attr("value");
+   var nomact=$('#workflowh'+idwg).attr("value");
+   var typemiss=$('#workflowht'+idwg).attr("value");
       $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
 
            $.ajax({
 
-               url: "<?php echo $urlapp; ?>/Mission/getMailGenerator/"+idw,
-               type : 'GET',
+               url: "<?php echo $urlapp; ?>/Mission/getMailGenerator/"+idwg,
+               type : 'get',
               // data : 'idw=' + idw,
                success: function(data){
                
@@ -1346,16 +1349,16 @@ $('.DescripMission').on('click', function() {
 $('.deleguerMission').on('click', function() {
 
 
-   var idw=$(this).attr("id");
+   var idwd=$(this).attr("id");
    //alert(idw);
-   var nomact=$('#workflowh'+idw).attr("value");
-   var typemiss=$('#workflowht'+idw).attr("value");
+   var nomact=$('#workflowh'+idwd).attr("value");
+   var typemiss=$('#workflowht'+idwd).attr("value");
       $("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
 
            $.ajax({
 
-               url: "<?php echo $urlapp; ?>/Mission/getAjaxDeleguerMission/"+idw,
-               type : 'GET',
+               url: "<?php echo $urlapp; ?>/Mission/getAjaxDeleguerMission/"+idwd,
+               type : 'get',
               // data : 'idw=' + idw,
                success: function(data){
                
@@ -1381,12 +1384,12 @@ $('.deleguerMission').on('click', function() {
 $('.annulerMission').on('click', function() {
 
 
-   var idw=$(this).attr("id");
+   var idws=$(this).attr("id");
   
-   if(idw.indexOf('a')!= -1)
+   if(idws.indexOf('a')!= -1)
    {
       //alert(idw);
-      idw=idw.substr(1);
+      idws=idws.substr(1);
       //alert(idw);
    }
   // var nomact=$('#workflowh'+idw).attr("value");
@@ -1398,8 +1401,8 @@ if (r == true) {
  
          $.ajax({
 
-               url: "<?php echo $urlapp; ?>/Mission/AnnulerMissionCouranteByAjax/"+idw,
-               type : 'GET',
+               url: "<?php echo $urlapp; ?>/Mission/AnnulerMissionCouranteByAjax/"+idws,
+               type : 'get',
               // data : 'idw=' + idw,
                success: function(data){
               

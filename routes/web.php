@@ -419,7 +419,7 @@ Route::get('/Mission/getDescriptionMissionAjax/{id}', 'MissionController@getDesc
 
 Route::get('/dossiers/view/CreerOM/{id}/{idmiss}', 'MissionController@viewDossierMission');
 Route::get('dossiers/view/CreerDoc/{id}/{idmiss}', 'MissionController@viewDossierMission');
-Route::get('/Missions/storeMissionByAjax','MissionController@storeMissionByAjax')->name('Mission.StoreMissionByAjax');
+Route::post('/Missions/storeMissionByAjax','MissionController@storeMissionByAjax')->name('Mission.StoreMissionByAjax');
 Route::post('/Missions/storeMissionLieByAjax','MissionController@storeMissionLieByAjax')->name('Mission.StoreMissionLieByAjax');
 Route::get('/ReporterMission/','MissionController@ReporterMission')->name('Mission.ReporterMission');
 
@@ -466,7 +466,7 @@ Route::get('/activerActionsReporteeOuRappelee','ActionController@activerActionsR
 
 Route::get('/activerAct_des_dates_speciales','ActionController@activerAct_des_dates_speciales');
 
-Route::get('/traitementsBoutonsActions/{iddoss}/{idmiss}/{idsousact}/{bouton}',
+Route::post('/traitementsBoutonsActions/{iddoss}/{idmiss}/{idsousact}/{bouton}',
     'ActionController@Bouton_Faire1_ignorer2_reporter3_rappeler4');
 
 Route::get('/annulerAttenteReponseAction/{idact}','ActionController@annulerAttenteReponseAction');
