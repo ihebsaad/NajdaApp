@@ -4480,10 +4480,10 @@ function keyUpHandler(){
             document.getElementById('selectedprest').value=0;
 
 
-            toggle('tprest', 'none');
+         ////   toggle('tprest', 'none');
             var typeprest=  document.getElementById('typeprest').value;
 
-            document.getElementById('tprest-'+typeprest).style.display='block';
+         ///   document.getElementById('tprest-'+typeprest).style.display='block';
 
             //  prest = $(this).val();
             document.getElementById('selectedprest').value=0;

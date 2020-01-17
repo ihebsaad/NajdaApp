@@ -256,7 +256,7 @@
               if($user->id==$suptech){$role.='(Superviseur Technique) ';}
               if($user->id==$charge){$role.='(Chargé de transport) ';}
 
-
+              $style='';
 
 									if($user->id!=1){
 										
@@ -290,7 +290,7 @@
                                       echo '</div>' ;}
 									}
                                 }
-                                    ?>
+                  ?>
   
   
 			</div>
@@ -298,7 +298,7 @@
 			
 			<div class="panel panel-danger col-md-5" style="padding:0 ;min-height: 800px ">
                     <div class="panel-heading">
-                        <h4 class="panel-title">Dossiers Non Affectés</h4>
+                        <h4 class="panel-title"></h4>
 
                     </div>
 
@@ -306,37 +306,55 @@
 
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#panelsupmedic" data-toggle="tab" onclick="hideTab1();showTab2();hideTab3();hideTab4();hideTab5();"  >
+                        <a class="nav-link" href="#panelsupmedic" data-toggle="tab" onclick="hideTabs(); showTab2() "  >
                             <i class="fa-lg fas fa-folder"></i>  Sup Médical (<?php echo  $CdossiersSM ;?>)
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#panelsuptech" data-toggle="tab" onclick="hideTab1();showTab3();hideTab2();hideTab4();hideTab5();"  >
+                        <a class="nav-link" href="#panelsuptech" data-toggle="tab" onclick="hideTabs();showTab3() "  >
                             <i class="fa-lg fas fa-folder"></i>  Supe Tech (<?php echo $CdossiersST ;?>)
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#panelcharge" data-toggle="tab" onclick="hideTab1();showTab4();hideTab2();hideTab3();hideTab5();"  >
+                        <a class="nav-link" href="#panelcharge" data-toggle="tab" onclick="hideTabs();showTab4(); "  >
                             <i class="fa-lg fas fa-folder"></i>  Chargé T (<?php echo $CdossiersC ;?>)
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#paneldisp" data-toggle="tab" onclick="hideTab1();showTab5();hideTab2();hideTab3();hideTab4();"  >
+                        <a class="nav-link" href="#paneldisp" data-toggle="tab" onclick="hideTabs();showTab5(); "  >
                             <i class="fa-lg fas fa-folder"></i>  Dispat  (<?php echo  $CdossiersDisp ;?>)
                         </a>
                     </li>
 
-                    <li class="nav-item active">
-                        <a class="nav-link   active " href="#panelnonaff" data-toggle="tab"  onclick="showTab1();hideTab2();hideTab3();hideTab4();hideTab5();"  >
-                            <i class="fa-lg fas fa-folder-open"></i>  Non affectés  (<?php echo  $Cdossiers ;?>)
-                        </a>
-                    </li>
+                </ul>
+
+                    <ul class="nav  nav-tabs" style="margin-top:10px;margin-bottom:10px">
+                        <li class="nav-item  ">
+                            <a class="nav-link    " href="#panelnonaff" data-toggle="tab"  onclick="showTab1();hideTab2();hideTab3();hideTab4();hideTab5();"  >
+                                <i class="fa-lg fas fa-folder-open"></i>  Non affectés  (<?php echo  $Cdossiers ;?>)
+                            </a>
+                        </li>
+                    <?php $i=0;
+                    foreach($users as $user)
+                    { $i++;
+                    $iduser=$user->id;
+                    $folders = Dossier::where('affecte','=',$user->id)->where('statut',5)->get();
+                    $countF=count($folders);
+                    if($user->isOnline()) {
+                   echo '  <li class="nav-item  ">
+                    <a class="nav-link    " href="#panelu-'.$iduser.'>" data-toggle="tab"  onclick="hideTabs();showTabs('.$iduser.');"  >
+                    <i class="fa-lg fas fa-user"></i>  '.$user->name.' '.$user->lastname.' ('. $countF .')
+                    </a>
+                    </li> ';
+                    }
+                    }
+                    ?>
                 </ul>
 
 
 
-                <div id="panelsupmedic"  class="tab-pane fade " >
+                <div id="panelsupmedic"  class="tab-pane fade pannel" >
 
                     <div class="row">
                         <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputSM" onkeyup="SMSearchf()" placeholder="N° de Dossier.." title="Taper"></div>
@@ -383,7 +401,7 @@
                 </div><!--- Panel Sup Tech --->
 
 
-                <div id="panelsuptech"  class="tab-pane fade " >
+                <div id="panelsuptech"  class="tab-pane fade pannel" >
 
                     <div class="row">
                         <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputST" onkeyup="STSearchf()" placeholder="N° de Dossier.." title="Taper"></div>
@@ -431,7 +449,7 @@
 
 
 
-                <div id="panelcharge"  class="tab-pane fade " >
+                <div id="panelcharge"  class="tab-pane fade pannel " >
 
                     <div class="row">
                         <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputC" onkeyup="CSearchf()" placeholder="N° de Dossier.." title="Taper"></div>
@@ -478,7 +496,7 @@
                 </div><!--- Panel Chargé --->
 
 
-                <div id="paneldisp"  class="tab-pane fade " >
+                <div id="paneldisp"  class="tab-pane fade  pannel" >
 
                     <div class="row">
                         <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputD" onkeyup="DSearchf()" placeholder="N° de Dossier.." title="Taper"></div>
@@ -525,7 +543,7 @@
                 </div><!--- Panel disp --->
 
 
-                <div id="panelnonaff"   class="tab-pane fade  active in ">
+                <div id="panelnonaff"   class="tab-pane fade   pannel  ">
 
 
                     <div class="row">
@@ -573,7 +591,80 @@
                 </div><!--- Panel non affectés --->
 
 
-            </div><!--panel 2-->
+
+
+
+   <!--**********  Tabs Users     ************---->
+
+
+
+
+                <?php $c=0;
+                foreach($users as $user)
+                { if($c % 2 ==0){$bg=' border:2px dotted black ;';}else{$bg='';}
+                $iduser=$user->id;
+
+
+                if($user->id!=1){
+
+                if($user->isOnline()) {
+                $c++;
+                $folders = Dossier::where('affecte','=',$user->id)->where('statut',5)->get();
+
+                $countF=count($folders);
+                $taille='400px;';
+                if($countF < 20 || $countF == 20 ){$taille='400px';}
+                if($countF > 20 && ( $countF < 40 || $countF == 40) ){$taille='600px';}
+                if($countF > 40 && $countF < 80){$taille='1000px';}
+                if($countF > 80 || $countF == 80){$taille='1400px';}
+                if($countF >120 || $countF == 120){$taille='1800px';}
+                if($countF >160){$taille='2300px';}
+?>
+               <div id="panelu-<?php echo $iduser; ?>"   class=" pannel   ">
+                     <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
+                     <div id="drag-elements-u-<?php echo $iduser; ?>" class="dragging"  >
+<?php
+                 $type='';$style='';
+
+                foreach($folders as $dossier)
+                { $type=$dossier['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
+                $idd=$dossier['id'];
+                $immatricul=$dossier['vehicule_immatriculation']; $statut=$dossier['statut'];
+                $ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
+                <div  id="dossierU-<?php echo $idd;?>" class="dossier dossierU-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style; if($statut!=2){ echo';border:2px solid black;';} ?>" >
+                    <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
+                    <div class="infos">  <label style="font-size: 15px;"><?php echo $ref;?></label>
+                        <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
+                        <?php if($immatricul!='') { echo '<small style="font-size:10px">'. $immatricul .'</small>';} ?>
+
+                    </div>
+                </div>
+
+                <?php	} ?>
+
+            </div>
+         </div>
+         </div>
+
+                <?php
+                }  // online
+                } // not admin
+                } //for users
+                ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div><!--panel 2-->
 			
 			
             <!-- /.content -->
@@ -610,6 +701,22 @@
 
 
     }
+
+     function showTabs(user) {
+      $('#panelu-'+user).css('display','block');
+      //  $('#panelu-32' ).css('display','block');
+    }
+
+    function hideTabs() {
+
+        var elements = document.getElementsByClassName('pannel');
+
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.display = 'none';
+        }
+
+     }
+
 
     function hideTab1() {
         $('#panelnonaff').css('display','none');
@@ -1263,6 +1370,7 @@
           {
                if($user->isOnline()) {
                    echo "document.getElementById('user-".$user->id."'),";
+                   echo "document.getElementById('drag-elements-u-".$user->id."'),";
                }
           }
 

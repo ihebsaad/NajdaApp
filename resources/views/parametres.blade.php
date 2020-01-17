@@ -92,11 +92,13 @@
                                     <i class="fa-lg fas fa-users"></i>  Finances
                                 </a>
                             </li>
+                                <?php if($user_type=='admin') { ?>
                                 <li class="nav-item">
                                     <a class="nav-link " href="#tab5" data-toggle="tab" onclick="showinfos5();hideinfos();hideinfos2();hideinfos4();hideinfos3()">
                                         <i class="fa-lg fas fa-gears"></i>  Paramètres Type Missions
                                     </a>
                                 </li>
+                                <?php }?>
 
                             <?php }?>
                         </ul>

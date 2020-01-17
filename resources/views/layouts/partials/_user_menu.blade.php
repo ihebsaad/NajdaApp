@@ -62,7 +62,17 @@
             </a>
         </li>
         <?php } ?>
-<!--
+        <?php if($type=='financier' || $type=='bureau'){ ?>
+        <li style="margin-top:8px">
+
+        <a href="{{ route('logout') }}">
+            <i class="fas fa-sign-out-alt"></i>
+           Déconnexion
+        </a>
+        </li>
+        <?php } ?>
+
+    <!--
         <li role="presentation" class="divider"></li>
          <li style="margin-bottom:8px">
             <a href="{{ route('changerposte') }}">
