@@ -269,7 +269,7 @@ function formatBytes($size){
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#tab8" data-toggle="tab" onclick=";showinfos81();hideinfos82()">
-                                <i class="fas fa-tasks"></i> Missions
+                                <i class="fas fa-tasks"></i> Missions Plateau
                             </a>
                         </li>
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -58,7 +59,6 @@ class DocumentsController extends Controller
         if (isset($_POST['pre_dateheure']))
         {
             $array += [ '[PRE_DATEHEURE]' => $_POST['pre_dateheure']];
-
         }
         // champ idtag GOP pour PEC
         if (isset($_POST['idtaggop']))
@@ -77,7 +77,8 @@ class DocumentsController extends Controller
             foreach ($champsArray as $champtemp) {
                 //verifier quil nest pas un champs libre
                 if (stristr($champtemp,'[CL_')=== FALSE && ($champtemp !=='[MONTANT_FRANCHISE]') ) 
-                { //$array += [ $champtemp => 'ti' ];
+                {   
+                    //$array += [ $champtemp => 'ti' ];
                     $champform = str_replace('[', '', $champtemp);
                     $champform = str_replace(']', '', $champform);
                     $champform = strtolower($champform);
@@ -117,7 +118,7 @@ class DocumentsController extends Controller
                 elseif(stristr($champtemp,'[CL_')!== FALSE)
                 {if (stristr($champtemp,'[CL_accidente')== TRUE )
                         {if(isset($_POST['CL_accidente']))
-                            {$valchamp='Accidenté';
+                            {$valchamp='Accidente';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
@@ -127,7 +128,7 @@ class DocumentsController extends Controller
                             }}
                  elseif (stristr($champtemp,'[CL_enpanne')== TRUE )
                         {if(isset($_POST['CL_enpanne']))
-                            {$valchamp='En panne';
+                            {$valchamp='Enpanne';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
@@ -137,7 +138,7 @@ class DocumentsController extends Controller
                             }}
                             elseif (stristr($champtemp,'[CL_incendie')== TRUE )
                         {if(isset($_POST['CL_incendie']))
-                            {$valchamp='Incendié';
+                            {$valchamp='Incendie';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
@@ -157,7 +158,7 @@ class DocumentsController extends Controller
                             }}
 elseif (stristr($champtemp,'[CL_attention')== TRUE )
                         {if(isset($_POST['CL_attention']))
-                            {$valchamp="Attention : Cette prise en charge s'entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix";
+                            {$valchamp='Attention : Cette prise en charge s’entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
@@ -167,17 +168,15 @@ elseif (stristr($champtemp,'[CL_attention')== TRUE )
                             }}
                     else
                     //champ libre
-                  {  
-                      if(empty($champtemp))
-                    {$array += [ $champtemp => '         ']; }  
-                    $champdb = str_replace('[CL_', '', $champtemp);
+                  {  $champdb = str_replace('[CL_', '', $champtemp);
                     $champdb = str_replace(']', '', $champdb);
                     $champdb = strtolower($champdb);
 
                     $valchamp=$_POST['CL_'.$champdb];
                     $array += [ $champtemp => $valchamp];
                     }
-  }
+
+                }
 
                 
                     //remplissage de la colonne de base - valeur des champs
@@ -208,7 +207,7 @@ elseif (stristr($champtemp,'[CL_attention')== TRUE )
                 setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
                 $mc=round(microtime(true) * 1000);
                 $datees = strftime("%d-%B-%Y"."_".$mc); 
-                $datesc = strftime("%d-%B-%Y"); 				
+                $datesc = strftime("%d-%B-%Y");                 
                 $name_file = utf8_encode($arrfile['nom'].'_'.$datees.'.doc');
                 $titref =utf8_encode($arrfile['nom'].'_'.$datesc);
            /* }
@@ -455,14 +454,13 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                     }
 
                 //$titref =utf8_encode($arrfile['nom'].'_'.$refdoss);
-		$titref =utf8_decode($arrfile['nom'].'_'.$refdoss);
+        $titref =utf8_decode($arrfile['nom'].'_'.$refdoss);
             }
         }
      
     }
 
 /*--------------------------------------------------------fin dates spécifiques---------------------------*/
-      // $array = str_replace("é", "é", $array);
        $Arrayd = array_map("utf8_decode", $array ); 
        WordTemplate::export($file,$Arrayd, '/documents/'.$refdoss.'/'.$name_file);
 
@@ -709,9 +707,9 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
 
 
                 case "PEC_gardiennage":
-                //case "PEC_Hotel":
+                case "PEC_Hotel":
                 case "PEC_location_Najda_a_VAT":
-               // case "Orientation_vehicule_accidente_pr_expertise_Rev":
+                case "Orientation_vehicule_accidente_pr_expertise_Rev":
                 case "Procuration_Najda_pr_prestataire_rapat_veh":
                 case "PEC_Reparation":
                 case "PEC_Pompes_funebres":
@@ -837,7 +835,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                         if ((stristr($champtemp,'[CL_')=== FALSE) && ($champtemp !=='[DATE_HEURE]'))
                         {   
                             /////
-                            if (($champtemp !=='[CUSTOMER_ID__NAME]') && ($champtemp !=='[AGENT__NAME]')&&($champtemp !=='[AGENT__SIGNATURE]')&&($champtemp !=='[AGENT__LASTNAME]'))
+                            if (($champtemp !=='[CUSTOMER_ID__NAME]') && ($champtemp !=='[AGENT__NAME]')&&($champtemp !=='[AGENT__SIGNATURE]')&&($champtemp !=='[AGENT__LASTNAME]')&&($champtemp !=='[MONTANT_FRANCHISE]'))
                             {
                                 if (array_key_exists($i,$champsparentArray))
                                 {
@@ -928,7 +926,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp =>$valchamp];
+                                $array += [ $champtemp => utf8_encode($valchamp)];
                             }
                             elseif($champtemp ==='[AGENT__LASTNAME]')
                             {
@@ -958,22 +956,32 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                 $array += [ $champtemp => $valchamp];
                             }
                         }
-                      /*  elseif($champtemp ==='[MONTANT_FRANCHISE]')
+                        elseif($champtemp ==='[MONTANT_FRANCHISE]')
                         {
-                                  
-                            if (array_key_exists($i,$champsparentArray))
-                                {
-                                    $valchamp = $champsparentArray[$i];
+                                                             $iddossier = $infodossier['id'];
+                                if (! empty($iddossier) && $iddossier!==null)
+                                {   
+                                    $infodossier = Dossier::where('id', $iddossier)->first();
+                                    $valchamp = $infodossier['montant_franchise'];
+                                    if (! empty($valchamp) && $valchamp!==null)
+                                    {$champtemp = str_replace('[', '', $champtemp);
+                                    $champtemp = str_replace(']', '', $champtemp);
+                                    $champtemp = strtolower($champtemp);
+                                    $array += [ $champtemp => utf8_encode($valchamp)];
+                                    }
+                                    else
+                                   {
+                                       $champtemp = str_replace('[', '', $champtemp);
+                                    $champtemp = str_replace(']', '', $champtemp);
+                                    $champtemp = strtolower($champtemp);
+                                        $valchamp='';
+                                         $array += [ $champtemp => $valchamp];
+                                
+                                   }    
+                                     
                                 }
-                                else
-                                    { $valchamp = "undefined index";}
-
-                                $champtemp = str_replace('[', '', $champtemp);
-                                $champtemp = str_replace(']', '', $champtemp);
-                                $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp => $valchamp];    
                                                     
-                        }*/
+                        }
                         
                         elseif($champtemp ==='[DATE_HEURE]')
                         {
@@ -981,7 +989,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             $champtemp = str_replace('[', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ $champtemp => $datees];
+                            $array += [ $champtemp => utf8_encode($datees)];
                             // champ date precedente
                             if (array_key_exists($i,$champsparentArray))
                             {
@@ -1046,17 +1054,15 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             $array += [ 'CL_'.$champtemp => $valchamp];
                         }
                 elseif (stristr($champtemp,'[CL_attention')== TRUE )
-                        {if (array_key_exists($i,$champsparentArray))
+                        {if(isset($_POST['CL_attention']))
+                            {$valchamp='Attention : Cette prise en charge s’entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix';
+                             $array += [ $champtemp => $valchamp];
+                        }
+                        else
                             {
-                                $valchamp = $champsparentArray[$i];
-                            }
-                            else
-                                { $valchamp = "undefined index";}
-
-                            $champtemp = str_replace('[CL_', '', $champtemp);
-                            $champtemp = str_replace(']', '', $champtemp);
-                            $champtemp = strtolower($champtemp);
-                            $array += [ 'CL_'.$champtemp => $valchamp];}
+                            $valchamp='';
+                            $array += [ $champtemp => $valchamp];
+                            }}
                     else
                     //champ libre
                   {
@@ -1090,21 +1096,17 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                         //verifier quil nest pas un champs libre
                         if ((stristr($champtemp,'[CL_')=== FALSE) && ($champtemp !=='[DATE_HEURE]'))
                         {   
-                            if (($champtemp !=='[CUSTOMER_ID__NAME]') && ($champtemp !=='[AGENT__NAME]') && ($champtemp !=='[AGENT__SIGNATURE]')&&($champtemp !=='[AGENT__LASTNAME]')&& ($champtemp !=='[PREST__HOTEL]') && ($champtemp !=='[PREST__GARAGE]') && ($champtemp !=='[PREST__TRANSIT]') && ($champtemp !=='[PREST__IMAG]') && ($champtemp !=='[PREST__OPTIC]') && ($champtemp !=='[PREST__PHARM]') && ($champtemp !=='[PREST__POMPES]') && ($champtemp !=='[PREST__REEDUC]') && ($champtemp !=='[PREST__LABMED]'))
-                            { 
+                            if (($champtemp !=='[CUSTOMER_ID__NAME]') && ($champtemp !=='[AGENT__NAME]') && ($champtemp !=='[PREST__HOTEL]') && ($champtemp !=='[PREST__GARAGE]') && ($champtemp !=='[PREST__TRANSIT]') && ($champtemp !=='[PREST__IMAG]') && ($champtemp !=='[PREST__OPTIC]') && ($champtemp !=='[PREST__PHARM]') && ($champtemp !=='[PREST__POMPES]') && ($champtemp !=='[PREST__REEDUC]') && ($champtemp !=='[PREST__LABMED]')&&($champtemp !=='[AGENT__SIGNATURE]')&&($champtemp !=='[AGENT__LASTNAME]')&&($champtemp !=='[MONTANT_FRANCHISE]'))
+                            {
                                 $champdb = str_replace('[', '', $champtemp);
                                 $champdb = str_replace(']', '', $champdb);
-                            
                                 $champdb = strtolower($champdb);
-                 if( empty(($infodossier[$champdb])) || ($infodossier[$champdb]) == null)
+                                $valchamp = $infodossier[$champdb];
 
-                               { $valchamp = '';}
-                             else
-                               { $valchamp = $infodossier[$champdb];}
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
-                                $array += [ $champtemp =>$valchamp];
+                                $array += [ $champtemp => utf8_encode($valchamp)];
                             }
                             elseif($champtemp ==='[CUSTOMER_ID__NAME]')
                             {
@@ -1116,7 +1118,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                     $champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
-                                    $array += [ $champtemp => $valchamp];
+                                    $array += [ $champtemp => utf8_encode($valchamp)];
                                 }
                             }
                             elseif($champtemp ==='[AGENT__NAME]')
@@ -1129,7 +1131,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                     $champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
-                                    $array += [ $champtemp =>$valchamp];
+                                    $array += [ $champtemp => utf8_encode($valchamp)];
 
                                 }
                             }
@@ -1143,7 +1145,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                     $champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
-                                    $array += [ $champtemp =>$valchamp];
+                                    $array += [ $champtemp => utf8_encode($valchamp)];
                                 }
                             }
                              elseif($champtemp ==='[AGENT__SIGNATURE]')
@@ -1156,10 +1158,10 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                     $champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
-                                    $array += [ $champtemp =>$valchamp];
+                                    $array += [ $champtemp => utf8_encode($valchamp)];
                                 }
                             }
-                           /* elseif($champtemp ==='[MONTANT_FRANCHISE]')
+                            elseif($champtemp ==='[MONTANT_FRANCHISE]')
                         {
                                                              $iddossier = $infodossier['id'];
                                 if (! empty($iddossier) && $iddossier!==null)
@@ -1170,7 +1172,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                     {$champtemp = str_replace('[', '', $champtemp);
                                     $champtemp = str_replace(']', '', $champtemp);
                                     $champtemp = strtolower($champtemp);
-                                    $array += [ $champtemp => $valchamp];
+                                    $array += [ $champtemp => utf8_encode($valchamp)];
                                     }
                                     else
                                    {$champtemp = str_replace('[', '', $champtemp);
@@ -1183,9 +1185,9 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                      
                                 }
                                             
-                        }*/
+                        }
                         
-                          elseif($champtemp ==='[PREST__HOTEL]')
+                            elseif($champtemp ==='[PREST__HOTEL]')
                             {
                                 $infoprest = Prestation::where(['dossier_id' => $dossier,'type_prestations_id' => 18])->first();
                                 $idprest = $infoprest['prestataire_id'];
@@ -1328,12 +1330,12 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             $champtemp = str_replace('[', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
-                            $array += [ $champtemp =>$datees];
+                            $array += [ $champtemp => utf8_encode($datees)];
                         }
                         elseif(stristr($champtemp,'[CL_')!== FALSE)
                         { if (stristr($champtemp,'[CL_accidente')== TRUE )
                         {if(isset($_POST['CL_accidente']))
-                            {$valchamp='Accidenté';
+                            {$valchamp='Accidente';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
@@ -1343,7 +1345,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             }}
                  elseif (stristr($champtemp,'[CL_enpanne')== TRUE )
                         {if(isset($_POST['CL_enpanne']))
-                            {$valchamp='En panne';
+                            {$valchamp='Enpanne';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
@@ -1353,7 +1355,7 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             }}
                             elseif (stristr($champtemp,'[CL_incendie')== TRUE )
                         {if(isset($_POST['CL_incendie']))
-                            {$valchamp='Incendié';
+                            {$valchamp='Incendie';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
@@ -1373,12 +1375,12 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             }}
 elseif (stristr($champtemp,'[CL_attention')== TRUE )
                         {if(isset($_POST['CL_attention']))
-                            {$valchamp="Attention : Cette prise en charge s'entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix";
+                            {$valchamp='Attention : Cette prise en charge s’entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix';
                              $array += [ $champtemp => $valchamp];
                         }
                         else
                             {
-                            $valchamp='           ';
+                            $valchamp='';
                             $array += [ $champtemp => $valchamp];
                             }}
                     else
@@ -1405,9 +1407,9 @@ elseif (stristr($champtemp,'[CL_attention')== TRUE )
  
             //header('Content-type: application/json');    
             //return json_encode($array);
-       // return response()->json($array, 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
-      // JSON_UNESCAPED_UNICODE); 
-	  return $array;
+        return response()->json($array, 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+       JSON_UNESCAPED_UNICODE); 
+      // return $array;
        
     }
 
@@ -1445,11 +1447,8 @@ public function historique(Request $request)
         $arrfile = Template_doc::where('id', $templateid)->first();
         // template annulation
         $file=public_path($arrfile['template_annulation']);
-        $mc=round(microtime(true) * 1000);
-        $datees = strftime("%d-%B-%Y"."_".$mc); 
-        $datesc = strftime("%d-%B-%Y"); 
-        $name_file = $arrfile['nom'].'_'.$datees.'_annulation.doc';
-        $titref =$arrfile['nom'].'_'.$datesc;
+        $name_file = $arrfile['nom'].'_'.$refdoss.'_annulation.doc';
+        $titref =$arrfile['nom'].'_'.$refdoss;
         // verifier si la template a un champ date/heure
         $datees="";
         if(stristr($arrfile['champs'], '[DATE_HEURE]') !== FALSE) 

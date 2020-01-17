@@ -1,5 +1,5 @@
 <?php 
-if (isset($_GET['ville'])) {$ville=$_GET['ville'];}
+if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];}
@@ -62,7 +62,7 @@ $conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-mysqli_query($conn,"set names 'utf8'");
+//mysqli_query($conn,"set names 'utf8'");
 
 $sqlvh = "SELECT id,name,immarticulation,type,fonction FROM voitures";
 	$resultvh = $conn->query($sqlvh);
@@ -75,7 +75,35 @@ $sqlvh = "SELECT id,name,immarticulation,type,fonction FROM voitures";
 	    }
 	    //print_r($array_prest);
 		}
+$sqlclient = "SELECT id,groupe,name FROM clients";
+	$resultclient = $conn->query($sqlclient);
+	if ($resultclient->num_rows > 0) {
+	    // output data of each row
+	    $array_client = array();
+	    while($rowclient = $resultclient->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_client[] = array('id' => $rowclient["id"],'groupe' => $rowclient["groupe"],'name' => $rowclient["name"]);
+	    }
+	    //print_r($array_prest);
+		}
 
+$IMA="non";
+foreach ($array_client as $client) {
+	if ($client['name'] == $customer_id__name && $client['groupe'] == 3)
+		{
+	$IMA="oui";
+}
+}
+// infos agent
+	    $sqlagt = "SELECT name,lastname,signature FROM users WHERE id=".$iduser."";
+		$resultagt = $conn->query($sqlagt);
+		if ($resultagt->num_rows > 0) {
+	    // output data of each row
+	    $detailagt = $resultagt->fetch_assoc();
+	    
+		} else {
+	    echo "0 results agent";
+		}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>Demande_evasan_nationale</title>
@@ -189,6 +217,7 @@ p,ul,ol /* Paragraph Style */
 <form id="formchamps">
 <input name="pre_dateheure" type="hidden" value="<?php if(isset ($pre_dateheure)) echo $pre_dateheure; ?>"></input>
 <p><span class=rvts1><br></span></p>
+
 <p><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
@@ -202,7 +231,7 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps1><span class=rvts3> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts3> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts3> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts3> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts3> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts3> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts3> &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
 <p class=rvps1><span class=rvts3><br></span></p>
 <p class=rvps1><span class=rvts3><br></span></p>
-<p class=rvps3><span class=rvts3> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts3><input name="ville" id="ville" placeholder="" readonly value="<?php if(isset ($ville)) {echo $ville;}  if (empty($ville)){ echo ".............................." ;}?>" /><input name="date_heure" type="hidden" value="<?php if(isset ($date_heure)) echo $date_heure; ?>"></input></span></p>
+<p class=rvps3><span class=rvts3> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts3>Sousse le <input name="date_heure" value="<?php if(isset ($date_heure)) echo $date_heure; ?>"></input></span></p>
 <p class=rvps1><span class=rvts3><br></span></p>
 <p class=rvps1><span class=rvts4><br></span></p>
 <p class=rvps2><span class=rvts5>Demande d</span><span class=rvts6>’</span><span class=rvts5>évacuation sanitaire aérienne</span></p>
@@ -210,7 +239,24 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps1><span class=rvts7><br></span></p>
 <p class=rvps1><span class=rvts7>Bonjour Monsieur le Ministre,</span></p>
 <p class=rvps1><span class=rvts7><br></span></p>
-<p class=rvps1><span class=rvts7>Nous avons été sollicités par la compagnie <input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /> pour le cas d</span><span class=rvts8>’</span><span class=rvts7>un de leurs assurés de trouvant à <input name="CL_localisation" id="CL_localisation" placeholder="localisation"  value="<?php if(isset ($CL_localisation)) echo $CL_localisation; ?>"></input>.</span></p>
+<p class=rvps1><span class=rvts7>Nous avons été sollicités par la compagnie 
+<?php 
+{if( $IMA==='oui' )
+ {
+?>
+
+<input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /> 
+
+<?php 
+}
+ else
+ {
+?><input type=hidden name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="" /> 
+<?php 
+}
+ }
+?>
+pour le cas d</span><span class=rvts8>’</span><span class=rvts7>un de leurs assurés de trouvant à <input name="CL_localisation" id="CL_localisation" placeholder="localisation"  value="<?php if(isset ($CL_localisation)) echo $CL_localisation; ?>"></input>.</span></p>
 <p class=rvps1><span class=rvts7>Il s</span><span class=rvts8>’</span><span class=rvts7>agit de Mr/Mme <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> de nationalité <input name="CL_nationalite" placeholder="nationalité"  value="<?php if(isset ($CL_nationalite)) echo $CL_nationalite; ?>"></input> qui présente</span><span class=rvts9> </span><span class=rvts7><input name="CL_diagnostic" placeholder="diagnostic"  value="<?php if(isset ($CL_diagnostic)) echo $CL_diagnostic; ?>"></input>.</span></p>
 <p class=rvps1><span class=rvts7><br></span></p>
 <p class=rvps1><span class=rvts7>La demande est une </span><span class=rvts9>évacuation sanitaire par avion de <input name="CL_lsortie" placeholder="sortie"  value="<?php if(isset ($CL_lsortie)) echo $CL_lsortie; ?>"></input> à <input name="CL_larrivee" placeholder="arrivee"  value="<?php if(isset ($CL_larrivee)) echo $CL_larrivee; ?>"></input> </span><span class=rvts7>en date du</span><span class=rvts10> </span><span class=rvts7><input name="CL_dateevac" placeholder="date"  value="<?php if(isset ($CL_dateevac)) echo $CL_dateevac; ?>"></input> dans <input name="CL_matine_apresmidi" placeholder="la matinée/après-midi"  value="<?php if(isset ($CL_matine_apresmidi)) echo $CL_matine_apresmidi; ?>"></input>.</span></p>
@@ -236,8 +282,8 @@ foreach ($array_vehic as $vehic) {
 <p class=rvps1><span class=rvts7><br></span></p>
 <p><span class=rvts7><br></span></p>
 <p><span class=rvts7>Cordialement</span></p>
-<p class=rvps1><span class=rvts9><input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($agent__lastname)) echo $agent__lastname; ?>" /> </span></p>
-<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($agent__signature)) echo $agent__signature; ?>" /></span></p>
+<p class=rvps1><span class=rvts9><input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($detailagt['name'])) echo $detailagt['name']; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($detailagt['lastname'])) echo $detailagt['lastname']; ?>" /> </span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($detailagt['signature'])) echo $detailagt['signature']; ?>" /></span></p>
 <p><span class=rvts7>Plateau Médical</span></p>
 <p><span class=rvts7><br></span></p>
 <p><span class=rvts7><br></span></p>

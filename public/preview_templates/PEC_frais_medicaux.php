@@ -1,7 +1,9 @@
 <?php
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
+if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['prest__structure'])) {$prest__structure=$_GET['prest__structure'];}
+if (isset($_GET['CL_text_client'])) {$CL_text_client=$_GET['CL_text_client'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; $subscriber_name2=$_GET['subscriber_name'];}
 if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; $subscriber_lastname2=$_GET['subscriber_lastname'];}
@@ -129,10 +131,38 @@ $sqlstruc = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id
         $array_struc = array();
         while($rowstruc = $resultstruc->fetch_assoc()) {
             $array_struc[] = array('id' => $rowstruc["id"],'name' => $rowstruc["name"]  );
-        }	 
-	
-	
+        }	
+$sqlclient = "SELECT id,groupe,name FROM clients";
+	$resultclient = $conn->query($sqlclient);
+	if ($resultclient->num_rows > 0) {
+	    // output data of each row
+	    $array_client = array();
+	    while($rowclient = $resultclient->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_client[] = array('id' => $rowclient["id"],'groupe' => $rowclient["groupe"],'name' => $rowclient["name"]);
+	    }
+	    //print_r($array_prest);
+		}
+
+$IMA="non";
+foreach ($array_client as $client) {
+	if ($client['name'] == $customer_id__name && $client['groupe'] == 3)
+		{
+	$IMA="oui";
+}
+} 
+// infos agent
+	    $sqlagt = "SELECT name,lastname,signature FROM users WHERE id=".$iduser."";
+		$resultagt = $conn->query($sqlagt);
+		if ($resultagt->num_rows > 0) {
+	    // output data of each row
+	    $detailagt = $resultagt->fetch_assoc();
+	    
+		} else {
+	    echo "0 results agent";
+		}
 ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>PEC_frais_medicaux</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -488,7 +518,8 @@ $sqlstruc = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id
             <?php
 foreach ($array_struc as $struc) {
     
-    echo "<option value='".$struc['name']."' >".$struc['name']."</option>";
+   // echo "<option value='".$struc['name']."' >".$struc['name']."</option>";
+echo '<option value="'.$struc["name"].'" >'.$struc["name"].'</option>';
 }
 ?>
 </span></p>
@@ -498,11 +529,28 @@ foreach ($array_struc as $struc) {
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps3><span class=rvts4>PRISE EN CHARGE DE FRAIS MEDICAUX</span></p>
 <p class=rvps3><span class=rvts5><br></span></p>
+<?php 
+{if( $IMA==='oui' )
+ {
+?>
+<input name="CL_text_client"  type="hidden" value="CLient : " />
 <p class=rvps4><span class=rvts6>Client : <input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /></span></p>
-<p class=rvps5><span class=rvts6>Nom patient : <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> Prénom : <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> </span></p>
-<p class=rvps6><span class=rvts6>Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input/></span></p>
+
+<?php 
+}
+ else
+ {
+?>
+<input name="CL_text_client"  type="hidden" value="" />
+<p class=rvps4><span class=rvts6> <input  type="hidden" name="customer_id__name" id="customer_id__name" placeholder="compagnie" value=" " /></span></p>
+<?php 
+}
+ }
+?>
+<p class=rvps5><span class=rvts6>Nom patient : <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" />  Prénom : <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> </span></p>
+<p class=rvps6><span class=rvts6>Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input/> <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> </span></p>
 <p class=rvps5><span class=rvts5>Montant maximal de prise en charge (TND)</span><span class=rvts6>:&nbsp;</span><span class=rvts9> </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_numerique" placeholder="Montant maximal"  value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input></span><span class=rvts9>&nbsp;&nbsp;&nbsp; </span><span class=rvts5>Toutes lettres</span><span class=rvts6> : <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant en toutes lettres"  value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars</span></p>
-<p class=rvps5><span class=rvts6>Periode de hospitalisation: <input name="CL_periode_hospitalisation" placeholder="periode de hospitalisation"  value="<?php if(isset ($CL_periode_hospitalisation)) echo $CL_periode_hospitalisation; ?>"></input></span></p>
+<p class=rvps5><span class=rvts6>Periode d'hospitalisation: <input name="CL_periode_hospitalisation" placeholder="periode de hospitalisation"  value="<?php if(isset ($CL_periode_hospitalisation)) echo $CL_periode_hospitalisation; ?>"></input></span></p>
 
 <p class=rvps6><span class=rvts6>Franchise: <input name="franchise" placeholder="franchise"  value="<?php if($franchise==="1")echo "oui"; else echo "non" ?>"></input> </span><span class=rvts7></span></p>
 <?php
@@ -525,7 +573,7 @@ foreach ($array_struc as $struc) {
 <p class=rvps9><span class=rvts27><br></span></p>
 <?php
 { if (isset($CL_attention))
-	{ if (($CL_attention === "oui")||($CL_attention === "on")) { 
+	{ if (($CL_attention === "Attention : Cette prise en charge s'entend hors extra (y compris surclassement de chambre) et conformément à la nomenclature officielle des actes médicaux et à votre liste de prix")) { 
      $test='oui';
 	 ?>	
 		<input type="checkbox" name="CL_attention" id="CL_attention" checked value="oui">
@@ -564,7 +612,7 @@ foreach ($array_docssignes as $docsigne)
 	} } 
 ?>
 
-<input name="CL_doc_sig" type="hidden" placeholder="" value="<?php if(isset($CL_doc_sig)) {echo $CL_doc_sig;} if ($sign==="oui"){ echo 'Attention : Cette prise en charge ne sera valable que si la facture nous parvient accompagnée de l’original de '   ;} else { echo '' ;}?>"></input>
+<input name="CL_doc_sig" type="hidden" placeholder="" value="<?php if(isset($CL_doc_sig)) {echo $CL_doc_sig;} if ($sign==="oui"){ echo "Attention : Cette prise en charge ne sera valable que si la facture nous parvient accompagnée de l'original de "   ;} else { echo '' ;}?>"></input>
 <input name="CL_doc_sign" type="hidden" placeholder="" value="<?php if(isset($CL_doc_sign)) {echo $CL_doc_sign;} if ($sign==="oui"){ echo 'dûment  complétée  et  signée  par  le  (la) patient(e)'   ;} else { echo '' ;}?>"></input>
 <p class=rvps9><span class=rvts16>Observations:</span><span class=rvts11> <input name="CL_text" placeholder="text" value="<?php if(isset ($CL_text)) echo $CL_text; ?>"></input></span></p>
 <p><span class=rvts32><br></span></p>
@@ -577,16 +625,18 @@ foreach ($array_docssignes as $docsigne)
 <p><span class=rvts3><br></span></p>
 <p><span class=rvts3><br></span></p>
 <p><span class=rvts3>P/ la Gérante</span></p>
-<p class=rvps1><span class=rvts9> <input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($agent__lastname)) echo $agent__lastname; ?>" /></span></p>
-<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($agent__signature)) echo $agent__signature; ?>" /></span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($detailagt['name'])) echo $detailagt['name']; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($detailagt['lastname'])) echo $detailagt['lastname']; ?>" /></span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($detailagt['signature'])) echo $detailagt['signature']; ?>" /></span></p>
 <p><span class=rvts3>Plateau d</span><span class=rvts41>’</span><span class=rvts3>assistance médicale</span></p>
 <p class=rvps1><span class=rvts3>« courrier électronique, sans signature »</span></p>
 </form>
 <script language="javascript" src="nombre_en_lettre.js"></script>
 <script type="text/javascript">
     function keyUpHandler(obj){
+	<?php if (intval($montantgop) > 0) { ?>
             if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block";}
             else {document.getElementById("alertGOP").style.display="none";}
+	<?php } ?>
             document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value)
         }//fin de keypressHandler
 	// statut malade checkbox

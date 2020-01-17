@@ -1,5 +1,5 @@
 <?php
-if (isset($_GET['CL_date_heure_act'])) {$CL_date_heure_act=$_GET['CL_date_heure_act'];}
+if (isset($_GET['ville'])) {$ville=$_GET['ville'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; }
 if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; }
@@ -15,9 +15,69 @@ if (isset($_GET['idtaggop']))
     {
         $idtaggop=$_GET['idtaggop']; 
     }
+$lines_array = file("../../.env");
+
+foreach($lines_array as $line) {
+    // username
+    if(strpos($line, 'DB_USERNAME') !== false) {
+        list(, $user) = explode("=", $line);
+        $user = trim(preg_replace('/\s+/', ' ', $user));
+        $user = str_replace(' ', '', $user);
+    }
+    // password
+    if(strpos($line, 'DB_PASSWORD') !== false) {
+        list(, $mdp) = explode("=", $line);
+        $mdp = trim(preg_replace('/\s+/', ' ', $mdp));
+        $mdp = str_replace(' ', '', $mdp);
+    }
+    // database
+    if(strpos($line, 'DB_DATABASE') !== false) {
+        list(, $dbname) = explode("=", $line);
+        $dbname = trim(preg_replace('/\s+/', ' ', $dbname));
+        $dbname = str_replace(' ', '', $dbname);
+    }
+    // hostname
+    if(strpos($line, 'DB_HOST') !== false) {
+        list(, $hostname) = explode("=", $line);
+        $hostname = trim(preg_replace('/\s+/', ' ', $hostname));
+        $hostname = str_replace(' ', '', $hostname);
+    }
+}
+//echo $hostname.",".$user.",".$mdp.",".$dbname."<br>";
+// Create connection
+$conn = mysqli_connect($hostname, $user, $mdp,$dbname);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+//mysqli_query($conn,"set names 'utf8'");
+$sqlclient = "SELECT id,groupe,name FROM clients";
+	$resultclient = $conn->query($sqlclient);
+	if ($resultclient->num_rows > 0) {
+	    // output data of each row
+	    $array_client = array();
+	    while($rowclient = $resultclient->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_client[] = array('id' => $rowclient["id"],'groupe' => $rowclient["groupe"],'name' => $rowclient["name"]);
+	    }
+	    //print_r($array_prest);
+		}
+
+$IMA="non";
+foreach ($array_client as $client) {
+	if ($client['name'] == $customer_id__name && $client['groupe'] == 3)
+		{
+	$IMA="oui";
+}
+}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>1sj2w5nrf2cp2hsbevn2rpx6iqrv8wxm_Procu_abonne_pr_Najda_rapat_vhl</title>
+<html><head>
+
+
+<title>1sj2w5nrf2cp2hsbevn2rpx6iqrv8wxm_Procu_abonne_pr_Najda_rapat_vhl</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <style type="text/css"><!--
@@ -103,7 +163,7 @@ if (isset($_GET['idtaggop']))
 <form id="formchamps">
     <input name="pre_dateheure" type="hidden" value="<?php if(isset ($pre_dateheure)) echo $pre_dateheure; ?>"> </input>
 <input name="idtaggop" type="hidden" value="<?php if(isset ($idtaggop)) echo $idtaggop; ?>"></input>
-<p class=rvps1><span class=rvts1> <input name="CL_date_heure_act" placeholder="Date Heure" value="<?php if(isset ($CL_date_heure_act)) echo $CL_date_heure_act; ?>"></input></span></p>
+<p class=rvps1><span class=rvts1> <input name="ville" id="ville" placeholder="" readonly value="<?php if(isset ($ville)) {echo $ville;}  if (empty($ville)){ echo ".............................." ;}?>" /><input name="date_heure" type="hidden" value="<?php if(isset ($date_heure)) echo $date_heure; ?>"></input></span></p>
 <p class=rvps1><span class=rvts1><br></span></p>
 <p><span class=rvts1><br></span></p>
 <p><span class=rvts1><br></span></p>
@@ -119,7 +179,24 @@ if (isset($_GET['idtaggop']))
 <p><span class=rvts1><br></span></p>
 <p><span class=rvts1><br></span></p>
 <p class=rvps3><span class=rvts1><br></span></p>
-<p class=rvps4><span class=rvts1>Je soussigné  <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> titulaire du passeport <input name="CL_pays" placeholder="Pays" value="<?php if(isset ($CL_pays)) echo $CL_pays; ?>"></input> N° N° <input name="CL_passport" placeholder="Passport" value="<?php if(isset ($CL_passport)) echo $CL_passport; ?>"></input> autorise par la présente la société </span><span class=rvts3>Najda Assistance,</span><span class=rvts1> agissant en tant que correspondant de ma société d</span><span class=rvts4>’</span><span class=rvts1>assistance <input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /> à procéder aux démarches douanières pour le rapatriement de mon véhicule  <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input>  <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input>.</span></p>
+<p class=rvps4><span class=rvts1>Je soussigné  <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> titulaire du passeport <input name="CL_pays" placeholder="Pays" value="<?php if(isset ($CL_pays)) echo $CL_pays; ?>"></input>  N° <input name="CL_passport" placeholder="Passport" value="<?php if(isset ($CL_passport)) echo $CL_passport; ?>"></input> autorise par la présente la société </span><span class=rvts3>Najda Assistance,</span><span class=rvts1> agissant en tant que correspondant de ma société d</span><span class=rvts4>’</span><span class=rvts1>assistance 
+<?php 
+{if( $IMA==='oui' )
+ {
+?>
+
+<input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" />  
+
+<?php 
+}
+ else
+ {
+?><input type=hidden name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="" /> 
+<?php 
+}
+ }
+?>
+à procéder aux démarches douanières pour le rapatriement de mon véhicule  <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input>  <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input>.</span></p>
 <p class=rvps3><span class=rvts1><br></span></p>
 <p class=rvps3><span class=rvts1>Dont acte.</span></p>
 <p class=rvps3><span class=rvts1><br></span></p>

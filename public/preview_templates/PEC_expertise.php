@@ -1,5 +1,6 @@
 <?php
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
+if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['prest__expertise'])) {$prest__expertise=$_GET['prest__expertise'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['CL_date_heure_debut'])) {$CL_date_heure_debut=$_GET['CL_date_heure_debut'];}
@@ -61,7 +62,7 @@ $conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-mysqli_query($conn,"set names 'utf8'");
+//mysqli_query($conn,"set names 'utf8'");
 $sqlclient = "SELECT id,groupe,name FROM clients";
 	$resultclient = $conn->query($sqlclient);
 	if ($resultclient->num_rows > 0) {
@@ -88,8 +89,26 @@ $sqlvh =$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHE
 
         $array_prest = array();
         while($rowvh = $resultvh->fetch_assoc()) {
-            $array_prest[] = array('id' => $rowvh["id"],'name' => $rowvh["name"]  );
+            $array_prest[] = array('id' => $rowvh["id"],"name" => $rowvh["name"]  );
         }
+$sqltel = "SELECT champ,nom,prenom FROM adresses WHERE parent =".$iddossier." AND nature ='teldoss'";
+    $resulttel = $conn->query($sqltel);
+    if ($resulttel->num_rows > 0) {
+
+        $array_tel = array();
+        while($rowtel = $resulttel->fetch_assoc()) {
+            $array_tel[] = array('id' => $rowtel["id"],'nom' => $rowtel["nom"] ,'prenom' => $rowtel["prenom"],'champ' => $rowtel["champ"]  );
+        } }
+// infos agent
+	    $sqlagt = "SELECT name,lastname,signature FROM users WHERE id=".$iduser."";
+		$resultagt = $conn->query($sqlagt);
+		if ($resultagt->num_rows > 0) {
+	    // output data of each row
+	    $detailagt = $resultagt->fetch_assoc();
+	    
+		} else {
+	    echo "0 results agent";
+		}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>taml0bzv01qwdlqbdo97kjxixaeohm1q_PEC_expertise</title>
@@ -408,7 +427,7 @@ $sqlvh =$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHE
             <?php
 foreach ($array_prest as $prest) {
     
-    echo "<option value='".$prest['name']."' >".$prest['name']."</option>";
+    echo '<option value="'.$prest["name"].'" >'.$prest["name"].'</option>';
 }
 
 ?>
@@ -442,12 +461,23 @@ foreach ($array_prest as $prest) {
 }
  }
 ?>
-<p class=rvps9><span class=rvts15>Nom</span><span class=rvts16> </span><span class=rvts15>assuré</span><span class=rvts17> </span><span class=rvts13>:</span><span class=rvts17> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> </span></p>
-<p class=rvps9><span class=rvts15>Prénom</span><span class=rvts16> </span><span class=rvts15>assuré</span><span class=rvts17> </span><span class=rvts13>:</span><span class=rvts17> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span></p>
-<p class=rvps9><span class=rvts15>Notre référence</span><span class=rvts13>: <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input></span></p>
+<p class=rvps9><span class=rvts15>Nom</span><span class=rvts16> </span><span class=rvts15>assuré</span><span class=rvts17> </span><span class=rvts13>:</span><span class=rvts17><input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> </span></p>
+<p class=rvps9><span class=rvts15>Prénom</span><span class=rvts16> </span><span class=rvts15>assuré</span><span class=rvts17> </span><span class=rvts13>:</span><span class=rvts17><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> </span></p>
+<p class=rvps9><span class=rvts15>Notre référence</span><span class=rvts13>: <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> |<input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input> <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> </span></p>
 <p class=rvps9><span class=rvts15>Type du véhicule</span><span class=rvts17> </span><span class=rvts13>: <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input> <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> </span></p>
 <p class=rvps9><span class=rvts15>Immatriculation</span><span class=rvts17> </span><span class=rvts13>: <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input></span></p>
-<p class=rvps9><span class=rvts15>Contact abonné</span><span class=rvts17> </span><span class=rvts13>:<input name="subscriber_phone_cell" placeholder="téléphone du l'abonnée"  value="<?php if(isset ($subscriber_phone_cell)) echo $subscriber_phone_cell;?>"/></span></p>
+<p class=rvps9><span class=rvts15>Contact abonné</span><span class=rvts17> </span><span class=rvts13>:<input name="subscriber_phone_cell" list="subscriber_phone_cell" placeholder="téléphone du l'abonnée"  value="<?php if(isset ($subscriber_phone_cell)) echo $subscriber_phone_cell;?>"/>
+<datalist id="subscriber_phone_cell">
+<?php
+
+foreach ($array_tel as $tel) {
+	
+		echo "<option value='".$tel['champ']."'  >".$tel['prenom']." ".$tel['nom']." </option>";
+ }
+
+?>
+</datalist>
+</span></p>
 <p class=rvps9><span class=rvts15>Localisation du véhicule</span><span class=rvts13> :<input name="CL_lieu_localisation" placeholder="Lieu Localisation" value="<?php if(isset ($CL_lieu_localisation)) echo $CL_lieu_localisation; ?>"></input></span></p>
 <p class=rvps9><span class=rvts15>Type d</span><span class=rvts18>’</span><span class=rvts15>expertise</span><span class=rvts13> :<input name="CL_type_expertise" placeholder="Type Expertise" value="<?php if(isset ($CL_type_expertise)) echo $CL_type_expertise; ?>"></input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>
 
@@ -455,8 +485,8 @@ foreach ($array_prest as $prest) {
 {if( $IMA==='oui' )
  {
 ?>
-<input name="CL_text_reference"  type="hidden" value="Référence client : " />
-<span class=rvts15>Référence client</span><span class=rvts13>:  <input name="reference_customer" id="reference_customer"placeholder="reference client" value="<?php if(isset ($reference_customer)) echo $reference_customer; ?>"></input> |<input name="CL_text_reference1"  type="hidden" value="|" /><input name="customer_id__name2" id="customer_id__name2" placeholder="compagnie" value="<?php if(isset ($customer_id__name2)) echo $customer_id__name2; ?>" /> </span></p>
+<input name="CL_text_reference"  type="hidden" value="Reference client : " />
+<span class=rvts15>Référence client</span><span class=rvts13>:  <input name="reference_customer" id="reference_customer"placeholder="reference client" value="<?php if(isset ($reference_customer)) echo $reference_customer; ?>"></input>  <input name="customer_id__name2" id="customer_id__name2" placeholder="compagnie" value="<?php if(isset ($customer_id__name2)) echo $customer_id__name2; ?>" /> </span></p>
 
 <?php 
 }
@@ -466,7 +496,6 @@ foreach ($array_prest as $prest) {
 <input name="CL_text_reference"  type="hidden" value="" />
 <p class=rvps9><span class=rvts14> <input  type="hidden" name="reference_customer" id="reference_customer" placeholder="compagnie" value=" " /></span></p>
 <p class=rvps9><span class=rvts14> <input  type="hidden" name="customer_id__name2" id="customer_id__name2" placeholder="compagnie" value=" " /></span></p>
-<input name="CL_text_reference1"  type="hidden" value="" />
 <?php 
 }
  }
@@ -484,8 +513,8 @@ foreach ($array_prest as $prest) {
 <p><span class=rvts29>Merci de votre collaboration.</span></p>
 <p><span class=rvts29><br></span></p>
 <p><span class=rvts29>P/la Gérante</span></p>
-<p class=rvps1><span class=rvts9><input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($agent__lastname)) echo $agent__lastname; ?>" /> </span></p>
-<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($agent__signature)) echo $agent__signature; ?>" /></span></p>
+<p class=rvps1><span class=rvts9><input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($detailagt['name'])) echo $detailagt['name']; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($detailagt['lastname'])) echo $detailagt['lastname']; ?>" /> </span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($detailagt['signature'])) echo $detailagt['signature']; ?>" /></span></p>
 <p><span class=rvts29>Plateau d</span><span class=rvts30>’</span><span class=rvts29>assistance technique</span></p>
 <p class=rvps1><span class=rvts29>« courrier électronique, sans signature »</span></p>
 </body></html>

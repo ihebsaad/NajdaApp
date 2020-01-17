@@ -240,7 +240,7 @@ $(document).ready(function()
                             <select id="attachs"  class="itemName form-control col-lg-12" style="" name="attachs[]"  multiple  value="$('#attachs').val()">
                                 <option></option>
                                 @foreach($attachements as $attach)
-                                    <option value="<?php echo $attach->id;?>"> <?php echo $attach->nom;?></option>
+                                    <option  value="<?php echo $attach->id;?>" pathem="<?php  echo URL::asset('storage'.addslashes($attach->path)) ; ?>" typeem="<?php echo $attach->type;?>"><?php echo $attach->nom;?> </option>
                                <!--     <option value="<?php // echo $attach->id;?>"> <?php //echo $attach->nom;?> - <small><?php // echo date('d/m/Y H:i', strtotime($attach->created_at)); ?></small></option>-->
                                 @endforeach
                             </select>
@@ -330,6 +330,29 @@ $(document).ready(function()
                 <div class="modal-footer">
                     <a id="oui"  href="#attachem" class="btn btn-sucess"   style="width:100px;color:#ffffff" onclick="$('#modalalert').modal('hide');" >Oui</a>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Non</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Modal Ouvrir Attachement-->
+    <div class="modal fade" id="openattachEM"  role="dialog" aria-labelledby="exampleModal2" aria-hidden="true" style="z-index: 9999 !important">
+        <div class="modal-dialog" role="document" style="width:900px;height: 450px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="attTitleEM"></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+
+                        <iframe id="attachiframeEM" src="" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                         <center>   <img style="max-width:800px" id="imgattachEM"/></center>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
@@ -677,6 +700,74 @@ $("#prest").change(function(){
 
         });
     </script>
+<script>
+    function modalattachEM(titre,emplacement,type)
+    {
+        document.getElementById('attachiframeEM').style.display='none';
+        document.getElementById('imgattachEM').style.display='none';
+          $("#attTitleEM").text(titre);
+
+        if  (type ==  'pdf')
+        {
+            document.getElementById('attachiframeEM').src =emplacement;
+            document.getElementById('attachiframeEM').style.display='block';
+
+            // document.getElementById('attachiframe').src =emplacement;
+        }
+        if ( (type ==  'doc') || ( type ==  'docx'  ) || ( type ==  'xls'  ) || ( type ==  'xlsx'  )  )
+        {document.getElementById('attachiframeEM').src ="https://view.officeapps.live.com/op/view.aspx?src="+emplacement;
+            document.getElementById('attachiframeEM').style.display='block';
+        }
+        if ( (type ==  'png') || (type ==  'jpg') ||(type ==  'jpeg' ) )
+        {
+            document.getElementById('imgattachEM').style.display='block';
+            document.getElementById('imgattachEM').src =emplacement;
+           // document.getElementById('attachiframe').src =emplacement;
+        }
+
+
+        // cas DOC fichier DOC
+        $("#openattachEM").modal('show');
+    }
+  
+      var verrou=false;
+    
+     $(document).on('click','.select2-selection__choice__remove',function(){
+
+        verrou=true;
+      //alert('remove');
+
+         });
+
+
+    $(document).on('click','.select2-selection__choice',function(){
+     var nomf=$(this).attr("title");
+       // alert(nomf);
+
+        //var texte = $("#attachs option:selected").text(); 
+        //alert(texte);
+        var values = '';
+        if(verrou==false)
+        {
+        $('#attachs option').each(function() {
+
+             //values += $(this).text(); 
+
+            if($(this).text()==nomf)
+            {
+               empl=$(this).attr("pathem");
+               type=$(this).attr("typeem");
+               modalattachEM(nomf,empl,type);
+               return false;
+            }
+           
+
+         });
+       }
+       verrou=false;
+                 //alert(values);
+            })
+</script>
 <!--
     <script type="text/javascript">
         var onloadCallback = function() {

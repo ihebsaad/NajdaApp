@@ -2416,6 +2416,11 @@ class ActionController extends Controller
 
     public function TraitementAction($iddoss,$idact,$idsousact)
     {
+          if( Session::has('missionID'))
+          {
+            Session::forget('missionID');
+          }
+      Session::put('missionID',$idact);
 
      $Action=ActionEC::find($idsousact);
 
@@ -2429,7 +2434,7 @@ class ActionController extends Controller
      //'dossiers' => $dossiers,
      $typesMissions=TypeMission::get();
      $Missions=Auth::user()->activeMissions;
-     $Actions=$act->Actions;
+    // $Actions=$act->Actions;
     // dd($dossier);
 
 
@@ -2473,7 +2478,7 @@ class ActionController extends Controller
          }
 
      return view('actions.TraitementAction',['act'=>$act,'attachements'=>$attachements,
-        'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action,'doss'=>$dossier->id], compact('dossier'));
+        'typesMissions'=>$typesMissions,'Missions'=>$Missions,'Action'=>$Action,'doss'=>$dossier->id], compact('dossier'));
 
     }
 
@@ -2553,8 +2558,20 @@ class ActionController extends Controller
         return true;
     }
 
-    public function Bouton_Faire1_ignorer2_reporter3_rappeler4(Request $request, $iddoss,$idmiss,$idact,$bouton)
+    public function Bouton_Faire1_ignorer2_reporter3_rappeler4(Request $request, $iddoss,$idmiss,$idact,$boutonk)
     {
+
+      // $action=ActionEC::where("id",$idact)->where("mission_id_org","=",$idmiss)->first();
+       //dd(intval($action->id_type_miss));
+       //dd(intval($idact));
+
+        if (Session::has('missionID'))
+          {
+            $missionID=Session::get('missionID');
+          }
+
+
+      //
 
         // Activer dossier
        /* Dossier::where('id', $iddoss )
@@ -2571,9 +2588,9 @@ class ActionController extends Controller
          $dateSys  = \DateTime::createFromFormat($format, $dtc);
 
         $bouton=intval($request->get("numerobouton"));
+        //dd($bouton);
 
-
-        $action=ActionEC::where("id",$idact)->first();
+        $action=ActionEC::where("id",$idact)->where("mission_id_org","=",$idmiss)->first();
         $option=$request->get("optionAction");
 
         if(isset($option) && $bouton==1 )
@@ -2583,16 +2600,14 @@ class ActionController extends Controller
             return back()->with('messagekbsFail', 'Erreur: Vous devez choisir une option');
            }
         }
-       if($action )
+       if($action)
        {
-
 
        // ebregistrement des valeurs des options
        if($option != null)
             {
               $action->update(['opt_choisie'=>$option]);
             }
-
 
 
           if($bouton==1)//bouton fait
@@ -2609,8 +2624,7 @@ class ActionController extends Controller
                    }
 
                }
-
-            
+        
 
            $action->update(['statut'=>"faite"]); 
            $action->update(['date_fin' => $dateSys]);
@@ -2682,53 +2696,39 @@ class ActionController extends Controller
   
              if($action->Mission->type_Mission==17)
              {   
-
                 
                   if($action->ordre==3  )
                    {
                       $this->boucle_Dossier_etranger=1;
                       $this->entree_act3_Dossier_etranger=0;
-                      $this->entree_act4_Dossier_etranger=1;             
+                      $this->entree_act4_Dossier_etranger=1;         
 
                    }
-
 
                    if($action->ordre==4)
                     {
                         $this->boucle_Dossier_etranger=1;
                         $this->entree_act3_Dossier_etranger=1;
-                        $this->entree_act4_Dossier_etranger=0;                  
-
+                        $this->entree_act4_Dossier_etranger=0;      
                     }
 
        
-
              }
           
      
-
-
-
-
-
 
            // Cas particulier pour la mission document à signer (boucle)
 
              if($action->Mission->type_Mission==38)
              {   
-
-
-                
-
+              
                   if($action->ordre==2 && $option==2 )
                    {
-
                         $this->boucle_Doc_A_signer=1;
                         $this->entree_act2_Doc_A_signer=0;
-                        $this->entree_act4_Doc_A_signer=1;                
+                        $this->entree_act4_Doc_A_signer=1;             
 
                    }
-
 
                    if($action->ordre==4)
                     {
@@ -2737,13 +2737,7 @@ class ActionController extends Controller
                         $this->entree_act4_Doc_A_signer=0;                   
 
                     }
-
-
-              
-
                      
-
-
              }
 
              // traiter boucle mission suivi frais médicaux
@@ -2751,8 +2745,7 @@ class ActionController extends Controller
               if($action->Mission->type_Mission==42)
              { 
 
-
-                    if($action->ordre==2)
+                   if($action->ordre==2)
                    {
 
                     $this->boucle_Suivi_frais=1;
@@ -2760,7 +2753,6 @@ class ActionController extends Controller
                     $this->entree_act2_suivi_frais=0;
 
                    }
-
 
                    if($action->ordre==3)
                     {
@@ -2772,18 +2764,13 @@ class ActionController extends Controller
                     }
 
 
-
-
              } 
 
 
              // probleme de demi boucle entre  action 8 et 7 dans consultation_medicale
 
-     
-
             if($action->Mission->type_Mission==11)
                 { 
-
                     if($action->ordre==8)
                    {
                     $this->boucle_consultation_medicale=1;
@@ -2791,38 +2778,29 @@ class ActionController extends Controller
 
                    }
 
-
                } 
-
-            
-                  
+                     
 
            }  // fin bouton fait
            else
            {
-
-                   if($bouton==2)  //bouton ignorer
+             if($bouton==2)  //bouton ignorer
                    {
-
                       $action->update(['statut'=>"ignoree"]);
                       $action->update(['user_id'=>auth::user()->id]); 
                       $action->update(['date_fin' => $dateSys]);
-
                    }  
                    else{
 
-
                              if($bouton==3)  //bouton reporter
                            {
-
                                  $dateRepAct  = \DateTime::createFromFormat($format, $request->get('datereport'));
                                  // dd($dateRepAct);
                                  if($dateRepAct<= $dateSys)
                                  {
 
                                     return back()->with('messagekbsFail', 'Erreur: Date de report invalide : date de report doit être supérieure à la date courante');
-
-                                
+                               
                                  }
                                  else
                                  {
@@ -2835,9 +2813,7 @@ class ActionController extends Controller
                                  $Naction->save();
                                  $NNaction=ActionEC::where('id',$Naction->id);
                                  $NNaction->update(['statut'=>"reportee"]);
-                                 $NNaction->update(['user_id'=>auth::user()->id]);
-                              
-
+                                 $NNaction->update(['user_id'=>auth::user()->id]);                             
                                  $n=$Naction->num_report;
                                  $n+=1;
                                  $NNaction->update(['num_report'=> $n]);
@@ -2848,16 +2824,13 @@ class ActionController extends Controller
                                 
                                 }
                             }
-
                          
                            else
                            {
 
                                if($bouton==4)  //bouton rappeler mise en attente de réponse
-                               {
-                                                          
+                               {                 
                                                                
-
                                  $dateRapAct  = \DateTime::createFromFormat($format, $request->get('daterappel'));
                                 // dd($dateRapAct);
 
@@ -2889,160 +2862,159 @@ class ActionController extends Controller
 
                                 }
 
-
                                } 
                             }
                   }
           
              }
-          
-             
-           
+                                   
+ 
+          //$at=ActionEC::where("mission_id",$idmiss)->first();
 
-              
+          /*if($at->mission_id_org != $idmiss)
+          {
+              $at=ActionEC::where("mission_id",$at->mission_id_org)->first()->id_type_miss;
+          }*/
 
-          $at=ActionEC::where("mission_id",$idmiss)->first()->type_Mission;
+          if($action->id_type_miss)
+          {
+             $idtype= intval($action->id_type_miss);
+          }
+          else
+          {
+             $idtype= intval($action->Mission->type_Mission);
+          }
+          switch ( $idtype) {
 
-               switch($at){
-
-
-         case "Location de voiture"://46
+         case intval(46) ://46 "Location de voiture"
          return $this->Location_de_voiture_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-                  case "Remorquage":// 44
+         case intval(44) :// 44 "Remorquage"
          return $this->Remorquage_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-                  case "Réparation de véhicule":// 45
+         case intval(45):// 45 "Réparation de véhicule"
          return $this->Reparation_vehicule_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-                case "Rapatriement de véhicule sur ferry": // 43
+         case intval(43): // 43"Rapatriement de véhicule sur ferry"
          return $this->Rapatriement_de_vehicule_sur_ferry_DV($option,$idmiss,$idact,$iddoss,$bouton); break; 
+        case intval(34): // 34"Transport terrestre effectué par prestataire externe"
+        return $this->Transport_terrestre_effectue_par_prestataire_externe_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-                 case "Transport terrestre effectué par prestataire externe": // 34
-           return $this->Transport_terrestre_effectue_par_prestataire_externe_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
-
-                case "Transports terrestres effectué par entité-sœur MMS": // 33 
+        case intval(33): // 33 "Transports terrestres effectué par entité-sœur MMS"
          return $this->Transports_terrestres_assure_par_MMS_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
          
-
-                case "Organisation visite médicale"://35
+         case intval(35)://35 "Organisation visite médicale":
          return $this->Organisation_visite_medicale_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-
-                case "PEC frais medicaux"://40
+         case intval(40)://40 "PEC frais medicaux"
          return $this->PEC_frais_medicaux_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-                case "Expertise": // 39
+         case intval(39): // 39 "Expertise"
          return $this->Expertise_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-                case "Réservation hotel"://32
+         case intval(32)://32 "Réservation hotel"
          return $this->Reservation_hotels_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-                case "Escorte de l étranger"://22
-         return $this->Escorte_de_étranger_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+        case intval(22)://22 "Escorte de l étranger"
+        return $this->Escorte_de_étranger_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-                case "Demande d evasan nationale"://19
+        case intval(19)://19 "Demande d evasan nationale"
         return $this-> Demande_evasan_nationale_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
-
        
-              case "Demande d evasan internationale"://18
-         return $this->Demande_evasan_internationale_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+        case intval(18)://18 "Demande d evasan internationale"
+        return $this->Demande_evasan_internationale_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-                case "Devis transport international sous assistance"://16
-         return $this->Devis_transport_international_sous_assistance_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+        case intval(16)://16 "Devis transport international sous assistance"
+        return $this->Devis_transport_international_sous_assistance_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-                case "Consultation médicale":// 11
+        case intval(11):// 11 "Consultation médicale"
          return $this->Consultation_medicale_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
 
-
-         case "Dédouanement de pièces"://12
+         case intval(12)://12"Dédouanement de pièces"
          return $this->Dedouanement_de_pieces_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
 
-            case "Rapatriement véhicule avec chauffeur accompagnateur"://27
+         case intval(27)://27 "Rapatriement véhicule avec chauffeur accompagnateur"
          return $this->Rapatriement_vehicule_avec_chauffeur_accompagnateur_DV($option,$idmiss,$idact,$iddoss,$bouton); break;   
 
-                case "Escorte internationale fournie par MI":// 26
+         case intval(26):// 26 "Escorte internationale fournie par MI"
          return $this->Escorte_internationale_fournie_par_MI_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-
-             case "Rapatriement véhicule sur cargo":   // 30  
+          case intval(30): // 30 "Rapatriement véhicule sur cargo" 
          return $this->Rapatriement_vehicule_sur_cargo_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-
-              case "Dossier à l étranger"://17
+          case intval(17): // 17 "Dossier à l étranger"
          return $this->Dossier_a_etranger_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-                 case "Suivi frais médicaux":
+         case intval(42):// 42 "Suivi frais médicaux"
          return $this->Suivi_frais_medicaux_DV($option,$idmiss,$idact,$iddoss,$bouton); break;   
 
-                case "Document à signer":
-        return $this-> Document_a_signer_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+        case intval(38): // 38 "Document à signer"
+        return $this->Document_a_signer_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-          case "Demande qualité structure":
-         return $this->Demande_qualite_structure_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+        case intval(37):  // 37 "Demande qualité structure"
+        return $this->Demande_qualite_structure_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-         case "Contact technique"://36
+         case intval(36)://36 "Contact technique"
          return $this-> Contact_technique_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-                 case "Remboursement de frais avancés": //31
+         case intval(31): //31 "Remboursement de frais avancés"
          return $this->Remboursement_de_frais_avances_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-                 case "Recherche de vehicule avec coordonnees GPS": //29
-         return $this->Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
+        case intval(29): //29 "Recherche de vehicule avec coordonnees GPS"
+        return $this->Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-         case "Recap frais engagés":// 30
+         case intval(30):// 30 "Recap frais engagés"
          return $this->Recap_frais_engages_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-                case "Rapport médical":
+          case intval(24): // 24"Rapport médical"
          return $this->Rapport_medical_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-            case "Libre générique":
+          case intval(23): // 23 "Libre générique"
          return $this->libre_generique_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-             case "Expertise fin de travaux (client IMA)":
+          case intval(21): //21 "Expertise fin de travaux (client IMA)"
          return $this->Expertise_fin_de_travaux_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-                case "Expédition par poste rapide":
+          case intval(20): //20 "Expédition par poste rapide"
          return $this->Expedition_par_poste_rapide_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-          case "Dossier à l étranger":
+         case intval(17):// 17 "Dossier à l étranger"
          return $this->Dossier_a_etranger_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-         case "Demande de plan de vol ou de traversée": //14
+        case intval(14): //14 "Demande de plan de vol ou de traversée"
         return $this->Demande_plan_vol_ou_de_traversee_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-          case "Demande investigation de dossier douteux": // id 13
+          case intval(13): // id 13 "Demande investigation de dossier douteux"
          return $this->Demande_investigation_de_dossier_douteux_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-          case "Transport sur civière": // id 10
+          case intval(10): // id 10 "Transport sur civière"
          return $this->Civiere_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-          case "Transport assis  chaise roulante": // id 5
+          case intval(5): // id 5 "Transport sur civière"
          return $this->Transport_assis_chaise_roulante_DV($option,$idmiss,$idact,$iddoss,$bouton); break; 
 
-         case "Transport ambulance":  // 7
+         case intval(7):  // 7 "Transport ambulance"
          return $this->Transport_ambulance_DV($option,$idmiss,$idact,$iddoss,$bouton); break; 
 
-         case "Taxi": // 6
+         case intval(6): // 6 "Taxi"
          return $this->taxi_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
         
-         case "Avance de fonds contre RDD": //8
+         case intval(8): //8 "Avance de fonds contre RDD"
          return $this->Avance_de_fonds_contre_RDD_DV($option,$idmiss,$idact,$iddoss,$bouton); break;  
 
-         case "Billetterie fournie par VAT": // 9
+         case intval(9): // 9 "Billetterie fournie par VAT"
          return $this->Billetterie_fournie_par_VAT_DV($option,$idmiss,$idact,$iddoss,$bouton); break;  
         
-          case "Départ un lieu hospitalisation":// 15
+         case intval(15):// 15 "Départ un lieu hospitalisation"
          return $this->Depart_lieu_hospitalisation_DV($option,$idmiss,$idact,$iddoss,$bouton); break; 
 
-        case "Recherche devis de frais medicaux pour hospitalisation":     
+        case intval(41):   // 41 "Recherche devis de frais medicaux pour hospitalisation"
          return $this->Recherche_devis_de_frais_medicaux_pour_hospitalisation_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
         
-
-        case "Tout transport aérien international sous assistance":
+        case intval(25): //25 "Tout transport aérien international sous assistance"
          return $this->transport_aerien_international_sous_assistance_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
    
                 // default:
@@ -9335,16 +9307,11 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
 
                            }
 
-                         
-
                             // activer Action 4 Vers concession la plus proche 
                            // Si_appui_fait_action1 & si_choix_option3_action1 OU 
                            //Si_appui_fait_action5 & si_choix_option2_action5
 
  
-                   
-              
-                     
                            if((($action1->statut=="faite"  && $action1->opt_choisie=="3") && $action4->statut =="inactive" )||
                               ( $this->boucle_remorquage==1 && $this->entree_act4_remorquage==1 && $action5->statut=="faite"  && $action5->opt_choisie=="2") )  
                            {
@@ -9627,8 +9594,7 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
 // debut workflow  Location de voiture
 
   public function Location_de_voiture_DV($option,$idmiss,$idact,$iddoss,$bouton)
-{
-  
+{  
 
                    $dtc = (new \DateTime())->format('Y-m-d\TH:i');                         
                        $format = "Y-m-d\TH:i";
@@ -9689,8 +9655,6 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
 
 
                            }
-
-                         
 
                             // activer Action 4 Créer PEC location  
                            
