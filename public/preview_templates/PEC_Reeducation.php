@@ -1,10 +1,12 @@
 <?php
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
+if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['prest__reeduc'])) {$prest__reeduc=$_GET['prest__reeduc'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
+if (isset($_GET['CL_text_client'])) {$CL_text_client=$_GET['CL_text_client'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; $subscriber_name2=$_GET['subscriber_name'];}
-if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname'];$subscriber_name2=$_GET['subscriber_lastname']; }
+if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname'];$subscriber_lastname2=$_GET['subscriber_lastname']; }
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
 if (isset($_GET['CL_nombre_seance'])) {$CL_nombre_seance=$_GET['CL_nombre_seance'];}
 if (isset($_GET['CL_montant_seance_numerique'])) {$CL_montant_seance_numerique=$_GET['CL_montant_seance_numerique'];}
@@ -58,7 +60,7 @@ $conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-mysqli_query($conn,"set names 'utf8'");
+//mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
@@ -69,8 +71,38 @@ $sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN
 
         $array_prest = array();
         while($rowvh = $resultvh->fetch_assoc()) {
-            $array_prest[] = array('id' => $rowvh["id"],'name' => $rowvh["name"]  );
+            $array_prest[] = array('id' => $rowvh["id"],"name" => $rowvh["name"]  );
         }
+$sqlclient = "SELECT id,groupe,name FROM clients";
+	$resultclient = $conn->query($sqlclient);
+	if ($resultclient->num_rows > 0) {
+	    // output data of each row
+	    $array_client = array();
+	    while($rowclient = $resultclient->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_client[] = array('id' => $rowclient["id"],'groupe' => $rowclient["groupe"],'name' => $rowclient["name"]);
+	    }
+	    //print_r($array_prest);
+		}
+
+$IMA="non";
+foreach ($array_client as $client) {
+	if ($client['name'] == $customer_id__name && $client['groupe'] == 3)
+		{
+	$IMA="oui";
+}
+}
+//mysqli_query($conn,"set names 'utf8'");
+// infos agent
+	    $sqlagt = "SELECT name,lastname,signature FROM users WHERE id=".$iduser."";
+		$resultagt = $conn->query($sqlagt);
+		if ($resultagt->num_rows > 0) {
+	    // output data of each row
+	    $detailagt = $resultagt->fetch_assoc();
+	    
+		} else {
+	    echo "0 results agent";
+		}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>PEC_Reeducation</title>
@@ -300,7 +332,7 @@ $sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN
             <?php
 foreach ($array_prest as $prest) {
     
-    echo "<option value='".$prest['name']."' >".$prest['name']."</option>";
+    echo '<option value="'.$prest["name"].'" >'.$prest["name"].'</option>';
 }
 ?>
 </span></p>
@@ -315,10 +347,26 @@ foreach ($array_prest as $prest) {
 <p class=rvps5><span class=rvts4>PRISE EN CHARGE </span></p>
 <p class=rvps5><span class=rvts4>SEANCES DE REEDUCATION FONCTIONNELLE</span></p>
 <p class=rvps5><span class=rvts5><br></span></p>
-<p class=rvps6><span class=rvts6>*Client :</span><span class=rvts7> </span><span class=rvts6><input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /></span></p>
-<p class=rvps7><span class=rvts6>*Nom patient : <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
-<p class=rvps7><span class=rvts6>*Prénom : <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span></p>
-<p class=rvps1><span class=rvts8>*Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input></span></p>
+<?php 
+{if( $IMA==='oui' )
+ {
+?>
+<input name="CL_text_client"  type="hidden" value="*CLient : " />
+ <p class=rvps6><span class=rvts6>*Client :</span><span class=rvts7> </span><span class=rvts6><input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /></span></p>
+<?php 
+}
+ else
+ {
+?>
+<input name="CL_text_client"  type="hidden" value="" />
+<p class=rvps6><span class=rvts6></span><span class=rvts6> </span><span class=rvts5> <input  type="hidden" name="customer_id__name" id="customer_id__name" placeholder="compagnie" value=" " /></span></p>
+<?php 
+}
+ }
+?>
+<p class=rvps7><span class=rvts6>*Nom patient :<input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> </span></p>
+<p class=rvps7><span class=rvts6>*Prénom : <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> </span></p>
+<p class=rvps1><span class=rvts8>*Notre réf. dossier : <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> |  <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input>  <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /></span><span class=rvts8> </span></p>
 <p><span class=rvts9>*</span><span class=rvts8>Nombre de séances</span><span class=rvts9> : <input name="CL_nombre_seance" id="CL_nombre_seance" placeholder="Nombre de Séances" value="<?php if(isset ($CL_nombre_seance)) echo $CL_nombre_seance; ?>" onKeyUp=" calcultotal()"></input> </span><span class=rvts8>Montant/séance (TND): <input name="CL_montant_seance_numerique" id="CL_montant_seance_numerique" width=70% placeholder="Montant Numerique par Séance" value="<?php if(isset ($CL_montant_seance_numerique)) echo $CL_montant_seance_numerique; ?>" onKeyUp=" calcultotal()"></input></span><span class=rvts9> </span></p>
 <p class=rvps6><span class=rvts6>*Montant total (TND): </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_total" id="CL_montant_total" placeholder="Montant total" value="<?php if(isset ($CL_montant_total)) echo $CL_montant_total; ?>" onchange=" keyUpHandler(this)"></input></span> <span class=rvts11>&nbsp;&nbsp; </span><span class=rvts6>Toutes lettres</span><span class=rvts7> :  <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars</span></p>
 <p><span class=rvts12><br></span></p>
@@ -332,8 +380,8 @@ foreach ($array_prest as $prest) {
 <p class=rvps1><span class=rvts18>Toute facture devra être envoyée accompagnée de la présente prise en charge, ainsi que de l'original de tout document à signer qui l</span><span class=rvts19>’</span><span class=rvts18>accompagnerait.</span></p>
 <p><span class=rvts14><br></span></p>
 <p><span class=rvts9>Cordialement</span></p>
-<p class=rvps1><span class=rvts9> <input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($agent__lastname)) echo $agent__lastname; ?>" /></span></p>
-<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($agent__signature)) echo $agent__signature; ?>" /></span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($detailagt['name'])) echo $detailagt['name']; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($detailagt['lastname'])) echo $detailagt['lastname']; ?>" /></span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($detailagt['signature'])) echo $detailagt['signature']; ?>" /></span></p>
 <p class=rvps8><span class=rvts7>Plateau TPA</span></p>
 <p class=rvps1><span class=rvts9>« courrier électronique, sans signature »</span></p>
 <p class=rvps9><span class=rvts7><br></span></p>
@@ -341,8 +389,10 @@ foreach ($array_prest as $prest) {
 <script language="javascript" src="nombre_en_lettre.js"></script>
 <script type="text/javascript">
     function keyUpHandler(obj){
+<?php if (intval($montantgop) > 0) { ?>
             if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block";}
             else {document.getElementById("alertGOP").style.display="none";}
+<?php   } ?>
             document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value)
         }//fin de keypressHandler
     function calcultotal() {

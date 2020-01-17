@@ -1,12 +1,13 @@
 <?php 
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
+if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['prest__labmed'])) {$prest__labmed=$_GET['prest__labmed'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
+if (isset($_GET['CL_text_client'])) {$CL_text_client=$_GET['CL_text_client'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; }
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];$subscriber_name2=$_GET['subscriber_name'];}
 if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname'];$subscriber_lastname2=$_GET['subscriber_lastname'];}
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic'];}
-
 if (isset($_GET['CL_montant_numerique'])) {$CL_montant_numerique=$_GET['CL_montant_numerique'];}
 if (isset($_GET['CL_montant_toutes_lettres'])) {$CL_montant_toutes_lettres=$_GET['CL_montant_toutes_lettres'];}
 if (isset($_GET['CL_natureexamen'])) {$CL_natureexamen=$_GET['CL_natureexamen'];}
@@ -58,7 +59,7 @@ $conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-mysqli_query($conn,"set names 'utf8'");
+//mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
@@ -69,9 +70,37 @@ $sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN
 
         $array_prest = array();
         while($rowvh = $resultvh->fetch_assoc()) {
-            $array_prest[] = array('id' => $rowvh["id"],'name' => $rowvh["name"]  );
+            $array_prest[] = array('id' => $rowvh["id"],"name" => $rowvh["name"]  );
         }
+$sqlclient = "SELECT id,groupe,name FROM clients";
+	$resultclient = $conn->query($sqlclient);
+	if ($resultclient->num_rows > 0) {
+	    // output data of each row
+	    $array_client = array();
+	    while($rowclient = $resultclient->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_client[] = array('id' => $rowclient["id"],'groupe' => $rowclient["groupe"],'name' => $rowclient["name"]);
+	    }
+	    //print_r($array_prest);
+		}
 
+$IMA="non";
+foreach ($array_client as $client) {
+	if ($client['name'] == $customer_id__name && $client['groupe'] == 3)
+		{
+	$IMA="oui";
+}
+}
+// infos agent
+	    $sqlagt = "SELECT name,lastname,signature FROM users WHERE id=".$iduser."";
+		$resultagt = $conn->query($sqlagt);
+		if ($resultagt->num_rows > 0) {
+	    // output data of each row
+	    $detailagt = $resultagt->fetch_assoc();
+	    
+		} else {
+	    echo "0 results agent";
+		}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>PEC_analyses_medicales</title>
@@ -305,7 +334,8 @@ p,ul,ol /* Paragraph Style */
             <?php
 foreach ($array_prest as $prest) {
     
-    echo "<option value='".$prest['name']."' >".$prest['name']."</option>";
+    //echo "<option value='".$prest['name']."' >".$prest['name']."</option>";
+echo '<option value="'.$prest["name"].'" >'.$prest["name"].'</option>';
 }
 ?>
 </span></p>
@@ -315,10 +345,26 @@ foreach ($array_prest as $prest) {
 <p class=rvps3><span class=rvts3><br></span></p>
 <p class=rvps3><span class=rvts3>PRISE EN CHARGE ANALYSES MEDICALES</span></p>
 <p class=rvps1><span class=rvts4><br></span></p>
+ <?php 
+{if( $IMA==='oui' )
+ {
+?>
+<input name="CL_text_client"  type="hidden" value="CLient : " />
 <p class=rvps4><span class=rvts5>Client</span><span class=rvts6> : <input name="customer_id__name" id="customer_id__name" placeholder="client" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /></span></p>
-<p class=rvps4><span class=rvts5>Nom patient</span><span class=rvts6> : <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input>  </span></p>
-<p class=rvps4><span class=rvts7>Prénom</span><span class=rvts8> : <input name="subscriber_name" placeholder="prenom du l'abonnée"  value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>"></input></span></p>
-<p class=rvps4><span class=rvts7>Notre réf. dossier</span><span class=rvts8> : <input name="reference_medic" placeholder="Notre Reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input></span></p>
+<?php 
+}
+ else
+ {
+?>
+<input name="CL_text_client"  type="hidden" value="" />
+<p class=rvps4><span class=rvts5> <input  type="hidden" name="customer_id__name" id="customer_id__name" placeholder="compagnie" value=" " /></span></p>
+<?php 
+}
+ }
+?>
+<p class=rvps4><span class=rvts5>Nom patient</span><span class=rvts6> : <input name="subscriber_name" placeholder="prenom du l'abonnée"  value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>"></input>  </span></p>
+<p class=rvps4><span class=rvts7>Prénom</span><span class=rvts8> : <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span></p>
+<p class=rvps4><span class=rvts7>Notre réf. dossier</span><span class=rvts8> : <input name="reference_medic" placeholder="Notre Reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> |  <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input></span></p> <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" />
 <p class=rvps5><span class=rvts5>Montant maximal de prise en charge (TND)</span><span class=rvts6>:&nbsp;</span><span class=rvts9> </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_numerique" placeholder="Montant maximal"  value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input></span><span class=rvts9>&nbsp;&nbsp;&nbsp; </span><span class=rvts5>Toutes lettres</span><span class=rvts6> : <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant en toutes lettres"  value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars</span></p>
 <p class=rvps6><span class=rvts6><br></span></p>
 <p class=rvps7><span class=rvts6>Nous</span><span class=rvts10> </span><span class=rvts6>soussignés,</span><span class=rvts10> </span><span class=rvts5>Najda</span><span class=rvts11> </span><span class=rvts5>Assistance</span><span class=rvts6>,</span><span class=rvts10> </span><span class=rvts6>nous</span><span class=rvts10> </span><span class=rvts6>engageons</span><span class=rvts10> </span><span class=rvts6>à</span><span class=rvts10> </span><span class=rvts6>prendre</span><span class=rvts10> </span><span class=rvts6>en</span><span class=rvts10> </span><span class=rvts6>charge</span><span class=rvts10> </span><span class=rvts6>frais</span><span class=rvts10> </span><span class=rvts6>des</span><span class=rvts10> </span><span class=rvts6>examens</span><span class=rvts10>&nbsp;</span><span class=rvts12> </span><span class=rvts10><input name="CL_natureexamen" placeholder="Nature d examen"  value="<?php if(isset ($CL_natureexamen)) echo $CL_natureexamen; ?>"></input></span><span class=rvts6> à réaliser</span><span class=rvts10> </span><span class=rvts6>le</span><span class=rvts10> </span><span class=rvts6><input name="CL_dateexamen" placeholder="Date d examen"  value="<?php if(isset ($CL_dateexamen)) echo $CL_dateexamen; ?>"></input> au</span><span class=rvts10> </span><span class=rvts6>profit</span><span class=rvts10> </span><span class=rvts6>de</span><span class=rvts10> </span><span class=rvts6>du (de la) patient(e) ci-dessus pour le montant maximal mentionné ci-dessus.</span></p>
@@ -334,17 +380,18 @@ foreach ($array_prest as $prest) {
 <p class=rvps9><span class=rvts6>Merci de votre collaboration</span></p>
 <p class=rvps9><span class=rvts6><br></span></p>
 <p class=rvps9><span class=rvts6>P/La Gérante</span></p>
-<p class=rvps1><span class=rvts9><input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($agent__lastname)) echo $agent__lastname; ?>" /> </span></p>
-<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($agent__signature)) echo $agent__signature; ?>" /></span></p>
+<p class=rvps1><span class=rvts9><input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($detailagt['name'])) echo $detailagt['name']; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($detailagt['lastname'])) echo $detailagt['lastname']; ?>" /> </span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($detailagt['signature'])) echo $detailagt['signature']; ?>" /></span></p>
 <p class=rvps1><span class=rvts14>Plateau TPA</span></p>
 <p class=rvps1><span class=rvts14>« courrier électronique, sans signature »</span></p>
 </form>
 <script language="javascript" src="nombre_en_lettre.js"></script>
 <script type="text/javascript">
 	function keyUpHandler(obj){
-			//document.getElementById("CL_montant_toutes_lettres").firstChild.nodeValue	=	NumberToLetter(obj.value)
-			if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block";}
+	<?php if (intval($montantgop) > 0) { ?>
+			if (obj.value > <?php echo $montantgop; ?>)  {document.getElementById("alertGOP").style.display="block";}
 			else {document.getElementById("alertGOP").style.display="none";}
+	<?php } ?>
 			document.getElementById("CL_montant_toutes_lettres").value	= NumberToLetter(obj.value);
 		}//fin de keypressHandler
 </script>

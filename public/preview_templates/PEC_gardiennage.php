@@ -1,6 +1,6 @@
 <?php
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
-
+if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['prest__remor'])) {$prest__remor=$_GET['prest__remor'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
@@ -60,21 +60,29 @@ $conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-mysqli_query($conn,"set names 'utf8'");
+//mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
 $sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." ) AND id IN (SELECT prestataire_id FROM specialites_prestataires WHERE specialite = 116)";
 
-
-
-    $resultvh = $conn->query($sqlvh);
+$resultvh = $conn->query($sqlvh);
     if ($resultvh->num_rows > 0) {
 
         $array_prest = array();
         while($rowvh = $resultvh->fetch_assoc()) {
-            $array_prest[] = array('id' => $rowvh["id"],'name' => $rowvh["name"]  );
+            $array_prest[] = array('id' => $rowvh["id"],"name" => $rowvh["name"]  );
         }
+// infos agent
+	    $sqlagt = "SELECT name,lastname,signature FROM users WHERE id=".$iduser."";
+		$resultagt = $conn->query($sqlagt);
+		if ($resultagt->num_rows > 0) {
+	    // output data of each row
+	    $detailagt = $resultagt->fetch_assoc();
+	    
+		} else {
+	    echo "0 results agent";
+		}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -245,7 +253,7 @@ $sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN
             <?php
 foreach ($array_prest as $prest) {
     
-    echo "<option value='".$prest['name']."' >".$prest['name']."</option>";
+   echo '<option value="'.$prest["name"].'" >'.$prest["name"].'</option>';
 }
 ?>
 </span></p>
@@ -258,9 +266,9 @@ foreach ($array_prest as $prest) {
 <p class=rvps1><span class=rvts6><br></span></p>
 <p class=rvps1><span class=rvts6><br></span></p>
 <p class=rvps1><span class=rvts6><br></span></p>
-<p class=rvps1><span class=rvts6>Nous soussignés, </span><span class=rvts5>Najda Assistance</span><span class=rvts6>, nous engageons à prendre en charge les frais relatifs au gardiennage dans vos locaux du véhicule </span><span class=rvts5> </input> <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input> <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>">, </span><span class=rvts6>immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> appartenant à notre client(e) Mr/Mme <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> pour la période du </span><span class=rvts5><input name="CL_date_heure_debut" placeholder="Date Heure Debut" value="<?php if(isset ($CL_date_heure_debut)) echo $CL_date_heure_debut; ?>"></input></span><span class=rvts6> au  <input name="CL_date_heure_fin" placeholder="Date Heure fin" value="<?php if(isset ($CL_date_heure_fin)) echo $CL_date_heure_fin; ?>"></input> et pour le coût total de </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_numerique" placeholder="Montant"  value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input></span><span class=rvts6>TND, (soit</span><span class=rvts5> </span><span class=rvts6><input name="CL_montant_toutes_lettres"  id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars)</span><span class=rvts5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></p>
+<p class=rvps1><span class=rvts6>Nous soussignés, </span><span class=rvts5>Najda Assistance</span><span class=rvts6>, nous engageons à prendre en charge les frais relatifs au gardiennage dans vos locaux du véhicule </span><span class=rvts5> </input> <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input> <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>">, </span><span class=rvts6>immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> appartenant à notre client(e) Mr/Mme <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" />  pour la période du </span><span class=rvts5><input name="CL_date_heure_debut" placeholder="Date Heure Debut" value="<?php if(isset ($CL_date_heure_debut)) echo $CL_date_heure_debut; ?>"></input></span><span class=rvts6> au  <input name="CL_date_heure_fin" placeholder="Date Heure fin" value="<?php if(isset ($CL_date_heure_fin)) echo $CL_date_heure_fin; ?>"></input> et pour le coût total de </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_numerique" placeholder="Montant"  value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input></span><span class=rvts6>TND, (soit</span><span class=rvts5> </span><span class=rvts6><input name="CL_montant_toutes_lettres"  id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars)</span><span class=rvts5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></p>
 <p class=rvps5><span class=rvts6><br></span></p>
-<p class=rvps1><span class=rvts6>Merci de nous adresser votre facture originale dès que possible par courrier postal au nom de </span><span class=rvts5>Najda Assistance</span><span class=rvts6> à l</span><span class=rvts7>’</span><span class=rvts6>adresse ci-dessus en mentionnant notre référence de dossier <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input/> </span></p>
+<p class=rvps1><span class=rvts6>Merci de nous adresser votre facture originale dès que possible par courrier postal au nom de </span><span class=rvts5>Najda Assistance</span><span class=rvts6> à l</span><span class=rvts7>’</span><span class=rvts6>adresse ci-dessus en mentionnant notre référence de dossier <input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input/> <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" />  </span></p>
 <p class=rvps1><span class=rvts5><br></span></p>
 <p class=rvps1><span class=rvts5><br></span></p>
 <p class=rvps1><span class=rvts8>ATTENTION IMPORTANT</span><span class=rvts9> </span></p>
@@ -273,8 +281,8 @@ foreach ($array_prest as $prest) {
 <p class=rvps5><span class=rvts6>Salutations Cordiales</span><span class=rvts5>.</span><span class=rvts6> </span></p>
 <p class=rvps5><span class=rvts6><br></span></p>
 <p class=rvps5><span class=rvts6>Pour la gérante</span></p>
-<p class=rvps1><span class=rvts9> <input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($agent__lastname)) echo $agent__lastname; ?>" /></span></p>
-<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($agent__signature)) echo $agent__signature; ?>" /></span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($detailagt['name'])) echo $detailagt['name']; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($detailagt['lastname'])) echo $detailagt['lastname']; ?>" /></span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($detailagt['signature'])) echo $detailagt['signature']; ?>" /></span></p>
 <p class=rvps1><span class=rvts6>Plateau d</span><span class=rvts7>’</span><span class=rvts6>assistance technique</span></p>
 <p class=rvps1><span class=rvts6>« courrier électronique, sans signature »;</span></p>
 <p class=rvps6><span class=rvts13><br></span></p>
@@ -282,9 +290,11 @@ foreach ($array_prest as $prest) {
 <script language="javascript" src="nombre_en_lettre.js"></script>
 <script type="text/javascript">
     function keyUpHandler(obj){
+<?php if (intval($montantgop) > 0) {?>
             //document.getElementById("CL_montant_toutes_lettres").firstChild.nodeValue =   NumberToLetter(obj.value)
             if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block";}
             else {document.getElementById("alertGOP").style.display="none";}
+<?php  }?>
             document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value);
         }//fin de keypressHandler
 </script>

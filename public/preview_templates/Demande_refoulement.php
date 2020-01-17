@@ -3,7 +3,7 @@ if (isset($_GET['ville'])) {$ville=$_GET['ville'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; $subscriber_name2=$_GET['subscriber_name'];}
 if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; $subscriber_lastname2=$_GET['subscriber_lastname'];}
-if (isset($_GET['CL_payee'])) {$Cl_payee=$_GET['CL_payee'];}
+if (isset($_GET['CL_payee'])) {$CL_payee=$_GET['CL_payee'];}
 if (isset($_GET['CL_passeport'])) {$CL_passeport=$_GET['CL_passeport'];}
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
 if (isset($_GET['vehicule_marque'])) {$vehicule_marque=$_GET['vehicule_marque'];}
@@ -132,13 +132,13 @@ p,ul,ol /* Paragraph Style */
 <p><span class=rvts6>Objet : </span><span class=rvts7>Demande de refoulement</span></p>
 <p><span class=rvts7><br></span></p>
 <p><span class=rvts7><br></span></p>
-<p class=rvps3><span class=rvts1>Je soussigné Mr/Mme <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> titulaire du passeport <input name="CL_payee" placeholder="pays"  value="<?php if(isset ($Cl_payee)) echo $Cl_payee; ?>"></input> n° <input name="CL_passeport" placeholder="numéro du passeport" value="<?php if(isset ($CL_passeport)) echo $CL_passeport; ?>"></input>, viens par la présente vous prier de bien vouloir me donner votre accord pour le refoulement de mon véhicule <input name="vehicule_marque" placeholder="marque du véhicule
+<p class=rvps3><span class=rvts1>Je soussigné Mr/Mme <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /> titulaire du passeport <input name="CL_payee" placeholder="pays"  value="<?php if(isset ($CL_payee)) echo $CL_payee; ?>"></input> n° <input name="CL_passeport" placeholder="numéro du passeport" value="<?php if(isset ($CL_passeport)) echo $CL_passeport; ?>"></input>, viens par la présente vous prier de bien vouloir me donner votre accord pour le refoulement de mon véhicule <input name="vehicule_marque" placeholder="marque du véhicule
 " value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input> <input name="vehicule_type" placeholder="Type du véhicule
 " value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input>  immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input>.</span></p>
 <p class=rvps3><span class=rvts1><br></span></p>
 <?php
 { if (isset($CL_accidente))
-	{ if (($CL_accidente === "oui")||($CL_accidente === "on")) { ?>	
+	{ if ($CL_accidente === "Accidenté") { ?>	
 		<input type="checkbox" name="CL_accidente" id="CL_accidente" checked value="oui">
 		 <label for="CL_accidente">Accidenté</label>
 		<?php } else { ?>
@@ -152,8 +152,8 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps3><span class=rvts1><br></span></p>
 <?php
 {if (isset($CL_enpanne))
-	{ if (($CL_enpanne === "oui")||($CL_enpanne === "on")) { ?>	
-		<input type="checkbox" name="CL_enpanne" id="CL_enpanne"  value="oui">
+	{ if ($CL_enpanne === "En panne") { ?>	
+		<input type="checkbox" name="CL_enpanne" id="CL_enpanne"  checked value="oui">
 		 <label for="CL_enpanne">En panne</label>
 		<?php } else { ?>
 		<input type="checkbox" name="CL_enpanne" id="CL_enpanne"  value="">
@@ -167,7 +167,7 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps3><span class=rvts1><br></span></p>
 <?php
 { if (isset($CL_incendie))
-	{ if (($CL_incendie === "oui")||($CL_incendie === "on")) { ?>	
+	{ if ($CL_incendie === "Incendié") { ?>	
 		<input type="checkbox" name="CL_incendie" id="CL_incendie" checked value="oui">
 		 <label for="CL_incendie">Incendié</label>
 		<?php } else { ?>
@@ -181,7 +181,7 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps3><span class=rvts1><br></span></p>
 <?php
 { if (isset($CL_intact))
-	{ if (($CL_intact === "oui")||($CL_intact === "on")) { ?>	
+	{ if ($CL_intact === "Intact") { ?>	
 		<input type="checkbox" name="CL_intact" id="CL_intact" checked value="oui">
 		 <label for="CL_intact">Intact</label>
 		<?php } else { ?>
@@ -196,7 +196,7 @@ p,ul,ol /* Paragraph Style */
 <p class=rvps3><span class=rvts1><br></span></p>
 <p class=rvps3><span class=rvts1>Dans l</span><span class=rvts9>’</span><span class=rvts1>attente d</span><span class=rvts9>’</span><span class=rvts1>une suite que j</span><span class=rvts9>’</span><span class=rvts1>espère favorable, je vous prie d</span><span class=rvts9>’</span><span class=rvts1>agréer, Monsieur le chef du bureau de la douane, l</span><span class=rvts9>’</span><span class=rvts1>expression de mes salutations distinguées.</span></p>
 <p class=rvps3><span class=rvts1><br></span></p>
-<p class=rvps3><span class=rvts1>Nom et prénom : <input name="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>"></input><input name="subscriber_lastname2" placeholder="nom du l'abonnée" value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input></span></p>
+<p class=rvps3><span class=rvts1>Nom et prénom : <input name="subscriber_lastname2" placeholder="nom du l'abonnée" value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input> <input name="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>"></input></span></p>
 <p class=rvps3><span class=rvts1>Signature légalisée </span></p>
 <p><span class=rvts7><br></span></p>
 <p><span class=rvts5><br></span></p>

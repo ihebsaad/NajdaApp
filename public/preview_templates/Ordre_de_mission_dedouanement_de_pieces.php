@@ -1,7 +1,9 @@
 <?php
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
+if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['prest__transitaire'])) {$prest__transitaire=$_GET['prest__transitaire'];}
 if (isset($_GET['inter__garage'])) {$inter__garage=$_GET['inter__garage'];}
+if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['CL_name'])) {$CL_name=$_GET['CL_name'];}
 if (isset($_GET['CL_nlta'])) {$CL_nlta=$_GET['CL_nlta'];}
@@ -54,8 +56,7 @@ $conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 // Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
-}
-mysqli_query($conn,"set names 'utf8'");
+}mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
@@ -75,8 +76,37 @@ $sqlvha = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id I
 
         $array_presta = array();
         while($rowvha = $resultvha->fetch_assoc()) {
-            $array_presta[] = array('id' => $rowvha["id"],'name' => $rowvha["name"]  );
+            $array_presta[] = array('id' => $rowvha["id"],"name" => $rowvha["name"]  );
         } }
+$sqlclient = "SELECT id,groupe,name FROM clients";
+	$resultclient = $conn->query($sqlclient);
+	if ($resultclient->num_rows > 0) {
+	    // output data of each row
+	    $array_client = array();
+	    while($rowclient = $resultclient->fetch_assoc()) {
+	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
+	        $array_client[] = array('id' => $rowclient["id"],'groupe' => $rowclient["groupe"],'name' => $rowclient["name"]);
+	    }
+	    //print_r($array_prest);
+		}
+
+$IMA="non";
+foreach ($array_client as $client) {
+	if ($client['name'] == $customer_id__name && $client['groupe'] == 3)
+		{
+	$IMA="oui";
+}
+}
+// infos agent
+	    $sqlagt = "SELECT name,lastname,signature FROM users WHERE id=".$iduser;
+		$resultagt = $conn->query($sqlagt);
+		if ($resultagt->num_rows > 0) {
+	    // output data of each row
+	    $detailagt = $resultagt->fetch_assoc();
+	    
+		} else {
+	    echo "0 results agent";
+		}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>w5mvim5sot8rvi4n6hbsfpa25ahs9suk_Ordre_de_mission_d%C3%A9douanement_de_pi%C3%A8ces_R%C3%A9v</title>
@@ -218,22 +248,41 @@ $sqlvha = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id I
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+<p class=rvps1> <input name="date_heure" type="hidden" value="<?php if(isset ($date_heure)) echo $date_heure; ?>"></input><span class=rvts2><br></span></p>
 <h1 class=rvps2><span class=rvts0><span class=rvts3><br></span></span></h1>
 <h1 class=rvps2><span class=rvts0><span class=rvts3><br></span></span></h1>
 <p class=rvps3><span class=rvts4>Ordre de Mission Transitaire</span></p>
 <p class=rvps3><span class=rvts4><br></span></p>
 <p class=rvps3><span class=rvts5><br></span></p>
-<p class=rvps4><span class=rvts2>Nous soussignés, </span><span class=rvts6>Najda Assistance</span><span class=rvts2>, société d</span><span class=rvts7>’</span><span class=rvts2>assistance correspondante de la compagnie <input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" /> attestons par la présente que la société </span><span class=rvts8>
+<p class=rvps4><span class=rvts2>Nous soussignés, </span><span class=rvts6>Najda Assistance</span><span class=rvts2>, société d</span><span class=rvts7>’</span><span class=rvts2>assistance correspondante de la compagnie 
+
+<?php 
+{if( $IMA==='oui' )
+ {
+?>
+
+<input name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>" />
+
+<?php 
+}
+ else
+ {
+?><input type=hidden name="customer_id__name" id="customer_id__name" placeholder="compagnie" value="" /> 
+<?php 
+}
+ }
+?>
+attestons par la présente que la société </span><span class=rvts8>
 <input type="text" list="prest__transitaire" name="prest__transitaire"  value="<?php  if(isset ($prest__transitaire)) echo $prest__transitaire; ?>"/>
         <datalist id="prest__transitaire">
             <?php
 foreach ($array_prest as $prest) {
     
-    echo "<option value='".$prest['name']."' >".$prest['name']."</option>";
+   // echo "<option value='".$prest['name']."' >".$prest['name']."</option>";
+      echo '<option value="'.$prest["name"].'" >'.$prest["name"].'</option>';
 }
 ?>
-</span><span class=rvts2>&nbsp; représentée par son gérant Mr <input name="CL_name"  placeholder="name" value="<?php if(isset ($CL_name)) echo $CL_name; ?>" /> est chargée par nos soins de procéder au dédouanement de pièces sous le numéro de LTA  <input name="CL_nlta"  placeholder="NLTA" value="<?php if(isset ($CL_nlta)) echo $CL_nlta; ?>" /> et qui arrivera le <input name="CL_date_heure_ariv" placeholder="Date et heure" value="<?php if(isset ($CL_date_heure_ariv)) echo $CL_date_heure_ariv; ?>"></input> sur le vol <input name="CL_cordonnes_vol" placeholder="Cordonnes Vol" value="<?php if(isset ($CL_cordonnes_vol)) echo $CL_cordonnes_vol; ?>"></input> au nom de notre client(e) </span><span class=rvts9><input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input></span><span class=rvts2> </span><br><span class=rvts2>A noter que la pièce de rechange en question sera montée sur le véhicule de notre client(e) de marque  <input name="vehicule_marque" placeholder="marque du véhicule
+</span><span class=rvts2>&nbsp; représentée par son gérant Mr <input name="CL_name"  placeholder="name" value="<?php if(isset ($CL_name)) echo $CL_name; ?>" /> est chargée par nos soins de procéder au dédouanement de pièces sous le numéro de LTA  <input name="CL_nlta"  placeholder="NLTA" value="<?php if(isset ($CL_nlta)) echo $CL_nlta; ?>" /> et qui arrivera le <input name="CL_date_heure_ariv" placeholder="Date et heure" value="<?php if(isset ($CL_date_heure_ariv)) echo $CL_date_heure_ariv; ?>"></input> sur le vol <input name="CL_cordonnes_vol" placeholder="Cordonnes Vol" value="<?php if(isset ($CL_cordonnes_vol)) echo $CL_cordonnes_vol; ?>"></input> au nom de notre client(e) </span><span class=rvts9><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span><span class=rvts2> </span><br><span class=rvts2>A noter que la pièce de rechange en question sera montée sur le véhicule de notre client(e) de marque  <input name="vehicule_marque" placeholder="marque du véhicule
 " value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input>  <input name="vehicule_type" placeholder="Type du véhicule
 " value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input>  immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> en circulation temporaire en Tunisie et nécessitant la réparation avant son retour vers l</span><span class=rvts7>’</span><span class=rvts2>étranger. Le véhicule sera réparé au garage </span><span class=rvts8>
 <input type="text" list="inter__garage" name="inter__garage" value="<?php  if(isset ($inter__garage)) echo $inter__garage; ?>" />
@@ -241,7 +290,8 @@ foreach ($array_prest as $prest) {
             <?php
 foreach ($array_presta as $presta) {
     
-    echo "<option value='".$presta['name']."' >".$presta['name']."</option>";
+   // echo "<option value='".$presta['name']."' >".$presta['name']."</option>";
+      echo '<option value="'.$presta["name"].'" >'.$presta["name"].'</option>';
 
 }
 ?>
@@ -251,8 +301,8 @@ foreach ($array_presta as $presta) {
 <p><span class=rvts2><br></span></p>
 <p><span class=rvts2><br></span></p>
 <p><span class=rvts2>P/ Le Directeur des Opérations</span></p>
-<p class=rvps1><span class=rvts9> <input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($agent__name)) echo $agent__name; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($agent__lastname)) echo $agent__lastname; ?>" /></span></p>
-<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($agent__signature)) echo $agent__signature; ?>" /></span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($detailagt['name'])) echo $detailagt['name']; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($detailagt['lastname'])) echo $detailagt['lastname']; ?>" /></span></p>
+<p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($detailagt['signature'])) echo $detailagt['signature']; ?>" /></span></p>
 
 <p><span class=rvts12><br></span></p>
 <p><span class=rvts12><br></span></p>
