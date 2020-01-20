@@ -1,4 +1,4 @@
-@extends('layouts.mainlayout')
+@extends('layouts.fulllayout')
 
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/dataTables.bootstrap.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/buttons.bootstrap.css') }}" />
@@ -53,13 +53,13 @@
             </thead>
             <tbody>
             @foreach($prestataires as $prestataire)
-                <?php $id= $prestataire['id'];$ville='';
-                if($prestataire['ville']!=''){$ville=$prestataire['ville'];}else{
+                <?php $id= $prestataire->id ;$ville='';
+                if($prestataire->ville !=''){$ville=$prestataire->ville;}else{
 
 
-                     $villeid=intval($prestataire['ville_id']);
-                if (isset($villes[$villeid]['name']) ){if($villeid>0) {$ville=$villes[$villeid-1]['name'];}}
-                else{$ville=$prestataire['ville'];}
+                     $villeid=intval($prestataire->ville_id );
+            /*    if (isset($villes[$villeid]['name']) ){if($villeid>0) {$ville=$villes[$villeid-1]['name'];}}
+                else{$ville=$prestataire['ville'];}*/
                 }
 
                 $gouvs=  PrestatairesController::PrestataireGouvs($id);
@@ -68,7 +68,7 @@
                 ?>
 
                 <tr>
-                    <td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $id)}}" ><?php echo ' <b>'. $prestataire->name .'</b> '.$prestataire->prenom; ?></a></td>
+                    <td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $id)}}" ><?php echo ' <b> '. $prestataire->civilite .' '. $prestataire->name .'</b> '.$prestataire->prenom; ?></a></td>
                     <td style="font-size:12px;width:20%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
                     <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
                     <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
@@ -84,6 +84,9 @@
             @endforeach
             </tbody>
         </table>
+
+         {{ $prestataires->links() }}
+
     </div>
 
 

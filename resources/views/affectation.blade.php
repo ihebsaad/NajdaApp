@@ -260,7 +260,7 @@
 
 									if($user->id!=1){
 										
-                                  if($user->isOnline() && $user->statut!= -1 &&  $user->user_type!= 'financier' ) {
+                                  if($user->isOnline() && $user->statut!= -1 &&  $user->user_type!= 'financier' &&  $user->user_type!= 'admin' ) {
 									  $c++;
               $folders = Dossier::where('affecte','=',$user->id)->where('statut',5)->get();
 
@@ -341,7 +341,7 @@
                     $iduser=$user->id;
                     $folders = Dossier::where('affecte','=',$user->id)->where('statut',5)->get();
                     $countF=count($folders);
-                    if($user->isOnline() && $user->statut!= -1 &&  $user->user_type != 'financier'  ) {
+                    if($user->isOnline() && $user->statut!= -1 &&  $user->user_type != 'financier' &&  $user->user_type!= 'admin'   ) {
                    echo '  <li class="nav-item  ">
                     <a class="nav-link    " href="#panelu-'.$iduser.'>" data-toggle="tab"  onclick="hideTabs();showTabs('.$iduser.');"  >
                     <i class="fa-lg fas fa-user"></i>  '.$user->name.' '.$user->lastname.' ('. $countF .')
@@ -607,7 +607,7 @@
 
                 if($user->id!=1){
 
-                if($user->isOnline()  && $user->statut!= -1 &&  $user->user_type!= 'financier'  ) {
+                if($user->isOnline()  && $user->statut!= -1 &&  $user->user_type!= 'financier' &&  $user->user_type!= 'admin'  ) {
                 $c++;
                 $folders = Dossier::where('affecte','=',$user->id)->where('statut',5)->get();
 
@@ -1368,7 +1368,7 @@
          <?php
     foreach($users as $user)
           {
-               if( $user->isOnline() && $user->statut!= -1 &&  $user->user_type!= 'financier'  ) {
+               if( $user->isOnline() && $user->statut!= -1 &&  $user->user_type!= 'financier' &&  $user->user_type!= 'admin'  ) {
                    echo "document.getElementById('user-".$user->id."'),";
                    echo "document.getElementById('drag-elements-u-".$user->id."'),";
                }
