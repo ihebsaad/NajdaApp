@@ -1584,7 +1584,7 @@ array_push($listepr,$pr['prestataire_id']);
                
                 </ul>
 
-                <div id="tab81" class="tab-pane fade active in  ">
+                <div id="tab81" class="tab-pane fade active in " style="overflow-y: scroll;">
                     <br>
                    Missions actives + reportées + déléguées
                    <br>
@@ -1633,6 +1633,9 @@ array_push($listepr,$pr['prestataire_id']);
                             @if($macvd->statut_courant=='active')
                             <td style="width:10%;"><small>active</small></td>
                             @endif
+                             @if($macvd->statut_courant=='endormie')
+                            <td style="width:10%;"><small>endormie</small></td>
+                            @endif
                              <td style="width:15%;"><small>{{$macvd->agent->name}} {{$macvd->agent->lastname}}</small></td>
                             <td style="width:10%;"><button type="button" id="macvd{{$macvd->id}}" class="btn btn-primary panelciel macvd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick=""> Actions</button><br>
                                 <button type="button" id="macvdo{{$macvd->id}}" class="btn btn-primary panelciel mailGenermacvd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick=""> Source</button></td></tr>
@@ -1642,7 +1645,7 @@ array_push($listepr,$pr['prestataire_id']);
 
                  </table>
                 </div> 
-                <div id="tab82" class="tab-pane fade  ">
+                <div id="tab82" class="tab-pane fade " style="overflow-y: scroll;">
                     <br>
                      Missions achevées + annulées
                      <br>

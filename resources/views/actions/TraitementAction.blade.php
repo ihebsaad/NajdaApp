@@ -1160,7 +1160,7 @@ $('#MajDateSpec').click(function(){
 
                                           <select id="typeMissLieauto" name="typeMissLieauto" class="form-control select2" style="width:95%; border: 1px solid #ccc; height: 32px">
                                             <option value="">Sélectionner</option>
-                                         @foreach( $typesMissions as $c) 
+                                         @foreach( $typesMissions2 as $c) 
 
                                                 <option value="{{$c->nom_type_Mission}}">{{$c->nom_type_Mission}} </option>
 

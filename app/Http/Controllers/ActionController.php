@@ -537,14 +537,11 @@ class ActionController extends Controller
 
       // recherche les missions actives  pour l'utilisateur courant
 
-        /*$missionsec= Mission::where('user_id', Auth::user()->id)->where('statut_courant',"active")->where('type_heu_spec',1)
-        ->where('date_spec_affect','=',1)->get();*/
-
-
         $missionsec= Mission::where('user_id', Auth::user()->id)                             
                             ->where(function($q){                             
                                $q->where('statut_courant',"active")
-                               ->orWhere('statut_courant',"deleguee");                             
+                               ->orWhere('statut_courant',"deleguee") 
+                               ->orWhere('statut_courant',"endormie");                            
                                 })
                              ->where('type_heu_spec',1)
                              ->where(function($q){                             
@@ -570,21 +567,16 @@ class ActionController extends Controller
         // dd($dateSys);
              foreach ($missionsec as $miss) {
 
-
-             
+    
              // cas om taxi ici rendez-vous= date début pour mission
 
               if($miss->type_Mission==6)//taxi 
                                 {
 
 
-
                       if($miss->date_spec_affect==1 && $miss->h_dep_pour_miss!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
 
                            $datespe = \DateTime::createFromFormat($format,($miss->h_dep_pour_miss));
                            // dd( $datespe );
@@ -592,9 +584,6 @@ class ActionController extends Controller
                             if($miss->type_Mission==6)//taxi 
                                 {
                                     //activer l'action 6 de consultation médicale  Si_heure_systeme>heure_RDV+2h 
-
-                                   // dd($datespe);
-                                    //dd($dateSys);
 
                                     if($datespe <= $dateSys)
                                     {
@@ -607,11 +596,11 @@ class ActionController extends Controller
                                         if($action6->statut=='inactive')
                                         {
                                           
-
                                              $action6->update(['statut'=>"active"]);
                                              $action6->update(['date_deb' => $dateSys]); 
                                              $action6->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action6->Mission->dossier->reference_medic.' - '.$action6->Mission->dossier->subscriber_name.' '.$action6->Mission->dossier->subscriber_lastname .'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
      
@@ -621,13 +610,7 @@ class ActionController extends Controller
 
                                         }
 
-                                        // rendre datespec 0
-
-                                       
-                                        
-
-
-
+                               
                                     }
 
 
@@ -646,19 +629,15 @@ class ActionController extends Controller
                           if($miss->date_spec_affect2==1 && $miss->h_arr_prev_dest!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
+                     
 
                            $datespe = \DateTime::createFromFormat($format,($miss->h_arr_prev_dest));
-                           // dd( $datespe );
+                     
                          
                             if($miss->type_Mission==6)//taxi 
                                 {
                                     //activer l'action 6 de consultation médicale  Si_heure_systeme>heure_RDV+2h 
 
-                                   // dd($datespe);
-                                    //dd($dateSys);
 
                                     if($datespe <= $dateSys)
                                     {
@@ -676,6 +655,7 @@ class ActionController extends Controller
                                              $action7->update(['date_deb' => $dateSys]); 
                                               $action7->update(['user_id'=>Auth::user()->id]);
                                              $miss->update(['date_spec_affect2'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action7->titre.' | Mission :'. $action7->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action7->Mission->dossier->reference_medic.' - '.$action7->Mission->dossier->subscriber_name.' '.$action7->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action7->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action7->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action7->Mission->dossier->id.'"/> ';
      
@@ -683,16 +663,7 @@ class ActionController extends Controller
 
 
 
-
-                                        
-
                                         }
-
-                                        // rendre datespec 0
-
-                                       
-                                        
-
 
 
                                     }
@@ -720,9 +691,6 @@ class ActionController extends Controller
                       if($miss->date_spec_affect==1 && $miss->h_arr_prev_dest!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
 
                            $datespe = \DateTime::createFromFormat($format,($miss->h_arr_prev_dest));
                            // dd( $datespe );
@@ -745,36 +713,24 @@ class ActionController extends Controller
                                         //Suivre mission taxi
                                         if($action26->statut=='inactive')
                                         {
-
                                          
                                              $action26->update(['statut'=>"active"]);
                                              $action26->update(['date_deb' => $dateSys]); 
                                              $action26->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action26->titre.' | Mission :'. $action26->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action26->Mission->dossier->reference_medic.' - '. $action26->Mission->dossier->subscriber_name.' '.$action26->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action26->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action26->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action26->Mission->dossier->id.'"/> ';
      
                                            return($output);
-
                                         
 
                                         }
 
-                                        // rendre datespec 0
-
-                                       
-                                        
-
-
-
+                              
                                     }
 
 
-
-                              
-
-
-                            
                             }
 
 
@@ -785,9 +741,6 @@ class ActionController extends Controller
                           if($miss->date_spec_affect2==1 && $miss->h_decoll_ou_dep_bat!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
 
                            $datespe = \DateTime::createFromFormat($format,($miss->h_decoll_ou_dep_bat));
                            // dd( $datespe );
@@ -808,41 +761,26 @@ class ActionController extends Controller
                                         //Suivre mission taxi
                                         if($action29->statut=='inactive')
                                         {
-
                                          
                                              $action29->update(['statut'=>"active"]);
                                              $action29->update(['date_deb' => $dateSys]); 
                                               $action29->update(['user_id'=>Auth::user()->id]);
                                              $miss->update(['date_spec_affect2'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action29->titre.' | Mission :'. $action29->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action29->Mission->dossier->reference_medic.' - '.$action29->Mission->dossier->subscriber_name.' '.$action29->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action29->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action29->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action29->Mission->dossier->id.'"/> ';
      
                                            return($output);
 
 
-
-
-                                        
-
                                         }
 
-                                        // rendre datespec 0
-
-                                       
-                                        
-
-
+                             
 
                                     }
 
-
-
-                                
-
-
                             
                                }
-
 
 
                         }     // fin cas rapatriement véhicule sur Cargo
@@ -857,15 +795,9 @@ class ActionController extends Controller
                       if($miss->date_spec_affect==1 && $miss->h_decoll_ou_dep_bat!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
+                
                            $datespe = \DateTime::createFromFormat($format,($miss->h_decoll_ou_dep_bat));
-                           // dd( $datespe );
-                         
-                                  
-
+                    
 
                                    // $datespe <= $dateSys && $action25->statut=="faite"
 
@@ -879,12 +811,12 @@ class ActionController extends Controller
                                         //Suivre mission taxi
                                         if($action16->statut=='inactive')
                                         {
-
                                             
                                              $action16->update(['statut'=>"active"]);
                                              $action16->update(['date_deb' => $dateSys]); 
                                              $action16->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action16->titre.' | Mission :'. $action16->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action16->Mission->dossier->reference_medic.'-'.$action16->Mission->dossier->subscriber_name.' '.$action16->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action16->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action16->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action16->Mission->dossier->id.'"/> ';
      
@@ -893,12 +825,6 @@ class ActionController extends Controller
                                         
 
                                         }
-
-                                        // rendre datespec 0
-
-                                       
-                                        
-
 
 
                                     }
@@ -919,15 +845,9 @@ class ActionController extends Controller
                       if($miss->date_spec_affect==1 && $miss->h_rdv!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
+                   
                            $datespe = \DateTime::createFromFormat($format,($miss->h_rdv));
-                           // dd( $datespe );
-                         
-                                  
-
+                        
 
                                    // $datespe <= $dateSys && $action25->statut=="faite"
 
@@ -947,6 +867,8 @@ class ActionController extends Controller
                                              $action11->update(['date_deb' => $dateSys]); 
                                              $action11->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
+
 
                                               $output='Activation de l\'action :'. $action11->titre.' | Mission :'. $action11->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action11->Mission->dossier->reference_medic.' - '.$action11->Mission->dossier->subscriber_name.' '.$action11->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action11->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action11->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action11->Mission->dossier->id.'"/> ';
      
@@ -956,13 +878,7 @@ class ActionController extends Controller
 
                                         }
 
-                                        // rendre datespec 0
-
-                                       
-                                        
-
-
-
+                                 
                                     }
 
                      
@@ -982,10 +898,7 @@ class ActionController extends Controller
                       if($miss->date_spec_affect==1 && $miss->h_rdv!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
+                   
                            $datespe = \DateTime::createFromFormat($format,($miss->h_rdv));
                            // dd( $datespe );
                          
@@ -1007,27 +920,22 @@ class ActionController extends Controller
                                         //Suivre mission taxi
                                         if($action7->statut=='inactive')
                                         {
-
                                            
                                              $action7->update(['statut'=>"active"]);
                                              $action7->update(['date_deb' => $dateSys]); 
                                              $action7->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
+
 
                                               $output='Activation de l\'action :'. $action7->titre.' | Mission :'. $action7->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action7->Mission->dossier->reference_medic.' - '. $action7->Mission->dossier->subscriber_name.' '. $action7->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action7->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action7->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action7->Mission->dossier->id.'"/> ';
      
                                            return($output);
-
                                         
 
                                         }
 
-                                        // rendre datespec 0
-
-                                       
-                                        
-
-
+                            
 
                                     }
 
@@ -1048,16 +956,9 @@ class ActionController extends Controller
                       if($miss->date_spec_affect==1 && $miss->h_rdv!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
+                   
                            $datespe = \DateTime::createFromFormat($format,($miss->h_rdv));
-                           // dd( $datespe );
-                         
-                                  
-
-
+                      
                                    // $datespe <= $dateSys && $action25->statut=="faite"
 
                                  //Si_heure_systeme>heure_RDV+2h 
@@ -1072,25 +973,21 @@ class ActionController extends Controller
                                         //Suivre mission taxi
                                         if($action6->statut=='inactive')
                                         {
-
                                            
                                              $action6->update(['statut'=>"active"]);
                                              $action6->update(['date_deb' => $dateSys]); 
                                              $action6->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action6->Mission->dossier->reference_medic.' - '.$action6->Mission->dossier->subscriber_name.' '.$action6->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
      
                                            return($output);
-
                                         
 
                                         }
 
-                                        // rendre datespec 0
-                                                                         
-
-
+                               
                                     }
 
                      
@@ -1107,10 +1004,6 @@ class ActionController extends Controller
 
                       if($miss->date_spec_affect==1 && $miss->h_decoll_ou_dep_bat!=null )
                          {
-
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
 
                            $datespe = \DateTime::createFromFormat($format,($miss->h_decoll_ou_dep_bat));
                            // dd( $datespe );
@@ -1138,6 +1031,7 @@ class ActionController extends Controller
                                              $action9->update(['date_deb' => $dateSys]); 
                                              $action9->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action9->titre.' | Mission :'. $action9->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action9->Mission->dossier->reference_medic.' - '.$action9->Mission->dossier->subscriber_name.' '.$action9->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action9->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action9->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action9->Mission->dossier->id.'"/> ';
      
@@ -1146,15 +1040,10 @@ class ActionController extends Controller
                                         
                                         }
 
-                                        // rendre datespec 0
-                                                                         
-
-
+                                
                                     }
 
                      
-
-                            
                             }
                           }   // fin Devis_transport_international_sous_assistance
 
@@ -1168,15 +1057,9 @@ class ActionController extends Controller
                       if($miss->date_spec_affect==1 && $miss->h_arr_prev_dest!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
 
                            $datespe = \DateTime::createFromFormat($format,($miss->h_arr_prev_dest));
-                           // dd( $datespe );
-                         
-
-                                   
+                           
 
                                  //Si_heure_systeme>heure prévue_d’arrivee+3 heures
 
@@ -1192,11 +1075,11 @@ class ActionController extends Controller
                                         {
 
                                         
-
                                              $action8->update(['statut'=>"active"]);
                                              $action8->update(['date_deb' => $dateSys]); 
                                              $action8->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action8->titre.' | Mission :'. $action8->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action8->Mission->dossier->reference_medic.' - '. $action8->Mission->dossier->subscriber_name.' '.$action8->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action8->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action8->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action8->Mission->dossier->id.'"/> ';
      
@@ -1205,15 +1088,8 @@ class ActionController extends Controller
                                         
                                         }
 
-                                        // rendre datespec 0
-                                                                         
-
-
                                     }
-
                      
-
-                            
                             }
                           }   // fin Demande d’evasan internationale
 
@@ -1227,14 +1103,8 @@ class ActionController extends Controller
                       if($miss->date_spec_affect==1 && $miss->h_arr_prev_dest!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
                            $datespe = \DateTime::createFromFormat($format,($miss->h_arr_prev_dest));
-                           // dd( $datespe );
-                         
-
+                       
                                    //Si_heure_systeme>heure_arrivee_prevue
 
 
@@ -1248,12 +1118,12 @@ class ActionController extends Controller
                                         //Suivre mission taxi
                                         if($action8->statut=='inactive')
                                         {
-
                                           
                                              $action8->update(['statut'=>"active"]);
                                              $action8->update(['date_deb' => $dateSys]); 
                                              $action8->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action8->titre.' | Mission :'. $action8->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action8->Mission->dossier->reference_medic.' - '.$action8->Mission->dossier->subscriber_name.' '.$action8->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action8->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action8->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action8->Mission->dossier->id.'"/> ';
      
@@ -1285,14 +1155,9 @@ class ActionController extends Controller
                       if($miss->date_spec_affect==1 && $miss->h_arr_av_ou_bat!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
+                   
                            $datespe = \DateTime::createFromFormat($format,($miss->h_arr_av_ou_bat));
-                           // dd( $datespe );
-                         
-
+                      
                                    //Si_appui_fait_action2 & si_heure_systeme=heure_arrivée_vol-30min
 
                                       $action2=ActionEC::where('mission_id',$miss->id)
@@ -1313,11 +1178,11 @@ class ActionController extends Controller
                                         if($action5->statut=='inactive')
                                         {
 
-
                                              $action5->update(['statut'=>"active"]);
                                              $action5->update(['date_deb' => $dateSys]); 
                                              $action5->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action5->titre.' | Mission :'. $action5->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action5->Mission->dossier->reference_medic.' - '.$action5->Mission->dossier->subscriber_name.' '.$action5->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action5->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action5->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action5->Mission->dossier->id.'"/> ';
      
@@ -1326,14 +1191,8 @@ class ActionController extends Controller
                                         
                                         }
 
-                                        // rendre datespec 0
-                                                                         
-
-
                                     }
-
-                     
-
+                    
                             
                             }
                           }   // fin escorte à l étranger
@@ -1348,14 +1207,9 @@ class ActionController extends Controller
                       if($miss->date_spec_affect==1 && $miss->h_fin_sejour!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
+                     
                            $datespe = \DateTime::createFromFormat($format,($miss->h_fin_sejour));
-                           // dd( $datespe );
                          
-                                  
                                    // Si_date_systeme>date_fin_sejour+24h  (date_check_out_+24h)
 
                                     if($datespe->modify('+2 minutes') <= $dateSys )
@@ -1373,6 +1227,7 @@ class ActionController extends Controller
                                              $action6->update(['date_deb' => $dateSys]); 
                                              $action6->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
 
                                               $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action6->Mission->dossier->reference_medic.' - '.$action6->Mission->dossier->subscriber_name.' '.$action6->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
@@ -1382,12 +1237,6 @@ class ActionController extends Controller
                                         
 
                                         }
-
-                                        // rendre datespec 0
-
-                                       
-                                        
-
 
 
                                     }
@@ -1404,15 +1253,8 @@ class ActionController extends Controller
                           if($miss->date_spec_affect2==1 && $miss->h_fin_sejour!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
                            $datespe = \DateTime::createFromFormat($format,($miss->h_fin_sejour));
-                           // dd( $datespe );
-                                     
-                                    
-                         
+                     
                                       // Si_date_systeme>date_fin_sejour
                                     if($datespe<= $dateSys )
                                     {
@@ -1424,39 +1266,26 @@ class ActionController extends Controller
                                         //Suivre mission taxi
                                         if($action7->statut=='inactive')
                                         {
-
                                               
                                              $action7->update(['statut'=>"active"]);
                                              $action7->update(['date_deb' => $dateSys]); 
                                               $action7->update(['user_id'=>Auth::user()->id]);
                                              $miss->update(['date_spec_affect2'=>0]);
+                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action7->titre.' | Mission :'. $action7->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action7->Mission->dossier->reference_medic.' - '.$action7->Mission->dossier->subscriber_name.' '.$action7->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action7->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action7->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action7->Mission->dossier->id.'"/> ';
      
                                            return($output);
 
 
-
-
-                                        
-
                                         }
 
                                         // rendre datespec 0
 
-                                       
-                                        
-
-
-
+                       
                                     }
 
 
-
-                                
-
-
-                            
                                }
 
 
@@ -1472,13 +1301,9 @@ class ActionController extends Controller
                       if($miss->date_spec_affect==1 && $miss->h_rdv!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
+                    
                            $datespe = \DateTime::createFromFormat($format,($miss->h_rdv));
-                           // dd( $datespe );
-                            
+                          
                                   
                                    // Si_heure_systeme>heure_RDV+30’
 
@@ -1492,12 +1317,12 @@ class ActionController extends Controller
                                         //Suivre mission taxi
                                         if($action6->statut=='inactive')
                                         {
-
                                          
                                              $action6->update(['statut'=>"active"]);
                                              $action6->update(['date_deb' => $dateSys]); 
                                              $action6->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action6->Mission->dossier->reference_medic.' - '.$action6->Mission->dossier->subscriber_name.' '.$action6->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
      
@@ -1506,13 +1331,6 @@ class ActionController extends Controller
                                         
 
                                         }
-
-                                        // rendre datespec 0
-
-                                       
-                                        
-
-
 
                                     }
 
@@ -1534,10 +1352,7 @@ class ActionController extends Controller
                       if($miss->date_spec_affect==1 && $miss->h_rdv!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
+                      
                            $datespe = \DateTime::createFromFormat($format,($miss->h_rdv));
                            // dd( $datespe );
                             
@@ -1547,8 +1362,6 @@ class ActionController extends Controller
                                                           ->where('ordre',5)
                                                           ->first();
                                   
-
-
                                    // $datespe <= $dateSys && $action25->statut=="faite"
 
                                     if($datespe <= $dateSys  && $action5->statut=="faite")
@@ -1561,28 +1374,21 @@ class ActionController extends Controller
                                         //Suivre mission taxi
                                         if($action6->statut=='inactive')
                                         {
-
                                             
                                              $action6->update(['statut'=>"active"]);
                                              $action6->update(['date_deb' => $dateSys]); 
                                              $action6->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action6->Mission->dossier->reference_medic.' - '.$action6->Mission->dossier->subscriber_name.' '.$action6->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
      
                                            return($output);
 
                                         
-
                                         }
 
-                                        // rendre datespec 0
-
-                                       
-                                        
-
-
-
+                              
                                     }
 
                      
@@ -1601,15 +1407,9 @@ class ActionController extends Controller
                       if($miss->date_spec_affect2==1 && $miss->h_decoll_ou_dep_bat!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
+                     
                            $datespe = \DateTime::createFromFormat($format,($miss->h_decoll_ou_dep_bat));
-                           // dd( $datespe );
                          
-                                  
-
 
                                    // $datespe <= $dateSys && $action25->statut=="faite"
 
@@ -1629,6 +1429,7 @@ class ActionController extends Controller
                                              $action3->update(['date_deb' => $dateSys]); 
                                              $action3->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect2'=>0]);
+                                            $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action3->titre.' | Mission :'. $action3->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action3->Mission->dossier->reference_medic.' - '.$action3->Mission->dossier->subscriber_name.' '.$action3->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action3->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action3->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action3->Mission->dossier->id.'"/> ';
      
@@ -1662,9 +1463,7 @@ class ActionController extends Controller
                       if($miss->date_spec_affect2==1 && $miss->h_decoll_ou_dep_bat!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
+                    
 
                            $datespe = \DateTime::createFromFormat($format,($miss->h_decoll_ou_dep_bat));
                            // dd( $datespe );
@@ -1690,6 +1489,7 @@ class ActionController extends Controller
                                              $action2->update(['date_deb' => $dateSys]); 
                                              $action2->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect2'=>0]);
+                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action2->titre.' | Mission :'. $action2->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action2->Mission->dossier->reference_medic.' - '.$action2->Mission->dossier->subscriber_name.' '.$action2->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action2->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action2->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action2->Mission->dossier->id.'"/> ';
      
@@ -1751,6 +1551,7 @@ class ActionController extends Controller
                                              $action11->update(['date_deb' => $dateSys]); 
                                              $action11->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action11->titre.' | Mission :'. $action11->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action11->Mission->dossier->reference_medic.'-'.$action11->Mission->dossier->subscriber_name.' '.$action11->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action11->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action11->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action11->Mission->dossier->id.'"/> ';
      
@@ -1760,13 +1561,7 @@ class ActionController extends Controller
 
                                         }
 
-                                        // rendre datespec 0
-
-                                       
-                                        
-
-
-
+                                  
                                     }
 
                      
@@ -1784,14 +1579,8 @@ class ActionController extends Controller
                       if($miss->date_spec_affect==1 && $miss->h_rdv!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
                            $datespe = \DateTime::createFromFormat($format,($miss->h_rdv));
-                           // dd( $datespe );
-                         
-                                  
+                      
                                     /* Si_appui_fait_action7 & si_heure_systeme> heure H+2 prévue pour passage assuré (heure RDV)  OU si_appui_ignorer_action7 & si_heure_systeme> heure H+2 prévue pour passage assuré (heure RDV)
                                       */
 
@@ -1817,6 +1606,7 @@ class ActionController extends Controller
                                              $action8->update(['date_deb' => $dateSys]); 
                                              $action8->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action8->titre.' | Mission :'. $action8->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action8->Mission->dossier->reference_medic.' - '.$action8->Mission->dossier->subscriber_name.' '.$action8->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action8->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action8->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action8->Mission->dossier->id.'"/> ';
      
@@ -1826,13 +1616,7 @@ class ActionController extends Controller
 
                                         }
 
-                                        // rendre datespec 0
-
-                                       
-                                        
-
-
-
+                                   
                                     }
 
                      
@@ -1852,14 +1636,10 @@ class ActionController extends Controller
                       if($miss->date_spec_affect==1 && $miss->h_dep_pour_miss!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
+                      
                            $datespe = \DateTime::createFromFormat($format,($miss->h_dep_pour_miss));
                            // dd( $datespe );
-                         
-                             
+                                                     
 
                                     if($datespe <= $dateSys)
                                     {
@@ -1871,39 +1651,25 @@ class ActionController extends Controller
                                         //Suivre mission taxi
                                         if($action10->statut=='inactive')
                                         {
-
                                        
                                              $action10->update(['statut'=>"active"]);
                                              $action10->update(['date_deb' => $dateSys]); 
                                              $action10->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action10->titre.' | Mission :'. $action10->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action10->Mission->dossier->reference_medic.' - '.$action10->Mission->dossier->subscriber_name.' '.$action10->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action10->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action10->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action10->Mission->dossier->id.'"/> ';
      
                                            return($output);
-
                                         
 
                                         }
 
-                                        // rendre datespec 0
-
-                                       
-                                        
-
-
-
+                                
                                     }
 
 
-
-                              
-
-
-                            
                             }
-
-
 
                                // cas affect2
 
@@ -1911,14 +1677,8 @@ class ActionController extends Controller
                           if($miss->date_spec_affect2==1 && $miss->h_retour_base!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
-                           $datespe = \DateTime::createFromFormat($format,($miss->h_retour_base));
-                           // dd( $datespe );
-                                     
-                     
+                               $datespe = \DateTime::createFromFormat($format,($miss->h_retour_base));
+                           
                                       // Si_heure_systeme>heure_fin_mission+30min
 
                                     if($datespe->modify('+3 minutes') <= $dateSys )
@@ -1937,30 +1697,19 @@ class ActionController extends Controller
                                              $action11->update(['date_deb' => $dateSys]); 
                                               $action11->update(['user_id'=>Auth::user()->id]);
                                              $miss->update(['date_spec_affect2'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action11->titre.' | Mission :'. $action11->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action11->Mission->dossier->reference_medic.' - '.$action11->Mission->dossier->subscriber_name.' '.$action11->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action11->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action11->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action11->Mission->dossier->id.'"/> ';
      
                                            return($output);
-
                                         
 
                                         }
 
-                                        // rendre datespec 0
-
-                                       
-                                        
-
-
-
+                                
                                     }
 
 
-
-                                
-
-
-                            
                                }
 
 
@@ -1976,19 +1725,10 @@ class ActionController extends Controller
                       if($miss->date_spec_affect==1 && $miss->h_fin_location_voit!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
+                  
                            $datespe = \DateTime::createFromFormat($format,($miss->h_fin_location_voit));
-                           // dd( $datespe );
-                         
-                                      
-
-
+                        
                                    // si_date_système<date_fin_location-24h (de midi à midi)
-
-
 
                                     if($datespe->modify('-2 minutes') <= $dateSys )
                                       
@@ -2002,12 +1742,11 @@ class ActionController extends Controller
                                         if($action6->statut=='inactive')
                                         {
 
-
-
                                              $action6->update(['statut'=>"active"]);
                                              $action6->update(['date_deb' => $dateSys]); 
                                              $action6->update(['user_id'=>Auth::user()->id]);
                                              $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action6->Mission->dossier->reference_medic.' - '.$action6->Mission->dossier->subscriber_name.' '.$action6->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
      
@@ -2017,19 +1756,7 @@ class ActionController extends Controller
 
                                         }
 
-                                        // rendre datespec 0
-
-                                       
-                                        
-
-
-
                                     }
-
-
-
-                              
-
 
                             
                             }
@@ -2042,16 +1769,9 @@ class ActionController extends Controller
                           if($miss->date_spec_affect2==1 && $miss->h_fin_location_voit!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
+                    
                            $datespe = \DateTime::createFromFormat($format,($miss->h_fin_location_voit));
-                           // dd( $datespe );
-
-
-                                         // Si_appui_fait_action6 & si_choix_option1_action6 & si_date_système>date_fin_location (midi à midi) OU 
-                                                  //Si_appui_fait_action7 & si_choix_option2_action7 & si_date_système>date_fin_location (midi à midi) Si_appui_fait_Action9 & si_choix_Option2_action9 & si_date_système>date_fin_location (midi à midi)
+                   
 
 
                                $action6=ActionEC::where('mission_id',$miss->id)
@@ -2068,9 +1788,6 @@ class ActionController extends Controller
                                                           ->where('ordre',9)
                                                           ->first();
 
-
-
-                                   
 
                                     if($datespe <= $dateSys && 
                                       (($action6->statut=="faite" && $action6->opt_choisie=="1") ||
@@ -2089,42 +1806,22 @@ class ActionController extends Controller
                                         //Suivre mission taxi
                                         if($action8->statut=='inactive')
                                         {
-
-
-
                                              $action8->update(['statut'=>"active"]);
                                              $action8->update(['date_deb' => $dateSys]); 
                                              $action8->update(['user_id'=>Auth::user()->id]);
                                              $miss->update(['date_spec_affect2'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action8->titre.' | Mission :'. $action8->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action8->Mission->dossier->reference_medic.' - '.$action8->Mission->dossier->subscriber_name.' '.$action8->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action8->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action8->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action8->Mission->dossier->id.'"/> ';
      
                                            return($output);
 
-                                        
-
-
-
-
-                                        
-
-                                        }
+                                          }
 
                                         // rendre datespec 0
 
-                                       
-                                        
-
-
-
                                     }
 
-
-
-                                
-
-
-                            
                                }
 
 
@@ -2134,15 +1831,8 @@ class ActionController extends Controller
                           if($miss->date_spec_affect3==1 && $miss->h_fin_location_voit!=null )
                          {
 
-                        //dd($miss->h_dep_pour_miss);
-                        // $datespe1=($miss->h_dep_pour_miss)->format('Y-m-d H:i');
-                        //dd( $datespe1);
-
                            $datespe = \DateTime::createFromFormat($format,($miss->h_fin_location_voit));
-                           // dd( $datespe );
-                                     
-                         
-                                      
+                             
                                     if($datespe <= $dateSys  )
                                     {
 
@@ -2158,7 +1848,8 @@ class ActionController extends Controller
                                              $action10->update(['statut'=>"active"]);
                                              $action10->update(['date_deb' => $dateSys]); 
                                               $action10->update(['user_id'=>Auth::user()->id]);
-                                             $miss->update(['date_spec_affect3'=>0]);
+                                              $miss->update(['date_spec_affect3'=>0]);
+                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action10->titre.' | Mission :'. $action10->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action10->Mission->dossier->reference_medic.' - '.$action10->Mission->dossier->subscriber_name.' '.$action10->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action10->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action10->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action10->Mission->dossier->id.'"/> ';
      
@@ -2167,33 +1858,14 @@ class ActionController extends Controller
 
                                         }
 
-                                        // rendre datespec 0
-
-                                       
-                                        
-
 
 
                                     }
 
-
-
-                                
-
-
-                            
                                }
 
 
-
                         }     // fin location voiture
-
-
-
-
-
-
-
 
 
              }// fin pour
@@ -2253,6 +1925,7 @@ class ActionController extends Controller
                   $upde= ActionEC::where('id',$actionRepo->id)->where('statut','!=','rfaite')->first();
                   $upde->update(['statut' => 'active']);
                   $upde->update(['date_deb'=> $dtc]);
+                  Mission::where('id', $upde->Mission->id)->update(['statut_courant'=>'active']);
 
                      $output='Activation de l\'action reportée : '.$upde->titre.' | Mission :'.$upde->Mission->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname .'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
                 
@@ -2263,6 +1936,7 @@ class ActionController extends Controller
                  $upde= ActionEC::where('id',$actionRapp->id)->where('statut','!=','rfaite')->first();
                      $upde->update(['statut' => 'active']);
                       $upde->update(['date_deb'=> $dtc]);
+                      Mission::where('id', $upde->Mission->id)->update(['statut_courant'=>'active']);
 
                      $output='Rappel concernant l\'action :'.$upde->titre.' | Mission :'.$upde->Mission->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
                     // dd($output);
@@ -2276,6 +1950,7 @@ class ActionController extends Controller
             $upde= ActionEC::where('id',$actionRapp->id)->where('statut','!=','rfaite')->first();
              $upde->update(['statut' => 'active']);
               $upde->update(['date_deb'=> $dtc]);
+              Mission::where('id', $upde->Mission->id)->update(['statut_courant'=>'active']);
 
              $output='Rappel concernant l\'action :'.$upde->titre.' | Mission :'.$upde->Mission->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
              //dd($output);
@@ -2289,15 +1964,12 @@ class ActionController extends Controller
                          $upde= ActionEC::where('id',$actionRepo->id)->where('statut','!=','rfaite')->first();
                          $upde->update(['statut' => 'active']);
                          $upde->update(['date_deb'=> $dtc]);
+                         Mission::where('id', $upde->Mission->id)->update(['statut_courant'=>'active']);
 
                          $output='Activation de l\'action reportée : '.$upde->titre.' | Mission :'.$upde->Mission ->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
                   
-
-                        //dd($output);
                             return($output);
  
-
-
 
                     }
 
@@ -2432,7 +2104,7 @@ class ActionController extends Controller
      $dossier=$act->dossier;
      //$dossiers=Dossier::all();
      //'dossiers' => $dossiers,
-     $typesMissions=TypeMission::get();
+     $typesMissions2=TypeMission::get();
      $Missions=Auth::user()->activeMissions;
     // $Actions=$act->Actions;
     // dd($dossier);
@@ -2478,7 +2150,7 @@ class ActionController extends Controller
          }
 
      return view('actions.TraitementAction',['act'=>$act,'attachements'=>$attachements,
-        'typesMissions'=>$typesMissions,'Missions'=>$Missions,'Action'=>$Action,'doss'=>$dossier->id], compact('dossier'));
+        'typesMissions2'=>$typesMissions2,'Missions'=>$Missions,'Action'=>$Action,'doss'=>$dossier->id], compact('dossier'));
 
     }
 
@@ -2506,22 +2178,27 @@ class ActionController extends Controller
          $miss->forceDelete();
 
 
-
     }
 
      
-
        public function afficheEtatAction_mision_dossier($idact,$bouton)
         {
 
              $Action=ActionEC::find($idact);
              $act=$Action->Mission;     
              $dossier=$act->dossier;
-            // $dossiers=Dossier::get();
-             //'dossiers' => $dossiers,
-             $typesMissions=TypeMission::get();
+
+    // etat endormie
+           $actmissendor=ActionEC::where('mission_id',$act->id)->where('statut','active')->first();
+           if(!$actmissendor)
+           {
+               //dd('endormie');
+                Mission::where('id',$act->id)->update(['statut_courant'=>'endormie']);
+           }
+
              $Missions=Auth::user()->activeMissions;
-             $Actions=$act->Actions;
+     
+              //$Actions=$act->Actions;
     // dd($dossier);
 
            if ($bouton==1)
@@ -2532,16 +2209,16 @@ class ActionController extends Controller
            Session::flash('messagekbsSucc', 'l\'action a été reportée');
             if ($bouton==4)
            Session::flash('messagekbsSucc', 'l\'action a été mise en attente');
-             
 
-     return view('actions.DossierMissionAction',['act'=>$act,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+                    
+
+     return view('actions.DossierMissionAction',['act'=>$act,'Missions'=>$Missions,'Action'=>$Action], compact('dossier'));
 
 
         }
 
   public function test_fin_mission($idmission)
     {
-
 
         $actions=ActionEC::where('mission_id',$idmission)->get();
         foreach ($actions as $a) {
@@ -2876,6 +2553,7 @@ class ActionController extends Controller
               $at=ActionEC::where("mission_id",$at->mission_id_org)->first()->id_type_miss;
           }*/
 
+         
           if($action->id_type_miss)
           {
              $idtype= intval($action->id_type_miss);
@@ -3017,18 +2695,16 @@ class ActionController extends Controller
         case intval(25): //25 "Tout transport aérien international sous assistance"
          return $this->transport_aerien_international_sous_assistance_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
    
-                // default:
-                 // Code to be executed if n is different from all labels
+            
          }
+
+
 
       
       }
       else
       {
-
            return redirect('dossiers/view/'.$iddoss);
-
-
       }
 
 
@@ -3469,12 +3145,12 @@ public function fin_mission_si_test_fin($idact,$idmiss)
                    $dossier=$act->dossier;
                   // $dossiers=Dossier::get();
                    //'dossiers' => $dossiers,
-                   $typesMissions=TypeMission::get();
+                  //$typesMissions=TypeMission::get();
                   
                    $dtc = (new \DateTime())->format('Y-m-d\TH:i');
                    $act->update(['statut_courant'=>'achevee']);
                    $act->update(['date_fin'=>$dtc]);
-                   $Actions=$act->Actions;
+                   //$Actions=$act->Actions;
 
                    $this->Archiver_mission_actions($idmiss);
 
@@ -3484,7 +3160,7 @@ public function fin_mission_si_test_fin($idact,$idmiss)
 
                   Session::flash('messagekbsSucc', 'La mission en cours { '.$act->typeMission->nom_type_Mission.' } de dossier { '.$act->dossier->reference_medic .' - '.$act->dossier->subscriber_name.' '.$act->dossier->subscriber_lastname.' } est achevée');            
 
-                  return view('actions.FinMission',['act'=>$act,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+                  return view('actions.FinMission',['act'=>$act,'Missions'=>$Missions,'Action'=>$Action], compact('dossier'));
  }
               
 
@@ -3497,12 +3173,18 @@ public function etat_action_sinon_test_fin($chang,$bouton,$idact)
                              $Action=ActionEC::find($idact);
                              $act=$Action->Mission;     
                              $dossier=$act->dossier;
-                            // $dossiers=Dossier::get();
-                             //'dossiers' => $dossiers,
-                             $typesMissions=TypeMission::get();
-                             $Missions=Auth::user()->activeMissions;
-                             $Actions=$act->Actions;
-                           // dd($dossier);
+                    
+                        // etat endormie
+                         $actmissendor=ActionEC::where('mission_id',$act->id)->where('statut','active')->first();
+                         if(!$actmissendor)
+                         {
+                             //dd('endormie');
+                              Mission::where('id',$act->id)->update(['statut_courant'=>'endormie']);
+                         }
+
+
+                           $Missions=Auth::user()->activeMissions;
+
 
                        if ($bouton==1)
                        Session::flash('messagekbsSucc', 'l\'action a été faite ');
@@ -3512,9 +3194,11 @@ public function etat_action_sinon_test_fin($chang,$bouton,$idact)
                        Session::flash('messagekbsSucc', 'l\'action a été reportée');
                         if ($bouton==4)
                        Session::flash('messagekbsSucc', 'l\'action a été mise en attente');
+
+         
              
 
-                         return view('actions.DossierMissionAction',['act'=>$act,'typesMissions'=>$typesMissions,'Missions'=>$Missions, 'Actions' => $Actions,'Action'=>$Action], compact('dossier'));
+                         return view('actions.DossierMissionAction',['act'=>$act,'Missions'=>$Missions,'Action'=>$Action], compact('dossier'));
 
 
 
