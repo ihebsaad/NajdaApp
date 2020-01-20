@@ -434,8 +434,19 @@ function formatBytes($size){
                             <select class="form-control  col-lg-12 " style="width:400px" name="specialite"     id="specialite2">
                                 <option value="0"></option>
                                 @foreach($specialites as $sp)
-                                    <option  <?php if($specialite==$sp->id){echo 'selected="selected"';}?>  class="tprest2  tprest2-<?php echo $sp->type_prestation;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
-                                @endforeach
+                                         <?php     $specialite_tprestation = DB::table('specialites_typeprestations')
+                                         ->where([
+                                            ['specialite', '=', $sp->id],
+                                            ])->first();
+                                         if (isset($specialite_tprestation->type_prestation))
+                                            {$stprest = $specialite_tprestation->type_prestation;
+                                            ?>
+                                            <option  class="tprest2  tprest2-<?php echo $stprest;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                        <?php } else { ?>
+                                                <option  class="tprest2" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                        <?php
+                                        } ?>
+                                        @endforeach
                             </select>
                         </div>
                     </div>
@@ -588,8 +599,19 @@ function formatBytes($size){
                                      <select class="form-control  col-lg-12 " style="width:400px" name="specialite"    id="specialite">
                                          <option value="0"></option>
                                          @foreach($specialites as $sp)
-                                             <option class="tprest  tprest-<?php echo $sp->type_prestation;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
-                                         @endforeach
+                                         <?php     $specialite_tprestation = DB::table('specialites_typeprestations')
+                                         ->where([
+                                            ['specialite', '=', $sp->id],
+                                            ])->first();
+                                         if (isset($specialite_tprestation->type_prestation))
+                                            {$stprest = $specialite_tprestation->type_prestation;
+                                            ?>
+                                            <option  class="tprest  tprest-<?php echo $stprest;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                        <?php } else { ?>
+                                                <option  class="tprest" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                        <?php
+                                        } ?>
+                                        @endforeach
                                      </select>
                                  </div>
                              </div>
@@ -1090,7 +1112,18 @@ array_push($listepr,$pr['prestataire_id']);
                                     <select class="form-control  col-lg-12 " style="width:400px" name="specialite"     id="specialitem">
                                         <option value="0"></option>
                                         @foreach($specialites as $sp)
-                                            <option  class="tprestm  tprestm-<?php echo $sp->type_prestation;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                         <?php     $specialite_tprestation = DB::table('specialites_typeprestations')
+                                         ->where([
+                                            ['specialite', '=', $sp->id],
+                                            ])->first();
+                                         if (isset($specialite_tprestation->type_prestation))
+                                            {$stprest = $specialite_tprestation->type_prestation;
+                                            ?>
+                                            <option  class="tprestm  tprestm-<?php echo $stprest;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                        <?php } else { ?>
+                                                <option  class="tprestm" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                        <?php
+                                        } ?>
                                         @endforeach
                                     </select>
                                 </div>
@@ -1551,7 +1584,7 @@ array_push($listepr,$pr['prestataire_id']);
                
                 </ul>
 
-                <div id="tab81" class="tab-pane fade active in  ">
+                <div id="tab81" class="tab-pane fade active in " style="overflow-y: scroll;">
                     <br>
                    Missions actives + reportées + déléguées
                    <br>
@@ -1600,6 +1633,9 @@ array_push($listepr,$pr['prestataire_id']);
                             @if($macvd->statut_courant=='active')
                             <td style="width:10%;"><small>active</small></td>
                             @endif
+                             @if($macvd->statut_courant=='endormie')
+                            <td style="width:10%;"><small>endormie</small></td>
+                            @endif
                              <td style="width:15%;"><small>{{$macvd->agent->name}} {{$macvd->agent->lastname}}</small></td>
                             <td style="width:10%;"><button type="button" id="macvd{{$macvd->id}}" class="btn btn-primary panelciel macvd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick=""> Actions</button><br>
                                 <button type="button" id="macvdo{{$macvd->id}}" class="btn btn-primary panelciel mailGenermacvd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick=""> Source</button></td></tr>
@@ -1609,7 +1645,7 @@ array_push($listepr,$pr['prestataire_id']);
 
                  </table>
                 </div> 
-                <div id="tab82" class="tab-pane fade  ">
+                <div id="tab82" class="tab-pane fade " style="overflow-y: scroll;">
                     <br>
                      Missions achevées + annulées
                      <br>
@@ -4349,26 +4385,26 @@ function toggle(className, displayState){
 
             var typeprestom = document.getElementById('templateom').value;
             var gouvernorat = $('#gouvcouvm').val();
-            //var specialite = $('#specialite').val();
+            var specialite = $('#specialite').val();
             /*
                 Taxi: - type:2 - specialite:2
                 Remorquage: - type:1 - specialite:3
                 Ambulance: -type:4 - specialite:4
             */
             // TAXI
-            if ((typeprestom==="Taxi")&&(typeprestom !=="")) {typeprest=2; type=2; specialite=2;}
+            if ((typeprestom==="Taxi")&&(typeprestom !=="")) {typeprest=2; type=2; }
             // AMBULANCE
-            if ((typeprestom==="Ambulance")&&(typeprestom !=="")) {typeprest=4; type=4; specialite=4;}
+            if ((typeprestom==="Ambulance")&&(typeprestom !=="")) {typeprest=4; type=4;}
             // REMORQUAGE
-            if ((typeprestom==="Remorquage")&&(typeprestom !=="")) {typeprest=1; type=1; specialite=3;}
+            if ((typeprestom==="Remorquage")&&(typeprestom !=="")) {typeprest=1; type=1;}
             // cas remplace
             var srcomtemp = document.getElementById("omfilled").src;
             var posomtaxitemp = srcomtemp.indexOf("odm_taxi");
             var posomambulancetemp = srcomtemp.indexOf("odm_ambulance");
             var posomremorquagetemp = srcomtemp.indexOf("odm_remorquage");
-            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomtaxitemp != -1)) {typeprest=2; type=2; specialite=2;}
-            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomambulancetemp != -1)) {typeprest=4; type=4; specialite=4;}
-            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=1; specialite=3;}
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomtaxitemp != -1)) {typeprest=2; type=2;}
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomambulancetemp != -1)) {typeprest=4; type=4; }
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=1;}
 
 
             var date = $('#pres_datem').val();
