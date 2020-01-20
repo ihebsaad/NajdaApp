@@ -1083,6 +1083,19 @@ array_push($listepr,$pr['prestataire_id']);
                 <div class="card-body" style="min-height: 650px">
 
                             <div class="form-group ">
+                                <div class="row">
+                                    <label>Spécialité</label>
+                                </div>
+                                <div class="row">
+                                    <select class="form-control  col-lg-12 " style="width:400px" name="specialite"     id="specialitem">
+                                        <option value="0"></option>
+                                        @foreach($specialites as $sp)
+                                            <option  class="tprestm  tprestm-<?php echo $sp->type_prestation;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group ">
                                  <label>Gouvernorat de couverture *</label>
                                  <div class="row">
                                      <select class="form-control  col-lg-12 " style="width:400px" name="gouvm"    id="gouvcouvm">
@@ -3975,7 +3988,13 @@ function keyUpHandler(){
                 }
             });
     });
+function toggle(className, displayState){
+            var elements = document.getElementsByClassName(className);
 
+            for (var i = 0; i < elements.length; i++){
+                elements[i].style.display = displayState;
+            }
+        }
     $("#affectationprest").change(function() {
 
             if ($("#affectationprest").val()==="interne")
@@ -3989,6 +4008,18 @@ function keyUpHandler(){
                 {
 
                     document.getElementById('externaffect').style.display = 'none';
+                    // afficher les specialite par type de prestation selectionné
+                    var srctemp = document.getElementById('omfilled').src;
+                    var typeprest = 2;
+                    toggle('tprestm', 'none');
+                    if (srctemp.indexOf("/odm_taxi") !== -1 )
+                    {typeprest =2; }
+                    if (srctemp.indexOf("/odm_ambulance") !== -1 )
+                    {typeprest =4; }
+                    if (srctemp.indexOf("/odm_remorquage") !== -1 )
+                    {typeprest =1; }
+                    toggle('tprestm-'+typeprest, 'block');
+                    
                     $("#optprestataire").modal('show');
                     $("#affectea").val("externe");
                 }
@@ -4550,8 +4581,8 @@ function keyUpHandler(){
             document.getElementById('selectedprest-m').value=0;
 
 
-            toggle('tprest2', 'none');
             var typeprestom=  document.getElementById('templateom').value;
+            var specialite=  document.getElementById('specialitem').value;
             
             /*
                 Taxi: - type:2 - specialite:2
@@ -4559,20 +4590,20 @@ function keyUpHandler(){
                 Ambulance: -type:4 - specialite:4
             */
             // TAXI
-            if ((typeprestom==="Taxi")&&(typeprestom !=="")) {typeprest=2; type=2; specialite=2;}
+            if ((typeprestom==="Taxi")&&(typeprestom !=="")) {typeprest=2; type=2; }
 
             // AMBULANCE
-            if ((typeprestom==="Ambulance")&&(typeprestom !=="")) {typeprest=4; type=4; specialite=4;}
+            if ((typeprestom==="Ambulance")&&(typeprestom !=="")) {typeprest=4; type=4; }
             // REMORQUAGE
-            if ((typeprestom==="Remorquage")&&(typeprestom !=="")) {typeprest=1; type=1; specialite=3;}
+            if ((typeprestom==="Remorquage")&&(typeprestom !=="")) {typeprest=1; type=1;}
             // cas remplace
             var srcomtemp = document.getElementById("omfilled").src;
             var posomtaxitemp = srcomtemp.indexOf("odm_taxi");
             var posomambulancetemp = srcomtemp.indexOf("odm_ambulance");
             var posomremorquagetemp = srcomtemp.indexOf("odm_remorquage");
-            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomtaxitemp != -1)) {typeprest=2; type=2; specialite=2;}
-            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomambulancetemp != -1)) {typeprest=4; type=4; specialite=4;}
-            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=1; specialite=3;}
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomtaxitemp != -1)) {typeprest=2; type=2;}
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomambulancetemp != -1)) {typeprest=4; type=4; }
+            if(((typeprestom === "") || (typeprestom === "Select"))&&(posomremorquagetemp != -1)) {typeprest=1; type=1;}
             //document.getElementById('tprest2-'+typeprest).style.display='block';
 
             //  prest = $(this).val();
