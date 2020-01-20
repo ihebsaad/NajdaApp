@@ -2849,9 +2849,6 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
              })->orWhere(function($query) use($d){
                 $query->where('reference_medic','like','%TV%')
                     ->where('statut', '<>', 5);
-             })->orWhere(function($query)use($d) {
-                $query->where('reference_medic','like','%XP%')
-                    ->where('statut', '<>', 5);
              })->update(array('affecte' => $charge));
 
         }

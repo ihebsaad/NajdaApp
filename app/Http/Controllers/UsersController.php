@@ -474,6 +474,10 @@ class UsersController extends Controller
                       $query->where('reference_medic', 'like', '%V%')
                            ->where('current_status', 'actif')
                           ->where('statut', '<>', 5);
+                 })->orWhere(function ($query)   {
+                     $query->where('reference_medic', 'like', '%XP%')
+                         ->where('current_status', 'actif')
+                         ->where('statut', '<>', 5);
 
                   })->get();
 
@@ -532,11 +536,6 @@ class UsersController extends Controller
                       $query->where('reference_medic','like','%TV%')
                           ->where('statut', '<>', 5)
                           ->where('current_status','!=', 'Cloture');
-                  })->orWhere(function($query) {
-                      $query->where('reference_medic','like','%XP%')
-                          ->where('statut', '<>', 5)
-                          ->where('current_status','!=', 'Cloture');
-
                   })->get();
 
                 //  Dossier::setTimestamps(false);

@@ -191,10 +191,6 @@ class LoginController extends Controller
                             $query->where('reference_medic', 'like', '%TV%')
                                 ->where('current_status','!=', 'Cloture')
                                 ->where('affecte', $iduser);
-                        })->orWhere(function ($query) use ($iduser) {
-                            $query->where('reference_medic', 'like', '%XP%')
-                                ->where('current_status','!=', 'Cloture')
-                                ->where('affecte', $iduser);
                         })->get();
 
                      //   Dossier::setTimestamps(false);
@@ -227,10 +223,6 @@ class LoginController extends Controller
                                 $query->where('reference_medic', 'like', '%TV%')
                                     ->where('current_status','!=', 'Cloture')
                                     ->where('affecte', $iduser);
-                            })->orWhere(function ($query) use ($iduser) {
-                                $query->where('reference_medic', 'like', '%XP%')
-                                    ->where('current_status','!=', 'Cloture')
-                                    ->where('affecte', $iduser);
                             })->get();
 
                        //     Dossier::setTimestamps(false);
@@ -260,10 +252,6 @@ class LoginController extends Controller
                                         ->where('affecte', $iduser);
                                 })->orWhere(function ($query) use ($iduser) {
                                     $query->where('reference_medic', 'like', '%TV%')
-                                        ->where('current_status','!=', 'Cloture')
-                                        ->where('affecte', $iduser);
-                                })->orWhere(function ($query) use ($iduser) {
-                                    $query->where('reference_medic', 'like', '%XP%')
                                         ->where('current_status','!=', 'Cloture')
                                         ->where('affecte', $iduser);
                                 })->get();
@@ -382,6 +370,10 @@ class LoginController extends Controller
                             $query->where('reference_medic', 'like', '%V%')
                                 ->where('current_status', 'actif')
                                 ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%XP%')
+                                ->where('current_status', 'actif')
+                                ->where('affecte', $iduser);
 
                         })->get();
 
@@ -441,6 +433,10 @@ class LoginController extends Controller
                                     ->where('affecte', $iduser);
                             })->orWhere(function ($query) use ($iduser) {
                                 $query->where('reference_medic', 'like', '%V%')
+                                    ->where('current_status', 'actif')
+                                    ->where('affecte', $iduser);
+                            })->orWhere(function ($query) use ($iduser) {
+                                $query->where('reference_medic', 'like', '%XP%')
                                     ->where('current_status', 'actif')
                                     ->where('affecte', $iduser);
 
@@ -556,10 +552,6 @@ class LoginController extends Controller
                     $query->where('reference_medic', 'like', '%TV%')
                         ->where('current_status','!=','Cloture' )
                         ->where('affecte', $iduser);
-                })->orWhere(function ($query) use ($iduser) {
-                    $query->where('reference_medic', 'like', '%XP%')
-                        ->where('current_status','!=','Cloture' )
-                        ->where('affecte', $iduser);
                 })->get();
 
             //    Dossier::setTimestamps(false);
@@ -591,10 +583,6 @@ class LoginController extends Controller
                         $query->where('reference_medic', 'like', '%TV%')
                             ->where('current_status','!=','Cloture' )
                             ->where('current_status', 'actif');
-                    })->orWhere(function ($query) use ($iduser) {
-                        $query->where('reference_medic', 'like', '%XP%')
-                            ->where('current_status','!=','Cloture' )
-                            ->where('affecte', $iduser);
                     })->get();
 
                //     Dossier::setTimestamps(false);
@@ -624,10 +612,6 @@ class LoginController extends Controller
                                 ->where('affecte', $iduser);
                         })->orWhere(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%TV%')
-                                ->where('current_status','!=','Cloture' )
-                                ->where('affecte', $iduser);
-                        })->orWhere(function ($query) use ($iduser) {
-                            $query->where('reference_medic', 'like', '%XP%')
                                 ->where('current_status','!=','Cloture' )
                                 ->where('affecte', $iduser);
                         })->get()(array('affecte' => $medic, 'statut' => 2));
@@ -728,6 +712,10 @@ class LoginController extends Controller
                     $query->where('reference_medic', 'like', '%V%')
                         ->where('current_status', 'actif')
                         ->where('affecte', $iduser);
+                })->orWhere(function ($query) use ($iduser) {
+                    $query->where('reference_medic', 'like', '%XP%')
+                        ->where('current_status', 'actif')
+                        ->where('affecte', $iduser);
                 })->get();
 
                  if($dossiers)
@@ -773,6 +761,10 @@ class LoginController extends Controller
                             ->where('affecte', $iduser);
                     })->orWhere(function ($query) use ($iduser) {
                         $query->where('reference_medic', 'like', '%V%')
+                            ->where('current_status', 'actif')
+                            ->where('affecte', $iduser);
+                    })->orWhere(function ($query) use ($iduser) {
+                        $query->where('reference_medic', 'like', '%XP%')
                             ->where('current_status', 'actif')
                             ->where('affecte', $iduser);
                     })->get();
@@ -853,7 +845,7 @@ class LoginController extends Controller
 
         // changement statut dans la base
         // logged out statut = -1
-        User::where('id', s)->update(array('statut' => '-1'));
+        User::where('id', $iduser)->update(array('statut' => '-1'));
 
 
 

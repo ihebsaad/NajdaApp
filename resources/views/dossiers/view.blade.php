@@ -976,7 +976,7 @@ array_push($listepr,$pr['prestataire_id']);
                                         <?php  echo $attach->nom;  ?></small>
 
                                 </td>
-                                <td  style="cursor:pointer" onclick="modalattach2('<?php echo $attach->id ; ?>','<?php echo addslashes($descriptionAttach) ;?>','<?php echo addslashes($attach->nom) ; ?>','<?php echo $tailleA ;?>','<?php echo addslashes($NomcA);?>')" class="overme" style="width:20%;"><small><?php  echo $descriptionAttach.'<br>'.$descriptionEmail  ;  ?></small></td>
+                                <td  style="cursor:pointer" onclick="modalattach2('<?php echo $attach->id ; ?>','<?php echo addslashes($descriptionAttach) ;?>','<?php echo addslashes($attach->nom) ; ?>','<?php echo $tailleA ;?>','<?php echo addslashes($NomcA);?>')" class="overme" style="width:20%;"><small><?php  echo  $descriptionAttach ; if($descriptionAttach==''){echo   $descriptionEmail  ;}   ?></small></td>
 
                                 <td style="width:10%"><small><?php if ($attach->boite==1) {echo ' Envoi<i class="fas a-lg fa-level-up-alt" />';} if ($attach->boite==0) {echo 'Réception<i class="fas a-lg fa-level-down-alt"/>';}  if ($attach->boite==3) {echo 'Généré <br><i style="margin-top:4px;" class="fas fa-lg fa-file-invoice"/>';}    if ($attach->boite==4) {echo 'Externe <br><i style="margin-top:4px;" class="fas fa-upload"></i>';}  if ($attach->boite==7) {echo ' Envoi Fax<i class="fas a-lg fa-level-up-alt" />';}     ?></small></td>
 
