@@ -156,7 +156,7 @@
                                     // if($user->type=='admin'){$role='(Administrateur)';}
 									if($user->id!=1){
 										
-                                  if($user->isOnline()) {$style=''; if($dureeactives >20){$style='background-color:#fd9883;color:white;';}    if($user->statut==2){$style='background-color:#FFCE54;color:black;';}
+                                  if($user->isOnline()  && $user->statut!= -1 &&  $user->user_type!= 'financier') {$style=''; if($dureeactives >20){$style='background-color:#fd9883;color:white;';}    if($user->statut==2){$style='background-color:#FFCE54;color:black;';}
                                       $c++; echo  '<tr class="usertr" onclick="showuser(this);"  id="user-'.$user->id.'" style="font-size:12px;cursor:pointer;'.$style.'" ><td>   '.$user->name.' '.$user->lastname .'</td><td>'.$user->user_type.' </td><td>'. $role.'</td><td>'.$dossiers.'</td><td>'.$missions.'</td><td>'.$actions.' <br>charge : '.$dureeactions.'</td><td>'.$actives.' <br>charge : '.$dureeactives.'</td><td>'.$notifications.'</td>  </tr>' ;}
 									}
                                 }
@@ -190,7 +190,7 @@
                        {
                        if($user->id!=1){
 
-                       if($user->isOnline()) {
+                       if($user->isOnline() && $user->statut!= -1   ) {
                            $c++;?>
                         <div  class="agent" id="agent-<?php echo $user->id;?>"  style="display:none">
                        <?php echo  '<h4 style=";text-align:center;background-color:grey;color:white;padding-top:10px;padding-bottom:10px;border:2px solid black">Agent : '.$user->name.' '.$user->lastname .'</h4>';

@@ -1294,10 +1294,10 @@ class DossiersController extends Controller
 
         $dtc = (new \DateTime())->format('Y-m-d H:i');
 
-
+/*
         $this->migration_miss ($id,$agent);
         $this->migration_notifs ($id,$agent);
-
+*/
         $affec=new AffectDoss([
 
             'util_affecteur'=>$iduser,
@@ -1311,24 +1311,14 @@ class DossiersController extends Controller
 
         $affec->save();
 
-         
 
         //mise à jour notifications
-      /*  Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"dossier": "'.$ref.'"}}\')')
-            ->where('statut','=', 0 )
-        ->update(array('notifiable_id' => $agent));
-
-*/
-
-       //Notif::where('dossierid',$id)->update(array('user'=>$agent,'affiche'=>-1,'statut'=>1,'read_at'=> null)) ;
-
 
         $user = auth()->user();
         $nomuser=$user->name.' '.$user->lastname;
         $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
         Log::info('[Agent: '.$nomuser.'] - Affectation de dossier :'.$ref.' à: '.$nomagent);
-        //$this->Migration ($id, $agent);
-        return back();
+         return back();
 
     }
 

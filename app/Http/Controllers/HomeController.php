@@ -976,7 +976,7 @@ return redirect('roles');
 
     public function migration_miss ($iddoss, $iduser_dest)
     {
-
+/*
         $missions_doss= Mission::where('dossier_id','=',$iddoss)->get();
 
         // dd($missions_doss);
@@ -1018,11 +1018,11 @@ return redirect('roles');
 
 
         }
-
+*/ return true ;
     }
     public function migration_notifs ($iddoss, $iduser_dest)
     {
-
+/*
         $notifs_doss=Notif::where('dossierid','=',$iddoss)->get();
 
         if($notifs_doss)
@@ -1038,7 +1038,7 @@ return redirect('roles');
             }
 
         }
-
+*/ return true ;
     }
 
 

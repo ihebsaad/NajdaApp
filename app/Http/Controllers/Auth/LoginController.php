@@ -45,7 +45,8 @@ class LoginController extends Controller
         $nomuser = $user->name . ' ' . $user->lastname;
         Log::info('[Agent: ' . $nomuser . '] Login ');
 
-        User::where('id', $iduser)->update(array('statut' => '0'));
+        // logged in statut = 1
+        User::where('id', $iduser)->update(array('statut' => '1'));
 
         if ($type == 'financier') {
             return redirect('/parametres');
@@ -81,6 +82,7 @@ class LoginController extends Controller
 
      public function migration_miss ($iddoss, $iduser_dest)
     {
+        /*
 
              $missions_doss= Mission::where('dossier_id','=',$iddoss)->get();
 
@@ -123,7 +125,8 @@ class LoginController extends Controller
 
 
               }
-
+*/
+        return true;
     }
      public function migration_notifs ($iddoss, $iduser_dest)
     {
@@ -143,7 +146,7 @@ class LoginController extends Controller
             }
 
         }
-        
+        return true ;
     }
 
 
@@ -812,7 +815,7 @@ class LoginController extends Controller
         }  // heure de jour
 
 
-        // vider les roles de lutilisateur dans la seance avant logout
+        // vider les roles de l utilisateur dans la seance avant logout
 
 
         if ($seance->dispatcheur == Auth::id()) {
@@ -847,6 +850,12 @@ class LoginController extends Controller
         $nomuser = $user->name . ' ' . $user->lastname;
 
         Log::info('[Agent: ' . $nomuser . '] Déconnexion ');
+
+        // changement statut dans la base
+        // logged out statut = -1
+        User::where('id', s)->update(array('statut' => '-1'));
+
+
 
         $this->guard()->logout();
 
