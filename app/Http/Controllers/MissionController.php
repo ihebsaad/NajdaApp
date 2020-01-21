@@ -3978,9 +3978,12 @@ public function getAjaxDeleguerMission($idmiss)
 
         $envoyes =   Envoye::where('dossier', $ref)->get();
 
-        $entrees1 =   Entree::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
+
+        $entrees1 =   Entree::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'asc')->get();
         ///  $entrees1 =$entrees1->sortBy('reception');
-        $envoyes1 =   Envoye::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'desc')->get();
+        $envoyes1 =   Envoye::where('dossier', $ref)->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire','description','par')->orderBy('reception', 'asc')->get();
+        ///  $envoyes1 =$envoyes1->sortBy('reception');
+
         ///  $envoyes1 =$envoyes1->sortBy('reception');
 
         $communins = array_merge($entrees1->toArray(),$envoyes1->toArray());

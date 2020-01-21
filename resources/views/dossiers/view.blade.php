@@ -334,7 +334,7 @@ function formatBytes($size){
                                         }
 
                                         ?>
-                                             <?php if ($communin['boite']==1  )
+                                             <?php if ($communin['boite']==1 && $communin['par']>0 )
                                             {
                                            echo '<b>Emetteur : </b>'. UsersController::ChampById('name',$communin['par']) .' '.  UsersController::ChampById('lastname',$communin['par']);
                                             } ?>
