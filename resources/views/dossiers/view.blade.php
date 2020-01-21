@@ -523,7 +523,7 @@ function formatBytes($size){
   ->get();
         ?>
 
-        <tr>
+        <tr style="border-top:1px solid black">
             <td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $id)}}" ><?php echo '<i>'.$prestataire->civilite .'</i> <b>'. $prestataire->name .'</b> '.$prestataire->prenom; ?></a>  </td>
             <td style="font-size:12px;width:20%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
             <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
@@ -4560,7 +4560,7 @@ function toggle(className, displayState){
             var  type =document.getElementById('typeprest').value;
             var  gouv =document.getElementById('gouvcouv').value;
             var  specialite =document.getElementById('specialite').value;
-            var  ville =document.getElementById('villepr2').value;
+            var  ville =document.getElementById('villepr').value;
             var  postal =document.getElementById('villecode').value;
             if((type !="")&&(gouv !=""))
             {
@@ -4569,6 +4569,8 @@ function toggle(className, displayState){
                 document.getElementById('termine').style.display = 'none';
                 document.getElementById('add2').style.display = 'none';
                 document.getElementById('add2prest').style.display='none';
+
+               console.log('Gouv: '+gouv+' Type P: '+type+' Specialite: '+specialite+' Ville: '+ville+' Postal: '+postal) ;
 
                 $.ajax({
                     url:"{{ route('dossiers.listepres') }}",

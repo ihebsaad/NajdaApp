@@ -2130,7 +2130,7 @@ class DossiersController extends Controller
 
   }else {
 
-      $output='<B>Aucun élément trouvé !</B>' ;
+      $output='<br><B>Aucun élément trouvé !</B>' ;
   }
 
 
