@@ -17,6 +17,8 @@ use App\Ville ;
 use App\Evaluation ;
 use DB;
 use Illuminate\Support\Facades\Mail;
+use Swift_Mailer;
+
 
 
 class PrestationsController extends Controller
@@ -126,6 +128,22 @@ class PrestationsController extends Controller
         if ($prestation->save()) {
             // Envoi de mail
             if ($autorise != '') {
+
+
+                $parametres =  DB::table('parametres')
+                    ->where('id','=', 1 )->first();
+
+                $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+                $swiftTransport->setUsername('24ops@najda-assistance.com');
+                $swiftTransport->setPassword($parametres->pass_N);
+                $fromname="Najda Assistance";
+                $from='24ops@najda-assistance.com';
+
+                $swiftMailer = new Swift_Mailer($swiftTransport);
+
+                Mail::setSwiftMailer($swiftMailer);
+
+
                 $to = array('ihebsaad@gmail.com');
                 // $to='ihebsaad@gmail.com';
                 $sujet = 'Nouvelle prestation effectuée';
@@ -139,7 +157,7 @@ class PrestationsController extends Controller
                 $cc = array('ihebs001@gmail.com', 'saadiheb@gmail.com');
                 //  $cc=array('chef.plateau@najda-assistance.com','smq@medicmultiservices.com',nejib.karoui@medicmultiservices.com);
 
-                Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc) {
+                Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$from,$fromname) {
                     $message
                         //->to($to ?: [])
                         // ->to($to)
@@ -147,7 +165,8 @@ class PrestationsController extends Controller
                         ->cc($cc ?: [])
                         //  ->bcc($ccimails ?: [])
                         ->subject($sujet)
-                        ->setBody($contenu, 'text/html');
+                        ->setBody($contenu, 'text/html')
+                        ->setFrom([$from => $fromname]);
 
 
                     foreach ($to as $t) {
@@ -166,8 +185,7 @@ class PrestationsController extends Controller
             $id = $prestation->id;
             $date = date('Y-m-d H:i:s');
             //   $evaluation = Evaluation::find($prest);
-            $evaluation = //DB::table('evaluations')
-                Evaluation::where('prestataire', $prest)
+                 Evaluation::where('prestataire', $prest)
                     ->where('gouv', $gouv)
                     ->where('type_prest', $typep)
                     ->where('specialite', $spec)

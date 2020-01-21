@@ -4360,6 +4360,8 @@ function toggle(className, displayState){
                             text: "Prestation Enregistrée"
                         });*/
                         alert('prestation ajoutée');
+                        //window.location =location.href ;
+                         location.reload() ;
                         // window.location =data;
                         $("#openmodalprest").modal('hide');
 

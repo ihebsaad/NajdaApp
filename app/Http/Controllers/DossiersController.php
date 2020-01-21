@@ -725,6 +725,9 @@ class DossiersController extends Controller
             $reference_medic = $annee . 'XP' . sprintf("%'.05d\n", $num_dossier+1);
         }
 */
+
+        $reference_medic=  preg_replace( "/\r|\n/", "", $reference_medic );
+
         $user = auth()->user();
 
         $dossier = new Dossier([
@@ -1879,7 +1882,9 @@ class DossiersController extends Controller
     {
         $dossier = Dossier::find($id);
         if (isset($dossier['reference_medic'])) {
-            return trim($dossier['reference_medic']);
+
+          $reference_medic=  preg_replace( "/\r|\n/", "", $dossier['reference_medic'] );
+            return trim($reference_medic);
         }else{return '';}
 
     }
