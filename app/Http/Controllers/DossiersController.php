@@ -2260,10 +2260,10 @@ class DossiersController extends Controller
 
         if($request->get('postal'))
         { $postal=$request->get('postal'); }
-        else{ $postal='';}
+        else{ $postal=0;}
 
 
-        if (intval($postal) >1 &&($ville!='')){
+        if (intval($postal) >1  ){
             $datasearch =Evaluation::where('gouv',$gouvernorat )
                 ->where('type_prest',$typeprest )
                 ->where('specialite',$specialite )
