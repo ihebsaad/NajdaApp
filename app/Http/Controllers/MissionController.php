@@ -3893,7 +3893,6 @@ public function getAjaxDeleguerMission($idmiss)
     }
 
     // 2eme versionde view dossier mais avec id mission
-
     
 
      public function viewDossierMission($id,$idmiss)
@@ -3905,51 +3904,18 @@ public function getAjaxDeleguerMission($idmiss)
          $minutes= 120;
         $minutes2= 600;
 
-  //      $typesMissions=TypeMission::get();
-
-     /*   $specialites = Cache::remember('specialites',$minutes2,  function () {
-
-            return DB::table('specialites')
-                ->get();
-        });*/
-      /*$specialites =DB::table('specialites')
-                ->get();*/
-
-
-       /* $typesMissions = Cache::remember('type_mission',$minutes2,  function () {
-
-            return DB::table('type_mission')
-                ->get();
-        });*/
-
-        /*$typesMissions =  DB::table('type_mission')
-                ->get();*/
-
+  
         $Missions=Dossier::find($id)->activeMissions;
 
-       // $typesprestations = TypePrestation::all();
-
+       
         $typesprestations =  DB::table('type_prestations')
                 ->get();
 
 
-       // $typesprestations = TypePrestation::all();
-
-       /* $typesprestations = Cache::remember('type_prestations',$minutes2,  function () {
-
-            return DB::table('type_prestations')
-                ->get();
-        });*/
-
-       // $prestataires = Prestataire::all();
-
-      //  $prestataires = Cache::remember('prestataires',$minutes,  function () {
-
         $prestataires= DB::table('prestataires')->get();
                 
-      //  });
-
-      $gouvernorats = DB::table('cities')  ->get();
+  
+      $gouvernorats = DB::table('cities')->get();
         
         $dossier = Dossier::find($id);
 
@@ -3959,16 +3925,6 @@ public function getAjaxDeleguerMission($idmiss)
         $entite=app('App\Http\Controllers\ClientsController')->ClientChampById('entite',$cl);
         $adresse=app('App\Http\Controllers\ClientsController')->ClientChampById('adresse',$cl);
 
-
-      //  $clients = DB::table('clients')->select('id', 'name')->get();
-
-      /*  $clients = Cache::remember('clients',$minutes2,  function () {
-
-            return DB::table('clients')
-                ->get();
-        });
-
-*/
         $prestations =   Prestation::where('dossier_id', $id)->get();
         $intervenants =   Intervenant::where('dossier', $id)->get();
         $inters =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
@@ -4024,20 +3980,14 @@ public function getAjaxDeleguerMission($idmiss)
         $idenv=array();
         foreach ($entrees as $entr)
         {
-            //  $attaches= Attachement::where('entree_id',$entr->id)->get();
-            //  $attaches= DB::table('attachements')->where('entree_id',$entr->id)->get();
-
-            //$tab =  Entree::find($entr->id)->attachements;
+         
             array_push($identr,$entr->id );
 
         }
 
         foreach ($envoyes as $env)
         {
-            //   $attaches= DB::table('attachements')->where('envoye_id',$env->id)->get();
-
-            // $tab =  Envoye::find($env->id)->attachements;
-            //array_push($attachements,$attaches );
+          
             array_push($idenv,$env->id );
 
         }
@@ -4062,11 +4012,6 @@ public function getAjaxDeleguerMission($idmiss)
         $specialites =DB::table('specialites')->get();
 
         return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis, 'omambs'=>$omambs, 'omrem'=>$omrem,'ommi'=>$ommi,'missionDocOm'=>$missionDocOm], compact('dossier'));
-
-
-
-        
-
 
     }
 
