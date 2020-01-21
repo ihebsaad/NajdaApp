@@ -156,6 +156,11 @@
    <br>
 
      <div class="row">
+      @if($Action->Mission->type_Mission==7) {{--ambulance--}} 
+        @if($Action->ordre <=7 )
+       <span style="color:red"> <h3> * <u><b>Date(s) spécifique(s) :</b></u></h3> </span>  <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir les dates suivantes dans l'interface de description de mission dès qu'elles seront connues : <br> -  la date "début mission" (date départ base) (2ème partie OM Ambulance) <br> - la date/heure "arrivée à destination" (date/heure disponibilité prévisible) (2ème partie OM Ambulance) </b></h4></div>
+       @endif 
+     @endif
       @if($Action->Mission->type_Mission==6) {{--Taxi--}} 
         @if($Action->ordre <=5 )
        <span style="color:red"> <h3> * <u><b>Date(s) spécifique(s) :</b></u></h3> </span>  <div style="padding-left: 10px;color:red"><h4><b> Vous devrez saisir les dates suivantes dans l'interface de description de mission dès qu'elles seront connues : <br> -  la date "début mission" (date départ base) (2ème partie OM Taxi) <br> - la date/heure "arrivée à destination" (date/heure disponibilité prévisible) (2ème partie OM Taxi) </b></h4></div>
