@@ -32,6 +32,8 @@ use  \App\Http\Controllers\PrestatairesController;
     <?php $idagent=$dossier->user_id; $creator=UsersController::ChampById('name',$idagent).' '.UsersController::ChampById('lastname',$idagent);
     if($dossier->created==null){ $createdat=  date('d/m/Y H:i', strtotime($dossier->created_at ));}else{
         $createdat=  date('d/m/Y H:i', strtotime($dossier->created ));}
+
+    $statut=$dossier->current_status;
     ;?>
 <div class="row">
 
@@ -74,10 +76,13 @@ use  \App\Http\Controllers\PrestatairesController;
         <?php }
         else
         {
-            if ((Gate::check('isAdmin') || Gate::check('isSupervisor') || ( $idagent==$iduser) ))
+            if($statut!='Cloture') {
+
+                if ((Gate::check('isAdmin') || Gate::check('isSupervisor') || ( $idagent==$iduser) ))
             {echo '<a style="color:#FD9883" href="#" data-toggle="modal" data-target="#attrmodal">merci cliquer pour affecter</a>';}
             else
-            {echo '<b style="color:#FD9883">merci cliquer pour affecter</b>';}
+            {echo '<b style="color:#FD9883">non affecté</b>';}
+            }
         } ?>
 
             <?php  } else{
@@ -88,7 +93,7 @@ use  \App\Http\Controllers\PrestatairesController;
              }?>
      </div>
 
-    <?php $statut=$dossier->current_status;
+    <?php
     if($statut!='Cloture') {
 ?>
     <div class="col-md-5" style="text-align: right;padding-right: 35px">

@@ -237,7 +237,10 @@
             @endforeach
             </tbody>
         </table>
-        <?php  } }?>
+
+        {{  $dossiers->links() }}
+
+    <?php  } }?>
     </div>
 
 

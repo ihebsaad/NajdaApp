@@ -59,7 +59,7 @@ class PrestatairesController extends Controller
 */
 
 
-        $prestataires = Prestataire::orderBy('name', 'asc')->paginate(10000000);
+        $prestataires = Prestataire::orderBy('name', 'asc')->paginate(300);
 
       //  $prestataires = Cache::remember('prestataires',$minutes1,  function () {
 

@@ -93,9 +93,9 @@ function formatBytes($size){
             if($statut=='Cloture'){ } else {
 
             if ((Gate::check('isAdmin') || Gate::check('isSupervisor')))
-            {echo '<a href="#" data-toggle="modal" data-target="#attrmodal">merci cliquer pour affecter</a>';}
+            {echo '<a style="color:#FD9883" href="#" data-toggle="modal" data-target="#attrmodal">merci cliquer pour affecter</a>';}
             else
-            {echo '<b>merci cliquer pour affecter</b>';}
+            {echo '<b style="color:#FD9883">non affecté</b>';}
 
             }
         } ?>

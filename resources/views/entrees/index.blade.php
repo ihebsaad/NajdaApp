@@ -81,6 +81,7 @@ function SstartsWith ($string, $startString)
             @endforeach
             </tbody>
         </table>
+        {{  $entrees->links() }}
     </div>
 @endsection
 
