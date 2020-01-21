@@ -156,6 +156,31 @@ class ActionController extends Controller
         {
             $miss=Mission::where('id',$request->idmissionDateSpec)->first();
 
+             if($miss->type_Mission==7)// ambulance
+            {
+
+              if($request->NomTypeDateSpec=="dep_pour_miss")
+              {
+            
+                $miss->update(['date_spec_affect'=>1]); 
+
+                $miss->update(['h_dep_pour_miss'=>$datespe]);
+
+                return 'date affectée'; 
+              } 
+
+               if($request->NomTypeDateSpec=="arr_prev_dest")
+              {
+            
+                $miss->update(['date_spec_affect2'=>1]); 
+
+                $miss->update(['h_arr_prev_dest'=>$datespe]);
+
+                return 'date affectée'; 
+              }     
+
+            }// fin ambulance 
+
             if($miss->type_Mission==6)// taxi 
             {
 
@@ -338,15 +363,11 @@ class ActionController extends Controller
 
              if($miss->type_Mission==32)// reservation hotel
             {
-
-            
-
+           
                $miss->update(['date_spec_affect'=>1]);  
                $miss->update(['date_spec_affect2'=>1]); 
                 $miss->update(['h_fin_sejour'=>$datespe]);
-                return 'date affectée';   
-
-             
+                return 'date affectée';             
 
 
             }// fin reservation hotel
@@ -566,6 +587,116 @@ class ActionController extends Controller
           $dateSys = \DateTime::createFromFormat($format, $dtc);
         // dd($dateSys);
              foreach ($missionsec as $miss) {
+
+               if($miss->type_Mission==7)//ambulance
+                                {
+
+
+                      if($miss->date_spec_affect==1 && $miss->h_dep_pour_miss!=null )
+                         {
+
+
+                           $datespe = \DateTime::createFromFormat($format,($miss->h_dep_pour_miss));
+                           // dd( $datespe );
+                         
+                            if($miss->type_Mission==7)//taxi 
+                                {
+                                    //activer l'action 6 de consultation médicale  Si_heure_systeme>heure_RDV+2h 
+
+                                    if($datespe <= $dateSys)
+                                    {
+
+                                        $action8=ActionEC::where('mission_id',$miss->id)
+                                                          ->where('statut','!=','rfaite')
+                                                          ->where('ordre',8)
+                                                          ->first();
+                                        //Suivre mission taxi
+                                        if($action8->statut=='inactive')
+                                        {
+                                          
+                                             $action8->update(['statut'=>"active"]);
+                                             $action8->update(['date_deb' => $dateSys]); 
+                                             $action8->update(['user_id'=>Auth::user()->id]);
+                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
+
+                                              $output='Activation de l\'action :'. $action8->titre.' | Mission :'. $action8->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action8->Mission->dossier->reference_medic.' - '.$action8->Mission->dossier->subscriber_name.' '.$action8->Mission->dossier->subscriber_lastname .'<input type="hidden" id="idactActive" value="'. $action8->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action8->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action8->Mission->dossier->id.'"/> ';
+     
+                                           return($output);
+
+                                        
+
+                                        }
+
+                               
+                                    }
+
+
+
+                                 }
+
+
+                            
+                               }
+
+
+
+                               // cas affect2
+
+
+                          if($miss->date_spec_affect2==1 && $miss->h_arr_prev_dest!=null )
+                         {
+
+                     
+
+                           $datespe = \DateTime::createFromFormat($format,($miss->h_arr_prev_dest));
+                     
+                         
+                            if($miss->type_Mission==7)//ambulance
+                                {
+                                    //activer l'action 6 de consultation médicale  Si_heure_systeme>heure_RDV+2h 
+
+
+                                    if($datespe <= $dateSys)
+                                    {
+
+                                        $action9=ActionEC::where('mission_id',$miss->id)
+                                                           ->where('statut','!=','rfaite')
+                                                           ->where('ordre',9)
+                                                           ->first();
+                                        //Suivre mission taxi
+                                        if($action9->statut=='inactive')
+                                        {
+
+
+                                             $action9->update(['statut'=>"active"]);
+                                             $action9->update(['date_deb' => $dateSys]); 
+                                              $action9->update(['user_id'=>Auth::user()->id]);
+                                             $miss->update(['date_spec_affect2'=>0]);
+                                             $miss->update(['statut_courant'=>'active']);
+
+                                              $output='Activation de l\'action :'. $action9->titre.' | Mission :'. $action9->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action9->Mission->dossier->reference_medic.' - '.$action9->Mission->dossier->subscriber_name.' '.$action9->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action9->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action9->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action9->Mission->dossier->id.'"/> ';
+     
+                                           return($output);
+
+
+
+                                        }
+
+
+                                    }
+
+
+
+                                 }
+
+
+                            
+                               }
+
+
+
+                        }// fin ambulance
 
     
              // cas om taxi ici rendez-vous= date début pour mission
@@ -3351,13 +3482,9 @@ public function Transport_ambulance_DV ($option,$idmiss,$idact,$iddoss,$bouton)
 
                         $dtc = (new \DateTime())->format('Y-m-d\TH:i');                         
                        $format = "Y-m-d\TH:i";
-                        $dateSys  = \DateTime::createFromFormat($format, $dtc);
-              
-          
+                        $dateSys  = \DateTime::createFromFormat($format, $dtc);                     
 
-                        $chang=false;
-
-                   
+                        $chang=false;                   
 
                         $toutesActions=ActionEC::Where('mission_id',$idmiss)->where('statut','!=','rfaite')
                         ->where('statut','!=','deleguee')->orderBy('ordre')->get();
@@ -3370,7 +3497,8 @@ public function Transport_ambulance_DV ($option,$idmiss,$idact,$iddoss,$bouton)
                          }
 
                        $action1=$actions[0];$action2=$actions[1];$action3=$actions[2];$action4=$actions[3];
-                       $action5=$actions[4];$action6=$actions[5];$action7=$actions[6];
+                       $action5=$actions[4];$action6=$actions[5];$action7=$actions[6];$action8=$actions[7];
+                       $action9=$actions[8];
 
 
                 // activer action 2 Définir destination 
@@ -3462,6 +3590,8 @@ public function Transport_ambulance_DV ($option,$idmiss,$idact,$iddoss,$bouton)
                  $chang=true;              
 
                }
+
+               // il ya aussi action 8 et 9 suivre mission et evaluation
 
 
 
