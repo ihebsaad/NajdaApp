@@ -85,8 +85,7 @@
             </tbody>
         </table>
 
-         {{ $prestataires->links() }}
-
+ 
     </div>
 
 

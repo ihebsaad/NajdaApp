@@ -81,8 +81,7 @@ function SstartsWith ($string, $startString)
             @endforeach
             </tbody>
         </table>
-        {{  $entrees->links() }}
-    </div>
+     </div>
 @endsection
 
 <style>#colmn6 input{display:none;}</style>

@@ -238,7 +238,6 @@
             </tbody>
         </table>
 
-        {{  $dossiers->links() }}
 
     <?php  } }?>
     </div>

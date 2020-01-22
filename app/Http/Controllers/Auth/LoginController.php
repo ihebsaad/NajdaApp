@@ -82,7 +82,7 @@ class LoginController extends Controller
 
      public function migration_miss ($iddoss, $iduser_dest)
     {
-        /*
+
 
              $missions_doss= Mission::where('dossier_id','=',$iddoss)->get();
 
@@ -125,9 +125,9 @@ class LoginController extends Controller
 
 
               }
-*/
-        return true;
-    }
+
+     }
+
      public function migration_notifs ($iddoss, $iduser_dest)
     {
 
@@ -146,7 +146,7 @@ class LoginController extends Controller
             }
 
         }
-        return true ;
+
     }
 
 

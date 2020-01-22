@@ -48,7 +48,7 @@ class EntreesController extends Controller
     {
         //
     //    $entrees = Entree::orderBy('id', 'desc')->where('statut','<','2')->paginate(10000000);
-        $entrees = Entree::orderBy('reception', 'desc')->where('statut','<','2')->paginate(500);
+        $entrees = Entree::orderBy('reception', 'desc')->where('statut','<','2')->get();
       //  $dossiers = Dossier::all();
 
         return view('entrees.index', compact('entrees'));

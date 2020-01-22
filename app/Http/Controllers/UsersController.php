@@ -310,7 +310,7 @@ class UsersController extends Controller
 
      public function migration_miss ($iddoss, $iduser_dest)
     {
-/*
+
              $missions_doss= Mission::where('dossier_id','=',$iddoss)->get();
 
              // dd($missions_doss);
@@ -352,10 +352,9 @@ class UsersController extends Controller
 
 
               }
-*/ return true;
-    }
+     }
      public function migration_notifs ($iddoss, $iduser_dest)
-    {/*
+    {
 
         $notifs_doss=Notif::where('dossierid','=',$iddoss)->get();
 
@@ -372,8 +371,7 @@ class UsersController extends Controller
             }
 
         }
-      */ return true ;
-    }
+     }
      
 
 

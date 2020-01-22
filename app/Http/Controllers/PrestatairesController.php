@@ -59,7 +59,7 @@ class PrestatairesController extends Controller
 */
 
 
-        $prestataires = Prestataire::orderBy('name', 'asc')->paginate(300);
+        $prestataires = Prestataire::orderBy('name', 'asc')->get();
 
       //  $prestataires = Cache::remember('prestataires',$minutes1,  function () {
 
@@ -141,7 +141,6 @@ class PrestatairesController extends Controller
         if( isset($dossier) && intval($dossier)>0) {
 
 
-                Log::info('01');
 
                 $prestataire = new Prestataire([
                     'name' => $nom,
@@ -150,7 +149,6 @@ class PrestatairesController extends Controller
                     'dossier' => $dossier,
 
                 ]);
-                Log::info('02');
 
 
                 if ($prestataire->save()) {
@@ -167,13 +165,11 @@ class PrestatairesController extends Controller
 
                     ]);
                     $interv->save();
-                    Log::info('04');
 
                     return redirect('/dossiers/view/' . $dossier );
 
                 } else {
                     return redirect('/prestataires');
-                    Log::info('05');
 
                 }
 
@@ -190,7 +186,6 @@ class PrestatairesController extends Controller
 
 
             ]);
-            Log::info('07');
 
             if ($prestataire->save()) {
                 $id = $prestataire->id;
@@ -198,14 +193,11 @@ class PrestatairesController extends Controller
 
                 return redirect('/prestataires/view/' . $id)/*->with('success', ' Créé avec succès')*/
                     ;
-                Log::info('08');
 
             } else {
                 return redirect('/prestataires');
-                Log::info('09');
 
             }
-            Log::info('10');
 
         }
 
