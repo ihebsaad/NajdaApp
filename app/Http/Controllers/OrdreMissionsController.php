@@ -1960,7 +1960,7 @@ $reqlieup->request->add(['dossier' => $iddnew]);
 
 
                 }
-                /*if(isset($typeaffect) && ! empty($typeaffect))
+                if(isset($typeaffect) && ! empty($typeaffect))
                 {$emispar="najda";
                 	if($typeaffect==="X-Press")
                 	{
@@ -1980,7 +1980,7 @@ $reqlieup->request->add(['dossier' => $iddnew]);
                 	    }
                 	$requestData = $request->all();
                 	$requestData['emispar'] = $emispar;
-                }*/
+                }
                 if (isset($requestData))
                 {
                     /*$omn = new OrdreMission();
@@ -1989,7 +1989,7 @@ $reqlieup->request->add(['dossier' => $iddnew]);
 
                     $nresponse = $nrequest->send();*/
                     // duplication de lom dans le nouveau dossier
-                    $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage',['reference_medic' => $nref, 'reference_medic2' => $nref/*,'emispar' =>$emispar*/])->setPaper('a4', '');
+                    $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage',['reference_medic' => $nref, 'reference_medic2' => $nref,'emispar' =>$emispar])->setPaper('a4', '');
                 }
                 else
                 {
