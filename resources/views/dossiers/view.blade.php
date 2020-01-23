@@ -1637,7 +1637,7 @@ array_push($listepr,$pr['prestataire_id']);
                             <td style="width:10%;"><small>endormie</small></td>
                             @endif
                              <td style="width:15%;"><small>  <?php if ((isset($dossier->affecte)) && (($dossier->affecte>0))) { ?>
-                                     {{$macvd->agent->name}} {{$macvd->agent->lastname}} <?php } ?></small></td>
+                                     {{$macvd->user_origin->name}} {{$macvd->user_origin->lastname}} <?php } ?></small></td>
                             <td style="width:10%;"><button type="button" id="macvd{{$macvd->id}}" class="btn btn-primary panelciel macvd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick=""> Actions</button><br>
                                 <button type="button" id="macvdo{{$macvd->id}}" class="btn btn-primary panelciel mailGenermacvd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick=""> Source</button></td></tr>
                        @endforeach
@@ -1691,7 +1691,7 @@ array_push($listepr,$pr['prestataire_id']);
                             <td style="width:10%;"><small>annulée </small></td>
                             @endif
                            <td style="width:15%;">         <?php if ((isset($dossier->affecte)) && (($dossier->affecte>0))) { ?>
-                               <small>{{$mhivd->agent->name}} {{$mhivd->agent->lastname}}</small><?php } ?></td>
+                               <small>{{$mhivd->user_origin->name}} {{$mhivd->user_origin->lastname}}</small><?php } ?></td>
                             <td style="width:10%;"><button type="button" id="mhivd{{$mhivd->id_origin_miss}}" class="btn btn-primary panelciel mhivd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick="">Actions</button><br>
                                 <button type="button" id="mhivdo{{$mhivd->id_origin_miss}}" class="btn btn-primary panelciel mailGenermhivd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick="">Source</button></td></tr>
                        @endforeach

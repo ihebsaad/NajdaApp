@@ -370,9 +370,23 @@ class MissionController extends Controller
     {
   
         $typeMiss=TypeMission::where('id',trim($request->get('typeMissauto')))->first();
+         $dos=Dossier::where('id',trim($request->get('dossierID')))->first();
+         $user_affec=auth::user()->id;
+         if($dos)
+         {
+             if($dos->current_status != 'Cloture')
+             {
+                 $dos->update(array('current_status'=>'actif'));
+             }
 
-     
-       //dd($dossier);  
+             if($dos->affecte)
+             {
+                $user_affec=$dos->affecte;
+             }
+
+         }
+
+ 
          $format = "Y-m-d\TH:i";
   
         
@@ -397,7 +411,7 @@ class MissionController extends Controller
 
              'realisee'=> 0,
              'affichee'=>1,
-             'user_id'=>auth::user()->id,
+             'user_id'=>$user_affec,
              'origin_id'=>auth::user()->id,
 
              'type_heu_spec'=> $typeMiss->type_heu_spec,
@@ -565,11 +579,7 @@ class MissionController extends Controller
 
 
 
-        $dos=Dossier::where('id',trim($request->get('dossierID')))->first();
-         if($dos->current_status != 'Cloture')
-         {
-             $dos->update(array('current_status'=>'actif'));
-         }
+       
 
              // mise à jour de table entree col mission_id
 
