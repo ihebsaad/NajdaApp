@@ -1,40 +1,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src='https://bevacqua.github.io/dragula/dist/dragula.js'></script>
 
-<!--
-<html>
-<head>
-</head>
-<body>
-<div class="parent">
-    <div class="wrapper">
-        <div id="drag-elements" class="container">
-            <div>Something 1</div>
-            <div>Something 2</div>
-            <div>Something 3</div>
-            <div>Something 4</div>
-            <div>Something 5</div>
-            <div>Something 6</div>
-            <div>Something 7</div>
-            <div>Something 8</div>
-            <div>Something 9</div>
-        </div>
-        <div id="drag-elements2" class="container">
-            <div>Something A</div>
-            <div>Something B</div>
-            <div>Something C</div>
-            <div>Something D</div>
-            <div>Something E</div>
-            <div>Something F</div>
-            <div>Something G</div>
-            <div>Something H</div>
-            <div>Something I</div>
-        </div>
-    </div>
-</div>
-</body>
-</html>
--->
+
 
 
 @extends('layouts.supervislayout')
@@ -315,11 +282,11 @@
                 echo  '<div class="userdiv" id="user-'.$iduser.'" style="display:none;margin-bottom:30px;'.$bg.';height:'.$taille.'"  >';
 
                 foreach($folders as $folder)
-                { $type=$folder['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}//if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique' || $type=='Transport'){$style="background-color:#3498DB;";}
+                { $type=$folder['type_dossier']; $style=""; if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique' || $type=='Transport'){$style="--my-color-var:#3498DB;";}
                 $statut=$folder['statut']; $idd=$folder['id'];$ref=$folder['reference_medic'];$abn=$folder['subscriber_lastname'].' '.$folder['subscriber_name'];$idclient=$folder['customer_id'];$client= $folder['reference_customer'] /*  ClientsController::ClientChampById('name',$idclient)*/ ;?>
-                <div  id="dossier-<?php echo $idd;?>" class="dossier"  style="margin-top:5px;<?php echo $style; if($statut==5){ echo';border:2px solid black';}?>" >
+                <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style; if($statut==5){ echo';border:2px solid black';}?>" >
                     <label style="font-size: 18px;"><?php echo $ref ;?></label>
-                    <div class="infos">  <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
+                    <div class="infos">  <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
                         <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small>
 
                         <i style="float:left;color:;margin-top:10px" class="delete fa fa-trash" onclick="Delete('<?php echo $idd;?>')"></i></div>
@@ -335,10 +302,22 @@
             </div>
         </div><!--panel 1-->
 
-        <div class="panel panel-danger col-md-5" style="padding:0 ;min-height: 800px ">
+        <div class="panel panel-danger col-md-5" style="padding:0 ;min-height: 800px  "  id="panelright">
             <div class="panel-heading">
                 <h4 class="panel-title"></h4>
 
+            </div>
+
+            <div class="row" style="margin-bottom:10px">
+                <div class="col-sm-4"><center> <input style="width:200px;margin-top:10px;border:1px solid black" class="search" type="text" id="myInput" onkeyup="Searchf()" placeholder=" N° de Dossier.." title="Taper"></center></div>
+                <div class="col-sm-4"><center><input  style="width:200px;margin-top:10px;border:1px solid black" class="search" type="text" id="myInput2" onkeyup="Searchf2()" placeholder=" Assuré.." title="Taper"></center></div>
+                <div class="col-sm-4"><center><input style="width:200px;margin-top:10px;border:1px solid black" class="search" type="text" id="myInput3" onkeyup="Searchf3()" placeholder=" Réf Client.." title="Taper"></center></div>
+            </div>
+            <div class="row" style="margin-bottom:15px;">
+                <div class="col-md-3" style="cursor:pointer;color:#F39C12" onclick="showMixtes()"><i class="fa fa-lg fa-folder"></i>  <b  >Dossier Mixte</b></div>
+                <div class="col-md-3" style="cursor:pointer;color:#52BE80" onclick="showMedic()" ><i class="fa fa-lg fa-folder"></i>  <b  >Dossier Medical</b></div>
+                <div class="col-md-4" style="cursor:pointer;color:#3498DB" onclick="showTech()" ><i class="fa fa-lg fa-folder"></i>  <b  >Dossier Technique</b></div>
+                <div class="col-md-2" style="cursor:pointer;color:#000000;font-weight: 600" onclick="showTous()" >  <b  onclick="showTech()">TOUS</b></div>
             </div>
 
             <ul class="nav  nav-tabs" style="margin-top:10px;margin-bottom:10px">
@@ -370,7 +349,7 @@
 
             <ul class="nav  nav-tabs" style="margin-top:10px;margin-bottom:10px">
                 <li class="nav-item  ">
-                    <a class="nav-link    " href="#panelnonaff" data-toggle="tab"  onclick="showTab1();hideTab2();hideTab3();hideTab4();hideTab5();"  >
+                    <a class="nav-link    " href="#panelnonaff" data-toggle="tab"  onclick="hideTabs();showTab1();hideTab2();hideTab3();hideTab4();hideTab5();"  >
                         <i class="fa-lg fas fa-folder-open"></i>  Non affectés  (<?php echo  $Cdossiers ;?>)
                     </a>
                 </li>
@@ -382,7 +361,7 @@
                     $countF=count($folders);
                     if($user->statut== 1 &&  $user->user_type!= 'financier' &&  $user->user_type!= 'admin' && $user->user_type!= 'bureau' ) {
                         echo '  <li class="nav-item  ">
-                    <a class="nav-link    " href="#panelu-'.$iduser.'>" data-toggle="tab"  onclick="hideTabs();showTabs('.$iduser.');"  >
+                    <a class="nav-link    " href="#panelu-'.$iduser.'" data-toggle="tab"  onclick="hideTabs();showTabs('.$iduser.');"  >
                     <i class="fa-lg fas fa-user"></i>  '.$user->name.' '.$user->lastname.' ('. $countF .')
                     </a>
                     </li> ';
@@ -392,13 +371,15 @@
             </ul>
 
 
+            <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
+
 
             <div id="panelsupmedic"  class="tab-pane fade pannel" >
 
                 <div class="row">
-                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputSM" onkeyup="SMSearchf()" placeholder="N° de Dossier.." title="Taper"></div>
-                    <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInputSM2" onkeyup="SMSearchf2()" placeholder="Assuré.." title="Taper"></div>
-                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputSM3" onkeyup="SMSearchf3()" placeholder="Réf Client.." title="Taper"></div>
+                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputSM" onkeyup="SMSearchf()" placeholder=" N° de Dossier.." title="Taper"></div>
+                    <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInputSM2" onkeyup="SMSearchf2()" placeholder=" Assuré.." title="Taper"></div>
+                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputSM3" onkeyup="SMSearchf3()" placeholder=" Réf Client.." title="Taper"></div>
                 </div>
                 <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
                     <div class="row" style="margin-bottom:15px;">
@@ -414,11 +395,11 @@
                         if($CdossiersSM >0)
                         {
                         foreach($dossiersSM as $dossierI)
-                        { $type=$dossierI['type_dossier'];//if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="background-color:#3498DB;";}
+                        { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="--my-color-var:#3498DB;";}
                         $idd=$dossierI['id'];
                         $immatricul=$dossierI['vehicule_immatriculation'];
                         $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-                        <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
+                        <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
                             <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>-->
                             <div class="infos"> <label style="font-size: 15px;"><?php echo $ref;?></label>
                                 <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
@@ -443,9 +424,9 @@
             <div id="panelsuptech"  class="tab-pane fade pannel" >
 
                 <div class="row">
-                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputST" onkeyup="STSearchf()" placeholder="N° de Dossier.." title="Taper"></div>
-                    <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInputST2" onkeyup="STSearchf2()" placeholder="Assuré.." title="Taper"></div>
-                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputST3" onkeyup="STSearchf3()" placeholder="Réf Client.." title="Taper"></div>
+                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputST" onkeyup="STSearchf()" placeholder=" N° de Dossier.." title="Taper"></div>
+                    <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInputST2" onkeyup="STSearchf2()" placeholder=" Assuré.." title="Taper"></div>
+                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputST3" onkeyup="STSearchf3()" placeholder=" Réf Client.." title="Taper"></div>
                 </div>
                 <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
                     <div class="row" style="margin-bottom:15px;">
@@ -461,11 +442,11 @@
                         if($CdossiersST >0)
                         {
                         foreach($dossiersST as $dossierI)
-                        { $type=$dossierI['type_dossier'];//if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="background-color:#3498DB;";}
+                        { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="--my-color-var:#3498DB;";}
                         $idd=$dossierI['id'];
                         $immatricul=$dossierI['vehicule_immatriculation'];
                         $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-                        <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
+                        <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
                             <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>-->
                             <div class="infos"> <label style="font-size: 15px;"><?php echo $ref;?></label>
                                 <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
@@ -491,9 +472,9 @@
             <div id="panelcharge"  class="tab-pane fade pannel " >
 
                 <div class="row">
-                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputC" onkeyup="CSearchf()" placeholder="N° de Dossier.." title="Taper"></div>
-                    <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInputC2" onkeyup="CSearchf2()" placeholder="Assuré.." title="Taper"></div>
-                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputC3" onkeyup="CSearchf3()" placeholder="Réf Client.." title="Taper"></div>
+                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputC" onkeyup="CSearchf()" placeholder=" N° de Dossier.." title="Taper"></div>
+                    <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInputC2" onkeyup="CSearchf2()" placeholder=" Assuré.." title="Taper"></div>
+                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputC3" onkeyup="CSearchf3()" placeholder=" Réf Client.." title="Taper"></div>
                 </div>
                 <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
                     <div class="row" style="margin-bottom:15px;">
@@ -509,11 +490,11 @@
                         if($CdossiersC >0)
                         {
                         foreach($dossiersC as $dossierI)
-                        { $type=$dossierI['type_dossier'];//if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="background-color:#3498DB;";}
+                        { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="--my-color-var:#3498DB;";}
                         $idd=$dossierI['id'];
                         $immatricul=$dossierI['vehicule_immatriculation'];
                         $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-                        <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
+                        <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
                             <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>-->
                             <div class="infos"> <label style="font-size: 15px;"><?php echo $ref;?></label>
                                 <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
@@ -538,9 +519,9 @@
             <div id="paneldisp"  class="tab-pane fade  pannel" >
 
                 <div class="row">
-                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputD" onkeyup="DSearchf()" placeholder="N° de Dossier.." title="Taper"></div>
-                    <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInputD2" onkeyup="DSearchf2()" placeholder="Assuré.." title="Taper"></div>
-                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputD3" onkeyup="DSearchf3()" placeholder="Réf Client.." title="Taper"></div>
+                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputD" onkeyup="DSearchf()" placeholder=" N° de Dossier.." title="Taper"></div>
+                    <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInputD2" onkeyup="DSearchf2()" placeholder=" Assuré.." title="Taper"></div>
+                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputD3" onkeyup="DSearchf3()" placeholder=" Réf Client.." title="Taper"></div>
                 </div>
                 <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
                     <div class="row" style="margin-bottom:15px;">
@@ -556,11 +537,11 @@
                         if($CdossiersDisp >0)
                         {
                         foreach($dossiersDisp as $dossierI)
-                        { $type=$dossierI['type_dossier'];//if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="background-color:#3498DB;";}
+                        { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="--my-color-var:#3498DB;";}
                         $idd=$dossierI['id'];
                         $immatricul=$dossierI['vehicule_immatriculation'];
                         $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-                        <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
+                        <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
                             <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>-->
                             <div class="infos"> <label style="font-size: 15px;"><?php echo $ref;?></label>
                                 <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
@@ -585,18 +566,8 @@
             <div id="panelnonaff"   class="tab-pane fade   pannel  ">
 
 
-                <div class="row">
-                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInput" onkeyup="Searchf()" placeholder="N° de Dossier.." title="Taper"></div>
-                    <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInput2" onkeyup="Searchf2()" placeholder="Assuré.." title="Taper"></div>
-                    <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInput3" onkeyup="Searchf3()" placeholder="Réf Client.." title="Taper"></div>
-                </div>
                 <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
-                    <div class="row" style="margin-bottom:15px;">
-                        <div class="col-md-3" style="cursor:pointer;color:#F39C12" onclick="showMixtes()"><i class="fa fa-lg fa-folder"></i>  <b  >Dossier Mixte</b></div>
-                        <div class="col-md-3" style="cursor:pointer;color:#52BE80" onclick="showMedic()" ><i class="fa fa-lg fa-folder"></i>  <b  >Dossier Medical</b></div>
-                        <div class="col-md-4" style="cursor:pointer;color:#3498DB" onclick="showTech()" ><i class="fa fa-lg fa-folder"></i>  <b  >Dossier Technique</b></div>
-                        <div class="col-md-2" style="cursor:pointer;color:#000000;font-weight: 600" onclick="showTous()" >  <b  onclick="showTech()">TOUS</b></div>
-                    </div>
+
 
                     <div id="drag-elements" class="dragging container"  >
 
@@ -604,12 +575,12 @@
                         if($Cdossiers >0)
                         {
                         foreach($dossiers as $dossier)
-                        { $type=$dossier['type_dossier'];//if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="background-color:#3498DB;";}
+                        { $type=$dossier['type_dossier'];if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="--my-color-var:#3498DB;";}
                         $idd=$dossier['id'];
                         $immatricul=$dossier['vehicule_immatriculation']; $statut=$dossier['statut'];
                         $ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
                         <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style; if($statut!=2){ echo';border:2px solid black;';} ?>" >
-                            <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
+                            <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
                             <div class="infos">  <label style="font-size: 15px;"><?php echo $ref;?></label>
                                 <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
                                 <?php if($immatricul!='') { echo '<small style="font-size:10px">'. $immatricul .'</small>';} ?>
@@ -661,17 +632,17 @@
             ?>
             <div id="panelu-<?php echo $iduser; ?>"   class=" pannel   ">
                 <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
-                    <div id="drag-elements-u-<?php echo $iduser; ?>" class="dragging container"  >
+                    <div id="agnt-<?php echo $iduser; ?>" class="dragging container"  >
                         <?php
                         $type='';$style='';
 
                         foreach($folders as $dossier)
-                        { $type=$dossier['type_dossier'];//if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="background-color:#3498DB;";}
+                        { $type=$dossier['type_dossier'];if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="--my-color-var:#3498DB;";}
                         $idd=$dossier['id'];
                         $immatricul=$dossier['vehicule_immatriculation']; $statut=$dossier['statut'];
                         $ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-                        <div  id="folders-<?php echo $idd;?>" class="dossier dossierU-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style; if($statut!=2){ echo';border:2px solid black;';} ?>" >
-                            <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
+                        <div  id="folders-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style; if($statut!=2){ echo';border:2px solid black;';} ?>" >
+                            <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
                             <div class="infos">  <label style="font-size: 15px;"><?php echo $ref;?></label>
                                 <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
                                 <?php if($immatricul!='') { echo '<small style="font-size:10px">'. $immatricul .'</small>';} ?>
@@ -776,10 +747,10 @@
 
         var elements = document.getElementsByClassName('dossier');
         for (var i = 0; i < elements.length; i++){
-            if (elements[i].parentElement.id =='drag-elements')
-            {
+           // if (elements[i].parentElement.id =='drag-elements')
+          //  {
                 elements[i].style.display = 'none';
-            }
+           // }
         }
 
         var elements = document.getElementsByClassName('dossier-Mixte');
@@ -792,10 +763,10 @@
 
         var elements = document.getElementsByClassName('dossier');
         for (var i = 0; i < elements.length; i++){
-            if (elements[i].parentElement.id =='drag-elements')
-            {
+          //  if (elements[i].parentElement.id =='drag-elements')
+          //  {
                 elements[i].style.display = 'none';
-            }
+          //  }
         }
 
         var elements = document.getElementsByClassName('dossier-Medical');
@@ -808,10 +779,10 @@
 
         var elements = document.getElementsByClassName('dossier');
         for (var i = 0; i < elements.length; i++){
-            if (elements[i].parentElement.id =='drag-elements')
-            {
+         //   if (elements[i].parentElement.id =='drag-elements')
+         //   {
                 elements[i].style.display = 'none';
-            }
+          //  }
         }
 
         var elements = document.getElementsByClassName('dossier-Technique');
@@ -843,7 +814,7 @@
         var input, filter, ul, li, label, i, txtValue;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
-        ul = document.getElementById("drag-elements");
+        ul = document.getElementById("panelright");
         li = ul.getElementsByClassName("dossier");
         for (i = 0; i < li.length; i++) {
             label = li[i].getElementsByTagName("label")[0];
@@ -861,7 +832,7 @@
         var input, filter, ul, li, label, i, txtValue;
         input = document.getElementById("myInput2");
         filter = input.value.toUpperCase();
-        ul = document.getElementById("drag-elements");
+        ul = document.getElementById("panelright");
         li = ul.getElementsByClassName("dossier");
         for (i = 0; i < li.length; i++) {
             label = li[i].getElementsByTagName("small")[0];
@@ -880,7 +851,7 @@
         var input, filter, ul, li, label, i, txtValue;
         input = document.getElementById("myInput3");
         filter = input.value.toUpperCase();
-        ul = document.getElementById("drag-elements");
+        ul = document.getElementById("panelright");
         li = ul.getElementsByClassName("dossier");
         for (i = 0; i < li.length; i++) {
             label = li[i].getElementsByTagName("small")[1];
@@ -1398,7 +1369,7 @@
           {
                if( $user->statut== 1 &&  $user->user_type!= 'financier' &&  $user->user_type!= 'admin' && $user->user_type!= 'bureau' ) {
                    echo "document.getElementById('user-".$user->id."'),";
-                   echo "document.getElementById('drag-elements-u-".$user->id."'),";
+                   echo "document.getElementById('agnt-".$user->id."'),";
                }
           }
 
@@ -1564,7 +1535,33 @@
                 // single selection case
                 else {
                     // edge case: if only one item happened to be selected, remove the selected item class
-                  //  right.children().removeClass('selectedItem');
+
+                    var userdiv=target2.id;
+                    var dossdiv=el.id;
+                    var user=userdiv.slice( 5);
+                    var dossier=dossdiv.slice( 8);
+                    console.log('USER : '+user);
+                    console.log('DOSSIER : '+dossier);
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                        url: "{{ route('dossiers.attribution') }}",
+                        method: "POST",
+                        data: {  dossierid:dossier ,agent:user, _token: _token},
+                        success: function ( ) {
+                            $('#dossier-'+dossier).animate({
+                                opacity: '0.3',
+                            });
+                            $('#dossier-'+dossier).animate({
+                                opacity: '1',
+                            });
+
+                        }
+                    });
+
+                //    right.children().removeClass('selectedItem');
+
+
                 }
 
                 /****
@@ -1676,6 +1673,7 @@
     .userdiv   {border:2px dotted grey; padding:5px 5px 5px;opactity:0.1;/*height:1300px;*/}
     .userdiv .dossier label{font-size:18px;}
     .userdiv .dossier .infos small{display:none;}
+    .userdiv .dossier .infos   .assure{display:block!important;}
     #drag-elements .dossier .infos{display:block;}
     .dragging .dossier .infos{display:block;}
 
@@ -1686,12 +1684,13 @@
     }
 
 
-
+    .userdiv .dossier{ background-color: lightgrey;color:black;}
     .dossier{cursor:pointer;
         width: 150px;
         height: 105px;
         margin-top: 50px;
         position: relative;
+        background-color: lightgrey;
         /* background-color: #708090;*/
         /*  background-color:#52BE80  #af8e33 !important;*/color:white;font-weight:600;
         border-radius: 0 6px 6px 6px;
@@ -1700,6 +1699,7 @@
         white-space:nowrap;
         text-overflow: ellipsis;
         padding:5px 5px 5px 5px!important;
+        color:black;
     }
 
     .dossier:before {
@@ -1707,7 +1707,9 @@
         width: 50%;
         height: 12px;
         border-radius: 0 20px 0 0;
-        background-color: #708090;
+      /*  background-color: #708090;*/
+        background-color: var(--my-color-var);
+
         opacity:0.5;
         position: absolute;
         top: -12px;
@@ -1843,7 +1845,7 @@
     @media (min-width: 1280px) {
 
         .userdiv .dossier label{font-size:13px!important;}
-        .userdiv .dossier {width:100px;height:40px;}
+        .userdiv .dossier {width:100px;height:60px;}
     }
 
 
@@ -1852,14 +1854,14 @@
     @media (min-width: 768px) and (max-width: 980px) {
 
         .userdiv .dossier label{font-size:13px!important;}
-        .userdiv .dossier {width:100px;height:40px;}
+        .userdiv .dossier {width:100px;height:60px;}
     }
 
     /***/
     @media (min-width: 480px) and (max-width: 767px) {
 
         .userdiv .dossier label{font-size:13px!important;}
-        .userdiv .dossier {width:100px;height:40px;}
+        .userdiv .dossier {width:100px;height:60px;}
 
     }
 
@@ -1921,11 +1923,11 @@
     }
     .container {
         display: table-cell;
-        background-color: rgba(255, 255, 255, 0.2);
+    /*    background-color: rgba(255, 255, 255, 0.2);*/
         width: 50%;
     }
     .container:nth-child(odd) {
-        background-color: rgba(0, 0, 0, 0.2);
+       /* background-color: rgba(0, 0, 0, 0.2);*/
     }
 
     #right.container .selectedItem {
@@ -1940,7 +1942,7 @@
     .gu-mirror > div /* multiple selection */{
         margin: 10px;
         padding: 10px;
-        background-color: rgba(0, 0, 0, 0.2);
+      /*  background-color: rgba(0, 0, 0, 0.2);*/
         transition: opacity 0.4s ease-in-out;
     }
     .container > div {

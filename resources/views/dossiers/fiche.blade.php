@@ -1072,7 +1072,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                         <select onchange="changing(this);ajout_prest(this);"  type="text" id="hospital_address" name="hospital_address" class="form-control"   value="{{ $dossier->hospital_address }}">
 
                                                                         <option></option>
-                                                                            <?php
+                                                                        <?php
 
                                                                         foreach($hopitaux as $hp)
                                                                         { if ($dossier->hospital_address == PrestatairesController::ChampById('name',$hp->prestataire_id)){ $selected='selected="selected"'; }else{ $selected=''; }
