@@ -722,6 +722,7 @@ class LoginController extends Controller
                          {
                           $user_dest=$tech;
                           foreach ($dossiers as $doss) {
+                              Log::info("affectation automatique ligne 725 de".$iduser. "  vers". $user_dest);
                             $doss->update(array('affecte' => $user_dest, 'statut' => 2));
                             $this->migration_miss($doss->id,$user_dest);
                             $this->migration_notifs($doss->id,$user_dest);
@@ -807,10 +808,13 @@ class LoginController extends Controller
         }  // heure de jour
 
 
-        // vider les roles de l utilisateur dans la seance avant logout
+        //// vérifier pas de dossiers affectés
+        if (true)
+        {
 
+         // vider les roles de l utilisateur dans la seance avant logout
 
-        if ($seance->dispatcheur == Auth::id()) {
+          if ($seance->dispatcheur == Auth::id()) {
             $seance->dispatcheur = NULL;
         }
         if ($seance->dispatcheurtel == Auth::id()) {
@@ -855,6 +859,7 @@ class LoginController extends Controller
 
         return redirect('/');
 
+        } // verification pas de dossiers affectés
 
     } //end function
 

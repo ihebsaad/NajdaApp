@@ -46,8 +46,11 @@ class EntreesController extends Controller
     // Statut entrées :    3 = archivé= | 1 = affecté à un dossier |
     public function index()
     {
-        //
-    //    $entrees = Entree::orderBy('id', 'desc')->where('statut','<','2')->paginate(10000000);
+        $user = auth()->user();
+        $iduser=$user->id;
+
+        User::where('id', $iduser)->update(array('statut'=>'1'));
+
         $entrees = Entree::orderBy('reception', 'desc')->where('statut','<','2')->get();
       //  $dossiers = Dossier::all();
 
@@ -66,7 +69,11 @@ class EntreesController extends Controller
 
     public function dispatching()
     {
-        //
+        $user = auth()->user();
+        $iduser=$user->id;
+
+        User::where('id', $iduser)->update(array('statut'=>'1'));
+
         $entrees = Entree::orderBy('reception', 'desc')
             ->where('statut','<','2')
             ->where('dossier','=','')

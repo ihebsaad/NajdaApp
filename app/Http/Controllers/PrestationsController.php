@@ -129,7 +129,7 @@ class PrestationsController extends Controller
             // Envoi de mail
             if ($autorise != '') {
 
-
+/***********
                 $parametres =  DB::table('parametres')
                     ->where('id','=', 1 )->first();
 
@@ -144,7 +144,7 @@ class PrestationsController extends Controller
                 Mail::setSwiftMailer($swiftMailer);
 
 
-                $to = array('ihebsaad@gmail.com');
+                $to = array('nejib.karoui@medicmultiservices.com');
                 // $to='ihebsaad@gmail.com';
                 $sujet = 'Nouvelle prestation effectuée';
                 $contenu = 'Bonjour, <br>Nouvelle prestation effectuée.<br>
@@ -154,8 +154,8 @@ class PrestationsController extends Controller
                  Détails: ' . $details . '<br>
                  Créée par :' . $nomuser . '<br>    
                      ';
-                $cc = array('ihebs001@gmail.com', 'saadiheb@gmail.com');
-                //  $cc=array('chef.plateau@najda-assistance.com','smq@medicmultiservices.com',nejib.karoui@medicmultiservices.com);
+               // $cc = array('ihebs001@gmail.com', 'saadiheb@gmail.com');
+                 $cc=array('chef.plateau@najda-assistance.com','smq@medicmultiservices.com');
 
                 Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$from,$fromname) {
                     $message
@@ -175,7 +175,7 @@ class PrestationsController extends Controller
 
                 });
 
-
+********/
             }
 
             $ref = app('App\Http\Controllers\DossiersController')->RefDossierById($iddoss);

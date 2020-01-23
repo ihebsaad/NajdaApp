@@ -6,7 +6,7 @@ class Dossier extends Model
 
 {
     protected $fillable = ['id', 'created_by', 'affecte','created','created_at',
-
+'statut',
 'subscriber_name',
 'subscriber_lastname',
 'adresse_etranger',

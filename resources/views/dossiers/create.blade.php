@@ -527,21 +527,21 @@ use  \App\Http\Controllers\DocsController;
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="is_hospitalized" class=""> Hospitalisé
-                                                            <div style="margin-right:20px" class="radio radio2" id="uniform-is_hospitalized"><span><input    type="radio" name="is_hospitalized" id="is_hospitalized" value="1"   ></span>Outpatient</div>
+                                                            <div style="margin-right:20px" class="radio radio2" id="uniform-is_hospitalized"><span><input    type="radio" name="is_hospitalized" id="is_hospitalized" value="1"  checked="checked"  ></span>Outpatient</div>
                                                         </label> <label for="nonis_hospitalized" class=""> <div class="radio radio2" id="uniform-nonis_hospitalized"><span class=""><input  type="radio" name="is_hospitalized" id="nonis_hospitalized" value="0"     ></span> Inpatient </div>
                                                         </label>
                                                     </div>
                                                 </div>
 
                                             </div>
-                                            <div id="hospital">
+                                            <div id="hospital" style="display:none">
                                                 <div class="row">
                                                     <div class="col-md-8">
                                                         <div class="form-group">
                                                             <label for="inputError" class="control-label">Hôspitalisé à </label>
 
                                                             <div class="input-group-control">
-                                                                <select   id="hospital_address" name="hospital_address" class="form-control"   >
+                                                                <select  style="width:100%" id="hospital_address" name="hospital_address" class="form-control"   >
 
                                                                     <option></option>
                                                                     <?php
@@ -587,7 +587,7 @@ use  \App\Http\Controllers\DocsController;
 
 
                                                             <div class="input-group-control">
-                                                                <select   id="medecin_traitant" name="medecin_traitant" class="form-control"   >
+                                                                <select  style="width:100%" id="medecin_traitant" name="medecin_traitant" class="form-control"   >
 
                                                                     <option></option>
                                                                     <?php

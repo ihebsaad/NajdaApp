@@ -132,7 +132,6 @@ $(document).ready(function()
                     <div class="row">
                         <div class="col-md-10">
                             <select id="destinataire" required  class="form-control" name="destinataire[]"  multiple >
-                                <option>ihebsaad@gmail.com</option>
                                 @foreach($listeemails as  $mail)
                                     <option   value="<?php echo $mail ;?>"> <?php echo $mail ;?>  <small style="font-size:11px">(<?php echo PrestatairesController::NomByEmail( $mail);?>) - '<?php echo PrestatairesController::QualiteByEmail($mail);?>' ('<?php echo PrestatairesController::TypeEmail($mail);?>' , '<?php echo PrestatairesController::RemarqueByEmail($mail);?>)' </small> </option>
                                 @endforeach
@@ -153,8 +152,6 @@ $(document).ready(function()
                             <div class="col-md-10">
                                 <select id="cc" style="width:100%"   class="itemName form-control" name="cc[]" multiple   >
                                     <option></option>
-                                    <option value="saadiheb@gmail.com">IHEB 2 (test)</option>
-                                    <option value="ihebs002@gmail.com">IHEB 3 (test)</option>
                                     <option value="vat@medicmultiservices.com">vat@medicmultiservices.com</option>
                                     <option value="fact.vat-groupe@najda-assistance.com">fact.vat-groupe@najda-assistance.com</option>
                                     <option value="finances@medicmultiservices.com">finances@medicmultiservices.com</option>
@@ -164,8 +161,7 @@ $(document).ready(function()
                                     <option value="chef.plateau@najda-assistance.com">chef.plateau@najda-assistance.com</option>
                                     <option value="mohsalah.harzallah@gmail.com">mohsalah.harzallah@gmail.com</option>
                                     <option value="mahmoud.helali@gmail.com">mahmoud.helali@gmail.com</option>
-                                    <option value="24ops@najda-assistance.com">24ops@najda-assistance.com</option>
-                                </select>
+                                 </select>
                             </div>
                         </div>
                         <div  class="row"  style="margin-bottom:10px" >
@@ -175,19 +171,20 @@ $(document).ready(function()
                             <div class="col-md-10">
                                 <select id="cci"  style="width:100%"   class="itemName form-control " name="cci[]" multiple  >
                                     <option></option>
-                                    <option value="saadiheb@gmail.com">IHEB 2 (test)</option>
-                                    <option value="ihebs002@gmail.com">IHEB 3 (test)</option>
                                     <option value="vat@medicmultiservices.com">vat@medicmultiservices.com</option>
+                                    <option value="voyages.assistance.tunisie@gmail.com">voyages.assistance.tunisie@gmail.com</option>
                                     <option value="fact.vat-groupe@najda-assistance.com">fact.vat-groupe@najda-assistance.com</option>
                                     <option value="finances@medicmultiservices.com">finances@medicmultiservices.com</option>
                                     <option value="dirops@najda-assistance.com">dirops@najda-assistance.com</option>
                                     <option value="controle1@medicmultiservices.com">controle1@medicmultiservices.com</option>
                                     <option value="smq@medicmultiservices.com">smq@medicmultiservices.com</option>
                                     <option value="chef.plateau@najda-assistance.com">chef.plateau@najda-assistance.com</option>
+                                    <option value="nejib.karoui@gmail.com">nejib.karoui@gmail.com </option>
                                     <option value="mohsalah.harzallah@gmail.com">mohsalah.harzallah@gmail.com</option>
                                     <option value="mahmoud.helali@gmail.com">mahmoud.helali@gmail.com</option>
-                                    <option value="24ops@najda-assistance.com">24ops@najda-assistance.com</option>
-							  </select>
+                                    <option value="facturation.vat@medicmultiservices.com">facturation.vat@medicmultiservices.com</option>
+
+                                </select>
                             </div>
                         </div>
                     </div>

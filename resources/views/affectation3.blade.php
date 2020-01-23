@@ -299,7 +299,7 @@
 
                 if($user->id!=1){
 
-                if($user->isOnline() && $user->statut!= -1 &&  $user->user_type!= 'financier' &&  $user->user_type!= 'admin' ) {
+                if($user->statut== 1 &&  $user->user_type!= 'financier' &&  $user->user_type!= 'admin' && $user->user_type!= 'bureau' ) {
                 $c++;
                 $folders = Dossier::where('affecte','=',$user->id)->where('statut',5)->get();
 
@@ -315,9 +315,9 @@
                 echo  '<div class="userdiv" id="user-'.$iduser.'" style="display:none;margin-bottom:30px;'.$bg.';height:'.$taille.'"  >';
 
                 foreach($folders as $folder)
-                { $type=$folder['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
+                { $type=$folder['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}//if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique' || $type=='Transport'){$style="background-color:#3498DB;";}
                 $statut=$folder['statut']; $idd=$folder['id'];$ref=$folder['reference_medic'];$abn=$folder['subscriber_lastname'].' '.$folder['subscriber_name'];$idclient=$folder['customer_id'];$client= $folder['reference_customer'] /*  ClientsController::ClientChampById('name',$idclient)*/ ;?>
-                <div  id="dossier-<?php echo $idd;?>" class="dossier"  style="margin-top:5px;<?php echo $style; if($statut!=2){ echo';border:2px solid black';}?>" >
+                <div  id="dossier-<?php echo $idd;?>" class="dossier"  style="margin-top:5px;<?php echo $style; if($statut==5){ echo';border:2px solid black';}?>" >
                     <label style="font-size: 18px;"><?php echo $ref ;?></label>
                     <div class="infos">  <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
                         <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small>
@@ -380,7 +380,7 @@
                     $iduser=$user->id;
                     $folders = Dossier::where('affecte','=',$user->id)->where('statut',5)->get();
                     $countF=count($folders);
-                    if($user->isOnline() && $user->statut!= -1 &&  $user->user_type != 'financier' &&  $user->user_type!= 'admin'   ) {
+                    if($user->statut== 1 &&  $user->user_type!= 'financier' &&  $user->user_type!= 'admin' && $user->user_type!= 'bureau' ) {
                         echo '  <li class="nav-item  ">
                     <a class="nav-link    " href="#panelu-'.$iduser.'>" data-toggle="tab"  onclick="hideTabs();showTabs('.$iduser.');"  >
                     <i class="fa-lg fas fa-user"></i>  '.$user->name.' '.$user->lastname.' ('. $countF .')
@@ -414,7 +414,7 @@
                         if($CdossiersSM >0)
                         {
                         foreach($dossiersSM as $dossierI)
-                        { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
+                        { $type=$dossierI['type_dossier'];//if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="background-color:#3498DB;";}
                         $idd=$dossierI['id'];
                         $immatricul=$dossierI['vehicule_immatriculation'];
                         $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
@@ -461,7 +461,7 @@
                         if($CdossiersST >0)
                         {
                         foreach($dossiersST as $dossierI)
-                        { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
+                        { $type=$dossierI['type_dossier'];//if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="background-color:#3498DB;";}
                         $idd=$dossierI['id'];
                         $immatricul=$dossierI['vehicule_immatriculation'];
                         $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
@@ -509,7 +509,7 @@
                         if($CdossiersC >0)
                         {
                         foreach($dossiersC as $dossierI)
-                        { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
+                        { $type=$dossierI['type_dossier'];//if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="background-color:#3498DB;";}
                         $idd=$dossierI['id'];
                         $immatricul=$dossierI['vehicule_immatriculation'];
                         $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
@@ -556,7 +556,7 @@
                         if($CdossiersDisp >0)
                         {
                         foreach($dossiersDisp as $dossierI)
-                        { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
+                        { $type=$dossierI['type_dossier'];//if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="background-color:#3498DB;";}
                         $idd=$dossierI['id'];
                         $immatricul=$dossierI['vehicule_immatriculation'];
                         $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
@@ -604,7 +604,7 @@
                         if($Cdossiers >0)
                         {
                         foreach($dossiers as $dossier)
-                        { $type=$dossier['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
+                        { $type=$dossier['type_dossier'];//if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="background-color:#3498DB;";}
                         $idd=$dossier['id'];
                         $immatricul=$dossier['vehicule_immatriculation']; $statut=$dossier['statut'];
                         $ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
@@ -646,7 +646,7 @@
 
             if($user->id!=1){
 
-            if($user->isOnline()  && $user->statut!= -1 &&  $user->user_type!= 'financier' &&  $user->user_type!= 'admin'  ) {
+            if($user->statut== 1 &&  $user->user_type!= 'financier' &&  $user->user_type!= 'admin' && $user->user_type!= 'bureau'  ) {
             $c++;
             $folders = Dossier::where('affecte','=',$user->id)->where('statut',5)->get();
 
@@ -666,11 +666,11 @@
                         $type='';$style='';
 
                         foreach($folders as $dossier)
-                        { $type=$dossier['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
+                        { $type=$dossier['type_dossier'];//if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="background-color:#3498DB;";}
                         $idd=$dossier['id'];
                         $immatricul=$dossier['vehicule_immatriculation']; $statut=$dossier['statut'];
                         $ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-                        <div  id="dossierU-<?php echo $idd;?>" class="dossier dossierU-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style; if($statut!=2){ echo';border:2px solid black;';} ?>" >
+                        <div  id="folders-<?php echo $idd;?>" class="dossier dossierU-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style; if($statut!=2){ echo';border:2px solid black;';} ?>" >
                             <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <small style="font-size:11px"><?php custom_echo($abn,18);?></small>
                             <div class="infos">  <label style="font-size: 15px;"><?php echo $ref;?></label>
                                 <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
@@ -1396,7 +1396,7 @@
             <?php
        foreach($users as $user)
           {
-               if( $user->isOnline() && $user->statut!= -1 &&  $user->user_type!= 'financier' &&  $user->user_type!= 'admin'  ) {
+               if( $user->statut== 1 &&  $user->user_type!= 'financier' &&  $user->user_type!= 'admin' && $user->user_type!= 'bureau' ) {
                    echo "document.getElementById('user-".$user->id."'),";
                    echo "document.getElementById('drag-elements-u-".$user->id."'),";
                }
@@ -1501,6 +1501,7 @@
         })
             .on('drop', function (el, target, source, sibling) {
                 // convert to jquery
+               var target2=target;
                 target = $(target);
 
                 // flag if dropped on right
@@ -1509,16 +1510,54 @@
                 if (hasMultiple) {
                     // are we adding items to the right?
                         // get the default, single dropped item
-                        var droppedItem = target.find('.selectedItem').first();
 
-                        // replace it with the content of the mirror container
-                        mirrorContainer.children().insertAfter(droppedItem);
 
-                        // remove all vestigial items from the dom
-                        $('.selectedItem').remove();
+                    var elements = document.getElementsByClassName('selectedItem');
 
-                        // clear flag
-                        hasMultiple = false;
+                    for (var i = 0; i < elements.length; i++){
+                        console.log('i  : '+i) ;
+
+                      //  elements[i].style.display = displayState;
+                        var userdiv=target2.id;
+                        var dossdiv=elements[i].id;
+                        var user=userdiv.slice( 5);
+                        var dossier=dossdiv.slice( 8);
+                        console.log('USER : '+user);
+                        console.log('DOSSIER : '+dossier);
+                        console.log('dossdiv : '+dossdiv) ;
+
+                        var _token = $('input[name="_token"]').val();
+
+                        $.ajax({
+                            url: "{{ route('dossiers.attribution') }}",
+                            method: "POST",
+                            data: {  dossierid:dossier ,agent:user, _token: _token},
+                            success: function ( ) {
+                                $('#dossier-'+dossier).animate({
+                                    opacity: '0.3',
+                                });
+                                $('#dossier-'+dossier).animate({
+                                    opacity: '1',
+                                });
+
+                            }
+                        });
+
+                    }
+
+
+                    var droppedItem = target.find('.selectedItem').first();
+
+                    // replace it with the content of the mirror container
+                    mirrorContainer.children().insertAfter(droppedItem);
+
+                    // remove all vestigial items from the dom
+                    $('.selectedItem').remove();
+
+                    // clear flag
+                    hasMultiple = false;
+
+
 
                 }
 
@@ -1528,7 +1567,7 @@
                   //  right.children().removeClass('selectedItem');
                 }
 
-
+                /****
                 console.log('target: '+target.id);
                 console.log(' element: '+el.id);
 
@@ -1555,7 +1594,7 @@
                     }
                 });
 
-
+**/
 
 
             })
@@ -1588,7 +1627,7 @@
         function bindShiftPressEvent () {
             // set flag on
             $(document).keydown(function(event){
-                if(event.shiftKey)
+                if(event.shiftKey || event.ctrlKey)
                     shiftIsPressed = true;
             });
 

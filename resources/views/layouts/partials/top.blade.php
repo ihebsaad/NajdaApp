@@ -1,10 +1,13 @@
 <header class="header">
 <?php
     use App\Entree;
+    use App\User;
     $seance =  DB::table('seance')
         ->where('id','=', 1 )->first();
     $user = auth()->user();
     $iduser=$user->id;
+
+     User::where('id', $iduser)->update(array('statut'=>'1'));
 
     ?>
         <div class="collapse bg-grey" id="navbarHeader">

@@ -238,6 +238,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                         <select  onchange="changing(this);location.reload();"  id="type_dossier" name="type_dossier" class="form-control js-example-placeholder-single">
                                             <option <?php if ($dossier->type_dossier =='Medical'){echo 'selected="selected"';} ?> value="Medical">Medical</option>
                                             <option <?php if ($dossier->type_dossier =='Technique'){echo 'selected="selected"';} ?> value="Technique">Technique</option>
+                                            <option <?php if ($dossier->type_dossier =='Transport'){echo 'selected="selected"';} ?> value="Transport">Transport</option>
                                             <option <?php if ($dossier->type_dossier =='Mixte'){echo 'selected="selected"';} ?> value="Mixte">Mixte</option>
                                         </select>
                                     </div>
@@ -530,7 +531,6 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 </div>
 
                                                                 <div class="row" id="bens" <?php if ($dossier->benefdiff ==0) { ?> style="display:none" <?php }?> >
-
 
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
@@ -1040,7 +1040,7 @@ use  \App\Http\Controllers\PrestatairesController;
 
                                     <div class="col-md-12">
 
-                                        <div class="panel panel-success" id="medical" style=" <?php if ($dossier->type_dossier =='Technique'){echo 'display:none';}?>;">
+                                        <div class="panel panel-success" id="medical" style=" <?php if (trim($dossier->type_dossier) =='Technique' || trim($dossier->type_dossier) =='Transport' ){echo 'display:none';}?>;">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
                                                     <a class="accordion-toggle" data-toggle="collapse">

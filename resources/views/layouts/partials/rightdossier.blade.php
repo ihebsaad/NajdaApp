@@ -79,8 +79,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
     return $string ? implode(', ', $string) . ' ' : 'maintenant';
 }
 
-
-
 				$type=$entree['type'];
 									$time=$entree['created_at'];$heure= "<small>Il y'a ".time_elapsed_string($time, false).'</small>';
 								//	$emetteur= $entree['emetteur'] ;
@@ -111,7 +109,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                 </div>
                 <div class="form-group">
                     <label for="contenu" id="contenulabel" style="cursor:pointer">Contenu:</label>
-                    <div    id="lecontenu" class="form-control" style=" <?php if($entree->type=='fax'){echo 'display:none';}?>;  overflow:scroll;min-height:400px">
+                    <section><div    id="lecontenu" class="form-control" style=" <?php if($entree->type=='fax'){echo 'display:none';}?>;  overflow:scroll;min-height:400px">
 
                         <?php
 
@@ -121,7 +119,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                         }
                         echo ($content);  ?>
                     </div>
-
+                    </section>
                     @if ($entree['nb_attach']  > 0)
                         <?php
                         // get attachements info from DB
