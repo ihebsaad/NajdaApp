@@ -1063,7 +1063,7 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
         	if ($_POST['affectea'] === "interne")
         	{
         		// creation om pour le dossier courant
-        		if (isset($_POST["type_affectation"]))
+        		if (isset($_POST["type_affectation"]) && ($_POST["type_affectation"] !== "Select"))
         		{
         			$prestomamb = $_POST["type_affectation"];
         			$omambulance = OMAmbulance::create(['prestataire_ambulance'=>$prestomamb,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
@@ -1363,7 +1363,8 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 
     public function export_pdf_odmremorquage(Request $request)
     {
-    	// MAJ disponibilite vehicule
+
+    	            	// MAJ disponibilite vehicule
 
         if (isset($_POST['idvehic']))
                 {// mettre à jour les infos de vehicule
@@ -1474,7 +1475,6 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 							}
 					}
                 }
-
 
         //dd($_POST['idMissionOM']);
         // verifier si remplacement ou annule
@@ -1727,7 +1727,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
             if ($_POST['affectea'] === "interne")
             {
                 // creation om pour le dossier courant
-        		if (isset($_POST["type_affectation"]))
+        		if (isset($_POST["type_affectation"]) && ($_POST["type_affectation"] !== "Select"))
         		{
         			$prestomrem = $_POST["type_affectation"];
         			$omremorquage = OMRemorquage::create(['prestataire_remorquage'=>$prestomrem,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
@@ -1960,6 +1960,27 @@ $reqlieup->request->add(['dossier' => $iddnew]);
 
 
                 }
+                /*if(isset($typeaffect) && ! empty($typeaffect))
+                {$emispar="najda";
+                	if($typeaffect==="X-Press")
+                	{
+                		$emispar="xpress";
+                	}
+                	if($typeaffect==="VAT"||$typeaffect==="Transport VAT")
+                	{
+                		$emispar="vat";
+                	}	
+                	if($typeaffect==="Medic International")
+                	{
+                		$emispar="medici";
+                	}
+                	if($typeaffect==="MEDIC"||$typeaffect==="Transport MEDIC")
+                		{
+                		$emispar="medicm";
+                	    }
+                	$requestData = $request->all();
+                	$requestData['emispar'] = $emispar;
+                }*/
                 if (isset($requestData))
                 {
                     /*$omn = new OrdreMission();
@@ -1968,7 +1989,7 @@ $reqlieup->request->add(['dossier' => $iddnew]);
 
                     $nresponse = $nrequest->send();*/
                     // duplication de lom dans le nouveau dossier
-                    $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage',['reference_medic' => $nref, 'reference_medic2' => $nref])->setPaper('a4', '');
+                    $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage',['reference_medic' => $nref, 'reference_medic2' => $nref/*,'emispar' =>$emispar*/])->setPaper('a4', '');
                 }
                 else
                 {
@@ -2005,9 +2026,14 @@ $reqlieup->request->add(['dossier' => $iddnew]);
                 if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
                 {$result2 = $omremorquage2->update($requestData);}
                 else { $result2 = $omremorquage2->update($request->all()); }
+                 /*if(isset($typeaffect)&& !(empty($typeaffect)))
+               {$result3 = $omremorquage2->update($requestData);}
+               else { $result3 = $omremorquage2->update($request->all()); }
+            }*/
 
             }
         }
+
 
 
     }

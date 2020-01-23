@@ -3544,7 +3544,7 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
     });
 
 // on n'affiche pas liste de gop ici
-    if ((templateexist) && (document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC") === -1 || document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC_location_VAT_a_Prest") !== -1 ) && !(needgop) )
+    if ((templateexist) && (document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC") === -1 || document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC_location_VAT_a_Prest") !== -1 || document.getElementById('templatedoc').options[document.getElementById('templatedoc').selectedIndex].text.indexOf("PEC_Hotel") !== -1 ) && !(needgop) )
     {
 
         // remplissage de la template dans iframe
