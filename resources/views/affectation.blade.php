@@ -399,7 +399,7 @@
                         $idd=$dossierI['id'];
                         $immatricul=$dossierI['vehicule_immatriculation'];
                         $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
-                        <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
+                        <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small class="assure" style="font-size:12px"><?php custom_echo($abn,13);?></small>
                             <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>-->
                             <div class="infos"> <label style="font-size: 15px;"><?php echo $ref;?></label>
                                 <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>

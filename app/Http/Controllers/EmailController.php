@@ -777,6 +777,7 @@ $id=0;
                     }
 
                     $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
+                    $sujetPreg =  strtoupper ( $sujetPreg);
                     //$sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
 
 
@@ -1151,6 +1152,7 @@ $id=0;
                    }
 
                    $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
+                   $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                    if ((strpos($sujetPreg, $ref) !== false) ||
@@ -1509,6 +1511,7 @@ $id=0;
                   }
 
                   $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
+                  $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                   if ((strpos($sujetPreg, $ref) !== false) ||
@@ -1847,6 +1850,7 @@ $id=0;
                   }
 
                   $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
+                  $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                   if ((strpos($sujetPreg, $ref) !== false) ||
@@ -2201,6 +2205,7 @@ $id=0;
                     }
 
                     $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
+                    $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                     if ((strpos($sujetPreg, $ref) !== false) ||
@@ -2552,6 +2557,7 @@ $id=0;
                     }
 
                     $sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
+                    $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                     if ((strpos($sujetPreg, $ref) !== false) ||
@@ -2904,6 +2910,7 @@ $id=0;
                     }
 
                     $sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
+                    $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                     if ((strpos($sujetPreg, $ref) !== false) ||
@@ -3254,6 +3261,7 @@ $id=0;
                     }
 
                     $sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
+                    $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                     if ((strpos($sujetPreg, $ref) !== false) ||
@@ -3613,6 +3621,7 @@ $id=0;
                     }
 
                     $sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
+                    $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                     if ((strpos($sujetPreg, $ref) !== false) ||

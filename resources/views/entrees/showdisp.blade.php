@@ -24,7 +24,8 @@ use App\Http\Controllers\NotificationsController;
 @stop
 @section('content')
 
-
+    <style>   span.select2-selection , .select2-selection--single ,.select2-selection ,.select2-selection--single, .select2-selection__rendered,span.select2-selection__rendered{color:black!important; }
+    </style>
 <div class="panel panel-default panelciel " style="">
  @if(session()->has('AffectNouveauDossier'))
     <div class="alert alert-success">
@@ -83,12 +84,12 @@ use App\Http\Controllers\NotificationsController;
             <div class="panel-body">
                 <div class="row" id="displine" style="padding-left:30px;padding-bottom:15px;padding-top:15px;background-color: #F9F9F8 ">
                      <B> Dossier : </B>
-                    <select id ="affdoss"  class="form-control " style="width: 150px">
+                    <select id ="affdoss"  class="form-control " style="width: 150px;color:black!important;">
                         <option></option>
                         <?php foreach($dossiers as $ds)
 
                         {
-                            echo '<option title="'.$ds->id.'" value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
+                            echo '<option style="color:black!important" title="'.$ds->id.'" value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
                     </select>
                        <button style="margin-left:35px" type="button" id="updatefolder" onclick="document.getElementById('updatefolder').disabled=true" class="btn btn-primary">Dispatcher</button>
 
@@ -550,7 +551,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
     $( document ).ready(function() {
         $("#affdoss").select2();
-
 
         $('#add').click(function(){
             var type_dossier = $('#type_dossier').val();

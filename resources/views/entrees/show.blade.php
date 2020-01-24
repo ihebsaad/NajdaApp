@@ -599,7 +599,7 @@ padding: 5px;
     function checkComment()
     {
         if (document.getElementById('commentuser').value == '') {
-            alert('Ajouter un commentaire avant de marquer comme traité !');
+         //   alert('Ajouter un commentaire avant de marquer comme traité !');
                $('#actiontabs a[href="#infostab"]').trigger('click');
                 $('#btn-cmttag').trigger('click');
                 $('#editbtn').trigger('click');

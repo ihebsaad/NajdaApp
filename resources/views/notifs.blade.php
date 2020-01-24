@@ -154,7 +154,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 							<br>
                             <H2>Flux de réception d'Aujourd'hui </H2>
                             <table id="tabusers" style="text-align: center ;background-color:#F8F7F6;padding:5px 5px 5px 5px">
-                                <thead style="text-align:center;font-size:14px;"><th>Type</th><th>Réception</th><th>Emetteur</th><th>Sujet</th><th>Nb attchs</th><th>Dossier</th><th>Affecté à</th><th>Consulté</th></thead>
+                                <thead style="text-align:center;font-size:14px;"><th>Type</th><th>Réception</th><th>Emetteur</th><th>Sujet</th><th>Nb attchs</th><th>Dossier</th><th>Consulté</th></thead>
 								<tbody class="thetable" style="font-size:14px;line-height:30px">
                             <?php $c=0;
                             foreach($entrees as $entree)
@@ -167,14 +167,14 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 									$sujet=custom_echo($entree['sujet'],'20');  
 									$dossier=$entree['dossier']; if($dossier==''){$folder='<small style="color:red">Non Dispatché!</small>';}else{$folder=$entree['dossier'];}
 									$attachs=$entree['nb_attach'];
-									$affecte=$entree['affecte']; if($affecte>0){$agent= UsersController::ChampById('name',$affecte).' '.UsersController::ChampById('lastname',$affecte); }else{ $agent='<span style="color:red">Non Affecté!</span>'; }
+									//$affecte=$entree['affecte']; if($affecte>0){$agent= UsersController::ChampById('name',$affecte).' '.UsersController::ChampById('lastname',$affecte); }else{ $agent='<span style="color:red">Non Affecté!</span>'; }
 									$viewed=$entree['viewed']; if($viewed==1){$consulte='<span style="color:green">OUI';}else{$consulte='<span style="color:red">NON</span>';}
 									
 									echo '<tr class="usertr" onclick="show(this);"  id="user-'.$entree['id'].'" ><td>';
 									  if ($type=='email'){echo '<img width="15" src="'. $urlapp .'/public/img/email.png" />';}   if ($type=='fax'){echo '<img width="15" src="'. $urlapp .'/public/img/faxx.png" />';}  if ($type=='sms'){echo '<img width="15" src="'. $urlapp .'/public/img/smss.png" />';}   if ($type=='phone'){echo '<img width="15" src="'. $urlapp .'/public/img/tel.png" />';} 
 									echo ' '.$type.'</td><td>'.$heure.'</td><td>'.$emetteur.'</td><td>';
 									if($dossier==''){ ?><a href="{{action('EntreesController@showdisp', $entree['id'])}}"> <?php }else{ ?> <a href="{{action('EntreesController@show', $entree['id'])}}"> <?php }  
-									echo $sujet.'</a></td><td>'.$attachs.'</td><td>'.$folder.'</td><td>'.$agent.'</td><td>'.$consulte.'</td></tr>';
+									echo $sujet.'</a></td><td>'.$attachs.'</td><td>'.$folder.'</td> <td>'.$consulte.'</td></tr>';
 
                                 }
 
@@ -225,8 +225,15 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                     <label for="contenu">Contenu:</label>
                     <div class="form-control" style="overflow:scroll;min-height:400px">
 
-                        <?php $contenu= $entree['contenu'];
-                        echo ($contenu);  ?>
+
+
+                         <?php   if($entree['contenu']!= null)
+                            {$contenu= nl2br($entree['contenu']) ;}
+                            else{
+                            $contenu= nl2br($entree['contenutxt']) ;
+                            }
+                        echo $contenu ;
+                            ?>
                     </div>
 
                     @if ($entree['nb_attach']  > 0)

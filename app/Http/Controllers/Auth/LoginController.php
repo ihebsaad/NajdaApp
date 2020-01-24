@@ -582,7 +582,7 @@ class LoginController extends Controller
                     })->orWhere(function ($query) use ($iduser) {
                         $query->where('reference_medic', 'like', '%TV%')
                             ->where('current_status','!=','Cloture' )
-                            ->where('current_status', 'actif');
+                            ->where('affecte', $iduser);
                     })->get();
 
                //     Dossier::setTimestamps(false);
@@ -638,19 +638,27 @@ class LoginController extends Controller
             if ($medic > 0) {
 
 
-                $dossiers=Dossier::where(function ($query)  {
+                $dossiers=Dossier::where(function ($query) use($iduser)  {
                     $query->where('reference_medic', 'like', '%N%')
                         ->where('type_dossier', 'Medical')
-                        ->where('current_status', 'actif');
-                })->orWhere(function ($query)   {
+                        ->where('current_status', 'actif')
+                    ->where('affecte', $iduser);
+
+                })->orWhere(function ($query) use($iduser)   {
                     $query->where('reference_medic', 'like', '%M%')
-                        ->where('current_status', 'actif');
-                })->orWhere(function ($query)   {
+                        ->where('current_status', 'actif')
+                        ->where('affecte', $iduser);
+
+                })->orWhere(function ($query) use($iduser)   {
                     $query->where('reference_medic', 'like', '%MI%')
-                        ->where('current_status', 'actif');
-                })->orWhere(function ($query)   {
+                        ->where('current_status', 'actif')
+                        ->where('affecte', $iduser);
+
+                })->orWhere(function ($query) use($iduser)   {
                     $query->where('reference_medic', 'like', '%TPA%')
-                        ->where('current_status', 'actif');
+                        ->where('current_status', 'actif')
+                        ->where('affecte', $iduser);
+
                 })->get();
 
                    if($dossiers)
@@ -669,20 +677,29 @@ class LoginController extends Controller
             else {
                 if ($tech > 0) {
 
-                    $dossiers=Dossier::where(function ($query)  {
+                    $dossiers=Dossier::where(function ($query) use($iduser)  {
                         $query->where('reference_medic', 'like', '%N%')
                             ->where('type_dossier', 'Medical')
-                            ->where('current_status', 'actif');
-                         ///   ->where('statut', '<>', 5);  //auto
-                    })->orWhere(function ($query)   {
+                            ->where('current_status', 'actif')
+                            ->where('affecte', $iduser);
+
+
+                        ///   ->where('statut', '<>', 5);  //auto
+                    })->orWhere(function ($query) use($iduser)   {
                         $query->where('reference_medic', 'like', '%M%')
-                            ->where('current_status', 'actif');
-                    })->orWhere(function ($query)   {
+                            ->where('current_status', 'actif')
+                            ->where('affecte', $iduser);
+
+                    })->orWhere(function ($query) use($iduser)   {
                         $query->where('reference_medic', 'like', '%MI%')
-                            ->where('current_status', 'actif');
-                    })->orWhere(function ($query)   {
+                            ->where('current_status', 'actif')
+                            ->where('affecte', $iduser);
+
+                    })->orWhere(function ($query) use($iduser)   {
                         $query->where('reference_medic', 'like', '%TPA%')
-                            ->where('current_status', 'actif');
+                            ->where('current_status', 'actif')
+                            ->where('affecte', $iduser);
+
                     })->get();
 
                      if($dossiers)
