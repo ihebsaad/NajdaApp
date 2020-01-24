@@ -97,6 +97,14 @@ use App\Http\Controllers\TagsController;
                                      return $me->dossier_id;
                                    });
 
+                                $MissionsDC=array();
+
+                                if(isset($dossier))
+                                {
+                                //$MissionsDC=App\Mission::where('dossier_id',$dossier->id)->where('user_id','!=', Auth::user()->id)->orderBy('updated_at','desc')->get();
+                               // dd($MissionsDC);
+                                }
+
                                 /*->sortBy(function($t)
                                         {
                                             return $t->updated_at;
@@ -135,7 +143,7 @@ use App\Http\Controllers\TagsController;
                                // dd(array_values($missionO));
 
                             ?>
-                  @if ($Missions)
+                  @if ($Missions || $MissionsDC )
 <!--  début tab -+----------------------------------------------------------------------------------------->
                         <ul id="actiontabs" class="nav nav-tabs" style="margin-bottom: 15px;">
                             <li class="active">
@@ -183,7 +191,7 @@ use App\Http\Controllers\TagsController;
                                     
                                     <div class="accordion panel-group" id="accordion">
 
-                                 @if ($Missions)
+                                 @if ($Missions || $MissionsDC )
 
                                   <div class="row">
 
@@ -206,6 +214,74 @@ use App\Http\Controllers\TagsController;
                                   @endif
 
                                       <div id ="contenuMissions">
+                                          @foreach( $MissionsDC as $Missidc)
+                                     
+                                      @if ( $Missidc->statut_courant =='active' || $Missidc->statut_courant =='deleguee')
+
+                                      <div class="row" style="padding-bottom: 3px;">
+                                      <div class="col-md-10">
+                                      <div class="panel panel-default">
+
+                                        <div class="panel-heading <?php if($Missidc->id ==$currentMission){echo 'active';}
+                                        else {if($Missidc->dossier_id==$dosscourant){ echo 'ColorerMissionsCourantes' ;}}?>">
+
+                                         
+                                           <h4 class="panel-title">
+                                              <a href="{{action('DossiersController@view',$Missidc->dossier->id)}}"> {{$Missidc->dossier->reference_medic}}&nbsp;-&nbsp;{{$Missidc->dossier-> subscriber_name}} {{$Missidc->dossier->subscriber_lastname}}</a>
+                                             <br>
+                                                {{$Missidc->typeMission->nom_type_Mission}}
+                                               <a data-toggle="collapse" href="#collapse{{$Missidc->id}}">&nbsp; --</a>@if ($Missidc->assistant_id != NULL && $Missidc->emetteur_id != NULL && $Missidc->emetteur_id != $Missidc->assistant_id && $Missidc->emetteur_id!= $Missidc->user_id && $Missidc->statut_courant =='deleguee')
+                                         <span style="color:#151515"> &nbsp;(déléguée par {{$Missidc-> emetteur->name}}&nbsp {{$Missidc->emetteur->lastname}} ) </span> @endif
+
+                                         @if ($Missidc->miss_mere_id!=NULL )
+                                         <span style="color:#151515"> &nbsp;(*Sous-Mission*) </span> @endif
+                                           </h4>
+                                        </div>
+
+                                       <div id="collapse{{$Missidc->id}}" class="panel-collapse collapse in">
+                                            <ul class="list-group">
+                                              @foreach($Missidc->activeActionEC as  $sas)
+                                              <li class="list-group-item"><a  href="{{url('dossier/Mission/TraitementAction/'.$sas->Mission->dossier->id.'/'.$sas->mission_id.'/'.$sas->id)}}">
+
+                                                {{$sas->titre}} </a></li>
+                                              @endforeach
+                                            </ul>
+
+                                        </div>
+
+
+                                        <!-- /.panel-heading -->
+
+
+                                      </div>
+                                    </div>
+                                    <div class="col-md-2" >
+
+                                        <div class="dropdown" style="float:right;">
+                                          <button class="dropbtn"><span class="fa fa-2x fa-tasks" aria-hidden="true"></span></button>
+                                          <div class="dropdown-content" style="right:0;">
+                                          <a class="DescripMission" id="<?php echo $Missidc->id ?>" href="javascript:void(0)">Descrip. Mission</a>
+                                          <a class="etatAction" id="<?php echo $Missidc->id ?>" href="javascript:void(0)">Voir état actions</a>
+                                          <a class="mailGenerateur" id="<?php echo $Missidc->id ?>" href="javascript:void(0)">Mail générateur</a>
+                                          <a class="deleguerMission" id="<?php echo $Missidc->id ?>" href="javascript:void(0)">Déléguer Mission</a>
+                                          <a class="annulerMission" id="<?php echo $Missidc->id ?>" href="javascript:void(0)">Annuler Mission</a>
+
+                                           <input id="workflowh<?php echo $Missidc->id ?>" type="hidden" value="{{$Missidc->titre}}">
+                                            <input id="workflowht<?php echo $Missidc->id ?>" type="hidden" value="{{$Missidc->typeMission->nom_type_Mission}}">
+
+
+                                          </div>
+                                        </div>
+
+                                    </div>
+                                    </div>
+                                    @endif
+
+                                    
+                                     @endforeach
+
+                                   <!--Missions affectée à l'utilisateur dont les dossiers sont affectés --> 
+
                                        @foreach($Missions as $t=>$k)
                                       @foreach ($k as $Mission)
                                       @if ( $Mission->statut_courant =='active' || $Mission->statut_courant =='deleguee')

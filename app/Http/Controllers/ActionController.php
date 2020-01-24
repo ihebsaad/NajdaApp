@@ -2378,17 +2378,22 @@ class ActionController extends Controller
             $missionID=Session::get('missionID');
           }
 
-
-      //
-
         // Activer dossier
        /* Dossier::where('id', $iddoss )
             ->update(array('current_status'=>'actif'));*/
+         $user_affec=auth::user()->id;
          $dos=Dossier::where('id', $iddoss)->first();
-         if($dos->current_status != 'Cloture')
+         if($dos)
          {
-             $dos->update(array('current_status'=>'actif'));
-         }
+             if($dos->affecte)
+             {
+                $user_affec=$dos->affecte;
+             }
+             if($dos->current_status != 'Cloture')
+             {
+                $dos->update(array('current_status'=>'actif'));
+             }
+          }
 
 
          $dtc = (new \DateTime())->format('Y-m-d\TH:i');                         
@@ -2621,7 +2626,7 @@ class ActionController extends Controller
                                  $Naction->save();
                                  $NNaction=ActionEC::where('id',$Naction->id);
                                  $NNaction->update(['statut'=>"reportee"]);
-                                 $NNaction->update(['user_id'=>auth::user()->id]);                             
+                                 $NNaction->update(['user_id'=>$user_affec]);                             
                                  $n=$Naction->num_report;
                                  $n+=1;
                                  $NNaction->update(['num_report'=> $n]);
@@ -2663,7 +2668,7 @@ class ActionController extends Controller
                                  $n+=1;
                                  $NNaction->update(['num_rappel'=> $n]);
                                  $NNaction->update(['date_rappel'=> $dateRapAct]);
-                                 $NNaction->update(['user_id'=>auth::user()->id]);
+                                 $NNaction->update(['user_id'=>$user_affec]);
                                  $NNaction->update(['date_deb'=> $dateRapAct]);
                                 // $NNaction->update(['date_fin'=> $dateRapAct]);
                                  $action->update(['date_fin'=> $dateSys]);
@@ -6298,7 +6303,7 @@ public function Rapport_medical_DV($option,$idmiss,$idact,$iddoss,$bouton)
                             // activer Action 4  Mettre en forme RM sur notre entête
 
                      
-                           if((($action2->statut=="faite" && $action2->opt_choisie=="2")|| ($action2->statut=="faite" && $action2->opt_choisie=="2") || $action7->statut=="faite") && $action4->statut =="inactive")  
+                           if((($action2->statut=="faite" && $action2->opt_choisie=="2")|| ($action2->statut=="faite" && $action2->opt_choisie=="3") || $action7->statut=="faite") && $action4->statut =="inactive")  
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',4)

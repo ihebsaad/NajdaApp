@@ -1266,9 +1266,7 @@ class DossiersController extends Controller
                            }
 
 
-
                         }
-
                 }
 
 
@@ -1350,6 +1348,8 @@ class DossiersController extends Controller
 
     public function view($id)
     {
+
+        $this->update_missions($id);
 
       //$specialites =DB::table('specialites')->get();
 
@@ -1507,9 +1507,28 @@ class DossiersController extends Controller
 
     }
 
+    public function update_missions($id)
+    {
+        $updatedmission=Mission::where('dossier_id',$id)->orderBy('updated_at','desc')->get();
+        if($updatedmission)
+        {
+            foreach ($updatedmission as $um) {
+
+                 $dtc = (new \DateTime())->format('Y-m-d H:i:s');
+                $um->update(['updated_at'=>$dtc]);              
+
+            }
+
+        }
+    }
+
 
     public function fiche($id)
     {
+
+        $this->update_missions($id);
+
+
         $relations1 = DB::table('dossiers_docs')->select('dossier', 'doc')
             ->where('dossier',$id)
             ->get();
@@ -1517,8 +1536,8 @@ class DossiersController extends Controller
 
 
 
-        $typesMissions =  DB::table('type_mission')
-                ->get();
+        /*$typesMissions =  DB::table('type_mission')
+                ->get();*/
 
         $Missions=Dossier::find($id)->activeMissions;
 
@@ -1657,7 +1676,7 @@ class DossiersController extends Controller
         $relations2 = DB::table('clients_docs')->select('client', 'doc')
             ->where('client',$id)->get();
 
-        return view('dossiers.fiche',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'listeemails'=>$listeemails,'cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'typesMissions'=>$typesMissions,'Missions'=>$Missions], compact('dossier'));
+        return view('dossiers.fiche',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'listeemails'=>$listeemails,'cldocs'=>$cldocs,'relations1'=>$relations1,'garages'=>$garages,'hotels'=>$hotels,'traitants'=>$traitants,'hopitaux'=>$hopitaux,'client'=>$cl,'entite'=>$entite,'liste'=>$liste,'adresse'=>$adresse, 'phones'=>$phones, 'emailads'=>$emailads,'dossiers'=>$dossiers, 'prestations'=>$prestations,'clients'=>$clients,'Missions'=>$Missions], compact('dossier'));
 
 
     }
