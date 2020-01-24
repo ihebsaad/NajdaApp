@@ -622,7 +622,6 @@ class EntreesController extends Controller
 
         $date=date('Y-m-d H:i:s.u');
 
-
         $entree = new Entree([
             'destinataire' => $nomuser2,
             'emetteur' => $emetteur ,
@@ -645,7 +644,7 @@ class EntreesController extends Controller
 
             if($id>0) {
                 // check same user
-              if($userid=!$par)  {
+              if(intval($userid) != intval($par))  {
                 $notif = new Notif([
                     'emetteur' => $emetteur,
                     'sujet' => 'Compte Rendu écrit par ' . $nomuser,

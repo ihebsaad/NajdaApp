@@ -1297,10 +1297,10 @@ class DossiersController extends Controller
 
         $dtc = (new \DateTime())->format('Y-m-d H:i');
 
-/*
+
         $this->migration_miss ($id,$agent);
         $this->migration_notifs ($id,$agent);
-*/
+
         $affec=new AffectDoss([
 
             'util_affecteur'=>$iduser,
