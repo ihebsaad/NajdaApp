@@ -1039,7 +1039,7 @@ function verifdispvoiture()
                                 }
                            
                         }else{alert('wrrong');}
-                          alert(JSON.stringify(output));
+                         // alert(JSON.stringify(output));
                     }
                     else
                     {

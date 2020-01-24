@@ -1364,10 +1364,18 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
     public function export_pdf_odmremorquage(Request $request)
     {
 
-    	            	// MAJ disponibilite vehicule
+    	            	
+                	// efface disponibilite dans l'OM parent
+                 if (isset($_POST['parent']) && ! empty($_POST['parent']))
+					{
+						$parent = $_POST['parent'];
+						OMRemorquage::where('id', $parent)->update(['idvehic' => "",'idchauff' => ""]);
+					}
+                // MAJ disponibilite vehicule
 
-        if (isset($_POST['idvehic']))
-                {// mettre à jour les infos de vehicule
+        /*if (isset($_POST['idvehic']))
+                {
+                // mettre à jour les infos de vehicule
 
                 	// verifier si l'om a un parent om
             		if (isset($_POST['parent']) && ! empty($_POST['parent']))
@@ -1474,7 +1482,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 								}
 							}
 					}
-                }
+                }*/
 
         //dd($_POST['idMissionOM']);
         // verifier si remplacement ou annule
@@ -2089,7 +2097,7 @@ $reqlieup->request->add(['dossier' => $iddnew]);
                     $parent = $_POST['parent'];
                     $iddoss = $_POST['dossdoc'];
 
-                    OMMedicInternational:where('id', $parent)->update(['dernier' => 0]);
+                    OMMedicInternational::where('id', $parent)->update(['dernier' => 0]);
                     $omparent= OMMedicInternational::where('id', $parent)->first();
                     $filename='medicinternationnal_Complet-'.$parent;
                     $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
@@ -2666,7 +2674,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 	    }
 	    // annulation om Remorquage
 	    elseif (stristr($titre,'remorquage') !== FALSE)  {
-	    	OMRemorquage::where('id', $parent)->update(['dernier' => 0]);
+	    	OMRemorquage::where('id', $parent)->update(['dernier' => 0,'idvehic' => "",'idchauff' => ""]);
 	        $omparent=OMRemorquage::where('id', $parent)->first();
 	        $filename='remorquage_annulation-'.$parent;
 
