@@ -201,9 +201,14 @@ $(document).ready(function()
                     if ($type=='assure') {?>
                     <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabnC ?> - N/Réf(O/Ref): <?php echo $ref ?>"/>
                     <?php        } ?>
-                    <?php   if  ($type=='client') {?>
-                    <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabnC ?> - V/Réf(Y/Ref): <?php echo $refclient ?>   - N/Réf(O/Ref): <?php echo $ref ?>"/>
-                    <?php        } ?>
+                    <?php  if  ($type=='client') {
+                    if ($langue=='francais'){ ?>
+                         <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabnC ?> - V/Réf: <?php echo $refclient ?>   - N/Réf: <?php echo $ref ?>"/>
+                 <?php   }else{ ?>
+                         <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabnC ?> - Y/Ref: <?php echo $refclient ?>   - O/Ref: <?php echo $ref ?>"/>
+                 <?php   }
+                        ?>
+                     <?php   } ?>
                 </div>
 
             <?php }else{  ?>
@@ -217,9 +222,14 @@ $(document).ready(function()
                     if ($type=='assure') {?>
                     <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - N/Réf(O/Ref): <?php echo $ref ?>"/>
                     <?php        } ?>
-                    <?php   if  ($type=='client') {?>
-                    <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - V/Réf(Y/Ref): <?php echo $refclient ?>   - N/Réf(O/Ref): <?php echo $ref ?>"/>
-                    <?php        } ?>
+                    <?php  if  ($type=='client') {
+                    if ($langue=='francais'){ ?>
+                    <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - V/Réf: <?php echo $refclient ?>   - N/Réf: <?php echo $ref ?>"/>
+                    <?php   }else{ ?>
+                    <input id="sujet" type="text" class="form-control" name="sujet" required value="<?php echo $nomabn ?> - Y/Ref: <?php echo $refclient ?>   - O/Ref: <?php echo $ref ?>"/>
+                    <?php   }
+                    ?>
+                    <?php   } ?>
                 </div>
 
                 <?php    }

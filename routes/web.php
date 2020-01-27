@@ -77,6 +77,7 @@ Route::get('/demo/test/', 'DemoController@test')->name('demo.test');
 Route::put('/demo/test/', 'DemoController@test')->name('demo.test');
 Route::post('/demo/test/', 'DemoController@test')->name('demo.test');
 Route::post('/home/fetch', 'HomeController@fetch')->name('home.fetch');
+Route::post('/home/deconnecter', 'HomeController@deconnecter')->name('home.deconnecter');
 
 //affectation dossier dispartcheur
 Route::get('/affectation/',  'AffectDossController@Interface_Affectation_DossierDispatcheur'); 

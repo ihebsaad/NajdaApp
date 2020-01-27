@@ -725,6 +725,15 @@ return redirect('roles');
         return view('home'  );
      }
 
+    public function deconnecter(Request $request)
+    {
+
+         $user= $request->get('user');
+
+        User::where('id', $user)->update(array('statut' => -1));
+
+
+    }
 
     public function parametring(Request $request)
     {

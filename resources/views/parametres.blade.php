@@ -256,6 +256,29 @@
                                 </tbody>
                             </table>
 
+                       <H2>Agents Enregistrés Connectés :</H2><br>
+
+                       <?php
+                       foreach($users as $user)
+                       {
+                           if($user->statut == 1 ){
+
+                               $role=' ';
+                               if($user->id==$veilleur){$role.='(Veilleur de nuit)';}
+                               if($user->id==$disp){$role.='(Dispatcheur)';}
+                               if($user->id==$disptel){$role.='(Dispatcheur Téléphonique)';}
+                               if($user->id==$disptel2){$role.='(Dispatcheur Téléphonique 2)';}
+                               if($user->id==$disptel3){$role.='(Dispatcheur Téléphonique 3)';}
+                               if($user->id==$supmedic){$role.='(Superviseur Médical)';}
+                               if($user->id==$suptech){$role.='(Superviseur Technique)';}
+                               if($user->id==$charge){$role.='(Chargé de transport)';}
+                                if($user->user_type!='admin') { echo  '<li style="margin-bottom:20px"><i class="fa fa-user fa-lg" ></i><span  style="min-width:300px">   '.$user->name.' '.$user->lastname .' - '. $role.' </span>'; if(! $user->isOnline() ){ echo ' <b>Non Actif</b> <button class="btn btn-danger" onclick="deconnecter('.$user->id.')" > Déconnecter </button>';} echo '</li>  ' ;}
+
+                           }
+
+
+                       }?>
+
                         </div>
                      </div>
 
@@ -408,7 +431,7 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
 ?>
                     <div id="tab3" class="tab-pane fade <?php if ($user_type=='superviseur'){echo 'in active';}?>" style="display:block">
                         <div class="padding:50px 50px 50px 50px"><br>
-                            <h4>Agents connectés</h4><br>
+                            <h4>Agents Actifs</h4><br>
                             <ul style="width:80%;background-color:#F8F7F6;padding:50px 50px 50px 50px">
 
                             <?php
@@ -709,6 +732,22 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
         });
 
     }
+
+
+    function deconnecter(user) {
+
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('home.deconnecter') }}",
+            method: "POST",
+            data: {  user:user  , _token: _token},
+            success: function ( ) {
+                 location.reload();
+            }
+        });
+
+    }
+
 
     function ShowModal(elm)
     {

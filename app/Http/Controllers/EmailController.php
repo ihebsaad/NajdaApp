@@ -4491,6 +4491,7 @@ $id=0;
 
     public function envoimail($id,$type,$prest=null)
     {
+        $langue="francais";
         if (isset($prest)){$prest=$prest;}else{$prest=0;}
         $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
         $nomabn=app('App\Http\Controllers\DossiersController')->NomAbnDossierById($id);
@@ -4508,6 +4509,7 @@ $id=0;
         {
         // trouver id client à partir de la référence
             $cl=app('App\Http\Controllers\DossiersController')->ClientDossierById($id);
+            $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$cl);
 
             $mail=app('App\Http\Controllers\ClientsController')->ClientChampById('mail',$cl);
             if($mail!='') { array_push($listeemails,$mail);}
@@ -4712,7 +4714,7 @@ $id=0;
 
 */
 
-        return view('emails.envoimail',['dossier'=>$dossier,'refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'nomabnC'=>$nomabnC,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type]);
+        return view('emails.envoimail',['dossier'=>$dossier,'refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'nomabnC'=>$nomabnC,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type ,'langue'=>$langue]);
     }
 
     public function envoimailbr($id)
