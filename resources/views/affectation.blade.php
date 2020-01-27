@@ -283,7 +283,7 @@
 
                 foreach($folders as $folder)
                 { $type=$folder['type_dossier']; $style=""; if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique' || $type=='Transport'){$style="--my-color-var:#3498DB;";}
-                $statut=$folder['statut']; $idd=$folder['id'];$ref=$folder['reference_medic'];$abn=$folder['subscriber_lastname'].' '.$folder['subscriber_name'];$idclient=$folder['customer_id'];$client= $folder['reference_customer'] /*  ClientsController::ClientChampById('name',$idclient)*/ ;?>
+                $statut=$folder['statut']; $idd=$folder['id'];$ref=$folder['reference_medic'];$abn=$folder['subscriber_name'].' '.$folder['subscriber_lastname'];$idclient=$folder['customer_id'];$client= $folder['reference_customer'] /*  ClientsController::ClientChampById('name',$idclient)*/ ;?>
                 <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style; if($statut==5){ echo';border:2px solid black';}?>" >
                     <label style="font-size: 18px;"><?php echo $ref ;?></label>
                     <div class="infos">  <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
@@ -398,7 +398,7 @@
                         { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="--my-color-var:#3498DB;";}
                         $idd=$dossierI['id'];
                         $immatricul=$dossierI['vehicule_immatriculation'];
-                        $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
+                        $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_name'].' '.$dossierI['subscriber_lastname'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
                         <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small class="assure" style="font-size:12px"><?php custom_echo($abn,13);?></small>
                             <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>-->
                             <div class="infos"> <label style="font-size: 15px;"><?php echo $ref;?></label>
@@ -445,7 +445,7 @@
                         { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="--my-color-var:#3498DB;";}
                         $idd=$dossierI['id'];
                         $immatricul=$dossierI['vehicule_immatriculation'];
-                        $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
+                        $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_name'].' '.$dossierI['subscriber_lastname'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
                         <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
                             <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>-->
                             <div class="infos"> <label style="font-size: 15px;"><?php echo $ref;?></label>
@@ -493,7 +493,7 @@
                         { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="--my-color-var:#3498DB;";}
                         $idd=$dossierI['id'];
                         $immatricul=$dossierI['vehicule_immatriculation'];
-                        $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
+                        $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_name'].' '.$dossierI['subscriber_lastname'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
                         <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
                             <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>-->
                             <div class="infos"> <label style="font-size: 15px;"><?php echo $ref;?></label>
@@ -540,7 +540,7 @@
                         { $type=$dossierI['type_dossier'];if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="--my-color-var:#3498DB;";}
                         $idd=$dossierI['id'];
                         $immatricul=$dossierI['vehicule_immatriculation'];
-                        $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_lastname'].' '.$dossierI['subscriber_name'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
+                        $ref=$dossierI['reference_medic'];$abn=$dossierI['subscriber_name'].' '.$dossierI['subscriber_lastname'];$idclient=$dossierI['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
                         <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
                             <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>-->
                             <div class="infos"> <label style="font-size: 15px;"><?php echo $ref;?></label>
@@ -578,7 +578,7 @@
                         { $type=$dossier['type_dossier'];if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="--my-color-var:#3498DB;";}
                         $idd=$dossier['id'];
                         $immatricul=$dossier['vehicule_immatriculation']; $statut=$dossier['statut'];
-                        $ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
+                        $ref=$dossier['reference_medic'];$abn=$dossier['subscriber_name'].' '.$dossier['subscriber_lastname'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
                         <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style; if($statut!=2){ echo';border:2px solid black;';} ?>" >
                             <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
                             <div class="infos">  <label style="font-size: 15px;"><?php echo $ref;?></label>
@@ -640,7 +640,7 @@
                         { $type=$dossier['type_dossier'];if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="--my-color-var:#3498DB;";}
                         $idd=$dossier['id'];
                         $immatricul=$dossier['vehicule_immatriculation']; $statut=$dossier['statut'];
-                        $ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
+                        $ref=$dossier['reference_medic'];$abn=$dossier['subscriber_name'].' '.$dossier['subscriber_lastname'];$idclient=$dossier['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
                         <div  id="folders-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style; if($statut!=2){ echo';border:2px solid black;';} ?>" >
                             <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>--> <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
                             <div class="infos">  <label style="font-size: 15px;"><?php echo $ref;?></label>

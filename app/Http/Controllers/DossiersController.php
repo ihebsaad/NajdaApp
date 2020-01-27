@@ -2823,7 +2823,6 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
     public static function InactiverDossiers()
     {
 
-
         $user = auth()->user();
         $iduser=$user->id;
 
@@ -2842,14 +2841,13 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
             ->get();
 
 
-
         foreach($dossiers as $d)
         {
             // Affecter les dossiers inactifs au dispatcheur
             Dossier::where('id',$d->id) // ->where('affecte',0)
                 ->update(array(
                     'current_status'=>'inactif',
-                    'affecte'=>$dispatcheur
+                 /////   'affecte'=>$dispatcheur
 
                 ));
 
@@ -2863,7 +2861,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 */
 
             // Affecter dossiers Inactifs Transpot au Chargé
-
+/*
              Dossier::where(function ($query)use($d) {
                 $query->where('reference_medic','like','%TN%')
                     ->where('id',$d->id);
@@ -2874,7 +2872,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
                 $query->where('reference_medic','like','%TV%')
                     ->where('statut', '<>', 5);
              })->update(array('affecte' => $charge));
-
+*/
         }
 
 

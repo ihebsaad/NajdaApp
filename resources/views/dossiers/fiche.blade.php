@@ -1255,48 +1255,49 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                           <?php if( trim($dossier->type_affectation)=='Najda TPA') {?>
-                                                            <div class="row">
 
-                                                                <div class="col-md-4">
-                                                                    <div class="form-group">
-                                                                        <label for="tpa" class="control-label"> ID Assuré  </label>
+                                                        </div>
 
-                                                                        <div class="input-group-control">
-                                                                            <input onchange="changing(this)" type="number" id="ID_assure"    class="form-control" value="{{ $dossier->ID_assure }}" >
-                                                                        </div>
+                                                        <?php if( trim($dossier->type_affectation)=='Najda TPA') {?>
+                                                        <div class="row">
+
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label for="tpa" class="control-label"> ID Assuré  </label>
+
+                                                                    <div class="input-group-control">
+                                                                        <input onchange="changing(this)" type="number" id="ID_assure"    class="form-control" value="{{ $dossier->ID_assure }}" >
                                                                     </div>
                                                                 </div>
+                                                            </div>
 
-                                                                <div class="col-md-8">
-                                                                    <div class="form-group">
-                                                                        <label for="tpa" class="control-label"> Spécialité Médicale </label>
+                                                            <div class="col-md-8">
+                                                                <div class="form-group">
+                                                                    <label for="tpa" class="control-label"> Spécialité Médicale </label>
 
-                                                                      <?php  $specsTPA = DB::table('specialites_typeprestations')
+                                                                    <?php  $specsTPA = DB::table('specialites_typeprestations')
                                                                         ->where('type_prestation',15)  // medcecin traitant
                                                                         ->get();
 
-                                                                        ?>
-                                                                        <div class="input-group-control">
-                                                                            <select id="specialite_TPA"    class="form-control" value="{{ $dossier->specialite_TPA }}" >
-                                                                                <option value=""></option>
-                                                                              <?php  foreach($specsTPA as $spec)
-                                                                                {
-                                                                                    $nomSpec=\App\Http\Controllers\SpecialitesController::NomSpecialiteById($spec->specialite);
-                                                                                    if($dossier->specialite_TPA==$nomSpec){$selected='selected="selected"';}else{$selected='';}
-                                                                                    echo '<option  '.$selected.'   value="'.$nomSpec.'" >'. $nomSpec  .'</option>';
-                                                                                }
-                                                                                ?>
-                                                                            </select>
-                                                                        </div>
+                                                                    ?>
+                                                                    <div class="input-group-control">
+                                                                        <select id="specialite_TPA"    class="form-control" value="{{ $dossier->specialite_TPA }}" >
+                                                                            <option value=""></option>
+                                                                            <?php  foreach($specsTPA as $spec)
+                                                                            {
+                                                                                $nomSpec=\App\Http\Controllers\SpecialitesController::NomSpecialiteById($spec->specialite);
+                                                                                if($dossier->specialite_TPA==$nomSpec){$selected='selected="selected"';}else{$selected='';}
+                                                                                echo '<option  '.$selected.'   value="'.$nomSpec.'" >'. $nomSpec  .'</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select>
                                                                     </div>
                                                                 </div>
-
                                                             </div>
 
-                                                          <?php }?>
                                                         </div>
 
+                                                        <?php }?>
 
                                                     </div>
                                                 </div>

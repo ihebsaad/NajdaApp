@@ -146,14 +146,14 @@ use App\Http\Controllers\TagsController;
                   @if ($Missions || $MissionsDC )
 <!--  début tab -+----------------------------------------------------------------------------------------->
                         <ul id="actiontabs" class="nav nav-tabs" style="margin-bottom: 15px;">
-                            <li class="active">
+                            <li class="<?php if ( ! \Request::is('entrees/show/*')) {echo ' class="active" ';} ?> ">
                                 <a id="idMissionstab" href="#Missionstab" data-toggle="tab">Missions</a>
                             </li>
                             <li>
                                 <a href="#newMissiontab" data-toggle="tab">Nouvelle Mission</a>
                             </li>
                             <?php if (\Request::is('entrees/show/*')) { ?>
-                            <li>
+                            <li  <?php if (\Request::is('entrees/show/*')) {echo ' class="active" ';} ?> >
                                 <a href="#infostab" data-toggle="tab">Informations</a>
                             </li>
                             <?php } ?>
@@ -161,7 +161,7 @@ use App\Http\Controllers\TagsController;
                         <div id="MissionsTabContent" class="tab-content">
 
                           <!-- début  Missions tab-->
-                          <div class="tab-pane fade active in " id="Missionstab">
+                          <div class="tab-pane fade <?php if (! \Request::is('entrees/show/*')) {echo ' active in';}?> " id="Missionstab">
                               <!--<div class="tab-pane fade active in  scrollable-panel" id="Missionstab">-->
 
                                
@@ -661,16 +661,16 @@ use App\Http\Controllers\TagsController;
                     </div>
                     <?php if (\Request::is('entrees/show/*')) { ?>
                      <!-- Informations tab------------------------>
-                     <div class="tab-pane fade " id="infostab" style="overflow-x: hidden;">
+                     <div class="tab-pane fade <?php if (\Request::is('entrees/show/*')) {echo ' active in';} ?> " id="infostab" style="overflow-x: hidden;">
                       <div class="row text-center">
                         <div class="col-md-6" >
-                          <button id="btn-atag" class="btn btn-default default-hovered" style="background-color: #A9A9A9">Ajouter TAG</button>
+                          <button id="btn-atag" class="btn btn-default "  style="background-color: #A9A9A9">Ajouter TAG</button>
                         </div>
                         <div class="col-md-6" >
-                          <button id="btn-cmttag" class="btn btn-default">TAG & Commentaire</button>
+                          <button id="btn-cmttag" class="btn btn-default default-hovered">TAG & Commentaire</button>
                         </div>
                       </div>    
-                      <div id="ajouttag" style="display:block;margin-top: 30px">
+                      <div id="ajouttag" style="display:none;margin-top: 30px">
                         <input type="hidden" name="dossieridtag" id="dossieridtag" value="<?php echo $dosscourant; ?>">
                            <div class="form-group mar-20">
                                 <label for="tagname" class="control-label" style="padding-right: 20px">TAG</label>
@@ -716,12 +716,12 @@ use App\Http\Controllers\TagsController;
                               {{ csrf_field() }}
                             </div> 
                       </div>   
-                      <div id="cmttag"  style="display:none;margin-top: 30px">
+                      <div id="cmttag"  style="display:block;margin-top: 30px">
                           <div class="row">
                             <div class="col-md-6"><label for="commentuser" class="control-label" >Description</label></div>
                             <div class="col-md-3 pull-right"><button id="editbtn" type="button" class="btn btn-info btn-xs" ><i class="fas fa-lock-open"></i> Modifier</button></div>
                           </div>
-                          <textarea id="commentuser" name="commentuser" rows="7" class="form-control resize_vertical" placeholder="Entrez votre Description" readonly >{{ $entree['commentaire']  }}</textarea></br>
+                          <textarea id="commentuser" name="commentuser" rows="7" class="form-control resize_vertical" placeholder="Entrez votre Description" <?php if($entree['commentaire']!=''){echo 'readonly'; }?> >{{ $entree['commentaire']  }}</textarea></br>
                           <!-- affichage des tags -->
                           <label for="accordiontags" class="control-label" >TAGs</label>
                           <div class="accordion panel-group" id="accordiontags">
