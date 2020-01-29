@@ -3,6 +3,7 @@
 @section('content')
 
     <?php
+     setlocale(LC_ALL, 'fr_FR');
 
     use Illuminate\Support\Carbon;$user = auth()->user();
     $name=$user->name;
@@ -26,31 +27,58 @@
         ->where('id','=', 1 )->first();
 
 
+    $month = date('m');
+    $year = date('Y');
+    $date = date('d');
+    $fmt = new IntlDateFormatter('fr_FR',
+        IntlDateFormatter::FULL,
+        IntlDateFormatter::NONE,
+        'Europe/Paris',
+        IntlDateFormatter::GREGORIAN);
+    //	$date=date('l A d/m/Y');
+    $d1 = mktime(0, 0, 0, $month , $date, $year);
+    $d2 = mktime(0, 0, 0, $month , $date+1, $year);
+    $d3 = mktime(0, 0, 0, $month , $date+2, $year);
+    $d4 = mktime(0, 0, 0, $month , $date+3, $year);
+    $d5 = mktime(0, 0, 0, $month , $date+4, $year);
+    $d6 = mktime(0, 0, 0, $month , $date+5, $year);
+    $d7 = mktime(0, 0, 0, $month , $date+6, $year);
+    $sd1 =  $fmt->format($d1);
+    $sd2 =  $fmt->format($d2);
+    $sd3 =  $fmt->format($d3);
+    $sd4 =  $fmt->format($d4);
+    $sd5 =  $fmt->format($d5);
+    $sd6 =  $fmt->format($d6);
+    $sd7 =  $fmt->format($d7);
+
     $today= date('Y-m-d');
 
     // OM TAXIs
-    $ordres_taxi = \App\OMTaxi::where('dhdepartmiss', '>=', Carbon::now()->toDateString())
-        ->select('id','dhdepartmiss','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
-        ->orderBy('dhdepartmiss')
+    $ordres_taxi = \App\OMTaxi::where('dateheuredep', '>=', Carbon::now()->toDateString())
+       ->where('dernier',1)
+        ->select('id','dateheuredep','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
+        ->orderBy('dateheuredep')
         ->get();
 
     //OM Ambul
 
-    $ordres_ambul =   \App\OMAmbulance::where('dhdepartmiss',  '>=', Carbon::now()->toDateString())
-        ->select('id','dhdepartmiss','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
-        ->orderBy('dhdepartmiss')
+    $ordres_ambul =   \App\OMAmbulance::where('dateheuredep',  '>=', Carbon::now()->toDateString())
+        ->where('dernier',1)
+            ->select('id','dateheuredep','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
+        ->orderBy('dateheuredep')
          ->get();
     // OM Remorq
 
-    $ordres_rem =  \App\OMRemorquage::where('dhdepartmiss',  '>=', Carbon::now()->toDateString())
-        ->select('id','dhdepartmiss','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
-        ->orderBy('dhdepartmiss')
+    $ordres_rem =  \App\OMRemorquage::where('dateheuredep',  '>=', Carbon::now()->toDateString())
+        ->where('dernier',1)
+            ->select('id','dateheuredep','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
+        ->orderBy('dateheuredep')
          ->get();
     $oms = array_merge($ordres_taxi->toArray(),$ordres_ambul->toArray(),$ordres_rem->toArray() );
 
     function cmp($a, $b)
     {
-        return strcmp($a["dhdepartmiss"], $b["dhdepartmiss"]);
+        return strcmp($a["dateheuredep"], $b["dateheuredep"]);
     }
 
     usort($oms, "cmp");
@@ -63,6 +91,8 @@
               </div>
         				
 		  <div class="panel-body" style="display: block;min-height:700px;padding:15px 15px 15px 15px">
+
+
                          <!-- Tabs -->
               <ul class="nav  nav-tabs">
 
@@ -80,7 +110,7 @@
               </ul>
 
                        <div class="row seven-cols" style="height:1200px">
-                           <div class="col-md-1"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2 style="background-color: #4fc1e9!important;font-weight: 800"> <?php echo date('l d/m/y');?> </h2></center>
+                           <div class="col-md-1"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2 style="background-color: #4fc1e9!important;font-weight: 400"> <?php echo $sd1; ?> </h2></center>
 
                                <?php
 
@@ -88,10 +118,10 @@
                                                       foreach($oms as $o)
                                                       {
                                                         $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
-                                                        $date=$o['dhdepartmiss'];
+                                                        $date=$o['dateheuredep'];
                                                           $ref=$o['reference_medic'];
                                                           $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                                                          $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
+                                                          $heureT=$o['dateheuredep'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                                           $tel=$o['CL_contacttel'];
                                                           $de=$o['CL_lieuprest_pc'];
                                                           $vers=$o['CL_lieudecharge_dec'];
@@ -147,17 +177,17 @@
                            $day->modify('+1 day');
                            $day=$day->format('Y-m-d');
                            ?>
-                           <div class="col-md-1"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2> <?php echo date("l d/m/y", strtotime($day)); ?> </h2></center>
+                           <div class="col-md-1"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2> <?php echo $sd2; ?> </h2></center>
                                <?php
 
                                $color='';$icon='';
                                foreach($oms as $o)
                                {
                                $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
-                               $date=$o['dhdepartmiss'];
+                               $date=$o['dateheuredep'];
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
+                               $heureT=$o['dateheuredep'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
@@ -213,17 +243,17 @@
                            $day->modify('+2 day');
                            $day=$day->format('Y-m-d');
                            ?>
-                           <div class="col-md-1"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2> <?php echo date("l d/m/y", strtotime($day)); ?> </h2></center>
+                           <div class="col-md-1"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2> <?php echo $sd3; ?> </h2></center>
                                <?php
 
                                $color='';$icon='';
                                foreach($oms as $o)
                                {
                                $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
-                               $date=$o['dhdepartmiss'];
+                               $date=$o['dateheuredep'];
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
+                               $heureT=$o['dateheuredep'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
@@ -277,7 +307,7 @@
                            $day->modify('+3 day');
                            $day=$day->format('Y-m-d');
                            ?>
-                           <div class="col-md-1"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2> <?php echo date("l d/m/y", strtotime($day)); ?> </h2></center>
+                           <div class="col-md-1"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2> <?php echo $sd4; ?></h2></center>
 
                                <?php
 
@@ -285,10 +315,10 @@
                                foreach($oms as $o)
                                {
                                $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
-                               $date=$o['dhdepartmiss'];
+                               $date=$o['dateheuredep'];
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
+                               $heureT=$o['dateheuredep'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
@@ -342,17 +372,17 @@
                            $day->modify('+4 day');
                            $day=$day->format('Y-m-d');
                            ?>
-                           <div class="col-md-1"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2> <?php echo date("l d/m/y", strtotime($day)); ?> </h2></center>
+                           <div class="col-md-1"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2> <?php echo $sd5; ?> </h2></center>
                                <?php
 
                                $color='';$icon='';
                                foreach($oms as $o)
                                {
                                $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
-                               $date=$o['dhdepartmiss'];
+                               $date=$o['dateheuredep'];
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
+                               $heureT=$o['dateheuredep'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
@@ -406,7 +436,7 @@
                            $day->modify('+5 day');
                            $day=$day->format('Y-m-d');
                            ?>
-                           <div class="col-md-1"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2> <?php echo date("l d/m/y", strtotime($day)); ?> </h2></center>
+                           <div class="col-md-1"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2> <?php echo $sd6; ?></h2></center>
 
                                <?php
 
@@ -414,10 +444,10 @@
                                foreach($oms as $o)
                                {
                                $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
-                               $date=$o['dhdepartmiss'];
+                               $date=$o['dateheuredep'];
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
+                               $heureT=$o['dateheuredep'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
@@ -472,7 +502,7 @@
                            $day->modify('+6 day');
                            $day=$day->format('Y-m-d');
                            ?>
-                           <div class="col-md-1"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2> <?php echo date("l d/m/y", strtotime($day)); ?> </h2></center>
+                           <div class="col-md-1"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2> <?php echo $sd7; ?> </h2></center>
 
                                <?php
 
@@ -480,10 +510,10 @@
                                foreach($oms as $o)
                                {
                                $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
-                               $date=$o['dhdepartmiss'];
+                               $date=$o['dateheuredep'];
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
+                               $heureT=$o['dateheuredep'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];

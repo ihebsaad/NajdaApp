@@ -71,6 +71,18 @@ class DossiersController extends Controller
         return view('dossiers.index', compact('dossiers'));
     }
 
+    public function affectclassique()
+    {
+        if(\Gate::allows('isAdmin') || \Gate::allows('isSupervisor')  ) {
+
+        $dossiers = Dossier::orderBy('created_at', 'desc')->where('current_status','!=','Cloture')->get();
+        return view('dossiers.affectclassique', compact('dossiers'));
+            }else{
+            return back();
+        }
+    }
+
+
     function uploadExterneFile(Request $request)
     {
 
@@ -1286,7 +1298,7 @@ class DossiersController extends Controller
 
         // statut= 5 => dossier affecté manuellement
 
-         Dossier::where('id', $id)->update(array('affecte' => $agent,'statut'=>5 ,'current_status'=>$statut));
+         Dossier::where('id', $id)->update(array('affecte' => $agent,'statut'=>5 /*,'current_status'=>$statut*/));
 
         $ref=$this->RefDossierById($id);
 
@@ -1294,7 +1306,6 @@ class DossiersController extends Controller
         $iduser=$user->id;
 
         $dtc = (new \DateTime())->format('Y-m-d H:i');
-
 
         $this->migration_miss ($id,$agent);
         $this->migration_notifs ($id,$agent);
@@ -1322,6 +1333,52 @@ class DossiersController extends Controller
          return back();
 
     }
+
+
+    public function attribution2(Request $request)
+    {
+        $agent= $request->get('agent');
+        $type= $request->get('type');
+        $dossiers = json_decode( $request->get('dossiers'));
+        //dd($dossiers);
+        // statut= 5 => dossier affecté manuellement  2/5
+        if(isset($dossiers))
+        {
+            foreach($dossiers as $doss)
+            {
+                Dossier::where('id', intval($doss))->update(array('affecte' => $agent,'statut'=>5));
+
+                $ref=$this->RefDossierById($doss);
+
+                $user = auth()->user();
+                $iduser=$user->id;
+
+                $this->migration_miss (intval($doss),$agent);
+                $this->migration_notifs (intval($doss),$agent);
+
+                $dtc = (new \DateTime())->format('Y-m-d H:i');
+                $affec=new AffectDoss([
+
+                    'util_affecteur'=>$iduser,
+                    'util_affecte'=>$agent,
+                    'statut'=>"nouveau",
+
+                    'id_dossier'=>$doss,
+                    'date_affectation'=>$dtc,
+                ]);
+
+                $affec->save();
+
+                $user = auth()->user();
+                $nomuser=$user->name.' '.$user->lastname;
+                $nomagent=  app('App\Http\Controllers\UsersController')->ChampById('name',$agent).' '.app('App\Http\Controllers\UsersController')->ChampById('lastname',$agent);
+                Log::info('[Agent: '.$nomuser.'] Affectation de dossier :'.$ref.' à: '.$nomagent);
+            }   //foreach
+        }
+        return 'true';
+    }
+
+
 
     public function addemail(Request $request)
     {
@@ -2051,7 +2108,7 @@ class DossiersController extends Controller
     }
     public  static function ListeDossiersAffecte()
     {
-        $dossiers = Dossier::where('affecte',Auth::id())->orderBy('updated_at','desc')->get();
+        $dossiers = Dossier::where('affecte',Auth::id())->where('current_status','!=','Cloture')->orderBy('updated_at','desc')->get();
 
         return $dossiers;
 

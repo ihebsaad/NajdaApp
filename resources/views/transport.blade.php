@@ -3,7 +3,7 @@
 @section('content')
 
     <?php
-
+    setlocale(LC_TIME, "fr_FR");
     $user = auth()->user();
     $name=$user->name;
     $iduser=$user->id;
@@ -28,28 +28,31 @@
     $today= date('Y-m-d');
 
     // OM TAXIs
-    $ordres_taxi = \App\OMTaxi::where('dhdepartmiss', 'like',$today.'%')
-        ->select('id','dhdepartmiss','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
-        ->orderBy('dhdepartmiss')
+    $ordres_taxi = \App\OMTaxi::where('dateheuredep', 'like',$today.'%')
+        ->where('dernier',1)
+         ->select('id','dateheuredep','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
+        ->orderBy('dateheuredep')
         ->get();
 
     //OM Ambul
 
-    $ordres_ambul =   \App\OMAmbulance::where('dhdepartmiss', 'like',$today.'%')
-        ->select('id','dhdepartmiss','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
-        ->orderBy('dhdepartmiss')
+    $ordres_ambul =   \App\OMAmbulance::where('dateheuredep', 'like',$today.'%')
+        ->where('dernier',1)
+          ->select('id','dateheuredep','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
+        ->orderBy('dateheuredep')
          ->get();
     // OM Remorq
 
-    $ordres_rem =  \App\OMRemorquage::where('dhdepartmiss', 'like',$today.'%')
-         ->select('id','dhdepartmiss','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
-         ->orderBy('dhdepartmiss')
+    $ordres_rem =  \App\OMRemorquage::where('dateheuredep', 'like',$today.'%')
+        ->where('dernier',1)
+         ->select('id','dateheuredep','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
+         ->orderBy('dateheuredep')
          ->get();
     $oms = array_merge($ordres_taxi->toArray(),$ordres_ambul->toArray(),$ordres_rem->toArray() );
 
     function cmp($a, $b)
     {
-        return strcmp($a["dhdepartmiss"], $b["dhdepartmiss"]);
+        return strcmp($a["dateheuredep"], $b["dateheuredep"]);
     }
 
     usort($oms, "cmp");
@@ -93,7 +96,7 @@
                                                           $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
                                                             $ref=$o['reference_medic'];
                                                           $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                                                          $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
+                                                          $heureT=$o['dateheuredep'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                                           $tel=$o['CL_contacttel'];
                                                           $de=$o['CL_lieuprest_pc'];
                                                           $vers=$o['CL_lieudecharge_dec'];
@@ -151,7 +154,7 @@
                                $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
+                               $heureT=$o['dateheuredep'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
@@ -209,7 +212,7 @@
                                $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
+                               $heureT=$o['dateheuredep'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
@@ -267,7 +270,7 @@
                                $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
+                               $heureT=$o['dateheuredep'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
@@ -324,7 +327,7 @@
                                $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
+                               $heureT=$o['dateheuredep'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
@@ -382,7 +385,7 @@
                                $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
                                $ref=$o['reference_medic'];
                                $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                               $heureT=$o['dhdepartmiss'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
+                               $heureT=$o['dateheuredep'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));
                                $tel=$o['CL_contacttel'];
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];

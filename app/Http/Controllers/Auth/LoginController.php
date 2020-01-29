@@ -671,7 +671,6 @@ class LoginController extends Controller
                           }
                         }
 
-
             }// medic
 
             else {
@@ -739,7 +738,7 @@ class LoginController extends Controller
                          {
                           $user_dest=$tech;
                           foreach ($dossiers as $doss) {
-                              Log::info("affectation automatique ligne 725 de".$iduser. "  vers". $user_dest);
+                         //     Log::info("affectation automatique ligne 725 de".$iduser. "  vers". $user_dest);
                             $doss->update(array('affecte' => $user_dest, 'statut' => 2));
                             $this->migration_miss($doss->id,$user_dest);
                             $this->migration_notifs($doss->id,$user_dest);

@@ -184,10 +184,20 @@
 
  $debut=$seance->debut;
  $fin=$seance->fin;
- setlocale(LC_TIME,'fr_FR','french','French_France.1252','fr_FR.ISO8859-1','fra');
 
- $date=date('l d/m/Y');
- $date=date('d/m/Y');
+ $month = date('m');
+ $year = date('Y');
+ $date = date('d');
+ $fmt = new IntlDateFormatter('fr_FR',
+     IntlDateFormatter::FULL,
+     IntlDateFormatter::NONE,
+     'Europe/Paris',
+     IntlDateFormatter::GREGORIAN);
+ //	$date=date('l A d/m/Y');
+ $d1 = mktime(0, 0, 0, $month , $date, $year);
+
+ $sd1 =  $fmt->format($d1);
+
  ?>
  <script src="{{  URL::asset('public/js/jquery-1.11.1.min.js') }}" type="text/javascript"></script>
 
@@ -205,7 +215,7 @@
 </div>
 <div class="col-md-6" style="padding:80px 50px 80px 50px">
     <h1>Bienvenue <B style="color:#5D9CEC"><?php echo  $name .' '. $lastname; ?></B></h1>
-	<h4>Nous sommes le <b><?php echo $date; ?></b></h4>
+	<h4>Nous sommes le <b><?php echo $sd1; ?></b></h4>
 
 <h5>Sélectionnez votre/vos rôle(s) pendant cette séance :</h5>
     <small> (Cliquez sur un rôle attribué pour le demander)</small><br><br><br>

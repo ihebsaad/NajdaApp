@@ -2779,7 +2779,7 @@ class ActionController extends Controller
         case intval(29): //29 "Recherche de vehicule avec coordonnees GPS"
         return $this->Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
-         case intval(30):// 30 "Recap frais engagés"
+         case intval(28):// 30 "Recap frais engagés"
          return $this->Recap_frais_engages_DV($option,$idmiss,$idact,$iddoss,$bouton); break;
 
           case intval(24): // 24"Rapport médical"

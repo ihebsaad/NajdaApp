@@ -73,6 +73,14 @@ $seance =  DB::table('seance')
                     Affectations
                 </a>
             </div>
+
+            <div class="col-sm-2">
+                <a href="{{ route('dossiers.affectclassique') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="fas fa-lg  fa-user-tag"></span>
+                    <br>
+                    Affectation Classique
+                </a>
+            </div>
 <?php }
 ?>    </div>
 
@@ -172,7 +180,6 @@ $seance =  DB::table('seance')
         <span style="color:white;font-size:15px; ">1 Euro (€) <small>Vente</small>  =  <?php echo $euroV; ?> <small>dt</small></span>
     </div>
     </div>
-
 
 
     <div class="row">

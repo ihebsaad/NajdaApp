@@ -83,6 +83,7 @@ Route::post('/home/deconnecter', 'HomeController@deconnecter')->name('home.decon
 Route::get('/affectation/',  'AffectDossController@Interface_Affectation_DossierDispatcheur'); 
 //Route::post('/affecterDossier',  'AffectDossController@affecterDossier')->name('affectation.dossier');
 Route::post('/affecterDossier',  'DossiersController@attribution')->name('affectation.dossier');
+Route::post('dossiers/attribution2',  'DossiersController@attribution2')->name('dossiers.attribution2');
 Route::get('/getNotificationAffectationDoss/{userConnect}', 'AffectDossController@getNotificationAffectationDoss');
 
 // delegation mission
@@ -217,6 +218,7 @@ Route::post('/dossiers/rendreactif','DossiersController@rendreActif')->name('dos
 Route::get('/dossiers/inactifs','DossiersController@inactifs')->name('inactifs');
 Route::get('/dossiers/activerdossiers','DossiersController@ActiverDossiers')->name('activerdossiers');
 Route::post('/dossiers/changestatut','DossiersController@changestatut')->name('dossiers.changestatut');
+Route::get('/dossiers/affectclassique','DossiersController@affectclassique')->name('dossiers.affectclassique');
 Route::post('/ExternefileUpload/upload', 'DossiersController@uploadExterneFile')->name('Upload.ExterneFile');
 
 
@@ -590,3 +592,4 @@ Route::get('/ordremissions/pdfodmremorquage','OrdreMissionsController@pdfodmremo
 Route::post('/ordremissions/export_pdf_odmremorquage','OrdreMissionsController@export_pdf_odmremorquage')->name('ordremissions.export_pdf_odmremorquage'); 
 Route::get('/ordremissions/pdfodmmedicinternationnal','OrdreMissionsController@pdfodmmedicinternationnal')->name('ordremissions.pdfodmmedicinternationnal');
 Route::post('/ordremissions/export_pdf_odmmedicinternationnal','OrdreMissionsController@export_pdf_odmmedicinternationnal')->name('ordremissions.export_pdf_odmmedicinternationnal');
+
