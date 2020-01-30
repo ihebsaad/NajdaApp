@@ -62,7 +62,7 @@ function SstartsWith ($string, $startString)
                             <?php
                           $sujet=trim($entree['sujet']);
 
-                            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows")   ) {
+                            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") /*||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND") */  ) {
                                  $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
                             }
                                  echo $sujet;

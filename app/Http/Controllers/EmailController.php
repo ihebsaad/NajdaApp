@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+Use App\Common;
 use App\Adresse;
 use App\Boite;
 use App\Email;
@@ -427,7 +428,14 @@ class EmailController extends Controller
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=(imap_utf8($oMessage->getSubject()))  ;
+            if($oMessage->getSubject()!=''){
+                $sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;
+            }else{$sujet='aucun objet';}
+            $sujet2= $oMessage->getSubject()  ;
+
+            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+            }
 
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
              $contenu= ($oMessage->getHTMLBody(true));
@@ -552,7 +560,7 @@ class EmailController extends Controller
 
                   }
                     // Activer le dossier
-                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
+                //    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
                     // Notification::send($user, new Notif_Suivi_Doss($entree));
                   
@@ -715,7 +723,16 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-           if($oMessage->getSubject()!=''){$sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;}else{$sujet='aucun objet';}
+           if($oMessage->getSubject()!=''){
+               $sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;
+           }else{$sujet='aucun objet';}
+            $sujet2= $oMessage->getSubject()  ;
+
+
+            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+            }
+
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
                $contenubrut= $oMessage->getTextBody();
@@ -777,7 +794,7 @@ $id=0;
                     }
 
                     $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
-                 //   $sujetPreg =  strtoupper ( $sujetPreg);
+                    $sujetPreg =  strtoupper ( $sujetPreg);
                     //$sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
 
 
@@ -828,6 +845,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' => $sujet,
+                    'sujet2' => $sujet2,
                     'contenutxt'=> $contenubrut,
                     'contenu' => ($contenu),
                     'reception' => $date,
@@ -912,7 +930,7 @@ $id=0;
 
                     }
                     // Activer le dossier
-                    Dossier::where('id', $dossierid)->update(array('current_status' => 'actif'));
+                //    Dossier::where('id', $dossierid)->update(array('current_status' => 'actif'));
 
 
                 } else {
@@ -1094,7 +1112,16 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            if($oMessage->getSubject()!=''){ $sujet=strval(imap_utf8($oMessage->getSubject()));}else{$sujet='aucun objet';}
+            if($oMessage->getSubject()!=''){
+                $sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;
+            }else{$sujet='aucun objet';}
+            $sujet2= $oMessage->getSubject()  ;
+
+
+            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+            }
+
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
            $contenubrut= $oMessage->getTextBody();
@@ -1152,7 +1179,7 @@ $id=0;
                    }
 
                    $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
-                //   $sujetPreg =  strtoupper ( $sujetPreg);
+                    $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                    if ((strpos($sujetPreg, $ref) !== false) ||
@@ -1202,6 +1229,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
+                    'sujet2' =>   $sujet2 ,
                     'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
@@ -1284,7 +1312,7 @@ $id=0;
                        }
                    }
                     // Activer le dossier
-                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
+                //    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -1453,7 +1481,16 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval(imap_utf8($oMessage->getSubject()) ) ;
+            if($oMessage->getSubject()!=''){
+                $sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;
+            }else{$sujet='aucun objet';}
+            $sujet2= $oMessage->getSubject()  ;
+
+
+            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+            }
+
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
                $contenubrut= $oMessage->getTextBody();
@@ -1511,7 +1548,7 @@ $id=0;
                   }
 
                   $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
-                 // $sujetPreg =  strtoupper ( $sujetPreg);
+                   $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                   if ((strpos($sujetPreg, $ref) !== false) ||
@@ -1561,6 +1598,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
+                    'sujet2' =>   $sujet2 ,
                       'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
@@ -1642,7 +1680,7 @@ $id=0;
 
                     }
                     // Activer le dossier
-                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
+                //    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -1811,7 +1849,16 @@ $id=0;
 
             //  $nbattachs=10;
 
-            $sujet=strval(imap_utf8($oMessage->getSubject()) ) ;
+            if($oMessage->getSubject()!=''){
+                $sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;
+            }else{$sujet='aucun objet';}
+            $sujet2= $oMessage->getSubject()  ;
+
+
+            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+            }
+
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
                $contenubrut= $oMessage->getTextBody();
@@ -1850,7 +1897,7 @@ $id=0;
                   }
 
                   $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
-                //  $sujetPreg =  strtoupper ( $sujetPreg);
+                 $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                   if ((strpos($sujetPreg, $ref) !== false) ||
@@ -1901,6 +1948,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
+                    'sujet2' =>   $sujet2 ,
                       'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
@@ -1982,7 +2030,7 @@ $id=0;
                         }
                     }
                     // Activer le dossier
-                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
+                //    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -2145,7 +2193,16 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval(imap_utf8($oMessage->getSubject()) ) ;
+            if($oMessage->getSubject()!=''){
+                $sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;
+            }else{$sujet='aucun objet';}
+            $sujet2= $oMessage->getSubject()  ;
+
+
+            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+            }
+
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
                $contenubrut= $oMessage->getTextBody();
@@ -2205,7 +2262,7 @@ $id=0;
                     }
 
                     $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
-                //    $sujetPreg =  strtoupper ( $sujetPreg);
+                     $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                     if ((strpos($sujetPreg, $ref) !== false) ||
@@ -2256,7 +2313,8 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
-                       'contenutxt'=> $contenubrut,
+                    'sujet2' =>   $sujet2 ,
+                    'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -2333,7 +2391,7 @@ $id=0;
                         }
                     }
                     // Activer le dossier
-                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
+                 //   Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -2497,7 +2555,15 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval(imap_utf8($oMessage->getSubject()))  ;
+            if($oMessage->getSubject()!=''){
+                $sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;
+            }else{$sujet='aucun objet';}
+            $sujet2= $oMessage->getSubject()  ;
+
+            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+            }
+
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
                $contenubrut= $oMessage->getTextBody();
@@ -2557,7 +2623,7 @@ $id=0;
                     }
 
                     $sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
-                 //   $sujetPreg =  strtoupper ( $sujetPreg);
+                    $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                     if ((strpos($sujetPreg, $ref) !== false) ||
@@ -2609,7 +2675,8 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
-                       'contenutxt'=> $contenubrut,
+                    'sujet2' =>   $sujet2 ,
+                    'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
                     'nb_attach'=> $nbattachs,
@@ -2685,7 +2752,7 @@ $id=0;
                         }
                     }
                     // Activer le dossier
-                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
+                 //   Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -2849,7 +2916,16 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-          if($oMessage->getSubject()!=''){ $sujet=strval(imap_utf8($oMessage->getSubject()));}else{$sujet='aucun objet';}
+            if($oMessage->getSubject()!=''){
+                $sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;
+            }else{$sujet='aucun objet';}
+            $sujet2= $oMessage->getSubject()  ;
+
+
+            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+            }
+
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
                $contenubrut= $oMessage->getTextBody();
@@ -2910,7 +2986,7 @@ $id=0;
                     }
 
                     $sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
-                 //   $sujetPreg =  strtoupper ( $sujetPreg);
+                   $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                     if ((strpos($sujetPreg, $ref) !== false) ||
@@ -2962,6 +3038,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
+                    'sujet2' =>   $sujet2 ,
                       'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
@@ -3040,7 +3117,7 @@ $id=0;
                         }
                     }
                     // Activer le dossier
-                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
+                //    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -3204,7 +3281,17 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval(imap_utf8($oMessage->getSubject()) ) ;
+            if($oMessage->getSubject()!=''){
+                $sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;
+            }else{$sujet='aucun objet';}
+            $sujet2= $oMessage->getSubject()  ;
+
+
+            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+            }
+
+
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
               $contenubrut= $oMessage->getTextBody();
@@ -3261,7 +3348,7 @@ $id=0;
                     }
 
                     $sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
-                 //   $sujetPreg =  strtoupper ( $sujetPreg);
+                    $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                     if ((strpos($sujetPreg, $ref) !== false) ||
@@ -3313,6 +3400,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
+                    'sujet2' =>   $sujet2 ,
                      'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
@@ -3392,7 +3480,7 @@ $id=0;
                         }
                     }
                     // Activer le dossier
-                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
+                //    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -3562,7 +3650,16 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval(imap_utf8($oMessage->getSubject()))  ;
+            if($oMessage->getSubject()!=''){
+                $sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;
+            }else{$sujet='aucun objet';}
+            $sujet2= $oMessage->getSubject()  ;
+
+
+            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+            }
+
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
             $contenu= $oMessage->getHTMLBody(true);
               $contenubrut= $oMessage->getTextBody();
@@ -3621,7 +3718,7 @@ $id=0;
                     }
 
                     $sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
-                //    $sujetPreg =  strtoupper ( $sujetPreg);
+                     $sujetPreg =  strtoupper ( $sujetPreg);
 
 
                     if ((strpos($sujetPreg, $ref) !== false) ||
@@ -3671,6 +3768,7 @@ $id=0;
 
                     'emetteur' => ($from),
                     'sujet' =>   $sujet ,
+                    'sujet2' =>   $sujet2 ,
                       'contenutxt'=> $contenubrut,
                     'contenu'=>  ($contenu) ,
                     'reception'=> $date,
@@ -3750,7 +3848,7 @@ $id=0;
                         }
                     }
                     // Activer le dossier
-                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
+                 //   Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }
@@ -3914,7 +4012,15 @@ $id=0;
         foreach ($aMessage as $oMessage) {
             //  $nbattachs=10;
 
-            $sujet=strval(imap_utf8($oMessage->getSubject()) ) ;
+            if($oMessage->getSubject()!=''){
+                $sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;
+            }else{$sujet='aucun objet';}
+            $sujet2= $oMessage->getSubject()  ;
+
+            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+            }
+
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
              $contenu= $oMessage->getHTMLBody(true);
             $contenubrut= $oMessage->getTextBody();
@@ -4029,7 +4135,15 @@ $id=0;
             foreach ($aMessage as $oMessage) {
 
                 //$sujet=strval($oMessage->getSubject())  ;
-                $sujet=$oMessage->getSubject()  ;
+                if($oMessage->getSubject()!=''){
+                    $sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;
+                }else{$sujet='aucun objet';}
+                $sujet2= $oMessage->getSubject()  ;
+
+
+                if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                    $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+                }
 
                 //$contenu= $oMessage->getHTMLBody(true);
                 $contenu= $oMessage->getTextBody();
@@ -4151,7 +4265,7 @@ $id=0;
                       }
 
                         // Activer le dossier
-                        Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
+                    //    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                     }
@@ -4231,7 +4345,16 @@ $id=0;
         foreach ($aMessage as $oMessage) {
 
 
-            $sujet=strval(imap_utf8($oMessage->getSubject()) ) ;
+            if($oMessage->getSubject()!=''){
+                $sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;
+            }else{$sujet='aucun objet';}
+            $sujet2= $oMessage->getSubject()  ;
+
+
+            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+            }
+
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
            // $contenu= $oMessage->getHTMLBody(true);
             $contenu= $oMessage->getTextBody();
@@ -4352,7 +4475,7 @@ $id=0;
                     }
 
                     // Activer le dossier
-                    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
+                //    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
 
 
                 }

@@ -7,7 +7,7 @@
 use App\Tag ;
 use App\Dossier ;
 use App\Notification ;
-$dossiers = Dossier::get();
+//$dossiers = Dossier::get();
 Use App\Common;
 
 
@@ -37,7 +37,7 @@ use App\Http\Controllers\NotificationsController;
                         <div  style=" padding-left: 0px;color:black;font-weight: bold ;">
                             <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet'];
 
-                                if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows")   ) {
+                            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
                                     $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
                                 }
 
@@ -83,16 +83,29 @@ use App\Http\Controllers\NotificationsController;
         <div id="emailhead" class="panel-collapse collapse in" aria-expanded="true" style="">
             <div class="panel-body">
                 <div class="row" id="displine" style="padding-left:30px;padding-bottom:15px;padding-top:15px;background-color: #F9F9F8 ">
-                     <B> Dossier : </B>
-                    <select id ="affdoss"  class="form-control " style="width: 150px;color:black!important;">
+                  <div class="col-md-3">
+                      <B> Dossier : </B>
+                      <section><select id ="affdoss"  class="form-control " style="width: 150px;color:black!important;">
+                        <option></option>
+                        <?php foreach($dossiers as $ds)
+
+                        {
+                            echo '<option style="color:black!important" title="'.$ds->id.'" value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
+                          </select></section>
+                  </div>
+                    <div class="col-md-3">
+
+                    <select id ="affdoss2"  class="form-control " style="margin-left:100px;width: 150px;color:black!important;">
                         <option></option>
                         <?php foreach($dossiers as $ds)
 
                         {
                             echo '<option style="color:black!important" title="'.$ds->id.'" value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
                     </select>
-                       <button style="margin-left:35px" type="button" id="updatefolder" onclick="document.getElementById('updatefolder').disabled=true" class="btn btn-primary">Dispatcher</button>
-
+                    </div>
+                    <div class="col-md-3">
+                    <button style="margin-left:35px" type="button" id="updatefolder" onclick="document.getElementById('updatefolder').disabled=true" class="btn btn-primary">Dispatcher</button>
+                    </div>
                 </div>
                 <div class="row" style="font-size:12px;">
                     <div class="col-sm-5 col-md-5 col-lg-5" style=" padding-top: 4px; ">
@@ -367,7 +380,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
       </script>
 
 
-<!-- Modal -->
+<!-- Modal
 <div class="modal fade" id="affectfolder"    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -405,7 +418,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
         </div>
     </div>
 </div>
-
+-->
 <!-- Modal -->
 <div class="modal fade" id="createfolder"    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
@@ -607,7 +620,9 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         $('#updatefolder').click(function(){
             var entree = $('#entreeid').val();
             var dossier = $('#affdoss').val();
+            var dossier2 = $('#affdoss2').val();
             var iddossier = $('#affdoss').find("option:selected").attr("title");
+            var iddossier2 = $('#affdoss').find("option:selected").attr("title");
 
             var _token = $('input[name="_token"]').val();
             if(dossier!='')
@@ -622,8 +637,27 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                 }
             });
 
-            }else{alert('Sélectionnez un dossier');
-                document.getElementById('updatefolder').disabled=false;
+            }else{
+
+                if(dossier2!='')
+                {
+                    $.ajax({
+                        url:"{{ route('entrees.dispatchf2') }}",
+                        method:"POST",
+                        data:{entree:entree,dossier:dossier2,iddossier:iddossier2, _token:_token},
+                        success:function(data){
+                            window.location =data;
+
+                        }
+                    });
+                }
+                else{
+                    alert('Sélectionnez un dossier');
+                    document.getElementById('updatefolder').disabled=false;
+
+                }
+
+
             }
 
         });

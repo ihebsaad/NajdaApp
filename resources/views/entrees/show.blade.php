@@ -44,7 +44,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                         <div  style=" padding-left: 0px;color:black;font-weight: bold ;">
                             <h4 class="panel-title  " > <label for="sujet" style=" ;font-size: 15px;">Sujet :</label>  <?php $sujet=$entree['sujet'];
 
-                                if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows")   ) {
+                            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
                                     $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
                                 }
                                 echo $sujet;
@@ -181,7 +181,17 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                                             <?php  $replace=  array('<B class="invoice">facture</B>','<B class="invoice">invoice</B>','<B class="invoice">facturation</B>','<B class="invoice">invoicing</B>','<B class="invoice">plafond</B>','<B class="invoice">max</B>','<B class="invoice">maximum</B>'); ?>
 
                                             <?php  $cont=  str_replace($search,$replace, $content); ?>
-                                              <?php  echo $cont; ?></p>
+                                   <?php
+
+                                   echo $cont.'<br><br>';
+
+                                   if($entree['type']== "tel")
+                                   {
+                                   echo '<b>Média : </b>'. $entree['contenutxt'].'<br>';
+                                   echo '<b>Description : </b>'. $entree['commentaire'].'<br>';
+                                   }
+
+                                  ?></p>
                                </section>
 
                            <?php } ?>

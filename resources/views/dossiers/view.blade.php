@@ -23,6 +23,18 @@ function formatBytes($size){
     $f_base = floor($base);
     return round(pow(1024, $base - floor($base)), 1) . $suffix[$f_base];
 }
+function custom_echo($x, $length)
+{
+    if(strlen($x)<=$length)
+    {
+        echo $x;
+    }
+    else
+    {
+        $y=substr($x,0,$length) . '..';
+        echo $y;
+    }
+}
 
 
 ?>
@@ -750,11 +762,12 @@ function formatBytes($size){
                     <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
                         <thead>
                         <tr id="headtable">
-                            <th style="width:10%">Numéro</th>
-                            <th style="width:20%">Prestataire</th>
-                            <th style="width:20%">Type</th>
-                            <th style="width:20%">Spécialité</th>
-                            <th style="width:15%">Gouvernorat</th>
+                            <th style="width:10%">ID</th>
+                            <th style="width:10%">Date</th>
+                            <th style="width:15%">Prestataire</th>
+                            <th style="width:20%">Prestation</th>
+                            <th style="width:15%">Spécialité</th>
+                            <th style="width:20%">Détails</th>
                             @can('isAdmin')<th style="width:10%">Actions</th>@endcan
                         </tr>
 
@@ -772,21 +785,27 @@ function formatBytes($size){
                                     <a href="{{action('PrestationsController@view', $prestation['id'])}}" >
                                         <?php  echo $prestation['id']  ; ?>
                                     </a></td>
-                                <td style="width:20%">
-                                    <?php $prest= $prestation['prestataire_id'];
-                                    echo PrestationsController::PrestataireById($prest);  ?>
+
+                                <td style="width:10%">
+                                    <?php echo $prestation['date_prestation'] ; ?>
                                 </td>
-                                <td style="width:20%;">
+                                <td style="width:20%">
+                                    <?php $prest= $prestation['prestataire_id']; ?>
+                                    <a  href="{{action('PrestatairesController@view', $prest)}}" ><?php echo PrestationsController::PrestataireById($prest);  ?>
+                                    </a>
+                                </td>
+                                <td style="width:15%;">
                                     <?php $typeprest= $prestation['type_prestations_id'];
                                     echo PrestationsController::TypePrestationById($typeprest);  ?>
                                 </td>
-                                <td style="width:20%;">
+                                <td style="width:15%;">
                                     <?php $specialite= $prestation['specialite'];
                                     echo PrestationsController::SpecialiteById($specialite);  ?>
                                 </td>
-                                <td style="width:15%;">
-                                    <?php $gouvernorat= $prestation['gouvernorat'];
-                                    echo PrestationsController::GouvById($gouvernorat);  ?>
+                                <td style="width:20%;">
+                                <?php $details= $prestation['details'];
+                                  custom_echo($details ,20);
+                                ?>
                                 </td>
                                 @can('isAdmin')   <td style="width:10%;"><a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('PrestationsController@destroy', $prestation->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span>
@@ -807,7 +826,7 @@ function formatBytes($size){
                    <div class="col-md-4"><a   style="margin-top:15px" class="pull-right btn btn-md btn-default"   href="{{route('prestataires.create',['id'=>$dossier->id])}}" ><b><i class="fas fa-plus"></i> Ajouter un Nouvel Intervenant</b></a></div>
                    <div class="col-md-4"><button   style="margin-top:15px" id="" class="pull-right btn btn-md btn-success"   data-toggle="modal" data-target="#insererprest"><b><i class="fas fa-plus"></i>  Insérer un Intervenant </b></button></div>
                </div>
-<br><B> Intervenants qui ont effectué de(s) prestation(s) </B>
+            <br><B> Intervenants qui ont effectué de(s) prestation(s) </B>
                <table class="table table-striped" id="mytable3" style="width:100%;margin-top:15px;">
                    <thead>
                    <tr class="headtable">
@@ -2603,13 +2622,30 @@ array_push($listepr,$pr['prestataire_id']);
                         -->
                         <div class="form-group">
                             <label for="emetteur">Interlocuteur :</label>
-                            <input type="text"    id="emetteur"   class="form-control" name="emetteur"    ></textarea>
+                            <input type="text"    id="emetteur"   class="form-control" name="emetteur"    />
 
                         </div>
 
                         <div class="form-group">
-                            <label for="sujet">Contenu :</label>
-                            <textarea style="overflow:scroll;" id="contenucr"   class="form-control" name="contenucr"    ></textarea>
+                            <label for="sujet">Média :</label>
+                            <select  id="mediacr"   class="form-control" name="mediacr"    >
+                                <option value="Tel">Tel</option>
+                                <option value="Email">Email</option>
+                                <option value="Fax">Fax</option>
+                                <option value="Poste">Poste</option>
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sujet">Contenu *:</label>
+                            <textarea style="height:100px;" id="contenucr"   class="form-control" name="contenucr"    ></textarea>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sujet">Description :</label>
+                            <input style="overflow:scroll;" id="descriptioncr"   class="form-control" name="descriptioncr"    />
 
                         </div>
 
@@ -4202,19 +4238,26 @@ function toggle(className, displayState){
             var refdossier = document.getElementById('refdossier').value;
             var contenu = document.getElementById('contenucr').value;
             var emetteur = document.getElementById('emetteur').value;
+            var media = document.getElementById('mediacr').value;
+            var description = document.getElementById('descriptioncr').value;
+            if(contenu != ''){
+                $.ajax({
+                    url: "{{ route('entrees.ajoutcompter') }}",
+                    method: "POST",
+                    data: { emetteur:emetteur, dossier:dossier,refdossier:refdossier,contenu:contenu, media:media,description:description, _token: _token},
 
-            $.ajax({
-                url: "{{ route('entrees.ajoutcompter') }}",
-                method: "POST",
-                data: { emetteur:emetteur, dossier:dossier,refdossier:refdossier,contenu:contenu,  _token: _token},
+                    success: function (data) {
+                        alert('Ajouté avec succès');
+                        $('#crendu').modal('hide');
+                        //     $('#crendu').modal({show: false});
 
-                success: function (data) {
-                    alert('Ajouté avec succès');
-                    $('#crendu').modal('hide');
-                    //     $('#crendu').modal({show: false});
+                    }
+                });
 
-                }
-            });
+            }else{
+                alert('le contenu est obligatoire !');
+            }
+
 
 
         }); //end click

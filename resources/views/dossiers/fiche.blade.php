@@ -2415,8 +2415,25 @@ use  \App\Http\Controllers\PrestatairesController;
                     </div>
 
                     <div class="form-group">
-                        <label for="sujet">Contenu :</label>
-                        <textarea style="overflow:scroll;" id="contenucr"   class="form-control" name="contenucr"    ></textarea>
+                        <label for="sujet">Média :</label>
+                        <select  id="mediacr"   class="form-control" name="mediacr"    >
+                            <option value="Tel">Tel</option>
+                            <option value="Email">Email</option>
+                            <option value="Fax">Fax</option>
+                            <option value="Poste">Poste</option>
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sujet">Contenu *:</label>
+                        <textarea style="height:100px;" id="contenucr"   class="form-control" name="contenucr"    ></textarea>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sujet">Description :</label>
+                        <input style="overflow:scroll;" id="descriptioncr"   class="form-control" name="descriptioncr"    />
 
                     </div>
 
@@ -2916,22 +2933,28 @@ function disabling(elm) {
             var refdossier = document.getElementById('refdossier').value;
             var contenu = document.getElementById('contenucr').value;
             var emetteur = document.getElementById('emetteur').value;
+            var media = document.getElementById('mediacr').value;
+            var description = document.getElementById('descriptioncr').value;
+            if(contenu != ''){
+                $.ajax({
+                    url: "{{ route('entrees.ajoutcompter') }}",
+                    method: "POST",
+                    data: { emetteur:emetteur, dossier:dossier,refdossier:refdossier,contenu:contenu, media:media,description:description, _token: _token},
 
-            $.ajax({
-                url: "{{ route('entrees.ajoutcompter') }}",
-                method: "POST",
-                data: { emetteur:emetteur, dossier:dossier,refdossier:refdossier,contenu:contenu,  _token: _token},
+                    success: function (data) {
+                        alert('Ajouté avec succès');
+                        $('#crendu').modal('hide');
+                        //     $('#crendu').modal({show: false});
 
-                success: function (data) {
-                    alert('Ajouté avec succès');
-                    $('#crendu').modal('hide');
-                    //     $('#crendu').modal({show: false});
+                    }
+                });
 
-                }
-            });
-
+            }else{
+                alert('le contenu est obligatoire !');
+            }
 
         }); //end click
+
 
 
         // fermerdossier

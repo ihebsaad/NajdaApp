@@ -201,7 +201,7 @@ class EntreesController extends Controller
 
     public function showdisp($id)
     {
-        $dossiers = Dossier::all();
+        $dossiers = Dossier::orderBy('created_at', 'desc')->get();
         $entree = Entree::find($id);
         if ($entree->viewed==0 )
         {
@@ -249,7 +249,15 @@ class EntreesController extends Controller
 
         $entree = Entree::find($id);
          $entree->statut = 3;  // 3 = archivé
+
           $entree->save();
+
+        $par=Auth::id();
+        $user = User::find($par);
+        $nomuser = $user->name ."".$user->lastname ;
+
+        Log::info('Archivage Email - Par :'.$nomuser );
+
 
         return redirect('/entrees/dispatching')->with('success', '  Archivé');
     }
@@ -308,6 +316,14 @@ class EntreesController extends Controller
         $notif=Notif::where('entree',$id)->first();
         if(isset ($notif)) { $notif->delete();}
 
+        $par=Auth::id();
+        $user = User::find($par);
+
+        $nomuser=$user->name.' '.$user->lastname;
+
+        Log::info('Suppression Email - Par :'.$nomuser );
+
+
         return redirect('/entrees/dispatching')->with('success', '  Supprimé');
     }
 
@@ -320,12 +336,19 @@ class EntreesController extends Controller
         $notif=Notif::where('entree',$id)->first();
       if(isset ($notif)) { $notif->delete();}
 
+        $par=Auth::id();
+        $user = User::find($par);
+
+        $nomuser=$user->name.' '.$user->lastname;
+
+        Log::info('Suppression Email - Par :'.$nomuser );
+
         return redirect('/entrees')->with('success', '  Supprimé');
     }
 
     public static function countarchives()
     {
-        $par=Auth::id();
+
 
         $count = DB::table('entrees')
             ->where('statut','=',3)
@@ -605,6 +628,8 @@ class EntreesController extends Controller
         $contenu=$request->get('contenu') ;
         $refdoss=$request->get('refdossier') ;
         $emetteur=$request->get('emetteur') ;
+        $description=$request->get('description') ;
+        $media=$request->get('media') ;
 
        // $refdoss = app('App\Http\Controllers\DossiersController')->RefDossierById($iddossier);
 
@@ -633,6 +658,8 @@ class EntreesController extends Controller
             'viewed'=>0,
             'dossier'=>$refdoss,
             'dossierid'=>$iddossier,
+            'commentaire'=>$description,
+            'contenutxt'=>$media,
 
         ]);
 
