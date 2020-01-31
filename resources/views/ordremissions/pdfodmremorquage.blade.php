@@ -230,14 +230,14 @@ if (isset($_POST['CB_prerades'])) {if ($_POST['CB_prerades'] === "oui"||($_POST[
 <?php if (isset($_POST['affectea'])) { if (($_POST['affectea'] === "interne") || ($_POST['affectea'] === "mmentite")) { ?>						
 <div id="prestinterne" >
 					<p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; padding-bottom:1pt; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; ">&#xa0;</span></p><p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;border-top: 1.5pt solid #000000;padding-top:10px"><span style="font-family:'Times New Roman'; font-weight:bold">Origine de la demande: </span><span style="font-family:'Times New Roman'; font-weight:bold; ">
-<span style="font-family:'Times New Roman'"><?php if (isset($_POST['client_dossier'])) { echo $_POST['client_dossier']; } ?></span></span><span style="font-family:'Times New Roman'; font-weight:bold">   Date demande: </span>
+<span style="font-family:'Times New Roman'"><?php if (isset($client_dossier)) { echo $client_dossier; }  if (!(isset($client_dossier)) && isset($_POST['client_dossier']) ) { echo $_POST['client_dossier']; } ?></span></span><span style="font-family:'Times New Roman'; font-weight:bold">   Date demande: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_datedemande'])) { echo $_POST['CL_datedemande']; } ?></span>
 						<span style="font-family:'Times New Roman'; font-weight:bold"> Heure: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_heuredemande'])) { echo $_POST['CL_heuredemande']; } ?></span>
 						<span style="font-family:'Times New Roman'; font-weight:bold">  </span></p><p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; border-bottom:1.5pt solid #000000; padding-bottom:10px; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Notre réf.</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($reference_medic2) ){ echo $reference_medic2; }  if ((isset($_POST['reference_medic2'])) && (! isset($reference_medic2))) { echo $_POST['reference_medic2']; } ?></span>
 							<span style="font-family:'Times New Roman'; font-weight:bold">   Réf. client: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($_POST['reference_customer'])) { echo $_POST['reference_customer']; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($reference_customer)) { echo $reference_customer; }  if (!(isset($reference_customer)) && isset($_POST['reference_customer'])) { echo $_POST['reference_customer']; } ?></span>
 						</p>
 </div>
 

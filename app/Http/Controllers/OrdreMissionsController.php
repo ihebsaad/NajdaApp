@@ -20,12 +20,23 @@ use App\OMMedicInternational;
 use App\OMMedicEquipement;
 use App\Mission;
 use App\Dossier;
+use App\Adresse;
+use App\Client; //modification nouveau dossier 
+use App\Prestation;
 
 
 class OrdreMissionsController extends Controller
 {
 	public function export_pdf_odmtaxi(Request $request)
     {
+        
+        // efface disponibilite dans l'OM parent
+         if (isset($_POST['parent']) && ! empty($_POST['parent']))
+			{
+				$parent = $_POST['parent'];
+				OMTaxi::where('id', $parent)->update(['idvehic' => "",'idchauff' => ""]);
+			}
+
         // verifier si remplacement ou annule
         if (isset($_POST['parent']) && (! empty($_POST['parent'])))
         {
@@ -171,14 +182,32 @@ class OrdreMissionsController extends Controller
 
 			// affectation en interne om privée meme entitee <hs change>
         	if ($_POST['affectea'] === "mmentite")
-        	{
+        	{$typep=2;
         		$iddossom= $_POST["dossdoc"];
         		//$dossierom=Dossier::where('id', $iddossom)->first();
         		$dossierom= Dossier::where('id', $iddossom)->select('type_affectation')->first();
         		$prestataireom=$dossierom['type_affectation'];
     			
     			 if (isset($prestataireom))
-			        {
+			        {if($prestataireom=="Transport VAT")
+        	{
+        		$prest=625;
+        	}
+        	if($prestataireom=="Transport MEDIC")
+        	{
+        		$prest=144;
+        	}
+        	if($prestataireom=="Transport Najda")
+        	{
+        		$prest=933;
+        	}
+        			$prestation = new Prestation([
+                   'prestataire_id' => $prest,
+                      'dossier_id' => $iddossom,
+                    'type_prestations_id' => $typep,
+                    'effectue' => 1
+            ]);
+        			$prestation->save();
 			        	// changer le var post
 			        	$reqmmentite = new \Illuminate\Http\Request();
 	                    $reqmmentite->request->add(['prestataire_taxi' => $prestataireom]);
@@ -273,10 +302,30 @@ class OrdreMissionsController extends Controller
         {
         	// affectation en interne
         	if ($_POST['affectea'] === "interne")
-        	{
+        	{$typep=2;
         		// creation om pour le dossier courant
         		if (isset($_POST["type_affectation"]))
-        		{
+        		{if(!(isset($_POST['type_affectation_post'])))
+                        
+        		{if($_POST["type_affectation"]=="Transport VAT")
+        	{
+        		$prest=625;
+        	}
+        	if($_POST["type_affectation"]=="Transport MEDIC")
+        	{
+        		$prest=144;
+        	}
+        	if($_POST["type_affectation"]=="Transport Najda")
+        	{
+        		$prest=933;
+        	}
+        			$prestation = new Prestation([
+                   'prestataire_id' => $prest,
+                      'dossier_id' => $iddoss,
+                    'type_prestations_id' => $typep,
+                    'effectue' => 1
+            ]);
+        			$prestation->save();}
         			$prestomtx = $_POST["type_affectation"];
         			$omtaxi = OMTaxi::create(['prestataire_taxi'=>$prestomtx,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         		} else {
@@ -289,10 +338,14 @@ class OrdreMissionsController extends Controller
         		$subscriber_name_ =$_POST['subscriber_name'];
         		$subscriber_lastname_ =$_POST['subscriber_lastname'];
 $cnctagent = Auth::id();
+$adressDossier = Adresse::where('parent',$iddoss)
+            ->get();
+$Dossier = Dossier::where('id',$iddoss)
+            ->first();
 
 				/*$arequest->request->add(['name' => $subscriber_name_]);
 				$arequest->request->add(['lastname' => $subscriber_lastname_]);*/
-				$arequest->request->add(['type_dossier' => 'Technique']);
+				$arequest->request->add(['type_dossier' => 'Transport']);
 
 				// entree de creation est 0
 				$arequest->request->add(['entree' => 0]);
@@ -334,6 +387,51 @@ $reqsublname->request->add(['dossier' => $iddnew]);
 				$reqsublname->request->add(['champ' => 'subscriber_lastname']);
 				$reqsublname->request->add(['val' => $subscriber_lastname_]);
 				app('App\Http\Controllers\DossiersController')->updating($reqsublname);
+				$reqsubltype = new \Illuminate\Http\Request();
+$reqsubltype->request->add(['dossier' => $iddnew]);
+				$reqsubltype->request->add(['champ' => 'vehicule_type']);
+				$reqsubltype->request->add(['val' => $Dossier['vehicule_type']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsubltype);
+				$reqsublmarque = new \Illuminate\Http\Request();
+$reqsublmarque->request->add(['dossier' => $iddnew]);
+				$reqsublmarque->request->add(['champ' => 'vehicule_marque']);
+				$reqsublmarque->request->add(['val' => $Dossier['vehicule_marque']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublmarque);
+	            $reqsublimmatriculation = new \Illuminate\Http\Request();
+$reqsublimmatriculation->request->add(['dossier' => $iddnew]);
+				$reqsublimmatriculation->request->add(['champ' => 'vehicule_immatriculation']);
+				$reqsublimmatriculation->request->add(['val' => $Dossier['vehicule_immatriculation']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublimmatriculation);
+                $reqsublishospitalized = new \Illuminate\Http\Request();
+$reqsublishospitalized->request->add(['dossier' => $iddnew]);
+				$reqsublishospitalized->request->add(['champ' => 'is_hospitalized']);
+				$reqsublishospitalized->request->add(['val' => $Dossier['is_hospitalized']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublishospitalized);
+                $reqsublchambrehoptial = new \Illuminate\Http\Request();
+$reqsublchambrehoptial->request->add(['dossier' => $iddnew]);
+				$reqsublchambrehoptial->request->add(['champ' => 'chambre_hoptial']);
+				$reqsublchambrehoptial->request->add(['val' => $Dossier['chambre_hoptial']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublchambrehoptial);
+                $reqsublhospitaladdress = new \Illuminate\Http\Request();
+$reqsublhospitaladdress->request->add(['dossier' => $iddnew]);
+				$reqsublhospitaladdress->request->add(['champ' => 'hospital_address']);
+				$reqsublhospitaladdress->request->add(['val' => $Dossier['hospital_address']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublhospitaladdress);
+				$reqsublhospitaladdress2 = new \Illuminate\Http\Request();
+$reqsublhospitaladdress2->request->add(['dossier' => $iddnew]);
+				$reqsublhospitaladdress2->request->add(['champ' => 'autre_hospital_address']);
+				$reqsublhospitaladdress2->request->add(['val' => $Dossier['autre_hospital_address']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublhospitaladdress2);
+				$reqsublmedecintraitant = new \Illuminate\Http\Request();
+$reqsublmedecintraitant->request->add(['dossier' => $iddnew]);
+				$reqsublmedecintraitant->request->add(['champ' => 'medecin_traitant']);
+				$reqsublmedecintraitant->request->add(['val' => $Dossier['medecin_traitant']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublmedecintraitant);
+				$reqsublmedecintraitant2 = new \Illuminate\Http\Request();
+$reqsublmedecintraitant2->request->add(['dossier' => $iddnew]);
+				$reqsublmedecintraitant2->request->add(['champ' => 'medecin_traitant2']);
+				$reqsublmedecintraitant2->request->add(['val' => $Dossier['medecin_traitant2']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublmedecintraitant2);
 
 				// affecte dossier au agent qui le cree
 				$reqaffectea = new \Illuminate\Http\Request();
@@ -387,7 +485,8 @@ $reqlieup->request->add(['dossier' => $iddnew]);
                 {
                     $reqrefc = new \Illuminate\Http\Request();
                     //$refcustomer = $_POST["reference_customer"];
-                    $refcustomer = $dossparent["reference_medic"];
+                   // $refcustomer = $dossparent["reference_medic"];
+                    $refcustomer = 'ES'.$dossparent["reference_medic"];
 $reqrefc->request->add(['dossier' => $iddnew]);
                     $reqrefc->request->add(['champ' => 'reference_customer']);
                     $reqrefc->request->add(['val' => $refcustomer]);
@@ -495,6 +594,21 @@ $reqprestaxi->request->add(['dossier' => $iddnew]);
 					$reqprestaxi->request->add(['val' => $prestataire_taxi]);
 					app('App\Http\Controllers\DossiersController')->updating($reqprestaxi	);
 				}
+				foreach ($adressDossier as $adress ) {
+                $newadress = new Adresse([
+                'champ' => $adress ["champ"],
+                'nom' =>   $adress ["nom"],
+                'prenom' => $adress ["prenom"],
+                'fonction' =>$adress ["fonction"],
+                 'mail' => $adress ["mail"],
+                 'remarque' =>$adress ["remarque"],
+                'nature' => $adress ["nature"],
+                'tel' => $adress ["tel"],
+                'typetel' => $adress ["typetel"],
+                'parent' => $iddnew,
+                ]);
+                $newadress->save();
+                }
 				// recuperation de reference de nouveau dossier et la changer dans request
 				$dossnouveau=Dossier::where('id', $iddossnew)->select('reference_medic')->first();
 				if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
@@ -511,6 +625,46 @@ $reqprestaxi->request->add(['dossier' => $iddnew]);
 
 
 				}
+				if(isset($typeaffect) && ! empty($typeaffect))
+                {$emispar="najda";
+                	
+                	if($typeaffect==="VAT"||$typeaffect==="Transport VAT")
+                	{
+                		$emispar="vat";
+                	}	
+                	if($typeaffect==="Medic International")
+                	{
+                		$emispar="medici";
+                	}
+                	if($typeaffect==="MEDIC"||$typeaffect==="Transport MEDIC")
+                		{
+                		$emispar="medicm";
+                	    }
+                	
+                	$requestData['emispar'] = $emispar;
+                }
+                $dossnouveau1=Dossier::where('id', $iddossnew) ->first();
+                if (isset($dossnouveau1["customer_id"]) && ! (empty($dossnouveau1["customer_id"])))
+				{
+					$ncustomer=$dossnouveau1["customer_id"];
+                    $Clientdoss=CLient::where('id', $ncustomer)->first();
+
+					$client_dossier=$Clientdoss['name'];
+					$requestData['client_dossier'] = $client_dossier;
+
+
+
+
+				}
+				if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
+				{
+					$reference_customer=$dossnouveau1["reference_customer"];
+                    $requestData['reference_customer'] = $reference_customer;
+
+
+
+
+				}
 					if (isset($requestData))
 					{
 						/*$omn = new OrdreMission();
@@ -519,7 +673,7 @@ $reqprestaxi->request->add(['dossier' => $iddnew]);
 
 						$nresponse = $nrequest->send();*/
 					// duplication de lom dans le nouveau dossier
-					$pdf2 = PDF4::loadView('ordremissions.pdfodmtaxi',['reference_medic' => $nref, 'reference_medic2' => $nref])->setPaper('a4', '');
+					$pdf2 = PDF4::loadView('ordremissions.pdfodmtaxi',['reference_medic' => $nref, 'reference_medic2' => $nref, 'emispar' => $emispar,'client_dossier' => $client_dossier, 'reference_customer' => $reference_customer])->setPaper('a4', '');
 					}
 					else
 					{
@@ -556,11 +710,21 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
 				if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
 				{$result2 = $omtaxi2->update($requestData);}
 		        else { $result2 = $omtaxi2->update($request->all()); }
+		           if(isset($typeaffect)&& !(empty($typeaffect)))
+               {$result3 = $omtaxi2->update($requestData);}
+               else { $result3 = $omtaxi2->update($request->all()); }
+               if (isset($dossnouveau1["customer_id"]) && ! (empty($dossnouveau1["customer_id"])))
+              
+                  {$result4 = $omtaxi2->update($requestData);}
+               else { $result4 = $omtaxi2->update($request->all()); }
+           	if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
+               {$result5 = $omtaxi2->update($requestData);}
+               else { $result5 = $omtaxi2->update($request->all()); }
 
         	}
         }
 
-        if (isset($_POST['idvehic']))
+        /*if (isset($_POST['idvehic']))
                 {// mettre à jour les infos de vehicule
 
             		$parent = $_POST['parent'];
@@ -634,7 +798,7 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
 						}
 
 					}
-                }
+                }*/
 
     }
 
@@ -655,7 +819,7 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
         			//echo "remplacement";
         			$parent = $_POST['parent'];
                 	$count = OMAmbulance::where('parent',$parent)->count();
-                	OMAmbulance::where('id', $parent)->update(['dernier' => 0]);
+                	OMAmbulance::where('id', $parent)->update(['dernier' => 0 ,'vehicID' => "",'idambulancier1' => "",'idambulancier2' => "",'idparamed' => ""]);
 			        $omparent=OMAmbulance::where('id', $parent)->first();
 			        $filename='ambulance_Remplace-'.$parent;
 
@@ -761,7 +925,7 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
         			{ $prestambulance = $_POST['type_affectation_post'];
 					} else { 
 						$prestambulance = $_POST['type_affectation'];}
-        			OMAmbulance::where('id', $parent)->update(['dernier' => 0]);
+        			OMAmbulance::where('id', $parent)->update(['dernier' => 0,'vehicID' => "",'idambulancier1' => "",'idambulancier2' => "",'idparamed' => ""]);
         			$omparent=OMAmbulance::where('id', $parent)->first();
         			$filename='ambulance_Complet-'.$parent;
         			$name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
@@ -911,14 +1075,32 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
         if (isset($_POST['affectea'])) {
         	// affectation en interne om privée meme entitee <hs change>
         	if ($_POST['affectea'] === "mmentite")
-        	{
+        	{$typep=4;
         		$iddossom= $_POST["dossdoc"];
         		//$dossierom=Dossier::where('id', $iddossom)->first();
         		$dossierom= Dossier::where('id', $iddossom)->select('type_affectation')->first();
         		$prestataireom=$dossierom['type_affectation'];
     			
     			 if (isset($prestataireom))
-			        {
+			        {if($prestataireom=="Transport VAT")
+        	{
+        		$prest=625;
+        	}
+        	if($prestataireom=="Transport MEDIC")
+        	{
+        		$prest=144;
+        	}
+        	if($prestataireom=="Transport Najda")
+        	{
+        		$prest=933;
+        	}
+        			$prestation = new Prestation([
+                   'prestataire_id' => $prest,
+                      'dossier_id' => $iddossom,
+                    'type_prestations_id' => $typep,
+                    'effectue' => 1
+            ]);
+        			$prestation->save();
 			        	// changer le var post
 			        	$reqmmentite = new \Illuminate\Http\Request();
 	                    $reqmmentite->request->add(['prestataire_ambulance' => $prestataireom]);
@@ -1061,10 +1243,30 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
 
         	// affectation en interne
         	if ($_POST['affectea'] === "interne")
-        	{
+        	{$typep=4;
         		// creation om pour le dossier courant
         		if (isset($_POST["type_affectation"]) && ($_POST["type_affectation"] !== "Select"))
-        		{
+        		{if(!(isset($_POST['type_affectation_post'])))
+
+                   { if($_POST["type_affectation"]=="Transport VAT")
+        	{
+        		$prest=625;
+        	}
+        	if($_POST["type_affectation"]=="Transport MEDIC")
+        	{
+        		$prest=144;
+        	}
+        	if($_POST["type_affectation"]=="Transport Najda")
+        	{
+        		$prest=933;
+        	}
+        			$prestation = new Prestation([
+                   'prestataire_id' => $prest,
+                      'dossier_id' => $iddoss,
+                    'type_prestations_id' => $typep,
+                    'effectue' => 1
+            ]);
+        			$prestation->save();}
         			$prestomamb = $_POST["type_affectation"];
         			$omambulance = OMAmbulance::create(['prestataire_ambulance'=>$prestomamb,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         		} else {
@@ -1077,10 +1279,14 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
         		$subscriber_name_ =$_POST['subscriber_name'];
         		$subscriber_lastname_ =$_POST['subscriber_lastname'];
 $cnctagent = Auth::id();
+$adressDossier = Adresse::where('parent',$iddoss)
+            ->get();
+            $Dossier = Dossier::where('id',$iddoss)
+            ->first();
 
 				/*$arequest->request->add(['name' => $subscriber_name_]);
 				$arequest->request->add(['lastname' => $subscriber_lastname_]);*/
-				$arequest->request->add(['type_dossier' => 'Technique']);
+				$arequest->request->add(['type_dossier' => 'Transport']);
 
 				// entree de creation est 0
 				$arequest->request->add(['entree' => 0]);
@@ -1122,6 +1328,51 @@ $reqsublname->request->add(['dossier' => $iddnew]);
 				$reqsublname->request->add(['champ' => 'subscriber_lastname']);
 				$reqsublname->request->add(['val' => $subscriber_lastname_]);
 				app('App\Http\Controllers\DossiersController')->updating($reqsublname);
+				$reqsubltype = new \Illuminate\Http\Request();
+$reqsubltype->request->add(['dossier' => $iddnew]);
+				$reqsubltype->request->add(['champ' => 'vehicule_type']);
+				$reqsubltype->request->add(['val' => $Dossier['vehicule_type']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsubltype);
+				$reqsublmarque = new \Illuminate\Http\Request();
+$reqsublmarque->request->add(['dossier' => $iddnew]);
+				$reqsublmarque->request->add(['champ' => 'vehicule_marque']);
+				$reqsublmarque->request->add(['val' => $Dossier['vehicule_marque']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublmarque);
+	            $reqsublimmatriculation = new \Illuminate\Http\Request();
+$reqsublimmatriculation->request->add(['dossier' => $iddnew]);
+				$reqsublimmatriculation->request->add(['champ' => 'vehicule_immatriculation']);
+				$reqsublimmatriculation->request->add(['val' => $Dossier['vehicule_immatriculation']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublimmatriculation);
+                $reqsublishospitalized = new \Illuminate\Http\Request();
+$reqsublishospitalized->request->add(['dossier' => $iddnew]);
+				$reqsublishospitalized->request->add(['champ' => 'is_hospitalized']);
+				$reqsublishospitalized->request->add(['val' => $Dossier['is_hospitalized']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublishospitalized);
+                $reqsublchambrehoptial = new \Illuminate\Http\Request();
+$reqsublchambrehoptial->request->add(['dossier' => $iddnew]);
+				$reqsublchambrehoptial->request->add(['champ' => 'chambre_hoptial']);
+				$reqsublchambrehoptial->request->add(['val' => $Dossier['chambre_hoptial']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublchambrehoptial);
+                $reqsublhospitaladdress = new \Illuminate\Http\Request();
+$reqsublhospitaladdress->request->add(['dossier' => $iddnew]);
+				$reqsublhospitaladdress->request->add(['champ' => 'hospital_address']);
+				$reqsublhospitaladdress->request->add(['val' => $Dossier['hospital_address']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublhospitaladdress);
+				$reqsublhospitaladdress2 = new \Illuminate\Http\Request();
+$reqsublhospitaladdress2->request->add(['dossier' => $iddnew]);
+				$reqsublhospitaladdress2->request->add(['champ' => 'autre_hospital_address']);
+				$reqsublhospitaladdress2->request->add(['val' => $Dossier['autre_hospital_address']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublhospitaladdress2);
+				$reqsublmedecintraitant = new \Illuminate\Http\Request();
+$reqsublmedecintraitant->request->add(['dossier' => $iddnew]);
+				$reqsublmedecintraitant->request->add(['champ' => 'medecin_traitant']);
+				$reqsublmedecintraitant->request->add(['val' => $Dossier['medecin_traitant']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublmedecintraitant);
+				$reqsublmedecintraitant2 = new \Illuminate\Http\Request();
+$reqsublmedecintraitant2->request->add(['dossier' => $iddnew]);
+				$reqsublmedecintraitant2->request->add(['champ' => 'medecin_traitant2']);
+				$reqsublmedecintraitant2->request->add(['val' => $Dossier['medecin_traitant2']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublmedecintraitant2);
 
 				// affecte dossier au agent qui le cree
 				$reqaffectea = new \Illuminate\Http\Request();
@@ -1175,7 +1426,8 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                 {
                     $reqrefc = new \Illuminate\Http\Request();
                     //$refcustomer = $_POST["reference_customer"];
-                    $refcustomer = $dossparent["reference_medic"];
+                   // $refcustomer = $dossparent["reference_medic"];
+                    $refcustomer = 'ES'.$dossparent["reference_medic"];
                     $reqrefc->request->add(['dossier' => $iddossnew]);
                     $reqrefc->request->add(['champ' => 'reference_customer']);
                     $reqrefc->request->add(['val' => $refcustomer]);
@@ -1282,6 +1534,21 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 					$reqprestambulance->request->add(['val' => $prestataire_ambulance]);
 					app('App\Http\Controllers\DossiersController')->updating($reqprestambulance	);
 				}
+				foreach ($adressDossier as $adress ) {
+                $newadress = new Adresse([
+                'champ' => $adress ["champ"],
+                'nom' =>   $adress ["nom"],
+                'prenom' => $adress ["prenom"],
+                'fonction' =>$adress ["fonction"],
+                 'mail' => $adress ["mail"],
+                 'remarque' =>$adress ["remarque"],
+                'nature' => $adress ["nature"],
+                'tel' => $adress ["tel"],
+                'typetel' => $adress ["typetel"],
+                'parent' => $iddnew,
+                ]);
+                $newadress->save();
+                }
 				// recuperation de reference de nouveau dossier et la changer dans request
 				$dossnouveau=Dossier::where('id', $iddossnew)->select('reference_medic')->first();
 				if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
@@ -1298,6 +1565,46 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 
 
 				}
+				 if(isset($typeaffect) && ! empty($typeaffect))
+                {$emispar="najda";
+                	
+                	if($typeaffect==="VAT"||$typeaffect==="Transport VAT")
+                	{
+                		$emispar="vat";
+                	}	
+                	if($typeaffect==="Medic International")
+                	{
+                		$emispar="medici";
+                	}
+                	if($typeaffect==="MEDIC"||$typeaffect==="Transport MEDIC")
+                		{
+                		$emispar="medicm";
+                	    }
+                	
+                	$requestData['emispar'] = $emispar;
+                }
+                 $dossnouveau1=Dossier::where('id', $iddossnew) ->first();
+                if (isset($dossnouveau1["customer_id"]) && ! (empty($dossnouveau1["customer_id"])))
+				{
+					$ncustomer=$dossnouveau1["customer_id"];
+                    $Clientdoss=CLient::where('id', $ncustomer)->first();
+
+					$client_dossier=$Clientdoss['name'];
+					$requestData['client_dossier'] = $client_dossier;
+
+
+
+
+				}
+				if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
+				{
+					$reference_customer=$dossnouveau1["reference_customer"];
+                    $requestData['reference_customer'] = $reference_customer;
+
+
+
+
+				}
 					if (isset($requestData))
 					{
 						/*$omn = new OrdreMission();
@@ -1306,7 +1613,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 
 						$nresponse = $nrequest->send();*/
 					// duplication de lom dans le nouveau dossier
-					$pdf2 = PDF4::loadView('ordremissions.pdfodmambulance',['reference_medic' => $nref, 'reference_medic2' => $nref])->setPaper('a4', '');
+					$pdf2 = PDF4::loadView('ordremissions.pdfodmambulance',['reference_medic' => $nref, 'reference_medic2' => $nref, 'emispar' => $emispar, 'client_dossier' => $client_dossier, 'reference_customer' => $reference_customer])->setPaper('a4', '');
 					}
 					else
 					{
@@ -1344,7 +1651,16 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 				if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
 				{$result2 = $omambulance2->update($requestData);}
 		        else { $result2 = $omambulance2->update($request->all()); }
-
+           if(isset($typeaffect)&& !(empty($typeaffect)))
+               {$result3 = $omambulance2->update($requestData);}
+               else { $result3 = $omambulance2->update($request->all()); }
+               if (isset($dossnouveau1["customer_id"]) && ! (empty($dossnouveau1["customer_id"])))
+              
+                  {$result4 = $omambulance2->update($requestData);}
+               else { $result4 = $omambulance2->update($request->all()); }
+           	if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
+               {$result5 = $omambulance2->update($requestData);}
+               else { $result5 = $omambulance2->update($request->all()); }
         	}
         	
         }
@@ -1633,14 +1949,36 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
         if (isset($_POST['affectea'])) {
         	// affectation en interne om privée meme entitee <hs change>
         	if ($_POST['affectea'] === "mmentite")
-        	{
+        	{$typep=1;
         		$iddossom= $_POST["dossdoc"];
         		//$dossierom=Dossier::where('id', $iddossom)->first();
         		$dossierom= Dossier::where('id', $iddossom)->select('type_affectation')->first();
         		$prestataireom=$dossierom['type_affectation'];
     			
     			 if (isset($prestataireom))
-			        {
+			        {if($prestataireom=="Transport VAT")
+            {
+                $prest=625;
+            }
+            if($prestataireom=="Transport MEDIC")
+            {
+                $prest=144;
+            }
+            if($prestataireom=="Transport Najda")
+            {
+                $prest=933;
+            }
+            if($prestataireom=="X-Press")
+            {
+                $prest=1696;
+            }
+                    $prestation = new Prestation([
+                   'prestataire_id' => $prest,
+                      'dossier_id' => $iddossom,
+                    'type_prestations_id' => $typep,
+                    'effectue' => 1
+            ]);
+                    $prestation->save();
 			        	// changer le var post
 			        	$reqmmentite = new \Illuminate\Http\Request();
 	                    $reqmmentite->request->add(['prestataire_remorquage' => $prestataireom]);
@@ -1733,10 +2071,33 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
         {
             // affectation en interne
             if ($_POST['affectea'] === "interne")
-            {
+            {$typep=1;
                 // creation om pour le dossier courant
         		if (isset($_POST["type_affectation"]) && ($_POST["type_affectation"] !== "Select"))
-        		{
+        		{if(!(isset($_POST['type_affectation_post'])))
+        		{ if($_POST["type_affectation"]=="Transport VAT")
+        	{
+        		$prest=625;
+        	}
+        	if($_POST["type_affectation"]=="Transport MEDIC")
+        	{
+        		$prest=144;
+        	}
+        	if($_POST["type_affectation"]=="Transport Najda")
+        	{
+        		$prest=933;
+        	}
+        	if($_POST["type_affectation"]=="X-Press")
+        	{
+        		$prest=1696;
+        	}
+        			$prestation = new Prestation([
+                   'prestataire_id' => $prest,
+                      'dossier_id' => $iddoss,
+                    'type_prestations_id' => $typep,
+                    'effectue' => 1
+            ]);
+        			$prestation->save();}
         			$prestomrem = $_POST["type_affectation"];
         			$omremorquage = OMRemorquage::create(['prestataire_remorquage'=>$prestomrem,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         		} else {
@@ -1749,10 +2110,15 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                 $subscriber_name_ =$_POST['subscriber_name'];
                 $subscriber_lastname_ =$_POST['subscriber_lastname'];
 $cnctagent = Auth::id();
+$adressDossier = Adresse::where('parent',$iddoss)
+            ->get();
+            $Dossier = Dossier::where('id',$iddoss)
+            ->first();
+
 
 				/*$arequest->request->add(['name' => $subscriber_name_]);
 				$arequest->request->add(['lastname' => $subscriber_lastname_]);*/
-				$arequest->request->add(['type_dossier' => 'Technique']);
+				
 
 				// entree de creation est 0
 				$arequest->request->add(['entree' => 0]);
@@ -1764,6 +2130,10 @@ $cnctagent = Auth::id();
         		{	
         			if ($_POST["type_affectation"] !== "Select")
         			{$typeaffect = $_POST["type_affectation"];
+        		if ($_POST["type_affectation"] == "X-Press")
+                   {  $arequest->request->add(['type_dossier' => 'Technique']);}
+                   else
+                    {  $arequest->request->add(['type_dossier' => 'Transport']);}
         			$arequest->request->add(['type_affectation' => $typeaffect]);}
         		}
         		// type_affect pares remplace ou complete
@@ -1772,6 +2142,10 @@ $cnctagent = Auth::id();
         		{	
         			if ($_POST["type_affectation_post"] !== "Select")
         			{$typeaffect = $_POST["type_affectation_post"];
+        		if ($_POST["type_affectation_post"] == "X-Press")
+                   {  $arequest->request->add(['type_dossier' => 'Technique']);}
+                   else
+                    {  $arequest->request->add(['type_dossier' => 'Transport']);}
         			$arequest->request->add(['type_affectation' => $typeaffect]);}
         		}
 				//ajout nouveau dossier
@@ -1794,6 +2168,51 @@ $reqsublname->request->add(['dossier' => $iddnew]);
 				$reqsublname->request->add(['champ' => 'subscriber_lastname']);
 				$reqsublname->request->add(['val' => $subscriber_lastname_]);
 				app('App\Http\Controllers\DossiersController')->updating($reqsublname);
+				$reqsubltype = new \Illuminate\Http\Request();
+$reqsubltype->request->add(['dossier' => $iddnew]);
+				$reqsubltype->request->add(['champ' => 'vehicule_type']);
+				$reqsubltype->request->add(['val' => $Dossier['vehicule_type']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsubltype);
+				$reqsublmarque = new \Illuminate\Http\Request();
+$reqsublmarque->request->add(['dossier' => $iddnew]);
+				$reqsublmarque->request->add(['champ' => 'vehicule_marque']);
+				$reqsublmarque->request->add(['val' => $Dossier['vehicule_marque']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublmarque);
+	            $reqsublimmatriculation = new \Illuminate\Http\Request();
+$reqsublimmatriculation->request->add(['dossier' => $iddnew]);
+				$reqsublimmatriculation->request->add(['champ' => 'vehicule_immatriculation']);
+				$reqsublimmatriculation->request->add(['val' => $Dossier['vehicule_immatriculation']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublimmatriculation);
+                $reqsublishospitalized = new \Illuminate\Http\Request();
+$reqsublishospitalized->request->add(['dossier' => $iddnew]);
+				$reqsublishospitalized->request->add(['champ' => 'is_hospitalized']);
+				$reqsublishospitalized->request->add(['val' => $Dossier['is_hospitalized']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublishospitalized);
+                $reqsublchambrehoptial = new \Illuminate\Http\Request();
+$reqsublchambrehoptial->request->add(['dossier' => $iddnew]);
+				$reqsublchambrehoptial->request->add(['champ' => 'chambre_hoptial']);
+				$reqsublchambrehoptial->request->add(['val' => $Dossier['chambre_hoptial']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublchambrehoptial);
+                $reqsublhospitaladdress = new \Illuminate\Http\Request();
+$reqsublhospitaladdress->request->add(['dossier' => $iddnew]);
+				$reqsublhospitaladdress->request->add(['champ' => 'hospital_address']);
+				$reqsublhospitaladdress->request->add(['val' => $Dossier['hospital_address']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublhospitaladdress);
+				$reqsublhospitaladdress2 = new \Illuminate\Http\Request();
+$reqsublhospitaladdress2->request->add(['dossier' => $iddnew]);
+				$reqsublhospitaladdress2->request->add(['champ' => 'autre_hospital_address']);
+				$reqsublhospitaladdress2->request->add(['val' => $Dossier['autre_hospital_address']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublhospitaladdress2);
+				$reqsublmedecintraitant = new \Illuminate\Http\Request();
+$reqsublmedecintraitant->request->add(['dossier' => $iddnew]);
+				$reqsublmedecintraitant->request->add(['champ' => 'medecin_traitant']);
+				$reqsublmedecintraitant->request->add(['val' => $Dossier['medecin_traitant']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublmedecintraitant);
+				$reqsublmedecintraitant2 = new \Illuminate\Http\Request();
+$reqsublmedecintraitant2->request->add(['dossier' => $iddnew]);
+				$reqsublmedecintraitant2->request->add(['champ' => 'medecin_traitant2']);
+				$reqsublmedecintraitant2->request->add(['val' => $Dossier['medecin_traitant2']]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublmedecintraitant2);
 
 				// affecte dossier au agent qui le cree
 				$reqaffectea = new \Illuminate\Http\Request();
@@ -1845,8 +2264,8 @@ $reqlieup->request->add(['dossier' => $iddnew]);
                 if (isset($_POST["reference_customer"]))
                 {
                     $reqrefc = new \Illuminate\Http\Request();
-                    //$refcustomer = $_POST["reference_customer"];
-                    $refcustomer = $dossparent["reference_medic"];
+                    //$refcustomer = $dossparent["reference_medic"];
+                    $refcustomer = 'ES'.$dossparent["reference_medic"];
                     $reqrefc->request->add(['dossier' => $iddossnew]);
                     $reqrefc->request->add(['champ' => 'reference_customer']);
                     $reqrefc->request->add(['val' => $refcustomer]);
@@ -1952,6 +2371,21 @@ $reqlieup->request->add(['dossier' => $iddnew]);
                     $reqprestremorquage->request->add(['val' => $prestataire_remorquage]);
                     app('App\Http\Controllers\DossiersController')->updating($reqprestremorquage);
                 }
+                foreach ($adressDossier as $adress ) {
+                $newadress = new Adresse([
+                'champ' => $adress ["champ"],
+                'nom' =>   $adress ["nom"],
+                'prenom' => $adress ["prenom"],
+                'fonction' =>$adress ["fonction"],
+                 'mail' => $adress ["mail"],
+                 'remarque' =>$adress ["remarque"],
+                'nature' => $adress ["nature"],
+                'tel' => $adress ["tel"],
+                'typetel' => $adress ["typetel"],
+                'parent' => $iddnew,
+                ]);
+                $newadress->save();
+                }
                 // recuperation de reference de nouveau dossier et la changer dans request
                 $dossnouveau=Dossier::where('id', $iddossnew)->select('reference_medic')->first();
                 if (isset($dossnouveau["reference_medic"]) && ! (empty($dossnouveau["reference_medic"])))
@@ -1986,9 +2420,36 @@ $reqlieup->request->add(['dossier' => $iddnew]);
                 		{
                 		$emispar="medicm";
                 	    }
-                	$requestData = $request->all();
+                	
                 	$requestData['emispar'] = $emispar;
                 }
+                 $dossnouveau1=Dossier::where('id', $iddossnew) ->first();
+                if (isset($dossnouveau1["customer_id"]) && ! (empty($dossnouveau1["customer_id"])))
+				{
+					$ncustomer=$dossnouveau1["customer_id"];
+                    $Clientdoss=CLient::where('id', $ncustomer)->first();
+
+					$client_dossier=$Clientdoss['name'];
+					$requestData['client_dossier'] = $client_dossier;
+                  
+
+
+
+				}
+                else 
+                    {
+                    $client_dossier=" ";
+                    $requestData['client_dossier'] = $client_dossier;
+                    }
+				if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
+				{
+					$reference_customer=$dossnouveau1["reference_customer"];
+                    $requestData['reference_customer'] = $reference_customer;
+
+
+
+
+				}
                 if (isset($requestData))
                 {
                     /*$omn = new OrdreMission();
@@ -1997,7 +2458,7 @@ $reqlieup->request->add(['dossier' => $iddnew]);
 
                     $nresponse = $nrequest->send();*/
                     // duplication de lom dans le nouveau dossier
-                    $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage',['reference_medic' => $nref, 'reference_medic2' => $nref,'emispar' =>$emispar])->setPaper('a4', '');
+                    $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage',['reference_medic' => $nref, 'reference_medic2' => $nref,'emispar' =>$emispar, 'client_dossier' => $client_dossier, 'reference_customer' => $reference_customer])->setPaper('a4', '');
                 }
                 else
                 {
@@ -2038,6 +2499,13 @@ $reqlieup->request->add(['dossier' => $iddnew]);
                {$result3 = $omremorquage2->update($requestData);}
                else { $result3 = $omremorquage2->update($request->all()); }
             }*/
+             if (isset($dossnouveau1["customer_id"]) && ! (empty($dossnouveau1["customer_id"])))
+              
+                  {$result4 = $omremorquage2->update($requestData);}
+               else { $result4 = $omremorquage2->update($request->all()); }
+           	if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
+               {$result5 = $omremorquage2->update($requestData);}
+               else { $result5 = $omremorquage2->update($request->all()); }
 
             }
         }
@@ -2318,7 +2786,8 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                 {
                     $reqrefc = new \Illuminate\Http\Request();
                     //$refcustomer = $_POST["reference_customer"];
-                    $refcustomer = $dossparent["reference_medic"];
+                    //$refcustomer = $dossparent["reference_medic"];
+                    $refcustomer = 'ES'.$dossparent["reference_medic"];
                     $reqrefc->request->add(['dossier' => $iddossnew]);
                     $reqrefc->request->add(['champ' => 'reference_customer']);
                     $reqrefc->request->add(['val' => $refcustomer]);
@@ -2571,7 +3040,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
         if (stristr($titre,'taxi') !== FALSE) 
         {
 	    	//$count = OMTaxi::where('parent',$parent)->count();
-	    	OMTaxi::where('id', $parent)->update(['dernier' => 0]);
+	    	OMTaxi::where('id', $parent)->update(['dernier' => 0,'idvehic' => "",'idchauff' => ""]);
 	        $omparent=OMTaxi::where('id', $parent)->first();
 	        $filename='taxi_annulation-'.$parent;
 
@@ -2609,7 +3078,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 	    }
 	    // annulation om Ambulance
 	    elseif (stristr($titre,'ambulance') !== FALSE)  {
-	    	OMAmbulance::where('id', $parent)->update(['dernier' => 0]);
+	    	OMAmbulance::where('id', $parent)->update(['dernier' => 0,'vehicID' => "",'idambulancier1' => "",'idambulancier2' => "",'idparamed' => ""]);
 	        $omparent=OMAmbulance::where('id', $parent)->first();
 	        $filename='ambulance_annulation-'.$parent;
 

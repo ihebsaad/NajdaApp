@@ -1047,7 +1047,7 @@ function verifdispvoiture()
                         $("#lchauff").empty();
                         $("<option />", {
                                         val: "aucun personnel est disponible",
-                                    }).appendTo("#lvehicule");
+                                    }).appendTo("#lchauff");
                     }    
                         
             },

@@ -2050,13 +2050,8 @@ array_push($listepr,$pr['prestataire_id']);
                     <div id="typeaffect" class="col-md-3" style="float: left!important;display: none;">
                         <select id="type_affectation" name="type_affectation" class="form-control" style="width: 230px">
                                                     <option value="Select">Selectionner</option>
-                                                    <option value="Najda">Najda Assistance</option>
-                                                    <option value="MEDIC">MEDIC</option>
-                                                    <option value="VAT">VAT</option>
                                                     <option value="Transport VAT">Transport VAT</option>
                                                     <option value="Transport MEDIC">Transport MEDIC</option>
-                                                    <option value="Medic International">Medic International</option>
-                                                    <option value="Najda TPA">Najda TPA</option>
                                                     <option value="Transport Najda">Transport Najda</option>
                                                     <option value="X-Press">X-Press</option>
                         </select>

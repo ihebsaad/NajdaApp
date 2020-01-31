@@ -1,7 +1,7 @@
 <?php
 // Create connection
 //$conn = mysqli_connect('192.168.1.208', 'najda2017', '9g3\jHtFeEA-*?@[','medic_preprod');
-$conn = mysqli_connect('192.168.1.249', 'cmk', 'CMKnajda*2020','najda');
+$conn = mysqli_connect('192.168.1.249', 'phpmyadmin', 'Najda2020','najda','3306');
 
 // Check connection
 if (!$conn) {
