@@ -9,7 +9,7 @@ class Seance extends Model
     //
     protected $table = 'seance';
     protected $fillable = ['id','debut','fin','dispatcheur','superviseurmedic','superviseurtech','chargetransport','superviseur'];
-/*
+
 
     protected $dateFormat = 'Y-m-d H:i';
 
@@ -18,6 +18,6 @@ class Seance extends Model
         return 'Y-m-d H:i:s.u';
     }
 
-*/
+ 
 
 }
