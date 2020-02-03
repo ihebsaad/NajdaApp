@@ -614,7 +614,9 @@ class LoginController extends Controller
                             $query->where('reference_medic', 'like', '%TV%')
                                 ->where('current_status','!=','Cloture' )
                                 ->where('affecte', $iduser);
-                        })->get()(array('affecte' => $medic, 'statut' => 2));
+                        })->get() ;
+
+                    //    (array('affecte' => $medic, 'statut' => 2));
 
                   //      Dossier::setTimestamps(false);
 
@@ -861,7 +863,13 @@ class LoginController extends Controller
         /*** Déconnexion ***/
         $nomuser = $user->name . ' ' . $user->lastname;
 
-        Log::info('[Agent: ' . $nomuser . '] Déconnexion ');
+
+            $countdossiers=Dossier::where('affecte',  Auth::id() )
+                ->count();
+
+        Log::info('[Agent: ' . $nomuser . '] Déconnexion '.$countdossiers);
+
+   //     Log::info('[Agent: ' . $nomuser . '] Déconnexion ');
 
         // changement statut dans la base
         // logged out statut = -1

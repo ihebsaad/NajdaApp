@@ -554,6 +554,10 @@
             {
                 echo '<input type="checkbox" name="veilleur">';
             }
+            else
+            {
+                echo '<input type="checkbox" name="veilleur" checked>';
+            }
 
 
         }
