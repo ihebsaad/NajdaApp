@@ -2427,9 +2427,20 @@ class ActionController extends Controller
            {
 
    // controle la non saisie des dates spécifique
-               if($action->Mission->type_Mission==6)
+               if($action->Mission->type_Mission==6)//taxi 
                {
                    if($action->ordre==5 && (!$action->Mission->h_dep_pour_miss || !$action->Mission->h_arr_prev_dest))
+                   {
+
+                    return back()->with('messagekbsFail', 'Erreur: Vous devez saisir les dates spécifiques dans le menu Description de mission');
+
+                   }
+
+               }
+
+                if($action->Mission->type_Mission==44)//Remorquage 
+               {
+                   if(($action->ordre==7 ||$action->ordre==8||$action->ordre==9) && (!$action->Mission->h_dep_pour_miss || !$action->Mission->h_retour_base))
                    {
 
                     return back()->with('messagekbsFail', 'Erreur: Vous devez saisir les dates spécifiques dans le menu Description de mission');
@@ -3678,7 +3689,6 @@ public function Transport_assis_chaise_roulante_DV($option,$idmiss,$idact,$iddos
 
 
                            }
-
 
 
 
@@ -6550,11 +6560,7 @@ public function transport_aerien_international_sous_assistance_DV($option,$idmis
 
   public function Rapatriement_vehicule_avec_chauffeur_accompagnateur_DV($option,$idmiss,$idact,$iddoss,$bouton)
 {
-  // dd("rrr");
-
-           
- 
-                    $dtc = (new \DateTime())->format('Y-m-d\TH:i');                         
+          $dtc = (new \DateTime())->format('Y-m-d\TH:i');                         
                     $format = "Y-m-d\TH:i";
                     $dateSys  = \DateTime::createFromFormat($format, $dtc);
                     $chang=false;
@@ -6953,9 +6959,9 @@ public function transport_aerien_international_sous_assistance_DV($option,$idmis
 
                            /*si_appui_fait_action1 & si_client_dossier=AXA_France & si_appui_fait_action1 & si_choix_option1_action1 & si_appui_fait_action2 & si_choix_option1_action2*/
 
-                                $dossi=Dossier::where('id',$iddoss)->first();
+                                 /*$dossi=Dossier::where('id',$iddoss)->first();
                                 $existe_cli=Client::where('id',$dossi->customer_id)->Where('name', 'like', '%AXA%')
-                                ->where('pays','FRANCE')->first();
+                                ->where('pays','FRANCE')->first();*/
 
                                 //dd($existe_cli);
                      
@@ -7051,7 +7057,6 @@ public function transport_aerien_international_sous_assistance_DV($option,$idmis
                   // activer Action 19 : Vérifier si diptyque valide/informer l’assuré           
                  
             
-
                  if(($action5->statut=="faite" || $action6->statut=="faite" || $action7->statut=="faite" || 
                     $action8->statut=="faite" || $action9->statut=="faite" || $action10->statut=="faite" ||
                     $action11->statut=="faite" || $action12->statut=="faite" || $action13->statut=="faite" ||
@@ -7068,7 +7073,8 @@ public function transport_aerien_international_sous_assistance_DV($option,$idmis
                    }
 
                     // activer Action 20 : Programmer un RDV au port de Rades entre l’assuré et notre transitaire    
-                   if($action19->statut=="faite"   &&  $action20->statut =="inactive" )                       
+                   if($action19->statut=="faite"   &&  $action20->statut =="inactive" )
+
                      {
 
                       $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',20)
@@ -7081,7 +7087,7 @@ public function transport_aerien_international_sous_assistance_DV($option,$idmis
 
 
                     // activer Action 21 :: Attendre accord rapatriement   
-                   if($action20->statut=="faite"   &&  $action21->statut =="inactive" )                       
+                   if($action20->statut=="faite"   &&  $action21->statut =="inactive" )                      
                      {
 
                       $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',21)
@@ -7093,9 +7099,8 @@ public function transport_aerien_international_sous_assistance_DV($option,$idmis
                      }
 
                       // activer Action 22 :Préparer les doc finaux  
-                   if($action21->statut=="faite"   &&  $action22->statut =="inactive" )                       
+                   if($action21->statut=="faite"   &&  $action22->statut =="inactive" )                     
                      {
-
                       $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',22)
                      ->where('statut','!=','rfaite')->first();
                       $actSui->update(['statut'=>"active"]); 
@@ -9162,7 +9167,7 @@ public function Recherche_de_vehicule_avec_coordonnees_GPS_DV($option,$idmiss,$i
                              //Si_appui_fait_action1 & si_choix_option2_action1  &                           //Si_appui_fait_action3 OU Si_appui_fait_action1 & si_choix_option1_action1
    
                                                                   
-                            if((($action1->statut=="faite"  && $action1->opt_choisie=="2" && $action3->statut=="faite") || ($action1->statut=="faite"  && $action1->opt_choisie=="2")) && $action6->statut =="inactive")  
+                            if((($action1->statut=="faite"  && $action1->opt_choisie=="2" && $action3->statut=="faite") || ($action1->statut=="faite"  && $action1->opt_choisie=="2") || ($action1->statut=="faite"  && $action1->opt_choisie=="3")) && $action6->statut =="inactive")  
                            {
 
                              $actSui=ActionEC::where('mission_id',$idmiss)->where('ordre',6)
