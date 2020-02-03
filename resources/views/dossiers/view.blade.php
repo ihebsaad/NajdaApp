@@ -3883,6 +3883,11 @@ function keyUpHandler(){
                         afficheom(data,tempom);
                 }
             });*/
+
+            document.getElementById('claffect1').style.display = 'block';
+            document.getElementById('claffect2').style.display = 'block';
+            $("#affectationprest").val("Select").change();
+
             afficheom(tempom,dossier,affectea);
 
 

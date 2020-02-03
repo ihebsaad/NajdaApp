@@ -161,6 +161,14 @@ foreach ($array_client as $client) {
 		} else {
 	    echo "0 results agent";
 		}
+$sqlsig = "SELECT id,nom FROM docs WHERE id IN (SELECT doc FROM dossiers_docs WHERE dossier=".$iddossier.")";
+    $resultsig = $conn->query($sqlsig);
+    if ($resultsig->num_rows > 0) {
+
+        $array_sig = array();
+        while($rowsig = $resultsig->fetch_assoc()) {
+            $array_sig[] = array('id' => $rowsig["id"],'nom' => $rowsig["nom"]  );
+        }}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -599,10 +607,10 @@ echo '<option value="'.$struc["name"].'" >'.$struc["name"].'</option>';
 <p><span class=rvts29>Attention</span><span class=rvts30> </span><span class=rvts31>:</span><span class=rvts30> </span><span class=rvts32>Cette</span><span class=rvts30> </span><span class=rvts32>prise</span><span class=rvts30> </span><span class=rvts32>en</span><span class=rvts30> </span><span class=rvts32>charge</span><span class=rvts30> </span><span class=rvts32>ne</span><span class=rvts30> </span><span class=rvts32>sera</span><span class=rvts30> </span><span class=rvts32>valable</span><span class=rvts30> </span><span class=rvts32>que</span><span class=rvts30> </span><span class=rvts32>si</span><span class=rvts30> </span><span class=rvts32>la</span><span class=rvts30> </span><span class=rvts32>facture</span><span class=rvts30> </span><span class=rvts32>nous</span><span class=rvts30> </span><span class=rvts32>parvient</span><span class=rvts30> </span><span class=rvts32>accompagnée</span><span class=rvts30> </span><span class=rvts32>de</span><span class=rvts30> </span><span class=rvts29>l</span><span class=rvts33>’</span><span class=rvts29>original</span><span class=rvts30> </span><span class=rvts32>de</span><span class=rvts30>&nbsp;</span><span class=rvts32> </span><span class=rvts34><input name="CL_nom_doc_sig" id="CL_nom_doc_sig" placeholder=""  value="
 <?php  
 if(isset($CL_nom_doc_sig)) {echo $CL_nom_doc_sig;} 
-foreach ($array_docssignes as $docsigne) 
-{     if ( $iddoc==$docsigne['id'] )
-		{ echo $docsigne['nom']; 
-	      } else  {echo '';}}   ?> " ></input></span></span><span class=rvts32> </span><span class=rvts31>dûment</span><span class=rvts35> </span><span class=rvts31>complétée</span><span class=rvts30> </span><span class=rvts32>et</span><span class=rvts30> </span><span class=rvts32>signée</span><span class=rvts30> </span><span class=rvts32>par</span><span class=rvts30> </span><span class=rvts32>le</span><span class=rvts30> </span><span class=rvts32>(la) patient(e)</span></p>
+foreach ($array_sig as $docsigne) 
+{     
+		 echo $docsigne['nom'].' '; 
+	      }    ?> " ></input></span></span><span class=rvts32> </span><span class=rvts31>dûment</span><span class=rvts35> </span><span class=rvts31>complétée</span><span class=rvts30> </span><span class=rvts32>et</span><span class=rvts30> </span><span class=rvts32>signée</span><span class=rvts30> </span><span class=rvts32>par</span><span class=rvts30> </span><span class=rvts32>le</span><span class=rvts30> </span><span class=rvts32>(la) patient(e)</span></p>
 <p><span class=rvts32><br></span></p>
 <?php
 

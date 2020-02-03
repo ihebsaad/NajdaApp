@@ -1541,7 +1541,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 <div class="input-group-control">
 
                                                                     <div class="input-group-control">
-                                                                        <input    type="text" id="vehicule_address2" name="vehicule_address2" class="form-control"   value="<?php echo $dossier->vehicule_address2 ; ?>"  >
+                                                                        <input    type="text" id="vehicule_address2" name="vehicule_address2" class="form-control"   value="<?php echo $dossier->vehicule_address2 ; ?>" onchange="changing(this);"  >
                                                                     </div>
 
                                                                 </div>
@@ -1554,7 +1554,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 <label for="inputError" class="control-label"> Ville / localité</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input   type="text" id="vehicule_address" name="vehicule_address" class="form-control"   value="<?php echo $dossier->vehicule_address ; ?>"  >
+                                                                    <input   type="text" id="vehicule_address" name="vehicule_address" class="form-control"   value="<?php echo $dossier->vehicule_address ; ?>" onchange="changing(this);" >
                                                                 </div>
                                                                 <script>
                                                                     var placesAutocomplete = places({
@@ -1571,7 +1571,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 <label for="inputError" class="control-label">De (Date)</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input   type="text" id="date_debut_vehicule_address" name="date_debut_vehicule_address"  class="form-control datepicker-default"     value="<?php echo $dossier->date_debut_vehicule_address ; ?>"  >
+                                                                    <input   type="text" id="date_debut_vehicule_address" name="date_debut_vehicule_address"  class="form-control datepicker-default"     value="<?php echo $dossier->date_debut_vehicule_address ; ?>" onchange="changing(this);"  >
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1580,7 +1580,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 <label for="inputError" class="control-label">A (Date)</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input   type="text" id="date_fin_vehicule_address" name="date_fin_vehicule_address"   class="form-control datepicker-default"  value="<?php echo $dossier->date_fin_vehicule_address ; ?>"  >
+                                                                    <input   type="text" id="date_fin_vehicule_address" name="date_fin_vehicule_address"   class="form-control datepicker-default"  value="<?php echo $dossier->date_fin_vehicule_address ; ?>" onchange="changing(this);"  >
                                                                 </div>
                                                             </div>
                                                         </div>
