@@ -27,6 +27,7 @@ Route::get('/missions', 'HomeController@missions')->name('missions');
 Route::get('/notifs', 'HomeController@notifs')->name('notifs');
 Route::get('/transport', 'HomeController@transport')->name('transport');
 Route::get('/transport2', 'HomeController@transport2')->name('transport2');
+Route::get('/transporttous', 'HomeController@transporttous')->name('transporttous');
 Route::get('/transportsemaine', 'HomeController@transportsemaine')->name('transportsemaine');
 Route::post('/parametring', 'HomeController@parametring')->name('home.parametring');
 Route::post('/parametring2', 'HomeController@parametring2')->name('home.parametring2');

@@ -88,6 +88,13 @@
                           <i class="fas fa-2x fa-calendar-week"></i>  Semaine
                       </a>
                   </li>
+
+                  <li class="nav-item ">
+                      <a class="nav-link  "  href="{{ route('transporttous') }}"  >
+                          <i class="fas fa-2x fa-list"></i>  Tous
+                      </a>
+                  </li>
+
               </ul>
 
 

@@ -710,6 +710,16 @@ return redirect('roles');
 
     }
 
+    public function transporttous()
+    {
+        // if(\Gate::allows('isAdmin') || \Gate::allows('isSupervisor')  ) {
+        //   $users = User::get();
+
+        return view('transporttous' );
+        //  }else{ return back();}
+
+    }
+
 
     public function missions()
     {
