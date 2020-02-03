@@ -684,14 +684,21 @@ return redirect('roles');
     public function transport()
     {
 
-       // if(\Gate::allows('isAdmin') || \Gate::allows('isSupervisor')  ) {
+        // if(\Gate::allows('isAdmin') || \Gate::allows('isSupervisor')  ) {
         //   $users = User::get();
 
-            return view('transport' );
-      //  }else{ return back();}
+        return view('transport' );
+        //  }else{ return back();}
 
     }
 
+
+    public function transport2()
+    {
+
+        return view('transport2' );
+
+    }
     public function transportsemaine()
     {
 

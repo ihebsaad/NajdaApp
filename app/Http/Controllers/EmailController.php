@@ -2537,7 +2537,7 @@ $id=0;
             'port'          => '993',// env('portreception'),
             //    'encryption'    => '',//env('encreception'),
             'validate_cert' => true,
-            'username'      =>'operations1@medicinternational.tn',
+            'username'      =>'operations@medicinternational.tn',
             'password'      => $pass_MI,
             'protocol'      => 'imap'
         ]);

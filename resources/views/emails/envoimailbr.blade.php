@@ -52,12 +52,13 @@
         </div>
         <div class="col-lg-9 ">
 
-<form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data"   >
+<!--<form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data"   >-->
+<form     >
     <input id="envoye" type="hidden" class="form-control" name="envoye"  value="{{$envoye['id']}}" />
     <input id="dossier" type="hidden" class="form-control" name="dossier"  value="{{$doss}}" />
+    {{ csrf_field() }}
 
-    <div class="form-group">
-        {{ csrf_field() }}
+  <!--  <div class="form-group">
         <label for="from">Emetteur:</label>
         <div class="row">
             <select class="form-control" name="from" id="from" >
@@ -65,7 +66,7 @@
                 <option value="najdassist@gmail.com">najdassist@gmail.com</option>
             </select>
         </div>
-    </div>
+    </div>-->
         <label for="destinataire">destinataire:</label>
         <div class="row">
         <div class="col-md-10">
@@ -76,7 +77,6 @@
 
             </div>
         </div>
-    </div>
 
     <div class="form-group" style="margin-top:10px;">
         <div id="autres" class="row"  style="display:none " >
@@ -109,7 +109,7 @@
         <textarea style="min-height: 280px;" id="contenu" type="text"  class="textarea tex-com" placeholder="Contenu de l'email ici" name="contenu" required onchange=""><?php $contenu=$envoye['contenu']; echo $contenu; ?></textarea>
        </div>
     </div>
-
+<!--
     <div class="form-group form-group-default">
         <label>Attachements de dossier</label>
         <div class="row">
@@ -124,9 +124,7 @@
         </div>
      </div>
 
-    {!! NoCaptcha::display() !!}
 
-     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
      <div class="form-group form-group-default">
         <label>Attachements Externes</label>
@@ -134,7 +132,7 @@
     </div>
 
     <button  type="submit"  class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
-
+--->
  </form>
 
         </div>

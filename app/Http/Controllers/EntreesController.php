@@ -256,7 +256,7 @@ class EntreesController extends Controller
         $user = User::find($par);
         $nomuser = $user->name ."".$user->lastname ;
 
-        Log::info('Archivage Email - Par :'.$nomuser );
+        Log::info('[Agent : '.$nomuser.' ] Archivage d\'Email ' );
 
 
         return redirect('/entrees/dispatching')->with('success', '  Archivé');
@@ -299,7 +299,15 @@ class EntreesController extends Controller
         if( ( $entree->type=='email')||( $entree->type=='sms'))
         { app('App\Http\Controllers\EntreesController')->export_pdf($id);}
 
-      //  return redirect('/home')->with('success', '  Traité');
+
+        $par=Auth::id();
+        $user = User::find($par);
+        $nomuser = $user->name ."".$user->lastname ;
+
+        Log::info('[Agent : '.$nomuser.' ] Traiter un Email ' );
+
+
+        //  return redirect('/home')->with('success', '  Traité');
         if($dossid >0) {return redirect('/dossiers/view/'.$dossid.'#tab2');}
         else{
             return back();
@@ -318,10 +326,9 @@ class EntreesController extends Controller
 
         $par=Auth::id();
         $user = User::find($par);
+        $nomuser = $user->name ."".$user->lastname ;
 
-        $nomuser=$user->name.' '.$user->lastname;
-
-        Log::info('Suppression Email - Par :'.$nomuser );
+        Log::info('[Agent : '.$nomuser.' ] Supprimer un Email ' );
 
 
         return redirect('/entrees/dispatching')->with('success', '  Supprimé');
@@ -338,10 +345,10 @@ class EntreesController extends Controller
 
         $par=Auth::id();
         $user = User::find($par);
+        $nomuser = $user->name ."".$user->lastname ;
 
-        $nomuser=$user->name.' '.$user->lastname;
+        Log::info('[Agent : '.$nomuser.' ] Supprimer un Email ' );
 
-        Log::info('Suppression Email - Par :'.$nomuser );
 
         return redirect('/entrees')->with('success', '  Supprimé');
     }
@@ -508,9 +515,11 @@ class EntreesController extends Controller
        }
 
         // Activer le dossier
-        Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+      //  Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
 
       // return url('/entrees/show/'.$identree);
+
+
 
         return url('/entrees/dispatching');
 
@@ -550,7 +559,14 @@ class EntreesController extends Controller
         }
 
         // Activer le dossier
-        Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+    //    Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+
+        $par=Auth::id();
+        $user = User::find($par);
+        $nomuser = $user->name ."".$user->lastname ;
+
+        Log::info('[Agent : '.$nomuser.' ] Dispatcher un Email - Dossier: '.$dossier );
+
 
         //return url('/entrees/show/'.$identree);
         return url('/entrees/dispatching');
@@ -720,7 +736,7 @@ class EntreesController extends Controller
         }
 
         // Activer le dossier
-        Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
+     //   Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
 
 
         Log::info('Création Compte Rendu - Par :'.$nomuser.' - Dossier : '.$refdoss);

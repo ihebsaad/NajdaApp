@@ -68,32 +68,32 @@
         				
 		  <div class="panel-body" style="display: block;min-height:700px;padding:15px 15px 15px 15px">
                          <!-- Tabs -->
-              <ul class="nav  nav-tabs">
+                        <ul class="nav  nav-tabs">
+ 
+                            <li class="nav-item ">
+                                <a class="nav-link    " href="{{ route('transport') }}"  >
+                                    <i class="fas fa-2x fa-calendar-day"></i> Jour v
+                                </a>
+                            </li>
 
-                  <li class="nav-item active ">
-                      <a class="nav-link active   " href="#" >
-                          <i class="fas fa-2x fa-calendar-day"></i> Jour v
-                      </a>
-                  </li>
-
-                  <li class="nav-item ">
-                      <a class="nav-link  "  href="{{ route('transport2') }}"      >
-                          <i class="fas fa-2x fa-calendar-day"></i> Jour h
-                      </a>
-                  </li>
-
-
-                  <li class="nav-item">
-                      <a class="nav-link  " href="{{ route('transportsemaine') }}">
-                          <i class="fas fa-2x fa-calendar-week"></i>  Semaine
-                      </a>
-                  </li>
-              </ul>
+                            <li class="nav-item active">
+                                <a class="nav-link active   " href="#"    >
+                                    <i class="fas fa-2x fa-calendar-day"></i> Jour h
+                                </a>
+                            </li>
 
 
+                            <li class="nav-item">
+                                <a class="nav-link  " href="{{ route('transportsemaine') }}">
+                                    <i class="fas fa-2x fa-calendar-week"></i>  Semaine
+                                </a>
+                            </li>
+                        </ul>
 
-                       <div class="row" style="height:1200px">
-                           <div class="col-md-2"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2  <?php $now=date('H');$now=intval($now); if ($now<8){echo 'style="background-color:#4fc1e9"';}?>  > 00<small>:00</small> => 07<small>:59</small> </h2></center>
+
+
+                       <table  style="width:100%" >
+                           <tr   style="border-right:2px solid #4fc1e9;min-height: 550px"><td><center><h2  <?php $now=date('H');$now=intval($now); if ($now<8){echo 'style="background-color:#4fc1e9"';}?>  > 00<small>:00</small> => 07<small>:59</small> </h2></center>
 
                                <?php
 
@@ -115,7 +115,7 @@
                                                        if($hour<8)
 
                                                        {  ?>
-                                                      <div class="om " style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;;height: 260px">
+                                                      <div class="om " style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;;height: 300px">
 
                                                          <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>; ">
                                                               <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
@@ -151,8 +151,8 @@
                                                    }
                                                        ?>
 
-                           </div>
-                           <div class="col-md-2"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2   <?php $now=date('H');$now=intval($now); if ($now>=8 && $now<11){echo 'style="background-color:#4fc1e9"';}?> > 08 <small>:00</small> => 10<small>:59</small> </h2></center>
+                               </td> </tr>
+                           <tr    style="border-right:2px solid #4fc1e9;min-height: 550px"><td><center><h2   <?php $now=date('H');$now=intval($now); if ($now>=8 && $now<11){echo 'style="background-color:#4fc1e9"';}?> > 08 <small>:00</small> => 10<small>:59</small> </h2></center>
                                <?php
 
                                $color='';$icon='';
@@ -173,7 +173,7 @@
                                if($hour>7 && $hour<11)
 
                                {  ?>
-                               <div class="om " style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; ; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 260px">
+                               <div class="om " style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; ; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 300px">
 
                                    <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>;">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
@@ -208,9 +208,9 @@
 
                                }
                                ?>
-
-                           </div>
-                           <div class="col-md-2"  style="border-right:2px solid #4fc1e9;min-height: 550px"   ><center><h2 <?php $now=date('H');$now=intval($now);  if ($now>=11 && $now<14){echo 'style="background-color:#4fc1e9!important"';}?>> 11<small>:00</small> => 13<small>:59</small> </h2></center>
+                               </td>
+                           </tr>
+                           <tr   style="border-right:2px solid #4fc1e9;min-height: 550px"   ><td><center><h2 <?php $now=date('H');$now=intval($now);  if ($now>=11 && $now<14){echo 'style="background-color:#4fc1e9!important"';}?>> 11<small>:00</small> => 13<small>:59</small> </h2></center>
                                <?php
 
                                $color='';$icon='';
@@ -231,7 +231,7 @@
                                if($hour>10 && $hour<14)
 
                                {  ?>
-                               <div class="om" style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px;; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 260px">
+                               <div class="om" style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px;; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 300px">
 
                                    <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
@@ -266,8 +266,9 @@
 
                                }
                                ?>
-                           </div>
-                           <div class="col-md-2"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2 <?php $now=date('H');$now=intval($now);  if ($now>=14 && $now<17){echo 'style="background-color:#4fc1e9"';}?>   > 14<small>:00</small> => 16<small>:59</small></h2></center>
+                               </td>
+                           </tr>
+                           <tr    style="border-right:2px solid #4fc1e9;min-height: 550px"><td><center><h2 <?php $now=date('H');$now=intval($now);  if ($now>=14 && $now<17){echo 'style="background-color:#4fc1e9"';}?>   > 14<small>:00</small> => 16<small>:59</small></h2></center>
 
                                <?php
 
@@ -289,7 +290,7 @@
                                if($hour>13 && $hour<17)
 
                                {  ?>
-                               <div class="om" style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 260px">
+                               <div class="om" style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 300px">
 
                                    <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
@@ -324,8 +325,9 @@
 
                                }
                                ?>
-                           </div>
-                           <div class="col-md-2"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2 <?php $now=date('H');$now=intval($now);  if ($now>=17 && $now<20){echo 'style="background-color:#4fc1e9"';}?>    > 17<small>:00</small>=> 19<small>:59</small> </h2></center>
+                               </td>
+                           </tr>
+                           <tr    style="border-right:2px solid #4fc1e9;min-height: 550px"><td><center><h2 <?php $now=date('H');$now=intval($now);  if ($now>=17 && $now<20){echo 'style="background-color:#4fc1e9"';}?>    > 17<small>:00</small>=> 19<small>:59</small> </h2></center>
                                <?php
 
                                $color='';$icon='';
@@ -346,7 +348,7 @@
                                if($hour>17 && $hour<20)
 
                                {  ?>
-                               <div class="om" style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; ; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 260px">
+                               <div class="om" style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; ; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 300px">
 
                                    <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>;">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
@@ -381,8 +383,9 @@
 
                                }
                                ?>
-                           </div>
-                           <div class="col-md-2"  style="border-right:2px solid #4fc1e9;min-height: 550px"><center><h2 <?php $now=date('H');$now=intval($now);  if ($now>=20&& $now<24){echo 'style="background-color:#4fc1e9"';}?>   > 20<small>:00</small> => 23<small>:59</small> </h2></center>
+                               </td>
+                           </tr>
+                           <tr    style="border-right:2px solid #4fc1e9;min-height: 550px"><td><center><h2 <?php $now=date('H');$now=intval($now);  if ($now>=20&& $now<24){echo 'style="background-color:#4fc1e9"';}?>   > 20<small>:00</small> => 23<small>:59</small> </h2></center>
 
                                <?php
 
@@ -404,7 +407,7 @@
                                if($hour>19 && $hour<24)
 
                                {  ?>
-                               <div class="om" style="background-color:<?php echo $color2;?>;;float:left;margin-top:15px;margin-right:30px;color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 260px">
+                               <div class="om" style="background-color:<?php echo $color2;?>;;float:left;margin-top:15px;margin-right:30px;color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 300px">
 
                                    <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>;">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
@@ -439,242 +442,10 @@
 
                                }
                                ?>
-                           </div>
+                               </td>
+                           </tr>
 
-                       </div>
-<!--
-                <div class="" style="float:left;margin-top:15px;margin-right:30px;background-color:#C0392B;color:white;   ;border-radius: 20px;padding:5px 5px 5px 5px;width:300px">
-
-                       <div class="row" style=" margin-bottom:5px;">
-                           <div class="col-md-9"><i class="fa fa-folder"></i> 15N00026</div>
-                           <div class="col-md-3"><i class="fas fa-2x fa-ambulance"></i></div>
-                       </div>
-
-                    <div class="row" style= "margin-bottom:5px">
-                        <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-clock"></i> 09:00</div>
-                    </div>
-
-                    <div class="row" style="margin-bottom:10px">
-                        <div class="col-md-12 "  ><i class="fas fa-portrait"></i>  Affes Mohamed Ali</div>
-                           <div class="col-md-12 "  ><i class="fas fa-mobile-alt"></i>  +216 50 235 666</div>
-                       </div>
-
-
-                    <div class="row"  >
-                        <div class="col-md-12"><i class="fas fa-map-marker-alt"></i> <small>De :</small> Sahloul ,sousse </div>
-                    </div>
-
-                    <div class="row"  >
-                        <div class="col-md-12"><i class="fas fa-road"></i> <small>Vers:</small> Hopital Farhat Hached</div>
-                    </div>
-
-
-                  </div>
-
-                       <div class="" style="float:left;margin-top:15px;margin-right:30px;background-color:#D4AC0D; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;width:300px">
-
-                          <div class="row" style=" margin-bottom:5px;">
-                               <div class="col-md-9"><i class="fa fa-folder"></i> 19N00035</div>
-                               <div class="col-md-3"><i class="fas fa-2x fa-taxi"></i></div>
-                           </div>
-
-                           <div class="row" style= "margin-bottom:5px">
-                               <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-clock"></i> 09:00</div>
-                           </div>
-
-
-                           <div class="row" style="margin-bottom:10px">
-                               <div class="col-md-12 "  ><i class="fas fa-portrait"></i>  Affes Mohamed Ali</div>
-                               <div class="col-md-12 "  ><i class="fas fa-mobile-alt"></i>  +216 50 235 666</div>
-                           </div>
-
-
-                           <div class="row"  >
-                               <div class="col-md-12"><i class="fas fa-map-marker-alt"></i> <small>De :</small> Sahloul ,sousse </div>
-                           </div>
-
-                           <div class="row"  >
-                               <div class="col-md-12"><i class="fas fa-road"></i> <small>Vers:</small> Hopital Farhat Hached</div>
-                           </div>
-
-                       </div>
-
-
-
-                       <div class="" style="float:left;margin-top:15px;margin-right:30px;background-color:#2874A6; color:white;  border-radius: 20px;padding:5px 5px 5px 5px;width:300px">
-
-                           <div class="row" style=" margin-bottom:5px;">
-                               <div class="col-md-9"><i class="fa fa-folder"></i> 18N00063</div>
-                               <div class="col-md-3"><i class="fas fa-2x fa-truck-pickup"></i></div>
-                           </div>
-
-                           <div class="row" style= "margin-bottom:5px">
-                               <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-clock"></i> 10:00</div>
-                           </div>
-
-                           <div class="row" style="margin-bottom:10px">
-                               <div class="col-md-12"><i class="fas fa-portrait"></i>  Nom prenom abonné</div>
-                               <div class="col-md-12"><i class="fas fa-mobile-alt"></i>  +216 50 235 666</div>
-
-                           </div>
-
-
-                           <div class="row"  >
-                               <div class="col-md-12"><i class="fas fa-map-marker-alt"></i> <small>De :</small> Sahloul ,sousse </div>
-                           </div>
-
-                           <div class="row"  >
-                               <div class="col-md-12"><i class="fas fa-road"></i> <small>Vers:</small> Hopital Farhat Hached</div>
-                           </div>
-
-                       </div>
-
--->
-
-                       <?php
-/*
-
-                       foreach($ordres_taxi as $ot)
-                       {
-                           $ref=$ot->reference_medic;
-                           $benef=$ot->subscriber_name.' '.$ot->subscriber_lastname;
-                           $heure=$ot->CL_heure_RDV;$heure= substr($heure,0,5);
-                           $tel=$ot->CL_contacttel;
-                           $de=$ot->CL_lieuprest_pc;
-                           $vers=$ot->CL_lieudecharge_dec;
-
-                          ?>
-                       <div class="" style="float:left;margin-top:15px;margin-right:30px;background-color:#D4AC0D; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;width:300px;height: 250px">
-
-                          <div class="row" style=" margin-bottom:5px;">
-                               <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
-                               <div class="col-md-3"><i class="fas fa-2x fa-taxi"></i></div>
-                           </div>
-
-                           <div class="row" style= "margin-bottom:5px">
-                               <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-clock"></i> <?php echo $heure; ?></div>
-                           </div>
-
-
-                           <div class="row" style="margin-bottom:10px">
-                               <div class="col-md-12 "  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
-                               <div class="col-md-12 "  ><i class="fas fa-mobile-alt"></i>   <?php echo $tel; ?></div>
-                           </div>
-
-
-                           <div class="row"  >
-                               <div class="col-md-12"><i class="fas fa-map-marker-alt"></i> <small>De :</small>  <?php echo $de; ?> </div>
-                           </div>
-
-                           <div class="row"  >
-                               <div class="col-md-12"><i class="fas fa-road"></i> <small>Vers:</small> <?php echo $vers; ?></div>
-                           </div>
-
-                       </div>
-
-
-                    <?php  }
-                      */ ?>
-
-
-
-
-                       <?php
-
-/*
-                       foreach($ordres_ambul as $oa)
-                       {
-                           $ref=$oa->reference_medic;
-                           $benef=$oa->subscriber_name.' '.$oa->subscriber_lastname;
-                           $heure=$oa->CL_heure_RDV;$heure= substr($heure,0,5);
-                           $tel=$oa->CL_contacttel;
-                           $de=$oa->CL_lieuprest_pc;
-                           $vers=$oa->CL_lieudecharge_dec;
-
-                           ?>
-
-                           <div class="" style="float:left;margin-top:15px;margin-right:30px;background-color:#C0392B; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;width:300px;height: 250px">
-
-                               <div class="row" style=" margin-bottom:5px;">
-                                   <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
-                                   <div class="col-md-3"><i class="fas fa-2x fa-ambulance"></i></div>
-                               </div>
-
-                               <div class="row" style= "margin-bottom:5px">
-                                   <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-clock"></i> <?php echo $heure; ?></div>
-                               </div>
-
-
-                               <div class="row" style="margin-bottom:10px">
-                                   <div class="col-md-12 "  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
-                                   <div class="col-md-12 "  ><i class="fas fa-mobile-alt"></i>   <?php echo $tel; ?></div>
-                               </div>
-
-
-                               <div class="row"  >
-                                   <div class="col-md-12"><i class="fas fa-map-marker-alt"></i> <small>De :</small>  <?php echo $de; ?> </div>
-                               </div>
-
-                               <div class="row"  >
-                                   <div class="col-md-12"><i class="fas fa-road"></i> <small>Vers:</small> <?php echo $vers; ?></div>
-                               </div>
-
-                           </div>
-
-                       <?php  }
-*/
-
-?>
-
-
-                       <?php
-
-
-                   /*    foreach($ordres_rem as $or)
-                       {
-                       $ref=$or->reference_medic;
-                       $benef=$or->subscriber_name.' '.$or->subscriber_lastname;
-                       $heure=$or->CL_heure_RDV;$heure= substr($heure,0,5);
-                       $tel=$or->CL_contacttel;
-                       $de=$or->CL_lieuprest_pc;
-                       $vers=$or->CL_lieudecharge_dec;
-
-                       ?>
-
-                       <div class="" style="float:left;margin-top:15px;margin-right:30px;background-color:#2874A6; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;width:300px;height: 250px">
-
-                           <div class="row" style=" margin-bottom:5px;">
-                               <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
-                               <div class="col-md-3"><i class="fas fa-2x fa-truck-pickup"></i></div>
-                           </div>
-
-                           <div class="row" style= "margin-bottom:5px">
-                               <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-clock"></i> <?php echo $heure; ?></div>
-                           </div>
-
-
-                           <div class="row" style="margin-bottom:10px">
-                               <div class="col-md-12 "  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
-                               <div class="col-md-12 "  ><i class="fas fa-mobile-alt"></i>   <?php echo $tel; ?></div>
-                           </div>
-
-
-                           <div class="row"  >
-                               <div class="col-md-12"><i class="fas fa-map-marker-alt"></i> <small>De :</small>  <?php echo $de; ?> </div>
-                           </div>
-
-                           <div class="row"  >
-                               <div class="col-md-12"><i class="fas fa-road"></i> <small>Vers:</small> <?php echo $vers; ?></div>
-                           </div>
-
-                       </div>
-
-                       <?php  }
-
-                   */
-                       ?>
-
-
+                       </table>
 
 
 

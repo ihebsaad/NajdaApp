@@ -285,7 +285,7 @@ $(document).ready(function()
    {{--      {!! NoCaptcha::display() !!}  --}}
                     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 -->
-                <button onclick=" resetForm(this.form);" id="SendBtn" type="submit" disabled  name="myButton" class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
+                <button onclick=" resetForm(this.form);" id="SendBtn" type="submit"  name="myButton" class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
 
             </form>
 

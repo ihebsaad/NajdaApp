@@ -92,13 +92,18 @@
         				
 		  <div class="panel-body" style="display: block;min-height:700px;padding:15px 15px 15px 15px">
 
-
-                         <!-- Tabs -->
+          <!-- Tabs -->
               <ul class="nav  nav-tabs">
 
-                  <li class="nav-item  ">
-                      <a class="nav-link    "    href="{{ route('transport') }}"  >
-                          <i class="fas fa-2x fa-calendar-day"></i> Jour
+                  <li class="nav-item">
+                      <a class="nav-link " href="{{ route('transport') }}" >
+                          <i class="fas fa-2x fa-calendar-day"></i> Jour v
+                      </a>
+                  </li>
+
+                  <li class="nav-item ">
+                      <a class="nav-link  "  href="{{ route('transport2') }}"      >
+                          <i class="fas fa-2x fa-calendar-day"></i> Jour h
                       </a>
                   </li>
 
