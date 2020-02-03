@@ -16,9 +16,9 @@ if (isset($_GET['doc_dossier'])) {$doc_dossier=$_GET['doc_dossier']; }
 if (isset($_GET['CL_montant_numerique'])) {$CL_montant_numerique=$_GET['CL_montant_numerique'];}
 if (isset($_GET['CL_montant_toutes_lettres'])) {$CL_montant_toutes_lettres=$_GET['CL_montant_toutes_lettres'];}
 if (isset($_GET['CL_attention'])) {$CL_attention=$_GET['CL_attention'];}
-if (isset($_GET['nom_doc_sig'])) {$nom_doc_sig=$_GET['nom_doc_sig']; }
-if (isset($_GET['CL_nom_doc_sig'])) {$CL_nom_doc_sig=$_GET['CL_nom_doc_sig']; }
-if (isset($_GET['CL_doc_sign'])) {$CL_doc_sig=$_GET['CL_doc_sign']; }
+//if (isset($_GET['CL_doc_sig'])) {$CL_doc_sig=$_GET['CL_doc_sig']; }
+//if (isset($_GET['CL_nom_doc_sig'])) {$CL_nom_doc_sig=$_GET['CL_nom_doc_sig']; }
+//if (isset($_GET['CL_doc_sign'])) {$CL_doc_sign=$_GET['CL_doc_sign']; }
 if (isset($_GET['CL_text'])) {$CL_text=$_GET['CL_text'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['agent__lastname'])) {$agent__lastname=$_GET['agent__lastname']; }
@@ -552,16 +552,18 @@ echo '<option value="'.$struc["name"].'" >'.$struc["name"].'</option>';
 <p class=rvps5><span class=rvts5>Montant maximal de prise en charge (TND)</span><span class=rvts6>:&nbsp;</span><span class=rvts9> </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_numerique" placeholder="Montant maximal"  value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input></span><span class=rvts9>&nbsp;&nbsp;&nbsp; </span><span class=rvts5>Toutes lettres</span><span class=rvts6> : <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant en toutes lettres"  value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars</span></p>
 <p class=rvps5><span class=rvts6>Periode d'hospitalisation: <input name="CL_periode_hospitalisation" placeholder="periode de hospitalisation"  value="<?php if(isset ($CL_periode_hospitalisation)) echo $CL_periode_hospitalisation; ?>"></input></span></p>
 
-<p class=rvps6><span class=rvts6>Franchise: <input name="franchise" placeholder="franchise"  value="<?php if($franchise==="1")echo "oui"; else echo "non" ?>"></input> </span><span class=rvts7></span></p>
+<p class=rvps6><span class=rvts6>Franchise: <input name="franchise" placeholder="franchise"  value="<?php if($franchise==="1"||$franchise==="oui" )echo "oui"; else echo "non" ?>"></input> </span><span class=rvts7></span></p>
 <?php
 {
-	if ($franchise === "1") { ?>
+	if ($franchise === "1"||$franchise==="oui") { ?>
 <input name="CL_text_montant" type="hidden" placeholder="" value="<?php if(isset($CL_text_montant)) {echo $CL_text_montant;}  if (empty($CL_text_montant)){ echo "Montant de la franchise:" ;}?>"></input>
-<p class=rvps7><span class=rvts6>Montant de la franchise: </span><span class=rvts8><input name="montant_franchise" placeholder="montant franchise"  value="<?php if(isset ($montant_franchise)) echo $montant_franchise; ?>"></input></span><span class=rvts6></span><span class=rvts9></span><span class=rvts6></span><span class=rvts9>’</span><span class=rvts6></span></p>
+<p class=rvps7><span class=rvts6>Montant de la franchise: </span><span class=rvts8><input name="montant_franchise" placeholder="montant franchise"  value="<?php if(isset ($montant_franchise)) echo $montant_franchise; ?>"></input></span><span class=rvts6></span><span class=rvts9></span><span class=rvts6></span><span class=rvts9></span><span class=rvts6></span></p>
 <?php
 
 	}else { ?>
-<input name="CL_text_montant" type="hidden" placeholder="" value="<?php if(isset($CL_text_montant)) {echo $CL_text_montant;}  if (empty($CL_text_montant)){ echo "" ;}?>"></input>
+<input name="CL_text_montant" type="hidden" placeholder="" value="<?php if(isset($CL_text_montant)) {echo $CL_text_montant;}  if (empty($CL_text_montant)){ echo "" ;}?>">
+<p class=rvps7><span class=rvts6></span><span class=rvts8><input name="montant_franchise" placeholder="montant franchise" type="hidden" value=""></input></span><span class=rvts6></span><span class=rvts9></span><span class=rvts6></span><span class=rvts9></span><span class=rvts6></span></p>
+</input>
 
 <?php } }?>
 

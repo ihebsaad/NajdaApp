@@ -207,8 +207,8 @@ elseif (stristr($champtemp,'[CL_attention')== TRUE )
                 date_default_timezone_set('Africa/Tunis');
                 setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
                 $mc=round(microtime(true) * 1000);
-                $datees = strftime("%d-%B-%Y"."_".$mc); 
-                $datesc = strftime("%d-%B-%Y"); 				
+                $datees = strftime("%d-%m-%Y"."_".$mc); 
+                $datesc = strftime("%d-%m-%Y"); 				
                 $name_file = utf8_encode($arrfile['nom'].'_'.$datees.'.doc');
                 $titref =utf8_encode($arrfile['nom'].'_'.$datesc);
            /* }
@@ -1446,8 +1446,8 @@ public function historique(Request $request)
         // template annulation
         $file=public_path($arrfile['template_annulation']);
         $mc=round(microtime(true) * 1000);
-        $datees = strftime("%d-%B-%Y"."_".$mc); 
-        $datesc = strftime("%d-%B-%Y"); 
+        $datees = strftime("%d-%m-%Y"."_".$mc); 
+        $datesc = strftime("%d-%m-%Y"); 
         $name_file = $arrfile['nom'].'_'.$datees.'_annulation.doc';
         $titref =$arrfile['nom'].'_'.$datesc;
         // verifier si la template a un champ date/heure

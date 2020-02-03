@@ -1425,7 +1425,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 <label for="inputError" class="control-label">De (Date)</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input   type="text" id="date_debut_emp3"  name='date_debut_emp3' class="form-control datepicker-default" data-format="dd-MM-yyyy hh:mm:ss"  value="{{ $dossier->date_debut_emp3 }}">
+                                                                    <input   type="text" id="date_debut_emp3"  name='date_debut_emp3' class="form-control datepicker-default" data-format="dd-MM-yyyy hh:mm:ss"  value="{{ $dossier->date_debut_emp3 }}"  onchange="changing(this);">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1434,7 +1434,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 <label for="inputError" class="control-label">A (Date)</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input   type="text" id="date_fin_emp3"  name="date_fin_emp3"   class="form-control datepicker-default"   value="{{ $dossier->date_fin_emp3 }}">
+                                                                    <input   type="text" id="date_fin_emp3"  name="date_fin_emp3"   class="form-control datepicker-default"   value="{{ $dossier->date_fin_emp3 }}"  onchange="changing(this);">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1466,7 +1466,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 <label for="inputError" class="control-label">De (Date)</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input   type="text" id="date_debut_emp2"  name="date_debut_emp2" class="form-control datepicker-default"    value="{{ $dossier->date_debut_emp2 }}">
+                                                                    <input   type="text" id="date_debut_emp2"  name="date_debut_emp2" class="form-control datepicker-default"    value="{{ $dossier->date_debut_emp2 }}"  onchange="changing(this);">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1475,7 +1475,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 <label for="inputError" class="control-label">A (Date)</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input   type="text" id="date_fin_emp2"  name="date_debut_emp2" class="form-control datepicker-default"   value="{{ $dossier->date_fin_emp2 }}">
+                                                                    <input   type="text" id="date_fin_emp2"  name="date_debut_emp2" class="form-control datepicker-default"   value="{{ $dossier->date_fin_emp2 }}"  onchange="changing(this);">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1510,7 +1510,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 <label for="inputError" class="control-label">De (Date)</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input   type="text" id="date_debut_emp" name="date_debut_emp"  class="form-control datepicker-default"     value="{{ $dossier->date_debut_emp }}">
+                                                                    <input   type="text" id="date_debut_emp" name="date_debut_emp"  class="form-control datepicker-default"     value="{{ $dossier->date_debut_emp }}"  onchange="changing(this);">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1519,7 +1519,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                 <label for="inputError" class="control-label">A (Date)</label>
 
                                                                 <div class="input-group-control">
-                                                                    <input   type="text" id="date_fin_emp" name="date_fin_emp"   class="form-control datepicker-default"    value="{{ $dossier->date_fin_emp }}">
+                                                                    <input   type="text" id="date_fin_emp" name="date_fin_emp"   class="form-control datepicker-default"    value="{{ $dossier->date_fin_emp }}"  onchange="changing(this);">
                                                                 </div>
                                                             </div>
                                                         </div>
