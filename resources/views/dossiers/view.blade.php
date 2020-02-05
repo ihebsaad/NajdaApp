@@ -1319,9 +1319,10 @@ array_push($listepr,$pr['prestataire_id']);
                             <td style=";"><?php echo $omtx->titre; ?></td>
                             <td style=";">
                             <?php
+ $titre=1;
                                 if ($omtx->parent !== null)
                                 {
-                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$omtx->parent.');"><i class="far fa-eye"></i> Voir</button>';
+                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$omtx->parent.','.$titre.');"><i class="far fa-eye"></i> Voir</button>';
                                    
                                 }
                                 else
@@ -1392,9 +1393,10 @@ array_push($listepr,$pr['prestataire_id']);
                             <td style=";"><?php echo $omamb->titre; ?></td>
                             <td style=";">
                             <?php
+ $titre=2;
                                 if ($omamb->parent !== null)
                                 {
-                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$omamb->parent.');"><i class="far fa-eye"></i> Voir</button>';
+                                  echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$omamb->parent.','.$titre.');"><i class="far fa-eye"></i> Voir</button>';
                                    
                                 }
                                 else
@@ -1462,9 +1464,10 @@ array_push($listepr,$pr['prestataire_id']);
                                 <td style=";"><?php echo $omre->titre; ?></td>
                                 <td style=";">
                                     <?php
+ $titre=3;
                                     if ($omre->parent !== null)
                                     {
-                                        echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$omre->parent.');"><i class="far fa-eye"></i> Voir</button>';
+                                           echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$omre->parent.','.$titre.');"><i class="far fa-eye"></i> Voir</button>';
 
                                     }
                                     else
@@ -1533,7 +1536,7 @@ array_push($listepr,$pr['prestataire_id']);
                                     <?php
                                     if ($ommie->parent !== null)
                                     {
-                                        echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$ommie->parent.');"><i class="far fa-eye"></i> Voir</button>';
+                                       echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$ommie->parent.','.$ommie->titre.');"><i class="far fa-eye"></i> Voir</button>';
 
                                     }
                                     else
@@ -3368,14 +3371,14 @@ function annuleom(titre,iddoc)
     }
 // affichage de lhistorique du om taxi
     
-    function historiqueomtx(om){
+    function historiqueomtx(om,titre){
         //$("#gendocfromhtml").submit();
         var _token = $('input[name="_token"]').val();
         $.ajax({
                 url:"{{ route('ordremissions.historique') }}",
                 method:"POST",
                 //'&_token='+_token
-                data:'_token='+_token+'&om='+om,
+                data:'_token='+_token+'&om='+om+'&titre='+titre,
                 success:function(data){
 
                     var histom = JSON.parse(data);

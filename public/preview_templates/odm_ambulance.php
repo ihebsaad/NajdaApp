@@ -1232,7 +1232,7 @@ if (isset($signaturetype))
             });
     }
 
-   function verifamb1(origine)
+   function verifamb1()
 {
 
     var date1 = $("#dateheuredep").val();
@@ -1253,20 +1253,33 @@ if (isset($signaturetype))
                     {
                         // Clear vehicules list
                         $("#lambulancier1").empty();
+                        //alert($("input[list='lambulancier2']").val());
                         var len = output.length;
                         if (len >= 1)
                         {   
                             
                                 for(var i=0; i<len; i++){
                                     //alert(output[i].name);
-                                    if (! origine)
+                                    /*if (! origine)
                                     {
                                     	$("<option />", {
                                         val: output[i].name,
                                         text: output[i].name,
                                         idperso: output[i].id
                                     	}).appendTo("#lambulancier1");
-                                	}
+                                	}*/
+                                	// conditions pour ne pas donner la possibilite de selectionne le mm personnel deux foix (amb1,amb2,paramed)
+                                	/*if (origine == "amb1")
+                                	{*/
+                                		if ((output[i].name !== $("input[list='lambulancier2']").val()) && (output[i].name !== $("input[list='lparamed']").val()))
+                                		{
+	                                    	$("<option />", {
+	                                        val: output[i].name,
+	                                        text: output[i].name,
+	                                        idperso: output[i].id
+	                                    	}).appendTo("#lambulancier1");
+	                                	}
+                                	//}		
                                 }
                            
                         }else{alert('wrrong');}
@@ -1313,11 +1326,14 @@ if (isset($signaturetype))
                             
                                 for(var i=0; i<len; i++){
                                     //alert(output[i].name);
-                                    $("<option />", {
-                                        val: output[i].name,
-                                        text: output[i].name,
-                                        idperso: output[i].id
-                                    }).appendTo("#lambulancier2");
+                                    if ((output[i].name !== $("input[list='lambulancier1']").val()) && (output[i].name !== $("input[list='lparamed']").val()))
+                                	{
+	                                    $("<option />", {
+	                                        val: output[i].name,
+	                                        text: output[i].name,
+	                                        idperso: output[i].id
+	                                    }).appendTo("#lambulancier2");
+	                                }
                                 }
                            
                         }else{alert('wrrong');}
@@ -1364,11 +1380,14 @@ if (isset($signaturetype))
                             
                                 for(var i=0; i<len; i++){
                                     //alert(output[i].name);
-                                    $("<option />", {
-                                        val: output[i].name,
-                                        text: output[i].name,
-                                        idperso: output[i].id
-                                    }).appendTo("#lparamed");
+                                    if ((output[i].name !== $("input[list='lambulancier1']").val()) && (output[i].name !== $("input[list='lambulancier2']").val()))
+                                	{
+	                                    $("<option />", {
+	                                        val: output[i].name,
+	                                        text: output[i].name,
+	                                        idperso: output[i].id
+	                                    }).appendTo("#lparamed");
+	                                }
                                 }
                            
                         }else{alert('wrrong');}
@@ -1407,45 +1426,26 @@ $("#dateheuredispprev").change(function() {
     verifparamed();
   }
 });
-
-// amb1
-$('input[list="lambulancier1"]').on('input', function () {
-    var val = this.value;
-    if($('#lambulancier1 option').filter(function(){
-        return this.value.toUpperCase() === val.toUpperCase();        
-    }).length) {
-        //send ajax request
-        //alert("amb1");
+//AMb1
+$("input[list='lambulancier1']").focusin( function (event) {
+	event.preventDefault();
         verifamb1();
-	    verifamb2();
-	    verifparamed();
-    }
+	    /*verifamb2();
+	    verifparamed();*/
 });
-
-// amb1
-$('input[list="lambulancier2"]').on('input', function () {
-    var val = this.value;
-    if($('#lambulancier2 option').filter(function(){
-        return this.value.toUpperCase() === val.toUpperCase();        
-    }).length) {
-        //send ajax request
-        verifamb1();
+//AMb2
+$("input[list='lambulancier2']").focusin( function (event) {
+	event.preventDefault();
+        //verifamb1();
 	    verifamb2();
-	    verifparamed();
-    }
+	    //verifparamed();
 });
-
-// amb1
-$('input[list="lparamed"]').on('input', function () {
-    var val = this.value;
-    if($('#lparamed option').filter(function(){
-        return this.value.toUpperCase() === val.toUpperCase();        
-    }).length) {
-        //send ajax request
-        verifamb1();
-	    verifamb2();
+//PARAMED
+$("input[list='lparamed']").focusin( function (event) {
+	event.preventDefault();
+        /*verifamb1();
+	    verifamb2();*/
 	    verifparamed();
-    }
 });
 
 	// fin disponibilities
