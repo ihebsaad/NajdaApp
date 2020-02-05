@@ -1232,7 +1232,7 @@ if (isset($signaturetype))
             });
     }
 
-   function verifamb1()
+   function verifamb1(origine)
 {
 
     var date1 = $("#dateheuredep").val();
@@ -1259,11 +1259,14 @@ if (isset($signaturetype))
                             
                                 for(var i=0; i<len; i++){
                                     //alert(output[i].name);
-                                    $("<option />", {
+                                    if (! origine)
+                                    {
+                                    	$("<option />", {
                                         val: output[i].name,
                                         text: output[i].name,
                                         idperso: output[i].id
-                                    }).appendTo("#lambulancier1");
+                                    	}).appendTo("#lambulancier1");
+                                	}
                                 }
                            
                         }else{alert('wrrong');}
@@ -1404,6 +1407,47 @@ $("#dateheuredispprev").change(function() {
     verifparamed();
   }
 });
+
+// amb1
+$('input[list="lambulancier1"]').on('input', function () {
+    var val = this.value;
+    if($('#lambulancier1 option').filter(function(){
+        return this.value.toUpperCase() === val.toUpperCase();        
+    }).length) {
+        //send ajax request
+        //alert("amb1");
+        verifamb1();
+	    verifamb2();
+	    verifparamed();
+    }
+});
+
+// amb1
+$('input[list="lambulancier2"]').on('input', function () {
+    var val = this.value;
+    if($('#lambulancier2 option').filter(function(){
+        return this.value.toUpperCase() === val.toUpperCase();        
+    }).length) {
+        //send ajax request
+        verifamb1();
+	    verifamb2();
+	    verifparamed();
+    }
+});
+
+// amb1
+$('input[list="lparamed"]').on('input', function () {
+    var val = this.value;
+    if($('#lparamed option').filter(function(){
+        return this.value.toUpperCase() === val.toUpperCase();        
+    }).length) {
+        //send ajax request
+        verifamb1();
+	    verifamb2();
+	    verifparamed();
+    }
+});
+
 	// fin disponibilities
 	$('#CL_choix').on('change', function (e) {
 	    var valueSelected = this.value;

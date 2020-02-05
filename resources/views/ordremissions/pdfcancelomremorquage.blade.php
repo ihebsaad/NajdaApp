@@ -107,9 +107,9 @@
 			<span id="prestataire_remorquage" style="font-family:'Times New Roman'; "><?php echo $omparent['prestextern']; ?></span>
 <?php } ?>
 			<h1 style="margin-top:8.75pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:20pt"><span style="font-family:'Times New Roman'; text-decoration:underline">ORDRE DE MISSION</span><span style="font-family:'Times New Roman'; text-decoration:underline"> </span><span style="font-family:'Times New Roman'; text-decoration:underline">REMORQUAGE</span></h1><p style="margin-top:0.6pt; margin-left:5.85pt; margin-bottom:0pt; text-align:right; widows:0; orphans:0; font-size:8pt"><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span></p>
-
+<p><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">        </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">S</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">pecialité Remorqueur:</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">&#xa0;</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">: </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt"> </span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_spec'])) { echo $omparent['CL_spec']; } ?></span></p>
 				<span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">        </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">K</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">m approximatif</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">&#xa0;</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">: </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt"> </span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_km_approximatif'])) { echo $omparent['CL_km_approximatif']; } ?></span>
-				<span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">   </span><span style="font-family:'Times New Roman'; font-weight:bold">     </span><span style="font-family:'Times New Roman';">T</span><span style="font-family:'Times New Roman';">arif annoncé: </span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_tarif'])) { echo $omparent['CL_tarif']; } if (empty($omparent['CL_tarif'])) {echo "non";} ?></span></p>
+				<span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">   </span><span style="font-family:'Times New Roman'; font-weight:bold">     </span><span style="font-family:'Times New Roman';">M</span><span style="font-family:'Times New Roman';">ontant max: </span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_montant_max'])) { echo $omparent['CL_montant_max']; } if (empty($omparent['CL_montant_max'])) {echo "non";} ?></span></p>
 <?php  // Si client IMA
 if (isset($omparent['clientIMA'])) { ?>
 				<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; color:#000"><?php print($omparent['clientIMA']); ?></span></p>
@@ -122,6 +122,9 @@ if (isset($omparent['clientIMA'])) { ?>
 				</p>
 	</div>
 </div>
+
+<p style="margin-top: 0pt;margin-bottom:0pt; widows:0; orphans:0; font-size:14pt;color:red;"><span style="font-family:'Times New Roman'; font-weight:bold">Ce document annule l'ordre de mission au-dessous de la date : <?php echo $omparent['created_at']; ?></span></p>
+
 <div class="row" style=" margin-left: 0px;">
 	<p style="margin-top: 0pt;margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
 			<span style="font-family:'Times New Roman'; font-weight:bold">Identité personne à transporter:</span>

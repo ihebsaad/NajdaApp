@@ -334,6 +334,9 @@ class OrdreMissionsController extends Controller
 			    $result = $omtaxi->update($request->all());
 
 			    // creation nouveau dossier et l'om assigné
+			    if (!isset($_POST['parent']) ||empty($_POST['parent']))
+		    // creation nouveau dossier et l'om assigné
+               { 
         		$arequest = new \Illuminate\Http\Request();
         		$subscriber_name_ =$_POST['subscriber_name'];
         		$subscriber_lastname_ =$_POST['subscriber_lastname'];
@@ -722,7 +725,7 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
                else { $result5 = $omtaxi2->update($request->all()); }
 
         	}
-        }
+        }}
 
         /*if (isset($_POST['idvehic']))
                 {// mettre à jour les infos de vehicule
@@ -1275,6 +1278,8 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
 			    $result = $omambulance->update($request->all());
 
 			    // creation nouveau dossier et l'om assigné
+			    if (!isset($_POST['parent']) ||empty($_POST['parent']))
+            {
         		$arequest = new \Illuminate\Http\Request();
         		$subscriber_name_ =$_POST['subscriber_name'];
         		$subscriber_lastname_ =$_POST['subscriber_lastname'];
@@ -1665,7 +1670,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
         	
         }
 
-    }
+    }}
 
     
     public function pdfodmambulance()
@@ -2106,6 +2111,8 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 			    $result = $omremorquage->update($request->all());
 
 			    // creation nouveau dossier et l'om assigné
+			    if (!isset($_POST['parent']) ||empty($_POST['parent']))
+        		{
                 $arequest = new \Illuminate\Http\Request();
                 $subscriber_name_ =$_POST['subscriber_name'];
                 $subscriber_lastname_ =$_POST['subscriber_lastname'];
@@ -2512,7 +2519,7 @@ $reqlieup->request->add(['dossier' => $iddnew]);
 
 
 
-    }
+    } }
 
     public function export_pdf_odmmedicinternationnal(Request $request)
     {
