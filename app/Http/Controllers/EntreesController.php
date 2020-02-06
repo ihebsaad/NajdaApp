@@ -254,7 +254,7 @@ class EntreesController extends Controller
 
         $par=Auth::id();
         $user = User::find($par);
-        $nomuser = $user->name ."".$user->lastname ;
+        $nomuser = $user->name ." ".$user->lastname ;
 
         Log::info('[Agent : '.$nomuser.' ] Archivage d\'Email ' );
 

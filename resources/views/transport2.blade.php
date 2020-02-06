@@ -122,7 +122,7 @@
                                                        if($hour<8)
 
                                                        {  ?>
-                                                      <div class="om " style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;;height: 300px">
+                                                      <div class="om " style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;;height: 350px">
 
                                                          <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>; ">
                                                               <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
@@ -180,7 +180,7 @@
                                if($hour>7 && $hour<11)
 
                                {  ?>
-                               <div class="om " style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; ; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 300px">
+                               <div class="om " style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; ; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 350px">
 
                                    <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>;">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
@@ -238,7 +238,7 @@
                                if($hour>10 && $hour<14)
 
                                {  ?>
-                               <div class="om" style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px;; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 300px">
+                               <div class="om" style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px;; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 350px">
 
                                    <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
@@ -297,7 +297,7 @@
                                if($hour>13 && $hour<17)
 
                                {  ?>
-                               <div class="om" style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 300px">
+                               <div class="om" style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 350px">
 
                                    <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
@@ -355,7 +355,7 @@
                                if($hour>17 && $hour<20)
 
                                {  ?>
-                               <div class="om" style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; ; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 300px">
+                               <div class="om" style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; ; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 350px">
 
                                    <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>;">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>
@@ -414,7 +414,7 @@
                                if($hour>19 && $hour<24)
 
                                {  ?>
-                               <div class="om" style="background-color:<?php echo $color2;?>;;float:left;margin-top:15px;margin-right:30px;color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 300px">
+                               <div class="om" style="background-color:<?php echo $color2;?>;;float:left;margin-top:15px;margin-right:30px;color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 350px">
 
                                    <div class="row" style="padding:3px 3px 3px 3px; margin-bottom:5px;background-color:<?php echo $color; ?>;">
                                        <div class="col-md-9"><i class="fa fa-folder"></i> <?php echo $ref; ?></div>

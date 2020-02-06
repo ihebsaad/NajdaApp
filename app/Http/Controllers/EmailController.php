@@ -434,6 +434,7 @@ class EmailController extends Controller
             $sujet2= $oMessage->getSubject()  ;
 
             if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=iconv('UTF-8', 'ISO-8859-1//IGNORE', $sujet);
                 $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
             }
 
@@ -730,7 +731,9 @@ $id=0;
 
 
             if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                 $sujet=iconv('UTF-8', 'ISO-8859-1//IGNORE', $sujet);
                 $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+
             }
 
             $nbattachs= intval($oMessage->getAttachments()->count()) ;
@@ -1119,6 +1122,7 @@ $id=0;
 
 
             if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=iconv('UTF-8', 'ISO-8859-1//IGNORE', $sujet);
                 $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
             }
 
@@ -1488,6 +1492,7 @@ $id=0;
 
 
             if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=iconv('UTF-8', 'ISO-8859-1//IGNORE', $sujet);
                 $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
             }
 
@@ -1856,6 +1861,7 @@ $id=0;
 
 
             if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=iconv('UTF-8', 'ISO-8859-1//IGNORE', $sujet);
                 $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
             }
 
@@ -2200,6 +2206,7 @@ $id=0;
 
 
             if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=iconv('UTF-8', 'ISO-8859-1//IGNORE', $sujet);
                 $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
             }
 
@@ -2561,6 +2568,7 @@ $id=0;
             $sujet2= $oMessage->getSubject()  ;
 
             if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=iconv('UTF-8', 'ISO-8859-1//IGNORE', $sujet);
                 $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
             }
 
@@ -2923,6 +2931,7 @@ $id=0;
 
 
             if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=iconv('UTF-8', 'ISO-8859-1//IGNORE', $sujet);
                 $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
             }
 
@@ -3288,6 +3297,7 @@ $id=0;
 
 
             if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=iconv('UTF-8', 'ISO-8859-1//IGNORE', $sujet);
                 $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
             }
 
@@ -3657,6 +3667,7 @@ $id=0;
 
 
             if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=iconv('UTF-8', 'ISO-8859-1//IGNORE', $sujet);
                 $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
             }
 
@@ -4018,6 +4029,7 @@ $id=0;
             $sujet2= $oMessage->getSubject()  ;
 
             if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=iconv('UTF-8', 'ISO-8859-1//IGNORE', $sujet);
                 $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
             }
 
@@ -4142,6 +4154,7 @@ $id=0;
 
 
                 if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                    $sujet=iconv('UTF-8', 'ISO-8859-1//IGNORE', $sujet);
                     $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
                 }
 
@@ -4352,6 +4365,7 @@ $id=0;
 
 
             if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=iconv('UTF-8', 'ISO-8859-1//IGNORE', $sujet);
                 $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
             }
 

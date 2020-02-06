@@ -536,7 +536,9 @@
     <?php
     // $date_actu =time();
     $date_actu =date("H:i");
-
+	$date_actu=strtotime($date_actu);
+    $debut= strtotime($debut);
+    $fin= strtotime($fin);
     // verif date actuelle par rapport seance
    if ( $date_actu < $debut || ($date_actu > $fin) )
      {

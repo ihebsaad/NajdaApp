@@ -235,7 +235,11 @@
                                     </td>
                                 </tr>
                             <?php     $date_actu =date("H:i");
-                            if ( $date_actu < $debut || ($date_actu > $fin) )
+                            $date_actu=strtotime($date_actu);
+                          $debut= strtotime($debut);
+                          $fin= strtotime($fin);
+              
+                            if ( ($date_actu < $debut )|| ($date_actu > $fin ) )
                                 {  ?>
                                 <tr>
                                     <td class="text-primary">Veilleur de nuit</td>

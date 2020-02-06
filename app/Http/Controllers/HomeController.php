@@ -747,7 +747,36 @@ return redirect('roles');
 
          $user= $request->get('user');
 
+        $seance =   Seance::first();
+        $supmedic=$seance->superviseurmedic;
+        $suptech=$seance->superviseurtech;
+        $veilleur=$seance->veilleur;
+
+        $date_actu =date("H:i");
+        $debut=$seance->debut;
+        $fin=$seance->fin;
+
+				$date_actu=strtotime($date_actu);
+                $debut= strtotime($debut);
+                $fin= strtotime($fin);
+
         User::where('id', $user)->update(array('statut' => -1));
+
+
+        if($supmedic >0){
+            Dossier::where('affecte', $user)->update(array('affecte' => $supmedic));
+
+        }elseif ($suptech>0){
+            Dossier::where('affecte', $user)->update(array('affecte' => $suptech));
+
+        }
+
+        // verif date actuelle par rapport seance
+        if ( $date_actu < $debut || ($date_actu > $fin) )
+        {
+            Dossier::where('affecte', $user)->update(array('affecte' => $veilleur));
+
+        }
 
 
     }

@@ -168,21 +168,52 @@ class LoginController extends Controller
 // 'statut'=>2  affectation automatique
 
 
-        // Heure de nuit
-        if ($date_actu < $debut || ($date_actu > $fin)) {
-            // L'utilisateur est le veilleur
-            if ($veilleur == $iduser) {
 
-                //interdire de deconnexion veilleur si superviseur non connectés
-                if (!($medic > 0) && !($tech > 0)) {
-                    return redirect('/home')->withErrors(['un superviseur doit êtres connecté ']);
-                } else {
-                    // Affectation des dossiers Transport vers charge
-                    if ($charge > 0) {
+
+        if ($veilleur == $iduser) {
+
+            //interdire de deconnexion veilleur si superviseur non connectés
+            if (!($medic > 0) && !($tech > 0)) {
+                return redirect('/home')->withErrors(['un superviseur doit êtres connecté ']);
+            } else {
+                // Affectation des dossiers Transport vers charge
+                if ($charge > 0) {
+                    $dossiers=Dossier::where(function ($query) use ($iduser) {
+                        $query->where('reference_medic', 'like', '%TN%')
+                            ->where('current_status','!=', 'Cloture')
+                            ->where('affecte', $iduser);
+                    })->orWhere(function ($query) use ($iduser) {
+                        $query->where('reference_medic', 'like', '%TM%')
+                            ->where('current_status','!=', 'Cloture')
+                            ->where('affecte', $iduser);
+                    })->orWhere(function ($query) use ($iduser) {
+                        $query->where('reference_medic', 'like', '%TV%')
+                            ->where('current_status','!=', 'Cloture')
+                            ->where('affecte', $iduser);
+                    })->get();
+
+                    //   Dossier::setTimestamps(false);
+
+                    if($dossiers)
+                    {
+                        $user_dest=$charge;
+                        foreach ($dossiers as $doss) {
+                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                            $this->migration_miss($doss->id,$user_dest);
+                            $this->migration_notifs($doss->id,$user_dest);
+                        }
+                    }
+                    //  Dossier::setTimestamps(true);
+
+
+                }// charge
+                else {
+
+                    if ($tech > 0) {
                         $dossiers=Dossier::where(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%TN%')
                                 ->where('current_status','!=', 'Cloture')
-                            ->where('affecte', $iduser);
+                                ->where('affecte', $iduser);
                         })->orWhere(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%TM%')
                                 ->where('current_status','!=', 'Cloture')
@@ -193,24 +224,23 @@ class LoginController extends Controller
                                 ->where('affecte', $iduser);
                         })->get();
 
-                     //   Dossier::setTimestamps(false);
+                        //     Dossier::setTimestamps(false);
 
                         if($dossiers)
-                         {
-                          $user_dest=$charge;
-                          foreach ($dossiers as $doss) {
-                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
-                            $this->migration_miss($doss->id,$user_dest);
-                            $this->migration_notifs($doss->id,$user_dest);
-                          }
+                        {
+                            $user_dest=$tech;
+                            foreach ($dossiers as $doss) {
+                                $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                                $this->migration_miss($doss->id,$user_dest);
+                                $this->migration_notifs($doss->id,$user_dest);
+                            }
                         }
-                      //  Dossier::setTimestamps(true);
+                        //    Dossier::setTimestamps(true);
 
 
-                    }// charge
-                    else {
+                    } else {
 
-                        if ($tech > 0) {
+                        if ($medic > 0) {
                             $dossiers=Dossier::where(function ($query) use ($iduser) {
                                 $query->where('reference_medic', 'like', '%TN%')
                                     ->where('current_status','!=', 'Cloture')
@@ -225,59 +255,61 @@ class LoginController extends Controller
                                     ->where('affecte', $iduser);
                             })->get();
 
-                       //     Dossier::setTimestamps(false);
+                            //   Dossier::setTimestamps(false);
 
                             if($dossiers)
-                         {
-                          $user_dest=$tech;
-                          foreach ($dossiers as $doss) {
-                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
-                            $this->migration_miss($doss->id,$user_dest);
-                            $this->migration_notifs($doss->id,$user_dest);
-                          }
-                        }
-                        //    Dossier::setTimestamps(true);
-
-
-                        } else {
-
-                            if ($medic > 0) {
-                                $dossiers=Dossier::where(function ($query) use ($iduser) {
-                                    $query->where('reference_medic', 'like', '%TN%')
-                                        ->where('current_status','!=', 'Cloture')
-                                        ->where('affecte', $iduser);
-                                })->orWhere(function ($query) use ($iduser) {
-                                    $query->where('reference_medic', 'like', '%TM%')
-                                        ->where('current_status','!=', 'Cloture')
-                                        ->where('affecte', $iduser);
-                                })->orWhere(function ($query) use ($iduser) {
-                                    $query->where('reference_medic', 'like', '%TV%')
-                                        ->where('current_status','!=', 'Cloture')
-                                        ->where('affecte', $iduser);
-                                })->get();
-
-                             //   Dossier::setTimestamps(false);
-
-                                if($dossiers)
-                                 {
-                                  $user_dest=$medic;
-                                  foreach ($dossiers as $doss) {
+                            {
+                                $user_dest=$medic;
+                                foreach ($dossiers as $doss) {
                                     $doss->update(array('affecte' => $user_dest, 'statut' => 2));
                                     $this->migration_miss($doss->id,$user_dest);
                                     $this->migration_notifs($doss->id,$user_dest);
-                                  }
                                 }
-                             //   Dossier::setTimestamps(true);
-
-
                             }
+                            //   Dossier::setTimestamps(true);
+
+
+                        }
+                    }
+                }
+
+
+                // Affectation des dossiers Medic
+                if ($medic > 0) {
+
+
+                    $dossiers=Dossier::where(function ($query)  {
+                        $query->where('reference_medic', 'like', '%N%')
+                            ->where('type_dossier', 'Medical')
+                            ->where('current_status', 'actif');
+                    })->orWhere(function ($query)   {
+                        $query->where('reference_medic', 'like', '%M%')
+                            ->where('current_status', 'actif');
+                    })->orWhere(function ($query)   {
+                        $query->where('reference_medic', 'like', '%MI%')
+                            ->where('current_status', 'actif');
+                    })->orWhere(function ($query)   {
+                        $query->where('reference_medic', 'like', '%TPA%')
+                            ->where('current_status', 'actif');
+                    })->get();
+
+                    if($dossiers)
+                    {
+                        $user_dest=$medic;
+                        foreach ($dossiers as $doss) {
+                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                            $this->migration_miss($doss->id,$user_dest);
+                            $this->migration_notifs($doss->id,$user_dest);
                         }
                     }
 
 
-                    // Affectation des dossiers Medic
-                    if ($medic > 0) {
+                }// medic
 
+                else {
+                    if ($tech > 0) {
+
+                        // Dossiers medicaux vers Sup Tech
 
                         $dossiers=Dossier::where(function ($query)  {
                             $query->where('reference_medic', 'like', '%N%')
@@ -294,78 +326,85 @@ class LoginController extends Controller
                                 ->where('current_status', 'actif');
                         })->get();
 
-                         if($dossiers)
-                             {
-                              $user_dest=$medic;
-                              foreach ($dossiers as $doss) {
+                        if($dossiers)
+                        {
+                            $user_dest=$tech;
+                            foreach ($dossiers as $doss) {
                                 $doss->update(array('affecte' => $user_dest, 'statut' => 2));
                                 $this->migration_miss($doss->id,$user_dest);
                                 $this->migration_notifs($doss->id,$user_dest);
-                              }
                             }
-
-
-                    }// medic
-
-                    else {
-                        if ($tech > 0) {
-
-                            // Dossiers medicaux vers Sup Tech
-
-                            $dossiers=Dossier::where(function ($query)  {
-                                $query->where('reference_medic', 'like', '%N%')
-                                    ->where('type_dossier', 'Medical')
-                                    ->where('current_status', 'actif');
-                            })->orWhere(function ($query)   {
-                                $query->where('reference_medic', 'like', '%M%')
-                                    ->where('current_status', 'actif');
-                            })->orWhere(function ($query)   {
-                                $query->where('reference_medic', 'like', '%MI%')
-                                    ->where('current_status', 'actif');
-                            })->orWhere(function ($query)   {
-                                $query->where('reference_medic', 'like', '%TPA%')
-                                    ->where('current_status', 'actif');
-                            })->get();
-
-                             if($dossiers)
-                             {
-                              $user_dest=$tech;
-                              foreach ($dossiers as $doss) {
-                                $doss->update(array('affecte' => $user_dest, 'statut' => 2));
-                                $this->migration_miss($doss->id,$user_dest);
-                                $this->migration_notifs($doss->id,$user_dest);
-                              }
-                            }
-
-
                         }
+
 
                     }
 
-                    // Affectation des dossiers Techniques et Mixtes
-                    if ($tech > 0) {
+                }
 
-                   /*     // Dossiers Techniques vers Sup Tech
-                        Dossier::where('affecte', $iduser)
-                            ->where('type_dossier', 'Mixte')
-                            ->where('current_status', 'actif')
-                            ->update(array('affecte' => $tech));
+                // Affectation des dossiers Techniques et Mixtes
+                if ($tech > 0) {
 
-                        // Dossiers Mixte vers Sup Tech
 
-                        Dossier::where('affecte', $iduser)
-                            ->where('type_dossier', 'Technique')
-                            ->where('current_status', 'actif')
-                            ->update(array('affecte' => $tech, 'statut' => 2));
-*/
+                    // Techniques
 
-                        // Techniques
-
-                        $dossiers=Dossier::where(function ($query) use ($iduser) {
-                            $query->where('reference_medic', 'like', '%N%')
+                    $dossiers=Dossier::where(function ($query) use ($iduser) {
+                        $query->where('reference_medic', 'like', '%N%')
                             ->where('type_dossier', 'Technique')
                             ->where('current_status', 'actif')
                             ->where('affecte', $iduser);
+                    })->orWhere(function ($query) use ($iduser) {
+                        $query->where('reference_medic', 'like', '%V%')
+                            ->where('current_status', 'actif')
+                            ->where('affecte', $iduser);
+                    })->orWhere(function ($query) use ($iduser) {
+                        $query->where('reference_medic', 'like', '%XP%')
+                            ->where('current_status', 'actif')
+                            ->where('affecte', $iduser);
+
+                    })->get();
+
+                    if($dossiers)
+                    {
+                        $user_dest=$tech;
+                        foreach ($dossiers as $doss) {
+                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                            $this->migration_miss($doss->id,$user_dest);
+                            $this->migration_notifs($doss->id,$user_dest);
+                        }
+                    }
+
+
+                    // Mixtes
+                    $dossiers=Dossier::where(function ($query) use ($iduser) {
+                        $query->where('reference_medic', 'like', '%N%')
+                            ->where('type_dossier', 'Mixte')
+                            ->where('current_status', 'actif')
+                            ->where('affecte', $iduser);
+                    })->get();
+
+                    if($dossiers)
+                    {
+                        $user_dest=$tech;
+                        foreach ($dossiers as $doss) {
+                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                            $this->migration_miss($doss->id,$user_dest);
+                            $this->migration_notifs($doss->id,$user_dest);
+                        }
+                    }
+
+
+                }// tech
+
+                else {
+                    if ($medic > 0) {
+
+                        // Dossiers Techniques vers Sup Tech
+
+                       $dossiers=Dossier::where(function ($query) use ($iduser) {
+                            $query->where('reference_medic', 'like', '%N%')
+                                ->where('type_dossier', 'Technique')
+                                ->where('current_status', 'actif')
+                                ->where('affecte', $iduser);
                         })->orWhere(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%V%')
                                 ->where('current_status', 'actif')
@@ -375,144 +414,89 @@ class LoginController extends Controller
                                 ->where('current_status', 'actif')
                                 ->where('affecte', $iduser);
 
+
                         })->get();
 
-                         if($dossiers)
-                             {
-                              $user_dest=$tech;
-                              foreach ($dossiers as $doss) {
+                        if($dossiers)
+                        {
+                            $user_dest=$medic;
+                            foreach ($dossiers as $doss) {
                                 $doss->update(array('affecte' => $user_dest, 'statut' => 2));
                                 $this->migration_miss($doss->id,$user_dest);
                                 $this->migration_notifs($doss->id,$user_dest);
-                              }
                             }
+                        }
 
 
-                    // Mixtes
+
+                        // Mixtes
                         $dossiers=Dossier::where(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%N%')
                                 ->where('type_dossier', 'Mixte')
                                 ->where('current_status', 'actif')
                                 ->where('affecte', $iduser);
+
+
+
                         })->get();
 
                         if($dossiers)
-                             {
-                              $user_dest=$tech;
-                              foreach ($dossiers as $doss) {
+                        {
+                            $user_dest=$medic;
+                            foreach ($dossiers as $doss) {
                                 $doss->update(array('affecte' => $user_dest, 'statut' => 2));
                                 $this->migration_miss($doss->id,$user_dest);
                                 $this->migration_notifs($doss->id,$user_dest);
-                              }
                             }
-
-
-                    }// tech
-
-                    else {
-                        if ($medic > 0) {
-
-                            // Dossiers Techniques vers Sup Tech
-                       /*     Dossier::where('affecte', $iduser)
-                                ->where('type_dossier', 'Mixte')
-                                ->where('current_status', 'actif')
-                                ->update(array('affecte' => $medic, 'statut' => 2));
-
-                            // Dossiers Mixte vers Sup Tech
-
-                            Dossier::where('affecte', $iduser)
-                                ->where('type_dossier', 'Technique')
-                                ->where('current_status', 'actif')
-                                ->update(array('affecte' => $medic, 'statut' => 2));
-*/
-
-                            $dossiers=Dossier::where(function ($query) use ($iduser) {
-                                $query->where('reference_medic', 'like', '%N%')
-                                    ->where('type_dossier', 'Technique')
-                                    ->where('current_status', 'actif')
-                                    ->where('affecte', $iduser);
-                            })->orWhere(function ($query) use ($iduser) {
-                                $query->where('reference_medic', 'like', '%V%')
-                                    ->where('current_status', 'actif')
-                                    ->where('affecte', $iduser);
-                            })->orWhere(function ($query) use ($iduser) {
-                                $query->where('reference_medic', 'like', '%XP%')
-                                    ->where('current_status', 'actif')
-                                    ->where('affecte', $iduser);
-
-
-                            })->get();
-
-                            if($dossiers)
-                             {
-                              $user_dest=$medic;
-                              foreach ($dossiers as $doss) {
-                                $doss->update(array('affecte' => $user_dest, 'statut' => 2));
-                                $this->migration_miss($doss->id,$user_dest);
-                                $this->migration_notifs($doss->id,$user_dest);
-                              }
-                            }
+                        }
 
 
 
-                             // Mixtes
-                           $dossiers=Dossier::where(function ($query) use ($iduser) {
-                                $query->where('reference_medic', 'like', '%N%')
-                                    ->where('type_dossier', 'Mixte')
-                                    ->where('current_status', 'actif')
-                                    ->where('affecte', $iduser);
+                    }// medic
+
+                }
 
 
+                // Affectation des dossiers inactifs au dispatcheur
+                if ($dispatcheur > 0) {
 
-                            })->get();
+                    $dossiers=Dossier::where('affecte', $iduser)
+                        ->where('current_status', 'inactif')
+                        ->get();
+                    //     Dossier::setTimestamps(false);
 
-                             if($dossiers)
-                             {
-                              $user_dest=$medic;
-                              foreach ($dossiers as $doss) {
-                                $doss->update(array('affecte' => $user_dest, 'statut' => 2));
-                                $this->migration_miss($doss->id,$user_dest);
-                                $this->migration_notifs($doss->id,$user_dest);
-                              }
-                            }
-
-
-
-                        }// medic
-
+                    if($dossiers)
+                    {
+                        $user_dest=$dispatcheur;
+                        foreach ($dossiers as $doss) {
+                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                            $this->migration_miss($doss->id,$user_dest);
+                            $this->migration_notifs($doss->id,$user_dest);
+                        }
                     }
+                    //     Dossier::setTimestamps(true);
 
 
-                    // Affectation des dossiers inactifs au dispatcheur
-                    if ($dispatcheur > 0) {
-
-                         $dossiers=Dossier::where('affecte', $iduser)
-                            ->where('current_status', 'inactif')
-                            ->get();
-                   //     Dossier::setTimestamps(false);
-
-                            if($dossiers)
-                             {
-                              $user_dest=$dispatcheur;
-                              foreach ($dossiers as $doss) {
-                                $doss->update(array('affecte' => $user_dest, 'statut' => 2));
-                                $this->migration_miss($doss->id,$user_dest);
-                                $this->migration_notifs($doss->id,$user_dest);
-                              }
-                            }
-                   //     Dossier::setTimestamps(true);
+                }// dispatcheur
 
 
-                    }// dispatcheur
+            }// superviseur connecté
 
 
-                }// superviseur connecté
+            /******  Fin de déconnexion Veilleur  *****/
 
 
-                /******  Fin de déconnexion Veilleur  *****/
+        }
 
 
-            } else {
+				$date_actu=strtotime($date_actu);
+                $debut= strtotime($debut);
+                $fin= strtotime($fin);
+
+            // Heure de nuit
+        if ($date_actu < $debut || ($date_actu > $fin)) {
+            // L'utilisateur est le veilleur
+          if($veilleur!=$iduser){
                 // L'utilisateur n'est pas le veilleur
 
                 // Affectation tous les dossiers vers le veilleur

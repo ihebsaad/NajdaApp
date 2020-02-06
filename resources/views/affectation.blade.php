@@ -78,7 +78,9 @@
                 $disptel3=$seance->dispatcheurtel3 ;
                 $veilleur=$seance->veilleur ;
 
-
+                $date_actu =date("H:i");
+                $debut=$seance->debut;
+                $fin=$seance->fin;
                 function custom_echo($x, $length)
                 {
                     if(strlen($x)<=$length)
@@ -249,6 +251,8 @@
                     ->get();
 
                 $CdossiersDisp=count($dossiersDisp);
+
+
                 ?>
 
 
@@ -348,7 +352,22 @@
                         <i class="fa-lg fas fa-folder"></i>  Dispat  (<?php echo  $CdossiersDisp ;?>)
                     </a>
                 </li>
+                <?php if ( $date_actu < $debut || ($date_actu > $fin) )
+                {
+                // veilleur
+                $dossiersV=     Dossier::where('statut','<>',5)
+                    ->where('affecte',$veilleur)
+                    ->get();
+                $CdossiersV=count($dossiersV);
 
+
+                ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="#panelv" data-toggle="tab" onclick="hideTabs();showTab6(); "  >
+                        <i class="fa-lg fas fa-folder"></i>  Veilleur  (<?php echo  $CdossiersV ;?>)
+                    </a>
+                </li>
+            <?php }  ?>
             </ul>
 
             <ul class="nav  nav-tabs" style="margin-top:10px;margin-bottom:10px">
@@ -567,7 +586,56 @@
             </div><!--- Panel disp --->
 
 
-            <div id="panelnonaff"   class="tab-pane fade   pannel  ">
+           <?php     if ( $date_actu < $debut || ($date_actu > $fin) )
+                { ?>
+                <div id="panelv"  class="tab-pane fade  pannel" >
+
+                    <div class="row">
+                        <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputV" onkeyup="VSearchf()" placeholder=" N° de Dossier.." title="Taper"></div>
+                        <div class="col-sm-4"><input  style="width:200px;margin-top:10px;" class="search" type="text" id="myInputV2" onkeyup="VSearchf2()" placeholder=" Assuré.." title="Taper"></div>
+                        <div class="col-sm-4"> <input style="width:200px;margin-top:10px;" class="search" type="text" id="myInputV3" onkeyup="VSearchf3()" placeholder=" Réf Client.." title="Taper"></div>
+                    </div>
+                    <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
+                        <div class="row" style="margin-bottom:15px;">
+                            <div class="col-md-3" style="cursor:pointer;color:#F39C12" onclick="VshowMixtes()"><i class="fa fa-lg fa-folder"></i>  <b  >Dossier Mixte</b></div>
+                            <div class="col-md-3" style="cursor:pointer;color:#52BE80" onclick="VshowMedic()" ><i class="fa fa-lg fa-folder"></i>  <b  >Dossier Medical</b></div>
+                            <div class="col-md-4" style="cursor:pointer;color:#3498DB" onclick="VshowTech()" ><i class="fa fa-lg fa-folder"></i>  <b   >Dossier Technique</b></div>
+                            <div class="col-md-2" style="cursor:pointer;color:#000000;font-weight: 600" onclick="VshowTous()" >  <b  onclick="IshowTech()">TOUS</b></div>
+                        </div>
+
+                        <div id="drag-elements6" class="dragging container">
+
+                            <?php  $type='';$style='';
+                            if($CdossiersV >0)
+                            {
+                            foreach($dossiersV as $dossierV)
+                            { $type=$dossierV['type_dossier'];if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique'|| $type=='Transport'){$style="--my-color-var:#3498DB;";}
+                            $idd=$dossierV['id'];
+                            $immatricul=$dossierV['vehicule_immatriculation'];
+                            $ref=$dossierV['reference_medic'];$abn=$dossierV['subscriber_name'].' '.$dossierV['subscriber_lastname'];$idclient=$dossierV['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
+                            <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style;?>" > <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
+                                <!--<i style="float:right;color:black;margin-left:5px;margin-right:5px;" class="fa fa-folder" ></i>-->
+                                <div class="infos"> <label style="font-size: 15px;"><?php echo $ref;?></label>
+                                    <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small><br>
+                                    <?php if($immatricul!='') { echo '<small style="font-size:10px">'. $immatricul .'</small>';} ?>
+
+                                </div>
+                            </div>
+
+                            <?php	}
+                            }
+
+
+                            ?>
+                        </div>
+
+
+                    </div>
+
+                </div><!--- Panel veilleur --->
+
+<?php } ?>
+                <div id="panelnonaff"   class="tab-pane fade   pannel  ">
 
 
                 <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
@@ -744,6 +812,9 @@
     }
     function showTab5() {
         $('#paneldisp').css('display','block');
+    }
+    function showTab6() {
+        $('#panelv').css('display','block');
     }
 
 
@@ -1346,6 +1417,130 @@
 
         }
     }
+
+
+    /**************/
+
+
+    /************     Veilleur   **************/
+
+
+    function   VshowMixtes  (){
+
+        var elements = document.getElementsByClassName('dossier');
+        for (var i = 0; i < elements.length; i++){
+            if (elements[i].parentElement.id =='drag-elements6')
+            {
+                elements[i].style.display = 'none';
+            }
+        }
+
+        var elements = document.getElementsByClassName('dossier-Mixte');
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.display = 'block';
+        }
+    }
+
+    function   VshowMedic  (){
+
+        var elements = document.getElementsByClassName('dossier');
+        for (var i = 0; i < elements.length; i++){
+            if (elements[i].parentElement.id =='drag-elements6')
+            {
+                elements[i].style.display = 'none';
+            }
+        }
+
+        var elements = document.getElementsByClassName('dossier-Medical');
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.display = 'block';
+        }
+    }
+
+    function   VshowTech  (){
+
+        var elements = document.getElementsByClassName('dossier');
+        for (var i = 0; i < elements.length; i++){
+            if (elements[i].parentElement.id =='drag-elements6')
+            {
+                elements[i].style.display = 'none';
+            }
+        }
+
+        var elements = document.getElementsByClassName('dossier-Technique');
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.display = 'block';
+        }
+    }
+
+    function   VshowTous  (){
+
+        var elements = document.getElementsByClassName('dossier');
+        for (var i = 0; i < elements.length; i++){
+            elements[i].style.display = 'block';
+        }
+
+
+    }
+
+
+    function VSearchf() {
+        var input, filter, ul, li, label, i, txtValue;
+        input = document.getElementById("myInputV");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("drag-elements6");
+        li = ul.getElementsByClassName("dossier");
+        for (i = 0; i < li.length; i++) {
+            label = li[i].getElementsByTagName("label")[0];
+            txtValue = label.textContent || label.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+
+
+        }
+    }
+    function VSearchf2() {
+        var input, filter, ul, li, label, i, txtValue;
+        input = document.getElementById("myInputV2");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("drag-elements6");
+        li = ul.getElementsByClassName("dossier");
+        for (i = 0; i < li.length; i++) {
+            label = li[i].getElementsByTagName("small")[0];
+            txtValue = label.textContent || label.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+
+
+        }
+    }
+
+    function VSearchf3() {
+        var input, filter, ul, li, label, i, txtValue;
+        input = document.getElementById("myInputV3");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("drag-elements6");
+        li = ul.getElementsByClassName("dossier");
+        for (i = 0; i < li.length; i++) {
+            label = li[i].getElementsByTagName("small")[1];
+            txtValue = label.textContent || label.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+
+
+        }
+    }
+
+
 </script>
 
 
@@ -1383,8 +1578,13 @@
   document.getElementById('drag-elements3'),
   document.getElementById('drag-elements4'),
   document.getElementById('drag-elements5')
+<?php
+  if ( $date_actu < $debut || ($date_actu > $fin) )
+        {
+       ?>
+         ,document.getElementById('drag-elements6')
 
-
+        <?php }?>
         ], {
             revertOnSpill: true
         });

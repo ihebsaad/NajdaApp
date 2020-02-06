@@ -586,7 +586,7 @@ class UsersController extends Controller
         // affecter des dossiers inactifs
 
          //   Dossier::setTimestamps(false);
-            $dossiers=Dossier::where('current_status','inactif')
+           $dossiers=Dossier::where('current_status','inactif')
                   //  ->where('statut','<>',5)
                     ->get();
          //   Dossier::setTimestamps(true);
@@ -601,8 +601,6 @@ class UsersController extends Controller
                     $this->migration_notifs($doss->id,$user_dest);
                   }
                 }
-
-
 
             //}
         }
