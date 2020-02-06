@@ -164,6 +164,8 @@ class LoginController extends Controller
         $debut = $seance->debut;
         $fin = $seance->fin;
         $date_actu = date("H:i");
+        $annee=date('y');
+
 
 // 'statut'=>2  affectation automatique
 
@@ -278,12 +280,12 @@ class LoginController extends Controller
                 if ($medic > 0) {
 
 
-                    $dossiers=Dossier::where(function ($query)  {
-                        $query->where('reference_medic', 'like', '%N%')
+                    $dossiers=Dossier::where(function ($query) use($annee) {
+                        $query->where('reference_medic', 'like', $annee.'N%')
                             ->where('type_dossier', 'Medical')
                             ->where('current_status', 'actif');
-                    })->orWhere(function ($query)   {
-                        $query->where('reference_medic', 'like', '%M%')
+                    })->orWhere(function ($query) use($annee)   {
+                        $query->where('reference_medic', 'like', $annee.'M%')
                             ->where('current_status', 'actif');
                     })->orWhere(function ($query)   {
                         $query->where('reference_medic', 'like', '%MI%')
@@ -311,12 +313,12 @@ class LoginController extends Controller
 
                         // Dossiers medicaux vers Sup Tech
 
-                        $dossiers=Dossier::where(function ($query)  {
-                            $query->where('reference_medic', 'like', '%N%')
+                        $dossiers=Dossier::where(function ($query)use($annee)   {
+                            $query->where('reference_medic', 'like', $annee.'N%')
                                 ->where('type_dossier', 'Medical')
                                 ->where('current_status', 'actif');
-                        })->orWhere(function ($query)   {
-                            $query->where('reference_medic', 'like', '%M%')
+                        })->orWhere(function ($query)  use($annee)  {
+                            $query->where('reference_medic', 'like', $annee.'M%')
                                 ->where('current_status', 'actif');
                         })->orWhere(function ($query)   {
                             $query->where('reference_medic', 'like', '%MI%')
@@ -347,16 +349,16 @@ class LoginController extends Controller
 
                     // Techniques
 
-                    $dossiers=Dossier::where(function ($query) use ($iduser) {
-                        $query->where('reference_medic', 'like', '%N%')
+                    $dossiers=Dossier::where(function ($query) use ($iduser,$annee) {
+                        $query->where('reference_medic', 'like', $annee.'N%')
                             ->where('type_dossier', 'Technique')
                             ->where('current_status', 'actif')
                             ->where('affecte', $iduser);
-                    })->orWhere(function ($query) use ($iduser) {
-                        $query->where('reference_medic', 'like', '%V%')
+                    })->orWhere(function ($query) use ($iduser,$annee) {
+                        $query->where('reference_medic', 'like',$annee. 'V%')
                             ->where('current_status', 'actif')
                             ->where('affecte', $iduser);
-                    })->orWhere(function ($query) use ($iduser) {
+                    })->orWhere(function ($query) use ($iduser,$annee) {
                         $query->where('reference_medic', 'like', '%XP%')
                             ->where('current_status', 'actif')
                             ->where('affecte', $iduser);
@@ -375,8 +377,8 @@ class LoginController extends Controller
 
 
                     // Mixtes
-                    $dossiers=Dossier::where(function ($query) use ($iduser) {
-                        $query->where('reference_medic', 'like', '%N%')
+                    $dossiers=Dossier::where(function ($query) use ($iduser,$annee) {
+                        $query->where('reference_medic', 'like', $annee.'N%')
                             ->where('type_dossier', 'Mixte')
                             ->where('current_status', 'actif')
                             ->where('affecte', $iduser);
@@ -400,13 +402,13 @@ class LoginController extends Controller
 
                         // Dossiers Techniques vers Sup Tech
 
-                       $dossiers=Dossier::where(function ($query) use ($iduser) {
-                            $query->where('reference_medic', 'like', '%N%')
+                       $dossiers=Dossier::where(function ($query) use ($iduser,$annee) {
+                            $query->where('reference_medic', 'like', $annee.'N%')
                                 ->where('type_dossier', 'Technique')
                                 ->where('current_status', 'actif')
                                 ->where('affecte', $iduser);
-                        })->orWhere(function ($query) use ($iduser) {
-                            $query->where('reference_medic', 'like', '%V%')
+                        })->orWhere(function ($query) use ($iduser,$annee) {
+                            $query->where('reference_medic', 'like', $annee.'V%')
                                 ->where('current_status', 'actif')
                                 ->where('affecte', $iduser);
                         })->orWhere(function ($query) use ($iduser) {
@@ -430,8 +432,8 @@ class LoginController extends Controller
 
 
                         // Mixtes
-                        $dossiers=Dossier::where(function ($query) use ($iduser) {
-                            $query->where('reference_medic', 'like', '%N%')
+                        $dossiers=Dossier::where(function ($query) use ($iduser,$annee) {
+                            $query->where('reference_medic', 'like', $annee.'N%')
                                 ->where('type_dossier', 'Mixte')
                                 ->where('current_status', 'actif')
                                 ->where('affecte', $iduser);
@@ -624,14 +626,14 @@ class LoginController extends Controller
             if ($medic > 0) {
 
 
-                $dossiers=Dossier::where(function ($query) use($iduser)  {
-                    $query->where('reference_medic', 'like', '%N%')
+                $dossiers=Dossier::where(function ($query) use($iduser,$annee)  {
+                    $query->where('reference_medic', 'like', $annee.'N%')
                         ->where('type_dossier', 'Medical')
                         ->where('current_status', 'actif')
                     ->where('affecte', $iduser);
 
-                })->orWhere(function ($query) use($iduser)   {
-                    $query->where('reference_medic', 'like', '%M%')
+                })->orWhere(function ($query) use($iduser,$annee)   {
+                    $query->where('reference_medic', 'like', $annee.'M%')
                         ->where('current_status', 'actif')
                         ->where('affecte', $iduser);
 
@@ -662,16 +664,16 @@ class LoginController extends Controller
             else {
                 if ($tech > 0) {
 
-                    $dossiers=Dossier::where(function ($query) use($iduser)  {
-                        $query->where('reference_medic', 'like', '%N%')
+                    $dossiers=Dossier::where(function ($query) use($iduser,$annee)  {
+                        $query->where('reference_medic', 'like', $annee.'N%')
                             ->where('type_dossier', 'Medical')
                             ->where('current_status', 'actif')
                             ->where('affecte', $iduser);
 
 
                         ///   ->where('statut', '<>', 5);  //auto
-                    })->orWhere(function ($query) use($iduser)   {
-                        $query->where('reference_medic', 'like', '%M%')
+                    })->orWhere(function ($query) use($iduser,$annee)   {
+                        $query->where('reference_medic', 'like', $annee.'M%')
                             ->where('current_status', 'actif')
                             ->where('affecte', $iduser);
 
@@ -705,13 +707,13 @@ class LoginController extends Controller
             if ($tech > 0) {
 
                 // Dossiers Techniques vers Sup Tech
-                $dossiers=Dossier::where(function ($query) use ($iduser) {
-                    $query->where('reference_medic', 'like', '%N%')
+                $dossiers=Dossier::where(function ($query) use ($iduser,$annee) {
+                    $query->where('reference_medic', 'like', $annee.'N%')
                         ->where('type_dossier', 'Technique')
                         ->where('current_status', 'actif')
                         ->where('affecte', $iduser);
-                })->orWhere(function ($query) use ($iduser) {
-                    $query->where('reference_medic', 'like', '%V%')
+                })->orWhere(function ($query) use ($iduser,$annee) {
+                    $query->where('reference_medic', 'like',$annee .'V%')
                         ->where('current_status', 'actif')
                         ->where('affecte', $iduser);
                 })->orWhere(function ($query) use ($iduser) {
@@ -734,8 +736,8 @@ class LoginController extends Controller
 
                 // Dossiers Mixte vers Sup Tech
                 // Mixtes
-                $dossiers=Dossier::where(function ($query) use ($iduser) {
-                    $query->where('reference_medic', 'like', '%N%')
+                $dossiers=Dossier::where(function ($query) use ($iduser,$annee) {
+                    $query->where('reference_medic', 'like', $annee.'N%')
                         ->where('type_dossier', 'Mixte')
                         ->where('current_status', 'actif')
                         ->where('affecte', $iduser);
@@ -757,13 +759,13 @@ class LoginController extends Controller
                 if ($medic > 0) {
 
                     // Dossiers Techniques vers Sup Tech
-                    $dossiers=Dossier::where(function ($query) use ($iduser) {
-                        $query->where('reference_medic', 'like', '%N%')
+                    $dossiers=Dossier::where(function ($query) use ($iduser,$annee) {
+                        $query->where('reference_medic', 'like', $annee.'N%')
                             ->where('type_dossier', 'Technique')
                             ->where('current_status', 'actif')
                             ->where('affecte', $iduser);
-                    })->orWhere(function ($query) use ($iduser) {
-                        $query->where('reference_medic', 'like', '%V%')
+                    })->orWhere(function ($query) use ($iduser,$annee) {
+                        $query->where('reference_medic', 'like',$annee.'V%')
                             ->where('current_status', 'actif')
                             ->where('affecte', $iduser);
                     })->orWhere(function ($query) use ($iduser) {
@@ -784,8 +786,8 @@ class LoginController extends Controller
 
                     // Dossiers Mixte vers Sup Tech
                     // Mixtes
-                    $dossiers=Dossier::where(function ($query) use ($iduser) {
-                        $query->where('reference_medic', 'like', '%N%')
+                    $dossiers=Dossier::where(function ($query) use ($iduser,$annee) {
+                        $query->where('reference_medic', 'like', $annee.'N%')
                             ->where('type_dossier', 'Mixte')
                             ->where('current_status', 'actif')
                             ->where('affecte', $iduser);

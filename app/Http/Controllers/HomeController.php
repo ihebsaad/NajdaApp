@@ -279,6 +279,7 @@ class HomeController extends Controller
         $demande= Demande::where('id', $iddemande)->first();
 
         $seance =   Seance::first();
+        $annee=date('y');
 
 
         $role= $demande->role;
@@ -355,13 +356,13 @@ class HomeController extends Controller
             { $nomrole = 'superviseurmedic';
                 $request->session()->put('supmedic',0) ;
 
-                $dossiers=Dossier::where(function ($query)  {
-                    $query->where('reference_medic', 'like', '%N%')
+                $dossiers=Dossier::where(function ($query) use($annee) {
+                    $query->where('reference_medic', 'like',$annee.'N%')
                         ->where('type_dossier', 'Medical')
                         ->where('current_status', 'actif')
                         ->where('statut', '<>', 5);  //auto
-                })->orWhere(function ($query)   {
-                    $query->where('reference_medic', 'like', '%M%')
+                })->orWhere(function ($query) use($annee)  {
+                    $query->where('reference_medic', 'like', $annee.'M%')
                         ->where('current_status', 'actif')
                         ->where('statut', '<>', 5);
                 })->orWhere(function ($query)   {
@@ -394,13 +395,13 @@ class HomeController extends Controller
 
 
              //Techniques
-                $dossiers=Dossier::where(function ($query)  {
-                    $query->where('reference_medic', 'like', '%N%')
+                $dossiers=Dossier::where(function ($query) use($annee) {
+                    $query->where('reference_medic', 'like', $annee.'N%')
                         ->where('type_dossier', 'Technique')
                         ->where('current_status', 'actif')
                         ->where('statut', '<>', 5);  //auto
-                })->orWhere(function ($query)   {
-                    $query->where('reference_medic', 'like', '%V%')
+                })->orWhere(function ($query) use($annee)  {
+                    $query->where('reference_medic', 'like', $annee.'V%')
                         ->where('current_status', 'actif')
                         ->where('statut', '<>', 5);
                 })->orWhere(function ($query)   {
@@ -421,8 +422,8 @@ class HomeController extends Controller
 
 
                 // Mixtes
-                $dossiers=Dossier::where(function ($query)  {
-                    $query->where('reference_medic', 'like', '%N%')
+                $dossiers=Dossier::where(function ($query) use($annee) {
+                    $query->where('reference_medic', 'like',$annee.'N%')
                         ->where('type_dossier', 'Mixte')
                         ->where('current_status', 'actif')
                         ->where('statut', '<>', 5);  //auto
@@ -809,25 +810,26 @@ return redirect('roles');
         $nomuser=$user->name.' '.$user->lastname;
 
         /*** Modification du role par l'administrateur  => affectation des dossiers automatiques  ****/
+        $annee=date('y');
 
         if ( $champ=='superviseurmedic' && $val>0)
         {
 
-            $dossiers=Dossier::where(function ($query)  {
-                $query->where('reference_medic', 'like', '%N%')
+            $dossiers=Dossier::where(function ($query) use($annee) {
+                $query->where('reference_medic', 'like', $annee.'N%')
                     ->where('type_dossier', 'Medical')
                     ->where('current_status', 'actif')
                     ->where('statut', '<>', 5);  //auto
-            })->orWhere(function ($query)   {
-                $query->where('reference_medic', 'like', '%M%')
+            })->orWhere(function ($query) use($annee)  {
+                $query->where('reference_medic', 'like', $annee.'M%')
                     ->where('current_status', 'actif')
                     ->where('statut', '<>', 5);
-            })->orWhere(function ($query)   {
-                $query->where('reference_medic', 'like', '%MI%')
+            })->orWhere(function ($query) use($annee)  {
+                $query->where('reference_medic', 'like', $annee.'MI%')
                     ->where('current_status', 'actif')
                     ->where('statut', '<>', 5);
-            })->orWhere(function ($query)   {
-                $query->where('reference_medic', 'like', '%TPA%')
+            })->orWhere(function ($query) use($annee)  {
+                $query->where('reference_medic', 'like', $annee.'TPA%')
                     ->where('current_status', 'actif')
                     ->where('statut', '<>', 5);
             })->get();
@@ -853,17 +855,17 @@ return redirect('roles');
         {
 
             //Techniques
-            $dossiers=Dossier::where(function ($query)  {
-                $query->where('reference_medic', 'like', '%N%')
+            $dossiers=Dossier::where(function ($query) use($annee) {
+                $query->where('reference_medic', 'like', $annee.'N%')
                     ->where('type_dossier', 'Technique')
                     ->where('current_status', 'actif')
                     ->where('statut', '<>', 5);  //auto
-            })->orWhere(function ($query)   {
-                $query->where('reference_medic', 'like', '%V%')
+            })->orWhere(function ($query) use($annee)  {
+                $query->where('reference_medic', 'like', $annee.'V%')
                     ->where('current_status', 'actif')
                     ->where('statut', '<>', 5);
-            })->orWhere(function ($query)   {
-                $query->where('reference_medic', 'like', '%XP%')
+            })->orWhere(function ($query) use($annee)  {
+                $query->where('reference_medic', 'like', $annee.'XP%')
                     ->where('current_status', 'actif')
                     ->where('statut', '<>', 5);
 
@@ -880,8 +882,8 @@ return redirect('roles');
 
 
             // Mixtes
-            $dossiers=Dossier::where(function ($query)  {
-                $query->where('reference_medic', 'like', '%N%')
+            $dossiers=Dossier::where(function ($query) use($annee) {
+                $query->where('reference_medic', 'like', $annee.'N%')
                     ->where('type_dossier', 'Mixte')
                     ->where('current_status', 'actif')
                     ->where('statut', '<>', 5);  //auto
@@ -912,15 +914,15 @@ return redirect('roles');
             // vérification Temps
             ///   if ( ($date_actu >'07:50' && $date_actu < '08:45'  ) || ($date_actu >'14:50' && $date_actu < '15:45'  )   ) {
 
-            $dossiers=Dossier::where(function ($query) {
+            $dossiers=Dossier::where(function ($query)   {
                 $query->where('reference_medic','like','%TN%')
                     ->where('statut', '<>', 5)
                     ->where('current_status','!=', 'Cloture');
-            })->orWhere(function($query) {
+            })->orWhere(function($query)  {
                 $query->where('reference_medic','like','%TM%')
                     ->where('statut', '<>', 5)
                     ->where('current_status','!=', 'Cloture');
-            })->orWhere(function($query) {
+            })->orWhere(function($query)   {
                 $query->where('reference_medic','like','%TV%')
                     ->where('statut', '<>', 5)
                     ->where('current_status','!=', 'Cloture');

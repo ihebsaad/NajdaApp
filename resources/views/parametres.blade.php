@@ -238,7 +238,7 @@
                             $date_actu=strtotime($date_actu);
                           $debut= strtotime($debut);
                           $fin= strtotime($fin);
-              
+
                             if ( ($date_actu < $debut )|| ($date_actu > $fin ) )
                                 {  ?>
                                 <tr>

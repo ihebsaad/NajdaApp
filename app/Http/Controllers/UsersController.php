@@ -383,6 +383,7 @@ class UsersController extends Controller
         $date_actu =date("H:i");
         $debut=$seance->debut;
         $fin=$seance->fin;
+        $annee=date('y');
 
 
             $disp = $request->get('disp');
@@ -411,13 +412,13 @@ class UsersController extends Controller
 
  // 2 Affect Auto ; 5 Affect Manuel
 
-                  $dossiers=Dossier::where(function ($query)  {
-                      $query->where('reference_medic', 'like', '%N%')
+                  $dossiers=Dossier::where(function ($query) use($annee) {
+                      $query->where('reference_medic', 'like', $annee.'N%')
                           ->where('type_dossier', 'Medical')
                           ->where('current_status', 'actif')
                           ->where('statut', '<>', 5);  //auto
-                  })->orWhere(function ($query)   {
-                      $query->where('reference_medic', 'like', '%M%')
+                  })->orWhere(function ($query)use($annee)    {
+                      $query->where('reference_medic', 'like',$annee.'M%')
                           ->where('current_status', 'actif')
                           ->where('statut', '<>', 5);
                   })->orWhere(function ($query)   {
@@ -463,13 +464,13 @@ class UsersController extends Controller
                   })->update(array('affecte' => Auth::id()));
 */
 
-                 $dossiers=Dossier::where(function ($query)  {
-                      $query->where('reference_medic', 'like', '%N%')
+                 $dossiers=Dossier::where(function ($query) use($annee)   {
+                      $query->where('reference_medic', 'like', $annee.'N%')
                           ->where('type_dossier', 'Technique')
                           ->where('current_status', 'actif')
                           ->where('statut', '<>', 5);  //auto
-                  })->orWhere(function ($query)   {
-                      $query->where('reference_medic', 'like', '%V%')
+                  })->orWhere(function ($query) use($annee)    {
+                      $query->where('reference_medic', 'like', $annee.'V%')
                            ->where('current_status', 'actif')
                           ->where('statut', '<>', 5);
                  })->orWhere(function ($query)   {
@@ -491,8 +492,8 @@ class UsersController extends Controller
 
 
                   // Mixtes
-                  $dossiers=Dossier::where(function ($query)  {
-                      $query->where('reference_medic', 'like', '%N%')
+                  $dossiers=Dossier::where(function ($query) use($annee)   {
+                      $query->where('reference_medic', 'like', $annee.'N%')
                           ->where('type_dossier', 'Mixte')
                           ->where('current_status', 'actif')
                           ->where('statut', '<>', 5);  //auto
