@@ -327,6 +327,10 @@ class OrdreMissionsController extends Controller
             ]);
         			$prestation->save();}
         			$prestomtx = $_POST["type_affectation"];
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+                    {
+                        $prestomtx = $omparent['prestataire_taxi'];
+                    }
         			$omtaxi = OMTaxi::create(['prestataire_taxi'=>$prestomtx,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         		} else {
         			$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
@@ -334,6 +338,9 @@ class OrdreMissionsController extends Controller
 			    $result = $omtaxi->update($request->all());
 
 			    // creation nouveau dossier et l'om assigné
+			    if (!isset($_POST['parent']) ||empty($_POST['parent']))
+		    // creation nouveau dossier et l'om assigné
+               { 
         		$arequest = new \Illuminate\Http\Request();
         		$subscriber_name_ =$_POST['subscriber_name'];
         		$subscriber_lastname_ =$_POST['subscriber_lastname'];
@@ -402,7 +409,12 @@ $reqsublimmatriculation->request->add(['dossier' => $iddnew]);
 				$reqsublimmatriculation->request->add(['champ' => 'vehicule_immatriculation']);
 				$reqsublimmatriculation->request->add(['val' => $Dossier['vehicule_immatriculation']]);
 				app('App\Http\Controllers\DossiersController')->updating($reqsublimmatriculation);
-                $reqsublishospitalized = new \Illuminate\Http\Request();
+$reqsublstatus = new \Illuminate\Http\Request();
+$reqsublstatus->request->add(['dossier' => $iddnew]);
+				$reqsublstatus->request->add(['champ' => 'statut']);
+				$reqsublstatus->request->add(['val' => 5]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublstatus);
+                /*$reqsublishospitalized = new \Illuminate\Http\Request();
 $reqsublishospitalized->request->add(['dossier' => $iddnew]);
 				$reqsublishospitalized->request->add(['champ' => 'is_hospitalized']);
 				$reqsublishospitalized->request->add(['val' => $Dossier['is_hospitalized']]);
@@ -431,7 +443,92 @@ $reqsublmedecintraitant->request->add(['dossier' => $iddnew]);
 $reqsublmedecintraitant2->request->add(['dossier' => $iddnew]);
 				$reqsublmedecintraitant2->request->add(['champ' => 'medecin_traitant2']);
 				$reqsublmedecintraitant2->request->add(['val' => $Dossier['medecin_traitant2']]);
-				app('App\Http\Controllers\DossiersController')->updating($reqsublmedecintraitant2);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublmedecintraitant2);*/
+ $reqemplacement = new \Illuminate\Http\Request();
+$reqemplacement->request->add(['dossier' => $iddnew]);
+                $reqemplacement->request->add(['champ' => 'empalcement']);
+                $reqemplacement->request->add(['val' => $Dossier['empalcement']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacement);
+                $reqemplacementdeb = new \Illuminate\Http\Request();
+   $reqemplacementdeb->request->add(['dossier' => $iddnew]);
+                $reqemplacementdeb->request->add(['champ' => 'date_debut_emp']);
+                $reqemplacementdeb->request->add(['val' => $Dossier['date_debut_emp']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacementdeb);
+                $reqemplacementfin = new \Illuminate\Http\Request();
+   $reqemplacementfin->request->add(['dossier' => $iddnew]);
+                $reqemplacementfin->request->add(['champ' => 'date_fin_emp']);
+                $reqemplacementfin->request->add(['val' => $Dossier['date_fin_emp']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacementfin);
+                 $reqvehiculeadress = new \Illuminate\Http\Request();
+   $reqvehiculeadress->request->add(['dossier' => $iddnew]);
+                $reqvehiculeadress->request->add(['champ' => 'vehicule_address']);
+                $reqvehiculeadress->request->add(['val' => $Dossier['vehicule_address']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqvehiculeadress);
+                 $reqvehiculeadress2 = new \Illuminate\Http\Request();
+   $reqvehiculeadress2->request->add(['dossier' => $iddnew]);
+                $reqvehiculeadress2->request->add(['champ' => 'vehicule_address2']);
+                $reqvehiculeadress2->request->add(['val' => $Dossier['vehicule_address2']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqvehiculeadress2);
+                 $reqvehiculeadressdebut = new \Illuminate\Http\Request();
+   $reqvehiculeadressdebut->request->add(['dossier' => $iddnew]);
+                $reqvehiculeadressdebut->request->add(['champ' => 'date_debut_vehicule_address']);
+                $reqvehiculeadressdebut->request->add(['val' => $Dossier['date_debut_vehicule_address']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqvehiculeadressdebut);
+                $reqvehiculeadressfin = new \Illuminate\Http\Request();
+   $reqvehiculeadressfin->request->add(['dossier' => $iddnew]);
+                $reqvehiculeadressfin->request->add(['champ' => 'date_fin_vehicule_address']);
+                $reqvehiculeadressfin->request->add(['val' => $Dossier['date_fin_vehicule_address']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqvehiculeadressfin);
+                 $reqemplacementtrans = new \Illuminate\Http\Request();
+$reqemplacementtrans->request->add(['dossier' => $iddnew]);
+                $reqemplacementtrans->request->add(['champ' => 'empalcement_trans']);
+                $reqemplacementtrans->request->add(['val' => $Dossier['empalcement_trans']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacementtrans);
+                $reqemplacementdebtrans = new \Illuminate\Http\Request();
+   $reqemplacementdebtrans->request->add(['dossier' => $iddnew]);
+                $reqemplacementdebtrans->request->add(['champ' => 'date_debut_trans']);
+                $reqemplacementdebtrans->request->add(['val' => $Dossier['date_debut_trans']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacementdebtrans);
+                $reqemplacementfintrans = new \Illuminate\Http\Request();
+   $reqemplacementfintrans->request->add(['dossier' => $iddnew]);
+                $reqemplacementfintrans->request->add(['champ' => 'date_fin_trans']);
+                $reqemplacementfintrans->request->add(['val' => $Dossier['date_fin_trans']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacementfintrans);
+ $reqtypetrans = new \Illuminate\Http\Request();
+$reqtypetrans->request->add(['dossier' => $iddnew]);
+                $reqtypetrans->request->add(['champ' => 'type_trans']);
+                $reqtypetrans->request->add(['val' => $Dossier['type_trans']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqtypetrans);
+$reqdestination = new \Illuminate\Http\Request();
+$reqdestination->request->add(['dossier' => $iddnew]);
+                $reqdestination->request->add(['champ' => 'destination']);
+                $reqdestination->request->add(['val' => $Dossier['destination']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqdestination);
+$reqadresseetranger = new \Illuminate\Http\Request();
+$reqadresseetranger->request->add(['dossier' => $iddnew]);
+                $reqadresseetranger->request->add(['champ' => 'adresse_etranger']);
+                $reqadresseetranger->request->add(['val' => $Dossier['adresse_etranger']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqadresseetranger);
+ $reqlocad= new \Illuminate\Http\Request();
+$reqlocad->request->add(['dossier' => $iddnew]);
+                $reqlocad->request->add(['champ' => 'subscriber_local_address']);
+                $reqlocad->request->add(['val' => $Dossier['subscriber_local_address']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqlocad);
+                $reqville = new \Illuminate\Http\Request();
+$reqville->request->add(['dossier' => $iddnew]);
+                $reqville->request->add(['champ' => 'ville']);
+                $reqville->request->add(['val' => $Dossier['ville']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqville);
+                $reqhotel = new \Illuminate\Http\Request();
+$reqhotel->request->add(['dossier' => $iddnew]);
+                $reqhotel->request->add(['champ' => 'hotel']);
+                $reqhotel->request->add(['val' => $Dossier['hotel']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqhotel);
+                $reqlocadch= new \Illuminate\Http\Request();
+$reqlocadch->request->add(['dossier' => $iddnew]);
+                $reqlocadch->request->add(['champ' => 'subscriber_local_address_ch']);
+                $reqlocadch->request->add(['val' => $Dossier['subscriber_local_address_ch']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqlocadch);   
 
 				// affecte dossier au agent qui le cree
 				$reqaffectea = new \Illuminate\Http\Request();
@@ -468,7 +565,7 @@ $reqphone->request->add(['dossier' => $iddnew]);
 					app('App\Http\Controllers\DossiersController')->updating($reqphone);
 				}
 				// lieu prie en charge
-				if (isset($_POST["CL_lieuprest_pc"]))
+				/*if (isset($_POST["CL_lieuprest_pc"]))
 				{
 					$reqlieup = new \Illuminate\Http\Request();
 					$CL_lieuprest_pc = $_POST["CL_lieuprest_pc"];
@@ -476,7 +573,7 @@ $reqlieup->request->add(['dossier' => $iddnew]);
 					$reqlieup->request->add(['champ' => 'subscriber_local_address']);
 					$reqlieup->request->add(['val' => $CL_lieuprest_pc]);
 					app('App\Http\Controllers\DossiersController')->updating($reqlieup);
-				}
+				}*/
 
 				// recuperation des infos du dossier parent
                 $dossparent=Dossier::where('id', $iddoss)->first();
@@ -722,7 +819,7 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
                else { $result5 = $omtaxi2->update($request->all()); }
 
         	}
-        }
+        }}
 
         /*if (isset($_POST['idvehic']))
                 {// mettre à jour les infos de vehicule
@@ -1245,7 +1342,7 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
         	if ($_POST['affectea'] === "interne")
         	{$typep=4;
         		// creation om pour le dossier courant
-        		if (isset($_POST["type_affectation"]) && ($_POST["type_affectation"] !== "Select"))
+        		if (isset($_POST["type_affectation"]))
         		{if(!(isset($_POST['type_affectation_post'])))
 
                    { if($_POST["type_affectation"]=="Transport VAT")
@@ -1267,7 +1364,12 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
                     'effectue' => 1
             ]);
         			$prestation->save();}
+ 
         			$prestomamb = $_POST["type_affectation"];
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+                    {
+                        $prestomamb = $omparent['prestataire_ambulance'];
+                    }
         			$omambulance = OMAmbulance::create(['prestataire_ambulance'=>$prestomamb,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         		} else {
         			$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
@@ -1275,6 +1377,8 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
 			    $result = $omambulance->update($request->all());
 
 			    // creation nouveau dossier et l'om assigné
+			    if (!isset($_POST['parent']) ||empty($_POST['parent']))
+            {
         		$arequest = new \Illuminate\Http\Request();
         		$subscriber_name_ =$_POST['subscriber_name'];
         		$subscriber_lastname_ =$_POST['subscriber_lastname'];
@@ -1343,7 +1447,12 @@ $reqsublimmatriculation->request->add(['dossier' => $iddnew]);
 				$reqsublimmatriculation->request->add(['champ' => 'vehicule_immatriculation']);
 				$reqsublimmatriculation->request->add(['val' => $Dossier['vehicule_immatriculation']]);
 				app('App\Http\Controllers\DossiersController')->updating($reqsublimmatriculation);
-                $reqsublishospitalized = new \Illuminate\Http\Request();
+$reqsublstatus = new \Illuminate\Http\Request();
+$reqsublstatus->request->add(['dossier' => $iddnew]);
+				$reqsublstatus->request->add(['champ' => 'statut']);
+				$reqsublstatus->request->add(['val' => 5]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublstatus);
+               /* $reqsublishospitalized = new \Illuminate\Http\Request();
 $reqsublishospitalized->request->add(['dossier' => $iddnew]);
 				$reqsublishospitalized->request->add(['champ' => 'is_hospitalized']);
 				$reqsublishospitalized->request->add(['val' => $Dossier['is_hospitalized']]);
@@ -1372,7 +1481,92 @@ $reqsublmedecintraitant->request->add(['dossier' => $iddnew]);
 $reqsublmedecintraitant2->request->add(['dossier' => $iddnew]);
 				$reqsublmedecintraitant2->request->add(['champ' => 'medecin_traitant2']);
 				$reqsublmedecintraitant2->request->add(['val' => $Dossier['medecin_traitant2']]);
-				app('App\Http\Controllers\DossiersController')->updating($reqsublmedecintraitant2);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublmedecintraitant2);*/
+ $reqemplacement = new \Illuminate\Http\Request();
+$reqemplacement->request->add(['dossier' => $iddnew]);
+                $reqemplacement->request->add(['champ' => 'empalcement']);
+                $reqemplacement->request->add(['val' => $Dossier['empalcement']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacement);
+                $reqemplacementdeb = new \Illuminate\Http\Request();
+   $reqemplacementdeb->request->add(['dossier' => $iddnew]);
+                $reqemplacementdeb->request->add(['champ' => 'date_debut_emp']);
+                $reqemplacementdeb->request->add(['val' => $Dossier['date_debut_emp']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacementdeb);
+                $reqemplacementfin = new \Illuminate\Http\Request();
+   $reqemplacementfin->request->add(['dossier' => $iddnew]);
+                $reqemplacementfin->request->add(['champ' => 'date_fin_emp']);
+                $reqemplacementfin->request->add(['val' => $Dossier['date_fin_emp']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacementfin);
+                 $reqvehiculeadress = new \Illuminate\Http\Request();
+   $reqvehiculeadress->request->add(['dossier' => $iddnew]);
+                $reqvehiculeadress->request->add(['champ' => 'vehicule_address']);
+                $reqvehiculeadress->request->add(['val' => $Dossier['vehicule_address']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqvehiculeadress);
+                 $reqvehiculeadress2 = new \Illuminate\Http\Request();
+   $reqvehiculeadress2->request->add(['dossier' => $iddnew]);
+                $reqvehiculeadress2->request->add(['champ' => 'vehicule_address2']);
+                $reqvehiculeadress2->request->add(['val' => $Dossier['vehicule_address2']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqvehiculeadress2);
+                 $reqvehiculeadressdebut = new \Illuminate\Http\Request();
+   $reqvehiculeadressdebut->request->add(['dossier' => $iddnew]);
+                $reqvehiculeadressdebut->request->add(['champ' => 'date_debut_vehicule_address']);
+                $reqvehiculeadressdebut->request->add(['val' => $Dossier['date_debut_vehicule_address']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqvehiculeadressdebut);
+                $reqvehiculeadressfin = new \Illuminate\Http\Request();
+   $reqvehiculeadressfin->request->add(['dossier' => $iddnew]);
+                $reqvehiculeadressfin->request->add(['champ' => 'date_fin_vehicule_address']);
+                $reqvehiculeadressfin->request->add(['val' => $Dossier['date_fin_vehicule_address']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqvehiculeadressfin);
+                 $reqemplacementtrans = new \Illuminate\Http\Request();
+$reqemplacementtrans->request->add(['dossier' => $iddnew]);
+                $reqemplacementtrans->request->add(['champ' => 'empalcement_trans']);
+                $reqemplacementtrans->request->add(['val' => $Dossier['empalcement_trans']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacementtrans);
+                $reqemplacementdebtrans = new \Illuminate\Http\Request();
+   $reqemplacementdebtrans->request->add(['dossier' => $iddnew]);
+                $reqemplacementdebtrans->request->add(['champ' => 'date_debut_trans']);
+                $reqemplacementdebtrans->request->add(['val' => $Dossier['date_debut_trans']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacementdebtrans);
+                $reqemplacementfintrans = new \Illuminate\Http\Request();
+   $reqemplacementfintrans->request->add(['dossier' => $iddnew]);
+                $reqemplacementfintrans->request->add(['champ' => 'date_fin_trans']);
+                $reqemplacementfintrans->request->add(['val' => $Dossier['date_fin_trans']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacementfintrans);
+ $reqtypetrans = new \Illuminate\Http\Request();
+$reqtypetrans->request->add(['dossier' => $iddnew]);
+                $reqtypetrans->request->add(['champ' => 'type_trans']);
+                $reqtypetrans->request->add(['val' => $Dossier['type_trans']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqtypetrans);
+$reqdestination = new \Illuminate\Http\Request();
+$reqdestination->request->add(['dossier' => $iddnew]);
+                $reqdestination->request->add(['champ' => 'destination']);
+                $reqdestination->request->add(['val' => $Dossier['destination']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqdestination);
+$reqadresseetranger = new \Illuminate\Http\Request();
+$reqadresseetranger->request->add(['dossier' => $iddnew]);
+                $reqadresseetranger->request->add(['champ' => 'adresse_etranger']);
+                $reqadresseetranger->request->add(['val' => $Dossier['adresse_etranger']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqadresseetranger);
+ $reqlocad= new \Illuminate\Http\Request();
+$reqlocad->request->add(['dossier' => $iddnew]);
+                $reqlocad->request->add(['champ' => 'subscriber_local_address']);
+                $reqlocad->request->add(['val' => $Dossier['subscriber_local_address']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqlocad);
+                $reqville = new \Illuminate\Http\Request();
+$reqville->request->add(['dossier' => $iddnew]);
+                $reqville->request->add(['champ' => 'ville']);
+                $reqville->request->add(['val' => $Dossier['ville']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqville);
+                $reqhotel = new \Illuminate\Http\Request();
+$reqhotel->request->add(['dossier' => $iddnew]);
+                $reqhotel->request->add(['champ' => 'hotel']);
+                $reqhotel->request->add(['val' => $Dossier['hotel']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqhotel);
+                $reqlocadch= new \Illuminate\Http\Request();
+$reqlocadch->request->add(['dossier' => $iddnew]);
+                $reqlocadch->request->add(['champ' => 'subscriber_local_address_ch']);
+                $reqlocadch->request->add(['val' => $Dossier['subscriber_local_address_ch']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqlocadch);   
 
 				// affecte dossier au agent qui le cree
 				$reqaffectea = new \Illuminate\Http\Request();
@@ -1409,7 +1603,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 					app('App\Http\Controllers\DossiersController')->updating($reqphone);
 				}
 				// lieu prie en charge
-				if (isset($_POST["CL_lieuprest_pc"]))
+				/*if (isset($_POST["CL_lieuprest_pc"]))
 				{
 					$reqlieup = new \Illuminate\Http\Request();
 					$CL_lieuprest_pc = $_POST["CL_lieuprest_pc"];
@@ -1417,7 +1611,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 					$reqlieup->request->add(['champ' => 'subscriber_local_address']);
 					$reqlieup->request->add(['val' => $CL_lieuprest_pc]);
 					app('App\Http\Controllers\DossiersController')->updating($reqlieup);
-				}
+				}*/
 
 				// recuperation des infos du dossier parent
                 $dossparent=Dossier::where('id', $iddoss)->first();
@@ -1665,7 +1859,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
         	
         }
 
-    }
+    }}
 
     
     public function pdfodmambulance()
@@ -2073,7 +2267,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
             if ($_POST['affectea'] === "interne")
             {$typep=1;
                 // creation om pour le dossier courant
-        		if (isset($_POST["type_affectation"]) && ($_POST["type_affectation"] !== "Select"))
+        		if (isset($_POST["type_affectation"]))
         		{if(!(isset($_POST['type_affectation_post'])))
         		{ if($_POST["type_affectation"]=="Transport VAT")
         	{
@@ -2098,7 +2292,12 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                     'effectue' => 1
             ]);
         			$prestation->save();}
+
         			$prestomrem = $_POST["type_affectation"];
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+                    {
+                       $prestomrem= $omparent['prestataire_remorquage'];
+                    }
         			$omremorquage = OMRemorquage::create(['prestataire_remorquage'=>$prestomrem,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         		} else {
         			$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
@@ -2106,6 +2305,8 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 			    $result = $omremorquage->update($request->all());
 
 			    // creation nouveau dossier et l'om assigné
+			    if (!isset($_POST['parent']) ||empty($_POST['parent']))
+        		{
                 $arequest = new \Illuminate\Http\Request();
                 $subscriber_name_ =$_POST['subscriber_name'];
                 $subscriber_lastname_ =$_POST['subscriber_lastname'];
@@ -2183,7 +2384,12 @@ $reqsublimmatriculation->request->add(['dossier' => $iddnew]);
 				$reqsublimmatriculation->request->add(['champ' => 'vehicule_immatriculation']);
 				$reqsublimmatriculation->request->add(['val' => $Dossier['vehicule_immatriculation']]);
 				app('App\Http\Controllers\DossiersController')->updating($reqsublimmatriculation);
-                $reqsublishospitalized = new \Illuminate\Http\Request();
+$reqsublstatus = new \Illuminate\Http\Request();
+$reqsublstatus->request->add(['dossier' => $iddnew]);
+				$reqsublstatus->request->add(['champ' => 'statut']);
+				$reqsublstatus->request->add(['val' => 5]);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublstatus);
+                /*$reqsublishospitalized = new \Illuminate\Http\Request();
 $reqsublishospitalized->request->add(['dossier' => $iddnew]);
 				$reqsublishospitalized->request->add(['champ' => 'is_hospitalized']);
 				$reqsublishospitalized->request->add(['val' => $Dossier['is_hospitalized']]);
@@ -2212,7 +2418,92 @@ $reqsublmedecintraitant->request->add(['dossier' => $iddnew]);
 $reqsublmedecintraitant2->request->add(['dossier' => $iddnew]);
 				$reqsublmedecintraitant2->request->add(['champ' => 'medecin_traitant2']);
 				$reqsublmedecintraitant2->request->add(['val' => $Dossier['medecin_traitant2']]);
-				app('App\Http\Controllers\DossiersController')->updating($reqsublmedecintraitant2);
+				app('App\Http\Controllers\DossiersController')->updating($reqsublmedecintraitant2);*/
+ $reqemplacement = new \Illuminate\Http\Request();
+$reqemplacement->request->add(['dossier' => $iddnew]);
+                $reqemplacement->request->add(['champ' => 'empalcement']);
+                $reqemplacement->request->add(['val' => $Dossier['empalcement']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacement);
+                $reqemplacementdeb = new \Illuminate\Http\Request();
+   $reqemplacementdeb->request->add(['dossier' => $iddnew]);
+                $reqemplacementdeb->request->add(['champ' => 'date_debut_emp']);
+                $reqemplacementdeb->request->add(['val' => $Dossier['date_debut_emp']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacementdeb);
+                $reqemplacementfin = new \Illuminate\Http\Request();
+   $reqemplacementfin->request->add(['dossier' => $iddnew]);
+                $reqemplacementfin->request->add(['champ' => 'date_fin_emp']);
+                $reqemplacementfin->request->add(['val' => $Dossier['date_fin_emp']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacementfin);
+                 $reqvehiculeadress = new \Illuminate\Http\Request();
+   $reqvehiculeadress->request->add(['dossier' => $iddnew]);
+                $reqvehiculeadress->request->add(['champ' => 'vehicule_address']);
+                $reqvehiculeadress->request->add(['val' => $Dossier['vehicule_address']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqvehiculeadress);
+                 $reqvehiculeadress2 = new \Illuminate\Http\Request();
+   $reqvehiculeadress2->request->add(['dossier' => $iddnew]);
+                $reqvehiculeadress2->request->add(['champ' => 'vehicule_address2']);
+                $reqvehiculeadress2->request->add(['val' => $Dossier['vehicule_address2']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqvehiculeadress2);
+                 $reqvehiculeadressdebut = new \Illuminate\Http\Request();
+   $reqvehiculeadressdebut->request->add(['dossier' => $iddnew]);
+                $reqvehiculeadressdebut->request->add(['champ' => 'date_debut_vehicule_address']);
+                $reqvehiculeadressdebut->request->add(['val' => $Dossier['date_debut_vehicule_address']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqvehiculeadressdebut);
+                $reqvehiculeadressfin = new \Illuminate\Http\Request();
+   $reqvehiculeadressfin->request->add(['dossier' => $iddnew]);
+                $reqvehiculeadressfin->request->add(['champ' => 'date_fin_vehicule_address']);
+                $reqvehiculeadressfin->request->add(['val' => $Dossier['date_fin_vehicule_address']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqvehiculeadressfin);
+                 $reqemplacementtrans = new \Illuminate\Http\Request();
+$reqemplacementtrans->request->add(['dossier' => $iddnew]);
+                $reqemplacementtrans->request->add(['champ' => 'empalcement_trans']);
+                $reqemplacementtrans->request->add(['val' => $Dossier['empalcement_trans']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacementtrans);
+                $reqemplacementdebtrans = new \Illuminate\Http\Request();
+   $reqemplacementdebtrans->request->add(['dossier' => $iddnew]);
+                $reqemplacementdebtrans->request->add(['champ' => 'date_debut_trans']);
+                $reqemplacementdebtrans->request->add(['val' => $Dossier['date_debut_trans']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacementdebtrans);
+                $reqemplacementfintrans = new \Illuminate\Http\Request();
+   $reqemplacementfintrans->request->add(['dossier' => $iddnew]);
+                $reqemplacementfintrans->request->add(['champ' => 'date_fin_trans']);
+                $reqemplacementfintrans->request->add(['val' => $Dossier['date_fin_trans']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqemplacementfintrans);
+ $reqtypetrans = new \Illuminate\Http\Request();
+$reqtypetrans->request->add(['dossier' => $iddnew]);
+                $reqtypetrans->request->add(['champ' => 'type_trans']);
+                $reqtypetrans->request->add(['val' => $Dossier['type_trans']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqtypetrans);
+$reqdestination = new \Illuminate\Http\Request();
+$reqdestination->request->add(['dossier' => $iddnew]);
+                $reqdestination->request->add(['champ' => 'destination']);
+                $reqdestination->request->add(['val' => $Dossier['destination']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqdestination);
+$reqadresseetranger = new \Illuminate\Http\Request();
+$reqadresseetranger->request->add(['dossier' => $iddnew]);
+                $reqadresseetranger->request->add(['champ' => 'adresse_etranger']);
+                $reqadresseetranger->request->add(['val' => $Dossier['adresse_etranger']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqadresseetranger);
+ $reqlocad= new \Illuminate\Http\Request();
+$reqlocad->request->add(['dossier' => $iddnew]);
+                $reqlocad->request->add(['champ' => 'subscriber_local_address']);
+                $reqlocad->request->add(['val' => $Dossier['subscriber_local_address']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqlocad);
+                $reqville = new \Illuminate\Http\Request();
+$reqville->request->add(['dossier' => $iddnew]);
+                $reqville->request->add(['champ' => 'ville']);
+                $reqville->request->add(['val' => $Dossier['ville']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqville);
+                $reqhotel = new \Illuminate\Http\Request();
+$reqhotel->request->add(['dossier' => $iddnew]);
+                $reqhotel->request->add(['champ' => 'hotel']);
+                $reqhotel->request->add(['val' => $Dossier['hotel']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqhotel);
+                $reqlocadch= new \Illuminate\Http\Request();
+$reqlocadch->request->add(['dossier' => $iddnew]);
+                $reqlocadch->request->add(['champ' => 'subscriber_local_address_ch']);
+                $reqlocadch->request->add(['val' => $Dossier['subscriber_local_address_ch']]);
+                app('App\Http\Controllers\DossiersController')->updating($reqlocadch);   
 
 				// affecte dossier au agent qui le cree
 				$reqaffectea = new \Illuminate\Http\Request();
@@ -2248,7 +2539,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                     app('App\Http\Controllers\DossiersController')->updating($reqphone);
                 }
                 // lieu prie en charge
-                if (isset($_POST["CL_lieuprest_pc"]))
+               /* if (isset($_POST["CL_lieuprest_pc"]))
                 {
                     $reqlieup = new \Illuminate\Http\Request();
                     $CL_lieuprest_pc = $_POST["CL_lieuprest_pc"];
@@ -2256,7 +2547,7 @@ $reqlieup->request->add(['dossier' => $iddnew]);
                     $reqlieup->request->add(['champ' => 'subscriber_local_address']);
                     $reqlieup->request->add(['val' => $CL_lieuprest_pc]);
                     app('App\Http\Controllers\DossiersController')->updating($reqlieup);
-                }
+                }*/
 
                 // recuperation des infos du dossier parent
                 $dossparent=Dossier::where('id', $iddoss)->first();
@@ -2512,7 +2803,7 @@ $reqlieup->request->add(['dossier' => $iddnew]);
 
 
 
-    }
+    } }
 
     public function export_pdf_odmmedicinternationnal(Request $request)
     {
@@ -3006,19 +3297,42 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 
     public function historique(Request $request)
     {
-        $omparent= $_POST['om'] ;
+         $omparent= $_POST['om'] ;
+        $omtitre= $_POST['titre'] ;
         $histoom = array();
+        if ($omtitre== 1) {
         while ($omparent !== null) {
             $arrom = OMTaxi::select('id','titre','emplacement','dernier','parent','updated_at')->where('id', $omparent)->first();
 
             $histoom[]=$arrom;
             $omparent = $arrom['parent'];
-        }
+            //return $histodoc;
+        
 
-        //return $histodoc;
-        header('Content-type: application/json');    
+        }}
+        if ($omtitre== 2) {
+        while ($omparent !== null) {
+            $arrom = OMAmbulance::select('id','titre','emplacement','dernier','parent','updated_at')->where('id', $omparent)->first();
+
+            $histoom[]=$arrom;
+            $omparent = $arrom['parent'];
+            //return $histodoc;
+      
+
+        }}
+        if ($omtitre== 3) {
+        while ($omparent !== null) {
+            $arrom = OMRemorquage::select('id','titre','emplacement','dernier','parent','updated_at')->where('id', $omparent)->first();
+
+            $histoom[]=$arrom;
+            $omparent = $arrom['parent'];
+            //return $histodoc;
+
+
+        }}
+       
+header('Content-type: application/json');    
         return json_encode($histoom);
-
     }
 
     public function pdfodmtaxi()

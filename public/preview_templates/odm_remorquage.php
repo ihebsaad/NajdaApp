@@ -1071,6 +1071,27 @@ $("#dateheuredispprev").change(function() {
     verifdisppersonnel();
   }
 });
+
+$('input[list="lvehicule"]').on('input', function () {
+    var val = this.value;
+    if($('#lvehicule option').filter(function(){
+        return this.value.toUpperCase() === val.toUpperCase();        
+    }).length) {
+        //send ajax request
+        verifdispvoiture();
+        verifdisppersonnel();
+    }
+});
+$('input[list="lchauff"]').on('input', function () {
+    var val = this.value;
+    if($('#lchauff option').filter(function(){
+        return this.value.toUpperCase() === val.toUpperCase();        
+    }).length) {
+        //send ajax request
+        verifdispvoiture();
+        verifdisppersonnel();
+    }
+});
     // CB_preetape
     $("#CB_preetape").change(function() {
         if(this.checked) {

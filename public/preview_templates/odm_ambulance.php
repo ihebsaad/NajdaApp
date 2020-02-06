@@ -1253,17 +1253,33 @@ if (isset($signaturetype))
                     {
                         // Clear vehicules list
                         $("#lambulancier1").empty();
+                        //alert($("input[list='lambulancier2']").val());
                         var len = output.length;
                         if (len >= 1)
                         {   
                             
                                 for(var i=0; i<len; i++){
                                     //alert(output[i].name);
-                                    $("<option />", {
+                                    /*if (! origine)
+                                    {
+                                    	$("<option />", {
                                         val: output[i].name,
                                         text: output[i].name,
                                         idperso: output[i].id
-                                    }).appendTo("#lambulancier1");
+                                    	}).appendTo("#lambulancier1");
+                                	}*/
+                                	// conditions pour ne pas donner la possibilite de selectionne le mm personnel deux foix (amb1,amb2,paramed)
+                                	/*if (origine == "amb1")
+                                	{*/
+                                		if ((output[i].name !== $("input[list='lambulancier2']").val()) && (output[i].name !== $("input[list='lparamed']").val()))
+                                		{
+	                                    	$("<option />", {
+	                                        val: output[i].name,
+	                                        text: output[i].name,
+	                                        idperso: output[i].id
+	                                    	}).appendTo("#lambulancier1");
+	                                	}
+                                	//}		
                                 }
                            
                         }else{alert('wrrong');}
@@ -1310,11 +1326,14 @@ if (isset($signaturetype))
                             
                                 for(var i=0; i<len; i++){
                                     //alert(output[i].name);
-                                    $("<option />", {
-                                        val: output[i].name,
-                                        text: output[i].name,
-                                        idperso: output[i].id
-                                    }).appendTo("#lambulancier2");
+                                    if ((output[i].name !== $("input[list='lambulancier1']").val()) && (output[i].name !== $("input[list='lparamed']").val()))
+                                	{
+	                                    $("<option />", {
+	                                        val: output[i].name,
+	                                        text: output[i].name,
+	                                        idperso: output[i].id
+	                                    }).appendTo("#lambulancier2");
+	                                }
                                 }
                            
                         }else{alert('wrrong');}
@@ -1361,11 +1380,14 @@ if (isset($signaturetype))
                             
                                 for(var i=0; i<len; i++){
                                     //alert(output[i].name);
-                                    $("<option />", {
-                                        val: output[i].name,
-                                        text: output[i].name,
-                                        idperso: output[i].id
-                                    }).appendTo("#lparamed");
+                                    if ((output[i].name !== $("input[list='lambulancier1']").val()) && (output[i].name !== $("input[list='lambulancier2']").val()))
+                                	{
+	                                    $("<option />", {
+	                                        val: output[i].name,
+	                                        text: output[i].name,
+	                                        idperso: output[i].id
+	                                    }).appendTo("#lparamed");
+	                                }
                                 }
                            
                         }else{alert('wrrong');}
@@ -1404,6 +1426,28 @@ $("#dateheuredispprev").change(function() {
     verifparamed();
   }
 });
+//AMb1
+$("input[list='lambulancier1']").focusin( function (event) {
+	event.preventDefault();
+        verifamb1();
+	    /*verifamb2();
+	    verifparamed();*/
+});
+//AMb2
+$("input[list='lambulancier2']").focusin( function (event) {
+	event.preventDefault();
+        //verifamb1();
+	    verifamb2();
+	    //verifparamed();
+});
+//PARAMED
+$("input[list='lparamed']").focusin( function (event) {
+	event.preventDefault();
+        /*verifamb1();
+	    verifamb2();*/
+	    verifparamed();
+});
+
 	// fin disponibilities
 	$('#CL_choix').on('change', function (e) {
 	    var valueSelected = this.value;
