@@ -280,6 +280,7 @@ class HomeController extends Controller
 
         $seance =   Seance::first();
         $annee=date('y');
+        $anneep= date('y',strtotime("-1 year"));
 
 
         $role= $demande->role;
@@ -365,6 +366,15 @@ class HomeController extends Controller
                     $query->where('reference_medic', 'like', $annee.'M%')
                         ->where('current_status', 'actif')
                         ->where('statut', '<>', 5);
+                })->orWhere(function ($query) use($anneep)  {
+                    $query->where('reference_medic', 'like', $anneep.'N%')
+                        ->where('current_status', 'actif')
+                        ->where('type_dossier', 'Medical')
+                        ->where('statut', '<>', 5);
+                })->orWhere(function ($query) use($anneep)  {
+                    $query->where('reference_medic', 'like', $anneep.'M%')
+                        ->where('current_status', 'actif')
+                        ->where('statut', '<>', 5);
                 })->orWhere(function ($query)   {
                     $query->where('reference_medic', 'like', '%MI%')
                         ->where('current_status', 'actif')
@@ -404,6 +414,15 @@ class HomeController extends Controller
                     $query->where('reference_medic', 'like', $annee.'V%')
                         ->where('current_status', 'actif')
                         ->where('statut', '<>', 5);
+                })->orWhere(function ($query) use($anneep)  {
+                    $query->where('reference_medic', 'like', $anneep.'N%')
+                        ->where('current_status', 'actif')
+                        ->where('type_dossier', 'Technique')
+                        ->where('statut', '<>', 5);
+                })->orWhere(function ($query) use($anneep)  {
+                    $query->where('reference_medic', 'like', $anneep.'V%')
+                        ->where('current_status', 'actif')
+                        ->where('statut', '<>', 5);
                 })->orWhere(function ($query)   {
                     $query->where('reference_medic', 'like', '%XP%')
                         ->where('current_status', 'actif')
@@ -427,7 +446,11 @@ class HomeController extends Controller
                         ->where('type_dossier', 'Mixte')
                         ->where('current_status', 'actif')
                         ->where('statut', '<>', 5);  //auto
-
+                })->orWhere(function ($query) use($anneep)  {
+                    $query->where('reference_medic', 'like',$anneep.'N%')
+                        ->where('type_dossier', 'Mixte')
+                        ->where('current_status', 'actif')
+                        ->where('statut', '<>', 5);  //auto
                 })->get();
 
                 if($dossiers)
@@ -811,6 +834,7 @@ return redirect('roles');
 
         /*** Modification du role par l'administrateur  => affectation des dossiers automatiques  ****/
         $annee=date('y');
+        $anneep= date('y',strtotime("-1 year"));
 
         if ( $champ=='superviseurmedic' && $val>0)
         {
@@ -824,12 +848,21 @@ return redirect('roles');
                 $query->where('reference_medic', 'like', $annee.'M%')
                     ->where('current_status', 'actif')
                     ->where('statut', '<>', 5);
-            })->orWhere(function ($query) use($annee)  {
-                $query->where('reference_medic', 'like', $annee.'MI%')
+            })->orWhere(function ($query) use($anneep)  {
+                $query->where('reference_medic', 'like', $anneep.'N%')
+                    ->where('type_dossier', 'Medical')
+                    ->where('current_status', 'actif')
+                    ->where('statut', '<>', 5);
+            })->orWhere(function ($query) use($anneep)  {
+                $query->where('reference_medic', 'like', $anneep.'M%')
                     ->where('current_status', 'actif')
                     ->where('statut', '<>', 5);
             })->orWhere(function ($query) use($annee)  {
-                $query->where('reference_medic', 'like', $annee.'TPA%')
+                $query->where('reference_medic', 'like', '%MI%')
+                    ->where('current_status', 'actif')
+                    ->where('statut', '<>', 5);
+            })->orWhere(function ($query) use($annee)  {
+                $query->where('reference_medic', 'like', '%TPA%')
                     ->where('current_status', 'actif')
                     ->where('statut', '<>', 5);
             })->get();
@@ -864,8 +897,17 @@ return redirect('roles');
                 $query->where('reference_medic', 'like', $annee.'V%')
                     ->where('current_status', 'actif')
                     ->where('statut', '<>', 5);
-            })->orWhere(function ($query) use($annee)  {
-                $query->where('reference_medic', 'like', $annee.'XP%')
+            })->orWhere(function ($query) use($anneep)  {
+                $query->where('reference_medic', 'like', $anneep.'N%')
+                    ->where('type_dossier', 'Technique')
+                    ->where('current_status', 'actif')
+                    ->where('statut', '<>', 5);
+            })->orWhere(function ($query) use($anneep)  {
+                $query->where('reference_medic', 'like', $anneep.'V%')
+                    ->where('current_status', 'actif')
+                    ->where('statut', '<>', 5);
+            })->orWhere(function ($query)  {
+                $query->where('reference_medic', 'like', '%XP%')
                     ->where('current_status', 'actif')
                     ->where('statut', '<>', 5);
 
@@ -887,6 +929,11 @@ return redirect('roles');
                     ->where('type_dossier', 'Mixte')
                     ->where('current_status', 'actif')
                     ->where('statut', '<>', 5);  //auto
+            })->orWhere(function ($query) use($anneep)  {
+                $query->where('reference_medic', 'like', $anneep.'N%')
+                    ->where('type_dossier', 'Mixte')
+                    ->where('current_status', 'actif')
+                    ->where('statut', '<>', 5);
 
             })->get();
 

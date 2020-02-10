@@ -412,7 +412,7 @@
                         <div class="col-md-2" style="cursor:pointer;color:#000000;font-weight: 600" onclick="SMshowTous()" >  <b   >TOUS</b></div>
                     </div>
 
-                    <div id="drag-elements2"  class="dragging container">
+                    <div id="drag-elements2"  class="dragging container"  style="display: table-cell;">
 
                         <?php  $type='';$style='';
                         if($CdossiersSM >0)
@@ -459,7 +459,7 @@
                         <div class="col-md-2" style="cursor:pointer;color:#000000;font-weight: 600" onclick="STshowTous()" >  <b   >TOUS</b></div>
                     </div>
 
-                    <div id="drag-elements3"  class="dragging container">
+                    <div id="drag-elements3"  class="dragging container"   style="display: table-cell;">
 
                         <?php  $type='';$style='';
                         if($CdossiersST >0)
@@ -507,7 +507,7 @@
                         <div class="col-md-2" style="cursor:pointer;color:#000000;font-weight: 600" onclick="CshowTous()" >  <b   >TOUS</b></div>
                     </div>
 
-                    <div id="drag-elements4"  class="dragging container">
+                    <div id="drag-elements4"  class="dragging container"   style="display: table-cell;">
 
                         <?php  $type='';$style='';
                         if($CdossiersC >0)
@@ -554,7 +554,7 @@
                         <div class="col-md-2" style="cursor:pointer;color:#000000;font-weight: 600" onclick="DshowTous()" >  <b  onclick="IshowTech()">TOUS</b></div>
                     </div>
 
-                    <div id="drag-elements5" class="dragging container">
+                    <div id="drag-elements5" class="dragging container"   style="display: table-cell;">
 
                         <?php  $type='';$style='';
                         if($CdossiersDisp >0)
@@ -603,7 +603,7 @@
                             <div class="col-md-2" style="cursor:pointer;color:#000000;font-weight: 600" onclick="VshowTous()" >  <b  onclick="IshowTech()">TOUS</b></div>
                         </div>
 
-                        <div id="drag-elements6" class="dragging container">
+                        <div id="drag-elements6" class="dragging container"   style="display: table-cell;">
 
                             <?php  $type='';$style='';
                             if($CdossiersV >0)
@@ -641,7 +641,7 @@
                 <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
 
 
-                    <div id="drag-elements" class="dragging container"  >
+                    <div id="drag-elements" class="dragging container"   style="display: table-cell;">
 
                         <?php  $type='';$style='';
                         if($Cdossiers >0)
@@ -704,7 +704,7 @@
             ?>
             <div id="panelu-<?php echo $iduser; ?>"   class=" pannel   ">
                 <div class="panel-body scrollable-panel" style="display: block;min-height: 800px">
-                    <div id="agnt-<?php echo $iduser; ?>" class="dragging container"  >
+                    <div id="agnt-<?php echo $iduser; ?>" class="dragging container"   style="display: table-cell;">
                         <?php
                         $type='';$style='';
 
@@ -2125,10 +2125,9 @@
         display: table;
         width: 100%;
     }
-    .container {
-        display: table-cell;
-    /*    background-color: rgba(255, 255, 255, 0.2);*/
-        width: 50%;
+  .container {
+    /*    display: table-cell; */
+         width: 50%;
     }
     .container:nth-child(odd) {
        /* background-color: rgba(0, 0, 0, 0.2);*/

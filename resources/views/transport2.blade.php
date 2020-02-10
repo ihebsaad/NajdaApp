@@ -352,7 +352,7 @@
                                if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
                                if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
                                if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
-                               if($hour>17 && $hour<20)
+                               if($hour>16 && $hour<20)
 
                                {  ?>
                                <div class="om" style="background-color:<?php echo $color2;?>;float:left;margin-top:15px;margin-right:30px; ; color:white;  ;border-radius: 20px;padding:5px 5px 5px 5px;height: 350px">

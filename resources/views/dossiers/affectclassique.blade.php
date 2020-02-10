@@ -205,18 +205,20 @@
             <thead >
             <tr id="headtable">
                 <th  class="no-sort" style="width:5%"><label class="check "><b>Tous </b><input type="checkbox" onclick='selectall()' id="casetout" name="casetout" value="">   <span class="checkmark"></span></label></th>
-                <th style="width:20%">Référence</th>
+                <th style="width:15%">Référence</th>
                 <th style="width:20%">Assuré</th>
                 <th style="width:25%">Client</th>
                 <th style="width:20%">Agent</th>
+                <th style="width:10%">Statut</th>
                 <th style="width:10%">Type</th>
               </tr>
             <tr>
 				<td class="no-sort"style="width:5%"></td>
-                <th style="width:20%">Référence</th>
+                <th style="width:15%">Référence</th>
                 <th style="width:20%">Assuré</th>
                 <th style="width:25%">Client</th>
                 <th style="width:20%">Agent</th>
+                <th style="width:10%">Statut</th>
                 <th style="width:10%">Type</th>
             </tr>
             </thead>
@@ -225,7 +227,7 @@
             @foreach($dossiers as $dossier)
                 <tr><?php $etat=$dossier['statut']; $statut=$dossier['current_status'];  $affecte=$dossier['affecte'];   ?>
                     <td style="width:5%"><label class="check "><small><?php echo $dossier['reference_medic']?></small> <input   class="checkbox" type="checkbox" id="doss-<?php echo $dossier->id;   ?>" name="casedossier" value=" "> <span class="checkmark"></span></label></td>
-					<td style="width:20%"><a href="{{action('DossiersController@view', $dossier['id'])}}" >{{$dossier->reference_medic}}</a> <a style="color:#a0d468" href="{{action('DossiersController@fiche', $dossier['id'])}}" >Fiche<i class="fa fa-file-txt"></a></td>
+					<td style="width:15%"><a href="{{action('DossiersController@view', $dossier['id'])}}" >{{$dossier->reference_medic}}</a> <a style="color:#a0d468" href="{{action('DossiersController@fiche', $dossier['id'])}}" >Fiche<i class="fa fa-file-txt"></a></td>
                     <td style="width:20%"><?php echo '<small>'.$dossier['subscriber_name'] .' '.$dossier['subscriber_lastname'] .'</small>';?></td>
                     <td style="width:25%">
                         <?php $customer_id= $dossier['customer_id']; echo '<small>'. DossiersController::ClientById($customer_id).'</small>';?>
@@ -236,7 +238,8 @@
                     }
                     }
                      ?> </td>
-                    <td style="width:20%"> <?php if($etat=='5'){echo '<b>Manuel</b>';} else {
+                    <td style="width:10%"><?php echo $dossier['current_status'];?></td>
+                    <td style="width:10%"> <?php if($etat=='5'){echo '<b>Manuel</b>';} else {
                     if($etat=='2'){echo 'Automatique';}
                     }
                      ?> </td>

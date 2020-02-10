@@ -627,14 +627,14 @@
         || ( $date_actu < $debut || ($date_actu > $fin)  )
     ) { ?>
     <a style="margin-top:20px;color:white" href="{{ route('logout') }}"  class="bg-danger btn btn-md">
-        <i class="fa  fa-lg fa-sign-out"></i>
+        <i class="fas fa-sign-out-alt"></i>
         Déconnexion
     </a>
     <?php
     }
     else{ ?>
         <button disabled style="margin-top:20px;color:white"  title="videz vos rôles avant de quitter" class="bg-danger btn btn-md btn-disabled">
-        <i class="fa  fa-lg fa-sign-out"></i>
+            <i class="fas fa-sign-out-alt"></i>
         Déconnexion désactivée
     </button><br>
         <small>(Libérez les rôles)</small>
