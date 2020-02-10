@@ -135,7 +135,6 @@ class DossiersController extends Controller
         $filesize= filesize($fullpath) ;
 
 
-
                  $attachement = new Attachement([
 
                             'type'=>$fichier_ext,
@@ -155,9 +154,9 @@ class DossiersController extends Controller
     
     }
 
-    public function inactifs()
+    public function Dossierinactifs()
     {
-       $dtc = (new \DateTime())->modify('-2 days')->format('Y-m-d\TH:i');
+       $dtc = (new \DateTime())->modify('-3 days')->format('Y-m-d\TH:i');
 
         $dossiers = Dossier::where('current_status', 'inactif')
              ->where('updated_at', '<=', $dtc)
@@ -168,6 +167,37 @@ class DossiersController extends Controller
 
 
     }
+
+    /*public function DossiersImmobiles()
+    {
+
+        // dossiers immobiles pourront être cloturés
+
+     $dtc = (new \DateTime())->modify('-3 days')->format('Y-m-d\TH:i');
+
+        $dossiers = Dossier::where('updated_at', '<=', $dtc)
+            ->get();
+
+        $dossiermobiles=array();
+        $dossierm=Mission::get(['dossier_id']);
+
+        foreach ($dossierm as $dm ) {
+
+           push_array($dossiermobiles,$dm);
+        
+        }
+
+        $DossiersImmobiles = Dossier::where('updated_at', '<=', $dtc)->whereNotIn('id',$dossiermobiles)
+            ->get();
+
+        $dossierImmobiles=[];
+
+         foreach ($dossiers as $d ) {
+            # code...
+         }
+
+
+    }*/
 
     /**
      * Show the form for creating a new resource.
@@ -1241,6 +1271,7 @@ class DossiersController extends Controller
     }
 
 
+
     public function migration_miss ($iddoss, $iduser_dest)
     {
 
@@ -1298,7 +1329,7 @@ class DossiersController extends Controller
 
         // statut= 5 => dossier affecté manuellement
 
-         Dossier::where('id', $id)->update(array('affecte' => $agent,'statut'=>5 /*,'current_status'=>$statut*/));
+         Dossier::where('id', $id)->update(array('affecte' => $agent,'statut'=>5 ,'current_status'=>$statut));
 
         $ref=$this->RefDossierById($id);
 
@@ -2576,13 +2607,13 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
     public static function DossiersActifs( )
     {
 
-        $deb_seance_1=(new \DateTime())->format('Y-m-d 08:30:00');
+        $deb_seance_1=(new \DateTime())->format('Y-m-d 08:00:00');
         $fin_seance_1=(new \DateTime())->format('Y-m-d 15:00:00');
 
-        $deb_seance_2=(new \DateTime())->format('Y-m-d 15:30:00');
-        $fin_seance_2=(new \DateTime())->format('Y-m-d 22:00:00');
+        $deb_seance_2=(new \DateTime())->format('Y-m-d 15:00:00');
+        $fin_seance_2=(new \DateTime())->format('Y-m-d 23:00:00');
 
-        $deb_seance_3=(new \DateTime())->format('Y-m-d 22:30:00');
+        $deb_seance_3=(new \DateTime())->format('Y-m-d 23:00:00');
         $fin_seance_3=(new \DateTime())->modify('+1 day')->format('Y-m-d 08:00:00');
 
          
@@ -2608,6 +2639,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
 
          $missions=Mission::get();
+
       //  $missions= DB::table('missions')
         //    ->where('statut_courant','active')->get();
 
@@ -2618,11 +2650,13 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
         {
            // dd($Miss->ActionEC_report_rappel);
             $ActionEC_report_rappel=$Miss->ActionEC_report_rappel;
-            //dd($ActionEC_report_rappel);
+           // dd($ActionEC_report_rappel);
             if($ActionEC_report_rappel)
             {
                 foreach($ActionEC_report_rappel as $actrr)
                 {
+
+                    //dd($actrr->statut);
                     if($actrr->statut=="rappelee")
                     {
 
@@ -2819,17 +2853,59 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
            }
 
+           if($Miss->statut_courant=="active" || $Miss->statut_courant=="deleguee")
+           {
+             $dossiersactifsparmissions[]=$Miss->dossier_id;
+
+           }
+
 
             
         }
 
-      $dossiersdb= Dossier::where('current_status','actif')->pluck('id');
+        $dossiersactifs =array_unique($dossiersactifsparmissions);
+
+        return($dossiersactifs);
+
+      /*$dossiersdb= Dossier::where('current_status','actif')->pluck('id');
 
 
         $dossiersactifs = array_merge($dossiersactifsparmissions,$dossiersdb->toArray());
       $dossiersactifs =array_unique ($dossiersactifs);
 
-          return ($dossiersactifs);
+          return ($dossiersactifs);*/
+/* rendre les anciens dosiiers actifs inactif*/
+
+         /* $dossiersdb= Dossier::get(['id','current_status']);
+          $dossiersactifs =array_unique($dossiersactifsparmissions);
+          //dd($dossiersactifs);
+          foreach ($dossiersdb as $value) {
+
+            if(in_array($value->id, $dossiersactifs))
+            {
+                echo "je_suis_actif   ";
+            }
+            else
+            {
+                if($value->current_status=='actif' || $value->current_status=='En cours' )
+                {
+                    Dossier::where('id',$value->id)->update(['current_status'=>'inactif']);
+                    echo "maj_inactif   ";
+                }
+                else
+                {
+                    //echo $value->current_status.' ';
+                }
+            }
+          }*/
+
+/* rendre les anciens dosiiers actifs inactif*/
+
+          /*foreach ($dossiersactifs as $key => $value) {
+              echo  $key;
+          }*/
+         //dd('ok');
+         // return ($dossiersactifs);
 
        // return array_unique($dossiersactifsparmissions);
 
@@ -2837,7 +2913,166 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
     }
 
-    
+    public function DossiersDormants()
+    {
+
+    $dossierexistantsMiss=array();
+    $dossiersactifsparmissions=array();
+    $dossierDormants=array();
+
+    $missions=Mission::get();
+
+      
+       foreach($missions as $Miss)
+        {
+            $dossierexistantsMiss[]=$Miss->dossier_id;
+
+        }
+
+        $dossierexistantsMiss=array_unique($dossierexistantsMiss);
+        $dossiersactifsparmissions= $this->DossiersActifs();
+        $dossierDormants=array_diff($dossierexistantsMiss,$dossiersactifsparmissions);
+
+        //dd("dossier dormant");
+        //dd($dossierDormants);
+        
+        return($dossierDormants);
+
+    }
+
+    public function DossiersImmobiles()
+    {
+        $dossierDormants=$this->DossiersDormants();
+        $dossierActifs=$this->DossiersActifs();
+        $dossierTous=Dossier::where('current_status','!=','Cloture')->pluck('id')->toArray();
+        $somme=array_merge($dossierDormants,$dossierActifs);
+        $dossierImmobiles=array_diff($dossierTous,$somme);
+
+       // dd($dossierImmobiles);
+
+        //dd('ok');
+        return($dossierImmobiles);
+        
+    }
+
+    function RendreEtatDossiersActifs()
+    {
+
+
+        /* rendre les anciens dosiiers actifs inactif*/
+
+          $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
+
+          $dossiersactifsparmissions=$this->DossiersActifs();
+          $dossiersactifs =array_unique($dossiersactifsparmissions);
+          //dd($dossiersactifs);
+          foreach ($dossiersdb as $value) {
+
+            if(in_array($value->id, $dossiersactifs))
+            {
+                //echo "je_suis_actif   ";
+
+                Dossier::where('id',$value->id)->update(['current_status'=>'actif', 'sub_status'=>null]);
+
+
+            }
+            else
+            {
+                if($value->current_status=='actif' || $value->current_status=='En cours' )
+                {
+                    Dossier::where('id',$value->id)->update(['current_status'=>'inactif','sub_status'=>null]);
+                   // echo "maj_inactif   ";
+                }
+                else
+                {
+                    //echo $value->current_status.' ';
+                }
+            }
+          }
+
+/* rendre les anciens dosiiers actifs inactif*/
+
+
+    }
+
+    function RendreEtatDossiersImmobiles()
+    {
+
+        $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
+
+          $dossiersImmobileparmissions=$this->DossiersImmobiles();
+          $dossiersImmobiles =array_unique($dossiersImmobileparmissions);
+          //dd($dossiersactifs);
+          foreach ($dossiersdb as $value) {
+
+            if(in_array($value->id, $dossiersImmobiles))
+            {
+                //echo "je_suis_actif   ";
+
+        Dossier::where('id',$value->id)->update(['current_status'=>'inactif','sub_status'=>'immobile']);
+
+
+            }
+            else
+            {
+                if($value->sub_status=='immobile' )
+                {
+                Dossier::where('id',$value->id)->update(['current_status'=>'inactif','sub_status'=>null]);
+                   // echo "maj_inactif   ";
+                }
+                else
+                {
+                    //echo $value->current_status.' ';
+                }
+            }
+          }
+
+
+
+
+    }
+
+     function RendreEtatDossiersDormants()
+    {
+
+        $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
+
+          $dossiersDormantparmissions=$this->DossiersDormants();
+          $dossiersDormants =array_unique($dossiersDormantparmissions);
+          //dd($dossiersactifs);
+          foreach ($dossiersdb as $value) {
+
+            if(in_array($value->id, $dossiersDormants))
+            {
+                //echo "je_suis_actif   ";
+
+            Dossier::where('id',$value->id)->update(['current_status'=>'inactif', 'sub_status'=> 'dormant']);
+
+            }
+            else
+            {
+                if($value->sub_status=='dormant' )
+                {
+            Dossier::where('id',$value->id)->update(['current_status'=>'inactif','sub_status'=>null]);
+                   // echo "maj_inactif   ";
+                }
+                else
+                {
+                    //echo $value->current_status.' ';
+                }
+            }
+          }
+
+    }
+
+    function Gerer_etat_dossiers ()
+    {
+
+        $this->RendreEtatDossiersActifs();
+        $this->RendreEtatDossiersDormants();
+        $this->RendreEtatDossiersImmobiles();
+
+    }
 
 
     public static function DossiersInactifs( )
@@ -2898,13 +3133,14 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
             ->get();
 
 
+
         foreach($dossiers as $d)
         {
             // Affecter les dossiers inactifs au dispatcheur
             Dossier::where('id',$d->id) // ->where('affecte',0)
                 ->update(array(
                     'current_status'=>'inactif',
-                 /////   'affecte'=>$dispatcheur
+                    'affecte'=>$dispatcheur
 
                 ));
 
@@ -2918,7 +3154,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 */
 
             // Affecter dossiers Inactifs Transpot au Chargé
-/*
+
              Dossier::where(function ($query)use($d) {
                 $query->where('reference_medic','like','%TN%')
                     ->where('id',$d->id);
@@ -2929,7 +3165,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
                 $query->where('reference_medic','like','%TV%')
                     ->where('statut', '<>', 5);
              })->update(array('affecte' => $charge));
-*/
+
         }
 
 

@@ -31,6 +31,7 @@ class Dossier extends Model
 'type_dossier',
 'type_affectation',
 'current_status',
+'sub_status',
 'opened_by_date',
 'reference_medic',
 'complexite',

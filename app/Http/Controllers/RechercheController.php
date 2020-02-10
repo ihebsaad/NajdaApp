@@ -9,6 +9,7 @@ use App\Mission;
 use App\Dossier;
 use App\TypeMission;
 use App\User;
+use App\Prestataire;
 use Auth;
 use DB;
 use Carbon\Carbon;
@@ -295,6 +296,355 @@ class RechercheController extends Controller
 
     }
 
+    public function touslesprestataires(Request $request)
+    {
+
+          $prests=Prestataire::get(['id','name','civilite','prenom','ville','ville_id']);
+
+           return view('prestataires.index', compact('prests')); 
+
+    }
+
+  public function RecherchePrestataireAvancee (Request $request )
+   {
+   //dd($request->all());
+
+   /*  $mat=array();
+     $mat[0][]=array('t1'=>1, 't2'=>2, 't5'=>array());
+     $mat[0][]=array('t3'=>1, 't4'=>2);
+     $mat[1][]=array();
+     $mat[2][]=array();*/
+
+     ///dd($mat);
+
+  /*foreach ($mat as $key => $value) {
+ echo $mat[$key];
+   echo ' ';
+  }*/
+/*dd('fin');
+     dd($request->all());*/
+
+      /* $datasearch =null;
+       $gouvs=  PrestatairesController::PrestataireGouvs($id);
+       $typesp=  PrestatairesController::PrestataireTypesP($id);
+       $specs=  PrestatairesController::PrestataireSpecs($id);
+       $format = "Y-m-d H:i:s";*/
+
+      /* array:5 [▼
+  "pres_id_search" => null
+  "typepres_id_search" => null
+  "gouv_id_search" => null
+  "ville_id_search" => null
+  "spec_id_search" => null
+]*/
+
+     if($request->get('pres_id_search'))
+       {
+           $prests=Prestataire::where('id',$request->get('pres_id_search'))->get(); 
+           //dd($prests);
+
+       }
+       else
+       {
+          // début cas 1----------------------------------------------------------------------------
+        // si prstataire non identifié 1 0 0 0------------
+        if ($request->get('typepres_id_search') != null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')== null && $request->get('spec_id_search')==null )
+            {
+              $idprestataire = DB::table('prestataires_type_prestations')->where('type_prestation_id','=',$request->get('typepres_id_search'))->pluck('prestataire_id')->toArray();
+            // $val=41; 
+            //  dd(in_array($val,array_values($idprestataire)));
+
+           $idprestataire=array_unique($idprestataire);
+           $prests=Prestataire::whereIn('id',array_values($idprestataire))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            }
+
+
+           //1 1 0 0
+
+            if ($request->get('typepres_id_search') != null && $request->get('gouv_id_search')!= null && $request->get('ville_id_search')== null && $request->get('spec_id_search')==null )
+            {
+              $idprestatairetype = DB::table('prestataires_type_prestations')->where('type_prestation_id','=',$request->get('typepres_id_search'))->pluck('prestataire_id')->toArray();
+
+                 $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
+
+                 $result=array_intersect($idprestatairetype,$idprestatairegouv);
+    
+            // $val=41; 
+            //  dd(in_array($val,array_values($idprestataire)));
+
+           $result=array_unique($result);
+           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            }
+
+            //1 0 1 0
+
+            if ($request->get('typepres_id_search') != null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')!= null && $request->get('spec_id_search')==null )
+            {
+              $idprestatairetype = DB::table('prestataires_type_prestations')->where('type_prestation_id','=',$request->get('typepres_id_search'))->pluck('prestataire_id')->toArray();
+
+                 $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
+
+                 $result=array_intersect($idprestatairetype, $prestatairesville);
+    
+            // $val=41; 
+            //  dd(in_array($val,array_values($idprestataire)));
+
+           $result=array_unique($result);
+           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            }
+
+            //  1001
+             if ($request->get('typepres_id_search') != null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')== null && $request->get('spec_id_search')!=null )
+            {
+              $idprestatairetype = DB::table('prestataires_type_prestations')->where('type_prestation_id','=',$request->get('typepres_id_search'))->pluck('prestataire_id')->toArray();
+
+                 $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();
+
+
+                 $result=array_intersect($idprestatairetype, $idprestatairespec);
+    
+            // $val=41; 
+            //  dd(in_array($val,array_values($idprestataire)));
+
+           $result=array_unique($result);
+           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            }
+
+          //1101
+
+          if ($request->get('typepres_id_search') != null && $request->get('gouv_id_search')!= null && $request->get('ville_id_search')== null && $request->get('spec_id_search')!=null )
+            {
+              $idprestatairetype = DB::table('prestataires_type_prestations')->where('type_prestation_id','=',$request->get('typepres_id_search'))->pluck('prestataire_id')->toArray();
+
+                $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
+
+                 $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();
+
+
+                 $result1=array_intersect($idprestatairetype, $idprestatairespec);
+                 $result=array_intersect( $result1, $idprestatairegouv);
+    
+            // $val=41; 
+            //  dd(in_array($val,array_values($idprestataire)));
+
+           $result=array_unique($result);
+           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            }
+
+              //1011
+
+          if ($request->get('typepres_id_search') != null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')!= null && $request->get('spec_id_search')!=null )
+            {
+              $idprestatairetype = DB::table('prestataires_type_prestations')->where('type_prestation_id','=',$request->get('typepres_id_search'))->pluck('prestataire_id')->toArray();
+
+                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
+
+                 $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();
+
+
+                 $result1=array_intersect($idprestatairetype, $idprestatairespec);
+                 $result=array_intersect( $result1, $prestatairesville);
+    
+            // $val=41; 
+            //  dd(in_array($val,array_values($idprestataire)));
+
+           $result=array_unique($result);
+           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            }
+
+            // 1110
+
+            if ($request->get('typepres_id_search') != null && $request->get('gouv_id_search')!= null && $request->get('ville_id_search')!= null && $request->get('spec_id_search')==null )
+            {
+              $idprestatairetype = DB::table('prestataires_type_prestations')->where('type_prestation_id','=',$request->get('typepres_id_search'))->pluck('prestataire_id')->toArray();
+
+                $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
+
+                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
+
+               
+                 $result1=array_intersect($idprestatairetype, $idprestatairegouv);
+                 $result2=array_intersect($prestatairesville, $result1);
+                 $result=array_intersect( $result1,$result2);
+    
+            // $val=41; 
+            //  dd(in_array($val,array_values($idprestataire)));
+
+           $result=array_unique($result);
+           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            }
+
+           // 1111
+             if ($request->get('typepres_id_search') != null && $request->get('gouv_id_search')!= null && $request->get('ville_id_search')!= null && $request->get('spec_id_search')!=null )
+            {
+              $idprestatairetype = DB::table('prestataires_type_prestations')->where('type_prestation_id','=',$request->get('typepres_id_search'))->pluck('prestataire_id')->toArray();
+
+                $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
+
+                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
+
+                 $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();
+
+
+                 $result1=array_intersect($idprestatairetype, $idprestatairegouv);
+                 $result2=array_intersect($prestatairesville, $idprestatairespec);
+                 $result=array_intersect( $result1,$result2);
+    
+            // $val=41; 
+            //  dd(in_array($val,array_values($idprestataire)));
+
+           $result=array_unique($result);
+           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            }
+
+
+            //-------------------------------------fin cas 1-----------------------------------------------
+
+            // 0100
+
+             if ($request->get('typepres_id_search') == null && $request->get('gouv_id_search')!= null && $request->get('ville_id_search')== null && $request->get('spec_id_search')==null )
+            {
+             
+                $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
+            // $val=41; 
+            //  dd(in_array($val,array_values($idprestataire)));
+
+           $idprestatairegouv=array_unique($idprestatairegouv);
+           $prests=Prestataire::whereIn('id',array_values( $idprestatairegouv))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            }
+
+
+            //0110
+
+
+            if ($request->get('typepres_id_search') == null && $request->get('gouv_id_search')!= null && $request->get('ville_id_search')!= null && $request->get('spec_id_search')==null )
+            {
+             
+                $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
+
+                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
+
+                 $result=array_intersect($idprestatairegouv,$prestatairesville);
+    
+
+           $result=array_unique($result);
+           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            }
+
+            // 0101
+
+            if ($request->get('typepres_id_search') == null && $request->get('gouv_id_search')!= null && $request->get('ville_id_search')== null && $request->get('spec_id_search')!=null )
+            {
+      
+
+                $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
+
+
+                 $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();
+
+
+                 $result=array_intersect( $idprestatairegouv,$idprestatairespec);
+    
+       
+           $result=array_unique($result);
+           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            }
+
+            // 0111
+
+             if ($request->get('typepres_id_search') == null && $request->get('gouv_id_search')!= null && $request->get('ville_id_search')!= null && $request->get('spec_id_search')!=null )
+            {
+           
+                $idprestatairegouv= DB::table('cities_prestataires')->where('citie_id',$request->get('gouv_id_search') )->pluck('prestataire_id')->toArray();
+
+                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
+
+                 $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();
+                
+                 $result2=array_intersect($prestatairesville, $idprestatairespec);
+                 $result1=array_intersect($result2, $idprestatairegouv);
+                 $result=array_intersect( $result1,$result2);
+    
+
+           $result=array_unique($result);
+           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            }
+
+            ///   fin cas 2--------------------------------------------------------------------------------
+
+            //    cas 3  
+
+            //0010
+
+             if ($request->get('typepres_id_search') == null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')!= null && $request->get('spec_id_search')==null )
+            {
+             
+                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();        
+    
+           $result=array_unique($prestatairesville);
+           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            }
+
+            //  0011
+
+           if ($request->get('typepres_id_search') == null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')!= null && $request->get('spec_id_search')!=null )
+            {
+                          
+                $ville= DB::table('villes')->where('id',$request->get('ville_id_search'))->first();
+                 $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();
+
+                 $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();
+                
+                 $result=array_intersect($prestatairesville, $idprestatairespec);             
+          
+           $result=array_unique($result);
+           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            }
+
+           // fin cas 3
+
+            // cas 4 
+            // 0001
+
+             if ($request->get('typepres_id_search') == null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')== null && $request->get('spec_id_search')!=null )
+            {
+             
+                 $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();                                             
+           $result=array_unique($idprestatairespec);
+           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            }
+
+
+
+       }
+
+
+      return view('prestataires.index', compact('prests'));  
+
+   }
+
 
 public function pageRechercheAvancee(Request $request )
 {
@@ -363,7 +713,6 @@ public function pageRechercheAvancee(Request $request )
                       $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'));
 
                      foreach ( $data as $d) {
-
 
 
                       if($d->created !=null)

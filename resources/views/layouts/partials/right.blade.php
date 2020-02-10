@@ -456,7 +456,7 @@ use App\Http\Controllers\TagsController;
                                   <?php if(isset($dossier)) {  ?>
                                     <?php if($dossier) {  ?>
                                       <?php if($dossier->current_status != 'Cloture') {  ?>
-                                  <form  id="idFormCreationMission" method="post" action="{{route('Missions.storeActionsEC') }}" style="padding-top:30px">
+                                  <form  id="idFormCreationMission" method="post" style="padding-top:30px">
                                    <input id="idEntreeMissionOnMarker" type="hidden" class="form-control" value="" 
                                    name="idEntreeMissionOnMarker"/>
 
@@ -1032,7 +1032,7 @@ use App\Http\Controllers\TagsController;
 
            url:"{{ route('Mission.StoreMissionByAjax') }}",
            method:"post",
-           data : donnees,
+           data:donnees,
            success:function(data){
          
                 alert("Mission créée");

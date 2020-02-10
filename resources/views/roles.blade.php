@@ -1072,11 +1072,13 @@ $heureActuelle=date('H');
 
 if($heureActuelle=='08' || $heureActuelle=='15'){
 
+   // App\Http\Controllers\DossiersController::Gerer_etat_dossiers();
+
 // Inactiver Dossiers
-\App\Http\Controllers\DossiersController::InactiverDossiers();
+//App\Http\Controllers\DossiersController::InactiverDossiers();
 
 //Activer Dossier Inactifs
-\App\Http\Controllers\DossiersController::ActiverDossiers();
+//App\Http\Controllers\DossiersController::ActiverDossiers();
         }
 
 ?>

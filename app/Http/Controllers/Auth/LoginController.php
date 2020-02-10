@@ -48,6 +48,41 @@ class LoginController extends Controller
         // logged in statut = 1
         User::where('id', $iduser)->update(array('statut' => '1'));
 
+        /* début block  dossiers actifs, dormants et immobile */
+
+           $format = "Y-m-d H:i:s";
+            $deb_seance_1=(new \DateTime())->format('Y-m-d 07:30:00');
+            $fin_seance_1=(new \DateTime())->format('Y-m-d 09:00:00');            
+            $deb_seance_1 = \DateTime::createFromFormat($format, $deb_seance_1);
+            $fin_seance_1 = \DateTime::createFromFormat($format, $fin_seance_1);
+
+            $deb_seance_2=(new \DateTime())->format('Y-m-d 14:30:00');
+            $fin_seance_2=(new \DateTime())->format('Y-m-d 16:00:00');            
+            $deb_seance_2 = \DateTime::createFromFormat($format, $deb_seance_2);
+            $fin_seance_2 = \DateTime::createFromFormat($format, $fin_seance_2);
+
+            $deb_seance_3=(new \DateTime())->format('Y-m-d 22:30:00');
+            $fin_seance_3=(new \DateTime())->format('Y-m-d 23:30:00');            
+            $deb_seance_3 = \DateTime::createFromFormat($format, $deb_seance_3);
+            $fin_seance_3 = \DateTime::createFromFormat($format, $fin_seance_3);
+
+            $dtc = (new \DateTime())->format('Y-m-d H:i:s');
+            $dateSys = \DateTime::createFromFormat($format, $dtc);
+
+        if($type=='superviseur' || $type=='admin' || ($dateSys>=$deb_seance_3 && $dateSys<=$fin_seance_3))
+        {
+
+           // dd('khaled');
+      
+          /*  if(($dateSys>=$deb_seance_1 && $dateSys<=$fin_seance_1) || ($dateSys>=$deb_seance_2 && $dateSys<=$fin_seance_2)  || ($dateSs>=$deb_seance_3 && $dateSys<=$fin_seance_3))
+            {*/
+                app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
+                 //dd('khaled gg');
+           // }
+        }
+
+        /* fin block  dossiers actifs, dormants et immobiles */
+
         if ($type == 'financier') {
             return redirect('/parametres');
 

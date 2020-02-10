@@ -216,6 +216,9 @@ Route::post('/dossiers/checkexiste','DossiersController@checkexiste')->name('dos
 Route::get('/searchprest','DossiersController@searchprest')->name('searchprest');
 Route::get('/dossiers/dossiersactifs','DossiersController@DossiersActifs')->name('dossiers.dossiersactifs');
 Route::get('/dossiers/dossiersinactifs','DossiersController@DossiersInactifs')->name('dossiers.dossiersinactifs');
+Route::get('/dossiers/dossiersImmobiles','DossiersController@DossiersImmobiles')->name('dossiers.dossiersimmobiles');
+Route::get('/dossiers/dossiersDormants','DossiersController@DossiersDormants')->name('dossiers.dossiersdormants');
+//Route::get()
 Route::post('/dossiers/rendreactif','DossiersController@rendreActif')->name('dossiers.rendreactif');
 Route::get('/dossiers/inactifs','DossiersController@inactifs')->name('inactifs');
 Route::get('/dossiers/activerdossiers','DossiersController@ActiverDossiers')->name('activerdossiers');
@@ -400,6 +403,8 @@ Route::get('/notes/destroy/{id}', 'NotesController@destroy');
 
  
 /*** Missions**/
+Route::post('/Missions/storeMissionByAjax', ['uses'=>'MissionController@storeMissionByAjax',
+'as'=>'Mission.StoreMissionByAjax']);
 //Route::resource('/Missions',  'MissionController');
 Route::get('/Missions', array('as' => 'Missions','uses' => 'MissionController@index'));
 Route::post('/Missions/saving','MissionController@saving')->name('Missions.saving');
@@ -424,7 +429,8 @@ Route::get('/Mission/getDescriptionMissionAjax/{id}', 'MissionController@getDesc
 
 Route::get('/dossiers/view/CreerOM/{id}/{idmiss}', 'MissionController@viewDossierMission');
 Route::get('dossiers/view/CreerDoc/{id}/{idmiss}', 'MissionController@viewDossierMission');
-Route::post('/Missions/storeMissionByAjax','MissionController@storeMissionByAjax')->name('Mission.StoreMissionByAjax');
+/*Route::post('/Missions/storeMissionByAjax','MissionController@storeMissionByAjax')->name('Mission.StoreMissionByAjax');*/
+
 Route::post('/Missions/storeMissionLieByAjax','MissionController@storeMissionLieByAjax')->name('Mission.StoreMissionLieByAjax');
 Route::get('/ReporterMission/','MissionController@ReporterMission')->name('Mission.ReporterMission');
 
@@ -508,6 +514,9 @@ Route::post('/RechercheMultiAutocomplete','RechercheController@rechercheMultiAja
 Route::post('/testRechercheMultiAutocomplete','RechercheController@test')->name('RechercheMulti.test');
 
 Route::get('/pageRechercheAvancee','RechercheController@pageRechercheAvancee')->name('page_recherche.avancee');
+
+Route::get('/RecherchePrestataireAvancee','RechercheController@RecherchePrestataireAvancee')->name('recherchePrestataire.avancee');
+Route::get('/prestataire/tousprestataires', 'RechercheController@touslesprestataires');
 
  
 

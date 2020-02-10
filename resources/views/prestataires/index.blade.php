@@ -6,6 +6,9 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/rowReorder.bootstrap.css') }}" />-->
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
 
+ <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+
 @section('content')
     <?php use \App\Http\Controllers\PrestatairesController;
 
@@ -24,14 +27,135 @@
     <div class="uper">
         <div class="portlet box grey">
             <div class="row">
-                <div class="col-lg-6">Prestataires</div>
+                <div class="col-lg-6"><h4>Prestataires</h4></div>
                 <div class="col-lg-6">
-                    <a    href="{{route('prestataires.create',['id'=>0])}}" class="btn btn-md btn-success"   ><b><i class="fas fa-plus"></i> Ajouter un Prestataire</b></a>
+                    <a    href="{{route('prestataires.create',['id'=>0])}}" class="btn btn-md btn-success"   ><b><i class="fas fa-plus"></i> Ajouter un Prestataire</b></a>&nbsp; &nbsp;
+                    <a class="btn btn-default" id="recherchertp" href="{{url('/prestataire/tousprestataires')}}"> Afficher tous les prestataires</a>
                 </div>
             </div>
         </div>
 
-        <table class="table table-striped" id="mytable" style="width:100%">
+        <!-- debut recherche avancee sur dossiers-->
+
+
+      <div class="portlet box blue">
+               <div  style="background-color:#4fc1e9; height: 45px; margin-bottom: 0px; padding: 2px;">
+                
+                   <h4 style="cursor:pointer"  id="search">  &nbsp;<strong> <i class="fa fa-search"></i> &nbsp;Recherche avancée </strong></h4>
+                    
+                </div>
+            <div class="portlet-title" style="margin-top: 0px; padding-top: 0px;">
+                
+            </div>
+            <div class="portlet-body"  id="searchbox"    >
+                <form accept-charset="utf-8" id="searchDossierform" action="{{route('recherchePrestataire.avancee')}}">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Prestataire </label>
+                            <select class="form-control select2" name="pres_id_search" id="pres_id_search">
+                                <option value="">sélectionner</option>
+
+                                @foreach(App\Prestataire::get() as $p)
+
+                                 <option value="{{$p->id}}">{{$p->name}}</option>  
+
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>type de Prestation </label>
+                    <select class="form-control select2" name="typepres_id_search" id="typepres_id_search">
+                                <option value="">sélectionner</option>
+
+                                @foreach(App\TypePrestation::get(["id","name"]) as $pp)
+
+                                 <option value="{{$pp->id}}">{{$pp->name}}</option>  
+
+                                @endforeach
+                            </select>
+                        </div>
+
+                         <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Gouvernorat </label>
+                                <select id="gouv_id_search" name="gouv_id_search" class="form-control js-example-placeholder-single select2" >
+                                    <option value="">sélectionner</option>
+                                      @foreach(App\Citie::get() as $c)
+
+                                         <option value="{{$c->id}}">{{$c->name}}</option>
+
+                                      @endforeach
+                                                                    
+                                </select>
+                            </div>
+                        </div>
+
+                           </div>
+                             <div class="row">
+
+                          
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Ville </label>
+                                <select id="ville_id_search" name="ville_id_search" class="form-control js-example-placeholder-single select2" >
+                                    <option value="">sélectionner</option>
+                                      @foreach(App\Ville::get() as $c)
+
+                                         <option value="{{$c->id}}">{{$c->name}}</option>
+
+                                      @endforeach
+                                                                    
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Spécialité </label>
+                                <select id="spec_id_search" name="spec_id_search" class="form-control js-example-placeholder-single select2" >
+                                    <option value="">sélectionner</option>
+                                      @foreach(App\Specialite::get() as $c)
+
+                                         <option value="{{$c->id}}">{{$c->nom}}</option>
+
+                                      @endforeach
+                                                                    
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <!--<div class="col-md-4">
+                            
+                            <div class="form-group ">
+                                <label >Date de création</label>
+                                <input type="text" name="daterange" class="form-control" value="" />
+                                <input type="hidden" name="date_debut" id="date_debut_recherche" value="" />
+                                <input type="hidden" name="date_fin" id="date_fin_recherche" value="" />
+                            </div>
+                        </div>-->
+                        </div>
+
+                        
+                    <div class="row">
+
+                     
+                        <div class="col-md-12">
+                            
+                            <button class="btn btn-circle blue pull-right" id="rechercher" type="submit" style="margin-top: 20px;margin-right:20px;">  Rechercher</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+          
+        </div>
+
+
+ <!-- table-->
+  <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
             <tr id="headtable">
                 <th style="width:30%">Prestataire</th>
@@ -52,7 +176,8 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($prestataires as $prestataire)
+            @if(isset($prests))
+            @foreach($prests as $prestataire)
                 <?php $id= $prestataire->id ;$ville='';
                 if($prestataire->ville !=''){$ville=$prestataire->ville;}else{
 
@@ -82,10 +207,9 @@
 
                 </tr>
             @endforeach
+            @endif
             </tbody>
         </table>
-
- 
     </div>
 
 
@@ -233,4 +357,108 @@
         });
 
     </script>
+
+     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  
+      <script type="text/javascript" src="{{ URL::asset('public/js/moment/moment-timezone-with-data-1970-2030.min.js') }}"></script>
+     
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+ <script>
+    $(function() {
+
+   // var start = moment().subtract(29, 'days');
+   // var start = moment().set({'year': 2015, 'month': 0 , 'day': 0});
+   
+      var start = moment("01/01/2019", "DD/MM/YYYY");
+    //var start ='01/01/2015' ;
+    var end = moment();
+
+    //var start ='';
+    //var end = '';
+
+    function cb(start, end) {
+       /* $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));*/
+       //$('#reportrange span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+      $('input[name="daterange"]').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+
+       $('#date_debut_recherche').val(start.tz('Africa/Tunis').format('Y-MM-DD HH:mm:ss'));
+       $('#date_fin_recherche').val(end.tz('Africa/Tunis').format('Y-MM-DD HH:mm:ss'));
+
+
+    }
+
+   // $('#reportrange').daterangepicker({
+    $('input[name="daterange"]').daterangepicker({
+        linkedCalendars: false,
+        "locale": {
+        "format": "DD/MM/YYYY",
+        "separator": " - ",
+        "applyLabel": "Valider",
+        "cancelLabel": "Annuler",
+        "fromLabel": "De",
+        "toLabel": "à",
+        "customRangeLabel": "Personnaliser",
+        "daysOfWeek": [
+            "Dim",
+            "Lun",
+            "Mar",
+            "Mer",
+            "Jeu",
+            "Ven",
+            "Sam"
+        ],
+        "monthNames": [
+            "Janvier",
+            "Février",
+            "Mars",
+            "Avril",
+            "Mai",
+            "Juin",
+            "Juillet",
+            "Août",
+            "Septembre",
+            "Octobre",
+            "Novembre",
+            "Décembre"
+        ],
+        "firstDay": 1
+         },
+        startDate: start,
+        endDate: end,
+        ranges: {
+           'Pas de date':["",""],
+           'Aujourd hui': [moment(), moment()],
+           'Hier': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Dernières 7 jours': [moment().subtract(6, 'days'), moment()],
+           'Dernieres 30 jours': [moment().subtract(29, 'days'), moment()],
+           'Ce mois': [moment().startOf('month'), moment().endOf('month')],
+           'Dernier mois': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, cb);
+
+    cb(start, end);
+
+});
+
+
+</script>
+
+<script>
+ $(document).ready(function() {
+  
+    $("#pres_id_search").select2();
+    $("#typepres_id_search").select2();
+    $("#ville_id_search").select2();
+    $("#spec_id_search").select2();
+    $("#gouv_id_search").select2();
+
+
+
+
+ });
+
+ </script>
+
 @stop

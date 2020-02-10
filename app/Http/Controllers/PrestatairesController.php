@@ -38,9 +38,9 @@ class PrestatairesController extends Controller
     {
         $minutes1=120;
 
-         $dossiers = Dossier::all();
+        //$dossiers = Dossier::all();
 
-        $villes = Ville::all();
+        //$villes = Ville::all();
 
       /*  $villes = Cache::remember('villes',$minutes2,  function () {
 
@@ -67,7 +67,10 @@ class PrestatairesController extends Controller
 
         //});
 
-        return view('prestataires.index',[ 'dossiers' => $dossiers,'villes' => $villes], compact('prestataires'));
+        /*return view('prestataires.index',[ 'dossiers' => $dossiers,'villes' => $villes], compact('prestataires'));*/
+       return view('prestataires.index', compact('prestataires'));
+
+
     }
 
  
