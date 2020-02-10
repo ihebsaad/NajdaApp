@@ -6,10 +6,14 @@ if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];$subscriber_name2=$_GET['subscriber_name'];}
 if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname'];$subscriber_lastname2=$_GET['subscriber_lastname'];}
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
+if (isset($_GET['reference_customer'])) {$reference_customer=$_GET['reference_customer']; }
+if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; }
 if (isset($_GET['CL_debut_sejour'])) {$CL_debut_sejour=$_GET['CL_debut_sejour'];}
 if (isset($_GET['CL_fin_sejour'])) {$CL_fin_sejour=$_GET['CL_fin_sejour'];}
 if (isset($_GET['CL_arrangement'])) {$CL_arrangement=$_GET['CL_arrangement'];}
 if (isset($_GET['CL_tarif_convention'])) {$CL_tarif_convention=$_GET['CL_tarif_convention'];}
+if (isset($_GET['CL_montant_toutes_lettres'])) {$CL_montant_toutes_lettres=$_GET['CL_montant_toutes_lettres'];}
+if (isset($_GET['CL_text'])) {$CL_text=$_GET['CL_text'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['agent__lastname'])) {$agent__lastname=$_GET['agent__lastname']; }
 if (isset($_GET['agent__signature'])) {$agent__signature=$_GET['agent__signature']; }
@@ -57,7 +61,7 @@ $conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-//mysqli_query($conn,"set names 'utf8'");
+mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
@@ -310,16 +314,18 @@ foreach ($array_prest as $prest) {
 <p class=rvps4><span class=rvts4><br></span></p>
 <p class=rvps2><span class=rvts3><br></span></p>
 <p class=rvps5><span class=rvts5>Nom client</span><span class=rvts6> : </span><span class=rvts7><input name="subscriber_name" placeholder="Prenom Client" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>"></input> </span><span class=rvts6> </span><span class=rvts6> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts8>Prénom</span><span class=rvts7> : <input name="subscriber_lastname" placeholder="Nom Client" value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> </span></p>
-<p class=rvps5><span class=rvts8>Notre réf. dossier</span><span class=rvts7> : </span><span class=rvts6><input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_lastname2" placeholder="Nom Client" value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input> <input name="subscriber_name2" placeholder="Prenom Client" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>"></input></span></p>
+<p class=rvps5><span class=rvts8>N/ref</span><span class=rvts7> : </span><span class=rvts6><input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_lastname2" placeholder="Nom Client" value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input> <input name="subscriber_name2" placeholder="Prenom Client" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>"></input></span></p>
+<p class=rvps5><span class=rvts8>Référence client : </span><span class=rvts7></span><span class=rvts6><input name="reference_customer" placeholder="reference client" value="<?php if(isset ($reference_customer)) echo $reference_customer; ?>"></input> | <input name="customer_id__name" placeholder="Nom Client" value="<?php if(isset ($customer_id__name)) echo $customer_id__name; ?>"></input> </span></p>
 <p class=rvps6><span class=rvts8>Dates de séjour</span><span class=rvts7> : de <input type="datetime-local" name="CL_debut_sejour" placeholder="Debut Sejour" value="<?php if(isset ($CL_debut_sejour)) echo $CL_debut_sejour; ?>"></input> à <input  type="datetime-local" name="CL_fin_sejour" placeholder="Fin Sejour" value="<?php if(isset ($CL_fin_sejour)) echo $CL_fin_sejour; ?>"></input></span></p>
 <p class=rvps6><span class=rvts8>Arrangement</span><span class=rvts7> :<input name="CL_arrangement" placeholder="Arrangement" value="<?php if(isset ($CL_arrangement)) echo $CL_arrangement; ?>"></input></span></p>
-<p class=rvps6><span class=rvts8>Tarif de convention : </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_tarif_convention" placeholder="Tarif Convention" value="<?php if(isset ($CL_tarif_convention)) echo $CL_tarif_convention; ?>"  onKeyUp=" keyUpHandler(this)"></input></span></p>
+<p class=rvps6><span class=rvts8>Tarif de convention : </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_tarif_convention" placeholder="Tarif Convention" value="<?php if(isset ($CL_tarif_convention)) echo $CL_tarif_convention; ?>"  onKeyUp=" keyUpHandler(this)"></input></span><span class=rvts8>Toutes lettres </span> <span class=rvts8> : <input name="CL_montant_toutes_lettres"  id="CL_montant_toutes_lettres" placeholder="Montant toutes lettres" value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input></span> dinars </p>
 <p class=rvps6><span class=rvts7><br></span></p>
 <p class=rvps6><span class=rvts7><br></span></p>
 <p class=rvps7><span class=rvts7>Messieurs,</span></p>
 <p class=rvps7><span class=rvts6>Nous</span><span class=rvts9> </span><span class=rvts6>soussignés,</span><span class=rvts9> </span><span class=rvts5>Voyages</span><span class=rvts10> </span><span class=rvts5>Assistance</span><span class=rvts10> </span><span class=rvts5>Tunisie</span><span class=rvts6>,</span><span class=rvts9> </span><span class=rvts6>nous</span><span class=rvts9> </span><span class=rvts6>engageons</span><span class=rvts9> </span><span class=rvts6>à</span><span class=rvts9> </span><span class=rvts6>prendre</span><span class=rvts9> </span><span class=rvts6>en</span><span class=rvts9> </span><span class=rvts6>charge</span><span class=rvts9> </span><span class=rvts6>les</span><span class=rvts9> </span><span class=rvts6>frais</span><span class=rvts9> </span><span class=rvts6>d</span><span class=rvts11>’</span><span class=rvts6>hébergement</span><span class=rvts9> </span><span class=rvts6>de</span><span class=rvts9> </span><span class=rvts6>notre</span><span class=rvts9> </span><span class=rvts6>client ci-dessus</span><span class=rvts9> </span><span class=rvts6>selon l</span><span class=rvts11>’</span><span class=rvts6>arrangement énoncé.</span></p>
 <p class=rvps7><span class=rvts6>Merci</span><span class=rvts9> </span><span class=rvts6>de</span><span class=rvts9> </span><span class=rvts6>nous</span><span class=rvts9> </span><span class=rvts6>adresser</span><span class=rvts9> </span><span class=rvts6>votre</span><span class=rvts9> </span><span class=rvts6>facture</span><span class=rvts9> </span><span class=rvts6>originale</span><span class=rvts9> </span><span class=rvts6>dès</span><span class=rvts9> </span><span class=rvts6>que</span><span class=rvts9> </span><span class=rvts6>possible</span><span class=rvts9> </span><span class=rvts6>(et</span><span class=rvts9> </span><span class=rvts6>au</span><span class=rvts9> </span><span class=rvts6>plus</span><span class=rvts9> </span><span class=rvts6>tard</span><span class=rvts9> </span><span class=rvts6>30</span><span class=rvts9> </span><span class=rvts6>jours</span><span class=rvts9> </span><span class=rvts6>après</span><span class=rvts9> </span><span class=rvts6>le check-out du client),</span><span class=rvts9> </span><span class=rvts6>à</span><span class=rvts9> </span><span class=rvts6>l</span><span class=rvts11>’</span><span class=rvts6>adresse</span><span class=rvts9> </span><span class=rvts6>ci-dessus,</span><span class=rvts9> </span><span class=rvts6>en mentionnant notre référence</span><span class=rvts9> </span><span class=rvts6>ci-dessus.</span></p>
 <p class=rvps7><span class=rvts6><br></span></p>
+<p class=rvps12><span class=rvts12>Observations:</span><span class=rvts11> <input name="CL_text" placeholder="text" value="<?php if(isset ($CL_text)) echo $CL_text; ?>"></input></span></p>
 <p><span class=rvts12>ATTENTION IMPORTANT</span><span class=rvts13> </span></p>
 <p><span class=rvts14><br></span></p>
 <p class=rvps1><span class=rvts15>Toute facture reçue dans nos locaux plus de 60 jours après le service rendu ne pourra plus être garantie pour règlement. Cette prise en charge a donc une validité maximale de 60 jours après la date de la prestation de service.</span></p>
@@ -332,6 +338,7 @@ foreach ($array_prest as $prest) {
 <p class=rvps9><span class=rvts6>Service réservations</span></p>
 <p class=rvps1><span class=rvts3>« courrier électronique, sans signature »</span></p>
 <p class=rvps2><span class=rvts3><br></span></p>
+<script language="javascript" src="nombre_en_lettre.js"></script>
 <script type="text/javascript">
     function keyUpHandler(obj){
 <?php if (intval($montantgop) > 0) { ?>
@@ -339,6 +346,7 @@ foreach ($array_prest as $prest) {
             if (obj.value > <?php echo $montantgop  ?>) {document.getElementById("alertGOP").style.display="block";}
             else {document.getElementById("alertGOP").style.display="none";}
 <?php } ?>
+ document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value)
         }//fin de keypressHandler
 </script>
 </body></html>

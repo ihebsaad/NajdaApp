@@ -10,6 +10,7 @@ if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber
 if (isset($_GET['CL_age'])) {$CL_age=$_GET['CL_age'];}
 if (isset($_GET['reference_customer'])) {$reference_customer=$_GET['reference_customer']; }
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
+if (isset($_GET['CL_rapport'])) {$CL_rapport=$_GET['CL_rapport']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 
 // Create connection
@@ -50,7 +51,7 @@ $conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-//mysqli_query($conn,"set names 'utf8'");
+mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
@@ -309,6 +310,7 @@ foreach ($array_prest as $prest) {
 ?>
 </span></p>
 <p class=rvps3><span class=rvts3><br></span></p>
+<p class=rvps7><span class=rvts7><input name="CL_rapport" placeholder="" value="<?php if(isset ($CL_rapport)) echo $CL_rapport; ?>"></input></span></p>
 <h1 class=rvps6><span class=rvts0><span class=rvts12><br></span></span></h1>
 </body></html>
 
