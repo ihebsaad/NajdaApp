@@ -132,6 +132,7 @@ Route::post('/emails/send','EmailController@send');
 Route::get('/emails/sending','EmailController@sending')->name('emails.sending');
 Route::get('/emails/envoimail/{id}/{type}','EmailController@envoimail')->name('emails.envoimail');
 Route::get('/emails/envoimail/{id}/{type}/{prest}','EmailController@envoimail')->name('emails.envoimail');
+Route::get('/emails/envoimailenreg/{id}/{type}/{prest}/{entreeid}/{envoyeid}','EmailController@envoimailenreg')->name('emails.envoimailenreg');
 Route::get('/emails/envoimailbr/{id}','EmailController@envoimailbr')->name('emails.envoimailbr');
 #Route::get('/emails/envoifax/{id}','EmailController@envoifax')->name('emails.envoifax');
 Route::get('/emails/envoifax/{id}/{type}','EmailController@envoifax')->name('emails.envoifax');

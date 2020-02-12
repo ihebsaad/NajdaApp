@@ -969,6 +969,7 @@ class DossiersController extends Controller
         $iddossier=$request->get('dossier');
         $client=$request->get('client');
         $affecte=$request->get('affecte');
+        $sujet=$request->get('sujet');
         $message=$request->get('message');
         $refclient=$request->get('refclient');
         $from=trim($request->get('from'));
@@ -989,11 +990,11 @@ class DossiersController extends Controller
 
         if ($langue=='francais'){
             $signature = app('App\Http\Controllers\UsersController')->ChampById('signature',$affecte);
-            $sujet=  $nomabn.'  - V/Réf: '.$refclient .' - N/Réf: '.$refdossier ;
+          //  $sujet=  $nomabn.'  - V/Réf: '.$refclient .' - N/Réf: '.$refdossier ;
 
         }else{
             $signature = app('App\Http\Controllers\UsersController')->ChampById('signature_en',$affecte);
-            $sujet=  $nomabn.'  - Y/Ref: '.$refclient .' - O/Ref: '.$refdossier ;
+           // $sujet=  $nomabn.'  - Y/Ref: '.$refclient .' - O/Ref: '.$refdossier ;
 
         }
         $prenomagent = app('App\Http\Controllers\UsersController')->ChampById('name',$affecte);
@@ -1325,11 +1326,11 @@ class DossiersController extends Controller
         $id= $request->get('dossierid');
         $agent= $request->get('agent');
         $stat = $request->get('statut');
-        if(trim($stat)=='inactif'){$statut='inactif';}else{$statut='actif';}
+      //  if(trim($stat)=='inactif'){$statut='inactif';}else{$statut='actif';}
 
         // statut= 5 => dossier affecté manuellement
 
-         Dossier::where('id', $id)->update(array('affecte' => $agent,'statut'=>5 ,'current_status'=>$statut));
+         Dossier::where('id', $id)->update(array('affecte' => $agent,'statut'=>5 ));
 
         $ref=$this->RefDossierById($id);
 

@@ -14,6 +14,7 @@ use App\Attachement ;
 use  \App\Http\Controllers\PrestatairesController;
  use  \App\Http\Controllers\DocsController;
 ?>
+<link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
 
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
 <link rel="stylesheet" href="{{ asset('public/css/timeline.css') }}" type="text/css">
@@ -2350,10 +2351,30 @@ use  \App\Http\Controllers\PrestatairesController;
                     if($typea=='TRANSPORT NAJDA'){$from='taxi@najda-assistance.com';}
                     if($typea=='X-PRESS'){$from='x-press@najda-assistance.com';}
 
+                    $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$dossier->customer_id);
 
                     ?>
                     <input type="hidden"   name="from" id="from" value="<?php echo $from; ?>" />
+                     <?php
 
+                        $subscriber_name = app('App\Http\Controllers\DossiersController')->ChampById('subscriber_name',$dossier->id);
+                        $subscriber_lastname = app('App\Http\Controllers\DossiersController')->ChampById('subscriber_lastname',$dossier->id);
+
+                        if ($from=='tpa@najda-assistance.com') {
+                            $nomabn = $subscriber_name . ' ' . $subscriber_lastname;
+                        }else{
+                            $nomabn = $subscriber_name ;
+                        }
+
+                        if ($langue=='francais'){
+                        $sujet=  $nomabn.'  - V/Réf: '.$dossier->reference_customer .' - N/Réf: '.$dossier->reference_medic ;
+
+                        }else{
+                        $sujet=  $nomabn.'  - Y/Ref: '.$dossier->reference_customer .' - O/Ref: '.$dossier->reference_medic ;
+
+                        }
+                        ?>
+                     <input style="width:100%" class="form-control" type="sujet"   name="sujet" id="sujet" value="<?php echo $sujet; ?>" />
 
                     <label for="destinataire">Destinataire:</label>
 
@@ -2371,7 +2392,15 @@ use  \App\Http\Controllers\PrestatairesController;
                     {{ csrf_field() }}
                     <?php $message= EntreesController::GetParametre($dossier->customer_id);
                     //  echo json_encode($message);?>
-                    <div  style="width: 540px; height: 450px;padding:5px 5px 5px 5px;border:1px solid black" id="message" contenteditable="true" ><?php echo $message   ;?></div>
+               <!--     <div  style="width: 540px; height: 450px;padding:5px 5px 5px 5px;border:1px solid black" id="message" contenteditable="true" ><?php // echo $message   ;?></div>-->
+
+                    <div class="form-group ">
+                        <label for="contenu">Contenu:</label>
+                        <div class="editor" >
+                            <textarea style="min-height: 280px;" id="message"  class="textarea tex-com"   name="contenu" required  ><?php echo $message   ;?></textarea>
+                        </div>
+                    </div>
+
                 </div>
 
 
@@ -3294,9 +3323,10 @@ function disabling(elm) {
             var refclient = $('#reference_customer').val();
             var affecte = $('#affecte').val();
             var from = $('#from').val();
+            var sujet = $('#sujet').val();
 
 
-            var message = $('#message').html();
+            var message = $('#message').val();
 
 
             if (destinataire !=null)
@@ -3305,7 +3335,7 @@ function disabling(elm) {
                 $.ajax({
                     url:"{{ route('dossiers.sendaccuse') }}",
                     method:"POST",
-                    data:{ from:from,refclient:refclient,message:message,affecte:affecte,client:client,dossier:dossier,destinataire:destinataire, _token:_token},
+                    data:{ from:from,refclient:refclient,message:message,affecte:affecte,client:client,dossier:dossier,destinataire:destinataire,sujet:sujet, _token:_token},
 
                     success:function(data){
 

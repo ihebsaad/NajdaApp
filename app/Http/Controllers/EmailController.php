@@ -996,6 +996,12 @@ $id=0;
                     $facturation='';
                     $type=  $oAttachment->getExtension();
 
+                    if ($type=='docx')
+                    {
+
+                    }
+
+
                      // verifier si l'attachement pdf contient des mots de facturation
                     if ( App::environment() === 'production') {
 
@@ -4853,6 +4859,211 @@ $id=0;
 
         return view('emails.envoimail',['dossier'=>$dossier,'refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'nomabnC'=>$nomabnC,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type ,'langue'=>$langue]);
     }
+
+
+
+
+
+    public function envoimailenreg($id,$type,$prest=null,$entreeid=null,$envoyeid=null)
+    {
+        $langue="francais";
+        if (isset($prest)){$prest=$prest;}else{$prest=0;}
+        $ref=app('App\Http\Controllers\DossiersController')->RefDossierById($id);
+        $nomabn=app('App\Http\Controllers\DossiersController')->NomAbnDossierById($id);
+        $nomabnC=app('App\Http\Controllers\DossiersController')->FullnameAbnDossierById($id);
+        $refdem=app('App\Http\Controllers\DossiersController')->RefDemDossierById($id);
+        $refclient=app('App\Http\Controllers\DossiersController')->ChampById('reference_customer',$id);
+        $entrees =   Entree::where('dossier', $ref)->get();
+        $envoyes =   Envoye::where('dossier', $ref)->get();
+
+        $listeemails=array();
+        $prestataires=array();
+        $dossier=Dossier::find($id);
+
+        if($type=='client')
+        {
+            // trouver id client à partir de la référence
+            $cl=app('App\Http\Controllers\DossiersController')->ClientDossierById($id);
+            $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$cl);
+
+            $mail=app('App\Http\Controllers\ClientsController')->ClientChampById('mail',$cl);
+            if($mail!='') { array_push($listeemails,$mail);}
+
+            $mail2=app('App\Http\Controllers\ClientsController')->ClientChampById('mail2',$cl);
+            if($mail2!='') { array_push($listeemails,$mail2);}
+
+            $mail3=app('App\Http\Controllers\ClientsController')->ClientChampById('mail3',$cl);
+            if($mail3!='') { array_push($listeemails,$mail3);}
+
+            $mail4=app('App\Http\Controllers\ClientsController')->ClientChampById('mail4',$cl);
+            if($mail4!='') { array_push($listeemails,$mail4);}
+
+            $mail5=app('App\Http\Controllers\ClientsController')->ClientChampById('mail5',$cl);
+            if($mail5!='') { array_push($listeemails,$mail5);}
+
+            $mail6=app('App\Http\Controllers\ClientsController')->ClientChampById('mail6',$cl);
+            if($mail6!='') { array_push($listeemails,$mail6);}
+
+            $mail7=app('App\Http\Controllers\ClientsController')->ClientChampById('mail7',$cl);
+            if($mail7!='') { array_push($listeemails,$mail7);}
+
+            $mail8=app('App\Http\Controllers\ClientsController')->ClientChampById('mail8',$cl);
+            if($mail8!='') { array_push($listeemails,$mail8);}
+
+            $mail9=app('App\Http\Controllers\ClientsController')->ClientChampById('mail9',$cl);
+            if($mail9!='') { array_push($listeemails,$mail9);}
+
+            $mail10=app('App\Http\Controllers\ClientsController')->ClientChampById('mail10',$cl);
+            if($mail10!='') { array_push($listeemails,$mail10);}
+
+
+
+            $emails =   Adresse::where('nature', 'email')
+                ->where('parent',$cl)
+                ->pluck('champ');
+
+            $emails =  $emails->unique();
+
+            if (count($emails)>0) {
+                foreach ($emails as $m) {
+                    array_push($listeemails, $m);
+
+                }
+            }
+
+        }
+        if($type=='prestataire')
+        {
+            $prestataires =   Prestation::where('dossier_id', $id)->pluck('prestataire_id');
+            $prestataires = $prestataires->unique();
+
+            $intervenants =   Intervenant::where('dossier', $id)->pluck('prestataire_id');
+
+            // merger prestataire + intervenants
+            $prestataires=$prestataires->merge($intervenants);
+
+            $listeemails=array();
+
+            $mails=array();
+
+            if ($prest!='')
+            {
+                $mail = app('App\Http\Controllers\PrestatairesController')->ChampById('mail', $prest);
+                if ($mail != '') {
+                    array_push($mails, $mail);
+                }
+                $mail2 = app('App\Http\Controllers\PrestatairesController')->ChampById('mail2', $prest);
+                if ($mail2 != '') {
+                    array_push($mails, $mail2);
+
+                }
+
+                $mail3 = app('App\Http\Controllers\PrestatairesController')->ChampById('mail3', $prest);
+                if ($mail3 != '') {
+                    array_push($mails, $mail3);
+
+                }
+
+                $mail4 = app('App\Http\Controllers\PrestatairesController')->ChampById('mail4', $prest);
+                if ($mail4 != '') {
+                    array_push($mails, $mail4);
+
+                }
+
+                $mail5 = app('App\Http\Controllers\PrestatairesController')->ChampById('mail5', $prest);
+                if ($mail5 != '') {
+                    array_push($mails, $mail5);
+
+                }
+
+
+                // $emails =   Email::where('parent', $prest)->pluck('champ');
+
+                $emails =   Adresse::where('nature', 'emailinterv')
+                    ->where('parent',$prest)
+                    ->pluck('champ');
+
+                $emails =  $emails->unique();
+
+                if (count($emails)>0){
+                    foreach ( $emails as $m)
+                    {
+                        array_push($mails,$m);
+
+                    }
+
+                }
+                $listeemails=$mails;
+
+            } // if isset
+
+
+        } // prestataire
+
+        if($type=='assure')
+        {
+
+            $mail=app('App\Http\Controllers\DossiersController')->ChampById('mail',$id);
+            if($mail!='') { array_push($listeemails,$mail);}
+
+
+            $subscriber_mail1=app('App\Http\Controllers\DossiersController')->ChampById('subscriber_mail1',$id);
+            if($subscriber_mail1!='') { array_push($listeemails,$subscriber_mail1);}
+
+            $subscriber_mail2=app('App\Http\Controllers\DossiersController')->ChampById('subscriber_mail2',$id);
+            if($subscriber_mail2!='') { array_push($listeemails,$subscriber_mail2);}
+
+            $subscriber_mail3=app('App\Http\Controllers\DossiersController')->ChampById('subscriber_mail3',$id);
+            if($subscriber_mail3!='') { array_push($listeemails,$subscriber_mail3);}
+
+            // $emails =   Email::where('parent', $id)->pluck('champ');
+
+            $emails =   Adresse::where('nature', 'emaildoss')
+                ->where('parent',$id)
+                ->pluck('champ');
+
+            $emails =  $emails->unique();
+
+            if (count($emails)>0){
+                foreach ( $emails as $m)
+                {
+                    array_push($listeemails,$m);
+
+                }
+
+            }
+
+        }
+
+        $identr=array();
+        $idenv=array();
+        foreach ($entrees as $entr)
+        {
+            array_push($identr,$entr->id );
+
+        }
+
+        foreach ($envoyes as $env)
+        {
+            array_push($idenv,$env->id );
+
+        }
+
+
+        $attachements=   Attachement::where(function ($query) use($identr,$idenv) {
+            $query->whereIn('entree_id',$identr )
+                ->orWhereIn('envoye_id',$idenv );
+        })->orWhere(function ($query) use($id) {
+            $query->Where('dossier','=',$id );
+        })->orderBy('created_at', 'desc')
+            ->distinct()
+            ->get();
+
+
+
+        return view('emails.envoimailenreg',['dossier'=>$dossier,'refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'nomabnC'=>$nomabnC,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type ,'langue'=>$langue,'entreeid'=>$entreeid,'envoyeid'=>$envoyeid]);
+    }
+
 
     public function envoimailbr($id)
     {

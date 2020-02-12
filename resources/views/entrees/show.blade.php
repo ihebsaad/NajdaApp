@@ -91,6 +91,26 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                                         <span class="fa fa-fw fa-trash-alt"></span> Supprimer
                                     </a>
 
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-share"></i> Transférer <i class="fa fa-angle-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            <a href="{{route('emails.envoimailenreg',['id'=>$dossier->id,'type'=> 'client','prest'=> 0,'entreeid'=>$entree['id'],'envoyeid'=>0 ])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                                                Au client </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{route('emails.envoimailenreg',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0 ,'entreeid'=>$entree['id'],'envoyeid'=>0 ])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                                                À l'intervenant </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{route('emails.envoimailenreg',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0 ,'entreeid'=>$entree['id'],'envoyeid'=>0  ] )}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                                                À l'assuré </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                  </a>

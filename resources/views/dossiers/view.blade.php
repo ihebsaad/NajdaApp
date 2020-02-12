@@ -398,17 +398,17 @@ function custom_echo($x, $length)
                 <ul class="nav  nav-tabs">
 
                     <li class="nav-item active">
-                        <a class="nav-link active show" href="#tab32" data-toggle="tab"  onclick=";showinfos2();hideinfos();hideinfos3();">
+                        <a class="nav-link active show" href="#tab32" data-toggle="tab"  onclick=";showinfos32();hideinfos33();hideinfos34();">
                             <i class="fas fa-lg  fa-user-md"></i>  Recherche des Prestataires
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#tab33" data-toggle="tab"  onclick="showinfos3();hideinfos();hideinfos2();">
+                        <a class="nav-link" href="#tab33" data-toggle="tab"  onclick="showinfos33();hideinfos32();hideinfos34();">
                             <i class="fas  fa-lg fa-users"></i>  Optimiseur
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link   " href="#tab34" data-toggle="tab"  onclick="showinfos();hideinfos2();hideinfos3();">
+                        <a class="nav-link   " href="#tab34" data-toggle="tab"  onclick="showinfos34();hideinfos32();hideinfos33();">
                             <i class="fas fa-lg  fa-ambulance"></i>  Prestations
                         </a>
                     </li>
@@ -3046,23 +3046,23 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
         $('.telsclients').css('display','none');
     }
 
-    function hideinfos() {
-        $('#tab31').css('display','none');
+    function hideinfos34() {
+        $('#tab34').css('display','none');
     }
-    function hideinfos2() {
+    function hideinfos32() {
         $('#tab32').css('display','none');
     }
-    function hideinfos3() {
+    function hideinfos33() {
         $('#tab33').css('display','none');
     }
-    function showinfos() {
-        $('#tab31').css('display','block');
+    function showinfos34() {
+        $('#tab34').css('display','block');
     }
 
-    function showinfos2() {
+    function showinfos32() {
         $('#tab32').css('display','block');
     }
-    function showinfos3() {
+    function showinfos33() {
         $('#tab33').css('display','block');
     }
     function hideinfos81()

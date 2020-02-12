@@ -739,7 +739,7 @@ class EntreesController extends Controller
      //   Dossier::where('id',$iddossier)->update(array('current_status'=>'actif'));
 
 
-        Log::info('Création Compte Rendu - Par :'.$nomuser.' - Dossier : '.$refdoss);
+        Log::info('[Agent: '.$nomuser.'] Création Compte Rendu - Dossier : '.$refdoss);
 
     }
 
