@@ -2015,19 +2015,18 @@ class ActionController extends Controller
 
    public function activerActionsReporteeOuRappelee ()
    {
-
+  
           // $burl = URL::to("/");
        $output='';
 
          $dtc = (new \DateTime())->format('Y-m-d H:i');
 
          $actionRR=ActionEC::where('user_id', Auth::user()->id)
-                          ->where(function($q){                             
+                               ->where(function($q){                             
                                $q->where('statut','reportee')
                                ->orWhere('statut','rappelee');
-                                })                     
-                                ->get();
-
+                                })->get();                 
+                          
 
         $actionRepo= $actionRR->where('statut','reportee')
                               ->where('date_report','<=', $dtc)
@@ -2078,6 +2077,8 @@ class ActionController extends Controller
     {
         if($actionRapp!=null)
         {
+
+
             $upde= ActionEC::where('id',$actionRapp->id)->where('statut','!=','rfaite')->first();
              $upde->update(['statut' => 'active']);
               $upde->update(['date_deb'=> $dtc]);
@@ -2097,7 +2098,7 @@ class ActionController extends Controller
                          $upde->update(['date_deb'=> $dtc]);
                          Mission::where('id', $upde->Mission->id)->update(['statut_courant'=>'active']);
 
-                         $output='Activation de l\'action reportée : '.$upde->titre.' | Mission :'.$upde->Mission ->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
+                         $output='Activation de l\'action reportée : '.$upde->titre.' | Mission :'.$upde->Mission->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
                   
                             return($output);
  

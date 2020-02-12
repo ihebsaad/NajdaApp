@@ -238,7 +238,7 @@
                     }
                     }
                      ?> </td>
-                    <td style="width:10%"><?php echo $dossier['current_status'];?></td>
+                    <td style="width:10%"><?php if($dossier['current_status']=='inactif') {echo $dossier['current_status'].' ('.$dossier['sub_status'].')';}else {echo $dossier['current_status'];}?></td>
                     <td style="width:10%"> <?php if($etat=='5'){echo '<b>Manuel</b>';} else {
                     if($etat=='2'){echo 'Automatique';}
                     }
