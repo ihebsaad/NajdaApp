@@ -76,7 +76,7 @@ class LoginController extends Controller
       
           /*  if(($dateSys>=$deb_seance_1 && $dateSys<=$fin_seance_1) || ($dateSys>=$deb_seance_2 && $dateSys<=$fin_seance_2)  || ($dateSs>=$deb_seance_3 && $dateSys<=$fin_seance_3))
             {*/
-                app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
+                //app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
                  //dd('khaled gg');
            // }
         }
