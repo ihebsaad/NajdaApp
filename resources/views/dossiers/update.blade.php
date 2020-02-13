@@ -15,6 +15,8 @@ use  \App\Http\Controllers\PrestatairesController;
  use  \App\Http\Controllers\DocsController;
 ?>
 
+<link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
+
 <link rel="stylesheet" href="{{ asset('public/css/timelinestyle.css') }}" type="text/css">
 <link rel="stylesheet" href="{{ asset('public/css/timeline.css') }}" type="text/css">
 <!--select css-->
@@ -2316,66 +2318,97 @@ use  \App\Http\Controllers\PrestatairesController;
 </div>
 
 
-<!-- Modal -->
-<div class="modal fade" id="createAccuse"    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Envoyer un accusé de réception</h5>
+    <!-- Modal -->
+    <div class="modal fade" id="createAccuse"    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Envoyer un accusé de réception</h5>
 
-            </div>
-            <div class="modal-body">
-                <div class="card-body">
-
-                    {{ csrf_field() }}
                 </div>
-                <div class="form-group">
+                <div class="modal-body">
+                    <div class="card-body">
 
-                    <?php $typea=trim(strtoupper($dossier->type_affectation));
-                    $from='';
-                    if($typea=='NAJDA'){$from='24ops@najda-assistance.com';}
-                    if($typea=='VAT'){$from='hotels.vat@medicmultiservices.com';}
-                    if($typea=='MEDIC'){$from='assistance@medicmultiservices.com';}
-                    if($typea=='TRANSPORT MEDIC'){$from='ambulance.transp@medicmultiservices.com';}
-                    if($typea=='TRANSPORT VAT'){$from='vat.transp@medicmultiservices.com';}
-                    if($typea=='MEDIC INTERNATIONAL'){$from='operations@medicinternational.tn';}
-                    if($typea=='NAJDA TPA'){$from='tpa@najda-assistance.com';}
-                    if($typea=='TRANSPORT NAJDA'){$from='taxi@najda-assistance.com';}
-                    if($typea=='X-PRESS'){$from='x-press@najda-assistance.com';}
+                        {{ csrf_field() }}
+                    </div>
+                    <div class="form-group">
 
+                        <?php $typea=trim(strtoupper($dossier->type_affectation));
+                        $from='';
+                        if($typea=='NAJDA'){$from='24ops@najda-assistance.com';}
+                        if($typea=='VAT'){$from='hotels.vat@medicmultiservices.com';}
+                        if($typea=='MEDIC'){$from='assistance@medicmultiservices.com';}
+                        if($typea=='TRANSPORT MEDIC'){$from='ambulance.transp@medicmultiservices.com';}
+                        if($typea=='TRANSPORT VAT'){$from='vat.transp@medicmultiservices.com';}
+                        if($typea=='MEDIC INTERNATIONAL'){$from='operations@medicinternational.tn';}
+                        if($typea=='NAJDA TPA'){$from='tpa@najda-assistance.com';}
+                        if($typea=='TRANSPORT NAJDA'){$from='taxi@najda-assistance.com';}
+                        if($typea=='X-PRESS'){$from='x-press@najda-assistance.com';}
 
-                    ?>
-                    <input type="hidden"   name="from" id="from" value="<?php echo $from; ?>" />
+                        $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$dossier->customer_id);
 
+                        ?>
+                        <label for="destinataire">Sujet:</label>
 
-                    <label for="destinataire">Destinataire:</label>
+                        <input type="hidden"   name="from" id="from" value="<?php echo $from; ?>" />
+                        <?php
 
-                    <select id="emaildestinataire"    required  class="form-control" name="destinataire[]" style="width:100%" multiple >
-                        <option>ihebsaad@gmail.com</option>
-                        <option>saadiheb@gmail.com</option>
-                       <?php foreach($listeemails as  $mail)
-                           { ?>
+                        $subscriber_name = app('App\Http\Controllers\DossiersController')->ChampById('subscriber_name',$dossier->id);
+                        $subscriber_lastname = app('App\Http\Controllers\DossiersController')->ChampById('subscriber_lastname',$dossier->id);
+
+                        if ($from=='tpa@najda-assistance.com') {
+                            $nomabn = $subscriber_name . ' ' . $subscriber_lastname;
+                        }else{
+                            $nomabn = $subscriber_name ;
+                        }
+
+                        if ($langue=='francais'){
+                            $sujet=  $nomabn.'  - V/Réf: '.$dossier->reference_customer .' - N/Réf: '.$dossier->reference_medic ;
+
+                        }else{
+                            $sujet=  $nomabn.'  - Y/Ref: '.$dossier->reference_customer .' - O/Ref: '.$dossier->reference_medic ;
+
+                        }
+                        ?>
+                        <input style="width:100%" class="form-control" type="sujet"   name="sujet" id="sujet" value="<?php echo $sujet; ?>" />
+
+                        <label for="destinataire">Destinataire:</label>
+
+                        <select id="emaildestinataire"    required  class="form-control" name="destinataire[]" style="width:100%" multiple >
+                            <option>ihebsaad@gmail.com</option>
+                            <option>saadiheb@gmail.com</option>
+                            <?php foreach($listeemails as  $mail)
+                            { ?>
                             <option   value="<?php echo $mail ;?>"> <?php echo $mail ;?>  <small style="font-size:12px">(<?php echo PrestatairesController::NomByEmail( $mail) .' '.PrestatairesController::PrenomByEmail( $mail)  ;?>)  "</small> </option>
-                        <?php } ?>
-                    </select>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div id="formaccuse"  >
+                        {{ csrf_field() }}
+                        <?php $message= EntreesController::GetParametre($dossier->customer_id);
+                        //  echo json_encode($message);?>
+                    <!--     <div  style="width: 540px; height: 450px;padding:5px 5px 5px 5px;border:1px solid black" id="message" contenteditable="true" ><?php // echo $message   ;?></div>-->
+
+                        <div class="form-group ">
+                            <label for="contenu">Contenu:</label>
+                            <div class="editor" >
+                                <textarea style="min-height: 280px;" id="message"  class="textarea tex-com"   name="contenu" required  ><?php echo $message   ;?></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+
                 </div>
-
-                <div id="formaccuse"  >
-                    {{ csrf_field() }}
-                    <?php $message= EntreesController::GetParametre($dossier->customer_id);
-                    //  echo json_encode($message);?>
-                    <div  style="width: 540px; height: 450px;padding:5px 5px 5px 5px;border:1px solid black" id="message" contenteditable="true" ><?php echo $message   ;?></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="submit" onclick="document.getElementById('sendaccuse').disabled=true" id="sendaccuse" class="btn btn-primary">Envoyer</button>
                 </div>
-
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                <button type="submit" onclick="document.getElementById('sendaccuse').disabled=true" id="sendaccuse" class="btn btn-primary">Envoyer</button>
             </div>
         </div>
     </div>
-</div>
+
 
 <div class="modal  " id="crendu" >
     <?php     $listedossiers = DB::table('dossiers')->get();
@@ -3210,9 +3243,10 @@ function disabling(elm) {
             var refclient = $('#reference_customer').val();
             var affecte = $('#affecte').val();
             var from = $('#from').val();
+            var sujet = $('#sujet').val();
 
 
-            var message = $('#message').html();
+            var message = $('#message').val();
 
 
             if (destinataire !=null)
@@ -3221,7 +3255,7 @@ function disabling(elm) {
                 $.ajax({
                     url:"{{ route('dossiers.sendaccuse') }}",
                     method:"POST",
-                    data:{ from:from,refclient:refclient,message:message,affecte:affecte,client:client,dossier:dossier,destinataire:destinataire, _token:_token},
+                    data:{ from:from,refclient:refclient,message:message,affecte:affecte,client:client,dossier:dossier,destinataire:destinataire,sujet:sujet, _token:_token},
 
                     success:function(data){
 
@@ -3230,7 +3264,7 @@ function disabling(elm) {
                     }
                 });
             }else{
-                  alert('sélectionnez le destinataire !');
+                alert('sélectionnez le destinataire !');
                 document.getElementById('sendaccuse').disabled=false;
             }
         });

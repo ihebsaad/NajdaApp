@@ -273,7 +273,7 @@ $(document).ready(function()
                     </div>
                 </div>
 
-
+                <section>
                 <div class="form-group ">
                     <label for="contenu">Contenu:</label>
                     <div class="editor" >
@@ -286,6 +286,7 @@ $(document).ready(function()
                          </textarea>
                     </div>
                 </div>
+                </section>
                 <div class="form-group form-group-default">
                     <label>Attachements Externes <span style="color:red;">(la taille totale de fichiers ne doit pas dépasser 25 Mo)</span></label>
                     <!--<input  class="btn btn-danger fileinput-button" id="file" type="file" name="files[]"   multiple   >-->
@@ -449,9 +450,9 @@ $("#prest").change(function(){
                 if (prest>0)
                 {
 
-                    window.location = '<?php echo $urlapp; ?>/emails/envoimail/<?php echo $doss; ?>/prestataire/'+prest;
+                    window.location = '<?php echo $urlapp; ?>/emails/envoimailenreg/<?php echo $doss; ?>/prestataire/'+prest+'/<?php echo $entreeid; ?>/<?php echo $envoyeid; ?>';
                 }else{
-                    window.location = "<?php echo $urlapp; ?>/emails/envoimail/<?php echo $doss; ?>/prestataire/0";
+                    window.location = "<?php echo $urlapp; ?>/emails/envoimailenreg/<?php echo $doss; ?>/prestataire/0/<?php echo $entreeid; ?>/<?php echo $envoyeid; ?>";
 
                 }
 

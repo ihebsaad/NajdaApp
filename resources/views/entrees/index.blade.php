@@ -81,7 +81,10 @@ function SstartsWith ($string, $startString)
             @endforeach
             </tbody>
         </table>
-     </div>
+
+    Affichage par 500 : <br>  <?php echo $entrees->links() ;  ?>
+
+    </div>
 @endsection
 
 <style>#colmn6 input{display:none;}</style>

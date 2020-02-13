@@ -93,18 +93,23 @@ use App\Http\Controllers\NotificationsController;
                             echo '<option style="color:black!important" title="'.$ds->id.'" value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
                           </select></section>
                   </div>
-                    <div class="col-md-3">
 
-                    <select id ="affdoss2"  class="form-control " style="margin-left:100px;width: 150px;color:black!important;">
-                        <option></option>
-                        <?php foreach($dossiers as $ds)
-
-                        {
-                            echo '<option style="color:black!important" title="'.$ds->id.'" value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
-                    </select>
-                    </div>
                     <div class="col-md-3">
                     <button style="margin-left:35px" type="button" id="updatefolder" onclick="document.getElementById('updatefolder').disabled=true" class="btn btn-primary">Dispatcher</button>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-md-3 pull-left">
+
+                        <select id ="affdoss2"  class="form-control " style="margin-left:15px;width: 150px;color:black!important;">
+                            <option></option>
+                            <?php foreach($dossiers as $ds)
+
+                            {
+                                echo '<option style="color:black!important" title="'.$ds->id.'" value="'.$ds->reference_medic.'"> '.$ds->reference_medic.' </option>';}     ?>
+                        </select>
                     </div>
                 </div>
                 <div class="row" style="font-size:12px;">

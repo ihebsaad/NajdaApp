@@ -3185,10 +3185,10 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
              ->count();
             if($statut=='Cloture'){
                 if($count==0){
-                Dossier::where('id',$iddossier)->update(array('current_status'=>$statut ,'sanssuite'=>$sanssuite));
+                Dossier::where('id',$iddossier)->update(array('current_status'=>$statut ,'sanssuite'=>$sanssuite,'affecte'=>0));
                 }
             }else{
-              Dossier::where('id',$iddossier)->update(array('current_status'=>$statut));
+              Dossier::where('id',$iddossier)->update(array('current_status'=>'inactif','affecte'=>0 , 'sub_status'=>'immobile'));
                 }
     }
 

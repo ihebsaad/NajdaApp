@@ -51,7 +51,7 @@ class EntreesController extends Controller
 
         User::where('id', $iduser)->update(array('statut'=>'1'));
 
-        $entrees = Entree::orderBy('reception', 'desc')->where('statut','<','2')->get();
+        $entrees = Entree::orderBy('reception', 'desc')->where('statut','<','2')->paginate(500);
       //  $dossiers = Dossier::all();
 
         return view('entrees.index', compact('entrees'));
@@ -302,7 +302,7 @@ class EntreesController extends Controller
 
         $par=Auth::id();
         $user = User::find($par);
-        $nomuser = $user->name ."".$user->lastname ;
+        $nomuser = $user->name ." ".$user->lastname ;
 
         Log::info('[Agent : '.$nomuser.' ] Traiter un Email ' );
 

@@ -10,7 +10,28 @@
             $dosss=    DB::table('dossiers')->where('reference_medic','like','%'.trim($envoye['dossier'].'%'))->first();
             $dossierid= $dosss->id;
 
-             ?>   <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@fiche',$dossierid)}}" ><?php  echo   $envoye['dossier'].' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossierid );?> </a></h4><br><?php } ?>
+             ?>   <span style="font-weight:bold;"><a  href="{{action('DossiersController@fiche',$dossierid)}}" ><?php  echo   $envoye['dossier'].' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossierid );?> </a></span>
+
+             <div class="btn-group pull-right">
+                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                     <i class="fas fa-share"></i> Transférer <i class="fa fa-angle-down"></i>
+                 </button>
+                 <ul class="dropdown-menu pull-right">
+                     <li>
+                         <a href="{{route('emails.envoimailenreg',['id'=>$dossier->id,'type'=> 'client','prest'=> 0,'entreeid'=>0,'envoyeid'=>$envoye['id'] ])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                             Au client </a>
+                     </li>
+                     <li>
+                         <a href="{{route('emails.envoimailenreg',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0 ,'entreeid'=>0,'envoyeid'=>$envoye['id'] ])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                             À l'intervenant </a>
+                     </li>
+                     <li>
+                         <a href="{{route('emails.envoimailenreg',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0 ,'entreeid'=>0,'envoyeid'=>$envoye['id']  ] )}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                             À l'assuré </a>
+                     </li>
+
+                 </ul>
+             </div><br><?php } ?>
 
         <?php $type= $envoye['type'];
             if ($type=='email') { echo ' <H3 style="margin-left:20px;margin-bottom:10px">  <i class="fa fa-lg fa-envelope"></i> Email envoyé</H3>'; }

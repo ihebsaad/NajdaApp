@@ -2354,7 +2354,9 @@ use  \App\Http\Controllers\PrestatairesController;
                     $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$dossier->customer_id);
 
                     ?>
-                    <input type="hidden"   name="from" id="from" value="<?php echo $from; ?>" />
+                        <label for="destinataire">Sujet:</label>
+
+                        <input type="hidden"   name="from" id="from" value="<?php echo $from; ?>" />
                      <?php
 
                         $subscriber_name = app('App\Http\Controllers\DossiersController')->ChampById('subscriber_name',$dossier->id);
