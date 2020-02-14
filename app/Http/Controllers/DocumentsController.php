@@ -82,6 +82,12 @@ class DocumentsController extends Controller
                     $champform = str_replace(']', '', $champform);
                     $champform = strtolower($champform);
                     $valchamp = $_POST[$champform];
+if($champtemp =='[VILLE]')
+{
+$valchamp = str_replace('?', '', $valchamp);
+
+
+}
                     $array += [ $champtemp => $valchamp];
 
                 }
@@ -175,7 +181,14 @@ elseif (stristr($champtemp,'[CL_attention')== TRUE )
                     $champdb = strtolower($champdb);
 
                     $valchamp=$_POST['CL_'.$champdb];
+if(stristr($champtemp,'[CL_passport') == TRUE || stristr($champtemp,'[CL_passeport') == TRUE)
+{if(empty($valchamp))
+$valchamp = '...........................';
+
+
+}
                     $array += [ $champtemp => $valchamp];
+
                     }
   }
 
@@ -183,6 +196,7 @@ elseif (stristr($champtemp,'[CL_attention')== TRUE )
                     //remplissage de la colonne de base - valeur des champs
                     if ($valchamps!=="")
                     {
+
                         if ($valchamps!=="|") {
                             $valchamps=$valchamps.'|'.$valchamp;
                         }
@@ -464,7 +478,10 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
 /*--------------------------------------------------------fin dates spécifiques---------------------------*/
       // $array = str_replace("é", "é", $array);
        $Arrayd = array_map("utf8_decode", $array ); 
-       WordTemplate::export($file,$Arrayd, '/documents/'.$refdoss.'/'.$name_file);
+       $Arrays = str_replace("?,", "", $Arrayd);
+       $Arraym = str_replace("?", "", $Arrays);
+       
+       WordTemplate::export($file,$Arraym, '/documents/'.$refdoss.'/'.$name_file);
 
 
     // creation du fichier PDF
@@ -1104,6 +1121,12 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                                 $champtemp = str_replace('[', '', $champtemp);
                                 $champtemp = str_replace(']', '', $champtemp);
                                 $champtemp = strtolower($champtemp);
+/*if(stristr($champtemp,'ville') == TRUE)
+{
+$valchamp = str_replace('?', '', $valchamp);
+
+
+}*/
                                 $array += [ $champtemp =>$valchamp];
                             }
                             elseif($champtemp ==='[CUSTOMER_ID__NAME]')
