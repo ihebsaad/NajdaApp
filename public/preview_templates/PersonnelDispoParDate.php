@@ -65,19 +65,19 @@ $conn = mysqli_connect($dbHost, $dbuser, $dbpass,$dbname);
 $sqlvh = "SELECT id,name FROM personnes WHERE (((`annule` = 0) OR (`annule` IS NULL)) AND (`type` LIKE '%".$typeperso."%') AND 
 ((id NOT IN (SELECT idchauff FROM om_remorquage WHERE 
 ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
-(dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idchauff <> '') AND (idchauff <> null)))) AND 
+(dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idchauff IS NOT NULL)))) AND 
 (id NOT IN (SELECT idchauff FROM om_taxi WHERE 
 ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
-(dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idchauff <> '') AND (idchauff <> null))))  AND 
+(dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idchauff IS NOT NULL))))  AND 
 (id NOT IN (SELECT idambulancier1 FROM om_ambulance WHERE 
 ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
-(dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idambulancier1 <> '') AND (idambulancier1 <> null))))  AND 
+(dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idambulancier1 IS NOT NULL))))  AND 
 (id NOT IN (SELECT idambulancier2 FROM om_ambulance WHERE 
 ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
-(dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idambulancier2 <> '') AND (idambulancier2 <> null)))) AND 
+(dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idambulancier2 IS NOT NULL)))) AND 
 (id NOT IN (SELECT idparamed FROM om_ambulance WHERE 
 ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
-(dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idparamed <> '') AND (idparamed <> null)))) ))";
+(dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idparamed IS NOT NULL) ))) ))";
 
 	    $resultvh = $conn->query($sqlvh);
 	    if (!empty($resultvh) && $resultvh->num_rows > 0) {

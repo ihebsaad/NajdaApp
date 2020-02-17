@@ -92,7 +92,7 @@ foreach ($array_client as $client) {
 	$IMA="oui";
 }
 }
-//mysqli_query($conn,"set names 'utf8'");
+mysqli_query($conn,"set names 'utf8'");
 // infos agent
 	    $sqlagt = "SELECT name,lastname,signature FROM users WHERE id=".$iduser."";
 		$resultagt = $conn->query($sqlagt);

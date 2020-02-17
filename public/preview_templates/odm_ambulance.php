@@ -940,7 +940,7 @@ foreach ($array_prestap as $prestap) {
 ?>
 </datalist>
 <input name="vehicID" id="vehicID" type="hidden" value="<?php echo $detailom['vehicID']; ?>"></input>
-			</p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Médecin transporteur : </span>
+			</p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt;width:100%"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Médecin transporteur : </span>
 <!-- affiche pour le moment toute la liste des personnels -->				
 <input  style="float: left;" type="text" list="lmedecin" name="lmedecin"  <?php if (isset($detailom['lmedecin'])) { if (!empty($detailom['lmedecin'])) {echo "value='".$detailom['lmedecin']."'";}} ?> />
 <datalist id="lmedecin">
@@ -1066,7 +1066,7 @@ foreach ($array_vehic as $vehic) {
 ?>
 </datalist>
 <input name="vehicID" id="vehicID" type="hidden" value="<?php echo $detailom['vehicID']; ?>"></input>	
-			</p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Médecin transporteur : </span>
+			</p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt;width:100%"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Médecin transporteur : </span>
 <!-- affiche pour le moment toute la liste des personnels -->				
 <input  style="float: left;" type="text" list="lmedecin" name="lmedecin"  <?php if (isset($detailom['lmedecin'])) { if (!empty($detailom['lmedecin'])) {echo "value='".$detailom['lmedecin']."'";}} ?> />
 <datalist id="lmedecin">

@@ -56,7 +56,8 @@ $conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 // Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
-}mysqli_query($conn,"set names 'utf8'");
+}
+mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
@@ -69,7 +70,7 @@ $sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN
         while($rowvh = $resultvh->fetch_assoc()) {
             $array_prest[] = array('id' => $rowvh["id"],'name' => $rowvh["name"]  );
         } }
-$sqlvha = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM intervenants WHERE dossier=".$iddossier." ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
+$sqlvha = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier.")  AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
 
     $resultvha = $conn->query($sqlvha);
     if ($resultvha->num_rows > 0) {

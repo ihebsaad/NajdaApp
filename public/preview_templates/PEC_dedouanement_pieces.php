@@ -65,7 +65,7 @@ $conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-//mysqli_query($conn,"set names 'utf8'");
+mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires transitaire ayant prestations dans dossier
 

@@ -310,7 +310,7 @@ foreach ($array_prest as $prest) {
 ?>
 </span></p>
 <p class=rvps3><span class=rvts3><br></span></p>
-<p class=rvps7><span class=rvts7><input name="CL_rapport" placeholder="" value="<?php if(isset ($CL_rapport)) echo $CL_rapport; ?>"></input></span></p>
+<p class=rvps7><span class=rvts7><textarea name="CL_rapport" form="formchamps" placeholder="" value=""><?php if(isset ($CL_rapport)) { $ligne = str_replace('\\', "\n", $CL_rapport); echo $ligne;} ?></textarea></span></p>
 <h1 class=rvps6><span class=rvts0><span class=rvts12><br></span></span></h1>
 </body></html>
 

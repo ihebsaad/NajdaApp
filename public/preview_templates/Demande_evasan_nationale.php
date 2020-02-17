@@ -62,7 +62,7 @@ $conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-//mysqli_query($conn,"set names 'utf8'");
+mysqli_query($conn,"set names 'utf8'");
 
 $sqlvh = "SELECT id,name,immarticulation,type,fonction FROM voitures";
 	$resultvh = $conn->query($sqlvh);

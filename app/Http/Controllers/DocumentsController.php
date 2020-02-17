@@ -82,12 +82,8 @@ class DocumentsController extends Controller
                     $champform = str_replace(']', '', $champform);
                     $champform = strtolower($champform);
                     $valchamp = $_POST[$champform];
-if($champtemp =='[VILLE]')
-{
-$valchamp = str_replace('?', '', $valchamp);
+                    
 
-
-}
                     $array += [ $champtemp => $valchamp];
 
                 }
@@ -187,6 +183,11 @@ $valchamp = '...........................';
 
 
 }
+if(stristr($champtemp,'[CL_rapport') == TRUE )
+{
+$valchamp = nl2br($valchamp);
+
+}
                     $array += [ $champtemp => $valchamp];
 
                     }
@@ -196,6 +197,11 @@ $valchamp = '...........................';
                     //remplissage de la colonne de base - valeur des champs
                     if ($valchamps!=="")
                     {
+
+
+
+
+$valchamp = str_replace("<br />", "", $valchamp);
 
                         if ($valchamps!=="|") {
                             $valchamps=$valchamps.'|'.$valchamp;
@@ -477,11 +483,13 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
 
 /*--------------------------------------------------------fin dates spécifiques---------------------------*/
       // $array = str_replace("é", "é", $array);
-       $Arrayd = array_map("utf8_decode", $array ); 
+$Arrayn = str_replace("’", "'", $array);
+       $Arrayd = array_map("utf8_decode", $Arrayn ); 
        $Arrays = str_replace("?,", "", $Arrayd);
        $Arraym = str_replace("?", "", $Arrays);
+       $Arraysi = str_replace('<br />', "\\", $Arraym);
        
-       WordTemplate::export($file,$Arraym, '/documents/'.$refdoss.'/'.$name_file);
+       WordTemplate::export($file,$Arraysi, '/documents/'.$refdoss.'/'.$name_file);
 
 
     // creation du fichier PDF
@@ -521,6 +529,17 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
 
         ]);}
         $doc->save();
+/*if ($doc->save()) {
+            $iddoss = $dossier->id;
+        $infoagent = User::where('id', $iduser)->first();
+        $nomagent = $infoagent['lastname'];
+        $prenomagent = $infoagent['name'];
+        $signagent = $infoagent['signature'];
+
+        $infodossier = Dossier::where('id', $dossier)->first();
+        $refdoss = trim($infodossier["reference_medic"]);
+       Log::info('generation du doc :'.$name_file.' dans le dossier: '.$refdoss.' par agent: '.$prenomagent.' '.$nomagent);
+}*/
         //return $valchamps;
 
         //redirect()->route('docgen');
@@ -1084,10 +1103,17 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
                             }
                             else
                                 { $valchamp = "undefined index";}
+if(stristr($champtemp,'[CL_rapport') == TRUE )
+{
+$valchamp = nl2br($valchamp);
 
+}
+$valchamp = str_replace('<br />', "\\", $valchamp);
                             $champtemp = str_replace('[CL_', '', $champtemp);
                             $champtemp = str_replace(']', '', $champtemp);
                             $champtemp = strtolower($champtemp);
+
+
                             $array += [ 'CL_'.$champtemp => $valchamp];
 
                         }}
@@ -1514,7 +1540,7 @@ public function historique(Request $request)
                     else
                         { $valchamp = "undefined index";}
                     //champ date/heure
-                    $array += [ $champtemp => $valchamp];
+                    $array += [ $champtemp => $datees];
                     $array += [ '[PRE_DATEHEURE]' => $valchamp];
 
                 }
@@ -1547,7 +1573,14 @@ public function historique(Request $request)
                     }
                     else
                         { $valchamp = "undefined index";}
+if(stristr($champtemp,'[CL_rapport') == TRUE )
+{
+$valchamp = nl2br($valchamp);
 
+}
+$valchamp = str_replace('<br />', "\\", $valchamp);
+
+$valchamp = str_replace('<br />', "\n", $valchamp);
                     $array += [ $champtemp => $valchamp];
 
                     // verifier si le champs existe en double
@@ -1574,7 +1607,8 @@ public function historique(Request $request)
         /*header('Content-type: application/json');    
         return json_encode($array);*/
 
-        $Arrayd = array_map("utf8_decode", $array ); 
+        $Arrayn = str_replace("’", "'", $array);
+        $Arrayd = array_map("utf8_decode", $Arrayn ); 
         WordTemplate::export($file, $Arrayd, '/documents/'.$refdoss.'/'.$name_file);
 
     // creation du fichier PDF

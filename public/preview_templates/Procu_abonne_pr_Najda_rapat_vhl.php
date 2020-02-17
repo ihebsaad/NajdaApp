@@ -51,7 +51,7 @@ $conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-//mysqli_query($conn,"set names 'utf8'");
+mysqli_query($conn,"set names 'utf8'");
 $sqlclient = "SELECT id,groupe,name FROM clients";
 	$resultclient = $conn->query($sqlclient);
 	if ($resultclient->num_rows > 0) {

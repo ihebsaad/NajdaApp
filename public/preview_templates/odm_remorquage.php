@@ -683,7 +683,7 @@ foreach ($array_prestap as $prestap) {
 				<span style="font-family:'Times New Roman'; font-weight:bold">Départ bateau </span>
 
 				<span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<input type="time" id="CL_heure_D" name="CL_heure_D" min="00:00" max="23:59" <?php if (isset($detailom)) { if (isset($detailom['CL_heure_D'])) {echo "value='".date('H:i',strtotime($detailom['CL_heure_D']))."'";}} ?> >
+<input type="datetime-local" id="CL_heure_D" name="CL_heure_D" min="00:00" max="23:59" <?php if (isset($detailom)) { if (isset($detailom['CL_heure_D'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_heure_D']))."'";}} ?> >
 
     </p>
     <?php if (isset($detailom['CB_prerades'])) { if (($detailom['CB_prerades'] === "oui")||($detailom['CB_prerades'] === "on")) { $prerades = true; ?>
