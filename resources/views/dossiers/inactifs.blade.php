@@ -25,7 +25,7 @@
     <div class="uper">
         <div class="portlet box grey">
              <div class="row">
-                <div class="col-lg-8"> <h3 style="font-wight:bold">Liste des dossiers inactifs depuis plus de 48 Heures </h3></div>
+                <div class="col-lg-8"> <h3 style="font-wight:bold">Liste des dossiers inactifs immobiles </h3></div>
                 <div class="col-lg-4">
                  </div>
             </div>

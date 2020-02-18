@@ -394,6 +394,61 @@ class EmailController extends Controller
 
               }
               */
+
+function convertir_document_entrant_en_pdf($type,$nom,$id)
+{
+
+    $doc_ex_liboff= array('doc', 'docx', 'odt', 'dot', 'wri','602', 'txt', 'sdw', 'sgl', 'vor', 'wpd','wps','html', 'htm', 'jdt', 'jtt', 'hwp', 'pdb', 'pages', 'cwk', 'rtf', 'xls', 'ods', 'numbers', 'dif', 'gnm', 'gnumeric', 'wk1', 'wks', '123', 'wk3','wk4', 'xlw', 'xlt', 'pxl', 'wb2', 'wq1',
+        'wq2', 'sdc', 'vor', 'slk', 'xlts', 'xlsm','xlsx','svg', 'odg','ppt', 'pptx', 'odp', 'kth', 'key', 'pps', 'pot', 'pcd', 'sda', 'sdd','sdp', 'vor', 'pot', 'potx', 'ppsx','ppsm' );
+
+    if( in_array( strtolower($type), $doc_ex_liboff) )
+    {
+
+        // traitement des espaces
+        $withoutExt = preg_replace('/\.[^.\s]{3,4}$/', '',$nom);
+        $nomSansespaceWE=$withoutExt;
+        if(strpos($withoutExt, ' ') !== false)
+        {
+            $nomSansespaceWE=str_replace(' ','',$withoutExt);
+            $nomSansespace=$nomSansespaceWE.'.'.$type;
+            \File::copy(storage_path() .'/Emails/'.$id.'/'.$nom, storage_path() .'/Emails/'.$id.'/'.$nomSansespace);
+            //$suppfichiers[]=storage_path() .'/Emails/'.$id.'/'.$nomSansespace ;
+        }
+        else
+        {
+            $nomSansespace=$nom;
+            $nomSansespaceWE=$withoutExt;
+        }
+
+        Converter::file(storage_path() .'/Emails/'.$id.'/'.$nomSansespace) // file for convertion
+        ->setLibreofficeBinaryPath('/usr/bin/libreoffice') // binary to the libreoffice binary
+        ->setTemporaryPath(storage_path().'/temp') // temporary directory for convertion
+        ->setTimeout(100) // libreoffice process timeout
+        ->save(storage_path().'/Emails/'.$id.'/'.$nomSansespaceWE.'.pdf'); // save as pdf
+
+        $pa='/Emails/'.$id.'/'.$nomSansespaceWE.'.pdf';
+        $pa_orig='/Emails/'.$id.'/'.$nom;
+        $attach = new Attachement([
+            'nom' => $nom,
+            'type' => 'pdf',
+            'path'=>$pa,
+            'path_org'=>$pa_orig,
+            'parent'=> $id,
+            'entree_id'=> $id,
+            'boite'=> 0,  // 0 = reception, 1 = envoi
+
+        ]);
+
+        $attach->save();
+
+    }
+
+
+}
+
+
+
+
     function check()
     {
 /*
@@ -413,7 +468,7 @@ class EmailController extends Controller
             //    'encryption'    => '',//env('encreception'),
             'validate_cert' => true,
             'username'      =>'test@najda-assistance.com',
-            'password'      => 'esol@2109',
+            'password'      => 'Rem2018@najda1',
             'protocol'      => 'imap'
         ]);
 
@@ -624,6 +679,10 @@ class EmailController extends Controller
                     $nom = $oAttachment->getName();
                     $facturation='';
                     $type=  $oAttachment->getExtension();
+
+                    //convertir un document nom pdf et non image en pdf et l'enregister
+                    $this->convertir_document_entrant_en_pdf($type,$nom,$id);
+
 
                      // verifier si l'attachement pdf contient des mots de facturation
                     if ( App::environment() === 'production') {
@@ -5443,26 +5502,25 @@ if ($from=='najdassist@gmail.com')
 
                   }
 
-              ////   $path=$file->getRealPath();
-               //  $chemin=$file->Path();
-               ////  $ext= $file->extension();
-               //  $name=$file->name();
-
 
 
            // save external files here
 
 
                  $fullpath=$path0.$envoyeid.'/'.$file->getClientOriginalName();
-$filesize= filesize($fullpath);
+                $filesize= filesize($fullpath);
 
+                $counta= Attachement::where('filesize',$filesize)->where('nom',$file->getClientOriginalName() )->count();
+
+
+                    if($counta==0){
                  $attachement = new Attachement([
 
                     'type'=>$file->getClientOriginalExtension(),'path' => '/Envoyes/'.$envoyeid.'/'.$file->getClientOriginalName(), 'nom' => $file->getClientOriginalName(),'boite'=>1,'dossier'=>$doss,'envoye_id'=>$envoyeid,'parent'=>$envoyeid,'user'=>Auth::id(),'filesize'=>$filesize
                  ]);
-
                  $attachement->save();
 
+                    }
 
                  $name=basename($fullpath);
                  $mime_content_type=mime_content_type ($path0.$envoyeid);
@@ -5498,14 +5556,20 @@ $filesize= filesize($fullpath);
                          'as' =>$name,
                          'mime' => $mime_content_type)
                 );
-                    $filesize= filesize($fullpath);
+              $filesize= filesize($fullpath);
 
-              // DB::table('attachements')->insert([
+                $counta2= Attachement::where('filesize',$filesize)->where('nom', $name )->count();
+
+                if($counta2==0)
+                {
+                // DB::table('attachements')->insert([
                    $attachement = new Attachement([
 
                        'type'=>$ext,'path' => $path, 'nom' => $name,'boite'=>1,'dossier'=>$doss,'parent'=>$envoyeid,'envoye_id'=>$envoyeid,'user'=>Auth::id(),'filesize'=>$filesize
                ]);
                     $attachement->save();
+
+                }
 
             }
          }

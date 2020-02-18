@@ -129,9 +129,12 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                         @if (!empty($attachs) )
                             <?php $i=1; ?>
                             @foreach ($attachs as $att)
+
+                              <?php if ( ($att->type =="pdf") ||($att->type =="png") ||($att->type =="jpg") || ($att->type =="jpeg") || ($att->type =="gif")||($att->type =="bmp")        )
+                                            { ?>
                                 <div class="tab-pane fade in <?php  if ( ($entree['type']=='fax')&&($i==1)) {echo 'active';}?>" id="pj<?php echo $i; ?>">
                                     Pièce jointe N°: <?php echo $i; ?>
-                                    <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
+                                    <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="<?php if($att->type =="pdf"){if($att->path_org){ echo URL::asset('storage'.$att->path_org);}else{echo URL::asset('storage'.$att->path);} }else{ echo URL::asset('storage'.$att->path); }?>" download>Télécharger</a>)</h4>
 
                                     @switch($att->type)
                                     @case('docx')
@@ -154,7 +157,57 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                                     @case('xlsm')
                                     @case('xlsb')
                                     @case('ods')
-                                    <iframe src="https://view.officeapps.live.com/op/view.aspx?src={{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                                    @case('wri')
+                                    @case('602')
+                                    @case('txt')
+                                    @case('sdw')
+                                    @case('sgl')
+                                    @case('wpd')
+                                    @case('vor')
+                                    @case('wps')
+                                    @case('html')
+                                    @case('htm')
+                                    @case('jdt')
+                                    @case('jtt')
+                                    @case('hwp')
+                                    @case('pdb')
+                                    @case('pages')
+                                    @case('cwk')
+                                    @case('rtf')
+                                    @case('gnumeric')
+                                    @case('numbers')
+                                    @case('dif')
+                                    @case('gnm')
+                                    @case('wk1')
+                                    @case('wks')
+                                    @case('123')
+                                    @case('wk3')
+                                    @case('wk4')
+                                    @case('xlw')
+                                    @case('xlt')
+                                    @case('wk3')
+                                    @case('pxl')
+                                    @case('wb2')
+                                    @case('wq1')
+                                    @case('wq2')
+                                    @case('sdc')
+                                    @case('vor')
+                                    @case('slk')
+                                    @case('wk3')
+                                    @case('xlts')
+                                    @case('svg')
+                                    @case('odg')
+                                    @case('odp')
+                                    @case('kth')
+                                    @case('key')
+                                    @case('pcd')
+                                    @case('sda')
+                                    @case('sdd')
+                                    @case('sdp')
+                                    @case('potx')
+
+
+                                    
                                     @break
 
                                     @case('pdf')
@@ -184,7 +237,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                                     @endswitch
 
                                 </div>
-                                <?php $i++; ?>
+                                <?php $i++; }?>
                             @endforeach
 
                         @endif

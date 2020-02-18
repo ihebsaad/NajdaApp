@@ -100,7 +100,7 @@ $(document).ready(function()
             </div>
         </div>
         <div class="col-lg-9 ">
-            <?php if(isset($dossier)){?>   <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@fiche',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossier->id);?> </a></h4><?php } ?>
+            <?php if(isset($dossier)){?>   <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@view',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossier->id);?> </a></h4><?php } ?>
 
             <form  enctype="multipart/form-data" id="theform" method="POST" action="{{action('EmailController@send')}}"    onsubmit="return checkForm(this);"  >
                 {{ csrf_field() }}

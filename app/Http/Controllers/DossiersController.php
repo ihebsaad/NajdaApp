@@ -154,13 +154,15 @@ class DossiersController extends Controller
     
     }
 
-    public function Dossierinactifs()
+    public function inactifs()
     {
-       $dtc = (new \DateTime())->modify('-3 days')->format('Y-m-d\TH:i');
 
-        $dossiers = Dossier::where('current_status', 'inactif')
-             ->where('updated_at', '<=', $dtc)
+        $dossiers = Dossier::where('sub_status', 'immobile')
+            ->where('current_status', 'inactif')
             ->get();
+
+//       $dtc = (new \DateTime())->modify('-3 days')->format('Y-m-d\TH:i');
+//              ->where('updated_at', '<=', $dtc)
 
 
         return view('dossiers.inactifs', ['dossiers' => $dossiers]);

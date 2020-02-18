@@ -66,7 +66,7 @@
 
 
  <?php
-$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+$urlapp="http://$_SERVER[HTTP_HOST]/najdatest";
 $urlnotif=$urlapp.'/entrees/show/' ;
 //$urlnotif = preg_replace('/\s+/', '', $urlnotif);
 

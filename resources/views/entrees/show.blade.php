@@ -90,28 +90,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                                     <a  href="{{action('EntreesController@destroy2', $entree['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                         <span class="fa fa-fw fa-trash-alt"></span> Supprimer
                                     </a>
-                                <?php if ($entree->dossierid >0 ){ ?>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-share"></i> Transférer <i class="fa fa-angle-down"></i>
-                                    </button>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li>
-                                            <a href="{{route('emails.envoimailenreg',['id'=>$dossier->id,'type'=> 'client','prest'=> 0,'entreeid'=>$entree->id,'envoyeid'=>0 ])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                                                Au client </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{route('emails.envoimailenreg',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0 ,'entreeid'=>$entree->id,'envoyeid'=>0 ])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                                                À l'intervenant </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{route('emails.envoimailenreg',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0 ,'entreeid'=>$entree->id,'envoyeid'=>0  ] )}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
-                                                À l'assuré </a>
-                                        </li>
 
-                                    </ul>
-                                </div>
-                                <?php } ?>
                             </div>
                         </div>
                  </a>
@@ -178,15 +157,28 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                               <a href="#txtcorps" data-toggle="tab" aria-expanded="true"> Texte Brut</a>
                        </li>
                        <?php } */
-                       if ( $entree['type']!='tel') { ?>
-                        @if ( $nbattachs   > 0)
-                            @for ($i = 1; $i <= $nbattachs ; $i++)
+					   $i=0;
+                       if ( $entree['type']!='tel') { 
+					     if ( $nbattachs   > 0)
+						{
+					   foreach ($attachs as $att)
+					   {
+                      
+                 if ( ($att->type =="pdf") ||($att->type =="png") ||($att->type =="jpg") || ($att->type =="jpeg") || ($att->type =="gif")||($att->type =="bmp")        )
+				 { 			 $i++;
+
+			 
+			 ?>
                                 <li>
                                     <a class=" " href="#pj<?php echo $i; ?>" data-toggle="tab" aria-expanded="false">PJ<?php echo $i; ?></a>
                                 </li>
-                            @endfor
-                        @endif
-                       <?php } ?>
+                      
+		 	<?php } //extension
+												
+					   }  //foreach 
+ 					   }/// nb attach
+ 					   } //tel
+					   ?>
                     </ul>
                     
                     <div id="myTabContent" class="tab-content" style="background: #ffffff">
@@ -254,33 +246,86 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                                             @if (!empty($attachs) )
                                             <?php $i=1; ?>
                                             @foreach ($attachs as $att)
-                                                <div class="tab-pane fade in <?php  if ( ($entree['type']=='fax')&&($i==1)) {echo 'active';}?>" id="pj<?php echo $i; ?>">
+                                            <?php if ( ($att->type =="pdf") ||($att->type =="png") ||($att->type =="jpg") || ($att->type =="jpeg") || ($att->type =="gif")||($att->type =="bmp")        )
+											{ ?>
 
-                                                    <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="{{ URL::asset('storage'.$att->path) }}" download>Télécharger</a>)</h4>
+												<div class="tab-pane fade in <?php  if ( ($entree['type']=='fax')&&($i==1)) {echo 'active';}?>" id="pj<?php echo $i; ?>">
 
-                                                    @switch($att->type)
-                                                        @case('docx')
-                                                        @case('doc')
-                                                        @case('dot')
-                                                        @case('dotx')
-                                                        @case('docm')
-                                                        @case('odt')
-                                                        @case('pot')
-                                                        @case('potm')
-                                                        @case('pps')
-                                                        @case('ppsm')
-                                                        @case('ppt')
-                                                        @case('pptm')
-                                                        @case('pptx')
-                                                        @case('ppsx')
-                                                        @case('odp')
-                                                        @case('xls')
-                                                        @case('xlsx')
-                                                        @case('xlsm')
-                                                        @case('xlsb')
-                                                        @case('ods')
-                                                            <iframe src="https://view.officeapps.live.com/op/view.aspx?src={{ URL::asset('storage'.$att->path) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
-                                                            @break
+                                                    <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="<?php if($att->type =="pdf"){if($att->path_org){ echo URL::asset('storage'.$att->path_org);}else{echo URL::asset('storage'.$att->path);} }else{ echo URL::asset('storage'.$att->path); }?>" download>Télécharger</a>)</h4>
+
+                                    @switch($att->type)
+                                  
+                                    @case('docx')
+                                    @case('doc')
+                                    @case('dot')
+                                    @case('dotx')
+                                    @case('docm')
+                                    @case('odt')
+                                    @case('pot')
+                                    @case('potm')
+                                    @case('pps')
+                                    @case('ppsm')
+                                    @case('ppt')
+                                    @case('pptm')
+                                    @case('pptx')
+                                    @case('ppsx')
+                                    @case('odp')
+                                    @case('xls')
+                                    @case('xlsx')
+                                    @case('xlsm')
+                                    @case('xlsb')
+                                    @case('ods')
+                                    @case('wri')
+                                    @case('602')
+                                    @case('txt')
+                                    @case('sdw')
+                                    @case('sgl')
+                                    @case('wpd')
+                                    @case('vor')
+                                    @case('wps')
+                                    @case('html')
+                                    @case('htm')
+                                    @case('jdt')
+                                    @case('jtt')
+                                    @case('hwp')
+                                    @case('pdb')
+                                    @case('pages')
+                                    @case('cwk')
+                                    @case('rtf')
+                                    @case('gnumeric')
+                                    @case('numbers')
+                                    @case('dif')
+                                    @case('gnm')
+                                    @case('wk1')
+                                    @case('wks')
+                                    @case('123')
+                                    @case('wk3')
+                                    @case('wk4')
+                                    @case('xlw')
+                                    @case('xlt')
+                                    @case('wk3')
+                                    @case('pxl')
+                                    @case('wb2')
+                                    @case('wq1')
+                                    @case('wq2')
+                                    @case('sdc')
+                                    @case('vor')
+                                    @case('slk')
+                                    @case('wk3')
+                                    @case('xlts')
+                                    @case('svg')
+                                    @case('odg')
+                                    @case('odp')
+                                    @case('kth')
+                                    @case('key')
+                                    @case('pcd')
+                                    @case('sda')
+                                    @case('sdd')
+                                    @case('sdp')
+                                    @case('potx')
+                                        
+                                                          
+                                    @break
 
                                                         @case('pdf')
                                                     <?php
@@ -309,7 +354,9 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                                                     @endswitch
                                                     
                                                 </div>
-                                                <?php $i++; ?>
+                                                <?php $i++; 
+											}
+												?>
                                             @endforeach
 
                                             @endif

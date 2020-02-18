@@ -56,7 +56,7 @@
     // OM TAXIs
     $ordres_taxi = \App\OMTaxi::where('dateheuredep', '>=', Carbon::now()->toDateString())
        ->where('dernier',1)
-        ->select('id','dateheuredep','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
+        ->select('id','dateheuredep','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule')
         ->orderBy('dateheuredep')
         ->get();
 
@@ -64,14 +64,14 @@
 
     $ordres_ambul =   \App\OMAmbulance::where('dateheuredep',  '>=', Carbon::now()->toDateString())
         ->where('dernier',1)
-            ->select('id','dateheuredep','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
+            ->select('id','dateheuredep','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lvehicule','lambulancier1')
         ->orderBy('dateheuredep')
          ->get();
     // OM Remorq
 
     $ordres_rem =  \App\OMRemorquage::where('dateheuredep',  '>=', Carbon::now()->toDateString())
         ->where('dernier',1)
-            ->select('id','dateheuredep','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type')
+            ->select('id','dateheuredep','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule')
         ->orderBy('dateheuredep')
          ->get();
     $oms = array_merge($ordres_taxi->toArray(),$ordres_ambul->toArray(),$ordres_rem->toArray() );
@@ -138,10 +138,12 @@
                                                           $de=$o['CL_lieuprest_pc'];
                                                           $vers=$o['CL_lieudecharge_dec'];
                                                           $type=$o['type'];
+
+                                                         $veh=$o['lvehicule'];
                                                           $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
-                                                         if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                                                          if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                                                          if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                                                         if($type=='taxi'){ $chauff=$o['lchauff'];$color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
+                                                          if($type=='ambulance'){  $chauff=$o['lambulancier1'];$color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                                                          if($type=='remorquage'){$chauff=$o['lchauff']; $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                                          $Date= date("Y-m-d", strtotime($date));
                                                           $day=$today;
                                                        if($Date==$day)
@@ -165,7 +167,10 @@
                                                               <div class="col-md-12 "  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
                                                               <div class="col-md-12 "  ><i class="fas fa-mobile-alt"></i>   <?php echo $tel; ?></div>
                                                           </div>
-
+                                                              <div class="row" style="margin-bottom:10px">
+                                                                  <div class="col-md-12 overme"  ><i class="fas fa-user-alt"></i>  <?php echo $chauff; ?></div>
+                                                                  <div class="col-md-12 overme "  ><i class="fas fa-car"></i>   <?php echo $veh; ?></div>
+                                                              </div>
                                                           <div class="row"  >
                                                               <div class="col-md-12"><i class="fas fa-map-marker-alt"></i> <small>De :</small>  <?php echo $de; ?> </div>
                                                           </div>
@@ -204,10 +209,11 @@
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
+                               $veh=$o['lvehicule'];
                                $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
-                               if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='taxi'){ $chauff=$o['lchauff'];$color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
+                               if($type=='ambulance'){ $chauff=$o['lambulancier1'];$color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){$chauff=$o['lchauff']; $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                $Date= date("Y-m-d", strtotime($date));
 
                                if($Date==$day)
@@ -231,7 +237,10 @@
                                            <div class="col-md-12 "  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
                                            <div class="col-md-12 "  ><i class="fas fa-mobile-alt"></i>   <?php echo $tel; ?></div>
                                        </div>
-
+                                       <div class="row" style="margin-bottom:10px">
+                                           <div class="col-md-12 overme"  ><i class="fas fa-user-alt"></i>  <?php echo $chauff; ?></div>
+                                           <div class="col-md-12 overme "  ><i class="fas fa-car"></i>   <?php echo $veh; ?></div>
+                                       </div>
                                        <div class="row"  >
                                            <div class="col-md-12"><i class="fas fa-map-marker-alt"></i> <small>De :</small>  <?php echo $de; ?> </div>
                                        </div>
@@ -270,10 +279,11 @@
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
+                               $veh=$o['lvehicule'];
                                $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
-                               if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='taxi'){$chauff=$o['lchauff']; $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
+                               if($type=='ambulance'){ $chauff=$o['lambulancier1']; $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){$chauff=$o['lchauff']; $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                $Date= date("Y-m-d", strtotime($date));
 
                                if($Date==$day)
@@ -296,7 +306,10 @@
                                            <div class="col-md-12 "  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
                                            <div class="col-md-12 "  ><i class="fas fa-mobile-alt"></i>   <?php echo $tel; ?></div>
                                        </div>
-
+                                       <div class="row" style="margin-bottom:10px">
+                                           <div class="col-md-12 overme"  ><i class="fas fa-user-alt"></i>  <?php echo $chauff; ?></div>
+                                           <div class="col-md-12 overme "  ><i class="fas fa-car"></i>   <?php echo $veh; ?></div>
+                                       </div>
                                        <div class="row"  >
                                            <div class="col-md-12"><i class="fas fa-map-marker-alt"></i> <small>De :</small>  <?php echo $de; ?> </div>
                                        </div>
@@ -335,10 +348,11 @@
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
+                               $veh=$o['lvehicule'];
                                $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
-                               if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='taxi'){$chauff=$o['lchauff']; $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
+                               if($type=='ambulance'){  $chauff=$o['lambulancier1'];$color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){ $chauff=$o['lchauff'];$color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                $Date= date("Y-m-d", strtotime($date));
 
                                if($Date==$day)
@@ -361,7 +375,10 @@
                                            <div class="col-md-12 "  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
                                            <div class="col-md-12 "  ><i class="fas fa-mobile-alt"></i>   <?php echo $tel; ?></div>
                                        </div>
-
+                                       <div class="row" style="margin-bottom:10px">
+                                           <div class="col-md-12 overme"  ><i class="fas fa-user-alt"></i>  <?php echo $chauff; ?></div>
+                                           <div class="col-md-12 overme "  ><i class="fas fa-car"></i>   <?php echo $veh; ?></div>
+                                       </div>
                                        <div class="row"  >
                                            <div class="col-md-12"><i class="fas fa-map-marker-alt"></i> <small>De :</small>  <?php echo $de; ?> </div>
                                        </div>
@@ -399,10 +416,11 @@
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
+                               $veh=$o['lvehicule'];
                                $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
-                               if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='taxi'){ $chauff=$o['lchauff'];$color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
+                               if($type=='ambulance'){ $chauff=$o['lambulancier1']; $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){$chauff=$o['lchauff']; $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                $Date= date("Y-m-d", strtotime($date));
 
                                if($Date==$day)
@@ -425,7 +443,10 @@
                                            <div class="col-md-12 "  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
                                            <div class="col-md-12 "  ><i class="fas fa-mobile-alt"></i>   <?php echo $tel; ?></div>
                                        </div>
-
+                                       <div class="row" style="margin-bottom:10px">
+                                           <div class="col-md-12 overme"  ><i class="fas fa-user-alt"></i>  <?php echo $chauff; ?></div>
+                                           <div class="col-md-12 overme "  ><i class="fas fa-car"></i>   <?php echo $veh; ?></div>
+                                       </div>
                                        <div class="row"  >
                                            <div class="col-md-12"><i class="fas fa-map-marker-alt"></i> <small>De :</small>  <?php echo $de; ?> </div>
                                        </div>
@@ -464,10 +485,11 @@
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
+                               $veh=$o['lvehicule'];
                                $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
-                               if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='taxi'){$chauff=$o['lchauff']; $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
+                               if($type=='ambulance'){ $chauff=$o['lambulancier1']; $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){ $chauff=$o['lchauff'];$color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                $Date= date("Y-m-d", strtotime($date));
 
                                if($Date==$day)
@@ -491,7 +513,10 @@
                                            <div class="col-md-12 "  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
                                            <div class="col-md-12 "  ><i class="fas fa-mobile-alt"></i>   <?php echo $tel; ?></div>
                                        </div>
-
+                                       <div class="row" style="margin-bottom:10px">
+                                           <div class="col-md-12 overme"  ><i class="fas fa-user-alt"></i>  <?php echo $chauff; ?></div>
+                                           <div class="col-md-12 overme "  ><i class="fas fa-car"></i>   <?php echo $veh; ?></div>
+                                       </div>
                                        <div class="row"  >
                                            <div class="col-md-12"><i class="fas fa-map-marker-alt"></i> <small>De :</small>  <?php echo $de; ?> </div>
                                        </div>
@@ -530,10 +555,12 @@
                                $de=$o['CL_lieuprest_pc'];
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
+
+                               $veh=$o['lvehicule'];
                                $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
-                               if($type=='taxi'){ $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
-                               if($type=='ambulance'){ $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
-                               if($type=='remorquage'){ $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
+                               if($type=='taxi'){ $chauff=$o['lchauff'];$color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
+                               if($type=='ambulance'){  $chauff=$o['lambulancier1']; $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
+                               if($type=='remorquage'){$chauff=$o['lchauff']; $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';}
                                $Date= date("Y-m-d", strtotime($date));
 
                                if($Date==$day)
@@ -557,7 +584,10 @@
                                            <div class="col-md-12 "  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
                                            <div class="col-md-12 "  ><i class="fas fa-mobile-alt"></i>   <?php echo $tel; ?></div>
                                        </div>
-
+                                       <div class="row" style="margin-bottom:10px">
+                                           <div class="col-md-12 overme"  ><i class="fas fa-user-alt"></i>  <?php echo $chauff; ?></div>
+                                           <div class="col-md-12 overme "  ><i class="fas fa-car"></i>   <?php echo $veh; ?></div>
+                                       </div>
                                        <div class="row"  >
                                            <div class="col-md-12"><i class="fas fa-map-marker-alt"></i> <small>De :</small>  <?php echo $de; ?> </div>
                                        </div>

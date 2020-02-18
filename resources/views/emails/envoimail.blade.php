@@ -82,7 +82,7 @@ $(document).ready(function()
             </div>
         </div>
         <div class="col-lg-9 ">
-            <?php if(isset($dossier)){?>   <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@fiche',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossier->id);?> </a></h4><?php } ?>
+            <?php if(isset($dossier)){?>   <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@view',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossier->id);?> </a></h4><?php } ?>
 
             <form  enctype="multipart/form-data" id="theform" method="POST" action="{{action('EmailController@send')}}"    onsubmit="return checkForm(this);"  >
                 {{ csrf_field() }}
@@ -132,7 +132,9 @@ $(document).ready(function()
                     <div class="row">
                         <div class="col-md-10">
                             <select id="destinataire" required  class="form-control" name="destinataire[]"  multiple >
-                                @foreach($listeemails as  $mail)
+                                <option value="ihebsaad@gmail.com">IHEB</option>
+
+                            @foreach($listeemails as  $mail)
                                     <option   value="<?php echo $mail ;?>"> <?php echo $mail ;?>  <small style="font-size:11px">(<?php echo PrestatairesController::NomByEmail( $mail);?>) - '<?php echo PrestatairesController::QualiteByEmail($mail);?>' ('<?php echo PrestatairesController::TypeEmail($mail);?>' , '<?php echo PrestatairesController::RemarqueByEmail($mail);?>)' </small> </option>
                                 @endforeach
                             </select>

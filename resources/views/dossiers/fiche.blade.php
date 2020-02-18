@@ -659,7 +659,7 @@ use  \App\Http\Controllers\PrestatairesController;
 
                                                                             ?>
                                                                             <div class="input-group-control">
-                                                                                <select id="specialite_TPA"    class="form-control" value="{{ $dossier->specialite_TPA }}" >
+                                                                                <select id="specialite_TPA"  onchange="changing(this)"   class="form-control" value="{{ $dossier->specialite_TPA }}" >
                                                                                     <option value=""></option>
                                                                                     <?php  foreach($specsTPA as $spec)
                                                                                     {

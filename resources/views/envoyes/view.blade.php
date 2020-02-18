@@ -10,7 +10,7 @@
             $dosss=    DB::table('dossiers')->where('reference_medic','like','%'.trim($envoye['dossier'].'%'))->first();
             $dossierid= $dosss->id;
 
-             ?>   <span style="font-weight:bold;"><a  href="{{action('DossiersController@fiche',$dossierid)}}" ><?php  echo   $envoye['dossier'].' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossierid );?> </a></span>
+             ?>   <span style="font-weight:bold;"><a  href="{{action('DossiersController@view',$dossierid)}}" ><?php  echo   $envoye['dossier'].' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossierid );?> </a></span>
 
              <div class="btn-group pull-right">
                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -18,15 +18,15 @@
                  </button>
                  <ul class="dropdown-menu pull-right">
                      <li>
-                         <a href="{{route('emails.envoimailenreg',['id'=>$dossier->id,'type'=> 'client','prest'=> 0,'entreeid'=>0,'envoyeid'=>$envoye['id'] ])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                         <a href="{{route('emails.envoimailenreg',[$dossierid,'type'=> 'client','prest'=> 0,'entreeid'=>0,'envoyeid'=>$envoye['id'] ])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
                              Au client </a>
                      </li>
                      <li>
-                         <a href="{{route('emails.envoimailenreg',['id'=>$dossier->id,'type'=> 'prestataire','prest'=> 0 ,'entreeid'=>0,'envoyeid'=>$envoye['id'] ])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                         <a href="{{route('emails.envoimailenreg',[$dossierid,'type'=> 'prestataire','prest'=> 0 ,'entreeid'=>0,'envoyeid'=>$envoye['id'] ])}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
                              À l'intervenant </a>
                      </li>
                      <li>
-                         <a href="{{route('emails.envoimailenreg',['id'=>$dossier->id,'type'=> 'assure','prest'=> 0 ,'entreeid'=>0,'envoyeid'=>$envoye['id']  ] )}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
+                         <a href="{{route('emails.envoimailenreg',[$dossierid,'type'=> 'assure','prest'=> 0 ,'entreeid'=>0,'envoyeid'=>$envoye['id']  ] )}}" class="sendMail" data-dest="client" style="font-size:17px;height:30px;margin-bottom:5px;">
                              À l'assuré </a>
                      </li>
 
