@@ -256,6 +256,7 @@ use App\Http\Controllers\NotificationsController;
                                     }else{ echo URL::asset('storage'.$att->path); }?>" download>Télécharger</a>)</h4>
 
                                     @switch($att->type)
+                                    
                                    @case('docx')
                                     @case('doc')
                                     @case('dot')

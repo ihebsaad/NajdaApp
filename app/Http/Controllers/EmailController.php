@@ -400,7 +400,7 @@ function convertir_document_entrant_en_pdf($type,$nom,$id)
 
     $doc_ex_liboff= array('doc', 'docx', 'odt', 'dot', 'wri','602', 'txt', 'sdw', 'sgl', 'vor', 'wpd','wps','html', 'htm', 'jdt', 'jtt', 'hwp', 'pdb', 'pages', 'cwk', 'rtf', 'xls', 'ods', 'numbers', 'dif', 'gnm', 'gnumeric', 'wk1', 'wks', '123', 'wk3','wk4', 'xlw', 'xlt', 'pxl', 'wb2', 'wq1',
         'wq2', 'sdc', 'vor', 'slk', 'xlts', 'xlsm','xlsx','svg', 'odg','ppt', 'pptx', 'odp', 'kth', 'key', 'pps', 'pot', 'pcd', 'sda', 'sdd','sdp', 'vor', 'pot', 'potx', 'ppsx','ppsm' );
-
+     $suppfichierss=null;
     if( in_array( strtolower($type), $doc_ex_liboff) )
     {
 
@@ -412,7 +412,7 @@ function convertir_document_entrant_en_pdf($type,$nom,$id)
             $nomSansespaceWE=str_replace(' ','',$withoutExt);
             $nomSansespace=$nomSansespaceWE.'.'.$type;
             \File::copy(storage_path() .'/Emails/'.$id.'/'.$nom, storage_path() .'/Emails/'.$id.'/'.$nomSansespace);
-            //$suppfichiers[]=storage_path() .'/Emails/'.$id.'/'.$nomSansespace ;
+            $suppfichierss=storage_path() .'/Emails/'.$id.'/'.$nomSansespace ;
         }
         else
         {
@@ -440,6 +440,10 @@ function convertir_document_entrant_en_pdf($type,$nom,$id)
         ]);
 
         $attach->save();
+        if($suppfichierss){
+
+          File::delete($suppfichierss);
+        }
 
     }
 
@@ -1055,10 +1059,8 @@ $id=0;
                     $facturation='';
                     $type=  $oAttachment->getExtension();
 
-                    if ($type=='docx')
-                    {
-
-                    }
+                     //convertir un document nom pdf et non image en pdf et l'enregister
+                    $this->convertir_document_entrant_en_pdf($type,$nom,$id);
 
 
                      // verifier si l'attachement pdf contient des mots de facturation
@@ -1440,6 +1442,9 @@ $id=0;
                     $facturation='';
                     $type=  $oAttachment->getExtension();
 
+                     //convertir un document nom pdf et non image en pdf et l'enregister
+                    $this->convertir_document_entrant_en_pdf($type,$nom,$id);
+
                     // verifier si l'attachement pdf contient des mots de facturation
                     if ( App::environment() === 'production') {
 
@@ -1808,6 +1813,9 @@ $id=0;
                     $facturation='';
                     $type=  $oAttachment->getExtension();
 
+                     //convertir un document nom pdf et non image en pdf et l'enregister
+                    $this->convertir_document_entrant_en_pdf($type,$nom,$id);
+
                     // verifier si l'attachement pdf contient des mots de facturation
                     if ( App::environment() === 'production') {
 
@@ -2158,6 +2166,9 @@ $id=0;
                     $nom = $oAttachment->getName();
                     $facturation='';
                     $type=  $oAttachment->getExtension();
+
+                     //convertir un document nom pdf et non image en pdf et l'enregister
+                    $this->convertir_document_entrant_en_pdf($type,$nom,$id);
 
                     // verifier si l'attachement pdf contient des mots de facturation
                     if ( App::environment() === 'production') {
@@ -2521,6 +2532,9 @@ $id=0;
                     $facturation='';
                     $type=  $oAttachment->getExtension();
 
+                     //convertir un document nom pdf et non image en pdf et l'enregister
+                    $this->convertir_document_entrant_en_pdf($type,$nom,$id);
+
                     // verifier si l'attachement pdf contient des mots de facturation
                     if ( App::environment() === 'production') {
 
@@ -2881,6 +2895,9 @@ $id=0;
                     $nom = $oAttachment->getName();
                     $facturation='';
                     $type=  $oAttachment->getExtension();
+
+                     //convertir un document nom pdf et non image en pdf et l'enregister
+                    $this->convertir_document_entrant_en_pdf($type,$nom,$id);
 
                     // verifier si l'attachement pdf contient des mots de facturation
                     if ( App::environment() === 'production') {
@@ -3250,6 +3267,9 @@ $id=0;
                     $facturation='';
                     $type=  $oAttachment->getExtension();
 
+                     //convertir un document nom pdf et non image en pdf et l'enregister
+                    $this->convertir_document_entrant_en_pdf($type,$nom,$id);
+
                     // verifier si l'attachement pdf contient des mots de facturation
                     if ( App::environment() === 'production') {
 
@@ -3615,6 +3635,9 @@ $id=0;
                     $facturation='';
                     $type=  $oAttachment->getExtension();
 
+                     //convertir un document nom pdf et non image en pdf et l'enregister
+                    $this->convertir_document_entrant_en_pdf($type,$nom,$id);
+
                     // verifier si l'attachement pdf contient des mots de facturation
                     if ( App::environment() === 'production') {
 
@@ -3976,6 +3999,9 @@ $id=0;
                     $nom = $oAttachment->getName();
                     $facturation='';
                     $type=  $oAttachment->getExtension();
+
+                     //convertir un document nom pdf et non image en pdf et l'enregister
+                    $this->convertir_document_entrant_en_pdf($type,$nom,$id);
 
                     // verifier si l'attachement pdf contient des mots de facturation
                     if ( App::environment() === 'production') {

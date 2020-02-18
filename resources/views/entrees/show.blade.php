@@ -253,8 +253,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
                                                     <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="<?php if($att->type =="pdf"){if($att->path_org){ echo URL::asset('storage'.$att->path_org);}else{echo URL::asset('storage'.$att->path);} }else{ echo URL::asset('storage'.$att->path); }?>" download>Télécharger</a>)</h4>
 
-                                    @switch($att->type)
-                                  
+                                    @switch($att->type)                                  
                                     @case('docx')
                                     @case('doc')
                                     @case('dot')
