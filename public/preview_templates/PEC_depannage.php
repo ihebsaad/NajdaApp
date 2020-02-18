@@ -58,8 +58,8 @@ $conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-//mysqli_query($conn,"set names 'utf8'");
-$sqlvh = "SELECT id,name,phone_home,prenom,civilite,,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM intervenants WHERE dossier=".$iddossier." ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 1)";
+mysqli_query($conn,"set names 'utf8'");
+$sqlvh = "SELECT id,name,phone_home,prenom,civilite,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier.") AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 1)";
     $resultvh = $conn->query($sqlvh);
     if ($resultvh->num_rows > 0) {
 
@@ -357,6 +357,6 @@ foreach ($array_prest as $prest) {
 <?php
         }
 else
-{ echo "<h3>Il n'y a pas un intervenant valide pour ce type de document sous le dossier!</h3>";}
+{ echo "<h3>Il n'y a pas un prestataire valide pour ce type de document sous le dossier!</h3>";}
 ?>
 

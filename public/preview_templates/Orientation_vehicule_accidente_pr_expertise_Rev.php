@@ -60,10 +60,10 @@ $conn = mysqli_connect($hostname, $user, $mdp,$dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-//mysqli_query($conn,"set names 'utf8'");
+mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
-$sqlvha = "SELECT id,name,prenom,civilite,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM intervenants WHERE dossier=".$iddossier." ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 23)";
+$sqlvha = "SELECT id,name,prenom,civilite,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier.") AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 23)";
     $resultvha = $conn->query($sqlvha);
     if ($resultvha->num_rows > 0) {
 
@@ -71,7 +71,7 @@ $sqlvha = "SELECT id,name,prenom,civilite,phone_home,ville,ville_id FROM prestat
         while($rowvha = $resultvha->fetch_assoc()) {
             $array_presta[] = array('id' => $rowvha["id"],"name" => $rowvha["name"] ,"prenom" => $rowvha["prenom"],"civilite" => $rowvha["civilite"]);
         } }
-$sqlvh = "SELECT id,name,phone_home,ville,prenom,civilite,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM intervenants WHERE dossier=".$iddossier." ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
+$sqlvh = "SELECT id,name,phone_home,ville,prenom,civilite,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier.") AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
     $resultvh = $conn->query($sqlvh);
     if ($resultvh->num_rows > 0) {
 
@@ -390,6 +390,6 @@ echo '<option value="'.$presta['prenom'].' '.$presta['name'].'">'.$presta["preno
 <?php
         }
 else
-{ echo "<h3>Il n'y a pas un intervenant valide pour ce type de document sous le dossier!</h3>";}
+{ echo "<h3>Il n'y a pas un prestataire valide pour ce type de document sous le dossier!</h3>";}
 ?>
 

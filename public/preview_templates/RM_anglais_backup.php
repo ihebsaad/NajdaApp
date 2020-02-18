@@ -3,7 +3,7 @@ if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['ville'])) {$ville=$_GET['ville'];}
 if (isset($_GET['CL_text'])) {$CL_text=$_GET['CL_text'];}
 if (isset($_GET['inter__structure'])) {$inter__structure=$_GET['inter__structure'];}
-if (isset($_GET['inter__medecin'])) {$inter__medecin=$_GET['inter__medecin'];$inter__medecin2=$_GET['inter__medecin'];}
+if (isset($_GET['inter__medecin'])) {$inter__medecin=$_GET['inter__medecin'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; $subscriber_name2=$_GET['subscriber_name'];}
@@ -11,7 +11,6 @@ if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber
 if (isset($_GET['CL_age'])) {$CL_age=$_GET['CL_age'];}
 if (isset($_GET['reference_customer'])) {$reference_customer=$_GET['reference_customer']; }
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
-if (isset($_GET['CL_rapport'])) {$CL_rapport=$_GET['CL_rapport']; }
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 
 // Create connection
@@ -312,7 +311,5 @@ foreach ($array_prest as $prest) {
 ?>
 </span></p>
 <p class=rvps3><span class=rvts3><br></span></p>
-<p class=rvps7><span class=rvts7><textarea name="CL_rapport" form="formchamps" placeholder="" value=""><?php if(isset ($CL_rapport)) { $ligne = str_replace('\\', "\n", $CL_rapport); echo $ligne;} ?></textarea></span></p>
-
 <h1 class=rvps6><span class=rvts0><span class=rvts12><br></span></span></h1>
 </body></html>
