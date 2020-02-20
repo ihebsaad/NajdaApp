@@ -602,17 +602,20 @@ if (isset($dossier))
                                             <?php $agents = App\User::get(); ?>
                                            
                                                 @foreach ($agents as $agt)
+                                                @if($agt->isOnline())
+                                                  
                                                 <?php if (!empty ($agentname)) { ?>
                                                 @if ($agentname["id"] == $agt["id"])
-                                                    <option value={{ $agt["id"] }} selected >{{ $agt["name"] }}</option>
+                                                    <option value={{ $agt["id"] }} selected >{{ $agt["name"] }} {{$agt["lastname"]}}</option>
                                                 @else
-                                                    <option value={{ $agt["id"] }} >{{ $agt["name"] }}</option>
+                                                    <option value={{ $agt["id"] }} >{{ $agt["name"] }} {{$agt["lastname"]}}</option>
                                                 @endif
                                                 
                                                 <?php }
                                                 else
-                                                      {  echo '<option value='.$agt["id"] .' >'.$agt["name"].'</option>';}
+                                                      {  echo '<option value='.$agt["id"] .' >'.$agt["name"].' '.$agt["lastname"].'</option>';}
                                                 ?>
+                                                @endif
                                                 @endforeach    
                 </select>
 
