@@ -41,28 +41,36 @@ $conn = mysqli_connect($dbHost, $dbuser, $dbpass,$dbname);
 
 	$datedepmission = $_POST["datedepmission"];
 	$datedispprev = $_POST["datedispprev"];
-/* sql test
-	SELECT idvehic FROM om_remorquage WHERE ( (DATE_FORMAT('2020-01-27 17:15:00', '%Y-%m-%d %H:%i:%s.000000') > `dateheuredispprev`) OR (DATE_FORMAT('2020-01-27 19:00:00"', '%Y-%m-%d %H:%i:%s.000000') < `dateheuredep`))*/
-
-//https://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap
-
-	// recuperation des voitures qui ont de mission pendant la plage horaire reçu
-	/*$sqlvnondisp = "SELECT ".$colvehic." FROM ".$omtable." WHERE ( (DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000') < `".$fin_indisp."`) OR (DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000') > `".$deb_indisp."`))";*/
-
-		//SELECT id,name,carburant,telepeage FROM voitures WHERE ((`annule` = 0) OR (`annule` IS NULL)) AND (id NOT IN (SELECT idvehic FROM om_remorquage WHERE ( (DATE_FORMAT('2020-01-27 12:15:00', '%Y-%m-%d %H:%i:%s.000000') < `dateheuredispprev`) OR (DATE_FORMAT('2020-01-27 19:00:00"', '%Y-%m-%d %H:%i:%s.000000') > `dateheuredep`))))
-
-	//SELECT idvehic FROM om_remorquage WHERE ( (`dateheuredep` <= DATE_FORMAT('2020-01-27 12:30:00', '%Y-%m-%d %H:%i:%s.000000')) AND (`dateheuredispprev` >= DATE_FORMAT('2020-01-27 11:00:00', '%Y-%m-%d %H:%i:%s.000000')))
-
-	//$sqlvh = "SELECT id,name,carburant,telepeage FROM voitures WHERE ((`annule` = 0) OR (`annule` IS NULL)) AND (id NOT IN (SELECT ".$colvehic." FROM ".$omtable." WHERE ( (`".$deb_indisp."` <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (`".$fin_indisp."` >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')))))";
+/*
 if ($_POST['typeom'] === "ambulance")
 		{
-			$sqlvh = "SELECT id,name,carburant,telepeage FROM voitures WHERE ((`annule` = 0) OR (`annule` IS NULL)) AND (name LIKE '%ambulance%' OR name LIKE '%médicalisé%' OR fonction LIKE '%Ambulance%'  OR type LIKE '%Ambulance%') AND ((id NOT IN (SELECT idvehic FROM om_remorquage WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000'))))) AND (id NOT IN (SELECT idvehic FROM om_taxi WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000'))))) AND (id NOT IN (SELECT vehicID FROM om_ambulance WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000'))))) )";
+			$sqlvh = "SELECT id,name,carburant,telepeage FROM voitures WHERE ((annule = 0) OR (annule IS NULL)) AND (name LIKE '%ambulance%' OR name LIKE '%médicalisé%' OR fonction LIKE '%Ambulance%'  OR type LIKE '%Ambulance%') AND ((id NOT IN (SELECT idvehic FROM om_remorquage WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idvehic IS NOT NULL)  AND (idvehic  NOT LIKE '0') ))) AND (id NOT IN (SELECT idvehic FROM om_taxi WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idvehic IS NOT NULL)  AND (idvehic  NOT LIKE '0') ))) AND (id NOT IN (SELECT vehicID FROM om_ambulance WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (vehicID IS NOT NULL)  AND (vehicID  NOT LIKE '0') ))) )";
 		}
-else
+if ($_POST['typeom'] === "taxi")
 		{
-			$sqlvh = "SELECT id,name,carburant,telepeage FROM voitures WHERE ((`annule` = 0) OR (`annule` IS NULL)) AND ((id NOT IN (SELECT idvehic FROM om_remorquage WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000'))))) AND (id NOT IN (SELECT idvehic FROM om_taxi WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000'))))) AND (id NOT IN (SELECT vehicID FROM om_ambulance WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000'))))) )";
+			$sqlvh = "SELECT id,name,carburant,telepeage FROM voitures WHERE ((annule = 0) OR (annule IS NULL))  AND (((name NOT LIKE '%ambulance%') AND (name NOT LIKE '%médicalisé%') AND (name NOT LIKE '%X-Press%')) OR ((fonction NOT LIKE '%Ambulance%')  AND (type NOT LIKE '%Ambulance%'))) AND ((id NOT IN (SELECT idvehic FROM om_remorquage WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idvehic IS NOT NULL)  AND (idvehic  NOT LIKE '0') ))) AND (id NOT IN (SELECT idvehic FROM om_taxi WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idvehic IS NOT NULL)  AND (idvehic  NOT LIKE '0') ))) AND (id NOT IN (SELECT vehicID FROM om_ambulance WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (vehicID IS NOT NULL)  AND (vehicID  NOT LIKE '0') ))) )";
 
-		}	
+		}
+if ($_POST['typeom'] === "remorquage")
+		{
+			$sqlvh = "SELECT id,name,carburant,telepeage FROM voitures WHERE ((annule = 0) OR (annule IS NULL))  AND (name LIKE '%X-Press%') AND ((id NOT IN (SELECT idvehic FROM om_remorquage WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idvehic IS NOT NULL)  AND (idvehic  NOT LIKE '0') ))) AND (id NOT IN (SELECT idvehic FROM om_taxi WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idvehic IS NOT NULL)  AND (idvehic  NOT LIKE '0') ))) AND (id NOT IN (SELECT vehicID FROM om_ambulance WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (vehicID IS NOT NULL)  AND (vehicID  NOT LIKE '0') ))) )";
+
+		}
+*/
+		if ($_POST['typeom'] === "ambulance")
+		{
+			$sqlvh = "SELECT id,name,carburant,telepeage FROM voitures WHERE ((annule = 0) OR (annule IS NULL)) AND (fonction LIKE '%Ambulance%') AND ((id NOT IN (SELECT idvehic FROM om_remorquage WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idvehic IS NOT NULL)  AND (idvehic  NOT LIKE '0') ))) AND (id NOT IN (SELECT idvehic FROM om_taxi WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idvehic IS NOT NULL)  AND (idvehic  NOT LIKE '0') ))) AND (id NOT IN (SELECT vehicID FROM om_ambulance WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (vehicID IS NOT NULL)  AND (vehicID  NOT LIKE '0') ))) )";
+		}
+		if ($_POST['typeom'] === "taxi")
+				{
+					$sqlvh = "SELECT id,name,carburant,telepeage FROM voitures WHERE ((annule = 0) OR (annule IS NULL))  AND (fonction LIKE '%Taxi%') AND ((id NOT IN (SELECT idvehic FROM om_remorquage WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idvehic IS NOT NULL)  AND (idvehic  NOT LIKE '0') ))) AND (id NOT IN (SELECT idvehic FROM om_taxi WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idvehic IS NOT NULL)  AND (idvehic  NOT LIKE '0') ))) AND (id NOT IN (SELECT vehicID FROM om_ambulance WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (vehicID IS NOT NULL)  AND (vehicID  NOT LIKE '0') ))) )";
+
+				}
+		if ($_POST['typeom'] === "remorquage")
+				{
+					$sqlvh = "SELECT id,name,carburant,telepeage FROM voitures WHERE ((annule = 0) OR (annule IS NULL))  AND (fonction LIKE '%Remorquage%') AND ((id NOT IN (SELECT idvehic FROM om_remorquage WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idvehic IS NOT NULL)  AND (idvehic  NOT LIKE '0') ))) AND (id NOT IN (SELECT idvehic FROM om_taxi WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idvehic IS NOT NULL)  AND (idvehic  NOT LIKE '0') ))) AND (id NOT IN (SELECT vehicID FROM om_ambulance WHERE ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (vehicID IS NOT NULL)  AND (vehicID  NOT LIKE '0') ))) )";
+
+				}
 
 
 
