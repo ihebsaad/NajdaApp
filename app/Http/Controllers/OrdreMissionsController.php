@@ -1,10 +1,11 @@
 <?php
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use Spatie\PdfToText\Pdf;
+use App\User ;
 use PDF as PDFomme;
 use PDF as PDF3;
 use PDF as PDF4;
@@ -81,6 +82,24 @@ class OrdreMissionsController extends Controller
 	        		$pdf->save($path.$iddoss.'/'.$name.'.pdf');
 	                $omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_taxi' => $prestataireom, 'affectea'=>$affectea]);
 	                $result = $omtaxi->update($request->all());
+if ($omtaxi->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+$dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
+$titreparent = $omparent['titre'];
+if($affectea=='externe')
+{
+Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+}
+if($affectea=='mmentite')
+{
+Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+}
+
+}
+
                 // end bloc test
                 exit();}
         		    //exit();
@@ -124,6 +143,13 @@ class OrdreMissionsController extends Controller
         			// enregistrement dans la BD
         			$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_taxi' => $presttaxi]);
         			$result = $omtaxi->update($request->all());
+if ($omtaxi->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$presttaxi.' dans le dossier: '.$omparent["reference_medic"] );
+ }
         			//return 'complete action '.$result;
 
                     // affecter date  prévue destination ( prévue fin de mission)
@@ -186,7 +212,20 @@ class OrdreMissionsController extends Controller
         		$iddossom= $_POST["dossdoc"];
         		//$dossierom=Dossier::where('id', $iddossom)->first();
         		$dossierom= Dossier::where('id', $iddossom)->select('type_affectation')->first();
+                        $dossieromref= Dossier::where('id', $iddossom)->select('reference_medic')->first();
         		$prestataireom=$dossierom['type_affectation'];
+
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']=null)
+{
+
+$newformat = $_POST['CL_heuredateRDV'];
+}
+
+
+
     			
     			 if (isset($prestataireom))
 			        {if($prestataireom=="Transport VAT")
@@ -205,9 +244,20 @@ class OrdreMissionsController extends Controller
                    'prestataire_id' => $prest,
                       'dossier_id' => $iddossom,
                     'type_prestations_id' => $typep,
-                    'effectue' => 1
+                    'effectue' => 1,
+                    'date_prestation'  => $newformat
             ]);
         			$prestation->save();
+if ($prestation->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+
+}
+
 			        	// changer le var post
 			        	$reqmmentite = new \Illuminate\Http\Request();
 	                    $reqmmentite->request->add(['prestataire_taxi' => $prestataireom]);
@@ -221,6 +271,14 @@ class OrdreMissionsController extends Controller
 			    	}
 			    
         		$result = $omtaxi->update($request->all());
+if ($omtaxi->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à même entité: '.$dossierom["type_affectation"].' dans le dossier: '.$dossieromref["reference_medic"] );
+
+}
 
 			    $pdf2 = PDFomme::loadView('ordremissions.pdfodmambulance',['prestataire_taxi' => $prestataireom])->setPaper('a4', '');
 			    // enregistrement de nouveau attachement
@@ -248,6 +306,15 @@ class OrdreMissionsController extends Controller
 					    	}
 
 					    	$result = $omtaxi->update($request->all());
+if ($omtaxi->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+$dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+
+}
 
 					    // enregistrement de nouveau attachement
 				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
@@ -299,10 +366,19 @@ class OrdreMissionsController extends Controller
 
         // verification affectation et creation de processus
         if (isset($_POST['affectea']))
-        {
+        {$dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
         	// affectation en interne
         	if ($_POST['affectea'] === "interne")
         	{$typep=2;
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']=null)
+{
+
+$newformat = $_POST['CL_heuredateRDV'];
+}
+
         		// creation om pour le dossier courant
         		if (isset($_POST["type_affectation"]))
         		{if(!(isset($_POST['type_affectation_post'])))
@@ -323,9 +399,20 @@ class OrdreMissionsController extends Controller
                    'prestataire_id' => $prest,
                       'dossier_id' => $iddoss,
                     'type_prestations_id' => $typep,
-                    'effectue' => 1
+                    'effectue' => 1,
+                    'date_prestation' =>$newformat
             ]);
-        			$prestation->save();}
+        			$prestation->save();
+if ($prestation->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+
+}
+}
         			$prestomtx = $_POST["type_affectation"];
 if (isset($_POST['parent']) && ! empty($_POST['parent']))
                     {
@@ -336,6 +423,24 @@ if (isset($_POST['parent']) && ! empty($_POST['parent']))
         			$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         		}
 			    $result = $omtaxi->update($request->all());
+if ($omtaxi->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+                    {
+                      Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"] );
+                    }
+else
+{
+
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"] );
+}
+
+
+
+}
 
 			    // creation nouveau dossier et l'om assigné
 			    if (!isset($_POST['parent']) ||empty($_POST['parent']))
@@ -817,6 +922,15 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
            	if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
                {$result5 = $omtaxi2->update($requestData);}
                else { $result5 = $omtaxi2->update($request->all()); }
+if ($omtaxi2->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+
+}
 
         	}
         }}
@@ -1006,6 +1120,24 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
 	                $omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_ambulance' => $prestataireom, 'affectea'=>$affectea]);
 	                $result = $omambulance->update($request->all());
                 // end bloc test
+if ($omambulance->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+$dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
+$titreparent = $omparent['titre'];
+if($affectea=='externe')
+{
+Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+}
+if($affectea=='mmentite')
+{
+Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+}
+
+}
+
                 exit();}
         		// end remplace
         	   }
@@ -1048,6 +1180,13 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
         			// enregistrement dans la BD
         			$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_ambulance' => $prestambulance]);
         			$result = $omambulance->update($request->all());
+if ($omambulance->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$prestambulance.' dans le dossier: '.$omparent["reference_medic"] );
+ }
         			//return 'complete action '.$result;
                   // mettre à jour kilométrage véhicule
         			//dd('ok');
@@ -1176,7 +1315,17 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
         		$iddossom= $_POST["dossdoc"];
         		//$dossierom=Dossier::where('id', $iddossom)->first();
         		$dossierom= Dossier::where('id', $iddossom)->select('type_affectation')->first();
+                        $dossieromref= Dossier::where('id', $iddossom)->select('reference_medic')->first();
         		$prestataireom=$dossierom['type_affectation'];
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']=null)
+{
+
+$newformat = $_POST['CL_heuredateRDV'];
+}
+
     			
     			 if (isset($prestataireom))
 			        {if($prestataireom=="Transport VAT")
@@ -1195,9 +1344,19 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
                    'prestataire_id' => $prest,
                       'dossier_id' => $iddossom,
                     'type_prestations_id' => $typep,
-                    'effectue' => 1
+                    'effectue' => 1,
+                    'date_prestation' =>$newformat
             ]);
         			$prestation->save();
+if ($prestation->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+
+}
 			        	// changer le var post
 			        	$reqmmentite = new \Illuminate\Http\Request();
 	                    $reqmmentite->request->add(['prestataire_ambulance' => $prestataireom]);
@@ -1211,6 +1370,14 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
 			    	}
 			    
         		$result = $omambulance->update($request->all());
+if ($omambulance->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à même entité: '.$dossierom["type_affectation"].' dans le dossier: '.$dossieromref["reference_medic"] );
+
+}
 
 			    $pdf2 = PDFomme::loadView('ordremissions.pdfodmambulance',['prestataire_ambulance' => $prestataireom])->setPaper('a4', '');
 			    // enregistrement de nouveau attachement
@@ -1237,6 +1404,16 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
 					    	}
 
 					    	$result = $omambulance->update($request->all());
+if ($omambulance->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+$dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+
+}
+
 					    	
 					    // enregistrement de nouveau attachement
 				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
@@ -1341,6 +1518,15 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
         	// affectation en interne
         	if ($_POST['affectea'] === "interne")
         	{$typep=4;
+$dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']=null)
+{
+
+$newformat = $_POST['CL_heuredateRDV'];
+}
         		// creation om pour le dossier courant
         		if (isset($_POST["type_affectation"]))
         		{if(!(isset($_POST['type_affectation_post'])))
@@ -1361,9 +1547,19 @@ $emplacOM = storage_path()."/OrdreMissions/".$iddnew;
                    'prestataire_id' => $prest,
                       'dossier_id' => $iddoss,
                     'type_prestations_id' => $typep,
-                    'effectue' => 1
+                    'effectue' => 1,
+                     'date_prestation' =>$newformat
             ]);
-        			$prestation->save();}
+        			$prestation->save();
+if ($prestation->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+
+}}
  
         			$prestomamb = $_POST["type_affectation"];
 if (isset($_POST['parent']) && ! empty($_POST['parent']))
@@ -1375,6 +1571,25 @@ if (isset($_POST['parent']) && ! empty($_POST['parent']))
         			$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         		}
 			    $result = $omambulance->update($request->all());
+if ($omambulance->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+                    {
+                      Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"] );
+                    }
+else
+{
+
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomamb.' dans le dossier: '.$dossieromref["reference_medic"] );
+}
+
+
+
+}
+
 
 			    // creation nouveau dossier et l'om assigné
 			    if (!isset($_POST['parent']) ||empty($_POST['parent']))
@@ -1855,6 +2070,15 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
            	if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
                {$result5 = $omambulance2->update($requestData);}
                else { $result5 = $omambulance2->update($request->all()); }
+if ($omambulance2->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+
+}
         	}
         	
         }
@@ -2040,6 +2264,24 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 		                $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_remorquage' => $prestataireom, 'affectea'=>$affectea]);
 		                $result = $omremorquage->update($request->all());
 	                // end bloc test
+if ($omremorquage->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+$dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
+$titreparent = $omparent['titre'];
+if($affectea=='externe')
+{
+Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+}
+if($affectea=='mmentite')
+{
+Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+}
+
+}
+
 	                exit();}
                     //exit();
                 }
@@ -2087,6 +2329,13 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                     // enregistrement dans la BD
                     $omremorquage= OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_remorquage' => $prestambulance]);
                     $result = $omremorquage->update($request->all());
+if ($omremorquage->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$prestambulance.' dans le dossier: '.$omparent["reference_medic"] );
+ }
                     //return 'complete action '.$result;
 
                     // affecter date  prévue destination ( prévue fin de mission)
@@ -2147,7 +2396,16 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
         		$iddossom= $_POST["dossdoc"];
         		//$dossierom=Dossier::where('id', $iddossom)->first();
         		$dossierom= Dossier::where('id', $iddossom)->select('type_affectation')->first();
+                        $dossieromref= Dossier::where('id', $iddossom)->select('reference_medic')->first();
         		$prestataireom=$dossierom['type_affectation'];
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']=null)
+{
+
+$newformat = $_POST['CL_heuredateRDV'];
+}
     			
     			 if (isset($prestataireom))
 			        {if($prestataireom=="Transport VAT")
@@ -2170,9 +2428,19 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                    'prestataire_id' => $prest,
                       'dossier_id' => $iddossom,
                     'type_prestations_id' => $typep,
-                    'effectue' => 1
+                    'effectue' => 1,
+                    'date_prestation' =>$newformat
             ]);
                     $prestation->save();
+if ($prestation->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+
+}
 			        	// changer le var post
 			        	$reqmmentite = new \Illuminate\Http\Request();
 	                    $reqmmentite->request->add(['prestataire_remorquage' => $prestataireom]);
@@ -2186,6 +2454,15 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 			    	}
 			    
         		$result = $omremorquage->update($request->all());
+if ($omremorquage->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à même entité: '.$dossierom["type_affectation"].' dans le dossier: '.$dossieromref["reference_medic"] );
+
+
+}
 
 			    $pdf2 = PDFomme::loadView('ordremissions.pdfodmremorquage',['prestataire_remorquage' => $prestataireom])->setPaper('a4', '');
 			    // enregistrement de nouveau attachement
@@ -2212,6 +2489,15 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                     }
 
                     $result = $omremorquage->update($request->all());
+if ($omremorquage->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+$dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+
+}
                     // enregistrement de nouveau attachement
                     $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
                     $attachement = new Attachement([
@@ -2266,6 +2552,15 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
             // affectation en interne
             if ($_POST['affectea'] === "interne")
             {$typep=1;
+$dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']=null)
+{
+
+$newformat = $_POST['CL_heuredateRDV'];
+}
                 // creation om pour le dossier courant
         		if (isset($_POST["type_affectation"]))
         		{if(!(isset($_POST['type_affectation_post'])))
@@ -2289,9 +2584,20 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                    'prestataire_id' => $prest,
                       'dossier_id' => $iddoss,
                     'type_prestations_id' => $typep,
-                    'effectue' => 1
+                    'effectue' => 1,
+'date_prestation' =>$newformat
             ]);
-        			$prestation->save();}
+        			$prestation->save();
+if ($prestation->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
+
+}
+}
 
         			$prestomrem = $_POST["type_affectation"];
 if (isset($_POST['parent']) && ! empty($_POST['parent']))
@@ -2303,6 +2609,26 @@ if (isset($_POST['parent']) && ! empty($_POST['parent']))
         			$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         		}
 			    $result = $omremorquage->update($request->all());
+if ($omremorquage->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+                    {
+                      Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$omparent["titre"].' par: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"] );
+                    }
+else
+{
+
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomrem.' dans le dossier: '.$dossieromref["reference_medic"] );
+}
+
+
+
+}
+
+
 
 			    // creation nouveau dossier et l'om assigné
 			    if (!isset($_POST['parent']) ||empty($_POST['parent']))
@@ -2797,6 +3123,15 @@ $reqlieup->request->add(['dossier' => $iddnew]);
            	if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
                {$result5 = $omremorquage2->update($requestData);}
                else { $result5 = $omremorquage2->update($request->all()); }
+if ($omremorquage2->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
+
+}
 
             }
         }
@@ -3356,6 +3691,7 @@ header('Content-type: application/json');
 	    	//$count = OMTaxi::where('parent',$parent)->count();
 	    	OMTaxi::where('id', $parent)->update(['dernier' => 0,'idvehic' => "",'idchauff' => ""]);
 	        $omparent=OMTaxi::where('id', $parent)->first();
+                $affect=$omparent["affectea"];
 	        $filename='taxi_annulation-'.$parent;
 
 	        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
@@ -3388,8 +3724,16 @@ header('Content-type: application/json');
 	        // If you want to store the generated pdf to the server then you can use the store function
 	        $pdf->save($path.$dossier.'/'.$name.'.pdf');
 	        $omtaxi = OMTaxi::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier]);
-	        return "OM Ambulance annulée avec succès";
-	    }
+if ($omtaxi->save()) {
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans le dossier: '.$omparent["reference_medic"]);
+	       
+
+}
+ return "OM Ambulance annulée avec succès";}
 	    // annulation om Ambulance
 	    elseif (stristr($titre,'ambulance') !== FALSE)  {
 	    	OMAmbulance::where('id', $parent)->update(['dernier' => 0,'vehicID' => "",'idambulancier1' => "",'idambulancier2' => "",'idparamed' => ""]);
@@ -3451,7 +3795,15 @@ header('Content-type: application/json');
 	        // If you want to store the generated pdf to the server then you can use the store function
 	        $pdf->save($path.$dossier.'/'.$name.'.pdf');
 	        $omambu = OMAmbulance::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier]);
+if ($omambu->save()) {
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
 
+Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans le dossier: '.$omparent["reference_medic"]);
+
+
+}
 
 	        return "OM Ambulance annulée avec succès";
 	    }
@@ -3489,6 +3841,15 @@ header('Content-type: application/json');
 	        // If you want to store the generated pdf to the server then you can use the store function
 	        $pdf->save($path.$dossier.'/'.$name.'.pdf');
 	        $omrem = OMRemorquage::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier]);
+if ($omrem->save()) {
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["titre"]. ' par: '.$name. ' dans le dossier: '.$omparent["reference_medic"]);
+	       
+
+}
 	        return "OM Remorquage annulée avec succès";
 	    }
     }

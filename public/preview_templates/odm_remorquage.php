@@ -969,7 +969,7 @@ function verifdispvoiture()
                         // Clear vehicules list
                         $("#lvehicule").empty();
                         var len = output.length;
-                        if (len > 1)
+                        if (len >= 1)
                         {   
                             
                                 for(var i=0; i<len; i++){

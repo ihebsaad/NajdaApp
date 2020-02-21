@@ -201,7 +201,7 @@ if (isset($_POST['clientIMA'])) { ?>
 				<span style="font-family:'Times New Roman'; font-weight:bold">Départ bateau </span>
 
 				<span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_heure_D'])) { echo $_POST['CL_heure_D']; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_heure_D'])) { $DHsansT =str_replace('T',' ',$_POST['CL_heure_D']); echo $DHsansT; } ?></span>
 </span>			
 </p>
 <?php }} ?>

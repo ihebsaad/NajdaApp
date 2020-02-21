@@ -529,17 +529,27 @@ $Arrayn = str_replace("’", "'", $array);
 
         ]);}
         $doc->save();
-/*if ($doc->save()) {
-            $iddoss = $dossier->id;
-        $infoagent = User::where('id', $iduser)->first();
-        $nomagent = $infoagent['lastname'];
-        $prenomagent = $infoagent['name'];
-        $signagent = $infoagent['signature'];
+//LOG DOC
+if ($doc->save()) {
 
-        $infodossier = Dossier::where('id', $dossier)->first();
-        $refdoss = trim($infodossier["reference_medic"]);
-       Log::info('generation du doc :'.$name_file.' dans le dossier: '.$refdoss.' par agent: '.$prenomagent.' '.$nomagent);
-}*/
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+ if (isset($_POST['parent']) )
+        {
+            if (!empty($_POST['parent']) && $_POST['parent']!== null)
+            {$infoparent = Document::where('id',$parent)->first();
+
+       $docparent=$infoparent['titre'];
+Log::info('[Agent : '.$nomuser.' ] remplacement du document '.$docparent.' dans le dossier: '.$refdoss );
+}
+else 
+{
+Log::info('[Agent : '.$nomuser.' ] Generation du document '.$titref.' dans le dossier: '.$refdoss );
+}
+}
+}
+//FIN LOG DOC
         //return $valchamps;
 
         //redirect()->route('docgen');
@@ -1634,7 +1644,19 @@ $valchamp = str_replace('<br />', "\n", $valchamp);
 
         ]);
         $doc->save();
+//LOG DOC
+if ($doc->save()) {
 
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+ 
+
+ $docparent=$infoparent['titre'];
+Log::info('[Agent : '.$nomuser.' ] Annulation du document '.$docparent.' dans le dossier: '.$refdoss );
+
+}
+//FIN LOG DOC
         // enregistrement de lattachement
         $attachement = new Attachement([
 

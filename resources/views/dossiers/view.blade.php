@@ -1968,7 +1968,7 @@ array_push($listepr,$pr['prestataire_id']);
     </div>
 </div>
 <!-- Modal template html doc-->
-<div class="modal fade" id="templatehtmldoc" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="templatehtmldoc" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true"  data-backdrop="static" data-keyboard="false" >
     <div class="modal-dialog" role="document" style="width:900px;height: 450px">
         <div class="modal-content">
             <div class="modal-header">
@@ -2006,7 +2006,7 @@ array_push($listepr,$pr['prestataire_id']);
     </div>
 </div>
 <!-- Modal template html om-->
-<div class="modal fade" id="templatehtmlom" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="templatehtmlom" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true"  data-backdrop="static" data-keyboard="false" >
     <div class="modal-dialog" role="document" style="width:900px;height: 450px">
         <div class="modal-content">
             <div class="modal-header">
