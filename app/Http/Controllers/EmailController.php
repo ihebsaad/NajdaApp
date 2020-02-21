@@ -4186,6 +4186,191 @@ $id=0;
 
     }
 
+    function checksmsxml()
+    {
+
+       $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
+
+
+        $files = scandir(storage_path() . "/SMS/");
+        foreach($files as $pathfile){
+
+           //   $pathfile= storage_path() . "/SMS/sms.xml";
+            if( file_exists ($pathfile))
+            {
+             //   chmod ($pathfile,'0777');
+                $get = file_get_contents($pathfile);
+                $arr = simplexml_load_string($get);
+                // lire N Tel et le message
+                Log::info('SMS reçu $pathfile : '.$pathfile);
+                Log::info('SMS reçu $get : '.$get);
+                Log::info('SMS reçu $arr: '.$arr);
+              //  $tel=$arr->sms->gsm ;
+                $tel=$arr[0]->gsm ;
+                $contenu=$arr[0]->texte ;
+                Log::info('SMS reçu $tel: '.$tel);
+
+                // $contenu=$arr->sms->texte ;
+
+
+                // supprimer le fichier
+                unlink ($pathfile);
+
+
+
+                $refdossier='';$dossierid=0;$nomassure='';
+                $statut = 0;
+                foreach ($dossiers as $dos) {
+                    $ref=trim(strval($dos['reference_medic']));
+                    $refCL=trim(strval($dos['reference_customer']));
+                    if ($refCL==''){$refCL='XX';}
+                    if ($ref==''){$ref='dossiervide';}
+
+                    if (
+                        (strpos($contenu, $ref) !==false ) ||
+
+                        ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
+                    {
+                        $refdossier = trim($dos['reference_medic']);
+                        $dossierid = intval($dos['id']);
+                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
+                        $statut = 1;
+                        break;
+                    }
+                }
+
+
+                $date=date('Y-m-d H:i:s');
+
+                $entree = new Entree([
+
+                    'destinataire' =>  'SMS Najda',
+                    'emetteur' =>  ($tel),
+                    'sujet' =>  ('sms'),
+                    'contenu'=>  ($contenu) ,
+                    'mailid'=>  'sms-'.$date,
+                    'viewed'=>0,
+                    'statut'=>0,
+                    'nb_attach'=>0,
+                    'reception'=>$date,
+                    'type'=>'sms',
+                    'dossier'=>$refdossier,
+                    'dossierid'=>$dossierid,
+                    'statut'=>$statut,
+
+                ]);
+
+
+                if ($this->checkEmailExiste( 'sms-'.$date)==0){
+                    $entree->save();
+                    $id=$entree->id;
+                }
+
+                /*********************/
+                if($refdossier!= ''){
+
+
+                    //   $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                    //   $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                    $userid=$this->AgentAffecte($dossierid);
+
+                    //  $user=  DB::table('users')->where('id','=', $userid )->first();
+                    if($userid>0)
+                    {
+                        //// Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => $tel,
+                                'sujet' => 'sms',
+                                'reception' => $date,
+                                'type' => 'sms',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $userid
+
+                            ]);
+                            $notif->save();
+                        }
+
+                    }
+                    else{
+                        $seance =  DB::table('seance')
+                            ->where('id','=', 1 )->first();
+                        $disp=$seance->dispatcheur ;
+
+                        //// Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => $tel,
+                                'sujet' => 'sms',
+                                'reception' => $date,
+                                'type' => 'sms',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
+
+                    }
+
+
+
+                }
+                else{
+
+                    $seance =  DB::table('seance')
+                        ->where('id','=', 1 )->first();
+                    $disp=$seance->dispatcheur ;
+
+                    if($disp) {
+
+                        ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($tel),
+                                'sujet' => ('sms'),
+                                'reception' => $date,
+                                'type' => 'sms',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
+                    }
+
+
+
+                }
+
+
+            }
+        } // for files
+
+
+    }
+
+
+
     function checksms()
     {
 
@@ -4256,6 +4441,29 @@ $id=0;
                             break;
                         }
                     }
+
+
+/****          SMS XML
+                    $files = scandir(storage_path() . "/SMS/");
+                foreach($files as $pathfile){
+
+              //  $pathfile= storage_path() . "/SMS/sms.xml";
+                    if( file_exists ($pathfile))
+                    {
+                        $get = file_get_contents($pathfile);
+                        $arr = simplexml_load_string($get);
+                // lire N Tel et le message
+                        $tel=$arr->gsm ;
+                        $contenu=$arr->texte ;
+
+                        // supprimer le fichier
+                        unlink ($pathfile);
+
+                    }
+                  }
+*/
+
+
 
 
                     $entree = new Entree([
@@ -5614,10 +5822,14 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
      });
         $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         $urlsending=$urlapp.'/envoyes';
-        if($envoyeid>0){ $this->export_pdf_send($envoyeid,$from,$fromname,$to,$contenu,$files,$attachs);};
+        if($envoyeid>0){ $this->export_pdf_send($envoyeid,$from,$fromname,$to,$contenu,$files,$attachs);}
+        else{
 
-        // activer le dossier
-        Dossier::where('id', $doss)->update(array('current_status' => 'actif'));
+            Log::info('PB Attachement Envoi mail ');
+
+        }
+
+
 
 
         return redirect($urlsending.'/view/'.$envoyeid)->with('success', '  Envoyé ! ');
@@ -6180,6 +6392,62 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         return view('emails.test');
     }
 
+    function sendsmsxml(Request $request)
+    {
+
+        $num = trim($request->get('destinataire'));
+        $contenu = trim( $request->get('message'));
+        $description = trim( $request->get('description'));
+        $doss = trim( $request->get('dossier'));
+        $dossier= $this->RefDossierById($doss);////;
+
+        $xmlString = '<?xml version="1.0" encoding="UTF-8" ?>
+        <sms>
+            <gsm>'.$num.'</gsm>
+            <texte>'.$contenu.'</texte>
+        </sms>';
+
+       // $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+     //  $old = umask(0);
+
+        echo file_put_contents($filepath,$xmlString,0);
+    //    chmod($filepath, 0755);
+
+      //  umask($old);
+
+        $user = auth()->user();
+        $nomuser=$user->name.' '.$user->lastname;
+        $from='sms najda '.$nomuser;
+        $par=Auth::id();
+
+        $envoye = new Envoye([
+            'emetteur' => $from,
+            'destinataire' => $num,
+            'sujet' => $description,
+            'description' => $description,
+            'contenu'=> $contenu,
+            'statut'=> 1,
+            'par'=> $par,
+            'dossier'=>$dossier,
+            'type'=>'sms'
+        ]);
+
+        $envoye->save();
+
+
+        Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
+
+
+
+        $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+
+        $urlsending=$urlapp.'/envoyes';
+     //   echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
+        return redirect($urlsending)->with('success', '  Envoyé ! ');
+
+    }
 
     function sendsms(Request $request)
     {
@@ -6208,6 +6476,11 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         Mail::setSwiftMailer($swiftMailer);
 
 
+        $date=date ('Ymd');
+        $heure=date ('H:i:s:v');
+
+
+
         $from='SMS Najda +216 21 433 463';
         $par=Auth::id();
 
@@ -6218,8 +6491,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         try{
             Mail::send([], [], function ($message) use ($contenu,$dossier,$par,$description,$num,$from,$mpass) {
                 $message
-                   //  ->to('ihebsaad@gmail.com')
-                     ->to('ecom_plus@hotmail.com')
+                     ->to('ihebsaad@gmail.com')
+                  //   ->to('ecom_plus@hotmail.com')
                     ->subject('sms'.$num.' '.$mpass)
                     ->setBody($contenu );
 
@@ -6256,6 +6529,11 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         } catch (Exception $ex) {
             // Debug via $ex->getMessage();
          }
+
+
+
+
+
 
     }// end send
 

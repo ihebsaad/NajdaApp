@@ -941,13 +941,38 @@ class LoginController extends Controller
 
         if($countdossiers>0){
             if($medic>0)
-            {Dossier::where('affecte',  Auth::id() )->update(array('affecte' => $medic, 'statut' => 2));}
+            {
+                $folders=Dossier::where('affecte',  Auth::id() )->update(array('affecte' => $medic, 'statut' => 2));
+
+                if($folders)
+                {
+                    $user_dest=$medic;
+                    foreach ($dossiers as $doss) {
+                        $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                        $this->migration_miss($doss->id,$user_dest);
+                        $this->migration_notifs($doss->id,$user_dest);
+                    }
+                }
+            }
+
             elseif ($tech>0)
             {
-             Dossier::where('affecte',  Auth::id() )->update(array('affecte' => $tech, 'statut' => 2));
+               $folders=   Dossier::where('affecte',  Auth::id() )->update(array('affecte' => $tech, 'statut' => 2));
+
+                if($folders)
+                {
+                    $user_dest=$tech;
+                    foreach ($dossiers as $doss) {
+                        $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                        $this->migration_miss($doss->id,$user_dest);
+                        $this->migration_notifs($doss->id,$user_dest);
+                    }
+                }
+
             }
 
         }
+
         if (true)
         {
 

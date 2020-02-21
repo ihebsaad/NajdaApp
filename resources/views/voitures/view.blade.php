@@ -179,13 +179,13 @@
         var champ=elm;
 
         var val =1;
-         var citie = $('#id').val();
+         var voiture = $('#id').val();
         //if ( (val != '')) {
         var _token = $('input[name="_token"]').val();
         $.ajax({
             url: "{{ route('voitures.updating') }}",
             method: "POST",
-            data: {citie: citie , champ:champ ,val:val, _token: _token},
+            data: {voiture: voiture , champ:champ ,val:val, _token: _token},
             success: function (data) {
                 if (elm=='annule'){
                 $('#nonactif').animate({

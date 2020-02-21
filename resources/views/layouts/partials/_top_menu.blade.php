@@ -113,7 +113,7 @@ $seance =  DB::table('seance')
                 <span class="fas fa-lg  fa-warning"></span>
                 <br><?php $count=  \App\Dossier::where('sub_status', 'immobile')
                     ->where('current_status', 'inactif')
-                    ->count();
+                     ->count();
                   ?>
                 Dossiers Immobiles <span   class="label label-warning" style="color:black"><?php echo $count  ;?></span>
             </a>

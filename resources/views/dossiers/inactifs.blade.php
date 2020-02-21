@@ -49,8 +49,14 @@
             <tbody>
 
             @foreach($dossiers as $dossier)
-                <tr><?php $statut=$dossier['current_status'];  $affecte=$dossier['affecte'];   ?>
-                    <td style="width:20%"><a href="{{action('DossiersController@view', $dossier['id'])}}" >{{$dossier->reference_medic}}</a> <a style="color:#a0d468" href="{{action('DossiersController@fiche', $dossier['id'])}}" >Fiche<i class="fa fa-file-txt"></a></td>
+                <?php
+                $style="";
+                if( \App\Http\Controllers\DossiersController::checkImmobile3D($dossier->updated_at)== true    )
+                   {$style="background-color:#fd9883;"; }
+
+                ?>
+                <tr  style="<?php echo $style;?>"><?php $statut=$dossier['current_status'];  $affecte=$dossier['affecte'];   ?>
+                    <td style="width:20%; <?php echo $style;?>"><a href="{{action('DossiersController@view', $dossier['id'])}}" >{{$dossier->reference_medic}}</a> <a style="color:#a0d468" href="{{action('DossiersController@fiche', $dossier['id'])}}" >Fiche<i class="fa fa-file-txt"></a></td>
                      <td style="width:20%"><?php echo '<small>'.$dossier['subscriber_name'] .' '.$dossier['subscriber_lastname'] .'</small>';?></td>
                     <td style="width:25%">
                         <?php $customer_id= $dossier['customer_id']; echo '<small>'. DossiersController::ClientById($customer_id).'</small>';?>

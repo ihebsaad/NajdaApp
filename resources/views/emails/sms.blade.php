@@ -7,7 +7,7 @@
     ?>
     <h2>Envoyer un SMS</h2>
 
-    <form method="post" action="{{action('EmailController@sendsms')}}" >
+    <form method="post" action="{{action('EmailController@sendsmsxml')}}" >
        <input id="dossier" type="hidden" class="form-control" name="dossier"  value="{{$doss}}" />
 
         <div class="form-group">

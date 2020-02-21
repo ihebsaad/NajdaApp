@@ -3209,6 +3209,31 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
     }
 
+    public static function checkImmobile3D($date)
+    {
+
+        $format = "Y-m-d H:i:s";
+     //   $dtc = (new \DateTime())->format('Y-m-d H:i:s');
+
+        $dtc = (new \DateTime())->modify('-3 days')->format($format);
+
+        $dateSys = \DateTime::createFromFormat($format, $dtc);
+
+
+        $dateDoss = (\DateTime::createFromFormat($format, $date) );
+
+
+        if($dateDoss <= $dateSys)
+        {
+            return true;
+        }else{
+            return false ;
+    }
+
+
+    }
+
+
 
 }
 
