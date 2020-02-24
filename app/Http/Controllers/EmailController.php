@@ -3044,9 +3044,6 @@ $id=0;
             }
             /**********/
 
-
-
-
             $mailid=$oMessage->getUid();
 
             //Move the current Message to 'INBOX.read'
@@ -4219,28 +4216,35 @@ $id=0;
 
 
         $files = scandir(storage_path() . "/SMS/");
-        foreach($files as $pathfile){
+
+        foreach($files as $file){
+            Log::info(' file : '.$file);
 
            //   $pathfile= storage_path() . "/SMS/sms.xml";
-            if( file_exists ($pathfile))
+            if(   $file!= '.' && $file != '..')
             {
-             //   chmod ($pathfile,'0777');
-                $get = file_get_contents($pathfile);
-                $arr = simplexml_load_string($get);
-                // lire N Tel et le message
-                Log::info('SMS reçu $pathfile : '.$pathfile);
-                Log::info('SMS reçu $get : '.$get);
-                Log::info('SMS reçu $arr: '.$arr);
+                $fullname=basename(storage_path() . "/SMS/".$file) ;
+              //   Log::info(' fullname : '.$fullname);
+
+                //      if ( strpos($file,'.xml' ))
+             //   if ( $file_parts['extension'] =='xml' )
+                if ( true )
+                {
+
+                $xml = file_get_contents(storage_path() . "/SMS/".$file);
+                $items = simplexml_load_string($xml);
+
+
               //  $tel=$arr->sms->gsm ;
-                $tel=$arr[0]->gsm ;
-                $contenu=$arr[0]->texte ;
+                $tel=$items[0]->gsm;
+                $contenu=$items[0]->texte;
+              //  dd($tel);
                 Log::info('SMS reçu $tel: '.$tel);
 
                 // $contenu=$arr->sms->texte ;
 
-
                 // supprimer le fichier
-                unlink ($pathfile);
+                unlink (storage_path() . "/SMS/".$file);
 
 
 
@@ -4274,6 +4278,7 @@ $id=0;
                     'emetteur' =>  ($tel),
                     'sujet' =>  ('sms'),
                     'contenu'=>  ($contenu) ,
+                    'contenutxt'=>  ($contenu) ,
                     'mailid'=>  'sms-'.$date,
                     'viewed'=>0,
                     'statut'=>0,
@@ -4388,7 +4393,7 @@ $id=0;
 
                 }
 
-
+                }
             }
         } // for files
 
