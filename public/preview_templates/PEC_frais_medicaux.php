@@ -80,14 +80,14 @@ mysqli_query($conn,"set names 'utf8'");
 	    }
 	    //print_r($array_prest);
 		}
-		 $sqlvhq = "SELECT id,reference_medic FROM dossiers";
+		 $sqlvhq = "SELECT id,reference_medic,documents FROM dossiers";
 	$resultvhq = $conn->query($sqlvhq);
 	if ($resultvhq->num_rows > 0) {
 	    // output data of each row
 	    $array_dossier = array();
 	    while($rowvhq = $resultvhq->fetch_assoc()) {
 	        //echo "name: " . $row["name"]. " - phone_home: " . $row["phone_home"]. "<br>";
-	        $array_dossier[] = array('id' => $rowvhq["id"],'reference_medic' => trim($rowvhq["reference_medic"]));
+	        $array_dossier[] = array('id' => $rowvhq["id"],'reference_medic' => trim($rowvhq["reference_medic"]),'documents' => $rowvhq["documents"]);
 			
 			
 	    }
@@ -111,7 +111,8 @@ mysqli_query($conn,"set names 'utf8'");
 	foreach ($array_dossier as $dossier) 
 	{if (trim($dossier['reference_medic'])==$reference_medic ){
 		$id=$dossier['id'];
-	}}	
+
+	}	}
 $sign = 'non';
 	foreach ($array_docs as $doc) 
 {     if ( $id==$doc['dossier'] )
@@ -169,6 +170,16 @@ $sqlsig = "SELECT id,nom FROM docs WHERE id IN (SELECT doc FROM dossiers_docs WH
         while($rowsig = $resultsig->fetch_assoc()) {
             $array_sig[] = array('id' => $rowsig["id"],'nom' => $rowsig["nom"]  );
         }}
+ $sqldos = "SELECT id,documents FROM dossiers WHERE id=".$iddossier."";
+		$resultdos = $conn->query($sqldos);
+		if ($resultdos->num_rows > 0) {
+	    // output data of each row
+	    $detaildos = $resultdos->fetch_assoc();
+	    
+		} else {
+	    echo "0 results agent";
+		}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -576,7 +587,7 @@ echo '<option value="'.$struc["name"].'" >'.$struc["name"].'</option>';
 <?php } }?>
 
 <p class=rvps5><span class=rvts6>Document à signer: </span><span class=rvts7> <input name="doc_dossier" id="doc_dossier" placeholder=""  value="
-<?php  { if ($sign=== "oui")  {echo 'oui'; } else  {echo  'non';}}  ?> "></input></span></p>
+<?php  { if ($detaildos['documents']==='1')  {echo 'oui'; } else  {echo  'non';}}  ?> "></input></span></p>
 <p><span class=rvts10>&nbsp; </span></p>
 <p class=rvps5><span class=rvts11>Nous</span><span class=rvts12> </span><span class=rvts11>soussignés,</span><span class=rvts12> </span><span class=rvts11>Najda</span><span class=rvts12> </span><span class=rvts11>Assistance,</span><span class=rvts12> </span><span class=rvts11>nous</span><span class=rvts12> </span><span class=rvts11>engageons</span><span class=rvts12> </span><span class=rvts11>à</span><span class=rvts12> </span><span class=rvts11>prendre</span><span class=rvts12> </span><span class=rvts11>en</span><span class=rvts12> </span><span class=rvts11>charge,</span><span class=rvts12> </span><span class=rvts11>pour</span><span class=rvts12> </span><span class=rvts11>le</span><span class=rvts12> </span><span class=rvts11>compte</span><span class=rvts12> </span><span class=rvts11>de</span><span class=rvts12> </span><span class=rvts11>notre</span><span class=rvts12> </span><span class=rvts11>client</span><span class=rvts13>,</span><span class=rvts12> </span><span class=rvts11>les</span><span class=rvts12> </span><span class=rvts11>frais</span><span class=rvts12> </span><span class=rvts11>médicaux</span><span class=rvts12> </span><span class=rvts11>et</span><span class=rvts12> </span><span class=rvts11>d</span><span class=rvts14>’</span><span class=rvts11>hospitalisation</span><span class=rvts12> </span><span class=rvts11>du</span><span class=rvts12> </span><span class=rvts11>(de</span><span class=rvts12> </span><span class=rvts11>la) patient(e) ci-dessus mentionné(e)</span><span class=rvts15> </span><span class=rvts11>pour le</span><span class=rvts15> </span><span class=rvts11>montant maximal ci-dessus.</span></p>
 <p class=rvps8><span class=rvts11>Merci</span><span class=rvts15> </span><span class=rvts11>de</span><span class=rvts15> </span><span class=rvts11>nous</span><span class=rvts15> </span><span class=rvts11>adresser</span><span class=rvts15> </span><span class=rvts11>votre</span><span class=rvts15> </span><span class=rvts11>facture</span><span class=rvts15> </span><span class=rvts11>originale</span><span class=rvts15> </span><span class=rvts11>dès</span><span class=rvts15> </span><span class=rvts11>que</span><span class=rvts15> </span><span class=rvts11>possible</span><span class=rvts15> </span><span class=rvts11>(et</span><span class=rvts15> </span><span class=rvts11>au</span><span class=rvts15> </span><span class=rvts11>plus</span><span class=rvts15> </span><span class=rvts11>tard</span><span class=rvts15> </span><span class=rvts11>30</span><span class=rvts15> </span><span class=rvts11>jours</span><span class=rvts15> </span><span class=rvts11>après</span><span class=rvts15> </span><span class=rvts11>la</span><span class=rvts15> </span><span class=rvts11>sortie),</span><span class=rvts15> </span><span class=rvts16>accompagnée</span><span class=rvts17> </span><span class=rvts16>de</span><span class=rvts17> </span><span class=rvts16>tous</span><span class=rvts15> </span><span class=rvts16>les</span><span class=rvts15> </span><span class=rvts16>justificatifs</span><span class=rvts15> </span><span class=rvts11>(notamment</span><span class=rvts15> </span><span class=rvts11>articles</span><span class=rvts15> </span><span class=rvts11>de </span><span class=rvts18>pharmacie,</span><span class=rvts19> </span><span class=rvts18>laboratoire,</span><span class=rvts19> </span><span class=rvts18>notes</span><span class=rvts19> </span><span class=rvts18>d</span><span class=rvts20>’</span><span class=rvts18>honoraires,</span><span class=rvts19> </span><span class=rvts18>rapport</span><span class=rvts19> </span><span class=rvts18>médical</span><span class=rvts19> </span><span class=rvts18>avec</span><span class=rvts19> </span><span class=rvts18>codification</span><span class=rvts19> </span><span class=rvts18>précise</span><span class=rvts19> </span><span class=rvts18>des</span><span class=rvts19> </span><span class=rvts18>actes</span><span class=rvts19> </span><span class=rvts18>pratiqués…),</span><span class=rvts19> </span><span class=rvts18>à</span><span class=rvts19> </span><span class=rvts18>notre adresse</span><span class=rvts19> </span><span class=rvts18>ci-dessus,</span><span class=rvts19> </span><span class=rvts18>en</span><span class=rvts19> </span><span class=rvts18>mentionnant</span><span class=rvts19> </span><span class=rvts18>notre</span><span class=rvts19> </span><span class=rvts18>référence</span><span class=rvts19> </span><span class=rvts21>de dossier</span><span class=rvts18>.</span></p>
@@ -602,7 +613,7 @@ echo '<option value="'.$struc["name"].'" >'.$struc["name"].'</option>';
 
 <?php
 { 
-	if ($sign=== "oui") { ?>
+	if ($sign=== "oui" && $detaildos['documents']==='1') { ?>
 
 <p><span class=rvts29>Attention</span><span class=rvts30> </span><span class=rvts31>:</span><span class=rvts30> </span><span class=rvts32>Cette</span><span class=rvts30> </span><span class=rvts32>prise</span><span class=rvts30> </span><span class=rvts32>en</span><span class=rvts30> </span><span class=rvts32>charge</span><span class=rvts30> </span><span class=rvts32>ne</span><span class=rvts30> </span><span class=rvts32>sera</span><span class=rvts30> </span><span class=rvts32>valable</span><span class=rvts30> </span><span class=rvts32>que</span><span class=rvts30> </span><span class=rvts32>si</span><span class=rvts30> </span><span class=rvts32>la</span><span class=rvts30> </span><span class=rvts32>facture</span><span class=rvts30> </span><span class=rvts32>nous</span><span class=rvts30> </span><span class=rvts32>parvient</span><span class=rvts30> </span><span class=rvts32>accompagnée</span><span class=rvts30> </span><span class=rvts32>de</span><span class=rvts30> </span><span class=rvts29>l</span><span class=rvts33>’</span><span class=rvts29>original</span><span class=rvts30> </span><span class=rvts32>de</span><span class=rvts30>&nbsp;</span><span class=rvts32> </span><span class=rvts34><input name="CL_nom_doc_sig" id="CL_nom_doc_sig" placeholder=""  value="
 <?php  

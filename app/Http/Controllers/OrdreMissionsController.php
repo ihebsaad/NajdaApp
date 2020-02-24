@@ -80,7 +80,7 @@ class OrdreMissionsController extends Controller
 	        		$dataprest =array('prestataire_taxi' => $prestataireom,'affectea' => $affectea);
 	        		$pdf = PDFomme::loadView('ordremissions.pdfodmtaxi',$dataprest)->setPaper('a4', '');
 	        		$pdf->save($path.$iddoss.'/'.$name.'.pdf');
-	                $omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_taxi' => $prestataireom, 'affectea'=>$affectea]);
+	                $omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_taxi' => $prestataireom, 'affectea'=>$affectea,'idprestation'=>$omparent['idprestation']]);
 	                $result = $omtaxi->update($request->all());
 if ($omtaxi->save()) {
 
@@ -141,7 +141,7 @@ Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent
 				        $attachement->save();
 
         			// enregistrement dans la BD
-        			$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_taxi' => $presttaxi]);
+        			$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_taxi' => $presttaxi,'idprestation'=> $omparent['idprestation']]);
         			$result = $omtaxi->update($request->all());
 if ($omtaxi->save()) {
 
@@ -248,6 +248,8 @@ $newformat = $_POST['CL_heuredateRDV'];
                     'date_prestation'  => $newformat
             ]);
         			$prestation->save();
+
+$idprestation=$prestation['id'];
 if ($prestation->save()) {
 
 $par=Auth::id();
@@ -263,7 +265,7 @@ Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$do
 	                    $reqmmentite->request->add(['prestataire_taxi' => $prestataireom]);
 	                    app('App\Http\Controllers\OrdreMissionsController')->pdfodmtaxi($reqmmentite);
 
-			        	$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddossom.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossom, 'prestataire_taxi' => $prestataireom,'complete'=>1]);
+			        	$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddossom.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_taxi' => $prestataireom,'complete'=>1,'idprestation'=>$idprestation]);
 			        }
 			    	else
 			    	{
@@ -297,9 +299,10 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 	        		if (isset($_POST["prestextern"]))
 	        		{	
 	        			$prestataireom= $_POST["prestextern"];
-	        			$pdf2 = PDF4::loadView('ordremissions.pdfodmtaxi')->setPaper('a4', '');
+                                        $idprestation= $_POST["idprestextern"];                                
+                                        $pdf2 = PDF4::loadView('ordremissions.pdfodmtaxi')->setPaper('a4', '');
 	        			 if (isset($prestataireom))
-					        {$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_taxi' => $prestataireom]);}
+					        {$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_taxi' => $prestataireom,'idprestation' => $idprestation]);}
 					    	else
 					    	{
 					    		$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
@@ -411,14 +414,17 @@ $nomuser = $user->name ." ".$user->lastname ;
 
 Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
 
+
 }
+$idprestation=$prestation['id'];
 }
         			$prestomtx = $_POST["type_affectation"];
 if (isset($_POST['parent']) && ! empty($_POST['parent']))
                     {
                         $prestomtx = $omparent['prestataire_taxi'];
+                        $idprestation = $omparent['idprestation'];
                     }
-        			$omtaxi = OMTaxi::create(['prestataire_taxi'=>$prestomtx,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        			$omtaxi = OMTaxi::create(['prestataire_taxi'=>$prestomtx,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss,'idprestation'=>$idprestation]);
         		} else {
         			$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         		}
@@ -1117,7 +1123,7 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 	        		$dataprest =array('prestataire_ambulance' => $prestataireom,'affectea' => $affectea);
 	        		$pdf = PDFomme::loadView('ordremissions.pdfodmambulance',$dataprest)->setPaper('a4', '');
 	        		$pdf->save($path.$iddoss.'/'.$name.'.pdf');
-	                $omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_ambulance' => $prestataireom, 'affectea'=>$affectea]);
+	                $omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_ambulance' => $prestataireom, 'affectea'=>$affectea,'idprestation'=>$omparent['idprestation']]);
 	                $result = $omambulance->update($request->all());
                 // end bloc test
 if ($omambulance->save()) {
@@ -1178,7 +1184,7 @@ Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent
 				        $attachement->save();
 
         			// enregistrement dans la BD
-        			$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_ambulance' => $prestambulance]);
+        			$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_ambulance' => $prestambulance,'idprestation'=>$omparent['idprestation']]);
         			$result = $omambulance->update($request->all());
 if ($omambulance->save()) {
 
@@ -1348,6 +1354,7 @@ $newformat = $_POST['CL_heuredateRDV'];
                     'date_prestation' =>$newformat
             ]);
         			$prestation->save();
+$idprestation=$prestation['id'];
 if ($prestation->save()) {
 
 $par=Auth::id();
@@ -1362,7 +1369,7 @@ Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$do
 	                    $reqmmentite->request->add(['prestataire_ambulance' => $prestataireom]);
 	                    app('App\Http\Controllers\OrdreMissionsController')->pdfodmambulance($reqmmentite);
 
-			        	$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddossom.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossom, 'prestataire_ambulance' => $prestataireom,'complete'=>1]);
+			        	$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddossom.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossom, 'prestataire_ambulance' => $prestataireom,'complete'=>1,'idprestation'=>$idprestation]);
 			        }
 			    	else
 			    	{
@@ -1395,9 +1402,10 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 	        		if (isset($_POST["prestextern"]))
 	        		{	
 	        			$prestataireom= $_POST["prestextern"];
+                                        $idprestation= $_POST["idprestextern"]; 
 	        			$pdf2 = PDF4::loadView('ordremissions.pdfodmambulance')->setPaper('a4', '');
 	        			 if (isset($prestataireom))
-					        {$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_ambulance' => $prestataireom]);}
+					        {$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_ambulance' => $prestataireom,'idprestation'=> $idprestation]);}
 					    	else
 					    	{
 					    		$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
@@ -1559,14 +1567,16 @@ $nomuser = $user->name ." ".$user->lastname ;
 
 Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
 
-}}
+}
+$idprestation=$prestation['id'];}
  
         			$prestomamb = $_POST["type_affectation"];
 if (isset($_POST['parent']) && ! empty($_POST['parent']))
                     {
                         $prestomamb = $omparent['prestataire_ambulance'];
+                        $idprestation = $omparent['idprestation'];
                     }
-        			$omambulance = OMAmbulance::create(['prestataire_ambulance'=>$prestomamb,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        			$omambulance = OMAmbulance::create(['prestataire_ambulance'=>$prestomamb,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss,'idprestation'=>$idprestation]);
         		} else {
         			$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         		}
@@ -2261,7 +2271,7 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 		        		$dataprest =array('prestataire_remorquage' => $prestataireom,'affectea' => $affectea);
 		        		$pdf = PDFomme::loadView('ordremissions.pdfodmremorquage',$dataprest)->setPaper('a4', '');
 		        		$pdf->save($path.$iddoss.'/'.$name.'.pdf');
-		                $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_remorquage' => $prestataireom, 'affectea'=>$affectea]);
+		                $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_remorquage' => $prestataireom, 'affectea'=>$affectea,'idprestation'=>$omparent['idprestation']]);
 		                $result = $omremorquage->update($request->all());
 	                // end bloc test
 if ($omremorquage->save()) {
@@ -2327,7 +2337,7 @@ Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent
                     $attachement->save();
 
                     // enregistrement dans la BD
-                    $omremorquage= OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_remorquage' => $prestambulance]);
+                    $omremorquage= OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'parent' => $parent, 'complete' => 1, 'prestataire_remorquage' => $prestambulance,'idprestation'=>$omparent['idprestation']]);
                     $result = $omremorquage->update($request->all());
 if ($omremorquage->save()) {
 
@@ -2432,6 +2442,8 @@ $newformat = $_POST['CL_heuredateRDV'];
                     'date_prestation' =>$newformat
             ]);
                     $prestation->save();
+$idprestation=$prestation['id'];
+
 if ($prestation->save()) {
 
 $par=Auth::id();
@@ -2446,7 +2458,7 @@ Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$do
 	                    $reqmmentite->request->add(['prestataire_remorquage' => $prestataireom]);
 	                    app('App\Http\Controllers\OrdreMissionsController')->pdfodmremorquage($reqmmentite);
 
-			        	$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddossom.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossom, 'prestataire_remorquage' => $prestataireom,'complete'=>1]);
+			        	$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddossom.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossom, 'prestataire_remorquage' => $prestataireom,'complete'=>1,'idprestation'=>$idprestation]);
 			        }
 			    	else
 			    	{
@@ -2480,9 +2492,10 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
                 if (isset($_POST["prestextern"]))
                 {
                     $prestataireom= $_POST["prestextern"];
+$idprestation= $_POST["idprestextern"]; 
                     $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage')->setPaper('a4', '');
                     if (isset($prestataireom))
-                    {$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_remorquage' => $prestataireom]);}
+                    {$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_remorquage' => $prestataireom,'idprestation'=> $idprestation]);}
                     else
                     {
                         $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
@@ -2588,6 +2601,7 @@ $newformat = $_POST['CL_heuredateRDV'];
 'date_prestation' =>$newformat
             ]);
         			$prestation->save();
+
 if ($prestation->save()) {
 
 $par=Auth::id();
@@ -2597,14 +2611,16 @@ $nomuser = $user->name ." ".$user->lastname ;
 Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$dossieromref["reference_medic"]);
 
 }
+$idprestation=$prestation['id'];
 }
 
         			$prestomrem = $_POST["type_affectation"];
 if (isset($_POST['parent']) && ! empty($_POST['parent']))
                     {
                        $prestomrem= $omparent['prestataire_remorquage'];
+                       $idprestation = $omparent['idprestation'];
                     }
-        			$omremorquage = OMRemorquage::create(['prestataire_remorquage'=>$prestomrem,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
+        			$omremorquage = OMRemorquage::create(['prestataire_remorquage'=>$prestomrem,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss,'idprestation'=>$idprestation]);
         		} else {
         			$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
         		}
@@ -3264,6 +3280,7 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
                 if (isset($_POST["prestextern"]))
                 {
                     $prestataireom= $_POST["prestextern"];
+
                     $pdf2 = PDF4::loadView('ordremissions.pdfodmmedicinternationnal')->setPaper('a4', '');
                     if (isset($prestataireom))
                     {$ommedicinternationnal = OMMedicInternational::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);}
@@ -3691,6 +3708,19 @@ header('Content-type: application/json');
 	    	//$count = OMTaxi::where('parent',$parent)->count();
 	    	OMTaxi::where('id', $parent)->update(['dernier' => 0,'idvehic' => "",'idchauff' => ""]);
 	        $omparent=OMTaxi::where('id', $parent)->first();
+$idprestation=$omparent['idprestation'];
+if(!empty($idprestation))
+{
+                Prestation::where('id', $idprestation)->update(['effectue' => 0,'statut' => "autre",'details' => "annulation"]);
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: ' .$omparent["reference_medic"]);
+	 }       
+
+
                 $affect=$omparent["affectea"];
 	        $filename='taxi_annulation-'.$parent;
 
@@ -3733,11 +3763,23 @@ Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["tit
 	       
 
 }
- return "OM Ambulance annulée avec succès";}
+
+}
 	    // annulation om Ambulance
 	    elseif (stristr($titre,'ambulance') !== FALSE)  {
 	    	OMAmbulance::where('id', $parent)->update(['dernier' => 0,'vehicID' => "",'idambulancier1' => "",'idambulancier2' => "",'idparamed' => ""]);
 	        $omparent=OMAmbulance::where('id', $parent)->first();
+$idprestation=$omparent['idprestation'];
+if(!empty($idprestation))
+{
+                Prestation::where('id', $idprestation)->update(['effectue' => 0,'statut' => "autre",'details' => "annulation"]);
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: ' .$omparent["reference_medic"]);
+	 }   
 	        $filename='ambulance_annulation-'.$parent;
 
 	        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
@@ -3811,6 +3853,17 @@ Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["tit
 	    elseif (stristr($titre,'remorquage') !== FALSE)  {
 	    	OMRemorquage::where('id', $parent)->update(['dernier' => 0,'idvehic' => "",'idchauff' => ""]);
 	        $omparent=OMRemorquage::where('id', $parent)->first();
+$idprestation=$omparent['idprestation'];
+if(!empty($idprestation))
+{
+                Prestation::where('id', $idprestation)->update(['effectue' => 0,'statut' => "autre",'details' => "annulation"]);
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: ' .$omparent["reference_medic"]);
+	 } 
 	        $filename='remorquage_annulation-'.$parent;
 
 	        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);

@@ -398,17 +398,17 @@ function custom_echo($x, $length)
                 <ul class="nav  nav-tabs">
 
                     <li class="nav-item active">
-                        <a class="nav-link active show" href="#tab32" data-toggle="tab"  onclick=";showinfos32();hideinfos33();hideinfos34();">
+                        <a class="nav-link active show" href="#tab32" data-toggle="tab"  onclick=";showinfos2();hideinfos();hideinfos3();">
                             <i class="fas fa-lg  fa-user-md"></i>  Recherche des Prestataires
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#tab33" data-toggle="tab"  onclick="showinfos33();hideinfos32();hideinfos34();">
+                        <a class="nav-link" href="#tab33" data-toggle="tab"  onclick="showinfos3();hideinfos();hideinfos2();">
                             <i class="fas  fa-lg fa-users"></i>  Optimiseur
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link   " href="#tab34" data-toggle="tab"  onclick="showinfos34();hideinfos32();hideinfos33();">
+                        <a class="nav-link   " href="#tab34" data-toggle="tab"  onclick="showinfos();hideinfos2();hideinfos3();">
                             <i class="fas fa-lg  fa-ambulance"></i>  Prestations
                         </a>
                     </li>
@@ -3046,23 +3046,23 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
         $('.telsclients').css('display','none');
     }
 
-    function hideinfos34() {
-        $('#tab34').css('display','none');
+    function hideinfos() {
+        $('#tab31').css('display','none');
     }
-    function hideinfos32() {
+    function hideinfos2() {
         $('#tab32').css('display','none');
     }
-    function hideinfos33() {
+    function hideinfos3() {
         $('#tab33').css('display','none');
     }
-    function showinfos34() {
-        $('#tab34').css('display','block');
+    function showinfos() {
+        $('#tab31').css('display','block');
     }
 
-    function showinfos32() {
+    function showinfos2() {
         $('#tab32').css('display','block');
     }
-    function showinfos33() {
+    function showinfos3() {
         $('#tab33').css('display','block');
     }
     function hideinfos81()
@@ -3996,10 +3996,13 @@ function keyUpHandler(){
         {
           var type_affectation = $("#type_affectation").val();
           var nomprestextern = "";
+          var idprestextern= "";
         }
         else {
             var type_affectation = "";
             var nomprestextern = $("#prestselected").val();
+            var idprestextern = $("#idprestation-m").val();
+
         }
 
 
@@ -4038,7 +4041,7 @@ function keyUpHandler(){
                 method:"POST",
                 //'&_token='+_token
 
-                data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&affectea='+affectea+'&type_affectation='+type_affectation+'&prestextern='+nomprestextern+'&templatedocument='+tempdoc+'&parent='+idparent+'&idMissionOM='+idMissionOM,
+                data:$("#omfilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&affectea='+affectea+'&type_affectation='+type_affectation+'&prestextern='+nomprestextern+'&idprestextern='+idprestextern+'&templatedocument='+tempdoc+'&parent='+idparent+'&idMissionOM='+idMissionOM,
 
                 success:function(data){
                      console.log(data);
@@ -5927,6 +5930,8 @@ $(document).ready(function(){
            });
 
   });
+
+
 
   </script>
 @stop
