@@ -543,6 +543,7 @@ class LoginController extends Controller
 
                     $dossiers=Dossier::where('affecte', $iduser)
                         ->where('current_status', 'inactif')
+                        ->where('statut','<>',5)
                         ->get();
                     //     Dossier::setTimestamps(false);
 

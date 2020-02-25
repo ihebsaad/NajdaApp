@@ -333,6 +333,7 @@ class HomeController extends Controller
 
                 // affecter dossiers ouverts inactifs
                 $dossiers=Dossier::where('current_status','inactif')
+                    ->where('statut','<>',5)
                     ->get();
            //     Dossier::setTimestamps(false);
 
@@ -503,6 +504,7 @@ class HomeController extends Controller
 
                 // affecter dossiers ouverts inactifs
                 $dossiers=Dossier::where('current_status','inactif')
+                    ->where('statut','<>',5)
                     ->get();
             //    Dossier::setTimestamps(false);
 
@@ -1000,6 +1002,7 @@ return redirect('roles');
           // affecter dossiers ouverts inactifs
 
             $dossiers=Dossier::where('current_status','inactif')
+                ->where('statut','<>',5)
                 ->get();
        //     Dossier::setTimestamps(false);
 
@@ -1024,6 +1027,7 @@ return redirect('roles');
         {
             // affecter dossiers ouverts inactifs
             $dossiers=Dossier::where('current_status','inactif')
+                ->where('statut','<>',5)
                 ->get();
          //   Dossier::setTimestamps(false);
 

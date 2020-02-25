@@ -396,7 +396,7 @@ class UsersController extends Controller
              //     Dossier::setTimestamps(false);
 
                   Dossier::where('current_status','inactif')
-                      //  ->where('statut','<>',5)
+                        ->where('statut','<>',5)
                       ->update(array('affecte' => Auth::id() ));
                 ///  'updated_at' => false
                   /// ->timestamps = false;
@@ -615,7 +615,7 @@ class UsersController extends Controller
 
          //   Dossier::setTimestamps(false);
            $dossiers=Dossier::where('current_status','inactif')
-                  //  ->where('statut','<>',5)
+                   ->where('statut','<>',5)
                     ->get();
          //   Dossier::setTimestamps(true);
 

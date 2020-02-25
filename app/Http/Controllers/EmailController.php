@@ -6584,9 +6584,11 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
             $tels =   Adresse::where('nature', 'tel')
                 ->where('parent',$cl)
-                ->pluck('champ');
+                ->where('typetel','Mobile')
+                ->get();
+           //     ->pluck('champ');
 
-            $tels =  $tels->unique();
+           // $tels =  $tels->unique();
 
         }
 
@@ -6607,8 +6609,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
 
                 $tels =   Adresse::where('nature', 'telinterv')
+                    ->where('typetel','Mobile')
                     ->where('parent',$prest)
-                    ->pluck('champ');
+                 //   ->pluck('champ');
+                    ->get();
 
                 $tels =  $tels->unique();
             }

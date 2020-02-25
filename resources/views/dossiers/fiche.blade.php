@@ -2509,19 +2509,19 @@ use  \App\Http\Controllers\PrestatairesController;
                                 <option value="3001">3001</option>
                                 <?php foreach($phonesDossier   as $phone)
                                 {
-                                    echo '<option class="telsassures" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
+                                    echo '<option class="telsassures" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.' | '.$phone->remarque.')</option>';
 
                                 }
                                 ?>
                                 <?php foreach($phonesCl   as $phone)
                                 {
-                                    echo '<option class="telsclients" value="'.$phone->champ.'">'.$phone->champ.'   '.$phone->nom.' '.$phone->prenom.' </option>';
+                                    echo '<option class="telsclients" value="'.$phone->champ.'">'.$phone->champ.'   ('.$phone->nom.' '.$phone->prenom.' | '.$phone->remarque.') </option>';
 
                                 }
                                 ?>
                                 <?php foreach($phonesInt   as $phone)
                                 {
-                                    echo '<option class="telsintervs" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.')</option>';
+                                    echo '<option class="telsintervs" value="'.$phone->champ.'">'.$phone->champ.'  ('.$phone->nom.' '.$phone->prenom.' | '.$phone->remarque.')</option>';
 
                                 }
                                 ?>
