@@ -27,10 +27,10 @@
     <div class="uper">
         <div class="portlet box grey">
             <div class="row">
-                <div class="col-lg-6"><h4>Prestataires</h4></div>
+                <div class="col-lg-6"><h4>Liste des intervenants</h4></div>
                 <div class="col-lg-6">
-                    <a    href="{{route('prestataires.create',['id'=>0])}}" class="btn btn-md btn-success"   ><b><i class="fas fa-plus"></i> Ajouter un Prestataire</b></a>&nbsp; &nbsp;
-                    <a class="btn btn-default" id="recherchertp" href="{{url('/prestataire/tousprestataires')}}"> Afficher tous les prestataires</a>
+                    <a    href="{{route('prestataires.create',['id'=>0])}}" class="btn btn-md btn-success"   ><b><i class="fas fa-plus"></i> Ajouter un Intervenant</b></a>&nbsp; &nbsp;
+                    <a class="btn btn-default" id="recherchertp" href="{{url('/prestataire/tousprestataires')}}"> Afficher tous les intervenants</a>
                 </div>
             </div>
         </div>

@@ -27,22 +27,26 @@
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
             <tr id="headtable">
-                <th style="width:20%">Nom</th>
-                <th style="width:15%">Groupe</th>
+                <th style="width:15%">Nom</th>
+                <th style="width:10%">Groupe</th>
                 <th style="width:10%">Pays</th>
-                <th style="width:20%">Nature</th>
+                <th style="width:10%">Nature</th>
                 <th style="width:10%">Statut</th>
                 <th style="width:10%"><small>Lang 1</small></th>
                 <th style="width:10%"><small>Lang 2</small></th>
+                <th style="width:5%"><small>Dossiers</small></th>
+                <th style="width:5%"><small>Ouverts </small></th>
               </tr>
             <tr>
-                <th style="width:20%">Nom</th>
-                <th style="width:15%">Groupe</th>
+                <th style="width:15%">Nom</th>
+                <th style="width:10%">Groupe</th>
                 <th style="width:10%">Pays</th>
-                <th style="width:20%">Nature</th>
+                <th style="width:10%">Nature</th>
                 <th style="width:10%">Statut</th>
                 <th style="width:10%">Lang 1</th>
                 <th style="width:10%">Lang 2</th>
+                <th style="width:5%">Dossiers</th>
+                <th style="width:5%">Ouverts </th>
              </tr>
             </thead>
             <tbody>
@@ -51,10 +55,10 @@
             @foreach($clients as $client)
 
                 <tr>
-                    <td style="width:20%"><a href="{{action('ClientsController@view', $client['id'])}}" >{{$client->name}}</a></td>
-                    <td style="width:15%"><?php $groupeid= $client['groupe']; echo ClientsController::GroupeById($groupeid);?> </td>
+                    <td style="width:15%"><a href="{{action('ClientsController@view', $client['id'])}}" >{{$client->name}}</a></td>
+                    <td style="width:10%"><?php $groupeid= $client['groupe']; echo ClientsController::GroupeById($groupeid);?> </td>
                     <td style="width:10%"><small>{{$client->pays2}}</small></td>
-                    <td style="width:20%">
+                    <td style="width:10%">
 <?php  $nature = $client['nature'];
                       //echo  $listen[1];
  if (strlen($nature)==1){
@@ -74,7 +78,9 @@
                     <td style="width:10%"><?php if ($client->annule ==0){echo 'Actif';}else{echo 'Inactif';} ?></td>
                     <td style="width:10%"><small>{{$client->langue1}}</small></td>
                     <td style="width:10%"><small>{{$client->langue2}}</small></td>
-					
+                    <td style="width:5%"><a href="{{action('ClientsController@dossiers', $client['id'])}}" ><?php echo ClientsController::CountDossCL( $client['id']); ?></a> </td>
+                    <td style="width:5%"><a href="{{action('ClientsController@ouverts', $client['id'])}}" ><?php echo ClientsController::CountDossCLouverts( $client['id']); ?></a> </td>
+
                 </tr>
             @endforeach
             </tbody>

@@ -5,6 +5,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
+    <?php use \App\Http\Controllers\ClientsController;     ?>
 
 
     <div class="form-group">
@@ -17,6 +18,26 @@
             <div class="modal-header">Client</div>
         </div>
         <div class="modal-body">
+
+
+            <div class="row"  style="margin-bottom:30px">
+            <div class="col-md-2">
+                <a href="{{action('ClientsController@dossiers', $client['id'])}}" >Total Dossiers  : <?php echo ClientsController::CountDossCL( $client['id']); ?> </a> |  ( <a href="{{action('ClientsController@ouverts', $client['id'])}}" > Ouverts : <?php echo ClientsController::CountDossCLouverts( $client['id']); ?> </a>)
+            </div>
+                <div class="col-md-2">
+                   Mixtes : <?php echo ClientsController::CountDossCLMixte( $client['id']); ?>
+                </div>
+                <div class="col-md-2">
+                    Médicaux : <?php echo ClientsController::CountDossCLMedic( $client['id']); ?>
+                </div>
+                <div class="col-md-2">
+                    Techniques : <?php echo ClientsController::CountDossCLTechnique( $client['id']); ?>
+                </div>
+                <div class="col-md-2">
+                    Transport : <?php echo ClientsController::CountDossCLTransp( $client['id']); ?>
+                </div>
+
+            </div>
 
             <div class="row">
                 <div class="col-md-4">

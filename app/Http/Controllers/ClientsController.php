@@ -45,7 +45,7 @@ class ClientsController extends Controller
     }
 
  
- 
+
     /**
      * Show the form for creating a new resource.
      *
@@ -438,8 +438,85 @@ class ClientsController extends Controller
         // $dossier->$champ =   $val;
         Adresse::where('id', $id)->update(array($champ => $val));
 
+    }
 
 
+
+
+
+    public function dossiers($id)
+    {
+        $dossiers = Dossier::orderBy('created_at', 'desc')->where('customer_id',$id)
+          //  ->where('current_status','<>','Cloture')
+            ->get();
+        return view('clients.dossiers', ['dossiers' => $dossiers,'idcl'=>$id] );
+    }
+
+
+    public function ouverts($id)
+    {
+        $dossiers = Dossier::orderBy('created_at', 'desc')->where('customer_id',$id)
+              ->where('current_status','<>','Cloture')
+            ->get();
+        return view('clients.ouverts', ['dossiers' => $dossiers,'idcl'=>$id] );
+    }
+
+
+    public static function CountDossCLouverts ($idcl)
+    {
+        $Cdossiers = Dossier::where('customer_id',$idcl)
+            ->where('current_status','<>','Cloture')
+            ->count();
+        return $Cdossiers;
+    }
+
+
+public static function CountDossCL ($idcl)
+{
+    $Cdossiers = Dossier::where('customer_id',$idcl)
+       // ->where('current_status','<>','Cloture')
+
+        ->count();
+return $Cdossiers;
+}
+
+    public static function CountDossCLMedic ($idcl)
+    {
+        $Cdossiers = Dossier::where('customer_id',$idcl)
+         //   ->where('current_status','<>','Cloture')
+            ->where('type_dossier','Medical')
+            ->count();
+        return $Cdossiers;
+    }
+
+    public static function CountDossCLTechnique ($idcl)
+    {
+        $Cdossiers = Dossier::where('customer_id',$idcl)
+         //   ->where('current_status','<>','Cloture')
+            ->where('type_dossier','Technique')
+            ->count();
+        return $Cdossiers;
+    }
+
+
+    public static function CountDossCLMixte ($idcl)
+    {
+        $Cdossiers = Dossier::where('customer_id',$idcl)
+        //    ->where('current_status','<>','Cloture')
+            ->where('type_dossier','Mixte')
+            ->count();
+        return $Cdossiers;
+    }
+
+
+    public static function CountDossCLTransp ($idcl)
+    {
+        $Cdossiers = Dossier::where('customer_id',$idcl)
+        //    ->where('current_status','<>','Cloture')
+            ->where('type_dossier','Transport')
+            ->count();
+
+        return $Cdossiers;
     }
 
 

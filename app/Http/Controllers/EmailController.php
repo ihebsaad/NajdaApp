@@ -6149,12 +6149,12 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         if($files)
         {
          foreach($files as $file) {
-    
+
           $fichier_ext=$file->getClientOriginalExtension();
 
           if( strtolower($fichier_ext) != 'pdf' )
           {
-            // si une image 
+            // si une image
            if( in_array( strtolower($fichier_ext),  $image_ext)  )
               {
                 /*\File::copy($file->getRealPath(), storage_path().'/Envoyes/'.$id.'/'.$file->getClientOriginalName());*/
@@ -6371,6 +6371,49 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
 
     }
+
+
+
+
+    public static function export_pdf_send2(Request $request)
+    {
+        $id = $request->get('envoye');
+
+
+        $envoye = Envoye::find($id);
+        $from=$envoye->emetteur;
+        $contenu=$envoye->contenu;
+        $fromname='';
+        $to=array();
+        array_push( $to,$envoye->destinataire);
+
+        // Send data to the view using loadView function of PDF facade
+        $pdf = PDF2::loadView('entrees.pdfsend', ['envoye' => $envoye,'from'=>$from,'fromname'=>$fromname,'to'=>$to,'contenu'=>$contenu])->setPaper('a4', '');
+
+        $path= storage_path()."/Envoyes/";
+
+        if (!file_exists($path.$id)) {
+            mkdir($path.$id, 0777, true);
+        }
+        $filename=$envoye->description;
+        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+        $name='ENV - '.$name;
+        // If you want to store the generated pdf to the server then you can use the store function
+        $pdf->save($path.$id.'/'.$name.'.pdf');
+        $path2='/Envoyes/'.$id.'/'.$name.'.pdf';
+
+        $attachement = new Attachement([
+
+            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>1,'envoye_id'=>$id,'parent'=>$id,
+        ]);
+        $attachement->save();
+
+
+
+
+    }
+
+
 
 
     public function garde_pdf($sujet,$fax,$date,$nom)
@@ -6614,7 +6657,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
                  //   ->pluck('champ');
                     ->get();
 
-                $tels =  $tels->unique();
+               // $tels =  $tels->unique();
             }
 
 
@@ -6626,9 +6669,9 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
             $tels =   Adresse::where('nature', 'teldoss')
                 ->where('typetel','Mobile')
                 ->where('parent',$id)
-                ->pluck('champ');
+                ->get();
 
-            $tels =  $tels->unique();
+        //    $tels =  $tels->unique();
 
             $nomabn=app('App\Http\Controllers\DossiersController')->FullnameAbnDossierById($id);
 

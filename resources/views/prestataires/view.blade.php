@@ -11,6 +11,17 @@
 
     <section class="content form_layouts">
 
+        <div class="row pull-right">
+
+        <div class="col-md-6">
+            <a    href="{{route('prestataires.create',['id'=>0])}}" class="btn btn-md btn-success"   ><b><i class="fas fa-plus"></i> Ajouter un Intervenant</b></a>&nbsp; &nbsp;
+        </div>
+        <div class="col-md-6">
+        <a class="btn btn-default" id="recherchertp" href="{{url('/prestataires')}}"> Liste des intervenants</a>
+        </div>
+
+        </div>
+
         <div class="container-fluid">
     <div class="row" style="margin-top:10px">
         <div class="col-lg-12">
@@ -602,12 +613,19 @@
                                             <option value=""></option>
                                             <?php if ( count($relations2) > 0 ) {
 
-                                            //foreach($relations2 as $rel  )
-                                             //  {
-                                                   foreach($specialites2 as $sp){?>
+                                              /*
+                                            foreach($specialites2 as $sp){?>
                                                     <option     value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                            <?php }
+                                            */
+
+                                            foreach($relations2 as $rel  ){
+                                                foreach($specialites2 as $sp){
+                                            if($rel->specialite==$sp->id) {?>
+                                                    <option      value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
                                                 <?php }
-                                          //  }
+                                                }
+                                            }
 
 
 

@@ -57,8 +57,8 @@
       <?php if($type!='libre') {?>
         <select id="destinataire" class="form-control" name="destinataire" >
         <option value=""></option>
-            <?php foreach($tels as $tel){ ?>
-            <option value="<?php echo $tel;?>"><?php echo $tel;?></option>
+            <?php foreach($tels as $tel){   ?>
+            <option value="<?php echo $tel->champ;?>"><?php echo $tel->champ .'( '.$tel->nom.'  '.$tel->prenom.' | '.$tel->remarque.' )';?></option>
             <?php } ?>
         </select>
         <?php  }else{?>

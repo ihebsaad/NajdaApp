@@ -180,6 +180,18 @@
 
             });
 
+
+            function delay(callback, ms) {
+                var timer = 0;
+                return function() {
+                    var context = this, args = arguments;
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        callback.apply(context, args);
+                    }, ms || 0);
+                };
+            }
+
 // Apply the search
             table.columns().every(function (index) {
                 $('#mytable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {

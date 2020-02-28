@@ -35,11 +35,11 @@
 
         <?php $type= $envoye['type'];
             if ($type=='email') { echo ' <H3 style="margin-left:20px;margin-bottom:10px">  <i class="fa fa-lg fa-envelope"></i> Email envoyé</H3>'; }
-            if ($type=='sms') { echo ' <H3 style="margin-left:20px;margin-bottom:10px"> <i class="fas fa-lg  fa-sms"></i> SMS envpyé</H3>'; }
+            if ($type=='sms') { echo ' <H3 style="margin-left:20px;margin-bottom:10px"> <i class="fas fa-lg  fa-sms"></i> SMS envoyé</H3>'; }
             if ($type=='fax') { echo ' <H3 style="margin-left:20px;margin-bottom:10px"> <i class="fa fa-lg fa-fax"></i> FAX envoyé</H3>'; }
 
     ?>
-            <form method="post" action="{{action('EmailController@send')}}"  enctype="multipart/form-data">
+
                 <div class="form-group">
                     {{ csrf_field() }}
                     <label for="destinataire">destinataire:</label>
@@ -100,6 +100,8 @@
 
                 <?php } ?>
 
+                <button class="btn btn-success " id="genererpdf"> Générer le PDF de l'email </button>
+
             <?php use App\Attachement ;?>
 
 
@@ -141,7 +143,7 @@
 
 
 
-             </form>
+
 
         </div>
     </div>
@@ -180,6 +182,23 @@
                 }
             });
 
+            $('#genererpdf').click(function() {
+
+
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: "{{ route('emails.createpdf') }}",
+                    method: "POST",
+                    data: {   envoye:<?php echo $envoye['id']; ?>, _token: _token},
+                    success: function (data) {
+
+                        location.reload();
+
+                    }
+                });
+
+
+            });
 
 
         });

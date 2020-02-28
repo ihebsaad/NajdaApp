@@ -872,13 +872,13 @@ $interv = PrestationsController::PrestById($prest);
 <td style="font-size:12px;width:15%"> <button onclick="init('<?php echo $prest;?>','<?php  echo addslashes( PrestatairesController::ChampById('name',$prest).' '. PrestatairesController::ChampById('prenom',$prest))  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> Prestation</button></td></tr>
 
 <?php }
-
-}
 array_push($listepr,$pr['prestataire_id']);
 
 }
+
+}
     ?>
-                   </tbody>
+     </tbody>
 
                </table><br><br><br>
 

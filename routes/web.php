@@ -161,7 +161,7 @@ Route::get('/emails/checksmsxml', 'EmailController@checksmsxml');
 Route::get('/emails/checkboiteperso', 'EmailController@checkboiteperso');
 Route::get('/emails/folder/{foldername}', 'EmailController@folder');
 Route::post('/emails/accuse', 'EmailController@accuse')->name('emails.accuse');
-
+Route::post('/emails/createpdf', 'EmailController@export_pdf_send2')->name('emails.createpdf');
 
 Route::get('/emails/test', 'EmailController@test');
 Route::get('/emails/sms/{id}', 'EmailController@sms');
@@ -245,6 +245,8 @@ Route::get('/clients/view/{id}', 'ClientsController@view');
 Route::get('/clients/destroy/{id}', 'ClientsController@destroy');
 Route::get('/clients/deleteaddress/{id}', 'ClientsController@deleteaddress')->name('clients.deleteaddress');
 Route::post('/clients/updateaddress', 'ClientsController@updateaddress')->name('clients.updateaddress');
+Route::get('/clients/dossiers/{id}', 'ClientsController@dossiers')->name('clients.dossiers');
+Route::get('/clients/ouverts/{id}', 'ClientsController@ouverts')->name('clients.ouverts');
 
 
 /*** Cities -> Gouvernorats  **/
