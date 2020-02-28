@@ -1620,7 +1620,7 @@ $("input[list='lparamed']").focusin( function (event) {
 	  for(var i = 0; i < options.length; i++) {
 	    if(options[i].innerText === val) {
 	      // An item was selected from the list
-	      document.getElementById("vehicID").value = options[i].getAttribute("vehicID");
+              document.getElementById("vehicID").value = options[i].getAttribute("vehicID");
 	      break;
 	    }
 	  }

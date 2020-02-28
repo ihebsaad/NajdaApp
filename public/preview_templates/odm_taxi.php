@@ -372,7 +372,7 @@ header("Content-Type: text/html;charset=UTF-8");
 				<span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">        </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">K</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">m approximatif</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">&#xa0;</span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">: </span><span style="font-family:'Times New Roman'; letter-spacing:-0.35pt"> </span>
 <input name="CL_km_approximatif" type="number" id="CL_km_approximatif" min="0" max="10000" <?php if (isset($detailom)) { if (isset($detailom['CL_km_approximatif'])) {echo "value='".$detailom['CL_km_approximatif']."'";}} ?> >
 				<span style="font-family:'Times New Roman'; letter-spacing:-0.35pt">   </span><span style="font-family:'Times New Roman'; font-weight:bold">     </span><span style="font-family:'Times New Roman'; font-weight:bold">T</span><span style="font-family:'Times New Roman'; font-weight:bold">arif annoncé</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">? </span>
-<input name="CL_tarif" type="number" id="CL_tarif" <?php if (isset($detailom)) { if (isset($detailom['CL_tarif'])) {echo "value='".$detailom['CL_tarif']."'";}} ?> >
+<input name="CL_tarif" type="number" id="CL_tarif"  <?php if (isset($detailom)) { if (isset($detailom['CL_tarif'])) {echo "value='".$detailom['CL_tarif']."'";}} ?> >
 				<span style="font-family:'Times New Roman'; font-weight:bold">                                     </span></p>
 <?php  // Si client IMA
 if (isset($detailom))

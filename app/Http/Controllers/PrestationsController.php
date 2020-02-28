@@ -192,9 +192,9 @@ class PrestationsController extends Controller
                     ->update(['derniere_prestation' => $date]);
 
             // Suppression de la liste 2 de la fiche de dossier (Intervenants Ajoutés Manuellement)
-            Intervenant::where('prestataire_id', $prest)
+            /*Intervenant::where('prestataire_id', $prest)
                 ->where('dossier', $iddoss)
-                ->delete();
+                ->delete();*/
 
 
             return $id;

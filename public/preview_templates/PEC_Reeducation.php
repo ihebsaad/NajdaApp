@@ -2,6 +2,7 @@
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['prest__reeduc'])) {$prest__reeduc=$_GET['prest__reeduc'];}
+if (isset($_GET['id__prestataire'])) {$id__prestataire=$_GET['id__prestataire'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['CL_text_client'])) {$CL_text_client=$_GET['CL_text_client'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
@@ -64,7 +65,7 @@ if (!$conn) {
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
-$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier.") AND (id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 61) OR id IN (SELECT prestataire_id FROM specialites_prestataires WHERE specialite = 31))";
+$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1) AND (id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 61) OR id IN (SELECT prestataire_id FROM specialites_prestataires WHERE specialite = 31))";
 
     $resultvh = $conn->query($sqlvh);
     if ($resultvh->num_rows > 0) {
@@ -332,11 +333,11 @@ mysqli_query($conn,"set names 'utf8'");
             <?php
 foreach ($array_prest as $prest) {
     
-    echo '<option value="'.$prest["name"].'" >'.$prest["name"].'</option>';
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';
 }
 ?>
 </span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+<p class=rvps1><span class=rvts2><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <h1 class=rvps2><span class=rvts0><span class=rvts3><br></span></span></h1>
@@ -404,6 +405,22 @@ foreach ($array_prest as $prest) {
 /*    $("#CL_montant_total").on("change paste keyup", function() {
    alert($(this).val()); 
 });*/
+document.querySelector('input[list="prest__reeduc"]').addEventListener('input', onInput);
+
+	function onInput(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
+	      break;
+	    }
+	  }
+	}
 </script>
 </body></html>
 <?php
