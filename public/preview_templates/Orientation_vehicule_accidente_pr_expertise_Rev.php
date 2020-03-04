@@ -2,7 +2,9 @@
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['inter__garage'])) {$inter__garage=$_GET['inter__garage'];}
+if (isset($_GET['id__prestataire'])) {$id__prestataire=$_GET['id__prestataire'];}
 if (isset($_GET['inter__expert'])) {$inter__expert=$_GET['inter__expert'];}
+if (isset($_GET['id__prestataire1'])) {$id__prestataire1=$_GET['id__prestataire1'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
 if (isset($_GET['vehicule_marque'])) {$vehicule_marque=$_GET['vehicule_marque'];}
@@ -63,7 +65,7 @@ if (!$conn) {
 mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
-$sqlvha = "SELECT id,name,prenom,civilite,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier.") AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 23)";
+$sqlvha = "SELECT id,name,prenom,civilite,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 23)";
     $resultvha = $conn->query($sqlvha);
     if ($resultvha->num_rows > 0) {
 
@@ -71,7 +73,7 @@ $sqlvha = "SELECT id,name,prenom,civilite,phone_home,ville,ville_id FROM prestat
         while($rowvha = $resultvha->fetch_assoc()) {
             $array_presta[] = array('id' => $rowvha["id"],"name" => $rowvha["name"] ,"prenom" => $rowvha["prenom"],"civilite" => $rowvha["civilite"]);
         } }
-$sqlvh = "SELECT id,name,phone_home,ville,prenom,civilite,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier.") AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
+$sqlvh = "SELECT id,name,phone_home,ville,prenom,civilite,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1 ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
     $resultvh = $conn->query($sqlvh);
     if ($resultvh->num_rows > 0) {
 
@@ -310,6 +312,7 @@ $sqltel = "SELECT champ,nom,prenom FROM adresses WHERE parent =".$iddossier." AN
         .list4 {text-indent: 0px; padding: 0; margin: 0 0 0 48px; list-style-position: outside; list-style-type: square;}
         .list5 {text-indent: 0px; padding: 0; margin: 0 0 0 48px; list-style-position: outside; list-style-type: disc;}
         --></style>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 </head>
 <body>
 <form id="formchamps">
@@ -329,10 +332,10 @@ $sqltel = "SELECT champ,nom,prenom FROM adresses WHERE parent =".$iddossier." AN
 foreach ($array_prest as $prest) {
     
   //  echo "<option value='".$prest['civilite']." ".$prest['prenom']." ".$prest['name']."' >".$prest['civilite']." ".$prest['prenom']." ".$prest['name']."</option>";
-echo '<option value="'.$prest['civilite'].' '.$prest['prenom'].' '.$prest['name'].'">'.$prest["civilite"].' '.$prest["prenom"].''.$prest["name"].'</option>';
+      echo '<option value="'.$prest["civilte"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';
 }
 ?>
-</span></p>
+</span><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <h1 class=rvps2><span class=rvts0><span class=rvts3><br></span></span></h1>
 <p class=rvps3><span class=rvts4>Orientation de véhicule accidenté</span></p>
@@ -363,10 +366,11 @@ foreach ($array_tel as $tel) {
 foreach ($array_presta as $presta) {
     
  // echo "<option value='".$presta['prenom']." ".$presta['name']."' >".$presta['prenom']." ".$presta['name']."</option>";
-echo '<option value="'.$presta['prenom'].' '.$presta['name'].'">'.$presta["prenom"].''.$presta["name"].'</option>';
+ echo '<option value="'.$presta["prenom"].''.$presta["name"].'" id="'.$presta["id"].'" >'.$presta["prenom"].''.$presta["name"].'</option>';
  }
 ?>
-</span><span class=rvts7>passera à votre garage pour expertiser le véhicule le <input name="CL_date_heure_exp" placeholder="Date et heure" value="<?php if(isset ($CL_date_heure_exp)) echo $CL_date_heure_exp; ?>"></input></span></li>
+
+</span><input type="hidden" name="id__prestataire1" id="id__prestataire1"  value="<?php if(isset ($id__prestataire1)) echo $id__prestataire1; ?>"></input><span class=rvts7>passera à votre garage pour expertiser le véhicule le <input name="CL_date_heure_exp" placeholder="Date et heure" value="<?php if(isset ($CL_date_heure_exp)) echo $CL_date_heure_exp; ?>"></input></span></li>
 </ul>
 <p class=rvps7><span class=rvts7><br></span></p>
 <p class=rvps7><span class=rvts10>Notre référence dossier :</span><span class=rvts7><input name="reference_medic" placeholder="reference" value="<?php if(isset ($reference_medic)) echo $reference_medic; ?>"></input> | <input name="subscriber_lastname2" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname2)) echo $subscriber_lastname2; ?>"></input> <input name="subscriber_name2" id="subscriber_name2" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name2)) echo $subscriber_name2; ?>" /> </span></p>
@@ -386,6 +390,42 @@ echo '<option value="'.$presta['prenom'].' '.$presta['name'].'">'.$presta["preno
 <p><span class=rvts15>Plateau d</span><span class=rvts16>’</span><span class=rvts15>assistance technique </span></p>
 <p><span class=rvts15><br></span></p>
 <p><span class=rvts17><br></span></p>
+</form>
+<script type="text/javascript">
+document.querySelector('input[list="inter__garage"]').addEventListener('input', onInput);
+
+	function onInput(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
+	      break;
+	    }
+	  }
+	}
+document.querySelector('input[list="inter__expert"]').addEventListener('input', onInput1);
+
+	function onInput1(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("id__prestataire1").value = options[i].getAttribute("id");
+	      break;
+	    }
+	  }
+	}
+</script>
+
 </body></html>
 <?php
         }

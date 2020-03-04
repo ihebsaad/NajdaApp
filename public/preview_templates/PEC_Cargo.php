@@ -2,7 +2,9 @@
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['prest__transitaire'])) {$prest__transitaire=$_GET['prest__transitaire'];}
+if (isset($_GET['id__prestataire'])) {$id__prestataire=$_GET['id__prestataire'];}
 if (isset($_GET['inter__remor'])) {$inter__remor=$_GET['inter__remor'];}
+if (isset($_GET['id__prestataire1'])) {$id__prestataire1=$_GET['id__prestataire1'];}
 if (isset($_GET['CL_date_om_remorquage'])) {$CL_date_om_remorquage=$_GET['CL_date_om_remorquage'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['CL_text_client'])) {$CL_text_client=$_GET['CL_text_client'];}
@@ -71,7 +73,7 @@ mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires transitaire ayant prestations dans dossier
 
-$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 40)";
+$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 40)";
 
     $resultvh = $conn->query($sqlvh);
     if ($resultvh->num_rows > 0) {
@@ -81,7 +83,7 @@ $sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN
             $array_prest[] = array('id' => $rowvh["id"],"name" => $rowvh["name"]  );
         }
 
-$sqlvha = "SELECT id,name,prenom,civilite,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier.") AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 1)";
+$sqlvha = "SELECT id,name,prenom,civilite,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 1)";
 
     $resultvha = $conn->query($sqlvha);
     if ($resultvha->num_rows > 0) {
@@ -370,11 +372,11 @@ $sqltel = "SELECT champ,nom,prenom FROM adresses WHERE parent =".$iddossier." AN
             <?php
 foreach ($array_prest as $prest) {
     
-    echo '<option value="'.$prest["name"].'" >'.$prest["name"].'</option>';
+    echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';
 }
 ?>
 </span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+<p class=rvps1><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><span class=rvts2><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <h1 class=rvps2><span class=rvts0><span class=rvts3><br></span></span></h1>
 <p class=rvps1><span class=rvts2><br></span></p>
@@ -426,10 +428,10 @@ foreach ($array_tel as $tel) {
         <datalist id="inter__remor">
             <?php
 foreach ($array_presta as $presta) {
-    
-echo '<option value="'.$presta['civilite'].' '.$presta['prenom'].' '.$presta['name'].'">'.$presta["civilite"].' '.$presta["prenom"].''.$presta["name"].'</option>';}
+   echo '<option value="'.$presta["civilte"].''.$presta["prenom"].''.$presta["name"].'" id="'.$presta["id"].'" >'.$presta["civilite"].''.$presta["prenom"].''.$presta["name"].'</option>';
+}
 ?>
-</span><span class=rvts7> vers le port de Rades le « </span><span class=rvts14></span><span class=rvts7> <input name="CL_date_om_remorquage" placeholder="text" value="<?php if(isset ($CL_date_om_remorquage)) echo $CL_date_om_remorquage; ?>"></input>». </span></p>
+</span><span class=rvts7><input type="hidden" name="id__prestataire1" id="id__prestataire1"  value="<?php if(isset ($id__prestataire1)) echo $id__prestataire1; ?>"></input> vers le port de Rades le « </span><span class=rvts14></span><span class=rvts7> <input name="CL_date_om_remorquage" placeholder="text" value="<?php if(isset ($CL_date_om_remorquage)) echo $CL_date_om_remorquage; ?>"></input>». </span></p>
 <p class=rvps7><span class=rvts8><br></span></p>
 <p class=rvps5><span class=rvts9>Merci de nous adresser votre facture originale dès que possible (dans un délai max de 30 jours) à l</span><span class=rvts15>’</span><span class=rvts9>adresse ci-dessus, en mentionnant notre référence de dossier.</span></p>
 <p class=rvps8><span class=rvts16>Observations</span><span class=rvts17> :&nbsp; </span><span class=rvts9><input name="CL_text" placeholder="text" value="<?php if(isset ($CL_text)) echo $CL_text; ?>"></input></span></p>
@@ -448,6 +450,42 @@ echo '<option value="'.$presta['civilite'].' '.$presta['prenom'].' '.$presta['na
 <p class=rvps1><span class=rvts9> <input name="agent__signature" id="agent__signature" placeholder="signature" value="<?php if(isset ($detailagt['signature'])) echo $detailagt['signature']; ?>" /></span></p>
 <p><span class=rvts7>Plateau d</span><span class=rvts25>’</span><span class=rvts7>assistance technique</span></p>
 <p class=rvps1><span class=rvts7>« courrier électronique, sans signature »</span></p>
+</form>
+<script type="text/javascript">
+document.querySelector('input[list="prest__transitaire"]').addEventListener('input', onInput);
+
+	function onInput(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
+	      break;
+	    }
+	  }
+	}
+document.querySelector('input[list="inter__remor"]').addEventListener('input', onInput1);
+
+	function onInput1(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("id__prestataire1").value = options[i].getAttribute("id");
+	      break;
+	    }
+	  }
+	}
+
+</script>
 </body></html>
 <?php
         }

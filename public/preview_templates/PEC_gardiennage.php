@@ -2,6 +2,7 @@
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['prest__remor'])) {$prest__remor=$_GET['prest__remor'];}
+if (isset($_GET['id__prestataire'])) {$id__prestataire=$_GET['id__prestataire'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
 if (isset($_GET['vehicule_marque'])) {$vehicule_marque=$_GET['vehicule_marque'];}
@@ -64,7 +65,7 @@ mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
-$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." ) AND id IN (SELECT prestataire_id FROM specialites_prestataires WHERE specialite = 116)";
+$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1 ) AND id IN (SELECT prestataire_id FROM specialites_prestataires WHERE specialite = 116)";
 
 $resultvh = $conn->query($sqlvh);
     if ($resultvh->num_rows > 0) {
@@ -253,11 +254,11 @@ $resultvh = $conn->query($sqlvh);
             <?php
 foreach ($array_prest as $prest) {
     
-   echo '<option value="'.$prest["name"].'" >'.$prest["name"].'</option>';
+echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';
 }
 ?>
 </span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+<p class=rvps1><span class=rvts2><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <h1 class=rvps2><span class=rvts0><span class=rvts3><br></span></span></h1>
 <p class=rvps3><span class=rvts4>Prise en charge gardiennage</span></p>
@@ -297,6 +298,22 @@ foreach ($array_prest as $prest) {
 <?php  }?>
             document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value);
         }//fin de keypressHandler
+document.querySelector('input[list="prest__remor"]').addEventListener('input', onInput);
+
+	function onInput(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
+	      break;
+	    }
+	  }
+	}
 </script>
 </body></html>
 <?php

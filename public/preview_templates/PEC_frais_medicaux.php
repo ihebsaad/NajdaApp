@@ -3,6 +3,7 @@ if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['prest__structure'])) {$prest__structure=$_GET['prest__structure'];}
+if (isset($_GET['id__prestataire'])) {$id__prestataire=$_GET['id__prestataire'];}
 if (isset($_GET['CL_text_client'])) {$CL_text_client=$_GET['CL_text_client'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; $subscriber_name2=$_GET['subscriber_name'];}
@@ -124,7 +125,7 @@ $sign = 'non';
 {     if ( $id==$doc['dossier'] )
 		{  $iddoc=$doc['doc'];} } 
 	
-$sqlstruc = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id  IN (8,9))";
+$sqlstruc = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id  IN (8,9))";
 
     $resultstruc = $conn->query($sqlstruc);
     if ($resultstruc->num_rows > 0) {
@@ -538,11 +539,11 @@ $sqlsig = "SELECT id,nom FROM docs WHERE id IN (SELECT doc FROM dossiers_docs WH
 foreach ($array_struc as $struc) {
     
    // echo "<option value='".$struc['name']."' >".$struc['name']."</option>";
-echo '<option value="'.$struc["name"].'" >'.$struc["name"].'</option>';
+echo '<option value="'.$struc["name"].'" id="'.$struc["id"].'" >'.$struc["name"].'</option>';
 }
 ?>
 </span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+<p class=rvps1><span class=rvts2><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps2><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts3>Sousse le <input name="date_heure" type="text" value="<?php if(isset ($date_heure)) echo $date_heure; ?>"></input> </span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
@@ -613,7 +614,7 @@ echo '<option value="'.$struc["name"].'" >'.$struc["name"].'</option>';
 
 <?php
 { 
-	if ($sign=== "oui" && $detaildos['documents']==='1') { ?>
+	if ($detaildos['documents']==='1') { ?>
 
 <p><span class=rvts29>Attention</span><span class=rvts30> </span><span class=rvts31>:</span><span class=rvts30> </span><span class=rvts32>Cette</span><span class=rvts30> </span><span class=rvts32>prise</span><span class=rvts30> </span><span class=rvts32>en</span><span class=rvts30> </span><span class=rvts32>charge</span><span class=rvts30> </span><span class=rvts32>ne</span><span class=rvts30> </span><span class=rvts32>sera</span><span class=rvts30> </span><span class=rvts32>valable</span><span class=rvts30> </span><span class=rvts32>que</span><span class=rvts30> </span><span class=rvts32>si</span><span class=rvts30> </span><span class=rvts32>la</span><span class=rvts30> </span><span class=rvts32>facture</span><span class=rvts30> </span><span class=rvts32>nous</span><span class=rvts30> </span><span class=rvts32>parvient</span><span class=rvts30> </span><span class=rvts32>accompagnée</span><span class=rvts30> </span><span class=rvts32>de</span><span class=rvts30> </span><span class=rvts29>l</span><span class=rvts33>’</span><span class=rvts29>original</span><span class=rvts30> </span><span class=rvts32>de</span><span class=rvts30>&nbsp;</span><span class=rvts32> </span><span class=rvts34><input name="CL_nom_doc_sig" id="CL_nom_doc_sig" placeholder=""  value="
 <?php  
@@ -633,8 +634,8 @@ foreach ($array_sig as $docsigne)
 	} } 
 ?>
 
-<input name="CL_doc_sig" type="hidden" placeholder="" value="<?php if(isset($CL_doc_sig)) {echo $CL_doc_sig;} if ($sign==="oui"){ echo "Attention : Cette prise en charge ne sera valable que si la facture nous parvient accompagnée de l'original de "   ;} else { echo '' ;}?>"></input>
-<input name="CL_doc_sign" type="hidden" placeholder="" value="<?php if(isset($CL_doc_sign)) {echo $CL_doc_sign;} if ($sign==="oui"){ echo 'dûment  complétée  et  signée  par  le  (la) patient(e)'   ;} else { echo '' ;}?>"></input>
+<input name="CL_doc_sig" type="hidden" placeholder="" value="<?php if(isset($CL_doc_sig)) {echo $CL_doc_sig;} if ($detaildos['documents']==='1'){ echo "Attention : Cette prise en charge ne sera valable que si la facture nous parvient accompagnée de l'original de "   ;} else { echo '' ;}?>"></input>
+<input name="CL_doc_sign" type="hidden" placeholder="" value="<?php if(isset($CL_doc_sign)) {echo $CL_doc_sign;} if ($detaildos['documents']==='1'){ echo 'dûment  complétée  et  signée  par  le  (la) patient(e)'   ;} else { echo '' ;}?>"></input>
 <p class=rvps9><span class=rvts16>Observations:</span><span class=rvts11> <input name="CL_text" placeholder="text" value="<?php if(isset ($CL_text)) echo $CL_text; ?>"></input></span></p>
 <p><span class=rvts32><br></span></p>
 <p><span class=rvts36><br></span></p>
@@ -670,6 +671,22 @@ foreach ($array_sig as $docsigne)
             $("#pattention").hide();
         }
     });	
+document.querySelector('input[list="prest__structure"]').addEventListener('input', onInput);
+
+	function onInput(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
+	      break;
+	    }
+	  }
+	}
 </script>
 </body></html>
 <?php

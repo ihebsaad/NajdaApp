@@ -2,6 +2,7 @@
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['prest__garage'])) {$prest__garage=$_GET['prest__garage'];}
+if (isset($_GET['id__prestataire'])) {$id__prestataire=$_GET['id__prestataire'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['CL_facture_devis'])) {$CL_facture_devis=$_GET['CL_facture_devis'];}
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
@@ -62,7 +63,7 @@ mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
-$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
+$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
 
     $resultvh = $conn->query($sqlvh);
     if ($resultvh->num_rows > 0) {
@@ -327,11 +328,11 @@ p,ul,ol /* Paragraph Style */
             <?php
 foreach ($array_prest as $prest) {
     
-   echo '<option value="'.$prest["name"].'" >'.$prest["name"].'</option>';
+   echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';
 }
 ?>
 </span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+<p class=rvps1><span class=rvts2><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
     <p class=rvps1><span class=rvts2>Sousse <input name="date_heure" type="text" value="<?php if(isset ($date_heure)) echo $date_heure; ?>"></input></span></p>
     <p class=rvps1><span class=rvts2><br></span></p>
@@ -369,6 +370,25 @@ foreach ($array_prest as $prest) {
 <p><span class=rvts23><br></span></p>
 <p><span class=rvts23><br></span></p>
 <p><span class=rvts23><br></span></p>
+</form>
+<script type="text/javascript">
+document.querySelector('input[list="prest__garage"]').addEventListener('input', onInput);
+
+	function onInput(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
+	      break;
+	    }
+	  }
+	}
+</script>
 </body></html>
 <?php
         }

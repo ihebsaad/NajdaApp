@@ -2,6 +2,7 @@
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['prest__dossier'])) {$prest__dossier=$_GET['prest__dossier'];}
+if (isset($_GET['id__prestataire'])) {$id__prestataire=$_GET['id__prestataire'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['vehicule_type'])) {$vehicule_type=$_GET['vehicule_type'];}
@@ -57,7 +58,7 @@ mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
-$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier.")";
+$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1)";
 
     $resultvh = $conn->query($sqlvh);
     if ($resultvh->num_rows > 0) {
@@ -278,10 +279,10 @@ foreach ($array_client as $client) {
             <?php
 foreach ($array_prest as $prest) {
     
-    echo '<option value="'.$prest["name"].'" >'.$prest["name"].'</option>';
+  echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';
 }
 ?>
-</span><span class=rvts10> </span><span class=rvts9></span><span class=rvts2> est chargé par nos soins de procéder au rapatriement du véhicule <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input> <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input>.</span></p>
+</span><span class=rvts10> </span><span class=rvts9></span><span class=rvts2> <input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input> est chargé par nos soins de procéder au rapatriement du véhicule <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input> <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input>.</span></p>
 <p><span class=rvts2><br></span></p>
 <p><span class=rvts2>Cette procuration est délivrée pour servir et valoir ce que de droit auprès des services de la douane tunisienne.</span></p>
 <p><span class=rvts2><br></span></p>
@@ -300,4 +301,23 @@ foreach ($array_prest as $prest) {
 <p><span class=rvts11><br></span></p>
 <p><span class=rvts11><br></span></p>
 <p><span class=rvts11><br></span></p>
+</form>
+<script type="text/javascript">
+document.querySelector('input[list="prest__dossier"]').addEventListener('input', onInput);
+
+	function onInput(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
+	      break;
+	    }
+	  }
+	}
+</script>
 </body></html>

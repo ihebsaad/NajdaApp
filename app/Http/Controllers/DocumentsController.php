@@ -1538,6 +1538,30 @@ public function historique(Request $request)
                         { $valchamp = "undefined index";}
 
                     $array += [ $champtemp => $valchamp];
+if($champtemp ==='[ID__PRESTATAIRE]')
+{
+if(!empty($valchamp))
+{$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $valchamp,'effectue' => 1])->orderBy('created_at', 'desc')->first();
+              $prestation  ->update(['effectue' => 0,'statut' => "autre",'details' => "annulation"]);
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: ' .$refdoss);
+	 }}  
+if($champtemp ==='[ID__PRESTATAIRE1]')
+{
+if(!empty($valchamp))
+{$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $valchamp,'effectue' => 1])->orderBy('created_at', 'desc')->first();
+              $prestation  ->update(['effectue' => 0,'statut' => "autre",'details' => "annulation"]);
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+
+Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: ' .$refdoss);
+	 }}  
                 }
                 elseif($champtemp ==='[DATE_HEURE]')
                 {

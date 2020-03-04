@@ -2,6 +2,7 @@
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['prest__dossier'])) {$prest__dossier=$_GET['prest__dossier'];}
+if (isset($_GET['id__prestataire'])) {$id__prestataire=$_GET['id__prestataire'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['CL_name_gerant'])) {$CL_name_gerant=$_GET['CL_name_gerant'];}
@@ -58,7 +59,7 @@ mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
-$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier.")";
+$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1)";
 
     $resultvh = $conn->query($sqlvh);
     if ($resultvh->num_rows > 0) {
@@ -251,10 +252,10 @@ attestons par la présente que la société </span><span class=rvts7>
             <?php
 foreach ($array_prest as $prest) {
     
-    echo '<option value="'.$prest["name"].'" >'.$prest["name"].'</option>';
+   echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';
 }
 ?>
-</span><span class=rvts2> représentée par son gérant Mr <input name="CL_name_gerant" placeholder="Name GERANT" value="<?php if(isset ($CL_name_gerant)) echo $CL_name_gerant; ?>"></input> titulaire de la CIN N° <input name="CL_cin_gerant" placeholder="Cin GERANT" value="<?php if(isset ($CL_cin_gerant)) echo $CL_cin_gerant; ?>"></input>  est chargée par nos soins de procéder auprès des services concernés à la récupération des documents originaux et le retrait des marchandises objet de la LTA N° <input name="CL_nlta" placeholder="NLTA" value="<?php if(isset ($CL_nlta)) echo $CL_nlta; ?>"></input>  relatif au véhicule <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input>  <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> pour le compte de son propriétaire Mr <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" />  .</span></p>
+</span><span class=rvts2> <input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input>représentée par son gérant Mr <input name="CL_name_gerant" placeholder="Name GERANT" value="<?php if(isset ($CL_name_gerant)) echo $CL_name_gerant; ?>"></input> titulaire de la CIN N° <input name="CL_cin_gerant" placeholder="Cin GERANT" value="<?php if(isset ($CL_cin_gerant)) echo $CL_cin_gerant; ?>"></input>  est chargée par nos soins de procéder auprès des services concernés à la récupération des documents originaux et le retrait des marchandises objet de la LTA N° <input name="CL_nlta" placeholder="NLTA" value="<?php if(isset ($CL_nlta)) echo $CL_nlta; ?>"></input>  relatif au véhicule <input name="vehicule_marque" placeholder="marque du véhicule" value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input>  <input name="vehicule_type" placeholder="Type du véhicule" value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input> immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> pour le compte de son propriétaire Mr <input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" />  .</span></p>
 <p><span class=rvts2>Cette procuration est établie pour servir et valoir ce que de droit.</span></p>
 <p><span class=rvts2><br></span></p>
 <p><span class=rvts2><br></span></p>
@@ -266,5 +267,24 @@ foreach ($array_prest as $prest) {
 <h1 class=rvps2><span class=rvts0><span class=rvts3><br></span></span></h1>
 <h1 class=rvps2><span class=rvts0><span class=rvts9><br></span></span></h1>
 <p><span class=rvts8><br></span></p>
+</form>
+<script type="text/javascript">
+document.querySelector('input[list="prest__dossier"]').addEventListener('input', onInput);
+
+	function onInput(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
+	      break;
+	    }
+	  }
+	}
+</script>
 </body></html>
 

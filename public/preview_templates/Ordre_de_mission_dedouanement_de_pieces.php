@@ -2,7 +2,9 @@
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['prest__transitaire'])) {$prest__transitaire=$_GET['prest__transitaire'];}
+if (isset($_GET['id__prestataire1'])) {$id__prestataire1=$_GET['id__prestataire1'];}
 if (isset($_GET['inter__garage'])) {$inter__garage=$_GET['inter__garage'];}
+if (isset($_GET['id__prestataire'])) {$id__prestataire=$_GET['id__prestataire'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
 if (isset($_GET['CL_name'])) {$CL_name=$_GET['CL_name'];}
@@ -61,7 +63,7 @@ mysqli_query($conn,"set names 'utf8'");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
-$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier.")AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 40)";
+$sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue=1) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 40)";
 
     $resultvh = $conn->query($sqlvh);
     if ($resultvh->num_rows > 0) {
@@ -70,7 +72,7 @@ $sqlvh = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN
         while($rowvh = $resultvh->fetch_assoc()) {
             $array_prest[] = array('id' => $rowvh["id"],'name' => $rowvh["name"]  );
         } }
-$sqlvha = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier.")  AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
+$sqlvha = "SELECT id,name,phone_home,ville,ville_id,id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue=1)  AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
 
     $resultvha = $conn->query($sqlvha);
     if ($resultvha->num_rows > 0) {
@@ -280,10 +282,10 @@ attestons par la présente que la société </span><span class=rvts8>
 foreach ($array_prest as $prest) {
     
    // echo "<option value='".$prest['name']."' >".$prest['name']."</option>";
-      echo '<option value="'.$prest["name"].'" >'.$prest["name"].'</option>';
+      echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"].'</option>';
 }
 ?>
-</span><span class=rvts2>&nbsp; représentée par son gérant Mr <input name="CL_name"  placeholder="name" value="<?php if(isset ($CL_name)) echo $CL_name; ?>" /> est chargée par nos soins de procéder au dédouanement de pièces sous le numéro de LTA  <input name="CL_nlta"  placeholder="NLTA" value="<?php if(isset ($CL_nlta)) echo $CL_nlta; ?>" /> et qui arrivera le <input name="CL_date_heure_ariv" placeholder="Date et heure" value="<?php if(isset ($CL_date_heure_ariv)) echo $CL_date_heure_ariv; ?>"></input> sur le vol <input name="CL_cordonnes_vol" placeholder="Cordonnes Vol" value="<?php if(isset ($CL_cordonnes_vol)) echo $CL_cordonnes_vol; ?>"></input> au nom de notre client(e) </span><span class=rvts9><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span><span class=rvts2> </span><br><span class=rvts2>A noter que la pièce de rechange en question sera montée sur le véhicule de notre client(e) de marque  <input name="vehicule_marque" placeholder="marque du véhicule
+</span><span class=rvts2><input type="hidden" name="id__prestataire1" id="id__prestataire1"  value="<?php if(isset ($id__prestataire1)) echo $id__prestataire1; ?>"></input>&nbsp; représentée par son gérant Mr <input name="CL_name"  placeholder="name" value="<?php if(isset ($CL_name)) echo $CL_name; ?>" /> est chargée par nos soins de procéder au dédouanement de pièces sous le numéro de LTA  <input name="CL_nlta"  placeholder="NLTA" value="<?php if(isset ($CL_nlta)) echo $CL_nlta; ?>" /> et qui arrivera le <input name="CL_date_heure_ariv" placeholder="Date et heure" value="<?php if(isset ($CL_date_heure_ariv)) echo $CL_date_heure_ariv; ?>"></input> sur le vol <input name="CL_cordonnes_vol" placeholder="Cordonnes Vol" value="<?php if(isset ($CL_cordonnes_vol)) echo $CL_cordonnes_vol; ?>"></input> au nom de notre client(e) </span><span class=rvts9><input name="subscriber_lastname" placeholder="nom du l'abonnée"  value="<?php if(isset ($subscriber_lastname)) echo $subscriber_lastname; ?>"></input> <input name="subscriber_name" id="subscriber_name" placeholder="prénom du l'abonnée" value="<?php if(isset ($subscriber_name)) echo $subscriber_name; ?>" /></span><span class=rvts2> </span><br><span class=rvts2>A noter que la pièce de rechange en question sera montée sur le véhicule de notre client(e) de marque  <input name="vehicule_marque" placeholder="marque du véhicule
 " value="<?php if(isset ($vehicule_marque)) echo $vehicule_marque; ?>"></input>  <input name="vehicule_type" placeholder="Type du véhicule
 " value="<?php if(isset ($vehicule_type)) echo $vehicule_type; ?>"></input>  immatriculé <input name="vehicule_immatriculation" placeholder="immatriculation" value="<?php if(isset ($vehicule_immatriculation)) echo $vehicule_immatriculation; ?>"></input> en circulation temporaire en Tunisie et nécessitant la réparation avant son retour vers l</span><span class=rvts7>’</span><span class=rvts2>étranger. Le véhicule sera réparé au garage </span><span class=rvts8>
 <input type="text" list="inter__garage" name="inter__garage" value="<?php  if(isset ($inter__garage)) echo $inter__garage; ?>" />
@@ -292,11 +294,12 @@ foreach ($array_prest as $prest) {
 foreach ($array_presta as $presta) {
     
    // echo "<option value='".$presta['name']."' >".$presta['name']."</option>";
-      echo '<option value="'.$presta["name"].'" >'.$presta["name"].'</option>';
+      echo '<option value="'.$presta["name"].'" id="'.$presta["id"].'">'.$presta["name"].'</option>';
 
 }
 ?>
-</span><span class=rvts2> <input name="CL_cordonnes_gar" placeholder="Cordonnes Garage" value="<?php if(isset ($CL_cordonnes_gar)) echo $CL_cordonnes_gar; ?>"></input></span><span class=rvts10>.</span><span class=rvts2>&nbsp;&nbsp; </span></p>
+
+</span><span class=rvts2> <input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><input name="CL_cordonnes_gar" placeholder="Cordonnes Garage" value="<?php if(isset ($CL_cordonnes_gar)) echo $CL_cordonnes_gar; ?>"></input></span><span class=rvts10>.</span><span class=rvts2>&nbsp;&nbsp; </span></p>
 <p><span class=rvts2><br></span></p>
 <p><span class=rvts2>Cette procuration est délivrée pour servir et valoir ce que de droit.</span></p>
 <p><span class=rvts2><br></span></p>
@@ -309,5 +312,41 @@ foreach ($array_presta as $presta) {
 <p><span class=rvts12><br></span></p>
 <p><span class=rvts12><br></span></p>
 <p><span class=rvts12><br></span></p>
+</form>
+<script type="text/javascript">
+document.querySelector('input[list="inter__garage"]').addEventListener('input', onInput1);
+
+	function onInput1(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
+	      break;
+	    }
+	  }
+	}
+document.querySelector('input[list="prest__transitaire"]').addEventListener('input', onInput2);
+
+	function onInput2(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("id__prestataire1").value = options[i].getAttribute("id");
+	      break;
+	    }
+	  }
+	}
+</script>
 </body></html>
+
 

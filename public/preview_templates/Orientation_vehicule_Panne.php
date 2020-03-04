@@ -1,6 +1,7 @@
 <?php 
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['inter__garage'])) {$inter__garage=$_GET['inter__garage'];}
+if (isset($_GET['id__prestataire'])) {$id__prestataire=$_GET['id__prestataire'];}
 if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name']; $subscriber_name2=$_GET['subscriber_name'];}
@@ -54,7 +55,7 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 mysqli_query($conn,"set names 'utf8'");
-$sqlvh = "SELECT id,name,phone_home,prenom,civilite,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier.") AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
+$sqlvh = "SELECT id,name,phone_home,prenom,civilite,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 22)";
 
     $resultvh = $conn->query($sqlvh);
     if ($resultvh->num_rows > 0) {
@@ -321,11 +322,11 @@ p,ul,ol /* Paragraph Style */
             <?php
 foreach ($array_prest as $prest) {
     
-       echo '<option value="'.$prest['civilite'].' '.$prest['prenom'].' '.$prest['name'].'">'.$prest["civilite"].' '.$prest["prenom"].''.$prest["name"].'</option>';
+        echo '<option value="'.$prest["civilte"].''.$prest["prenom"].''.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["civilite"].''.$prest["prenom"].''.$prest["name"].'</option>';
  }
 ?>
 </span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+<p class=rvps1><span class=rvts2><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <h1 class=rvps2><span class=rvts0><span class=rvts3><br></span></span></h1>
 <p class=rvps3><span class=rvts4>Orientation de véhicule en panne</span></p>
@@ -373,6 +374,25 @@ foreach ($array_tel as $tel) {
 <p><span class=rvts18><br></span></p>
 <p class=rvps11><span class=rvts18> &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
 </form>
+<script type="text/javascript">
+document.querySelector('input[list="inter__garage"]').addEventListener('input', onInput);
+
+	function onInput(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
+	      break;
+	    }
+	  }
+	}
+
+</script>
 </body></html>
 <?php
         }

@@ -3,6 +3,7 @@ header("Content-Type: text/html;charset=UTF-8");
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
 if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['prest__imag'])) {$prest__imag=$_GET['prest__imag'];}
+if (isset($_GET['id__prestataire'])) {$id__prestataire=$_GET['id__prestataire'];}
 if (isset($_GET['CL_text_client'])) {$CL_text_client=$_GET['CL_text_client'];}
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['customer_id__name'])) {$customer_id__name=$_GET['customer_id__name']; $customer_id__name2=$_GET['customer_id__name']; }
@@ -71,7 +72,7 @@ mysqli_set_charset($conn,"utf8");
 
 // recuperation des prestataires HOTEL ayant prestations dans dossier
 
-$sqlimag = "SELECT id,name FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 6)";
+$sqlimag = "SELECT id,name FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1 ) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 6)";
 
     $resultimag = $conn->query($sqlimag);
     if ($resultimag->num_rows > 0) {
@@ -320,11 +321,11 @@ foreach ($array_client as $client) {
 foreach ($array_imag as $imag) {
     
     //echo "<option value='".$prest['name']."' >".$prest['name']."</option>";
-echo '<option value="'.$imag["name"].'" >'.$imag["name"].'</option>';
+    echo '<option value="'.$imag["name"].'" id="'.$imag["id"].'" >'.$imag["name"].'</option>';
 }
 ?>
 </span></p>
-<p class=rvps1><span class=rvts2><br></span></p>
+<p class=rvps1><span class=rvts2><input type="hidden" name="id__prestataire" id="id__prestataire"  value="<?php if(isset ($id__prestataire)) echo $id__prestataire; ?>"></input><br></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
 <p class=rvps2><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts2> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts2>Sousse le <input name="date_heure" type="text" value="<?php if(isset ($date_heure)) echo $date_heure; ?>"></input></span></p>
 <p class=rvps1><span class=rvts2><br></span></p>
@@ -388,6 +389,22 @@ echo '<option value="'.$imag["name"].'" >'.$imag["name"].'</option>';
 <?php   } ?> 
          document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value)
         }//fin de keypressHandler
+document.querySelector('input[list="prest__imag"]').addEventListener('input', onInput);
+
+	function onInput(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("id__prestataire").value = options[i].getAttribute("id");
+	      break;
+	    }
+	  }
+	}
 </script>
 </body></html>
 <?php
