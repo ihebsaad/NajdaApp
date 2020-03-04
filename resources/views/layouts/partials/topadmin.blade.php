@@ -154,7 +154,9 @@
     </header>
 
 <?php
-$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
+  $param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+?>
 
 <style>
     @media  (max-width: 1280px)  /*** 150 % ***/  {

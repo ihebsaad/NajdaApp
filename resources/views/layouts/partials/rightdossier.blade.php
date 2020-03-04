@@ -4,7 +4,8 @@ use App\Http\Controllers\DossiersController;
 
 use App\Dossier ;
 use App\Attachement ;
-$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+  $param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 ?>
  <?php use \App\Http\Controllers\ClientsController;     ?>
 

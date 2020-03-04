@@ -205,7 +205,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <?php
-    $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+  $param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
       ?>
 <script type="text/javascript">
 

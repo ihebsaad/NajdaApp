@@ -2618,8 +2618,7 @@ use  \App\Http\Controllers\PrestatairesController;
 
     <?php
 
-     $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
-
+ 
     function custom_echo($x, $length)
     {
     if(strlen($x)<=$length)

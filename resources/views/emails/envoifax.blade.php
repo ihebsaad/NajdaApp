@@ -153,7 +153,10 @@
         });
 
 
-        <?php $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp"; ?>
+        <?php  
+		$param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+		?>
 
         $("#prest").change(function(){
             //  prest = $(this).val();
