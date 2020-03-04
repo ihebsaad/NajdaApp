@@ -6481,8 +6481,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
             <texte>'.$contenu.'</texte>
         </sms>';
 
-       // $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
-        $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+       $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+      //  $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
 
      //  $old = umask(0);
 

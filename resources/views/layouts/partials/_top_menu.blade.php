@@ -119,7 +119,7 @@ $seance =  DB::table('seance')
             </a>
         </div>
 
-       <?php if($user_type=='financier')
+       <?php if($user_type=='financier' || $user_type=='bureau'  )
         {?>
 
         <div class="col-sm-2">
@@ -129,6 +129,15 @@ $seance =  DB::table('seance')
                 Paramètres
             </a>
         </div>
+
+        <div class="col-sm-2">
+            <a href="{{ route('factures') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                <span  class="fas fa-lg fa-file-invoice"></span>
+                <br>
+                Finances
+            </a>
+        </div>
+
 
     <?php  } ?>
 

@@ -596,18 +596,20 @@ class EntreesController extends Controller
         $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
         $dtc2 = (new \DateTime())->modify('-10 minutes')->format('Y-m-d\TH:i');
 
-      /*  $count=Notification::where('read_at', null)
-            //      ->where('dossier','')
-            ->where('created_at','<=', $dtc)
-            ->where('created_at','>', $dtc2)
-            ->count();*/
 
-           $count=Notif::where('read_at', null)
+
+     /*      $count=Notif::where('read_at', null)
               //      ->where('dossier','')
               ->where('created_at','<=', $dtc)
               ->where('created_at','>', $dtc2)
               ->count();
+*/
 
+        $count=Entree::where('viewed','<>', 1)
+                ->where('type','<>','tel')
+            ->where('created_at','<=', $dtc)
+            ->where('created_at','>', $dtc2)
+            ->count();
 
         return $count;
 
@@ -620,13 +622,14 @@ class EntreesController extends Controller
 
         $dtc = (new \DateTime())->modify('-10 minutes')->format('Y-m-d\TH:i');
 
-  /*          $count=Notification::where('read_at', null)
-           //      ->where('dossier','')
+
+    /*    $count=Notif::where('read_at', null)
+            //      ->where('dossier','')
             ->where('created_at','<=', $dtc)
             ->count();
 */
-        $count=Notif::where('read_at', null)
-            //      ->where('dossier','')
+        $count=Entree::where('viewed','<>', 1)
+            ->where('type','<>','tel')
             ->where('created_at','<=', $dtc)
             ->count();
 

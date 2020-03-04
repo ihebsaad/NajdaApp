@@ -83,8 +83,8 @@ class LoginController extends Controller
 
         /* fin block  dossiers actifs, dormants et immobiles */
 
-        if ($type == 'financier') {
-            return redirect('/parametres');
+        if ($type == 'financier' || $type == 'bureau'  ) {
+            return redirect('/factures');
 
         } else {
             return redirect('/roles');

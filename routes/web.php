@@ -258,6 +258,17 @@ Route::get('/cities/view/{id}', 'CitiesController@view');
 Route::get('/cities/destroy/{id}', 'CitiesController@destroy');
 
 
+/*** Factures  **/
+
+Route::get('/factures', array('as' => 'factures','uses' => 'FacturesController@index'));
+Route::post('/factures/saving','FacturesController@saving')->name('factures.saving');
+Route::post('/factures/updating','FacturesController@updating')->name('factures.updating');
+Route::get('/factures/view/{id}', 'FacturesController@view');
+Route::get('/factures/destroy/{id}', 'FacturesController@destroy');
+
+
+
+
 /*** Actualites  **/
 //Route::resource('/actualites',  'ActualitesController');
 Route::get('/actualites', array('as' => 'actualites','uses' => 'ActualitesController@index'));

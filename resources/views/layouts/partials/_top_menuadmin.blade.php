@@ -1,3 +1,9 @@
+<?php
+$user = auth()->user();
+$iduser=$user->id;
+$user_type=$user->user_type;
+?>
+
 <div class="container">
  
  
@@ -43,6 +49,14 @@
                 </a>
             </div>
 
+            <div class="col-sm-2">
+                <a href="{{ route('factures') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span  class="fas fa-lg fa-file-invoice"></span>
+                    <br>
+                    Factures
+                </a>
+            </div>
+
     @endcan
     </div>
 
@@ -84,7 +98,7 @@
                 </a>
             </div>
 
-	    
+
 
         @endcan
     </div>
@@ -136,6 +150,43 @@
 
 
     <div class="row">
+
+        <?php if($user_type=='financier' || $user_type=='bureau'  )
+        {?>
+
+        <div class="col-sm-2">
+            <a href="{{ route('parametres') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                <span class="fas fa-lg  fa-sliders-h"></span>
+                <br>
+                Paramètres
+            </a>
+        </div>
+
+        <div class="col-sm-2">
+            <a href="{{ route('factures') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                <span  class="fas fa-lg fa-file-invoice"></span>
+                <br>
+                Factures
+            </a>
+        </div>
+
+            <div class="col-sm-2">
+                <a href="{{ route('dossiers') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="fa fa-lg fa-fw fa-folder"></span>
+                    <br>
+                    Liste des dossiers
+                </a>
+            </div>
+
+            <div class="col-sm-2">
+                <a href="{{ route('prestataires') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="fa fa-lg fa-fw fa-user-md"></span>
+                    <br>
+                    Les Intervenants
+                </a>
+            </div>
+        <?php  } ?>
+
 
         @can('isAdmin')
 

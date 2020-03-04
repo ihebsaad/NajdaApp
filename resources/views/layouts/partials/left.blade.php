@@ -108,6 +108,7 @@
 <?php
 use App\Notification;
 use App\Notif;
+use App\Entree;
 use  \App\Http\Controllers\EntreesController ;
 Use App\Common;
 
@@ -131,24 +132,30 @@ $superviseurtech=$seance->superviseurtech ;
 $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
     $dtc2 = (new \DateTime())->modify('-10 minutes')->format('Y-m-d\TH:i');
 
-  /*  $countO=Notification::where('read_at', null)
+
+   /*  $countO=Notif::where('read_at', null)
          ->where('created_at','<=', $dtc)
-        ->where('created_at','>', $dtc2)
-        ->count();
+         ->where('created_at','>', $dtc2)
+         ->count();
 */
-     $countO=Notif::where('read_at', null)
+
+     $countO=Entree::where('viewed','<>', 1)
+         ->where('type','<>','tel')
          ->where('created_at','<=', $dtc)
          ->where('created_at','>', $dtc2)
          ->count();
 
+
     $dtc3 = (new \DateTime())->modify('-10 minutes')->format('Y-m-d\TH:i');
 
    
-  /*   $countR=Notif::where('read_at', null)
+
+    /* $countR=Notif::where('read_at', null)
          ->where('created_at','<=', $dtc3)
          ->count();
 */
-     $countR=Notif::where('read_at', null)
+     $countR=Entree::where('viewed','<>', 1)
+         ->where('type','<>','tel')
          ->where('created_at','<=', $dtc3)
          ->count();
 
