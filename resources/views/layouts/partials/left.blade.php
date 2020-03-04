@@ -208,8 +208,8 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                 <div id="jstree">
 
                         <?php
-		$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
-
+  $param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                               $notifications =  DB::table('notifs')->orderBy('dossierid', 'desc')->orderBy('reception', 'desc')
                               ->where('affiche','<', 1 )
                                           ->where('user',  Auth::id() )

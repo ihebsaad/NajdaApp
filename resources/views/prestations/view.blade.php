@@ -6,7 +6,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
 
-
     <div class="form-group">
      {{ csrf_field() }}
 
@@ -22,7 +21,10 @@
 
                       ?>
                      <?php
-$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";?>
+  $param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+
+?>
                   </div>
                 </div>
 

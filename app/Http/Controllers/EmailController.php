@@ -5813,8 +5813,8 @@ if ($from=='najdassist@gmail.com')
             }
          }
  
-$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
-
+  $param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
              //   $urlsending=$urlapp.'/emails/envoimail/'.$doss;
                 $urlsending=$urlapp.'/envoyes';
                 $dossier= $this->RefDossierById($doss);////;
@@ -5851,7 +5851,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         ////     echo ('<script> window.location.href = "'.$urlsending.'/view/'.$envoyeid.'";</script>') ;
 
      });
-        $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+  $param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         $urlsending=$urlapp.'/envoyes';
         if($envoyeid>0){ $this->export_pdf_send($envoyeid,$from,$fromname,$to,$contenu,$files,$attachs);}
         else{
@@ -5866,15 +5867,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
         return redirect($urlsending.'/view/'.$envoyeid)->with('success', '  Envoyé ! ');
 
         ///  var_dump( Mail:: failures());
-
-    /*   } catch (Exception $ex) {
-    // Debug via $ex->getMessage();
-    /// echo '<script>alert("Erreur !") </script>' ;
-              $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
-            return redirect($urlapp.'/envoyes') ;
-     }*/
-     //   $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
-
+ 
+ 
      //   return redirect($urlapp.'/envoyes') ;
 
     }// end send
@@ -6043,7 +6037,9 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
 
 
-        $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+  $param= App\Parametre::find(1);$env=$param->env;
+  $param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
         $urlsending=$urlapp.'/envoyes';
 
@@ -6515,8 +6511,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
 
 
-        $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
-
+  $param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         $urlsending=$urlapp.'/envoyes';
      //   echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
         return redirect($urlsending)->with('success', '  Envoyé ! ');
@@ -6591,8 +6587,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
 
 
-                $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
-
+  $param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                 //   $urlsending=$urlapp.'/emails/envoimail/'.$doss;
                 $urlsending=$urlapp.'/envoyes';
                  echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;

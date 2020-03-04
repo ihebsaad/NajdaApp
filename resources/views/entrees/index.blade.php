@@ -9,14 +9,9 @@
 <?php  use App\Http\Controllers\DossiersController;
 Use App\Common;
 
-$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
-/*
-function SstartsWith ($string, $startString)
-{
-    $len = strlen($startString);
-    return (substr($string, 0, $len) === $startString);
-}
-*/
+  $param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+ 
 
 ?>
 

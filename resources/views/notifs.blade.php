@@ -33,8 +33,8 @@
               use \App\Http\Controllers\UsersController;
    use \App\Http\Controllers\ClientsController;
               use \App\Attachement ;
-$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
-   
+  $param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;   
 
               function custom_echo($x, $length)
               {
@@ -116,7 +116,9 @@ $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 }
 
 
-$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+  $param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+
               if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
 ?>
               <?php           $today=date('Y-m-d');
