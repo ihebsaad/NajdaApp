@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Action;
 use App\Mission;
+use App\ActionEC;
 use App\Dossier;
 use App\TypeMission;
 use App\User;
@@ -302,6 +303,127 @@ class RechercheController extends Controller
           $prests=Prestataire::get(['id','name','civilite','prenom','ville','ville_id']);
 
            return view('prestataires.index', compact('prests')); 
+
+    }
+
+    public function RechercheMissions (Request $request)
+    {
+      //dd($request->all());
+      $format = "Y-m-d H:i:s";
+
+      if( (strcmp($request->get('date_debut') , "Invalid date")!= 0
+                       && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
+
+                           ($request->get('date_debut') && $request->get('date_fin'))  )
+
+                   {
+
+                     $data=Mission::get();
+
+                     $datasearch=array();
+
+                      $datedeb = \DateTime::createFromFormat($format, $request->get('date_debut'));
+
+                      $datefin = \DateTime::createFromFormat($format, $request->get('date_fin'))->modify('+ 8 hours');
+                      $dtc = (new \DateTime())->format( $format);
+                      $datesys=\DateTime::createFromFormat($format, $dtc );
+
+                      //dd($datefin);
+
+                     
+                     foreach ( $data as $d) {
+
+
+                      $datecreation = \DateTime::createFromFormat($format, $d->date_deb);
+
+               
+                          if($datecreation >= $datedeb &&  $datecreation <= $datefin)
+                          {
+
+                            $datasearch[]=$d;
+
+                            if ($datesys>=$datedeb && $datesys<=$datefin && ($d->statut_courant=="active" || $d->statut_courant=="deleguee" ))
+                            {
+                               $datasearch[]=$d;
+                            }
+
+
+
+                          }
+                          $actions=ActionEC::where('mission_id',$d->id)->get();
+                          foreach ( $actions as $aa) {
+
+                            if($aa->statut!='faite' && $aa->statut!='rfaite' && $aa->statut!='inactive' )
+                            {
+
+                              if($aa->statut=='reportee')
+                              {
+                              $datedeba = \DateTime::createFromFormat($format, $aa->date_report);
+
+                          if($datedeba>= $datedeb &&  $datedeba <= $datefin)
+                            {
+
+                            $datasearch[]=$d;
+
+
+
+                            }
+                          }
+
+                           if($aa->statut=='rappelee')
+                              {
+                               // dd('ok');
+                              $datedeba = \DateTime::createFromFormat($format, $aa->date_rappel);
+
+                          if($datedeba>= $datedeb &&  $datedeba <= $datefin)
+                            {
+
+                            $datasearch[]=$d;
+
+
+
+                            }
+                          }
+
+
+
+
+                          if($aa->statut=='active') // active
+                          {
+
+                            if($datesys>=$datedeb && $datesys<=$datefin)
+                            {
+                               $datasearch[]=$d;
+
+                            }
+
+
+
+                          }
+
+
+                            }
+
+
+
+                          }
+
+
+
+
+
+                     }
+
+
+
+                   }
+
+
+      $missions=$datasearch;
+      $missions=array_unique($missions);
+
+
+      return view('missions.calendrier', compact('missions')); 
 
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Adresse;
 use App\AffectDoss;
+use App\AffectDossHis;
 use App\Evaluation;
 use App\Mission;
 use App\ActionEC;
@@ -1335,7 +1336,6 @@ class DossiersController extends Controller
          Dossier::where('id', $id)->update(array('affecte' => $agent,'statut'=>5 ));
 
         $ref=$this->RefDossierById($id);
-
         $user = auth()->user();
         $iduser=$user->id;
 
@@ -3188,9 +3188,45 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
             if($statut=='Cloture'){
                 if($count==0){
                 Dossier::where('id',$iddossier)->update(array('current_status'=>$statut ,'sanssuite'=>$sanssuite,'affecte'=>0));
+
+                 $format = "Y-m-d H:i:s";  
+
+                  $dtc = (new \DateTime())->format($format);
+                  $dateSys = \DateTime::createFromFormat($format, $dtc);
+
+               $etat='';
+               if($sanssuite==1)
+               {
+                 $etat='sans suite';
+               }
+               else
+               {
+                $etat='';
+               }
+                $affechis=new AffectDossHis([
+                    'util_affecteur'=>auth::user()->id,
+                    'util_affecte'=>null,
+                    'id_dossier'=>$iddossier,
+                    'date_affectation'=> $dateSys,
+                    'statut'=>'Cloture -'.$etat,
+
+                ]); 
+                $affechis->save();
+
                 }
             }else{
               Dossier::where('id',$iddossier)->update(array('current_status'=>'inactif','affecte'=>0 , 'sub_status'=>'immobile'));
+
+              $affechis=new AffectDossHis([
+                    'util_affecteur'=>auth::user()->id,
+                    'util_affecte'=>null,
+                    'id_dossier'=>$iddossier,
+                    'date_affectation'=> $dateSys,
+                    'statut'=>'Ouverture',
+
+                ]); 
+                $affechis->save();
+
                 }
     }
 
@@ -3232,6 +3268,114 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
 
     }
+
+   public function historiqueAffectation ($id)
+   {
+
+         $hisaffec=AffectDossHis::where('id_dossier',$id)->orderBy('date_affectation','DESC')->get();
+
+      $output='';
+
+
+      if(!$hisaffec->isEmpty())
+      {
+
+        $dossiera=Dossier::where('id',$id)->first(['reference_medic','current_status','sub_status']); 
+                   $output='<h4><b>Historique d\'affectation de dossier : '. $dossiera->reference_medic.'</b></h4><br>';
+                   
+              
+                   $output.='<input id="InputetatActionMission" style="float:right" type="text" placeholder="Recherche.." autocomplete="off"> <br><br>';
+                   $output.='<table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Dossier</th>
+                     
+                      <th>Utilisateur</th>
+                      <th>Opération</th>
+                      <th>Date</th>                    
+                     
+                    </tr>
+                  </thead>
+                  
+                  <tbody id="tabetatActionMission">';
+
+                  $user_em=User::where('id',$dossiera->user_id)->first(['name','lastname']); 
+
+                  $output.='<tr><td style="overflow: auto;" title="'.$dossiera->reference_medic.'"><span style="font-weight : none;">'.$dossiera->reference_medic.'</span></td>';
+
+                   $output.='<td style="overflow: auto;" title="'.$user_em->name.' '.$user_em->lastname.'"><span style="font-weight : none;">'.$user_em->name.' '.$user_em->lastname.'</span></td>';
+
+                    $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Ouverture du dossier</span></td>';
+
+                         $output.='<td style="overflow: auto;" title="'.$ha->date_affectation.'"><span style="font-weight : none;">'.$ha->date_affectation.'</span></td>';
+
+                  foreach ($hisaffec as $ha)
+                     { 
+
+                       
+                       $user_em=User::where('id',$ha->util_affecteur)->first(['name','lastname']); 
+                       $user_re=User::where('id',$ha->util_affecte)->first(['name','lastname']);  
+                                      
+
+                        $output.='<tr><td style="overflow: auto;" title="'.$dossiera->reference_medic.'"><span style="font-weight : none;">'.$dossiera->reference_medic.'</span></td>';
+                          
+
+
+                        $output.='<td style="overflow: auto;" title="'.$user_em->name.' '.$user_em->lastname.'"><span style="font-weight : none;">'.$user_em->name.' '.$user_em->lastname.'</span></td>';
+
+                         $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">'.$user_re->name.' '.$user_re->lastname.'</span></td>';
+
+                         if($user_em && $user_re && $user_re!=$user_em && !stripos($ha->statut,"Cloture") && !stripos($ha->statut,"Ouverture") )
+                         {
+
+                             $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Affectation du dossier à '.$user_re->name.' '.$user_re->lastname.'</span></td>';
+
+                         }
+
+                         if($user_em && $user_re && $user_re==$user_em && !stripos($ha->statut,"Cloture") && !stripos($ha->statut,"Ouverture") )
+                         {
+
+                             $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Creation et affectation du nouveau dossier à l\'utilisateur lui meme  '.$user_re->name.' '.$user_re->lastname.'</span></td>';
+
+                         }
+
+                         if(stripos($ha->statut,"Cloture"))
+                         {
+
+                             $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Cloture de dossier</span></td>';
+
+                         }
+
+                          if(stripos($ha->statut,"Ouverture"))
+                         {
+
+                             $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Ouverture de dossier</span></td>';
+
+                         }
+
+                         
+
+                         $output.='<td style="overflow: auto;" title="'.$ha->date_affectation.'"><span style="font-weight : none;">'.$ha->date_affectation.'</span></td>';
+                       
+
+                    }
+                 
+
+
+                   $output.=' </tbody> </table>';
+
+
+         }
+        else
+         {
+           $output='Pas d\'historique d\'affectation pour ce dossier';
+
+         }
+
+   return $output;
+
+
+   }
 
 
 

@@ -67,6 +67,7 @@ class Dossier extends Model
   'observation2',
   'observation3',
   'observation4',
+  'updatedmiss_at',
 'is_contract_validated',
 'closed_at',
 'is_transport',
@@ -139,14 +140,14 @@ class Dossier extends Model
 
     ];
 
- /*   public $timestamps    ; 
+ /*   public $timestamps    ;
 
    protected $dateFormat = 'Y-m-d H:i:s';
 
     public function getDateFormat()
     {
         return 'Y-m-d H:i:s.u';
-    }
+    } */
 
 /*
  public function activeMissions()

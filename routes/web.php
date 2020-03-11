@@ -228,6 +228,8 @@ Route::get('/dossiers/activerdossiers','DossiersController@ActiverDossiers')->na
 Route::post('/dossiers/changestatut','DossiersController@changestatut')->name('dossiers.changestatut');
 Route::get('/dossiers/affectclassique','DossiersController@affectclassique')->name('dossiers.affectclassique');
 Route::post('/ExternefileUpload/upload', 'DossiersController@uploadExterneFile')->name('Upload.ExterneFile');
+Route::get('/Dossier/historiqueaffectation/{id}', 'DossiersController@historiqueAffectation')->name('historique.affectation');
+
 
 
 /*** Clients **/
@@ -449,6 +451,7 @@ Route::get('dossiers/view/CreerDoc/{id}/{idmiss}', 'MissionController@viewDossie
 
 Route::post('/Missions/storeMissionLieByAjax','MissionController@storeMissionLieByAjax')->name('Mission.StoreMissionLieByAjax');
 Route::get('/ReporterMission/','MissionController@ReporterMission')->name('Mission.ReporterMission');
+Route::get('/missions/calendrier','MissionController@calendrierMissions')->name('missions.calendriermissions');
 
 
 
@@ -533,6 +536,8 @@ Route::get('/pageRechercheAvancee','RechercheController@pageRechercheAvancee')->
 
 Route::get('/RecherchePrestataireAvancee','RechercheController@RecherchePrestataireAvancee')->name('recherchePrestataire.avancee');
 Route::get('/prestataire/tousprestataires', 'RechercheController@touslesprestataires');
+
+Route::get('/Recherchemissions','RechercheController@RechercheMissions')->name('recherchemissions.avancee');
 
  
 
