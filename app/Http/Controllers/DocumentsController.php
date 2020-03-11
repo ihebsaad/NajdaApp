@@ -183,7 +183,7 @@ $valchamp = '...........................';
 
 
 }
-if(stristr($champtemp,'[CL_rapport') == TRUE )
+if(stristr($champtemp,'[CL_rapport') == TRUE || stristr($champtemp,'[CL_prest') == TRUE || stristr($champtemp,'[CL_prest1') == TRUE || stristr($champtemp,'[CL_prest2') == TRUE || stristr($champtemp,'[CL_prest3') == TRUE || stristr($champtemp,'[CL_prest4') == TRUE )
 {
 $valchamp = nl2br($valchamp);
 
@@ -229,7 +229,7 @@ $valchamp = str_replace("<br />", "", $valchamp);
                 $mc=round(microtime(true) * 1000);
                 $datees = strftime("%d-%m-%Y"."_".$mc); 
                 $datesc = strftime("%d-%m-%Y"); 				
-                $name_file = utf8_encode($arrfile['nom'].'_'.$datees.'.doc');
+                $name_file = utf8_encode($arrfile['nom'].'_'.$datees.'.rtf');
                 $titref =utf8_encode($arrfile['nom'].'_'.$datesc);
            /* }
         else 
@@ -482,13 +482,17 @@ if ((isset($_POST['idMissionDoc'])) && (! empty($_POST['idMissionDoc'])))
     }
 
 /*--------------------------------------------------------fin dates spécifiques---------------------------*/
-      // $array = str_replace("é", "é", $array);
 $Arrayn = str_replace("’", "'", $array);
-       $Arrayd = array_map("utf8_decode", $Arrayn ); 
+//$search  = array('À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'à', 'á', 'â', 'ã', 'ä', 'å', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ð', 'ò', 'ó', 'ô', 'õ', 'ö', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ');
+	//$replace = array('A', 'A', 'A', 'A', 'A', 'A', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 'a', 'a', 'a', 'a', 'a', 'a', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y');
+	//$Arrayd = str_replace($search, $replace, $Arrayn);
+$Arrayd = array_map("utf8_decode", $Arrayn); 
+//$Arrayd =mb_convert_encoding($Arrayn,'CP850','utf-8');
+//$Arrayd= mb_convert_encoding($Arrayd,'utf-8','iso-8859-16');
        $Arrays = str_replace("?,", "", $Arrayd);
        $Arraym = str_replace("?", "", $Arrays);
        $Arraysi = str_replace('<br />', "\\", $Arraym);
-       
+
        WordTemplate::export($file,$Arraysi, '/documents/'.$refdoss.'/'.$name_file);
 
 
@@ -1113,7 +1117,7 @@ Log::info('[Agent : '.$nomuser.' ] Generation du document '.$titref.' dans le do
                             }
                             else
                                 { $valchamp = "undefined index";}
-if(stristr($champtemp,'[CL_rapport') == TRUE )
+if(stristr($champtemp,'[CL_rapport') == TRUE || stristr($champtemp,'[CL_prest') == TRUE || stristr($champtemp,'[CL_prest1') == TRUE || stristr($champtemp,'[CL_prest2') == TRUE || stristr($champtemp,'[CL_prest3') == TRUE || stristr($champtemp,'[CL_prest4') == TRUE )
 {
 $valchamp = nl2br($valchamp);
 
@@ -1475,7 +1479,7 @@ public function historique(Request $request)
         $docparent= $_POST['doc'] ;
         $histodoc = array();
         while ($docparent !== null) {
-            $arrdoc = Document::select('id','titre','emplacement','dernier','parent','updated_at')->where('id', $docparent)->first();
+            $arrdoc = Document::select('id','titre','emplacement','dernier','parent','created_at')->where('id', $docparent)->first();
             $histodoc[]=$arrdoc;
             $docparent = $arrdoc['parent'];
         }
@@ -1507,7 +1511,7 @@ public function historique(Request $request)
         $mc=round(microtime(true) * 1000);
         $datees = strftime("%d-%m-%Y"."_".$mc); 
         $datesc = strftime("%d-%m-%Y"); 
-        $name_file = $arrfile['nom'].'_'.$datees.'_annulation.doc';
+        $name_file = $arrfile['nom'].'_'.$datees.'_annulation.rtf';
         $titref =$arrfile['nom'].'_'.$datesc;
         // verifier si la template a un champ date/heure
         $datees="";
@@ -1607,7 +1611,7 @@ Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: '
                     }
                     else
                         { $valchamp = "undefined index";}
-if(stristr($champtemp,'[CL_rapport') == TRUE )
+if(stristr($champtemp,'[CL_rapport') == TRUE || stristr($champtemp,'[CL_prest') == TRUE || stristr($champtemp,'[CL_prest1') == TRUE || stristr($champtemp,'[CL_prest2') == TRUE || stristr($champtemp,'[CL_prest3') == TRUE || stristr($champtemp,'[CL_prest4') == TRUE )
 {
 $valchamp = nl2br($valchamp);
 

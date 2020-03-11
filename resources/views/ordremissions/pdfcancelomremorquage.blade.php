@@ -130,7 +130,7 @@ if (isset($omparent['clientIMA'])) { ?>
 			 <span style="font-family:'Times New Roman'"> <?php if (isset($omparent['subscriber_lastname'])) { echo $omparent['subscriber_lastname']; } ?></span>
 			<span style="font-family:'Times New Roman'; font-weight:bold"> </span><span style="width:2.79pt; display:inline-block">&#xa0;</span><span style="width:36pt; display:inline-block">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">N/Réf</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">:  </span>
 			<!-- verification en cas affectation au nouveau dossier - ref medic nouveau dossier -->
-			<span style="font-family:'Times New Roman'; font-weight:bold;"><span style="font-family:'Times New Roman'"><?php if (isset($reference_medic) ){ echo $reference_medic; }  if ((isset($omparent['reference_medic'])) && (! isset($reference_medic))) { echo $omparent['reference_medic']; } ?></span></span>
+			<span style="font-family:'Times New Roman'; font-weight:bold;"><span style="font-family:'Times New Roman'"><?php if (isset($reference_medic) ){ echo $reference_medic; }  if ((isset($omparent['reference_medic'])) && (! isset($reference_medic))) { echo $omparent['reference_medic']; if (isset( $omparent['idprestation'])) {echo " /".$omparent['idprestation'];}} ?></span></span>
 	</p>
 </div>
 <div class="row" style=" margin-left: 0px; ">
@@ -220,7 +220,7 @@ if (isset($omparent['CB_prerades'])) {if ($omparent['CB_prerades'] === "oui"||($
 <div style="margin-top:0pt;clear:both"></div><p style="margin-left:5.85pt;margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Remarque</span><span style="font-family:'Times New Roman'; font-weight:bold">s</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_remarque'])) { echo $omparent['CL_remarque']; } ?></span>
 					</p>
-<?php if (isset($omparent['affectea'])) { if ($omparent['affectea'] === "interne") { ?>						
+<?php if (isset($omparent['affectea'])) { if ($omparent['affectea'] === "interne" || ($omparent['affectea'] === "mmentite")) { ?>						
 <div id="prestinterne" >
 					<p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; padding-bottom:1pt; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold; ">&#xa0;</span></p><p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;border-top: 1.5pt solid #000000;padding-top:10px"><span style="font-family:'Times New Roman'; font-weight:bold">Origine de la demande: </span><span style="font-family:'Times New Roman'; font-weight:bold; ">
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['client_dossier'])) { echo $omparent['client_dossier']; } ?></span></span><span style="font-family:'Times New Roman'; font-weight:bold">   Date demande: </span>
@@ -228,7 +228,7 @@ if (isset($omparent['CB_prerades'])) {if ($omparent['CB_prerades'] === "oui"||($
 						<span style="font-family:'Times New Roman'; font-weight:bold"> Heure: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heuredemande'])) { echo $omparent['CL_heuredemande']; } ?></span>
 						<span style="font-family:'Times New Roman'; font-weight:bold">  </span></p><p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; border-bottom:1.5pt solid #000000; padding-bottom:10px; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Notre réf.</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($reference_medic2) ){ echo $reference_medic2; }  if ((isset($omparent['reference_medic2'])) && (! isset($reference_medic2))) { echo $omparent['reference_medic2']; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($reference_medic2) ){ echo $reference_medic2; }  if ((isset($omparent['reference_medic2'])) && (! isset($reference_medic2))) { echo $omparent['reference_medic2']; if (isset( $omparent['idprestation'])) {echo " /".$omparent['idprestation'];} } ?></span>
 							<span style="font-family:'Times New Roman'; font-weight:bold">   Réf. client: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['reference_customer'])) { echo $omparent['reference_customer']; } ?></span>
 						</p>
