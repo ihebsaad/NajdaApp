@@ -2764,9 +2764,7 @@ array_push($listepr,$pr['prestataire_id']);
 
 
     <?php
-
  $param= App\Parametre::find(1);$env=$param->env;
-
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 ?>
 
@@ -3999,6 +3997,15 @@ function keyUpHandler(){
         if (affectea == "interne")
         {
           var type_affectation = $("#type_affectation").val();
+ if (type_affectation==="Select")
+        {
+             Swal.fire({
+                type: 'error',
+                title: 'oups...',
+                text: "Veuillez selectionner une entité soeur"
+            });
+            return false;
+        }
           var nomprestextern = "";
           var idprestextern= "";
         }
