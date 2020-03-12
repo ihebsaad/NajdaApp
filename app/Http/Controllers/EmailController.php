@@ -4234,10 +4234,13 @@ $id=0;
                 $xml = file_get_contents(storage_path() . "/SMS/".$file);
                 $items = simplexml_load_string($xml);
 
-
               //  $tel=$arr->sms->gsm ;
                 $tel=$items[0]->gsm;
                 $contenu=$items[0]->texte;
+                    $contenu= str_replace ( '&' ,'' ,$contenu);
+                    $contenu= str_replace ( '<' ,'' ,$contenu);
+                    $contenu= str_replace ( '>' ,'' ,$contenu);
+
               //  dd($tel);
                 Log::info('SMS reçu $tel: '.$tel);
 
@@ -6467,6 +6470,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
         $num = trim($request->get('destinataire'));
         $contenu = trim( $request->get('message'));
+        $contenu= str_replace ( '&' ,'' ,$contenu);
+
         $description = trim( $request->get('description'));
         $doss = trim( $request->get('dossier'));
         $dossier= $this->RefDossierById($doss);////;
@@ -6476,8 +6481,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             <gsm>'.$num.'</gsm>
             <texte>'.$contenu.'</texte>
         </sms>';
-
-       $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        $date=date('dmYHis');
+       $filepath = storage_path() . '/SENDSMS/sms_'.$num.'_'.$date.'.xml';
       //  $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
 
      //  $old = umask(0);
@@ -6510,9 +6515,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
 
 
-
   $param= App\Parametre::find(1);$env=$param->env;
-$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+  $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         $urlsending=$urlapp.'/envoyes';
      //   echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
         return redirect($urlsending)->with('success', '  Envoyé ! ');

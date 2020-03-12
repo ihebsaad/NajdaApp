@@ -110,7 +110,10 @@ $(document).ready(function()
 
 
                 <div class="row">
+                    <?php if($type=='client'  || $type=='prestataire' )
+                    {?>
                     <label for="destinataire">Destinataire:</label>
+                        <?php } ?>
                     <div class="row">
                         <?php if($type=='client')
                         {?>
@@ -122,7 +125,7 @@ $(document).ready(function()
                         <select class="form-control" id="prest"   >
                             <option ></option>
                             @foreach($prestataires as $prestat)
-                                <option  <?php  if($prest==$prestat){ echo 'selected="selected" ';}  ?> value="<?php echo $prestat ;?>"> <?php   echo PrestatairesController::ChampById('name',$prestat); ;?></option>
+                                <option  <?php  if($prest==$prestat){ echo 'selected="selected" ';}  ?> value="<?php echo $prestat ;?>"> <?php   echo PrestatairesController::ChampById('name',$prestat); ;?>  <?php   echo PrestatairesController::ChampById('prenom',$prestat); ;?></option>
                             @endforeach
                         </select>
                         <?php }
@@ -132,10 +135,10 @@ $(document).ready(function()
                     <div class="row">
                         <div class="col-md-10">
                             <select id="destinataire" required  class="form-control" name="destinataire[]"  multiple >
-                                <option value="ihebsaad@gmail.com">IHEB</option>
+
 
                             @foreach($listeemails as  $mail)
-                                    <option   value="<?php echo $mail ;?>"> <?php echo $mail ;?>  <small style="font-size:11px">(<?php echo PrestatairesController::NomByEmail( $mail);?>) - '<?php echo PrestatairesController::QualiteByEmail($mail);?>' ('<?php echo PrestatairesController::TypeEmail($mail);?>' , '<?php echo PrestatairesController::RemarqueByEmail($mail);?>)' </small> </option>
+                                    <option   value="<?php echo $mail ;?>"> <?php echo $mail ;?>  <small style="font-size:11px">(<?php echo PrestatairesController::NomByEmail( $mail);?>  <?php echo PrestatairesController::PrenomByEmail( $mail);?>) -  <?php echo PrestatairesController::QualiteByEmail($mail);?> ( <?php echo PrestatairesController::TypeEmail($mail);?>      <?php echo PrestatairesController::RemarqueByEmail($mail);?>)  </small> </option>
                                 @endforeach
                             </select>
                         </div>
@@ -374,7 +377,8 @@ $(document).ready(function()
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <?php
-    $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+ $param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
     ?>
     <script type="text/javascript">
 

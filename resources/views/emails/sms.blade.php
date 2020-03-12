@@ -28,7 +28,7 @@
                     <select class="form-control" id="prest" required name="nom" >
                         <option ></option>
                         @foreach($prestataires as $prestat)
-                            <option  <?php  if($prest==$prestat){ echo 'selected="selected" ';}  ?> value="<?php echo $prestat ;?>"> <?php   echo PrestatairesController::ChampById('name',$prestat); ;?></option>
+                            <option  <?php  if($prest==$prestat){ echo 'selected="selected" ';}  ?> value="<?php echo $prestat ;?>"> <?php   echo PrestatairesController::ChampById('name',$prestat).' '.  PrestatairesController::ChampById('prenom',$prestat) ; ;?></option>
                         @endforeach
                     </select>
                     <?php }                 ?>
