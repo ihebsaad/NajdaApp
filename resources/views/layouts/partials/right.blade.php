@@ -1324,7 +1324,7 @@ $('.DescripMission').on('click', function() {
 
            $.ajax({
 
-               url: "<?php echo $urlapp; ?>/Mission/getDescriptionMissionAjax/"+idwde,
+               url: "{{ url('/') }}/Mission/getDescriptionMissionAjax/"+idwde,
                type : 'get',
               // data : 'idw=' + idw,
                success: function(data){
@@ -1399,7 +1399,7 @@ $('.DescripMission').on('click', function() {
 
            $.ajax({
 
-               url: "<?php echo $urlapp; ?>/Mission/getMailGenerator/"+idwg,
+               url: "{{ url('/') }}/Mission/getMailGenerator/"+idwg,
                type : 'get',
               // data : 'idw=' + idw,
                success: function(data){
@@ -1434,7 +1434,7 @@ $('.deleguerMission').on('click', function() {
 
            $.ajax({
 
-               url: "<?php echo $urlapp; ?>/Mission/getAjaxDeleguerMission/"+idwd,
+               url: "{{ url('/') }}/Mission/getAjaxDeleguerMission/"+idwd,
                type : 'get',
               // data : 'idw=' + idw,
                success: function(data){
@@ -1478,7 +1478,7 @@ if (r == true) {
  
          $.ajax({
 
-               url: "<?php echo $urlapp; ?>/Mission/AnnulerMissionCouranteByAjax/"+idws,
+               url: "{{ url('/') }}/Mission/AnnulerMissionCouranteByAjax/"+idws,
                type : 'get',
               // data : 'idw=' + idw,
                success: function(data){

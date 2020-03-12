@@ -10,11 +10,11 @@
 		</div>
 		<br style="clear:both; mso-break-type:section-break" />
 			<p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0.2pt; margin-bottom:0pt; widows:0; orphans:0; font-size:7.5pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p>
-			<p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
+			<p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:7pt">
 		<span id="Eligne1" style="font-family:'Times New Roman'; font-weight:bold">Rue Mohamed Hamdane - Sahloul III</span>
-				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
+				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:7pt">
 		<span id="Eligne2" style="font-family:'Times New Roman'; font-weight:bold">B.P. 41 - 4054 Sousse-Sahloul - Tunisie Tel : (+216) 3600 3600</span>
-				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
+				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:7pt">
 		<span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">Fax : (+216) 73 82 03 33</span>
 				</p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt">
 		<span id="Eligne4" style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">24ops@najda-assistance.com DD-(FP-03/04)-08/01</span>
@@ -122,7 +122,7 @@ if (isset($_POST['clientIMA'])) { ?>
 			 <span style="font-family:'Times New Roman'"> <?php if (isset($_POST['subscriber_lastname'])) { echo $_POST['subscriber_lastname']; } ?></span>
 			<span style="font-family:'Times New Roman'; font-weight:bold"> </span><span style="width:2.79pt; display:inline-block">&#xa0;</span><span style="width:36pt; display:inline-block">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">N/Réf</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">:  </span>
 			<!-- verification en cas affectation au nouveau dossier - ref medic nouveau dossier -->
-			<span style="font-family:'Times New Roman'; font-weight:bold;"><span style="font-family:'Times New Roman'"><?php if (isset($reference_medic) ){ echo $reference_medic; }  if ((isset($_POST['reference_medic'])) && (! isset($reference_medic))) { echo $_POST['reference_medic']; } ?></span></span>
+			<span style="font-family:'Times New Roman'; font-weight:bold;"><span style="font-family:'Times New Roman'"><?php if (isset($reference_medic) ){ echo $reference_medic; }  if ((isset($_POST['reference_medic'])) && (! isset($reference_medic))) { echo $_POST['reference_medic'];if (isset($idprestation) && !(empty($idprestation))) {echo " /".$idprestation;} } ?></span></span>
 	</p>
 </div>
 <div class="row" style=" margin-left: 0px; ">
@@ -250,9 +250,9 @@ if (isset($_POST['clientIMA'])) { ?>
 						<span style="font-family:'Times New Roman'; font-weight:bold"> Heure: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_heuredemande'])) { echo $_POST['CL_heuredemande']; } ?></span>
 						<span style="font-family:'Times New Roman'; font-weight:bold">  </span></p><p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; border-bottom:1.5pt solid #000000; padding-bottom:10px; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Notre réf.</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($reference_medic2) ){ echo $reference_medic2; }  if ((isset($_POST['reference_medic2'])) && (! isset($reference_medic2))) { echo $_POST['reference_medic2']; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($reference_medic2) ){ echo $reference_medic2; }  if ((isset($_POST['reference_medic2'])) && (! isset($reference_medic2))) { echo $_POST['reference_medic2']; if (isset($idprestation) && !(empty($idprestation))) {echo " /".$idprestation;} } ?></span>
 							<span style="font-family:'Times New Roman'; font-weight:bold">   Réf. client: </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($reference_customer)) { echo $reference_customer; }  if (!(isset($reference_customer)) && isset($_POST['reference_customer'])) { echo $_POST['reference_customer']; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($reference_customer)) { echo $reference_customer; if (isset($idprestation) && !(empty($idprestation))) {echo " /".$idprestation;}}  if (!(isset($reference_customer)) && isset($_POST['reference_customer'])) { echo $_POST['reference_customer']; } ?></span>
 						</p>
 </div>
 

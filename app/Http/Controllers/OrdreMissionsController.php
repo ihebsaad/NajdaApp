@@ -67,6 +67,79 @@ class OrdreMissionsController extends Controller
 				        ]);
 				        $attachement->save();
                 	}
+// mettre à jour kilométrage véhicule
+                if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['idvehic']))
+                	{
+                		$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+                		if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+
+                    if($omparent['km_distance'] && $_POST['km_distance'] )
+                    {
+	                	if((int)$_POST['km_distance'] > (int)$omparent['km_distance'])
+	                	{
+	                     
+	                     $voiture->update(['km'=>$km + ((int)$_POST['km_distance']-(int)$omparent['km_distance'])]);
+
+	                	}
+	                	elseif ((int)$_POST['km_distance'] < (int)$omparent['km_distance']) {
+	                
+	                     $voiture->update(['km'=>$km-((int)$omparent['km_distance']-(int)$_POST['km_distance'])]);
+	                	}
+                   }
+                   else
+                   {
+                   	if(!isset($omparent['km_distance']) && $_POST['km_distance'])
+                   	{
+                    
+	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+	                }
+
+                   }
+
+               }
+               else
+               {
+               	if( isset($omparent['km_distance']) && !Empty($omparent['km_distance']) && !Empty($_POST['idvehic']) )
+                	{
+               		  $voiture=Voiture::where('id',$_POST['idvehic'])->first();
+                		if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+                      $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+
+               	}
+
+                   
+                   	if(!isset($omparent['km_distance']) && isset($_POST['km_distance']) && !empty($_POST['km_distance']))
+                   	{
+                         $voiture=Voiture::where('id',$_POST['idvehic'])->first();
+                         if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+	                }
+
+                  
+
+
+               }
 
                 	/* bloc test */
                 if ($_POST['affectea'] !== "interne")
@@ -77,7 +150,7 @@ class OrdreMissionsController extends Controller
 	        		$iddoss = $_POST['dossdoc'];
 	        		$prestataireom= $omparent['prestataire_taxi'];
 	        		$affectea = $omparent['affectea'];
-	        		$dataprest =array('prestataire_taxi' => $prestataireom,'affectea' => $affectea);
+	        		$dataprest =array('prestataire_taxi' => $prestataireom,'affectea' => $affectea,'idprestation' => $omparent['idprestation']);
 	        		$pdf = PDFomme::loadView('ordremissions.pdfodmtaxi',$dataprest)->setPaper('a4', '');
 	        		$pdf->save($path.$iddoss.'/'.$name.'.pdf');
 	                $omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_taxi' => $prestataireom, 'affectea'=>$affectea,'idprestation'=>$omparent['idprestation']]);
@@ -108,8 +181,9 @@ Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent
         		{
         			
 	        		// Send data to the view using loadView function of PDF facade
-        			$pdfcomp = PDFcomp::loadView('ordremissions.pdfodmtaxi')->setPaper('a4', '');
-        			$parent = $_POST['parent'];
+                                $parent = $_POST['parent'];
+                                $omparent1= OMTaxi::where('id', $parent)->select('idprestation')->first();
+                                $pdfcomp = PDFcomp::loadView('ordremissions.pdfodmtaxi',['idprestation' => $omparent1['idprestation']])->setPaper('a4', '');
         			$iddoss = $_POST['dossdoc'];
         			// type_affectation_post est proritaire ? -->	hs change
         			if (isset($_POST['type_affectation_post']) && !(empty($_POST['type_affectation_post']))) 
@@ -151,6 +225,73 @@ $nomuser = $user->name ." ".$user->lastname ;
 Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$presttaxi.' dans le dossier: '.$omparent["reference_medic"] );
  }
         			//return 'complete action '.$result;
+if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['vehicID']))
+                	{
+                		$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+                		if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+
+                    if($omparent['km_distance'] && $_POST['km_distance'] )
+                    {
+	                	if((int)$_POST['km_distance'] > (int)$omparent['km_distance'])
+	                	{
+	                     
+	                     $voiture->update(['km'=>$km + ((int)$_POST['km_distance']-(int)$omparent['km_distance'])]);
+
+	                	}
+	                	elseif ((int)$_POST['km_distance'] < (int)$omparent['km_distance']) {
+	                
+	                     $voiture->update(['km'=>$km-((int)$omparent['km_distance']-(int)$_POST['km_distance'])]);
+	                	}
+                   }
+                   else
+                   {
+                   	if(! $omparent['km_distance'] && $_POST['km_distance'])
+                   	{
+                    
+	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+	                }
+
+                   }
+
+               }
+               else
+               {
+               	if(isset($omparent['km_distance']) && !Empty($omparent['km_distance']) && !Empty($_POST['vehicID'])  )
+                	{
+               		  $voiture=Voiture::where('id',$_POST['idvehic'])->first();
+                		if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+                      $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+
+               	}
+if(!isset($omparent['km_distance']) && isset($_POST['km_distance'])&& !empty($_POST['km_distance']))
+                   	{
+                         $voiture=Voiture::where('id',$_POST['idvehic'])->first();
+                         if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+	                }
+
+               }
 
                     // affecter date  prévue destination ( prévue fin de mission)
                if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))    
@@ -218,7 +359,7 @@ Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent
 $date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
 
 $newformat = date('d/m/Y',$date);
-if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']=null)
+if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']==null)
 {
 
 $newformat = $_POST['CL_heuredateRDV'];
@@ -282,7 +423,8 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 
 }
 
-			    $pdf2 = PDFomme::loadView('ordremissions.pdfodmambulance',['prestataire_taxi' => $prestataireom])->setPaper('a4', '');
+			    $pdf2 = PDFomme::loadView('ordremissions.pdfodmtaxi',['prestataire_taxi' => $prestataireom,'idprestation' => $idprestation])->setPaper('a4', '');
+                            $pdf2->save($path.$iddossom.'/'.$name.'.pdf');
 			    // enregistrement de nouveau attachement
 		        $path2='/OrdreMissions/'.$iddossom.'/'.$name.'.pdf';
 		        $attachement = new Attachement([
@@ -300,7 +442,8 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 	        		{	
 	        			$prestataireom= $_POST["prestextern"];
                                         $idprestation= $_POST["idprestextern"];                                
-                                        $pdf2 = PDF4::loadView('ordremissions.pdfodmtaxi')->setPaper('a4', '');
+                                        $pdf2 = PDFomme::loadView('ordremissions.pdfodmtaxi',['idprestation' => $idprestation])->setPaper('a4', '');
+                                        $pdf2->save($path.$iddoss.'/'.$name.'.pdf');
 	        			 if (isset($prestataireom))
 					        {$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_taxi' => $prestataireom,'idprestation' => $idprestation]);}
 					    	else
@@ -376,7 +519,7 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 $date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
 
 $newformat = date('d/m/Y',$date);
-if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']=null)
+if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']==null)
 {
 
 $newformat = $_POST['CL_heuredateRDV'];
@@ -424,6 +567,8 @@ if (isset($_POST['parent']) && ! empty($_POST['parent']))
                         $prestomtx = $omparent['prestataire_taxi'];
                         $idprestation = $omparent['idprestation'];
                     }
+                     $pdf = PDFomme::loadView('ordremissions.pdfodmtaxi',['idprestation' => $idprestation])->setPaper('a4', '');
+                     $pdf->save($path.$iddoss.'/'.$name.'.pdf');
         			$omtaxi = OMTaxi::create(['prestataire_taxi'=>$prestomtx,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss,'idprestation'=>$idprestation]);
         		} else {
         			$omtaxi = OMTaxi::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
@@ -867,7 +1012,7 @@ $reqprestaxi->request->add(['dossier' => $iddnew]);
 				if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
 				{
 					$reference_customer=$dossnouveau1["reference_customer"];
-                    $requestData['reference_customer'] = $reference_customer;
+                    $requestData['reference_customer'] = $reference_customer.'/'.$idprestation;
 
 
 
@@ -881,7 +1026,7 @@ $reqprestaxi->request->add(['dossier' => $iddnew]);
 
 						$nresponse = $nrequest->send();*/
 					// duplication de lom dans le nouveau dossier
-					$pdf2 = PDF4::loadView('ordremissions.pdfodmtaxi',['reference_medic' => $nref, 'reference_medic2' => $nref, 'emispar' => $emispar,'client_dossier' => $client_dossier, 'reference_customer' => $reference_customer])->setPaper('a4', '');
+					$pdf2 = PDF4::loadView('ordremissions.pdfodmtaxi',['reference_medic' => $nref, 'reference_medic2' => $nref, 'emispar' => $emispar,'client_dossier' => $client_dossier, 'reference_customer' => $reference_customer,'idprestation' => $idprestation])->setPaper('a4', '');
 					}
 					else
 					{
@@ -1084,7 +1229,7 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
                    }
                    else
                    {
-                   	if(! $omparent['km_distance'] && $_POST['km_distance'])
+                   	if(!isset($omparent['km_distance']) && $_POST['km_distance'])
                    	{
                     
 	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
@@ -1110,6 +1255,24 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 
                	}
 
+                   
+                   	if(!isset($omparent['km_distance']) && isset($_POST['km_distance'])&& !empty($_POST['km_distance']))
+                   	{
+                         $voiture=Voiture::where('id',$_POST['vehicID'])->first();
+                         if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+	                }
+
+                  
+
+
                }
                 /* bloc test */
                 if ($_POST['affectea'] !== "interne")
@@ -1120,7 +1283,7 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 	        		$iddoss = $_POST['dossdoc'];
 	        		$prestataireom= $omparent['prestataire_ambulance'];
 	        		$affectea = $omparent['affectea'];
-	        		$dataprest =array('prestataire_ambulance' => $prestataireom,'affectea' => $affectea);
+	        		$dataprest =array('prestataire_ambulance' => $prestataireom,'affectea' => $affectea,'idprestation' => $omparent['idprestation']);
 	        		$pdf = PDFomme::loadView('ordremissions.pdfodmambulance',$dataprest)->setPaper('a4', '');
 	        		$pdf->save($path.$iddoss.'/'.$name.'.pdf');
 	                $omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_ambulance' => $prestataireom, 'affectea'=>$affectea,'idprestation'=>$omparent['idprestation']]);
@@ -1150,11 +1313,11 @@ Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent
         		if ($_POST['templatedocument'] === "complete")
         		{
                     //return $_POST['idMissionOM'];
-        			
-	        		// Send data to the view using loadView function of PDF facade
-        			$pdfcomp = PDFcomp::loadView('ordremissions.pdfodmambulance')->setPaper('a4', '');
         			$parent = $_POST['parent'];
-        			$iddoss = $_POST['dossdoc'];
+	        		// Send data to the view using loadView function of PDF facade
+                                $omparent1= OMAmbulance::where('id', $parent)->select('idprestation')->first();
+                                $pdfcomp = PDFcomp::loadView('ordremissions.pdfodmambulance',['idprestation' => $omparent1['idprestation']])->setPaper('a4', '');
+                                 $iddoss = $_POST['dossdoc'];
         			// type_affectation_post est proritaire ? -->	hs change
         			if (isset($_POST['type_affectation_post']) && !(empty($_POST['type_affectation_post']))) 
         			{ $prestambulance = $_POST['type_affectation_post'];
@@ -1248,6 +1411,19 @@ Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent
                       $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
 
                	}
+if(!isset($omparent['km_distance']) && isset($_POST['km_distance'])&& !empty($_POST['km_distance']))
+                   	{
+                         $voiture=Voiture::where('id',$_POST['vehicID'])->first();
+                         if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+	                }
 
                }
 
@@ -1326,7 +1502,7 @@ Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent
 $date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
 
 $newformat = date('d/m/Y',$date);
-if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']=null)
+if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']==null)
 {
 
 $newformat = $_POST['CL_heuredateRDV'];
@@ -1386,7 +1562,8 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 
 }
 
-			    $pdf2 = PDFomme::loadView('ordremissions.pdfodmambulance',['prestataire_ambulance' => $prestataireom])->setPaper('a4', '');
+			    $pdf2 = PDFomme::loadView('ordremissions.pdfodmambulance',['prestataire_ambulance' => $prestataireom,'idprestation' => $idprestation])->setPaper('a4', '');
+                            $pdf2->save($path.$iddossom.'/'.$name.'.pdf');
 			    // enregistrement de nouveau attachement
 		        $path2='/OrdreMissions/'.$iddossom.'/'.$name.'.pdf';
 		        $attachement = new Attachement([
@@ -1403,7 +1580,8 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 	        		{	
 	        			$prestataireom= $_POST["prestextern"];
                                         $idprestation= $_POST["idprestextern"]; 
-	        			$pdf2 = PDF4::loadView('ordremissions.pdfodmambulance')->setPaper('a4', '');
+	        			$pdf2 = PDFomme::loadView('ordremissions.pdfodmambulance',['idprestation' => $idprestation])->setPaper('a4', '');
+                                        $pdf2->save($path.$iddoss.'/'.$name.'.pdf');
 	        			 if (isset($prestataireom))
 					        {$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_ambulance' => $prestataireom,'idprestation'=> $idprestation]);}
 					    	else
@@ -1530,7 +1708,7 @@ $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first()
 $date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
 
 $newformat = date('d/m/Y',$date);
-if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']=null)
+if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']==null)
 {
 
 $newformat = $_POST['CL_heuredateRDV'];
@@ -1576,6 +1754,8 @@ if (isset($_POST['parent']) && ! empty($_POST['parent']))
                         $prestomamb = $omparent['prestataire_ambulance'];
                         $idprestation = $omparent['idprestation'];
                     }
+$pdf = PDFomme::loadView('ordremissions.pdfodmambulance',['idprestation' => $idprestation])->setPaper('a4', '');
+                     $pdf->save($path.$iddoss.'/'.$name.'.pdf');
         			$omambulance = OMAmbulance::create(['prestataire_ambulance'=>$prestomamb,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss,'idprestation'=>$idprestation]);
         		} else {
         			$omambulance = OMAmbulance::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
@@ -2018,7 +2198,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 				if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
 				{
 					$reference_customer=$dossnouveau1["reference_customer"];
-                    $requestData['reference_customer'] = $reference_customer;
+                    $requestData['reference_customer'] = $reference_customer.'/'.$idprestation;
 
 
 
@@ -2032,7 +2212,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 
 						$nresponse = $nrequest->send();*/
 					// duplication de lom dans le nouveau dossier
-					$pdf2 = PDF4::loadView('ordremissions.pdfodmambulance',['reference_medic' => $nref, 'reference_medic2' => $nref, 'emispar' => $emispar, 'client_dossier' => $client_dossier, 'reference_customer' => $reference_customer])->setPaper('a4', '');
+					$pdf2 = PDF4::loadView('ordremissions.pdfodmambulance',['reference_medic' => $nref, 'reference_medic2' => $nref, 'emispar' => $emispar, 'client_dossier' => $client_dossier, 'reference_customer' => $reference_customer,'idprestation' => $idprestation])->setPaper('a4', '');
 					}
 					else
 					{
@@ -2258,6 +2438,79 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
                         ]);
                         $attachement->save();
                     }
+// mettre à jour kilométrage véhicule
+                if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['idvehic']))
+                	{
+                		$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+                		if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+
+                    if($omparent['km_distance'] && $_POST['km_distance'] )
+                    {
+	                	if((int)$_POST['km_distance'] > (int)$omparent['km_distance'])
+	                	{
+	                     
+	                     $voiture->update(['km'=>$km + ((int)$_POST['km_distance']-(int)$omparent['km_distance'])]);
+
+	                	}
+	                	elseif ((int)$_POST['km_distance'] < (int)$omparent['km_distance']) {
+	                
+	                     $voiture->update(['km'=>$km-((int)$omparent['km_distance']-(int)$_POST['km_distance'])]);
+	                	}
+                   }
+                   else
+                   {
+                   	if(!isset($omparent['km_distance']) && $_POST['km_distance'])
+                   	{
+                    
+	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+	                }
+
+                   }
+
+               }
+               else
+               {
+               	if( isset($omparent['km_distance']) && !Empty($omparent['km_distance']) && !Empty($_POST['idvehic']) )
+                	{
+               		  $voiture=Voiture::where('id',$_POST['idvehic'])->first();
+                		if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+                      $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+
+               	}
+
+                   
+                   	if(!isset($omparent['km_distance']) && isset($_POST['km_distance']) && !empty($_POST['km_distance']))
+                   	{
+                         $voiture=Voiture::where('id',$_POST['idvehic'])->first();
+                         if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+	                }
+
+                  
+
+
+               }
 
                     /* bloc test */
 	                if ($_POST['affectea'] !== "interne")
@@ -2267,8 +2520,9 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 		                $path= storage_path()."/OrdreMissions/";
 		        		$iddoss = $_POST['dossdoc'];
 		        		$prestataireom= $omparent['prestataire_remorquage'];
+                                        $idprestation= $omparent['idprestation'];
 		        		$affectea = $omparent['affectea'];
-		        		$dataprest =array('prestataire_remorquage' => $prestataireom,'affectea' => $affectea);
+		        		$dataprest =array('prestataire_remorquage' => $prestataireom,'affectea' => $affectea,'idprestation' => $idprestation);
 		        		$pdf = PDFomme::loadView('ordremissions.pdfodmremorquage',$dataprest)->setPaper('a4', '');
 		        		$pdf->save($path.$iddoss.'/'.$name.'.pdf');
 		                $omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_remorquage' => $prestataireom, 'affectea'=>$affectea,'idprestation'=>$omparent['idprestation']]);
@@ -2300,8 +2554,9 @@ Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent
                     //return $_POST['idMissionOM'];
 
                     // Send data to the view using loadView function of PDF facade
-                    $pdfcomp = PDFcomp::loadView('ordremissions.pdfodmremorquage')->setPaper('a4', '');
                     $parent = $_POST['parent'];
+                    $omparent1= OMRemorquage::where('id', $parent)->select('idprestation')->first();
+                    $pdfcomp = PDFcomp::loadView('ordremissions.pdfodmremorquage',['idprestation'=>$omparent1['idprestation']])->setPaper('a4', '');
                     $iddoss = $_POST['dossdoc'];
                     $prestambulance = $_POST['type_affectation'];
                     // type_affect pares remplace ou complete
@@ -2347,8 +2602,77 @@ $nomuser = $user->name ." ".$user->lastname ;
 Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$prestambulance.' dans le dossier: '.$omparent["reference_medic"] );
  }
                     //return 'complete action '.$result;
+	if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['vehicID']))
+                	{
+                		$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+                		if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+
+                    if($omparent['km_distance'] && $_POST['km_distance'] )
+                    {
+	                	if((int)$_POST['km_distance'] > (int)$omparent['km_distance'])
+	                	{
+	                     
+	                     $voiture->update(['km'=>$km + ((int)$_POST['km_distance']-(int)$omparent['km_distance'])]);
+
+	                	}
+	                	elseif ((int)$_POST['km_distance'] < (int)$omparent['km_distance']) {
+	                
+	                     $voiture->update(['km'=>$km-((int)$omparent['km_distance']-(int)$_POST['km_distance'])]);
+	                	}
+                   }
+                   else
+                   {
+                   	if(! $omparent['km_distance'] && $_POST['km_distance'])
+                   	{
+                    
+	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+	                }
+
+                   }
+
+               }
+               else
+               {
+               	if(isset($omparent['km_distance']) && !Empty($omparent['km_distance']) && !Empty($_POST['vehicID'])  )
+                	{
+               		  $voiture=Voiture::where('id',$_POST['idvehic'])->first();
+                		if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+                      $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+
+               	}
+if(!isset($omparent['km_distance']) && isset($_POST['km_distance'])&& !empty($_POST['km_distance']))
+                   	{
+                         $voiture=Voiture::where('id',$_POST['idvehic'])->first();
+                         if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
+	                }
+
+               }
+
 
                     // affecter date  prévue destination ( prévue fin de mission)
+
                     if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))
                     {
                     
@@ -2411,7 +2735,7 @@ Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent
 $date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
 
 $newformat = date('d/m/Y',$date);
-if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']=null)
+if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']==null)
 {
 
 $newformat = $_POST['CL_heuredateRDV'];
@@ -2455,7 +2779,7 @@ Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' .$do
 }
 			        	// changer le var post
 			        	$reqmmentite = new \Illuminate\Http\Request();
-	                    $reqmmentite->request->add(['prestataire_remorquage' => $prestataireom]);
+	                    $reqmmentite->request->add(['prestataire_remorquage' => $prestataireom,'idprestation' => $idprestation]);
 	                    app('App\Http\Controllers\OrdreMissionsController')->pdfodmremorquage($reqmmentite);
 
 			        	$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddossom.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddossom, 'prestataire_remorquage' => $prestataireom,'complete'=>1,'idprestation'=>$idprestation]);
@@ -2476,7 +2800,8 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 
 }
 
-			    $pdf2 = PDFomme::loadView('ordremissions.pdfodmremorquage',['prestataire_remorquage' => $prestataireom])->setPaper('a4', '');
+			    $pdf2 = PDFomme::loadView('ordremissions.pdfodmremorquage',['prestataire_remorquage' => $prestataireom,'idprestation' => $idprestation])->setPaper('a4', '');
+                            $pdf2->save($path.$iddossom.'/'.$name.'.pdf');
 			    // enregistrement de nouveau attachement
 		        $path2='/OrdreMissions/'.$iddossom.'/'.$name.'.pdf';
 		        $attachement = new Attachement([
@@ -2493,7 +2818,8 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
                 {
                     $prestataireom= $_POST["prestextern"];
 $idprestation= $_POST["idprestextern"]; 
-                    $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage')->setPaper('a4', '');
+                    $pdf2 = PDFomme::loadView('ordremissions.pdfodmremorquage',['idprestation' => $idprestation])->setPaper('a4', '');
+                     $pdf2->save($path.$iddoss.'/'.$name.'.pdf');
                     if (isset($prestataireom))
                     {$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss, 'prestataire_remorquage' => $prestataireom,'idprestation'=> $idprestation]);}
                     else
@@ -2569,7 +2895,7 @@ $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first()
 $date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
 
 $newformat = date('d/m/Y',$date);
-if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']=null)
+if(empty($_POST['CL_heuredateRDV'])|| $_POST['CL_heuredateRDV']==null)
 {
 
 $newformat = $_POST['CL_heuredateRDV'];
@@ -2620,6 +2946,8 @@ if (isset($_POST['parent']) && ! empty($_POST['parent']))
                        $prestomrem= $omparent['prestataire_remorquage'];
                        $idprestation = $omparent['idprestation'];
                     }
+$pdf = PDFomme::loadView('ordremissions.pdfodmremorquage',['idprestation' => $idprestation])->setPaper('a4', '');
+                     $pdf->save($path.$iddoss.'/'.$name.'.pdf');
         			$omremorquage = OMRemorquage::create(['prestataire_remorquage'=>$prestomrem,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss,'idprestation'=>$idprestation]);
         		} else {
         			$omremorquage = OMRemorquage::create(['emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1,'dossier'=>$iddoss]);
@@ -3077,7 +3405,7 @@ $reqlieup->request->add(['dossier' => $iddnew]);
 				if (isset($dossnouveau1["reference_customer"]) && ! (empty($dossnouveau1["reference_customer"])))
 				{
 					$reference_customer=$dossnouveau1["reference_customer"];
-                    $requestData['reference_customer'] = $reference_customer;
+                    $requestData['reference_customer'] = $reference_customer.'/'.$idprestation;
 
 
 
@@ -3091,7 +3419,7 @@ $reqlieup->request->add(['dossier' => $iddnew]);
 
                     $nresponse = $nrequest->send();*/
                     // duplication de lom dans le nouveau dossier
-                    $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage',['reference_medic' => $nref, 'reference_medic2' => $nref,'emispar' =>$emispar, 'client_dossier' => $client_dossier, 'reference_customer' => $reference_customer])->setPaper('a4', '');
+                    $pdf2 = PDF4::loadView('ordremissions.pdfodmremorquage',['reference_medic' => $nref, 'reference_medic2' => $nref,'emispar' =>$emispar, 'client_dossier' => $client_dossier, 'reference_customer' => $reference_customer,'idprestation' => $idprestation])->setPaper('a4', '');
                 }
                 else
                 {
@@ -3654,7 +3982,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
         $histoom = array();
         if ($omtitre== 1) {
         while ($omparent !== null) {
-            $arrom = OMTaxi::select('id','titre','emplacement','dernier','parent','updated_at')->where('id', $omparent)->first();
+            $arrom = OMTaxi::select('id','titre','emplacement','dernier','parent','created_at')->where('id', $omparent)->first();
 
             $histoom[]=$arrom;
             $omparent = $arrom['parent'];
@@ -3664,7 +3992,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
         }}
         if ($omtitre== 2) {
         while ($omparent !== null) {
-            $arrom = OMAmbulance::select('id','titre','emplacement','dernier','parent','updated_at')->where('id', $omparent)->first();
+            $arrom = OMAmbulance::select('id','titre','emplacement','dernier','parent','created_at')->where('id', $omparent)->first();
 
             $histoom[]=$arrom;
             $omparent = $arrom['parent'];
@@ -3674,7 +4002,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
         }}
         if ($omtitre== 3) {
         while ($omparent !== null) {
-            $arrom = OMRemorquage::select('id','titre','emplacement','dernier','parent','updated_at')->where('id', $omparent)->first();
+            $arrom = OMRemorquage::select('id','titre','emplacement','dernier','parent','created_at')->where('id', $omparent)->first();
 
             $histoom[]=$arrom;
             $omparent = $arrom['parent'];
@@ -3704,7 +4032,7 @@ header('Content-type: application/json');
         $parent = $request->get('parent') ;
         //return "dossier: ".$dossier." titre: ".$titre." parent: ".$parent;
         if (stristr($titre,'taxi') !== FALSE) 
-        {
+        {        $omparent1=OMTaxi::where('id', $parent)->first();
 	    	//$count = OMTaxi::where('parent',$parent)->count();
 	    	OMTaxi::where('id', $parent)->update(['dernier' => 0,'idvehic' => "",'idchauff' => ""]);
 	        $omparent=OMTaxi::where('id', $parent)->first();
@@ -3738,6 +4066,27 @@ Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: '
 		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
 		        ]);
 		        $attachement->save();
+   if(isset($omparent1['km_distance'])  && isset($omparent1['idvehic']))
+                	{
+
+                    if($omparent1['km_distance']  && $omparent1['idvehic'])
+                    {
+                		$voiture=Voiture::where('id',$omparent1['idvehic'])->first();
+                		if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+              		                     
+	                     $voiture->update(['km'=> ((int)$km-(int)$omparent1['km_distance'])]);
+	                	
+                   }
+                
+
+               }
 	    	}
 
 	    	/*$nrequest = new Request();
@@ -3767,6 +4116,7 @@ Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["tit
 }
 	    // annulation om Ambulance
 	    elseif (stristr($titre,'ambulance') !== FALSE)  {
+                $omparent1=OMAmbulance::where('id', $parent)->first();
 	    	OMAmbulance::where('id', $parent)->update(['dernier' => 0,'vehicID' => "",'idambulancier1' => "",'idambulancier2' => "",'idparamed' => ""]);
 	        $omparent=OMAmbulance::where('id', $parent)->first();
 $idprestation=$omparent['idprestation'];
@@ -3798,12 +4148,20 @@ Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: '
 		        $attachement->save();
 		        // set km véhicule
 
-		        if(isset($omparent['km_distance'])  && isset($omparent['vehicID']))
+		      
+            
+
+
+		        //fin set km vehicule
+	    	}
+
+
+  if(isset($omparent1['km_distance'])  && isset($omparent1['vehicID']))
                 	{
 
-                    if($omparent['km_distance']  && $omparent['vehicID'])
+                    if(!empty($omparent1['km_distance'])  && !empty($omparent1['vehicID']))
                     {
-                		$voiture=Voiture::where('id',$omparent['vehicID'])->first();
+                		$voiture=Voiture::where('id',$omparent1['vehicID'])->first();
                 		if($voiture->km)
                 		{
 	                     $km=$voiture->km;
@@ -3819,12 +4177,6 @@ Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: '
                 
 
                }
-            
-
-
-		        //fin set km vehicule
-	    	}
-
 	    	compact($omparent);
 	    	// Send data to the view using loadView function of PDF facade
 	        $pdf = PDF3::loadView('ordremissions.pdfcancelomambulance', ['omparent' => $omparent])->setPaper('a4', '');
@@ -3851,6 +4203,7 @@ Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["tit
 	    }
 	    // annulation om Remorquage
 	    elseif (stristr($titre,'remorquage') !== FALSE)  {
+                $omparent1=OMRemorquage::where('id', $parent)->first();
 	    	OMRemorquage::where('id', $parent)->update(['dernier' => 0,'idvehic' => "",'idchauff' => ""]);
 	        $omparent=OMRemorquage::where('id', $parent)->first();
 $idprestation=$omparent['idprestation'];
@@ -3880,7 +4233,35 @@ Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: '
 		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$dossier,
 		        ]);
 		        $attachement->save();
+ // set km véhicule
+
+		        if(isset($omparent1['km_distance'])  && isset($omparent1['idvehic']))
+                	{
+
+                    if($omparent1['km_distance']  && $omparent1['idvehic'])
+                    {
+                		$voiture=Voiture::where('id',$omparent1['idvehic'])->first();
+                		if($voiture->km)
+                		{
+	                     $km=$voiture->km;
+                		}
+                		else
+                		{
+                		$km=0;
+                		}
+              		                     
+	                     $voiture->update(['km'=> ((int)$km-(int)$omparent1['km_distance'])]);
+	                	
+                   }
+                
+
+               }
+            
+
+
+		        //fin set km vehicule
 	    	}
+
 
 	    	compact($omparent);
 	    	// Send data to the view using loadView function of PDF facade

@@ -76,9 +76,9 @@
                                 <select id="current_status" name="current_status" class="form-control select2" >
                                     <option value="">Sélectionner.....</option>
                                     <option value="Cloture">Clos</option>
-                                    <option value="En cours">En cours</option>
-                                    <option value="Cloture transport">Clos transport</option>
-                                    <option value="En cours transport">En cours transport</option>
+                                    <option value="actif">actif</option>
+                                    <option value="inactif">inactif</option>
+                                    <!--<option value="En cours transport">En cours transport</option>-->
                                 </select>
                             </div>
                         </div>
@@ -162,12 +162,15 @@
                 <th style="width:20%">Assuré</th>
                  <th style="width:25%">Client</th>
                  <th style="width:20%">Etat</th>
+                 <th style="width:20%">Historique affectation</th>
+
               </tr>
             <tr>
                 <th style="width:20%">Référence</th>
                 <th style="width:20%">Assuré</th>
                 <th style="width:25%">Client</th>
                 <th style="width:20%">Etat</th>
+                <th style="width:20%">Historique affectation</th>
             </tr>
             </thead>
             <tbody>
@@ -186,7 +189,7 @@
                     }
                      ?> </td>
 
-                    </td>
+                    <td><a class="class_his_affect" id="haff{{$do->id}}" href="javascript:void(0)" ><span class="glyphicon glyphicon-eye-open"></span> voir </a></td>
 
 
 
@@ -197,7 +200,8 @@
 
             <!-- fin recherche avancee sur dossiers-->
 
-         <?php }else {if (isset($dossiers)) { ?>
+
+         <?php }else {if (isset($dossie)) { ?>
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead >
             <tr id="headtable">
@@ -205,12 +209,16 @@
                 <th style="width:20%">Assuré</th>
                 <th style="width:25%">Client</th>
                 <th style="width:20%">Etat</th>
+                <th style="width:20%">Historique affectation</th>
+
               </tr>
             <tr>
                 <th style="width:20%">Référence</th>
                 <th style="width:20%">Assuré</th>
                 <th style="width:25%">Client</th>
                 <th style="width:20%">Etat</th>
+                <th style="width:20%">Historique affectation</th>
+
             </tr>
             </thead>
             <tbody>
@@ -229,7 +237,7 @@
                     }
                      ?> </td>
 
-                    </td>
+                 <td><a class="class_his_affect" id="haff{{$dossier->id}}" href="javascript:void(0)"> <span class="glyphicon glyphicon-eye-open"></span> voir  </a></td>
 
 
 
@@ -322,7 +330,33 @@
     </div>
 
 
+ <div class="modal fade" id="myhisaffect" role="dialog" >
+    <div class="modal-dialog modal-lg" >
+    
+      <!-- Modal content-->
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 id="titleworkflowmodal" class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+         
 
+  <div id="contenumodalhisaffect" style="background-color: #ABF8F8;padding:5px 5px 5px 5px" >
+
+               
+  </div>
+
+
+       
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
 
 @endsection
 
@@ -584,7 +618,52 @@
 
  });
 
+
+ $('.class_his_affect').on('click', function() {
+
+     var idhis=$(this).attr("id");
+     idhis=idhis.substr(4);
+       $('#contenumodalhisaffect').html('ok');
+
+              $('#myhisaffect').modal('show');
+  //alert(idhis);
+
+
+           $.ajax({
+
+               url: "{{ url('/') }}/Dossier/historiqueaffectation/"+idhis,
+               type : 'get',
+              // data : 'idw=' + idw,
+               success: function(data){
+               
+              // alert(data);
+
+               //alert(JSON.stringify(data));
+              $('#contenumodalhisaffect').html(data);
+
+              $('#myhisaffect').modal('show');
+
+                  //alert(JSON.stringify(retour))   ;
+                 // location.reload();
+            }
+
+             
+           });
+
+
+ });
+
+ $(document).on("keyup","#InputetatActionMission",function() {
+ 
+    var value = $(this).val().toLowerCase();
+    $("#tabetatActionMission tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+
+
 </script>
+
 
 
 @stop

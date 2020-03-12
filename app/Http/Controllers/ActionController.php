@@ -2384,6 +2384,11 @@ class ActionController extends Controller
             ->update(array('current_status'=>'actif'));*/
          $user_affec=auth::user()->id;
          $dos=Dossier::where('id', $iddoss)->first();
+
+         $dtc = (new \DateTime())->format('Y-m-d H:i:s');                         
+         $format = "Y-m-d H:i:s";
+         $dateSys  = \DateTime::createFromFormat($format, $dtc);
+         
          if($dos)
          {
              if($dos->affecte)
@@ -2392,14 +2397,14 @@ class ActionController extends Controller
              }
              if($dos->current_status != 'Cloture')
              {
-                $dos->update(array('current_status'=>'actif'));
+                $dos->update(array('current_status'=>'actif','sub_status'=>null));
+                 $dos->update(array('updatedmiss_at'=>$dateSys));
+
              }
           }
 
 
-         $dtc = (new \DateTime())->format('Y-m-d\TH:i');                         
-         $format = "Y-m-d\TH:i";
-         $dateSys  = \DateTime::createFromFormat($format, $dtc);
+         
 
         $bouton=intval($request->get("numerobouton"));
         //dd($bouton);
@@ -3535,7 +3540,7 @@ public function Transport_ambulance_DV ($option,$idmiss,$idact,$iddoss,$bouton)
 
               // activation action 3 Informer la structure d’accueil
               
-             if($action3->statut=="inactive" && ($action2->statut=="faite" ||$action2->statut=="ignoree"))
+             if($action3->statut=="inactive" && ($action2->statut=="faite" || $action2->statut=="ignoree"))
               
                {
                 

@@ -51,8 +51,11 @@
             @foreach($dossiers as $dossier)
                 <?php
                 $style="";
-                if( \App\Http\Controllers\DossiersController::checkImmobile3D($dossier->updated_at)== true    )
+               if($dossier->updatedmiss_at) {
+                   // dd('xxxxxxxxxxxxxx');
+                if( \App\Http\Controllers\DossiersController::checkImmobile3D($dossier->updatedmiss_at)== true    )
                    {$style="background-color:#fd9883;"; }
+                  }
 
                 ?>
                 <tr  style="<?php echo $style;?>"><?php $statut=$dossier['current_status'];  $affecte=$dossier['affecte'];   ?>

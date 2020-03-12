@@ -878,7 +878,7 @@ array_push($listepr,$pr['prestataire_id']);
 
 }
     ?>
-     </tbody>
+                   </tbody>
 
                </table><br><br><br>
 
@@ -2764,7 +2764,9 @@ array_push($listepr,$pr['prestataire_id']);
 
 
     <?php
-  $param= App\Parametre::find(1);$env=$param->env;
+
+ $param= App\Parametre::find(1);$env=$param->env;
+
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 ?>
 
@@ -3348,7 +3350,7 @@ function annuleom(titre,iddoc)
 
                     urlf="{{ URL::asset('storage'.'/app/') }}";
                     aurlf="<a style='color:black' href='"+urlf+"/"+val[1]['emplacement']+"' ><i class='fa fa-download'></i> Télécharger</a>";
-                    $("#tabledocshisto tbody").append("<tr><td>"+val[1]['updated_at']+"</td><td>"+aurlf+"</td></tr>");
+                    $("#tabledocshisto tbody").append("<tr><td>"+val[1]['created_at']+"</td><td>"+aurlf+"</td></tr>");
 
                     });
 
@@ -3404,7 +3406,7 @@ function annuleom(titre,iddoc)
                     posom=val[1]['emplacement'].indexOf("/OrdreMissions/");
                     empom=val[1]['emplacement'].slice(posom+1);
                     aurlf="<a style='color:black' href='"+urlf+"/"+empom+"' ><i class='fa fa-download'></i> Télécharger</a>";
-                    $("#tableomshisto tbody").append("<tr><td>"+val[1]['updated_at']+"</td><td>"+aurlf+"</td></tr>");
+                    $("#tableomshisto tbody").append("<tr><td>"+val[1]['created_at']+"</td><td>"+aurlf+"</td></tr>");
 
                     });
 

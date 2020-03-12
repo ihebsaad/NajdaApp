@@ -86,6 +86,80 @@ class MissionController extends Controller
             return redirect('dossiers/view/'.$dossid);
     }
 
+    public function Archiver_mission_actions($idmiss)
+    {
+
+       $Actionsk=ActionEC::where('mission_id',$idmiss)->get();
+    
+
+        foreach ($Actionsk as $k ) {
+
+             $Hact=new Action($k->toArray());
+
+             $Hact->save();
+             $k->forceDelete();
+
+         } 
+
+         $miss=Mission::where('id',$idmiss)->first();
+
+         $missH= new MissionHis($miss->toArray());
+         $missH->save();
+         $missH->update(['id_origin_miss'=>$miss->id]);
+         $miss->forceDelete();
+
+
+    }
+
+    public function test_fin_mission($idmission)
+    {
+
+        $actions=ActionEC::where('mission_id',$idmission)->get();
+        foreach ($actions as $a) {
+
+            if($a->statut=="active" || $a->statut=="reportee" || $a->statut=="rappelee" || $a->statut=="deleguee" || $a->Mission->date_spec_affect===1 ||  $a->Mission->date_spec_affect2===1 || $a->Mission->date_spec_affect3===1 )
+            {
+                return false;
+
+            }
+            
+        }
+
+        // code archiver les actions courantes dans la table actions (historiques)
+        return true;
+    }
+
+    public function verifier_fin_missions()
+    {
+      $missions=Mission::get();
+
+      foreach ($missions as $miss ) {
+
+        if($this->test_fin_mission($miss->id)==true)
+          {
+
+            //return $this->fin_mission_si_test_fin($idact,$idmiss);
+
+             $miss->update(['statut_courant'=>'achevee']);
+
+              $this->Archiver_mission_actions($miss->id);
+
+          }
+
+       
+        
+      }
+    }
+
+    public function calendrierMissions()
+    {
+       $missions = Mission::orderBy('created_at', 'desc')->get();
+      // $missions=null;
+       return view('missions.calendrier', compact('missions'));
+
+     // return view('missions.calendrier');
+    }
+
     public function ReporterMission (Request $request)
     {
 
@@ -98,9 +172,7 @@ class MissionController extends Controller
           // dd( $dateRep);
           if($dateRep<= $dateSys)
           {
-
              return ("Erreur: la date de Report doit être supérieure à la date courante");
-
           }
           else
           {
@@ -376,7 +448,7 @@ class MissionController extends Controller
          {
              if($dos->current_status != 'Cloture')
              {
-                 $dos->update(array('current_status'=>'actif'));
+                 $dos->update(array('current_status'=>'actif','sub_status'=>null));
              }
 
              if($dos->affecte)
@@ -596,6 +668,16 @@ class MissionController extends Controller
 
           }
 
+
+
+        }
+        if($dos)
+        {
+
+          //if($dos->current_status != 'Cloture')
+            // {
+                 $dos->update(array('updatedmiss_at'=>$dateSys));
+             //}
 
 
         }
