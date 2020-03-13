@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Demande;
 use App\Dossier;
 use App\Http\Controllers\Controller;
 use App\Seance;
@@ -1019,6 +1020,9 @@ class LoginController extends Controller
         // changement statut dans la base
         // logged out statut = -1
         User::where('id', $iduser)->update(array('statut' => '-1'));
+
+        // suppression demandes
+        Demande::where('par', $iduser)->delete();
 
 
 

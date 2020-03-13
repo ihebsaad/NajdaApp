@@ -4218,7 +4218,7 @@ $id=0;
         $files = scandir(storage_path() . "/SMS/");
 
         foreach($files as $file){
-            Log::info(' file : '.$file);
+
 
            //   $pathfile= storage_path() . "/SMS/sms.xml";
             if(   $file!= '.' && $file != '..')
@@ -6753,7 +6753,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
     public function searchprest(Request $request)
     {
         if($request->ajax()){
-            $data = DB::table('prestataires')->where('id',$request->prest)->pluck("mail","id")->all();
+           // $data = DB::table('prestataires')->where('id',$request->prest)->pluck("mail","id")->all();
+            $data = DB::table('prestataires')->where('id',$request->prest)->get();
            // $data = view('emails.envoimail',compact('listeemails'))->render();
             return response()->json(['options'=>$data]);
         }

@@ -2198,26 +2198,29 @@ class DossiersController extends Controller
           $prestataire = $row->prestataire;
           $priorite = $row->priorite;
 
-          $nom = app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
+          if($prestataire > 0) {
+
+
+          $nom = addslashes(app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire));
           $adresse = app('App\Http\Controllers\PrestatairesController')->ChampById('adresse', $prestataire);
           $observ = app('App\Http\Controllers\PrestatairesController')->ChampById('observation_prestataire', $prestataire);
 
 
-          $tels =   Adresse::where('nature', 'tel')
-              ->where('parent',$prestataire)
+          $tels = Adresse::where('nature', 'tel')
+              ->where('parent', $prestataire)
               ->get();
 
-          $output .= '  <div id="item'.$c . '" style="display:none;;padding: 20px 20px 20px 20px; border:3px dotted #4fc1e9">
+          $output .= '  <div id="item' . $c . '" style="display:none;;padding: 20px 20px 20px 20px; border:3px dotted #4fc1e9">
                                                                                    
                              <div class="prestataire form-group">
-                              <input type="hidden" id="prestataire_id_'.$c.'" value="'.$prestataire.'">
-                             <input type="hidden" id="nomprest" value="'.$nom.'">
+                              <input type="hidden" id="prestataire_id_' . $c . '" value="' . $prestataire . '">
+                             <input type="hidden" class="nomprest" value="' . $nom . '">
                             <div class="row" style="margin-top:10px;margin-bottom: 20px">
                                 <div class="col-md-8"><span style="color:grey" class="fa  fa-user-md"></span> <B>' . $nom . ' (' . $priorite . ')</b></div>
-                                <div class="col-md-8"><span style="color:grey" class="fa  fa-map-marker"></span>  '.$adresse.'</div>
+                                <div class="col-md-8"><span style="color:grey" class="fa  fa-map-marker"></span>  ' . $adresse . '</div>
                             </div>
                             <div class="row">
-                                <div class="col-md-8"><span style="color:grey" class="fas  fa-clipboard"></span> '.$observ.'</div>
+                                <div class="col-md-8"><span style="color:grey" class="fas  fa-clipboard"></span> ' . $observ . '</div>
                             </div>
                         </div>                       
                         <table style="padding-left:5px">';
@@ -2226,21 +2229,23 @@ class DossiersController extends Controller
           foreach ($tels as $tel) {
               $output .= ' <tr>
                                             <td style="padding-right:8px;"><i class="fa fa-phone"></i> ' . $tel->champ . '</td>
-                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>';?>
-<?php if($tel->typetel=='Mobile') {
-                  $output .= '<td><a onclick="setTel(this);" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
-                    } else
-                      { $output .= '<td></td>';}
+                                            <td style="padding-right:8px;">' . $tel->remarque . '</td>'; ?>
+              <?php if ($tel->typetel == 'Mobile') {
+                  $output .= '<td><a onclick="setTel(this);" class="' . $tel->champ . '" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
+              } else {
+                  $output .= '<td></td>';
+              }
 
-                   $output .= '</tr> ';
+              $output .= '</tr> ';
           }
 
 
-          $output .='</table> </address>                         
+          $output .= '</table> </address>                         
              </div> ';
 
-
       }
+      }
+
       $output=$output.'<input id="total" type="hidden" value="'.$c.'"> ';
 
   }else {
