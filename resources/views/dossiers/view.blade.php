@@ -518,10 +518,14 @@ function custom_echo($x, $length)
     <th style="width:10%">Actions</th>
     </tr>
     </thead>
-    <tbody>
-  <?php  foreach($datasearch as $do)
-      {  $id= $do['prestataire'];
-  $prestataire = Prestataire::find($id);
+        <tbody>
+        <?php  foreach($datasearch as $do)
+        {  $id= $do['prestataire'];
+        if($id >0)
+        {
+        $prestataire = Prestataire::find($id);
+        if($prestataire != null)
+        {
         $villeid=intval($do['ville_id']);
         if (isset($villes[$villeid]['name']) ){$ville=$villes[$villeid]['name'];}
         else{$ville=$do['ville'];}
@@ -529,41 +533,44 @@ function custom_echo($x, $length)
         $gouvs=  PrestatairesController::PrestataireGouvs($id);
         $typesp=  PrestatairesController::PrestataireTypesP($id);
         $specs=  PrestatairesController::PrestataireSpecs($id);
-  $tels=array();
-  $tels =   Adresse::where('nature', 'telinterv')
-  ->where('parent',$id)
-  ->get();
+        $tels=array();
+        $tels =   Adresse::where('nature', 'telinterv')
+        ->where('parent',$id)
+        ->get();
         ?>
 
         <tr style="border-top:1px solid black">
-            <td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $id)}}" ><?php echo '<i>'.$prestataire->civilite .'</i> <b>'. $prestataire->name .'</b> '.$prestataire->prenom; ?></a>  </td>
+            <td style="font-size:14px;width:30%"><a href="{{action('PrestatairesController@view', $id)}}" ><?php echo '<i>'.$prestataire['civilite'] .'</i> <b>'. $prestataire['name'] .'</b> '.$prestataire['prenom']; ?></a>  </td>
             <td style="font-size:12px;width:20%"><?php     foreach($typesp as $tp){echo PrestatairesController::TypeprestationByid($tp->type_prestation_id).',  ';}?></td>
             <td style="font-size:12px;width:15%"><?php foreach($gouvs as $gv){echo PrestatairesController::GouvByid($gv->citie_id).',  ';}?></td>
             <td style="font-size:12px;width:10%"><?php echo $ville; ?></td>
             <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
-
-            <td style="font-size:13px;width:10%">  <button onclick="init('<?php echo $id;?>','<?php echo addslashes($prestataire->name.' '.$prestataire->prenom)  ;?>')" style=";margin-botom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> + Prestation</button>
+            <?php $nomc =addslashes($prestataire['name'].' '.$prestataire['prenom']); ?>
+            <td style="font-size:13px;width:10%">  <button onclick="init('<?php echo $id;?>','<?php  echo  $nomc ;?>')" style="margin-bottom:10px;margin-top:10px" type="button" data-toggle="modal"  data-target="#openmodalprest" class="btn  btn-primary"><i class="far fa-save"></i> + Prestation</button>
 
             </td>
 
         </tr>
 
-     <?php
+        <?php
         foreach ($tels as $tel) {
-       echo ' <tr>
+        echo ' <tr>
             <td colspan="2" style="padding-right:8px;"><i class="fa fa-phone"></i> ' . $tel->champ . '</td>
             <td colspan="2" style="padding-right:8px;">' . $tel->remarque . '</td>';?>
-            <?php if($tel->typetel=='Mobile') {
-            echo '<td colspan="2"><a onclick="setTel(this);" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
-            } else
-            { echo  '<td colspan="2"></td>';}
+        <?php if($tel->typetel=='Mobile') {
+        echo '<td colspan="2"><a onclick="setTel(this);" class="'. $tel->champ.'" style="margin-left:5px;cursor:pointer" data-toggle="modal"  data-target="#sendsms" ><i class="fas fa-sms"></i> Envoyer un SMS </a></td>';
+        } else
+        { echo  '<td colspan="2"></td>';}
 
-           echo '</tr> ';
-            }
-?>
-     <?php }?>
+        echo '</tr> ';
+        }
+        ?>
+        <?php }
+        }
+        }
+        ?>
 
-          </tbody>
+        </tbody>
     </table>
 
   <?php }  ?>
