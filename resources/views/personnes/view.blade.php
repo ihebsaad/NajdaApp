@@ -51,14 +51,14 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="inputError" class="control-label">Date de Début indisponibilité * </label>
-                    <input onchange="changing(this)"   type="datetime-local" class="  form-control" name="date_deb_indisponibilite" id="date_deb_indisponibilite"     value="{{ $personne->date_deb_indisponibilite }}" >
+                    <input onchange="changing(this)"   type="datetime-local" class="  form-control" name="date_deb_indisponibilite" id="date_deb_indisponibilite"     value="<?php $datedeb=date('Y-m-d H:i', strtotime($personne->date_deb_indisponibilite)); $datedeb1=str_replace(' ', 'T', $datedeb); if($personne->date_deb_indisponibilite==null) {$datedeb1="";} echo $datedeb1;?>" >
                 </div>
 
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="inputError" class="control-label">Date de Fin indisponibilité *</label>
-                    <input onchange="changing(this)"  type="datetime-local"  class="form-control    " name="date_fin_indisponibilite" id="date_fin_indisponibilite"   value="{{ $personne->date_fin_indisponibilite }}" >
+                    <input onchange="changing(this)"  type="datetime-local"  class="form-control    " name="date_fin_indisponibilite" id="date_fin_indisponibilite"   value="<?php  $datefin=date('Y-m-d H:i', strtotime($personne->date_fin_indisponibilite)); $datefin1=str_replace(' ', 'T', $datefin); if($personne->date_fin_indisponibilite==null) {$datefin1="";} echo $datefin1;?>" >
                 </div>
 
             </div>
@@ -137,7 +137,7 @@ if ($personne->tel!=''){
 
 
 <!-- Modal SMS -->
-<div class="modal fade" id="sendsms"    role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
+<div class="modal fade" id="sendsms" tabindex="-1" role="dialog" aria-labelledby="sendingsms" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -205,7 +205,7 @@ if ($personne->tel!=''){
 
 
 <!-- Modal Liste sms -->
-<div class="modal fade" id="listesms"    role="dialog" aria-labelledby="liste" aria-hidden="true">
+<div class="modal fade" id="listesms" tabindex="-1" role="dialog" aria-labelledby="liste" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
