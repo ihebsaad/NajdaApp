@@ -255,7 +255,7 @@ $( "#open" ).click(function() {
                      var href = data.node.a_attr.href;
                      document.location.href = href;
                  });
-
+/********
                  Push.create("Nouvelle Notification", {
 
                      body:  jsnt.sujet,
@@ -270,7 +270,7 @@ $( "#open" ).click(function() {
                      }
 
                  });
-
+*/
              }
              else {
                  // cas dossier nest pas dans la liste des notifications
@@ -309,7 +309,8 @@ $( "#open" ).click(function() {
                      var href = data.node.a_attr.href;
                      document.location.href = href;
                  });
-                 Push.create("New Notification", {
+
+          /*****       Push.create("New Notification", {
 
                      body:  jsnt.emetteur +' '+ jsnt.sujet,
                      icon: "{{ asset('public/img/najda.png') }}",
@@ -324,7 +325,7 @@ $( "#open" ).click(function() {
 
                  });
 
-
+*/
              }
          }
          else {
@@ -356,6 +357,7 @@ $( "#open" ).click(function() {
 
 */
 
+             /****
            
               Push.create("Nouvelle Notification", {
 
@@ -370,7 +372,7 @@ $( "#open" ).click(function() {
               }
 
               });
- 
+ */
 
 
              <?php   } ?>

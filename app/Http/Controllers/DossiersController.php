@@ -2240,7 +2240,7 @@ class DossiersController extends Controller
           }
 
 
-          $output .= '</table> </address>                         
+          $output .= '</table>                           
              </div> ';
 
       }
