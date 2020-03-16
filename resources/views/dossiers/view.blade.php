@@ -3906,6 +3906,8 @@ function keyUpHandler(){
         }else{
 
         }
+$("#affectationprest").val("Select").change();
+$("#templateom").val("Select").change();
     });
 
     function afficheom(tempom,dossier,affectea)
@@ -4613,6 +4615,7 @@ function toggle(className, displayState){
 
             // document.getElementById('termine').style.display = 'none';
             document.getElementById('showNext').style.display='none';
+            document.getElementById('showNext').firstChild.data ='Commencer';
             document.getElementById('add2').style.display='none';
             document.getElementById('add2prest').style.display='none';
             document.getElementById('selectedprest').value=0;
@@ -4803,6 +4806,7 @@ function toggle(className, displayState){
             document.getElementById('add2').style.display = 'block';
             document.getElementById('add2prest').style.display='block';
             document.getElementById('showNext').style.display = 'block';
+            //document.getElementById('showNext').firstChild.data   = 'Commencer';
             document.getElementById('item1').style.display = 'block';
             document.getElementById('selected').value = 1;
             document.getElementById('selectedprest').value = 0;
@@ -4832,7 +4836,9 @@ function toggle(className, displayState){
         });
 
             $("#showNext").click(function() {
-            var shownext=false;var infos=false;
+                document.getElementById('showNext').firstChild.data  ='Suivant';
+
+                var shownext=false;var infos=false;
             // reinitialiser le champs de statut
             /*if(document.getElementById('selectedprest').value ==0) {
                 document.getElementById('statutprest').value ='';
@@ -4882,8 +4888,8 @@ function toggle(className, displayState){
                 document.getElementById('selectedprest').value = 0;
                 document.getElementById('detailsprest').value='';
 
-                var selected = document.getElementById('selected').value;
-                var total = document.getElementById('total').value;
+                var selected =parseInt(document.getElementById('selected').value);
+                var total = parseInt(document.getElementById('total').value);
 
 
                 var next = parseInt(selected) + 1;
@@ -4916,8 +4922,8 @@ function toggle(className, displayState){
                         document.getElementById('add2').style.display = 'block';
                         document.getElementById('add2prest').style.display='block';
                         document.getElementById('termine').style.display = 'none';
-                        document.getElementById('item' + selected).style.display = 'none';
-                        document.getElementById('item' + next).style.display = 'block';
+                        document.getElementById('item'+String(selected)).style.display = 'none';
+                        document.getElementById('item'+String(next)).style.display = 'block';
 
 
                         $("#selected").val(next);
@@ -4927,7 +4933,9 @@ function toggle(className, displayState){
                     }
                 }
 
-                if(next>parseInt(total)+1) {
+
+
+                  if(next>parseInt(total)+1) {
                     // document.getElementById('item' + selected).style.display = 'none';
                 }
                 if( document.getElementById('idprestation').value>0 ){
