@@ -98,6 +98,13 @@ $user_type=$user->user_type;
                 </a>
             </div>
 
+            <div class="col-sm-2">
+                <a href="{{ route('emails.envoimailtous') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="   fas fa-mail-bulk"></span>
+                    <br>
+                Emails Groupés
+                </a>
+            </div>
 
 
         @endcan
@@ -221,6 +228,8 @@ $user_type=$user->user_type;
                     Equipements
                 </a>
             </div>
+
+
 
         @endcan
     </div>

@@ -128,9 +128,11 @@ Route::get('/entrees/countnotifsorange','EntreesController@countnotifsorange')->
 /*** Emails **/
 
 Route::post('/emails/send','EmailController@send');
+Route::post('/emails/sendall','EmailController@sendall');
 /* envoie d'un email */
 Route::get('/emails/sending','EmailController@sending')->name('emails.sending');
 Route::get('/emails/envoimail/{id}/{type}','EmailController@envoimail')->name('emails.envoimail');
+Route::get('/emails/envoimailtous','EmailController@envoimailtous')->name('emails.envoimailtous');
 Route::get('/emails/envoimail/{id}/{type}/{prest}','EmailController@envoimail')->name('emails.envoimail');
 Route::get('/emails/envoimailenreg/{id}/{type}/{prest}/{entreeid}/{envoyeid}','EmailController@envoimailenreg')->name('emails.envoimailenreg');
 Route::get('/emails/envoimailbr/{id}','EmailController@envoimailbr')->name('emails.envoimailbr');

@@ -5164,6 +5164,16 @@ $id=0;
 
 
 
+    public function envoimailtous()
+    {
+
+
+        return view('emails.envoimailtous',[ ]);
+    }
+
+
+
+
 
     public function envoimailenreg($id,$type,$prest=null,$entreeid=null,$envoyeid=null)
     {
@@ -5876,6 +5886,256 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
     }// end send
 
+
+
+
+
+    function sendall (Request $request)
+    {
+        //  dd($request->all());
+
+        /*  $request->validate([
+              'g-recaptcha-response' => 'required|captcha'
+          ]);
+  */
+        $envoyeid = $request->get('envoye');
+        $to = $request->get('destinataire');
+        $cc = $request->get('cc');
+
+        $sujet = $request->get('sujet');
+        $contenu = $request->get('contenu');
+        $files = $request->file('vasplus_multiple_files');
+        $from = trim($request->get('from'));
+        $description= $request->get('description');
+
+        $dest='';
+        $cci=array();
+
+        if(trim($to)=='clients'){
+          $dest='Tous les Clients';
+          $cci=Adresse::where('nature','email')
+              ->where('champ','<>','')
+               ->pluck('champ');
+        }
+        if(trim($to)=='assures'){
+            $dest='Tous les Assurés';
+            $cci=Adresse::where('nature','emaildoss')
+                ->where('champ','<>','')
+                ->pluck('champ');
+        }
+        if(trim($to)=='prestataires'){
+            $dest='Tous les Prestataires';
+            $cci=Adresse::where('nature','emailinterv')
+                ->where('champ','<>','')
+                ->pluck('champ');
+        }
+
+
+        //    dd($request->all()) ;
+        $user = auth()->user();$idu=$user->id;
+        $lg='fr';
+        $signatureagent= $this->getSignatureUser($idu,$lg);
+
+        $ccimails=array();
+        if(isset($cci )) {
+            foreach($cci as $ccimail) {
+                array_push($ccimails,$ccimail );
+
+            }
+        }
+
+        // ajout de l'adresse de Mr Nejib en cci
+        array_push($ccimails,'medic.multiservices@topnet.tn' );
+
+        $fromname="";$signatureentite='';
+        $parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+
+
+        if ($from=='24ops@najda-assistance.com')
+        {        $pass_N=$parametres->pass_N ;
+            // $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
+            $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+            $swiftTransport->setUsername('24ops@najda-assistance.com');
+            $swiftTransport->setPassword($pass_N);
+            $fromname="Najda Assistance";
+            $signatureentite= $parametres->signature ;
+
+
+        }
+
+        $user = auth()->user();
+        $nomuser=$user->name.' '.$user->lastname;
+
+        $contenu=$contenu.'<br><br>Cordialement / Best regards<br>'.$nomuser.' '. $signatureagent.'<br><br><hr style="float:left;"><br><br>'.$signatureentite;
+
+
+        //dd('pk');
+
+        $swiftMailer = new Swift_Mailer($swiftTransport);
+
+        Mail::setSwiftMailer($swiftMailer);
+
+
+        ////    try{
+        Mail::send([], [], function ($message) use ($sujet,$contenu,$files,$cc,$envoyeid,$ccimails,$description,$from,$fromname ,$dest) {
+            $message
+
+                //  ->to('saadiheb@gmail.com')
+                // ->to()
+
+                ->cc($cc  ?: [])
+                ->bcc($ccimails ?: [])
+                ->subject($sujet)
+                ->setBody($contenu, 'text/html')
+                ->setFrom([$from => $fromname]);
+          /*  if(isset($emails )) {
+                foreach ($emails as $em) {
+                    $message->to($em);
+                }
+            }
+*/
+            $user = auth()->user();
+            $nomuser=$user->name.' '.$user->lastname;
+
+            Log::info('[Agent: '.$nomuser.'] Envoi de mail '.$sujet);
+
+            $count=0;
+
+            $ccsadd='';
+
+            if (isset($cc)) {
+                foreach ($cc as $ccadress) {
+                    $ccsadd .= $ccadress . '; ';
+                }
+            }
+
+            $ccisadd='';
+            if (isset($cci)) {
+
+                foreach ($cci as $cciadress) {
+                    $ccisadd .= $cciadress . '; ';
+                }
+            }
+
+            if(isset($files )) {
+                // if($tot)
+                //   {
+
+
+                foreach($files as $file) {
+                    $count++;
+
+                    $fichier_name =  $file->getClientOriginalName();
+                    $path0= storage_path()."/Envoyes/";
+
+                    if (!file_exists($path0.$envoyeid)) {
+                        mkdir($path0.$envoyeid, 0777, true);
+                    }
+
+                    if (!file_exists($path0.$envoyeid.'/'.$fichier_name)) {
+
+                        $file->move($path0.$envoyeid, $fichier_name);
+
+                    }
+
+
+
+                    // save external files here
+
+
+                    $fullpath=$path0.$envoyeid.'/'.$file->getClientOriginalName();
+                    $filesize= filesize($fullpath);
+
+                    $counta= Attachement::where('filesize',$filesize)->where('nom',$file->getClientOriginalName() )->count();
+
+
+                    if($counta==0){
+                        $attachement = new Attachement([
+
+                            'type'=>$file->getClientOriginalExtension(),'path' => '/Envoyes/'.$envoyeid.'/'.$file->getClientOriginalName(), 'nom' => $file->getClientOriginalName(),'boite'=>1,'dossier'=>$doss,'envoye_id'=>$envoyeid,'parent'=>$envoyeid,'user'=>Auth::id(),'filesize'=>$filesize
+                        ]);
+                        $attachement->save();
+
+                    }
+
+                    $name=basename($fullpath);
+                    $mime_content_type=mime_content_type ($path0.$envoyeid);
+
+                    $message->attach($fullpath, array(
+                            'as' => $name, // If you want you can chnage original name to custom name
+                            'mime' => $mime_content_type)
+                    );
+
+
+
+                }
+            }
+
+/// attach here
+///
+
+
+            $param= App\Parametre::find(1);$env=$param->env;
+            $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+            //   $urlsending=$urlapp.'/emails/envoimail/'.$doss;
+            $urlsending=$urlapp.'/envoyes';
+
+            $par=Auth::id();
+            /// $tos=    implode( ", ", $to );
+
+            //   $envoye
+            Envoye::where('id', $envoyeid)->update(array(
+                //   $champ => $val
+                //));
+
+                //  $envoye = new Envoye([
+                'emetteur' => $from, //env('emailenvoi')
+                'destinataire' => $dest,
+                //      'destinataire' =>'iheb test',
+                'par'=> $par,
+                'sujet'=> $sujet,
+                'contenu'=> $contenu,
+                'description'=> $description,
+                'nb_attach'=> $count,
+                'cc'=> $ccsadd,
+                'cci'=>'',
+                'statut'=> 1,
+                'type'=> 'email',
+                'dossier'=> ''
+                // 'reception'=> date('d/m/Y H:i:s'),
+
+            ));
+
+            // $envoye->save();
+            //$id=$envoye->id;
+
+            ////     echo ('<script> window.location.href = "'.$urlsending.'/view/'.$envoyeid.'";</script>') ;
+
+        });
+        $param= App\Parametre::find(1);$env=$param->env;
+        $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+        $urlsending=$urlapp.'/envoyes';
+        $attachs=array();$to=array();
+        array_push($to,$dest);
+        if($envoyeid>0){ $this->export_pdf_send($envoyeid,$from,$fromname,$to,$contenu,$files,$attachs);}
+        else{
+
+            Log::info('PB Attachement Envoi mail ');
+
+        }
+
+
+
+
+        return redirect($urlapp.'/envoyes')->with('success', '  Envoyé ! ');
+
+        ///  var_dump( Mail:: failures());
+
+
+        //   return redirect($urlapp.'/envoyes') ;
+
+    }// end send
 
 
 
