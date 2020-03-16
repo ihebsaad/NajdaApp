@@ -3906,6 +3906,8 @@ function keyUpHandler(){
         }else{
 
         }
+$("#affectationprest").val("Select").change();
+$("#templateom").val("Select").change();
     });
 
     function afficheom(tempom,dossier,affectea)

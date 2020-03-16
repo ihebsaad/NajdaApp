@@ -62,7 +62,7 @@ $conn = mysqli_connect($dbHost, $dbuser, $dbpass,$dbname);
 
 	//$sqlvh = "SELECT id,name FROM personnes WHERE ((`annule` = 0) OR (`annule` IS NULL)) AND (`type` LIKE '%".$typeperso."%') AND (id NOT IN (SELECT ".$colperso." FROM ".$omtable." WHERE ( (`".$deb_indisp."` <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (`".$fin_indisp."` >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')))))";
 
-$sqlvh = "SELECT id,name FROM personnes WHERE (((`annule` = 0) OR (`annule` IS NULL)) AND (`type` LIKE '%".$typeperso."%') AND 
+$sqlvh = "SELECT id,name FROM personnes WHERE (((`annule` = 0) OR (`annule` IS NULL)) AND (`type` LIKE '%".$typeperso."%') AND (((date_deb_indisponibilite > DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) OR (date_deb_indisponibilite IS NULL)) OR ((date_fin_indisponibilite < DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) OR (date_fin_indisponibilite IS NULL))) AND 
 ((id NOT IN (SELECT idchauff FROM om_remorquage WHERE 
 ( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
 (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idchauff IS NOT NULL)))) AND 
