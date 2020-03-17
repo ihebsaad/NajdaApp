@@ -206,23 +206,47 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
 
             <!-- treeview of notifications -->
                 <div id="jstree">
+                 <ul>
+
+                     <li id="notifcs" rel="tremail" > <span style="color:#4fc1e9" class="fa fa-bell fa-lg"></span>  <b style="color:#4fc1e9">  Notifications</b>
 
                         <?php
   $param= App\Parametre::find(1);$env=$param->env;
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
-                              $notifications =  DB::table('notifs')->orderBy('dossierid', 'desc')->orderBy('reception', 'desc')
+                             /* $firstnotific=DB::table('notifs')->orderBy('reception', 'desc')
                               ->where('affiche','<', 1 )
                                           ->where('user',  Auth::id() )
-                                           ->get();
+                                           ->first();*/
+
+                                /*$Missions=Auth::user()->activeMissions->groupBy(function ($me) {
+                                     return $me->dossier_id;
+                                   });*/
+
+                              /*$notifications =  DB::table('notifs')->orderBy('dossierid', 'desc')->orderBy('reception', 'desc')
+                              ->where('affiche','<', 1 )
+                                          ->where('user',  Auth::id() )
+                                           ->get();*/
+
+                              $sub = Notif::where('affiche','<', 1 )->where('user',  Auth::id())->orderBy('reception','DESC')->get();
+                              //dd($sub);
+
+                              //$notifications = DB::table(DB::raw("({$sub->toSql()}) as sub"))
+                              $notifications=$sub->groupBy(function ($me) {
+                                     return $me->dossierid;
+                                   });
+                             // dd($notifications);
+                                                                                           
+                                  
 
                               $nnotifs = array();
                               $notifssansdoss = array(); 
                               $notifsavecdoss = array();
 
                 //     echo json_encode($notifications).'<br>';
-
-                    foreach ($notifications as $notif) {
+                    foreach($notifications as $t=>$k)
+                    {
+                    foreach ($k as $notif) {
                             if($notif->dossierid >0){
                             array_push($notifsavecdoss,$notif);
                             }else{
@@ -230,6 +254,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                             }
 
                             }
+                          }
 
                  // echo json_encode($notifsavecdoss).'<br>';
                 // echo json_encode($notifssansdoss).'<br>';
@@ -296,6 +321,8 @@ if( EntreesController::ChampById( 'notif',$entreeid)!=1 ) {
 
 }
                             } // foreach
+
+
 echo '</ul>';
 
 /*
@@ -377,6 +404,8 @@ echo '</ul>';
 
 
 ?>
+</li>
+</ul>
                  </div>
 
             </div>

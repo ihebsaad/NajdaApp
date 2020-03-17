@@ -102,7 +102,7 @@ $user_type=$user->user_type;
                 <a href="{{ route('emails.envoimailtous') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="   fas fa-mail-bulk"></span>
                     <br>
-                Emails Groupés
+                Email Groupés
                 </a>
             </div>
 

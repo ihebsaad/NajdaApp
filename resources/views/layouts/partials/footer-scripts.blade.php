@@ -74,14 +74,17 @@
 
         //  $('#jstree').jstree();
       $('#jstree').jstree({
-            'core' : {
+
+          'core' : {
+
                 'check_callback' : function (op, node, par, pos, more) {
                     if(more && more.dnd) {
                         return more.pos !== "i" && par.id == node.parent;
                     }
                     return true;
                 },
-            },
+
+          },
             "types" : {
                 "default" : { "icon" : "glyphicon glyphicon-folder-open" },
                 "tremail" : { "icon" : "menu-icon fa fa-fw fa-envelope" },
@@ -90,7 +93,8 @@
                 "trsms" : { "icon" : "menu-icon fas fa-sms" },
                 "trwp" : { "icon" : "menu-icon fab fa-whatsapp" },
             },
-            "plugins" : ["dnd", "types"]
+
+          "plugins" : ["dnd", "types"]
         }).bind("select_node.jstree", function (e, data) {
             var href = data.node.a_attr.href;
             var parentId = data.node.a_attr.parent_id;
@@ -100,6 +104,25 @@
             window.open(href,'_self');
         });
 
+        $('#jstree').on('ready.jstree', function() {
+            $("#jstree").jstree("open_all");
+         });
+
+/*
+        $('#jstree').jstree({
+            'core' : {
+                'data' : [
+                    'Simple root node',
+                    {
+                        'id' : 'node_2',
+                        'text' : 'Root node with options',
+                        'state' : { 'opened' : true, 'selected' : true },
+                        'children' : [ { 'text' : 'Child 1' }, 'Child 2']
+                    }
+                ]
+            }
+        });
+*/
 
         $( ".datepicker-default" ).datepicker({
 
@@ -237,25 +260,26 @@ $( "#open" ).click(function() {
                 var heure=reception.toString().slice(11,16);
                  // ajout nouvelle notification sous son dossier
                  $('#jstree').jstree().create_node("#prt_" +  jsnt.dossierid, {
-                     "id":  jsnt.dossierid,
+                     "id":   'entree_'+jsnt.entree,
                      "text": heure+' '+emetteur+' '+ jsnt.sujet,
                      "type": typee,
                      "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" +  jsnt.entree}
                  }, "inside", function () {
                      // animation de nouvelle notification
                      setInterval(function () {
-                         $("#" + jsnt.entree).toggleClass("newnotif");
+                         $("#" +  'entree_'+jsnt.entree).toggleClass("newnotif");
                      }, 400);
-                     // scroll vers lemplacement de la notification
-                     $('#notificationstab').scrollTop(
-                         $("#" + jsnt.entree).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
-                     );
+
+
                  });
                  $('#jstree').bind("select_node.jstree", function (e, data) {
                      var href = data.node.a_attr.href;
                      document.location.href = href;
                  });
-/********
+
+                  $('#jstree').jstree("move_node", "#prt_"+jsnt.dossierid, "#notifcs", 0);
+
+                  /********
                  Push.create("Nouvelle Notification", {
 
                      body:  jsnt.sujet,
@@ -289,7 +313,7 @@ $( "#open" ).click(function() {
 
                  // ajout nouvelle notification sous son dossier
                   $('#jstree').jstree().create_node("#prt_" +  jsnt.dossierid, {
-                      "id":  jsnt.dossierid,
+                      "id":  'entree_'+jsnt.entree,
                       "text": heure+' '+emetteur+' '+ jsnt.sujet,
                       "type": typee,
                       "a_attr": {"href": "{{ asset('entrees/show/') }}" + "/" +  jsnt.entree}
@@ -298,19 +322,20 @@ $( "#open" ).click(function() {
                      $('#jstree').jstree().open_node("#prt_" + jsnt.dossierid);
                      // animation de nouvelle notification
                      setInterval(function () {
-                         $("#" + jsnt.entree).toggleClass("newnotif");
+                         $("#" +  'entree_'+jsnt.entree).toggleClass("newnotif");
                      }, 400);
-                     // scroll vers lemplacement de la notification
-                   /*  $('#notificationstab').scrollTop(
-                         $("#" + jsnt.entree).offset().top - $('#notificationstab').offset().top + $('#notificationstab').scrollTop()
-                     );*/
+
+
                  });
                  $('#jstree').bind("select_node.jstree", function (e, data) {
                      var href = data.node.a_attr.href;
                      document.location.href = href;
                  });
 
-          /*****       Push.create("New Notification", {
+                  $('#jstree').jstree("move_node", "#prt_"+jsnt.dossierid, "#notifcs", 0);
+
+
+                  /*****       Push.create("New Notification", {
 
                      body:  jsnt.emetteur +' '+ jsnt.sujet,
                      icon: "{{ asset('public/img/najda.png') }}",

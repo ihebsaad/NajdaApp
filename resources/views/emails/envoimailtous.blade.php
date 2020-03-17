@@ -83,7 +83,7 @@ $(document).ready(function()
         </div>
         <div class="col-lg-9 ">
 
-            <h2>  <span class="   fas fa-x fa-mail-bulk"></span>  Emails Groupés</h2>
+            <h2>  <span class="   fas fa-x fa-mail-bulk"></span>  Email Groupés</h2>
             <form  enctype="multipart/form-data" id="theform" method="POST" action="{{action('EmailController@sendall')}}"    onsubmit="return checkForm(this);"  >
                 {{ csrf_field() }}
 
@@ -106,7 +106,7 @@ $(document).ready(function()
 					<select id="destinataire"  name="destinataire" class="form-control"  >
 					<option value="clients">Tous les Clients</option>
 					<option value="assures">Tous les Assurés</option>
-					<option value="prestataires">Tous les prestataires</option>
+					<option value="prestataires">Tous les Prestataires</option>
 					</select>
 					
                 </div>
