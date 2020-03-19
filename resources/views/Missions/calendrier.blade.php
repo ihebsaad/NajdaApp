@@ -98,21 +98,21 @@
             <table class="table table-striped" id="mytable" style="width:100%">
             <thead >
              <tr id="headtable">
-                <th style="width:20%">Type mission</th>
-                <th style="width:20%">extrait</th>
-                 <th style="width:25%">dossier</th>
+                <th style="width:20%">Type Mission</th>
+                <th style="width:20%">Extrait</th>
+                 <th style="width:25%">Dossier</th>
                  <th style="width:20%">Séance</th>
-                 <th style="width:20%">Statut Mission</th>
-                 <th style="width:20%">date déclenchement</th>
+                 <th style="width:20%">Statut </th>
+                 <th style="width:20%">Date </th>
               </tr>
             <tr>
-                <th style="width:20%">Type mission</th>
-                <th style="width:20%">extrait</th>
-                 <th style="width:25%">dossier</th>
-                 <th style="width:20%">seance</th>
-                  <th style="width:20%">Statut Mission</th>
+                <th style="width:20%">Type Mission</th>
+                <th style="width:20%">Extrait</th>
+                 <th style="width:25%">Dossier</th>
+                 <th style="width:20%">Séance</th>
+                  <th style="width:20%">Statut</th>
 
-                 <th style="width:20%">date déclenchement</th>
+                 <th style="width:20%">Date</th>
             </tr>
             </thead>
             <tbody>

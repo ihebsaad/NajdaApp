@@ -625,6 +625,35 @@
                             </div>
 
 
+                            <div class="form-group ">
+                                <h3>Contrats</h3>
+
+                                <div class="row">
+                                    <select class="form-control  col-lg-12 itemName " style="width:400px" name="contrats"  multiple  id="contrats">
+
+
+                                        <option></option>
+                                        <?php if ( count($relaContr) > 0 ) {?>
+
+                                        @foreach($relaContr as $relc  )
+                                            @foreach($contrats as $contrat)
+                                                <option  @if($relc->contrat==$relc->id)selected="selected"@endif    onclick="createspec('spec<?php echo $contrat->id; ?>')"  value="<?php echo $contrat->id;?>"> <?php echo $contrat->nom;?></option>
+                                            @endforeach
+                                        @endforeach
+
+                                        <?php
+                                        } else { ?>
+                                        @foreach($contrats as $contrat)
+                                            <option    onclick="createspec('spec<?php echo $contrat->id; ?>')"  value="<?php echo $contrat->id;?>"> <?php echo $contrat->nom;?></option>
+                                        @endforeach
+
+                                        <?php }  ?>
+
+                                    </select>
+
+                                </div>
+                            </div>
+
 
                             <div class="row" style="margin-top:40px">
                                 <div class="col-md-8">
@@ -1556,6 +1585,16 @@
 
         });
 
+        $('#contrats').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+
+        });
+
 
         $('#btnaddtel').click(function(){
              var parent = $('#parent').val();
@@ -1916,6 +1955,90 @@
 
             });
         } // updating
+
+
+
+        var $topo2 = $('#contrats');
+
+        var valArray0 = ($topo2.val()) ? $topo2.val() : [];
+
+        $topo2.change(function() {
+             var val0 = $(this).val(),
+                numVals = (val0) ? val0.length : 0,
+                changes;
+            if (numVals != valArray0.length) {
+                var longerSet, shortSet;
+                (numVals > valArray0.length) ? longerSet = val0 : longerSet = valArray0;
+                (numVals > valArray0.length) ? shortSet = valArray0 : shortSet = val0;
+                //create array of values that changed - either added or removed
+                changes = $.grep(longerSet, function(n) {
+                    return $.inArray(n, shortSet) == -1;
+                });
+
+                UpdatingC(changes, (numVals > valArray0.length) ? 'selected' : 'removed');
+
+            }else{
+                // if change event occurs and previous array length same as new value array : items are removed and added at same time
+                UpdatingC( valArray0, 'removed');
+                UpdatingC( val0, 'selected');
+            }
+            valArray0 = (val0) ? val0 : [];
+        });
+
+
+
+        function UpdatingC(array, type) {
+            $.each(array, function(i, item) {
+
+                if (type=="selected"){
+
+
+                    var parent = $('#idcl').val();
+                    var type = 'particulier';
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                        url: "{{ route('contrats.createspec') }}",
+                        method: "POST",
+                        data: {parent: parent , contrat:item , type:type, _token: _token},
+                        success: function () {
+                            $('.select2-selection').animate({
+                                opacity: '0.3',
+                            });
+                            $('.select2-selection').animate({
+                                opacity: '1',
+                            });
+
+                        }
+                    });
+
+                }
+
+                if (type=="removed"){
+
+                    var parent = $('#idcl').val();
+                    var type = 'particulier';
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                        url: "{{ route('contrats.removespec') }}",
+                        method: "POST",
+                        data: {parent: parent , contrat:item , type:type, _token: _token},
+                        success: function () {
+                            $( ".select2-selection--multiple" ).hide( "slow", function() {
+                                // Animation complete.
+                            });
+                            $( ".select2-selection--multiple" ).show( "slow", function() {
+                                // Animation complete.
+                            });
+                        }
+                    });
+
+                }
+
+            });
+        } // updating
+
 
 
 

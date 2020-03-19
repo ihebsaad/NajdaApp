@@ -259,8 +259,21 @@ class ClientsController extends Controller
     {
         $dossiers = Dossier::all();
         $docs = DB::table('docs')->select('id', 'nom')->get();
-        $relations2 = DB::table('clients_docs')->select('client', 'doc')
+        $relations2 = DB::table('clients_docs')
+            ->select('client', 'doc')
             ->where('client',$id)->get();
+
+
+        $contrats = DB::table('contrats')
+            ->select('id', 'nom')
+            ->where('type','particulier')
+            ->get();
+
+        $relaContr = DB::table('contrats_clients')->select('parent', 'contrat')
+            ->where('parent',$id)
+            ->where('type','particulier')
+            ->get();
+
 
         $groupes = DB::table('client_groupes')->select('id', 'label')->get();
 
@@ -295,7 +308,7 @@ class ClientsController extends Controller
             ->get();
 
         $client = Client::find($id);
-        return view('clients.view',['docs'=>$docs,'relations2'=>$relations2 ,'dossiers' => $dossiers,'groupes'=>$groupes,'countries'=>$countries,'emails'=>$emails,'tels'=>$tels,'faxs'=>$faxs,'entites'=>$entites,'qualites'=>$qualites ,'reseaux'=>$reseaux,'gestions'=>$gestions], compact('client'));
+        return view('clients.view',['relaContr'=>$relaContr,'contrats'=>$contrats,'docs'=>$docs,'relations2'=>$relations2 ,'dossiers' => $dossiers,'groupes'=>$groupes,'countries'=>$countries,'emails'=>$emails,'tels'=>$tels,'faxs'=>$faxs,'entites'=>$entites,'qualites'=>$qualites ,'reseaux'=>$reseaux,'gestions'=>$gestions], compact('client'));
 
     }
 

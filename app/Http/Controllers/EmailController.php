@@ -5930,7 +5930,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                 ->pluck('champ');
         }
 
-
         //    dd($request->all()) ;
         $user = auth()->user();
         $idu = $user->id;

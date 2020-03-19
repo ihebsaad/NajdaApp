@@ -739,5 +739,16 @@ class PrestatairesController extends Controller
     }
 
 
+    public static function listetypes(Request $request)
+    {
+        $prestataire =  $request->get('prestataire');
+
+
+        $relations = DB::table('prestataires_type_prestations')
+            ->where('prestataire_id','=',$prestataire)
+            ->pluck('type_prestation_id');
+        return $relations;
+    }
+
 }
 

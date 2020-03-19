@@ -208,25 +208,13 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                 <div id="jstree">
                  <ul>
 
-                     <li id="notifcs" rel="tremail" > <span style="color:#4fc1e9" class="fa fa-bell fa-lg"></span>  <b style="color:#4fc1e9">  Notifications</b>
+                     <li id="notifcs" rel="tremail" > <span style="color:#4fc1e9" class="fa fa-bell fa-lg"></span>  <b style="color:#4fc1e9;letter-spacing:1.5px;">  Notifications</b>
 
                         <?php
   $param= App\Parametre::find(1);$env=$param->env;
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
-                             /* $firstnotific=DB::table('notifs')->orderBy('reception', 'desc')
-                              ->where('affiche','<', 1 )
-                                          ->where('user',  Auth::id() )
-                                           ->first();*/
 
-                                /*$Missions=Auth::user()->activeMissions->groupBy(function ($me) {
-                                     return $me->dossier_id;
-                                   });*/
-
-                              /*$notifications =  DB::table('notifs')->orderBy('dossierid', 'desc')->orderBy('reception', 'desc')
-                              ->where('affiche','<', 1 )
-                                          ->where('user',  Auth::id() )
-                                           ->get();*/
 
                               $sub = Notif::where('affiche','<', 1 )->where('user',  Auth::id())->orderBy('reception','DESC')->get();
                               //dd($sub);
@@ -256,8 +244,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                             }
                           }
 
-                 // echo json_encode($notifsavecdoss).'<br>';
-                // echo json_encode($notifssansdoss).'<br>';
 
 
                             echo '<ul>';
@@ -325,82 +311,7 @@ if( EntreesController::ChampById( 'notif',$entreeid)!=1 ) {
 
 echo '</ul>';
 
-/*
 
-
-
-                              foreach ($notifications as $ntf) {
-                                if (!empty($ntf[0]['dossierid']))
-                                {
-                                   echo "<li  class='jstree-open' id='prt_".$ntf[0]['dossierid']."'><a href='".$urlapp."/dossiers/view/".$dossierid."'>".$ntf[0]['dossier']." | ".$nassure['subscriber_name']." ".$nassure['subscriber_lastname']." </a><ul>";
-                                  }
-                                foreach ($ntf as $n) {
-
-                                  if (!isset ($n['type']) )
-                                  {  $n['type'] = 'default'; }
-
-
-                                    if ((empty($n['read_at']))||(is_null($n['read_at'])))
-                                      { $newnotif=" class='newnotif'" ;}
-                                    else
-                                      {$newnotif="" ;}
-
-                                  if (!isset ($n['sujet']) )
-                                    {  $n['sujet'] = ' '; }
-
-                                        if (!empty($ntf[0]['dossier']))
-                                {
-                                    switch ($n['type']) {
-                                        case "email":
-                                            echo '<li  id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$n['reception'].' '.$n['emetteur'].' '.$n['sujet'].'</span></a></li>';
-                                            break;
-                                        case "fax":
-                                            echo '<li id="'.$n['id'].'" rel="trfax" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'"  href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span>  '.$n['reception'].' '.$n['sujet'].'</span></a></li>';
-                                            break;
-                                        case "tel":
-                                            echo '<li  id="'.$n['id'].'" rel="trtel" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span>  '.$n['reception'].' '.$n['sujet'].'</span></a></li>';
-                                            break;
-                                        case "sms":
-                                            echo '<li  id="'.$n['id'].'" rel="trsms" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span>  '.$n['reception'].' '.$n['sujet'].'</span></a></li>';
-                                            break;
-                                        case "whatsapp":
-                                            echo '<li  id="'.$n['id'].'" rel="trwp" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"><span class="fab fa-whatsapp"></span> '.$n['sujet'].'</span></a></li>';
-                                            break;
-                                        default:
-                                            echo '<li  id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@show', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>';
-                                    }
-
-                                }else{
-
-                               switch ($n['type']) {
-                                        case "email":
-                                            echo '<li  id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-envelope"></span> '.$datenotif.' '.$n['emetteur'].' '.$n['sujet'].'</span></a></li>';
-                                            break;
-                                        case "fax":
-                                            echo '<li  id="'.$n['id'].'" rel="trfax" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'"  href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-fax"></span> '.$n['sujet'].'</span></a></li>';
-                                            break;
-                                        case "tel":
-                                            echo '<li  id="'.$n['id'].'" rel="trtel" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fa fa-fw fa-phone"></span> '.$n['sujet'].'</span></a></li>';
-                                            break;
-                                        case "sms":
-                                            echo '<li  id="'.$n['id'].'" rel="trsms" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fas fa-sms"></span> '.$n['sujet'].'</span></a></li>';
-                                            break;
-                                        case "whatsapp":
-                                            echo '<li  id="'.$n['id'].'" rel="trwp" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"><span class="fab fa-whatsapp"></span> '.$n['sujet'].'</span></a></li>';
-                                            break;
-                                        default:
-                                            echo '<li  id="'.$n['id'].'" rel="tremail" '.$newnotif.'><a class="idEntreePourMiss" id="'.$n['id'].'" href="'.action('EntreesController@showdisp', $n['id']).'" ><span class="cutlongtext"> '.$n['sujet'].'</span></a></li>';
-                                    }
-
-                                    }
-
-                                }
-                                if (!empty($ntf[0]['dossier'])) {echo '</ul>'; }
-                              }
-                              if (!empty($ntf[0]['dossier'])) {echo '</li>';}
-                            }}
-
-*/
 
 
 ?>

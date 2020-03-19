@@ -116,10 +116,21 @@ class ClientGroupesController extends Controller
     public function view($id)
     {
         $dossiers = Dossier::all();
-        $villes = DB::table('cities')->select('id', 'name')->get();
+        $villes = DB::table('cities')
+            ->select('id', 'name')
+            ->get();
+
+        $contrats = DB::table('contrats')
+            ->select('id', 'nom')
+            ->where('type','commun')
+            ->get();
+        $relaContr = DB::table('contrats_clients')->select('parent', 'contrat')
+            ->where('parent',$id)
+            ->where('type','commun')
+            ->get();
 
         $clientgroupe = ClientGroupe::find($id);
-        return view('clientgroupes.view',['dossiers' => $dossiers,'villes'=>$villes], compact('clientgroupe'));
+        return view('clientgroupes.view',['relaContr'=>$relaContr,'contrats'=>$contrats,'dossiers' => $dossiers,'villes'=>$villes], compact('clientgroupe'));
 
     }
 

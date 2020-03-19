@@ -2689,6 +2689,47 @@ array_push($listepr,$pr['prestataire_id']);
                             <input style="width:200px;" value="<?php echo date('d/m/Y');?>" class="form-control datepicker-default  hasDatepicker" name="pres_date2" id="pres_date2" data-required="1" required="" aria-required="true">
                         </div>
 
+
+                        <div class="form-group " >
+                            <label>Type de prestations</label>
+                            <div class=" row  ">
+                                <select class="itemName form-control col-lg-12  " style="width:400px"     id="ajout_typeprest">
+                                    <option></option>
+                                    @foreach($typesprestations as $aKey)
+                                        <option     value="<?php echo $aKey->id;?>"> <?php echo $aKey->name;?></option>
+                                    @endforeach
+
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group ">
+                            <div class="row">
+                                <label>Spécialité </label>
+                            </div>
+                            <div class="row">
+                                <select class="form-control  col-lg-12 " style="width:400px"     id="ajout_specialite">
+                                    <option value="0"></option>
+                                    @foreach($specialites as $sp)
+                                        <?php     $specialite_tprestation = DB::table('specialites_typeprestations')
+                                        ->where([
+                                        ['specialite', '=', $sp->id],
+                                        ])->first();
+                                        if (isset($specialite_tprestation->type_prestation))
+                                        {$stprest = $specialite_tprestation->type_prestation;
+                                        ?>
+                                        <option  class="add-tprest  tprest-<?php echo $stprest;?>" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                        <?php } else { ?>
+                                        <option  class="add-tprest" value="<?php echo $sp->id;?>"> <?php echo $sp->nom;?></option>
+                                        <?php
+                                        } ?>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+
                         <div class="form-group">
                             <label for="sujet">Autorisé Par :</label>
                             <select  id="autorise" class="form-control"  style="width:350px" >
@@ -4415,9 +4456,9 @@ function toggle(className, displayState){
 
             var dossier_id = $('#dossier').val();
 
-           // var typeprest = $('#typeprest2').val();
+            var typeprest = $('#ajout_typeprest').val();
             var gouvernorat = $('#gouvcouv2').val();
-            var specialite = $('#specialite2').val();
+            var specialite = $('#ajout_specialite').val();
             var date = $('#pres_date2').val();
             var autorise = $('#autorise').val();
             var details = $('#details').val();
@@ -4429,7 +4470,7 @@ function toggle(className, displayState){
                 $.ajax({
                     url:"{{ route('prestations.saving') }}",
                     method:"POST",
-                    data:{autorise:autorise,details:details,date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat/*,typeprest:typeprest*/, _token:_token},
+                    data:{autorise:autorise,details:details,date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat ,typeprest:typeprest, _token:_token},
                     success:function(data){
                         //var prestation=parseInt(data);
                         /// window.location =data;
@@ -4456,6 +4497,60 @@ function toggle(className, displayState){
             alert('il manque des informations');
             }
         });
+
+
+
+        // filtrer specialités selon type de prestation
+
+
+        $('#ajout_typeprest').change(function() {
+            var typeprestation = $('#ajout_typeprest').val();
+            $("#ajout_specialite").val('');
+
+            var liste ;
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{ route('prestataires.listesprest') }}",
+                method:"POST",
+                data:{typeprestation:typeprestation,  _token:_token},
+                success:function(data){
+                    liste=data;
+                    console.log('data : '+data);
+
+                    //   alert('Added successfully');
+
+
+                    $('#ajout_specialite option').each(function() {
+
+                        $(this).css("display", "none");
+
+
+                    });
+
+
+                    $('#ajout_specialite option').each(function() {
+                        // console.log(  $(this).val());
+                        for (i=0;i< liste.length ;i++){
+                            if(liste[i]== $(this).val() )
+                            {//alert('1');
+                                $(this).css("display", "block");
+                                break;
+                            }
+                        }
+
+
+                    });
+
+
+
+
+                }
+            });
+
+
+
+        });
+
 
 
         $('#add2-m').click(function(){
@@ -5173,9 +5268,59 @@ $("#showNext-m").click(function() {
 
         document.getElementById('selectedprest2').value =id;
         document.getElementById('inputprest').value =nom;
+        filtre(id);
 
 
     }
+// filtrer type prestation dans ajout prestation
+    function filtre(prestataire) {
+        $("#ajout_typeprest").val('');
+
+        var liste ;
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url:"{{ route('prestataires.listetypes') }}",
+            method:"POST",
+            data:{prestataire:prestataire,  _token:_token},
+            success:function(data){
+                liste=data;
+                console.log('data : '+data);
+
+                //   alert('Added successfully');
+
+
+                $('#ajout_typeprest option').each(function() {
+
+                    $(this).css("display", "none");
+
+
+                });
+
+
+                $('#ajout_typeprest option').each(function() {
+                    // console.log(  $(this).val());
+                    for (i=0;i< liste.length ;i++){
+                        if(liste[i]== $(this).val() )
+                        {//alert('1');
+                            $(this).css("display", "block");
+                            break;
+                        }
+                    }
+
+
+                });
+
+
+
+
+            }
+        });
+
+
+
+    }
+
+
 
 </script>
 <script>

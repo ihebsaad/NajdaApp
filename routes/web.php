@@ -324,6 +324,21 @@ Route::post('/docs/createdocdossier','DocsController@createdocdossier')->name('d
 Route::get('/docs/destroy/{id}', 'DocsController@destroy');
 
 
+/*** contrats -> Contrats Clients   **/
+
+Route::get('/contrats', array('as' => 'docs','uses' => 'ContratsController@index'));
+Route::post('/contrats/saving','ContratsController@saving')->name('contrats.saving');
+Route::post('/contrats/updating','ContratsController@updating')->name('contrats.updating');
+Route::get('/contrats/view/{id}', 'ContratsController@view');
+Route::post('/contrats/removespec','ContratsController@removespec')->name('contrats.removespec');
+Route::post('/contrats/createspec','ContratsController@createspec')->name('contrats.createspec');
+Route::post('/contrats/removedocdossier','ContratsController@removedocdossier')->name('contrats.removedocdossier');
+Route::post('/contrats/createdocdossier','ContratsController@createdocdossier')->name('contrats.createdocdossier');
+Route::get('/contrats/destroy/{id}', 'ContratsController@destroy');
+
+
+
+
 /*** Groupes Clients **/
 //Route::resource('/clientgroupes',  'ClientGroupesController');
 Route::get('/clientgroupes', array('as' => 'clientgroupes','uses' => 'ClientGroupesController@index'));
@@ -356,6 +371,7 @@ Route::get('/prestataires/create/{id}', 'PrestatairesController@create')->name('
 Route::post('/prestataires/checkexiste', 'PrestatairesController@checkexiste')->name('prestataires.checkexiste');
 Route::post('/prestataires/checkexisteprname', 'PrestatairesController@checkexistePrName')->name('prestataires.checkexisteprname');
 Route::post('/prestataires/listesprest', 'PrestatairesController@listesprest')->name('prestataires.listesprest');
+Route::post('/prestataires/listetypes', 'PrestatairesController@listetypes')->name('prestataires.listetypes');
 
 
 /*** Prestations **/

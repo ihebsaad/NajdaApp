@@ -84,9 +84,9 @@ $seance =  DB::table('seance')
 
              <div class="col-sm-2">
                 <a href="{{ route('missions.calendriermissions') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-                    <span class="fas fa-lg  fa-calendar-alt"></span>
+                    <span class="fas fa-lg fa-clipboard-list"></span>
                     <br>
-                   Calendrier de missions plateau
+                   Missions plateau
                 </a>
             </div>
 <?php }
