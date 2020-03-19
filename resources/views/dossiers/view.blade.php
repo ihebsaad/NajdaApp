@@ -4042,8 +4042,9 @@ $("#templateom").val("Select").change();
         var dossier = $('#dossom').val();
         var tempdoc = $("#templateordrem").val();
         var affectea = $("#affectea").val();
-        var heuredateRDV =document.omfilled.CL_heuredateRDV.value;
-         if (heuredateRDV==="")
+        
+       var heuredateRDV =document.omfilled.CL_heuredateRDV.value;
+       if (heuredateRDV==="")
         {document.getElementById('genomhtml').disabled = false;
              Swal.fire({
                 type: 'error',
@@ -4054,11 +4055,13 @@ $("#templateom").val("Select").change();
               
 
         }
+  
         var srctemp = document.getElementById('omfilled').src;
+
         if (affectea == "interne")
         {
           var type_affectation = $("#type_affectation").val();
- if (type_affectation==="Select")
+ if ((type_affectation==="Select") && ((tempdoc !== 'remplace') &&  (tempdoc !== 'complete')))
         {document.getElementById('genomhtml').disabled = false;
              Swal.fire({
                 type: 'error',
@@ -4066,6 +4069,7 @@ $("#templateom").val("Select").change();
                 text: "Veuillez selectionner une entité soeur"
             });
             return false;
+     
         }
           var nomprestextern = "";
           var idprestextern= "";
