@@ -10,9 +10,9 @@ if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];
 if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; $subscriber_lastname2=$_GET['subscriber_lastname'];}
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
 if (isset($_GET['CL_periode_hospitalisation'])) {$CL_periode_hospitalisation=$_GET['CL_periode_hospitalisation']; }
-if (isset($_GET['franchise'])) {$franchise=$_GET['franchise']; }
+//if (isset($_GET['franchise'])) {$franchise=$_GET['franchise']; }
 if (isset($_GET['CL_text_montant'])) {$CL_text_montant=$_GET['CL_text_montant']; }
-if (isset($_GET['montant_franchise'])) {$montant_franchise=$_GET['montant_franchise']; }
+//if (isset($_GET['montant_franchise'])) {$montant_franchise=$_GET['montant_franchise']; }
 if (isset($_GET['doc_dossier'])) {$doc_dossier=$_GET['doc_dossier']; }
 if (isset($_GET['CL_montant_numerique'])) {$CL_montant_numerique=$_GET['CL_montant_numerique'];}
 if (isset($_GET['CL_montant_toutes_lettres'])) {$CL_montant_toutes_lettres=$_GET['CL_montant_toutes_lettres'];}
@@ -171,7 +171,7 @@ $sqlsig = "SELECT id,nom FROM docs WHERE id IN (SELECT doc FROM dossiers_docs WH
         while($rowsig = $resultsig->fetch_assoc()) {
             $array_sig[] = array('id' => $rowsig["id"],'nom' => $rowsig["nom"]  );
         }}
- $sqldos = "SELECT id,documents FROM dossiers WHERE id=".$iddossier."";
+ $sqldos = "SELECT id,documents,franchise,montant_franchise FROM dossiers WHERE id=".$iddossier."";
 		$resultdos = $conn->query($sqldos);
 		if ($resultdos->num_rows > 0) {
 	    // output data of each row
@@ -572,12 +572,12 @@ echo '<option value="'.$struc["name"].'" id="'.$struc["id"].'" >'.$struc["name"]
 <p class=rvps5><span class=rvts5>Montant maximal de prise en charge (TND)</span><span class=rvts6>:&nbsp;</span><span class=rvts9> </span><span style="display:inline-block; "><label id="alertGOP" for="CL_montant_numerique" style="display:none; color:red;">Montant GOP dépassé <?php if (isset($montantgop)) { echo " <b>(Max: ".$montantgop.")</b>";} ?></label><input name="CL_montant_numerique" placeholder="Montant maximal"  value="<?php if(isset ($CL_montant_numerique)) echo $CL_montant_numerique; ?>" onKeyUp=" keyUpHandler(this)"></input></span><span class=rvts9>&nbsp;&nbsp;&nbsp; </span><span class=rvts5>Toutes lettres</span><span class=rvts6> : <input name="CL_montant_toutes_lettres" id="CL_montant_toutes_lettres" placeholder="Montant en toutes lettres"  value="<?php if(isset ($CL_montant_toutes_lettres)) echo $CL_montant_toutes_lettres; ?>"></input> dinars</span></p>
 <p class=rvps5><span class=rvts6>Periode d'hospitalisation: <input name="CL_periode_hospitalisation" placeholder="periode de hospitalisation"  value="<?php if(isset ($CL_periode_hospitalisation)) echo $CL_periode_hospitalisation; ?>"></input></span></p>
 
-<p class=rvps6><span class=rvts6>Franchise: <input name="franchise" placeholder="franchise"  value="<?php if($franchise==="1"||$franchise==="oui" )echo "oui"; else echo "non" ?>"></input> </span><span class=rvts7></span></p>
+<p class=rvps6><span class=rvts6>Franchise: <input name="franchise" placeholder="franchise"  value="<?php if($detaildos['franchise']==="1" )echo "oui"; else echo "non" ?>"></input> </span><span class=rvts7></span></p>
 <?php
 {
-	if ($franchise === "1"||$franchise==="oui") { ?>
+	if ($detaildos['franchise'] === "1") { ?>
 <input name="CL_text_montant" type="hidden" placeholder="" value="<?php if(isset($CL_text_montant)) {echo $CL_text_montant;}  if (empty($CL_text_montant)){ echo "Montant de la franchise:" ;}?>"></input>
-<p class=rvps7><span class=rvts6>Montant de la franchise: </span><span class=rvts8><input name="montant_franchise" placeholder="montant franchise"  value="<?php if(isset ($montant_franchise)) echo $montant_franchise; ?>"></input></span><span class=rvts6></span><span class=rvts9></span><span class=rvts6></span><span class=rvts9></span><span class=rvts6></span></p>
+<p class=rvps7><span class=rvts6>Montant de la franchise: </span><span class=rvts8><input name="montant_franchise" placeholder="montant franchise"  value="<?php if(isset ($detaildos['montant_franchise'])) echo $detaildos['montant_franchise']; ?>"></input></span><span class=rvts6></span><span class=rvts9></span><span class=rvts6></span><span class=rvts9></span><span class=rvts6></span></p>
 <?php
 
 	}else { ?>

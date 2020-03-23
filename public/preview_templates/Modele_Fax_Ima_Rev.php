@@ -64,14 +64,14 @@ $sqlexpert = "SELECT id,date_prestation,type_prestations_id,specialite FROM pres
         while($rowexpert = $resultexpert->fetch_assoc()) {
             $array_expert[] = array('id' => $rowexpert["id"],"date_prestation" => $rowexpert["date_prestation"],'type_prestations_id' => $rowexpert["type_prestations_id"],"specialite" => $rowexpert["specialite"]);
         }}
-$sqlhotel = "SELECT id,date_prestation,type_prestations_id,specialite FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1  AND type_prestations_id = 18";
+$sqlhotel = "SELECT id,date_prestation,type_prestations_id,specialite,details FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1  AND type_prestations_id = 18";
 
     $resulthotel = $conn->query($sqlhotel);
     if ($resulthotel->num_rows > 0) {
 
         $array_hotel = array();
         while($rowhotel = $resulthotel->fetch_assoc()) {
-            $array_hotel[] = array('id' => $rowhotel["id"],"date_prestation" => $rowhotel["date_prestation"],'type_prestations_id' => $rowhotel["type_prestations_id"],"specialite" => $rowhotel["specialite"]);
+            $array_hotel[] = array('id' => $rowhotel["id"],"date_prestation" => $rowhotel["date_prestation"],'type_prestations_id' => $rowhotel["type_prestations_id"],"specialite" => $rowhotel["specialite"],"details" => $rowhotel["details"]);
         }}
 $sqltax = "SELECT id,date_prestation,type_prestations_id,specialite FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1  AND type_prestations_id = 2";
 
@@ -154,6 +154,34 @@ $sqlpa = "SELECT id,name FROM type_prestations WHERE id IN (SELECT type_prestati
         while($rowpa = $resultpa->fetch_assoc()) {
             $array_pa[] = array('id' => $rowpa["id"],"name" => $rowpa["name"]  );
         }}
+$sqlomremor = "SELECT idprestation,CL_lieudecharge_dec,CL_lieuprest_pc FROM om_remorquage WHERE (CL_lieudecharge_dec IS NOT NULL AND CL_lieudecharge_dec IS NOT NULL )  AND idprestation IN (SELECT id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1  AND type_prestations_id = 1)";
+
+    $resultomremor = $conn->query($sqlomremor);
+    if ($resultomremor->num_rows > 0) {
+
+        $array_omremor = array();
+        while($rowomremor = $resultomremor->fetch_assoc()) {
+            $array_omremor[] = array('CL_lieudecharge_dec' => $rowomremor["CL_lieudecharge_dec"],"CL_lieuprest_pc" => $rowomremor["CL_lieuprest_pc"],"idprestation" => $rowomremor["idprestation"]  );
+        }}
+$sqlomtaxi = "SELECT idprestation,CL_lieudecharge_dec,CL_lieuprest_pc FROM om_remorquage WHERE (CL_lieudecharge_dec IS NOT NULL AND CL_lieudecharge_dec IS NOT NULL )  AND idprestation IN (SELECT id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1  AND type_prestations_id = 2)";
+
+    $resultomtaxi = $conn->query($sqlomtaxi);
+    if ($resultomtaxi->num_rows > 0) {
+
+        $array_omtaxi = array();
+        while($rowomtaxi = $resultomtaxi->fetch_assoc()) {
+            $array_omtaxi[] = array('CL_lieudecharge_dec' => $rowomtaxi["CL_lieudecharge_dec"],"CL_lieuprest_pc" => $rowomtaxi["CL_lieuprest_pc"],"idprestation" => $rowomtaxi["idprestation"]  );
+        }}
+$sqlomtaxi = "SELECT idprestation,CL_lieudecharge_dec,CL_lieuprest_pc FROM om_taxi WHERE (CL_lieudecharge_dec IS NOT NULL AND CL_lieudecharge_dec IS NOT NULL )  AND idprestation IN (SELECT id FROM prestations WHERE dossier_id=".$iddossier." AND effectue= 1  AND type_prestations_id = 2)";
+
+    $resultomtaxi = $conn->query($sqlomtaxi);
+    if ($resultomtaxi->num_rows > 0) {
+
+        $array_omtaxi = array();
+        while($rowomtaxi = $resultomtaxi->fetch_assoc()) {
+            $array_omtaxi[] = array('CL_lieudecharge_dec' => $rowomtaxi["CL_lieudecharge_dec"],"CL_lieuprest_pc" => $rowomtaxi["CL_lieuprest_pc"],"idprestation" => $rowomtaxi["idprestation"]  );
+        }}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>lnozr6vuqhzbh2ivjidu8xla90htp32y_Modele_Fax_Ima_Rev</title>
@@ -439,17 +467,24 @@ p,ul,ol /* Paragraph Style */
 <p><span class=rvts17><textarea name="CL_prest" rows="5" cols="12" form="formchamps" placeholder="" value=""><?php if(isset ($CL_prest)) { $ligne = str_replace('\\', "\n", $CL_prest); echo $ligne;}
 foreach ($array_remor as $remor) 
 {     $specr='';
+$omr='';
 		foreach ($array_sr as $sr)
 		{  if($remor['specialite']==$sr['id']){$specr=$sr['nom'].": ";} }
-echo '-Remorquage: '.$specr.$remor['date_prestation']."\n";  
+foreach ($array_omremor as $omremor)
+		{  if($remor['id']==$omremor['idprestation']){$omr=' : de '.$omremor['CL_lieuprest_pc']." à ".$omremor['CL_lieudecharge_dec'];} }
+echo '-'.$specr.$remor['date_prestation'].$omr."\n";  
 	      } ?></textarea></span></p>
 <p><span class=rvts17><br></span></p>
 </td>
 <td width=92 height=91 valign=middle style="border-width : 1px; border-color: #000000; border-style: solid; padding: 0px 7px; border-right: none;"><p><span class=rvts17><textarea name="CL_prest1" rows="5" cols="10" form="formchamps" placeholder="" value=""><?php if(isset ($CL_prest1)) { $ligne = str_replace('\\', "\n", $CL_prest1); echo $ligne;} foreach ($array_tax as $taxi) 
 {     $spect='';
+      $omt='';
+foreach ($array_omtaxi as $omtaxi)
+		{  if($taxi['id']==$omtaxi['idprestation']){$omt=' : de '.$omtaxi['CL_lieuprest_pc']." à ".$omtaxi['CL_lieudecharge_dec'];} }
 		foreach ($array_st as $st)
-		{  if($taxi['specialite']==$st['id']){$spect=$st['nom'].": ";} }
-echo '-Taxi : '.$spect.$taxi['date_prestation']."\n";  
+		{  
+                if($taxi['specialite']==$st['id']){$spect=$st['nom'].": ";} }
+echo '-'.$spect.$taxi['date_prestation'].$omt."\n";  
 	      }?></textarea></span></p>
 </td>
 <td width=75 height=91 valign=middle style="border-width : 1px; border-color: #000000; border-style: solid; padding: 0px 7px; border-right: none;"><p><span class=rvts17><textarea name="CL_prest2" rows="5" cols="10" form="formchamps" placeholder="" value=""><?php if(isset ($CL_prest2)) { $ligne = str_replace('\\', "\n", $CL_prest2); echo $ligne;}    
@@ -458,7 +493,8 @@ foreach ($array_hotel as $hotel)
 {     $spech='';
 		foreach ($array_sh as $sh)
 		{  if($hotel['specialite']==$sh['id']){$spech=$sh['nom'].": ";} }
-echo '-Hôtel : '.$spech.$hotel['date_prestation']."\n";  
+if(!empty($hotel['details']) && $hotel['details']!== null){$detail=' : '.$hotel['details'];}
+echo '-'.$spech.$hotel['date_prestation'].$detail."\n";  
 	      }  ?>  </textarea></span></p>
 </td>
 <td width=76 height=91 valign=middle style="border-width : 1px; border-color: #000000; border-style: solid; padding: 0px 7px; border-right: none;"><p><span class=rvts17><br></span></p>
@@ -469,7 +505,7 @@ foreach ($array_expert as $expert)
 {  $spec='';
 foreach ($array_se as $se)
 		{  if($expert['specialite']==$se['id']){$spec=$se['nom'].": ";} }
-echo '-Expertise auto : '.$spec.$expert['date_prestation']."\n"; 
+echo '-'.$spec.$expert['date_prestation']."\n"; 
 	       }?>
 </textarea></span></p>
 <p><span class=rvts17><br></span></p>

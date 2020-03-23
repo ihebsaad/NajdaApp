@@ -868,7 +868,7 @@ Log::info('[Agent : '.$nomuser.' ] Generation du document '.$titref.' dans le do
 
 
                 // ajout identification des tags
-                if (isset($resp)) {$array += [ 'lestags' => utf8_encode($resp)];}
+                if (isset($resp)) {$array += [ 'lestags' => $resp];}
                 // ajout montant gop
                 //if (isset($montantgop)) {$array += [ 'montantgop' => utf8_encode($montantgop)];}
 
