@@ -637,7 +637,7 @@
 
                                         @foreach($relaContr as $relc  )
                                             @foreach($contrats as $contrat)
-                                                <option  @if($relc->contrat==$relc->id)selected="selected"@endif    onclick="createspec('spec<?php echo $contrat->id; ?>')"  value="<?php echo $contrat->id;?>"> <?php echo $contrat->nom;?></option>
+                                                <option  @if($relc->contrat==$contrat->id)selected="selected"@endif    onclick="createspec('spec<?php echo $contrat->id; ?>')"  value="<?php echo $contrat->id;?>"> <?php echo $contrat->nom;?></option>
                                             @endforeach
                                         @endforeach
 
@@ -1994,13 +1994,13 @@
 
 
                     var parent = $('#idcl').val();
-                    var type = 'particulier';
+                    var types = 'particulier';
                     var _token = $('input[name="_token"]').val();
 
                     $.ajax({
                         url: "{{ route('contrats.createspec') }}",
                         method: "POST",
-                        data: {parent: parent , contrat:item , type:type, _token: _token},
+                        data: {parent: parent , contrat:item , type:types, _token: _token},
                         success: function () {
                             $('.select2-selection').animate({
                                 opacity: '0.3',
@@ -2017,13 +2017,13 @@
                 if (type=="removed"){
 
                     var parent = $('#idcl').val();
-                    var type = 'particulier';
+                    var types = 'particulier';
                     var _token = $('input[name="_token"]').val();
 
                     $.ajax({
                         url: "{{ route('contrats.removespec') }}",
                         method: "POST",
-                        data: {parent: parent , contrat:item , type:type, _token: _token},
+                        data: {parent: parent , contrat:item , type:types, _token: _token},
                         success: function () {
                             $( ".select2-selection--multiple" ).hide( "slow", function() {
                                 // Animation complete.

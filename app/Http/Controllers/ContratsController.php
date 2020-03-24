@@ -195,15 +195,16 @@ class ContratsController extends Controller
 
     public  function createspec(Request $request)
     {
-       $parent= $request->get('parent');
-        $contrat= $request->get('contrat');
+       $parent= intval($request->get('parent'));
+        $contrat=intval($request->get('contrat'));
         $type= $request->get('type');
-
         DB::table('contrats_clients')->insert(
-				['parent', '=', $parent],
-                ['contrat', '=', $contrat],
-                ['type', '=', $type]
+            ['contrat'=>   $contrat ,
+             'parent'=>  $parent ,
+             'type'=>   $type]
         );
+
+      //  dd('parent : ' .$parent. ' contrat : ' .$contrat .'type :'. $type ) ;
 
     }
 
