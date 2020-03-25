@@ -2370,6 +2370,14 @@ class ActionController extends Controller
     public function Bouton_Faire1_ignorer2_reporter3_rappeler4(Request $request, $iddoss,$idmiss,$idact,$boutonk)
     {
 
+       $action=ActionEC::where("id",$idact)->where("mission_id_org","=",$idmiss)->first();
+
+      /*if( $action->statut!= 'deleguee' && auth::user()->id!=  $action->user_id)
+      {
+        return back()->with('messagekbsFail', 'Erreur: Vous n\'êtes pas autorisé(e) de traiter cette action');
+
+      }  */
+
       // $action=ActionEC::where("id",$idact)->where("mission_id_org","=",$idmiss)->first();
        //dd(intval($action->id_type_miss));
        //dd(intval($idact));
@@ -2409,7 +2417,7 @@ class ActionController extends Controller
         $bouton=intval($request->get("numerobouton"));
         //dd($bouton);
 
-        $action=ActionEC::where("id",$idact)->where("mission_id_org","=",$idmiss)->first();
+        
         $option=$request->get("optionAction");
 
         if(isset($option) && $bouton==1 )
@@ -2429,13 +2437,14 @@ class ActionController extends Controller
             }
 
 
+
           if($bouton==1)//bouton fait
            {
 
    // controle la non saisie des dates spécifique
                if($action->Mission->type_Mission==6)//taxi 
                {
-                   if($action->ordre==5 && (!$action->Mission->h_dep_pour_miss || !$action->Mission->h_arr_prev_dest))
+                   if(($action->ordre==5 || $action->ordre==6) && (!$action->Mission->h_dep_pour_miss || !$action->Mission->h_arr_prev_dest))
                    {
 
                     return back()->with('messagekbsFail', 'Erreur: Vous devez saisir les dates spécifiques dans le menu Description de mission');
@@ -2454,6 +2463,8 @@ class ActionController extends Controller
                    }
 
                }
+
+             
         
 
            $action->update(['statut'=>"faite"]); 

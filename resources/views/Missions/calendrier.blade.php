@@ -163,13 +163,11 @@
 
                                               } 
 
-                                          }else
+                                          }else // active ou deleguee ou reportee
                                           {
                                             echo '<td style="width:20% ;color:red;"> Maintenant</td>';
 
-
                                           }
-
 
 
                                               ?>
@@ -202,7 +200,7 @@
 
                 </tr>
 
-                @else
+                @else {{-- Cas --}}
                 <?php $actions=App\ActionEC::where('mission_id',$do->id)->where('statut','reportee')->orWhere('statut','rappelee')->get(); ?>
                  @foreach($actions as $aa) {{--  debut action--}}
 
@@ -294,11 +292,7 @@
 
     ?>
 
-   
-
-
-
-
+  
 @endsection
 
 

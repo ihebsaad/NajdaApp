@@ -129,9 +129,14 @@ class MissionController extends Controller
         return true;
     }
 
-    public function verifier_fin_missions()
+    public function verifier_fin_missions($dossid)
     {
-      $missions=Mission::get();
+      $missions=Mission::where('dossier_id',$dossid)->get();
+      if($missions)
+      {
+
+      if($missions->count() > 0)
+      {
 
       foreach ($missions as $miss ) {
 
@@ -146,8 +151,8 @@ class MissionController extends Controller
 
           }
 
-       
-        
+           }
+       }
       }
     }
 

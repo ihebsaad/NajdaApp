@@ -623,9 +623,9 @@
 
      var idhis=$(this).attr("id");
      idhis=idhis.substr(4);
-       $('#contenumodalhisaffect').html('ok');
+      //$('#contenumodalhisaffect').html('ok');
 
-              $('#myhisaffect').modal('show');
+             // $('#myhisaffect').modal('show');
   //alert(idhis);
 
 
