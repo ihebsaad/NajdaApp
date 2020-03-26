@@ -3186,6 +3186,9 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
         $statut= $request->get('statut');
         $sanssuite= intval($request->get('sanssuite'));
 
+        // forcer la fin des missions qui sont réellemnt achevée
+        app('App\Http\Controllers\MissionController')->verifier_fin_missions($iddossier);
+
          $count= Mission::where('dossier_id',$iddossier)
              ->where('statut_courant','!=','annulee')
              ->where('statut_courant','!=','achevee')
@@ -3278,14 +3281,18 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
    {
 
          $hisaffec=AffectDossHis::where('id_dossier',$id)->orderBy('date_affectation','DESC')->get();
+         //dd($hisaffec);
 
       $output='';
 
 
-      if(!$hisaffec->isEmpty())
+      if($hisaffec->count()>0)
       {
+         //$output='cccc';
 
-        $dossiera=Dossier::where('id',$id)->first(['reference_medic','current_status','sub_status']); 
+       // dd('jjjjjj');
+
+        $dossiera=Dossier::where('id',$id)->first(['reference_medic','current_status','user_id','sub_status',]); 
                    $output='<h4><b>Historique d\'affectation de dossier : '. $dossiera->reference_medic.'</b></h4><br>';
                    
               
@@ -3305,19 +3312,26 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
                   <tbody id="tabetatActionMission">';
 
                   $user_em=User::where('id',$dossiera->user_id)->first(['name','lastname']); 
-
+                  //dd($user_em);
                   $output.='<tr><td style="overflow: auto;" title="'.$dossiera->reference_medic.'"><span style="font-weight : none;">'.$dossiera->reference_medic.'</span></td>';
+                   if($user_em)
+                   {
+                    $output.='<td style="overflow: auto;" title="'.$user_em->name.' '.$user_em->lastname.'"><span style="font-weight : none;">'.$user_em->name.' '.$user_em->lastname.'</span></td>';
+                   }
+                   else
+                   {
+                     $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;"></span></td>';
+                   }
+                   
 
-                   $output.='<td style="overflow: auto;" title="'.$user_em->name.' '.$user_em->lastname.'"><span style="font-weight : none;">'.$user_em->name.' '.$user_em->lastname.'</span></td>';
+                    $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Création du dossier</span></td>';
 
-                    $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Ouverture du dossier</span></td>';
-
-                         $output.='<td style="overflow: auto;" title="'.$ha->date_affectation.'"><span style="font-weight : none;">'.$ha->date_affectation.'</span></td>';
+                         $output.='<td style="overflow: auto;" title="'.$dossiera->created_at.'"><span style="font-weight : none;">'.$dossiera->created_at.'</span></td>';
 
                   foreach ($hisaffec as $ha)
                      { 
 
-                       
+                        $operation=true;
                        $user_em=User::where('id',$ha->util_affecteur)->first(['name','lastname']); 
                        $user_re=User::where('id',$ha->util_affecte)->first(['name','lastname']);  
                                       
@@ -3325,15 +3339,31 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
                         $output.='<tr><td style="overflow: auto;" title="'.$dossiera->reference_medic.'"><span style="font-weight : none;">'.$dossiera->reference_medic.'</span></td>';
                           
 
-
+                       if($user_em)
+                       {
                         $output.='<td style="overflow: auto;" title="'.$user_em->name.' '.$user_em->lastname.'"><span style="font-weight : none;">'.$user_em->name.' '.$user_em->lastname.'</span></td>';
+                        }
+                        else
+                        {
+                            $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;"></span></td>';
 
-                         $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">'.$user_re->name.' '.$user_re->lastname.'</span></td>';
+                        }
+
+                         /*if($user_re)
+                          {
+
+                            $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">'.$user_re->name.' '.$user_re->lastname.'</span></td>';
+                          }
+                          else
+                          {
+                            $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;"></span></td>';
+                          }*/
 
                          if($user_em && $user_re && $user_re!=$user_em && !stripos($ha->statut,"Cloture") && !stripos($ha->statut,"Ouverture") )
                          {
 
                              $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Affectation du dossier à '.$user_re->name.' '.$user_re->lastname.'</span></td>';
+                             $operation=false;
 
                          }
 
@@ -3341,6 +3371,8 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
                          {
 
                              $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Creation et affectation du nouveau dossier à l\'utilisateur lui meme  '.$user_re->name.' '.$user_re->lastname.'</span></td>';
+                        $operation=false;
+
 
                          }
 
@@ -3348,6 +3380,8 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
                          {
 
                              $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Cloture de dossier</span></td>';
+                              $operation=false;
+
 
                          }
 
@@ -3355,6 +3389,22 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
                          {
 
                              $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Ouverture de dossier</span></td>';
+                                                          $operation=false;
+
+
+                         }
+
+                         if($operation==true)
+                         {
+                             if(!$user_em && $user_re)
+                              {                      
+                               $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Dossier affecté à :'.$user_re->name.' '.$user_re->lastname.'</span></td>';
+                              }
+                              if($user_em && !$user_re)
+                              {
+                                $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;">Dossier affecté par :'.$user_em->name.' '.$user_em->lastname.'</span></td>';
+
+                              }
 
                          }
 
@@ -3374,7 +3424,6 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
         else
          {
            $output='Pas d\'historique d\'affectation pour ce dossier';
-
          }
 
    return $output;

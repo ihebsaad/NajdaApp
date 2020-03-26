@@ -198,15 +198,18 @@
                        $actions=$m->ActionECs;
                       foreach($actions as $act)
                       {
-                          if (
+                         /* if (
                               ($act->user_id == '')&&($act->assistant_id == '') ||
                               (($act->user_id == $user->id ) && ( $act->assistant_id == $user->id || ($act->assistant_id =='' )   )  )
-                           )
+                           )*/
+
+                           if ((!$act->statut!='deleguee'))
                               {
+
 
                           $datedebut=$act->date_deb; $debut=date("d/m/Y H:i", strtotime($datedebut));
                           $datefin=$act->date_fin; $fin=date("d/m/Y H:i", strtotime($datefin));
-                          $statut=$act->statut; if ($statut=='active'){$color='#4fc1e9';$statut='Active';} if ($statut=='inactive'){$color='grey';$statut='Inactive';}if ($statut=='faite' || $statut=='rfaite'){$color='#45B39D';$statut='Réalisée';}if ($statut=='reportee' || $statut=='rappelee'){$color='#F0B27A';$statut='Mise en attente';}if ($statut=='annulee' ){$color='##FD9883';$statut='Annulée';}
+                          $statut=$act->statut; if ($statut=='active'){$color='#4fc1e9';$statut='Active';} if ($statut=='inactive'){$color='grey';$statut='Inactive';}if ($statut=='faite' || $statut=='rfaite'){$color='#45B39D';$statut='Réalisée par '.$act->agent->name.' '.$act->agent->lastname;}if ($statut=='reportee' || $statut=='rappelee'){$color='#F0B27A';$statut='Mise en attente';}if ($statut=='annulee' ){$color='##FD9883';$statut='Annulée';}
 
                           echo  '<li style="display:block;margin-left:-35px;margin-bottom:15px;border:3px solid '.$color.';padding:10px 10px 10px 10px"  class=" liactions action-'.$statut.'">';
                         //  echo '<a  > <span style="color:grey;margin-top:25px" class="fa-li"><i style="color:grey" class="fa fa-cogs"></i></span></a>';
@@ -219,6 +222,7 @@
 						  echo  '</li>';
 
                               } // end user_id
+                           
 
 
                       }

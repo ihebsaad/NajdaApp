@@ -208,7 +208,9 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                 <div id="jstree">
                  <ul>
 
-                     <li id="notifcs" rel="tremail" > <span style="color:#4fc1e9" class="fa fa-bell fa-lg"></span>  <b style="color:#4fc1e9;letter-spacing:1.5px;">  Notifications</b>
+
+                     <li id="notifcs" rel="tremail" > <span style="color:#4fc1e9" class="fa fa-bell fa-lg"></span>  <b style="color:#4fc1e9">  Notifications</b>
+
 
                         <?php
   $param= App\Parametre::find(1);$env=$param->env;
@@ -309,8 +311,8 @@ if( EntreesController::ChampById( 'notif',$entreeid)!=1 ) {
                             } // foreach
 
 
-echo '</ul>';
 
+echo '</ul>';
 
 
 

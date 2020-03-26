@@ -315,7 +315,6 @@ class RechercheController extends Controller
                        && strcmp($request->get('date_fin') , "Invalid date") != 0 ) &&
 
                            ($request->get('date_debut') && $request->get('date_fin'))  )
-
                    {
 
                      $data=Mission::get();
@@ -348,7 +347,6 @@ class RechercheController extends Controller
                             }
 
 
-
                           }
                           $actions=ActionEC::where('mission_id',$d->id)->get();
                           foreach ( $actions as $aa) {
@@ -365,8 +363,6 @@ class RechercheController extends Controller
 
                             $datasearch[]=$d;
 
-
-
                             }
                           }
 
@@ -379,8 +375,6 @@ class RechercheController extends Controller
                             {
 
                             $datasearch[]=$d;
-
-
 
                             }
                           }
@@ -407,9 +401,6 @@ class RechercheController extends Controller
 
 
                           }
-
-
-
 
 
                      }
