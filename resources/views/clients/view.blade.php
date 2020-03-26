@@ -5,6 +5,27 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
+
+<!--
+    <script src="{{  URL::asset('public/js/upload_files/vpb_uploader.js') }}" type="text/javascript"></script>
+
+
+<!--
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            // Call the main function
+            new vpb_multiple_file_uploader
+            ({
+                vpb_form_id: "theform", // Form ID
+                autoSubmit: true,
+                vpb_server_url: "upload.php"
+            });
+        });
+    </script>
+-->
+    <link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
+
     <?php use \App\Http\Controllers\ClientsController;     ?>
 
 
@@ -15,14 +36,28 @@
 
     <div id="addclientform">
         <div class="portlet box grey">
-            <div class="modal-header">Client</div>
+            <div class="modal-header"><h4>Client</h4></div>
         </div>
         <div class="modal-body">
+           <!-- <div class="row"  style="margin-bottom:30px">
+                <div class="col-md-3">
+                    <a  ><i class="fa fa-envelope"></i> Email </a>
+                </div>
+                <div class="col-md-3">
+                    <a  >  <i class="fas fa-sms"></i> SMS </a>
+                </div>
+                <div class="col-md-3">
+                    <a  ><i class="fa fa-fax"></i> Fax </a>
 
+                </div>
+                <div class="col-md-3">
+
+                </div>
+            </div>-->
 
             <div class="row"  style="margin-bottom:30px">
             <div class="col-md-2">
-                <a href="{{action('ClientsController@dossiers', $client['id'])}}" >Total Dossiers  : <?php echo ClientsController::CountDossCL( $client['id']); ?> </a> |  ( <a href="{{action('ClientsController@ouverts', $client['id'])}}" > Ouverts : <?php echo ClientsController::CountDossCLouverts( $client['id']); ?> </a>)
+                <a href="{{action('ClientsController@dossiers', $client['id'])}}" >Total Dossiers  : <?php echo ClientsController::CountDossCL( $client['id']); ?> </a> | (<a href="{{action('ClientsController@ouverts', $client['id'])}}" > Ouverts : <?php echo ClientsController::CountDossCLouverts( $client['id']); ?> </a>)
             </div>
                 <div class="col-md-2">
                    Mixtes : <?php echo ClientsController::CountDossCLMixte( $client['id']); ?>
@@ -364,7 +399,7 @@
                                                 <option <?php if($tel->type=='technique'){echo 'selected="selected"';} ?> value="technique">Technique</option>
                                                 <option <?php if($tel->type=='commun'){echo 'selected="selected"';} ?>value="commun">Commun</option></select></td>
                                         <td style="width:50%;"><input   id='tel-rem-<?php echo $tel->id;?>' style="width:100%" value="<?php echo $tel->remarque; ?>" onchange="changingAddress('<?php echo $tel->id; ?>','remarque',this)" /></td>
-                                        <td style="width:10%;"><i class="fa fa-phone"></i></td>
+                                        <td style="width:10%;text-align:center;cursor:  pointer"><!--<i class="fa fa-phone"></i>-->  <a href="#" data-toggle="modal" data-target="#sendsms" onclick="setsms('<?php echo $tel->champ; ?>')" ><i class="fa fa-sms"></i> SMS</a></td>
                                         <td style="width:10%;">
                                             <a onclick="return confirm('Êtes-vous sûrs ?')" href="{{action('ClientsController@deleteaddress', $tel->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                                 <span class="fa fa-fw fa-trash-alt"></span>
@@ -407,7 +442,7 @@
                                                 <option <?php if($email->type=='technique'){echo 'selected="selected"';} ?> value="technique">Technique</option>
                                                 <option <?php if($email->type=='commun'){echo 'selected="selected"';} ?>value="commun">Commun</option></select></td>
                                         <td style="width:50%;"><input   id='email-rem-<?php echo $email->id;?>'  style="width:100%" value="<?php echo $email->remarque; ?>" onchange="changingAddress('<?php echo $email->id; ?>','remarque',this)" /></td>
-                                        <td style="width:10%;"><i class="fa fa-envelope"></i></td>
+                                        <td style="width:10%;text-align:center;"><a  href="#" data-toggle="modal" data-target="#sendmail" onclick="setmail('<?php echo $email->champ; ?>')"><i class="fa fa-envelope"></i> Email</a></td>
                                         <td style="width:10%;">
                                             <a onclick="return confirm('Êtes-vous sûrs ?')" href="{{action('ClientsController@deleteaddress', $email->id) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                                 <span class="fa fa-fw fa-trash-alt"></span>
@@ -684,7 +719,7 @@
                                     <tr>
                                         <td style="width:15%;"><input placeholder="Nom"  id='gest-nom-<?php echo $gestion->id;?>'    style="width:100%" value="<?php echo $gestion->nom; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','nom',this)" /><br><input placeholder="Prenom"  id='gest-prenom-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->prenom; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','prenom',this)" /></td>
                                         <td style="width:20%;"><input  id='gest-fon-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->fonction; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','fonction',this)" /></td>
-                                        <td style="width:15%;"><input type="text" id='gest-tel-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->tel; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','tel',this)" /></td>
+                                        <td style="width:15%;"><input type="text" id='gest-tel-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->tel; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','tel',this)" />    <a  href="#" data-toggle="modal" data-target="#sendsms" onclick="setsms('<?php echo $gestion->tel; ?>')" >SMS <i class="fa fa-sms"></i></a></td>
                                         <td style="width:15%;"><input type="text" id='gest-fax-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->fax; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','fax',this)" /></td>
                                         <td style="width:21%;"><input  type="email" id='gest-mail-<?php echo $gestion->id;?>'  style="width:100%" value="<?php echo $gestion->mail; ?>" onchange="changingAddress('<?php echo $gestion->id; ?>','mail',this)" /></td>
                                         <td style="width:10%;"><textarea  id='gest-rem-<?php echo $gestion->id;?>'  style="width:100%" onchange="changingAddress('<?php echo $gestion->id; ?>','remarque',this)"  > <?php echo $gestion->remarque; ?> </textarea></td>
@@ -819,7 +854,7 @@
                                     <tr>
                                         <td style="width:15%;"><input placeholder="Nom"  id='qual-nom-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->nom; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','nom',this)" /><br><input placeholder="Prenom"   id='qual-prenom-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->prenom; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','prenom',this)" /></td>
                                         <td style="width:20%;"><input  id='qual-fon-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->fonction; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','fonction',this)" /></td>
-                                        <td style="width:15%;"><input  type="text" pattern="[0-9]" id='qual-tel-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->tel; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','tel',this)" /></td>
+                                        <td style="width:15%;"><input  type="text" pattern="[0-9]" id='qual-tel-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->tel; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','tel',this)" />    <a  href="#" data-toggle="modal" data-target="#sendsms" onclick="setsms('<?php echo $qualite->tel; ?>')" >SMS <i class="fa fa-sms"></i></a></td>
                                         <td style="width:15%;"><input type="text" pattern="[0-9]" id='qual-fax-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->fax; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','fax',this)" /></td>
                                         <td style="width:21%;"><input type="email" id='qual-mail-<?php echo $qualite->id;?>'  style="width:100%" value="<?php echo $qualite->mail; ?>" onchange="changingAddress('<?php echo $qualite->id; ?>','mail',this)" /></td>
                                         <td style="width:10%;"><textarea  id='qual-rem-<?php echo $qualite->id;?>'  style="width:100%" onchange="changingAddress('<?php echo $qualite->id; ?>','remarque',this)" ><?php echo $qualite->remarque; ?></textarea></td>
@@ -953,7 +988,7 @@
                                     <tr>
                                         <td style="width:15%;"><input placeholder="Nom"  id='res-nom-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->nom; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','nom',this)" /><br><input placeholder="Prenom"  id='res-prenom-<?php echo $reseau->id;?>'   style="width:100%" value="<?php echo $reseau->prenom; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','prenom',this)" /></td>
                                         <td style="width:10%;"><input  id='res-fon-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->fonction; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','fonction',this)" /></td>
-                                        <td style="width:15%;"><input type="text" pattern="[0-9]" id='res-tel-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->tel; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','tel',this)" /></td>
+                                        <td style="width:15%;"><input type="text" pattern="[0-9]" id='res-tel-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->tel; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','tel',this)" />    <a href="#" data-toggle="modal" data-target="#sendsms" onclick="setsms('<?php echo $reseau->tel; ?>')" >SMS <i class="fa fa-sms"></i></a></td>
                                         <td style="width:15%;"><input type="text" pattern="[0-9]" id='res-fax-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->fax; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','fax',this)" /></td>
                                         <td style="width:21%;"><input  type="email" id='res-mail-<?php echo $reseau->id;?>'  style="width:100%" value="<?php echo $reseau->mail; ?>" onchange="changingAddress('<?php echo $reseau->id; ?>','mail',this)" /></td>
                                         <td style="width:10%;"><textarea  id='res-rem-<?php echo $reseau->id;?>'  style="width:100%" onchange="changingAddress('<?php echo $reseau->id; ?>','remarque',this)"  ><?php echo $reseau->remarque; ?></textarea></td>
@@ -967,12 +1002,6 @@
 
                                 </tbody>
                             </table>
-
-
-
-
-
-
 
 
                         </div>
@@ -1143,7 +1172,7 @@
 
                         <div class="form-group">
 
-                            <form   id="fggf" name="">
+                            <form     name="">
                                 {{ csrf_field() }}
 
                                 <div class="form-group " >
@@ -1203,7 +1232,7 @@
 
                         <div class="form-group">
 
-                            <form   id="fggf" name="">
+                            <form     name="">
                                 {{ csrf_field() }}
 
                                 <div class="form-group " >
@@ -1253,7 +1282,7 @@
 
                         <div class="form-group">
 
-                            <form   id="fggf" name="">
+                            <form    name="">
                                 {{ csrf_field() }}
 
                                 <div class="form-group " >
@@ -1348,7 +1377,7 @@
 
                         <div class="form-group">
 
-                            <form   id="fggf" name="">
+                            <form    name="">
                                 {{ csrf_field() }}
 
                                 <div class="form-group " >
@@ -1443,7 +1472,7 @@
 
                         <div class="form-group">
 
-                            <form   id="fggf" name="">
+                            <form    name="">
                                 {{ csrf_field() }}
 
                                 <div class="form-group " >
@@ -1524,15 +1553,207 @@
 
 
 
+
+
+
+    <!-- Modal Envoi Mail -->
+    <div class="modal fade" id="sendmail"   role="dialog" aria-labelledby="exampleModal8" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal7">Envoyer un email au client </h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+    <form  enctype="multipart/form-data" id="theform" method="POST" action="{{action('EmailController@send')}}"    onsubmit="return checkForm(this);"  >
+        {{ csrf_field() }}
+
+        <input id="dossier" type="hidden" class="form-control" name="dossier"  value="0" />
+        <input id="envoye" type="hidden" class="form-control" name="envoye"  value="" />
+        <input id="brsaved" type="hidden" class="form-control" name="brsaved"  value="0" />
+
+
+        <?php
+        $from='24ops@najda-assistance.com';
+
+        ?>
+        <input type="hidden"   name="from" id="from" value="<?php echo $from; ?>" />
+
+
+        <div class="row">
+
+            <label for="destinataire">Adresse(s):</label>
+            <div class="row">
+                <div class="col-md-10">
+                    <input type="email" id="destinataire" required  class="form-control" name="destinataire[]"   />
+
+                </div>
+                <div class="col-md-2">
+                    <i id="emailso" onclick="visibilite('autres')" class="fa fa-lg fa-arrow-circle-down" style="margin-right:10px"></i> (cc,cci)
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top:10px;">
+            <div id="autres" class="row"  style="display:none " >
+                <div  class="row"  style="margin-bottom:10px" >
+                    <div class="col-md-2">
+                        <label for="cc">CC:</label>
+                    </div>
+                    <div class="col-md-10">
+                        <select id="cc" style="width:100%"   class="itemName form-control" name="cc[]" multiple   >
+                            <option></option>
+                            <option value="vat@medicmultiservices.com">vat@medicmultiservices.com</option>
+                            <option value="fact.vat-groupe@najda-assistance.com">fact.vat-groupe@najda-assistance.com</option>
+                            <option value="finances@medicmultiservices.com">finances@medicmultiservices.com</option>
+                            <option value="dirops@najda-assistance.com">dirops@najda-assistance.com</option>
+                            <option value="controle1@medicmultiservices.com">controle1@medicmultiservices.com</option>
+                            <option value="smq@medicmultiservices.com">smq@medicmultiservices.com</option>
+                            <option value="chef.plateau@najda-assistance.com">chef.plateau@najda-assistance.com</option>
+                            <option value="mohsalah.harzallah@gmail.com">mohsalah.harzallah@gmail.com</option>
+                            <option value="mahmoud.helali@gmail.com">mahmoud.helali@gmail.com</option>
+                        </select>
+                    </div>
+                </div>
+                <div  class="row"  style="margin-bottom:10px" >
+                    <div class="col-md-2">
+                        <label for="cci">CCI:</label>
+                    </div>
+                    <div class="col-md-10">
+                        <select id="cci"  style="width:100%"   class="itemName form-control " name="cci[]" multiple  >
+                            <option></option>
+                            <option value="vat@medicmultiservices.com">vat@medicmultiservices.com</option>
+                            <option value="voyages.assistance.tunisie@gmail.com">voyages.assistance.tunisie@gmail.com</option>
+                            <option value="fact.vat-groupe@najda-assistance.com">fact.vat-groupe@najda-assistance.com</option>
+                            <option value="finances@medicmultiservices.com">finances@medicmultiservices.com</option>
+                            <option value="dirops@najda-assistance.com">dirops@najda-assistance.com</option>
+                            <option value="controle1@medicmultiservices.com">controle1@medicmultiservices.com</option>
+                            <option value="smq@medicmultiservices.com">smq@medicmultiservices.com</option>
+                            <option value="chef.plateau@najda-assistance.com">chef.plateau@najda-assistance.com</option>
+                            <option value="nejib.karoui@gmail.com">nejib.karoui@gmail.com </option>
+                            <option value="mohsalah.harzallah@gmail.com">mohsalah.harzallah@gmail.com</option>
+                            <option value="mahmoud.helali@gmail.com">mahmoud.helali@gmail.com</option>
+                            <option value="facturation.vat@medicmultiservices.com">facturation.vat@medicmultiservices.com</option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <?php   ?>
+        <div class="form-group">
+            <label for="sujet">Sujet :</label>
+            <input id="sujet" type="text" class="form-control" name="sujet" required value=" "/>
+
+        </div>
+
+
+        <div class="form-group">
+            <label for="description">Description :</label>
+            <input id="description" type="text" class="form-control" name="description" id="description" required/>
+        </div>
+
+
+
+        <div class="form-group ">
+            <label for="contenu">Contenu:</label>
+            <div class="editor" >
+                <textarea style="min-height: 280px;" id="contenu" type="text"  class="textarea tex-com" placeholder="Contenu de l'email ici" name="contenu" required  ></textarea>
+            </div>
+        </div>
+        <div class="form-group form-group-default">
+            <label>Attachements Externes <span style="color:red;">(la taille totale de fichiers ne doit pas dépasser 25 Mo)</span></label>
+            <!--<input  class="btn btn-danger fileinput-button" id="file" type="file" name="files[]"   multiple   >-->
+            <input type="file" class="btn btn-danger fileinput-button kfile" name="vasplus_multiple_files[]" id="vasplus_multiple_files" multiple="multiple" style="padding:5px;"/>
+
+            <table class="table table-striped table-bordered" style="width:60%; border: none;" id="add_files">
+
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+
+    </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button onclick=" resetForm(this.form);" id="SendBtn" type="submit"  name="myButton" class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
+                    </div>
+                </div>
+            </div>
+   </div>
+   </div>
+
+
+
+    <!-- Modal Envoi Mail -->
+    <div class="modal fade" id="sendsms"   role="dialog" aria-labelledby="exampleModal8" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal7">Envoyer un SMS au client </h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+
+    <form method="post" action="{{action('EmailController@sendsmsxml')}}" >
+        <input id="dossier" type="hidden" class="form-control" name="dossier"  value="0" />
+
+        <div class="form-group">
+            {{ csrf_field() }}
+            <label for="description">Description:</label>
+            <input id="descriptionsms" type="text" class="form-control" name="description"     />
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="destinataire">Numéro:</label>
+
+            <input id="destinatairesms" type="number" class="form-control" name="destinataire"     />
+
+
+        </div>
+
+        <div class="form-group">
+            <label for="contenu">Message:</label>
+            <textarea  type="text" class="form-control" name="message"></textarea>
+        </div>
+
+
+    </form>
+
+     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button onclick=" resetForm(this.form);" id="SendBtn" type="submit"  name="myButton" class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-
 <script>
+    function  setmail(email)
+    {
+        document.getElementById('destinataire').value =''+email;
+    }
 
-
-
+    function  setsms(num)
+    {
+        document.getElementById('destinatairesms').value =''+num;
+    }
     function checkexiste( elm,type) {
         var id=elm.id;
         var val =document.getElementById(id).value;
@@ -1770,7 +1991,7 @@
             var email = $('#emailg').val();
             var fax = $('#faxg').val();
             var observ = $('#remarqueg').val();
-            var nature = $('#nature7').val();
+            var nature = $('#nature7nature7').val();
             if (  (tel!='')  || (email!='')  )
             {
                 var _token = $('input[name="_token"]').val();
@@ -2039,14 +2260,6 @@
             });
         } // updating
 
-
-
-
-
-
-
-
-
     });
 
     function changing(elm) {
@@ -2130,8 +2343,359 @@
 
 
 
+</script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<?php
+$param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+?>
+<script type="text/javascript">
+
+    function checkForm(form) // Submit button clicked
+    {
+
+        form.myButton.disabled = true;
+        form.myButton.value = "Please wait...";
+        return true;
+    }
+
+    function resetForm(form) // Reset button clicked
+    {
+        form.myButton.disabled = false;
+        form.myButton.value = "Submit";
+    }
+
+    function visibilite(divId)
+    {
+        //divPrecedent.style.display='none';
+        divPrecedent=document.getElementById(divId);
+        if(divPrecedent.style.display==='none')
+        {divPrecedent.style.display='block';	 }
+        else
+        {divPrecedent.style.display='none';     }
+    }
+
+    $(document).ready(function(){
+
+        $('#theform').submit(function(){
+            $(this).children('input[type=submit]').prop('disabled', true);
+        });
 
 
+
+
+        fileInputk = document.querySelector('#vasplus_multiple_files');
+        fileInputk.addEventListener('change', function(event) {
+            var inputk = event.target;
+
+            if (inputk.files.length != khaled.length && inputk.files.length==0 )
+            {
+                // alert ('ddd');
+                fileInputk.value="";
+                fileInputk.files= new FileListItem(khaled);
+
+            }
+        });
+
+        // ajax save as draft
+        $('#description').change(function(){
+            var destinataire = $('#destinataire').val();
+            var cc = $('#cc').val();
+            var cci = $('#cci').val();
+            var sujet = $('#sujet').val();
+            var contenu = $('#contenu').val();
+            var description = $('#description').val();
+            var brsaved = $('#brsaved').val();
+
+            if ( (brsaved==0) )
+            { //alert('create br');
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('envoyes.savingbr') }}",
+                    method:"POST",
+                    data:{description:description,destinataire:destinataire,sujet:sujet,contenu:contenu,cc:cc,cci:cci, _token:_token},
+                    success:function(data){
+                        //   alert('Brouillon enregistré ');
+
+                        document.getElementById('envoye').value=data;
+                        document.getElementById('brsaved').value=1;
+                        document.getElementById('SendBtn').disabled=false;
+                    }
+                });
+            }else{
+
+                if ( description!='' )
+                {             var envoye = $('#envoye').val();
+
+                    //  alert('update br');
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('envoyes.updatingbr') }}",
+                        method:"POST",
+                        data:{envoye:envoye,description:description,destinataire:destinataire,contenu:contenu,cc:cc,cci:cci, _token:_token},
+                        success:function(data){
+                            //     alert('Brouillon enregistré ');
+
+                            document.getElementById('envoye').value=data;
+                            document.getElementById('brsaved').value=1;
+                            document.getElementById('SendBtn').disabled=false;
+
+
+                        }
+                    });
+
+                }
+
+            }
+        });
+
+
+
+        // ajax save as draft
+        $('#sujet').change(function(){
+            var destinataire = $('#destinataire').val();
+            var cc = $('#cc').val();
+            var cci = $('#cci').val();
+            var sujet = $('#sujet').val();
+            var contenu = $('#contenu').val();
+            var description = $('#description').val();
+            var brsaved = $('#brsaved').val();
+
+            if ( (brsaved==0) )
+            { //alert('create br');
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('envoyes.savingbr') }}",
+                    method:"POST",
+                    data:{description:description,destinataire:destinataire,sujet:sujet,contenu:contenu,cc:cc,cci:cci, _token:_token},
+                    success:function(data){
+                        //   alert('Brouillon enregistré ');
+
+                        document.getElementById('envoye').value=data;
+                        document.getElementById('brsaved').value=1;
+                        document.getElementById('SendBtn').disabled=false;
+
+                    }
+                });
+            }else{
+
+                if ( description!='' )
+                {             var envoye = $('#envoye').val();
+
+                    //  alert('update br');
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('envoyes.updatingbr') }}",
+                        method:"POST",
+                        data:{envoye:envoye,description:description,destinataire:destinataire,contenu:contenu,cc:cc,cci:cci, _token:_token},
+                        success:function(data){
+                            alert('Brouillon enregistré ');
+
+                            document.getElementById('envoye').value=data;
+                            document.getElementById('brsaved').value=1;
+                            document.getElementById('SendBtn').disabled=false;
+
+                        }
+                    });
+
+                }
+
+            }
+        });
+
+
+        objTextBox = document.getElementById("contenu");
+        oldValue = objTextBox.value;
+        var somethingChanged = false;
+
+        function track_change()
+        {
+            if(objTextBox.value != oldValue)
+            {
+                oldValue = objTextBox.value;
+                somethingChanged = true;
+                changeeditor();
+            };
+
+            setTimeout(function() { track_change()}, 5000);
+
+        }
+
+
+        // setTimeout(function() { track_change()}, 15000);
+        track_change();
+        function setcontenu(myValue) {
+            $('#contenu').val(myValue)
+                .trigger('change');
+        }
+
+
+        function changeeditor()
+        {    var destinataire = $('#destinataire').val();
+            var cc = $('#cc').val();
+            var cci = $('#cci').val();
+            var sujet = $('#sujet').val();
+            var contenu = $('#contenu').val();
+            var description = $('#description').val();
+            var brsaved = $('#brsaved').val();
+
+            if ((brsaved == 0)) {
+                //  alert('content changed');
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: "{{ route('envoyes.savingbr') }}",
+                    method: "POST",
+                    data: {
+                        description: description,
+                        destinataire: destinataire,
+                        sujet: sujet,
+                        contenu: contenu,
+                        cc: cc,
+                        cci: cci,
+                        _token: _token
+                    },
+                    success: function (data) {
+                        //       alert('Brouillon enregistré ');
+
+                        document.getElementById('envoye').value = data;
+                        document.getElementById('brsaved').value = 1;
+                        document.getElementById('SendBtn').disabled=false;
+
+                    }
+                });
+            } else {
+
+                //if ( description!='' )
+                //{
+                var envoye = $('#envoye').val();
+                // alert('updating br');
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: "{{ route('envoyes.updatingbr') }}",
+                    method: "POST",
+                    data: {
+                        description: description,
+                        envoye: envoye,
+                        destinataire: destinataire,
+                        contenu: contenu,
+                        cc: cc,
+                        cci: cci,
+                        _token: _token
+                    },
+                    success: function (data) {
+                        //     alert('Brouillon enregistré ');
+                        document.getElementById('envoye').value = data;
+                        document.getElementById('brsaved').value = 1;
+                        document.getElementById('SendBtn').disabled=false;
+
+                    }
+                });
+
+                //  }
+
+            }
+
+        }
+
+
+        $('#attachs').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+        });
+
+        $('#cc').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+        });
+
+        $('#cci').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+        });
+
+    });
+</script>
+<script>
+    function modalattachEM(titre,emplacement,type)
+    {
+        document.getElementById('attachiframeEM').style.display='none';
+        document.getElementById('imgattachEM').style.display='none';
+        $("#attTitleEM").text(titre);
+
+        if  (type ==  'pdf')
+        {
+            document.getElementById('attachiframeEM').src =emplacement;
+            document.getElementById('attachiframeEM').style.display='block';
+
+            // document.getElementById('attachiframe').src =emplacement;
+        }
+        if ( (type ==  'doc') || ( type ==  'docx'  ) || ( type ==  'xls'  ) || ( type ==  'xlsx'  )  )
+        {document.getElementById('attachiframeEM').src ="https://view.officeapps.live.com/op/view.aspx?src="+emplacement;
+            document.getElementById('attachiframeEM').style.display='block';
+        }
+        if ( (type ==  'png') || (type ==  'jpg') ||(type ==  'jpeg' ) )
+        {
+            document.getElementById('imgattachEM').style.display='block';
+            document.getElementById('imgattachEM').src =emplacement;
+            // document.getElementById('attachiframe').src =emplacement;
+        }
+
+
+        // cas DOC fichier DOC
+        $("#openattachEM").modal('show');
+    }
+
+    var verrou=false;
+
+    $(document).on('click','.select2-selection__choice__remove',function(){
+
+        verrou=true;
+        //alert('remove');
+
+    });
+
+
+    $(document).on('click','.select2-selection__choice',function(){
+        var nomf=$(this).attr("title");
+        // alert(nomf);
+
+        //var texte = $("#attachs option:selected").text();
+        //alert(texte);
+        var values = '';
+        if(verrou==false)
+        {
+            $('#attachs option').each(function() {
+
+                //values += $(this).text();
+
+                if($(this).text()==nomf)
+                {
+                    empl=$(this).attr("pathem");
+                    type=$(this).attr("typeem");
+                    modalattachEM(nomf,empl,type);
+                    return false;
+                }
+
+
+            });
+        }
+        verrou=false;
+        //alert(values);
+    })
 </script>
 <style>.headtable{background-color: grey!important;color:white;}
     table{margin-bottom:40px;}

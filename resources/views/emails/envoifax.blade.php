@@ -11,6 +11,10 @@
     ?>
     <h2> Envoyer un Fax </h2><br>
     <div class="row">
+        <?php if($type=='client' )
+        { ?>
+        <a class="pull-right" href="#"  data-toggle="modal" data-target="#listeemails" > <i class="fa fa-lg fa-user"></i> Liste des Responsables </a>
+        <?php  }  ?>
 
         </div>
         <div class="col-lg-11 ">
@@ -70,7 +74,7 @@
                  <select   id="numero"  class="form-control" required name="numero" >
                 @foreach($faxs as $fax)
 
-                    <option   value="<?php echo $fax; ?>"> <?php   echo  $fax ;?></option>
+                    <option   value="<?php echo $fax->champ; ?>"> <?php   echo  $fax->champ ;?> (<?php   echo  $fax->type ;?> , <?php   echo  $fax->remarque ;?>)</option>
                 @endforeach
                  </select>
                 <?php } ?>
@@ -113,12 +117,144 @@
 
 
 
+
+    <!-- Modal Liste emails -->
+    <div class="modal fade" id="listeemails"   role="dialog" aria-labelledby="exampleModal001" aria-hidden="true"    >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content"  style="width:800px">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal001">Liste des Faxs du client </h5>
+
+                </div>
+                <?php
+                $qualites =   App\Adresse::where('nature', 'qualite')
+                ->where('parent',$cl)
+                ->get();
+
+                $reseaux =   App\Adresse::where('nature', 'reseau')
+                ->where('parent',$cl)
+                ->get();
+
+                $gestions =   App\Adresse::where('nature', 'gestion')
+                ->where('parent',$cl)
+                ->get();
+
+                ?>
+                <div class="modal-body">
+                    <div class="card-body">
+                        Responsables Gestion
+
+                        <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
+                            <thead>
+                            <tr class="headtable">
+                                <th style="width:15%">Nom </th>
+                                <th style="width:20%">Fonction</th>
+                                <!--   <th style="width:15%">Tel</th>-->
+                                   <th style="width:15%">Fax</th>
+
+                                <th style="width:10%">Observation</th>
+
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            @foreach($gestions as $gestion)
+                                <tr>
+                                    <td style="width:15%;">  <?php echo $gestion->nom; ?>   <?php echo $gestion->prenom; ?> </td>
+                                    <td style="width:20%;"> <?php echo $gestion->fonction; ?> </td>
+                                    <td style="width:21%;" onclick="addItem('<?php echo $gestion->fax; ?>')"><a href="#">  <?php echo $gestion->fax; ?> </a></td>
+                                    <td style="width:10%;">  <?php echo $gestion->remarque; ?>  </td>
+
+                                </tr>
+                            @endforeach
+
+                            </tbody>
+                        </table>
+
+                        Responsables Qualité
+
+                        <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
+                            <thead>
+                            <tr class="headtable">
+                                <th style="width:15%">Nom</th>
+                                <th style="width:20%">Fonction</th>
+                                     <th style="width:15%">Fax</th>
+                                 <th style="width:10%">Observation</th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            @foreach($qualites as $qualite)
+                                <tr>
+                                    <td style="width:15%;"> <?php echo $qualite->nom; ?>   <?php echo $qualite->prenom; ?> </td>
+                                    <td style="width:20%;"> <?php echo $qualite->fonction; ?> </td>
+                                <!--   <td style="width:15%;"> <?php echo $qualite->tel; ?> </td>
+                                    <td style="width:15%;">  <?php echo $qualite->fax; ?> </td>-->
+                                    <td style="width:21%;"  onclick="addItem('<?php echo $qualite->fax; ?>')"> <a href="#"> <?php echo $qualite->fax; ?> </a></td>
+                                    <td style="width:10%;">  <?php echo $qualite->remarque; ?> </td>
+
+                                </tr>
+                            @endforeach
+
+                            </tbody>
+                        </table>
+
+                        Responsables Réseau
+
+                        <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
+                            <thead>
+                            <tr class="headtable">
+                                <th style="width:15%">Nom</th>
+                                <th style="width:20%">Fonction</th>
+                                <!--   <th style="width:15%">Tel</th>-->
+                                   <th style="width:15%">Fax</th>
+                                 <th style="width:10%">Observation</th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            @foreach($reseaux as $reseau)
+                                <tr>
+                                    <td style="width:15%;"> <?php echo $reseau->nom; ?>   <?php echo $qualite->prenom; ?> </td>
+                                    <td style="width:20%;"> <?php echo $reseau->fonction; ?> </td>
+                                <!--    <td style="width:15%;"> <?php // echo $reseau->tel; ?> </td>-->
+                                    <td style="width:21%;" onclick="addItem('<?php echo $reseau->fax; ?>')"> <a href="#"> <?php echo $reseau->fax; ?> </a></td>
+                                    <td style="width:10%;">  <?php echo $reseau->remarque; ?> </td>
+
+                                </tr>
+                            @endforeach
+
+                            </tbody>
+                        </table>
+
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
 <script type="text/javascript">
 
+    function addItem(item){
+        select = document.getElementById('numero');
+        var opt = document.createElement('option');
+        opt.value = item;
+        opt.innerHTML = item;
+        select.appendChild(opt);
+        $('#listeemails').modal('hide');
 
+    }
 
 
     $(document).ready(function(){

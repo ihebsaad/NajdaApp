@@ -5158,7 +5158,7 @@ $id=0;
 
 */
 
-        return view('emails.envoimail',['dossier'=>$dossier,'refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'nomabnC'=>$nomabnC,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type ,'langue'=>$langue]);
+        return view('emails.envoimail',['cl'=>$cl,'dossier'=>$dossier,'refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'nomabnC'=>$nomabnC,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type ,'langue'=>$langue]);
     }
 
 
@@ -5190,7 +5190,7 @@ $id=0;
         $listeemails=array();
         $prestataires=array();
         $dossier=Dossier::find($id);
-
+        $cl=0;
         if($type=='client')
         {
             // trouver id client à partir de la référence
@@ -5371,8 +5371,7 @@ $id=0;
             ->get();
 
 
-
-        return view('emails.envoimailenreg',['dossier'=>$dossier,'refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'nomabnC'=>$nomabnC,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type ,'langue'=>$langue,'entreeid'=>$entreeid,'envoyeid'=>$envoyeid]);
+        return view('emails.envoimailenreg',['cl'=>$cl,'dossier'=>$dossier,'refclient'=>$refclient,'prest'=>$prest, 'attachements'=>$attachements,'doss'=>$id,'ref'=>$ref,'nomabn'=>$nomabn,'nomabnC'=>$nomabnC,'refdem'=>$refdem,'listeemails'=>$listeemails,'prestataires'=>$prestataires,'type'=>$type ,'langue'=>$langue,'entreeid'=>$entreeid,'envoyeid'=>$envoyeid]);
     }
 
 
@@ -5420,7 +5419,7 @@ $id=0;
            $prestataires=array();
            $refdem='';
            if (isset($prest)){$prest=$prest;}else{$prest=0;}
-
+            $cl=0;
            if($type=='client')
           {
               $cl=app('App\Http\Controllers\DossiersController')->ClientDossierById($id);
@@ -5428,7 +5427,8 @@ $id=0;
 
               $faxs =   Adresse::where('nature', 'fax')
                   ->where('parent',$cl)
-                  ->pluck('champ');
+                //  ->pluck('champ');
+              ->get();
 
               $faxs =  $faxs->unique();
 
@@ -5488,9 +5488,7 @@ $id=0;
                ->get();
 
 
-
-
-           return view('emails.envoifax',['attachements'=>$attachements,'doss'=>$id,'prest'=>$prest,'faxs'=>$faxs,'type'=>$type,'prestataires'=>$prestataires,'refdem'=>$refdem]);
+           return view('emails.envoifax',['cl'=>$cl,'attachements'=>$attachements,'doss'=>$id,'prest'=>$prest,'faxs'=>$faxs,'type'=>$type,'prestataires'=>$prestataires,'refdem'=>$refdem]);
     }
 
     function send (Request $request)
@@ -6886,6 +6884,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         $tels=array();
         $prestataires=array();
         $refdem='';$nomabn='';
+        $cl=0;
         if (isset($prest)){$prest=$prest;}else{$prest=0;}
 
         if($type=='client')
@@ -6895,7 +6894,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
             $tels =   Adresse::where('nature', 'tel')
                 ->where('parent',$cl)
-                ->where('typetel','Mobile')
+              //  ->where('typetel','Mobile')
                 ->get();
            //     ->pluck('champ');
 
@@ -6946,8 +6945,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         }
 
 
-
-        return view('emails.sms', ['nomabn'=>$nomabn,'doss' => $id,'prestataires'=>$prestataires,'tels'=>$tels,'refdem'=>$refdem,'type'=>$type,'prest'=>$prest]);
+        return view('emails.sms', ['cl'=>$cl,'nomabn'=>$nomabn,'doss' => $id,'prestataires'=>$prestataires,'tels'=>$tels,'refdem'=>$refdem,'type'=>$type,'prest'=>$prest]);
 
     }
 

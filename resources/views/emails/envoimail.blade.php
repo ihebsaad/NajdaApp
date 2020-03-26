@@ -84,6 +84,11 @@ $(document).ready(function()
         <div class="col-lg-9 ">
             <?php if(isset($dossier)){?>   <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@view',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '.    \App\Http\Controllers\DossiersController::FullnameAbnDossierById($dossier->id);?> </a></h4><?php } ?>
 
+                <?php if($type=='client' )
+                { ?>
+                <a class="pull-right" href="#"  data-toggle="modal" data-target="#listeemails" > <i class="fa fa-lg fa-user"></i> Liste des Responsables </a>
+                <?php  }  ?>
+
             <form  enctype="multipart/form-data" id="theform" method="POST" action="{{action('EmailController@send')}}"    onsubmit="return checkForm(this);"  >
                 {{ csrf_field() }}
 
@@ -110,6 +115,7 @@ $(document).ready(function()
 
 
                 <div class="row">
+
                     <?php if($type=='client'  || $type=='prestataire' )
                     {?>
                     <label for="destinataire">Destinataire:</label>
@@ -370,6 +376,143 @@ $(document).ready(function()
         </div>
     </div>
 
+
+
+    <!-- Modal Liste emails -->
+    <div class="modal fade" id="listeemails"   role="dialog" aria-labelledby="exampleModal001" aria-hidden="true"    >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content"   style="width:800px">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal001">Liste des emails du client </h5>
+
+                </div>
+                <?php
+                   $qualites =   App\Adresse::where('nature', 'qualite')
+                ->where('parent',$cl)
+                ->get();
+
+                $reseaux =   App\Adresse::where('nature', 'reseau')
+                ->where('parent',$cl)
+                ->get();
+
+                $gestions =   App\Adresse::where('nature', 'gestion')
+                ->where('parent',$cl)
+                ->get();
+
+                    ?>
+                <div class="modal-body">
+                    <div class="card-body">
+                      Responsables Gestion
+
+                        <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
+                            <thead>
+                            <tr class="headtable">
+                                <th style="width:15%">Nom </th>
+                                <th style="width:20%">Fonction</th>
+                             <!--   <th style="width:15%">Tel</th>
+                                <th style="width:15%">Fax</th>-->
+                                <th style="width:21%">Email</th>
+                                <th style="width:10%">Observation</th>
+
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            @foreach($gestions as $gestion)
+                            <tr>
+                                <td style="width:15%;">  <?php echo $gestion->nom; ?>   <?php echo $gestion->prenom; ?> </td>
+                                <td style="width:20%;"> <?php echo $gestion->fonction; ?> </td>
+                            <!--    <td style="width:15%;"> <?php echo $gestion->tel; ?>    </td>
+                                <td style="width:15%;">   <?php echo $gestion->fax; ?> </td>-->
+                                <td style="width:21%;" onclick="addItem('<?php echo $gestion->mail; ?>')"><a href="#">  <?php echo $gestion->mail; ?> </a></td>
+                                <td style="width:10%;">  <?php echo $gestion->remarque; ?>  </td>
+
+                            </tr>
+                            @endforeach
+
+                            </tbody>
+                        </table>
+
+                        Responsables Qualité
+
+                        <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
+                            <thead>
+                            <tr class="headtable">
+                                <th style="width:15%">Nom</th>
+                                <th style="width:20%">Fonction</th>
+                            <!--    <th style="width:15%">Tel</th>
+                                <th style="width:15%">Fax</th>-->
+                                <th style="width:21%">Email</th>
+                                <th style="width:10%">Observation</th>
+                             </tr>
+
+                            </thead>
+                            <tbody>
+                            @foreach($qualites as $qualite)
+                                <tr>
+                                    <td style="width:15%;"> <?php echo $qualite->nom; ?>   <?php echo $qualite->prenom; ?> </td>
+                                    <td style="width:20%;"> <?php echo $qualite->fonction; ?> </td>
+                                 <!--   <td style="width:15%;"> <?php echo $qualite->tel; ?> </td>
+                                    <td style="width:15%;">  <?php echo $qualite->fax; ?> </td>-->
+                                    <td style="width:21%;"  onclick="addItem('<?php echo $qualite->mail; ?>')"> <a href="#"> <?php echo $qualite->mail; ?></a> </td>
+                                    <td style="width:10%;">  <?php echo $qualite->remarque; ?> </td>
+
+                                </tr>
+                            @endforeach
+
+                            </tbody>
+                        </table>
+
+                        Responsables Réseau
+
+                        <table class="table table-striped"  style="width:100%;margin-top:25px;font-size:16px;">
+                            <thead>
+                            <tr class="headtable">
+                                <th style="width:15%">Nom</th>
+                                <th style="width:20%">Fonction</th>
+                             <!--   <th style="width:15%">Tel</th>
+                                <th style="width:15%">Fax</th>
+                                <th style="width:21%">Email</th>-->
+                                <th style="width:10%">Observation</th>
+                             </tr>
+
+                            </thead>
+                            <tbody>
+                            @foreach($reseaux as $reseau)
+                                <tr>
+                                    <td style="width:15%;"> <?php echo $reseau->nom; ?>   <?php echo $qualite->prenom; ?> </td>
+                                    <td style="width:20%;"> <?php echo $reseau->fonction; ?> </td>
+                             <!--    <td style="width:15%;"> <?php // echo $reseau->tel; ?> </td>
+                                    <td style="width:15%;">  <?php // echo $reseau->fax; ?> </td>-->
+                                    <td style="width:21%;" onclick="addItem('<?php echo $reseau->mail; ?>')"> <a href="#"> <?php echo $reseau->mail; ?></a> </td>
+                                    <td style="width:10%;">  <?php echo $reseau->remarque; ?> </td>
+
+                                </tr>
+                            @endforeach
+
+                            </tbody>
+                        </table>
+
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                 </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
     <style>
 
         #oui  {background-color: #62c2e4;color :white;font-weight: bold;}
@@ -381,6 +524,15 @@ $(document).ready(function()
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
     ?>
     <script type="text/javascript">
+        function addItem(item){
+            select = document.getElementById('destinataire');
+            var opt = document.createElement('option');
+            opt.value = item;
+            opt.innerHTML = item;
+            select.appendChild(opt);
+             $('#listeemails').modal('hide');
+
+        }
 
       /*  function checkBr()
         {
@@ -452,25 +604,6 @@ $("#prest").change(function(){
 
                 }
                   });    
-
-
-
-             /*$('#file').change(function(){
-             var fp = $("#file");
-             var lg = fp[0].files.length;
-             var items = fp[0].files;
-             var fileSize = 0;
-
-             if (lg > 0) {
-             for (var i = 0; i < lg; i++) {
-             fileSize = fileSize+items[i].size; 
-             }
-             if(fileSize > 12000000 ) {
-             alert('La taille des fichiers ne doit pas dépasser 12 MB');
-             $('#file').val('');
-             }
-             }
-             });*/
 
 
 
