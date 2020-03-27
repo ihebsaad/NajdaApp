@@ -29,11 +29,10 @@ class ClientGroupesController extends Controller
      */
     public function index()
     {
-        $dossiers = Dossier::all();
-        $villes = Ville::all();
+       // $villes = Ville::all();
 
-        $clientgroupes = ClientGroupe::orderBy('id', 'desc')->paginate(10000000);
-        return view('clientgroupes.index',['dossiers' => $dossiers,'villes' => $villes], compact('clientgroupes'));
+        $clientgroupes = ClientGroupe::orderBy('label', 'asc')->get();
+        return view('clientgroupes.index',  compact('clientgroupes'));
     }
 
  

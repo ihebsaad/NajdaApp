@@ -31,7 +31,7 @@ class EquipementsController extends Controller
 
 
 	
-        $equipements = Equipement::orderBy('id', 'desc')->paginate(10000000);
+        $equipements = Equipement::orderBy('nom', 'asc')->paginate(10000000);
         return view('equipements.index', compact('equipements'));
     }
 

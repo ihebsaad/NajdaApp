@@ -32,7 +32,7 @@ class CitiesController extends Controller
         $dossiers = Dossier::all();
         $villes = Ville::all();
 
-        $cities = Citie::orderBy('id', 'desc')->paginate(10000000);
+        $cities = Citie::orderBy('name', 'asc')->paginate(10000000);
         return view('cities.index',['dossiers' => $dossiers,'villes' => $villes], compact('cities'));
     }
 

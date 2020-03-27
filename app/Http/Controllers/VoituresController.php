@@ -31,7 +31,7 @@ class VoituresController extends Controller
 
 
 	
-        $voitures = Voiture::orderBy('name', 'asc')->paginate(10000000);
+        $voitures = Voiture::orderBy('name', 'asc')->get();
         return view('voitures.index', compact('voitures'));
     }
 

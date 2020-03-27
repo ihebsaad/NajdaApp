@@ -191,6 +191,8 @@
             } );
 
             var table = $('#mytable').DataTable({
+                /* Disable initial sort */
+                "aaSorting": [] ,
                 orderCellsTop: true,
 				order:[],
                 dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',

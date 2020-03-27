@@ -31,7 +31,7 @@ class IntervenantsController extends Controller
 
 
 	
-        $intervenants = Intervenant::orderBy('id', 'desc')->paginate(10000000);
+        $intervenants = Intervenant::orderBy('nom', 'asc')->get();
         return view('intervenants.index', compact('intervenants'));
     }
 

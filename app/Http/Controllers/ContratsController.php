@@ -28,11 +28,9 @@ class ContratsController extends Controller
      */
     public function index()
     {
-        $dossiers = Dossier::all();
-        $villes = Ville::all();
 
-        $contrats = Contrat::orderBy('id', 'desc')->paginate(10000000);
-        return view('contrats.index',['dossiers' => $dossiers,'villes' => $villes], compact('contrats'));
+        $contrats = Contrat::orderBy('nom', 'asc')->get();
+        return view('contrats.index',  compact('contrats'));
     }
 
  

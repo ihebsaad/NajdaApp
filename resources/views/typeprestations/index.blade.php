@@ -143,6 +143,8 @@
             } );
 
             var table = $('#mytable').DataTable({
+                /* Disable initial sort */
+                "aaSorting": [] ,
                 orderCellsTop: true,
                 dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
                 responsive:true,

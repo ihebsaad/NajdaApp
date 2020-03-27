@@ -1453,6 +1453,7 @@ class DossiersController extends Controller
        // $typesprestations = TypePrestation::all();
 
         $typesprestations =  DB::table('type_prestations')
+            ->orderBy('name', 'asc')
                 ->get();
 
        // $prestataires = Prestataire::all();
@@ -1460,13 +1461,14 @@ class DossiersController extends Controller
       //  $prestataires = Cache::remember('prestataires',$minutes,  function () {
 
             $prestataires= DB::table('prestataires')
+                ->orderBy('name', 'asc')
                 ->get();
       //  });
 
         $gouvernorats = DB::table('cities')
-                ->get();
+            ->orderBy('name', 'asc')
 
-
+            ->get();
 
 
         $dossier = Dossier::find($id);
@@ -1589,7 +1591,10 @@ class DossiersController extends Controller
             ->whereIn('id', $specialitesIds)
             ->get();
 */
-         $specialites =DB::table('specialites')->get();
+         $specialites =DB::table('specialites')
+             ->orderBy('nom', 'asc')
+
+             ->get();
 
 
         return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis, 'omambs'=>$omambs, 'omrem'=>$omrem,'ommi'=>$ommi], compact('dossier'));
@@ -2405,6 +2410,7 @@ class DossiersController extends Controller
 
 
         $specialites =DB::table('specialites')
+            ->orderBy('nom', 'asc')
             ->get();
 
 
@@ -2414,14 +2420,17 @@ class DossiersController extends Controller
         $Missions=Dossier::find($id)->activeMissions;
 
         $typesprestations =  DB::table('type_prestations')
-                ->get();
+            ->orderBy('name', 'asc')
+            ->get();
 
         $prestataires= DB::table('prestataires')
+            ->orderBy('name', 'asc')
             ->get();
         //  });
 
         $gouvernorats = DB::table('cities')
-                ->get();
+            ->orderBy('name', 'asc')
+            ->get();
 
 
         $dossier = Dossier::find($id);

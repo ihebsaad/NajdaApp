@@ -265,10 +265,10 @@ class PrestatairesController extends Controller
          $minutes2= 600;
 
 
-        $gouvernorats =  Citie::get();
+        $gouvernorats =  Citie::orderBy('name', 'asc')->get();
 
 
-         $typesprestations = TypePrestation::get();
+         $typesprestations = TypePrestation::orderBy('name', 'asc')->get();
         //$typesprestationsid = TypePrestation::select('id');/
 
         $relations2 = DB::table('specialites_prestataires')->select('specialite')
@@ -313,6 +313,7 @@ class PrestatairesController extends Controller
 
 
         $specialites =DB::table('specialites')
+            ->orderBy('nom', 'asc')
            // ->whereIn('type_prestation', $typesprestationsid)
             ->get();
 

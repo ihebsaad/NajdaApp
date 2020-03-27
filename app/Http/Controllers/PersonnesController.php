@@ -31,7 +31,7 @@ class PersonnesController extends Controller
 
 
 	
-        $personnes = Personne::orderBy('id', 'desc')->paginate(10000000);
+        $personnes = Personne::orderBy('name', 'asc')->get();
         return view('personnes.index', compact('personnes'));
     }
 

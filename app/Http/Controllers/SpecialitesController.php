@@ -30,13 +30,12 @@ class SpecialitesController extends Controller
      */
     public function index()
     {
-        $dossiers = Dossier::all();
-        $villes = Ville::all();
 
-        $specialites = Specialite::orderBy('id', 'desc')->paginate(10000000);
-        $typesprestations = TypePrestation::get();
 
-        return view('specialites.index',['typesprestations'=>$typesprestations,'dossiers' => $dossiers,'villes' => $villes], compact('specialites'));
+        $specialites = Specialite::orderBy('nom', 'asc')->get();
+        $typesprestations = TypePrestation::orderBy('name', 'asc')->get();
+
+        return view('specialites.index',['typesprestations'=>$typesprestations ], compact('specialites'));
     }
 
  

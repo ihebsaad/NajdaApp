@@ -32,7 +32,7 @@ class TypePrestationsController extends Controller
         $dossiers = Dossier::all();
         $villes = Ville::all();
 
-        $typeprestations = TypePrestation::orderBy('name', 'asc')->paginate(10000000);
+        $typeprestations = TypePrestation::orderBy('name', 'asc')->get();
         return view('typeprestations.index',['dossiers' => $dossiers,'villes' => $villes], compact('typeprestations'));
     }
 

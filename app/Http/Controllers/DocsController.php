@@ -134,7 +134,7 @@ class DocsController extends Controller
     {
         //
         $docs = Doc::find($id);
-        $dossiers = Dossier::all();
+        $dossiers = Dossier::orderBy('nom', 'asc')->get();
 
         return view('docs.edit',['dossiers' => $dossiers], compact('docs'));
     }
