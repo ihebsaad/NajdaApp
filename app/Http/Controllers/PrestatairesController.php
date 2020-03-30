@@ -710,11 +710,15 @@ class PrestatairesController extends Controller
     {
         $val =  trim($request->get('val'));
         $type=trim($request->get('type'));
-        $count =  Adresse::where('champ', $val)
+
+     /*   $count =  Adresse::where('champ', $val)
             ->orWhere($type,$val)->count();
 
         return $count;
-
+*/
+     $rech=   Adresse::where('champ', $val)
+            ->orWhere($type,$val)->first();
+     return json_encode($rech) ;
     }
 
 

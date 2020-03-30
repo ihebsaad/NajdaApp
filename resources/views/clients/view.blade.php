@@ -1767,7 +1767,7 @@
             data: {   val:val,type:type, _token: _token},
             success: function (data) {
 
-                if(data>0){
+           /*     if(data>0){
                     alert('  Existe deja !');
                     document.getElementById(id).style.background='#FD9883';
                     document.getElementById(id).style.color='white';
@@ -1775,6 +1775,26 @@
                     document.getElementById(id).style.background='white';
                     document.getElementById(id).style.color='black';
                 }
+*/
+                if(data!=''){
+                    parsed = JSON.parse(data);
+                    string='Existe deja ! ';
+                    if(parsed['nom']!=null){string+='Nom : '+parsed['nom']+ ' - '; }
+                    if(parsed['prenom']!=null){string+='Prénom : '+parsed['prenom']+ ' - '; }
+                    if(parsed['fonction']!=null){string+='Fonction : '+parsed['fonction']+ ' - '; }
+                    if(parsed['remarque']!=null){string+='Remarque : '+parsed['remarque']+ ' - '; }
+                    if(parsed['type']!=null){string+='Type : '+parsed['type']+ ' '; }
+                    if(parsed['typetel']!=null){string+=parsed['typetel']+ ' '; }
+
+                    alert(string);
+                    document.getElementById(id).style.background='#FD9883';
+                    document.getElementById(id).style.color='white';
+                } else{
+                    document.getElementById(id).style.background='white';
+                    document.getElementById(id).style.color='black';
+                }
+
+
 
 
             }
