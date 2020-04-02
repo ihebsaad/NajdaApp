@@ -173,6 +173,13 @@ Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent
 
 }
 
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+$idprestation=$omparent['idprestation'];
+ Prestation::where('id', $idprestation)->update(['date_prestation' => $newformat]);
+
+
                 // end bloc test
                 exit();}
         		    //exit();
@@ -590,6 +597,14 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 }
 
 
+
+}
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+{
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+ Prestation::where('id', $idprestation)->update(['date_prestation' => $newformat]);
 
 }
 
@@ -1306,6 +1321,11 @@ Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent
 }
 
 }
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+$idprestation=$omparent['idprestation'];
+ Prestation::where('id', $idprestation)->update(['date_prestation' => $newformat]);
 
                 exit();}
         		// end remplace
@@ -1777,6 +1797,14 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 }
 
 
+
+}
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+{
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+ Prestation::where('id', $idprestation)->update(['date_prestation' => $newformat]);
 
 }
 
@@ -2545,7 +2573,11 @@ Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent
 }
 
 }
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
 
+$newformat = date('d/m/Y',$date);
+$idprestation=$omparent['idprestation'];
+ Prestation::where('id', $idprestation)->update(['date_prestation' => $newformat]);
 	                exit();}
                     //exit();
                 }
@@ -2969,6 +3001,14 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 }
 
 
+
+}
+if (isset($_POST['parent']) && ! empty($_POST['parent']))
+{
+$date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
+
+$newformat = date('d/m/Y',$date);
+ Prestation::where('id', $idprestation)->update(['date_prestation' => $newformat]);
 
 }
 
