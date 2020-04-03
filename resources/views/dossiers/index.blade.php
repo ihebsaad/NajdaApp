@@ -162,7 +162,7 @@
                 <th style="width:20%">Assuré</th>
                  <th style="width:25%">Client</th>
                  <th style="width:20%">Etat</th>
-                 <th style="width:20%">Historique affectation</th>
+                 <th style="width:20%">Historique d'opérations</th>
 
               </tr>
             <tr>
@@ -170,7 +170,7 @@
                 <th style="width:20%">Assuré</th>
                 <th style="width:25%">Client</th>
                 <th style="width:20%">Etat</th>
-                <th style="width:20%">Historique affectation</th>
+                <th style="width:20%">Historique d'opérations</th>
             </tr>
             </thead>
             <tbody>
@@ -201,7 +201,7 @@
             <!-- fin recherche avancee sur dossiers-->
 
 
-         <?php }else {if (isset($dossie)) { ?>
+         <?php }else {if (isset($dossiers)) { ?>
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead >
             <tr id="headtable">
@@ -209,7 +209,7 @@
                 <th style="width:20%">Assuré</th>
                 <th style="width:25%">Client</th>
                 <th style="width:20%">Etat</th>
-                <th style="width:20%">Historique affectation</th>
+                <th style="width:20%">Historique d'opérations</th>
 
               </tr>
             <tr>
@@ -217,7 +217,7 @@
                 <th style="width:20%">Assuré</th>
                 <th style="width:25%">Client</th>
                 <th style="width:20%">Etat</th>
-                <th style="width:20%">Historique affectation</th>
+                <th style="width:20%">Historique d'opérations</th>
 
             </tr>
             </thead>
