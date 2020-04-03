@@ -26,7 +26,7 @@
 
         <div class="portlet box grey">
             <div class="row">
-                <div class="col-lg-6">Factures</div>
+                <div class="col-lg-6"><h2>Factures</h2></div>
                 <div class="col-lg-6">
                     <button id="addgr" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une facture </b></button>
                 </div>
@@ -65,7 +65,7 @@
    
                 <tr>
 
-				<td style="width:5%"  ><a href="{{action('FacturesController@view', $facture->id)}}" >{{$facture->id}}</a></td>
+				<td style="width:5%"  ><a href="{{action('FacturesController@view', $facture->id)}}" ><?php echo sprintf("%05d",$facture->id);?></a></td>
                     <td  style="width:10%">{{$facture->date_arrive}}</td>
                     <td  style="width:17%"> <?php echo DossiersController::ClientById($facture->client); ?></td>
                     <td style="width:12%" >{{$facture->reference}}</td>

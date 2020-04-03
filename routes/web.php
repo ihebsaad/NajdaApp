@@ -326,7 +326,7 @@ Route::get('/docs/destroy/{id}', 'DocsController@destroy');
 
 /*** contrats -> Contrats Clients   **/
 
-Route::get('/contrats', array('as' => 'docs','uses' => 'ContratsController@index'));
+Route::get('/contrats', array('as' => 'contrats','uses' => 'ContratsController@index'));
 Route::post('/contrats/saving','ContratsController@saving')->name('contrats.saving');
 Route::post('/contrats/updating','ContratsController@updating')->name('contrats.updating');
 Route::get('/contrats/view/{id}', 'ContratsController@view');

@@ -10,6 +10,7 @@
      {{ csrf_field() }}
 
 <div class="modal-body">
+    <h2>Groupe du client </h2><br>
     <form id="updateform">
 
                     <div class="row">

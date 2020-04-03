@@ -3667,14 +3667,11 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
 }
 
 
-
-
-
     $(document).ready(function() {
     $("#typeprest").select2();
     $("#typeprest2").select2();
-    $("#specialite").select2();
-    $("#specialite2").select2();
+   /* $("#specialite").select2();
+    $("#specialite2").select2();*/
     $("#gouvcouv").select2();
     $("#gouvcouv2").select2();
     $("#agent").select2();
@@ -4151,6 +4148,7 @@ function toggle(className, displayState){
                 elements[i].style.display = displayState;
             }
         }
+
     $("#affectationprest").change(function() {
 
             if ($("#affectationprest").val()==="interne")
@@ -4695,28 +4693,27 @@ function toggle(className, displayState){
             document.getElementById('add2').style.display='none';
             document.getElementById('add2prest').style.display='none';
             document.getElementById('selectedprest').value=0;
-            /*
+
                 // afficher les specialite par type de prestation selectionné
             toggle('tprest', 'none');
            var typeprest=  document.getElementById('typeprest').value;
 
            // document.getElementById('tprest-'+typeprest).style.display='block';
             toggle('tprest-'+typeprest, 'block');
-*/
+
         });
 
 
         $("#typeprest2").change(function() {
 
-/*
+
             // afficher les specialite par type de prestation selectionné
 
             toggle('tprest2', 'none');
             var typeprest=  document.getElementById('typeprest2').value;
-
-            //document.getElementById('tprest2-'+typeprest).style.display='block';
+             //document.getElementById('tprest2-'+typeprest).style.display='block';
             toggle('tprest2-'+typeprest, 'block');
-*/
+
         });
 
 
@@ -4731,10 +4728,12 @@ function toggle(className, displayState){
             document.getElementById('selectedprest').value=0;
 
 
-         ////   toggle('tprest', 'none');
+           toggle('tprest', 'none');
             var typeprest=  document.getElementById('typeprest').value;
 
-         ///   document.getElementById('tprest-'+typeprest).style.display='block';
+        //   document.getElementById('tprest-'+typeprest).style.display='block';
+
+            toggle('tprest', 'block');
 
             //  prest = $(this).val();
             document.getElementById('selectedprest').value=0;
@@ -4766,9 +4765,9 @@ function toggle(className, displayState){
                         //window.location =data;
                         console.log(data);
                         ////       data.map((item, i) => console.log('Index:', i, 'Id:', item.id));
-                        var  total =document.getElementById('total').value;
+                        var  total =parseInt(document.getElementById('total').value);
 
-                        if(parseInt(total)>0)
+                        if(total>0)
                         {
                             document.getElementById('showNext').style.display='block';
                         }
@@ -4860,9 +4859,9 @@ function toggle(className, displayState){
                         console.log("success list prest");
                         console.log(data);
                         ////       data.map((item, i) => console.log('Index:', i, 'Id:', item.id));
-                        var  total =document.getElementById('total-m').value;
+                        var  total =parseInt(document.getElementById('total-m').value);
 
-                        if(parseInt(total)>0)
+                        if(total>0)
                         {
                             document.getElementById('showNext-m').style.display='block';
                         }
@@ -5124,7 +5123,7 @@ $("#showNext-m").click(function() {
                 document.getElementById('detailsprest-m').value='';
 
                 var selected = document.getElementById('selected-m').value;
-                var total = document.getElementById('total-m').value;
+                var total = parseInt(document.getElementById('total-m').value);
 
 
                 var next = parseInt(selected) + 1;

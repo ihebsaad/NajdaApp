@@ -1584,7 +1584,7 @@
 
         <div class="row">
 
-            <label for="destinataire">Adresse(s):</label>
+            <label for="destinataire">Adresse:</label>
             <div class="row">
                 <div class="col-md-10">
                     <input type="email" id="destinataire" required  class="form-control" name="destinataire[]"   />

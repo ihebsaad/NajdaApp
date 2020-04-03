@@ -18,7 +18,7 @@
     <div class="uper">
          <div class="portlet box grey">
             <div class="row">
-                <div class="col-lg-6">Contrats</div>
+                <div class="col-lg-6"><h2>Contrats</h2></div>
                 <div class="col-lg-6">
                     <button id="addgr" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter un contrat</b></button>
                 </div>
@@ -47,7 +47,7 @@
                 ?>
 
                 <tr>
-                    <td  >{{$contrat->id}}</td>
+                    <td  ><?php echo sprintf("%04d",$contrat->id);?></td>
                     <td  ><a href="{{action('ContratsController@view', $contrat['id'])}}" >{{$contrat->nom}}</a></td>
                     <td  ><a href="{{action('ContratsController@view', $contrat['id'])}}" >{{$contrat->type}}</a></td>
                       <td    >

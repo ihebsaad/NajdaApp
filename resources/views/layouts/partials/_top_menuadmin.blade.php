@@ -102,7 +102,7 @@ $user_type=$user->user_type;
                 <a href="{{ route('emails.envoimailtous') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="   fas fa-mail-bulk"></span>
                     <br>
-                Email Groupés
+                Emails Groupés
                 </a>
             </div>
 
@@ -147,6 +147,13 @@ $user_type=$user->user_type;
             </a>
         </div>
 
+            <div class="col-sm-2">
+                <a href="{{ route('contrats') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="fas fa-lg fa-file-contract"></span>
+                    <br>
+               Contrats
+                </a>
+            </div>
 
         @endcan
 
