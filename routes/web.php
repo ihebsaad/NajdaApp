@@ -129,6 +129,7 @@ Route::get('/entrees/countnotifsorange','EntreesController@countnotifsorange')->
 
 Route::post('/emails/send','EmailController@send');
 Route::post('/emails/sendall','EmailController@sendall');
+Route::post('/emails/sendallgroup','EmailController@sendallgroup');
 /* envoie d'un email */
 Route::get('/emails/sending','EmailController@sending')->name('emails.sending');
 Route::get('/emails/envoimail/{id}/{type}','EmailController@envoimail')->name('emails.envoimail');
@@ -251,6 +252,7 @@ Route::get('/clients/deleteaddress/{id}', 'ClientsController@deleteaddress')->na
 Route::post('/clients/updateaddress', 'ClientsController@updateaddress')->name('clients.updateaddress');
 Route::get('/clients/dossiers/{id}', 'ClientsController@dossiers')->name('clients.dossiers');
 Route::get('/clients/ouverts/{id}', 'ClientsController@ouverts')->name('clients.ouverts');
+Route::get('/clients/mailsclients', 'ClientsController@mailsclients')->name('clients.mails');
 
 
 /*** Cities -> Gouvernorats  **/
@@ -351,6 +353,7 @@ Route::get('/clientgroupes/destroy/{id}', 'ClientGroupesController@destroy');
 /*** Prestataires **/
 //Route::resource('/prestataires',  'PrestatairesController');
 Route::get('/prestataires', array('as' => 'prestataires','uses' => 'PrestatairesController@index'));
+Route::get('/prestataires/mails','PrestatairesController@mails')->name('prestataires.mails');
 Route::post('/prestataires/saving','PrestatairesController@saving')->name('prestataires.saving');
 Route::post('/prestataires/saving2','PrestatairesController@saving2')->name('prestataires.saving2');
 Route::post('/prestataires/updating','PrestatairesController@updating')->name('prestataires.updating');

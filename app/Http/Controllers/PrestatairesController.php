@@ -36,44 +36,24 @@ class PrestatairesController extends Controller
      */
     public function index()
     {
-        $minutes1=120;
-
-        //$dossiers = Dossier::all();
-
-        //$villes = Ville::all();
-
-      /*  $villes = Cache::remember('villes',$minutes2,  function () {
-
-          return DB::table('villes')
-               ->get();
-           // return Ville::get();
-
-        });
-
-        $dossiers = Cache::remember('dossiers',$minutes1,  function () {
-
-            return DB::table('dossiers')
-                ->get();
-          //  return Dossier::get();
-        });
-*/
-
 
         $prestataires = Prestataire::orderBy('name', 'asc')->get();
 
-      //  $prestataires = Cache::remember('prestataires',$minutes1,  function () {
 
-        //    return  Prestataire::orderBy('created_at', 'desc')->paginate(10000000);
-
-        //});
-
-        /*return view('prestataires.index',[ 'dossiers' => $dossiers,'villes' => $villes], compact('prestataires'));*/
-       return view('prestataires.index', compact('prestataires'));
+        return view('prestataires.index', compact('prestataires'));
 
 
     }
 
- 
+    public function mails()
+    {
+
+        $prestataires = Prestataire::orderBy('name', 'asc')->get();
+
+        return view('prestataires.mails', compact('prestataires'));
+
+
+    }
  
     /**
      * Show the form for creating a new resource.

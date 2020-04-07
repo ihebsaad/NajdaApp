@@ -10,20 +10,7 @@
 <script src="{{  URL::asset('public/js/upload_files/vpb_uploader.js') }}" type="text/javascript"></script>
 
 
-<!--
-<script type="text/javascript">
-    $(document).ready(function()
-    {
-        // Call the main function
-        new vpb_multiple_file_uploader
-        ({
-            vpb_form_id: "theform", // Form ID
-            autoSubmit: true,
-            vpb_server_url: "upload.php"
-        });
-    });
-</script>
--->
+
 <link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
 
 

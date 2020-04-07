@@ -44,7 +44,19 @@ class ClientsController extends Controller
         return view('clients.index',[ 'countries'=>$countries,'villes' => $villes], compact('clients'));
     }
 
- 
+    public function mailsclients()
+    {
+
+
+        $villes = Ville::all();
+
+
+        $countries = DB::table('apps_countries')->select('id', 'country_name')->get();
+
+        $clients = Client::orderBy('name', 'asc')->get();
+
+        return view('clients.mailsclients',[ 'countries'=>$countries,'villes' => $villes], compact('clients'));
+    }
 
     /**
      * Show the form for creating a new resource.
