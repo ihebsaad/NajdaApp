@@ -15,6 +15,11 @@
 $dossiersaff= DossiersController:: ListeDossiersAffecte();
 //print_r($dossiers);
 
+$user = auth()->user();
+$iduser=$user->id;
+$type=$user->user_type;
+
+if($type !='bureau' && $type !='financier'  ) {
 ?>
 @isset ($dossiersaff)
 <div class="row folders" style="margin-top:20px;min-height:120px">
@@ -35,3 +40,5 @@ $dossiersaff= DossiersController:: ListeDossiersAffecte();
         </div>
     </div>
 @endisset
+
+<?php } else{echo '<br>';}?>

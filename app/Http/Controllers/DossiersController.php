@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
+use App\Alerte ;
 use App\Entree ;
 use App\Envoye ;
 use App\Dossier ;
@@ -2211,7 +2212,7 @@ class DossiersController extends Controller
           $observ = app('App\Http\Controllers\PrestatairesController')->ChampById('observation_prestataire', $prestataire);
 
 
-          $tels = Adresse::where('nature', 'tel')
+          $tels = Adresse::where('nature', 'telinterv')
               ->where('parent', $prestataire)
               ->get();
 
@@ -3198,28 +3199,46 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
         // forcer la fin des missions qui sont réellemnt achevée
         app('App\Http\Controllers\MissionController')->verifier_fin_missions($iddossier);
 
+        $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
+
+        $refd= trim($this->RefDossierById($iddossier));
+
+        $format = "Y-m-d H:i:s";
+        $dtc = (new \DateTime())->format($format);
+        $dateSys = \DateTime::createFromFormat($format, $dtc);
+
+
          $count= Mission::where('dossier_id',$iddossier)
              ->where('statut_courant','!=','annulee')
              ->where('statut_courant','!=','achevee')
              ->count();
+
+
             if($statut=='Cloture'){
                 if($count==0){
                 Dossier::where('id',$iddossier)->update(array('current_status'=>$statut ,'sanssuite'=>$sanssuite,'affecte'=>0));
 
-                 $format = "Y-m-d H:i:s";  
 
-                  $dtc = (new \DateTime())->format($format);
-                  $dateSys = \DateTime::createFromFormat($format, $dtc);
-
-               $etat='';
                if($sanssuite==1)
                {
                  $etat='sans suite';
+                 $statAlerte='sanssuite';
                }
                else
                {
                 $etat='';
+                $statAlerte='ferme';
                }
+                // enregistrement notif pour financier
+                $alerte= new Alerte([
+                        'statut'=> $statAlerte ,
+                         'ref_dossier'=> $refd ,
+                         'id_dossier'=> $iddossier
+                 ]);
+
+                $alerte->save();
+
                 $affechis=new AffectDossHis([
                     'util_affecteur'=>auth::user()->id,
                     'util_affecte'=>null,
@@ -3229,6 +3248,9 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
                 ]); 
                 $affechis->save();
+
+                Log::info('[Agent: ' . $nomuser . '] Clôture de dossier: ' . $refd .' '.$etat);
+
 
                 }
             }else{
@@ -3244,7 +3266,21 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
                 ]); 
                 $affechis->save();
 
-                }
+                // enregistrement notif pour financier
+
+                $statAlerte='reouverture';
+                $alerte= new Alerte([
+                    'statut'=> $statAlerte ,
+                    'ref_dossier'=> $refd ,
+                    'id_dossier'=> $iddossier
+                ]);
+
+                $alerte->save();
+
+                Log::info('[Agent: ' . $nomuser . '] Re-Ouverture de dossier: ' . $refd);
+
+
+            }
     }
 
 

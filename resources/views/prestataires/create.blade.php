@@ -5,7 +5,7 @@
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 @section('content')
- 
+    <h2> Créer une nouvel Intervenant </h2>
                 <form id="updateform"   method="post"   action="{{route('prestataires.saving')}}" >
                     {{ csrf_field() }}
                     <input type="hidden" id="dossier" name="dossier" value="<?php echo $folder;?>"/>

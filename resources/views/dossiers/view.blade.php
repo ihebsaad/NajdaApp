@@ -7,6 +7,7 @@ use App\Document ;
 use App\Client;
 use App\ClientGroupe;
 use App\Adresse;
+use App\Mission;
 
 ?>
 <?php use \App\Http\Controllers\PrestationsController;
@@ -1665,7 +1666,7 @@ array_push($listepr,$pr['prestataire_id']);
                              @if($macvd->statut_courant=='endormie')
                             <td style="width:10%;"><small>endormie</small></td>
                             @endif
-                             <td style="width:15%;"><small>  <?php if ((isset($dossier->affecte)) && (($dossier->affecte>0))) { ?>
+                             <td style="width:15%;"><small>   <?php if ((isset($mhivd->user_origin))  ) { ?>
                                      {{$macvd->user_origin->name}} {{$macvd->user_origin->lastname}} <?php } ?></small></td>
                             <td style="width:10%;"><button type="button" id="macvd{{$macvd->id}}" class="btn btn-primary panelciel macvd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick=""> Actions</button><br>
                                 <button type="button" id="macvdo{{$macvd->id}}" class="btn btn-primary panelciel mailGenermacvd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick=""> Source</button></td></tr>
@@ -1719,7 +1720,7 @@ array_push($listepr,$pr['prestataire_id']);
                              @if($mhivd->statut_courant=='annulee')
                             <td style="width:10%;"><small>annulée </small></td>
                             @endif
-                           <td style="width:15%;">         <?php if ((isset($dossier->affecte)) && (($dossier->affecte>0))) { ?>
+                           <td style="width:15%;">         <?php if ((isset($dossier->user_origin))  ) { ?>
                                <small>{{$mhivd->user_origin->name}} {{$mhivd->user_origin->lastname}}</small><?php } ?></td>
                             <td style="width:10%;"><button type="button" id="mhivd{{$mhivd->id_origin_miss}}" class="btn btn-primary panelciel mhivd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick="">Actions</button><br>
                                 <button type="button" id="mhivdo{{$mhivd->id_origin_miss}}" class="btn btn-primary panelciel mailGenermhivd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick="">Source</button></td></tr>
@@ -2729,6 +2730,21 @@ array_push($listepr,$pr['prestataire_id']);
                             </div>
                         </div>
 
+                        <div class="form-group ">
+                            <div class="row">
+                                <label>Gouvernorat </label>
+                            </div>
+
+                            <div class="row">
+                                <select class="form-control  col-lg-12 " style="width:400px" name="gouvernorat"   required   id="pres_gouv">
+                                    <option></option>
+                                    @foreach($gouvernorats as $aKeyG)
+                                        <option  <?php if($gouvernorat==$aKeyG->id){echo 'selected="selected"';}?>  value="<?php echo $aKeyG->id;?>"> <?php echo $aKeyG->name;?></option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <label for="sujet">Autorisé Par :</label>
@@ -2736,11 +2752,12 @@ array_push($listepr,$pr['prestataire_id']);
                                 <option value="procedure">Engagé au préalable</option>
                                 <option value="nejib">Dr Nejib</option>
                                 <option value="salah">Dr Salah Harzallah</option>
-                                <option value="smq">SMQ</option>
-                                <option value="smq">DG</option>
+                                <option value="mahmoud">Dr Mahmoud HELALI</option>
+                                <option value="maher">Mr Maher BEN OTHMANE</option>
                             </select>
 
                         </div>
+
                         <div class="form-group">
                             <label for="details">Détails   :</label>
                             <textarea  id="details" class="form-control"  ></textarea>
@@ -2790,6 +2807,12 @@ array_push($listepr,$pr['prestataire_id']);
                 </div>
                 <div class="modal-body">
                     <div class="card-body" style="text-align:center;height:200px"><br>
+<?php    $count= Mission::where('dossier_id',$dossier['id'])
+                        ->where('statut_courant','!=','annulee')
+                        ->where('statut_courant','!=','achevee')
+                        ->count();
+if($count==0) {
+?>
                         <center><B> Etes vous sûrs de vouloir clôturer ce Dossier ?</B><br> <br> </center>
                         <center><label  style="width:250px;text-align:center;margin-bottom:50px;" class="check "> Fermer Sans suite
                             <input type="checkbox" id="sanssuite" class="form-control">
@@ -2799,7 +2822,11 @@ array_push($listepr,$pr['prestataire_id']);
                         <a id="fermerdossier"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >OUI</a>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button><br>
 
+<?php }else{ ?>
+                        <br> <br>  <center><B> Vous devez terminer toutes les missions pour pouvoir clôturer ce Dossier </B><br> <br> </center>
 
+
+                    <?php          } ?>
                     </div>
 
                 </div>
@@ -3674,6 +3701,7 @@ function filltemplate(data,tempdoc,mgopprec,idgopprec)
     $("#specialite2").select2();*/
     $("#gouvcouv").select2();
     $("#gouvcouv2").select2();
+    $("#pres_gouv").select2();
     $("#agent").select2();
     $("#gopdoc").select2();
     $("#templatedoc").select2();
@@ -4450,7 +4478,7 @@ function toggle(className, displayState){
              }
         });
 
-        // ajout prestation depuis la recherche
+        // ajout prestation
 
         $('#selectionnerprest').click(function(){
 
@@ -4459,7 +4487,7 @@ function toggle(className, displayState){
             var dossier_id = $('#dossier').val();
 
             var typeprest = $('#ajout_typeprest').val();
-            var gouvernorat = $('#gouvcouv2').val();
+            var gouvernorat = $('#pres_gouv').val();
             var specialite = $('#ajout_specialite').val();
             var date = $('#pres_date2').val();
             var autorise = $('#autorise').val();
@@ -4566,7 +4594,7 @@ function toggle(className, displayState){
 
             var typeprestom = document.getElementById('templateom').value;
             var gouvernorat = $('#gouvcouvm').val();
-            var specialite = $('#specialite').val();
+            var specialite = $('#specialitem').val();
             /*
                 Taxi: - type:2 - specialite:2
                 Remorquage: - type:1 - specialite:3
@@ -4967,8 +4995,7 @@ function toggle(className, displayState){
               {
             if(infos==true){
                 // enregistrement des infos de prestation  + envoi des emails
-
-                var _token = $('input[name="_token"]').val();
+                 var _token = $('input[name="_token"]').val();
                 var  prestation =document.getElementById('idprestation').value;
                 var  prestataire =document.getElementById('selectedprest').value;
                 var  statut =document.getElementById('statutprest').value;

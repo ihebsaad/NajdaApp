@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Log;
 use App\Mission;
 use App\Notif;
 use App\ActionEC;
+use App\Alerte;
 
 
 class HomeController extends Controller
@@ -762,10 +763,14 @@ return redirect('roles');
     {
         $user = auth()->user();
         $iduser=$user->id;
+        $type=$user->user_type;
 
         User::where('id', $iduser)->update(array('statut'=>'1'));
-     //   return view('home', ['countries' => $countries,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'dossiers' => $dossiers,'notifications'=>$result]);
-        return view('home'  );
+
+       $alertes= Alerte::get( );
+
+        //   return view('home', ['countries' => $countries,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'dossiers' => $dossiers,'notifications'=>$result]);
+        return view('home',['alertes'=>$alertes,'type'=>$type]  );
      }
 
     public function deconnecter(Request $request)
@@ -1175,6 +1180,35 @@ $url=storage_path().$attach->path ;
 
     }
 
+
+
+
+
+    public function updating(Request $request)
+    {
+
+        $id= $request->get('actus');
+        $champ= strval($request->get('champ'));
+        $val= $request->get('val');
+        //  $dossier = Dossier::find($id);
+        // $dossier->$champ =   $val;
+        //   Actualite::where('id', $id)->update(array($champ => $val));
+        Alerte::where('id', $id)->update(array('facture' => $val));
+
+        //  $dossier->save();
+
+        ///   return redirect('/dossiers')->with('success', 'Entry has been added');
+
+    }
+
+
+    public function destroy($id)
+    {
+        $alerte = Alerte::find($id);
+        $alerte->delete();
+
+        return redirect('/home')->with('success', '  Supprimée');
+    }
 
 
     }

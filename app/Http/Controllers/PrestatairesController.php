@@ -18,6 +18,9 @@ use App\Ville ;
 use App\Citie ;
 use DB;
 use Illuminate\Support\Facades\Cache;
+use Swift_Mailer;
+use Illuminate\Support\Facades\Mail;
+
 
 
 class PrestatairesController extends Controller
@@ -89,7 +92,24 @@ class PrestatairesController extends Controller
         ]);
 
        if ($eval->save()){
-      //  return url('/prestataires/view/'.$prest.'#tab03') ;
+
+
+           $parametres =  DB::table('parametres')
+               ->where('id','=', 1 )->first();
+
+           $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+           $swiftTransport->setUsername('24ops@najda-assistance.com');
+           $swiftTransport->setPassword($parametres->pass_N);
+           $fromname="Najda Assistance";
+           $from='24ops@najda-assistance.com';
+
+           $swiftMailer = new Swift_Mailer($swiftTransport);
+
+           Mail::setSwiftMailer($swiftMailer);
+
+
+
+           //  return url('/prestataires/view/'.$prest.'#tab03') ;
         return url('/prestataires/view/'.$prest ) ;
        }
     }
@@ -121,6 +141,14 @@ class PrestatairesController extends Controller
         if ($request->get('name') !==null ) {$nom=$request->get('name');}else{$nom='nom';}
          $prenom= $request->get('prenom');
         $dossier= $request->get('dossier');
+
+        $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
+        // $to=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
+
+        $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
+
+
         if( isset($dossier) && intval($dossier)>0) {
 
 
@@ -135,6 +163,48 @@ class PrestatairesController extends Controller
 
 
                 if ($prestataire->save()) {
+
+                    $prest=$prestataire->id;
+                    $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prest);
+
+
+                    // Email creation prestataire
+                    $parametres =  DB::table('parametres')
+                        ->where('id','=', 1 )->first();
+
+                    $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+                    $swiftTransport->setUsername('24ops@najda-assistance.com');
+                    $swiftTransport->setPassword($parametres->pass_N);
+                    $fromname="Najda Assistance";
+                    $from='24ops@najda-assistance.com';
+
+                    $swiftMailer = new Swift_Mailer($swiftTransport);
+                    $date=date('d/m/Y H:i');
+                    Mail::setSwiftMailer($swiftMailer);
+                    $sujet="Création d'un nouvel intervenant";
+                    $contenu='Création d\'un nouvel intervenant par '.$nomuser.'<br>
+                   Nom : '.$nomprest.' <br>date : '.$date;
+
+                    Mail::send([], [], function ($message) use ($to, $sujet, $contenu,$from,$fromname) {
+                        $message
+                            //->to($to ?: [])
+                            ->to($to)
+
+                            //   ->cc($cc ?: [])
+                            //  ->bcc($ccimails ?: [])
+                            ->subject($sujet)
+                            ->setBody($contenu, 'text/html')
+                            ->setFrom([$from => $fromname]);
+
+
+                        /* foreach ($to as $t) {
+                             $message->to($t);
+                         }
+     */
+                    });
+
+
+
                     $id = $prestataire->id;
                     Log::info('03');
 
@@ -174,6 +244,50 @@ class PrestatairesController extends Controller
                 $id = $prestataire->id;
                 $prestataire->update($request->all());
 
+                $prest=$id;
+                $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prest);
+
+                // Email creation prestataire
+                $parametres =  DB::table('parametres')
+                    ->where('id','=', 1 )->first();
+
+                $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+                $swiftTransport->setUsername('24ops@najda-assistance.com');
+                $swiftTransport->setPassword($parametres->pass_N);
+                $fromname="Najda Assistance";
+                $from='24ops@najda-assistance.com';
+
+                $swiftMailer = new Swift_Mailer($swiftTransport);
+                $date=date('d/m/Y H:i');
+                Mail::setSwiftMailer($swiftMailer);
+                $sujet='Création d\un nouvel intervenant';
+                $contenu='Création d\'un nouvel intervenant par '.$nomuser.'<br>
+                   Nom : '.$nomprest.' date : '.$date;
+
+                Mail::send([], [], function ($message) use ($to, $sujet, $contenu,$from,$fromname) {
+                    $message
+                        //->to($to ?: [])
+                        ->to($to)
+
+                     //   ->cc($cc ?: [])
+                        //  ->bcc($ccimails ?: [])
+                        ->subject($sujet)
+                        ->setBody($contenu, 'text/html')
+                        ->setFrom([$from => $fromname]);
+
+
+                    /* foreach ($to as $t) {
+                         $message->to($t);
+                     }
+ */
+                });
+
+
+
+
+
+
+
                 return redirect('/prestataires/view/' . $id)/*->with('success', ' Créé avec succès')*/
                     ;
 
@@ -184,8 +298,6 @@ class PrestatairesController extends Controller
 
         }
 
-          $user = auth()->user();
-           $nomuser = $user->name . ' ' . $user->lastname;
          Log::info('[Agent: ' . $nomuser . '] Ajout Intervenant: ' . $nom.' '.$prenom);
 
 

@@ -21,6 +21,7 @@ use Swift_Mailer;
 
 
 
+
 class PrestationsController extends Controller
 {
 
@@ -108,6 +109,14 @@ class PrestationsController extends Controller
             $effectue = 1;
         }
 
+        $abn= DossiersController::FullnameAbnDossierById($iddoss);
+        $ref= DossiersController::RefDossierById($iddoss);
+
+        $gouvernorat=    PrestatairesController::GouvByid($gouv);
+        $Specialite=   PrestatairesController::SpecialiteByid($spec);
+        $TypePrest=  PrestatairesController::TypeprestationByid($typep);
+
+
         $prestation = new Prestation([
             'prestataire_id' => $prest,
             'dossier_id' => $iddoss,
@@ -127,10 +136,18 @@ class PrestationsController extends Controller
 
         if ($prestation->save()) {
             // Envoi de mail
-            if ($autorise != '') {
+          //  if ($autorise != '') {
 
-/***********
-                $parametres =  DB::table('parametres')
+                if($autorise =='procedure'){$to='ihebsaad@gmail.com';}
+                //  if($autorise =='procedure'){$to='nejib.karoui@medicmultiservices.com';}
+                if($autorise =='nejib'){$to='nejib.karoui@gmail.com';}
+                if($autorise =='salah'){$to='salah.harzallah@topnet.tn'; }//mohsalah.harzallah@gmail.com
+                if($autorise =='mahmoud'){$to='mahmoud.helali@gmail.com';}
+                if($autorise =='maher'){$to='maher.benothmane@najda-assistance.com';}
+
+                if($autorise ==''){$to='ihebsaad@gmail.com';}
+
+                    $parametres =  DB::table('parametres')
                     ->where('id','=', 1 )->first();
 
                 $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
@@ -143,24 +160,21 @@ class PrestationsController extends Controller
 
                 Mail::setSwiftMailer($swiftMailer);
 
+                $now=date('d/m/Y');
+               // $to = array('nejib.karoui@medicmultiservices.com');
+                  $to=array('ihebsaad@gmail.com');
+                 $sujet = 'Nouvelle prestation effectuée';
 
-                $to = array('nejib.karoui@medicmultiservices.com');
-                // $to='ihebsaad@gmail.com';
-                $sujet = 'Nouvelle prestation effectuée';
-                $contenu = 'Bonjour, <br>Nouvelle prestation effectuée.<br>
-                 Date: ' . $date . '<br>
-                 Prestataire: ' . $nomprest . '<br>
-                 Autorisée Par: Mr ' . strtoupper($autorise) . '<br>
-                 Détails: ' . $details . '<br>
-                 Créée par :' . $nomuser . '<br>    
-                     ';
-               // $cc = array('ihebs001@gmail.com', 'saadiheb@gmail.com');
-                 $cc=array('chef.plateau@najda-assistance.com','smq@medicmultiservices.com');
+                $contenu = 'Bonjour de Najda, <br><br>Votre autorisation a été utilisée par ' . $nomuser . ' en date du: ' . $now .  ' <br>pour choisir manuellement le prestataire : ' . $nomprest . ' dans la gestion du dossier : '. $ref.' | '.$abn.'<br>  pour la prestation: '.$TypePrest.' ,  '.$Specialite.' - '. $details . '<br> qui aura lieu le ' . $date .  ' à  '.$gouvernorat ;
+
+
+                $cc = array('ihebs001@gmail.com', 'saadiheb@gmail.com');
+               //   $cc=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
 
                 Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$from,$fromname) {
                     $message
                         //->to($to ?: [])
-                        // ->to($to)
+                          ->to($to)
 
                         ->cc($cc ?: [])
                         //  ->bcc($ccimails ?: [])
@@ -169,14 +183,13 @@ class PrestationsController extends Controller
                         ->setFrom([$from => $fromname]);
 
 
-                    foreach ($to as $t) {
+                   /* foreach ($to as $t) {
                         $message->to($t);
                     }
-
+*/
                 });
 
-********/
-            }
+         //   }
 
             $ref = app('App\Http\Controllers\DossiersController')->RefDossierById($iddoss);
             Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' . $ref);
@@ -229,6 +242,19 @@ class PrestationsController extends Controller
 
 
         Prestation::where('id', $id)->update(array('statut' => $statut));
+        $prestation=Prestation::where('id', $id)->first();
+        $datep=$prestation->date_prestation;
+        $dossierid=$prestation->dossier_id;
+        $typep=$prestation->type_prestations_id;
+        $specialite=$prestation->specialite;
+
+        $abn= DossiersController::FullnameAbnDossierById($dossierid);
+        $ref= DossiersController::RefDossierById($dossierid);
+
+         $Specialite=   PrestatairesController::SpecialiteByid($specialite);
+        $TypePrest=  PrestatairesController::TypeprestationByid($typep);
+
+
         if ($details != '') {
             Prestation::where('id', $id)->update(array('details' => $details));
         }
@@ -236,43 +262,83 @@ class PrestationsController extends Controller
         $to = '';
         $raison = '';
         $sujet = 'Demande de prestation échouée';
-        if ($statut == 'nonjoignable') {
+        if (trim($statut) == 'nonjoignable') {
             $raison = 'Non Joignable';
         }
-        if ($statut == 'nondisponbile') {
+        if (trim($statut)  == 'nondisponible') {
             $raison = 'Non Disponbile';
         }
-        if ($statut == 'autre') {
+        if (trim($statut)  == 'autre') {
             $raison = $details;
-        }
-        $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prestataire) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
-        $contenu = "Bonjour " . $nomprest . ",<br>
-une demande de prestation de vos services a échoué pour les raisons suivantes :<br>
-<b>" . $raison . "</b> <br><br>
-Contactez nous pour plus d'informations.<br>
-A bientôt.<br>
 
-";
+        }
+        $now=date('d/m/Y H:i');
+         $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prestataire) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire);
+        $contenu = 'Bonjour ' . $nomprest . ',<br>
+        Najda vous informe que vous avez été choisi le '.$now.' pour mission le '.$datep.' mais vous étiez '.$raison.'<br>';
+        $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
+
+         $contenu2 = 'L\'agent '.$nomuser.' a zappé la proposition de l\'optimiseur dans le cadre du dossier : '.$ref.' | '.$abn .'<br> en passant le tour de ' .$nomprest. ' pour la prestation : '.$TypePrest.', '.$Specialite.',  pour la raison : '.$raison.', et ce le '.$now.' .';
 
         $cc = array();
-        $emails = Adresse::where('nature', 'email')
+        $emails = Adresse::where('nature', 'emailinterv')
             ->where('parent', $prestataire)
-            ->get();
+            ->pluck('champ');
+        $to = array();
 
         foreach ($emails as $email) {
-            array_push($cc, $email->champ);
+            array_push($to, $email);
 
         }
 
-        Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc) {
+        $parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+
+        $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+        $swiftTransport->setUsername('24ops@najda-assistance.com');
+        $swiftTransport->setPassword($parametres->pass_N);
+        $fromname="Najda Assistance";
+        $from='24ops@najda-assistance.com';
+
+        $swiftMailer = new Swift_Mailer($swiftTransport);
+
+        Mail::setSwiftMailer($swiftMailer);
+
+        // Mail au prestataire
+        Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$from,$fromname) {
             $message
-                ->to('saadiheb@gmail.com')
+               // ->to('saadiheb@gmail.com')
                 // ->to()
 
-                ->cc($cc ?: [])
+              //  ->cc($cc ?: [])
                 //  ->bcc($ccimails ?: [])
                 ->subject($sujet)
-                ->setBody($contenu, 'text/html');
+                ->setBody($contenu, 'text/html')
+                ->setFrom([$from => $fromname]);
+
+            if (isset($to)) {
+
+                   foreach ($to as $t) {
+                       $message->to($t);
+                   }
+               }
+        });
+
+        // Mail au SMQ Najda
+
+        $cc2=array( 'saadiheb@gmail.com');
+      //  $cc2=array( 'nejib.karoui@medicmultiservices.com');
+        Mail::send([], [], function ($message) use ( $sujet,$cc2, $contenu2,$from,$fromname) {
+            $message
+                ->to('ihebsaad@gmail.com')
+             //   ->to('smq@medicmultiservices.com')
+                // ->to()
+
+                ->cc($cc2 ?: [])
+                //  ->bcc($ccimails ?: [])
+                ->subject($sujet)
+                ->setBody($contenu2, 'text/html');
             /*   if (isset($to)) {
 
                    foreach ($to as $t) {
@@ -451,10 +517,66 @@ A bientôt.<br>
     {
         $eval = $request->get('eval');
         $priorite = $request->get('priorite');
+        $evaluation=Evaluation::where('id',$eval)->first();
+        $gouv= $evaluation->gouv;
+        $typep= $evaluation->type_prest;
+        $spec= $evaluation->specialite;
+        $prest=$evaluation->prestataire;
+        $ville=$evaluation->ville;
+
+        $gouvernorat=    PrestatairesController::GouvByid($gouv);
+        $Specialite=   PrestatairesController::SpecialiteByid($spec);
+        $TypePrest=  PrestatairesController::TypeprestationByid($typep);
+
+
+        // Email Modification Priorié
+        $parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+
+        $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+        $swiftTransport->setUsername('24ops@najda-assistance.com');
+        $swiftTransport->setPassword($parametres->pass_N);
+        $fromname="Najda Assistance";
+        $from='24ops@najda-assistance.com';
+
+        $swiftMailer = new Swift_Mailer($swiftTransport);
+
+        Mail::setSwiftMailer($swiftMailer);
+
+        $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prest);
+        $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
+
+       // $to=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
+        $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
+        $sujet= 'Modification de la priorité d\'un prestataire';
+        $contenu= 'Bonjour de Najda,<br>l\'agent '.$nomuser.' a modifié la priorité du prestataire '.$nomprest.'<br>
+        Priorité : '.$priorite.' - Type de prestation : '.$TypePrest. ' - Spécialité :  '.$Specialite.' -  Gouvernorat : '.$gouvernorat. ' - Ville: '.$ville.'  
+            ';
+
+
+        Mail::send([], [], function ($message) use ($to, $sujet, $contenu,  $from,$fromname) {
+            $message
+                //->to($to ?: [])
+                ->to($to)
+
+             //   ->cc($cc ?: [])
+                //  ->bcc($ccimails ?: [])
+                ->subject($sujet)
+                ->setBody($contenu, 'text/html')
+                ->setFrom([$from => $fromname]);
+
+
+            /* foreach ($to as $t) {
+                 $message->to($t);
+             }
+*/
+        });
 
 
         Evaluation::where('id', $eval)->update(array('priorite' => $priorite));
+        Log::info('[Agent: ' . $nomuser . '] Modification de priorité prestataire : '.$nomprest. ' Priorité : '.$priorite.' - Type de prestation : '.$TypePrest. ' - Spécialité :  '.$Specialite.' -  Gouvernorat : '.$gouvernorat );
 
-    }
+         }
 }
 
