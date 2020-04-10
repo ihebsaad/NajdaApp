@@ -27,11 +27,19 @@ if ((isset($_GET['remplace']) || isset($_GET['complete'])) && isset($_GET['paren
 	$resultp = $conn->query($sqlp);
 	if ($resultp->num_rows > 0) {
 	$detailom = $resultp->fetch_assoc();
-	$emispar = $detailom['emispar'];
-	if (isset($_GET['affectea'])) {$affectea=$_GET['affectea'];} else {$affectea = $detailom['affectea'];}
-	
+	//$emispar = $detailom['emispar'];
+	//if (isset($_GET['affectea'])) {$affectea=$_GET['affectea'];} else {$affectea = $detailom['affectea'];}
 	}
 	else { exit("impossible de recuperer les informations de lordre de mission ".$parentom);}
+
+	//recupere les puces utilise par lom parent
+	$sqlsims = "SELECT * FROM ommedic_equipements WHERE idom=".$parentom." AND type='puce'";
+	$resultsims = $conn->query($sqlsims);
+	if ($resultsims->num_rows > 0) {
+	$parentsims = $resultsims->fetch_assoc();
+	}
+	
+	
 }
 else
 {
@@ -213,6 +221,26 @@ if ($resulthch->num_rows > 0) {
 	    }
 	    //print_r($array_prest);
 		}
+
+// puces sims dispo -- annule est 0 or empty -- date today > fin dispo date ou fin dispo date est null
+	$sqlpuces = "SELECT id,nom,reference FROM equipements WHERE (`type`='numappel') AND ((`annule` = 0) OR (`annule` IS NULL)) AND ((CURDATE() NOT BETWEEN str_to_date(`date_deb_indisponibilite`, '%d/%m/%Y') AND str_to_date(`date_fin_indisponibilite`, '%d/%m/%Y')) OR (`date_fin_indisponibilite` IS NULL))
+";
+
+	$resultpuces = $conn->query($sqlpuces);
+	if ($resultpuces->num_rows > 0) {
+	    // output data of each row
+	    $array_puces = array();
+	    while($rowap = $resultpuces->fetch_assoc()) {
+	        
+			$nnameprest = $rowap['nom']." [".$rowap['reference']."]";
+	        
+	        $array_puces[] = array('id' => $rowap["id"],'name' => $nnameprest);
+	    }
+	    //print_r($array_prest);
+		} else {
+	    echo "0 puces dispo";
+		}
+
 header("Content-Type: text/html;charset=UTF-8");
 ?>
 <html>
@@ -1049,12 +1077,73 @@ header("Content-Type: text/html;charset=UTF-8");
 			<span style="font-family:'Times New Roman'; font-weight:bold">Heure départ clinique/Hôpital :</span><span style="font-family:'Times New Roman'">&#xa0;
 <input type="datetime-local" name="CL_date_heure_departclinique" id="CL_date_heure_departclinique" <?php if (isset($detailom)) { if (isset($detailom['CL_date_heure_departclinique'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_date_heure_departclinique']))."'";}} ?> >
             </div>
+<?php if (isset($_GET['remplace'])) { ?>
 <p class=rvps5><span class=rvts46>Vous emportez avec vous :</span></p>
-<p class=rvps11><span class=rvts46>Carte SIM ( </span><span class=rvts42>exple :</span><span class=rvts46> Puce #2&nbsp; )&nbsp;&nbsp; (+)</span></p>
+<p class=rvps11><span class=rvts46>Carte SIM 
+<span id="addnew" style="display: inline-block;text-align: right;"><a href="javascript:addsim();" id="addsim_button">(+)</a></span>
+	</span> 
+<?php if (isset($parentsims)) { 
+// cas existe sims dans om parent
+foreach ($parentsims as $psim) {	
+	?>
+<div class="fieldsims_wrapper" id="fieldsims_wrapper"><div>
+		<select list="CL_puces" name="CL_puces[]" >
+			<option value='' ></option>
+<?php
+foreach ($array_puces as $puced) {
+	if ($puced['id'] !== $psim['idequipement'])
+	{echo "<option value='".$puced['id']."' >".$puced['name']."</option>";}
+	else
+		{echo "<option value='".$puced['id']."' selected >".$puced['name']."</option>";}
+}
+?>
+</select>
+</div></div>
+<?php // end foreach parentsims
+} ?>
+<!-- template div sim -->
+<div id="newsim" style="display:none">
+<select list="CL_puces" name="CL_puces[]" >
+	<option value='' ></option>
+	<?php
+	foreach ($array_puces as $puced) {
+		echo "<option value='".$puced['id']."' >".$puced['name']."</option>";
+	}
+	?>
+</select>
+</div>
+<?php } else { ?>
+<div class="fieldsims_wrapper" id="fieldsims_wrapper"><div>
+		<select list="CL_puces" name="CL_puces[]" >
+			<option value='' ></option>
+<?php
+foreach ($array_puces as $puced) {
+	echo "<option value='".$puced['id']."' >".$puced['name']."</option>";
+}
+?>
+</select>
+</div></div>
+<!-- template div sim -->
+<div id="newsim" style="display:none">
+<select list="CL_puces" name="CL_puces[]" >
+	<option value='' ></option>
+	<?php
+	foreach ($array_puces as $puced) {
+		echo "<option value='".$puced['id']."' >".$puced['name']."</option>";
+	}
+	?>
+</select>
+</div>
+<?php } ?>
+<input type="hidden" name="ct" id="ct" value="1" />
+</p>
+</br>
 <p class=rvps11><span class=rvts46>Lot ADL&nbsp; ( </span><span class=rvts42>exple :</span><span class=rvts46> Lot #3&nbsp; )&nbsp; (+)</span></p>
 <p class=rvps11><span class=rvts46>POC&nbsp; ( </span><span class=rvts42>exple :</span><span class=rvts46> POC #1, </span><span class=rvts42>marque</span><span class=rvts46> : yyyyyyyy, </span><span class=rvts42>num. série</span><span class=rvts46> xxxxxxxxxxxx&nbsp; )&nbsp; (+)</span></p>
 <p class=rvps11><span class=rvts46>Equipement&nbsp; ( </span><span class=rvts42>exple :</span><span class=rvts46>&nbsp; Aspirateur num3, </span><span class=rvts42>marque</span><span class=rvts46> : yyyyyyy, </span><span class=rvts42>num. série</span><span class=rvts46> xxxxx&nbsp; )&nbsp; (+)</span></p>
 <p class=rvps11><span class=rvts46>Equipement&nbsp; ( </span><span class=rvts42>exple :</span><span class=rvts46>&nbsp; PSE num 4, </span><span class=rvts42>marque</span><span class=rvts46> :xxxxxxx, </span><span class=rvts42>num. série</span><span class=rvts46> : xxxxxxxxx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )&nbsp; (+)</span></p>
+<?php } ?>
+</br>
 <p class=rvps11><span class=rvts52>Merci de vérifier le certificat d</span><span class=rvts53>’</span><span class=rvts52>aptitude au vol (FTF) + documents d</span><span class=rvts53>’</span><span class=rvts52>identité du passager</span></p>
 <p class=rvps9><span class=rvts42>Le patient voyage assis et chaise roulante aux aéroports / sur civière / avec oxygène </span><span class=rvts54></span></p>
 <div class="row ">
@@ -1254,5 +1343,46 @@ header("Content-Type: text/html;charset=UTF-8");
 	    }
 	  }
 	}
+
+	// add delete dynamicly
+
+
+		/*
+		This script is identical to the above JavaScript function.
+		*/
+		function addsim()
+		{
+			ct = Number(document.getElementById('ct').value);
+			ct++;
+			document.getElementById('ct').value=ct;
+			var div1 = document.createElement('div');
+			div1.id = "simnum_"+ct;
+			// link to delete extended form elements
+			var delLink = '<div style="text-align:right;margin-right:480px;margin-top:-22px"><a href=javascript:deletesim("simnum_'+ ct +'") >(-)</a></div>';
+			//<span style="display: inline-block;text-align: right;"><a href="javascript:deletesim();" id="delsim_button">(-)</a></span>
+			// add options to datalist (list puces dispo)
+			 //document.getElementById('CL_puces').appendChild('<option>test</option>');
+			 //$("#CL_puces").append($("<option>").attr('value', 50).text('item'));
+			div1.innerHTML = document.getElementById('newsim').innerHTML + delLink;
+			document.getElementById('fieldsims_wrapper').appendChild(div1);
+		}
+
+
+		/*function addsim()
+		{
+			var div1 = document.createElement('div');
+			// Get template data
+			div1.innerHTML = document.getElementById('newsim').innerHTML;
+			// append to our form, so that template data
+			//become part of form
+			document.getElementById('fieldsims_wrapper').appendChild(div1);
+		}*/
+		function deletesim(eleid)
+		{
+			d = document;
+			var ele = d.getElementById(eleid);
+			var parentele = d.getElementById('fieldsims_wrapper');
+			parentele.removeChild(ele);
+		}
 </script>
 				</body></html>

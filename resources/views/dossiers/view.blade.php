@@ -1550,9 +1550,10 @@ array_push($listepr,$pr['prestataire_id']);
                                 <td style=";"><?php echo $ommie->titre; ?></td>
                                 <td style=";">
                                     <?php
+ $titre=4;
                                     if ($ommie->parent !== null)
                                     {
-                                       echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$ommie->parent.','.$ommie->titre.');"><i class="far fa-eye"></i> Voir</button>';
+                                       echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$ommie->parent.','.$titre.');"><i class="far fa-eye"></i> Voir</button>';
 
                                     }
                                     else
@@ -4129,8 +4130,9 @@ $("#templateom").val("Select").change();
         var dossier = $('#dossom').val();
         var tempdoc = $("#templateordrem").val();
         var affectea = $("#affectea").val();
-        
-       var heuredateRDV =document.omfilled.CL_heuredateRDV.value;
+        var srctemp = document.getElementById('omfilled').src;
+if (srctemp.indexOf("/odm_medic") === -1 )
+      { var heuredateRDV =document.omfilled.CL_heuredateRDV.value;
        if (heuredateRDV==="")
         {document.getElementById('genomhtml').disabled = false;
              Swal.fire({
@@ -4141,7 +4143,7 @@ $("#templateom").val("Select").change();
             return false;
               
 
-        }
+        }}
   
         var srctemp = document.getElementById('omfilled').src;
 

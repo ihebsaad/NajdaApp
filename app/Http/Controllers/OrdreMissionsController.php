@@ -4050,6 +4050,16 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
 
 
         }}
+if ($omtitre== 4) {
+        while ($omparent !== null) {
+            $arrom = OMMedicInternational::select('id','titre','emplacement','dernier','parent','created_at')->where('id', $omparent)->first();
+
+            $histoom[]=$arrom;
+            $omparent = $arrom['parent'];
+            //return $histodoc;
+        
+
+        }}
        
 header('Content-type: application/json');    
         return json_encode($histoom);
