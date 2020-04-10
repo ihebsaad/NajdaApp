@@ -1284,7 +1284,7 @@ array_push($listepr,$pr['prestataire_id']);
 </div>
 
 <!-- Modal Ouvrir Document-->
-<div class="modal fade" id="opendoc"  role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+<div class="modal fade" id="opendoc"  style="z-index: 1600;"role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
     <div class="modal-dialog" role="document" style="width:900px;height: 450px">
         <div class="modal-content">
             <div class="modal-header">
@@ -2107,7 +2107,7 @@ array_push($listepr,$pr['prestataire_id']);
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button id="fermerhis"type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>
@@ -3422,7 +3422,9 @@ function annuleom(titre,iddoc)
 
 
                     urlf="{{ URL::asset('storage'.'/app/') }}";
-                    aurlf="<a style='color:black' href='"+urlf+"/"+val[1]['emplacement']+"' ><i class='fa fa-download'></i> Télécharger</a>";
+aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\",\""+urlf+"/"+val[1]['emplacement']+"\");'><i class='fas fa-external-link-alt'></i>Aperçu</a>";
+
+                  // aurlf="<a style='color:black' href='"+urlf+"/"+val[1]['emplacement']+"' ><i class='fa fa-download'></i> Télécharger</a>";
                     $("#tabledocshisto tbody").append("<tr><td>"+val[1]['created_at']+"</td><td>"+aurlf+"</td></tr>");
 
                     });
@@ -3478,7 +3480,8 @@ function annuleom(titre,iddoc)
                     urlf="{{ URL::asset('storage') }}";
                     posom=val[1]['emplacement'].indexOf("/OrdreMissions/");
                     empom=val[1]['emplacement'].slice(posom+1);
-                    aurlf="<a style='color:black' href='"+urlf+"/"+empom+"' ><i class='fa fa-download'></i> Télécharger</a>";
+aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\",\""+urlf+"/"+empom+"\");'><i class='fas fa-external-link-alt'></i>Aperçu</a>";
+                   // aurlf="<a style='color:black' href='"+urlf+"/"+empom+"' ><i class='fa fa-download'></i> Télécharger</a>";
                     $("#tableomshisto tbody").append("<tr><td>"+val[1]['created_at']+"</td><td>"+aurlf+"</td></tr>");
 
                     });
