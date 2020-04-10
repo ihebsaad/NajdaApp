@@ -14,7 +14,10 @@
 
  .demande{color:darkorange;font-weight:bold;margin-left:20px;}
 
-    body {font-family: "Open Sans", serif !important;}
+ /*   body {font-family: "Open Sans", serif !important;}*/
+
+ @import url('//fonts.googleapis.com/css?family=Nunito');
+ body,span,label,h1,h2,h3,h4,h5,h6,p,input{font-family:Nunito ,sans-serif!important;}
     /* The radio */
     .radio {
 

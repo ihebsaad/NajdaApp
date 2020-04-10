@@ -33,7 +33,7 @@
                         <table class="table table-striped">
                          <thead>
                          <tr id="headtable">
-                         <th style="width:40%">Dossier</th><th style="width:20%">Statut</th><th style="width:20%">Facturé</th><th style="width:15%">Suppression</th>
+                             <th style="width:15%">Date</th><th style="width:35%">Dossier</th><th style="width:15%">Statut</th><th style="width:20%">Facturé</th><th style="width:10%">Suppression</th>
                          </tr>
                          </thead>
                             <tbody>
@@ -41,13 +41,14 @@
                        $dossier=  \App\Dossier::where('id',$alerte->id_dossier)->first();
                        $abn= $dossier->subscriber_name. ' '.$dossier->subscriber_lastname ;
                        $statut= $alerte->statut;
+                       $datea= date('d/m/Y H:i', strtotime($alerte->created_at)) ;
                        $facture= $alerte->facture; //if($facture!=1){$fact='<label style="color:white;padding:10px 10px 10px 10px" class="bg-danger">Non Facturé';}else{$fact='<label style="color:white;padding:10px 10px 10px 10px" class="bg-success">Facturé</label>';}
                        if($statut=='reouverture'){$stat='Re-Ouverture';}
                        if($statut=='ferme'){$stat='Fermeture';}
                        if($statut=='sanssuite'){$stat='Fermeture <small>Sans Suite</small>';}
                         ?>
-                        <tr> <td style="width:40%"><?php echo $alerte->ref_dossier . ' '.$abn; ?> </td><td style="width:20%"><?php echo $stat; ?> </td><td style="width:20%">
-                                <?php // echo $fact; ?>
+                       <tr><td style="width:15%"><?php   echo $datea; ?></td> <td style="width:35%"><?php echo $alerte->ref_dossier . ' '.$abn; ?> </td><td style="width:15%"><?php echo $stat; ?> </td><td style="width:20%">
+
                                      <div class="radio" id="uniform-actif">
                            <label><span class="checked">
                             <input  class="actus-<?php echo $alerte->id;?>"  type="checkbox"    id="actus-<?php echo $alerte->id;?>"    <?php if ($facture ==1){echo 'checked'; }  ?>  onclick="changing(this,'<?php echo $alerte->id; ?>' );"      >

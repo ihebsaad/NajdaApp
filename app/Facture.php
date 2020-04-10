@@ -9,8 +9,8 @@ class Facture extends Model
   protected $fillable = [
 
 	'par',	'date_arrive',	'mois',	'client',	'reference',	'date_valid',	'date_facture',	'date_reception',	
-	'date_scan',	'date_email',	'date_bord',	'date_poste',	'delai_email',	'delai_poste'
-	  
+	'date_scan',	'date_email',	'date_bord',	'date_poste',	'delai_email',	'delai_poste',
+	  'iddossier','facture_prestataire','prestataire'
      ];
 	 
 	 

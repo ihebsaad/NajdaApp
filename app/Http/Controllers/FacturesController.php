@@ -91,6 +91,7 @@ class FacturesController extends Controller
         if( ($request->get('date_arrive') !=null || $request->get('reference') !=null)) {
 
             $facture = new Facture([
+                'iddossier' => $request->get('dossier'),
                 'date_arrive' => $request->get('date_arrive'),
                 'reference' => $request->get('reference'),
                 'par' => $userid,

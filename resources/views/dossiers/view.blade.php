@@ -8,10 +8,12 @@ use App\Client;
 use App\ClientGroupe;
 use App\Adresse;
 use App\Mission;
+use App\Facture;
 
 ?>
 <?php use \App\Http\Controllers\PrestationsController;
      use  \App\Http\Controllers\PrestatairesController;
+     use  \App\Http\Controllers\ClientsController;
 use  \App\Http\Controllers\DossiersController ;
 use  \App\Http\Controllers\EnvoyesController ;
 use  \App\Http\Controllers\EntreesController ;
@@ -286,6 +288,12 @@ function custom_echo($x, $length)
                             </a>
                         </li>
 
+
+                        <li class="nav-item ">
+                            <a class="nav-link  " href="#tab9" data-toggle="tab">
+                                <i class="fas a-lg fa-file-invoice"></i>  Factures
+                            </a>
+                        </li>
 
                     </ul>
 
@@ -1733,7 +1741,58 @@ array_push($listepr,$pr['prestataire_id']);
 
              </div> <!--fin tab missions-->
 
-            </div>
+
+<?php           $user = auth()->user();
+                $type =    $user->user_type;
+                if($type=='admin' || $type=='bureau' ||$type=='financier' ){
+?>
+                <div id="tab9" class="tab-pane fade">
+
+                    <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
+                        <thead>
+                        <tr id="headtable">
+                            <th style="width:10%">ID</th>
+                            <th style="width:10%">Date</th>
+                            <th style="width:15%">N° Facture</th>
+                            <th style="width:20%">Assistance</th>
+                            <th style="width:20%">Prestataire</th>
+                          </tr>
+
+                        </thead>
+                        <tbody>
+                        <?php $factures= Facture::where('iddossier',$dossier->id)->get() ;?>
+                        @foreach($factures as $facture)
+
+                            <tr  >
+                                <td style="width:10%;">
+                                    <a href="{{action('FacturesController@view', $facture->id)}}" ><?php echo sprintf("%05d",$facture->id);?></a>
+                                    </td>
+                                <td style="width:10%">
+                                    <?php echo date('d/m/Y H:i', strtotime($facture->created_at)) ; ?>
+                                 </td>
+                                <td style="width:15%">
+                                    <?php echo $facture->reference ; ?>
+                                    </td>
+                                <td style="width:20%">
+                                    <?php $client =   $dossier->customer_id ; echo   ClientsController::ClientChampById('name',$client);?>
+                                </td>
+                                <td style="width:20%">
+                                    <?php $prest=  $facture->prestataire; ?>
+                                    <a  href="{{action('PrestatairesController@view', $prest)}}" ><?php echo PrestationsController::PrestataireById($prest);  ?>
+                                    </a>
+                                </td>
+
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+
+                </div>
+<?php
+                }
+                ?>
+
+                </div>
 
 
         </div>

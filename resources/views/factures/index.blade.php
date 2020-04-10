@@ -8,7 +8,10 @@
 
 @section('content')
 
-    <?php use App\Http\Controllers\DossiersController;use \App\Http\Controllers\UsersController;
+    <?php use App\Dossier;use App\Http\Controllers\DossiersController;
+    use \App\Http\Controllers\UsersController;
+    use \App\Http\Controllers\ClientsController;
+    use \App\Http\Controllers\PrestationsController;
     $users=UsersController::ListeUsers();
 
     $CurrentUser = auth()->user();
@@ -36,27 +39,27 @@
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
             <tr id="headtable">
-                <th style="width:5%">N°</th>
+                <th style="width:5%">ID</th>
+                <th style="width:15%">Dossier</th>
+                <th style="width:15%">Assistance</th>
+                <th style="width:15%">Intervanant</th>
+                 <th style="width:10%">N°Facture</th>
                 <th style="width:10%">Arrivé</th>
-                <th style="width:17%">Client</th>
-                <th style="width:12%">N°Facture</th>
                 <th style="width:10%">Facturation</th>
                 <th style="width:10%">Réception</th>
-                <th style="width:10%">Scan</th>
-                <th style="width:10%">Email</th>
-                <th style="width:10%">Bordereau</th>
+
 				<th class="no-sort" style="width:4%">Actions</th>
               </tr>
             <tr>
                 <th style="width:5%">ID</th>
-                <th style="width:10">Arrivé</th>
-                <th style="width:17%">Client</th>
-                <th style="width:12%">N°Facture</th>
+                <th style="width:15%">Dossier</th>
+                <th style="width:15%">Assistance</th>
+                <th style="width:15%">Intervanant</th>
+                 <th style="width:10%">N°Facture</th>
+                <th style="width:10%">Arrivé</th>
                 <th style="width:10%">Facturation</th>
                 <th style="width:10%">Réception</th>
-                <th style="width:10%">Scan</th>
-                <th style="width:10%">Email</th>
-                <th style="width:10%">Bordereau</th>
+
                 <th class="no-sort" style="width:4%">Actions</th>
             </tr>
             </thead>
@@ -66,14 +69,28 @@
                 <tr>
 
 				<td style="width:5%"  ><a href="{{action('FacturesController@view', $facture->id)}}" ><?php echo sprintf("%05d",$facture->id);?></a></td>
+                    <td style="width:15%">
+                        <?php if(isset($facture->iddossier)){ $iddossier= $facture->iddossier; $Folder= App\Dossier::where('id',$iddossier)->first();$ref=$Folder['reference_medic'] ; $abn= $Folder['subscriber_name'] .' '.$Folder['subscriber_lastname'] ;
+                         ?>
+                           <a href="{{action('DossiersController@view', $facture->iddossier)}}" >
+                               <?php   echo     $ref.' ' .$abn ; ?></a> <?php
+                            }
+                        ?>
+                    </td>
+                      <td style="width:15%">
+                        <?php
+                            $client =   $Folder['customer_id'] ;
+                            echo   ClientsController::ClientChampById('name',$client);?>
+                    </td>
+                      <td style="width:15%">
+                        <?php $prest=  $facture->prestataire; ?>
+                        <a  href="{{action('PrestatairesController@view', $prest)}}" ><?php echo PrestationsController::PrestataireById($prest);  ?>
+                        </a>
+                    </td>
+                    <td style="width:10%" >{{$facture->reference}}</td>
                     <td  style="width:10%">{{$facture->date_arrive}}</td>
-                    <td  style="width:17%"> <?php echo DossiersController::ClientById($facture->client); ?></td>
-                    <td style="width:12%" >{{$facture->reference}}</td>
                     <td style="width:10%"  >{{$facture->date_facture}}</td>
                     <td style="width:10%"  >{{$facture->date_reception}}</td>
-                    <td style="width:10%"  >{{$facture->date_scan}}</td>
-                    <td style="width:10%"  >{{$facture->date_email}}</td>
-                    <td style="width:10%"  >{{$facture->date_bord}}</td>
  					<td style="width:4%"   >
                         @can('isAdmin')
                             <a  href="{{action('FacturesController@destroy', $facture['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
@@ -118,6 +135,18 @@
                                 <input class="form-control"  id="reference"  type="text" class="form-control input"   />
 
                             </div>
+
+                            <div class="form-group">
+                                <label for="type"> Dossier : </label>
+                                     <?php         $dossiers = Dossier::orderBy('created_at', 'desc')->get(); ?>
+                                    <select id ="iddossier"  class="form-control " style="width: 100%;color:black!important;">
+                                        <option></option>
+                                        <?php foreach($dossiers as $ds)
+
+                                        {
+                                            echo '<option style="color:black!important" title="'.$ds->id.'" value="'.$ds->id.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name .' '.$ds->subscriber_lastname .' </option>';}     ?>
+                                    </select>
+                             </div>
                         </form>
                     </div>
 
@@ -155,9 +184,15 @@
 
     <style>.searchfield{width:100px;}</style>
 
+    <!--select css-->
+    <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+
+    <script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
+            $("#iddossier").select2();
 
 
             $('#mytable thead tr:eq(1) th').each( function () {
@@ -167,6 +202,8 @@
 
             var table = $('#mytable').DataTable({
                 orderCellsTop: true,
+                order:[],
+
                 dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
                 responsive:true,
                 buttons: [
@@ -234,13 +271,14 @@
             $('#add').click(function(){
                 var date_arrive = $('#date_arrive').val();
                 var reference = $('#reference').val();
+                var dossier = $('#iddossier').val();
                 if ((date_arrive != '' ) || (reference != '' )   )
                 {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
                         url:"{{ route('factures.saving') }}",
                         method:"POST",
-                        data:{reference:reference,date_arrive:date_arrive, _token:_token},
+                        data:{reference:reference,date_arrive:date_arrive,dossier:dossier, _token:_token},
                         success:function(data){
                             //   alert('Added successfully');
                             window.location =data;
