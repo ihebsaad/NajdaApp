@@ -118,7 +118,9 @@ if (isset($_POST['clientIMA'])) { ?>
 					<span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">          Aller/Retour</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-1.45pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_AllerRetour'])) { echo $_POST['CL_AllerRetour']; } else {echo "non";} ?></span></p>
 	</div>
 </div>
+<?php if (isset($_POST['affectea'])) { if ($_POST['affectea'] === "externe") { ?>	
 <p style="margin-top:-40px!important;line-height:30%; margin-left:2.85pt; margin-bottom:5px; widows:0; orphans:0; font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic; color:#000000">Le présent ordre de mission fait office de prise en charge et copie doit être adressée avec votre facture</span></p>
+<?php }} ?>
 <div class="row" style=" margin-left: 0px;">
 	<p style="margin-top: 0pt;margin-bottom:0pt; widows:0; orphans:0; font-size:9pt">
 			<span style="font-family:'Times New Roman'; font-weight:bold">Identité personne à transporter:</span>
