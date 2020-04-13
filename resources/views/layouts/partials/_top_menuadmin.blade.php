@@ -99,10 +99,10 @@ $user_type=$user->user_type;
             </div>
 
             <div class="col-sm-2">
-                <a href="{{ route('emails.envoimailtous') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                <a href="{{ route('clients.mails') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                     <span class="   fas fa-mail-bulk"></span>
                     <br>
-                Emails Groupés
+                Emails Clients
                 </a>
             </div>
 

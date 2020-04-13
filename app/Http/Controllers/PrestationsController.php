@@ -138,14 +138,15 @@ class PrestationsController extends Controller
             // Envoi de mail
           //  if ($autorise != '') {
 
-                if($autorise =='procedure'){$to='ihebsaad@gmail.com';}
-                //  if($autorise =='procedure'){$to='nejib.karoui@medicmultiservices.com';}
+             if($autorise ==''){$to='nejib.karoui@medicmultiservices.com';}
+
+            // if($autorise =='procedure'){$to='ihebsaad@gmail.com';}
+                 if($autorise =='procedure'){$to='nejib.karoui@medicmultiservices.com';}
                 if($autorise =='nejib'){$to='nejib.karoui@gmail.com';}
                 if($autorise =='salah'){$to='salah.harzallah@topnet.tn'; }//mohsalah.harzallah@gmail.com
                 if($autorise =='mahmoud'){$to='mahmoud.helali@gmail.com';}
                 if($autorise =='maher'){$to='maher.benothmane@najda-assistance.com';}
 
-                if($autorise ==''){$to='ihebsaad@gmail.com';}
 
                     $parametres =  DB::table('parametres')
                     ->where('id','=', 1 )->first();
@@ -161,15 +162,15 @@ class PrestationsController extends Controller
                 Mail::setSwiftMailer($swiftMailer);
 
                 $now=date('d/m/Y');
-               // $to = array('nejib.karoui@medicmultiservices.com');
-                  $to=array('ihebsaad@gmail.com');
+                $to = array('nejib.karoui@medicmultiservices.com');
+                //  $to=array('ihebsaad@gmail.com');
                  $sujet = 'Nouvelle prestation effectuée';
 
                 $contenu = 'Bonjour de Najda, <br><br>Votre autorisation a été utilisée par ' . $nomuser . ' en date du: ' . $now .  ' <br>pour choisir manuellement le prestataire : ' . $nomprest . ' dans la gestion du dossier : '. $ref.' | '.$abn.'<br>  pour la prestation: '.$TypePrest.' ,  '.$Specialite.' - '. $details . '<br> qui aura lieu le ' . $date .  ' à  '.$gouvernorat ;
 
 
-                $cc = array('ihebs001@gmail.com', 'saadiheb@gmail.com');
-               //   $cc=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
+              //  $cc = array('ihebs001@gmail.com', 'saadiheb@gmail.com');
+                  $cc=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
 
                 Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$from,$fromname) {
                     $message
@@ -327,12 +328,12 @@ class PrestationsController extends Controller
 
         // Mail au SMQ Najda
 
-        $cc2=array( 'saadiheb@gmail.com');
-      //  $cc2=array( 'nejib.karoui@medicmultiservices.com');
+       // $cc2=array( 'saadiheb@gmail.com');
+         $cc2=array( 'nejib.karoui@medicmultiservices.com');
         Mail::send([], [], function ($message) use ( $sujet,$cc2, $contenu2,$from,$fromname) {
             $message
-                ->to('ihebsaad@gmail.com')
-             //   ->to('smq@medicmultiservices.com')
+              //  ->to('ihebsaad@gmail.com')
+                 ->to('smq@medicmultiservices.com')
                 // ->to()
 
                 ->cc($cc2 ?: [])
@@ -547,8 +548,8 @@ class PrestationsController extends Controller
         $user = auth()->user();
         $nomuser = $user->name . ' ' . $user->lastname;
 
-       // $to=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
-        $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
+         $to=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
+       // $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
         $sujet= 'Modification de la priorité d\'un prestataire';
         $contenu= 'Bonjour de Najda,<br>l\'agent '.$nomuser.' a modifié la priorité du prestataire '.$nomprest.'<br>
         Priorité : '.$priorite.' - Type de prestation : '.$TypePrest. ' - Spécialité :  '.$Specialite.' -  Gouvernorat : '.$gouvernorat. ' - Ville: '.$ville.'  

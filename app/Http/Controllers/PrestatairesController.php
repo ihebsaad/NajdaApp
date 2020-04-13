@@ -142,8 +142,8 @@ class PrestatairesController extends Controller
          $prenom= $request->get('prenom');
         $dossier= $request->get('dossier');
 
-        $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
-        // $to=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
+       // $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
+         $to=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
 
         $user = auth()->user();
         $nomuser = $user->name . ' ' . $user->lastname;
