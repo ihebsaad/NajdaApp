@@ -128,7 +128,7 @@ $seance =  DB::table('seance')
             </a>
         </div>
 
-        
+
        <?php if($user_type=='financier' || $user_type=='bureau'  )
         {?>
 

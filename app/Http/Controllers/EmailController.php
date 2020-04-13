@@ -4212,189 +4212,185 @@ $id=0;
     function checksmsxml()
     {
 
-       $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
+        $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
 
 
         $files = scandir(storage_path() . "/SMS/");
 
         foreach($files as $file){
 
-
-           //   $pathfile= storage_path() . "/SMS/sms.xml";
+            //   $pathfile= storage_path() . "/SMS/sms.xml";
             if(   $file!= '.' && $file != '..')
             {
                 $fullname=basename(storage_path() . "/SMS/".$file) ;
-              //   Log::info(' fullname : '.$fullname);
 
-                //      if ( strpos($file,'.xml' ))
-             //   if ( $file_parts['extension'] =='xml' )
                 if ( true )
                 {
 
-                $xml = file_get_contents(storage_path() . "/SMS/".$file);
-                $items = simplexml_load_string($xml);
+                    $xml = file_get_contents(storage_path() . "/SMS/".$file);
+                    $items = simplexml_load_string($xml);
 
-              //  $tel=$arr->sms->gsm ;
-                $tel=$items[0]->gsm;
-                $contenu=$items[0]->texte;
+
+                    //  $tel=$arr->sms->gsm ;
+                    $tel=$items[0]->gsm;
+                    $contenu=$items[0]->texte;
                     $contenu= str_replace ( '&' ,'' ,$contenu);
                     $contenu= str_replace ( '<' ,'' ,$contenu);
                     $contenu= str_replace ( '>' ,'' ,$contenu);
 
-              //  dd($tel);
-                Log::info('SMS reçu $tel: '.$tel);
+                    Log::info('SMS reçu $tel: '.$tel);
 
-                // $contenu=$arr->sms->texte ;
+                    // $contenu=$arr->sms->texte ;
 
-                // supprimer le fichier
-                unlink (storage_path() . "/SMS/".$file);
-
+                    // supprimer le fichier
+                    unlink (storage_path() . "/SMS/".$file);
 
 
-                $refdossier='';$dossierid=0;$nomassure='';
-                $statut = 0;
-                foreach ($dossiers as $dos) {
-                    $ref=trim(strval($dos['reference_medic']));
-                    $refCL=trim(strval($dos['reference_customer']));
-                    if ($refCL==''){$refCL='XX';}
-                    if ($ref==''){$ref='dossiervide';}
 
-                    if (
-                        (strpos($contenu, $ref) !==false ) ||
+                    $refdossier='';$dossierid=0;$nomassure='';
+                    $statut = 0;
+                    foreach ($dossiers as $dos) {
+                        $ref=trim(strval($dos['reference_medic']));
+                        $refCL=trim(strval($dos['reference_customer']));
+                        if ($refCL==''){$refCL='XX';}
+                        if ($ref==''){$ref='dossiervide';}
 
-                        ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
-                    {
-                        $refdossier = trim($dos['reference_medic']);
-                        $dossierid = intval($dos['id']);
-                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
-                        $statut = 1;
-                        break;
-                    }
-                }
+                        if (
+                            (strpos($contenu, $ref) !==false ) ||
 
-
-                $date=date('Y-m-d H:i:s');
-
-                $entree = new Entree([
-
-                    'destinataire' =>  'SMS Najda',
-                    'emetteur' =>  ($tel),
-                    'sujet' =>  ('sms'),
-                    'contenu'=>  ($contenu) ,
-                    'contenutxt'=>  ($contenu) ,
-                    'mailid'=>  'sms-'.$date,
-                    'viewed'=>0,
-                    'statut'=>0,
-                    'nb_attach'=>0,
-                    'reception'=>$date,
-                    'type'=>'sms',
-                    'dossier'=>$refdossier,
-                    'dossierid'=>$dossierid,
-                    'statut'=>$statut,
-
-                ]);
-
-
-                if ($this->checkEmailExiste( 'sms-'.$date)==0){
-                    $entree->save();
-                    $id=$entree->id;
-                }
-
-                /*********************/
-                if($refdossier!= ''){
-
-
-                    //   $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
-                    //   $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
-                    $userid=$this->AgentAffecte($dossierid);
-
-                    //  $user=  DB::table('users')->where('id','=', $userid )->first();
-                    if($userid>0)
-                    {
-                        //// Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
-
-                        if($id>0) {
-                            $notif = new Notif([
-                                'emetteur' => $tel,
-                                'sujet' => 'sms',
-                                'reception' => $date,
-                                'type' => 'sms',
-                                'refdossier' => $refdossier,
-                                'affiche' => -1, // traitée ou non
-                                'dossierid' => $dossierid,
-                                'nomassure' => $nomassure,
-                                'statut' => $statut,  //dispatchée ou non
-                                'entree' => $entree->id,
-                                'user' => $userid
-
-                            ]);
-                            $notif->save();
+                            ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
+                        {
+                            $refdossier = trim($dos['reference_medic']);
+                            $dossierid = intval($dos['id']);
+                            $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
+                            $statut = 1;
+                            break;
                         }
+                    }
+
+
+                    $date=date('Y-m-d H:i:s');
+
+                    $entree = new Entree([
+
+                        'destinataire' =>  'SMS Najda',
+                        'emetteur' =>  ($tel),
+                        'sujet' =>  ('sms'),
+                        'contenu'=>  ($contenu) ,
+                        'contenutxt'=>  ($contenu) ,
+                        'mailid'=>  'sms-'.$date,
+                        'viewed'=>0,
+                        'statut'=>0,
+                        'nb_attach'=>0,
+                        'reception'=>$date,
+                        'type'=>'sms',
+                        'dossier'=>$refdossier,
+                        'dossierid'=>$dossierid,
+                        'statut'=>$statut,
+
+                    ]);
+
+
+                    if ($this->checkEmailExiste( 'sms-'.$date)==0){
+                        $entree->save();
+                        $id=$entree->id;
+                    }
+
+                    /*********************/
+                    if($refdossier!= ''){
+
+
+                        //   $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                        //   $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                        $userid=$this->AgentAffecte($dossierid);
+
+                        //  $user=  DB::table('users')->where('id','=', $userid )->first();
+                        if($userid>0)
+                        {
+                            //// Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+
+                            if($id>0) {
+                                $notif = new Notif([
+                                    'emetteur' => $tel,
+                                    'sujet' => 'sms',
+                                    'reception' => $date,
+                                    'type' => 'sms',
+                                    'refdossier' => $refdossier,
+                                    'affiche' => -1, // traitée ou non
+                                    'dossierid' => $dossierid,
+                                    'nomassure' => $nomassure,
+                                    'statut' => $statut,  //dispatchée ou non
+                                    'entree' => $entree->id,
+                                    'user' => $userid
+
+                                ]);
+                                $notif->save();
+                            }
+
+                        }
+                        else{
+                            $seance =  DB::table('seance')
+                                ->where('id','=', 1 )->first();
+                            $disp=$seance->dispatcheur ;
+
+                            //// Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+
+                            if($id>0) {
+                                $notif = new Notif([
+                                    'emetteur' => $tel,
+                                    'sujet' => 'sms',
+                                    'reception' => $date,
+                                    'type' => 'sms',
+                                    'refdossier' => $refdossier,
+                                    'affiche' => -1, // traitée ou non
+                                    'dossierid' => $dossierid,
+                                    'nomassure' => $nomassure,
+                                    'statut' => $statut,  //dispatchée ou non
+                                    'entree' => $entree->id,
+                                    'user' => $disp
+
+                                ]);
+                                $notif->save();
+                            }
+
+                        }
+
+
 
                     }
                     else{
+
                         $seance =  DB::table('seance')
                             ->where('id','=', 1 )->first();
                         $disp=$seance->dispatcheur ;
 
-                        //// Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+                        if($disp) {
 
+                            ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
 
-                        if($id>0) {
-                            $notif = new Notif([
-                                'emetteur' => $tel,
-                                'sujet' => 'sms',
-                                'reception' => $date,
-                                'type' => 'sms',
-                                'refdossier' => $refdossier,
-                                'affiche' => -1, // traitée ou non
-                                'dossierid' => $dossierid,
-                                'nomassure' => $nomassure,
-                                'statut' => $statut,  //dispatchée ou non
-                                'entree' => $entree->id,
-                                'user' => $disp
+                            if($id>0) {
+                                $notif = new Notif([
+                                    'emetteur' => ($tel),
+                                    'sujet' => ('sms'),
+                                    'reception' => $date,
+                                    'type' => 'sms',
+                                    'refdossier' => $refdossier,
+                                    'affiche' => -1, // traitée ou non
+                                    'dossierid' => $dossierid,
+                                    'nomassure' => $nomassure,
+                                    'statut' => $statut,  //dispatchée ou non
+                                    'entree' => $entree->id,
+                                    'user' => $disp
 
-                            ]);
-                            $notif->save();
+                                ]);
+                                $notif->save();
+                            }
                         }
 
+
+
                     }
-
-
-
-                }
-                else{
-
-                    $seance =  DB::table('seance')
-                        ->where('id','=', 1 )->first();
-                    $disp=$seance->dispatcheur ;
-
-                    if($disp) {
-
-                        ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
-
-                        if($id>0) {
-                            $notif = new Notif([
-                                'emetteur' => ($tel),
-                                'sujet' => ('sms'),
-                                'reception' => $date,
-                                'type' => 'sms',
-                                'refdossier' => $refdossier,
-                                'affiche' => -1, // traitée ou non
-                                'dossierid' => $dossierid,
-                                'nomassure' => $nomassure,
-                                'statut' => $statut,  //dispatchée ou non
-                                'entree' => $entree->id,
-                                'user' => $disp
-
-                            ]);
-                            $notif->save();
-                        }
-                    }
-
-
-
-                }
 
                 }
             }
@@ -4402,6 +4398,7 @@ $id=0;
 
 
     }
+
 
 
 
@@ -6964,12 +6961,15 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         return view('emails.test');
     }
 
+
     function sendsmsxml(Request $request)
     {
 
         $num = trim($request->get('destinataire'));
         $contenu = trim( $request->get('message'));
         $contenu= str_replace ( '&' ,'' ,$contenu);
+        $contenu= str_replace ( '<' ,'' ,$contenu);
+        $contenu= str_replace ( '>' ,'' ,$contenu);
 
         $description = trim( $request->get('description'));
         $doss = trim( $request->get('dossier'));
@@ -6980,16 +6980,18 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             <gsm>'.$num.'</gsm>
             <texte>'.$contenu.'</texte>
         </sms>';
-        $date=date('dmYHis');
-       $filepath = storage_path() . '/SENDSMS/sms_'.$num.'_'.$date.'.xml';
-      //  $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
 
-     //  $old = umask(0);
+        $date=date('dmYHis');
+        $filepath = storage_path() . '/SENDSMS/sms_'.$num.'_'.$date.'.xml';
+        //   $filepath = storage_path() . '/SENDSMS/sms'.$num.'.xml';
+        // $filepath = storage_path() . '/SMS/sms'.$num.'.xml';
+
+        //  $old = umask(0);
 
         echo file_put_contents($filepath,$xmlString,0);
-    //    chmod($filepath, 0755);
+        //    chmod($filepath, 0755);
 
-      //  umask($old);
+        //  umask($old);
 
         $user = auth()->user();
         $nomuser=$user->name.' '.$user->lastname;
@@ -7014,13 +7016,15 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
 
 
-  $param= App\Parametre::find(1);$env=$param->env;
-  $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+
+        $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+
         $urlsending=$urlapp.'/envoyes';
-     //   echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
+        //   echo ('<script> window.location.href = "'.$urlsending.'";</script>') ;
         return redirect($urlsending)->with('success', '  Envoyé ! ');
 
     }
+
 
     function sendsms(Request $request)
     {

@@ -1,53 +1,53 @@
- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="eSolutions">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="userId" content="{{ Auth::check() ? Auth::user()->id : '' }}">
- <link rel="shortcut icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
- <link rel="icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
-    <meta charset="UTF-8">
-    <title>
-        @section('title')
-            | Najda Assistance
-        @show
-    </title>
- <style>
-     #swal2-content{font-size:15px}
-     </style>
-    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-      <!-- CSRF Token -->
- {{ csrf_field() }}
+<link rel="shortcut icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
+<link rel="icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
+<meta charset="UTF-8">
+<title>
+    @section('title')
+        | Najda Assistance
+    @show
+</title>
+<style>
+    #swal2-content{font-size:15px}
+</style>
+<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+<!-- CSRF Token -->
+{{ csrf_field() }}
 
- <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-    <!-- global css -->
-    <link href="{{ URL::asset('public/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
-    <!--<link href="{{ asset('assets/css/calendardate.css') }}" rel="stylesheet" type="text/css"/>-->
-    <link href="{{ URL::asset('public/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ URL::asset('public/css/custom_css/chandra.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ URL::asset('public/css/custom_css/metisMenu.css') }}"  rel="stylesheet" type="text/css"/>
-    <link href="{{ URL::asset('public/css/custom_css/panel.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ URL::asset('public/css/custom_css/fixed_layout.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ URL::asset('public/css/custom_css/additional.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ URL::asset('public/css/custom_css/nestable_list.css') }}" rel="stylesheet">
-    <link href="{{ URL::asset('public/css/custom_css/owl.carousel.min.css') }}" rel="stylesheet">
-    <link href="{{ URL::asset('public/css/custom_css/alertmessage.css') }}" rel="stylesheet">
-    <link href="{{ URL::asset('public/js/jstree/themes/default/style.min.css') }}" rel="stylesheet">
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+<!-- global css -->
+<link href="{{ URL::asset('public/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
+<!--<link href="{{ asset('assets/css/calendardate.css') }}" rel="stylesheet" type="text/css"/>-->
+<link href="{{ URL::asset('public/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ URL::asset('public/css/custom_css/chandra.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ URL::asset('public/css/custom_css/metisMenu.css') }}"  rel="stylesheet" type="text/css"/>
+<link href="{{ URL::asset('public/css/custom_css/panel.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ URL::asset('public/css/custom_css/fixed_layout.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ URL::asset('public/css/custom_css/additional.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ URL::asset('public/css/custom_css/nestable_list.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('public/css/custom_css/owl.carousel.min.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('public/css/custom_css/alertmessage.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('public/js/jstree/themes/default/style.min.css') }}" rel="stylesheet">
 
- <link href="{{ URL::asset('public/css/datepicker.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('public/css/datepicker.css') }}" rel="stylesheet">
 
- <!-- end of global css -->
- <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/styles.css') }}" />
- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<!-- end of global css -->
+<link rel="stylesheet" href="{{ URL::asset('resources/assets/css/styles.css') }}" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
- <!--page level css-->
-    @yield('header_styles')
+<!--page level css-->
+@yield('header_styles')
 
-    <!-- include alertify css -->
+<!-- include alertify css -->
 
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/alertify.css') }}">
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/alertify-bootstrap.css') }}">
@@ -59,21 +59,21 @@
 <script src="{{  URL::asset('public/js/jquery-1.11.1.min.js') }}" type="text/javascript"></script>
 <script src="{{  URL::asset('public/js/app.js') }}" type="text/javascript"></script>
 
- <script src="https://cdnjs.cloudflare.com/ajax/libs/push.js/1.0.5/push.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/push.js/1.0.5/push.js"></script>
 
- <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
- <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 
 
- <?php
-$urlapp="http://$_SERVER[HTTP_HOST]/najdatest";
+<?php
+$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 $urlnotif=$urlapp.'/entrees/show/' ;
 //$urlnotif = preg_replace('/\s+/', '', $urlnotif);
 
 
 ?>
- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css" />
 <script>
 
     $(document).ready(function(){
@@ -155,21 +155,21 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
                     if(parseInt(data)>1)
                     {
-                   /*    Push.create("Nouvelle Notification", {
+                        /*    Push.create("Nouvelle Notification", {
 
-                            body: 'Nouvelle Notification',
-                            icon: "{{-- asset('public/img/najda.png') --}}",
-                            timeout: 5000,
+                         body: 'Nouvelle Notification',
+                         icon: "{{-- asset('public/img/najda.png') --}}",
+                     timeout: 5000,
 
-                            onClick: function(){
-                                // window.focus();
-                                // this.close();
-                               // window.location ='<?php // echo $urlapp; ?>/entrees/show/'+parsed['data']['entree']['id'];
+                     onClick: function(){
+                     // window.focus();
+                     // this.close();
+                     // window.location ='<?php // echo $urlapp; ?>/entrees/show/'+parsed['data']['entree']['id'];
 
-                            }
+                     }
 
-                        });
-                        */
+                     });
+                     */
                     }
                     //Send another request in n seconds.
                     setTimeout(function(){
@@ -179,6 +179,22 @@ $urlnotif=$urlapp.'/entrees/show/' ;
             });
 
 
+        }
+
+        function checksms(){
+            $.ajax({
+                type: "get",
+                url: "<?php echo $urlapp; ?>/emails/checksmsxml",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check boite 1 : '+data);
+                    //Send another request in n seconds.
+                    setTimeout(function(){
+                        checkemails1();
+                    }, 5000);  //5 secds
+                }
+            });
         }
 
 
@@ -263,7 +279,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
             });
         }
 
-            //operations@medicinternational.tn
+        //operations@medicinternational.tn
         function checkemails6(){
             $.ajax({
                 type: "get",
@@ -363,7 +379,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
         function checkdemandes(){
             $.ajax({
                 type: "get",
-              //  data:{nom:nom, _token:_token},
+                //  data:{nom:nom, _token:_token},
                 url: "<?php echo $urlapp; ?>/checkdemandes",
                 success:function(data)
                 {
@@ -378,7 +394,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                         var id=obj.id ;
                         var par=obj.par ;
                         var role=obj.role ;
-                         var vers=obj.vers ;
+                        var vers=obj.vers ;
                         var emetteur=obj.emetteur ;
                         var type=obj.type ;
 
@@ -386,30 +402,30 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                         if (type=='role')
                         {
                             var message= emetteur+' a demandé de prendre le rôle : '+role;
-                         const swalWithBootstrapButtons = Swal.mixin({
-                            customClass: {
-                                confirmButton: 'btn btn-success',
-                                cancelButton: 'btn btn-danger'
-                            },
-                            buttonsStyling: false,
-                        })
+                            const swalWithBootstrapButtons = Swal.mixin({
+                                customClass: {
+                                    confirmButton: 'btn btn-success',
+                                    cancelButton: 'btn btn-danger'
+                                },
+                                buttonsStyling: false,
+                            })
 
-                        swalWithBootstrapButtons.fire({
-                            title: 'changement de rôle',
-                            text: message,
-                            type: 'warning',
-                            showCancelButton: true,
-                            confirmButtonText: 'Ok !',
-                            cancelButtonText: 'Non',
-                         //   reverseButtons: true
-                        }).then((result) => {
-                            if (result.value) {
+                            swalWithBootstrapButtons.fire({
+                                title: 'changement de rôle',
+                                text: message,
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Ok !',
+                                cancelButtonText: 'Non',
+                                //   reverseButtons: true
+                            }).then((result) => {
+                                if (result.value) {
 
 
-                           // affectation du role ok =true
+                            // affectation du role ok =true
                             var _token = $('input[name="_token"]').val();
 
-                             $.ajax({
+                            $.ajax({
 
                                 url: "{{ route('home.affecterrole') }}",
                                 method: "POST",
@@ -420,19 +436,19 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                                 }
                             });
 
-                        swalWithBootstrapButtons.fire(
-                            'Attribué!',
-                            'le rôle '+role+' n\'est plus parmi vos permissions ',
-                            'success'
-                        );
+                            swalWithBootstrapButtons.fire(
+                                'Attribué!',
+                                'le rôle '+role+' n\'est plus parmi vos permissions ',
+                                'success'
+                            );
 
-                    } else if (
-                        // Read more about handling dismissals
-                    result.dismiss === Swal.DismissReason.cancel
-                    ) {
+                        } else if (
+                            // Read more about handling dismissals
+                        result.dismiss === Swal.DismissReason.cancel
+                        ) {
                             var _token = $('input[name="_token"]').val();
 
-                             // ok =false
+                            // ok =false
                             $.ajax({
                                 url: "{{ route('home.affecterrole') }}",
                                 method: "POST",
@@ -444,14 +460,14 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                             });
 
 
-                        swalWithBootstrapButtons.fire(
-                            'Non attribué',
-                            'le rôle '+role+' reste parmi vos permissions ',
-                            'error'
-                        )
+                            swalWithBootstrapButtons.fire(
+                                'Non attribué',
+                                'le rôle '+role+' reste parmi vos permissions ',
+                                'error'
+                            )
 
-                    }
-                    })
+                        }
+                        })
                         } // end type=role
 
 
@@ -533,7 +549,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
                         if(type=='reponsedemande')
                         {
-                          var rep=0;
+                            var rep=0;
                             if(role=='oui')
                             {
                                 rep=1;
@@ -593,9 +609,9 @@ $urlnotif=$urlapp.'/entrees/show/' ;
             });
         }
 
-<?php
+        <?php
 
-?>
+        ?>
 
 
         function checkNotifs(){
@@ -606,10 +622,10 @@ $urlnotif=$urlapp.'/entrees/show/' ;
                 {
                     //console.log the response
                     console.log('check new notif   :'+data);
-               //  Data=   JSON.stringify(data);
+                    //  Data=   JSON.stringify(data);
 
                     if(data )
-                   {
+                    {
 
                         showNotif(data);
 
@@ -627,19 +643,19 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
 
         checkNotifs();
-       // checkemails();	//test
-       /*  checkemails1();  // 24ops
-         checkemails2();  // VAT
-         checkemails3(); //MEDIC
-         checkemails4();  //TM
-         checkemails5();   //TV
-         checkemails6(); // MI
-         checkemails7();   // TPA
-         checkemails8();   //TN
-         checkemails9();  //XPRESS
+          checkemails();	//test
+     /*   checkemails1();  // 24ops
+        checkemails2();  // VAT
+        checkemails3(); //MEDIC
+        checkemails4();  //TM
+        checkemails5();   //TV
+        checkemails6(); // MI
+        checkemails7();   // TPA
+        checkemails8();   //TN
+        checkemails9();  //XPRESS
         checksms();
-         checkboite();
-         checkfax();*/
-         checkdemandes();
+        checkboite();
+        checkfax();*/
+        checkdemandes();
     });
 </script>
