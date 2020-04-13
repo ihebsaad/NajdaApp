@@ -1203,7 +1203,7 @@ array_push($listepr,$pr['prestataire_id']);
                              <div class="form-group row" >
                                  <label class=" control-label">Date de prestation <span class="required" aria-required="true"> * </span></label>
                                  <div class="row">
-                                     <input style="width:200px;" value='<?php echo date('d/m/Y'); ?>' class="form-control datepicker-default " name="pres_datem" id="pres_datem" data-required="1" required="" aria-required="true">
+                                     <input style="width:200px;" value='<?php echo date('d/m/Y'); ?>' class="form-control datepicker-default" name="pres_datem" id="pres_datem"  >
                                  </div>
                              </div>
 
@@ -2746,8 +2746,8 @@ array_push($listepr,$pr['prestataire_id']);
                         </div>
 
                         <div class="form-group">
-                            <label for="emetteur">Date de Prestation :</label>
-                            <input style="width:200px;" value="<?php echo date('d/m/Y');?>" class="form-control datepicker-default  hasDatepicker" name="pres_date2" id="pres_date2" data-required="1" required="" aria-required="true">
+                            <label for="pres_date2">Date de Prestation :</label>
+                            <input style="width:200px;" value="<?php echo date('d/m/Y');?>" class="form-control datepicker-default  " name="pres_date2" id="pres_date2" data-required="1" required="" aria-required="true">
                         </div>
 
 
@@ -2805,6 +2805,30 @@ array_push($listepr,$pr['prestataire_id']);
                                 </select>
                             </div>
                         </div>
+
+                        <div class="form-group ">
+                            <div class="row">
+                                <label>Ville</label>
+                            </div>
+                            <div class="row" style=";margin-bottom:10px;"><style>.algolia-places{width:80%;}</style>
+                            </div>
+                            <input class="form-control"   style="padding-left:5px" type="text"   name="ville" id="villepr3" />
+                            <input class="form-control" style="padding-left:5px;" type="hidden" name="postal" id="villecode3" />
+
+                        </div>
+                      <!--  <script>
+                            (function() {
+                                var placesAutocomplete4 = places({
+                                    appId: 'plCFMZRCP0KR',
+                                    apiKey: 'aafa6174d8fa956cd4789056c04735e1',
+                                    container: document.querySelector('#villepr3'),
+
+                                });
+                                placesAutocomplete4.on('change', function resultSelected(e) {
+                                    document.querySelector('#villecode3').value = e.suggestion.postcode || '';
+                                });
+                            })();
+                        </script>-->
 
                         <div class="form-group">
                             <label for="sujet">Autorisé Par :</label>
@@ -4556,6 +4580,7 @@ function toggle(className, displayState){
             var date = $('#pres_date2').val();
             var autorise = $('#autorise').val();
             var details = $('#details').val();
+            var ville = $('#villepr3').val();
 
             //   gouvcouv
             if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0) )
@@ -4564,7 +4589,7 @@ function toggle(className, displayState){
                 $.ajax({
                     url:"{{ route('prestations.saving') }}",
                     method:"POST",
-                    data:{autorise:autorise,details:details,date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat ,typeprest:typeprest, _token:_token},
+                    data:{autorise:autorise,details:details,date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat ,typeprest:typeprest,ville:ville, _token:_token},
                     success:function(data){
                         //var prestation=parseInt(data);
                         /// window.location =data;
@@ -6205,9 +6230,36 @@ $(document).ready(function(){
              
            });
 
+
+
+
+       $( "#pres_date2" ).datepicker({
+
+           altField: "#datepicker",
+           closeText: 'Fermer',
+           prevText: 'Précédent',
+           nextText: 'Suivant',
+           currentText: 'Aujourd\'hui',
+           monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+           monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+           dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+           dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+           dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+           weekHeader: 'Sem.',
+           buttonImage: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAATCAYAAAB2pebxAAABGUlEQVQ4jc2UP06EQBjFfyCN3ZR2yxHwBGBCYUIhN1hqGrWj03KsiM3Y7p7AI8CeQI/ATbBgiE+gMlvsS8jM+97jy5s/mQCFszFQAQN1c2AJZzMgA3rqpgcYx5FQDAb4Ah6AFmdfNxp0QAp0OJvMUii2BDDUzS3w7s2KOcGd5+UsRDhbAo+AWfyU4GwnPAYG4XucTYOPt1PkG2SsYTbq2iT2X3ZFkVeeTChyA9wDN5uNi/x62TzaMD5t1DTdy7rsbPfnJNan0i24ejOcHUPOgLM0CSTuyY+pzAH2wFG46jugupw9mZczSORl/BZ4Fq56ArTzPYn5vUA6h/XNVX03DZe0J59Maxsk7iCeBPgWrroB4sA/LiX/R/8DOHhi5y8Apx4AAAAASUVORK5CYII=",
+
+           firstDay: 1,
+           dateFormat: "dd/mm/yy"
+
+       });
+
+
+
   });
 
 
 
   </script>
+
+
 @stop

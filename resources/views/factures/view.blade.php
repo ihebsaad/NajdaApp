@@ -149,7 +149,7 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="inputError" class="control-label">Date d'arrivée</label>
-                    <input onchange="changing(this);location.reload()"  class="form-control datepicker-default "class="form-control input" name="date_arrive" id="date_arrive"  autocomplete="off" value="{{ $facture->date_arrive }}">
+                    <input onchange="changing(this);location.reload()"  class="form-control datepicker-default "  name="date_arrive" id="date_arrive"  autocomplete="off" value="{{ $facture->date_arrive }}">
                 </div>
             </div>
 

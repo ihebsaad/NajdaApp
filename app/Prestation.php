@@ -21,7 +21,8 @@ class Prestation extends Model
  'prestation',
   'autorise',
 'details',
-'effectue'
+'effectue',
+'ville'
 
 ];
 

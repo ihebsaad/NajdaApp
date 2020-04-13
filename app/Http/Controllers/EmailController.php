@@ -4945,7 +4945,7 @@ $id=0;
         $listeemails=array();
         $prestataires=array();
         $dossier=Dossier::find($id);
-
+        $cl=0;
         if($type=='client')
         {
         // trouver id client à partir de la référence
