@@ -49,13 +49,6 @@ $seance =  DB::table('seance')
         </div>
 
 
-        <div class="col-sm-2">
-            <a href="{{ route('clients.mails') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-                <span class="   fas fa-mail-bulk"></span>
-                <br>
-                Emails Intervenants
-            </a>
-        </div>
 
 
     </div>
@@ -96,13 +89,7 @@ $seance =  DB::table('seance')
                 </a>
             </div>
 
-            <div class="col-sm-2">
-                <a href="{{ route('prestataires.mails') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-                    <span class="   fas fa-mail-bulk"></span>
-                    <br>
-                    Emails Intervenants
-                </a>
-            </div>
+
 <?php }
 ?>    </div>
 
@@ -141,6 +128,7 @@ $seance =  DB::table('seance')
             </a>
         </div>
 
+        
        <?php if($user_type=='financier' || $user_type=='bureau'  )
         {?>
 
