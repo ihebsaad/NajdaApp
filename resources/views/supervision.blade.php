@@ -206,7 +206,7 @@
 
                             $complexite=$folder['complexite'];
                             $statutdos=$folder['statut'];
-                       $type=$folder['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique'){$style="background-color:#3498DB;";}
+                       $type=$folder['type_dossier'];if($type=='Mixte'){$style="background-color:#F39C12;";}if($type=='Medical'){$style="background-color:#52BE80";} if($type=='Technique' || $type=='Transport' ){$style="background-color:#3498DB;";}
                        $ref=$folder['reference_medic'];$abn=$folder['subscriber_lastname'].' '.$folder['subscriber_name'];$idclient=$folder['customer_id'];$client=   ClientsController::ClientChampById('name',$idclient) ;?>
 
                         <li  id="dossier-<?php echo $idd;?>"    style=";padding:10px 10px 10px 10px;color:white;margin-top:20px;<?php echo $style; if($statutdos==5){echo ';border:2px solid black;';}?>" >

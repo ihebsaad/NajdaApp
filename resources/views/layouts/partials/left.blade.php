@@ -111,14 +111,12 @@ use App\Notif;
 use App\Entree;
 use  \App\Http\Controllers\EntreesController ;
 Use App\Common;
+Use App\Alerte;
 
-/*
-function SstartsWith ($string, $startString)
-{
-    $len = strlen($startString);
-    return (substr($string, 0, $len) === $startString);
-}
-*/
+$param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+
+
 $seance =  DB::table('seance')
     ->where('id','=', 1 )->first();
 $user = auth()->user();
@@ -203,18 +201,42 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
         <div id="NotificationsTabContent" class="tab-content">
             <div class="tab-pane fade active in  scrollable-panel" id="notificationstab">
 
+            <?php
+            $user = auth()->user();
+            $iduser=$user->id;
+            $user_type=$user->user_type;
 
+            ?>
             <!-- treeview of notifications -->
                 <div id="jstree">
                  <ul>
+                    <?php
+                     if($user_type=='financier' ){
 
+                         $alertes= Alerte::orderBy('id', 'desc')->where('traite',0)->get( );
+                        foreach($alertes as $al){
+
+                            $dossier=  \App\Dossier::where('id',$al->id_dossier)->first();
+                            $abn= $dossier->subscriber_name. ' '.$dossier->subscriber_lastname ;
+                            $statut= $al->statut;
+                            $datea= date('d/m/Y H:i', strtotime($al->created_at)) ;
+                            if($statut=='reouverture'){$stat='Re-Ouverture';}
+                            if($statut=='ferme'){$stat='Fermeture';}
+                            if($statut=='sanssuite'){$stat='Fermeture <small>Sans Suite</small>';}
+                            ?>
+
+                     <li  id="<?php echo $al->id; ?>"   ><a href="{{action('DossiersController@view', $al->id_dossier)}}" > <i class="fas  fa-folder"></i> <?php echo $al->ref_dossier . ' '.$abn; ?> </a></li><li  rel="tremail" ><a href="<?php echo $urlapp; ?>"><label style="font-weight:bold;" >    <i class="fas  fa-warning"></i> <?php echo $datea.'  '.$stat ; ?> </label></a></li>
+
+                        <?php  } //for
+
+
+                     }else{
+                     ?>
 
                      <li id="notifcs" rel="tremail" > <span style="color:#4fc1e9" class="fa fa-bell fa-lg"></span>  <b style="color:#4fc1e9">  Notifications</b>
 
 
                         <?php
-  $param= App\Parametre::find(1);$env=$param->env;
-$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 
 
@@ -245,8 +267,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
                             }
                           }
-
-
 
                             echo '<ul>';
                             // dossier courant
@@ -318,6 +338,7 @@ echo '</ul>';
 
 ?>
 </li>
+                     <?php } ?>
 </ul>
                  </div>
 

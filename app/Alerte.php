@@ -10,7 +10,8 @@ class Alerte extends Model
  'statut',
  'id_dossier',
  'ref_dossier',
- 'facture'
+ 'facture',
+ 'traite'
   ];
  
 }
