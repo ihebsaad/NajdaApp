@@ -33,7 +33,7 @@
                         <table class="table table-striped">
                          <thead>
                          <tr id="headtable">
-                             <th style="width:15%">Date</th><th style="width:35%">Dossier</th><th style="width:15%">Statut</th><th style="width:20%">Facturé</th><th style="width:10%">Suppression</th>
+                             <th style="width:15%">Date</th><th style="width:35%">Dossier</th><th style="width:15%">Statut</th><th style="width:20%">Facturé</th><th style="width:10%">Traiter</th>
                          </tr>
                          </thead>
                             <tbody>
@@ -47,7 +47,7 @@
                        if($statut=='ferme'){$stat='Fermeture';}
                        if($statut=='sanssuite'){$stat='Fermeture <small>Sans Suite</small>';}
                         ?>
-                       <tr><td style="width:15%"><?php   echo $datea; ?></td> <td style="width:35%"><?php echo $alerte->ref_dossier . ' '.$abn; ?> </td><td style="width:15%"><?php echo $stat; ?> </td><td style="width:20%">
+                       <tr><td style="width:15%"><?php   echo $datea; ?></td> <td style="width:35%"> <a href="{{action('DossiersController@view', $alerte->id_dossier)}}" ><?php echo $alerte->ref_dossier . ' '.$abn; ?> </a></td><td style="width:15%"><?php echo $stat; ?> </td><td style="width:20%">
 
                                      <div class="radio" id="uniform-actif">
                            <label><span class="checked">
@@ -55,8 +55,8 @@
                         </span> Facturé</label>
                                      </div>
                             </td><td style="width:15%;text-align: center">
-                                <a onclick="return confirm('Êtes-vous sûrs de voulir supprimer cette notification ?')"  href="{{action('HomeController@destroy', $alerte['id'])}}" class="btn btn-sm btn-danger btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Supprimer">
-                                    <i class="fa fa-lg fa-fw fa-trash-alt"></i>
+                                <a   href="{{action('HomeController@traiter', $alerte['id'])}}" class="btn btn-sm btn-success btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Traiter">
+                                    <i class="fa fa-fw fa-check"></i>
                                 </a>
 
                             </td></tr>

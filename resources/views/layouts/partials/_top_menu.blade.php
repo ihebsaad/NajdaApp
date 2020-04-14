@@ -48,7 +48,13 @@ $seance =  DB::table('seance')
             </a>
         </div>
 
-
+        <div class="col-sm-2">
+            <a href="{{ route('prestataires.mails') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                <span class="   fas fa-mail-bulk"></span>
+                <br>
+                Emails Intervantant
+            </a>
+        </div>
 
 
     </div>

@@ -42,6 +42,7 @@ Route::get('/checkreponses', 'HomeController@checkreponses')->name('checkreponse
 Route::post('/updateattach', 'HomeController@updateattach')->name('updateattach');
 Route::post('/deleteattach', 'HomeController@deleteattach')->name('deleteattach');
 Route::get('/home/destroy/{id}', 'HomeController@destroy');
+Route::get('/home/traiter/{id}', 'HomeController@traiter');
 Route::post('/home/updating','HomeController@updating')->name('home.updating');
 
 

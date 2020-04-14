@@ -767,7 +767,7 @@ return redirect('roles');
 
         User::where('id', $iduser)->update(array('statut'=>'1'));
 
-       $alertes= Alerte::get( );
+       $alertes= Alerte::orderBy('id', 'desc')->where('statut',0)->get( );
 
         //   return view('home', ['countries' => $countries,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'dossiers' => $dossiers,'notifications'=>$result]);
         return view('home',['alertes'=>$alertes,'type'=>$type]  );
@@ -1210,5 +1210,11 @@ $url=storage_path().$attach->path ;
         return redirect('/home')->with('success', '  Supprimée');
     }
 
+    public function traiter($id)
+    {
+         Alerte::where('id', $id)->update(array('statut' => 1));
+
+        return redirect('/home')->with('success', '  Supprimée');
+    }
 
     }

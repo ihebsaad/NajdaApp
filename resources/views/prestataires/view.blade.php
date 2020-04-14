@@ -6,16 +6,7 @@
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 
-<!--
-<script src="{{  URL::asset('public/js/upload_files/vpb_uploader.js') }}" type="text/javascript"></script>
-
-
-
-<link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
-
-
 @section('content')
-     <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.1/select2.min.js"></script>-->
 
 
     <section class="content form_layouts">

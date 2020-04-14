@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Demande;
 use App\Dossier;
 use App\Http\Controllers\Controller;
 use App\Seance;
@@ -10,6 +9,7 @@ use App\User;
 use App\Notif;
 use App\Mission;
 use App\ActionEC;
+use App\Demande;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use Illuminate\Http\Request;
@@ -51,40 +51,40 @@ class LoginController extends Controller
 
         /* début block  dossiers actifs, dormants et immobile */
 
-           $format = "Y-m-d H:i:s";
-            $deb_seance_1=(new \DateTime())->format('Y-m-d 07:30:00');
-            $fin_seance_1=(new \DateTime())->format('Y-m-d 09:00:00');            
-            $deb_seance_1 = \DateTime::createFromFormat($format, $deb_seance_1);
-            $fin_seance_1 = \DateTime::createFromFormat($format, $fin_seance_1);
+        $format = "Y-m-d H:i:s";
+        $deb_seance_1=(new \DateTime())->format('Y-m-d 07:30:00');
+        $fin_seance_1=(new \DateTime())->format('Y-m-d 09:00:00');
+        $deb_seance_1 = \DateTime::createFromFormat($format, $deb_seance_1);
+        $fin_seance_1 = \DateTime::createFromFormat($format, $fin_seance_1);
 
-            $deb_seance_2=(new \DateTime())->format('Y-m-d 14:30:00');
-            $fin_seance_2=(new \DateTime())->format('Y-m-d 16:00:00');            
-            $deb_seance_2 = \DateTime::createFromFormat($format, $deb_seance_2);
-            $fin_seance_2 = \DateTime::createFromFormat($format, $fin_seance_2);
+        $deb_seance_2=(new \DateTime())->format('Y-m-d 14:30:00');
+        $fin_seance_2=(new \DateTime())->format('Y-m-d 16:00:00');
+        $deb_seance_2 = \DateTime::createFromFormat($format, $deb_seance_2);
+        $fin_seance_2 = \DateTime::createFromFormat($format, $fin_seance_2);
 
-            $deb_seance_3=(new \DateTime())->format('Y-m-d 22:30:00');
-            $fin_seance_3=(new \DateTime())->format('Y-m-d 23:30:00');            
-            $deb_seance_3 = \DateTime::createFromFormat($format, $deb_seance_3);
-            $fin_seance_3 = \DateTime::createFromFormat($format, $fin_seance_3);
+        $deb_seance_3=(new \DateTime())->format('Y-m-d 22:30:00');
+        $fin_seance_3=(new \DateTime())->format('Y-m-d 23:30:00');
+        $deb_seance_3 = \DateTime::createFromFormat($format, $deb_seance_3);
+        $fin_seance_3 = \DateTime::createFromFormat($format, $fin_seance_3);
 
-            $dtc = (new \DateTime())->format('Y-m-d H:i:s');
-            $dateSys = \DateTime::createFromFormat($format, $dtc);
+        $dtc = (new \DateTime())->format('Y-m-d H:i:s');
+        $dateSys = \DateTime::createFromFormat($format, $dtc);
 
         if($type=='superviseur' || $type=='admin' || ($dateSys>=$deb_seance_3 && $dateSys<=$fin_seance_3))
         {
 
-           // dd('khaled');
-      
-          /*  if(($dateSys>=$deb_seance_1 && $dateSys<=$fin_seance_1) || ($dateSys>=$deb_seance_2 && $dateSys<=$fin_seance_2)  || ($dateSs>=$deb_seance_3 && $dateSys<=$fin_seance_3))
-            {*/
-                //app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
-                 //dd('khaled gg');
-           // }
+            // dd('khaled');
+
+            /*  if(($dateSys>=$deb_seance_1 && $dateSys<=$fin_seance_1) || ($dateSys>=$deb_seance_2 && $dateSys<=$fin_seance_2)  || ($dateSs>=$deb_seance_3 && $dateSys<=$fin_seance_3))
+              {*/
+            //app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
+            //dd('khaled gg');
+            // }
         }
 
         /* fin block  dossiers actifs, dormants et immobiles */
 
-        if ($type == 'financier' || $type == 'bureau'  ) {
+        if ($type == 'financier') {
             return redirect('/home');
 
         } else {
@@ -116,55 +116,55 @@ class LoginController extends Controller
         return $this->username;
     }
 
-     public function migration_miss ($iddoss, $iduser_dest)
+    public function migration_miss ($iddoss, $iduser_dest)
     {
 
 
-             $missions_doss= Mission::where('dossier_id','=',$iddoss)->get();
+        $missions_doss= Mission::where('dossier_id','=',$iddoss)->get();
 
-             // dd($missions_doss);
+        // dd($missions_doss);
 
-              if($missions_doss)
-              {
+        if($missions_doss)
+        {
 
-                foreach($missions_doss as $md)
+            foreach($missions_doss as $md)
+            {
+                if($md->statut_courant!='deleguee')// reportee ou active
                 {
-                        if($md->statut_courant!='deleguee')// reportee ou active
-                        {
-                            $md->update(array('user_id' =>$iduser_dest));
-                            
-                           // $actions_missions= $md->ActionECs() ;
+                    $md->update(array('user_id' =>$iduser_dest));
 
-                             $actions_missions=ActionEC::where('mission_id','=',$md->id)->get();
-                           if($actions_missions)
-                           {
+                    // $actions_missions= $md->ActionECs() ;
 
-                              foreach ($actions_missions as $acts) {
+                    $actions_missions=ActionEC::where('mission_id','=',$md->id)->get();
+                    if($actions_missions)
+                    {
 
-                                if($acts->statut=='reportee' || $acts->statut=='rappelee' ||  $acts->statut=='active' )
-                                {
-                                       $acts->update(array('user_id' =>$iduser_dest));
+                        foreach ($actions_missions as $acts) {
 
-                                }
+                            if($acts->statut=='reportee' || $acts->statut=='rappelee' ||  $acts->statut=='active' )
+                            {
+                                $acts->update(array('user_id' =>$iduser_dest));
 
-                                  
-                              }
-
-
-                           }
-
+                            }
 
 
                         }
 
+
+                    }
+
+
+
                 }
 
+            }
 
-              }
 
-     }
+        }
 
-     public function migration_notifs ($iddoss, $iduser_dest)
+    }
+
+    public function migration_notifs ($iddoss, $iduser_dest)
     {
 
         $notifs_doss=Notif::where('dossierid','=',$iddoss)->get();
@@ -172,13 +172,13 @@ class LoginController extends Controller
         if($notifs_doss)
         {
             foreach ($notifs_doss as $notif) {
-               
-                 if($notif->affiche < 1) 
-                 {
 
-                     $notif->update(['user'=>$iduser_dest,'statut'=>1 ]);
+                if($notif->affiche < 1)
+                {
 
-                 }
+                    $notif->update(['user'=>$iduser_dest,'statut'=>1 ]);
+
+                }
             }
 
         }
@@ -469,7 +469,7 @@ class LoginController extends Controller
 
                         // Dossiers Techniques vers Sup Tech
 
-                       $dossiers=Dossier::where(function ($query) use ($iduser,$annee) {
+                        $dossiers=Dossier::where(function ($query) use ($iduser,$annee) {
                             $query->where('reference_medic', 'like', $annee.'N%')
                                 ->where('type_dossier', 'Technique')
                                 ->where('current_status', 'actif')
@@ -478,16 +478,16 @@ class LoginController extends Controller
                             $query->where('reference_medic', 'like', $annee.'V%')
                                 ->where('current_status', 'actif')
                                 ->where('affecte', $iduser);
-                       })->orWhere(function ($query) use ($iduser,$anneep) {
-                           $query->where('reference_medic', 'like', $anneep.'N%')
-                               ->where('type_dossier', 'Technique')
-                               ->where('current_status', 'actif')
-                               ->where('affecte', $iduser);
-                       })->orWhere(function ($query) use ($iduser,$anneep) {
-                           $query->where('reference_medic', 'like', $anneep.'V%')
-                               ->where('current_status', 'actif')
-                               ->where('affecte', $iduser);
-                       })->orWhere(function ($query) use ($iduser) {
+                        })->orWhere(function ($query) use ($iduser,$anneep) {
+                            $query->where('reference_medic', 'like', $anneep.'N%')
+                                ->where('type_dossier', 'Technique')
+                                ->where('current_status', 'actif')
+                                ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser,$anneep) {
+                            $query->where('reference_medic', 'like', $anneep.'V%')
+                                ->where('current_status', 'actif')
+                                ->where('affecte', $iduser);
+                        })->orWhere(function ($query) use ($iduser) {
                             $query->where('reference_medic', 'like', '%XP%')
                                 ->where('current_status', 'actif')
                                 ->where('affecte', $iduser);
@@ -572,32 +572,32 @@ class LoginController extends Controller
         }
 
 
-				$date_actu=strtotime($date_actu);
-                $debut= strtotime($debut);
-                $fin= strtotime($fin);
+        $date_actu=strtotime($date_actu);
+        $debut= strtotime($debut);
+        $fin= strtotime($fin);
 
-            // Heure de nuit
+        // Heure de nuit
         if ($date_actu < $debut || ($date_actu > $fin)) {
             // L'utilisateur est le veilleur
-          if($veilleur!=$iduser){
+            if($veilleur!=$iduser){
                 // L'utilisateur n'est pas le veilleur
 
                 // Affectation tous les dossiers vers le veilleur
 
                 $dossiers=Dossier::where('affecte', $iduser)
                     ->get();
-               // Dossier::setTimestamps(false);
+                // Dossier::setTimestamps(false);
 
-                    if($dossiers)
-                     {
-                      $user_dest=$veilleur;
-                      foreach ($dossiers as $doss) {
+                if($dossiers)
+                {
+                    $user_dest=$veilleur;
+                    foreach ($dossiers as $doss) {
                         $doss->update(array('affecte' => $user_dest, 'statut' => 2));
                         $this->migration_miss($doss->id,$user_dest);
                         $this->migration_notifs($doss->id,$user_dest);
-                      }
                     }
-              //  Dossier::setTimestamps(true);
+                }
+                //  Dossier::setTimestamps(true);
 
             }
 
@@ -621,18 +621,18 @@ class LoginController extends Controller
                         ->where('affecte', $iduser);
                 })->get();
 
-            //    Dossier::setTimestamps(false);
+                //    Dossier::setTimestamps(false);
 
                 if($dossiers)
-                     {
-                      $user_dest=$charge;
-                      foreach ($dossiers as $doss) {
+                {
+                    $user_dest=$charge;
+                    foreach ($dossiers as $doss) {
                         $doss->update(array('affecte' => $user_dest, 'statut' => 2));
                         $this->migration_miss($doss->id,$user_dest);
                         $this->migration_notifs($doss->id,$user_dest);
-                      }
                     }
-              //  Dossier::setTimestamps(true);
+                }
+                //  Dossier::setTimestamps(true);
 
             }// charge
             else {
@@ -652,18 +652,18 @@ class LoginController extends Controller
                             ->where('affecte', $iduser);
                     })->get();
 
-               //     Dossier::setTimestamps(false);
+                    //     Dossier::setTimestamps(false);
 
                     if($dossiers)
-                     {
-                      $user_dest=$tech;
-                      foreach ($dossiers as $doss) {
-                        $doss->update(array('affecte' => $user_dest, 'statut' => 2));
-                        $this->migration_miss($doss->id,$user_dest);
-                        $this->migration_notifs($doss->id,$user_dest);
-                      }
+                    {
+                        $user_dest=$tech;
+                        foreach ($dossiers as $doss) {
+                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                            $this->migration_miss($doss->id,$user_dest);
+                            $this->migration_notifs($doss->id,$user_dest);
+                        }
                     }
-                //    Dossier::setTimestamps(true);
+                    //    Dossier::setTimestamps(true);
 
 
                 } else {
@@ -683,20 +683,20 @@ class LoginController extends Controller
                                 ->where('affecte', $iduser);
                         })->get() ;
 
-                    //    (array('affecte' => $medic, 'statut' => 2));
+                        //    (array('affecte' => $medic, 'statut' => 2));
 
-                  //      Dossier::setTimestamps(false);
+                        //      Dossier::setTimestamps(false);
 
                         if($dossiers)
-                         {
-                          $user_dest=$medic;
-                          foreach ($dossiers as $doss) {
-                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
-                            $this->migration_miss($doss->id,$user_dest);
-                            $this->migration_notifs($doss->id,$user_dest);
-                          }
+                        {
+                            $user_dest=$medic;
+                            foreach ($dossiers as $doss) {
+                                $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                                $this->migration_miss($doss->id,$user_dest);
+                                $this->migration_notifs($doss->id,$user_dest);
+                            }
                         }
-                //        Dossier::setTimestamps(true);
+                        //        Dossier::setTimestamps(true);
 
                     }
                 }
@@ -711,7 +711,7 @@ class LoginController extends Controller
                     $query->where('reference_medic', 'like', $annee.'N%')
                         ->where('type_dossier', 'Medical')
                         ->where('current_status', 'actif')
-                    ->where('affecte', $iduser);
+                        ->where('affecte', $iduser);
                 })->orWhere(function ($query) use($iduser,$annee)   {
                     $query->where('reference_medic', 'like', $annee.'M%')
                         ->where('current_status', 'actif')
@@ -737,15 +737,15 @@ class LoginController extends Controller
 
                 })->get();
 
-                   if($dossiers)
-                         {
-                          $user_dest=$medic;
-                          foreach ($dossiers as $doss) {
-                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
-                            $this->migration_miss($doss->id,$user_dest);
-                            $this->migration_notifs($doss->id,$user_dest);
-                          }
-                        }
+                if($dossiers)
+                {
+                    $user_dest=$medic;
+                    foreach ($dossiers as $doss) {
+                        $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                        $this->migration_miss($doss->id,$user_dest);
+                        $this->migration_notifs($doss->id,$user_dest);
+                    }
+                }
 
             }// medic
 
@@ -782,15 +782,15 @@ class LoginController extends Controller
 
                     })->get();
 
-                     if($dossiers)
-                         {
-                          $user_dest=$tech;
-                          foreach ($dossiers as $doss) {
+                    if($dossiers)
+                    {
+                        $user_dest=$tech;
+                        foreach ($dossiers as $doss) {
                             $doss->update(array('affecte' => $user_dest, 'statut' => 2));
                             $this->migration_miss($doss->id,$user_dest);
                             $this->migration_notifs($doss->id,$user_dest);
-                          }
                         }
+                    }
 
                 }
 
@@ -824,16 +824,16 @@ class LoginController extends Controller
                         ->where('affecte', $iduser);
                 })->get();
 
-                 if($dossiers)
-                         {
-                          $user_dest=$tech;
-                          foreach ($dossiers as $doss) {
-                         //     Log::info("affectation automatique ligne 725 de".$iduser. "  vers". $user_dest);
-                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
-                            $this->migration_miss($doss->id,$user_dest);
-                            $this->migration_notifs($doss->id,$user_dest);
-                          }
-                        }
+                if($dossiers)
+                {
+                    $user_dest=$tech;
+                    foreach ($dossiers as $doss) {
+                        //     Log::info("affectation automatique ligne 725 de".$iduser. "  vers". $user_dest);
+                        $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                        $this->migration_miss($doss->id,$user_dest);
+                        $this->migration_notifs($doss->id,$user_dest);
+                    }
+                }
 
 
                 // Dossiers Mixte vers Sup Tech
@@ -852,15 +852,15 @@ class LoginController extends Controller
 
                 })->get();
 
-                 if($dossiers)
-                         {
-                          $user_dest=$tech;
-                          foreach ($dossiers as $doss) {
-                            $doss->update(array('affecte' => $user_dest, 'statut' => 2));
-                            $this->migration_miss($doss->id,$user_dest);
-                            $this->migration_notifs($doss->id,$user_dest);
-                          }
-                        }
+                if($dossiers)
+                {
+                    $user_dest=$tech;
+                    foreach ($dossiers as $doss) {
+                        $doss->update(array('affecte' => $user_dest, 'statut' => 2));
+                        $this->migration_miss($doss->id,$user_dest);
+                        $this->migration_notifs($doss->id,$user_dest);
+                    }
+                }
 
             }// tech
 
@@ -893,14 +893,14 @@ class LoginController extends Controller
                     })->get();
 
                     if($dossiers)
-                         {
-                          $user_dest=$medic;
-                          foreach ($dossiers as $doss) {
+                    {
+                        $user_dest=$medic;
+                        foreach ($dossiers as $doss) {
                             $doss->update(array('affecte' => $user_dest, 'statut' => 2));
                             $this->migration_miss($doss->id,$user_dest);
                             $this->migration_notifs($doss->id,$user_dest);
-                          }
                         }
+                    }
 
                     // Dossiers Mixte vers Sup Tech
                     // Mixtes
@@ -918,14 +918,14 @@ class LoginController extends Controller
                     })->get();
 
                     if($dossiers)
-                         {
-                          $user_dest=$medic;
-                          foreach ($dossiers as $doss) {
+                    {
+                        $user_dest=$medic;
+                        foreach ($dossiers as $doss) {
                             $doss->update(array('affecte' => $user_dest, 'statut' => 2));
                             $this->migration_miss($doss->id,$user_dest);
                             $this->migration_notifs($doss->id,$user_dest);
-                          }
                         }
+                    }
 
 
                 }//
@@ -959,7 +959,7 @@ class LoginController extends Controller
 
             elseif ($tech>0)
             {
-               $folders=   Dossier::where('affecte',  Auth::id() )->update(array('affecte' => $tech, 'statut' => 2));
+                $folders=   Dossier::where('affecte',  Auth::id() )->update(array('affecte' => $tech, 'statut' => 2));
 
                 if($folders)
                 {
@@ -978,59 +978,59 @@ class LoginController extends Controller
         if (true)
         {
 
-         // vider les roles de l utilisateur dans la seance avant logout
+            // vider les roles de l utilisateur dans la seance avant logout
 
-          if ($seance->dispatcheur == Auth::id()) {
-            $seance->dispatcheur = NULL;
-        }
-        if ($seance->dispatcheurtel == Auth::id()) {
-            $seance->dispatcheurtel = NULL;
-        }
-        if ($seance->dispatcheurte2 == Auth::id()) {
-            $seance->dispatcheurtel2 = NULL;
-        }
-        if ($seance->dispatcheurtel3 == Auth::id()) {
-            $seance->dispatcheurtel3 = NULL;
-        }
-        if ($seance->superviseurmedic == Auth::id()) {
-            $seance->superviseurmedic = NULL;
-        }
-        if ($seance->superviseurtech == Auth::id()) {
-            $seance->superviseurtech = NULL;
-        }
-        if ($seance->chargetransport == Auth::id()) {
-            $seance->chargetransport = NULL;
-        }
-        if ($seance->veilleur == Auth::id()) {
-            $seance->veilleur = NULL;
-        }
+            if ($seance->dispatcheur == Auth::id()) {
+                $seance->dispatcheur = NULL;
+            }
+            if ($seance->dispatcheurtel == Auth::id()) {
+                $seance->dispatcheurtel = NULL;
+            }
+            if ($seance->dispatcheurte2 == Auth::id()) {
+                $seance->dispatcheurtel2 = NULL;
+            }
+            if ($seance->dispatcheurtel3 == Auth::id()) {
+                $seance->dispatcheurtel3 = NULL;
+            }
+            if ($seance->superviseurmedic == Auth::id()) {
+                $seance->superviseurmedic = NULL;
+            }
+            if ($seance->superviseurtech == Auth::id()) {
+                $seance->superviseurtech = NULL;
+            }
+            if ($seance->chargetransport == Auth::id()) {
+                $seance->chargetransport = NULL;
+            }
+            if ($seance->veilleur == Auth::id()) {
+                $seance->veilleur = NULL;
+            }
 
-        $seance->save();
-
-
-        /*** Déconnexion ***/
-        $nomuser = $user->name . ' ' . $user->lastname;
+            $seance->save();
 
 
-
-        Log::info('[Agent: ' . $nomuser . '] Déconnexion '.$countdossiers);
-
-   //     Log::info('[Agent: ' . $nomuser . '] Déconnexion ');
-
-        // changement statut dans la base
-        // logged out statut = -1
-        User::where('id', $iduser)->update(array('statut' => '-1'));
-
-        // suppression demandes
-        Demande::where('par', $iduser)->delete();
+            /*** Déconnexion ***/
+            $nomuser = $user->name . ' ' . $user->lastname;
 
 
 
-        $this->guard()->logout();
+            Log::info('[Agent: ' . $nomuser . '] Déconnexion '.$countdossiers);
 
-        $request->session()->invalidate();
+            //     Log::info('[Agent: ' . $nomuser . '] Déconnexion ');
 
-        return redirect('/');
+            // changement statut dans la base
+            // logged out statut = -1
+            User::where('id', $iduser)->update(array('statut' => '-1'));
+
+            // suppression demandes
+            Demande::where('par', $iduser)->delete();
+
+
+
+            $this->guard()->logout();
+
+            $request->session()->invalidate();
+
+            return redirect('/');
 
         } // verification pas de dossiers affectés
 
@@ -1038,22 +1038,22 @@ class LoginController extends Controller
 
 
     public function changerposte(Request $request)
-{
-$user = auth()->user();
+    {
+        $user = auth()->user();
 
-    /*** changement de poste ***/
-$nomuser = $user->name . ' ' . $user->lastname;
+        /*** changement de poste ***/
+        $nomuser = $user->name . ' ' . $user->lastname;
 
-Log::info('[Agent: ' . $nomuser . '] Changement de poste ');
+        Log::info('[Agent: ' . $nomuser . '] Changement de poste ');
 
-$this->guard()->logout();
+        $this->guard()->logout();
 
-$request->session()->invalidate();
+        $request->session()->invalidate();
 
-return redirect('/login');
+        return redirect('/login');
 
 
-} //end function changer poste
+    } //end function changer poste
 
 
 } //end class
