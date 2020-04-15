@@ -452,8 +452,7 @@ $(document).ready(function()
                                 <tr>
                                     <td style="width:15%;"> <?php echo $qualite->nom; ?>   <?php echo $qualite->prenom; ?> </td>
                                     <td style="width:20%;"> <?php echo $qualite->fonction; ?> </td>
-                                 <!--   <td style="width:15%;"> <?php echo $qualite->tel; ?> </td>
-                                    <td style="width:15%;">  <?php echo $qualite->fax; ?> </td>-->
+                          
                                     <td style="width:21%;"  onclick="addItem('<?php echo $qualite->mail; ?>')"> <a href="#"> <?php echo $qualite->mail; ?></a> </td>
                                     <td style="width:10%;">  <?php echo $qualite->remarque; ?> </td>
 
@@ -480,7 +479,7 @@ $(document).ready(function()
                             <tbody>
                             @foreach($reseaux as $reseau)
                                 <tr>
-                                    <td style="width:15%;"> <?php echo $reseau->nom; ?>   <?php echo $qualite->prenom; ?> </td>
+                                    <td style="width:15%;"> <?php echo $reseau->nom; ?>   <?php echo $reseau->prenom; ?> </td>
                                     <td style="width:20%;"> <?php echo $reseau->fonction; ?> </td>
                              <!--    <td style="width:15%;"> <?php // echo $reseau->tel; ?> </td>
                                     <td style="width:15%;">  <?php // echo $reseau->fax; ?> </td>-->

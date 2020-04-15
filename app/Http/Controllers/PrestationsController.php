@@ -140,10 +140,12 @@ class PrestationsController extends Controller
             // Envoi de mail
           //  if ($autorise != '') {
             $cc=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
+            $sujet = 'Votre autorisation a été utilisée';
 
              if($autorise ==''){$to='nejib.karoui@medicmultiservices.com';
                  $cc=array( 'smq@medicmultiservices.com ');
                 $mr='Dr Karoui';
+
              }
 
             // if($autorise =='procedure'){$to='ihebsaad@gmail.com';}
@@ -151,6 +153,7 @@ class PrestationsController extends Controller
                  $to='nejib.karoui@medicmultiservices.com';
                  $mr='Dr Karoui';
                  $cc=array( 'smq@medicmultiservices.com ' );
+                $sujet = "sélection manuelle d'un prestataire déjà engagé";
 
                  }
                 if($autorise =='nejib'){
@@ -190,7 +193,6 @@ class PrestationsController extends Controller
                 $now=date('d/m/Y');
               //  $to = array('nejib.karoui@medicmultiservices.com');
                 //  $to=array('ihebsaad@gmail.com');
-                 $sujet = 'Votre autorisation a été utilisée';
 
                 $contenu = 'Bonjour de Najda, <br><br>'.$mr.' ,votre autorisation a été utilisée par ' . $nomuser . ' en date du: ' . $now .  ' <br>pour choisir manuellement le prestataire : ' . $nomprest . ' dans la gestion du dossier : '. $ref.' | '.$abn.'<br>  pour la prestation: '.$TypePrest.' ,  '.$Specialite.' - '. $details . '<br> qui aura lieu le ' . $date .  ' à  '.$gouvernorat .',  '.$ville ;
 

@@ -2940,28 +2940,8 @@ function disabling(elm) {
 
     $(document).ready(function() {
 
-
-    /*    var options = $('#hospital_address option');
-        var arr = options.map(function(_, o) { return { t: $(o).text(), v: o.value }; }).get();
-        arr.sort(function(o1, o2) { return o1.t > o2.t ? 1 : o1.t < o2.t ? -1 : 0; });
-        options.each(function(i, o) {
-            o.value = arr[i].v;
-            $(o).text(arr[i].t);
-        });
-*/
-     /*    function sortSelectOptions(selectElement) {
-            var options = $(selectElement + " option");
-
-            options.sort(function(a,b) {
-                if (a.text.toUpperCase() > b.text.toUpperCase()) return 1;
-                else if (a.text.toUpperCase() < b.text.toUpperCase()) return -1;
-                else return 0;
-            });
-
-            $(selectElement).empty().append( options );
-        }
-        */
-
+/*
+  // tri ordre alphabtique
         function sortSelectOptions(selectElement) {
             var options = $(selectElement + " option");
              var arr = options.map(function(_, o) { return { t: $(o).text(), v: o.value }; }).get();
@@ -2977,7 +2957,7 @@ function disabling(elm) {
         sortSelectOptions('#medecin_traitant');
         sortSelectOptions('#empalcement');
 
-
+*/
 
         $("#specialite_TPA").select2();
         $("#customer_id").select2();
