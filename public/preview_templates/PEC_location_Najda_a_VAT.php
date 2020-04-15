@@ -453,7 +453,7 @@ foreach ($array_tel as $tel) {
     function montantverif(obj){
  <?php if (intval($montantgop) > 0) {?>
             //document.getElementById("CL_montant_toutes_lettres").firstChild.nodeValue =   NumberToLetter(obj.value)
-            if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block";}
+            if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block"; obj.value='';}
             else {document.getElementById("alertGOP").style.display="none";}
 <?php   } ?>
         }

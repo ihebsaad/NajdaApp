@@ -388,13 +388,16 @@ echo '<option value="'.$prest["name"].'" id="'.$prest["id"].'" >'.$prest["name"]
 </form>
 <script language="javascript" src="nombre_en_lettre.js"></script>
 <script type="text/javascript">
-	function keyUpHandler(obj){
+	  function keyUpHandler(obj){
 	<?php if (intval($montantgop) > 0) { ?>
-			if (obj.value > <?php echo $montantgop; ?>)  {document.getElementById("alertGOP").style.display="block";}
-			else {document.getElementById("alertGOP").style.display="none";}
+            if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block"; obj.value="";document.getElementById("CL_montant_toutes_lettres").value  = "";}
+            else {document.getElementById("alertGOP").style.display="none";}
 	<?php } ?>
-			document.getElementById("CL_montant_toutes_lettres").value	= NumberToLetter(obj.value);
-		}//fin de keypressHandler
+if (obj.value > 0)
+            {document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value) }
+
+        }//fin de keypressHandler
+
 document.querySelector('input[list="prest__labmed"]').addEventListener('input', onInput);
 
 	function onInput(e) {

@@ -23,6 +23,7 @@ mysqli_query($conn,"set names 'utf8'");
 if ((isset($_GET['remplace']) || isset($_GET['complete'])) && isset($_GET['parent']))
 {
 	$parentom=$_GET['parent'];
+
 	$sqlp = "SELECT * FROM om_medicinternationnal WHERE id=".$parentom;
 	$resultp = $conn->query($sqlp);
 	if ($resultp->num_rows > 0) {
@@ -33,11 +34,31 @@ if ((isset($_GET['remplace']) || isset($_GET['complete'])) && isset($_GET['paren
 	else { exit("impossible de recuperer les informations de lordre de mission ".$parentom);}
 
 	//recupere les puces utilise par lom parent
-	$sqlsims = "SELECT * FROM ommedic_equipements WHERE idom=".$parentom." AND type='puce'";
+	$sqlsims = "SELECT idequipement FROM ommedic_equipements WHERE idom=".$parentom." AND type='puce'";
 	$resultsims = $conn->query($sqlsims);
 	if ($resultsims->num_rows > 0) {
-	$parentsims = $resultsims->fetch_assoc();
+            $parentsims = array();
+	    while($rowps = $resultsims->fetch_assoc()) {
+	        
+			
+	        
+	        $parentsims[] = array('idequipement' => $rowps["idequipement"]);
+	    }
+	
 	}
+$sqladls = "SELECT idequipement FROM ommedic_equipements WHERE idom=".$parentom." AND type='equipement'";
+	$resultadls = $conn->query($sqladls);
+	if ($resultadls->num_rows > 0) {
+            $parentadls = array();
+	    while($rowadls = $resultadls->fetch_assoc()) {
+	        
+			
+	        
+	        $parentadls[] = array('idequipement' => $rowadls["idequipement"]);
+	    }
+	
+	}
+
 	
 	
 }
@@ -63,7 +84,7 @@ else
 		}
 
 		// infos agent
-	    $sqlagt = "SELECT name FROM users WHERE id=".$detaildoss['affecte'];
+	    $sqlagt = "SELECT name,lastname FROM users WHERE id=".$detaildoss['affecte'];
 		$resultagt = $conn->query($sqlagt);
 		if ($resultagt->num_rows > 0) {
 	    // output data of each row
@@ -76,32 +97,7 @@ else
 		// recuperation OM emis par
 		
 		// Najda 
-		if ((stristr($detaildoss['reference_medic'],'N')!== FALSE) && (stristr($detaildoss['reference_medic'],'TN')=== FALSE))
-			{$emispar = "najda";}
-		// VAT 
-		if ((stristr($detaildoss['reference_medic'],'V')!== FALSE) && (stristr($detaildoss['reference_medic'],'TV')=== FALSE))
-			{$emispar = "vat";}
-		// MEDIC 
-		if ((stristr($detaildoss['reference_medic'],'M')!== FALSE) && (stristr($detaildoss['reference_medic'],'TM')=== FALSE) && (stristr($detaildoss['reference_medic'],'MI')=== FALSE))
-			{$emispar = "medicm";}
-		// Transport MEDIC 
-		if (stristr($detaildoss['reference_medic'],'TM')!== FALSE)
-			{$emispar = "medicm";}
-		// Transport VAT
-		if (stristr($detaildoss['reference_medic'],'TV')!== FALSE)
-			{$emispar = "vat";}
-		// Medic International
-		if (stristr($detaildoss['reference_medic'],'MI')!== FALSE)
-			{$emispar = "medici";}
-		// Najda TPA
-		if (stristr($detaildoss['reference_medic'],'TPA')!== FALSE)
-			{$emispar = "najda";}
-		// Transport Najda
-		if (stristr($detaildoss['reference_medic'],'TN')!== FALSE)
-			{$emispar = "najda";}
-		// X-Press
-		if (stristr($detaildoss['reference_medic'],'XP')!== FALSE)
-			{$emispar = "xpress";}
+		
 
 	} else {
 	    echo "0 results dossier";
@@ -235,6 +231,23 @@ if ($resulthch->num_rows > 0) {
 			$nnameprest = $rowap['nom']." [".$rowap['reference']."]";
 	        
 	        $array_puces[] = array('id' => $rowap["id"],'name' => $nnameprest);
+	    }
+	    //print_r($array_prest);
+		} else {
+	    echo "0 puces dispo";
+		}
+$sqllots = "SELECT id,nom,reference,numero FROM equipements WHERE (`type`='numserie') AND ((`annule` = 0) OR (`annule` IS NULL)) AND ((CURDATE() NOT BETWEEN str_to_date(`date_deb_indisponibilite`, '%d/%m/%Y') AND str_to_date(`date_fin_indisponibilite`, '%d/%m/%Y')) OR (`date_fin_indisponibilite` IS NULL))
+";
+
+	$resultlots = $conn->query($sqllots);
+	if ($resultlots->num_rows > 0) {
+	    // output data of each row
+	    $array_adls = array();
+	    while($rowlots = $resultlots->fetch_assoc()) {
+	        
+			$nnameprest = $rowlots['nom']." [".$rowlots['reference']."]".": num.série:".$rowlots['numero'];
+	        
+	        $array_adls[] = array('id' => $rowlots["id"],'name' => $nnameprest);
 	    }
 	    //print_r($array_prest);
 		} else {
@@ -828,25 +841,6 @@ header("Content-Type: text/html;charset=UTF-8");
 <form id="formchamps">
     <div class="row">
     <div id="entetelogo" class="col-md-3">
-        <input name="emispar" id="emispar" type="hidden" value="<?php if(isset ($emispar)) echo $emispar; ?>"></input>
-        <?php if (isset($emispar)) {  ?>
-        <?php if ($emispar == "najda") { ?>
-        <div>
-            <p style="margin-left:7px;margin-top:0.55pt; margin-bottom:0pt; widows:0; orphans:0; font-size:5.5pt"><span style="height:0pt; margin-top:-0.35pt; display:block; position:absolute; z-index:0"><img src="najda.png" width="161" height="98" alt="" style="margin-top:10pt; -aw-left-pos:16pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:-10.4pt; -aw-wrap-type:none; position:absolute" /></span><span style="font-family:'Times New Roman'">&#xa0;</span></p>
-        </div>
-        <br style="clear:both; mso-break-type:section-break" />
-        <p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0.2pt; margin-bottom:0pt; widows:0; orphans:0; font-size:7.5pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p>
-        <p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-            <span id="Eligne1" style="font-family:'Times New Roman'; font-weight:bold">Rue Mohamed Hamdane - Sahloul III</span>
-        </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-            <span id="Eligne2" style="font-family:'Times New Roman'; font-weight:bold">B.P. 41 - 4054 Sousse-Sahloul - Tunisie Tel : (+216) 3600 3600</span>
-        </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-            <span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">Fax : (+216) 73 82 03 33</span>
-        </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt">
-            <span id="Eligne4" style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">24ops@najda-assistance.com DD-(FP-03/04)-08/01</span>
-            <?php } ?>
-
-            <?php if ($emispar == "medici") { ?>
             <div>
         <p style="margin-left:7px;margin-top:0.55pt; margin-bottom:0pt; widows:0; orphans:0; font-size:5.5pt"><span style="height:0pt; margin-top:-0.35pt; display:block; position:absolute; z-index:0"><img src="medici.png" width="161" height="98" alt="" style="margin-top:10pt; -aw-left-pos:16pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:-10.4pt; -aw-wrap-type:none; position:absolute" /></span><span style="font-family:'Times New Roman'">&#xa0;</span></p>
     </div>
@@ -860,63 +854,10 @@ header("Content-Type: text/html;charset=UTF-8");
         <span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">Fax : (+216) 73 36 90 01</span>
     </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt">
         <span id="Eligne4" style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">international@medicmultiservices.com</span>
-        <?php } ?>
+       
 
 
-        <?php if (($emispar == "medicm") || ($emispar == "medict"))  { ?>
-        <div>
-    <p style="margin-left:7px;margin-top:0.55pt; margin-bottom:0pt; widows:0; orphans:0; font-size:5.5pt"><span style="height:0pt; margin-top:-0.35pt; display:block; position:absolute; z-index:0"><img src="medicm.png" width="161" height="98" alt="" style="margin-top:10pt; -aw-left-pos:16pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:-10.4pt; -aw-wrap-type:none; position:absolute" /></span><span style="font-family:'Times New Roman'">&#xa0;</span></p>
-    </div>
-    <br style="clear:both; mso-break-type:section-break" />
-    <p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0.2pt; margin-bottom:0pt; widows:0; orphans:0; font-size:7.5pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p>
-    <p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-        <span id="Eligne1" style="font-family:'Times New Roman'; font-weight:bold">Rue Mohamed Hamdane - Sahloul III</span>
-    </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-        <span id="Eligne2" style="font-family:'Times New Roman'; font-weight:bold">B.P. 41 - 4054 Sousse-Sahloul - Tunisie </span>
-    </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-        <span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 73 36 90 00</span>
-    </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-        <span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 73 36 90 01</span>
-    </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt">
-        <span id="Eligne4" style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">ambulance.transp@medicmultiservices.com</span>
-        <?php } ?>
-
-        <?php if ($emispar == "vat")  { ?>
-        <div>
-    <p style="margin-left:7px;margin-top:0.55pt; margin-bottom:0pt; widows:0; orphans:0; font-size:5.5pt"><span style="height:0pt; margin-top:-0.35pt; display:block; position:absolute; z-index:0"><img src="vat.png" width="161" height="98" alt="" style="margin-top:10pt; -aw-left-pos:16pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:-10.4pt; -aw-wrap-type:none; position:absolute" /></span><span style="font-family:'Times New Roman'">&#xa0;</span></p>
-    </div>
-    <br style="clear:both; mso-break-type:section-break" />
-    <p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0.2pt; margin-bottom:0pt; widows:0; orphans:0; font-size:7.5pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p>
-    <p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-        <span id="Eligne1" style="font-family:'Times New Roman'; font-weight:bold">Rue Mohamed Hamdane - Sahloul III</span>
-    </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-        <span id="Eligne2" style="font-family:'Times New Roman'; font-weight:bold">B.P. 41 - 4054 Sousse-Sahloul - Tunisie </span>
-    </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-        <span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 73 36 90 00</span>
-    </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-        <span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 73 36 90 01</span>
-    </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt">
-        <span id="Eligne4" style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">ambulance.transp@medicmultiservices.com</span>
-        <?php } ?>
-
-        <?php if ($emispar == "xpress")   { ?>
-        <div>
-    <p style="margin-left:7px;margin-top:0.55pt; margin-bottom:0pt; widows:0; orphans:0; font-size:5.5pt"><span style="height:0pt; margin-top:-0.35pt; display:block; position:absolute; z-index:0"><img src="xpress.png" width="161" height="98" alt="" style="margin-top:10pt; -aw-left-pos:16pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:-10.4pt; -aw-wrap-type:none; position:absolute" /></span><span style="font-family:'Times New Roman'">&#xa0;</span></p>
-    </div>
-    <br style="clear:both; mso-break-type:section-break" />
-    <p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:6pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p><p style="margin-top:0.2pt; margin-bottom:0pt; widows:0; orphans:0; font-size:7.5pt"><span style="font-family:'Times New Roman'">&#xa0;</span></p>
-    <p style="margin-top:0pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-        <span id="Eligne1" style="font-family:'Times New Roman'; font-weight:bold">Rue Mohamed Hamdane</span>
-    </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-        <span id="Eligne2" style="font-family:'Times New Roman'; font-weight:bold">B.P. 41 - 4054 Sousse-Sahloul - Tunisie </span>
-    </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-        <span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">(+216) 36 003 610</span>
-    </p><p style="margin-top:2.7pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt">
-        <span id="Eligne3" style="font-family:'Times New Roman'; font-weight:bold">FAX (+216) 73 820 333</span>
-    </p>
-    <?php } ?>
-
-    <?php } ?>
+       
 </div>
     <div class="col-md-9">
         <p class=rvps2><span class=rvts6><br></span></p>
@@ -1084,17 +1025,20 @@ header("Content-Type: text/html;charset=UTF-8");
 	</span> 
 <?php if (isset($parentsims)) { 
 // cas existe sims dans om parent
-foreach ($parentsims as $psim) {	
+foreach ($parentsims as $psim) {
+
 	?>
 <div class="fieldsims_wrapper" id="fieldsims_wrapper"><div>
 		<select list="CL_puces" name="CL_puces[]" >
 			<option value='' ></option>
 <?php
 foreach ($array_puces as $puced) {
-	if ($puced['id'] !== $psim['idequipement'])
-	{echo "<option value='".$puced['id']."' >".$puced['name']."</option>";}
-	else
+
+	if ( $puced['id']=== $psim['idequipement'])
 		{echo "<option value='".$puced['id']."' selected >".$puced['name']."</option>";}
+	
+	else
+{echo "<option value='".$puced['id']."' >".$puced['name']."</option>";}
 }
 ?>
 </select>
@@ -1138,10 +1082,70 @@ foreach ($array_puces as $puced) {
 <input type="hidden" name="ct" id="ct" value="1" />
 </p>
 </br>
-<p class=rvps11><span class=rvts46>Lot ADL&nbsp; ( </span><span class=rvts42>exple :</span><span class=rvts46> Lot #3&nbsp; )&nbsp; (+)</span></p>
-<p class=rvps11><span class=rvts46>POC&nbsp; ( </span><span class=rvts42>exple :</span><span class=rvts46> POC #1, </span><span class=rvts42>marque</span><span class=rvts46> : yyyyyyyy, </span><span class=rvts42>num. série</span><span class=rvts46> xxxxxxxxxxxx&nbsp; )&nbsp; (+)</span></p>
-<p class=rvps11><span class=rvts46>Equipement&nbsp; ( </span><span class=rvts42>exple :</span><span class=rvts46>&nbsp; Aspirateur num3, </span><span class=rvts42>marque</span><span class=rvts46> : yyyyyyy, </span><span class=rvts42>num. série</span><span class=rvts46> xxxxx&nbsp; )&nbsp; (+)</span></p>
-<p class=rvps11><span class=rvts46>Equipement&nbsp; ( </span><span class=rvts42>exple :</span><span class=rvts46>&nbsp; PSE num 4, </span><span class=rvts42>marque</span><span class=rvts46> :xxxxxxx, </span><span class=rvts42>num. série</span><span class=rvts46> : xxxxxxxxx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )&nbsp; (+)</span></p>
+<p class=rvps11><span class=rvts46>Equipement
+<span id="addnewadl" style="display: inline-block;text-align: right;"><a href="javascript:addadl();" id="addadl_button">(+)</a></span>
+	</span> 
+<?php if (isset($parentadls)) { 
+// cas existe sims dans om parent
+foreach ($parentadls as $padl) {
+
+	?>
+<div class="fieldadls_wrapper" id="fieldadls_wrapper"><div>
+		<select list="CL_adls" name="CL_adls[]" >
+			<option value='' ></option>
+<?php
+foreach ($array_adls as $adl) {
+
+	if ( $adl['id']=== $padl['idequipement'])
+		{echo "<option value='".$adl['id']."' selected >".$adl['name']."</option>";}
+	
+	else
+{echo "<option value='".$adl['id']."' >".$adl['name']."</option>";}
+}
+?>
+</select>
+</div></div>
+<?php // end foreach parentsims
+} ?>
+<!-- template div sim -->
+<div id="newadl" style="display:none">
+<select list="CL_adls" name="CL_adls[]" >
+	<option value='' ></option>
+	<?php
+	foreach ($array_adls as $adl) {
+		echo "<option value='".$adl['id']."' >".$adl['name']."</option>";
+	}
+	?>
+</select>
+</div>
+<?php } else { ?>
+<div class="fieldadls_wrapper" id="fieldadls_wrapper"><div>
+		<select list="CL_adls" name="CL_adls[]" >
+			<option value='' ></option>
+<?php
+foreach ($array_adls as $adl) {
+	echo "<option value='".$adl['id']."' >".$adl['name']."</option>";
+}
+?>
+</select>
+</div></div>
+<!-- template div sim -->
+<div id="newadl" style="display:none">
+<select list="CL_adls" name="CL_adls[]" >
+	<option value='' ></option>
+	<?php
+	foreach ($array_adls as $adl) {
+		echo "<option value='".$adl['id']."' >".$adl['name']."</option>";
+	}
+	?>
+</select>
+</div>
+<?php } ?>
+<input type="hidden" name="cadl" id="cadl" value="1" />
+</p>
+<br>
+
+
 <?php } ?>
 </br>
 <p class=rvps11><span class=rvts52>Merci de vérifier le certificat d</span><span class=rvts53>’</span><span class=rvts52>aptitude au vol (FTF) + documents d</span><span class=rvts53>’</span><span class=rvts52>identité du passager</span></p>
@@ -1216,8 +1220,8 @@ foreach ($array_puces as $puced) {
             <p><span class=rvts1>Bonne mission</span><span class=rvts2>.</span></p>
  <div class="row ">
       <p><span class=rvts1>Signé : </span><span class=rvts2>
-<span style="font-family:'Times New Roman'; font-weight:bold; color:#000"> <?php if (isset($detailagt)) {echo $detailagt['name']; } if (isset($detailom)) { if (isset($detailom['agent'])) {echo $detailom['agent'];}}?> </span>
-<input name="agent" id="agent" type="hidden" value="<?php if (isset($detailagt)) {echo $detailagt['name']; } if (isset($detailom)) { if (isset($detailom['agent'])) {echo $detailom['agent'];}} ?>"></input>
+<span style="font-family:'Times New Roman'; font-weight:bold; color:#000"> <?php if (isset($detailagt)) {echo $detailagt['name']." ".$detailagt['lastname']; } if (isset($detailom)) { if (isset($detailom['agent'])) {echo $detailom['agent'];}}?> </span>
+<input name="agent" id="agent" type="hidden" value="<?php if (isset($detailagt)) {echo $detailagt['name']." ".$detailagt['lastname']; } if (isset($detailom)) { if (isset($detailom['agent'])) {echo $detailom['agent'];}} ?>"></input>
       </div>
 </form>
 <script type="text/javascript">
@@ -1383,6 +1387,40 @@ foreach ($array_puces as $puced) {
 			var ele = d.getElementById(eleid);
 			var parentele = d.getElementById('fieldsims_wrapper');
 			parentele.removeChild(ele);
+		}
+function addadl()
+		{
+			cadl = Number(document.getElementById('cadl').value);
+			cadl++;
+			document.getElementById('cadl').value=cadl;
+			var div2 = document.createElement('div');
+			div2.id = "adl_"+cadl;
+			// link to delete extended form elements
+			var delLink1 = '<div style="text-align:right;margin-right:80px;margin-top:-22px"><a href=javascript:deleteadl("adl_'+ cadl+'") >(-)</a></div>';
+			//<span style="display: inline-block;text-align: right;"><a href="javascript:deletesim();" id="delsim_button">(-)</a></span>
+			// add options to datalist (list puces dispo)
+			 //document.getElementById('CL_puces').appendChild('<option>test</option>');
+			 //$("#CL_puces").append($("<option>").attr('value', 50).text('item'));
+			div2.innerHTML = document.getElementById('newadl').innerHTML + delLink1;
+			document.getElementById('fieldadls_wrapper').appendChild(div2);
+		}
+
+
+		/*function addsim()
+		{
+			var div1 = document.createElement('div');
+			// Get template data
+			div1.innerHTML = document.getElementById('newsim').innerHTML;
+			// append to our form, so that template data
+			//become part of form
+			document.getElementById('fieldsims_wrapper').appendChild(div1);
+		}*/
+		function deleteadl(eleid)
+		{
+			d1 = document;
+			var ele1 = d1.getElementById(eleid);
+			var parentele1 = d1.getElementById('fieldadls_wrapper');
+			parentele1.removeChild(ele1);
 		}
 </script>
 				</body></html>

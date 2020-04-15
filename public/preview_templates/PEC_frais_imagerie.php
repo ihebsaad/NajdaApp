@@ -380,14 +380,13 @@ foreach ($array_imag as $imag) {
 <script language="javascript" src="nombre_en_lettre.js"></script>
 <script type="text/javascript">
     function keyUpHandler(obj){
-
-            //document.getElementById("CL_montant_toutes_lettres").firstChild.nodeValue =   NumberToLetter(obj.value)
-            
-<?php if (intval($montantgop) > 0) { ?>
-            if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block";}
+	<?php if (intval($montantgop) > 0) { ?>
+            if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block"; obj.value="";document.getElementById("CL_montant_toutes_lettres").value  = "";}
             else {document.getElementById("alertGOP").style.display="none";}
-<?php   } ?> 
-         document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value)
+	<?php } ?>
+if (obj.value > 0)
+            {document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value) }
+
         }//fin de keypressHandler
 document.querySelector('input[list="prest__imag"]').addEventListener('input', onInput);
 

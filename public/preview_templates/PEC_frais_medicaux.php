@@ -656,10 +656,12 @@ foreach ($array_sig as $docsigne)
 <script type="text/javascript">
     function keyUpHandler(obj){
 	<?php if (intval($montantgop) > 0) { ?>
-            if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block";}
+            if (obj.value > <?php echo $montantgop; ?>) {document.getElementById("alertGOP").style.display="block"; obj.value="";document.getElementById("CL_montant_toutes_lettres").value  = "";}
             else {document.getElementById("alertGOP").style.display="none";}
 	<?php } ?>
-            document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value)
+if (obj.value > 0)
+            {document.getElementById("CL_montant_toutes_lettres").value  = NumberToLetter(obj.value) }
+
         }//fin de keypressHandler
 	// statut malade checkbox
     $("#CL_attention").change(function() {

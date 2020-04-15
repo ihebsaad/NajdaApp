@@ -1,11 +1,14 @@
 <?php
 if (isset($_GET['ID_DOSSIER'])) {$iddossier=$_GET['ID_DOSSIER'];}
+if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
 if (isset($_GET['reference_medic'])) {$reference_medic=$_GET['reference_medic']; }
 if (isset($_GET['reference_customer'])) {$reference_customer=$_GET['reference_customer']; }
 if (isset($_GET['subscriber_name'])) {$subscriber_name=$_GET['subscriber_name'];  }
 if (isset($_GET['subscriber_lastname'])) {$subscriber_lastname=$_GET['subscriber_lastname']; }
 if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['CL_rapport'])) {$CL_rapport=$_GET['CL_rapport'];}
+if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
+if (isset($_GET['agent__lastname'])) {$agent__lastname=$_GET['agent__lastname']; }
 if (isset($_GET['CL_action1'])) {$CL_action1=$_GET['CL_action1'];}
 if (isset($_GET['CL_delai'])) {$CL_delai=$_GET['CL_delai'];}
 if (isset($_GET['CL_action2'])) {$CL_action2=$_GET['CL_action2'];}
@@ -16,6 +19,7 @@ if (isset($_GET['CL_action4'])) {$CL_action4=$_GET['CL_action4'];}
 if (isset($_GET['CL_delai4'])) {$CL_delai4=$_GET['CL_delai4'];}
 
 if (isset($_GET['CL_observation'])) {$CL_observation=$_GET['CL_observation'];}
+
 if (isset($_GET['pre_dateheure'])) {$pre_dateheure=$_GET['pre_dateheure'];}
 $lines_array = file("../../.env");
 
@@ -181,6 +185,17 @@ $sqlomtaxi = "SELECT idprestation,CL_lieudecharge_dec,CL_lieuprest_pc FROM om_ta
         while($rowomtaxi = $resultomtaxi->fetch_assoc()) {
             $array_omtaxi[] = array('CL_lieudecharge_dec' => $rowomtaxi["CL_lieudecharge_dec"],"CL_lieuprest_pc" => $rowomtaxi["CL_lieuprest_pc"],"idprestation" => $rowomtaxi["idprestation"]  );
         }}
+// infos agent
+	    $sqlagt = "SELECT name,lastname,signature FROM users WHERE id=".$iduser."";
+		$resultagt = $conn->query($sqlagt);
+		if ($resultagt->num_rows > 0) {
+	    // output data of each row
+	    $detailagt = $resultagt->fetch_assoc();
+	    
+		} else {
+	    echo "0 results agent";
+		}
+
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -405,6 +420,8 @@ p,ul,ol /* Paragraph Style */
 <p><span class=rvts11>Informations de Najda vers IMA : </span><span class=rvts12>
 <p><span class=rvts13><br></span></p>
 <textarea name="CL_rapport" rows="10" cols="90" form="formchamps" placeholder="" value=""><?php if(isset ($CL_rapport)) { $ligne = str_replace('\\', "\n", $CL_rapport); echo $ligne;} ?></textarea></span></p>
+<p class=rvps9><span class=rvts6>Cordialement</span></p>
+<p class=rvps1><span class=rvts9><input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($detailagt['name'])) echo $detailagt['name']; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($detailagt['lastname'])) echo $detailagt['lastname']; ?>" /> </span></p>
 <p><span class=rvts13><br></span></p>
 <p class=rvps4><span class=rvts11>Actions à mettre en oeuvre par IMA:</span></p>
 <p class=rvps5><span class=rvts11><br></span></p>
