@@ -2171,13 +2171,13 @@ class DossiersController extends Controller
         $gouv = $request->get('gouv');
         $type = $request->get('type');
         $spec = $request->get('specialite');
-        $ville = $request->get('ville');
+        $ville = trim($request->get('ville'));
         $postal = $request->get('postal');
-        if (intval($postal) >1 &&($ville!='')){
+        if (intval($postal) >1 || ($ville!='')){
             $liste =Evaluation::where('gouv',$gouv )
                 ->where('type_prest',$type )
                 ->where('specialite',$spec )
-                ->where('postal',$postal )
+                ->where('ville',$ville )
                 ->orderBy('priorite','asc')
                 ->orderBy('derniere_prestation','asc')
                 ->get();
@@ -2273,11 +2273,11 @@ class DossiersController extends Controller
         $spec = $request->get('specialite');
         $ville = $request->get('ville');
         $postal = $request->get('postal');
-        if (intval($postal) >1 &&($ville!='')){
+        if (intval($postal) >1 ||($ville!='')){
             $liste =Evaluation::where('gouv',$gouv )
                 ->where('type_prest',$type )
                 ->where('specialite',$spec )
-                ->where('postal',$postal )
+                ->where('ville',$ville )
                 ->orderBy('priorite','asc')
                 ->orderBy('derniere_prestation','asc')
                 ->get();
@@ -2389,11 +2389,11 @@ class DossiersController extends Controller
         else{ $postal=0;}
 
 
-        if (intval($postal) >1  ){
+        if (intval($postal) >1 || ($ville!='')  ){
             $datasearch =Evaluation::where('gouv',$gouvernorat )
                 ->where('type_prest',$typeprest )
                 ->where('specialite',$specialite )
-                ->where('postal',$postal )
+                ->where('ville',$ville )
                 ->orderBy('priorite','asc')
                 ->orderBy('derniere_prestation','asc')
                 ->get();

@@ -224,6 +224,7 @@ $dtc = (new \DateTime())->modify('-5 minutes')->format('Y-m-d\TH:i');
                             if($statut=='ferme'){$stat='Fermeture';}
                             if($statut=='sanssuite'){$stat='Fermeture <small>Sans Suite</small>';}
                             ?>
+                        Notifications financiers
 
                      <li  id="<?php echo $al->id; ?>"   ><a href="{{action('DossiersController@view', $al->id_dossier)}}" > <i class="fas  fa-folder"></i> <?php echo $al->ref_dossier . ' '.$abn; ?> </a></li><li  rel="tremail" ><a href="<?php echo $urlapp; ?>"><label style="font-weight:bold;" >    <i class="fas  fa-warning"></i> <?php echo $datea.'  '.$stat ; ?> </label></a></li>
 

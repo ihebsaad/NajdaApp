@@ -1,6 +1,10 @@
 
 @extends('layouts.mainlayout')
 
+<?php
+$param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+?>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
@@ -1813,7 +1817,23 @@
                     if(parsed['type']!=null){string+='Type : '+parsed['type']+ ' '; }
                     if(parsed['typetel']!=null){string+=parsed['typetel']+ ' '; }
 
-                    alert(string);
+                    if(parsed['nature']=='email' || parsed['nature']=='tel' || parsed['nature']=='fax' )
+                    {  // client
+                        string+='<br>   lien : <a href="<?php echo $urlapp.'/clients/view/'; ?>'+parsed['parent']+'" target="_blank" >Ouvrir Fiche Client</a>';
+                    }else{
+                        // intervenant
+                        if(parsed['nature']=='emailinterv' || parsed['nature']=='telinterv' || parsed['nature']=='faxinterv' )
+                        {  // client
+                            string+='<br>   lien : <a href="<?php echo $urlapp.'/prestataires/view/'; ?>'+parsed['parent']+'" target="_blank" >Ouvrir Fiche Prestataire</a>';
+
+                        }
+                    }
+                    // alert(string);
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Existant...',
+                        html: string
+                    });
 
                     document.getElementById(id).style.background='#FD9883';
                     document.getElementById(id).style.color='white';
@@ -1834,10 +1854,6 @@
 
 
 
-<?php
-$param= App\Parametre::find(1);$env=$param->env;
-$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
-?>
 <script type="text/javascript">
 
     function checkForm(form) // Submit button clicked

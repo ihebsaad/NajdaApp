@@ -1,5 +1,8 @@
 @extends('layouts.adminlayout')
-
+<?php
+$param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+?>
 @section('content')
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
@@ -1785,8 +1788,24 @@
                     if(parsed['remarque']!=null){string+='Remarque : '+parsed['remarque']+ ' - '; }
                     if(parsed['type']!=null){string+='Type : '+parsed['type']+ ' '; }
                     if(parsed['typetel']!=null){string+=parsed['typetel']+ ' '; }
+                    if(parsed['nature']=='email' || parsed['nature']=='tel' || parsed['nature']=='fax' )
+                    {  // client
+                        string+='<br>   lien : <a href="<?php echo $urlapp.'/clients/view/'; ?>'+parsed['parent']+'" target="_blank" >Ouvrir Fiche Client</a>';
+                    }else{
+                        // intervenant
+                        if(parsed['nature']=='emailinterv' || parsed['nature']=='telinterv' || parsed['nature']=='faxinterv' )
+                        {  // client
+                            string+='<br>   lien : <a href="<?php echo $urlapp.'/prestataires/view/'; ?>'+parsed['parent']+'" target="_blank" >Ouvrir Fiche Prestataire</a>';
 
-                    alert(string);
+                        }
+                    }
+                   // alert(string);
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Existant...',
+                        html: string
+                    });
+
                     document.getElementById(id).style.background='#FD9883';
                     document.getElementById(id).style.color='white';
                 } else{
@@ -2367,10 +2386,7 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-<?php
-$param= App\Parametre::find(1);$env=$param->env;
-$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
-?>
+
 <script type="text/javascript">
 
     function checkForm(form) // Submit button clicked
