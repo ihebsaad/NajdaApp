@@ -662,7 +662,7 @@ function custom_echo($x, $length)
                                      <label>Ville</label>
                                  </div>
                                  <div class="row" style=";margin-bottom:10px;"><style>.algolia-places{width:80%;}</style></div>
-                                 <input class="form-control" style="padding-left:5px" type="text"  id="villepr" />
+                                 <input class="form-control" style="padding-left:5px" type="text"  id="villepr"  placeholder="toutes" />
                                  <input class="form-control" style="padding-left:5px;" type="hidden"  id="villecode" />
 
                              </div>
@@ -1994,8 +1994,13 @@ array_push($listepr,$pr['prestataire_id']);
                                           <option value="Taxi">Taxi</option>
                                           <option value="Ambulance">Ambulance</option>
                                           <option value="Remorquage">Remorquage</option>
+<?php
+if(strstr($dossier['reference_medic'],"MI")){
+?>
                                           <option value="Medic Internationnal">Medic Internationnal</option>
-                                     
+          <?php
+}
+?>                         
                                           
                                      </select>
                                   </div>
@@ -2812,7 +2817,7 @@ array_push($listepr,$pr['prestataire_id']);
                             </div>
                             <div class="row" style=";margin-bottom:10px;"><style>.algolia-places{width:80%;}</style>
                             </div>
-                            <input class="form-control"   style="padding-left:5px" type="text"   name="ville" id="villepr3" />
+                            <input class="form-control"   style="padding-left:5px" type="text"   name="ville" id="villepr3" placeholder="toutes" />
                             <input class="form-control" style="padding-left:5px;" type="hidden" name="postal" id="villecode3" />
 
                         </div>
@@ -3284,11 +3289,13 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
     }
 
 function remplaceom(id,affectea,verif)
-{
+{ var tempom = $("#templateom").val();
+
     document.getElementById('claffect1').style.display = 'block';
     document.getElementById('claffect2').style.display = 'block';
-
-    
+     if (verif === "ommie")
+     { document.getElementById('claffect1').style.display = 'none';
+            document.getElementById('claffect2').style.display = 'none';}
         if (affectea !== undefined && affectea !== null && affectea !== '')
         {
             //$("#affectationprest").val(affectea).change();
@@ -3301,7 +3308,7 @@ function remplaceom(id,affectea,verif)
 
     //ajout id user conncte
     var cnctuserid = $("#cnctuserid").val();
-
+ var dossier = $('#dossom').val();
     if(verif==='omtx')
     var url = '<?php echo url('/'); ?>/public/preview_templates/odm_taxi.php?remplace=1&parent='+id+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
      if(verif==='omamb')
@@ -3309,7 +3316,7 @@ function remplaceom(id,affectea,verif)
     if(verif==='omre')
         var url = '<?php echo url('/'); ?>/public/preview_templates/odm_remorquage.php?remplace=1&parent='+id+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
     if(verif==='ommie')
-        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_medic_international.php?remplace=1&parent='+id+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
+        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_medic_international.php?remplace=1&parent='+id+'&dossier='+dossier+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
 
          document.getElementById("omfilled").src = url;
          $("#idomparent").val(id);
@@ -4048,9 +4055,11 @@ function keyUpHandler(){
                         afficheom(data,tempom);
                 }
             });*/
-
-            document.getElementById('claffect1').style.display = 'block';
+ document.getElementById('claffect1').style.display = 'block';
             document.getElementById('claffect2').style.display = 'block';
+if (tempom === "Medic Internationnal")
+            { document.getElementById('claffect1').style.display = 'none';
+            document.getElementById('claffect2').style.display = 'none';}
             $("#affectationprest").val("Select").change();
 
             afficheom(tempom,dossier,affectea);
