@@ -38,14 +38,18 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
     $diffPoste=date_diff($datePoste,$today);
    // $diffPoste->format("%R%a ");
 
-	?>
+if($date_arrive !=''){
+$mois=substr ( $date_arrive , 3  ,2 );
+}else{$mois='';}
+ 	?>
     <form id="updateform">
 
                     <div class="row">
 					<h4 style="margin-left:30px;margin-bottom:30px"> Créée Par : <b><?php echo UsersController::ChampById('name',$facture->par).' '.UsersController::ChampById('lastname',$facture->par);?>     le  <?php echo   $createdat   ?> </b></h4>
 					</div>
                     <div class="row">
-					
+					    <input type="hidden"  name="id" id="id"  value="{{ $facture->id }}">
+
 					    <div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">N° de Facture</label>
@@ -56,10 +60,11 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Dossier</label>
-                                <?php $iddossier= $facture->iddossier; $dossier= App\Dossier::where('id',$iddossier)->first();$ref=$dossier->reference_medic ; $refC= $dossier->customer_id ;$abn= $dossier->subscriber_name .' '.$dossier->subscriber_lastname ;
+                                <?php $refC='';
+								$iddossier= $facture->iddossier; if($iddossier >0) {$dossier= App\Dossier::where('id',$iddossier)->first();$ref=$dossier->reference_medic ; $refC= $dossier->customer_id ;$abn= $dossier->subscriber_name .' '.$dossier->subscriber_lastname ;
                                 ?>
                                 <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@view',$dossier->id)}}" ><?php echo $ref. ' | '.$abn ; ?></a></h4>
-
+								<?php }  ?>
                             </div>
                         </div>
 
@@ -86,7 +91,7 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Adresse de facturation</label>
 
-                                <h4 style="font-weight:bold;"> <?php echo  $dossier->adresse_facturation ?></h4>
+                                <h4 style="font-weight:bold;"> <?php if($iddossier >0) { echo  $dossier->adresse_facturation ;} ?></h4>
 
                             </div>
                         </div>
@@ -98,6 +103,26 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
 
         <div class="row" style="margin-top:20px">
 <?php $prestataires =App\Prestataire::get();?>
+
+          <div class="col-md-3">
+             <div class="form-group">
+                  Type de facture 
+                <div style="width:100%;margin-top:8px "  >
+				<label for="honoraire" class="">
+				<input onclick="changing(this) ;$('#prest').hide('slow')"  type="radio" name="honoraire" id="honoraire"   value="1" <?php if ($facture->honoraire ==1){echo 'checked';} ?> >
+				Honoraire de Dossier
+				</label>
+                 <label for="non_honoraire" style="margin-left:20px"><!--  document.getElementById('prest').style.display = 'block'-->
+				 <input onclick="disabling('honoraire');$('#prest').show('slow') ;" type="radio" name="honoraire" id="non_honoraire" value="0"  <?php if ($facture->honoraire ==0){echo 'checked';} ?>  >
+				 Prestation 
+				 </label> 
+				</div>
+              
+			</div>
+           </div>
+
+
+		  <div id="prest"   <?php if ($facture->honoraire ==1){echo 'style="display:none"';} ?>  >
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="inputError" class="control-label">Intervenant</label>
@@ -119,7 +144,7 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
                     <input onchange="changing(this)" class="form-control input" name="facture_prestataire" id="facture_prestataire"  value="{{ $facture->facture_prestataire }}">
                 </div>
             </div>
-
+		  </div>
         </div><!------ Row 2 ------>
 
         <div class="row" style="margin-top:20px">
@@ -127,20 +152,20 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="inputError" class="control-label">Mois</label>
-                    <select onchange="changing(this)"    class="form-control input"   name="mois" id="mois"  value="{{ $facture->mois }}" style="width:150px">
+                    <select     class="form-control input"   name="mois" id="mois"    style="width:150px">
                         <option value=""></option>
-                        <option <?php if($facture->mois==1){echo 'selected="selected"';}?> value="1">  1  </option>
-                        <option <?php if($facture->mois==2){echo 'selected="selected"';}?> value="1">  2  </option>
-                        <option <?php if($facture->mois==3){echo 'selected="selected"';}?> value="1">  3  </option>
-                        <option <?php if($facture->mois==4){echo 'selected="selected"';}?> value="1">  4  </option>
-                        <option <?php if($facture->mois==5){echo 'selected="selected"';}?> value="1">  5  </option>
-                        <option <?php if($facture->mois==6){echo 'selected="selected"';}?> value="1">  6  </option>
-                        <option <?php if($facture->mois==7){echo 'selected="selected"';}?> value="1">  7  </option>
-                        <option <?php if($facture->mois==8){echo 'selected="selected"';}?> value="1">  8  </option>
-                        <option <?php if($facture->mois==9){echo 'selected="selected"';}?> value="1">  9  </option>
-                        <option <?php if($facture->mois==10){echo 'selected="selected"';}?> value="1">  10  </option>
-                        <option <?php if($facture->mois==11){echo 'selected="selected"';}?> value="1">  11  </option>
-                        <option <?php if($facture->mois==12){echo 'selected="selected"';}?> value="1">  12  </option>
+                        <option <?php if($mois=='01'){echo 'selected="selected"';}?>  >  1  </option>
+                        <option <?php if($mois=='02'){echo 'selected="selected"';}?> >   2  </option>
+                        <option <?php if($mois=='03'){echo 'selected="selected"';}?>  >  3  </option>
+                        <option <?php if($mois=='04'){echo 'selected="selected"';}?>  >  4  </option>
+                        <option <?php if($mois=='05'){echo 'selected="selected"';}?>  >  5  </option>
+                        <option <?php if($mois=='06'){echo 'selected="selected"';}?>  >  6  </option>
+                        <option <?php if($mois=='07'){echo 'selected="selected"';}?>  >  7  </option>
+                        <option <?php if($mois=='08'){echo 'selected="selected"';}?>  >  8  </option>
+                        <option <?php if($mois=='09'){echo 'selected="selected"';}?>  >  9  </option>
+                        <option <?php if($mois=='10'){echo 'selected="selected"';}?>  >  10  </option>
+                        <option <?php if($mois=='11'){echo 'selected="selected"';}?>  >  11  </option>
+                        <option <?php if($mois=='12'){echo 'selected="selected"';}?>  >  12  </option>
                     </select>
                 </div>
             </div>
@@ -149,14 +174,14 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="inputError" class="control-label">Date d'arrivée</label>
-                    <input onchange="changing(this);location.reload()"  class="form-control datepicker-default "  name="date_arrive" id="date_arrive"  autocomplete="off" value="{{ $facture->date_arrive }}">
+                    <input onchange="changing(this);location.reload()"  class="form-control datepicker-default "  name="date_arrive" id="date_arrive"  autocomplete="off" value="{{ $facture->date_arrive }}"  placeholder="jj/mm/aaaa">
                 </div>
             </div>
 
 				<div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Date de validation</label>
-                                <input onchange="changing(this);location.reload()"   class="form-control datepicker-default "  name="date_valid" id="date_valid"  autocomplete="off" value="{{ $facture->date_valid }}">
+                                <input onchange="changing(this);location.reload()"   class="form-control datepicker-default "  name="date_valid" id="date_valid"  autocomplete="off" value="{{ $facture->date_valid }}" placeholder="jj/mm/aaaa">
                             </div>
                 </div>
 
@@ -174,7 +199,7 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
    				<div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Date de Facturation</label>
-                                <input onchange="changing(this)"   class="form-control datepicker-default " name="date_facture" id="date_facture" autocomplete="off" value="{{ $facture->date_facture }}">
+                                <input onchange="changing(this)"   class="form-control datepicker-default " name="date_facture" id="date_facture" autocomplete="off" value="{{ $facture->date_facture }}" placeholder="jj/mm/aaaa">
                             </div>
                 </div>
 
@@ -182,14 +207,14 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
 
                 <div class="form-group">
                                 <label for="inputError" class="control-label">Date de Réception/Fact</label>
-                                <input onchange="changing(this)"   class="form-control datepicker-default " name="date_reception" id="date_reception" autocomplete="off" value="{{ $facture->date_reception }}">
+                                <input onchange="changing(this)"   class="form-control datepicker-default " name="date_reception" id="date_reception" autocomplete="off" value="{{ $facture->date_reception }}" placeholder="jj/mm/aaaa">
                  </div>
                 </div>
 
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="inputError" class="control-label">Date de Scan</label>
-                    <input onchange="changing(this)"  class="form-control datepicker-default " name="date_scan" id="date_scan" autocomplete="off" value="{{ $facture->date_scan }}">
+                    <input onchange="changing(this)"  class="form-control datepicker-default " name="date_scan" id="date_scan" autocomplete="off" value="{{ $facture->date_scan }}" placeholder="jj/mm/aaaa">
                 </div>
             </div>
         </div>
@@ -201,14 +226,14 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Date d'envoi par Email</label>
-                                <input onchange="changing(this)"   class="form-control datepicker-default " name="date_email" id="date_email" autocomplete="off" value="{{ $facture->date_email }}">
+                                <input onchange="changing(this)"   class="form-control datepicker-default " name="date_email" id="date_email" autocomplete="off" value="{{ $facture->date_email }}"  placeholder="jj/mm/aaaa">
                             </div>
                         </div>
 
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Date Bordereau</label>
-                                <input onchange="changing(this)"  class="form-control datepicker-default " name="date_bord" id="date_bord" autocomplete="off" value="{{ $facture->date_bord }}">
+                                <input onchange="changing(this)"  class="form-control datepicker-default " name="date_bord" id="date_bord" autocomplete="off" value="{{ $facture->date_bord }}" placeholder="jj/mm/aaaa">
                             </div>
                         </div>
 				
@@ -217,7 +242,7 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
 				<div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Date d'envoi par Poste</label>
-                                <input onchange="changing(this);location.reload() "   class="form-control datepicker-default "name="date_poste" id="date_poste" autocomplete="off" value="{{ $facture->date_poste }}">
+                                <input onchange="changing(this);location.reload() "   class="form-control datepicker-default "name="date_poste" id="date_poste" autocomplete="off" value="{{ $facture->date_poste }}"  placeholder="jj/mm/aaaa">
                             </div>
                 </div>
 				
@@ -290,20 +315,20 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
     function disabling(elm) {
         var champ=elm;
 
-        var val =1;
-         var citie = $('#id').val();
+        var val =0;
+         var facture = $('#id').val();
         //if ( (val != '')) {
         var _token = $('input[name="_token"]').val();
         $.ajax({
             url: "{{ route('factures.updating') }}",
             method: "POST",
-            data: {citie: citie , champ:champ ,val:val, _token: _token},
+            data: {facture: facture , champ:champ ,val:val, _token: _token},
             success: function (data) {
-                if (elm=='annule'){
-                $('#nonactif').animate({
+                if (elm=='honoraire'){
+                $('#non_honoraire').animate({
                     opacity: '0.3',
                 });
-                $('#nonactif').animate({
+                $('#non_honoraire').animate({
                     opacity: '1',
                 });
                 }
@@ -318,27 +343,27 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
 
 
 
+ 
+ $( "#date_facture" ).datepicker({
 
+            altField: "#datepicker",
+            closeText: 'Fermer',
+            prevText: 'Précédent',
+            nextText: 'Suivant',
+            currentText: 'Aujourd\'hui',
+            monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+            dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+            dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+            dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+            weekHeader: 'Sem.',
+            buttonImage: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAATCAYAAAB2pebxAAABGUlEQVQ4jc2UP06EQBjFfyCN3ZR2yxHwBGBCYUIhN1hqGrWj03KsiM3Y7p7AI8CeQI/ATbBgiE+gMlvsS8jM+97jy5s/mQCFszFQAQN1c2AJZzMgA3rqpgcYx5FQDAb4Ah6AFmdfNxp0QAp0OJvMUii2BDDUzS3w7s2KOcGd5+UsRDhbAo+AWfyU4GwnPAYG4XucTYOPt1PkG2SsYTbq2iT2X3ZFkVeeTChyA9wDN5uNi/x62TzaMD5t1DTdy7rsbPfnJNan0i24ejOcHUPOgLM0CSTuyY+pzAH2wFG46jugupw9mZczSORl/BZ4Fq56ArTzPYn5vUA6h/XNVX03DZe0J59Maxsk7iCeBPgWrroB4sA/LiX/R/8DOHhi5y8Apx4AAAAASUVORK5CYII=",
 
+            firstDay: 1,
+            dateFormat: "dd/mm/yy"
 
-    function calculduree() {
-        var inputdate1 = document.getElementById("date_poste").value;
-        var inputdate2 =  '<?php // echo $today;?>' ; //document.getElementById("CL_date_fin_location").value;
-        var date1 = inputdate1.substring(0, 10);
-        var date2 = inputdate2.substring(0, 10);
-
-alert(date1);
-alert(date2);
-        var datedeb = new Date(date1);
-        var datefin = new Date(date2);
-        alert(datedeb);
-        alert(datefin);
-
-        diffTime = Math.abs(datefin.getTime() - datedeb.getTime());
-        diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-         document.getElementById("delai_poste").value = diffDays;
-     }
-
+        });
+ 
 
 
 </script>

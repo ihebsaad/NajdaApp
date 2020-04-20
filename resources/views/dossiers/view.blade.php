@@ -1769,7 +1769,7 @@ array_push($listepr,$pr['prestataire_id']);
                                     <a href="{{action('FacturesController@view', $facture->id)}}" ><?php echo sprintf("%05d",$facture->id);?></a>
                                     </td>
                                 <td style="width:10%">
-                                    <?php echo date('d/m/Y H:i', strtotime($facture->created_at)) ; ?>
+                                    <?php echo  $facture->date_arrive  ; ?>
                                  </td>
                                 <td style="width:15%">
                                     <?php echo $facture->reference ; ?>

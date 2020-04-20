@@ -31,21 +31,26 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         <div class="col-lg-12">
             <ul id="tabs" class="nav  nav-tabs"  data-tabs="tabs">
                 <li class=" nav-item active">
-                    <a class="nav-link active   " href="#tab01" data-toggle="tab" onclick="showinfos();hideinfos2();hideinfos3();" >
+                    <a class="nav-link active   " href="#tab01" data-toggle="tab" onclick="showinfos();hideinfos2();hideinfos3();hideinfos4();" >
                         <i class="fas fa-lg fa-user-md"></i>  Détails de l'intervenant
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#tab02" data-toggle="tab"  onclick=";showinfos2();hideinfos();hideinfos3();;">
+                    <a class="nav-link" href="#tab02" data-toggle="tab"  onclick=";showinfos2();hideinfos();hideinfos3();hideinfos4();;">
                         <i class="fas fa-lg fa-ambulance"></i>  Prestations
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#tab03" data-toggle="tab"  onclick="showinfos3();hideinfos();hideinfos2();">
+                    <a class="nav-link" href="#tab03" data-toggle="tab"  onclick="showinfos3();hideinfos();hideinfos2();hideinfos4();">
                         <i class="fas fa-lg fa-sort-amount-down"></i>  Priorités
                     </a>
                 </li>
 
+                     <li class="nav-item ">
+                            <a class="nav-link  " href="#tab04" data-toggle="tab"  onclick="showinfos4();hideinfos();hideinfos2();hideinfos2();">
+                                <i class="fas a-lg fa-file-invoice"></i>  Factures
+                            </a>
+                        </li>
             </ul>
 
         </div>
@@ -551,6 +556,56 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
             </div>
 
+            <div id="tab04" class="tab-pane fade    " style="padding-top:30px">
+			
+			     <?php  
+				$user = auth()->user();
+                $type =    $user->user_type;
+				 use \App\Facture ;
+				 use \App\Http\Controllers\ClientsController ;
+				 
+				if ($type == 'financier' || $type == 'bureau' || $type == 'admin' ) {   ?>
+			      <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
+                        <thead>
+                        <tr id="headtable">
+                            <th style="width:10%">ID</th>
+                            <th style="width:10%">Date</th>
+                            <th style="width:15%">N° Facture</th>
+                            <th style="width:20%">Assistance</th>
+                           </tr>
+
+                        </thead>
+                        <tbody>
+                        <?php 
+						$factures= Facture::where('prestataire',$prestataire->id)->get() ;  ?>
+                        @foreach($factures as $facture)
+						   <?php if(isset($facture->iddossier)){ $iddossier= $facture->iddossier; $dossier= App\Dossier::where('id',$iddossier)->first();$ref=$dossier['reference_medic'] ; $abn= $dossier['subscriber_name'] .' '.$dossier['subscriber_lastname'] ;}
+                         ?>
+                            <tr  >
+                                <td style="width:10%;">
+                                    <a href="{{action('FacturesController@view', $facture->id)}}" ><?php echo sprintf("%05d",$facture->id);?></a>
+                                    </td>
+                                <td style="width:10%">
+                                    <?php echo  $facture->date_arrive  ; ?>
+                                 </td>
+                                <td style="width:15%">
+                                    <?php echo $facture->reference ; ?>
+                                    </td>
+                                <td style="width:20%">
+                                    <?php $client =   $dossier->customer_id ; echo   ClientsController::ClientChampById('name',$client);?>
+                                </td>
+              
+
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+			
+				 <?php } else{
+					 echo '<center><h2> Zone réservée au financiers </h2></center>';
+				 }  ?>
+				 
+			</div>
 
             </div>
 
@@ -1180,8 +1235,11 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
     function hideinfos3() {
         $('#tab03').css('display','none');
     }
+	  function hideinfos4() {
+        $('#tab03').css('display','none');
+    }
     function showinfos() {
-        $('#tab01').css('display','block');
+        $('#tab04').css('display','block');
     }
 
     function showinfos2() {
@@ -1189,6 +1247,9 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
     }
     function showinfos3() {
         $('#tab03').css('display','block');
+    }
+	  function showinfos4() {
+        $('#tab04').css('display','block');
     }
 
         function changing(elm) {

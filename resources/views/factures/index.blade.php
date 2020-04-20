@@ -2,6 +2,10 @@
 
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/dataTables.bootstrap.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/buttons.bootstrap.css') }}" />
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.jqueryui.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.jqueryui.min.css">
+
 <!--   <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/colReorder.bootstrap.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/rowReorder.bootstrap.css') }}" />-->
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
@@ -45,8 +49,8 @@
                 <th style="width:15%">Intervanant</th>
                  <th style="width:10%">N°Facture</th>
                 <th style="width:10%">Arrivé</th>
-                <th style="width:10%">Facturation</th>
-                <th style="width:10%">Réception</th>
+                <th style="width:10%">Délai Email</th>
+                <th style="width:10%">Délai Poste</th>
 
 				<th class="no-sort" style="width:4%">Actions</th>
               </tr>
@@ -57,25 +61,54 @@
                 <th style="width:15%">Intervanant</th>
                  <th style="width:10%">N°Facture</th>
                 <th style="width:10%">Arrivé</th>
-                <th style="width:10%">Facturation</th>
-                <th style="width:10%">Réception</th>
+                <th style="width:10%">Délai Email</th>
+                <th style="width:10%">Délai Poste</th>
 
                 <th class="no-sort" style="width:4%">Actions</th>
             </tr>
             </thead>
             <tbody>
+			<?php 
+			
+    $today=date('d-m-Y');
+    $today=new DateTime($today);;
+	?>
             @foreach($factures as $facture)
+   <?php
    
+   
+$createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
+
+    $date_valid=$facture['date_valid'];
+    $date_arrive=$facture['date_arrive'];
+    $dateposte=$facture['date_poste'];
+
+    if($date_valid!=''){$dateemail=$date_valid;}else{$dateemail=$date_arrive;}
+
+    $dateEmail=str_replace('/','-',$dateemail) ;
+    $datePoste=str_replace('/','-',$dateposte) ;
+    $dateEmail= new DateTime($dateEmail);
+    $datePoste= new DateTime($datePoste);
+   // $dateEmail=date_create($dateEmail);
+   // $datePoste=date_create($dateEmail);
+
+
+    $diffEmail=date_diff($dateEmail,$today);
+   // $diffEmail->format("%R%a ");
+    $diffPoste=date_diff($datePoste,$today);
+   
+   
+   
+   ?>
                 <tr>
 
 				<td style="width:5%"  ><a href="{{action('FacturesController@view', $facture->id)}}" ><?php echo sprintf("%05d",$facture->id);?></a></td>
                     <td style="width:15%">
-                        <?php if(isset($facture->iddossier)){ $iddossier= $facture->iddossier; $Folder= App\Dossier::where('id',$iddossier)->first();$ref=$Folder['reference_medic'] ; $abn= $Folder['subscriber_name'] .' '.$Folder['subscriber_lastname'] ;
+                        <?php if(isset($facture->iddossier)){ $iddossier= $facture->iddossier; $Folder= App\Dossier::where('id',$iddossier)->first();$ref=$Folder['reference_medic'] ; $abn= $Folder['subscriber_name'] .' '.$Folder['subscriber_lastname'] ; 
                          ?>
                            <a href="{{action('DossiersController@view', $facture->iddossier)}}" >
-                               <?php   echo     $ref.' ' .$abn ; ?></a> <?php
-                            }
-                        ?>
+                               <?php   echo     $ref.' ' .$abn ; ?></a> 
+					<?php } ?>							   
                     </td>
                       <td style="width:15%">
                         <?php
@@ -89,8 +122,8 @@
                     </td>
                     <td style="width:10%" >{{$facture->reference}}</td>
                     <td  style="width:10%">{{$facture->date_arrive}}</td>
-                    <td style="width:10%"  >{{$facture->date_facture}}</td>
-                    <td style="width:10%"  >{{$facture->date_reception}}</td>
+                    <td style="width:10%"  ><?php echo   $diffEmail->format("%R%a "); ?> jours</td>
+                    <td style="width:10%"  ><?php echo   $diffPoste->format("%R%a "); ?> jours</td>
  					<td style="width:4%"   >
                         @can('isAdmin')
                             <a  href="{{action('FacturesController@destroy', $facture['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >

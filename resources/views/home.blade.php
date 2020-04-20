@@ -1,10 +1,11 @@
 @extends('layouts.mainlayout')
+    <script type="text/javascript" src="{{ asset('public/js/jquery-1.11.1.min.js') }}" ></script>
 
 @section('content')
 
     <div class="row">
         <br><br>
-        <h1> Bienvenue</h1>
+        <h1> Hello</h1>
     </div>
      <?php   if ($type == 'financier' || $type == 'bureau' || $type == 'admin' ) {   ?>
             <div class="row  pull-right">
@@ -30,15 +31,20 @@
             </div>
 
                     <div class="form-group">
-                        <table class="table table-striped">
+                        <table class="table table-striped" id='mytable'>
                          <thead>
                          <tr id="headtable">
-                             <th style="width:15%">Date</th><th style="width:35%">Dossier</th><th style="width:15%">Statut</th><th style="width:20%">Facturé</th><th style="width:10%">Traiter</th>
+                             <th style="width:15%">Date</th><th style="width:30%">Dossier</th><th style="width:10%">Nb Factures</th><th style="width:15%">Statut</th><th style="width:15%">Facturé</th><th style="width:10%">Traiter</th>
+                         </tr>
+						 <tr>    <th style="width:15%">Date</th><th style="width:30%">Dossier</th><th style="width:10%">Nb Factures</th><th style="width:15%">Statut</th><th style="width:15%">Facturé</th><th style="width:10%">Traiter</th>
                          </tr>
                          </thead>
                             <tbody>
-                       <?php foreach ($alertes as $alerte){
+                       <?php 
+					   
+					   foreach ($alertes as $alerte){
                        $dossier=  \App\Dossier::where('id',$alerte->id_dossier)->first();
+					   
                        $abn= $dossier->subscriber_name. ' '.$dossier->subscriber_lastname ;
                        $statut= $alerte->statut;
                        $datea= date('d/m/Y H:i', strtotime($alerte->created_at)) ;
@@ -46,15 +52,17 @@
                        if($statut=='reouverture'){$stat='Re-Ouverture';}
                        if($statut=='ferme'){$stat='Fermeture';}
                        if($statut=='sanssuite'){$stat='Fermeture <small>Sans Suite</small>';}
-                        ?>
-                       <tr><td style="width:15%"><?php   echo $datea; ?></td> <td style="width:35%"> <a href="{{action('DossiersController@view', $alerte->id_dossier)}}" ><?php echo $alerte->ref_dossier . ' '.$abn; ?> </a></td><td style="width:15%"><?php echo $stat; ?> </td><td style="width:20%">
+                      $count= \App\Facture::where('iddossier',$dossier->id)->count() ; 
+
+					   ?>
+                       <tr><td style="width:15%"><?php   echo $datea; ?></td> <td style="width:30%"> <a href="{{action('DossiersController@view', $alerte->id_dossier)}}" ><?php echo $alerte->ref_dossier . ' '.$abn; ?> </a></td><td style="width:10%"><?php echo $count; ?> </td><td style="width:15%"><?php echo $stat; ?> </td><td style="width:15%">
 
                                      <div class="radio" id="uniform-actif">
                            <label><span class="checked">
                             <input  class="actus-<?php echo $alerte->id;?>"  type="checkbox"    id="actus-<?php echo $alerte->id;?>"    <?php if ($facture ==1){echo 'checked'; }  ?>  onclick="changing(this,'<?php echo $alerte->id; ?>' );"      >
                         </span> Facturé</label>
                                      </div>
-                            </td><td style="width:15%;text-align: center">
+                            </td><td style="width:10%;text-align: center">
                                 <a   href="{{action('HomeController@traiter', $alerte['id'])}}" class="btn btn-sm btn-success btn-responsive" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom"  data-original-title="Traiter">
                                     <i class="fa fa-fw fa-check"></i>
                                 </a>
@@ -108,6 +116,110 @@
 
 
     </script>
+ 
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/jquery.dataTables.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/dataTables.bootstrap.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/dataTables.rowReorder.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/dataTables.scroller.js') }}" ></script>
 
-@endsection
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/dataTables.buttons.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/dataTables.responsive.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/buttons.colVis.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/buttons.html5.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/buttons.print.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/buttons.bootstrap.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/buttons.print.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/pdfmake.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/vfs_fonts.js') }}" ></script>
 
+    <style>.searchfield{width:100px;}</style>
+
+    <!--select css-->
+    <link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+
+    <script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+ 
+
+            $('#mytable thead tr:eq(1) th').each( function () {
+                var title = $('#mytable thead tr:eq(0) th').eq( $(this).index() ).text();
+                $(this).html( '<input class="searchfield" type="text"   />' );
+            } );
+
+            var table = $('#mytable').DataTable({
+                orderCellsTop: true,
+                order:[],
+
+                dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
+                responsive:true,
+                buttons: [
+
+                    'csv', 'excel', 'pdf', 'print'
+                ],
+                "columnDefs": [ {
+                    "targets": 'no-sort',
+                    "orderable": false,
+                } ]
+                ,
+                "language":
+                    {
+                        "decimal":        "",
+                        "emptyTable":     "Pas de données",
+                        "info":           "affichage de  _START_ à _END_ de _TOTAL_ entrées",
+                        "infoEmpty":      "affichage 0 à 0 de 0 entrées",
+                        "infoFiltered":   "(Filtrer de _MAX_ total d`entrées)",
+                        "infoPostFix":    "",
+                        "thousands":      ",",
+                        "lengthMenu":     "affichage de _MENU_ entrées",
+                        "loadingRecords": "chargement...",
+                        "processing":     "chargement ...",
+                        "search":         "Recherche:",
+                        "zeroRecords":    "Pas de résultats",
+                        "paginate": {
+                            "first":      "Premier",
+                            "last":       "Dernier",
+                            "next":       "Suivant",
+                            "previous":   "Précédent"
+                        },
+                        "aria": {
+                            "sortAscending":  ": activer pour un tri ascendant",
+                            "sortDescending": ": activer pour un tri descendant"
+                        }
+                    }
+
+            });
+
+// Apply the search
+            function delay(callback, ms) {
+                var timer = 0;
+                return function() {
+                    var context = this, args = arguments;
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        callback.apply(context, args);
+                    }, ms || 0);
+                };
+            }
+            table.columns().every(function (index) {
+                $('#mytable thead tr:eq(1) th:eq(' + index + ') input').on('keyup change', function () {
+                    table.column($(this).parent().index() + ':visible')
+                        .search(this.value)
+                        .draw();
+                });
+				
+                $('#mytable thead tr:eq(1) th:eq(' + index + ') input').keyup(delay(function (e) {
+                    console.log('Time elapsed!', this.value);
+                    $(this).blur();
+
+                }, 2000));
+            });
+			
+			
+      });
+ 
+    </script>
+	 
+	 @endsection

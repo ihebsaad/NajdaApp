@@ -137,8 +137,9 @@ class PrestationsController extends Controller
         $nomuser = $user->name . ' ' . $user->lastname;
 
         if ($prestation->save()) {
+
             // Envoi de mail
-          //  if ($autorise != '') {
+           if ($autorise != '') {
             $cc=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
             $sujet = 'Votre autorisation a été utilisée';
 
@@ -193,9 +194,13 @@ class PrestationsController extends Controller
                 $now=date('d/m/Y');
               //  $to = array('nejib.karoui@medicmultiservices.com');
                 //  $to=array('ihebsaad@gmail.com');
+				
+				                 if($autorise =='procedure'){
+								$contenu = 'Bonjour de Najda, <br><br>sélection manuelle d\'un prestataire déjà engagé par ' . $nomuser . ' en date du: ' . $now .  ' <br>pour choisir manuellement le prestataire : ' . $nomprest . ' dans la gestion du dossier : '. $ref.' | '.$abn.'<br>  pour la prestation: '.$TypePrest.' ,  '.$Specialite.' - '. $details . '<br> qui aura lieu le ' . $date .  ' à  '.$gouvernorat .',  '.$ville ;
 
-                $contenu = 'Bonjour de Najda, <br><br>'.$mr.' ,votre autorisation a été utilisée par ' . $nomuser . ' en date du: ' . $now .  ' <br>pour choisir manuellement le prestataire : ' . $nomprest . ' dans la gestion du dossier : '. $ref.' | '.$abn.'<br>  pour la prestation: '.$TypePrest.' ,  '.$Specialite.' - '. $details . '<br> qui aura lieu le ' . $date .  ' à  '.$gouvernorat .',  '.$ville ;
-
+								 }else{
+								$contenu = 'Bonjour de Najda, <br><br>'.$mr.' ,votre autorisation a été utilisée par ' . $nomuser . ' en date du: ' . $now .  ' <br>pour choisir manuellement le prestataire : ' . $nomprest . ' dans la gestion du dossier : '. $ref.' | '.$abn.'<br>  pour la prestation: '.$TypePrest.' ,  '.$Specialite.' - '. $details . '<br> qui aura lieu le ' . $date .  ' à  '.$gouvernorat .',  '.$ville ;
+								 }
 
                   // $cc=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
 
@@ -211,13 +216,9 @@ class PrestationsController extends Controller
                         ->setFrom([$from => $fromname]);
 
 
-                   /* foreach ($to as $t) {
-                        $message->to($t);
-                    }
-*/
                 });
 
-         //   }
+            }
 
             $ref = app('App\Http\Controllers\DossiersController')->RefDossierById($iddoss);
             Log::info('[Agent: ' . $nomuser . '] Ajout de prestation pour le dossier: ' . $ref);
