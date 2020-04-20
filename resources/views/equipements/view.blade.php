@@ -73,14 +73,14 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="inputError" class="control-label">Date de Début indisponibilité * </label>
-                    <input onchange="changing(this)"  type="datetime-local"   class="form-control  " name="date_deb_indisponibilite" id="date_deb_indisponibilite" type="text"   value="{{ $equipement->date_deb_indisponibilite }}" >
+                     <input onchange="changing(this)"   class="form-control  " name="date_deb_indisponibilite" id="date_deb_indisponibilite" type="datetime-local"   value="<?php $datedeb=date('Y-m-d H:i', strtotime($equipement->date_deb_indisponibilite)); $datedeb1=str_replace(' ', 'T', $datedeb); if($equipement->date_deb_indisponibilite==null) {$datedeb1="";} echo $datedeb1;?>" >
                 </div>
 
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="inputError" class="control-label">Date de Fin indisponibilité *</label>
-                    <input onchange="changing(this)"  type="datetime-local"   class="form-control  " name="date_fin_indisponibilite" id="date_fin_indisponibilite" type="text"   value="{{ $equipement->date_fin_indisponibilite }}" >
+                    <input onchange="changing(this)"   class="form-control  " name="date_fin_indisponibilite" id="date_fin_indisponibilite" type="datetime-local"   value="<?php  $datefin=date('Y-m-d H:i', strtotime($equipement->date_fin_indisponibilite)); $datefin1=str_replace(' ', 'T', $datefin); if($equipement->date_fin_indisponibilite==null) {$datefin1="";} echo $datefin1;?>" >
                 </div>
 
             </div>
