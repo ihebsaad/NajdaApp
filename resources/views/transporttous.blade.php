@@ -54,31 +54,31 @@
     $today= date('Y-m-d');
 
     // OM TAXIs
-    $ordres_taxi = \App\OMTaxi::where('dateheuredep', '>', Carbon::now()->toDateString())
+    $ordres_taxi = \App\OMTaxi::where('CL_heuredateRDV', '>', Carbon::now()->toDateString())
        ->where('dernier',1)
-        ->select('id','dateheuredep','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule')
-        ->orderBy('dateheuredep')
+        ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule')
+        ->orderBy('CL_heuredateRDV')
         ->get();
 
     //OM Ambul
 
-    $ordres_ambul =   \App\OMAmbulance::where('dateheuredep',  '>', Carbon::now()->toDateString())
+    $ordres_ambul =   \App\OMAmbulance::where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())
         ->where('dernier',1)
-            ->select('id','dateheuredep','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lvehicule','lambulancier1')
-        ->orderBy('dateheuredep')
+            ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lvehicule','lambulancier1')
+        ->orderBy('CL_heuredateRDV')
          ->get();
     // OM Remorq
 
-    $ordres_rem =  \App\OMRemorquage::where('dateheuredep',  '>', Carbon::now()->toDateString())
+    $ordres_rem =  \App\OMRemorquage::where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())
         ->where('dernier',1)
-            ->select('id','dateheuredep','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule')
-        ->orderBy('dateheuredep')
+            ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule')
+        ->orderBy('CL_heuredateRDV')
          ->get();
     $oms = array_merge($ordres_taxi->toArray(),$ordres_ambul->toArray(),$ordres_rem->toArray() );
 
     function cmp($a, $b)
     {
-        return strcmp($a["dateheuredep"], $b["dateheuredep"]);
+        return strcmp($a["CL_heuredateRDV"], $b["CL_heuredateRDV"]);
     }
 
     usort($oms, "cmp");
@@ -130,10 +130,10 @@
                                                       foreach($oms as $o)
                                                       {
                                                         $emp=$o['emplacement'];  $emppos=strpos($emp, '/OrdreMissions/'); $empsub=substr($emp, $emppos);
-                                                        $date=$o['dateheuredep'];
+                                                        $date=$o['CL_heuredateRDV'];
                                                           $ref=$o['reference_medic'];
                                                           $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
-                                                          $heureT=$o['dateheuredep'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));$dateom=substr($heureT,0,10); $dateom= date('d/m/Y', strtotime($dateom));
+                                                          $heureT=$o['CL_heuredateRDV'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));$dateom=substr($heureT,0,10); $dateom= date('d/m/Y', strtotime($dateom));
                                                           $tel=$o['CL_contacttel'];
                                                           $de=$o['CL_lieuprest_pc'];
                                                           $vers=$o['CL_lieudecharge_dec'];
@@ -167,10 +167,12 @@
                                                               <div class="col-md-12 "  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>
                                                               <div class="col-md-12 "  ><i class="fas fa-mobile-alt"></i>   <?php echo $tel; ?></div>
                                                           </div>
+							<?php if($affecte!=='externe'){ ?>
                                                               <div class="row" style="margin-bottom:10px">
                                                                   <div class="col-md-12 overme"  ><i class="fas fa-user-alt"></i>  <?php echo $chauff; ?></div>
                                                                   <div class="col-md-12 overme "  ><i class="fas fa-car"></i>   <?php echo $veh; ?></div>
                                                               </div>
+							<?php } ?>
                                                           <div class="row"  >
                                                               <div class="col-md-12"><i class="fas fa-map-marker-alt"></i> <small>De :</small>  <?php echo $de; ?> </div>
                                                           </div>
