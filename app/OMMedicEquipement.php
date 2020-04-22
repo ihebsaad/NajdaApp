@@ -12,8 +12,7 @@ class OMMedicEquipement extends Model
 
     protected $fillable = [
 
-        'idom','idequipement','type'
-
+        'idom','idequipement','type','CL_date_heure_departmission','CL_date_heure_arrivebase'
 
     ];
 }

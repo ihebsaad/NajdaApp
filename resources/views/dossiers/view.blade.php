@@ -781,14 +781,14 @@ function custom_echo($x, $length)
                             <th style="width:10%">ID</th>
                             <th style="width:10%">Date</th>
                             <th style="width:15%">Prestataire</th>
-                            <th style="width:20%">Prestation</th>
-                            <th style="width:15%">Spécialité</th>
-                            <th style="width:20%">Détails</th>
+                            <th style="width:15%">Prestation</th>
+                            <th style="width:15%">Document/OM</th>
+                            <th style="width:15%">Détails</th>
                             @can('isAdmin')<th style="width:10%">Actions</th>@endcan
                         </tr>
 
                         </thead>
-                        <tbody>
+                        <tbody style="font-size:13px">
 
                         @foreach($prestations as $prestation)
                             <?php $dossid= $prestation['dossier_id'];?>
@@ -797,7 +797,7 @@ function custom_echo($x, $length)
                             ?>
 
                             <tr  >
-                                <td style="width:10%; <?php echo $style;?> ">
+                                <td style="width:5%; <?php echo $style;?> ">
                                     <a href="{{action('PrestationsController@view', $prestation['id'])}}" >
                                         <?php  echo $prestation['id']  ; ?>
                                     </a></td>
@@ -805,7 +805,7 @@ function custom_echo($x, $length)
                                 <td style="width:10%">
                                     <?php echo $prestation['date_prestation'] ; ?>
                                 </td>
-                                <td style="width:20%">
+                                <td style="width:15%">
                                     <?php $prest= $prestation['prestataire_id']; ?>
                                     <a  href="{{action('PrestatairesController@view', $prest)}}" ><?php echo PrestationsController::PrestataireById($prest);  ?>
                                     </a>
@@ -815,10 +815,10 @@ function custom_echo($x, $length)
                                     echo PrestationsController::TypePrestationById($typeprest);  ?>
                                 </td>
                                 <td style="width:15%;">
-                                    <?php $specialite= $prestation['specialite'];
-                                    echo PrestationsController::SpecialiteById($specialite);  ?>
+                                   <small> <?php $omsdocs= $prestation['oms_docs'];
+                                    echo custom_echo($omsdocs,25);  ?></small>
                                 </td>
-                                <td style="width:20%;">
+                                <td style="width:15%;">
                                 <?php $details= $prestation['details'];
                                   custom_echo($details ,20);
                                 ?>

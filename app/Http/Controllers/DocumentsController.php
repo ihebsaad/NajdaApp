@@ -546,10 +546,30 @@ $nomuser = $user->name ." ".$user->lastname ;
 
        $docparent=$infoparent['titre'];
 Log::info('[Agent : '.$nomuser.' ] remplacement du document '.$docparent.' dans le dossier: '.$refdoss );
+if(!empty($_POST['id__prestataire']))
+{
+$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_POST['id__prestataire'],'effectue' => 1])->orderBy('created_at', 'desc')->first();
+              $prestation  ->update(['oms_docs'=>$titref]);
+}
+if(!empty($_POST['id__prestataire1']))
+{
+$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_POST['id__prestataire1'],'effectue' => 1])->orderBy('created_at', 'desc')->first();
+              $prestation  ->update(['oms_docs'=>$titref]);
+}
 }
 else 
 {
 Log::info('[Agent : '.$nomuser.' ] Generation du document '.$titref.' dans le dossier: '.$refdoss );
+if(!empty($_POST['id__prestataire']))
+{
+$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_POST['id__prestataire'],'effectue' => 1])->orderBy('created_at', 'desc')->first();
+              $prestation  ->update(['oms_docs'=>$titref]);
+}
+if(!empty($_POST['id__prestataire1']))
+{
+$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_POST['id__prestataire1'],'effectue' => 1])->orderBy('created_at', 'desc')->first();
+              $prestation  ->update(['oms_docs'=>$titref]);
+}
 }
 }
 }
@@ -1144,6 +1164,7 @@ $valchamp = str_replace('<br />', "\\", $valchamp);
                 //return $infodossier['reference_medic']." | ".$infodossier['subscriber_name']." | ".$infodossier['subscriber_lastname'];
                  
                     foreach ($champsArray as $champtemp) {
+
                         //verifier quil nest pas un champs libre
                         if ((stristr($champtemp,'[CL_')=== FALSE) && ($champtemp !=='[DATE_HEURE]'))
                         {   
@@ -1168,6 +1189,7 @@ $valchamp = str_replace('?', '', $valchamp);
 
 }*/
                                 $array += [ $champtemp =>$valchamp];
+
                             }
                             elseif($champtemp ==='[CUSTOMER_ID__NAME]')
                             {
@@ -1458,8 +1480,10 @@ elseif (stristr($champtemp,'[CL_attention')== TRUE )
                             $champtemp = strtolower($champtemp);
                             $array += [ 'CL_'.$champtemp =>$champdb];
 
+
                         }}
                     }
+
             }
 
             // envoie ID_DOSSIER au preview
@@ -1546,7 +1570,7 @@ if($champtemp ==='[ID__PRESTATAIRE]')
 {
 if(!empty($valchamp))
 {$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $valchamp,'effectue' => 1])->orderBy('created_at', 'desc')->first();
-              $prestation  ->update(['effectue' => 0,'statut' => "autre",'details' => "annulation"]);
+              $prestation  ->update(['effectue' => 0,'statut' => "autre",'details' => "annulation","oms_docs"=>$titref]);
 
 $par=Auth::id();
 $user = User::find($par);
@@ -1558,7 +1582,7 @@ if($champtemp ==='[ID__PRESTATAIRE1]')
 {
 if(!empty($valchamp))
 {$prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $valchamp,'effectue' => 1])->orderBy('created_at', 'desc')->first();
-              $prestation  ->update(['effectue' => 0,'statut' => "autre",'details' => "annulation"]);
+              $prestation  ->update(['effectue' => 0,'statut' => "autre",'details' => "annulation","oms_docs"=>$titref]);
 
 $par=Auth::id();
 $user = User::find($par);

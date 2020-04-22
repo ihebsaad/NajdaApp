@@ -1,15 +1,18 @@
 <?php 
-if (! isset($_GET['remplace']))
-{
+
+
 	//if (isset($_GET['emispar'])) {$emispar=$_GET['emispar'];}
 	if (isset($_GET['dossier'])) {$dossier=$_GET['dossier'];}
-}
-	
+//recuperation iduser connecte
+if (isset($_GET['iduser'])) {$iduser=$_GET['iduser'];}
+ 
 
 if (isset($_GET['DB_HOST'])) {$dbHost=$_GET['DB_HOST'];}
 if (isset($_GET['DB_DATABASE'])) {$dbname=$_GET['DB_DATABASE'];}
 if (isset($_GET['DB_USERNAME'])) {$dbuser=$_GET['DB_USERNAME'];}
 if (isset($_GET['DB_PASSWORD'])) {$dbpass=$_GET['DB_PASSWORD'];}
+
+
 // Create connection
 $conn = mysqli_connect($dbHost, $dbuser, $dbpass,$dbname);
 
@@ -19,10 +22,21 @@ if (!$conn) {
 }
 mysqli_query($conn,"set names 'utf8'");
 
+$sqlescorte = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestations WHERE dossier_id=".$dossier." AND effectue= 1) AND id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 12)";
+
+    $resultescorte= $conn->query($sqlescorte);
+    if ($resultescorte->num_rows > 0) {
+
+        $array_escorte= array();
+        while($rowescorte = $resultescorte->fetch_assoc()) {
+            $array_escorte[] = array('id' => $rowescorte["id"],"name" => $rowescorte["name"]  );
+        }  
+
 // cas remplace: recuperation info parent
 if ((isset($_GET['remplace']) || isset($_GET['complete'])) && isset($_GET['parent']))
 {
 	$parentom=$_GET['parent'];
+
 
 	$sqlp = "SELECT * FROM om_medicinternationnal WHERE id=".$parentom;
 	$resultp = $conn->query($sqlp);
@@ -84,15 +98,13 @@ else
 		}
 
 		// infos agent
-	    $sqlagt = "SELECT name,lastname FROM users WHERE id=".$detaildoss['affecte'];
+	    $sqlagt = "SELECT name,lastname FROM users WHERE id=".$iduser;
 		$resultagt = $conn->query($sqlagt);
 		if ($resultagt->num_rows > 0) {
 	    // output data of each row
 	    $detailagt = $resultagt->fetch_assoc();
 	    
-		} else {
-	    echo "0 results agent";
-		}
+		} 
 
 		// recuperation OM emis par
 		
@@ -219,7 +231,7 @@ if ($resulthch->num_rows > 0) {
 		}
 
 // puces sims dispo -- annule est 0 or empty -- date today > fin dispo date ou fin dispo date est null
-	$sqlpuces = "SELECT id,nom,reference FROM equipements WHERE (`type`='numappel') AND ((`annule` = 0) OR (`annule` IS NULL)) AND ((CURDATE() NOT BETWEEN str_to_date(`date_deb_indisponibilite`, '%d/%m/%Y') AND str_to_date(`date_fin_indisponibilite`, '%d/%m/%Y')) OR (`date_fin_indisponibilite` IS NULL))
+	$sqlpuces = "SELECT id,nom,reference FROM equipements WHERE (`type`='numappel') AND ((`annule` = 0) OR (`annule` IS NULL)) 
 ";
 
 	$resultpuces = $conn->query($sqlpuces);
@@ -236,7 +248,7 @@ if ($resulthch->num_rows > 0) {
 		} else {
 	    echo "0 puces dispo";
 		}
-$sqllots = "SELECT id,nom,reference,numero FROM equipements WHERE (`type`='numserie') AND ((`annule` = 0) OR (`annule` IS NULL)) AND ((CURDATE() NOT BETWEEN str_to_date(`date_deb_indisponibilite`, '%d/%m/%Y') AND str_to_date(`date_fin_indisponibilite`, '%d/%m/%Y')) OR (`date_fin_indisponibilite` IS NULL))
+$sqllots = "SELECT id,nom,reference,numero FROM equipements WHERE (`type`='numserie') AND ((`annule` = 0) OR (`annule` IS NULL)) 
 ";
 
 	$resultlots = $conn->query($sqllots);
@@ -254,6 +266,9 @@ $sqllots = "SELECT id,nom,reference,numero FROM equipements WHERE (`type`='numse
 	    echo "0 puces dispo";
 		}
 
+
+ 
+
 header("Content-Type: text/html;charset=UTF-8");
 ?>
 <html>
@@ -263,6 +278,8 @@ header("Content-Type: text/html;charset=UTF-8");
 	<title></title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <style type="text/css"><!--
        /*background: #f2f2f2;*/
 /*background-color: #ffff00;*/
@@ -287,6 +304,12 @@ header("Content-Type: text/html;charset=UTF-8");
 		font-size: 14pt;
 		font-weight: bold;
 		color: #ff0000;
+	}
+span.rvts65
+	{
+		font-size: 14pt;
+		font-weight: bold;
+		color: #000000;
 	}
 	span.rvts2
 	{
@@ -859,9 +882,22 @@ header("Content-Type: text/html;charset=UTF-8");
 
        
 </div>
-    <div class="col-md-9">
+    <div class="col-md-9" >
         <p class=rvps2><span class=rvts6><br></span></p>
-    <p><span class=rvts1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nom_escorte_intervenant</span><span class=rvts2>.</span></p>
+    <p><span class=rvts1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class=rvts2><input type="text" list="prestataire_medic" name="prestataire_medic"  <?php if (isset($detailom)) { if (isset($detailom['prestataire_medic'])) {echo "value='".$detailom['prestataire_medic']."'";}} ?> />
+        <datalist id="prestataire_medic">
+            <?php
+foreach ($array_escorte as $escorte) {
+    
+  echo '<option value="'.$escorte['name'].'" idprest="'.$escorte['id'].'">'.$escorte['name'].'</option>';
+
+}
+
+?>
+</datalist>
+</span> <input type= "hidden" name="id_prestataire" id="id_prestataire"  <?php if (isset($detailom)) { if (isset($detailom['id_prestataire'])) {echo "value='".$detailom['id_prestataire']."'";}} ?> />
+</p>
+
     <p class=rvps1><span class=rvts2><br></span></p>
     <p class=rvps1><span class=rvts3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Merci vérifier l</span><span class=rvts4>’</span><span class=rvts3>équipement que vous allez&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></p>
     <p class=rvps1><span class=rvts3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; emporter, il sera « votre aide » et sous </span></p>
@@ -1029,16 +1065,16 @@ foreach ($parentsims as $psim) {
 
 	?>
 <div class="fieldsims_wrapper" id="fieldsims_wrapper"><div>
-		<select list="CL_puces" name="CL_puces[]" >
+		<select   list="CL_puces" name="CL_puces[]" >
 			<option value='' ></option>
 <?php
+
 foreach ($array_puces as $puced) {
 
 	if ( $puced['id']=== $psim['idequipement'])
 		{echo "<option value='".$puced['id']."' selected >".$puced['name']."</option>";}
 	
-	else
-{echo "<option value='".$puced['id']."' >".$puced['name']."</option>";}
+
 }
 ?>
 </select>
@@ -1047,35 +1083,23 @@ foreach ($array_puces as $puced) {
 } ?>
 <!-- template div sim -->
 <div id="newsim" style="display:none">
-<select list="CL_puces" name="CL_puces[]" >
+<select   list="CL_puces" name="CL_puces[]" >
 	<option value='' ></option>
-	<?php
-	foreach ($array_puces as $puced) {
-		echo "<option value='".$puced['id']."' >".$puced['name']."</option>";
-	}
-	?>
+	
 </select>
 </div>
 <?php } else { ?>
+
 <div class="fieldsims_wrapper" id="fieldsims_wrapper"><div>
-		<select list="CL_puces" name="CL_puces[]" >
-			<option value='' ></option>
-<?php
-foreach ($array_puces as $puced) {
-	echo "<option value='".$puced['id']."' >".$puced['name']."</option>";
-}
-?>
-</select>
+		
 </div></div>
 <!-- template div sim -->
+
 <div id="newsim" style="display:none">
-<select list="CL_puces" name="CL_puces[]" >
+<select    list="CL_puces" name="CL_puces[]" >
 	<option value='' ></option>
-	<?php
-	foreach ($array_puces as $puced) {
-		echo "<option value='".$puced['id']."' >".$puced['name']."</option>";
-	}
-	?>
+	
+	
 </select>
 </div>
 <?php } ?>
@@ -1091,7 +1115,7 @@ foreach ($parentadls as $padl) {
 
 	?>
 <div class="fieldadls_wrapper" id="fieldadls_wrapper"><div>
-		<select list="CL_adls" name="CL_adls[]" >
+		<select class="form-control select2"  list="CL_adls" name="CL_adls[]" >
 			<option value='' ></option>
 <?php
 foreach ($array_adls as $adl) {
@@ -1099,8 +1123,6 @@ foreach ($array_adls as $adl) {
 	if ( $adl['id']=== $padl['idequipement'])
 		{echo "<option value='".$adl['id']."' selected >".$adl['name']."</option>";}
 	
-	else
-{echo "<option value='".$adl['id']."' >".$adl['name']."</option>";}
 }
 ?>
 </select>
@@ -1109,35 +1131,21 @@ foreach ($array_adls as $adl) {
 } ?>
 <!-- template div sim -->
 <div id="newadl" style="display:none">
-<select list="CL_adls" name="CL_adls[]" >
+<select class="form-control select2"  list="CL_adls" name="CL_adls[]" >
 	<option value='' ></option>
-	<?php
-	foreach ($array_adls as $adl) {
-		echo "<option value='".$adl['id']."' >".$adl['name']."</option>";
-	}
-	?>
+	
 </select>
 </div>
 <?php } else { ?>
 <div class="fieldadls_wrapper" id="fieldadls_wrapper"><div>
-		<select list="CL_adls" name="CL_adls[]" >
-			<option value='' ></option>
-<?php
-foreach ($array_adls as $adl) {
-	echo "<option value='".$adl['id']."' >".$adl['name']."</option>";
-}
-?>
-</select>
+		
 </div></div>
 <!-- template div sim -->
 <div id="newadl" style="display:none">
-<select list="CL_adls" name="CL_adls[]" >
+<select  class="form-control select2" list="CL_adls" name="CL_adls[]" >
 	<option value='' ></option>
-	<?php
-	foreach ($array_adls as $adl) {
-		echo "<option value='".$adl['id']."' >".$adl['name']."</option>";
-	}
-	?>
+
+	
 </select>
 </div>
 <?php } ?>
@@ -1213,154 +1221,139 @@ foreach ($array_adls as $adl) {
  </div>
            <div class="row ">
             <span style="font-family:'Times New Roman'; font-weight:bold">Durée totale prévue de votre mission :  </span><span style="font-family:'Times New Roman'">&#xa0; </span>
-<input type="datetime-local" name="CL_date_heure_retourbase" id="CL_date_heure_retourbase" <?php if (isset($detailom)) { if (isset($detailom['CL_date_heure_retourbase'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_date_heure_retourbase']))."'";}} ?> >
-<input type="datetime-local" name="CL_date_heure_missiondepart" id="CL_date_heure_missiondepart" <?php if (isset($detailom)) { if (isset($detailom['CL_date_heure_missiondepart'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_date_heure_missiondepart']))."'";}} ?> >
+<input type="time" name="CL_date_heure_retourbase" id="CL_date_heure_retourbase" <?php if (isset($detailom['CL_date_heure_retourbase'])) { if (!empty($detailom['CL_date_heure_retourbase'])) {echo "value='".date('H:i',strtotime($detailom['CL_date_heure_retourbase']))."'";}} ?> >
 
  </div>
-            <p><span class=rvts1>Bonne mission</span><span class=rvts2>.</span></p>
+            <p><span class=rvts65>Bonne mission</span><span class=rvts2>.</span></p>
  <div class="row ">
-      <p><span class=rvts1>Signé : </span><span class=rvts2>
+      <p><span class=rvts65>Signé : </span><span class=rvts2>
 <span style="font-family:'Times New Roman'; font-weight:bold; color:#000"> <?php if (isset($detailagt)) {echo $detailagt['name']." ".$detailagt['lastname']; } if (isset($detailom)) { if (isset($detailom['agent'])) {echo $detailom['agent'];}}?> </span>
 <input name="agent" id="agent" type="hidden" value="<?php if (isset($detailagt)) {echo $detailagt['name']." ".$detailagt['lastname']; } if (isset($detailom)) { if (isset($detailom['agent'])) {echo $detailom['agent'];}} ?>"></input>
       </div>
 </form>
 <script type="text/javascript">
-	$('#CL_choix').on('change', function (e) {
-	    var valueSelected = this.value;
-	    if (valueSelected == "Transfert")
-	    {
-			$("#ccirquit1").hide();
-	    	$("#ctransfert1").show();
-	    }
-	    if (valueSelected == "Circuit")
-	    {
-	    	$("#ccirquit1").show();
-	    	$("#ctransfert1").hide();
-	    }
-	});
 	
 
-	// accompagnants
-	$("#CB_accompagnant").change(function() {
-	    if(this.checked) {
-	        $("#zoneaccom").show();
-	    }
-	    else
-	    {
-	        $("#zoneaccom").hide();
-	    }
-	});
-	// CB_preetape
-	$("#CB_preetape").change(function() {
-	    if(this.checked) {
-	        $("#preetape").show();
-	    }
-	    else
-	    {
-	        $("#preetape").hide();
-	    }
-	});
-	// CB_trmedecin
-	$("#CB_trmedecin").change(function() {
-	    if(this.checked) {
-	        $("#trmedecin").show();
-	    }
-	    else
-	    {
-	        $("#trmedecin").hide();
-	    }
-	});
-	// CB_preportaeroport
-	$("#CB_preportaeroport").change(function() {
-	    if(this.checked) {
-	        $("#preportaeroport").show();
-	        //Se révèle si on a sélectionné ci-dessus «vers aéroport/port »  
-	        if ($('#CL_destorg').val()==="Destination")
-	        {$("#preportaeroport1").show();}
-	    	$("#preportaeroport2").show();
-	    }
-	    else
-	    {
-	        $("#preportaeroport").hide();
-	        $("#preportaeroport1").hide();
-	        $("#preportaeroport2").hide();
-	    }
-	});
-	// statut malade checkbox
-	$("#CL_passagermalade").change(function() {
-	    if(this.checked) {
-	        $("#cmalade1").show();
-	    	$("#CL_statutmalade").show();
-	    	$("#resumeclin").show();
-	    }
-	    else
-	    {
-	        $("#cmalade1").hide();
-	    	$("#CL_statutmalade").hide();
-	    	$("#resumeclin").hide();
-	    }
-	});
+function verifdisppuces(iddiv)
+{
+ var date1 = $("#CL_date_heure_departmission").val();
+    var date2 = $("#CL_date_heure_arrivebase").val();
 
-	//Se révèle si on a sélectionné ci-dessus «vers aéroport/port »  
-	$('#CL_destorg').on('change', function (e) {
-	    var valueSelected = this.value;
-	    if (valueSelected ==="Destination")
-	        {$("#preportaeroport1").show();}
-	    else
-	    {
-	    	$("#preportaeroport1").hide();
-	    }
-	});
+    //alert ("in disp voiture: "+date1+" <-> "+date2);
 
-	/// fill phone number on select prest Prise en charge
-	document.querySelector('input[list="CL_lieuprest_pc"]').addEventListener('input', onInput);
+    $.ajax({ url: 'PucesDispoParDate.php',
+             data: {DB_HOST: '<?php echo $dbHost; ?>',
+             DB_DATABASE: '<?php echo $dbname; ?>', 
+             DB_USERNAME: '<?php echo $dbuser; ?>',
+             DB_PASSWORD: '<?php echo $dbpass; ?>',
+             CL_date_heure_departmission: date1,
+             CL_date_heure_arrivebase: date2,
+             },
+             type: 'post',
+             success: function(output) {
 
-	function onInput(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
+                    if (output !== 'aucune puce est disponible')
+                    {
+                        // Clear vehicules list
+                        //$("#CL_puces").empty();
+			var idselect = "#"+iddiv+" > select";
+			$(idselect).empty();
 
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("CL_prestatairetel_pc").value = options[i].getAttribute("telprest");
-	      break;
-	    }
-	  }
-	}
+                        var len = output.length;
+                        if (len >= 1)
+                        {   
+                            
+                                for(var i=0; i<len; i++){
+                                    //alert(output[i].name);
+                                    $("<option />", {
+                                        value: output[i].id,
+                                        text: output[i].name
+                                       
+                                    }).appendTo(idselect);
+                                }
+                           
+                        }else{alert('wrrong');}
+                          //alert(JSON.stringify(output));
+                    }
+                    else
+                    {
+                        // Clear vehicules list
+                       //$("#CL_puces").empty();
+			$(idselect).empty();
+                        $("<option />", {
+                                        text: "aucune puce est disponible",
+                                    }).appendTo(idselect);
+                    }    
+                        
+            },
+            dataType:"json"
+            });
+    }
+function verifdispequipements(iddiv)
+{
+ var date1 = $("#CL_date_heure_departmission").val();
+    var date2 = $("#CL_date_heure_arrivebase").val();
 
-	/// fill phone number on select prest Decharge
-	document.querySelector('input[list="CL_lieudecharge_dec"]').addEventListener('input', onInputdec);
+    //alert ("in disp voiture: "+date1+" <-> "+date2);
 
-	function onInputdec(e) {
-	   var input = e.target,
-	       val = input.value;
-	       list = input.getAttribute('list'),
-	       options = document.getElementById(list).childNodes;
+    $.ajax({ url: 'EquipemtsDispoParDate.php',
+             data: {DB_HOST: '<?php echo $dbHost; ?>',
+             DB_DATABASE: '<?php echo $dbname; ?>', 
+             DB_USERNAME: '<?php echo $dbuser; ?>',
+             DB_PASSWORD: '<?php echo $dbpass; ?>',
+             CL_date_heure_departmission: date1,
+             CL_date_heure_arrivebase: date2,
+             },
+             type: 'post',
+             success: function(output) {
 
-	  for(var i = 0; i < options.length; i++) {
-	    if(options[i].innerText === val) {
-	      // An item was selected from the list
-	      document.getElementById("CL_prestatairetel_dec").value = options[i].getAttribute("telprest");
-	      break;
-	    }
-	  }
-	}
+                    if (output !== 'aucun equipement est disponible')
+                    {
+                        // Clear vehicules list
+                        //$("#CL_puces").empty();
+			var idselect = "#"+iddiv+" > select";
+			$(idselect).empty();
 
-	// add delete dynamicly
+                        var len = output.length;
+                        if (len >= 1)
+                        {   
+                            
+                                for(var i=0; i<len; i++){
+                                    //alert(output[i].name);
+                                    $("<option />", {
+                                        value: output[i].id,
+                                        text: output[i].name
+                                       
+                                    }).appendTo(idselect);
+                                }
+    			$(idselect).select2();
+                           
+                        }else{alert('wrrong');}
+                          //alert(JSON.stringify(output));
+                    }
+                    else
+                    {
+                        // Clear vehicules list
+                       //$("#CL_puces").empty();
+			$(idselect).empty();
+                        $("<option />", {
+                                        text: "aucune equipement est disponible",
+                                    }).appendTo(idselect);
+                    }    
+                        
+            },
+            dataType:"json"
+            });
+    }
 
-
-		/*
-		This script is identical to the above JavaScript function.
-		*/
 		function addsim()
-		{
+		{    
 			ct = Number(document.getElementById('ct').value);
 			ct++;
 			document.getElementById('ct').value=ct;
 			var div1 = document.createElement('div');
 			div1.id = "simnum_"+ct;
+			
 			// link to delete extended form elements
 			var delLink = '<div style="text-align:right;margin-right:480px;margin-top:-22px"><a href=javascript:deletesim("simnum_'+ ct +'") >(-)</a></div>';
 			//<span style="display: inline-block;text-align: right;"><a href="javascript:deletesim();" id="delsim_button">(-)</a></span>
@@ -1369,6 +1362,9 @@ foreach ($array_adls as $adl) {
 			 //$("#CL_puces").append($("<option>").attr('value', 50).text('item'));
 			div1.innerHTML = document.getElementById('newsim').innerHTML + delLink;
 			document.getElementById('fieldsims_wrapper').appendChild(div1);
+			
+			verifdisppuces("simnum_"+ct);
+
 		}
 
 
@@ -1395,14 +1391,16 @@ function addadl()
 			document.getElementById('cadl').value=cadl;
 			var div2 = document.createElement('div');
 			div2.id = "adl_"+cadl;
+			div2.style="margin-bottom:5px;";
 			// link to delete extended form elements
-			var delLink1 = '<div style="text-align:right;margin-right:80px;margin-top:-22px"><a href=javascript:deleteadl("adl_'+ cadl+'") >(-)</a></div>';
+			var delLink1 = '<div style="text-align:right;margin-right:-30px;margin-top:-24px;font-weight:bold"><a href=javascript:deleteadl("adl_'+ cadl+'") >(-)</a></div>';
 			//<span style="display: inline-block;text-align: right;"><a href="javascript:deletesim();" id="delsim_button">(-)</a></span>
 			// add options to datalist (list puces dispo)
 			 //document.getElementById('CL_puces').appendChild('<option>test</option>');
 			 //$("#CL_puces").append($("<option>").attr('value', 50).text('item'));
 			div2.innerHTML = document.getElementById('newadl').innerHTML + delLink1;
 			document.getElementById('fieldadls_wrapper').appendChild(div2);
+verifdispequipements("adl_"+cadl);
 		}
 
 
@@ -1422,5 +1420,28 @@ function addadl()
 			var parentele1 = d1.getElementById('fieldadls_wrapper');
 			parentele1.removeChild(ele1);
 		}
+
+document.querySelector('input[list="prestataire_medic"]').addEventListener('input', onInputdec);
+
+	function onInputdec(e) {
+	   var input = e.target,
+	       val = input.value;
+	       list = input.getAttribute('list'),
+	       options = document.getElementById(list).childNodes;
+
+	  for(var i = 0; i < options.length; i++) {
+	    if(options[i].innerText === val) {
+	      // An item was selected from the list
+	      document.getElementById("id_prestataire").value = options[i].getAttribute("idprest");
+	      break;
+	  }
+	}
+}
 </script>
 				</body></html>
+<?php
+        }
+else
+{ echo "<h3>Il n'y a pas un prestataire valide pour ce type de document sous le dossier!</h3>";}
+?>
+	   

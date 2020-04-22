@@ -22,7 +22,8 @@ class Prestation extends Model
   'autorise',
 'details',
 'effectue',
-'ville'
+'ville',
+'oms_docs'
 
 ];
 

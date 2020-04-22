@@ -74,6 +74,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                      <label class="control-label">Ville <span class="required" aria-required="true">   </span></label>
                      <input  value="{{$prestation->ville}}" class="form-control" name="ville" id="ville" readonly data-required="1" required="" aria-required="true">
                  </div>
+ <div class="form-group">
+                     <label class="control-label">Document/OM <span class="required" aria-required="true">   </span></label>
+                     <input  value="{{$prestation->oms_docs}}" class="form-control" name="ville" id="ville" readonly data-required="1" required="" aria-required="true">
+                 </div>
                  <div class="form-group">
                             <label>Prix / Fourchette</label>
                             <input onchange="changing(this)" value="{{$prestation->price}}" class="form-control" name="price" id="price">
