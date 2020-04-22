@@ -649,3 +649,49 @@ Route::post('/ordremissions/export_pdf_odmremorquage','OrdreMissionsController@e
 Route::get('/ordremissions/pdfodmmedicinternationnal','OrdreMissionsController@pdfodmmedicinternationnal')->name('ordremissions.pdfodmmedicinternationnal');
 Route::post('/ordremissions/export_pdf_odmmedicinternationnal','OrdreMissionsController@export_pdf_odmmedicinternationnal')->name('ordremissions.export_pdf_odmmedicinternationnal');
 
+
+
+Route::get('/update_time_miss', function () {
+
+	$dosss=App\Dossier::get();
+
+         $dtc = (new \DateTime())->format('Y-m-d H:i:s');                         
+         $format = "Y-m-d H:i:s";
+         $dateSys  = \DateTime::createFromFormat($format, $dtc);
+         
+         foreach ($dosss as $dos) {        	
+        
+         if($dos)
+         {
+             
+           $dos->update(array('updatedmiss_at'=>$dateSys));
+             
+          }
+
+          }
+
+
+	});
+
+
+
+Route::get('/update_immobile_non', function () {
+
+	$dosss=App\DossierImmobile::get();
+
+       
+         
+         foreach ($dosss as $dos) {        	
+        
+         if($dos)
+         {
+             
+           $dos->update(array('mail_auto_envoye'=>'Oui'));
+             
+          }
+
+          }
+
+
+	});
+

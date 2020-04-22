@@ -156,7 +156,7 @@ class DossiersController extends Controller
     
     }
 
-    public function inactifs()
+    public static function inactifs()
     {
 
         $dossiers = Dossier::where('sub_status', 'immobile')
@@ -3197,7 +3197,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
         $sanssuite= intval($request->get('sanssuite'));
 
         // forcer la fin des missions qui sont réellemnt achevée
-        app('App\Http\Controllers\MissionController')->verifier_fin_missions($iddossier);
+        //app('App\Http\Controllers\MissionController')->verifier_fin_missions($iddossier);
 
         $user = auth()->user();
         $nomuser = $user->name . ' ' . $user->lastname;
@@ -3217,7 +3217,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
             if($statut=='Cloture'){
                 if($count==0){
-                Dossier::where('id',$iddossier)->update(array('current_status'=>$statut ,'sanssuite'=>$sanssuite,'affecte'=>0));
+                Dossier::where('id',$iddossier)->update(array('current_status'=>$statut,'sub_status'=>null ,'sanssuite'=>$sanssuite,'affecte'=>0));
 
 
                if($sanssuite==1)
@@ -3248,6 +3248,16 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
                 ]); 
                 $affechis->save();
+
+                // supprimer le id dossier de table dossiers immmobiles
+
+                $dm = App\DossierImmobile::where('dossier_id',$iddossier)->first();  
+                if($dm)
+                {
+                    if (! empty($dm)) {
+                    $dm->forceDelete();
+                    }
+                }
 
                 Log::info('[Agent: ' . $nomuser . '] Clôture de dossier: ' . $refd .' '.$etat);
 

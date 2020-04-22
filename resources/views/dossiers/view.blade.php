@@ -1617,7 +1617,7 @@ array_push($listepr,$pr['prestataire_id']);
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#tab82" data-toggle="tab"  onclick="showinfos82();hideinfos81();">
-                            <i class="fas  fa-lg fa-users"></i>  Missions achevées + annulées
+                            <i class="fas  fa-lg fa-users"></i>  Missions achevées 
                         </a>
                     </li>
                
@@ -1667,7 +1667,11 @@ array_push($listepr,$pr['prestataire_id']);
                             <td style="width:10%;"><small>reportée</small></td>
                             @endif
                              @if($macvd->statut_courant=='deleguee')
-                            <td style="width:10%;"><small>déléguée </small></td>
+                            <td style="width:10%;"><small>déléguée
+<?php if($macvd->assistant_id) {
+    $userrr=App\User::where('id',$macvd->assistant_id)->first();
+    echo 'à '.$userrr->name.' '.$userrr->lastname ;
+}?>                       </small></td>
                             @endif
                             @if($macvd->statut_courant=='active')
                             <td style="width:10%;"><small>active</small></td>
@@ -2896,7 +2900,10 @@ if(strstr($dossier['reference_medic'],"MI")){
                 </div>
                 <div class="modal-body">
                     <div class="card-body" style="text-align:center;height:200px"><br>
-<?php    $count= Mission::where('dossier_id',$dossier['id'])
+<?php    
+
+app('App\Http\Controllers\MissionController')->verifier_fin_missions($dossier['id']);
+$count= Mission::where('dossier_id',$dossier['id'])
                         ->where('statut_courant','!=','annulee')
                         ->where('statut_courant','!=','achevee')
                         ->count();

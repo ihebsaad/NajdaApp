@@ -2604,7 +2604,18 @@ use  \App\Http\Controllers\PrestatairesController;
                 </div>
                 <div class="modal-body">
                     <div class="card-body" style="text-align:center;height:200px"><br>
+
+                                             <?php    
+
+app('App\Http\Controllers\MissionController')->verifier_fin_missions($dossier['id']);
+$count= Mission::where('dossier_id',$dossier['id'])
+                        ->where('statut_courant','!=','annulee')
+                        ->where('statut_courant','!=','achevee')
+                        ->count();
+if($count==0) {
+?>
                         <center><B> Etes vous sûrs de vouloir clôturer ce Dossier ?</B><br> <br> </center>
+
                         <center><label  style="width:250px;text-align:center;margin-bottom:50px;" class="check "> Fermer Sans suite
                                 <input type="checkbox" id="sanssuite" class="form-control">
                                 <span class="checkmark"   ></span>
@@ -2612,6 +2623,11 @@ use  \App\Http\Controllers\PrestatairesController;
                             </label></center>
                         <a id="fermerdossier"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >OUI</a>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button><br>
+                        <?php }else{ ?>
+                        <br> <br>  <center><B> Vous devez terminer toutes les missions pour pouvoir clôturer ce Dossier </B><br> <br> </center>
+
+
+                    <?php          } ?>
 
 
                     </div>
