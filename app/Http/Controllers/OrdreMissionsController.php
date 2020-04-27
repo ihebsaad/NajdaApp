@@ -135,7 +135,20 @@ class OrdreMissionsController extends Controller
                 		}
 	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
 	                }
+  if( $_POST['cartecarburant'] )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+	                     
+	                     $voiture->update(['carburant'=>$_POST['cartecarburant']]);
 
+	                	}
+ if( $_POST['cartetelepeage'] )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+	                     
+	                     $voiture->update(['telepeage'=>$_POST['cartetelepeage']]);
+
+	                	}
                   
 
 
@@ -299,6 +312,20 @@ if(!isset($omparent['km_distance']) && isset($_POST['km_distance'])&& !empty($_P
                 		}
 	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
 	                }
+if( $_POST['cartecarburant'] )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+	                     
+	                     $voiture->update(['carburant'=>$_POST['cartecarburant']]);
+
+	                	}
+ if( $_POST['cartetelepeage'] )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+	                     
+	                     $voiture->update(['telepeage'=>$_POST['cartetelepeage']]);
+
+	                	}
 
                }
 
@@ -2543,7 +2570,20 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
 	                }
 
-                  
+                  if( $_POST['cartecarburant'] )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+	                     
+	                     $voiture->update(['carburant'=>$_POST['cartecarburant']]);
+
+	                	}
+ if( $_POST['cartetelepeage'] )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+	                     
+	                     $voiture->update(['telepeage'=>$_POST['cartetelepeage']]);
+
+	                	}
 
 
                }
@@ -2708,6 +2748,20 @@ if(!isset($omparent['km_distance']) && isset($_POST['km_distance'])&& !empty($_P
                 		}
 	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
 	                }
+if( $_POST['cartecarburant'] )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+	                     
+	                     $voiture->update(['carburant'=>$_POST['cartecarburant']]);
+
+	                	}
+ if( $_POST['cartetelepeage'] )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+	                     
+	                     $voiture->update(['telepeage'=>$_POST['cartetelepeage']]);
+
+	                	}
 
                }
 

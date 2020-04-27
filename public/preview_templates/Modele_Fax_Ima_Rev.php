@@ -9,14 +9,10 @@ if (isset($_GET['date_heure'])) {$date_heure=$_GET['date_heure'];}
 if (isset($_GET['CL_rapport'])) {$CL_rapport=$_GET['CL_rapport'];}
 if (isset($_GET['agent__name'])) {$agent__name=$_GET['agent__name']; }
 if (isset($_GET['agent__lastname'])) {$agent__lastname=$_GET['agent__lastname']; }
+if (isset($_GET['agent__signature'])) {$agent__signature=$_GET['agent__signature']; }
 if (isset($_GET['CL_action1'])) {$CL_action1=$_GET['CL_action1'];}
 if (isset($_GET['CL_delai'])) {$CL_delai=$_GET['CL_delai'];}
-if (isset($_GET['CL_action2'])) {$CL_action2=$_GET['CL_action2'];}
-if (isset($_GET['CL_delai2'])) {$CL_delai2=$_GET['CL_delai2'];}
-if (isset($_GET['CL_action3'])) {$CL_action3=$_GET['CL_action3'];}
-if (isset($_GET['CL_delai3'])) {$CL_delai3=$_GET['CL_delai3'];}
-if (isset($_GET['CL_action4'])) {$CL_action4=$_GET['CL_action4'];}
-if (isset($_GET['CL_delai4'])) {$CL_delai4=$_GET['CL_delai4'];}
+
 
 if (isset($_GET['CL_observation'])) {$CL_observation=$_GET['CL_observation'];}
 
@@ -422,6 +418,7 @@ p,ul,ol /* Paragraph Style */
 <textarea name="CL_rapport" rows="10" cols="90" form="formchamps" placeholder="" value=""><?php if(isset ($CL_rapport)) { $ligne = str_replace('\\', "\n", $CL_rapport); echo $ligne;} ?></textarea></span></p>
 <p class=rvps9><span class=rvts6>Cordialement</span></p>
 <p class=rvps1><span class=rvts9><input name="agent__name" id="agent__name" placeholder="prenom du lagent" value="<?php if(isset ($detailagt['name'])) echo $detailagt['name']; ?>" /> <input name="agent__lastname" id="agent__lastname" placeholder="nom du lagent" value="<?php if(isset ($detailagt['lastname'])) echo $detailagt['lastname']; ?>" /> </span></p>
+<p class=rvps1><span class=rvts9><input name="agent__signature" id="agent__signature" placeholder="signature du lagent" value="<?php if(isset ($detailagt['signature'])) echo $detailagt['signature']; ?>" />  </span></p>
 <p><span class=rvts13><br></span></p>
 <p class=rvps4><span class=rvts11>Actions à mettre en oeuvre par IMA:</span></p>
 <p class=rvps5><span class=rvts11><br></span></p>
@@ -438,24 +435,7 @@ p,ul,ol /* Paragraph Style */
 <td width=213 valign=top style="border-width : 1px; border-color: #000000; border-style: solid; padding: 0px 7px;"><p class=rvps8><span class=rvts5><input name="CL_delai" placeholder="Delai 1" value="<?php if(isset ($CL_delai)) echo $CL_delai; ?>"></input></span></p>
 </td>
 </tr>
-<tr valign=top>
-<td width=380 valign=top style="border-width : 1px; border-color: #000000; border-style: solid; padding: 0px 7px; border-right: none;"><p class=rvps8><span class=rvts5><input name="CL_action2" placeholder="Action 2" value="<?php if(isset ($CL_action2)) echo $CL_action2; ?>"></input></span></p>
-</td>
-<td width=213 valign=top style="border-width : 1px; border-color: #000000; border-style: solid; padding: 0px 7px;"><p class=rvps8><span class=rvts5><input name="CL_delai2" placeholder="Delai 2" value="<?php if(isset ($CL_delai2)) echo $CL_delai2; ?>"></input></span></p>
-</td>
-</tr>
-<tr valign=top>
-<td width=380 valign=top style="border-width : 1px; border-color: #000000; border-style: solid; padding: 0px 7px; border-right: none;"><p class=rvps8><span class=rvts5><input name="CL_action3" placeholder="Action 3" value="<?php if(isset ($CL_action3)) echo $CL_action3; ?>"></input></span></p>
-</td>
-<td width=213 valign=top style="border-width : 1px; border-color: #000000; border-style: solid; padding: 0px 7px;"><p class=rvps8><span class=rvts5><input name="CL_delai3" placeholder="Delai 3" value="<?php if(isset ($CL_delai3)) echo $CL_delai3; ?>"></input></span></p>
-</td>
-</tr>
-<tr valign=top>
-<td width=380 valign=top style="border-width : 1px; border-color: #000000; border-style: solid; padding: 0px 7px; border-right: none;"><p class=rvps8><span class=rvts5><input name="CL_action4" placeholder="Action 4" value="<?php if(isset ($CL_action4)) echo $CL_action4; ?>"></input></span></p>
-</td>
-<td width=213 valign=top style="border-width : 1px; border-color: #000000; border-style: solid; padding: 0px 7px;"><p class=rvps8><span class=rvts5><input name="CL_delai4" placeholder="Delai 4" value="<?php if(isset ($CL_delai4)) echo $CL_delai4; ?>"></input> </span></p>
-</td>
-</tr>
+
 </table>
 </div>
 <p class=rvps5><span class=rvts11><br></span></p>

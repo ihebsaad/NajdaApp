@@ -1217,8 +1217,7 @@ $("#dateheuredispprev").change(function() {
 	  for(var i = 0; i < options.length; i++) {
 	    if(options[i].innerText === val) {
 	      // An item was selected from the list
-	      document.getElementById("cartecarburant").value = options[i].getAttribute("carburant");
-	      document.getElementById("cartetelepeage").value = options[i].getAttribute("telepeage");
+	    
 	      document.getElementById("idvehic").value = options[i].getAttribute("idv");
 	      break;
 	    }
