@@ -192,7 +192,7 @@ class DossierImmobileController extends Controller
 
         $dateSys = \DateTime::createFromFormat($format, $dtc);
 
-        foreach ($dossim as $dm ) {
+        /*foreach ($dossim as $dm ) {
 
         if( self::checkImmobile4Days($dm->updatedmiss_at)==true )
          {
@@ -270,15 +270,7 @@ class DossierImmobileController extends Controller
 
 
             
-        }
-
-        
-        
-         
-    
-
-
-      
+        }*/
 
 
 /*Bonjour de Najda,

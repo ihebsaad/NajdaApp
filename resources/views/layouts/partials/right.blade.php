@@ -859,32 +859,7 @@ use App\Http\Controllers\TagsController;
                                 <td colspan="4"><i class="fa fa-warning"></i> Pas de résultats</td>
                               </tr>
                             </thead>
-                           {{-- <tbody>
-                              <?php  if (isset( $dossier)){
-                                  $acts=$dossier->Missions; $u=1; ?>
-                               @foreach ($acts as $ac)
-                              <tr>
-                                <th scope="row"><?php echo $u ?></th>
-                                <td>{{$ac->titre}}</td>
-                                <td>{{$ac->date_deb}}</td>
-                                <td>{{$ac->statut_courant}}</td>
-                                <td> 
-                                  <div class="dropdown">
-                                              <button class="dropbtn"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
-                                              <div class="dropdown-content">
-                                                <a href="#">Rendre Active</a>
-                                                <a href="#">Rendre Inactive</a>
-                                                <a href="#">Rendre Achevée</a>
-                                          
-                                              </div>
-                                            </div>
-
-                                          </td>
-                              </tr>
-                                <?php  $u++ ; ?>
-                              @endforeach
-                            <?php } ?>
-                            </tbody>--}}
+                          
                           </table>
                       </p>
                     </div>

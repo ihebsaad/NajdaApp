@@ -654,8 +654,7 @@ Route::post('/ordremissions/export_pdf_odmmedicinternationnal','OrdreMissionsCon
 Route::get('/update_time_miss', function () {
 
 	$dosss=App\Dossier::get();
-
-         $dtc = (new \DateTime())->format('Y-m-d H:i:s');                         
+         $dtc = (new \DateTime())->modify('-4 days')->format('Y-m-d H:i:s');                         
          $format = "Y-m-d H:i:s";
          $dateSys  = \DateTime::createFromFormat($format, $dtc);
          
@@ -663,8 +662,7 @@ Route::get('/update_time_miss', function () {
         
          if($dos)
          {
-             
-           $dos->update(array('updatedmiss_at'=>$dateSys));
+              $dos->update(array('updatedmiss_at'=>$dateSys));
              
           }
 
