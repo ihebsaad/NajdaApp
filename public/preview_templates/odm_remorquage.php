@@ -786,7 +786,7 @@ foreach ($array_prestap as $prestap) {
                     <p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Date/heure retour base prévisible:</span></p>
                     <input type="datetime-local" name="dhretbaseprev" id="dhretbaseprev" <?php if (isset($detailom['dhretbaseprev'])) { if (!empty($detailom['dhretbaseprev'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['dhretbaseprev']))."'";}} ?> style=" margin-left: 27px; "/>
                     <p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Véhicule: </span>
-                        <input type="text" list="lvehicule" name="lvehicule" <?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) {echo "value='".$detailom['lvehicule']."'";}} ?> />
+                        <input type="text" list="lvehicule" name="lvehicule" autocomplete="off" <?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) {echo "value='".$detailom['lvehicule']."'";}} ?> />
                         <datalist id="lvehicule">
                         <?php
                         /*foreach ($array_vehic as $vehic) {
@@ -802,7 +802,7 @@ foreach ($array_prestap as $prestap) {
                     <input type="text" name="cartetelepeage" id="cartetelepeage" <?php if (isset($detailom['cartetelepeage'])) { if (!empty($detailom['cartetelepeage'])) {echo "value='".$detailom['cartetelepeage']."'";}} ?> style="width:60%"/></p>
                     <p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Chauffeur : </span>
                         <!-- affiche pour le moment toute la liste des personnels -->
-                        <input type="text" list="lchauff" name="lchauff"  <?php if (isset($detailom['lchauff'])) { if (!empty($detailom['lchauff'])) {echo "value='".$detailom['lchauff']."'";}} ?> />
+                        <input type="text" list="lchauff" name="lchauff" autocomplete="off" <?php if (isset($detailom['lchauff'])) { if (!empty($detailom['lchauff'])) {echo "value='".$detailom['lchauff']."'";}} ?> />
                         <datalist id="lchauff">
                             <?php
                             /*foreach ($array_chauff as $chauff) {
@@ -866,7 +866,7 @@ foreach ($array_prestap as $prestap) {
                     <p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Date/heure retour base prévisible:</span></p>
                     <input type="datetime-local" name="dhretbaseprev" id="dhretbaseprev" <?php if (isset($detailom['dhretbaseprev'])) { if (!empty($detailom['dhretbaseprev'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['dhretbaseprev']))."'";}} ?> style=" margin-left: 27px; "/>
                     <p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Véhicule: </span>
-                        <input type="text" list="lvehicule" name="lvehicule" <?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) {echo "value='".$detailom['lvehicule']."'";}} ?> />
+                        <input type="text" list="lvehicule" name="lvehicule" autocomplete="off" <?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) {echo "value='".$detailom['lvehicule']."'";}} ?> />
                         <datalist id="lvehicule">
                         <?php
                         /*foreach ($array_vehic as $vehic) {
@@ -882,7 +882,7 @@ foreach ($array_prestap as $prestap) {
                     <input type="text" name="cartetelepeage" id="cartetelepeage" <?php if (isset($detailom['cartetelepeage'])) { if (!empty($detailom['cartetelepeage'])) {echo "value='".$detailom['cartetelepeage']."'";}} ?> style="width:60%"/></p>
                     <p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Chauffeur : </span>
                         <!-- affiche pour le moment toute la liste des personnels -->
-                        <input type="text" list="lchauff" name="lchauff"  <?php if (isset($detailom['lchauff'])) { if (!empty($detailom['lchauff'])) {echo "value='".$detailom['lchauff']."'";}} ?> />
+                        <input type="text" list="lchauff" name="lchauff" autocomplete="off"  <?php if (isset($detailom['lchauff'])) { if (!empty($detailom['lchauff'])) {echo "value='".$detailom['lchauff']."'";}} ?> />
                         <datalist id="lchauff">
                             <?php
                             /*foreach ($array_chauff as $chauff) {

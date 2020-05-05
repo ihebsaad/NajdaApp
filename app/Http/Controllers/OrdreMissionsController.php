@@ -67,7 +67,7 @@ class OrdreMissionsController extends Controller
 				        ]);
 				        $attachement->save();
                 	}
-// mettre à jour kilométrage véhicule
+/*mettre à jour kilométrage véhicule
                 if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['idvehic']))
                 	{
                 		$voiture=Voiture::where('id',$_POST['idvehic'])->first();
@@ -134,15 +134,15 @@ class OrdreMissionsController extends Controller
                 		$km=0;
                 		}
 	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
-	                }
-  if( $_POST['cartecarburant'] )
+	                }}*/
+  if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
                     {
 	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
 	                     
 	                     $voiture->update(['carburant'=>$_POST['cartecarburant']]);
 
 	                	}
- if( $_POST['cartetelepeage'] )
+ if( isset($_POST['cartetelepeage']) && !empty($_POST['cartetelepeage']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
                     {
 	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
 	                     
@@ -150,9 +150,15 @@ class OrdreMissionsController extends Controller
 
 	                	}
                   
+if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+	                     
+	                     $voiture->update(['km'=>$_POST['km_arrive']]);
 
+	                	}
 
-               }
+            
 
                 	/* bloc test */
                 if ($_POST['affectea'] !== "interne")
@@ -247,7 +253,7 @@ $nomuser = $user->name ." ".$user->lastname ;
 Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$presttaxi.' dans le dossier: '.$omparent["reference_medic"] );
  }
         			//return 'complete action '.$result;
-if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['vehicID']))
+/*if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['vehicID']))
                 	{
                 		$voiture=Voiture::where('id',$_POST['idvehic'])->first();
                 		if($voiture->km)
@@ -311,24 +317,32 @@ if(!isset($omparent['km_distance']) && isset($_POST['km_distance'])&& !empty($_P
                 		$km=0;
                 		}
 	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
-	                }
-if( $_POST['cartecarburant'] )
+	                }  }
+*/
+
+ if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
                     {
 	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
 	                     
 	                     $voiture->update(['carburant'=>$_POST['cartecarburant']]);
 
 	                	}
- if( $_POST['cartetelepeage'] )
+ if( isset($_POST['cartetelepeage']) && !empty($_POST['cartetelepeage'])  && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
                     {
 	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
 	                     
 	                     $voiture->update(['telepeage'=>$_POST['cartetelepeage']]);
 
 	                	}
+                  
+if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+	                     
+	                     $voiture->update(['km'=>$_POST['km_arrive']]);
 
-               }
-
+	                	}
+             
                     // affecter date  prévue destination ( prévue fin de mission)
                if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))    
         		{
@@ -1248,7 +1262,7 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
                 	}
 
                        // mettre à jour kilométrage véhicule
-                if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['vehicID']))
+               /* if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['vehicID']))
                 	{
                 		$voiture=Voiture::where('id',$_POST['vehicID'])->first();
                 		if($voiture->km)
@@ -1319,7 +1333,15 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
                   
 
 
-               }
+               }*/
+if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['vehicID']) && !empty($_POST['vehicID']) )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['vehicID'])->first();
+	                     
+	                     $voiture->update(['km'=>$_POST['km_arrive']]);
+
+	                	}
+
                 /* bloc test */
                 if ($_POST['affectea'] !== "interne")
         		{
@@ -1411,7 +1433,7 @@ Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent
         			//return 'complete action '.$result;
                   // mettre à jour kilométrage véhicule
         			//dd('ok');
-        		if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['vehicID']))
+        		/*if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['vehicID']))
                 	{
                 		$voiture=Voiture::where('id',$_POST['vehicID'])->first();
                 		if($voiture->km)
@@ -1477,7 +1499,16 @@ if(!isset($omparent['km_distance']) && isset($_POST['km_distance'])&& !empty($_P
 	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
 	                }
 
-               }
+               }*/
+
+                  
+if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['vehicID']) && !empty($_POST['vehicID']) )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['vehicID'])->first();
+	                     
+	                     $voiture->update(['km'=>$_POST['km_arrive']]);
+
+	                	}
 
                     // affecter date  prévue destination ( prévue fin de mission)
                if (isset($_POST['idMissionOM']) && !(empty($_POST['idMissionOM'])))    
@@ -2501,7 +2532,7 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
                         ]);
                         $attachement->save();
                     }
-// mettre à jour kilométrage véhicule
+/*mettre à jour kilométrage véhicule
                 if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['idvehic']))
                 	{
                 		$voiture=Voiture::where('id',$_POST['idvehic'])->first();
@@ -2570,23 +2601,32 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
 	                }
 
-                  if( $_POST['cartecarburant'] )
+     
+
+
+               }*/
+if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
                     {
 	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
 	                     
 	                     $voiture->update(['carburant'=>$_POST['cartecarburant']]);
 
 	                	}
- if( $_POST['cartetelepeage'] )
+ if( isset($_POST['cartetelepeage']) && !empty($_POST['cartetelepeage'])  && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
                     {
 	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
 	                     
 	                     $voiture->update(['telepeage'=>$_POST['cartetelepeage']]);
 
 	                	}
+                  
+if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+	                     
+	                     $voiture->update(['km'=>$_POST['km_arrive']]);
 
-
-               }
+	                	}
 
                     /* bloc test */
 	                if ($_POST['affectea'] !== "interne")
@@ -2683,7 +2723,7 @@ $nomuser = $user->name ." ".$user->lastname ;
 Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$prestambulance.' dans le dossier: '.$omparent["reference_medic"] );
  }
                     //return 'complete action '.$result;
-	if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['vehicID']))
+	/*if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['vehicID']))
                 	{
                 		$voiture=Voiture::where('id',$_POST['idvehic'])->first();
                 		if($voiture->km)
@@ -2748,22 +2788,31 @@ if(!isset($omparent['km_distance']) && isset($_POST['km_distance'])&& !empty($_P
                 		}
 	                $voiture->update(['km'=>$km+(int)$_POST['km_distance']]);
 	                }
-if( $_POST['cartecarburant'] )
+
+
+               }*/
+if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
                     {
 	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
 	                     
 	                     $voiture->update(['carburant'=>$_POST['cartecarburant']]);
 
 	                	}
- if( $_POST['cartetelepeage'] )
+ if( isset($_POST['cartetelepeage']) && !empty($_POST['cartetelepeage'])  && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
                     {
 	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
 	                     
 	                     $voiture->update(['telepeage'=>$_POST['cartetelepeage']]);
 
 	                	}
+                  
+if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['idvehic']) && !empty($_POST['idvehic']) )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['idvehic'])->first();
+	                     
+	                     $voiture->update(['km'=>$_POST['km_arrive']]);
 
-               }
+	                	}
 
 
                     // affecter date  prévue destination ( prévue fin de mission)

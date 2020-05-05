@@ -252,14 +252,14 @@ if ($resulthch->num_rows > 0) {
 		}*/
 
 	//  version  khaled pour les medecins de type transporteur (independant de dossier)
-		$sqlprestmed = "SELECT id,name FROM prestataires WHERE id IN (SELECT DISTINCT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 37)";
+		$sqlprestmed = "SELECT id,name,prenom FROM prestataires WHERE id IN (SELECT DISTINCT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id = 37)";
        $resultprestmed = $conn->query($sqlprestmed);
        if ($resultprestmed->num_rows > 0) {
 	   
 	    $array_med = array();
 	    while($rowprestmed = $resultprestmed->fetch_assoc()) {	       
 			
-				$array_med[] = array('id' => $rowprestmed["id"],'name' => $rowprestmed["name"]);			
+				$array_med[] = array('id' => $rowprestmed["id"],'name' => $rowprestmed["name"],'prenom' => $rowprestmed["prenom"]);			
 
 	    }
 	
@@ -931,7 +931,7 @@ foreach ($array_prestap as $prestap) {
 			<p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Date/heure retour base prévisible:</span></p>
 <input type="datetime-local" name="dhretbaseprev" id="dhretbaseprev" <?php if (isset($detailom['dhretbaseprev'])) { if (!empty($detailom['dhretbaseprev'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['dhretbaseprev']))."'";}} ?> style=" margin-left: 27px; "/>
 			<p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Ambulance: </span>
-<input type="text" list="lvehicule" name="lvehicule" <?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) {echo "value='".$detailom['lvehicule']."'";}} ?> />
+<input type="text" list="lvehicule" name="lvehicule" autocomplete="off" <?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) {echo "value='".$detailom['lvehicule']."'";}} ?> />
 <datalist id="lvehicule">
 <?php
 /*foreach ($array_vehic as $vehic) {
@@ -946,7 +946,7 @@ foreach ($array_prestap as $prestap) {
 <datalist id="lmedecin">
 <?php
 foreach ($array_med as $med) {
-	echo "<option value='".$med['name']."'  >".$med['name']."</option>";
+	echo "<option value='".$med['name']." ".$med['prenom']."' >".$med['name']." ".$med['prenom']." </option>";
 }
 ?>
 </datalist>
@@ -964,7 +964,7 @@ foreach ($array_med as $med) {
 <input  style="float: left; top: -3 px;" type="checkbox" name="CL_rea" id="CL_rea" value="oui" checked>
 <?php }} ?>
 <p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Paramédical: </span>
-<input type="text" list="lparamed" name="lparamed" <?php if (isset($detailom['lparamed'])) { if (!empty($detailom['lparamed'])) {echo "value='".$detailom['lparamed']."'";}} ?> />
+<input type="text" list="lparamed" name="lparamed" autocomplete="off" <?php if (isset($detailom['lparamed'])) { if (!empty($detailom['lparamed'])) {echo "value='".$detailom['lparamed']."'";}} ?> />
 <datalist id="lparamed">
 <?php /*
 foreach ($array_paramed as $paramed) {
@@ -975,7 +975,7 @@ foreach ($array_paramed as $paramed) {
 <input name="idparamed" id="idparamed" type="hidden" value="<?php echo $detailom['idparamed']; ?>"></input>
 			</p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Personnel (Ambulancier1): </span>
 <!-- affiche pour le moment toute la liste des personnels -->				
-<input type="text" list="lambulancier1" name="lambulancier1"  <?php if (isset($detailom['lambulancier1'])) { if (!empty($detailom['lambulancier1'])) {echo "value='".$detailom['lambulancier1']."'";}} ?> />
+<input type="text" list="lambulancier1" name="lambulancier1" autocomplete="off" <?php if (isset($detailom['lambulancier1'])) { if (!empty($detailom['lambulancier1'])) {echo "value='".$detailom['lambulancier1']."'";}} ?> />
 <datalist id="lambulancier1">
 <?php /*
 foreach ($array_chauff as $chauff) {
@@ -989,7 +989,7 @@ foreach ($array_chauff as $chauff) {
 			</p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p>
 		<p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Ambulancier2: </span>
 <!-- affiche pour le moment toute la liste des personnels -->				
-<input type="text" list="lambulancier2" name="lambulancier2"  <?php if (isset($detailom['lambulancier2'])) { if (!empty($detailom['lambulancier2'])) {echo "value='".$detailom['lambulancier2']."'";}} ?> />
+<input type="text" list="lambulancier2" name="lambulancier2"  autocomplete="off" <?php if (isset($detailom['lambulancier2'])) { if (!empty($detailom['lambulancier2'])) {echo "value='".$detailom['lambulancier2']."'";}} ?> />
 <datalist id="lambulancier2">
 <?php /*
 foreach ($array_chauff as $chauff) {
@@ -1057,7 +1057,7 @@ foreach ($array_chauff as $chauff) {
 			<p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Date/heure retour base prévisible:</span></p>
 <input type="datetime-local" name="dhretbaseprev" id="dhretbaseprev" <?php if (isset($detailom['dhretbaseprev'])) { if (!empty($detailom['dhretbaseprev'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['dhretbaseprev']))."'";}} ?> style=" margin-left: 27px; "/>
 			<p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Véhicule: </span>
-<input type="text" list="lvehicule" name="lvehicule" <?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) {echo "value='".$detailom['lvehicule']."'";}} ?> />
+<input type="text" list="lvehicule" name="lvehicule" autocomplete="off" <?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) {echo "value='".$detailom['lvehicule']."'";}} ?> />
 <datalist id="lvehicule">
 <?php /*
 foreach ($array_vehic as $vehic) {
@@ -1072,7 +1072,7 @@ foreach ($array_vehic as $vehic) {
 <datalist id="lmedecin">
 <?php
 foreach ($array_med as $med) {
-	echo "<option value='".$med['name']."'  >".$med['name']."</option>";
+	echo "<option value='".$med['name']." ".$med['prenom']."' >".$med['name']." ".$med['prenom']." </option>";
 }
 ?>
 </datalist>
@@ -1090,7 +1090,7 @@ foreach ($array_med as $med) {
 <input  style="float: left; top: -3 px;" type="checkbox" name="CL_rea" id="CL_rea" value="oui" checked>
 <?php }} ?>
 <p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Paramédical: </span>
-<input type="text" list="lparamed" name="lparamed" <?php if (isset($detailom['lparamed'])) { if (!empty($detailom['lparamed'])) {echo "value='".$detailom['lparamed']."'";}} ?> />
+<input type="text" list="lparamed" name="lparamed" autocomplete="off" <?php if (isset($detailom['lparamed'])) { if (!empty($detailom['lparamed'])) {echo "value='".$detailom['lparamed']."'";}} ?> />
 <datalist id="lparamed">
 <?php /*
 foreach ($array_paramed as $paramed) {
@@ -1102,7 +1102,7 @@ foreach ($array_paramed as $paramed) {
 <input name="idparamed" id="idparamed" type="hidden" value="<?php echo $detailom['idparamed']; ?>"></input>
 			</p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Ambulancier1: </span>
 <!-- affiche pour le moment toute la liste des personnels -->				
-<input type="text" list="lambulancier1" name="lambulancier1"  <?php if (isset($detailom['lambulancier1'])) { if (!empty($detailom['lambulancier1'])) {echo "value='".$detailom['lambulancier1']."'";}} ?> />
+<input type="text" list="lambulancier1" name="lambulancier1" autocomplete="off" <?php if (isset($detailom['lambulancier1'])) { if (!empty($detailom['lambulancier1'])) {echo "value='".$detailom['lambulancier1']."'";}} ?> />
 <datalist id="lambulancier1">
 <?php /*
 foreach ($array_chauff as $chauff) {
@@ -1117,7 +1117,7 @@ foreach ($array_chauff as $chauff) {
 			</p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p>
 		<p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Ambulancier2: </span>
 <!-- affiche pour le moment toute la liste des personnels -->				
-<input type="text" list="lambulancier2" name="lambulancier2"  <?php if (isset($detailom['lambulancier2'])) { if (!empty($detailom['lambulancier2'])) {echo "value='".$detailom['lambulancier2']."'";}} ?> />
+<input type="text" list="lambulancier2" name="lambulancier2" autocomplete="off"  <?php if (isset($detailom['lambulancier2'])) { if (!empty($detailom['lambulancier2'])) {echo "value='".$detailom['lambulancier2']."'";}} ?> />
 <datalist id="lambulancier2">
 <?php /*
 foreach ($array_chauff as $chauff) {
