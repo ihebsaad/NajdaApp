@@ -27,30 +27,35 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
     $dateEmail=str_replace('/','-',$dateemail) ;
     $datePoste=str_replace('/','-',$dateposte) ;
     $dateValid=str_replace('/','-',$date_valid) ;
-    
-        if( ( strlen($dateEmail) > 9 ) 
-        && (strlen($datePoste) > 9 ) 
-    &&  (strlen($dateEmail)  > 9 )  ){
-        
-    $dateEmail= new DateTime($dateEmail);
-    $datePoste= new DateTime($datePoste);
+
+	
+	if( ( strlen($datePoste) > 9 ) 
+ 	&&  (strlen($dateValid)  > 9 )  ){
+     $datePoste= new DateTime($datePoste);
     $dateValid= new DateTime($dateValid);
-    
 
-    $today=date('d-m-Y');
-    $today=new DateTime($today);;
-
-
-    $diffEmail=date_diff($dateValid,$dateEmail);
-   // $diffEmail->format("%R%a ");
     $diffPoste=date_diff($dateValid,$datePoste);
-   
-    }else{
-        $diffEmail='';
-       $diffPoste='';
-      
-        
-    }
+   // $diffEmail->format("%R%a ");
+   }else{
+	   $diffPoste='';
+ 	   
+   }
+	
+	 $dateEmail=str_replace('/','-',$dateemail) ;
+    $datePoste=str_replace('/','-',$dateposte) ;
+    $dateValid=str_replace('/','-',$date_valid) ;
+	
+	if( ( strlen($dateEmail) > 9 ) 
+ 	&&  (strlen($dateValid)  > 9 )  ){
+    $dateEmail= new DateTime($dateEmail);
+     $dateValid= new DateTime($dateValid);
+  
+    $diffEmail=date_diff($dateValid,$dateEmail);
+    
+   }else{
+	   $diffEmail='';
+ 	   
+   }
 
 if($date_arrive !=''){
 $mois=substr ( $date_arrive , 3  ,2 );
@@ -116,13 +121,15 @@ $mois=substr ( $date_arrive , 3  ,2 );
 
 
         <div class="row" style="margin-top:20px">
-        
+
+		
           <div class="col-md-3">
              <div class="form-group">
-             <label for="inputError" class="control-label">Montant</label>
+			 <label for="inputError" class="control-label">Montant</label>
                <input autocomplete="off" onchange="changing(this)" class="form-control input" name="montant" id="montant"  value="{{ $facture->montant }}">
 
-             </div>
+			 </div>
+
            </div>
 <?php $prestataires =App\Prestataire::get();?>
 
@@ -325,7 +332,9 @@ $mois=substr ( $date_arrive , 3  ,2 );
                 $('#'+champ).animate({
                     opacity: '1',
                 });
-                if( champ =='date_valid' || champ =='date_arrive' || champ =='date_poste' || champ =='date_email' ){location.reload();}
+
+				if( champ =='date_valid' || champ =='date_arrive' || champ =='date_poste' || champ =='date_email' ){location.reload();}
+
             }
         });
 

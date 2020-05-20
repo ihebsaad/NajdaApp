@@ -91,25 +91,42 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
     $dateEmail=str_replace('/','-',$dateemail) ;
     $datePoste=str_replace('/','-',$dateposte) ;
     $dateValid=str_replace('/','-',$date_valid) ;
-    
-    if( ( strlen($dateEmail) > 9 ) 
-        && (strlen($datePoste) > 9 ) 
-    &&  (strlen($dateEmail)  > 9 )  ){
-    $dateEmail= new DateTime($dateEmail);
-    $datePoste= new DateTime($datePoste);
+
+	
+	 
+	if( ( strlen($datePoste) > 9 ) 
+ 	&&  (strlen($dateValid)  > 9 )  ){
+     $datePoste= new DateTime($datePoste);
     $dateValid= new DateTime($dateValid);
    // $dateEmail=date_create($dateEmail);
    // $datePoste=date_create($dateEmail);
-
-
-    $diffEmail=date_diff($dateValid,$dateEmail);
-   // $diffEmail->format("%R%a ");
+ 
     $diffPoste=date_diff($dateValid,$datePoste);
+   // $diffEmail->format("%R%a ");
    
    }else{
-       $diffEmail='';
-       $diffPoste='';
-       
+	   $diffPoste='';
+ 	   
+   }
+	
+	 $dateEmail=str_replace('/','-',$dateemail) ;
+    $datePoste=str_replace('/','-',$dateposte) ;
+    $dateValid=str_replace('/','-',$date_valid) ;
+	
+	
+	if( ( strlen($dateEmail) > 9 ) 
+ 	&&  (strlen($dateValid)  > 9 )  ){
+    $dateEmail= new DateTime($dateEmail);
+     $dateValid= new DateTime($dateValid);
+   // $dateEmail=date_create($dateEmail);
+   // $datePoste=date_create($dateEmail);
+ 
+    $diffEmail=date_diff($dateValid,$dateEmail);
+   // $diffEmail->format("%R%a ");
+   
+   }else{
+	   $diffEmail='';
+
    }
    
    
@@ -138,7 +155,8 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
                     <td  style="width:10%">{{$facture->date_arrive}}</td>
                     <td style="width:10%"  ><?php if($date_valid !='' && $dateemail!='' && $diffEmail!=''){  echo  $diffEmail->format("%R%a ").' jours'; } ?></td>
                     <td style="width:10%"  > <?php if($date_valid !='' && $dateposte!='' && $diffPoste!=''){   echo      $diffPoste->format("%R%a ").' jours'; } ?> </td>
-                    <td style="width:4%"   >
+ 					<td style="width:4%"   >
+
                              <a  href="{{action('FacturesController@destroy', $facture['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                 <span class="fa fa-fw fa-trash-alt"></span>
                             </a>
