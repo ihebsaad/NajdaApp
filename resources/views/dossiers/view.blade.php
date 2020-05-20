@@ -662,7 +662,7 @@ function custom_echo($x, $length)
                                      <label>Ville</label>
                                  </div>
                                  <div class="row" style=";margin-bottom:10px;"><style>.algolia-places{width:80%;}</style></div>
-                                 <input class="form-control" style="padding-left:5px" type="text"  id="villepr"  placeholder="toutes" />
+                                 <input class="form-control" style="padding-left:5px" type="text"  id="villepr"  placeholder="toutes"/>
                                  <input class="form-control" style="padding-left:5px;" type="hidden"  id="villecode" />
 
                              </div>
@@ -781,14 +781,14 @@ function custom_echo($x, $length)
                             <th style="width:10%">ID</th>
                             <th style="width:10%">Date</th>
                             <th style="width:15%">Prestataire</th>
-                            <th style="width:15%">Prestation</th>
-                            <th style="width:15%">Document/OM</th>
-                            <th style="width:15%">Détails</th>
+                            <th style="width:20%">Prestation</th>
+                            <th style="width:15%">Spécialité</th>
+                            <th style="width:20%">Détails</th>
                             @can('isAdmin')<th style="width:10%">Actions</th>@endcan
                         </tr>
 
                         </thead>
-                        <tbody style="font-size:13px">
+                        <tbody>
 
                         @foreach($prestations as $prestation)
                             <?php $dossid= $prestation['dossier_id'];?>
@@ -797,7 +797,7 @@ function custom_echo($x, $length)
                             ?>
 
                             <tr  >
-                                <td style="width:5%; <?php echo $style;?> ">
+                                <td style="width:10%; <?php echo $style;?> ">
                                     <a href="{{action('PrestationsController@view', $prestation['id'])}}" >
                                         <?php  echo $prestation['id']  ; ?>
                                     </a></td>
@@ -805,7 +805,7 @@ function custom_echo($x, $length)
                                 <td style="width:10%">
                                     <?php echo $prestation['date_prestation'] ; ?>
                                 </td>
-                                <td style="width:15%">
+                                <td style="width:20%">
                                     <?php $prest= $prestation['prestataire_id']; ?>
                                     <a  href="{{action('PrestatairesController@view', $prest)}}" ><?php echo PrestationsController::PrestataireById($prest);  ?>
                                     </a>
@@ -815,10 +815,10 @@ function custom_echo($x, $length)
                                     echo PrestationsController::TypePrestationById($typeprest);  ?>
                                 </td>
                                 <td style="width:15%;">
-                                   <small> <?php $omsdocs= $prestation['oms_docs'];
-                                    echo custom_echo($omsdocs,25);  ?></small>
+                                    <?php $specialite= $prestation['specialite'];
+                                    echo PrestationsController::SpecialiteById($specialite);  ?>
                                 </td>
-                                <td style="width:15%;">
+                                <td style="width:20%;">
                                 <?php $details= $prestation['details'];
                                   custom_echo($details ,20);
                                 ?>
@@ -1773,7 +1773,7 @@ array_push($listepr,$pr['prestataire_id']);
                                     <a href="{{action('FacturesController@view', $facture->id)}}" ><?php echo sprintf("%05d",$facture->id);?></a>
                                     </td>
                                 <td style="width:10%">
-                                    <?php echo  $facture->date_arrive  ; ?>
+                                    <?php echo date('d/m/Y H:i', strtotime($facture->created_at)) ; ?>
                                  </td>
                                 <td style="width:15%">
                                     <?php echo $facture->reference ; ?>
@@ -1998,13 +1998,8 @@ array_push($listepr,$pr['prestataire_id']);
                                           <option value="Taxi">Taxi</option>
                                           <option value="Ambulance">Ambulance</option>
                                           <option value="Remorquage">Remorquage</option>
-<?php
-if(strstr($dossier['reference_medic'],"MI")){
-?>
                                           <option value="Medic Internationnal">Medic Internationnal</option>
-          <?php
-}
-?>                         
+                                     
                                           
                                      </select>
                                   </div>
@@ -2821,7 +2816,7 @@ if(strstr($dossier['reference_medic'],"MI")){
                             </div>
                             <div class="row" style=";margin-bottom:10px;"><style>.algolia-places{width:80%;}</style>
                             </div>
-                            <input class="form-control"   style="padding-left:5px" type="text"   name="ville" id="villepr3" placeholder="toutes" />
+                            <input class="form-control"   style="padding-left:5px" type="text"   name="ville" id="villepr3"  placeholder="toutes" />
                             <input class="form-control" style="padding-left:5px;" type="hidden" name="postal" id="villecode3" />
 
                         </div>
@@ -3296,13 +3291,11 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
     }
 
 function remplaceom(id,affectea,verif)
-{ var tempom = $("#templateom").val();
-
+{
     document.getElementById('claffect1').style.display = 'block';
     document.getElementById('claffect2').style.display = 'block';
-     if (verif === "ommie")
-     { document.getElementById('claffect1').style.display = 'none';
-            document.getElementById('claffect2').style.display = 'none';}
+
+    
         if (affectea !== undefined && affectea !== null && affectea !== '')
         {
             //$("#affectationprest").val(affectea).change();
@@ -3323,7 +3316,7 @@ function remplaceom(id,affectea,verif)
     if(verif==='omre')
         var url = '<?php echo url('/'); ?>/public/preview_templates/odm_remorquage.php?remplace=1&parent='+id+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
     if(verif==='ommie')
-        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_medic_international.php?remplace=1&parent='+id+'&dossier='+dossier+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
+        var url = '<?php echo url('/'); ?>/public/preview_templates/odm_medic_international.php?remplace=1&parent='+id+'&iduser='+cnctuserid+'&DB_HOST='+'<?php echo env("DB_HOST"); ?>'+'&DB_DATABASE='+'<?php echo env("DB_DATABASE"); ?>'+'&DB_USERNAME='+'<?php echo env("DB_USERNAME"); ?>'+'&DB_PASSWORD='+'<?php echo env("DB_PASSWORD"); ?>';
 
          document.getElementById("omfilled").src = url;
          $("#idomparent").val(id);
@@ -4062,11 +4055,9 @@ function keyUpHandler(){
                         afficheom(data,tempom);
                 }
             });*/
- document.getElementById('claffect1').style.display = 'block';
+
+            document.getElementById('claffect1').style.display = 'block';
             document.getElementById('claffect2').style.display = 'block';
-if (tempom === "Medic Internationnal")
-            { document.getElementById('claffect1').style.display = 'none';
-            document.getElementById('claffect2').style.display = 'none';}
             $("#affectationprest").val("Select").change();
 
             afficheom(tempom,dossier,affectea);

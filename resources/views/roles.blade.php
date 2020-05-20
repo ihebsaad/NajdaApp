@@ -1078,6 +1078,9 @@ $heureActuelle=date('H');
 
  app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
 
+ // \App\Http\Controllers\DossierImmobileController::mettreAjourTableDossImmobile();
+ // \App\Http\Controllers\DossierImmobileController::envoi_khaled_mail();
+
 // Inactiver Dossiers
 //App\Http\Controllers\DossiersController::InactiverDossiers();
 

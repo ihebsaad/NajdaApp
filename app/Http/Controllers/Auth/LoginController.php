@@ -1025,7 +1025,71 @@ class LoginController extends Controller
             Demande::where('par', $iduser)->delete();
 
 
+     // les actions et les missions delegues seront reaffectés au possesseur de dossier
 
+     // 1- les missions
+        $missdeleg=Mission::where('statut_courant','deleguee')->where('user_id', $iduser)->get();
+        
+        if($missdeleg)
+        {
+            if($missdeleg->get()>0)
+            {
+                foreach ($missdeleg as $md )
+                {
+                   $dosss=Dossier::where('id',$md->dossier_id)->first();
+                   if($dosss)
+                   {
+                      if($dosss->affecte)
+                      {
+                         $v=$dosss->affecte;
+                         $us=User::where('id',$v)->first();
+                         if($us)
+                         {
+                         $md->update(['user_id' =>$v,'assistant_id'=>$v,'emetteur_id'=>$v ,'statut_courant'=>'active']);
+                         }
+
+                      }
+
+                   }
+                }
+                        
+            }
+        }
+
+      // 2- les actions
+
+         $actdeleg=ActionEC::where('statut','deleguee')->where('assistant_id', $iduser)->get();
+
+        if($actdeleg)
+        {
+            if($actdeleg->get()>0)
+            {
+                 foreach ($actdeleg as $md )
+                {
+
+                   $dosss=Dossier::where('id',$md->Mission->dossier_id)->first();
+                    if($dosss)
+                   {
+                      if($dosss->affecte)
+                      {
+                         $v=$dosss->affecte;
+                         $us=User::where('id',$v)->first();
+                         if($us)
+                         {
+                         $md->update(['user_id' =>$v,'assistant_id'=>$v,'statut'=>'active']);
+                         }
+
+                      }
+
+                   }
+
+                }
+
+
+            }
+        }
+
+         // fin delégation action
             $this->guard()->logout();
 
             $request->session()->invalidate();

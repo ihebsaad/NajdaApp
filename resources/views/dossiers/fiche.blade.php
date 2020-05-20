@@ -2715,9 +2715,9 @@ if($count==0) {
 
     $type=$entree['type'];
     $time=$entree['created_at'];$heure= "<small>Il y'a ".time_elapsed_string($time, false).'</small>';
-    //	$emetteur= $entree['emetteur'] ;
+    //  $emetteur= $entree['emetteur'] ;
     $emetteur=custom_echo($entree['emetteur'],'18');
-    //	$sujet= $entree['sujet'] ;
+    //  $sujet= $entree['sujet'] ;
     $sujet=custom_echo($entree['sujet'],'20');
     $attachs=$entree['nb_attach'];
 
@@ -3467,7 +3467,7 @@ function disabling(elm) {
             var hospital=document.getElementById('nonis_hospitalized').checked;
 
             if(hospital)
-            {div.style.display='block';	 }
+            {div.style.display='block';  }
             else
             {div.style.display='none';     }
 
@@ -3480,7 +3480,7 @@ function disabling(elm) {
             var hospital=document.getElementById('nonis_hospitalized').checked;
 
             if(hospital)
-            {div.style.display='block';	 }
+            {div.style.display='block';  }
             else
             {div.style.display='none';     }
 
@@ -3493,7 +3493,7 @@ function disabling(elm) {
             var docs=document.getElementById('documents').checked;
 
             if(docs)
-            {div.style.display='block';	 }
+            {div.style.display='block';  }
             else
             {div.style.display='none';     }
 
@@ -3505,7 +3505,7 @@ function disabling(elm) {
             var docs=document.getElementById('documents').checked;
 
             if(docs)
-            {div.style.display='block';	 }
+            {div.style.display='block';  }
             else
             {div.style.display='none';     }
 
@@ -3528,7 +3528,7 @@ function disabling(elm) {
 
             var   div=document.getElementById('ben3');
             if(div.style.display==='none')
-            {div.style.display='block';	 }
+            {div.style.display='block';  }
             else
             {div.style.display='none';     }
 

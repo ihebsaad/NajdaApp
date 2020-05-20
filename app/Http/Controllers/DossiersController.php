@@ -1079,7 +1079,7 @@ class DossiersController extends Controller
             $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25', '');
             $swiftTransport->setUsername('assistance@medicmultiservices.com');
             $swiftTransport->setPassword($pass_MEDIC);
-            $fromname="Medic' Multiservices";
+            $fromname="Medic International";
             $signatureentite= $parametres->signature3 ;
 
         }
@@ -2273,7 +2273,7 @@ class DossiersController extends Controller
         $spec = $request->get('specialite');
         $ville = $request->get('ville');
         $postal = $request->get('postal');
-        if (intval($postal) >1 ||($ville!='')){
+        if (intval($postal) >1 || ($ville!='')){
             $liste =Evaluation::where('gouv',$gouv )
                 ->where('type_prest',$type )
                 ->where('specialite',$spec )
@@ -2389,7 +2389,7 @@ class DossiersController extends Controller
         else{ $postal=0;}
 
 
-        if (intval($postal) >1 || ($ville!='')  ){
+        if (intval($postal) >1 || $ville !=''  ){
             $datasearch =Evaluation::where('gouv',$gouvernorat )
                 ->where('type_prest',$typeprest )
                 ->where('specialite',$specialite )
@@ -2533,7 +2533,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
     }
 
-	
+    
     public function addressadd(Request $request)
     {
         if( ($request->get('email'))!=null) {
@@ -3217,7 +3217,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
             if($statut=='Cloture'){
                 if($count==0){
-                Dossier::where('id',$iddossier)->update(array('current_status'=>$statut,'sub_status'=>null ,'sanssuite'=>$sanssuite,'affecte'=>0));
+                Dossier::where('id',$iddossier)->update(array('current_status'=>$statut ,'sanssuite'=>$sanssuite,'affecte'=>0));
 
 
                if($sanssuite==1)

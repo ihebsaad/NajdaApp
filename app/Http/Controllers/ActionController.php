@@ -2395,6 +2395,7 @@ class ActionController extends Controller
 
          $dtc = (new \DateTime())->format('Y-m-d H:i:s');                         
          $format = "Y-m-d H:i:s";
+         $format2 = "Y-m-d\TH:i";
          $dateSys  = \DateTime::createFromFormat($format, $dtc);
          
          if($dos)
@@ -2635,8 +2636,8 @@ class ActionController extends Controller
 
                              if($bouton==3)  //bouton reporter
                            {
-                                 $dateRepAct  = \DateTime::createFromFormat($format, $request->get('datereport'));
-                                 // dd($dateRepAct);
+                                 $dateRepAct  = \DateTime::createFromFormat($format2, $request->get('datereport'));
+                                 //dd($dateSys);
                                  if($dateRepAct<= $dateSys)
                                  {
 
@@ -2672,7 +2673,7 @@ class ActionController extends Controller
                                if($bouton==4)  //bouton rappeler mise en attente de réponse
                                {                 
                                                                
-                                 $dateRapAct  = \DateTime::createFromFormat($format, $request->get('daterappel'));
+                                 $dateRapAct  = \DateTime::createFromFormat($format2, $request->get('daterappel'));
                                 // dd($dateRapAct);
 
                                  if($dateRapAct<= $dateSys)
