@@ -2608,7 +2608,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                              <?php    
 
 app('App\Http\Controllers\MissionController')->verifier_fin_missions($dossier['id']);
-$count= Mission::where('dossier_id',$dossier['id'])
+$count= App\Mission::where('dossier_id',$dossier['id'])
                         ->where('statut_courant','!=','annulee')
                         ->where('statut_courant','!=','achevee')
                         ->count();

@@ -44,7 +44,18 @@ class DeleguerActionController extends Controller
         { 
 
              $act->update(['statut' => 'deleguee']);
+
              $act->update(['user_id' => $request->get('affecteurmiss')]);
+
+             // délégué endormie
+           $actmissendordel=ActionEC::where('mission_id',$act->mission_id)->where('statut','active')->first();
+             if(!$actmissendordel)
+              {
+               //dd('endormie');
+                Mission::where('id',$act->mission_id)->update(['statut_courant'=>'delendormie']);
+              }
+
+              // fin etat deleguee endormie
 
             $dtc = (new \DateTime())->format('Y-m-d H:i');
             $affec=new DelegAct([

@@ -97,7 +97,7 @@ class ActionController extends Controller
        if($actionRR)
        {
             foreach ($actionRR as $key ) {
-              if($key->Mission->dossier->id== $iddoss)
+              if($key->Mission->dossier_id== $iddoss)
               {
                   $var[]=$key;
 
@@ -123,7 +123,10 @@ class ActionController extends Controller
 
         if($actrr->update(['statut'=>'active']))
         {
-
+              if(Mission::where('id',$actrr->mission_id)->first()->statut_courant=="endormie")
+              {
+              Mission::where('id',$actrr->mission_id)->update(['statut_courant'=>'active']);
+               }
               $output='Annulation validée et l\'action en question est activée';
 
         }
@@ -496,62 +499,7 @@ class ActionController extends Controller
      }
 
 
-     /*public function RappelAction (Request $request,$iddoss,$idact,$idsousact)
-   {
-
-        $sact=Action::find($idsousact);
-        $sact->update(['statut'=> "Suspendue", 'realisee' => 0,'date_rappel'=>$request->get('datereport')]);
-        $ActionR = new ActionRappel([
-             'action_id' => $sact->id,
-             'mission_id' => $sact->mission_id,
-             'type_Mission' => $sact->type_Mission,
-             'titre'=> $sact->titre,
-             'descrip' => $sact->descrip,
-             'date_deb' => $sact->date_deb,
-             'date_fin' => $sact->date_fin,
-             'igno_ou_non' => $sact->igno_ou_non,
-             'rapl_ou_non' => $sact->rapl_ou_non,
-             'num_rappel' => $sact->num_rappel,
-            'objetRappel' => $request->get('objetrappel'),
-             'doc_rapp_ou_non' => $sact->doc_rapp_ou_non,
-             'date_rappel' => $sact->date_rappel,
-
-             'date_report' => $sact->date_report,
-             'ordre' => $sact->ordre,
-             'realisee' => $sact->realisee,
-             'statut' => $sact->statut,
-             'nb_opt' => $sact->nb_opt,
-             'opt_choisie' => $sact->opt_choisie,
-             'user_id' => $sact->user_id,
-             'assistant_id' => $sact->assistant_id,
-             'comment1' => $sact->comment1,
-             'comment2' => $sact->comment2,
-             'comment3' => $sact->comment3
-
-      
-        ]);
-
-        $ActionR->save();
-
-
-        $sact=Action::find($idsousact);
-       $order=$sact->ordre;
-       
-           $actSui=Action::where("Mission_id",$idact)->where('ordre',$order+1)->first();
-            $actSui->update(['statut'=> "Active"]);
-
-          //  dd($sousactSui);
-
-            return redirect('/dossier/Mission/TraitementAction/'.$iddoss.'/'.$idact.'/'.$actSui->id);
-
-        
-       // $act=Mission::find($idact);
-      // $act->update(['statut_courant'=> "Suspendue", 'realisee' => 0]);
-       // return redirect('dossiers/view/'.$iddoss);
-
-
-   }*/
-
+     
 
    public function activerAct_des_dates_speciales()
    {
@@ -599,7 +547,7 @@ class ActionController extends Controller
                            $datespe = \DateTime::createFromFormat($format,($miss->h_dep_pour_miss));
                            // dd( $datespe );
                          
-                            if($miss->type_Mission==7)//taxi 
+                            if($miss->type_Mission==7)//ambulance 
                                 {
                                     //activer l'action 6 de consultation médicale  Si_heure_systeme>heure_RDV+2h 
 
@@ -617,7 +565,7 @@ class ActionController extends Controller
                                              $action8->update(['statut'=>"active"]);
                                              $action8->update(['date_deb' => $dateSys]); 
                                              $action8->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action8->titre.' | Mission :'. $action8->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action8->Mission->dossier->reference_medic.' - '.$action8->Mission->dossier->subscriber_name.' '.$action8->Mission->dossier->subscriber_lastname .'<input type="hidden" id="idactActive" value="'. $action8->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action8->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action8->Mission->dossier->id.'"/> ';
@@ -730,7 +678,7 @@ class ActionController extends Controller
                                              $action6->update(['statut'=>"active"]);
                                              $action6->update(['date_deb' => $dateSys]); 
                                              $action6->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             //$miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action6->Mission->dossier->reference_medic.' - '.$action6->Mission->dossier->subscriber_name.' '.$action6->Mission->dossier->subscriber_lastname .'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
@@ -785,7 +733,7 @@ class ActionController extends Controller
                                              $action7->update(['statut'=>"active"]);
                                              $action7->update(['date_deb' => $dateSys]); 
                                               $action7->update(['user_id'=>Auth::user()->id]);
-                                             $miss->update(['date_spec_affect2'=>0]);
+                                            // $miss->update(['date_spec_affect2'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action7->titre.' | Mission :'. $action7->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action7->Mission->dossier->reference_medic.' - '.$action7->Mission->dossier->subscriber_name.' '.$action7->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action7->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action7->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action7->Mission->dossier->id.'"/> ';
@@ -946,7 +894,7 @@ class ActionController extends Controller
                                              $action16->update(['statut'=>"active"]);
                                              $action16->update(['date_deb' => $dateSys]); 
                                              $action16->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action16->titre.' | Mission :'. $action16->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action16->Mission->dossier->reference_medic.'-'.$action16->Mission->dossier->subscriber_name.' '.$action16->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action16->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action16->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action16->Mission->dossier->id.'"/> ';
@@ -997,7 +945,7 @@ class ActionController extends Controller
                                              $action11->update(['statut'=>"active"]);
                                              $action11->update(['date_deb' => $dateSys]); 
                                              $action11->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
 
@@ -1055,7 +1003,7 @@ class ActionController extends Controller
                                              $action7->update(['statut'=>"active"]);
                                              $action7->update(['date_deb' => $dateSys]); 
                                              $action7->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
 
@@ -1108,7 +1056,7 @@ class ActionController extends Controller
                                              $action6->update(['statut'=>"active"]);
                                              $action6->update(['date_deb' => $dateSys]); 
                                              $action6->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action6->Mission->dossier->reference_medic.' - '.$action6->Mission->dossier->subscriber_name.' '.$action6->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
@@ -1161,7 +1109,7 @@ class ActionController extends Controller
                                              $action9->update(['statut'=>"active"]);
                                              $action9->update(['date_deb' => $dateSys]); 
                                              $action9->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action9->titre.' | Mission :'. $action9->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action9->Mission->dossier->reference_medic.' - '.$action9->Mission->dossier->subscriber_name.' '.$action9->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action9->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action9->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action9->Mission->dossier->id.'"/> ';
@@ -1209,7 +1157,7 @@ class ActionController extends Controller
                                              $action8->update(['statut'=>"active"]);
                                              $action8->update(['date_deb' => $dateSys]); 
                                              $action8->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action8->titre.' | Mission :'. $action8->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action8->Mission->dossier->reference_medic.' - '. $action8->Mission->dossier->subscriber_name.' '.$action8->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action8->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action8->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action8->Mission->dossier->id.'"/> ';
@@ -1253,7 +1201,7 @@ class ActionController extends Controller
                                              $action8->update(['statut'=>"active"]);
                                              $action8->update(['date_deb' => $dateSys]); 
                                              $action8->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action8->titre.' | Mission :'. $action8->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action8->Mission->dossier->reference_medic.' - '.$action8->Mission->dossier->subscriber_name.' '.$action8->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action8->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action8->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action8->Mission->dossier->id.'"/> ';
@@ -1357,7 +1305,7 @@ class ActionController extends Controller
                                              $action6->update(['statut'=>"active"]);
                                              $action6->update(['date_deb' => $dateSys]); 
                                              $action6->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
 
@@ -1452,7 +1400,7 @@ class ActionController extends Controller
                                              $action6->update(['statut'=>"active"]);
                                              $action6->update(['date_deb' => $dateSys]); 
                                              $action6->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                               $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action6->Mission->dossier->reference_medic.' - '.$action6->Mission->dossier->subscriber_name.' '.$action6->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
@@ -1509,7 +1457,7 @@ class ActionController extends Controller
                                              $action6->update(['statut'=>"active"]);
                                              $action6->update(['date_deb' => $dateSys]); 
                                              $action6->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action6->Mission->dossier->reference_medic.' - '.$action6->Mission->dossier->subscriber_name.' '.$action6->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
@@ -1559,7 +1507,7 @@ class ActionController extends Controller
                                              $action3->update(['statut'=>"active"]);
                                              $action3->update(['date_deb' => $dateSys]); 
                                              $action3->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect2'=>0]);
+                                             $miss->update(['date_spec_affect2'=>0]);
                                             $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action3->titre.' | Mission :'. $action3->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action3->Mission->dossier->reference_medic.' - '.$action3->Mission->dossier->subscriber_name.' '.$action3->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action3->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action3->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action3->Mission->dossier->id.'"/> ';
@@ -1619,7 +1567,7 @@ class ActionController extends Controller
                                              $action2->update(['statut'=>"active"]);
                                              $action2->update(['date_deb' => $dateSys]); 
                                              $action2->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect2'=>0]);
+                                             $miss->update(['date_spec_affect2'=>0]);
                                               $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action2->titre.' | Mission :'. $action2->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action2->Mission->dossier->reference_medic.' - '.$action2->Mission->dossier->subscriber_name.' '.$action2->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action2->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action2->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action2->Mission->dossier->id.'"/> ';
@@ -1681,7 +1629,7 @@ class ActionController extends Controller
                                              $action11->update(['statut'=>"active"]);
                                              $action11->update(['date_deb' => $dateSys]); 
                                              $action11->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action11->titre.' | Mission :'. $action11->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action11->Mission->dossier->reference_medic.'-'.$action11->Mission->dossier->subscriber_name.' '.$action11->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action11->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action11->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action11->Mission->dossier->id.'"/> ';
@@ -1736,7 +1684,7 @@ class ActionController extends Controller
                                              $action8->update(['statut'=>"active"]);
                                              $action8->update(['date_deb' => $dateSys]); 
                                              $action8->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action8->titre.' | Mission :'. $action8->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action8->Mission->dossier->reference_medic.' - '.$action8->Mission->dossier->subscriber_name.' '.$action8->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action8->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action8->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action8->Mission->dossier->id.'"/> ';
@@ -1786,7 +1734,7 @@ class ActionController extends Controller
                                              $action10->update(['statut'=>"active"]);
                                              $action10->update(['date_deb' => $dateSys]); 
                                              $action10->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action10->titre.' | Mission :'. $action10->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action10->Mission->dossier->reference_medic.' - '.$action10->Mission->dossier->subscriber_name.' '.$action10->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action10->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action10->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action10->Mission->dossier->id.'"/> ';
@@ -1876,7 +1824,7 @@ class ActionController extends Controller
                                              $action6->update(['statut'=>"active"]);
                                              $action6->update(['date_deb' => $dateSys]); 
                                              $action6->update(['user_id'=>Auth::user()->id]);
-                                             $miss-> update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action6->Mission->dossier->reference_medic.' - '.$action6->Mission->dossier->subscriber_name.' '.$action6->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
@@ -2055,8 +2003,8 @@ class ActionController extends Controller
                   $upde= ActionEC::where('id',$actionRepo->id)->where('statut','!=','rfaite')->first();
                   $upde->update(['statut' => 'active']);
                   $upde->update(['date_deb'=> $dtc]);
-                  Mission::where('id', $upde->Mission->id)->update(['statut_courant'=>'active']);
-
+                  $misu=Mission::where('id', $upde->mission_id)->first();
+                  $misu->update(['statut_courant'=>'active']);
                      $output='Activation de l\'action reportée : '.$upde->titre.' | Mission :'.$upde->Mission->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname .'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
                 
                      return($output);
@@ -2064,9 +2012,10 @@ class ActionController extends Controller
                else  
                {
                  $upde= ActionEC::where('id',$actionRapp->id)->where('statut','!=','rfaite')->first();
-                     $upde->update(['statut' => 'active']);
-                      $upde->update(['date_deb'=> $dtc]);
-                      Mission::where('id', $upde->Mission->id)->update(['statut_courant'=>'active']);
+                    $upde->update(['statut' => 'active']);
+                    $upde->update(['date_deb'=> $dtc]);
+                    $misu=Mission::where('id', $upde->mission_id)->first();
+                    $misu->update(['statut_courant'=>'active']);
 
                      $output='Rappel concernant l\'action :'.$upde->titre.' | Mission :'.$upde->Mission->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
                     // dd($output);
@@ -2082,7 +2031,8 @@ class ActionController extends Controller
             $upde= ActionEC::where('id',$actionRapp->id)->where('statut','!=','rfaite')->first();
              $upde->update(['statut' => 'active']);
               $upde->update(['date_deb'=> $dtc]);
-              Mission::where('id', $upde->Mission->id)->update(['statut_courant'=>'active']);
+                $misu=Mission::where('id', $upde->mission_id)->first();
+                  $misu->update(['statut_courant'=>'active']);
 
              $output='Rappel concernant l\'action :'.$upde->titre.' | Mission :'.$upde->Mission->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
              //dd($output);
@@ -2096,7 +2046,8 @@ class ActionController extends Controller
                          $upde= ActionEC::where('id',$actionRepo->id)->where('statut','!=','rfaite')->first();
                          $upde->update(['statut' => 'active']);
                          $upde->update(['date_deb'=> $dtc]);
-                         Mission::where('id', $upde->Mission->id)->update(['statut_courant'=>'active']);
+                          $misu=Mission::where('id', $upde->mission_id)->first();
+                          $misu->update(['statut_courant'=>'active']);
 
                          $output='Activation de l\'action reportée : '.$upde->titre.' | Mission :'.$upde->Mission->typeMission->nom_type_Mission.' | Dossier : '.$upde->Mission->dossier->reference_medic.' - '.$upde->Mission->dossier->subscriber_name.' '.$upde->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'.$upde->id.'"/> <input type="hidden" id="idactMissActive" value="'.$upde->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'.$upde->Mission->dossier->id.'"/> ';
                   
@@ -2119,6 +2070,316 @@ class ActionController extends Controller
        
    }
 
+   public function reactiverAction($idact)
+   {
+
+     $dtc = (new \DateTime())->format('Y-m-d H:i');
+     $upde= ActionEC::where('id',$idact)->first();
+     if($upde)
+     {
+     $upde->update(['statut' => 'active']);
+     $upde->update(['date_deb'=> $dtc]);
+     Mission::where('id', $upde->Mission->id)->update(['statut_courant'=>'active']);
+     return 'La réactivation est effectuée avec succès';
+     }
+
+     return 'Erreur';
+
+   }
+
+   public function validerDateSpecMission($actt)
+   {
+
+       // $miss=Mission::where('id',$request->idmissionDateSpec)->first();
+
+             if($actt->id_type_miss==7)// ambulance
+            {
+
+              if($actt->ordre==8)
+              {
+                $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect'=>0]); 
+
+              } 
+
+               if($actt->ordre==9)
+              {
+                $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect2'=>0]); 
+              
+              }     
+
+            }// fin ambulance 
+
+            if($actt->id_type_miss==6)// taxi 
+            {
+
+              if($actt->ordre==6)
+              {
+                $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect'=>0]); 
+ 
+              }  
+
+
+              if($actt->ordre==7)
+              {
+                $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect2'=>0]); 
+            
+              }     
+
+            }// fin taxi
+
+            if($actt->id_type_miss==30)// rapatriement véhicule sur Cargo 
+            {
+
+              if($actt->ordre==26)
+              {
+                $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect'=>0]); 
+
+              
+              }  
+
+
+
+              if($actt->ordre==29)
+              {
+                $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect2'=>0]); 
+
+              }     
+
+            }// fin rapatriement véhicule sur Cargo 
+
+             if($actt->id_type_miss==26) // Escorte interna. fournie par MI
+            {
+
+              if($actt->ordre==16)
+              {
+               $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect'=>1]); 
+
+                
+              }  
+
+            }// fin  Escorte interna. fournie par MI
+
+            if($actt->id_type_miss==27) // Rapatriement véhicule avec chauffeur accompagnateur
+            {
+
+              if($actt->ordre==11)
+              {
+                $miss=Mission::where('id',$actt->mission_id)->first(); 
+                $miss->update(['date_spec_affect'=>0]); 
+ 
+              }  
+
+            }// fin Rapatriement véhicule avec chauffeur accompagnateur
+
+            if($actt->id_type_miss==12) // Dédouanement de pièces
+            {
+
+              if($actt->ordre==7)
+              {
+                $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect'=>0]);
+                 
+              }  
+
+            }// fin Dédouanement de pièces
+
+             if($actt->id_type_miss==11) // consultation médicale
+            {
+
+              if($actt->ordre==6)
+              {
+              $miss=Mission::where('id',$actt->mission_id)->first();
+              $miss->update(['date_spec_affect'=>0]); 
+               
+              }  
+
+            }// fin consultation médicale
+
+            
+
+            if($actt->id_type_miss==16) // Devis transport international sous assistance
+            {
+
+              if($actt->ordre==9)
+              {
+                $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect'=>0]); 
+
+              }  
+
+            }// fin Devis transport international sous assistance
+
+
+             if($actt->id_type_miss==18) // Demande d’evasan internationale
+            {
+
+              if($actt->ordre==8)
+              {
+                $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect'=>0]); 
+
+              }  
+
+            }// fin Demande d’evasan internationale
+
+          if($actt->id_type_miss==19) // Demande d’evasan nationale
+            {
+
+              if($actt->ordre==8)
+              {
+                $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect'=>0]); 
+
+               
+              }  
+
+
+            }// fin Demande d’evasan nationale
+
+             if($actt->id_type_miss==22) // escorte à l étranger
+            {
+
+              if($actt->ordre==5)
+              {
+                $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect'=>0]); 
+
+              }  
+
+
+            }// fin  escorte à l étranger
+
+
+             if($actt->id_type_miss==32)// reservation hotel
+            {
+              
+              if($actt->ordre==6)
+              {
+                $miss=Mission::where('id',$actt->mission_id)->first();
+               $miss->update(['date_spec_affect'=>0]);                 
+                           
+             }
+              if($actt->ordre==7)
+              {
+               $miss=Mission::where('id',$actt->mission_id)->first();
+               $miss->update(['date_spec_affect2'=>0]); 
+                           
+             }
+
+            }// fin reservation hotel
+
+             if($actt->id_type_miss==35)// organisation visite médicale
+            {
+
+              if($actt->ordre==6)
+              {
+                $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect'=>0]); 
+            
+              }  
+
+
+             }// fin organisation visite médicale
+
+
+            if($actt->id_type_miss==39)// Expertise
+            {
+
+              if($actt->ordre==6)
+              {
+               $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect'=>0]); 
+              
+              }  
+
+
+             }// fin expertise
+
+
+            
+
+           if($actt->id_type_miss==43)// rapatriement de véhicule sur ferry
+            {
+
+              if($actt->ordre==11)
+              {
+               $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect'=>0]); 
+
+              }  
+
+
+
+             }// fin rapatriement de véhicule sur ferry
+
+             if($actt->id_type_miss==45)// réparation véhicule 
+            {
+
+              if($actt->ordre==8)
+              {
+              $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect'=>0]); 
+
+              }  
+
+
+
+             }// fin réparation véhicule 
+
+
+              if($actt->id_type_miss==44)// remorquage
+            {
+
+              if($actt->ordre==10)
+              {
+              $miss=Mission::where('id',$actt->mission_id)->first();
+              $miss->update(['date_spec_affect'=>0]); 
+ 
+              }  
+
+
+              if($actt->ordre==11)
+              {
+                $miss=Mission::where('id',$actt->mission_id)->first();
+                $miss->update(['date_spec_affect2'=>0]); 
+ 
+              }     
+
+            }// fin remorquage 
+
+
+             if($actt->id_type_miss==46)// location voiture
+            {
+          
+               if($actt->ordre==6)
+               {
+               $miss=Mission::where('id',$actt->mission_id)->first();
+               $miss->update(['date_spec_affect'=>0]);
+               } 
+               if($actt->ordre==8)
+               { 
+                $miss=Mission::where('id',$actt->mission_id)->first();
+               $miss->update(['date_spec_affect2'=>0]); 
+               } 
+               if($actt->ordre==10)
+               {
+                $miss=Mission::where('id',$actt->mission_id)->first();
+               $miss->update(['date_spec_affect3'=>0]);
+               } 
+                
+           
+
+            }// fin location voiture
+
+
+   }// fin fonction valider
 
 // pour les rappels
      public function getActionsAjaxModal ()
@@ -2372,6 +2633,12 @@ class ActionController extends Controller
 
        $action=ActionEC::where("id",$idact)->where("mission_id_org","=",$idmiss)->first();
 
+       // pour les missions delendormie
+       $mm=Mission::where("id",$action->mission_id)->first();
+       if($mm->statut_courant=='delendormie' && $action->statut="deleguee" )
+       {
+         $mm->update(['statut_courant'=>'active']);
+       }
       /*if( $action->statut!= 'deleguee' && auth::user()->id!=  $action->user_id)
       {
         return back()->with('messagekbsFail', 'Erreur: Vous n\'êtes pas autorisé(e) de traiter cette action');
@@ -2443,7 +2710,7 @@ class ActionController extends Controller
            {
 
    // controle la non saisie des dates spécifique
-               if($action->Mission->type_Mission==6)//taxi 
+               if($action->id_type_miss==6)//taxi 
                {
                    if(($action->ordre==5 || $action->ordre==6) && (!$action->Mission->h_dep_pour_miss || !$action->Mission->h_arr_prev_dest))
                    {
@@ -2454,9 +2721,19 @@ class ActionController extends Controller
 
                }
 
-                if($action->Mission->type_Mission==44)//Remorquage 
+                if($action->id_type_miss==44)//Remorquage 
                {
                    if(($action->ordre==7 ||$action->ordre==8||$action->ordre==9) && (!$action->Mission->h_dep_pour_miss || !$action->Mission->h_retour_base))
+                   {
+
+                    return back()->with('messagekbsFail', 'Erreur: Vous devez saisir les dates spécifiques dans le menu Description de mission');
+
+                   }
+
+               }
+               if($action->id_type_miss==7)//transport ambulance 
+               {
+                   if(($action->ordre==7 ||$action->ordre==6||$action->ordre==5) && (!$action->Mission->h_dep_pour_miss || !$action->Mission->h_arr_prev_dest))
                    {
 
                     return back()->with('messagekbsFail', 'Erreur: Vous devez saisir les dates spécifiques dans le menu Description de mission');
@@ -2478,7 +2755,7 @@ class ActionController extends Controller
 
 // remorquage
 
-      if($action->Mission->type_Mission==44)
+      if($action->id_type_miss==44)
              {   
                 
                   if($action->ordre==5)
@@ -2502,7 +2779,7 @@ class ActionController extends Controller
 
  // Cas particulier pour la mission organisiation visite médicale
 
-    if($action->Mission->type_Mission==35)
+    if($action->id_type_miss==35)
              {   
                 
                   if($action->ordre==8 )
@@ -2519,7 +2796,7 @@ class ActionController extends Controller
   // Cas particulier pour la mission expertise
 
 
-       if($action->Mission->type_Mission==39)
+       if($action->id_type_miss==39)
              {   
                 
                   if($action->ordre==3 && $option==1)
@@ -2536,7 +2813,7 @@ class ActionController extends Controller
     // Cas particulier pour la mission dossier à l étranger
 
   
-             if($action->Mission->type_Mission==17)
+             if($action->id_type_miss==17)
              {   
                 
                   if($action->ordre==3  )
@@ -2561,7 +2838,7 @@ class ActionController extends Controller
 
            // Cas particulier pour la mission document à signer (boucle)
 
-             if($action->Mission->type_Mission==38)
+             if($action->id_type_miss==38)
              {   
               
                   if($action->ordre==2 && $option==2 )
@@ -2584,7 +2861,7 @@ class ActionController extends Controller
 
              // traiter boucle mission suivi frais médicaux
 
-              if($action->Mission->type_Mission==42)
+              if($action->id_type_miss==42)
              { 
 
                    if($action->ordre==2)
@@ -2611,7 +2888,7 @@ class ActionController extends Controller
 
              // probleme de demi boucle entre  action 8 et 7 dans consultation_medicale
 
-            if($action->Mission->type_Mission==11)
+            if($action->id_type_miss==11)
                 { 
                     if($action->ordre==8)
                    {
@@ -2620,7 +2897,9 @@ class ActionController extends Controller
 
                    }
 
-               } 
+               }
+
+               $this->validerDateSpecMission($action); 
                      
 
            }  // fin bouton fait
@@ -2628,9 +2907,11 @@ class ActionController extends Controller
            {
              if($bouton==2)  //bouton ignorer
                    {
+                      $this->validerDateSpecMission($action);
                       $action->update(['statut'=>"ignoree"]);
                       $action->update(['user_id'=>auth::user()->id]); 
                       $action->update(['date_fin' => $dateSys]);
+
                    }  
                    else{
 

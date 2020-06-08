@@ -148,7 +148,7 @@
                             $dateMiss=strtotime($dateMiss);
                            // dd($dateMiss);
 
-                            if($do->statut_courant!="active" && $do->statut_courant!="deleguee") {
+                            if($do->statut_courant=="reportee") {
 
                                     if($dateMiss>=$deb_seance_1 &&  $dateMiss <=$fin_seance_1 ) { 
                                            echo '<td style="width:20%"> séance 1</td>';
@@ -163,7 +163,7 @@
 
                                               } 
 
-                                          }else // active ou deleguee ou reportee
+                                          }else // active ou deleguee ou deleguee-endormie
                                           {
                                             echo '<td style="width:20% ;color:red;"> Maintenant</td>';
 

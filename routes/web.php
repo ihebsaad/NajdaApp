@@ -527,7 +527,7 @@ Route::get('/annulerAttenteReponseAction/{idact}','ActionController@annulerAtten
 
 Route::post('/Actions/traiterDatesSpecifiques','ActionController@traiterDatesSpecifiques')->name('Action.dateSpecifique');
 
-
+Route::get('/reactiveraction/{idact}','ActionController@reactiverAction');
 
 
 /*** TypeMission**/

@@ -1032,7 +1032,7 @@ class LoginController extends Controller
         
         if($missdeleg)
         {
-            if($missdeleg->get()>0)
+            if($missdeleg->count()>0)
             {
                 foreach ($missdeleg as $md )
                 {
@@ -1062,7 +1062,7 @@ class LoginController extends Controller
 
         if($actdeleg)
         {
-            if($actdeleg->get()>0)
+            if($actdeleg->count()>0)
             {
                  foreach ($actdeleg as $md )
                 {
@@ -1077,6 +1077,12 @@ class LoginController extends Controller
                          if($us)
                          {
                          $md->update(['user_id' =>$v,'assistant_id'=>$v,'statut'=>'active']);
+                         $mmm=Mission::where('id',$md->mission_id)->first();
+                         if($mmm->statut_courant=="delendormie")
+                           {
+                            $mmm->update(['statut_courant'=>'active']);                                   
+                           }
+
                          }
 
                       }

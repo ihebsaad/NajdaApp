@@ -1679,6 +1679,9 @@ array_push($listepr,$pr['prestataire_id']);
                              @if($macvd->statut_courant=='endormie')
                             <td style="width:10%;"><small>endormie</small></td>
                             @endif
+                            @if($macvd->statut_courant=='delendormie')
+                            <td style="width:10%;"><small>contient une action déléguée</small></td>
+                            @endif
                              <td style="width:15%;"><small>   <?php if ((isset($mhivd->user_origin))  ) { ?>
                                      {{$macvd->user_origin->name}} {{$macvd->user_origin->lastname}} <?php } ?></small></td>
                             <td style="width:10%;"><button type="button" id="macvd{{$macvd->id}}" class="btn btn-primary panelciel macvd" style="color:black;background-color: rgb(214,239,247) !important;"  onclick=""> Actions</button><br>
@@ -1691,7 +1694,7 @@ array_push($listepr,$pr['prestataire_id']);
                 </div> 
                 <div id="tab82" class="tab-pane fade " style="overflow-y: scroll;">
                     <br>
-                     Missions achevées + annulées
+                     Missions achevées
                      <br>
                       <br><br><br>
                     <table class="table table-striped" id="mytableMACC" style=" margin-top:15px;">

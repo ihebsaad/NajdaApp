@@ -156,8 +156,60 @@
                             </table>
                         </div>
     <?php } ?>
+
+     <br><br><br>
+     <h4>Ré-activation des actions reportées et des missions endormies:</h4>
+     <br>
+     <input class="form-control" id="myInputkk" type="text" placeholder="recherche..">
+     <br>
+     <?php $actionecsPA= App\ActionEC::where('statut','reportee')->orWhere('statut','rappelee')->get(); ?>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr style="background-color: #33AFFF">
+        <th>Dossier</th>
+        <th>Mission</th>
+        <th>Etat mission</th>
+        <th>Action</th>
+        <th>Etat Action</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="myTablekk">
+       @if($actionecsPA)
+       @if($actionecsPA->count()>0)
+       @foreach($actionecsPA as $apa)
+      <tr>
+        <td><a href="{{action('DossiersController@view', $apa->Mission->dossier_id)}}" >{{$apa->Mission->dossier->reference_medic}} {{$apa->Mission->dossier->subscriber_name}} {{$apa->Mission->dossier->subscriber_lastname}}</a> <br> <a style="color:#a0d468" href="{{action('DossiersController@fiche', $apa->Mission->dossier_id)}}" >Fiche<i class="fa fa-file-txt"></a></td>
+        <td>{{$apa->type_Mission}}</td>
+        <td>{{$apa->Mission->statut_courant}}</td>
+        <td>{{$apa->titre}}</td>
+         @if($apa->statut=='reportee')
+        <td>reportée</td>
+         @endif
+         @if($apa->statut=='rappelee')
+        <td>mise en attente</td>
+         @endif
+        <td><button id="r{{$apa->id}}" class="buttonReact">Activer</button></td>
+      </tr>
+       @endforeach
+       @else
+       <tr><td>Il n'existe pas des actions reportées ou mises en attente</td></tr>
+       @endif
+       @endif
+       <!-- <tr>
+        <td>aa</td>
+        <td>aa</td>
+        <td>aa</td>
+        <td>aa</td>
+        <td>aa</td>
+        <td><button id="raa" class="buttonReact">Activer</button></td>
+      </tr> -->
+    </tbody>
+  </table>
 	
 			</div>
+
+
 			</div><!--panel 1-->
 			
 			<div class="panel panel-danger col-md-5" style="padding:0 ; ">
@@ -400,6 +452,52 @@ function   showactives (){
 
     }
 
+</script>
+<script>
+$(document).ready(function(){
+  $("#myInputkk").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTablekk tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+
+
+  $(document).on('click','.buttonReact', function() {
+
+  var r = confirm("Voulez vous vraiment réactiver cette action ?");
+if (r == true) {
+  
+
+   var idwd=$(this).attr("id");
+   idwd=idwd.substring(1) ;
+    //alert(idwd);
+           $.ajax({
+
+               url:"{{url('/')}}/reactiveraction/"+idwd,
+               type : 'get',
+               
+               success: function(data){
+               // alert("la suppression a été effectuée avec succès");
+                alert(data);
+                location.reload();
+
+               /* $('#tab').empty();
+                $('#tab').html(data);*/
+            },
+              error: function (data) {
+               alert('Erreur:', data);
+
+             }    
+
+             
+           });
+    }
+  
+
+
+  });
+});
 </script>
 
 <style>

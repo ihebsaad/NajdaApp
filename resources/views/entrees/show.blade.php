@@ -454,7 +454,7 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
 
                    @foreach ( $actionsReouRap as $rr)
-                    <tr> <td style="color: white; font-size: 0px;">{{$rr->id}}</td> <td>{{$rr->titre}}</td> <td>{{ $rr->Mission->typeMission->nom_type_Mission}}</td> <td>{{$rr->Mission->dossier->reference_medic}} - {{$rr->Mission->dossier->subscriber_name }} {{$rr->Mission->dossier->subscriber_lastname}}</td>  </tr>
+                    <tr> <td style="color: white; font-size: 0px;">{{$rr->id}}</td> <td id="ac{{$rr->id}}">{{$rr->titre}}</td> <td id="mi{{$rr->mission_id}}" >{{ $rr->Mission->typeMission->nom_type_Mission}}</td> <td id="do{{$rr->Mission->dossier_id}}">{{$rr->Mission->dossier->reference_medic}} - {{$rr->Mission->dossier->subscriber_name }} {{$rr->Mission->dossier->subscriber_lastname}}</td>  </tr>
                    
                   @endforeach
 
@@ -494,8 +494,13 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
       $('#tst').on('click', function(e){
           var arrid=-1;
           arrid =$("#tabkkk tr.selected td:first").html();
-        
-     
+         idac=$("#tabkkk tr.selected td:nth-child(2)").attr('id');
+          idmi=$("#tabkkk tr.selected td:nth-child(3)").attr('id');
+           iddo=$("#tabkkk tr.selected td:nth-child(4)").attr('id');
+           idac=idac.substring(2);
+           idmi=idmi.substring(2);
+            iddo=iddo.substring(2);
+        //alert(idac+" "+idmi+" "+iddo);
            $.ajax({
        
        url : '{{ url('/') }}'+'/annulerAttenteReponseAction/'+arrid,
@@ -511,7 +516,14 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
            if(String(data).indexOf("Erreur")== -1)
            {
-           location.reload();
+
+            var rr = confirm("Voulez-vous rester dans la même page ou ouvrir la page de l'action activée. Si vous voulez rester dans la même page cliquez le bouton annuler");
+              if (rr == true) {
+              location.href = '{{ url('/') }}'+'/dossier/Mission/TraitementAction/'+iddo+'/'+idmi+'/'+idac;  
+               } 
+           
+           //location.reload();
+           
            }
 
             
