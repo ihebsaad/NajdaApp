@@ -809,14 +809,9 @@ foreach ($array_prestap as $prestap) {
 
 			<p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Chauffeur : </span>
 <!-- affiche pour le moment toute la liste des personnels -->				
-<input type="text" list="lchauff" name="lchauff" autocomplete="off" <?php if (isset($detailom['lchauff'])) { if (!empty($detailom['lchauff'])) {echo "value='".$detailom['lchauff']."'";}} ?> />
-<datalist id="lchauff">
-<?php
-/*foreach ($array_chauff as $chauff) {
-	echo "<option value='".$chauff['name']."'  >".$chauff['name']."</option>";
-}*/
-?>
-</datalist>
+<select id="lchauff" name="lchauff" autocomplete="off" >
+<option></option>
+</select>
 <input type="hidden" name="idchauff" id="idchauff"   <?php if (isset($detailom['idchauff'])) { if (!empty($detailom['idchauff'])) {echo "value='".$detailom['idchauff']."'";}} ?> />
 			</p><p style="margin:0pt 0pt 0pt 20.9pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Heures sup ?: </span>
 <input name="heuressup" id="heuressup" placeholder="" <?php if (isset($detailom['heuressup'])) { if (!empty($detailom['heuressup'])) {echo "value='".$detailom['heuressup']."'";}} ?> style=""></input>
@@ -893,14 +888,9 @@ foreach ($array_prestap as $prestap) {
 
 			<p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Chauffeur : </span>
 <!-- affiche pour le moment toute la liste des personnels -->				
-<input type="text" list="lchauff" name="lchauff" autocomplete="off" <?php if (isset($detailom['lchauff'])) { if (!empty($detailom['lchauff'])) {echo "value='".$detailom['lchauff']."'";}} ?> />
-<datalist id="lchauff">
-<?php
-/*foreach ($array_chauff as $chauff) {
-	echo "<option value='".$chauff['name']."'  >".$chauff['name']."</option>";
-}*/
-?>
-</datalist>
+<select id="lchauff" name="lchauff" autocomplete="off" >
+<option></option>
+</select>
 <input type="hidden" name="idchauff" id="idchauff"   <?php if (isset($detailom['idchauff'])) { if (!empty($detailom['idchauff'])) {echo "value='".$detailom['idchauff']."'";}} ?> />
 			</p><p style="margin:0pt 0pt 0pt 20.9pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Heures sup ?: </span>
 <input name="heuressup" id="heuressup" placeholder="" <?php if (isset($detailom['heuressup'])) { if (!empty($detailom['heuressup'])) {echo "value='".$detailom['heuressup']."'";}} ?> style=""></input>
@@ -1044,6 +1034,15 @@ if (isset($signaturetype))
                                         idperso: output[i].id
                                     }).appendTo("#lchauff");
                                 }
+                           // selectionner chauffeur dans om parent
+                           var chauffomparent ="";
+                           chauffomparent ="<?php if (isset($detailom['lchauff'])) { if (!empty($detailom['lchauff'])) 
+                           {echo $detailom['lchauff'];}} ?>";
+
+                           if (chauffomparent !=="")
+                           {
+                           		$("#lchauff").val(chauffomparent);
+                           }
                            
                         }else{alert('wrrong');}
                          // alert(JSON.stringify(output));
@@ -1052,9 +1051,9 @@ if (isset($signaturetype))
                     {
                         // Clear vehicules list
                         $("#lchauff").empty();
-                        $("<option />", {
+                        /*$("<option />", {
                                         val: "aucun personnel est disponible",
-                                    }).appendTo("#lchauff");
+                                    }).appendTo("#lchauff");*/
                     }    
                         
             },
@@ -1225,7 +1224,7 @@ $("#dateheuredispprev").change(function() {
 	}
 
 	            /// fill id chauffeur
-    document.querySelector('input[list="lchauff"]').addEventListener('input', onInputchauff);
+    /*document.querySelector('input[list="lchauff"]').addEventListener('input', onInputchauff);
 
     function onInputchauff(e) {
        var input = e.target,
@@ -1240,6 +1239,10 @@ $("#dateheuredispprev").change(function() {
           break;
         }
       }
-    }
+    }*/
+    $('#lchauff').on('change', function (e) {
+	    var optionSelected = $("option:selected", this);
+		document.getElementById("idchauff").value = optionSelected.attr("idperso");
+	});
 </script>
 				</body></html>
