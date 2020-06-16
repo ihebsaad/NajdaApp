@@ -14,9 +14,18 @@
 <div class="modal-body">
     <div class="portlet box grey">
         <div class="modal-header"><b>Facture</b></div>
+		   <div class="row  pull-right">
+             <div class="col-sm-2">
+            <a href="{{ route('factures') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                <span  class="fas fa-lg fa-file-invoice"></span>
+                <br>
+            Factures
+            </a>
+              </div>
+            </div>
     </div>
     <?php
-         use \App\Http\Controllers\UsersController;
+	     use \App\Http\Controllers\UsersController;
 $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
 
    $date_valid=$facture['date_valid'];
@@ -27,7 +36,6 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
     $dateEmail=str_replace('/','-',$dateemail) ;
     $datePoste=str_replace('/','-',$dateposte) ;
     $dateValid=str_replace('/','-',$date_valid) ;
-
 	
 	if( ( strlen($datePoste) > 9 ) 
  	&&  (strlen($dateValid)  > 9 )  ){
@@ -56,20 +64,20 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
 	   $diffEmail='';
  	   
    }
-
+   
 if($date_arrive !=''){
 $mois=substr ( $date_arrive , 3  ,2 );
 }else{$mois='';}
-    ?>
+ 	?>
     <form id="updateform">
 
                     <div class="row">
-                    <h4 style="margin-left:30px;margin-bottom:30px"> Créée Par : <b><?php echo UsersController::ChampById('name',$facture->par).' '.UsersController::ChampById('lastname',$facture->par);?>     le  <?php echo   $createdat   ?> </b></h4>
-                    </div>
+					<h4 style="margin-left:30px;margin-bottom:30px"> Créée Par : <b><?php echo UsersController::ChampById('name',$facture->par).' '.UsersController::ChampById('lastname',$facture->par);?>     le  <?php echo   $createdat   ?> </b></h4>
+					</div>
                     <div class="row">
-                        <input type="hidden"  name="id" id="id"  value="{{ $facture->id }}">
+					    <input type="hidden"  name="id" id="id"  value="{{ $facture->id }}">
 
-                        <div class="col-md-3">
+					    <div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">N° de Facture</label>
                                 <input autocomplete="off" onchange="changing(this)" class="form-control input" name="reference" id="reference"  value="{{ $facture->reference }}">
@@ -80,10 +88,10 @@ $mois=substr ( $date_arrive , 3  ,2 );
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Dossier</label>
                                 <?php $refC='';
-                                $iddossier= $facture->iddossier; if($iddossier >0) {$dossier= App\Dossier::where('id',$iddossier)->first();$ref=$dossier->reference_medic ; $refC= $dossier->customer_id ;$abn= $dossier->subscriber_name .' '.$dossier->subscriber_lastname ;
+								$iddossier= $facture->iddossier; if($iddossier >0) {$dossier= App\Dossier::where('id',$iddossier)->first();$ref=$dossier->reference_medic ; $refC= $dossier->customer_id ;$abn= $dossier->subscriber_name .' '.$dossier->subscriber_lastname ;
                                 ?>
                                 <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@view',$dossier->id)}}" ><?php echo $ref. ' | '.$abn ; ?></a></h4>
-                                <?php }  ?>
+								<?php }  ?>
                             </div>
                         </div>
 
@@ -121,7 +129,6 @@ $mois=substr ( $date_arrive , 3  ,2 );
 
 
         <div class="row" style="margin-top:20px">
-
 		
           <div class="col-md-3">
              <div class="form-group">
@@ -129,7 +136,6 @@ $mois=substr ( $date_arrive , 3  ,2 );
                <input autocomplete="off" onchange="changing(this)" class="form-control input" name="montant" id="montant"  value="{{ $facture->montant }}">
 
 			 </div>
-
            </div>
 <?php $prestataires =App\Prestataire::get();?>
 
@@ -137,21 +143,21 @@ $mois=substr ( $date_arrive , 3  ,2 );
              <div class="form-group">
                   Type de facture 
                 <div style="width:100%;margin-top:8px "  >
-                <label for="honoraire" class="">
-                <input onclick="changing(this) ;$('#prest').hide('slow')"  type="radio" name="honoraire" id="honoraire"   value="1" <?php if ($facture->honoraire ==1){echo 'checked';} ?> >
-                Honoraire de Dossier
-                </label>
+				<label for="honoraire" class="">
+				<input onclick="changing(this) ;$('#prest').hide('slow')"  type="radio" name="honoraire" id="honoraire"   value="1" <?php if ($facture->honoraire ==1){echo 'checked';} ?> >
+				Honoraire de Dossier
+				</label>
                  <label for="non_honoraire" style="margin-left:20px"><!--  document.getElementById('prest').style.display = 'block'-->
-                 <input onclick="disabling('honoraire');$('#prest').show('slow') ;" type="radio" name="honoraire" id="non_honoraire" value="0"  <?php if ($facture->honoraire ==0){echo 'checked';} ?>  >
-                 Prestation 
-                 </label> 
-                </div>
+				 <input onclick="disabling('honoraire');$('#prest').show('slow') ;" type="radio" name="honoraire" id="non_honoraire" value="0"  <?php if ($facture->honoraire ==0){echo 'checked';} ?>  >
+				 Prestation 
+				 </label> 
+				</div>
               
-            </div>
+			</div>
            </div>
 
 
-          <div id="prest"   <?php if ($facture->honoraire ==1){echo 'style="display:none"';} ?>  >
+		  <div id="prest"   <?php if ($facture->honoraire ==1){echo 'style="display:none"';} ?>  >
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="inputError" class="control-label">Intervenant</label>
@@ -173,7 +179,7 @@ $mois=substr ( $date_arrive , 3  ,2 );
                     <input onchange="changing(this)" class="form-control input" name="facture_prestataire" id="facture_prestataire"  value="{{ $facture->facture_prestataire }}">
                 </div>
             </div>
-          </div>
+		  </div>
         </div><!------ Row 2 ------>
 
         <div class="row" style="margin-top:20px">
@@ -207,7 +213,7 @@ $mois=substr ( $date_arrive , 3  ,2 );
                 </div>
             </div>
 
-                <div class="col-md-3">
+				<div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Date de validation</label>
                                 <input onchange="changing(this);"   class="form-control datepicker-default "  name="date_valid" id="date_valid"  autocomplete="off" value="{{ $facture->date_valid }}" placeholder="jj/mm/aaaa">
@@ -225,14 +231,14 @@ $mois=substr ( $date_arrive , 3  ,2 );
 
         <div class="row" style="margin-top:20px">
 
-                <div class="col-md-3">
+   				<div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Date de Facturation</label>
                                 <input onchange="changing(this)"   class="form-control datepicker-default " name="date_facture" id="date_facture" autocomplete="off" value="{{ $facture->date_facture }}" placeholder="jj/mm/aaaa">
                             </div>
                 </div>
 
-                 <div class="col-md-3">
+				 <div class="col-md-3">
 
                 <div class="form-group">
                                 <label for="inputError" class="control-label">Date de Réception/Fact</label>
@@ -265,25 +271,25 @@ $mois=substr ( $date_arrive , 3  ,2 );
                                 <input onchange="changing(this)"  class="form-control datepicker-default " name="date_bord" id="date_bord" autocomplete="off" value="{{ $facture->date_bord }}" placeholder="jj/mm/aaaa">
                             </div>
                         </div>
-                
+				
 
 
-                <div class="col-md-3">
+				<div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Date d'envoi par Poste</label>
                                 <input onchange="changing(this); "   class="form-control datepicker-default "name="date_poste" id="date_poste" autocomplete="off" value="{{ $facture->date_poste }}"  placeholder="jj/mm/aaaa">
                             </div>
                 </div>
-                
+				
 
-      
-                <div class="col-md-3">
+	  
+	  	  		<div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Délai de Poste</label>
                                  <span class="form-control" style="font-weight:bold;border:none;width:150px">  <?php if($date_valid !='' && $dateposte!='' && $diffPoste!=''){   echo      $diffPoste->format("%R%a ").' jours'; } ?> </span>
                             </div>
                 </div>
-                
+				
         </div>
         <input type="hidden" id="id" class="form-control"   value="{{ $facture->id }}"  ></input>
     </form>
@@ -332,13 +338,11 @@ $mois=substr ( $date_arrive , 3  ,2 );
                 $('#'+champ).animate({
                     opacity: '1',
                 });
-
 				if( champ =='date_valid' || champ =='date_arrive' || champ =='date_poste' || champ =='date_email' ){location.reload();}
-
             }
         });
 
-        
+		
     }
 
     function disabling(elm) {

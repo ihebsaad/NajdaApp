@@ -6,6 +6,8 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.jqueryui.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.jqueryui.min.css">
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" type="text/javascript"></script>
+
 <!--   <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/colReorder.bootstrap.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/rowReorder.bootstrap.css') }}" />-->
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
@@ -54,7 +56,7 @@ date_default_timezone_set('Africa/Tunis');
                 <th style="width:10%">Délai Email</th>
                 <th style="width:10%">Délai Poste</th>
 
-                <th class="no-sort" style="width:4%">Actions</th>
+				<th class="no-sort" style="width:4%">Actions</th>
               </tr>
             <tr>
                 <th style="width:5%">ID</th>
@@ -70,11 +72,11 @@ date_default_timezone_set('Africa/Tunis');
             </tr>
             </thead>
             <tbody>
-            <?php 
-            
+			<?php 
+			
     $today=date('d-m-Y');
     $today=new DateTime($today);;
-    ?>
+	?>
             @foreach($factures as $facture)
    <?php
    
@@ -91,7 +93,6 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
     $dateEmail=str_replace('/','-',$dateemail) ;
     $datePoste=str_replace('/','-',$dateposte) ;
     $dateValid=str_replace('/','-',$date_valid) ;
-
 	
 	 
 	if( ( strlen($datePoste) > 9 ) 
@@ -126,20 +127,20 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
    
    }else{
 	   $diffEmail='';
-
+ 	   
    }
    
    
    ?>
                 <tr>
 
-                <td style="width:5%"  ><a href="{{action('FacturesController@view', $facture->id)}}" ><?php echo sprintf("%05d",$facture->id);?></a></td>
+				<td style="width:5%"  ><a href="{{action('FacturesController@view', $facture->id)}}" ><?php echo sprintf("%05d",$facture->id);?></a></td>
                     <td style="width:15%">
                         <?php if(isset($facture->iddossier)){ $iddossier= $facture->iddossier; $Folder= App\Dossier::where('id',$iddossier)->first();$ref=$Folder['reference_medic'] ; $abn= $Folder['subscriber_name'] .' '.$Folder['subscriber_lastname'] ; 
                          ?>
                            <a href="{{action('DossiersController@view', $facture->iddossier)}}" >
                                <?php   echo     $ref.' ' .$abn ; ?></a> 
-                    <?php } ?>                             
+					<?php } ?>							   
                     </td>
                       <td style="width:15%">
                         <?php
@@ -155,8 +156,7 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
                     <td  style="width:10%">{{$facture->date_arrive}}</td>
                     <td style="width:10%"  ><?php if($date_valid !='' && $dateemail!='' && $diffEmail!=''){  echo  $diffEmail->format("%R%a ").' jours'; } ?></td>
                     <td style="width:10%"  > <?php if($date_valid !='' && $dateposte!='' && $diffPoste!=''){   echo      $diffPoste->format("%R%a ").' jours'; } ?> </td>
- 					<td style="width:4%"   >
-
+ 					<td style="width:4%" class="no-print no-sort"  >
                              <a  href="{{action('FacturesController@destroy', $facture['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                 <span class="fa fa-fw fa-trash-alt"></span>
                             </a>
@@ -193,7 +193,7 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
 
                             </div>
 
-                            <div class="form-group">
+							<div class="form-group">
                                 <label for="type">N° de Facture :</label>
                                 <input class="form-control"  id="reference"  type="text" class="form-control input"   />
 
@@ -267,12 +267,64 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
                 orderCellsTop: true,
                 order:[],
 
-                dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
+        //        dom : '<"top"flp<"clear">>rt<"bottom"ip<"clear">>',
+				 dom: 'Bfrtip',
+     
                 responsive:true,
-                buttons: [
+				
+				 buttons: [						 
+                    {
+                    extend: 'print',
+                    text:    '  Imprimer' ,
+					className : 'fa fa-print',						
+                    exportOptions: {
+                    columns: [ 0,1,2,3,4,5,6,7 ]
+				}
+                    },
+                    {
+                    extend: 'csv',
+                    text: '  Csv',
+					className : 'fa fa-file',						
+                    exportOptions: {
+                    columns: [ 0,1,2,3,4,5,6,7 ]
+                	}
+                    },
+				 {
+                    extend: 'excel',
+                    text: '  Excel',
+					className : 'fa fa-file-excel-o',
+                    exportOptions: {
+                    columns: [ 0,1,2,3,4,5,6,7 ]
+               	}
+                    },				
+				{
+                    extend: 'pdf',
+                    text: '  Pdf',
+					className : 'fa fa-file-pdf-o',					
+                    exportOptions: {
+                    columns: [ 0,1,2,3,4,5,6,7]
+                	}
+                    }
+					/*,
+				 {
+                    extend: 'copy',
+                    text: '  Copier',
+					className : 'fa fa-copy',					 
+                    exportOptions: {
+                    columns: [ 0,1,2,3,4,5 ]
+                	}
+                  },
+		   		{
+                    extend: 'colvis',
+                    text: '  Colonnes',
+					className : 'fa fa-hand-o-up',	
+				}
+*/
+                ],
+             /*   buttons: [
 
                     'csv', 'excel', 'pdf', 'print'
-                ],
+                ],*/
                 "columnDefs": [ {
                     "targets": 'no-sort',
                     "orderable": false,
@@ -323,7 +375,7 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
                         .search(this.value)
                         .draw();
                 });
-                
+				
                 $('#mytable thead tr:eq(1) th:eq(' + index + ') input').keyup(delay(function (e) {
                     console.log('Time elapsed!', this.value);
                     $(this).blur();
