@@ -48,6 +48,7 @@ $conn = mysqli_connect($dbHost, $dbuser, $dbpass,$dbname);
 
 	$datedepmission = $_POST["datedepmission"];
 	$datedispprev = $_POST["datedispprev"];
+        $parent = $_POST["parent"];
 /* sql test
 	SELECT idvehic FROM om_remorquage WHERE ( (DATE_FORMAT('2020-01-27 17:15:00', '%Y-%m-%d %H:%i:%s.000000') > `dateheuredispprev`) OR (DATE_FORMAT('2020-01-27 19:00:00"', '%Y-%m-%d %H:%i:%s.000000') < `dateheuredep`))*/
 
@@ -62,22 +63,22 @@ $conn = mysqli_connect($dbHost, $dbuser, $dbpass,$dbname);
 
 	//$sqlvh = "SELECT id,name FROM personnes WHERE ((`annule` = 0) OR (`annule` IS NULL)) AND (`type` LIKE '%".$typeperso."%') AND (id NOT IN (SELECT ".$colperso." FROM ".$omtable." WHERE ( (`".$deb_indisp."` <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND (`".$fin_indisp."` >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')))))";
 
-$sqlvh = "SELECT id,name FROM personnes WHERE (((`annule` = 0) OR (`annule` IS NULL)) AND (`type` LIKE '%".$typeperso."%') AND (((date_deb_indisponibilite > DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) OR (date_deb_indisponibilite IS NULL)) OR ((date_fin_indisponibilite < DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) OR (date_fin_indisponibilite IS NULL))) AND 
+$sqlvh = "SELECT id,name  FROM personnes  WHERE (((`annule` = 0) OR (`annule` IS NULL)) AND (`type` LIKE '%".$typeperso."%') AND (((date_deb_indisponibilite > DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) OR (date_deb_indisponibilite IS NULL)) OR ((date_fin_indisponibilite < DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) OR (date_fin_indisponibilite IS NULL))) AND 
 ((id NOT IN (SELECT idchauff FROM om_remorquage WHERE 
-( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
+((id!= $parent ) AND  (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
 (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idchauff IS NOT NULL)))) AND 
 (id NOT IN (SELECT idchauff FROM om_taxi WHERE 
-( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
+((id!= $parent ) AND  (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
 (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idchauff IS NOT NULL))))  AND 
 (id NOT IN (SELECT idambulancier1 FROM om_ambulance WHERE 
-( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
+( (id!= $parent ) AND  (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
 (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idambulancier1 IS NOT NULL))))  AND 
 (id NOT IN (SELECT idambulancier2 FROM om_ambulance WHERE 
-( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
+( (id!= $parent ) AND  (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
 (dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idambulancier2 IS NOT NULL)))) AND 
 (id NOT IN (SELECT idparamed FROM om_ambulance WHERE 
-( (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
-(dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idparamed IS NOT NULL) ))) ))";
+((id!= $parent ) AND  (dateheuredep <= DATE_FORMAT('".$datedispprev."', '%Y-%m-%d %H:%i:%s.000000')) AND 
+(dateheuredispprev >= DATE_FORMAT('".$datedepmission."', '%Y-%m-%d %H:%i:%s.000000')) AND (idparamed IS NOT NULL) ))) )) ORDER BY name";
 
 	    $resultvh = $conn->query($sqlvh);
 	    if (!empty($resultvh) && $resultvh->num_rows > 0) {
