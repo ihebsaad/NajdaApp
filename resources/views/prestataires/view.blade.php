@@ -47,7 +47,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                 </li>
 
                      <li class="nav-item ">
-                            <a class="nav-link  " href="#tab04" data-toggle="tab"  onclick="showinfos4();hideinfos();hideinfos2();hideinfos2();">
+                            <a class="nav-link  " href="#tab04" data-toggle="tab"  onclick="showinfos4();hideinfos();hideinfos2();hideinfos3();">
                                 <i class="fas a-lg fa-file-invoice"></i>  Factures
                             </a>
                         </li>
@@ -307,13 +307,13 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                     <div class="col-md-3">
                                         <label for="annule" class="">
                                             <div class="radio" id="uniform-actif"><span class="checked">
-                                                <input  onclick="changing(this)" type="radio" name="annule" id="annule" value="0"   <?php if ($prestataire->annule ==0){echo 'checked';} ?>></span></div> Oui
+                                                <input  onclick="changing(this);activer(1)" type="radio" name="annule" id="annule" value="0"   <?php if ($prestataire->annule ==0){echo 'checked';} ?>></span></div> Oui
                                         </label>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="nonactif" class="">
                                             <div class="radio" id="uniform-nonactif"><span>
-                                                <input onclick="disabling('annule')" type="radio" name="annule" id="nonactif" value="1"  <?php if ($prestataire->annule ==1){echo 'checked';} ?>></span></div> Non
+                                                <input onclick="disabling('annule');activer(0)" type="radio" name="annule" id="nonactif" value="1"  <?php if ($prestataire->annule ==1){echo 'checked';} ?>></span></div> Non
                                         </label>
                                     </div>
                                 </div>
@@ -529,9 +529,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                     <tr id="headtable">
                         <th style="text-align: center;width:20%">Type de prestation</th>
                         <th style="text-align: center;width:20%">Spécialité</th>
-                        <th style="text-align: center;width:20%">Gouvernorat</th>
-                        <th style="text-align: center;width:20%">Ville</th>
+                        <th style="text-align: center;width:15%">Gouvernorat</th>
+                        <th style="text-align: center;width:15%">Ville</th>
                         <th style="text-align: center;width:10%">Priorité</th>
+                        <th style="text-align: center;width:10%">Évaluation</th>
                         <th style="text-align: center;width:10%">Actions</th>
                      </tr>
 
@@ -541,10 +542,11 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                     <tr>
                         <td style="text-align: center;width:20%"><?php echo PrestationsController::TypePrestationById( $eval['type_prest']) ;?></td>
                         <td style="text-align: center;width:20%"><?php echo PrestationsController::SpecialiteById($eval['specialite']) ;?></td>
-                        <td style="text-align: center;width:20%"><?php echo PrestationsController::GouvById( $eval['gouv']) ;?> </td>
-                        <td style="text-align: center;width:20%"><?php echo   $eval['ville'] ;?> </td>
+                        <td style="text-align: center;width:15%"><?php echo PrestationsController::GouvById( $eval['gouv']) ;?> </td>
+                        <td style="text-align: center;width:15%"><?php echo   $eval['ville'] ;?> </td>
 
                         <td style="text-align: center;width:10%;"><input style="text-align:center" id="eval-<?php echo $eval['id']; ?>" onchange="updatePriorite(this,'<?php echo $eval['id']; ?>')" type="number" max="5" min="1" step="1" value="<?php echo $eval['priorite'] ;?>"></td>
+                        <td style="text-align: center;width:10%;"><input style="text-align:center" id="evalu-<?php echo $eval['id']; ?>" onchange="updateEvaluation(this,'<?php echo $eval['id']; ?>')" type="number" max="5" min="1" step="1" value="<?php echo $eval['evaluation'] ;?>"></td>
                         <td><a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('PrestationsController@deleteeval', $eval['id']) }}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                 <span class="fa fa-fw fa-trash-alt"></span>
                             </a>
@@ -1226,6 +1228,28 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         });
     }
 
+    function updateEvaluation(elm,eval){
+        var id=elm.id;
+        var evaluation =document.getElementById(id).value;
+
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('prestations.updateevaluation') }}",
+            method: "POST",
+            data: {   eval:eval,evaluation:evaluation, _token: _token},
+            success: function (data) {
+
+                $('#'+id).animate({
+                    opacity: '0.3',
+                });
+                $('#'+id).animate({
+                    opacity: '1',
+                });
+
+            }
+        });
+    }
+
     function hideinfos() {
         $('#tab01').css('display','none');
     }
@@ -1236,10 +1260,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         $('#tab03').css('display','none');
     }
 	  function hideinfos4() {
-        $('#tab03').css('display','none');
+        $('#tab04').css('display','none');
     }
     function showinfos() {
-        $('#tab04').css('display','block');
+        $('#tab01').css('display','block');
     }
 
     function showinfos2() {
@@ -1251,6 +1275,29 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 	  function showinfos4() {
         $('#tab04').css('display','block');
     }
+
+
+
+    function activer(valeur) {
+    //  var type = $('#type').val();
+        var prestataire = $('#idpres').val();
+        //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('prestataires.activer') }}",
+            method: "POST",
+            data: {prestataire: prestataire ,  valeur:valeur, _token: _token},
+            success: function (data) {
+
+
+            }
+        });
+        // } else {
+
+        // }
+    }
+
+
 
         function changing(elm) {
         var champ=elm.id;

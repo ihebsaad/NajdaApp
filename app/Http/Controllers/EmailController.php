@@ -5025,6 +5025,7 @@ $id=0;
 
             // merger prestataire + intervenants
             $prestataires=$prestataires->merge($intervenants);
+            $prestataires=$prestataires->unique();
 
             $listeemails=array();
 

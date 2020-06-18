@@ -2178,6 +2178,7 @@ class DossiersController extends Controller
                 ->where('type_prest',$type )
                 ->where('specialite',$spec )
                 ->where('ville',$ville )
+                ->where('actif','<>',0 )
                 ->orderBy('priorite','asc')
                 ->orderBy('derniere_prestation','asc')
                 ->get();
@@ -2187,6 +2188,7 @@ class DossiersController extends Controller
                 ->where('type_prest',$type )
                 ->where('specialite',$spec )
                 ->where('postal',1 )
+                ->where('actif','<>',0 )
                 ->orderBy('priorite','asc')
                 ->orderBy('derniere_prestation','asc')
                 ->get();
@@ -2200,9 +2202,9 @@ class DossiersController extends Controller
       foreach ($liste as $row) {
           $c++;
 
-
           $prestataire = $row->prestataire;
           $priorite = $row->priorite;
+          $eval  = $row->evaluation;
 
           if($prestataire > 0) {
 
@@ -2210,9 +2212,11 @@ class DossiersController extends Controller
           $nom = addslashes(app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prestataire) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prestataire));
           $adresse = app('App\Http\Controllers\PrestatairesController')->ChampById('adresse', $prestataire);
           $observ = app('App\Http\Controllers\PrestatairesController')->ChampById('observation_prestataire', $prestataire);
+        //  $inactif = app('App\Http\Controllers\PrestatairesController')->ChampById('annule', $prestataire);
+        //      $statutsp= '';
+            //  if ($inactif==1){$statutp= '<span style="color:#fd9883;font-weight:bold;text-align:center" >Non Actif</span>'; }
 
-
-          $tels = Adresse::where('nature', 'telinterv')
+              $tels = Adresse::where('nature', 'telinterv')
               ->where('parent', $prestataire)
               ->get();
 
@@ -2222,11 +2226,12 @@ class DossiersController extends Controller
                               <input type="hidden" id="prestataire_id_' . $c . '" value="' . $prestataire . '">
                              <input type="hidden" class="nomprest" value="' . $nom . '">
                             <div class="row" style="margin-top:10px;margin-bottom: 20px">
-                                <div class="col-md-8"><span style="color:grey" class="fa  fa-user-md"></span> <B>' . $nom . ' (' . $priorite . ')</b></div>
+                                 <div class="col-md-8"><span style="color:grey" class="fa  fa-user-md"></span> <B>' . $nom . ' (' . $priorite . ')</b></div>
                                 <div class="col-md-8"><span style="color:grey" class="fa  fa-map-marker"></span>  ' . $adresse . '</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-8"><span style="color:grey" class="fas  fa-clipboard"></span> ' . $observ . '</div>
+                                <div class="col-md-8"><span style="color:grey" class="fas  fa fa-star"></span>Évaluation : ' . $eval . '</div>
                             </div>
                         </div>                       
                         <table style="padding-left:5px">';

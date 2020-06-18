@@ -14,6 +14,7 @@ use App\Entree ;
 use App\Dossier ;
 use App\Prestataire ;
 use App\Prestation ;
+use App\Facture ;
 use App\Ville ;
 use App\Citie ;
 use DB;
@@ -345,6 +346,67 @@ class PrestatairesController extends Controller
 
     }
 
+
+    public function activer(Request $request)
+    {
+
+        $id= $request->get('prestataire');
+        $valeur= $request->get('valeur');
+         Evaluation::where('prestataire', $id)->update(array('actif' => $valeur));
+        if($valeur==1)
+        {$statut='Actif';}
+        else{$statut='Inactif';}
+
+        // Email Modification Priorié
+        $parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+
+        $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+        $swiftTransport->setUsername('24ops@najda-assistance.com');
+        $swiftTransport->setPassword($parametres->pass_N);
+        $fromname="Najda Assistance";
+        $from='24ops@najda-assistance.com';
+
+        $swiftMailer = new Swift_Mailer($swiftTransport);
+
+        Mail::setSwiftMailer($swiftMailer);
+
+        $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $id) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $id) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $id);
+        $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
+
+       // $to=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
+          $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
+        $sujet= 'Modification du statut d\'un prestataire';
+        $contenu= 'Bonjour de Najda,<br>l\'agent '.$nomuser.' a changé le statut du prestataire <b>'.$nomprest.'</b> en <b>'.$statut.'</b>
+             ';
+
+
+        Mail::send([], [], function ($message) use ($to, $sujet, $contenu,  $from,$fromname) {
+            $message
+                //->to($to ?: [])
+                ->to($to)
+
+                //   ->cc($cc ?: [])
+                //  ->bcc($ccimails ?: [])
+                ->subject($sujet)
+                ->setBody($contenu, 'text/html')
+                ->setFrom([$from => $fromname]);
+
+
+            /* foreach ($to as $t) {
+                 $message->to($t);
+             }
+*/
+        });
+
+
+
+
+
+
+    }
+
     /**
      * Display the specified resource.
      *
@@ -507,6 +569,10 @@ class PrestatairesController extends Controller
     {
         $prestataire = Prestataire::find($id);
         $prestataire->delete();
+
+        Evaluation::where('prestataire',$id)->delete();
+        Facture::where('prestataire',$id)->update(array('prestataire' => null));
+        Prestation::where('prestataire_id',$id)->update(array('prestataire_id' => 0));
 
         return redirect('/prestataires')->with('success', '  Supprimé ');
     }

@@ -371,6 +371,8 @@ Route::post('/prestataires/addeval','PrestatairesController@addeval')->name('pre
 Route::post('/prestataires/addemail','PrestatairesController@addemail')->name('prestataires.addemail');
 Route::post('/prestataires/addressadd','PrestatairesController@addressadd')->name('prestataires.addressadd');
 Route::post('/prestataires/NomPrestatireById','PrestatairesController@NomPrestatireById')->name('prestataires.NomPrestatireById');
+Route::post('/prestataires/activer','PrestatairesController@activer')->name('prestataires.activer');
+
 
 Route::get('/prestataires/destroy/{id}', 'PrestatairesController@destroy');
 Route::get('/prestataires/create/{id}', 'PrestatairesController@create')->name('prestataires.create');
@@ -392,6 +394,7 @@ Route::post('/prestations/valide','PrestationsController@valide')->name('prestat
 Route::get('/prestations/destroy/{id}', 'PrestationsController@destroy');
 Route::get('/prestations/deleteeval/{id}', 'PrestationsController@deleteeval');
 Route::post('/prestations/updatepriorite', 'PrestationsController@updatepriorite')->name('prestations.updatepriorite');
+Route::post('/prestations/updateevaluation', 'PrestationsController@updateevaluation')->name('prestations.updateevaluation');
 
 
 

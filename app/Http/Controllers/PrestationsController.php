@@ -576,8 +576,8 @@ class PrestationsController extends Controller
         $user = auth()->user();
         $nomuser = $user->name . ' ' . $user->lastname;
 
-         $to=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
-       // $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
+       //  $to=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
+         $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
         $sujet= 'Modification de la priorité d\'un prestataire';
         $contenu= 'Bonjour de Najda,<br>l\'agent '.$nomuser.' a modifié la priorité du prestataire '.$nomprest.'<br>
         Priorité : '.$priorite.' - Type de prestation : '.$TypePrest. ' - Spécialité :  '.$Specialite.' -  Gouvernorat : '.$gouvernorat. ' - Ville: '.$ville.'  
@@ -607,5 +607,38 @@ class PrestationsController extends Controller
         Log::info('[Agent: ' . $nomuser . '] Modification de priorité prestataire : '.$nomprest. ' Priorité : '.$priorite.' - Type de prestation : '.$TypePrest. ' - Spécialité :  '.$Specialite.' -  Gouvernorat : '.$gouvernorat );
 
          }
+
+
+
+
+
+    public static function updateevaluation(Request $request)
+    {
+        $eval = $request->get('eval');
+        $note = $request->get('evaluation');
+        $evaluation=Evaluation::where('id',$eval)->first();
+        $gouv= $evaluation->gouv;
+        $typep= $evaluation->type_prest;
+        $spec= $evaluation->specialite;
+        $prest=$evaluation->prestataire;
+        $ville=$evaluation->ville;
+
+        $gouvernorat=    PrestatairesController::GouvByid($gouv);
+        $Specialite=   PrestatairesController::SpecialiteByid($spec);
+        $TypePrest=  PrestatairesController::TypeprestationByid($typep);
+
+
+
+        $nomprest = app('App\Http\Controllers\PrestatairesController')->ChampById('civilite', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('prenom', $prest) . ' ' . app('App\Http\Controllers\PrestatairesController')->ChampById('name', $prest);
+        $user = auth()->user();
+        $nomuser = $user->name . ' ' . $user->lastname;
+
+
+
+
+        Evaluation::where('id', $eval)->update(array('evaluation' => $note));
+        Log::info('[Agent: ' . $nomuser . '] Modification de l\'évaluation du prestataire : '.$nomprest. ' Note : '.$note.' - Type de prestation : '.$TypePrest. ' - Spécialité :  '.$Specialite.' -  Gouvernorat : '.$gouvernorat );
+
+    }
 }
 
