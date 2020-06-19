@@ -56,7 +56,7 @@
     // OM TAXIs
     $ordres_taxi = \App\OMTaxi::where('CL_heuredateRDV', '>', Carbon::now()->toDateString())
        ->where('dernier',1)
-        ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule')
+        ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule','dateheuredep','dateheuredispprev')
         ->orderBy('CL_heuredateRDV')
         ->get();
 
@@ -64,14 +64,14 @@
 
     $ordres_ambul =   \App\OMAmbulance::where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())
         ->where('dernier',1)
-            ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lvehicule','lambulancier1')
+            ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lvehicule','lambulancier1','dateheuredep','dateheuredispprev')
         ->orderBy('CL_heuredateRDV')
          ->get();
     // OM Remorq
 
     $ordres_rem =  \App\OMRemorquage::where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())
         ->where('dernier',1)
-            ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule')
+            ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule','dateheuredep','dateheuredispprev')
         ->orderBy('CL_heuredateRDV')
          ->get();
     $oms = array_merge($ordres_taxi->toArray(),$ordres_ambul->toArray(),$ordres_rem->toArray() );
@@ -134,12 +134,16 @@
                                                           $ref=$o['reference_medic'];
                                                           $benef=$o['subscriber_name'].' '.$o['subscriber_lastname'];
                                                           $heureT=$o['CL_heuredateRDV'];$heure= substr($heureT,11,5);  $hour=intval(substr($heureT,11,3));$dateom=substr($heureT,0,10); $dateom= date('d/m/Y', strtotime($dateom));
+
                                                           $tel=$o['CL_contacttel'];
                                                           $de=$o['CL_lieuprest_pc'];
                                                           $vers=$o['CL_lieudecharge_dec'];
                                                           $type=$o['type'];
                                                            $veh=$o['lvehicule'];
-
+                                                           $datedebut=$o['dateheuredep'];
+                                                           $datefin=$o['dateheuredispprev'];
+$datedebut= date('d/m/Y,H:i', strtotime($datedebut));
+$datefin= date('d/m/Y,H:i', strtotime($datefin));
                                                           $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
                                                          if($type=='taxi'){$chauff=$o['lchauff']; $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
                                                           if($type=='ambulance'){ $chauff=$o['lambulancier1']; $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
@@ -154,14 +158,22 @@
                                                           </div>
 
                                                     <div class="row" style= "margin-bottom:5px">
-                                                        <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-calendar"></i> <?php echo $dateom; ?></div>
-                                                    </div>
+                                                        <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-calendar"></i> <?php echo $dateom; ?></div> </div>
+
+                                                   
                                                     <div class="row" style= "margin-bottom:5px">
                                                         <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-clock"></i> <?php echo $heure; ?></div>
                                                     </div>
+<?php if($affecte!=='externe'){ ?>
+<div class="row" style= "margin-bottom:5px">
+    <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-calendar-o"></i> <?php echo $datedebut; ?></div></div>
+<div class="row" style= "margin-bottom:5px">
+  <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-calendar-check-o"></i> <?php echo $datefin; ?></div></div>
+<?php } ?>
                                                     <div class="row" style= "margin-bottom:5px">
                                                         <div   style="background-color:black;color:white;text-align: center;font-size: 20px"><a href="#" onclick="modalattach('<?php echo 'OM '.ucwords($type).' '.$ref.' '.$benef;?>','<?php echo URL::asset('storage'.$empsub);?>')"><i class="fas fa-file-alt"></i> Ouvrir </a></div>
                                                     </div>
+
                                                           <div id="om-<?php echo $type;?>-<?php echo $o['id'];?>"  style="display:none">
                                                           <div class="row" style="margin-bottom:10px">
                                                               <div class="col-md-12 "  ><i class="fas fa-portrait"></i>  <?php echo $benef; ?></div>

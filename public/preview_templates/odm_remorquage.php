@@ -494,6 +494,7 @@ foreach ($array_spec as $spec) {
     </div>
 <p style="margin-top:20px!important;margin-left:7.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:12pt"><span style="font-family:'Times New Roman'; font-weight:bold; font-style:italic; color:#000000">Le présent ordre de mission fait office de prise en charge et copie doit être adressée avec votre facture</span></p>
     <div class="row" style=" margin-left: 0px; ">
+<input type="hidden" name="parent" id="parent" value="<?php echo $parentom; ?>" />
         <span style="font-family:'Times New Roman'; font-weight:bold">Identité personne à transporter:</span><span style="font-family:'Times New Roman'; color:#ff0000">&#xa0;
 <?php  if (isset($detailom))
 {  ?>
@@ -785,31 +786,22 @@ foreach ($array_prestap as $prestap) {
                     <input type="datetime-local" name="dateheuredispprev" id="dateheuredispprev" <?php if (isset($detailom['dateheuredispprev'])) { if (!empty($detailom['dateheuredispprev'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['dateheuredispprev']))."'";}} ?> style=" margin-left: 27px; "/>
                     <p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Date/heure retour base prévisible:</span></p>
                     <input type="datetime-local" name="dhretbaseprev" id="dhretbaseprev" <?php if (isset($detailom['dhretbaseprev'])) { if (!empty($detailom['dhretbaseprev'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['dhretbaseprev']))."'";}} ?> style=" margin-left: 27px; "/>
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Véhicule: </span>
-                        <input type="text" list="lvehicule" name="lvehicule" autocomplete="off" <?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) {echo "value='".$detailom['lvehicule']."'";}} ?> />
-                        <datalist id="lvehicule">
-                        <?php
-                        /*foreach ($array_vehic as $vehic) {
-                            echo "<option value='".$vehic['name']."' idv='".$vehic['id']."' carburant='".$vehic['carburant']."' telepeage='".$vehic['telepeage']."' >".$vehic['name']."</option>";
-                        }*/
-                        ?>
-                        </datalist>
-                        <input type="hidden" name="idvehic" id="idvehic"   <?php if (isset($detailom['idvehic'])) { if (!empty($detailom['idvehic'])) {echo "value='".$detailom['idvehic']."'";}} ?> />
+                    <p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Véhicule: </span><button id="refdispv"><img src="refresh.png" width="10" height="10" alt="" /></button>
+<select id="lvehicule" name="lvehicule" autocomplete="off"  >
+    <option></option>
+</select>
+                  <input type="hidden" name="idvehic" id="idvehic"  <?php if (isset($detailom['idvehic'])) { if (!empty($detailom['idvehic'])) {echo "value='".$detailom['idvehic']."'";}} ?> />
                     </p>
                     <p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt;width:100%"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Carte de Carburant: </span>
                     <input type="text" name="cartecarburant" id="cartecarburant" <?php if (isset($detailom['cartecarburant'])) { if (!empty($detailom['cartecarburant'])) {echo "value='".$detailom['cartecarburant']."'";}} ?> style="width:60%"/></p>
                     <p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt;width:100%"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Carte de telepeage: </span>
                     <input type="text" name="cartetelepeage" id="cartetelepeage" <?php if (isset($detailom['cartetelepeage'])) { if (!empty($detailom['cartetelepeage'])) {echo "value='".$detailom['cartetelepeage']."'";}} ?> style="width:60%"/></p>
                     <p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Chauffeur : </span>
-                        <!-- affiche pour le moment toute la liste des personnels -->
-                        <input type="text" list="lchauff" name="lchauff" autocomplete="off" <?php if (isset($detailom['lchauff'])) { if (!empty($detailom['lchauff'])) {echo "value='".$detailom['lchauff']."'";}} ?> />
-                        <datalist id="lchauff">
-                            <?php
-                            /*foreach ($array_chauff as $chauff) {
-                                echo "<option value='".$chauff['name']."'  >".$chauff['name']."</option>";
-                            }*/
-                            ?>
-                        </datalist>
+                        <button id="refdispp"><img src="refresh.png" width="10" height="10" alt="" /></button>
+<!-- affiche pour le moment toute la liste des personnels -->				
+<select id="lchauff" name="lchauff" autocomplete="off"  >
+<option></option>
+</select>
                         <input type="hidden" name="idchauff" id="idchauff"   <?php if (isset($detailom['idchauff'])) { if (!empty($detailom['idchauff'])) {echo "value='".$detailom['idchauff']."'";}} ?> />
                     </p><p style="margin:0pt 0pt 0pt 20.9pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Heures sup ?: </span>
                         <input name="heuressup" id="heuressup" placeholder="" <?php if (isset($detailom['heuressup'])) { if (!empty($detailom['heuressup'])) {echo "value='".$detailom['heuressup']."'";}} ?> style=""></input>
@@ -817,7 +809,7 @@ foreach ($array_prestap as $prestap) {
                 </div>
             </div>
             <div class="row">
-                <div id="deroulmiss" class="col-md-3" style="margin-top: -380px;padding-bottom:50px">
+                <div id="deroulmiss" class="col-md-3" style="margin-top: -350px;padding-bottom:50px">
                     <p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="height:0pt; display:block; position:absolute; z-index:-1"><img width="320" height="480" alt="" style="margin-top:4.11pt; margin-left:7.72pt; -aw-left-pos:24pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:4.4pt; -aw-wrap-type:none; position:absolute"></span><span style="font-family:&#39;Times New Roman&#39;">&nbsp;</span></p><p style="margin-top:0pt;  margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold; text-decoration:underline">Déroulement mission</span></p><p style="margin:0pt 120.4pt 0pt 120.3pt; text-indent:-120.3pt; widows:0; orphans:0; font-size:14pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin:3.65pt 120.4pt 0pt 238.7pt; text-indent:-224.5pt; line-height:189%; widows:0; orphans:0; font-size:9pt;width:100%"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Départ </span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">pour mission: </span>
                         <input type="datetime-local" name="dhdepartmiss" id="dhdepartmiss" <?php if (isset($detailom['dhdepartmiss'])) { if (!empty($detailom['dhdepartmiss'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['dhdepartmiss']))."'";}} ?> style="margin-left:15px;width: 85%  "/>
                     </p><p style="margin:3.65pt 120.4pt 0pt 238.7pt; text-indent:-224.5pt; line-height:189%; widows:0; orphans:0; font-size:9pt;width:100%"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Arrivée</span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold"> </span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;lieux: </span>
@@ -850,9 +842,9 @@ foreach ($array_prestap as $prestap) {
                         <input type="hidden" name="complete" value="1">
                         <input name="supervisordate" id="supervisordate" placeholder=" " value="<?php if (isset($detailagtcomp)) {echo $detailagtcomp['name'].' '.$detailagtcomp['lastname'].' / '.date('Y-m-d').' '.date('H:i');  }  ?>" />
                     </p><p style="margin-top:0.05pt; margin-bottom:0pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin:0pt 0pt 0pt 5.75pt; text-indent:15.55pt; line-height:150%; widows:0; orphans:0; font-size:9pt;font-family:&#39;Times New Roman&#39;; font-weight:bold">OM remis par (date/sign)</p><p style="margin-top:0pt; margin-bottom:0pt; text-indent:21.3pt; line-height:9.8pt; widows:0; orphans:0">
-                        <input name="remispardate" id="remispardate" placeholder="date/sign" <?php if (isset($detailom['remispardate'])) { if (!empty($detailom['remispardate'])) {echo "value='".$detailom['remispardate']."'";}} ?> ></input>
+                        <input name="remispardate" id="remispardate" readonly placeholder="date/sign" <?php if (isset($detailom['remispardate'])) { if (!empty($detailom['remispardate'])) {echo "value='".$detailom['remispardate']."'";}} ?> ></input>
                     </p><p style="margin:0pt 0pt 0pt 5.75pt; text-indent:15.55pt; line-height:150%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">OM récupéré par (date/sign)</span></p><p style="margin-top:0pt; margin-bottom:0pt; text-indent:21.3pt; line-height:9.8pt; widows:0; orphans:0">
-                        <input name="recuperepardate" id="recuperepardate" placeholder="date/sign" <?php if (isset($detailom['recuperepardate'])) { if (!empty($detailom['recuperepardate'])) {echo "value='".$detailom['recuperepardate']."'";}} ?> ></input>
+                        <input name="recuperepardate" id="recuperepardate"   readonly placeholder="date/sign" <?php if (isset($detailom['recuperepardate'])) { if (!empty($detailom['recuperepardate'])) {echo "value='".$detailom['recuperepardate']."'";}} ?> ></input>
                     </p></div>
                 <div class="col-md-3">
                 </div>
@@ -865,31 +857,23 @@ foreach ($array_prestap as $prestap) {
                     <input type="datetime-local" name="dateheuredispprev" id="dateheuredispprev" <?php if (isset($detailom['dateheuredispprev'])) { if (!empty($detailom['dateheuredispprev'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['dateheuredispprev']))."'";}} ?> style=" margin-left: 27px; "/>
                     <p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Date/heure retour base prévisible:</span></p>
                     <input type="datetime-local" name="dhretbaseprev" id="dhretbaseprev" <?php if (isset($detailom['dhretbaseprev'])) { if (!empty($detailom['dhretbaseprev'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['dhretbaseprev']))."'";}} ?> style=" margin-left: 27px; "/>
-                    <p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Véhicule: </span>
-                        <input type="text" list="lvehicule" name="lvehicule" autocomplete="off" <?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) {echo "value='".$detailom['lvehicule']."'";}} ?> />
-                        <datalist id="lvehicule">
-                        <?php
-                        /*foreach ($array_vehic as $vehic) {
-                            echo "<option value='".$vehic['name']."' idv='".$vehic['id']."' carburant='".$vehic['carburant']."' telepeage='".$vehic['telepeage']."' >".$vehic['name']."</option>";
-                        }*/
-                        ?>
-                        </datalist>
-                        <input type="hidden" name="idvehic" id="idvehic"   <?php if (isset($detailom['idvehic'])) { if (!empty($detailom['idvehic'])) {echo "value='".$detailom['idvehic']."'";}} ?> />
+                    <p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Véhicule: </span><button id="refdispv"><img src="refresh.png" width="10" height="10" alt="" /></button>
+<select id="lvehicule" name="lvehicule" autocomplete="off"  >
+    <option></option>
+
+</select>
+ <input type="hidden" name="idvehic" id="idvehic"  <?php if (isset($detailom['idvehic'])) { if (!empty($detailom['idvehic'])) {echo "value='".$detailom['idvehic']."'";}} ?> />
                     </p>
                     <p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt;width:100%"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Carte de Carburant: </span>
                     <input type="text" name="cartecarburant" id="cartecarburant" <?php if (isset($detailom['cartecarburant'])) { if (!empty($detailom['cartecarburant'])) {echo "value='".$detailom['cartecarburant']."'";}} ?> style="width:60%"/></p>
                     <p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt;width:100%"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Carte de telepeage: </span>
                     <input type="text" name="cartetelepeage" id="cartetelepeage" <?php if (isset($detailom['cartetelepeage'])) { if (!empty($detailom['cartetelepeage'])) {echo "value='".$detailom['cartetelepeage']."'";}} ?> style="width:60%"/></p>
                     <p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Chauffeur : </span>
-                        <!-- affiche pour le moment toute la liste des personnels -->
-                        <input type="text" list="lchauff" name="lchauff" autocomplete="off"  <?php if (isset($detailom['lchauff'])) { if (!empty($detailom['lchauff'])) {echo "value='".$detailom['lchauff']."'";}} ?> />
-                        <datalist id="lchauff">
-                            <?php
-                            /*foreach ($array_chauff as $chauff) {
-                                echo "<option value='".$chauff['name']."'  >".$chauff['name']."</option>";
-                            }*/
-                            ?>
-                        </datalist>
+                      <button id="refdispp"><img src="refresh.png" width="10" height="10" alt="" /></button>
+<!-- affiche pour le moment toute la liste des personnels -->				
+<select id="lchauff" name="lchauff" autocomplete="off"  >
+<option></option>
+</select>
                         <input type="hidden" name="idchauff" id="idchauff"   <?php if (isset($detailom['idchauff'])) { if (!empty($detailom['idchauff'])) {echo "value='".$detailom['idchauff']."'";}} ?> />
                     </p><p style="margin:0pt 0pt 0pt 20.9pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Heures sup ?: </span>
                         <input name="heuressup" id="heuressup" placeholder="" <?php if (isset($detailom['heuressup'])) { if (!empty($detailom['heuressup'])) {echo "value='".$detailom['heuressup']."'";}} ?> style=""></input>
@@ -897,7 +881,7 @@ foreach ($array_prestap as $prestap) {
                 </div>
             </div>
             <div class="row">
-                <div id="deroulmiss" class="col-md-3" style="margin-top: -380px;padding-bottom:50px">
+                <div id="deroulmiss" class="col-md-3" style="margin-top: -350px;padding-bottom:50px">
                     <p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="height:0pt; display:block; position:absolute; z-index:-1"><img width="320" height="480" alt="" style="margin-top:4.11pt; margin-left:7.72pt; -aw-left-pos:24pt; -aw-rel-hpos:page; -aw-rel-vpos:paragraph; -aw-top-pos:4.4pt; -aw-wrap-type:none; position:absolute"></span><span style="font-family:&#39;Times New Roman&#39;">&nbsp;</span></p><p style="margin-top:0pt;  margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold; text-decoration:underline">Déroulement mission</span></p><p style="margin:0pt 120.4pt 0pt 120.3pt; text-indent:-120.3pt; widows:0; orphans:0; font-size:14pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin:3.65pt 120.4pt 0pt 238.7pt; text-indent:-224.5pt; line-height:189%; widows:0; orphans:0; font-size:9pt;width:100%"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Départ </span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">pour mission: </span>
                         <input type="datetime-local" name="dhdepartmiss" id="dhdepartmiss" <?php if (isset($detailom['dhdepartmiss'])) { if (!empty($detailom['dhdepartmiss'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['dhdepartmiss']))."'";}} ?> style="margin-left:15px;width:85%"/>
                     </p><p style="margin:3.65pt 120.4pt 0pt 238.7pt; text-indent:-224.5pt; line-height:189%; widows:0; orphans:0; font-size:9pt;width:100%"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Arrivée</span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold"> </span><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;lieux: </span>
@@ -941,36 +925,41 @@ if (isset($signaturetype))
         </div>
 </form>
 <script type="text/javascript">
-function verifdispvoiture()
+ 
+    function verifdispvoiture()
 {
 
     var date1 = $("#dateheuredep").val();
     var date2 = $("#dateheuredispprev").val();
+    var parent = $("#parent").val(); 
 
-    $.ajax({ url: 'VoituresDispoParDate.php',
+    $.ajax({url: 'VoituresDispoParDate.php',
              data: {DB_HOST: '<?php echo $dbHost; ?>',
              DB_DATABASE: '<?php echo $dbname; ?>', 
              DB_USERNAME: '<?php echo $dbuser; ?>',
              DB_PASSWORD: '<?php echo $dbpass; ?>',
              datedepmission: date1,
              datedispprev: date2,
-             typeom: 'remorquage' },
+             typeom: 'remorquage',
+             parent:parent
+             },
              type: 'post',
              success: function(output) {
-                         /*dispvehicules = output;
-                         $.each(output, function() {
-                          $.each(this, function(k, v) {
-                            //alert(JSON.stringify(v));
-                          });
-                         });*/
-                         //alert(output);
                     if (output !== 'aucune vehicule est disponible')
                     {
                         // Clear vehicules list
                         $("#lvehicule").empty();
                         var len = output.length;
+
                         if (len >= 1)
                         {   
+                             $("<option />", {
+                                        val: "",
+                                        text: "Sélectionner",
+                                        idv:"",
+                                        carburant:"",
+                                        telepeage:""
+                                    }).appendTo("#lvehicule");
                             
                                 for(var i=0; i<len; i++){
                                     //alert(output[i].name);
@@ -982,17 +971,26 @@ function verifdispvoiture()
                                         telepeage: output[i].telepeage
                                     }).appendTo("#lvehicule");
                                 }
+                           // selectionner chauffeur dans om parent
+                           var voitureomparent ="";
+                           voitureomparent ="<?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) 
+                           {echo $detailom['lvehicule'];}} ?>";
+
+                           if (voitureomparent!=="")
+                           {
+                           		$("#lvehicule").val(voitureomparent);
+                           }
                            
                         }else{alert('wrrong');}
-                          //alert(JSON.stringify(output));
+                         // alert(JSON.stringify(output));
                     }
                     else
                     {
                         // Clear vehicules list
                         $("#lvehicule").empty();
-                        $("<option />", {
-                                        val: "aucune vehicule est disponible",
-                                    }).appendTo("#lvehicule");
+                        /*$("<option />", {
+                                        val: "aucun personnel est disponible",
+                                    }).appendTo("#lchauff");*/
                     }    
                         
             },
@@ -1000,11 +998,13 @@ function verifdispvoiture()
             });
     }
 
+
     function verifdisppersonnel()
 {
 
     var date1 = $("#dateheuredep").val();
     var date2 = $("#dateheuredispprev").val();
+    var parent = $("#parent").val(); 
 
     $.ajax({ url: 'PersonnelDispoParDate.php',
              data: {DB_HOST: '<?php echo $dbHost; ?>',
@@ -1014,23 +1014,21 @@ function verifdispvoiture()
              datedepmission: date1,
              datedispprev: date2,
              typeom: 'remorquage',
-             typeperso: 'chauffeur' },
+             typeperso: 'chauffeur' ,
+             parent:parent },
              type: 'post',
              success: function(output) {
-                         /*dispvehicules = output;
-                         $.each(output, function() {
-                          $.each(this, function(k, v) {
-                            //alert(JSON.stringify(v));
-                          });
-                         });*/
-                         //alert(output);
                     if (output !== 'aucun personnel est disponible')
                     {
                         // Clear vehicules list
                         $("#lchauff").empty();
                         var len = output.length;
                         if (len >= 1)
-                        {   
+                        {   $("<option />", {
+                                        val: "",
+                                        text: "Sélectionner",
+                                        idperso:""
+                                    }).appendTo("#lchauff");
                             
                                 for(var i=0; i<len; i++){
                                     //alert(output[i].name);
@@ -1040,6 +1038,15 @@ function verifdispvoiture()
                                         idperso: output[i].id
                                     }).appendTo("#lchauff");
                                 }
+                           // selectionner chauffeur dans om parent
+                           var chauffomparent ="";
+                           chauffomparent ="<?php if (isset($detailom['lchauff'])) { if (!empty($detailom['lchauff'])) 
+                           {echo $detailom['lchauff'];}} ?>";
+
+                           if (chauffomparent !=="")
+                           {
+                           		$("#lchauff").val(chauffomparent);
+                           }
                            
                         }else{alert('wrrong');}
                          // alert(JSON.stringify(output));
@@ -1048,15 +1055,16 @@ function verifdispvoiture()
                     {
                         // Clear vehicules list
                         $("#lchauff").empty();
-                        $("<option />", {
+                        /*$("<option />", {
                                         val: "aucun personnel est disponible",
-                                    }).appendTo("#lchauff");
+                                    }).appendTo("#lchauff");*/
                     }    
                         
             },
             dataType:"json"
             });
     }
+
 
 // dateheuredep
 $("#dateheuredep").change(function() {
@@ -1075,7 +1083,7 @@ $("#dateheuredispprev").change(function() {
   }
 });
 
-$('input[list="lvehicule"]').on('input', function () {
+/*$('input[list="lvehicule"]').on('input', function () {
     var val = this.value;
     if($('#lvehicule option').filter(function(){
         return this.value.toUpperCase() === val.toUpperCase();        
@@ -1084,8 +1092,8 @@ $('input[list="lvehicule"]').on('input', function () {
         verifdispvoiture();
         verifdisppersonnel();
     }
-});
-$('input[list="lchauff"]').on('input', function () {
+});*/
+/*$('input[list="lchauff"]').on('input', function () {
     var val = this.value;
     if($('#lchauff option').filter(function(){
         return this.value.toUpperCase() === val.toUpperCase();        
@@ -1094,7 +1102,7 @@ $('input[list="lchauff"]').on('input', function () {
         verifdispvoiture();
         verifdisppersonnel();
     }
-});
+});*/
     // CB_preetape
     $("#CB_preetape").change(function() {
         if(this.checked) {
@@ -1179,7 +1187,7 @@ $('input[list="lchauff"]').on('input', function () {
         }
     }
         /// fill cartecarburant et telepeage
-    document.querySelector('input[list="lvehicule"]').addEventListener('input', onInputveh);
+  /*  document.querySelector('input[list="lvehicule"]').addEventListener('input', onInputveh);
 
     function onInputveh(e) {
        var input = e.target,
@@ -1195,10 +1203,10 @@ $('input[list="lchauff"]').on('input', function () {
           break;
         }
       }
-    }
+    }*/
 
             /// fill id chauffeur
-    document.querySelector('input[list="lchauff"]').addEventListener('input', onInputchauff);
+    /*document.querySelector('input[list="lchauff"]').addEventListener('input', onInputchauff);
 
     function onInputchauff(e) {
        var input = e.target,
@@ -1213,7 +1221,40 @@ $('input[list="lchauff"]').on('input', function () {
           break;
         }
       }
-    }
+    }*/
+/*$("input[list='lvehicule']").focusin( function (event) {
+	event.preventDefault();
+        verifdispvoiture();
+	    /*verifamb2();
+	    verifparamed();
+});*/
+/*$("input[list='lchauff']").focusin( function (event) {
+	event.preventDefault();
+        verifdisppersonnel();
+	    /*verifamb2();
+	    verifparamed();
+});*/
+ $('#lvehicule').on('change', function (e) {
+	    var optionSelected = $("option:selected", this);
+		 document.getElementById("idvehic").value = optionSelected.attr("idv");
+	 });
+ $('#lchauff').on('change', function (e) {
+	    var optionSelected = $("option:selected", this);
+		document.getElementById("idchauff").value = optionSelected.attr("idperso");
+	});
+$("#refdispv").click(function(e) {
+ e.preventDefault();
+ if( ($("#dateheuredep").val() !== "") && ($("#dateheuredispprev").val() !== "") ) {
+   verifdispvoiture();
+ }
+});
+$("#refdispp").click(function(e) {
+ e.preventDefault();
+ if( ($("#dateheuredep").val() !== "") && ($("#dateheuredispprev").val() !== "") ) {
+   verifdisppersonnel();
+ }
+});
+
 </script>
 </body>
 

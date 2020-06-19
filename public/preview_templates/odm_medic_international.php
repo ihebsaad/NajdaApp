@@ -1039,7 +1039,7 @@ foreach ($array_escorte as $escorte) {
 
            <div class="row" style=" margin-left: 0px;margin-top: 20px ">
 			<span style="font-family:'Times New Roman'; font-weight:bold">Date, heure et lieu de départ pour votre mission:</span><span style="font-family:'Times New Roman'">&#xa0;
-<input type="datetime-local" name="CL_date_heure_departmission" id="CL_date_heure_departmission" <?php if (isset($detailom)) { if (isset($detailom['CL_date_heure_departmission'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_date_heure_departmission']))."'";}} ?> >
+<input type="datetime-local" name="CL_date_heure_departmission" id="CL_date_heure_departmission" onKeyUp=" calculduree()" <?php if (isset($detailom)) { if (isset($detailom['CL_date_heure_departmission'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_date_heure_departmission']))."'";}} ?> >
                </div>
         <div class="row" style=" margin-left: 0px;margin-top: 20px ">
 			<span style="font-family:'Times New Roman'; font-weight:bold">Date de decollage:</span><span style="font-family:'Times New Roman'">&#xa0;
@@ -1157,7 +1157,24 @@ foreach ($array_adls as $adl) {
 <?php } ?>
 </br>
 <p class=rvps11><span class=rvts52>Merci de vérifier le certificat d</span><span class=rvts53>’</span><span class=rvts52>aptitude au vol (FTF) + documents d</span><span class=rvts53>’</span><span class=rvts52>identité du passager</span></p>
-<p class=rvps9><span class=rvts42>Le patient voyage assis et chaise roulante aux aéroports / sur civière / avec oxygène </span><span class=rvts54></span></p>
+<p class=rvps9><span class=rvts42>Le patient voyage </span><span class=rvts54> 
+<?php if (isset($detailom)) { ?>
+<select id="CL_chaise" name="CL_chaise">
+  <option value="assis et chaise roulante aux aéroports" <?php if (isset($detailom['CL_chaise'])) { if ($detailom['CL_chaise'] === "assis et chaise roulante aux aéroports") {echo "selected";}} ?> >assis et chaise roulante aux aéroports</option>
+  <option value="assis et chaise roulante aux aéroports avec Oxygène" <?php if (isset($detailom['CL_chaise'])) { if ($detailom['CL_chaise'] === "assis et chaise roulante aux aéroports avec Oxygène") {echo "selected";}} ?> >assis et chaise roulante aux aéroports avec Oxygène</option>
+ <option value="sur civière avec oxygène" <?php if (isset($detailom['CL_chaise'])) { if ($detailom['CL_chaise'] === "sur civière avec oxygène") {echo "selected";}} ?> >sur civière avec oxygène</option>
+
+</select>
+<?php } else { ?>
+<select id="CL_chaise" name="CL_chaise">
+  <option value="assis et chaise roulante aux aéroports" selected>assis et chaise roulante aux aéroport</option>
+  <option value="assis et chaise roulante aux aéroports avec Oxygène">assis et chaise roulante aux aéroports avec Oxygène</option>
+  <option value="sur civière avec oxygène">sur civière avec oxygène</option>
+ 
+</select>
+<?php } ?>
+
+</span></p>
 <div class="row ">
 	<span style="font-family:'Times New Roman'; font-weight:bold">Vous prendrez le vol </span><span style="font-family:'Times New Roman'">&#xa0;
 <input name="CL_vol" placeholder="Vol" <?php if (isset($detailom)) { if (isset($detailom['CL_vol'])) {echo "value='".$detailom['CL_vol']."'";}} ?> >
@@ -1216,12 +1233,12 @@ foreach ($array_adls as $adl) {
           </div>
         <div class="row ">
             <span style="font-family:'Times New Roman'; font-weight:bold">Heure prévue de votre arrivée à la base :  </span><span style="font-family:'Times New Roman'">&#xa0; </span>
-<input type="datetime-local" name="CL_date_heure_arrivebase" id="CL_date_heure_arrivebase" <?php if (isset($detailom)) { if (isset($detailom['CL_date_heure_arrivebase'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_date_heure_arrivebase']))."'";}} ?> >
+<input type="datetime-local" name="CL_date_heure_arrivebase" id="CL_date_heure_arrivebase" onKeyUp=" calculduree()" <?php if (isset($detailom)) { if (isset($detailom['CL_date_heure_arrivebase'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_date_heure_arrivebase']))."'";}} ?> >
 
  </div>
            <div class="row ">
             <span style="font-family:'Times New Roman'; font-weight:bold">Durée totale prévue de votre mission :  </span><span style="font-family:'Times New Roman'">&#xa0; </span>
-<input type="time" name="CL_date_heure_retourbase" id="CL_date_heure_retourbase" <?php if (isset($detailom['CL_date_heure_retourbase'])) { if (!empty($detailom['CL_date_heure_retourbase'])) {echo "value='".date('H:i',strtotime($detailom['CL_date_heure_retourbase']))."'";}} ?> >
+<input type="text" name="CL_date_heure_retourbase" id="CL_date_heure_retourbase" <?php if (isset($detailom['CL_date_heure_retourbase'])) { if (!empty($detailom['CL_date_heure_retourbase'])) {echo"value='".$detailom['CL_date_heure_retourbase']."'";}} ?> >
 
  </div>
             <p><span class=rvts65>Bonne mission</span><span class=rvts2>.</span></p>
@@ -1437,6 +1454,41 @@ document.querySelector('input[list="prestataire_medic"]').addEventListener('inpu
 	  }
 	}
 }
+function calculduree() {
+        var date1 = document.getElementsByName("CL_date_heure_departmission")[0].value;
+        var date2 = document.getElementById("CL_date_heure_arrivebase").value;
+       /* var date1 = inputdate1.substring(0, 10);
+        var date2 = inputdate2.substring(0, 10);*/
+
+        /*if (date1.indexOf('/') > -1)
+        {
+            var date1Parts = date1.split("/"); }
+        if (date1.indexOf('-') > -1)
+        {
+            var date1Parts = date1.split("-"); }
+        if (date2.indexOf('/') > -1)
+        {
+            var date2Parts = date2.split("/"); }
+        if (date2.indexOf('-') > -1)
+        {
+            var date2Parts = date2.split("-"); }
+
+        // month is 0-based, that's why we need dataParts[1] - 1
+        var datedeb = new Date(+date1Parts[2], date1Parts[1] - 1, +date1Parts[0]); 
+        var datefin = new Date(+date2Parts[2], date2Parts[1] - 1, +date2Parts[0]); */
+        var datedeb = new Date(date1);
+        var datefin = new Date(date2);
+
+
+
+        diffTime = Math.abs(datefin.getTime() - datedeb.getTime());
+
+        diffheures = Math.trunc(diffTime / (1000 * 60 * 60 )); 
+        diffminutes = Math.ceil(Math.abs(diffTime-(diffheures*1000 * 60 * 60)) / (1000 * 60 )); 
+       // alert(diffDays);
+        document.getElementById("CL_date_heure_retourbase").value = diffheures+' : '+diffminutes;
+        document.getElementById("CL_date_heure_retourbase").onchange();
+    }
 </script>
 				</body></html>
 <?php
