@@ -28,8 +28,79 @@
         </div>
           <div style="min-width:100px!important;padding-top:15px;padding-left:0px!important" class="col-sm-1 col-md-1 col-lg-1">
               <p id="njour" style="font-size: 25px; margin-bottom: 0px!important;color: white"></p>
-              <div class="time">
-                  time</div>
+              <div  >
+
+
+                  <?php
+                  // Récupère l'heure du serveur
+
+                  $localtime = localtime();
+
+                  $seconde =  $localtime[0];
+                  $minute =  $localtime[1];
+                  $heure =  $localtime[2];
+
+                  ?>
+                  <script>
+                      bcle=0;
+
+                      function clock()
+                      {
+                          if (bcle == 0)
+                          {
+                              heure = <?php echo $heure ?>;
+                              min = <?php echo $minute ?>;
+                              sec = <?php echo $seconde ?>;
+                          }
+                          else
+                          {
+                              sec ++;
+                              if (sec == 60)
+                              {
+                                  sec=0;
+                                  min++;
+                                  if (min == 60)
+                                  {
+                                      min=0;
+                                      heure++;
+                                  };
+                              };
+                          };
+                          txt="";
+                          if(heure < 10)
+                          {
+                              txt += "0";
+                          }
+                          txt += heure+ ":";
+                          if(min < 10)
+                          {
+                              txt += "0"
+                          }
+                          txt += min ;//+ ":";
+                          /* if(sec < 10)
+                           {
+                           txt += "0"
+                           }
+                           txt += sec ;*/
+                          timer = setTimeout("clock()",1000);
+                          bcle ++;
+                          document.clock.date.value = txt ;
+                      }
+                  </script>
+
+                  <body onload="clock();">
+                  <style type="text/css">
+                      form{
+                          display:inline;
+                      }
+                      .style {border-width: 0;background-color:transparent;color: #f3fdfd;font-weight:bold;font-size:20px;margin-left:10px;}
+                  </style>
+
+                  <form name="clock" onSubmit="0"  >
+                      <input type="text" name="date" size="5" readonly="true" class="style">
+                  </form>
+                  </body>
+              </div>
           </div>
         <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top: 5px;">
           <span  id="ndate" class="date" data-month="" data-year="" style="width:70px;height:60px;line-height: 1; padding-top: 15px;">

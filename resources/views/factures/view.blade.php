@@ -291,6 +291,26 @@ $mois=substr ( $date_arrive , 3  ,2 );
                 </div>
 				
         </div>
+        <?php use \App\Http\Controllers\PrestationsController; ?>
+
+        <?php $prestations = App\Prestation::where('dossier_id',$iddossier)->get();?>
+
+        <div class="row" style="margin-top:20px;margin-left:40px">
+            <div class="form-group">
+
+            <label for="inputError" class="control-label">Prestation</label>
+            <select  onchange="changing(this)"    class="form-control input"   name="prestation" id="prestation"    style="min-width:600px;max-width:850px ">
+            <option></option>
+            <?php   foreach ($prestations as $prest)
+                { ?>
+                    <option  <?php if($prest->id == $facture->prestation ) { echo 'selected="selected"'; } ?>    value="<?php echo $prest->id ;?>"><?php echo '<b>ID:</b> '. $prest->id.' - <b>Date:</b> '.$prest->date_prestation.' -  <b>Type P:</b> ' .PrestationsController::TypePrestationById($prest->type_prestations_id). ' - <b>Spécialité</b> : '.PrestationsController::SpecialiteById($prest->specialite).' - <b>Gouvernorat </b>: '.PrestationsController::GouvById($prest->gouvernorat) .' -  <b>Ville</b> : ' .$prest->ville ; ?> </option>
+
+             <?php  }
+                ?>
+            </select>
+
+            </div>
+        </div>
         <input type="hidden" id="id" class="form-control"   value="{{ $facture->id }}"  ></input>
     </form>
       </div>

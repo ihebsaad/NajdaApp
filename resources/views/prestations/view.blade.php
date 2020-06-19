@@ -11,7 +11,7 @@
 
              <div id="addpresform" novalidate="novalidate">
 
-                        <input id="idprestation" name="idprestation" type="hidden" value="{{$prestation->id}}">
+                <input id="idprestation" name="idprestation" type="hidden" value="{{$prestation->id}}">
                  <div class="row" >
                  <div class="form-group col-md-6  ">
                      <h3>Prestation</h3>
@@ -74,7 +74,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                      <label class="control-label">Ville <span class="required" aria-required="true">   </span></label>
                      <input  value="{{$prestation->ville}}" class="form-control" name="ville" id="ville" readonly data-required="1" required="" aria-required="true">
                  </div>
- <div class="form-group">
+                <div class="form-group">
                      <label class="control-label">Document/OM <span class="required" aria-required="true">   </span></label>
                      <input  value="{{$prestation->oms_docs}}" class="form-control" name="ville" id="ville" readonly data-required="1" required="" aria-required="true">
                  </div>
@@ -92,6 +92,13 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                  <div class="form-group">
                      <label>Détails  </label>
                      <textarea  onchange="changing(this)"   class="form-control" name="details" id="details" >{{$prestation->details}}</textarea>
+                 </div>
+
+
+                 <div class="form-group">
+                     <B>Facture :  </B>
+                        <?php $facture= \App\Facture::where('prestation',$prestation->id )->first();  ?>
+                     <a href="{{action('FacturesController@view', $facture->id)}}"    ><?php if(isset($facture) ){echo $facture->reference   ;}   ?> </a>
                  </div>
 
                 </div>

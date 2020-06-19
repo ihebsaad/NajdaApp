@@ -23,7 +23,8 @@ class Prestation extends Model
 'details',
 'effectue',
 'ville',
-'oms_docs'
+'oms_docs',
+'facture'
 
 ];
 
