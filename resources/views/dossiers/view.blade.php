@@ -741,7 +741,7 @@ function custom_echo($x, $length)
                              <div class="row">
                                  <div class="  form-group"  id="prestation"  style="display:none">
                                    <div class="col-md-4">
-                                       <button style="display:none;margin-botom:10px" type="button" id="valide" class="btn btn-lg btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
+                                       <button style="display:block;margin-botom:10px" type="button" id="valide" class="btn btn-lg btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
                                    </div>
                                      <div class="col-md-4">
                                          <label>ou bien Prestation non effectuée ? Raison:</label>
@@ -4560,8 +4560,8 @@ function toggle(className, displayState){
            var prestation=parseInt(data);
                /// window.location =data;
 
-                    document.getElementById('prestation').style.display='block';
-                    document.getElementById('valide').style.display='block';
+               //     document.getElementById('prestation').style.display='block';
+              //      document.getElementById('valide').style.display='block';
                     document.getElementById('idprestation').value =prestation;
 
                 },
@@ -4817,6 +4817,7 @@ function toggle(className, displayState){
 
             document.getElementById('termine').style.display = 'none';
             document.getElementById('showNext').style.display='none';
+            document.getElementById('prestation').style.display='none';
             document.getElementById('add2').style.display='none';
             document.getElementById('add2prest').style.display='none';
             document.getElementById('selectedprest').value=0;
@@ -4849,13 +4850,16 @@ function toggle(className, displayState){
 
             // document.getElementById('termine').style.display = 'none';
             document.getElementById('showNext').style.display='none';
+            document.getElementById('prestation').style.display='none';
+
             document.getElementById('showNext').firstChild.data ='Commencer';
             document.getElementById('add2').style.display='none';
             document.getElementById('add2prest').style.display='none';
-            document.getElementById('selectedprest').value=0;
+             document.getElementById('selected').value = 1;
 
 
-           toggle('tprest', 'none');
+
+            toggle('tprest', 'none');
             var typeprest=  document.getElementById('typeprest').value;
 
         //   document.getElementById('tprest-'+typeprest).style.display='block';
@@ -4897,6 +4901,9 @@ function toggle(className, displayState){
                         if(total>0)
                         {
                             document.getElementById('showNext').style.display='block';
+                       //     document.getElementById('prestation').style.display='block';
+                        //    document.getElementById('add2').style.display='block';
+
                         }
 
                     }
@@ -5004,36 +5011,6 @@ function toggle(className, displayState){
                 });
             }
         }); // change
-        /*var _token = $('input[name="_token"]').val();
-                    var gouvm = $('iframe[name=omfilled]').contents().find('#select_name').val();
-
-                document.getElementById('termine-m').style.display = 'none';
-                document.getElementById('add2-m').style.display = 'none';
-                document.getElementById('add2prest-m').style.display='none';
-
-                $.ajax({
-                    url:"{{-- route('dossiers.listepresm') --}}",
-                    method:"post",
-
-                    data:{gouv:gouvm,type:type,specialite:specialite,ville:ville,postal:postal, _token:_token},
-                    success:function(data){
-
-
-                        $('#data-m').html(data);
-                        //window.location =data;
-                        console.log(data);
-                        ////       data.map((item, i) => console.log('Index:', i, 'Id:', item.id));
-                        var  total =document.getElementById('total-m').value;
-
-                        if(parseInt(total)>0)
-                        {
-                            document.getElementById('showNext-m').style.display='block';
-                        }
-
-                    }*/
-                //}); 
-        // ajax
-
 
 
 
@@ -5072,13 +5049,59 @@ function toggle(className, displayState){
         });
 
             $("#showNext").click(function() {
-                document.getElementById('showNext').firstChild.data  ='Suivant';
 
                 var shownext=false;var infos=false;
             // reinitialiser le champs de statut
             /*if(document.getElementById('selectedprest').value ==0) {
                 document.getElementById('statutprest').value ='';
             document.getElementById('detailsprest').value ='';}*/
+if (            document.getElementById('showNext').firstChild.data !='Commencer' 
+)
+{   // ajout prestation
+
+                selected=   document.getElementById('selected').value;
+                document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
+ 
+                var prestataire = $('#selectedprest').val();
+                var dossier_id = $('#dossier').val();
+
+                var typeprest = $('#typeprest').val();
+                var gouvernorat = $('#gouvcouv').val();
+                var specialite = $('#specialite').val();
+                var date = $('#pres_date').val();
+
+                //   gouvcouv
+                if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
+                {
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('prestations.saving') }}",
+                        method:"POST",
+                        data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
+                        success:function(data){
+                       /*     var prestation=parseInt(data);
+                            /// window.location =data;
+
+                            document.getElementById('prestation').style.display='block';
+                            document.getElementById('add2').style.display='block';
+                            document.getElementById('valide').style.display='block';
+                            document.getElementById('idprestation').value =prestation;
+*/
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+
+
+                        }
+
+                    });
+                }else{
+
+                }
+
+
+}
+   document.getElementById('showNext').firstChild.data  ='Suivant';
+
 
             // si une prestation a èté ajoutée
             if(document.getElementById('idprestation').value >0) {
@@ -5130,7 +5153,7 @@ function toggle(className, displayState){
                 var next = parseInt(selected) + 1;
                 document.getElementById('selected').value = next;
 
-                if ((selected == 0)) {
+               // if ((selected == 0)) {
                     document.getElementById('termine').style.display = 'none';
                     document.getElementById('item1').style.display = 'block';
                     document.getElementById('add2').style.display = 'block';
@@ -5139,7 +5162,7 @@ function toggle(className, displayState){
                     //document.getElementById('selected').value=1;
                     // $("#selected").val('1');
 
-                }
+                  // }
 
                 if ((selected) == (total  )) {
 
@@ -5617,8 +5640,6 @@ $(document).ready(function(){
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);
     }
-
-
 
 
 

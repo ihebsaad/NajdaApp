@@ -98,7 +98,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                  <div class="form-group">
                      <B>Facture :  </B>
                         <?php $facture= \App\Facture::where('prestation',$prestation->id )->first();  ?>
-                     <a href="{{action('FacturesController@view', $facture->id)}}"    ><?php if(isset($facture) ){echo $facture->reference   ;}   ?> </a>
+                        <?php   if(isset($facture)) { ?>  <a href="{{action('FacturesController@view', $facture->id)}}"    ><?php if(isset($facture) ){echo $facture->reference   ;}   ?> </a> <?php } ?>
                  </div>
 
                 </div>
