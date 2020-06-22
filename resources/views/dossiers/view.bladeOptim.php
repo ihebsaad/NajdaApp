@@ -739,9 +739,9 @@ function custom_echo($x, $length)
                              </div>
 
                              <div class="row">
-                                 <div class="  form-group"  id="prestation"   >
+                                 <div class="  form-group"  id="prestation"  style="display:none">
                                    <div class="col-md-4">
-                                       <button style="display:none;margin-botom:10px" type="button" id="valide" class="btn btn-lg btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
+                                       <button style="display:block;margin-botom:10px" type="button" id="valide" class="btn btn-lg btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
                                    </div>
                                      <div class="col-md-4">
                                          <label>ou bien Prestation non effectuée ? Raison:</label>
@@ -4863,7 +4863,6 @@ function toggle(className, displayState){
             document.getElementById('showNext').style.display='none';
             document.getElementById('prestation').style.display='none';
             document.getElementById('add2').style.display='none';
-            document.getElementById('valide').style.display='none';
             document.getElementById('add2prest').style.display='none';
             document.getElementById('selectedprest').value=0;
 
@@ -4895,13 +4894,16 @@ function toggle(className, displayState){
 
             // document.getElementById('termine').style.display = 'none';
             document.getElementById('showNext').style.display='none';
+            document.getElementById('prestation').style.display='none';
+
             document.getElementById('showNext').firstChild.data ='Commencer';
             document.getElementById('add2').style.display='none';
             document.getElementById('add2prest').style.display='none';
-            document.getElementById('selectedprest').value=0;
+             document.getElementById('selected').value = 1;
 
 
-           toggle('tprest', 'none');
+
+            toggle('tprest', 'none');
             var typeprest=  document.getElementById('typeprest').value;
 
         //   document.getElementById('tprest-'+typeprest).style.display='block';
@@ -4943,6 +4945,9 @@ function toggle(className, displayState){
                         if(total>0)
                         {
                             document.getElementById('showNext').style.display='block';
+                       //     document.getElementById('prestation').style.display='block';
+                        //    document.getElementById('add2').style.display='block';
+
                         }
 
                     }
@@ -4956,7 +4961,7 @@ function toggle(className, displayState){
                 });
             }
         }); // change
- 
+
     /*    $("#choisir").click(function() {
             //selected= document.getElementById('selected').value;
             selected=    $("#selected").val();
@@ -5056,7 +5061,6 @@ function toggle(className, displayState){
         $("#essai2").click(function() {
             document.getElementById('termine').style.display = 'none';
             document.getElementById('add2').style.display = 'block';
-            document.getElementById('valide').style.display = 'block';
             document.getElementById('add2prest').style.display='block';
             document.getElementById('showNext').style.display = 'block';
             //document.getElementById('showNext').firstChild.data   = 'Commencer';
@@ -5088,18 +5092,22 @@ function toggle(className, displayState){
 }
         });
 
-                     $("#showNext").click(function() {
+            $("#showNext").click(function() {
 
-                ///// Enregistrement prestation
- if(            document.getElementById('showNext').firstChild.data =='Commencer' )
-){
-	 document.getElementById('selected').value=1;
- }
-                selected=  parseInt(document.getElementById('selected').value);
-                if(selected >0) {
+                var shownext=false;var infos=false;
+		   document.getElementById('prestation').style.display='block';
+
+            // reinitialiser le champs de statut
+            /*if(document.getElementById('selectedprest').value ==0) {
+                document.getElementById('statutprest').value ='';
+            document.getElementById('detailsprest').value ='';}*/
+if (            document.getElementById('showNext').firstChild.data !='Commencer' 
+)
+{   // ajout prestation
+
+                selected=   document.getElementById('selected').value;
                 document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
-
-
+ 
                 var prestataire = $('#selectedprest').val();
                 var dossier_id = $('#dossier').val();
 
@@ -5107,9 +5115,10 @@ function toggle(className, displayState){
                 var gouvernorat = $('#gouvcouv').val();
                 var specialite = $('#specialite').val();
                 var date = $('#pres_date').val();
+                var statutprest = $('#statutprest').val();
 
                 //   gouvcouv
-                if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
+                if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0) && (statutprest!='')  )
                 {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
@@ -5117,13 +5126,14 @@ function toggle(className, displayState){
                         method:"POST",
                         data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
                         success:function(data){
-                            var prestation=parseInt(data);
+                       /*     var prestation=parseInt(data);
                             /// window.location =data;
 
-                        //    document.getElementById('prestation').style.display='block';
-                        //    document.getElementById('valide').style.display='block';
-                        //    document.getElementById('idprestation').value =prestation;
-
+                            document.getElementById('prestation').style.display='block';
+                            document.getElementById('add2').style.display='block';
+                            document.getElementById('valide').style.display='block';
+                            document.getElementById('idprestation').value =prestation;
+*/
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
 
@@ -5132,20 +5142,17 @@ function toggle(className, displayState){
 
                     });
                 }else{
-
+					alert('Décrivez la raison pour zipper ce prestataire');
                 }
 
-    }
- 
 
+}
+else{
+	//document.getElementById('selectedprest').value =
+}
+ if(statutprest!='')
+ { document.getElementById('showNext').firstChild.data  ='Suivant';
 
-                document.getElementById('showNext').firstChild.data  ='Suivant';
-
-                var shownext=false;var infos=false;
-            // reinitialiser le champs de statut
-            /*if(document.getElementById('selectedprest').value ==0) {
-                document.getElementById('statutprest').value ='';
-            document.getElementById('detailsprest').value ='';}*/
 
             // si une prestation a èté ajoutée
             if(document.getElementById('idprestation').value >0) {
@@ -5183,7 +5190,7 @@ function toggle(className, displayState){
                 document.getElementById('statutprest').selectedIndex =0;
 
                       if(document.getElementById('idprestation').value >0) {
-                       ////   document.getElementById('prestation').style.display='none';
+                          document.getElementById('prestation').style.display='none';
                       }
 
             }
@@ -5196,19 +5203,18 @@ function toggle(className, displayState){
 
                 var next = parseInt(selected) + 1;
                 document.getElementById('selected').value = next;
-
+ 
                 if ((selected == 0)) {
                     document.getElementById('termine').style.display = 'none';
                     document.getElementById('item1').style.display = 'block';
                     document.getElementById('add2').style.display = 'block';
-                    document.getElementById('valide').style.display = 'block';
                     document.getElementById('add2prest').style.display='block';
 
                     //document.getElementById('selected').value=1;
                     // $("#selected").val('1');
 
-                }
-
+                   }
+ 
                 if ((selected) == (total  )) {
 
                     document.getElementById('termine').style.display = 'block';
@@ -5216,7 +5222,6 @@ function toggle(className, displayState){
                     document.getElementById('item'+(selected)).style.display = 'none';
                     document.getElementById('showNext').style.display = 'none';
                     document.getElementById('add2').style.display = 'none';
-                    document.getElementById('valide').style.display = 'none';
                     document.getElementById('add2prest').style.display='none';
 
 
@@ -5224,7 +5229,6 @@ function toggle(className, displayState){
 
                     if ((selected != 0) && (selected <= total + 1)) {
                         document.getElementById('add2').style.display = 'block';
-                        document.getElementById('valide').style.display = 'block';
                         document.getElementById('add2prest').style.display='block';
                         document.getElementById('termine').style.display = 'none';
                         document.getElementById('item'+String(selected)).style.display = 'none';
@@ -5247,7 +5251,7 @@ function toggle(className, displayState){
                       document.getElementById('idprestation').value=0
                       document.getElementById('selectedprest').value = 0;
                       document.getElementById('detailsprest').value='';
-                   ////   document.getElementById('prestation').style.display='none';
+                      document.getElementById('prestation').style.display='none';
                       document.getElementById('statutprest').selectedIndex =0;
 
                   }
@@ -5264,7 +5268,7 @@ function toggle(className, displayState){
             }
 
             }
-
+}// prestation !=''
         });
 
 $("#showNext-m").click(function() {
