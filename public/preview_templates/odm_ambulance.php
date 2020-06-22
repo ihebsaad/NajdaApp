@@ -840,6 +840,7 @@ foreach ($array_prestap as $prestap) {
   <option value="extra-seat civière" <?php if (isset($detailom['CL_type_siege'])) { if ($detailom['CL_type_siege'] === "extra-seat civière") {echo "selected";}} ?> >extra-seat civière </option>
   <option value="avion sanitaire" <?php if (isset($detailom['CL_type_siege'])) { if ($detailom['CL_type_siege'] === "avion sanitaire") {echo "selected";}} ?> >avion sanitaire</option>
   <option value=" Bateau" <?php if (isset($detailom['CL_type_siege'])) { if ($detailom['CL_type_siege'] === " Bateau") {echo "selected";}} ?> > Bateau</option>
+ <option value="Civière" <?php if (isset($detailom['CL_type_siege'])) { if ($detailom['CL_type_siege'] === "Civière") {echo "selected";}} ?> >Civière</option>
 
 </select>
 <?php } else { ?>
@@ -850,6 +851,7 @@ foreach ($array_prestap as $prestap) {
   <option value="extra-seat civière">extra-seat civière</option>
   <option value="avion sanitaire">avion sanitaire</option>
   <option value="Bateau">Bateau</option>
+  <option value="Civière">Civière</option>
 </select>
 <?php } ?>
 					<span style="font-family:'Times New Roman'; font-weight:bold">   Réf/pnr: </span>

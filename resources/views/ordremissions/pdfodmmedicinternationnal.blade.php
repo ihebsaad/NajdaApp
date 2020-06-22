@@ -713,7 +713,8 @@ span.rvts65
 </p>
 
 <p class=rvps11><span class=rvts52>Merci de vérifier le certificat d</span><span class=rvts53>’</span><span class=rvts52>aptitude au vol (FTF) + documents d</span><span class=rvts53>’</span><span class=rvts52>identité du passager</span></p>
-<p class=rvps9><span class=rvts42>Le patient voyage assis et chaise roulante aux aéroports / sur civière / avec oxygène </span><span class=rvts54></span></p>
+<p class=rvps9><span class=rvts42>Le patient voyage <span class=rvts42> <?php if (isset($_POST['CL_chaise'])) { echo $_POST['CL_chaise']; } ?></span></p>
+<p class=rvps1><span class=rvts2><br></span></p>
 <div class="row" style=" margin-left: 0px; ">
 	<p style="margin-top: 0pt;margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
 	<span style="font-family:'Times New Roman'; font-weight:bold">Vous prendrez le vol </span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">  </span><span style="font-family:'Times New Roman'; "><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_vol'])) { echo $_POST['CL_vol']; } ?></span>
@@ -757,6 +758,7 @@ span.rvts65
 		</span>
 </p>
 </div>
+<p class=rvps1><span class=rvts2><br></span></p>
 <div class="row" style=" margin-left: 0px; ">
 	<p style="margin-top: 0pt;margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
 	<span style="font-family:'Times New Roman'; font-weight:bold">En cas de retour sur le même vol, merci prévenir le chef d’escale de l’aéroport de départ, et ensuite avertir également le chef de cabine une fois embarqué dans l’avion . </span>
