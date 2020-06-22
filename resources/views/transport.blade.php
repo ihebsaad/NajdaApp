@@ -28,23 +28,23 @@
     $today= date('Y-m-d');
 
     // OM TAXIs
-    $ordres_taxi = \App\OMTaxi::where('CL_heuredateRDV', 'like',$today.'%')
-        ->where('dernier',1)
+    $ordres_taxi =\App\OMTaxi::where('affectea', '!=' , 'interne')->where('CL_heuredateRDV', 'like',$today.'%')
+      ->where('dernier',1)->orWhere('affectea','interne')->where('CL_heuredateRDV', 'like',$today.'%')->where('dernier',1)->where('complete',1)
          ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule','prestataire_taxi','dateheuredep','dateheuredispprev')
         ->orderBy('CL_heuredateRDV')
         ->get();
 
     //OM Ambul
 
-    $ordres_ambul =   \App\OMAmbulance::where('CL_heuredateRDV', 'like',$today.'%')
-        ->where('dernier',1)
+    $ordres_ambul =    \App\OMAmbulance::where('affectea', '!=' , 'interne')->where('CL_heuredateRDV', 'like',$today.'%')
+        ->where('dernier',1)->orWhere('affectea','interne')->where('CL_heuredateRDV', 'like',$today.'%')->where('dernier',1)->where('complete',1)
           ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lambulancier1','lvehicule','prestataire_ambulance','dateheuredep','dateheuredispprev')
         ->orderBy('CL_heuredateRDV')
          ->get();
     // OM Remorq
 
-    $ordres_rem =  \App\OMRemorquage::where('CL_heuredateRDV', 'like',$today.'%')
-        ->where('dernier',1)
+    $ordres_rem = \App\OMRemorquage::where('affectea', '!=' , 'interne')->where('CL_heuredateRDV', 'like',$today.'%')
+        ->where('dernier',1)->orWhere('affectea','interne')->where('CL_heuredateRDV', 'like',$today.'%')->where('dernier',1)->where('complete',1)
          ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule','prestataire_remorquage','dateheuredep','dateheuredispprev')
          ->orderBy('CL_heuredateRDV')
          ->get();
@@ -120,6 +120,7 @@
                                                            $datefin=$o['dateheuredispprev'];
 $datedebut= date('d/m/Y,H:i', strtotime($datedebut));
 $datefin= date('d/m/Y,H:i', strtotime($datefin));
+$dateorigine ='01/01/1970,01:00';
                                                           $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
                                                           if($type=='taxi'){  $chauff=$o['lchauff'];$color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>'; $prestom=$o['prestataire_taxi'];}
                                                           if($type=='ambulance'){  $chauff=$o['lambulancier1']; $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';$prestom=$o['prestataire_ambulance'];}
@@ -151,14 +152,17 @@ $datefin= date('d/m/Y,H:i', strtotime($datefin));
                                                               <div class="col-md-12 overme "  ><i class="fas fa-car"></i>   <?php echo $veh; ?></div>
 
                                                           </div>
+<?php if($datedebut !==$dateorigine){ ?>
  <div class="row" style="margin-bottom:10px">
   <div class="col-md-12" > <i class="fas fa-calendar-o"></i> <small>Date départ base:</small>  <?php echo $datedebut; ?> </div>
                                                           </div>
-
+<?php } ?>
+<?php if($datefin !==$dateorigine){ ?>
                                                          <div class="row" style="margin-bottom:10px">
                                                               <div class="col-md-12"  ><i class="fas fa-calendar-check-o"></i> <small>Date dispo prévisible:</small>  <?php echo $datefin; ?> </div>
                                                           </div>
 							<?php } ?>
+<?php } ?>
 							<?php if($affecte=='externe'){ ?>
                                                           <div class="row" style="margin-bottom:10px">
                                                               <div class="col-md-12 overme"  ><i class="fas fa-user-alt"></i>  <?php echo $prestom; ?></div>
@@ -196,6 +200,11 @@ $datefin= date('d/m/Y,H:i', strtotime($datefin));
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
                                 $veh=$o['lvehicule'];
+ $datedebut=$o['dateheuredep'];
+                                                           $datefin=$o['dateheuredispprev'];
+$datedebut= date('d/m/Y,H:i', strtotime($datedebut));
+$datefin= date('d/m/Y,H:i', strtotime($datefin));
+$dateorigine ='01/01/1970,01:00';
                                $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
 
 
@@ -229,14 +238,17 @@ $datefin= date('d/m/Y,H:i', strtotime($datefin));
                                        <div class="col-md-12 overme"  ><i class="fas fa-user-alt"></i>  <?php echo $chauff; ?></div>
                                        <div class="col-md-12 overme "  ><i class="fas fa-car"></i>   <?php echo $veh; ?></div>
                                    </div>
+<?php if($datedebut !==$dateorigine){ ?>
  <div class="row" style="margin-bottom:10px">
   <div class="col-md-12" > <i class="fas fa-calendar-o"></i> <small>Date départ base:</small>  <?php echo $datedebut; ?> </div>
                                                           </div>
-
+<?php } ?>
+<?php if($datefin !==$dateorigine){ ?>
                                                          <div class="row" style="margin-bottom:10px">
                                                               <div class="col-md-12"  ><i class="fas fa-calendar-check-o"></i> <small>Date dispo prévisible:</small>  <?php echo $datefin; ?> </div>
                                                           </div>
 				<?php } ?>
+<?php } ?>
 
 				<?php if($affecte=='externe'){ ?>
                                  <div class="row" style="margin-bottom:10px">
@@ -276,6 +288,11 @@ $datefin= date('d/m/Y,H:i', strtotime($datefin));
                                $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
                                $type=$o['type'];
                                 $veh=$o['lvehicule'];
+ $datedebut=$o['dateheuredep'];
+                                                           $datefin=$o['dateheuredispprev'];
+$datedebut= date('d/m/Y,H:i', strtotime($datedebut));
+$datefin= date('d/m/Y,H:i', strtotime($datefin));
+$dateorigine ='01/01/1970,01:00';
                                if($type=='taxi'){  $chauff=$o['lchauff'];$color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';$prestom=$o['prestataire_taxi'];}
                                if($type=='ambulance'){  $chauff=$o['lambulancier1'];  $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';$prestom=$o['prestataire_ambulance'];}
                                if($type=='remorquage'){ $chauff=$o['lchauff']; $color='#C0392B';$icon='<i class="fas fa-2x fa-truck-pickup"></i>';$prestom=$o['prestataire_remorquage'];}
@@ -305,14 +322,18 @@ $datefin= date('d/m/Y,H:i', strtotime($datefin));
                                        <div class="col-md-12 overme"  ><i class="fas fa-user-alt"></i>  <?php echo $chauff; ?></div>
                                        <div class="col-md-12 overme "  ><i class="fas fa-car"></i>   <?php echo $veh; ?></div>
                                    </div>
+<?php if($datedebut !==$dateorigine){ ?>
  <div class="row" style="margin-bottom:10px">
   <div class="col-md-12" > <i class="fas fa-calendar-o"></i> <small>Date départ base:</small>  <?php echo $datedebut; ?> </div>
                                                           </div>
+<?php } ?>
+<?php if($datefin !==$dateorigine){ ?>
 
                                                          <div class="row" style="margin-bottom:10px">
                                                               <div class="col-md-12"  ><i class="fas fa-calendar-check-o"></i> <small>Date dispo prévisible:</small>  <?php echo $datefin; ?> </div>
                                                           </div>
 				<?php } ?>
+<?php } ?>
 
 				<?php if($affecte=='externe'){ ?>
                                  <div class="row" style="margin-bottom:10px">
@@ -352,6 +373,11 @@ $datefin= date('d/m/Y,H:i', strtotime($datefin));
                                $type=$o['type'];
 
                                $veh=$o['lvehicule'];
+ $datedebut=$o['dateheuredep'];
+                                                           $datefin=$o['dateheuredispprev'];
+$datedebut= date('d/m/Y,H:i', strtotime($datedebut));
+$datefin= date('d/m/Y,H:i', strtotime($datefin));
+$dateorigine ='01/01/1970,01:00';
                                $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
                                if($type=='taxi'){ $chauff=$o['lchauff']; $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';$prestom=$o['prestataire_taxi'];}
                                if($type=='ambulance'){ $chauff=$o['lambulancier1'];  $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';$prestom=$o['prestataire_ambulance'];}
@@ -382,15 +408,17 @@ $datefin= date('d/m/Y,H:i', strtotime($datefin));
                                        <div class="col-md-12 overme"  ><i class="fas fa-user-alt"></i>  <?php echo $chauff; ?></div>
                                        <div class="col-md-12 overme "  ><i class="fas fa-car"></i>   <?php echo $veh; ?></div>
                                    </div>
+<?php if($datedebut !==$dateorigine){ ?>
  <div class="row" style="margin-bottom:10px">
   <div class="col-md-12" > <i class="fas fa-calendar-o"></i> <small>Date départ base:</small>  <?php echo $datedebut; ?> </div>
                                                           </div>
-
+<?php } ?>
+<?php if($datefin !==$dateorigine){ ?>
                                                          <div class="row" style="margin-bottom:10px">
                                                               <div class="col-md-12"  ><i class="fas fa-calendar-check-o"></i> <small>Date dispo prévisible:</small>  <?php echo $datefin; ?> </div>
                                                           </div>
 				<?php } ?>
-
+<?php } ?>
 				<?php if($affecte=='externe'){ ?>
                                  <div class="row" style="margin-bottom:10px">
                                     <div class="col-md-12 overme"  ><i class="fas fa-user-alt"></i>  <?php echo $prestom; ?></div>
@@ -427,6 +455,11 @@ $datefin= date('d/m/Y,H:i', strtotime($datefin));
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
                                 $veh=$o['lvehicule'];
+ $datedebut=$o['dateheuredep'];
+                                                           $datefin=$o['dateheuredispprev'];
+$datedebut= date('d/m/Y,H:i', strtotime($datedebut));
+$datefin= date('d/m/Y,H:i', strtotime($datefin));
+$dateorigine ='01/01/1970,01:00';
                                $affecte=$o['affectea'];
 if ($affecte == 'externe') { $color2='#0B5345'; } 
 else { $color2='#6E2C00'; }
@@ -459,14 +492,18 @@ if($type=='taxi'){ $chauff=$o['lchauff']; $color='#D4AC0D'; $icon='<i class="fas
                                        <div class="col-md-12 overme"  ><i class="fas fa-user-alt"></i>  <?php echo $chauff; ?></div>
                                        <div class="col-md-12 overme "  ><i class="fas fa-car"></i>   <?php echo $veh; ?></div>
                                    </div>
+<?php if($datedebut !==$dateorigine){ ?>
  <div class="row" style="margin-bottom:10px">
   <div class="col-md-12" > <i class="fas fa-calendar-o"></i> <small>Date départ base:</small>  <?php echo $datedebut; ?> </div>
                                                           </div>
+<?php } ?>
+<?php if($datefin !==$dateorigine){ ?>
 
                                                          <div class="row" style="margin-bottom:10px">
                                                               <div class="col-md-12"  ><i class="fas fa-calendar-check-o"></i> <small>Date dispo prévisible:</small>  <?php echo $datefin; ?> </div>
                                                           </div>
 				<?php } ?>
+<?php } ?>
 
 				<?php if($affecte=='externe'){ ?>
                                  <div class="row" style="margin-bottom:10px">
@@ -505,6 +542,11 @@ if($type=='taxi'){ $chauff=$o['lchauff']; $color='#D4AC0D'; $icon='<i class="fas
                                $vers=$o['CL_lieudecharge_dec'];
                                $type=$o['type'];
                                $veh=$o['lvehicule'];
+ $datedebut=$o['dateheuredep'];
+                                                           $datefin=$o['dateheuredispprev'];
+$datedebut= date('d/m/Y,H:i', strtotime($datedebut));
+$datefin= date('d/m/Y,H:i', strtotime($datefin));
+$dateorigine ='01/01/1970,01:00';
                                $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
                                if($type=='taxi'){ $chauff=$o['lchauff']; $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';$prestom=$o['prestataire_taxi'];}
                                if($type=='ambulance'){  $chauff=$o['lambulancier1']; $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';$prestom=$o['prestataire_ambulance'];}
@@ -536,14 +578,18 @@ if($type=='taxi'){ $chauff=$o['lchauff']; $color='#D4AC0D'; $icon='<i class="fas
                                        <div class="col-md-12 overme"  ><i class="fas fa-user-alt"></i>  <?php echo $chauff; ?></div>
                                        <div class="col-md-12 overme "  ><i class="fas fa-car"></i>   <?php echo $veh; ?></div>
                                    </div>
+<?php if($datedebut !==$dateorigine){ ?>
  <div class="row" style="margin-bottom:10px">
   <div class="col-md-12" > <i class="fas fa-calendar-o"></i> <small>Date départ base:</small>  <?php echo $datedebut; ?> </div>
                                                           </div>
+<?php } ?>
+<?php if($datefin !==$dateorigine){ ?>
 
                                                          <div class="row" style="margin-bottom:10px">
                                                               <div class="col-md-12"  ><i class="fas fa-calendar-check-o"></i> <small>Date dispo prévisible:</small>  <?php echo $datefin; ?> </div>
                                                           </div>
 				<?php } ?>
+<?php } ?>
 
 				<?php if($affecte=='externe'){ ?>
                                  <div class="row" style="margin-bottom:10px">

@@ -54,23 +54,23 @@
     $today= date('Y-m-d');
 
     // OM TAXIs
-    $ordres_taxi = \App\OMTaxi::where('CL_heuredateRDV', '>', Carbon::now()->toDateString())
-       ->where('dernier',1)
+    $ordres_taxi = \App\OMTaxi::where('affectea', '!=' , 'interne')->where('CL_heuredateRDV', '>', Carbon::now()->toDateString())
+      ->where('dernier',1)->orWhere('affectea','interne')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())->where('dernier',1)->where('complete',1)
         ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule','dateheuredep','dateheuredispprev')
         ->orderBy('CL_heuredateRDV')
         ->get();
 
     //OM Ambul
 
-    $ordres_ambul =   \App\OMAmbulance::where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())
-        ->where('dernier',1)
+    $ordres_ambul =   \App\OMAmbulance::where('affectea', '!=' , 'interne')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())
+        ->where('dernier',1)->orWhere('affectea','interne')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())->where('dernier',1)->where('complete',1)
             ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lvehicule','lambulancier1','dateheuredep','dateheuredispprev')
         ->orderBy('CL_heuredateRDV')
          ->get();
     // OM Remorq
 
-    $ordres_rem =  \App\OMRemorquage::where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())
-        ->where('dernier',1)
+    $ordres_rem =  \App\OMRemorquage::where('affectea', '!=' , 'interne')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())
+        ->where('dernier',1)->orWhere('affectea','interne')->where('CL_heuredateRDV',  '>', Carbon::now()->toDateString())->where('dernier',1)->where('complete',1)
             ->select('id','CL_heuredateRDV','affectea','emplacement','reference_medic','subscriber_name','subscriber_lastname','CL_heure_RDV','CL_contacttel','CL_lieuprest_pc','CL_lieudecharge_dec','type','lchauff','lvehicule','dateheuredep','dateheuredispprev')
         ->orderBy('CL_heuredateRDV')
          ->get();
@@ -144,6 +144,7 @@
                                                            $datefin=$o['dateheuredispprev'];
 $datedebut= date('d/m/Y,H:i', strtotime($datedebut));
 $datefin= date('d/m/Y,H:i', strtotime($datefin));
+$dateorigine ='01/01/1970,01:00';
                                                           $affecte=$o['affectea'];if($affecte=='externe'){$color2='#0B5345';}else{$color2='#6E2C00';}
                                                          if($type=='taxi'){$chauff=$o['lchauff']; $color='#D4AC0D';$icon='<i class="fas fa-2x fa-taxi"></i>';}
                                                           if($type=='ambulance'){ $chauff=$o['lambulancier1']; $color='#2874A6';$icon='<i class="fas fa-2x fa-ambulance"></i>';}
@@ -164,11 +165,15 @@ $datefin= date('d/m/Y,H:i', strtotime($datefin));
                                                     <div class="row" style= "margin-bottom:5px">
                                                         <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-clock"></i> <?php echo $heure; ?></div>
                                                     </div>
-<?php if($affecte!=='externe'){ ?>
+<?php if($affecte!=='externe' ){ ?>
+<?php if($datedebut !==$dateorigine){ ?>
 <div class="row" style= "margin-bottom:5px">
     <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-calendar-o"></i> <?php echo $datedebut; ?></div></div>
+<?php } ?>
+<?php if($datefin !==$dateorigine){ ?>
 <div class="row" style= "margin-bottom:5px">
   <div   style="background-color:white;color:black;text-align: center;font-size: 20px"><i class="fas fa-calendar-check-o"></i> <?php echo $datefin; ?></div></div>
+<?php } ?>
 <?php } ?>
                                                     <div class="row" style= "margin-bottom:5px">
                                                         <div   style="background-color:black;color:white;text-align: center;font-size: 20px"><a href="#" onclick="modalattach('<?php echo 'OM '.ucwords($type).' '.$ref.' '.$benef;?>','<?php echo URL::asset('storage'.$empsub);?>')"><i class="fas fa-file-alt"></i> Ouvrir </a></div>
