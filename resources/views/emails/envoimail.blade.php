@@ -123,6 +123,7 @@ $(document).ready(function()
                     <div class="row">
                         <?php if($type=='client')
                         {?>
+                        <input type="hidden" id="client" name="client" readonly class="form-control" value="<?php  echo  $refdem ;?> " />
                         <input type="text" readonly class="form-control" value="<?php  echo ClientsController::ClientChampById('name',$refdem) ;?> " />
                         <?php }
                         ?>

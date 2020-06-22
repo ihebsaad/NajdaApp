@@ -5500,6 +5500,7 @@ $id=0;
         $envoyeid = $request->get('envoye');
         $doss = $request->get('dossier');
         $to = $request->get('destinataire');
+        $client = $request->get('client');
         $cc = $request->get('cc');
         $cci = $request->get('cci');
         $sujet = $request->get('sujet');
@@ -5667,7 +5668,7 @@ if ($from=='najdassist@gmail.com')
 
 
     ////    try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails,$description,$from,$fromname ) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails,$description,$from,$fromname,$client ) {
             $message
 
               //  ->to('saadiheb@gmail.com')
@@ -5842,6 +5843,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             //      'destinataire' =>'iheb test',
                 'par'=> $par,
                'sujet'=> $sujet,
+               'client'=> $client,
                'contenu'=> $contenu,
                'description'=> $description,
                'nb_attach'=> $count,
