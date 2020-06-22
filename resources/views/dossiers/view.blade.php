@@ -5095,6 +5095,8 @@ function toggle(className, displayState){
             $("#showNext").click(function() {
 
                 var shownext=false;var infos=false;
+		   document.getElementById('prestation').style.display='block';
+
             // reinitialiser le champs de statut
             /*if(document.getElementById('selectedprest').value ==0) {
                 document.getElementById('statutprest').value ='';
@@ -5113,9 +5115,10 @@ if (            document.getElementById('showNext').firstChild.data !='Commencer
                 var gouvernorat = $('#gouvcouv').val();
                 var specialite = $('#specialite').val();
                 var date = $('#pres_date').val();
+                var statutprest = $('#statutprest').val();
 
                 //   gouvcouv
-                if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
+                if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0) && (statutprest!='')  )
                 {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
@@ -5139,12 +5142,13 @@ if (            document.getElementById('showNext').firstChild.data !='Commencer
 
                     });
                 }else{
-
+					alert('Décrivez la raison pour zipper ce prestataire');
                 }
 
 
 }
-   document.getElementById('showNext').firstChild.data  ='Suivant';
+ if(statutprest!='')
+ { document.getElementById('showNext').firstChild.data  ='Suivant';
 
 
             // si une prestation a èté ajoutée
@@ -5196,7 +5200,7 @@ if (            document.getElementById('showNext').firstChild.data !='Commencer
 
                 var next = parseInt(selected) + 1;
                 document.getElementById('selected').value = next;
-
+/*
                // if ((selected == 0)) {
                     document.getElementById('termine').style.display = 'none';
                     document.getElementById('item1').style.display = 'block';
@@ -5207,7 +5211,7 @@ if (            document.getElementById('showNext').firstChild.data !='Commencer
                     // $("#selected").val('1');
 
                   // }
-
+*/
                 if ((selected) == (total  )) {
 
                     document.getElementById('termine').style.display = 'block';
@@ -5261,7 +5265,7 @@ if (            document.getElementById('showNext').firstChild.data !='Commencer
             }
 
             }
-
+}// prestation !=''
         });
 
 $("#showNext-m").click(function() {
