@@ -3304,7 +3304,9 @@ function remplaceom(id,affectea,verif)
     document.getElementById('claffect1').style.display = 'block';
     document.getElementById('claffect2').style.display = 'block';
 
-    
+    if (verif === "ommie")
+     { document.getElementById('claffect1').style.display = 'none';
+            document.getElementById('claffect2').style.display = 'none';}
         if (affectea !== undefined && affectea !== null && affectea !== '')
         {
             //$("#affectationprest").val(affectea).change();
