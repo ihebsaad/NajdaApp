@@ -643,6 +643,7 @@ Route::post('/documents/canceldoc','DocumentsController@canceldoc')->name('docum
 
 Route::post('/ordremissions/export_pdf_odmtaxi','OrdreMissionsController@export_pdf_odmtaxi')->name('ordremissions.export_pdf_odmtaxi');
 Route::post('/ordremissions/historique','OrdreMissionsController@historique')->name('ordremissions.historique');
+Route::post('/ordremissions/valide','OrdreMissionsController@valide')->name('ordremissions.valide');
 //Route::get('/entrees/sendpdf/{id}', 'EntreesController@sendpdf');
 Route::get('/ordremissions/pdfodmtaxi','OrdreMissionsController@pdfodmtaxi')->name('ordremissions.pdfodmtaxi');
 Route::post('/ordremissions/cancelom','OrdreMissionsController@cancelom')->name('ordremissions.cancelom');
