@@ -1324,6 +1324,7 @@ array_push($listepr,$pr['prestataire_id']);
                         <th style="">OM</th>
                         <!--<th style="">Description</th>-->
                         <th style="">Historique</th>
+                        <th style="">Validation</th>
                         <th style="">Actions</th>
                      </tr>
 
@@ -1344,6 +1345,31 @@ array_push($listepr,$pr['prestataire_id']);
                                 else
                                 {
                                     echo "Aucun";
+                                }
+                            ?>
+                            </td>
+                            <td style=";">
+                            <?php
+
+                                if (Gate::check('isSupervisor')) 
+                                {$id=Auth::user()->id;
+$type=1;
+if ($omtx->statut !="Validé" && $omtx->statut!="Annulé" ) {
+                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnvalid" onclick="valideom('.$omtx->id.','.$id.','.$type.');" ><i class="fas fa-check"></i> Valider</button>';
+                                   
+                               
+                           }
+else {
+echo $omtx->statut;
+}}
+                                else
+                                { if ($omtx->statut =="Validé" || $omtx->statut=="Annulé" ) {
+                                    echo $omtx->statut;}
+else {
+echo "Non Validé";
+
+
+}
                                 }
                             ?>
                             </td>
@@ -1421,6 +1447,31 @@ array_push($listepr,$pr['prestataire_id']);
                                 }
                             ?>
                             </td>
+                            <td style=";">
+                            <?php
+
+                                if (Gate::check('isSupervisor')) 
+                                {$id=Auth::user()->id;
+$type=2;
+if ($omamb->statut !="Validé" && $omamb->statut!="Annulé" ) {
+                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnvalid" onclick="valideom('.$omamb->id.','.$id.','.$type.');" ><i class="fas fa-check"></i> Valider</button>';
+                                   
+                               
+                           }
+else {
+echo $omamb->statut;
+}}
+                                else
+                                { if ($omamb->statut =="Validé" || $omamb->statut=="Annulé" ) {
+                                    echo $omamb->statut;}
+else {
+echo "Non Validé";
+
+
+}
+                                }
+                            ?>
+                            </td>
                             <?php 
                             $emppos=strpos($omamb->emplacement, '/OrdreMissions/');
                             $empsub=substr($omamb->emplacement, $emppos);
@@ -1492,6 +1543,31 @@ array_push($listepr,$pr['prestataire_id']);
                                     }
                                     ?>
                                 </td>
+                                <td style=";">
+                            <?php
+
+                                if (Gate::check('isSupervisor')) 
+                                {$id=Auth::user()->id;
+$type=3;
+if ($omre->statut !="Validé" && $omre->statut!="Annulé" ) {
+                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnvalid" onclick="valideom('.$omre->id.','.$id.','.$type.');" ><i class="fas fa-check"></i> Valider</button>';
+                                   
+                               
+                           }
+else {
+echo $omre->statut;
+}}
+                                else
+                                { if ($omre->statut =="Validé" || $omre->statut=="Annulé" ) {
+                                    echo $omre->statut;}
+else {
+echo "Non Validé";
+
+
+}
+                                }
+                            ?>
+                            </td>
                                 <?php
                                 $emppos=strpos($omre->emplacement, '/OrdreMissions/');
                                 $empsub=substr($omre->emplacement, $emppos);
@@ -6375,7 +6451,21 @@ $(document).ready(function(){
 
   });
 
-
+function valideom(idom,idsuperviseur,type){
+        //$("#gendocfromhtml").submit();
+        var _token = $('input[name="_token"]').val();
+alert(idom);
+alert(idsuperviseur);
+alert(type);
+        $.ajax({
+                url:"{{ route('ordremissions.valide') }}",
+                method:"POST",
+                //'&_token='+_token
+                data:'_token='+_token+'&idom='+idom+'&idsuperviseur='+idsuperviseur+'&type='+type,
+                success:function(data){
+                                     location.reload();  }
+ });
+                                     }
 
   </script>
 
