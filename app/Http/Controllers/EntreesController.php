@@ -51,12 +51,30 @@ class EntreesController extends Controller
 
         User::where('id', $iduser)->update(array('statut'=>'1'));
 
-        $entrees = Entree::orderBy('reception', 'desc')->where('statut','<','2')->paginate(500);
+        $entrees = Entree::orderBy('reception', 'desc')->where('statut','<','2')->where('destinataire','<>','finances@najda-assistance.com')->paginate(500);
       //  $dossiers = Dossier::all();
 
         return view('entrees.index', compact('entrees'));
 
     }
+
+    public function finances()
+    {
+        $user = auth()->user();
+        $iduser=$user->id;
+        $user_type=$user->user_type;
+
+        User::where('id', $iduser)->update(array('statut'=>'1'));
+        if( $user_type =='bureau' ||  $user_type =='financier' )
+        {$entrees = Entree::orderBy('reception', 'desc')->where('destinataire',  'finances@najda-assistance.com')->paginate(500);}
+        else{
+         $entrees = Entree::orderBy('reception', 'desc')->where('statut','<','2')->where('destinataire','<>','finances@najda-assistance.com')->paginate(50);
+
+        }
+        return view('entrees.index', compact('entrees'));
+
+    }
+
 
     public function enregistrements()
     {
@@ -76,6 +94,7 @@ class EntreesController extends Controller
 
         $entrees = Entree::orderBy('reception', 'desc')
             ->where('statut','<','2')
+            ->where('destinataire','<>','finances@najda-assistance.com')
             ->where('dossier','=','')
             ->paginate(10000000);
 
@@ -90,7 +109,9 @@ class EntreesController extends Controller
     {
        // Log::info('Accès à la boite des entrées - utilisateur: Mounir Tounsi');
 
-        $entrees = Entree::orderBy('created_at', 'desc')->where('statut','<','2')->paginate(10);
+        $entrees = Entree::orderBy('created_at', 'desc')
+            ->where('destinataire','<>','finances@najda-assistance.com')
+            ->where('statut','<','2')->paginate(10);
         $dossiers = Dossier::all();
 
         return view('entrees.boite',['dossiers' => $dossiers], compact('entrees'));
@@ -102,7 +123,9 @@ class EntreesController extends Controller
     {
         // Log::info('Accès à la boite des entrées - utilisateur: Mounir Tounsi');
 
-        $entrees = Entree::orderBy('created_at', 'desc')->where('statut','=','3')->paginate(10);
+        $entrees = Entree::orderBy('created_at', 'desc')
+            ->where('destinataire','<>','finances@najda-assistance.com')
+            ->where('statut','=','3')->paginate(10);
         $dossiers = Dossier::all();
 
         return view('entrees.archive',['dossiers' => $dossiers], compact('entrees'));

@@ -4583,7 +4583,6 @@ function toggle(className, displayState){
             selected=   document.getElementById('selected').value;
             document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
 
-
             var prestataire = $('#selectedprest').val();
             var dossier_id = $('#dossier').val();
 
@@ -4604,8 +4603,8 @@ function toggle(className, displayState){
            var prestation=parseInt(data);
                /// window.location =data;
 
-               //     document.getElementById('prestation').style.display='block';
-              //      document.getElementById('valide').style.display='block';
+                    document.getElementById('prestation').style.display='block';
+                   document.getElementById('valide').style.display='block';
                     document.getElementById('idprestation').value =prestation;
 
                 },
@@ -5086,17 +5085,40 @@ function toggle(className, displayState){
     document.getElementById('detailsprest').style.display='none';
 
 }
-        });
+ $('#showNext').prop('disabled', false);
+
+ });
 
                      $("#showNext").click(function() {
 
                 ///// Enregistrement prestation
  if(            document.getElementById('showNext').firstChild.data =='Commencer' )
-){
-	 document.getElementById('selected').value=1;
- }
+{
+	 document.getElementById('selected').value=1; var selected=1; next=selected+1;
+   document.getElementById('selectedprest').value = document.getElementById('prestataire_id_1').value ;
+$('#showNext').prop('disabled', true);
+
+
+ document.getElementById('add2').style.display = 'block';
+                        document.getElementById('valide').style.display = 'block';
+                        document.getElementById('add2prest').style.display='block';
+                        document.getElementById('termine').style.display = 'none';
+                        document.getElementById('item1').style.display = 'block';
+                     //   document.getElementById('item'+String(selected)).style.display = 'none';
+                     //   document.getElementById('item'+String(next)).style.display = 'block';
+
+
+            //            $("#selected").val(next);
+
+ document.getElementById('showNext').firstChild.data ='Suivant';
+  }
+  else{
+	            ///////    $("#selected").val(selected+1);
+
+/*
                 selected=  parseInt(document.getElementById('selected').value);
-                if(selected >0) {
+				alert(selected) ;
+                if(selected >1 ) {
                 document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
 
 
@@ -5136,7 +5158,7 @@ function toggle(className, displayState){
                 }
 
     }
- 
+ */
 
 
                 document.getElementById('showNext').firstChild.data  ='Suivant';
@@ -5147,13 +5169,21 @@ function toggle(className, displayState){
                 document.getElementById('statutprest').value ='';
             document.getElementById('detailsprest').value ='';}*/
 
+			
+			
+			
+ 	/*****
             // si une prestation a èté ajoutée
             if(document.getElementById('idprestation').value >0) {
                 if ((document.getElementById('statutprest').value == 'autre') && (document.getElementById('detailsprest').value != '')) {
-                    shownext=true;infos=true
+                    shownext=true;infos=true;
+					$('#showNext').prop('disabled', false);
+
                 }
                 if ((document.getElementById('statutprest').value == 'nonjoignable') || (document.getElementById('statutprest').value == 'nondisponible')) {
-                    shownext=true;infos=true
+                    shownext=true;infos=true;
+					$('#showNext').prop('disabled', false);
+
                 }
             }
             else{shownext=true;}
@@ -5187,6 +5217,8 @@ function toggle(className, displayState){
                       }
 
             }
+			
+			****/
                 document.getElementById('selectedprest').value = 0;
                 document.getElementById('detailsprest').value='';
 
@@ -5251,7 +5283,7 @@ function toggle(className, displayState){
                       document.getElementById('statutprest').selectedIndex =0;
 
                   }
-            }
+    /*        }
             else{
                 if(document.getElementById('selectedprest').selectedIndex  >0) {
                   Swal.fire({
@@ -5264,7 +5296,15 @@ function toggle(className, displayState){
             }
 
             }
-
+*/
+			
+			
+			
+			
+	  }		
+			
+			
+			
         });
 
 $("#showNext-m").click(function() {

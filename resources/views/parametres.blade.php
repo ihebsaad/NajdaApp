@@ -38,6 +38,7 @@
     $signature7=$parametres->signature7 ;
     $signature8=$parametres->signature8 ;
     $signature9=$parametres->signature9 ;
+    $signature10=$parametres->signature10 ;
     $accuse1=$parametres->accuse1 ;
     $accuse2=$parametres->accuse2 ;
     $dollar_achat=$parametres->dollar_achat ;
@@ -55,6 +56,7 @@
     $pass_TPA=$parametres->pass_TPA ;
     $pass_XP=$parametres->pass_XP ;
     $pass_MI=$parametres->pass_MI ;
+    $pass_Finances=$parametres->pass_Finances ;
 
 
 
@@ -352,6 +354,12 @@
                                      </td>
                                  </tr>
                                  <tr>
+                                     <td style="width:35%" class="text-primary">Signature Finances</td>
+                                     <td style="width:65%">
+                                         <textarea  class="form-control" onchange="changing(this)" id="signature10" style="width:520px;height:100px"><?php echo $signature10; ?></textarea>
+                                     </td>
+                                 </tr>
+                                 <tr>
                                      <td class="text-primary">Mot de Passe boite Fax <small>najdassist@gmail.com</small></td>
                                      <td>
                                          <input  type="text" class="form-control" onchange="changing(this)" id="pass_Fax" style="width:300px" value="<?php echo $pass_Fax; ?>"  />
@@ -412,7 +420,12 @@
                                                <input  type="text" class="form-control" onchange="changing(this)" id="pass_MI" style="width:300px" value="<?php echo $pass_MI; ?>"  />
                                            </td>
                                        </tr>
-
+                                 <tr>
+                                     <td class="text-primary">Mot de Passe boite Finances <small>finances@najda-assistance.com</small></td>
+                                     <td>
+                                         <input  type="text" class="form-control" onchange="changing(this)" id="pass_Finances" style="width:300px" value="<?php echo $pass_Finances; ?>"  />
+                                     </td>
+                                 </tr>
                                        <tr>
                                            <td class="text-primary">Mail Semi Auto - Création de dossier (Fr)</td>
                                            <td>

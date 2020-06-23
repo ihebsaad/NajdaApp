@@ -756,6 +756,309 @@ function convertir_document_entrant_en_pdf($type,$nom,$id)
 
     } /// end check
 
+
+    function checkfinances()
+    {
+        $parametres =  DB::table('parametres')
+            ->where('id','=', 1 )->first();
+        $pass_Finances=$parametres->pass_Finances ;
+
+        $oClient = new Client([
+            'host'          => 'ssl0.ovh.net',// env('hostreception'),
+            'port'          => '993',// env('portreception'),
+            //    'encryption'    => '',//env('encreception'),
+            'validate_cert' => true,
+            'username'      =>'finances@najda-assistance.com',
+            'password'      => $pass_Finances,
+            'protocol'      => 'imap'
+        ]);
+
+//Connect to the IMAP Server
+        $oClient->connect();
+        $id=0;
+        //Get all Messages of the current Mailbox $oFolder
+        /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
+        $oFolder = $oClient->getFolder('INBOX');
+        $aMessage = $oFolder->messages()->all()->get();
+        /** @var \Webklex\IMAP\Message $oMessage */
+        foreach ($aMessage as $oMessage) {
+            //  $nbattachs=10;
+
+            if($oMessage->getSubject()!=''){
+                $sujet=strval( imap_utf8 ($oMessage->getSubject()))  ;
+            }else{$sujet='aucun objet';}
+            $sujet2= $oMessage->getSubject()  ;
+
+            if(Common::SstartsWith($sujet,"=?utf") || Common::SstartsWith($sujet,"=?windows") ||Common::SstartsWith($sujet,"=?UTF") || Common::SstartsWith($sujet,"=?WIND")   ) {
+                $sujet=iconv('UTF-8', 'ISO-8859-1//IGNORE', $sujet);
+                $sujet=  iconv_mime_decode( nl2br(strval(utf8_encode($sujet)) )  );
+            }
+
+            $nbattachs= intval($oMessage->getAttachments()->count()) ;
+            $contenu= ($oMessage->getHTMLBody(true));
+            $contenubrut= DB::connection()->getPdo()->quote(utf8_encode(($oMessage->getTextBody())));
+            //  $from= $oMessage->getFrom()[0]->mail;
+            $from= $oMessage->getSender()[0]->mail;
+            $date= $oMessage->getDate();
+            $mailid=$oMessage->getUid();
+
+            //Move the current Message to 'INBOX.read'
+            if ($oMessage->moveToFolder('read') == true) {
+
+
+                // dispatch
+                ///  $dossiers = DB::table('dossiers')->pluck('reference_medic');
+
+                $dossiers=   Dossier::where('current_status','!=', 'Cloture' )->get();
+
+
+                $refdossier='';$dossierid=0;$nomassure='';
+                $statut = 0;
+                foreach ($dossiers as $dos) {
+                    $ref=trim(strval($dos['reference_medic']));
+                    $refCL=trim(strval($dos['reference_customer']));
+                    if ($refCL==''){$refCL='XX';}
+                    if ($ref==''){$ref='dossiervide';}
+
+                    if (   (strpos($sujet, $ref )!==false) ||
+                        (strpos($contenu, $ref) !==false ) ||
+                        (strpos($sujet, $refCL )!==false && ( strlen($refCL) >4 )  )  ||
+                        ( strpos($contenu, $refCL )!==false &&  ( strlen($refCL) >4   ) )   )
+                    {
+                        $refdossier = trim($dos['reference_medic']);
+                        $dossierid = intval($dos['id']);
+                        $nomassure = $dos['subscriber_name'].' '.$dos['subscriber_lastname'];
+                        $statut = 1;
+                        break;
+                    }
+                }
+
+                $entree = new Entree([
+                    'destinataire' => 'finances@najda-assistance.com',
+                    'emetteur' => ($from),
+                    'sujet' =>  ($sujet),
+                    'contenutxt'=> $contenubrut ,
+                    'contenu'=> ($contenu) ,
+                    'reception'=> $date,
+                    'nb_attach'=> $nbattachs,
+                    'type'=> 'email',
+                    'mailid'=> 'F-'.$mailid,
+                    'viewed'=>0,
+                    'dossier'=>$refdossier,
+                    'dossierid'=>$dossierid,
+                    'statut'=>$statut,
+
+                ]);
+
+
+                if ($this->checkEmailExiste( $mailid)==0){
+                    $entree->save();
+                    $id=$entree->id;
+                    Log::info('Email reçu de : '.$from.' Dossier: '.$refdossier);
+                }
+                /*********************/
+  /*              if($refdossier!= ''){
+
+                    // $iddossier = app('App\Http\Controllers\DossiersController')->IdDossierByRef($refdossier);
+                    //   $userid = app('App\Http\Controllers\DossiersController')->ChampById('affecte', $dossierid);
+                    $userid=$this->AgentAffecte($dossierid);
+
+                    //  $user=  DB::table('users')->where('id','=', $userid )->first();
+                    if($userid>0){
+                        //  $user = User::find($userid);
+                        // $user->notify(new Notif_Suivi_Doss($entree));
+                        ////    Notification2::send(User::where('id',$userid)->first(), new Notif_Suivi_Doss($entree));
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $userid
+
+                            ]);
+                            $notif->save();
+                        }
+
+
+
+                    }
+                    else{
+                        $seance =  DB::table('seance')
+                            ->where('id','=', 1 )->first();
+                        $disp=$seance->dispatcheur ;
+
+                        ////    Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
+
+                    }
+
+                    // Activer le dossier
+                    //    Dossier::where('id',$dossierid)->update(array('current_status'=>'actif'));
+
+                    // Notification::send($user, new Notif_Suivi_Doss($entree));
+
+                }
+                else{
+
+                    $seance =  DB::table('seance')
+                        ->where('id','=', 1 )->first();
+                    $disp=$seance->dispatcheur ;
+
+                    // $user = User::find($disp);
+                    // $user=  DB::table('users')->where('id','=', $disp )->first();
+                    if($disp>0){
+
+                        // $user->notify(new Notif_Suivi_Doss($entree));
+                        ////   Notification2::send(User::where('id',$disp)->first(), new Notif_Suivi_Doss($entree));
+
+
+                        if($id>0) {
+                            $notif = new Notif([
+                                'emetteur' => ($from),
+                                'sujet' => ($sujet),
+                                'reception' => $date,
+                                'type' => 'email',
+                                'refdossier' => $refdossier,
+                                'affiche' => -1, // traitée ou non
+                                'dossierid' => $dossierid,
+                                'nomassure' => $nomassure,
+                                'statut' => $statut,  //dispatchée ou non
+                                'entree' => $entree->id,
+                                'user' => $disp
+
+                            ]);
+                            $notif->save();
+                        }
+
+
+                    }
+
+                    //  Notification::send( $user, new Notif_Suivi_Doss($entree));
+
+                }
+*/
+
+                //   auth2::user()->notify(new Notif_Suivi_Doss($entree));
+
+
+                $aAttachment = $oMessage->getAttachments();
+
+                $aAttachment->each(function ($oAttachment) use ($id,$date){
+                    $path= storage_path()."/Emails/";
+                    /** @var \Webklex\IMAP\Attachment $oAttachment */
+                    if (!file_exists($path.$id)) {
+                        mkdir($path.$id, 0777, true);
+                    }
+                    // save in folder
+                    $oAttachment->save($path.$id);
+                    // save in DB
+
+                    $nom = $oAttachment->getName();
+                    $facturation='';
+                    $type=  $oAttachment->getExtension();
+
+                    //convertir un document nom pdf et non image en pdf et l'enregister
+                    $this->convertir_document_entrant_en_pdf($type,$nom,$id);
+
+
+                    // verifier si l'attachement pdf contient des mots de facturation
+                  /*  if ( App::environment() === 'production') {
+
+                        if ($type=='pdf')
+                        {
+                            $path=$path.$id."/".$nom;
+                            $path=realpath($path);
+                            $text = (new Pdf())
+                                ->setPdf($path )
+                                ->text();
+
+                            if(strpos($text,'facturation')!==false)
+                            {
+                                $facturation='facturation';
+                            }
+                            if(strpos($text,'invoice')!==false)
+                            {
+                                $facturation=$facturation.' , '.'invoice';
+                            }
+
+                            if(strpos($text,'plafond')!==false)
+                            {
+                                $facturation=$facturation.' , '.'plafond';
+                            }
+
+                            if(strpos($text,'gop')!==false)
+                            {
+                                $facturation=$facturation.' , '.'gop';
+                            }
+
+
+                        } // end if pdf
+                    } // end if  production
+*/
+
+                    $path2= '/Emails/'.$id.'/'.$nom ;
+
+                    $attach = new Attachement([
+                        'nom' => $nom,
+                        'type' => $type,
+                        'path'=> $path2,
+                        'parent'=> $id,
+                        'entree_id'=> $id,
+                        'facturation'=> $facturation,
+                        'boite'=> 10,  // 0 = reception, 1 = envoi  // 10 finances
+
+                    ]);
+
+                    $attach->save();
+
+                });
+
+
+
+
+
+            } else {
+                // error
+                echo 'error';
+            }
+
+
+        }
+        return $id;
+        // return view('emails.check');
+
+    } /// end check
+
+
+
+
+
+
     // boite Najda
     function checkboite1()
     {
@@ -5532,16 +5835,16 @@ $id=0;
         $fromname="";$signatureentite='';
         $parametres =  DB::table('parametres')
             ->where('id','=', 1 )->first();
-        /*
-if ($from=='faxnajdassist@najda-assistance.com')
-{
-    $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
-    $swiftTransport->setUsername('faxnajdassist@najda-assistance.com');
-   // $swiftTransport->setUsername('test@najda-assistance.com');
-    $swiftTransport->setPassword('e-solutions2019');
-   // $swiftTransport->setPassword('esol@2109');
 
-}*/
+if ($from=='finances@najda-assistance.com')
+{     $pass_Finances=$parametres->pass_Finances ;
+    $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+    $swiftTransport->setUsername('finances@najda-assistance.com');
+      $swiftTransport->setPassword($pass_Finances);
+    $fromname="Najda Finances";
+    $signatureentite= $parametres->signature10 ;
+
+}
 
 
 if ($from=='najdassist@gmail.com')

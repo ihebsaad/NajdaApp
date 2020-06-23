@@ -104,6 +104,7 @@ Route::get('/getNotificationDeleguerAct/{userConnect}', 'DeleguerActionControlle
 /* tous les emails (tous les entrees) dans la base */
 Route::get('/entrees/boite', array('as' => 'boite','uses' => 'EntreesController@boite'));
 Route::get('/entrees/',  'EntreesController@index')->name('entrees.index');
+Route::get('/entrees/finances',  'EntreesController@finances')->name('entrees.finances');
 Route::post('/entrees/saving','EntreesController@saving')->name('entrees.saving');
 Route::get('/entrees/dispatching','EntreesController@dispatching')->name('entrees.dispatching');
 Route::get('/entrees/enregistrements','EntreesController@enregistrements')->name('entrees.enregistrements');
@@ -152,6 +153,7 @@ Route::get('/emails', 'EmailController@index');
 Route::get('/emails/inbox', 'EmailController@inbox');
 /* mark as readed and save to database */
 Route::get('/emails/check', 'EmailController@check');
+Route::get('/emails/checkfinances', 'EmailController@checkfinances');
 Route::get('/emails/checkboite1', 'EmailController@checkboite1');
 Route::get('/emails/checkboite2', 'EmailController@checkboite2');
 Route::get('/emails/checkboite3', 'EmailController@checkboite3');

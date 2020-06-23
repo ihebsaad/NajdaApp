@@ -150,7 +150,7 @@
           </a> 
         </div>-->
 
-        <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
+        <div class="col-sm-2 col-md-2 col-lg-2" style="padding-top:10px;">
 		 <?php
         $seance =  DB::table('seance')
             ->where('id','=', 1 )->first();
@@ -165,8 +165,13 @@
 		<?php } else {?>
           <a href="{{ route('entrees.index') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
               <span class="fa fa-fw fa-envelope fa-2x"></span>
-          </a> 
-	 <?php }  ?>
+          </a>
+
+             <a href="{{ route('entrees.finances') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte Finances" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;margin-left:10px">
+                 <span class="fa fa-fw fa-dollar fa-2x"></span>
+             </a>
+
+         <?php }  ?>
 
         </div>
         <div class="col-sm-1 col-md-1 col-lg-1">

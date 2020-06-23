@@ -122,7 +122,12 @@ $(document).ready(function()
                 if($typea=='TRANSPORT NAJDA'){$from='taxi@najda-assistance.com';}
                 if($typea=='X-PRESS'){$from='x-press@najda-assistance.com';}
 
-
+                $user = auth()->user();
+                $user_type=$user->user_type;
+                if( $user_type =='bureau' ||  $user_type =='financier' )
+                {
+                    $from='finances@najda-assistance.com';
+                }
                 ?>
                 <input type="hidden"   name="from" id="from" value="<?php echo $from; ?>" />
 
