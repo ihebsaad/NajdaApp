@@ -6054,8 +6054,7 @@ if ($from=='najdassist@gmail.com')
 
                   }
 
-
-
+ 
            // save external files here
 
 
@@ -6064,14 +6063,16 @@ if ($from=='najdassist@gmail.com')
 
                 $counta= Attachement::where('filesize',$filesize)->where('nom',$file->getClientOriginalName() )->count();
 
+//if ($from=='finances@najda-assistance.com')
 
                     if($counta==0){
+				 if ($from!='finances@najda-assistance.com'){
                  $attachement = new Attachement([
 
                     'type'=>$file->getClientOriginalExtension(),'path' => '/Envoyes/'.$envoyeid.'/'.$file->getClientOriginalName(), 'nom' => $file->getClientOriginalName(),'boite'=>1,'dossier'=>$doss,'envoye_id'=>$envoyeid,'parent'=>$envoyeid,'user'=>Auth::id(),'filesize'=>$filesize
                  ]);
                  $attachement->save();
-
+					}
                     }
 
                  $name=basename($fullpath);
@@ -6114,13 +6115,13 @@ if ($from=='najdassist@gmail.com')
 
                 if($counta2==0)
                 {
-                // DB::table('attachements')->insert([
+				 if ($from!='finances@najda-assistance.com'){
                    $attachement = new Attachement([
 
                        'type'=>$ext,'path' => $path, 'nom' => $name,'boite'=>1,'dossier'=>$doss,'parent'=>$envoyeid,'envoye_id'=>$envoyeid,'user'=>Auth::id(),'filesize'=>$filesize
                ]);
                     $attachement->save();
-
+				 }
                 }
 
             }
@@ -6168,7 +6169,11 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
   $param= App\Parametre::find(1);$env=$param->env;
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         $urlsending=$urlapp.'/envoyes';
-        if($envoyeid>0){ $this->export_pdf_send($envoyeid,$from,$fromname,$to,$contenu,$files,$attachs);}
+        if($envoyeid>0){
+		  if ($from!='finances@najda-assistance.com'){
+		$this->export_pdf_send($envoyeid,$from,$fromname,$to,$contenu,$files,$attachs);
+		  }
+		}
         else{
 
             Log::info('PB Attachement Envoi mail ');

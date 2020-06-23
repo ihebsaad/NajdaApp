@@ -1027,7 +1027,8 @@ if (isset($dossier))
 
         <?php  if (($view_name != 'supervision') && ($view_name != 'affectation') && ($view_name != 'notifs') && ($view_name != 'missions') && ($view_name != 'transport') && ($view_name != 'transportsemaine') && ($view_name != 'dossiers-create') && ($view_name != 'entrees-dispatching') && ($view_name != 'entrees-showdisp') ) { ?>
         <?php // if($iduser == $seance->dispatcheur)
-        //{  ?>
+			 if( $user_type!='financier' && $user_type!='bureau')
+			 { ?>
         // count notif dispatcheur
         console.log('count notif dispatcheur: ');
         $.ajax({
@@ -1048,7 +1049,7 @@ if (isset($dossier))
             }
         });
 
-        <?php  // }
+        <?php    }
 
           if ( ($iduser==$seance->superviseurmedic) || ($iduser== $seance->superviseurtech) ) {
           // count notif superviseur

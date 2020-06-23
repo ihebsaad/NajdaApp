@@ -66,7 +66,8 @@
 
 
 <?php
-$urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
+$param= App\Parametre::find(1);$env=$param->env;
+$urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 $urlnotif=$urlapp.'/entrees/show/' ;
 //$urlnotif = preg_replace('/\s+/', '', $urlnotif);
 
@@ -179,6 +180,22 @@ $urlnotif=$urlapp.'/entrees/show/' ;
             });
 
 
+        }
+
+        function checkfinances(){
+            $.ajax({
+                type: "get",
+                url: "<?php echo $urlapp; ?>/emails/checkfinances",
+                success:function(data)
+                {
+                    //console.log the response
+                    console.log('check boite 1 : '+data);
+                    //Send another request in n seconds.
+                    setTimeout(function(){
+                        checkemails1();
+                    }, 50000);  //50 secds
+                }
+            });
         }
 
         function checksms(){
@@ -644,6 +661,7 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
         checkNotifs();
           checkemails();	//test
+          checkfinances();	//Finances
      /*   checkemails1();  // 24ops
         checkemails2();  // VAT
         checkemails3(); //MEDIC

@@ -5,6 +5,7 @@
     $seance =  DB::table('seance')
         ->where('id','=', 1 )->first();
     $user = auth()->user();
+    $user_type = $user->user_type;
     $iduser=$user->id;
 
      User::where('id', $iduser)->update(array('statut'=>'1'));
@@ -203,10 +204,16 @@
             }
           ?>
           <div class="col-sm-1 col-md-1 col-lg-1" style="padding-top:10px;">
-
+           <?php  if( $user_type=='financier' || $user_type=='bureau') {  ?>
+              <a href="{{ route('entrees.finances') }}" class="btn btn-danger btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte Finances" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;margin-left:10px">
+                  <span class="fa fa-fw fa-dollar fa-2x"></span>
+              </a>
+               <?php    }  else{   ?>
           <a href="{{ route('entrees.dispatching') }}" class="btn <?php echo $color; ?> btn-lg btn-responsive boite" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Boîte d'emails" style="margin-bottom: 28px!important;padding-top: 15px;padding-bottom: 15px;">
               <span class="  fa-fw fas <?php echo $icon ; ?> fa-2x"></span><?php  if($count > 0 ){ ?><span id="countnotific" class="label label-warning" style="color:black"><?php echo $count;?></span><?php } else{ ?><span id="countnotific" class="label " style="color:black"><?php echo $count;?></span> <?php } ?>
           </a>
+
+               <?php    }    ?>
           </div>
 
 
