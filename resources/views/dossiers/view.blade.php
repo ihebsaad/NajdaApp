@@ -6454,9 +6454,7 @@ $(document).ready(function(){
 function valideom(idom,idsuperviseur,type){
         //$("#gendocfromhtml").submit();
         var _token = $('input[name="_token"]').val();
-alert(idom);
-alert(idsuperviseur);
-alert(type);
+
         $.ajax({
                 url:"{{ route('ordremissions.valide') }}",
                 method:"POST",
