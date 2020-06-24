@@ -1502,7 +1502,7 @@ class DossiersController extends Controller
             ->get();
 
         $envoyes =   Envoye::where('dossier', $ref)
-            ->where('destinataire','<>','finances@najda-assistance.com')
+            ->where('emetteur','<>','finances@najda-assistance.com')
             ->get();
 
         $entrees1 =   Entree::where('dossier', $ref)
@@ -1510,7 +1510,7 @@ class DossiersController extends Controller
             ->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire')->orderBy('reception', 'asc')->get();
         ///  $entrees1 =$entrees1->sortBy('reception');
         $envoyes1 =   Envoye::where('dossier', $ref)
-            ->where('destinataire','<>','finances@najda-assistance.com')
+            ->where('emetteur','<>','finances@najda-assistance.com')
             ->select('id','type' ,'reception','sujet','emetteur','boite','nb_attach','commentaire','description','par')->orderBy('reception', 'asc')->get();
         ///  $envoyes1 =$envoyes1->sortBy('reception');
 

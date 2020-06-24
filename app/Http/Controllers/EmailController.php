@@ -6063,7 +6063,6 @@ if ($from=='najdassist@gmail.com')
 
                 $counta= Attachement::where('filesize',$filesize)->where('nom',$file->getClientOriginalName() )->count();
 
-//if ($from=='finances@najda-assistance.com')
 
                     if($counta==0){
 				 if ($from!='finances@najda-assistance.com'){
@@ -6138,14 +6137,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
                 //   $envoye
            Envoye::where('id', $envoyeid)->update(array(
-            //   $champ => $val
-           //));
-
-                //  $envoye = new Envoye([
+ 
                'emetteur' => $from, //env('emailenvoi')
                   'destinataire' => $tos,
-            //      'destinataire' =>'iheb test',
-                'par'=> $par,
+                 'par'=> $par,
                'sujet'=> $sujet,
                'client'=> $client,
                'contenu'=> $contenu,
@@ -6156,15 +6151,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                'statut'=> 1,
                'type'=> 'email',
                'dossier'=> $dossier
-              // 'reception'=> date('d/m/Y H:i:s'),
-
+ 
            ));
 
-          // $envoye->save();
-           //$id=$envoye->id;
-
-        ////     echo ('<script> window.location.href = "'.$urlsending.'/view/'.$envoyeid.'";</script>') ;
-
+          
      });
   $param= App\Parametre::find(1);$env=$param->env;
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
