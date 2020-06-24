@@ -743,7 +743,7 @@ function custom_echo($x, $length)
                                    <div class="col-md-4">
                                        <button style="display:none;margin-botom:10px" type="button" id="valide" class="btn btn-lg btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
                                    </div>
-                                     <div class="col-md-4">
+                                     <div class="col-md-4"  style="display:none;"  id="validation" >
                                          <label>ou bien Prestation non effectuée ? Raison:</label>
 
                                          <select class="form-control" id="statutprest" >
@@ -1350,7 +1350,7 @@ array_push($listepr,$pr['prestataire_id']);
                             </td>
                             <td style=";">
                             <?php
-
+if($omtx->affectea!='externe') {
                                 if (Gate::check('isSupervisor')) 
                                 {$id=Auth::user()->id;
 $types=1;
@@ -1370,7 +1370,12 @@ echo "Non Validé";
 
 
 }
-                                }
+                                }}
+else {
+echo "";
+
+
+}
                             ?>
                             </td>
                             <?php 
@@ -1449,7 +1454,7 @@ echo "Non Validé";
                             </td>
                             <td style=";">
                             <?php
-
+if($omamb->affectea!='externe') {
                                 if (Gate::check('isSupervisor')) 
                                 {$id=Auth::user()->id;
 $types=2;
@@ -1469,7 +1474,12 @@ echo "Non Validé";
 
 
 }
-                                }
+                                } }
+else {
+echo "";
+
+
+}
                             ?>
                             </td>
                             <?php 
@@ -1545,7 +1555,7 @@ echo "Non Validé";
                                 </td>
                                 <td style=";">
                             <?php
-
+if($omre->affectea!='externe') {
                                 if (Gate::check('isSupervisor')) 
                                 {$id=Auth::user()->id;
 $types=3;
@@ -1565,7 +1575,9 @@ echo "Non Validé";
 
 
 }
-                                }
+                                } }
+else
+{echo "";}
                             ?>
                             </td>
                                 <?php
@@ -1636,6 +1648,11 @@ echo "Non Validé";
                                     {
                                         echo "Aucun";
                                     }
+                                    ?>
+                                </td>
+<td style=";">
+                                    <?php
+echo "";
                                     ?>
                                 </td>
                                 <?php
@@ -4681,6 +4698,7 @@ function toggle(className, displayState){
 
                     document.getElementById('prestation').style.display='block';
                    document.getElementById('valide').style.display='block';
+                   document.getElementById('validation').style.display='block';
                     document.getElementById('idprestation').value =prestation;
 
                 },
@@ -4939,6 +4957,7 @@ function toggle(className, displayState){
             document.getElementById('prestation').style.display='none';
             document.getElementById('add2').style.display='none';
             document.getElementById('valide').style.display='none';
+            document.getElementById('validation').style.display='none';
             document.getElementById('add2prest').style.display='none';
             document.getElementById('selectedprest').value=0;
 
@@ -5132,6 +5151,7 @@ function toggle(className, displayState){
             document.getElementById('termine').style.display = 'none';
             document.getElementById('add2').style.display = 'block';
             document.getElementById('valide').style.display = 'block';
+            document.getElementById('validation').style.display = 'block';
             document.getElementById('add2prest').style.display='block';
             document.getElementById('showNext').style.display = 'block';
             //document.getElementById('showNext').firstChild.data   = 'Commencer';
@@ -5177,6 +5197,7 @@ $('#showNext').prop('disabled', true);
 
  document.getElementById('add2').style.display = 'block';
                         document.getElementById('valide').style.display = 'block';
+                        document.getElementById('validation').style.display = 'block';
                         document.getElementById('add2prest').style.display='block';
                         document.getElementById('termine').style.display = 'none';
                         document.getElementById('item1').style.display = 'block';
@@ -5184,7 +5205,7 @@ $('#showNext').prop('disabled', true);
                      //   document.getElementById('item'+String(next)).style.display = 'block';
 
 
-            //            $("#selected").val(next);
+                 //      $("#selected").val(next);
 
  document.getElementById('showNext').firstChild.data ='Suivant';
   }
@@ -5197,7 +5218,7 @@ $('#showNext').prop('disabled', true);
                 if(selected >1 ) {
                 document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
 
-
+/*
                 var prestataire = $('#selectedprest').val();
                 var dossier_id = $('#dossier').val();
 
@@ -5304,12 +5325,14 @@ $('#showNext').prop('disabled', true);
 
                 var next = parseInt(selected) + 1;
                 document.getElementById('selected').value = next;
+                document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
 
                 if ((selected == 0)) {
                     document.getElementById('termine').style.display = 'none';
                     document.getElementById('item1').style.display = 'block';
                     document.getElementById('add2').style.display = 'block';
                     document.getElementById('valide').style.display = 'block';
+                    document.getElementById('validation').style.display = 'block';
                     document.getElementById('add2prest').style.display='block';
 
                     //document.getElementById('selected').value=1;
@@ -5325,6 +5348,7 @@ $('#showNext').prop('disabled', true);
                     document.getElementById('showNext').style.display = 'none';
                     document.getElementById('add2').style.display = 'none';
                     document.getElementById('valide').style.display = 'none';
+                    document.getElementById('validation').style.display = 'none';
                     document.getElementById('add2prest').style.display='none';
 
 
@@ -5333,6 +5357,7 @@ $('#showNext').prop('disabled', true);
                     if ((selected != 0) && (selected <= total + 1)) {
                         document.getElementById('add2').style.display = 'block';
                         document.getElementById('valide').style.display = 'block';
+                        document.getElementById('validation').style.display = 'block';
                         document.getElementById('add2prest').style.display='block';
                         document.getElementById('termine').style.display = 'none';
                         document.getElementById('item'+String(selected)).style.display = 'none';
@@ -5374,9 +5399,7 @@ $('#showNext').prop('disabled', true);
             }
 */
 			
-			
-			
-			
+			  
 	  }		
 			
 			
