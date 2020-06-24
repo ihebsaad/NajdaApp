@@ -1353,9 +1353,9 @@ array_push($listepr,$pr['prestataire_id']);
 
                                 if (Gate::check('isSupervisor')) 
                                 {$id=Auth::user()->id;
-$type=1;
+$types=1;
 if ($omtx->statut !="Validé" && $omtx->statut!="Annulé" ) {
-                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnvalid" onclick="valideom('.$omtx->id.','.$id.','.$type.');" ><i class="fas fa-check"></i> Valider</button>';
+                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnvalid" onclick="valideom('.$omtx->id.','.$id.','.$types.');" ><i class="fas fa-check"></i> Valider</button>';
                                    
                                
                            }
@@ -1452,9 +1452,9 @@ echo "Non Validé";
 
                                 if (Gate::check('isSupervisor')) 
                                 {$id=Auth::user()->id;
-$type=2;
+$types=2;
 if ($omamb->statut !="Validé" && $omamb->statut!="Annulé" ) {
-                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnvalid" onclick="valideom('.$omamb->id.','.$id.','.$type.');" ><i class="fas fa-check"></i> Valider</button>';
+                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnvalid" onclick="valideom('.$omamb->id.','.$id.','.$types.');" ><i class="fas fa-check"></i> Valider</button>';
                                    
                                
                            }
@@ -1548,9 +1548,9 @@ echo "Non Validé";
 
                                 if (Gate::check('isSupervisor')) 
                                 {$id=Auth::user()->id;
-$type=3;
+$types=3;
 if ($omre->statut !="Validé" && $omre->statut!="Annulé" ) {
-                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnvalid" onclick="valideom('.$omre->id.','.$id.','.$type.');" ><i class="fas fa-check"></i> Valider</button>';
+                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnvalid" onclick="valideom('.$omre->id.','.$id.','.$types.');" ><i class="fas fa-check"></i> Valider</button>';
                                    
                                
                            }
@@ -6451,7 +6451,7 @@ $(document).ready(function(){
 
   });
 
-function valideom(idom,idsuperviseur,type){
+function valideom(idom,idsuperviseur,types){
         //$("#gendocfromhtml").submit();
         var _token = $('input[name="_token"]').val();
 
@@ -6459,7 +6459,7 @@ function valideom(idom,idsuperviseur,type){
                 url:"{{ route('ordremissions.valide') }}",
                 method:"POST",
                 //'&_token='+_token
-                data:'_token='+_token+'&idom='+idom+'&idsuperviseur='+idsuperviseur+'&type='+type,
+                data:'_token='+_token+'&idom='+idom+'&idsuperviseur='+idsuperviseur+'&types='+types,
                 success:function(data){
                                      location.reload();  }
  });
