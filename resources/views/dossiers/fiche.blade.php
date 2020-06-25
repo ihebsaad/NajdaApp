@@ -1305,7 +1305,7 @@ use  \App\Http\Controllers\PrestatairesController;
                                             </div>
                                         </div>
 
-                                        <div class="panel panel-success " id="technique" style=" <?php if ($dossier->type_dossier =='Medical'){echo 'display:none';}?>;">
+                                        <div class="panel panel-success " id="technique" style=" <?php if ($dossier->type_dossier =='Medical' || $dossier->type_dossier =='Transport' ){echo 'display:none';}?>;">
                                         <div class="panel-heading">
                                             <h4 class="panel-title">
                                                 <a class="accordion-toggle" data-toggle="collapse">

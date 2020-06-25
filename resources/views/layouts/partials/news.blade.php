@@ -12,13 +12,13 @@ $total= ActualitesController:: NbrActus();
 @isset ($liste)
 <?php if ($total >0) { ?>
 <div class="news" style="padding-left:80px;padding-right:80px">
-				<div class="breaking-news-ticker" id="newsTicker1">
+				<div class="breaking-news-ticker" id="newsTicker1" style="height:70px!important;">
 			    	<div class="bn-news">
 			    		<ul>
 							<?php
 							foreach($liste as $l)
 							    {
-                                  echo '  <li><a href="#">'.$l['description'].'</a></li>';
+                                  echo '  <li><a style="color:red;font-size:22px;padding:15px 15px 15px 15px" href="#">'.$l['description'].'</a></li>';
 
 								}
 							    ?>
@@ -50,14 +50,16 @@ $total= ActualitesController:: NbrActus();
                     jQuery(document).ready(function($){
                         $('#newsTicker1').breakingNews();
 
-                        $('#newsTicker13').breakingNews({
+                       /* $('#newsTicker13').breakingNews({
                             effect: 'slide-right'
                         });
-
+*/
                     });
 
 				</script>
-
+<style>
+	#newsTicker1{height: 70px!important;}
+</style>
 <?php } ?>
 
 @endisset

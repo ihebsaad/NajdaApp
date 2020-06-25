@@ -39,7 +39,7 @@
             @foreach($actualites as $actualite)
                 <tr><?php $id= $actualite['id']; ?>
                     <td style="width:10%" ><?php echo $id ;?></td>
-                    <td  style="width:40%"> <?php echo $actualite['description'];?></td>
+                    <td  style="width:40%"> <textarea  class="form-control" style="width:100%" id="description-<?php echo $id ;?>" onchange ="changing2(this)"> <?php echo $actualite['description'];?> </textarea></td>
                     <td style="width:10%" > <?php $statut=   $actualite['statut'];?>
                         <div class="radio" id="uniform-actif">
                             <span class="checked">
@@ -153,7 +153,28 @@
             // }
         }
 
+        function changing2(elm) {
+            var champ='description';
+            var idelm =elm.id;
+			id= idelm.slice(12);
+			var val=document.getElementById(idelm).value;
+             var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url: "{{ route('actualites.updating2') }}",
+                method: "POST",
+                data: {actus:id , champ:champ ,val:val, _token: _token},
+                success: function (data) {
+                    $('#'+idelm).animate({
+                        opacity: '0.3',
+                    });
+                    $('#'+idelm).animate({
+                        opacity: '1',
+                    });
 
+                }
+            });
+        
+        }
         $(document).ready(function() {
 
 
