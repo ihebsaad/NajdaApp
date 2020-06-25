@@ -278,8 +278,9 @@ if (isset($_POST['clientIMA'])) { ?>
 <div class="row" >
 	<div id="compsup" class="col-md-3" style="margin-left:20px;width:35%;border-style: groove;">
 <p style="margin-top:10px; margin-bottom:0pt; line-height:4.05pt; widows:0; orphans:0"><span style="font-family:&#39;Times New Roman&#39;; font-size:9pt; font-weight:bold;margin-top:5px!important; ">Edité.par</span><br><br><br><span style="left:25pt; font-family:'Times New Roman';font-size:9pt"><?php if (isset($_POST['editepardate'])) { echo $_POST['editepardate']; } ?></span></p>
+<?php  if (isset($_POST['statut'])) { ?> 
 		<p style="margin-top:10px; margin-bottom:0pt; line-height:4.05pt; widows:0; orphans:0"><span style="font-family:&#39;Times New Roman&#39;; font-size:9pt; font-weight:bold;margin-top:5px!important; ">Valid.superviseur</span><br><br><br><span style="left:25pt; font-family:'Times New Roman';font-size:9pt"><?php if (isset($_POST['supervisordate'])) { echo $_POST['supervisordate']; } ?></span></p>
-
+<?php  } ?> 
 		<p style=" margin-top:0.5px; widows:0; orphans:0; font-size:9pt;font-family:&#39;Times New Roman&#39;; font-weight:bold">OM remis par (date/sign)<br><span style="font-size:9pt;font-weight:normal; font-family:'Times New Roman';left:25pt;"><?php if (isset($_POST['remispardate'])) { echo $_POST['remispardate']; } ?></span></p>
 		<p style="margin-block-end: 0em!important;margin-bottom: 3px!important;margin-top:-15px;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">OM récupéré par (date/sign)</span><br><span style="left:25pt; font-family:'Times New Roman';font-weight:normal;font-size:9pt"><?php if (isset($_POST['recuperepardate'])) { echo $_POST['recuperepardate']; } ?></span></p>
 	</div>

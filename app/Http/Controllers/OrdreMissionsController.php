@@ -2378,6 +2378,10 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
     {
     	return view('ordremissions.pdfcancelomambulance');
     }
+public function pdfvalideomambulance()
+    {
+    	return view('ordremissions.pdfvalideomambulance');
+    }
 
     public function export_pdf_odmremorquage(Request $request)
     {
@@ -4177,6 +4181,10 @@ if (isset($_POST['CL_adls']))
     {
     	return view('ordremissions.pdfcancelomremorquage');
     }
+public function pdfvalideomremorquage()
+    {
+    	return view('ordremissions.pdfvalideomremorquage');
+    }
 public function pdfcancelommedicinternationnal()
     {
     	return view('ordremissions.pdfcancelommedicinternationnal');
@@ -4189,7 +4197,7 @@ public function pdfcancelommedicinternationnal()
         $histoom = array();
         if ($omtitre== 1) {
         while ($omparent !== null) {
-            $arrom = OMTaxi::select('id','titre','emplacement','dernier','parent','created_at')->where('id', $omparent)->first();
+            $arrom = OMTaxi::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('id', $omparent)->first();
 
             $histoom[]=$arrom;
             $omparent = $arrom['parent'];
@@ -4199,7 +4207,7 @@ public function pdfcancelommedicinternationnal()
         }}
         if ($omtitre== 2) {
         while ($omparent !== null) {
-            $arrom = OMAmbulance::select('id','titre','emplacement','dernier','parent','created_at')->where('id', $omparent)->first();
+            $arrom = OMAmbulance::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('id', $omparent)->first();
 
             $histoom[]=$arrom;
             $omparent = $arrom['parent'];
@@ -4209,7 +4217,7 @@ public function pdfcancelommedicinternationnal()
         }}
         if ($omtitre== 3) {
         while ($omparent !== null) {
-            $arrom = OMRemorquage::select('id','titre','emplacement','dernier','parent','created_at')->where('id', $omparent)->first();
+            $arrom = OMRemorquage::select('id','titre','emplacement','dernier','parent','created_at','statut','affectea','supervisordate')->where('id', $omparent)->first();
 
             $histoom[]=$arrom;
             $omparent = $arrom['parent'];
@@ -4240,6 +4248,10 @@ header('Content-type: application/json');
     {
     	return view('ordremissions.pdfcancelomtaxi');
     }
+public function pdfvalideomtaxi()
+    {
+    	return view('ordremissions.pdfvalideomtaxi');
+    }
 
     //cancelom
     public function cancelom(Request $request)
@@ -4248,8 +4260,10 @@ header('Content-type: application/json');
         $titre = $request->get('title') ;
         $parent = $request->get('parent') ;
         //return "dossier: ".$dossier." titre: ".$titre." parent: ".$parent;
-        if (stristr($titre,'taxi') !== FALSE) 
-        {        $omparent1=OMTaxi::where('id', $parent)->first();
+        if (stristr($titre,'taxi') !== FALSE)
+ 
+        {      
+                $omparent1=OMTaxi::where('id', $parent)->first();
 	    	//$count = OMTaxi::where('parent',$parent)->count();
 	    	OMTaxi::where('id', $parent)->update(['dernier' => 0,'idvehic' => "",'idchauff' => ""]);
 	        $omparent=OMTaxi::where('id', $parent)->first();
@@ -4320,7 +4334,7 @@ Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: '
 	        }
 	        // If you want to store the generated pdf to the server then you can use the store function
 	        $pdf->save($path.$dossier.'/'.$name.'.pdf');
-	        $omtaxi = OMTaxi::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier]);
+	        $omtaxi = OMTaxi::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier,'statut'=>'Annulé']);
 if ($omtaxi->save()) {
 $par=Auth::id();
 $user = User::find($par);
@@ -4407,7 +4421,7 @@ Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: '
 	        }
 	        // If you want to store the generated pdf to the server then you can use the store function
 	        $pdf->save($path.$dossier.'/'.$name.'.pdf');
-	        $omambu = OMAmbulance::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier]);
+	        $omambu = OMAmbulance::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier,'statut'=>'Annulé']);
 if ($omambu->save()) {
 $par=Auth::id();
 $user = User::find($par);
@@ -4494,7 +4508,7 @@ Log::info('[Agent: ' . $nomuser . '] Annulation de prestation pour le dossier: '
 	        }
 	        // If you want to store the generated pdf to the server then you can use the store function
 	        $pdf->save($path.$dossier.'/'.$name.'.pdf');
-	        $omrem = OMRemorquage::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier]);
+	        $omrem = OMRemorquage::create(['emplacement'=>$path.$dossier.'/'.$name.'.pdf','titre'=>$name,'dernier'=>1, 'parent' => $parent,'dossier'=>$dossier,'statut'=>'Annulé']);
 if ($omrem->save()) {
 $par=Auth::id();
 $user = User::find($par);
@@ -4568,5 +4582,224 @@ Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["tit
 	    }
 	   
     }
+public function valide(Request $request)
+    {
+        $idom=$_POST['idom'] ;
+        $types= $_POST['types'] ;
+        $idsuperviseur= $_POST['idsuperviseur'] ;
+        $user = User::find($idsuperviseur);
+
+        $nom=$user->name;
+        $prenom=$user->lastname;
+if ($types==1) {
+OMTaxi::where('id', $idom)->update(['statut' => "Validé"]);
+DB::table('validation_omtaxi')->insert(
+               ['idom' => $idom,
+                'idsuperviseur' => $idsuperviseur,
+                'nomsuperviseur' => $nom,
+                'prenomsuperviseur' => $prenom]
+            );
+$omvalid=DB::table('validation_omtaxi')->where('idom', $idom)->first();
+                	
+                	OMTaxi::where('id', $idom)->update(['dernier' => 0]);
+			        $omparent=OMTaxi::where('id', $idom)->first();
+			        $filename='taxi_Remplace-'.$idom;
+                                 $iddoss = $omparent['dossier'];
+				        Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+				        // enregistrement de nouveau attachement
+	                	
+				        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+		        		$name='OM - '.$name;
+				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
+				        $attachement = new Attachement([
+
+				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
+				        ]);
+				        $attachement->save();
+                             $prestataireom= $omparent['prestataire_taxi'];
+	        		$affectea = $omparent['affectea'];
+$datevalid=date('Y-m-d\TH:i',strtotime($omvalid->created_at));
+
+$superviseur=  $nom.' '.$prenom.' / '.str_replace('T',' ',$datevalid);
+	        		 $pdf = PDF3::loadView('ordremissions.pdfvalideomtaxi', ['omparent' => $omparent,'superviseur'=> $superviseur])->setPaper('a4', '');
+
+	        $path= storage_path()."/OrdreMissions/";
+
+	        if (!file_exists($path.$iddoss)) {
+	            mkdir($path.$iddoss, 0777, true);
+	        }
+	        // If you want to store the generated pdf to the server then you can use the store function
+	        $pdf->save($path.$iddoss.'/'.$name.'.pdf');
+                   $omtaxi = $omparent->replicate();
+ $omtaxi->save(); 
+$id=$omtaxi['id'];
+DB::table('validation_omtaxi')->insert(
+               ['idom' => $id,
+                'idsuperviseur' => $idsuperviseur,
+                'nomsuperviseur' => $nom,
+                'prenomsuperviseur' => $prenom]
+            );
+OMTaxi::where('id', $id)->update(['dernier' => 1,'parent'=>$idom,'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name]);           
+	 OMTaxi::where('id', $omparent['id'])->update(['idvehic' => "",'idchauff' => "",'supervisordate'=>$superviseur]);           
+	if ($omtaxi->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+$dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
+
+$titreparent = $omparent['titre'];
+Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$titreparent. ' par: '.$name. ' dans le dossier: '.$dossieromref["reference_medic"] );
+if($affectea=='interne')
+{
+Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à entité soeur: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+
+}
+if($affectea=='mmentite')
+{
+Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+}
+
+}               
+                	
+        }
+if ($types==2) {
+OMAmbulance::where('id', $idom)->update(['statut' => "Validé"]);
+DB::table('validation_omambulance')->insert(
+               ['idom' => $idom,
+                'idsuperviseur' => $idsuperviseur,
+                'nomsuperviseur' => $nom,
+                'prenomsuperviseur' => $prenom]
+            );
+$omvalid=DB::table('validation_omambulance')->where('idom', $idom)->first();
+                	
+                	OMAmbulance::where('id', $idom)->update(['dernier' => 0]);
+			        $omparent=OMAmbulance::where('id', $idom)->first();
+			        $filename='ambulance_Remplace-'.$idom;
+                                 $iddoss = $omparent['dossier'];
+				        Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+				        // enregistrement de nouveau attachement
+	                	
+				        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+		        		$name='OM - '.$name;
+				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
+				        $attachement = new Attachement([
+
+				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
+				        ]);
+				        $attachement->save();
+                             $prestataireom= $omparent['prestataire_ambulance'];
+	        		$affectea = $omparent['affectea'];
+$datevalid=date('Y-m-d\TH:i',strtotime($omvalid->created_at));
+
+$superviseur=  $nom.' '.$prenom.' / '.str_replace('T',' ',$datevalid);
+	        		 $pdf = PDF3::loadView('ordremissions.pdfvalideomambulance', ['omparent' => $omparent,'superviseur'=> $superviseur])->setPaper('a4', '');
+
+	        $path= storage_path()."/OrdreMissions/";
+
+	        if (!file_exists($path.$iddoss)) {
+	            mkdir($path.$iddoss, 0777, true);
+	        }
+	        // If you want to store the generated pdf to the server then you can use the store function
+	        $pdf->save($path.$iddoss.'/'.$name.'.pdf');
+                   $omambulance = $omparent->replicate();
+ $omambulance->save(); 
+$id=$omambulance->id;
+DB::table('validation_omambulance')->insert(
+               ['idom' => $id,
+                'idsuperviseur' => $idsuperviseur,
+                'nomsuperviseur' => $nom,
+                'prenomsuperviseur' => $prenom]
+            );
+OMAmbulance::where('id', $id)->update(['dernier' => 1,'parent'=>$idom,'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name]);           
+	OMAmbulance::where('id', $omparent['id'])->update(['vehicID' => "",'idambulancier1' => "",'idambulancier2' => "",'idparamed' => "",'supervisordate'=>$superviseur]);
+if ($omambulance->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+$dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
+
+$titreparent = $omparent['titre'];
+Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$titreparent. ' par: '.$name. ' dans le dossier: '.$dossieromref["reference_medic"] );
+if($affectea=='interne')
+{
+Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à entité soeur: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+}
+if($affectea=='mmentite')
+{
+Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+}} 
+
+
+        } 
+if ($types==3) {
+OMRemorquage::where('id', $idom)->update(['statut' => "Validé"]);
+DB::table('validation_omremorquage')->insert(
+               ['idom' => $idom,
+                'idsuperviseur' => $idsuperviseur,
+                'nomsuperviseur' => $nom,
+                'prenomsuperviseur' => $prenom]
+            );
+$omvalid=DB::table('validation_omremorquage')->where('idom', $idom)->first();
+                	
+                	OMRemorquage::where('id', $idom)->update(['dernier' => 0]);
+			        $omparent=OMRemorquage::where('id', $idom)->first();
+			        $filename='remorquage_Remplace-'.$idom;
+                                 $iddoss = $omparent['dossier'];
+				        Attachement::where('path', '/OrdreMissions/'.$iddoss.'/'.$omparent["titre"].'.pdf')->delete();
+				        // enregistrement de nouveau attachement
+	                	
+				        $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
+		        		$name='OM - '.$name;
+				        $path2='/OrdreMissions/'.$iddoss.'/'.$name.'.pdf';
+				        $attachement = new Attachement([
+
+				            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddoss,
+				        ]);
+				        $attachement->save();
+                              $prestataireom= $omparent['prestataire_remorquage'];
+	        		$affectea = $omparent['affectea'];
+$datevalid=date('Y-m-d\TH:i',strtotime($omvalid->created_at));
+
+$superviseur=  $nom.' '.$prenom.' / '.str_replace('T',' ',$datevalid);
+	        		 $pdf = PDF3::loadView('ordremissions.pdfvalideomremorquage', ['omparent' => $omparent,'superviseur'=> $superviseur])->setPaper('a4', '');
+
+	        $path= storage_path()."/OrdreMissions/";
+
+	        if (!file_exists($path.$iddoss)) {
+	            mkdir($path.$iddoss, 0777, true);
+	        }
+	        // If you want to store the generated pdf to the server then you can use the store function
+	        $pdf->save($path.$iddoss.'/'.$name.'.pdf');
+                   $omremorquage = $omparent->replicate();
+$omremorquage->save(); 
+$id=$omremorquage->id;
+DB::table('validation_omremorquage')->insert(
+               ['idom' => $id,
+                'idsuperviseur' => $idsuperviseur,
+                'nomsuperviseur' => $nom,
+                'prenomsuperviseur' => $prenom]
+            );
+OMRemorquage::where('id', $id)->update(['dernier' => 1,'parent'=>$idom,'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name]);           
+	OMRemorquage::where('id', $omparent['id'])->update(['dernier' => 0,'idvehic' => "",'idchauff' => "",'supervisordate'=>$superviseur]);
+       if ($omremorquage->save()) {
+
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+$dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
+
+$titreparent = $omparent['titre'];
+Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$titreparent. ' par: '.$name. ' dans le dossier: '.$dossieromref["reference_medic"] );
+if($affectea=='interne')
+{
+Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à entité soeur: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+}
+if($affectea=='mmentite')
+{
+Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+}}  } }
+
 
 }
