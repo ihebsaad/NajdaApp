@@ -1360,13 +1360,19 @@ if ($omtx->statut !="Validé" && $omtx->statut!="Annulé" ) {
                                
                            }
 else {
-echo $omtx->statut;
+if ($omtx->statut =="Validé"){
+echo "<span style='color:blue'>".$omtx->statut."</span>";}
+if ($omtx->statut =="Annulé"){
+echo "<span style='color:black'>".$omtx->statut."</span>";}
 }}
                                 else
                                 { if ($omtx->statut =="Validé" || $omtx->statut=="Annulé" ) {
-                                    echo $omtx->statut;}
+                                    if ($omtx->statut =="Validé"){
+echo "<span style='color:blue'>".$omtx->statut."</span>";}
+if ($omtx->statut =="Annulé"){
+echo "<span style='color:black'>".$omtx->statut."</span>";}}
 else {
-echo "Non Validé";
+echo "<span style='color:red'> Non Validé </span>" ;
 
 
 }
@@ -1464,13 +1470,19 @@ if ($omamb->statut !="Validé" && $omamb->statut!="Annulé" ) {
                                
                            }
 else {
-echo $omamb->statut;
+if ($omamb->statut =="Validé"){
+echo "<span style='color:blue'>".$omamb->statut."</span>";}
+if ($omamb->statut =="Annulé"){
+echo "<span style='color:black'>".$omamb->statut."</span>";}
 }}
                                 else
                                 { if ($omamb->statut =="Validé" || $omamb->statut=="Annulé" ) {
-                                    echo $omamb->statut;}
+                                   if ($omamb->statut =="Validé"){
+echo "<span style='color:blue'>".$omamb->statut."</span>";}
+if ($omamb->statut =="Annulé"){
+echo "<span style='color:black'>".$omamb->statut."</span>";}}
 else {
-echo "Non Validé";
+echo "<span style='color:red'> Non Validé </span>" ;
 
 
 }
@@ -1565,13 +1577,19 @@ if ($omre->statut !="Validé" && $omre->statut!="Annulé" ) {
                                
                            }
 else {
-echo $omre->statut;
+if ($omre->statut =="Validé"){
+echo "<span style='color:blue'>".$omre->statut."</span>";}
+if ($omre->statut =="Annulé"){
+echo "<span style='color:black'>".$omre->statut."</span>";}
 }}
                                 else
                                 { if ($omre->statut =="Validé" || $omre->statut=="Annulé" ) {
-                                    echo $omre->statut;}
+                                    if ($omre->statut =="Validé"){
+echo "<span style='color:blue'>".$omre->statut."</span>";}
+if ($omre->statut =="Annulé"){
+echo "<span style='color:black'>".$omre->statut."</span>";}}
 else {
-echo "Non Validé";
+echo "<span style='color:red'> Non Validé </span>" ;
 
 
 }
@@ -2294,6 +2312,8 @@ if(strstr($dossier['reference_medic'],"MI")){
                             <thead>
                             <tr id="headtable">
                                 <th style="">Date de génération</th>
+                                <th style="">Statut</th>
+                                <th style="">Validé par</th>
                                 <th style="">Actions</th>
                              </tr>
 
@@ -3676,9 +3696,12 @@ aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\
                     posom=val[1]['emplacement'].indexOf("/OrdreMissions/");
                     empom=val[1]['emplacement'].slice(posom+1);
 aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\",\""+urlf+"/"+empom+"\");'><i class='fas fa-external-link-alt'></i>Aperçu</a>";
-                   // aurlf="<a style='color:black' href='"+urlf+"/"+empom+"' ><i class='fa fa-download'></i> Télécharger</a>";
-                    $("#tableomshisto tbody").append("<tr><td>"+val[1]['created_at']+"</td><td>"+aurlf+"</td></tr>");
 
+                   // aurlf="<a style='color:black' href='"+urlf+"/"+empom+"' ><i class='fa fa-download'></i> Télécharger</a>";
+if(titre!==4 ) {if(val[1]['affectea'] !="externe" ) { if(val[1]['statut']!=="Validé" ){statut="Non Validé";} else {statut= val[1]['statut'];}} else{statut="";}} else {statut="";}
+          if(titre!==4 ) {if(val[1]['affectea'] !="externe" ) { if(val[1]['supervisordate']) {supervisordate=val[1]['supervisordate'];} else {supervisordate= "";}} else{supervisordate="";}} else {supervisordate="";}          
+                    $("#tableomshisto tbody").append("<tr><td>"+val[1]['created_at']+"</td><td>"+statut+"</td><td>"+supervisordate+"</td><td>"+aurlf+"</td></tr>");
+                    
                     });
 
                     $("#modalhistoom").modal('show');
