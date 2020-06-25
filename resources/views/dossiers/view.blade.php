@@ -1350,7 +1350,7 @@ array_push($listepr,$pr['prestataire_id']);
                             </td>
                             <td style=";">
                             <?php
-
+if($omtx->affectea!='externe') {
                                 if (Gate::check('isSupervisor')) 
                                 {$id=Auth::user()->id;
 $types=1;
@@ -1370,7 +1370,12 @@ echo "Non Validé";
 
 
 }
-                                }
+                                }}
+else {
+echo "";
+
+
+}
                             ?>
                             </td>
                             <?php 
@@ -1449,7 +1454,7 @@ echo "Non Validé";
                             </td>
                             <td style=";">
                             <?php
-
+if($omamb->affectea!='externe') {
                                 if (Gate::check('isSupervisor')) 
                                 {$id=Auth::user()->id;
 $types=2;
@@ -1469,7 +1474,12 @@ echo "Non Validé";
 
 
 }
-                                }
+                                } }
+else {
+echo "";
+
+
+}
                             ?>
                             </td>
                             <?php 
@@ -1545,7 +1555,7 @@ echo "Non Validé";
                                 </td>
                                 <td style=";">
                             <?php
-
+if($omre->affectea!='externe') {
                                 if (Gate::check('isSupervisor')) 
                                 {$id=Auth::user()->id;
 $types=3;
@@ -1565,7 +1575,9 @@ echo "Non Validé";
 
 
 }
-                                }
+                                } }
+else
+{echo "";}
                             ?>
                             </td>
                                 <?php
@@ -1636,6 +1648,11 @@ echo "Non Validé";
                                     {
                                         echo "Aucun";
                                     }
+                                    ?>
+                                </td>
+<td style=";">
+                                    <?php
+echo "";
                                     ?>
                                 </td>
                                 <?php
