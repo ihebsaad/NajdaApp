@@ -382,6 +382,8 @@ class EntreesController extends Controller
 
         $count = DB::table('entrees')
             ->where('statut','=',3)
+			  ->where('destinataire','<>','finances@najda-assistances.com')
+			
           //  ->where('par','=',$par)
             ->count();
 
@@ -605,6 +607,7 @@ class EntreesController extends Controller
     {
 
      $count=Entree::where('statut','<','2')
+	 	 ->where('destinataire','<>','finances@najda-assistances.com')
          ->where('dossier','=','')
      ->count();
 
@@ -630,6 +633,7 @@ class EntreesController extends Controller
 
         $count=Entree::where('viewed','<>', 1)
                 ->where('type','<>','tel')
+			 ->where('destinataire','<>','finances@najda-assistances.com')
             ->where('created_at','<=', $dtc)
             ->where('created_at','>', $dtc2)
             ->count();
@@ -653,6 +657,7 @@ class EntreesController extends Controller
 */
         $count=Entree::where('viewed','<>', 1)
             ->where('type','<>','tel')
+			->where('destinataire','<>','finances@najda-assistances.com')
             ->where('created_at','<=', $dtc)
             ->count();
 

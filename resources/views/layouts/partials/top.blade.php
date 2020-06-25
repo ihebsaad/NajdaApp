@@ -198,7 +198,9 @@
         if($iduser==$disp){$icon='fa-map-signs';}else{$icon='fa-envelope';}
 
           $count=Entree::where('statut','<','2')
-              ->where('dossier','=','')->count();
+              ->where('dossier','=','')
+			  ->where('destinataire','<>','finances@najda-assistances.com')
+			  ->count();
             if($count==0){$color='btn-success';}
             else{$color='btn-danger';
             }
