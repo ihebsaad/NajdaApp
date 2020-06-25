@@ -285,6 +285,7 @@ Route::get('/factures/destroy/{id}', 'FacturesController@destroy');
 Route::get('/actualites', array('as' => 'actualites','uses' => 'ActualitesController@index'));
 Route::post('/actualites/saving','ActualitesController@saving')->name('actualites.saving');
 Route::post('/actualites/updating','ActualitesController@updating')->name('actualites.updating');
+Route::post('/actualites/updating2','ActualitesController@updating2')->name('actualites.updating2');
 Route::get('/actualites/view/{id}', 'ActualitesController@view');
 Route::get('/actualites/destroy/{id}', 'ActualitesController@destroy');
  

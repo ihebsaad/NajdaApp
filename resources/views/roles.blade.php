@@ -218,7 +218,7 @@
 </div>
 <div class="col-md-6" style="padding:80px 50px 80px 50px">
     <h1>Bienvenue <B style="color:#5D9CEC"><?php echo  $name .' '. $lastname; ?></B></h1>
-	<h4>Nous sommes le <b><?php echo $sd1; ?></b></h4>
+	
 
 <h5>Sélectionnez votre/vos rôle(s) pendant cette séance :</h5>
     <small> (Cliquez sur un rôle attribué pour le demander)</small><br><br><br>
@@ -644,6 +644,19 @@
    <?php
     }
         ?>
+		<style>
+#jour{
+    animation: Test 1s infinite;
+}
+@keyframes Test{
+    0%{opacity: 1;}
+    50%{opacity: 0;}
+    100%{opacity: 1;}
+}
+		</style>
+	<br><br><br><br><br><br>	
+	<h4>Nous sommes le <br><b id="jour" style="color:red;font-size:36px;"><?php echo $sd1; ?></b></h4>	
+		
 </div>  
   
 </div>

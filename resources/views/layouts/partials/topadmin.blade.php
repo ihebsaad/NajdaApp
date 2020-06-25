@@ -98,6 +98,7 @@
 
 
 
+      @can('isAdmin')
 
          <div id="dpause" class="col-sm-1 col-md-1 col-lg-2 " style="padding-top:10px;padding-left:0px!important">
           <a  href="{{ route('supervision') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
@@ -106,7 +107,8 @@
                                                 Supervision
           </a> 
         </div>
-
+	  @endcan
+	
           <div  class="col-sm-1 col-md-1 col-lg-2 " style="padding-top:10px;padding-left:0px!important;margin-left:15px">
               <a href="{{ route('home') }}" class="btn btn-default btn-lg btn-responsive" role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Demander pause de ton superviseur" style="margin-bottom: 28px!important;">
                   <i class="far fa-user"></i>

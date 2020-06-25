@@ -107,6 +107,18 @@ class ActualitesController extends Controller
 
     }
 
+	  public function updating2(Request $request)
+    {
+
+        $id= $request->get('actus');
+        $champ= strval($request->get('champ'));
+       $val= $request->get('val');
+         Actualite::where('id', $id)->update(array($champ => $val));
+ 
+      
+    }
+	
+	
     /**
      * Display the specified resource.
      *
