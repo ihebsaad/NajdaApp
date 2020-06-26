@@ -214,7 +214,7 @@
 <html>
 <body>
 <div class="row">
-<div class="col-md-3">
+<div class="col-md-2">
 </div>
 <div class="col-md-6" style="padding:80px 50px 80px 50px">
     <h1>Bienvenue <B style="color:#5D9CEC"><?php echo  $name .' '. $lastname; ?></B></h1>
@@ -624,7 +624,7 @@
     <button onclick="location.reload()" class="btn cust-btn btn-success " type="button" id="btn-primary" style="margin-left:50px;margin-top:50px;font-size: 20PX;letter-spacing: 1px;width:150px"><i class="fas fa-sync"></i> Refraichir</button>
 </div>
 
-<div class="col-md-3">
+<div class="col-md-4">
     <?php if (
         ($seance->superviseurmedic !=$iduser && $seance->superviseurtech != $iduser && $seance->chargetransport != $iduser && $seance->dispatcheur !=$iduser)
         || ( $date_actu < $debut || ($date_actu > $fin)  )
@@ -655,7 +655,7 @@
 }
 		</style>
 	<br><br><br><br><br><br>	
-	<h4>Nous sommes le <br><b id="jour" style="color:red;font-size:36px;"><?php echo $sd1; ?></b></h4>	
+	<h4>Nous sommes le <br><br><b id="jour" style="color:red;font-size:38px;"><?php echo $sd1; ?></b></h4>	
 		
 </div>  
   
