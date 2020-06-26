@@ -679,7 +679,7 @@ span.rvts65
 </div>
 <p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman';font-weight:bold">Date, heure et lieu de départ pour votre mission: &#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_date_heure_departmission'])) {$DHsansT =str_replace('T',' ',$_POST['CL_date_heure_departmission']); echo $DHsansT; }?></span>
 <p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman';font-weight:bold">Date de decollage: &#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_date_decollage'])) { echo $_POST['CL_date_decollage']; } ?></span>
-<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman';font-weight:bold">Heure de prise en charge annoncée au patient/client : &#xa0;</span><span style="font-family:'Times New Roman'"><?php  if (isset($_POST['CL_date_heure_prise'])) {$DHsansT =str_replace('T',' ',$_POST['CL_date_heure_prise']); echo $DHsansT; }?></span><p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman';font-weight:bold">Heure départ clinique/Hôpital : &#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_date_heure_departclinique'])) {$DHsansT =str_replace('T',' ',$_POST['CL_date_heure_departclinique']); echo $DHsansT; } ?></span>
+<p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman';font-weight:bold">Heure de prise en charge annoncée au patient/client : &#xa0;</span><span style="font-family:'Times New Roman'"><?php  if (isset($_POST['CL_date_heure_prise'])) {$DHsansT =str_replace('T',' ',$_POST['CL_date_heure_prise']); echo $DHsansT; }?></span><p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman';font-weight:bold">Heure départ clinique/Hôpital/Hôtel : &#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_date_heure_departclinique'])) {$DHsansT =str_replace('T',' ',$_POST['CL_date_heure_departclinique']); echo $DHsansT; } ?></span>
 <p class=rvps5><span class=rvts46>Vous emportez avec vous :</span></p>
 <p class=rvps11><span class=rvts46>Carte SIM: </span>
 	<?php if (isset($_POST['CL_puces'])) { 
@@ -690,7 +690,7 @@ span.rvts65
 				if ($_POST['CL_puces'][$i] !== "")
 				{
 					$puceinfo = Equipement::where(["id"=>$_POST['CL_puces'][$i]])->first();
-					echo '<span class=rvts42>'. $puceinfo['nom']." [".$puceinfo['reference']."]" . '</span>';
+					echo '<span class=rvts42>'. $puceinfo['nom']." [".$puceinfo['reference']."]" ." : ".$puceinfo['numero'] . '</span>';
 					if ((($i + 1)< $len) && ($_POST['CL_puces'][$i+1] !== "")) echo ", ";
 				}
 			}
@@ -725,16 +725,34 @@ span.rvts65
 	<p style="margin-top: 0pt;margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
 	<span style="font-family:'Times New Roman'; font-weight:bold">A l’arrivée à </span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">  </span><span style="font-family:'Times New Roman'; "><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_arrive'])) { echo $_POST['CL_arrive']; } ?></span>
 				 </span><span style="font-family:'Times New Roman'">vous serez accueilli par les ambulances/taxi  </span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"> </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_ambulance_taxi'])) { echo $_POST['CL_ambulance_taxi']; } ?></span> </span><span style="font-family:'Times New Roman'">pour déposer le patient à </span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"> </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_depose'])) { echo $_POST['CL_depose']; } ?></span>
-	<span style="font-family:'Times New Roman'; font-weight:bold">. Il est accepté par </span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">  </span><span style="font-family:'Times New Roman'; "><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_accepte'])) { echo $_POST['CL_accepte']; } ?></span>
- </span>
+	
 		</p>
 </div>
 <div class="row" style=" margin-left: 0px; ">
+<?php if (isset($_POST['CB_accepte'])) { if (($_POST['CB_accepte'] === "oui")||($_POST['CB_accepte'] === "on")) { ?>	
+<p style="margin-top:0.05pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt">
+					<span style="font-family:'Times New Roman'; font-weight:bold"> Il est accepté par</span><span style="font-family:'Times New Roman'; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold"></span>
+<span id="trmedecin">
+					<span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold"> </span><span style="font-family:'Times New Roman'; font-weight:bold"> </span>
+<span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_accepte'])) { echo $_POST['CL_accepte']; } ?></span>
+</span>
+</p>
+<?php }} ?>
+
+</div>
+<div class="row" style=" margin-left: 0px; ">
 	<p style="margin-top: 0pt;margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
-	<span style="font-family:'Times New Roman'; font-weight:bold">La même ambulance/un taxi  assurera votre transfert à l’hôtel / aéroport   </span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">  </span><span style="font-family:'Times New Roman'; "><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_hotel_aeroport'])) { echo $_POST['CL_hotel_aeroport']; } ?></span>
-				 </span><span style="font-family:'Times New Roman'"> en votre nom pour la nuitée/d’où vous prendrez le vol  </span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"> </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_prendre_vol'])) { echo $_POST['CL_prendre_vol']; } ?></span> </span>
+	<span style="font-family:'Times New Roman'; font-weight:bold">La même ambulance/un taxi  assurera votre transfert à l’</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">  </span><span style="font-family:'Times New Roman'; "><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_hotel_aeroport'])) { echo $_POST['CL_hotel_aeroport']; } ?></span>
+<?php if (isset($_POST['CL_hotel_aeroport'])) { if ($_POST['CL_hotel_aeroport'] === "hôtel") { ?>
+				 </span><span style="font-family:'Times New Roman'">où une chambre est réservée en votre nom pour la nuitée du </span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"> </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_debut_res'])) { $DHsansT =str_replace('T',' ',$_POST['CL_debut_res']); echo $DHsansT; }  ?></span> </span>
+	<span style="font-family:'Times New Roman'; font-weight:bold"> au </span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">  </span><span style="font-family:'Times New Roman'; "><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_fin_res'])) {$DHsansT =str_replace('T',' ',$_POST['CL_fin_res']); echo $DHsansT; }?></span>
+ </span>
+<?php }} ?>
+<?php if (isset($_POST['CL_hotel_aeroport'])) { if ($_POST['CL_hotel_aeroport'] === "aéroport") { ?>
+				 </span><span style="font-family:'Times New Roman'"> d’où vous prendrez le vol </span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'"> </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_prendre_vol'])) { echo $_POST['CL_prendre_vol'];  } ?></span> </span>
 	<span style="font-family:'Times New Roman'; font-weight:bold"> qui décolle à </span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">  </span><span style="font-family:'Times New Roman'; "><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_date_heure_decollage2'])) {$DHsansT =str_replace('T',' ',$_POST['CL_date_heure_decollage2']); echo $DHsansT; }?></span>
  </span>
+<?php }} ?>
 	</p>
 </div>
 <p style="margin-top:6.95pt; margin-bottom:0pt; widows:0; orphans:0; font-size:11pt"><span style="font-family:'Times New Roman';font-weight:bold">Date de Retour : &#xa0;</span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_date_retour'])) { echo $_POST['CL_date_retour']; } ?></span>
