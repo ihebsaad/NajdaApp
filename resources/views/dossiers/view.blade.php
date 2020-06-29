@@ -5239,15 +5239,16 @@ document.getElementById('add2').style.display = 'block';
 
  });
 
-                     $("#showNext").click(function() {
+   $("#showNext").click(function() {
 	var start=  document.getElementById('start').value ;
-                ///// Enregistrement prestation
+	  var  prest =document.getElementById('selectedprest').value;
+    ///// Enregistrement prestation
  if(    start==1  &&       document.getElementById('showNext').firstChild.data =='Commencer' )
 {
 	 document.getElementById('selected').value=1; var selected=1; next=selected+1;
    document.getElementById('selectedprest').value = document.getElementById('prestataire_id_1').value ;
 $('#showNext').prop('disabled', true);
-	  $('#add2').prop('disabled', false);
+ $('#add2').prop('disabled', false);
 
 
  document.getElementById('add2').style.display = 'block';
@@ -5266,6 +5267,12 @@ $('#showNext').prop('disabled', true);
   }
   else{
 	  document.getElementById('start').value =0;
+	  
+	   var  prestation =document.getElementById('idprestation').value;
+            //    var  prestataire =document.getElementById('selectedprest').value;
+                var  statut =document.getElementById('statutprest').value;
+                var  details =document.getElementById('detailsprest').value;
+				
 	            ///////    $("#selected").val(selected+1);
 
 /*
@@ -5344,7 +5351,7 @@ $('#showNext').prop('disabled', true);
               {
             if(infos==true){
                 // enregistrement des infos de prestation  + envoi des emails
-                 var _token = $('input[name="_token"]').val();
+                var _token = $('input[name="_token"]').val();
                 var  prestation =document.getElementById('idprestation').value;
                 var  prestataire =document.getElementById('selectedprest').value;
                 var  statut =document.getElementById('statutprest').value;
@@ -5498,6 +5505,35 @@ $('#showNext').prop('disabled', true);
                 }else{
 
                 }
+				
+				 
+				
+// 				
+ var _token = $('input[name="_token"]').val(); 
+               /* var  prestation =document.getElementById('idprestation').value;
+                var  prestataire =document.getElementById('selectedprest').value;
+                var  statut =document.getElementById('statutprest').value;
+                var  details =document.getElementById('detailsprest').value;
+*/
+                $.ajax({
+                    url:"{{ route('prestations.updatestatut') }}",
+                    method:"POST",
+                    data:{prestation:prestation,prestataire:prest,statut:statut,details:details, _token:_token},
+                    success:function(data){
+
+                // reinitialiser le champs de statut
+                    ///    if(document.getElementById('selectedprest').value ==0) {
+                    ///        document.getElementById('statutprest').value ='';
+                    ///        document.getElementById('detailsprest').value ='';}
+
+                    }
+                });				
+				
+				
+				
+				
+				
+				
 				
 				
 		  $('#add2').prop('disabled', true);
