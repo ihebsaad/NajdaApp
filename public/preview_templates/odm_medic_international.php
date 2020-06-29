@@ -231,7 +231,7 @@ if ($resulthch->num_rows > 0) {
 		}
 
 // puces sims dispo -- annule est 0 or empty -- date today > fin dispo date ou fin dispo date est null
-	$sqlpuces = "SELECT id,nom,reference FROM equipements WHERE (`type`='numappel') AND ((`annule` = 0) OR (`annule` IS NULL)) 
+	$sqlpuces = "SELECT id,nom,reference,numero FROM equipements WHERE (`type`='numappel') AND ((`annule` = 0) OR (`annule` IS NULL)) 
 ";
 
 	$resultpuces = $conn->query($sqlpuces);
@@ -240,7 +240,7 @@ if ($resulthch->num_rows > 0) {
 	    $array_puces = array();
 	    while($rowap = $resultpuces->fetch_assoc()) {
 	        
-			$nnameprest = $rowap['nom']." [".$rowap['reference']."]";
+			$nnameprest = $rowap['nom']." [".$rowap['reference']."]"." : ".$rowap['numero'];
 	        
 	        $array_puces[] = array('id' => $rowap["id"],'name' => $nnameprest);
 	    }
@@ -265,7 +265,16 @@ $sqllots = "SELECT id,nom,reference,numero FROM equipements WHERE (`type`='numse
 		} else {
 	    echo "0 puces dispo";
 		}
+$sqlhotelclin = "SELECT hospital_address,hotel FROM dossiers WHERE id=".$dossier."";
 
+    $resulthotelclin = $conn->query($sqlhotelclin);
+    if ($resulthotelclin->num_rows > 0) {
+
+        $array_hotelclin = array();
+        while($rowhotelclin= $resulthotelclin->fetch_assoc()) {
+            $array_hotelclin[] = array('hospital_address' => $rowhotelclin["hospital_address"]  );
+            $array_hotelclin[] = array('hospital_address' => $rowhotelclin["hotel"]  );
+            }}
 
  
 
@@ -1028,13 +1037,15 @@ foreach ($array_escorte as $escorte) {
 </div>
           <div class="row" style=" margin-left: 0px;margin-top: 20px ">
               <span style="font-family:'Times New Roman'; font-weight:bold">Hospital/hôtel :</span><span style="font-family:'Times New Roman'">&#xa0;
-<?php  if (isset($detailom))
-{ if (isset($detailom['lieu_immobilisation']))
-	{ ?>
-<input name="lieu_immobilisation" placeholder="lieu immobilisation" value="<?php if(! empty($detailom['lieu_immobilisation'])) echo $detailom['lieu_immobilisation']; ?>"></input>
-<?php }} else { ?>	
-<input name="lieu_immobilisation" placeholder="lieu immobilisation" value="<?php if(isset ($detaildoss)) echo $detaildoss['lieu_immobilisation']; ?>"></input>
-<?php } ?>
+<input list="lieu_immobilisation" autocomplete="off" name="lieu_immobilisation" placeholder="" <?php if (isset($detailom)) { if (isset($detailom['lieu_immobilisation'])) {echo "value='".$detailom['lieu_immobilisation']."'";}} ?>/ >
+ <datalist id="lieu_immobilisation">
+            <?php
+foreach ($array_hotelclin as $hotelclin) {
+    
+    echo "<option value='".$hotelclin['hospital_address']."' >".$hotelclin['hospital_address']."</option>";
+}
+?>
+</datalist>
               </div>
 
            <div class="row" style=" margin-left: 0px;margin-top: 20px ">
@@ -1051,7 +1062,7 @@ foreach ($array_escorte as $escorte) {
 <input type="datetime-local" name="CL_date_heure_prise" id="CL_date_heure_prise" <?php if (isset($detailom)) { if (isset($detailom['CL_date_heure_prise'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_date_heure_prise']))."'";}} ?> >
                </div>
         <div class="row" style=" margin-left: 0px;margin-top: 20px ">
-			<span style="font-family:'Times New Roman'; font-weight:bold">Heure départ clinique/Hôpital :</span><span style="font-family:'Times New Roman'">&#xa0;
+			<span style="font-family:'Times New Roman'; font-weight:bold">Heure départ clinique/Hôpital/Hôtel :</span><span style="font-family:'Times New Roman'">&#xa0;
 <input type="datetime-local" name="CL_date_heure_departclinique" id="CL_date_heure_departclinique" <?php if (isset($detailom)) { if (isset($detailom['CL_date_heure_departclinique'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_date_heure_departclinique']))."'";}} ?> >
             </div>
 <?php if (isset($_GET['remplace'])) { ?>
@@ -1163,6 +1174,7 @@ foreach ($array_adls as $adl) {
   <option value="assis et chaise roulante aux aéroports" <?php if (isset($detailom['CL_chaise'])) { if ($detailom['CL_chaise'] === "assis et chaise roulante aux aéroports") {echo "selected";}} ?> >assis et chaise roulante aux aéroports</option>
   <option value="assis et chaise roulante aux aéroports avec Oxygène" <?php if (isset($detailom['CL_chaise'])) { if ($detailom['CL_chaise'] === "assis et chaise roulante aux aéroports avec Oxygène") {echo "selected";}} ?> >assis et chaise roulante aux aéroports avec Oxygène</option>
  <option value="sur civière avec oxygène" <?php if (isset($detailom['CL_chaise'])) { if ($detailom['CL_chaise'] === "sur civière avec oxygène") {echo "selected";}} ?> >sur civière avec oxygène</option>
+<option value="civière sans oxygène" <?php if (isset($detailom['CL_chaise'])) { if ($detailom['CL_chaise'] === "civière sans oxygène") {echo "selected";}} ?> >civière sans oxygène</option>
 
 </select>
 <?php } else { ?>
@@ -1170,7 +1182,7 @@ foreach ($array_adls as $adl) {
   <option value="assis et chaise roulante aux aéroports" selected>assis et chaise roulante aux aéroport</option>
   <option value="assis et chaise roulante aux aéroports avec Oxygène">assis et chaise roulante aux aéroports avec Oxygène</option>
   <option value="sur civière avec oxygène">sur civière avec oxygène</option>
- 
+ <option value="civière sans oxygène">civière sans oxygène</option>
 </select>
 <?php } ?>
 
@@ -1193,20 +1205,78 @@ foreach ($array_adls as $adl) {
 <input name="CL_ambulance_taxi" placeholder="Ambulance/Taxi" <?php if (isset($detailom)) { if (isset($detailom['CL_ambulance_taxi'])) {echo "value='".$detailom['CL_ambulance_taxi']."'";}} ?> >
         <span style="font-family:'Times New Roman'; font-weight:bold">pour déposer le patient à </span><span style="font-family:'Times New Roman'">&#xa0; </span>
               <input name="CL_depose" placeholder="" <?php if (isset($detailom)) { if (isset($detailom['CL_depose'])) {echo "value='".$detailom['CL_depose']."'";}} ?> >
-              <span style="font-family:'Times New Roman'; font-weight:bold">. Il est accepté par  </span><span style="font-family:'Times New Roman'">&#xa0; </span>
-              <input name="CL_accepte" placeholder="" <?php if (isset($detailom)) { if (isset($detailom['CL_accepte'])) {echo "value='".$detailom['CL_accepte']."'";}} ?> >
  </div>
-  <div class="row ">
-        <span style="font-family:'Times New Roman'; font-weight:bold">La même ambulance/un taxi  assurera votre transfert à l’hôtel /   </span><span style="font-family:'Times New Roman'">&#xa0; </span>
-              <span style="font-family:'Times New Roman'; font-weight:bold">aéroport  </span><span style="font-family:'Times New Roman'">&#xa0; </span>
-       <input name="CL_hotel_aeroport" placeholder="" <?php if (isset($detailom)) { if (isset($detailom['CL_hotel_aeroport'])) {echo "value='".$detailom['CL_hotel_aeroport']."'";}} ?> >
- <span style="font-family:'Times New Roman'; font-weight:bold">où une chambre est réservée</span><span style="font-family:'Times New Roman'">&#xa0; </span>
-       <span style="font-family:'Times New Roman'; font-weight:bold">en votre nom pour la nuitée/d’où vous prendrez le vol </span><span style="font-family:'Times New Roman'">&#xa0; </span>
-             <input name="CL_prendre_vol" placeholder="vol" <?php if (isset($detailom)) { if (isset($detailom['CL_prendre_vol'])) {echo "value='".$detailom['CL_prendre_vol']."'";}} ?> >
-        <span style="font-family:'Times New Roman'; font-weight:bold">qui décolle à </span><span style="font-family:'Times New Roman'">&#xa0; </span>
-      <input type="datetime-local" name="CL_date_heure_decollage2" id="CL_date_heure_decollage2" <?php if (isset($detailom)) { if (isset($detailom['CL_date_heure_decollage2'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_date_heure_decollage2']))."'";}} ?> >
+<?php if (isset($detailom['CB_accepte'])) { if (($detailom['CB_accepte'] === "oui")||($detailom['CB_accepte'] === "on")) { $accepte = true; ?>
+<input type="checkbox" name="CB_accepte" id="CB_accepte" value="oui" checked>	
+<?php } else {  ?>
+<input type="checkbox" name="CB_accepte" id="CB_accepte" >	
+<?php }} else { if (empty($detailom['CB_accepte'])) { ?>
+<input type="checkbox" name="CB_accepte" id="CB_accepte" >
+<?php } else { $accepte = true; ?>	
+<input type="checkbox" name="CB_accepte" id="CB_accepte" value="oui" checked>
+<?php }} ?>
+					<span style="font-family:'Times New Roman'; font-weight:bold">Il est accepté par </span><span style="font-family:'Times New Roman'; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold"></span>
+<?php if (isset($accepte)) { ?>			
+<span id="accepte" style="display: inline-block;">
+<?php } else { ?>
+<span id="accepte" style="display: none;">
+<?php } ?>
+					<span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold"> </span><span style="font-family:'Times New Roman'; font-weight:bold"></span>
+  <input name="CL_accepte" placeholder="" <?php if (isset($detailom)) { if (isset($detailom['CL_accepte'])) {echo "value='".$detailom['CL_accepte']."'";}} ?> />
+</span>
+			</p>
+             
+ 
+  <div class="row">
+<p style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
+        <span style="font-family:'Times New Roman'; font-weight:bold">La même ambulance/un taxi  assurera votre transfert à l’</span><span style="font-family:'Times New Roman'">&#xa0 </span>
+              <span style="font-family:'Times New Roman'; font-weight:bold"></span><span style="font-family:'Times New Roman'">&#xa0;</span>
+<?php if (isset($detailom)) { ?>
+<select id="CL_hotel_aeroport" name="CL_hotel_aeroport">
+  <option value="hôtel" <?php if (isset($detailom['CL_hotel_aeroport'])) { if ($detailom['CL_hotel_aeroport'] === "hôtel") {echo "selected";}} ?> >hôtel</option>
+  <option value="aéroport" <?php if (isset($detailom['CL_hotel_aeroport'])) { if ($detailom['CL_hotel_aeroport'] === "aéroport") {echo "selected";}} ?> >aéroport</option>
 
- </div>
+
+</select>
+<?php } else { ?>
+<select id="CL_hotel_aeroport" name="CL_hotel_aeroport">
+  <option value="hôtel" selected>hôtel</option>
+  <option value="aéroport">aéroport</option>
+</select>
+<?php } ?>
+
+<?php if (isset($detailom['CL_hotel_aeroport'])) { if ($detailom['CL_hotel_aeroport'] === "hôtel") { ?>				
+			<p id="hotel" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
+<?php } else { ?>
+				<p id="hotel" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;display:none;">
+<?php } } else { ?>
+				<p id="hotel" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;display:none;">
+<?php } ?>	
+      
+ <span style="font-family:'Times New Roman'; font-weight:bold">où une chambre est réservée</span><span style="font-family:'Times New Roman'">&#xa0; </span>
+       <span style="font-family:'Times New Roman'; font-weight:bold">en votre nom pour la nuitée du </span><span style="font-family:'Times New Roman'">&#xa0; </span>
+             <input type="datetime-local" name="CL_debut_res" placeholder="" <?php if (isset($detailom)) { if (isset($detailom['CL_debut_res'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_debut_res']))."'";}} ?> >
+        <span style="font-family:'Times New Roman'; font-weight:bold"> au </span><span style="font-family:'Times New Roman'">&#xa0; </span>
+      <input type="datetime-local" name="CL_fin_res" id="CL_fin_res" <?php if (isset($detailom)) { if (isset($detailom['CL_fin_res'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_fin_res']))."'";}} ?> >
+
+
+ </p>	
+<?php if (isset($detailom['CL_hotel_aeroport'])) { if ($detailom['CL_hotel_aeroport'] === "aéroport") { ?>				
+			<p id="aeroport" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
+<?php } else { ?>
+				<p id="aeroport" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;display:none;">
+<?php } } else { ?>
+				<p id="aeroport" style="margin-top:4.65pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt;display:none;">
+<?php } ?>	
+      
+ <span style="font-family:'Times New Roman'; font-weight:bold">d’où vous prendrez le vol</span><span style="font-family:'Times New Roman'">&#xa0; </span>
+       <span style="font-family:'Times New Roman'; font-weight:bold"> </span><span style="font-family:'Times New Roman'">&#xa0; </span>
+             <input  name="CL_prendre_vol" placeholder="" <?php if (isset($detailom)) { if (isset($detailom['CL_prendre_vol'])) {echo "value='".$detailom['CL_prendre_vol']."'";}} ?> >
+        <span style="font-family:'Times New Roman'; font-weight:bold"> qui décolle à</span><span style="font-family:'Times New Roman'">&#xa0; </span>
+    <input type="datetime-local" name="CL_date_heure_decollage2" id="CL_date_heure_decollage2" <?php if (isset($detailom)) { if (isset($detailom['CL_date_heure_decollage2'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['CL_date_heure_decollage2']))."'";}} ?> >
+
+ </p>	
+ </div>	
          <div class="row ">
              <span style="font-family:'Times New Roman'; font-weight:bold">Date de Retour :  </span><span style="font-family:'Times New Roman'">&#xa0; </span>
 
@@ -1372,7 +1442,7 @@ function verifdispequipements(iddiv)
 			div1.id = "simnum_"+ct;
 			
 			// link to delete extended form elements
-			var delLink = '<div style="text-align:right;margin-right:480px;margin-top:-22px"><a href=javascript:deletesim("simnum_'+ ct +'") >(-)</a></div>';
+			var delLink = '<div style="text-align:right;margin-right:420px;margin-top:-22px"><a href=javascript:deletesim("simnum_'+ ct +'") >(-)</a></div>';
 			//<span style="display: inline-block;text-align: right;"><a href="javascript:deletesim();" id="delsim_button">(-)</a></span>
 			// add options to datalist (list puces dispo)
 			 //document.getElementById('CL_puces').appendChild('<option>test</option>');
@@ -1489,6 +1559,37 @@ function calculduree() {
         document.getElementById("CL_date_heure_retourbase").value = diffheures+' : '+diffminutes;
         document.getElementById("CL_date_heure_retourbase").onchange();
     }
+// CB_accepte
+	$("#CB_accepte").change(function() {
+	    if(this.checked) {
+	        $("#accepte").show();
+	    }
+	    else
+	    {
+	        $("#accepte").hide();
+	    }
+	});
+$("#CL_hotel_aeroport").change(function() {
+	   
+	       
+	        //Se révèle si on a sélectionné ci-dessus «vers aéroport/port »  
+	        if ($('#CL_hotel_aeroport').val()==="hôtel")
+	        {
+	    $("#hotel").show();}
+	    else
+	    {
+	       
+                $("#hotel").hide();
+	    }
+  if ($('#CL_hotel_aeroport').val()==="aéroport")
+	        {
+	    $("#aeroport").show();}
+	    else
+	    {
+	       
+                $("#aeroport").hide();
+	    }
+	});
 </script>
 				</body></html>
 <?php
