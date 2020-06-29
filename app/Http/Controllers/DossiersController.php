@@ -2408,6 +2408,7 @@ class DossiersController extends Controller
                 ->where('type_prest',$typeprest )
                 ->where('specialite',$specialite )
                 ->where('ville',$ville )
+                ->where('effectue',1 )
                 ->orderBy('priorite','asc')
                 ->orderBy('derniere_prestation','asc')
                 ->get();
