@@ -707,7 +707,7 @@ use App\Http\Controllers\TagsController;
                             
                              <div class="row text-center">
                               <div class="col-md-4" >
-                                <button id="btn-addtag" type="submit"  class="btn btn-danger">Ajouter</button>
+                                <button id="btn-addtag" type="submit" onclick="document.getElementById('btn-addtag').disabled=true"  class="btn btn-danger">Ajouter</button>
                               </div>
                               <div class="col-md-8" >
                                 <span id="addedsuccess" style="color:green;display: none">✓ Le TAG est ajouté avec succés</span>
@@ -1079,8 +1079,11 @@ use App\Http\Controllers\TagsController;
     }); 
 $("#tagname").select2();
 $('#tagname').change(function(e){
+
   if ($('#tagname option:selected').val() != null)
-    {if($('#tagname option:selected').val().match(/^(Franchise|Plafond|GOPmed|PlafondRem|GOPtn)$/))
+
+    {$('#btn-addtag').prop("disabled",false);
+if($('#tagname option:selected').val().match(/^(Franchise|Plafond|GOPmed|PlafondRem|GOPtn)$/))
         { //posséde champs montant
           if ($('#champstags').html() === "")
           {
@@ -1148,6 +1151,7 @@ $('#btn-addtag').click(function(e){
                     method:"POST",
                     data:{entree:entree,dossier:dossier,titre:tag,contenu:tagcontent,montant:montant,devise:devise, _token:_token},
                     success:function(data){
+
                         $("#addedsuccess").fadeIn(1500);
                         $("#addedsuccess").fadeOut(1500);
 
