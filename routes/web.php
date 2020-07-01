@@ -237,6 +237,7 @@ Route::post('/dossiers/changestatut','DossiersController@changestatut')->name('d
 Route::get('/dossiers/affectclassique','DossiersController@affectclassique')->name('dossiers.affectclassique');
 Route::post('/ExternefileUpload/upload', 'DossiersController@uploadExterneFile')->name('Upload.ExterneFile');
 Route::get('/Dossier/historiqueaffectation/{id}', 'DossiersController@historiqueAffectation')->name('historique.affectation');
+Route::get('/dossiers/details/{id}', 'DossiersController@details')->name('dossiers.details');
 
 
 
