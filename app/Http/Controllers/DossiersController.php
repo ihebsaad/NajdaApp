@@ -3506,87 +3506,135 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
    
    
    
-   
-   
+   public  function details ($id)
+   {
+	   
+	 return view('dossiers.details', ['id' => $id]);
+
+   }
    
    
     
    // Liste des utilisateurs qui ont travaillé sur un dossier
    
+   public static function users_work_on_folder( $iddoss)
+   {
+	$usersFolder = array();
+	
+    $usersFolder=\App\AffectDossHis::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
+         //dd($hisaffec);
+	//$countU=count($usersFolder);
+     $usersFolder=array_unique($usersFolder);
+     $usersFolder=array_values($usersFolder);
+ 
+	return $usersFolder ;
+   }
+
+   
+   
+   
    // nombre de factures
       public  static function countFactures ($id)
 	  {
-		 $count= \App\Facture::where('dossier',$id)->count();
+		 $count= \App\Facture::where('iddossier',$id)->count();
 		  return $count;
 	  }
 
    // nombre de prestations
        public  static function countPrestations ($id)
 	  {
-		 $count= \App\Prestation::where('dossier',$id)->count();
+		 $count= \App\Prestation::where('dossier_id',$id)->count();
 		  return $count;
 	  }
    // nombre des emails recus
-        public  static function countEmails ($id)
+        public  static function countEmailsDoss ($id)
 	  {
-		 $count= \App\Entree::where('dossier',$id)->where('type','email')->count();
+		 $count= \App\Entree::where('dossierid',$id)->where('type','email')->count();
 		  return $count;
 	  }
    
    // nombre de Fax reçus
-           public  static function countEmails ($id)
+           public  static function countFaxs ($id)
 	  {
-		 $count= \App\Entree::where('dossier',$id)->where('type','fax')->count();
+		 $count= \App\Entree::where('dossierid',$id)->where('type','fax')->count();
 		  return $count;
 	  }
    // nombre des sms reçus
            public  static function countSms ($id)
 	  {
-		 $count= \App\Entree::where('dossier',$id)->where('type','sms')->count();
+		 $count= \App\Entree::where('dossierid',$id)->where('type','sms')->count();
 		  return $count;
 	  }
    // nombre des emails envoyés
            public  static function countEmailsSent ($id)
 	  {
-		 $count= \App\Envoyee::where('dossier',$id)->where('type','email')->count();
+		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;
+		 $count= \App\Envoye::where('dossier',$ref)->where('type','email')->count();
 		  return $count;
 	  }
    // nombre des emails envoyés par un agent
        public  static function countEmailsSentUser ($id,$user)
-	  {
-		 $count= \App\Envoyee::where('dossier',$id)->where('type','email')->where('par',$user)->count();
+	  { 
+	  		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;
+		 $count= \App\Envoye::where('dossier',$ref)->where('type','email')->where('par',$user)->count();
 		  return $count;
 	  }
    // nombre des fax envoyés
           public  static function countFaxsSent ($id)
 	  {
-		 $count= \App\Envoyee::where('dossier',$id)->where('type','fax')->count();
+	  		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;		  
+		 $count= \App\Envoye::where('dossier',$ref)->where('type','fax')->count();
 		  return $count;
 	  }
    // nombre des fax envoyés par un agent
       public  static function countFaxsSentUser ($id,$user)
 	  {
-		 $count= \App\Envoyee::where('dossier',$id)->where('type','fax')->where('par',$user)->count();
+	  		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;		  
+		 $count= \App\Envoye::where('dossier',$ref)->where('type','fax')->where('par',$user)->count();
 		  return $count;
 	  }
    // nombre des sms envoyés
-         public  static function countSmsSentUser ($id,$user)
+         public  static function countSmsSent ($id)
 	  {
-		 $count= \App\Envoyee::where('dossier',$id)->where('type','sms')->count();
+	  		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;	  
+		 $count= \App\Envoye::where('dossier',$ref)->where('type','sms')->count();
 		  return $count;
 	  }
    // nombre des sms envoyés par un agent
       public static  function countSmsSentUser ($id,$user)
 	  {
-		 $count= \App\Envoyee::where('dossier',$id)->where('type','sms')->where('par',$user)->count();
+	  	  $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;		  
+		 $count= \App\Envoye::where('dossier',$ref)->where('type','sms')->where('par',$user)->count();
 		  return $count;
 	  }
    
+        // nombre des  comptes rendus
+      public static  function countRendus  ($id)
+	  {
+ 		 $count= \App\Entree::where('dossierid',$id)->where('type','tel')->count();
+		  return $count;
+	  } 
+	  
+     // nombre des compte rendu   par un agent
+      public static  function countRendusUser ($id,$user)
+	  {
+ 		 $count= \App\Entree::where('dossierid',$id)->where('type','tel')->where('par',$user)->count();
+		  return $count;
+	  } 
    
+        // nombre des missions
+      public static  function countMissions  ($id)
+	  {
+ 		 $count= \App\Mission::where('dossier_id',$id)->count();
+		  return $count;
+	  } 
    
-   
-   
-   
+        // nombre des missions    par un agent
+      public static  function countMissionsUser ($id,$user)
+	  {
+ 		 $count= \App\MissionHis::where('dossier_id',$id)->where('user_id',$user)->count();
+		  return $count;
+	  } 
    
    
    
