@@ -358,6 +358,17 @@ Route::get('/clientgroupes/view/{id}', 'ClientGroupesController@view');
 Route::get('/clientgroupes/destroy/{id}', 'ClientGroupesController@destroy');
 
 
+
+/*** Garanties  **/
+ Route::get('/garanties', array('as' => 'garanties','uses' => 'GarantiesController@index'));
+Route::post('/garanties/saving','GarantiesController@saving')->name('clientgroupes.saving');
+Route::post('/garanties/updating','GarantiesController@updating')->name('clientgroupes.updating');
+Route::get('/garanties/view/{id}', 'GarantiesController@view');
+Route::get('/garanties/destroy/{id}', 'GarantiesController@destroy');
+
+
+
+
 /*** Prestataires **/
 //Route::resource('/prestataires',  'PrestatairesController');
 Route::get('/prestataires', array('as' => 'prestataires','uses' => 'PrestatairesController@index'));
