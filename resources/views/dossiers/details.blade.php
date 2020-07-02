@@ -30,6 +30,7 @@ $listeusers=DossiersController::users_work_on_folder($id);
  
  // nombre des missions
  $missions=DossiersController::countMissions($id);
+ $missionsT=DossiersController::countMissionsT($id);
  
    // nombre de factures
   $Factures =   DossiersController::countFactures ($id);
@@ -89,7 +90,8 @@ $listeusers=DossiersController::users_work_on_folder($id);
             <tr><td  style="width:300px"><span><i class="fas fa-sms"></i>  SMS reçus </span></td><td><b><?php echo $Sms;?></b></td></tr>
             <tr><td  style="width:300px"><span><i class="fas fa-sms"></i>  SMS envoyés </span></td><td><b><?php echo $SmsSent;?></b></td></tr>
             <tr><td  style="width:300px"><span><i class="fa fa-comment-dots"></i>  Compte rendus  </span></td><td><b><?php echo $Rendus;?></b></td></tr>
-             <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i>  Missions  </span></td><td><b><?php echo $missions;?></b></td></tr>
+             <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i>  Missions en cours  </span></td><td><b><?php echo $missions;?></b></td></tr>
+             <tr><td  style="width:300px"><span><i class="fa fa-gears"></i>  Missions terminées  </span></td><td><b><?php echo $missionsT;?></b></td></tr>
          </table>
 
 </div>
@@ -118,6 +120,7 @@ foreach ($listeusers as $user)
    // $RendusUser=   DossiersController::countRendusUser ($id,$user);
 	  // mission agent
 	 $missionsUser=DossiersController::countMissionsUser($id,$user);
+	 $missionsUserT=DossiersController::countMissionsUserT($id,$user);
 
  
 ?>
@@ -128,7 +131,8 @@ foreach ($listeusers as $user)
              <tr><td  style="width:300px"><span><i class="fa fa-fax"></i>  Fax envoyés </span></td><td><b><?php echo $FaxsSentUser;?></b></td></tr>
              <tr><td  style="width:300px"><span><i class="fas fa-sms"></i>  SMS envoyés </span></td><td><b><?php echo $SmsSentUser;?></b></td></tr>
         <!--    <tr><td  style="width:300px"><span><i class="fa fa-comment-dots"></i>  Compte rendus  </span></td><td><b><?php // echo $RendusUser;?></b></td></tr>-->
-            <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Missions   </span></td><td><b><?php echo $missionsUser;?></b></td></tr>
+            <tr><td  style="width:300px"><span><i class="fa fa-tasks"></i> Missions en cours  </span></td><td><b><?php echo $missionsUser;?></b></td></tr>
+            <tr><td  style="width:300px"><span><i class="fa fa-gears"></i> Missions Terminées  </span></td><td><b><?php echo $missionsUserT;?></b></td></tr>
         </table> 
   </div> 
 		

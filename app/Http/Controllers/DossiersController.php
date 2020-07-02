@@ -3622,22 +3622,35 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 		  return $count;
 	  } 
    
-        // nombre des missions
+        // nombre des missions en cours
       public static  function countMissions  ($id)
 	  {
  		 $count= \App\Mission::where('dossier_id',$id)->count();
 		  return $count;
 	  } 
+	  
+	  // nombre des missions
+      public static  function countMissionsT  ($id)
+	  {
+ 		 $count= \App\MissionHis::where('dossier_id',$id)->count();
+		  return $count;
+	  } 
+	  
    
-        // nombre des missions    par un agent
+        // nombre des missions  encours  par un agent
       public static  function countMissionsUser ($id,$user)
 	  {
- 		 $count= \App\MissionHis::where('dossier_id',$id)->where('user_id',$user)->count();
+ 		 $count= \App\Mission::where('dossier_id',$id)->where('user_id',$user)->count();
 		  return $count;
 	  } 
    
    
-   
+           // nombre des missions  terminées  par un agent
+      public static  function countMissionsUserT ($id,$user)
+	  {
+ 		 $count= \App\MissionHis::where('dossier_id',$id)->where('user_id',$user)->count();
+		  return $count;
+	  } 
    
    
 
