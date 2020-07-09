@@ -45,6 +45,14 @@ class ContratsController extends Controller
 
     }
 
+	   public function add()
+    {
+        return view('contrats.add');
+
+    }
+	
+	
+	
      public function create()
     {
         $dossiers = Dossier::all();

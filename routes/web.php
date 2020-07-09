@@ -337,6 +337,7 @@ Route::get('/docs/destroy/{id}', 'DocsController@destroy');
 /*** contrats -> Contrats Clients   **/
 
 Route::get('/contrats', array('as' => 'contrats','uses' => 'ContratsController@index'));
+Route::get('/contrats/add','ContratsController@add')->name('contrats.add');
 Route::post('/contrats/saving','ContratsController@saving')->name('contrats.saving');
 Route::post('/contrats/updating','ContratsController@updating')->name('contrats.updating');
 Route::get('/contrats/view/{id}', 'ContratsController@view');
@@ -361,8 +362,8 @@ Route::get('/clientgroupes/destroy/{id}', 'ClientGroupesController@destroy');
 
 /*** Garanties  **/
  Route::get('/garanties', array('as' => 'garanties','uses' => 'GarantiesController@index'));
-Route::post('/garanties/saving','GarantiesController@saving')->name('clientgroupes.saving');
-Route::post('/garanties/updating','GarantiesController@updating')->name('clientgroupes.updating');
+Route::post('/garanties/saving','GarantiesController@saving')->name('garanties.saving');
+Route::post('/garanties/updating','GarantiesController@updating')->name('garanties.updating');
 Route::get('/garanties/view/{id}', 'GarantiesController@view');
 Route::get('/garanties/destroy/{id}', 'GarantiesController@destroy');
 

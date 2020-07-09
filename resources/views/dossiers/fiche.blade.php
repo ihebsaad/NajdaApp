@@ -656,9 +656,8 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                             <?php  $specsTPA = DB::table('specialites_typeprestations')
                                                                                 ->where('type_prestation',15)  // medcecin traitant
                                                                                 ->get();
-
                                                                             ?>
-                                                                            <div class="input-group-control">
+                                                                    <div class="input-group-control">
                                                                                 <select id="specialite_TPA"  onchange="changing(this)"   class="form-control" value="{{ $dossier->specialite_TPA }}" >
                                                                                     <option value=""></option>
                                                                                     <?php  foreach($specsTPA as $spec)
@@ -674,7 +673,54 @@ use  \App\Http\Controllers\PrestatairesController;
                                                                     </div>
 
                                                                 </div>
+                                                                <div class="row">
+																<?php $val1=$val2=$val3=$val4='';
+																$garantie=\App\Garantie::where('id_assure',$dossier->ID_assure)->first();
+																		if (isset($garantie)){$val1=$garantie->val1; $val2=$garantie->val2; $val3=$garantie->val3; $val4=$garantie->val4  ;  }
+																?>
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <label for="val1" class="control-label"> val1 </label>
 
+                                                                            <div class="input-group-control">
+                                                                                <input   type="number"  readonly  class="form-control" value="<?php echo $val1;?>" >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <label for="val1" class="control-label"> val2 </label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input   type="number"  readonly  class="form-control" value="<?php echo $val2;?>" >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>																	
+
+																<div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <label for="val1" class="control-label"> val3 </label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input   type="number"  readonly  class="form-control" value="<?php echo $val3;?>" >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+																	
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <label for="val1" class="control-label"> val4 </label>
+
+                                                                            <div class="input-group-control">
+                                                                                <input   type="number"  readonly  class="form-control" value="<?php echo $val4;?>" >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>																	
+																	
+                                                                </div>
+
+																	
                                                                 <?php }?>
 
                                                                 <div class="row" style="margin-top:50px">

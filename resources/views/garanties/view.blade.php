@@ -8,14 +8,24 @@
 
 <div class="modal-body">
     <form id="updateform">
+<?php
+ $dossier=\App\Dossier::where('ID_assure',trim($garantie->id_assure))->first();
 
+?>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">ID Assuré</label>
-                                <input onchange="changing(this)" type="text" class="form-control input" name="id_assure" id="id_assure"  value="{{ $garantie->id_assure }}">
+                                <input readonly onchange="changing(this)" type="text" class="form-control input" name="id_assure" id="id_assure"  value="{{ $garantie->id_assure }}">
                             </div>
                         </div>
+						     <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="inputError" class="control-label">Assuré</label>
+                                <input readonly onchange="changing(this)" type="text" class="form-control input"   value="<?php echo  $dossier->reference_medic.' '. $dossier->subscriber_name.' '.$dossier->subscriber_lastname ;?>">
+                            </div>
+                        </div>
+						
                     </div>
                     <div class="row">					
                         <div class="col-md-3">
@@ -56,13 +66,13 @@
 
         var val =document.getElementById(champ).value;
         //  var type = $('#type').val();
-        var contrat = $('#idtp').val();
+        var garantie = $('#idtp').val();
 
         var _token = $('input[name="_token"]').val();
         $.ajax({
-            url: "{{ route('contrats.updating') }}",
+            url: "{{ route('garanties.updating') }}",
             method: "POST",
-            data: {contrat: contrat , champ:champ ,val:val, _token: _token},
+            data: {garantie: garantie , champ:champ ,val:val, _token: _token},
             success: function (data) {
                 $('#'+champ).animate({
                     opacity: '0.3',

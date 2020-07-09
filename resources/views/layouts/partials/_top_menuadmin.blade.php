@@ -170,7 +170,7 @@ $seance =  DB::table('seance')
 
             <div class="col-sm-2">
                 <a href="{{ route('clients.mails') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-                    <span class="   fas fa-mail-bulk"></span>
+                    <span class="   fas fa-lg fa-mail-bulk"></span>
                     <br>
                     Emails Clients
                 </a>
@@ -181,6 +181,14 @@ $seance =  DB::table('seance')
                     <span  class="fas fa-lg fa-file-invoice"></span>
                     <br>
                     Factures
+                </a>
+            </div>
+			
+			            <div class="col-sm-2">
+                <a href="{{ route('garanties') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="fas fa-lg fa-stamp"></span>
+                    <br>
+                    Garanties
                 </a>
             </div>
 

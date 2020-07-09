@@ -27,8 +27,8 @@ class GarantiesController extends Controller
  	}
 	  public function view($id)
 	{
-		 $garanties = Garantie::where('id',$id)->first();
-		return view('garanties.index',['garantie'=>$garantie]);
+		 $garantie  = Garantie::where('id',$id)->first();
+		return view('garanties.view',['garantie'=>$garantie]);
  
  	}
 	

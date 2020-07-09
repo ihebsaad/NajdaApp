@@ -7,8 +7,15 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('resources/assets/datatables/css/scroller.bootstrap.css') }}" />
 
 @section('content')
-
-
+<?php
+ $assures=\App\Dossier::where('ID_assure','<>','')->pluck('ID_assure')->toArray();;
+ $assures=array_unique($assures);
+ $assures=array_values($assures);
+	 
+ $assuresG=\App\Garantie::pluck('ID_assure')->toArray();
+   
+								 
+?>
     <style>
         .uper {
             margin-top: 10px;
@@ -20,7 +27,7 @@
             <div class="row">
                 <div class="col-lg-6"><h2>Table de garanties</h2></div>
                 <div class="col-lg-6">
-                    <button id="addgr" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter un contrat</b></button>
+                    <button id="addgr" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une garantie</b></button>
                 </div>
             </div>
         </div>
@@ -28,34 +35,34 @@
             <thead>
             <tr id="headtable">
                 <th style="width:10%">ID</th>
-                <th style="width:10%">ID Assuré</th>
-                <th style="width:15%">val1</th>
-                <th style="width:15%">val2</th>
-                <th style="width:15%">val3</th>
-                <th style="width:15%">val4</th>
+                <th style="width:30%">ID Assuré</th>
+                <th style="width:10%">val1</th>
+                <th style="width:10%">val2</th>
+                <th style="width:10%">val3</th>
+                <th style="width:10%">val4</th>
                  <th style="width:10%">Actions</th>
               </tr>
             <tr>
                 <th style="width:10%">ID</th>
-                <th style="width:10%">ID Assuré</th>
-                <th style="width:15%">val1</th>
-                <th style="width:15%">val2</th>
-                <th style="width:15%">val3</th>
-                <th style="width:15%">val4</th>
+                <th style="width:30%">ID Assuré</th>
+                <th style="width:10%">val1</th>
+                <th style="width:10%">val2</th>
+                <th style="width:10%">val3</th>
+                <th style="width:10%">val4</th>
               <th class="no-sort" style="width:10%">Actions</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($garantie as $garantie)
+            @foreach($garanties as $garantie)
                 <?php
-          
+          	 	$dossier=\App\Dossier::where('ID_assure',trim($garantie->id_assure))->first();
+
 
                 ?>
 
                 <tr>
-                    <td  ><?php echo sprintf("%04d",$contrat->id);?></td>
-                    <td  ><a href="{{action('GarantiesController@view', $garantie['id'])}}" >{{$garantie->id}}</a></td>
-                    <td  > {{$garantie->id_assure}} </td>
+                    <td  ><a href="{{action('GarantiesController@view', $garantie['id'])}}" ><?php echo sprintf("%04d",$garantie->id);?></a></td>
+                     <td  ><?php echo $garantie->id_assure.' ('.$dossier->reference_medic.' '. $dossier->subscriber_name.' '.$dossier->subscriber_lastname.') ';?></td>
 					<td>{{$garantie->val1}}</td>
 					<td>{{$garantie->val2}}</td>
 					<td>{{$garantie->val3}}</td>
@@ -99,7 +106,18 @@
 
                             <div class="form-group">
                                 <label for="type">Assuré :</label>
-                                <input class="form-control" type="text" id="id_assure" />
+                                <select class="form-control select2"  required id="id_assure" style="width:100%" >
+								<option></option>
+								<?php
+								 foreach($assures as $assure)
+								{
+									$doss=\App\Dossier::where('ID_assure',trim($assure))->first();
+									if (! in_array(trim($assure),$assuresG))
+									{echo '<option value="'.$assure.'"> '.$assure.' ('.$doss->reference_medic.' '. $doss->subscriber_name.' '.$doss->subscriber_lastname.') </option>';}
+								}
+								 
+								?>
+								</select>
 
                             </div>
 							
@@ -160,10 +178,16 @@
     <script type="text/javascript" src="{{ asset('resources/assets/datatables/js/vfs_fonts.js') }}" ></script>
 
     <style>.searchfield{width:100px;}</style>
+<link href="{{ asset('public/js/select2/css/select2.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
 
     <script type="text/javascript">
         $(document).ready(function() {
+    $("#id_assure").select2();
 
 
             $('#mytable thead tr:eq(1) th').each( function () {
@@ -241,15 +265,18 @@
 
 
             $('#add').click(function(){
-                var nom = $('#nom').val();
-                var type = $('#type').val();
-                if ((nom != '')  )
+                var id_assure = $('#id_assure').val();
+                var val1 = $('#val1').val();
+                var val2 = $('#val2').val();
+                var val3 = $('#val3').val();
+                var val4 = $('#val4').val();
+                if ((id_assure != '')  )
                 {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
-                        url:"{{ route('contrats.saving') }}",
+                        url:"{{ route('garanties.saving') }}",
                         method:"POST",
-                        data:{nom:nom,type:type, _token:_token},
+                        data:{id_assure:id_assure,val1:val1,val2:val2,val3:val3,val4:val4, _token:_token},
                         success:function(data){
 
                             //   alert('Added successfully');
