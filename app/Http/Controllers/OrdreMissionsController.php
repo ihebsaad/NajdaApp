@@ -5430,7 +5430,7 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
                     $count = OMMedicInternational::where('parent',$parent)->count();
                     OMMedicInternational::where('id', $parent)->update(['dernier' => 0]);
                     $omparent=OMMedicInternational::where('id', $parent)->first();
-                    $filename='medicinternnationnal_Remplace-'.$parent;
+                    $filename='MI_Remplace-'.$parent;
 
                     if ((isset($omparent["complete"]) || isset($omparent["affectea"])) || isset($_POST['affectea']))
                     {// supprimer attachement precedent (du parent)
@@ -5477,7 +5477,7 @@ Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent
 
                     OMMedicInternational::where('id', $parent)->update(['dernier' => 0]);
                     $omparent= OMMedicInternational::where('id', $parent)->first();
-                    $filename='medicinternationnal_Complet-'.$parent;
+                    $filename='MI_Complet-'.$parent;
                     $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
                     $name='OM - '.$name;
                     $path= storage_path()."/OrdreMissions/";
@@ -5531,7 +5531,7 @@ Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent
         // nom fichier  - cas nouveau
         if (empty($_POST['templatedocument']))
         {
-            $filename='medicinternationnal_'.$datees;
+            $filename='MI_'.$datees;
         }
 
         $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
@@ -5848,7 +5848,7 @@ $reqpbenef->request->add(['dossier' => $iddnew]);
                 $mc=round(microtime(true) * 1000);
                 $datees = strftime("%d-%B-%Y"."_".$mc);
 
-                $filename='medicinternationnal__'.$datees;
+                $filename='MI__'.$datees;
 
                 $name=  preg_replace('/[^A-Za-z0-9 _ .-]/', ' ', $filename);
                 $name='OM - '.$name;
@@ -6579,10 +6579,10 @@ Log::info('[Agent : '.$nomuser.' ] Annulation Ordre de mission: '.$omparent["tit
 }
 	        return "OM Remorquage annulée avec succès";
 	    }
- elseif (stristr($titre,'medic') !== FALSE)  {
+ elseif (stristr($titre,'MI') !== FALSE)  {
                 $omparent1=OMMedicInternational::where('id', $parent)->first();
             OMMedicInternational::where('id', $parent)->update(['dernier' => 0]);
-$filename='medicinternationnal_annulation-'.$parent;
+$filename='MI_annulation-'.$parent;
 	    $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $omparent1['id_prestataire'] ,'effectue' => 1])->orderBy('created_at', 'desc')->first();
               $prestation  ->update(['effectue' => 0,'statut' => "autre",'details' => "annulation",'oms_docs'=>$filename]);
 
