@@ -837,7 +837,7 @@ foreach ($array_prestap as $prestap) {
   <option value="Assis WCHR" <?php if (isset($detailom['CL_type_siege'])) { if ($detailom['CL_type_siege'] === "Assis WCHR") {echo "selected";}} ?> >Assis WCHR</option>
   <option value="Assis WCHS" <?php if (isset($detailom['CL_type_siege'])) { if ($detailom['CL_type_siege'] === "Assis WCHS") {echo "selected";}} ?> >Assis WCHS</option>
   <option value="Assis WCHC" <?php if (isset($detailom['CL_type_siege'])) { if ($detailom['CL_type_siege'] === "Assis WCHC") {echo "selected";}} ?> >Assis WCHC</option>
-  <option value="extra-seat civière" <?php if (isset($detailom['CL_type_siege'])) { if ($detailom['CL_type_siege'] === "extra-seat civière") {echo "selected";}} ?> >extra-seat civière </option>
+  <option value="extra-seat" <?php if (isset($detailom['CL_type_siege'])) { if ($detailom['CL_type_siege'] === "extra-seat") {echo "selected";}} ?> >extra-seat</option>
   <option value="avion sanitaire" <?php if (isset($detailom['CL_type_siege'])) { if ($detailom['CL_type_siege'] === "avion sanitaire") {echo "selected";}} ?> >avion sanitaire</option>
   <option value=" Bateau" <?php if (isset($detailom['CL_type_siege'])) { if ($detailom['CL_type_siege'] === " Bateau") {echo "selected";}} ?> > Bateau</option>
  <option value="Civière" <?php if (isset($detailom['CL_type_siege'])) { if ($detailom['CL_type_siege'] === "Civière") {echo "selected";}} ?> >Civière</option>
@@ -848,12 +848,26 @@ foreach ($array_prestap as $prestap) {
   <option value="Assis WCHR" selected>Assis WCHR</option>
   <option value="Assis WCHS">Assis WCHS</option>
   <option value="Assis WCHC">Assis WCHC</option>
-  <option value="extra-seat civière">extra-seat civière</option>
+  <option value="extra-seat">extra-seat</option>
   <option value="avion sanitaire">avion sanitaire</option>
   <option value="Bateau">Bateau</option>
   <option value="Civière">Civière</option>
 </select>
 <?php } ?>
+<span style="font-family:'Times New Roman'; font-weight:bold">:oxygène</span>
+<?php  if (isset($detailom))
+{ if (isset($detailom['CL_oxygene']))
+	{ if (($detailom['CL_oxygene'] === "oxygène")) { ?>	
+		<input type="checkbox" name="CL_oxygene" id="CL_oxygene" checked value="oxygène">
+		<?php } else { ?>
+		<input type="checkbox" name="CL_oxygene" id="CL_oxygene" value="">
+<?php }} else { ?>
+<input type="checkbox" name="CL_oxygene" id="CL_oxygene" value="oxygène">
+<?php }
+} else { ?>				
+<input type="checkbox" name="CL_oxygene" id="CL_oxygene" value="oxygène">
+<?php } ?>
+
 					<span style="font-family:'Times New Roman'; font-weight:bold">   Réf/pnr: </span>
 <input name="CL_refbillet" id="CL_refbillet" placeholder="réf du billet" <?php if (isset($detailom)) { if (isset($detailom['CL_refbillet'])) {echo "value='".$detailom['CL_refbillet']."'";}} ?> />
 				<!--</p>-->
