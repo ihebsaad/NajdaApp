@@ -155,6 +155,16 @@ if (isset($_POST['clientIMA'])) { ?>
 		<span style="font-family:'Times New Roman'; font-weight:bold">Etat du véhicule</span><span style="font-family:'Times New Roman'; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span><span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_etat_vehicule'])) { echo $_POST['CL_etat_vehicule']; } ?></span>
 
 </div>
+<?php if (isset($_POST['CB_transfertpers'])) { if (($_POST['CB_transfertpers'] === "oui")||($_POST['CB_transfertpers'] === "on")) { ?>
+<p style="margin-top:0.65pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
+					
+<span id="transfertpers">
+
+<span style="font-family:'Times New Roman'; font-weight:bold">Nbre.</span><span style="font-family:'Times New Roman'; font-weight:bold">passagers : </span>
+<span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_nombrepassag'])) { echo $_POST['CL_nombrepassag']; } ?></span>
+</span>
+</p>
+<?php }} ?>
 <div class="row" style=" margin-left: 0px; ">
 	<p style="margin-top:1pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
 

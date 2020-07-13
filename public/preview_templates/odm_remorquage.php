@@ -547,6 +547,26 @@ foreach ($array_spec as $spec) {
             </select>
         <?php } ?>
         </p>
+<p style="margin-top:4.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
+        <?php if (isset($detailom['CB_transfertpers'])) { if (($detailom['CB_transfertpers'] === "oui")||($detailom['CB_transfertpers'] === "on")) { $transfertpers = true; ?>
+            <input type="checkbox" name="CB_transfertpers" id="CB_transfertpers" value="oui" checked>
+        <?php } else {  ?>
+            <input type="checkbox" name="CB_transfertpers" id="CB_transfertpers" >
+        <?php }} else { if (empty($detailom['CB_transfertpers'])) { ?>
+            <input type="checkbox" name="CB_transfertpers" id="CB_transfertpers" >
+        <?php } else { $transfertpers = true; ?>
+            <input type="checkbox" name="CB_transfertpers" id="CB_transfertpers" value="oui" checked>
+        <?php }} ?>
+            <span style="font-family:'Times New Roman'; font-weight:bold">T</span><span style="font-family:'Times New Roman'; font-weight:bold">ransfert des personnes</span><span style="font-family:'Times New Roman'; font-weight:bold"></span>
+        <?php if (isset($transfertpers)) { ?>
+        <span id="transfertpers" style="display: inline-block;">
+<?php } else { ?>
+<span id="transfertpers" style="display: none;">
+<?php } ?>
+					<span style="font-family:'Times New Roman'; font-weight:bold">:&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">Nbre.</span><span style="font-family:'Times New Roman'; font-weight:bold">passagers</span>
+<input type="number" name="CL_nombrepassag" id="CL_nombrepassag" placeholder="" <?php if (isset($detailom)) { if (isset($detailom['CL_nombrepassag'])) {echo "value='".$detailom['CL_nombrepassag']."'";}} ?> />
+</span>
+    </p>
         <div class="row" style=" margin-left: 0px; ">
     <p style="margin-top:4.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">RDV pour </span><span style="font-family:'Times New Roman'; font-weight:bold"> le remorquage </span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span>
         <input type="time" id="CL_heure_RDV" name="CL_heure_RDV" min="00:00" max="23:59"  <?php if (isset($detailom)) { if (isset($detailom['CL_heure_RDV'])) {echo "value='".date('H:i',strtotime($detailom['CL_heure_RDV']))."'";}} ?> >
@@ -1129,6 +1149,15 @@ $("#dateheuredispprev").change(function() {
         else
         {
             $("#trpersonne").hide();
+        }
+    });
+ $("#CB_transfertpers").change(function() {
+        if(this.checked) {
+            $("#transfertpers").show();
+        }
+        else
+        {
+            $("#transfertpers").hide();
         }
     });
     // CB_preportaeroport

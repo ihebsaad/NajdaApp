@@ -143,13 +143,22 @@ if (isset($omparent['clientIMA'])) { ?>
 	</p>
 </div>
 <div class="row" style=" margin-left: 0px; ">
-	<p style="margin-top:6.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Etat de véhicule</span><span style="font-family:'Times New Roman'; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_etat_vehicule'])) { echo $omparent['CL_etat_vehicule']; } ?></span>
+	<p style="margin-top:6.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
+	<p style="margin-top:6.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Boite de vitesse</span><span style="font-family:'Times New Roman'; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_automatique_normal'])) { echo $omparent['CL_automatique_normal']; } ?></span>:
+
+<span style="font-family:'Times New Roman'; font-weight:bold">Etat de véhicule</span><span style="font-family:'Times New Roman'; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_etat_vehicule'])) { echo $omparent['CL_etat_vehicule']; } ?></span>
 
 </div>
-<div class="row" style=" margin-left: 0px; ">
-	<p style="margin-top:6.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">Boite de vitesse</span><span style="font-family:'Times New Roman'; font-weight:bold"></span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_automatique_normal'])) { echo $omparent['CL_automatique_normal']; } ?></span>
+<?php if (isset($omparent['CB_transfertpers'])) { if (($omparent['CB_transfertpers'] === "oui")||($omparent['CB_transfertpers'] === "on")) { ?>
+<p style="margin-top:0.65pt;  margin-bottom:0pt; widows:0; orphans:0; font-size:10pt">
+					
+<span id="transfertpers">
 
-</div>
+<span style="font-family:'Times New Roman'; font-weight:bold">Nbre.</span><span style="font-family:'Times New Roman'; font-weight:bold">passagers : </span>
+<span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_nombrepassag'])) { echo $omparent['CL_nombrepassag']; } ?></span>
+</span>
+</p>
+<?php }} ?>
 <div class="row" style=" margin-left: 0px; ">
 			<p style="margin-top:6.65pt; margin-bottom:0pt; widows:0; orphans:0; font-size:10pt"><span style="font-family:'Times New Roman'; font-weight:bold">RDV avec </span><span style="font-family:'Times New Roman'; font-weight:bold">le passager</span><span style="font-family:'Times New Roman'; font-weight:bold">&#xa0;</span><span style="font-family:'Times New Roman'; font-weight:bold">: </span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_heure_RDV'])) { echo $omparent['CL_heure_RDV']; } ?></span>
 				<span style="font-family:'Times New Roman'; font-weight:bold">Contact téléphonique</span><span style="font-family:'Times New Roman'">&#xa0;</span><span style="font-family:'Times New Roman'">:   </span><span style="font-family:'Times New Roman'; "><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_contacttel'])) { echo $omparent['CL_contacttel']; } ?></span>
