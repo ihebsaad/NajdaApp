@@ -1320,21 +1320,23 @@ array_push($listepr,$pr['prestataire_id']);
                 </div>
                 <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
                     <thead>
-                    <tr id="headtable">
+                    <tr id="headtable" style="font-size:13px;">
                         <th style="">OM</th>
                         <!--<th style="">Description</th>-->
                         <th style="">Historique</th>
                         <th style="">Validation</th>
+                        <th style="">Date de mission</th>
+                        <th style="">Date de création</th>
                         <th style="">Actions</th>
                      </tr>
 
                     </thead>
-                    <tbody>
+                    <tbody style="font-size:13px;">
                         <?php if (! ($omtaxis->isEmpty())) { ?>
                         @foreach($omtaxis as $omtx)
                         <tr>
-                            <td style=";"><?php echo $omtx->titre; ?></td>
-                            <td style=";">
+                            <td style="width:10%" ><?php echo $omtx->titre; ?></td>
+                            <td style="width:10%">
                             <?php
  $titre=1;
                                 if ($omtx->parent !== null)
@@ -1348,7 +1350,7 @@ array_push($listepr,$pr['prestataire_id']);
                                 }
                             ?>
                             </td>
-                            <td style=";">
+                            <td style="width:10%">
                             <?php
 if($omtx->affectea!='externe') {
                                 if (Gate::check('isSupervisor')) 
@@ -1384,6 +1386,24 @@ echo "";
 }
                             ?>
                             </td>
+<?php
+   if (stristr( $omtx->titre,'annulation')!== FALSE) 
+                                            {
+$omtaxii = DB::table('om_taxi')->where('id',$omtx->parent)->first();
+
+
+      $heuredaterdv=$omtaxii->CL_heuredateRDV;  }
+else{ $heuredaterdv=$omtx->CL_heuredateRDV;
+                   }  
+$heuredaterdv1 = strtotime(substr($heuredaterdv,0,10));
+
+      $heuredaterdv2 = date('d-m-Y',$heuredaterdv1);     ?>
+
+<td style="width:10%"><?php echo $heuredaterdv2; ?></td>
+
+<td style="width:10%"><?php  $heurecrea = strtotime(substr($omtx->created_at,0,10));
+ $heurecrea1 = date('d-m-Y',$heurecrea); 
+echo $heurecrea1; ?></td>
                             <?php 
                             $emppos=strpos($omtx->emplacement, '/OrdreMissions/');
                             $empsub=substr($omtx->emplacement, $emppos);
@@ -1494,6 +1514,24 @@ echo "";
 }
                             ?>
                             </td>
+<?php
+   if (stristr( $omamb->titre,'annulation')!== FALSE) 
+                                            {
+$omambi = DB::table('om_ambulance')->where('id',$omamb->parent)->first();
+
+
+      $heuredaterdv=$omambi->CL_heuredateRDV;  }
+else{ $heuredaterdv=$omamb->CL_heuredateRDV;
+                   }  
+$heuredaterdv1 = strtotime(substr($heuredaterdv,0,10));
+
+      $heuredaterdv2 = date('d-m-Y',$heuredaterdv1);     ?>
+
+<td style=";"><?php echo $heuredaterdv2; ?></td>
+
+<td style=";"><?php  $heurecrea = strtotime(substr($omamb->created_at,0,10));
+ $heurecrea1 = date('d-m-Y',$heurecrea); 
+echo $heurecrea1; ?></td>
                             <?php 
                             $emppos=strpos($omamb->emplacement, '/OrdreMissions/');
                             $empsub=substr($omamb->emplacement, $emppos);
@@ -1598,6 +1636,24 @@ else
 {echo "";}
                             ?>
                             </td>
+<?php
+   if (stristr( $omre->titre,'annulation')!== FALSE) 
+                                            {
+$omrei = DB::table('om_remorquage')->where('id',$omre->parent)->first();
+
+
+      $heuredaterdv=$omrei->CL_heuredateRDV;  }
+else{ $heuredaterdv=$omre->CL_heuredateRDV;
+                   }  
+$heuredaterdv1 = strtotime(substr($heuredaterdv,0,10));
+
+      $heuredaterdv2 = date('d-m-Y',$heuredaterdv1);     ?>
+
+<td style=";"><?php echo $heuredaterdv2; ?></td>
+
+<td style=";"><?php  $heurecrea = strtotime(substr($omre->created_at,0,10));
+ $heurecrea1 = date('d-m-Y',$heurecrea); 
+echo $heurecrea1; ?></td>
                                 <?php
                                 $emppos=strpos($omre->emplacement, '/OrdreMissions/');
                                 $empsub=substr($omre->emplacement, $emppos);
@@ -1673,6 +1729,24 @@ else
 echo "";
                                     ?>
                                 </td>
+<?php
+   if (stristr( $ommie->titre,'annulation')!== FALSE) 
+                                            {
+$ommiei = DB::table('om_medicinternationnal')->where('id',$ommie->parent)->first();
+
+
+      $heuredaterdv=$ommiei->CL_date_heure_prise;  }
+else{ $heuredaterdv=$ommie->CL_date_heure_prise;
+                   }  
+$heuredaterdv1 = strtotime(substr($heuredaterdv,0,10));
+
+      $heuredaterdv2 = date('d-m-Y',$heuredaterdv1);     ?>
+
+<td style=";"><?php echo $heuredaterdv2; ?></td>
+
+<td style=";"><?php  $heurecrea = strtotime(substr($ommie->created_at,0,10));
+ $heurecrea1 = date('d-m-Y',$heurecrea); 
+echo $heurecrea1; ?></td>
                                 <?php
                                 $emppos=strpos($ommie->emplacement, '/OrdreMissions/');
                                 $empsub=substr($ommie->emplacement, $emppos);

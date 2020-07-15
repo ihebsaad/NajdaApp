@@ -221,7 +221,8 @@ if (isset($_POST['clientIMA'])) { ?>
 <?php }} ?>
 <?php if (isset($_POST['CB_preportaeroport']) && isset($_POST['CL_destorg'])) { if ((($_POST['CB_preportaeroport'] === "oui"||($_POST['CB_preportaeroport'] === "on"))) && ($_POST['CL_destorg'] === "Destination")) { ?>
 <p id="preportaeroport1" style="margin-top:0.05pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:'Times New Roman'; font-weight:bold">Type de siége: </span><span style="font-family:'Times New Roman'; font-weight:bold"> </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_type_siege'])) { echo $_POST['CL_type_siege']; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_type_siege'])) { echo $_POST['CL_type_siege']; } ?>: <?php if (isset($_POST['CL_oxygene'])) { echo $_POST['CL_oxygene']; } else {echo "";} ?></span> 
+			
 					<span style="font-family:'Times New Roman'; font-weight:bold">   Réf/pnr: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($_POST['CL_refbillet'])) { echo $_POST['CL_refbillet']; } ?></span>
 </p>

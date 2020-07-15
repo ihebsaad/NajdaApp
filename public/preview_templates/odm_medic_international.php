@@ -277,6 +277,34 @@ $sqlhotelclin = "SELECT hospital_address,hotel FROM dossiers WHERE id=".$dossier
             }}
 
  
+// hotel clinique hopital
+$sqlhch = "SELECT id,name,phone_home,ville,ville_id FROM prestataires WHERE id IN (SELECT prestataire_id FROM prestataires_type_prestations WHERE type_prestation_id IN (8,9,18))";
+$resulthch = $conn->query($sqlhch);
+if ($resulthch->num_rows > 0) {
+    // output data of each row
+    $array_presthch = array();
+    while($rowhch = $resulthch->fetch_assoc()) {
+        if (intval($rowhch["ville_id"]) > 0)
+        {
+        	$sqlvilleprest = "SELECT id,name FROM villes WHERE id =".$rowhch['ville_id'];
+        	$resultvprest = $conn->query($sqlvilleprest);
+        	$vprest = $resultvprest->fetch_assoc();
+        	$nnameprest = $rowhch['name']." [".$vprest['name']."]";
+        }
+        elseif (! empty($rowhch["ville"]))
+        {
+			$nnameprest = $rowhch['name']." [".$rowhch['ville']."]";
+        }
+        elseif (empty($rowhch["ville"]))
+        {
+        	$nnameprest = $rowhch['name'];
+        }
+        $array_presthch[] = array('id' => $rowhch["id"],'name' => $nnameprest, 'phone_home' => $rowhch["phone_home"]);
+    }
+    //print_r($array_prest);
+	} else {
+    echo "0 results prestataires hch";
+	}
 
 header("Content-Type: text/html;charset=UTF-8");
 ?>
@@ -1039,12 +1067,13 @@ foreach ($array_escorte as $escorte) {
               <span style="font-family:'Times New Roman'; font-weight:bold">Hospital/hôtel :</span><span style="font-family:'Times New Roman'">&#xa0;
 <input list="lieu_immobilisation" autocomplete="off" name="lieu_immobilisation" placeholder="" <?php if (isset($detailom)) { if (isset($detailom['lieu_immobilisation'])) {echo "value='".$detailom['lieu_immobilisation']."'";}} ?>/ >
  <datalist id="lieu_immobilisation">
-            <?php
-foreach ($array_hotelclin as $hotelclin) {
-    
-    echo "<option value='".$hotelclin['hospital_address']."' >".$hotelclin['hospital_address']."</option>";
+           
+<?php
+foreach ($array_presthch as $presthch) {
+	echo "<option value='".$presthch['name']."' telprest='".$presthch['phone_home']."'>".$presthch['name']."</option>";
 }
 ?>
+
 </datalist>
               </div>
 

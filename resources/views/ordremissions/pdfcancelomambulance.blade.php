@@ -208,7 +208,7 @@ if (isset($omparent['clientIMA'])) { ?>
 <?php }} ?>
 <?php if (isset($omparent['CB_preportaeroport']) && isset($omparent['CL_destorg'])) { if ((($omparent['CB_preportaeroport'] === "oui"||($omparent['CB_preportaeroport'] === "on"))) && ($omparent['CL_destorg'] === "Destination")) { ?>
 <p id="preportaeroport1" style="margin-top:0.05pt; margin-left:5.85pt; margin-bottom:0pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:'Times New Roman'; font-weight:bold">Type de siége: </span><span style="font-family:'Times New Roman'; font-weight:bold"> </span>
-<span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_type_siege'])) { echo $omparent['CL_type_siege']; } ?></span>
+<span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_type_siege'])) { echo $omparent['CL_type_siege']; } ?>: <?php if (isset($omparent['CL_oxygene'])) { echo $omparent['CL_oxygene']; } else {echo "";} ?></span>
 					<span style="font-family:'Times New Roman'; font-weight:bold">   Réf/pnr: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_refbillet'])) { echo $omparent['CL_refbillet']; } ?></span>
 </p>
