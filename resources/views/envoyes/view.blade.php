@@ -83,11 +83,12 @@
                 </div>
                 <?php }?>
 
-                <div class="form-group">
+
+                <?php if ( $envoye->type != 'fax' ) {?>
+				<div class="form-group">
                     <label for="description">Description :</label>
                     <input id="description" type="text" class="form-control" name="description" required value="{{ $envoye->description }}" />
                 </div>
-                <?php if ( $envoye->type != 'fax' ) {?>
                 <div class="form-group ">
                     <label for="contenu">contenu:</label>
                 <div class="form-control" style="overflow:scroll;min-height:200px">
@@ -98,6 +99,18 @@
 
                 </div>
 
+                <?php } ?>
+                <?php if ( $envoye->type == 'fax' ) {?>
+				
+				 <div class="form-group">
+                    <label for="description">Objet :</label>
+                    <input id="description" type="text" class="form-control" name="description" required value="{{ $envoye->description }}" />
+                </div>
+				
+				<div class="form-group">
+                    <label for="description">Description :</label>
+                    <input id="description" type="text" class="form-control" name="description"   value="{{ $envoye->commentaire }}" />
+                </div>
                 <?php } ?>
 
                 <button class="btn btn-success " id="genererpdf"> Générer le PDF de l'email </button>
