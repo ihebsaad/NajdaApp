@@ -8,7 +8,7 @@
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 	?>
 	<div style="width:100%">
-<img src="<?php echo $urlapp ?>/public/img/najda.png" style="width:80px;float: right;margin-right:60px;margin-top:40px;margin-bottom:50px;">
+<!--<img src="http://197.14.53.86:3007/najdaapp/public/img/najda.png" style="width:80px;float: right;margin-right:60px;margin-top:40px;margin-bottom:50px;">-->
  </div>
  <br> <br> <br> <br><br>
 <p style="margin-bottom: 0.08in; text-transform: uppercase; line-height: 100%"><a name="_GoBack"></a>
@@ -44,7 +44,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><b></b></font></p>
 		</td>
 		<td width="40%" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
-			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"> +216 73 000 000 </font></p>
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"> +216 73 820 333 </font></p>
 		</td>
 	</tr>
 	<tr valign="top">
@@ -77,10 +77,18 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 	</tr>
 	<tr valign="top">
 		<td width="15%" height="38" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
-			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><b>Objet&nbsp;:</b></font></p>
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><b>Objet&nbsp;</b></font></p>
 		</td>
 		<td colspan="3" width="85%" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
 			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><?php echo $sujet; ?></font></p>
+		</td>
+	</tr>
+		<tr valign="top">
+		<td width="15%" height="38" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;"><b>Description&nbsp;</b></font></p>
+		</td>
+		<td colspan="3" width="85%" style="border-top: 1.00pt solid #00000a; border-bottom: 1.00pt solid #00000a; border-left: none; border-right: none; padding: 0in">
+			<p style="margin-top: 0.08in"><font style="font-family: Comic Sans MS;">   <?php echo $commentaire; ?></font></p>
 		</td>
 	</tr>
 </table>
@@ -88,7 +96,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 <div title="footer" style="font-size:10px; ">
 <p align="right" style="margin-right: 0.02in"><B><i>Najda Assistance</i></B><br><B>Tel :</b> (+216) 36 00 36 00<br><B>Email: </B>contact@najda-assistance.com<br><B>Site Web: </B>www.najda-assistance.com
-			<br><b>Adresse:</b> Rue Mohamed Hamdane, Sahloul 3, Sousse 4054</p>
+			<br><b>Adresse:</b> Rue Mohamed Hamdane, Sahloul 3, Sousse 4054</p><b><br>Fax Medic & X PRESS : +216 73 369 001<br>Fax VAT :+216 73 820 301</b>
 	 
 	</table>
 	<p style="margin-bottom: 0in; line-height: 100%"><br/>

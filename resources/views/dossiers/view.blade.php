@@ -1947,8 +1947,9 @@ echo $heurecrea1; ?></td>
                             <th style="width:10%">ID</th>
                             <th style="width:10%">Date</th>
                             <th style="width:15%">N° Facture</th>
-                            <th style="width:20%">Assistance</th>
-                            <th style="width:20%">Prestataire</th>
+                            <th style="width:15%">Assistance</th>
+                            <th style="width:15%">Prestataire</th>
+                            <th style="width:10%">Supp</th>
                           </tr>
 
                         </thead>
@@ -1974,7 +1975,11 @@ echo $heurecrea1; ?></td>
                                     <a  href="{{action('PrestatairesController@view', $prest)}}" ><?php echo PrestationsController::PrestataireById($prest);  ?>
                                     </a>
                                 </td>
-
+								 <td style="width:10%">
+								     <a  href="{{action('FacturesController@destroy', $facture->id )}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                                <span class="fa fa-fw fa-trash-alt"></span>
+								</a>
+								</td>
                             </tr>
                         @endforeach
                         </tbody>

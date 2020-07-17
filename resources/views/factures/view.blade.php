@@ -14,8 +14,11 @@
 <div class="modal-body">
     <div class="portlet box grey">
         <div class="modal-header"><b>Facture</b></div>
-		   <div class="row  pull-right">
-             <div class="col-sm-2">
+		   <div class="row  ">
+		   <div class="col-sm-2 pull-right">
+		    <button id="addgr" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une facture </b></button>
+			</div>
+             <div class="col-sm-2 pull-right">
             <a href="{{ route('factures') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
                 <span  class="fas fa-lg fa-file-invoice"></span>
                 <br>
@@ -24,9 +27,18 @@
               </div>
             </div>
     </div>
-    <?php
-	     use \App\Http\Controllers\UsersController;
-$createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
+     <?php use App\Dossier;use App\Http\Controllers\DossiersController;
+    use \App\Http\Controllers\UsersController;
+    use \App\Http\Controllers\ClientsController;
+     $users=UsersController::ListeUsers();
+
+    $CurrentUser = auth()->user();
+
+    $iduser=$CurrentUser->id;
+
+date_default_timezone_set('Africa/Tunis');
+
+   $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
 
    $date_valid=$facture['date_valid'];
     $date_arrive=$facture['date_arrive'];
@@ -318,6 +330,57 @@ $mois=substr ( $date_arrive , 3  ,2 );
   </div>
 
 
+
+    <!-- Modal -->
+    <div class="modal fade" id="create"    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ajouter une facture</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+                        <form method="post" >
+                            {{ csrf_field() }}
+
+                            <div class="form-group">
+                                <label for="type">Date d'arrivée :</label>
+                                <input   id="date_arrive"   value='<?php echo date('d/m/Y'); ?>' class="form-control datepicker-default "  />
+
+                            </div>
+
+							<div class="form-group">
+                                <label for="type">N° de Facture :</label>
+                                <input class="form-control"  id="reference"  type="text" class="form-control input"   />
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="type"> Dossier : </label>
+                                     <?php         $dossiers = Dossier::orderBy('created_at', 'desc')->get(); ?>
+                                    <select id ="iddossier"  class="form-control " style="width: 100%;color:black!important;">
+                                        <option></option>
+                                        <?php foreach($dossiers as $ds)
+
+                                        {
+                                            echo '<option style="color:black!important" title="'.$ds->id.'" value="'.$ds->id.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name .' '.$ds->subscriber_lastname .' </option>';}     ?>
+                                    </select>
+                             </div>
+                        </form>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" id="add" class="btn btn-primary">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
   
 
 @endsection
@@ -338,8 +401,31 @@ $mois=substr ( $date_arrive , 3  ,2 );
 
         $("#prestataire").select2();
 
-    });
-    function changing(elm) {
+            $('#add').click(function(){
+                var date_arrive = $('#date_arrive').val();
+                var reference = $('#reference').val();
+                var dossier = $('#iddossier').val();
+                if ((date_arrive != '' ) || (reference != '' )   )
+                {
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('factures.saving') }}",
+                        method:"POST",
+                        data:{reference:reference,date_arrive:date_arrive,dossier:dossier, _token:_token},
+                        success:function(data){
+                            //   alert('Added successfully');
+                            window.location =data;
+
+                        }
+                    });
+                }else{
+                    // alert('ERROR');
+                }
+            });
+
+        });
+
+     function changing(elm) {
         var champ=elm.id;
 
         var val =document.getElementById(champ).value;

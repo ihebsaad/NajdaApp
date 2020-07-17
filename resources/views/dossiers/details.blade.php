@@ -94,6 +94,228 @@ $listeusers=DossiersController::users_work_on_folder($id);
              <tr><td  style="width:300px"><span><i class="fa fa-gears"></i>  Missions terminées  </span></td><td><b><?php echo $missionsT;?></b></td></tr>
          </table>
 
+<!-- <h2> Liste des missions : </h2>-->
+
+
+<?php 
+ $missionsHIVD=App\MissionHis::where('dossier_id',$id)->orderBy('date_deb','desc')->pluck('type_Mission')->toArray();
+ 
+ 
+	 
+		$listeM=array_count_values($missionsHIVD);
+	/*	foreach($listeM as $missID => $number)
+		{
+			echo 'Mission id : '.$missID.'<br>';
+			echo 'total  : '.$number.'<br>';
+		}
+		*/
+?>		
+	 <h2 style="color:#4fc1e9"><u> Liste des contrats : </u></h2>
+	<?php
+	$dossier=\App\Dossier::where('id',$id)->first();
+	$clientid=$dossier->customer_id;
+	$client=\App\Client::where('id',$clientid)->first();
+
+	$groupe=$client->groupe;
+	
+
+ 	$contratsp=DB::table('contrats_clients')->where('parent',$clientid)->where('type','particulier')->pluck('contrat');
+ 	 $contratsg=DB::table('contrats_clients')->where('parent',$groupe)->where('type','commun')->pluck('contrat');
+
+	 echo '<br><h3><u>Contrats Particuliers</u></h3><br>';
+	foreach($contratsp as $c )
+	{
+	 $contrat=\App\Contrat::where('id',$c)->first();
+	 echo 'Règles du contrat: <b>' .$contrat->nom .'</b><br><br>';
+ 	  $contatvalide=true;
+	 	foreach($listeM as $missID => $number)
+		{
+	/*	if( ($contrat->mission1 >0)   &&  ( $missID == $contrat->mission1 ) && ( $contrat->val1 $contrat->operateur1  $number    )	  ){
+			echo 'Règle valide :';
+		}	 
+	*/
+	
+if ($contrat->mission1 >0 && $missID == $contrat->mission1    ) 
+{	 if( $contrat->val1 .$contrat->operateur1.   $number    )	  
+	{	echo 'Règle valide  :';
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur1.' '.$contrat->val1.'<br><br>';
+		
+	}else{
+		echo 'Règle Non valide :';$contatvalide=false; 
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur1.' '.$contrat->val1.'<br><br>';
+		
+	}
+		 	
+}
+if ($contrat->mission2 >0 && $missID == $contrat->mission2    ) 
+{	 if( $contrat->val2 .$contrat->operateur2.  $number    )	  
+	{	echo 'Règle valide :';
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur2.' '.$contrat->val2.'<br><br>';
+
+		
+	}else{
+		echo 'Règle Non valide :';$contatvalide=false;
+			$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur2.' '.$contrat->val2.'<br><br>';
+
+	}
+		 	
+}
+if ($contrat->mission3 >0 && $missID == $contrat->mission3    ) 
+{	 if( $contrat->val3 .$contrat->operateur3.  $number    )	  
+	{	echo 'Règle valide :';
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur3.' '.$contrat->val3.'<br><br>';
+
+		
+	}else{
+		echo 'Règle Non valide :';$contatvalide=false;
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur3.' '.$contrat->val3.'<br><br>';
+
+	}
+		 	
+}
+if ($contrat->mission4 >0 && $missID == $contrat->mission4    ) 
+{	 if( $contrat->val4 .$contrat->operateur4.  $number    )	  
+	{	echo 'Règle valide :';
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur4.' '.$contrat->val4.'<br><br>';
+
+		
+	}else{
+		echo 'Règle Non valide :';$contatvalide=false;
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur4.' '.$contrat->val4.'<br><br>';
+
+	}
+		 	
+}
+if ($contrat->mission5 >0 && $missID == $contrat->mission5    ) 
+{	 if( $contrat->val5 .$contrat->operateur5.  $number    )	  
+	{	echo 'Règle valide :';
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur5.' '.$contrat->val5.'<br><br>';
+
+		
+	}else{
+		echo 'Règle Non valide :';$contatvalide=false;
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur5.' '.$contrat->val5.'<br><br>';
+
+	}
+		 	
+}
+if ($contrat->mission6 >0 && $missID == $contrat->mission6    ) 
+{	 if( $contrat->val6 .$contrat->operateur6.  $number    )	  
+	{	echo 'Règle valide :';
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur6.' '.$contrat->val6.'<br><br>';
+
+		
+	}else{
+		echo 'Règle Non valide :';$contatvalide=false;
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur6.' '.$contrat->val6.'<br><br>';
+
+	}
+		 	
+}
+if ($contrat->mission7 >0 && $missID == $contrat->mission7    ) 
+{	 if( $contrat->val7 .$contrat->operateur7.  $number    )	  
+	{	echo 'Règle valide :';
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur7.' '.$contrat->val7.'<br><br>';
+
+		
+	}else{
+		echo 'Règle Non valide :';$contatvalide=false;
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur7.' '.$contrat->val7.'<br><br>';
+
+	}
+		 	
+}
+if ($contrat->mission8 >0 && $missID == $contrat->mission8    ) 
+{	 if( $contrat->val8 .$contrat->operateur8.  $number    )	  
+	{	echo 'Règle valide :';
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur8.' '.$contrat->val8.'<br><br>';
+
+		
+	}else{
+		echo 'Règle Non valide :';$contatvalide=false;
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur8.' '.$contrat->val8.'<br><br>';
+
+	}
+		 	
+}
+if ($contrat->mission9 >0 && $missID == $contrat->mission9    ) 
+{	 if( $contrat->val9 .$contrat->operateur9.  $number    )	  
+	{	echo 'Règle valide :';
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur9.' '.$contrat->val9.'<br><br>';
+
+		
+	}else{
+		echo 'Règle Non valide :';$contatvalide=false;
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur9.' '.$contrat->val9.'<br><br>';
+
+	}
+		 	
+}
+if ($contrat->mission10 >0 && $missID == $contrat->mission10    ) 
+{	 if( $contrat->val10 .$contrat->operateur10.  $number    )	  
+	{	echo 'Règle valide :';
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur10.' '.$contrat->val10.'<br><br>';
+
+		
+	}else{
+		echo 'Règle Non valide :';$contatvalide=false;
+	$Mission=	\App\TypeMission::find($missID);
+	echo $Mission->nom_type_Mission.' '.$contrat->operateur10.' '.$contrat->val10.'<br><br>';
+
+	}
+	
+ 
+		 	
+}
+	
+		
+
+			
+		}//foreach liste
+ 	 
+	 if($contatvalide){
+		echo '<h4 style="color:#a0d468">'.$contrat->nom. ' => Contrat Valide</h4>';
+	}
+	else{
+		echo '<h4 style="color:#fd9883">'. $contrat->nom. ' => Contrat Non Valide</h4>';
+
+	}	
+	 
+	 
+ 	}//foreach contrats
+	
+	echo '<br><u><h3>Contrats Communs:</h3></u><br>';
+	
+	foreach($contratsg as $c )
+	{
+	 $contrat=\App\Contrat::where('id',$c)->first();
+	 
+ 	}
+	 
+	?>
+ 	
+		
+		
+		
 </div>
 <div class="col-lg-8">
 

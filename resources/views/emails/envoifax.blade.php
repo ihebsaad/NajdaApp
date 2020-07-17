@@ -29,9 +29,20 @@
             <div class="col-md-10">
                 <input id="description" type="text" class="form-control" name="description" required />
             </div>
-
-
+ 
         </div>
+
+    </div>
+	<div class="form-group">
+        {{ csrf_field() }}
+        <label for="description">Description:</label>
+        <div class="row">
+            <div class="col-md-10">
+                <input id="commentaire" type="text" class="form-control" name="commentaire"   />
+            </div>
+ 
+        </div>
+
     </div>
     <div class="form-group">
          <label for="destinataire">Destinataire:</label>
