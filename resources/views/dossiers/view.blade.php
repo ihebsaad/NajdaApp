@@ -3190,7 +3190,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                         $('#launchPhone').on('click', function(event) {
                             event.preventDefault();
                             var num=document.getElementById('numtel').options[document.getElementById('numtel').selectedIndex].value;
-                             var url      = 'http://192.168.1.249/najdaapp/public/ctxSip/phone/index.php?num='+num,
+                             var url      = 'http://localhost/najdatest/public/ctxSip/phone/index.php?num='+num,
                                 features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480,';
                             var session=null;
                             // This is set when the phone is open and removed on close
@@ -6709,6 +6709,7 @@ $(document).ready(function(){
 
 function valideom(idom,idsuperviseur,types){
         //$("#gendocfromhtml").submit();
+document.getElementById('btnvalid').disabled=true
         var _token = $('input[name="_token"]').val();
 
         $.ajax({

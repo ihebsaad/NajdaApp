@@ -6698,8 +6698,8 @@ DB::table('validation_omtaxi')->insert(
                 'nomsuperviseur' => $nom,
                 'prenomsuperviseur' => $prenom]
             );
-OMTaxi::where('id', $id)->update(['dernier' => 1,'parent'=>$idom,'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name]);           
-	 OMTaxi::where('id', $omparent['id'])->update(['idvehic' => "",'idchauff' => "",'supervisordate'=>$superviseur]);           
+OMTaxi::where('id', $id)->update(['dernier' => 1,'parent'=>$omparent['parent'],'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'created_at'=>$omparent['created_at']]);           
+	 OMTaxi::where('id', $omparent['id'])->delete();           
 	if ($omtaxi->save()) {
 
 $par=Auth::id();
@@ -6707,17 +6707,9 @@ $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
 
-$titreparent = $omparent['titre'];
-Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$titreparent. ' par: '.$name. ' dans le dossier: '.$dossieromref["reference_medic"] );
-if($affectea=='interne')
-{
-Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à entité soeur: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
 
-}
-if($affectea=='mmentite')
-{
-Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
-}
+Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$name.' dans le dossier: '.$dossieromref["reference_medic"] );
+
 
 }               
                 	
@@ -6770,8 +6762,8 @@ DB::table('validation_omambulance')->insert(
                 'nomsuperviseur' => $nom,
                 'prenomsuperviseur' => $prenom]
             );
-OMAmbulance::where('id', $id)->update(['dernier' => 1,'parent'=>$idom,'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name]);           
-	OMAmbulance::where('id', $omparent['id'])->update(['vehicID' => "",'idambulancier1' => "",'idambulancier2' => "",'idparamed' => "",'supervisordate'=>$superviseur]);
+OMAmbulance::where('id', $id)->update(['dernier' => 1,'parent'=>$omparent['parent'],'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'created_at'=>$omparent['created_at']]);           
+	OMAmbulance::where('id', $omparent['id'])->delete();
 if ($omambulance->save()) {
 
 $par=Auth::id();
@@ -6779,16 +6771,9 @@ $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
 
-$titreparent = $omparent['titre'];
-Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$titreparent. ' par: '.$name. ' dans le dossier: '.$dossieromref["reference_medic"] );
-if($affectea=='interne')
-{
-Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à entité soeur: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
-}
-if($affectea=='mmentite')
-{
-Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
-}} 
+
+Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$name.' dans le dossier: '.$dossieromref["reference_medic"] );
+} 
 
 
         } 
@@ -6840,8 +6825,8 @@ DB::table('validation_omremorquage')->insert(
                 'nomsuperviseur' => $nom,
                 'prenomsuperviseur' => $prenom]
             );
-OMRemorquage::where('id', $id)->update(['dernier' => 1,'parent'=>$idom,'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name]);           
-	OMRemorquage::where('id', $omparent['id'])->update(['dernier' => 0,'idvehic' => "",'idchauff' => "",'supervisordate'=>$superviseur]);
+OMRemorquage::where('id', $id)->update(['dernier' => 1,'parent'=>$omparent['parent'],'supervisordate'=>$superviseur,'emplacement'=>$path.$iddoss.'/'.$name.'.pdf','titre'=>$name,'created_at'=>$omparent['created_at']]);           
+	OMRemorquage::where('id', $omparent['id'])->delete();
        if ($omremorquage->save()) {
 
 $par=Auth::id();
@@ -6849,16 +6834,9 @@ $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
 
-$titreparent = $omparent['titre'];
-Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$titreparent. ' par: '.$name. ' dans le dossier: '.$dossieromref["reference_medic"] );
-if($affectea=='interne')
-{
-Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à entité soeur: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
-}
-if($affectea=='mmentite')
-{
-Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
-}}  } }
+
+Log::info('[Agent : '.$nomuser.' ] Validation Ordre de mission: '.$name. ' dans le dossier: '.$dossieromref["reference_medic"] );
+}  } }
 
 
 }
