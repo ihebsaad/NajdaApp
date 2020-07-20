@@ -957,6 +957,9 @@ foreach ($array_prestap as $prestap) {
 			<p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Ambulance: </span><button id="refdispv"><img src="refresh.png" width="10" height="10" alt="" /></button>
 <select id="lvehicule" name="lvehicule" autocomplete="off"  >
 <option></option>
+<?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) 
+{echo "<option value='".$detailom['lvehicule']."' selected >".$detailom['lvehicule']."</option>";}}
+?>
 </select>
 <input name="vehicID" id="vehicID" type="hidden" value="<?php echo $detailom['vehicID']; ?>"></input>
 			</p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt;width:100%"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Médecin transporteur : </span>
@@ -985,11 +988,17 @@ foreach ($array_med as $med) {
 <p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Paramédical: </span><button id="refdispra"><img src="refresh.png" width="10" height="10" alt="" /></button>
 <select id="lparamed" name="lparamed" autocomplete="off"  >
 <option></option>
+<?php if (isset($detailom['lparamed'])) { if (!empty($detailom['lparamed'])) 
+{echo "<option value='".$detailom['lparamed']."' selected >".$detailom['lparamed']."</option>";}}
+?>
 </select>
 <input name="idparamed" id="idparamed" type="hidden" value="<?php echo $detailom['idparamed']; ?>"></input>
 			</p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Personnel (Ambulancier1): </span><button id="refdisamb1"><img src="refresh.png" width="10" height="10" alt="" /></button>
 <select id="lambulancier1" name="lambulancier1" autocomplete="off"  >
 <option></option>
+<?php if (isset($detailom['lambulancier1'])) { if (!empty($detailom['lambulancier1'])) 
+{echo "<option value='".$detailom['lambulancier1']."' selected >".$detailom['lambulancier1']."</option>";}}
+?>
 </select>
 <input name="idambulancier1" id="idambulancier1" type="hidden" value="<?php echo $detailom['idambulancier1']; ?>"></input>
 			</p><p style="margin:0pt 0pt 0pt 20.9pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Heures sup ?: </span>
@@ -998,6 +1007,9 @@ foreach ($array_med as $med) {
 		<p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Ambulancier2: </span><button id="refdisamb2"><img src="refresh.png" width="10" height="10" alt="" /></button>
 <select id="lambulancier2" name="lambulancier2" autocomplete="off"  >
 <option></option>
+<?php if (isset($detailom['lambulancier2'])) { if (!empty($detailom['lambulancier2'])) 
+{echo "<option value='".$detailom['lambulancier2']."' selected >".$detailom['lambulancier2']."</option>";}}
+?>
 </select>
 <input name="idambulancier2" id="idambulancier2" type="hidden" value="<?php echo $detailom['idambulancier2']; ?>"></input>
 </p><p style="margin:0pt 0pt 0pt 20.9pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Heures sup ?: </span>
@@ -1064,7 +1076,11 @@ foreach ($array_med as $med) {
 <input type="datetime-local" name="dhretbaseprev" id="dhretbaseprev" <?php if (isset($detailom['dhretbaseprev'])) { if (!empty($detailom['dhretbaseprev'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['dhretbaseprev']))."'";}} ?> style=" margin-left: 27px; "/>
 			<p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Véhicule: </span> <button id="refdispv" ><img src="refresh.png" width="10" height="10" alt="" /></button>
 <select id="lvehicule" name="lvehicule" autocomplete="off"  >
+
 <option></option>
+<?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) 
+{echo "<option value='".$detailom['lvehicule']."' selected >".$detailom['lvehicule']."</option>";}}
+?>
 </select>
 <input name="vehicID" id="vehicID" type="hidden" value="<?php echo $detailom['vehicID']; ?>"></input>	
 			</p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt;width:100%"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Médecin transporteur : </span>
@@ -1093,11 +1109,17 @@ foreach ($array_med as $med) {
 <p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Paramédical: </span><button id="refdispra"><img src="refresh.png" width="10" height="10" alt="" /></button>
 <select id="lparamed" name="lparamed" autocomplete="off"  >
 <option></option>
+<?php if (isset($detailom['lparamed'])) { if (!empty($detailom['lparamed'])) 
+{echo "<option value='".$detailom['lparamed']."' selected >".$detailom['lparamed']."</option>";}}
+?>
 </select>
 <input name="idparamed" id="idparamed" type="hidden" value="<?php echo $detailom['idparamed']; ?>"></input>
 			</p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Ambulancier1: </span><button id="refdisamb1"><img src="refresh.png" width="10" height="10" alt="" /></button>
 <select id="lambulancier1" name="lambulancier1" autocomplete="off"  >
 <option></option>
+<?php if (isset($detailom['lambulancier1'])) { if (!empty($detailom['lambulancier1'])) 
+{echo "<option value='".$detailom['lambulancier1']."' selected >".$detailom['lambulancier1']."</option>";}}
+?>
 </select>
 <input name="idambulancier1" id="idambulancier1" type="hidden" value="<?php echo $detailom['idambulancier1']; ?>"></input>
 			</p><p style="margin:0pt 0pt 0pt 20.9pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Heures sup ?: </span>
@@ -1106,6 +1128,9 @@ foreach ($array_med as $med) {
 		<p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Ambulancier2: </span><button id="refdisamb2"><img src="refresh.png" width="10" height="10" alt="" /></button>
 <select id="lambulancier2" name="lambulancier2" autocomplete="off"  >
 <option></option>
+<?php if (isset($detailom['lambulancier2'])) { if (!empty($detailom['lambulancier2'])) 
+{echo "<option value='".$detailom['lambulancier2']."' selected >".$detailom['lambulancier2']."</option>";}}
+?>
 </select>	
 <input name="idambulancier2" id="idambulancier2" type="hidden" value="<?php echo $detailom['idambulancier2']; ?>"></input>
 </p><p style="margin:0pt 0pt 0pt 20.9pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Heures sup ?: </span>

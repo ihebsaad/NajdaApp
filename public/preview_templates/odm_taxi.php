@@ -801,6 +801,10 @@ foreach ($array_prestap as $prestap) {
 			<p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Véhicule: </span> <button id="refdispv"><img src="refresh.png" width="10" height="10" alt="" /></button>
 <select id="lvehicule" name="lvehicule" autocomplete="off"  >
 <option></option>
+<?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) 
+{echo "<option value='".$detailom['lvehicule']."' selected >".$detailom['lvehicule']."</option>";}}
+?>
+
 </select>
 <input type="hidden" name="idvehic" id="idvehic"  <?php if (isset($detailom['idvehic'])) { if (!empty($detailom['idvehic'])) {echo "value='".$detailom['idvehic']."'";}} ?> />
 			</p>
@@ -813,6 +817,8 @@ foreach ($array_prestap as $prestap) {
 <!-- affiche pour le moment toute la liste des personnels -->				
 <select id="lchauff" name="lchauff" autocomplete="off"  >
 <option></option>
+<?php if (isset($detailom['lchauff'])) { if (!empty($detailom['lchauff'])) 
+{echo "<option value='".$detailom['lchauff']."' selected >".$detailom['lchauff']."</option>";}}?>
 </select>
 <input type="hidden" name="idchauff" id="idchauff"   <?php if (isset($detailom['idchauff'])) { if (!empty($detailom['idchauff'])) {echo "value='".$detailom['idchauff']."'";}} ?> />
 			</p><p style="margin:0pt 0pt 0pt 20.9pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Heures sup ?: </span>
@@ -882,6 +888,9 @@ foreach ($array_prestap as $prestap) {
 			<p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Véhicule: </span><button id="refdispv"><img src="refresh.png" width="10" height="10" alt="" /></button>
 <select id="lvehicule" name="lvehicule" autocomplete="off"  >
 <option></option>
+<?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) 
+{echo "<option value='".$detailom['lvehicule']."' selected >".$detailom['lvehicule']."</option>";}}
+?>
 </select>
 <input type="hidden" name="idvehic" id="idvehic"   <?php if (isset($detailom['idvehic'])) { if (!empty($detailom['idvehic'])) {echo "value='".$detailom['idvehic']."'";}} ?> />
 			</p>
@@ -894,6 +903,8 @@ foreach ($array_prestap as $prestap) {
 <!-- affiche pour le moment toute la liste des personnels -->				
 <select id="lchauff" name="lchauff" autocomplete="off"  >
 <option></option>
+<?php if (isset($detailom['lchauff'])) { if (!empty($detailom['lchauff'])) 
+{echo "<option value='".$detailom['lchauff']."' selected >".$detailom['lchauff']."</option>";}}?>
 </select>
 <input type="hidden" name="idchauff" id="idchauff"   <?php if (isset($detailom['idchauff'])) { if (!empty($detailom['idchauff'])) {echo "value='".$detailom['idchauff']."'";}} ?> />
 			</p><p style="margin:0pt 0pt 0pt 20.9pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Heures sup ?: </span>
