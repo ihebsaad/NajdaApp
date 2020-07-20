@@ -1701,6 +1701,21 @@ intern
 
 
                }*/
+  if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['vehicID']) && !empty($_POST['vehicID']) )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['vehicID'])->first();
+	                     
+	                     $voiture->update(['carburant'=>$_POST['cartecarburant']]);
+
+	                	}
+ if( isset($_POST['cartetelepeage']) && !empty($_POST['cartetelepeage']) && isset($_POST['vehicID']) && !empty($_POST['vehicID']) )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['vehicID'])->first();
+	                     
+
+	                     $voiture->update(['telepeage'=>$_POST['cartetelepeage']]);
+
+	                	}
 if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['vehicID']) && !empty($_POST['vehicID']) )
                     {
 	                	$voiture=Voiture::where('id',$_POST['vehicID'])->first();
@@ -2560,6 +2575,20 @@ if(!isset($omparent['km_distance']) && isset($_POST['km_distance'])&& !empty($_P
 	                }
 
                }*/
+  if( isset($_POST['cartecarburant']) && !empty($_POST['cartecarburant']) && isset($_POST['vehicID']) && !empty($_POST['vehicID']) )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['vehicID'])->first();
+	                     
+	                     $voiture->update(['carburant'=>$_POST['cartecarburant']]);
+
+	                	}
+ if( isset($_POST['cartetelepeage']) && !empty($_POST['cartetelepeage']) && isset($_POST['vehicID']) && !empty($_POST['vehicID']) )
+                    {
+	                	$voiture=Voiture::where('id',$_POST['vehicID'])->first();
+	                     
+	                     $voiture->update(['telepeage'=>$_POST['cartetelepeage']]);
+
+	                	}
 
                   
 if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['vehicID']) && !empty($_POST['vehicID']) )
