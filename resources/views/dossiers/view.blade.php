@@ -1392,7 +1392,7 @@ echo "<span style='color:black'>".$om['statut']."</span>";}
 }}
                                 else
                                 { if ($om['statut'] =="Validé" || $om['statut']=="Annulé" ) {
-                                    if ($om->statut =="Validé"){
+                                    if ($om['statut'] =="Validé"){
 echo "<span style='color:blue'>".$om['statut']."</span>";}
 if ($om['statut'] =="Annulé"){
 echo "<span style='color:black'>".$om['statut']."</span>";}}
