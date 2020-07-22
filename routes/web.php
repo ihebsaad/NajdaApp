@@ -323,7 +323,7 @@ Route::post('/personnes/saving','PersonnesController@saving')->name('personnes.s
 Route::post('/personnes/updating','PersonnesController@updating')->name('personnes.updating');
 Route::get('/personnes/view/{id}', 'PersonnesController@view');
 Route::get('/personnes/destroy/{id}', 'PersonnesController@destroy');
-Route::get('/personnes/mails', 'ClientsController@mails')->name('personnes.mails');
+Route::get('/personnes/mailspersonnes', 'PersonnesController@mailspersonnes')->name('personnes.mailspersonnes');
 
 
 /*** docs -> documents à signer   **/

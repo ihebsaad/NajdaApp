@@ -50,6 +50,21 @@ class UsersController extends Controller
      }
 
  
+  public function mails()
+    {
+ 
+        if(\Gate::allows('isAdmin'))
+        {
+
+            $users = User::orderBy('name', 'asc')->get() ;
+            return view('users.mails',  compact('users'));        }
+        else {
+            // redirect
+            return redirect('/home')->with('success', 'droits insuffisants');
+
+        }
+
+     }
  
     /**
      * Show the form for creating a new resource.

@@ -36,7 +36,15 @@ class PersonnesController extends Controller
     }
 
  
- 
+     public function mailspersonnes()
+    {
+
+        $personnes = Personne::orderBy('name', 'asc')->get();
+        return view('personnes.mailspersonnes', compact('personnes'));
+    }
+	
+	
+	
     /**
      * Show the form for creating a new resource.
      *
