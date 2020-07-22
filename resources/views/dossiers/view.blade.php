@@ -1333,16 +1333,34 @@ array_push($listepr,$pr['prestataire_id']);
 
                     </thead>
                     <tbody style="font-size:13px;">
-                        <?php if (! ($omtaxis->isEmpty())) { ?>
-                        @foreach($omtaxis as $omtx)
+                       <?php
+$omtaxis = \App\OMTaxi::where(['dossier' => $dossier->id,'dernier' => 1])->select('id','affectea','titre','parent','emplacement','created_at','CL_heuredateRDV','statut')->orderBy('created_at','desc')->get();
+        $omambs = \App\OMAmbulance::where(['dossier' => $dossier->id,'dernier' => 1])->select('id','affectea','titre','parent','emplacement','created_at','CL_heuredateRDV','statut')->orderBy('created_at','desc')->get();
+        $omrem = \App\OMRemorquage::where(['dossier' => $dossier->id,'dernier' => 1])->select('id','affectea','titre','parent','emplacement','created_at','CL_heuredateRDV','statut')->orderBy('created_at','desc')->get();
+$omstot = array_merge($omtaxis->toArray(),$omambs->toArray(),$omrem->toArray() );
+  function cmp($a, $b)
+    {
+        return strcmp($b["created_at"],$a["created_at"]);
+    }
+
+    usort($omstot, "cmp");
+
+?>
+                        <?php if (!empty ($omstot)) { ?>
+                        @foreach($omstot as $om)
                         <tr>
-                            <td style="width:10%" ><?php echo $omtx->titre; ?></td>
+                            <td style="width:10%" ><?php echo $om['titre']; ?></td>
                             <td style="width:10%">
                             <?php
- $titre=1;
-                                if ($omtx->parent !== null)
+if (stristr( $om['titre'],'taxi')!== FALSE)
+{ $titre=1;}
+if (stristr( $om['titre'],'ambulance')!== FALSE)
+{ $titre=2;}
+if (stristr( $om['titre'],'remorquage')!== FALSE)
+{ $titre=3;}
+                                if ($om['parent'] !== null)
                                 {
-                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$omtx->parent.','.$titre.');"><i class="far fa-eye"></i> Voir</button>';
+                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$om['parent'].','.$titre.');"><i class="far fa-eye"></i> Voir</button>';
                                    
                                 }
                                 else
@@ -1353,27 +1371,32 @@ array_push($listepr,$pr['prestataire_id']);
                             </td>
                             <td style="width:10%">
                             <?php
-if($omtx->affectea!='externe') {
+if($om['affectea']!='externe') {
                                 if (Gate::check('isSupervisor')) 
                                 {$id=Auth::user()->id;
-$types=1;
-if ($omtx->statut !="Validé" && $omtx->statut!="Annulé" ) {
-                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnvalid" onclick="valideom('.$omtx->id.','.$id.','.$types.');" ><i class="fas fa-check"></i> Valider</button>';
+if (stristr( $om['titre'],'taxi')!== FALSE)
+{ $types=1;}
+if (stristr( $om['titre'],'ambulance')!== FALSE)
+{ $types=2;}
+if (stristr( $om['titre'],'remorquage')!== FALSE)
+{$types=3;}
+if ($om['statut'] !="Validé" && $om['statut']!="Annulé" ) {
+                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnvalid" onclick="valideom('.$om['id'].','.$id.','.$types.');" ><i class="fas fa-check"></i> Valider</button>';
                                    
                                
                            }
 else {
-if ($omtx->statut =="Validé"){
-echo "<span style='color:blue'>".$omtx->statut."</span>";}
-if ($omtx->statut =="Annulé"){
-echo "<span style='color:black'>".$omtx->statut."</span>";}
+if ($om['statut'] =="Validé"){
+echo "<span style='color:blue'>".$om['statut']."</span>";}
+if ($om['statut'] =="Annulé"){
+echo "<span style='color:black'>".$om['statut']."</span>";}
 }}
                                 else
-                                { if ($omtx->statut =="Validé" || $omtx->statut=="Annulé" ) {
-                                    if ($omtx->statut =="Validé"){
-echo "<span style='color:blue'>".$omtx->statut."</span>";}
-if ($omtx->statut =="Annulé"){
-echo "<span style='color:black'>".$omtx->statut."</span>";}}
+                                { if ($om['statut'] =="Validé" || $om['statut']=="Annulé" ) {
+                                    if ($om['statut'] =="Validé"){
+echo "<span style='color:blue'>".$om['statut']."</span>";}
+if ($om['statut'] =="Annulé"){
+echo "<span style='color:black'>".$om['statut']."</span>";}}
 else {
 echo "<span style='color:red'> Non Validé </span>" ;
 
@@ -1388,13 +1411,19 @@ echo "";
                             ?>
                             </td>
 <?php
-   if (stristr( $omtx->titre,'annulation')!== FALSE) 
+   if (stristr( $om['titre'],'annulation')!== FALSE) 
                                             {
-$omtaxii = DB::table('om_taxi')->where('id',$omtx->parent)->first();
+if (stristr( $om['titre'],'taxi')!== FALSE)
+{$omtaxii = DB::table('om_taxi')->where('id',$om['parent'])->first();}
+if (stristr( $om['titre'],'ambulance')!== FALSE)
+{ $omtaxii = DB::table('om_ambulance')->where('id',$om['parent'])->first();}
+if (stristr( $om['titre'],'remorquage')!== FALSE)
+{ $omtaxii = DB::table('om_remorquage')->where('id',$om['parent'])->first();}
+
 
 
       $heuredaterdv=$omtaxii->CL_heuredateRDV;  }
-else{ $heuredaterdv=$omtx->CL_heuredateRDV;
+else{ $heuredaterdv=$om['CL_heuredateRDV'];
                    }  
 $heuredaterdv1 = strtotime(substr($heuredaterdv,0,10));
 
@@ -1402,12 +1431,12 @@ $heuredaterdv1 = strtotime(substr($heuredaterdv,0,10));
 
 <td style="width:10%"><?php echo $heuredaterdv2; ?></td>
 
-<td style="width:10%"><?php  $heurecrea = strtotime(substr($omtx->created_at,0,10));
+<td style="width:10%"><?php  $heurecrea = strtotime(substr($om['created_at'],0,10));
  $heurecrea1 = date('d-m-Y',$heurecrea); 
 echo $heurecrea1; ?></td>
                             <?php 
-                            $emppos=strpos($omtx->emplacement, '/OrdreMissions/');
-                            $empsub=substr($omtx->emplacement, $emppos);
+                            $emppos=strpos($om['emplacement'], '/OrdreMissions/');
+                            $empsub=substr($om['emplacement'], $emppos);
                             $pathomtx = storage_path().$empsub;
                             //$templatedoc = $doc->template;
                             ?>
@@ -1418,31 +1447,38 @@ echo $heurecrea1; ?></td>
                                         <?php
                                             if (stristr($empsub,'annulation')=== FALSE) 
                                             {
+if (stristr( $om['titre'],'taxi')!== FALSE)
+{$omd='omtx';}
+if (stristr( $om['titre'],'ambulance')!== FALSE)
+{ $omd='omamb';}
+if (stristr( $om['titre'],'remorquage')!== FALSE)
+{$omd='omre';}
+
                                         ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important; padding: 6px 6px!important;" id="btnannrempomtx">
 
-                                                <a style="color:black" href="#" id="annrempomtx" onclick="remplaceom(<?php echo $omtx->id; ?>,'<?php echo $omtx->affectea; ?>','omtx');"> <i class="far fa-plus-square"></i> Remplacer</a>
+                                                <a style="color:black" href="#" id="annrempomtx" onclick="remplaceom(<?php echo $om['id']; ?>,'<?php echo $om['affectea']; ?>','<?php echo $omd; ?>');"> <i class="far fa-plus-square"></i> Remplacer</a>
 
                                             </button>
                                         </div>
 
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,214,214) !important; padding: 6px 6px!important;" id="btnannomtx">
-                                                <a style="color:black"  onclick="annuleom('<?php echo $omtx->titre; ?>',<?php echo $omtx->id; ?>);" href="#" > <i class="far fa-window-close"></i> Annuler</a>
+                                                <a style="color:black"  onclick="annuleom('<?php echo $om['titre']; ?>',<?php echo $om['id']; ?>);" href="#" > <i class="far fa-window-close"></i> Annuler</a>
                                             </button>
                                         </div>
                                         <?php
                                             }
                                         ?>
                                         <?php
-                                            if (isset($omtx->affectea)) 
-                                            { if ($omtx->affectea === "interne") {
+                                            if (isset($om['affectea'])) 
+                                            { if ($om['affectea'] === "interne") {
                                         ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(221,221,221) !important; padding: 6px 6px!important;" id="btncomp">
 
-                                                <a style="color:black" onclick='completeom("<?php echo $omtx->id; ?>","<?php echo $omtx->affectea; ?>","omtx");' ><i class="fas fa-pen"></i> Compléter</a>
+                                                <a style="color:black" onclick='completeom("<?php echo $om['id']; ?>","<?php echo $om['affectea']; ?>","<?php echo $omd; ?>");' ><i class="fas fa-pen"></i> Compléter</a>
                                             </button>
                                         </div>
                                         <?php
@@ -1451,7 +1487,7 @@ echo $heurecrea1; ?></td>
 
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important; padding: 6px 6px!important;" id="btntele">
-                                                <a style="color:black" onclick='modalodoc("<?php echo $omtx->titre; ?>","{{ URL::asset('storage'.$empsub) }}");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
+                                                <a style="color:black" onclick='modalodoc("<?php echo $om['titre']; ?>","{{ URL::asset('storage'.$empsub) }}");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
                                             </button>
                                         </div>
                                     </div>
@@ -1459,252 +1495,6 @@ echo $heurecrea1; ?></td>
                             </td>
                         </tr>
                     @endforeach
-                    <?php //endif
-                            } ?>
-                    <?php if (! ($omambs->isEmpty())) { ?>        
-                    @foreach($omambs as $omamb)
-                        <tr>
-                            <td style=";"><?php echo $omamb->titre; ?></td>
-                            <td style=";">
-                            <?php
- $titre=2;
-                                if ($omamb->parent !== null)
-                                {
-                                  echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$omamb->parent.','.$titre.');"><i class="far fa-eye"></i> Voir</button>';
-                                   
-                                }
-                                else
-                                {
-                                    echo "Aucun";
-                                }
-                            ?>
-                            </td>
-                            <td style=";">
-                            <?php
-if($omamb->affectea!='externe') {
-                                if (Gate::check('isSupervisor')) 
-                                {$id=Auth::user()->id;
-$types=2;
-if ($omamb->statut !="Validé" && $omamb->statut!="Annulé" ) {
-                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnvalid" onclick="valideom('.$omamb->id.','.$id.','.$types.');" ><i class="fas fa-check"></i> Valider</button>';
-                                   
-                               
-                           }
-else {
-if ($omamb->statut =="Validé"){
-echo "<span style='color:blue'>".$omamb->statut."</span>";}
-if ($omamb->statut =="Annulé"){
-echo "<span style='color:black'>".$omamb->statut."</span>";}
-}}
-                                else
-                                { if ($omamb->statut =="Validé" || $omamb->statut=="Annulé" ) {
-                                   if ($omamb->statut =="Validé"){
-echo "<span style='color:blue'>".$omamb->statut."</span>";}
-if ($omamb->statut =="Annulé"){
-echo "<span style='color:black'>".$omamb->statut."</span>";}}
-else {
-echo "<span style='color:red'> Non Validé </span>" ;
-
-
-}
-                                } }
-else {
-echo "";
-
-
-}
-                            ?>
-                            </td>
-<?php
-   if (stristr( $omamb->titre,'annulation')!== FALSE) 
-                                            {
-$omambi = DB::table('om_ambulance')->where('id',$omamb->parent)->first();
-
-
-      $heuredaterdv=$omambi->CL_heuredateRDV;  }
-else{ $heuredaterdv=$omamb->CL_heuredateRDV;
-                   }  
-$heuredaterdv1 = strtotime(substr($heuredaterdv,0,10));
-
-      $heuredaterdv2 = date('d-m-Y',$heuredaterdv1);     ?>
-
-<td style=";"><?php echo $heuredaterdv2; ?></td>
-
-<td style=";"><?php  $heurecrea = strtotime(substr($omamb->created_at,0,10));
- $heurecrea1 = date('d-m-Y',$heurecrea); 
-echo $heurecrea1; ?></td>
-                            <?php 
-                            $emppos=strpos($omamb->emplacement, '/OrdreMissions/');
-                            $empsub=substr($omamb->emplacement, $emppos);
-                            $pathomtx = storage_path().$empsub;
-                            //$templatedoc = $doc->template;
-                            ?>
-                            <td>
-                                    <div class="page-toolbar">
-
-                                    <div class="btn-group">
-                                        <?php
-                                            if (stristr($empsub,'annulation')=== FALSE) 
-                                            {
-                                        ?>
-                                        <div class="btn-group" style="margin-right: 10px">
-                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important; padding: 6px 6px!important;" id="btnannrempomtx">
-                                                <a style="color:black" href="#" id="annrempomamb" onclick="remplaceom(<?php echo $omamb->id; ?>,'<?php echo $omamb->affectea; ?>','omamb');"> <i class="far fa-plus-square"></i> Remplacer</a>
-                                            </button>
-                                        </div>
-
-                                        <div class="btn-group" style="margin-right: 10px">
-                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,214,214) !important; padding: 6px 6px!important;" id="btnannomtx">
-                                                <a style="color:black"  onclick="annuleom('<?php echo $omamb->titre; ?>',<?php echo $omamb->id; ?>);" href="#" > <i class="far fa-window-close"></i> Annuler</a>
-                                            </button>
-                                        </div>
-                                        <?php
-                                            }
-                                        ?>
-                                        <?php
-                                            if (isset($omamb->affectea)) 
-                                            { if ($omamb->affectea === "interne") {
-                                        ?>
-                                        <div class="btn-group" style="margin-right: 10px">
-                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(221,221,221) !important; padding: 6px 6px!important;" id="btncomp">
-                                                <a style="color:black" onclick='completeom("<?php echo $omamb->id; ?>","<?php echo $omamb->affectea; ?>","omamb");' ><i class="fas fa-pen"></i> Compléter</a>
-                                            </button>
-                                        </div>
-                                        <?php
-                                            }}
-                                        ?>
-                                        <div class="btn-group" style="margin-right: 10px">
-                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important; padding: 6px 6px!important;" id="btntele">
-                                                <a style="color:black" onclick='modalodoc("<?php echo $omamb->titre; ?>","{{ URL::asset('storage'.$empsub) }}");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                    <?php //endif
-                            } ?>
-
-                    <?php if (! ($omrem->isEmpty())) { ?>  
-                        @foreach($omrem as $omre)
-                            <tr>
-                                <td style=";"><?php echo $omre->titre; ?></td>
-                                <td style=";">
-                                    <?php
- $titre=3;
-                                    if ($omre->parent !== null)
-                                    {
-                                           echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnhisto" onclick="historiqueomtx('.$omre->parent.','.$titre.');"><i class="far fa-eye"></i> Voir</button>';
-
-                                    }
-                                    else
-                                    {
-                                        echo "Aucun";
-                                    }
-                                    ?>
-                                </td>
-                                <td style=";">
-                            <?php
-if($omre->affectea!='externe') {
-                                if (Gate::check('isSupervisor')) 
-                                {$id=Auth::user()->id;
-$types=3;
-if ($omre->statut !="Validé" && $omre->statut!="Annulé" ) {
-                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important; padding: 6px 6px!important;" id="btnvalid" onclick="valideom('.$omre->id.','.$id.','.$types.');" ><i class="fas fa-check"></i> Valider</button>';
-                                   
-                               
-                           }
-else {
-if ($omre->statut =="Validé"){
-echo "<span style='color:blue'>".$omre->statut."</span>";}
-if ($omre->statut =="Annulé"){
-echo "<span style='color:black'>".$omre->statut."</span>";}
-}}
-                                else
-                                { if ($omre->statut =="Validé" || $omre->statut=="Annulé" ) {
-                                    if ($omre->statut =="Validé"){
-echo "<span style='color:blue'>".$omre->statut."</span>";}
-if ($omre->statut =="Annulé"){
-echo "<span style='color:black'>".$omre->statut."</span>";}}
-else {
-echo "<span style='color:red'> Non Validé </span>" ;
-
-
-}
-                                } }
-else
-{echo "";}
-                            ?>
-                            </td>
-<?php
-   if (stristr( $omre->titre,'annulation')!== FALSE) 
-                                            {
-$omrei = DB::table('om_remorquage')->where('id',$omre->parent)->first();
-
-
-      $heuredaterdv=$omrei->CL_heuredateRDV;  }
-else{ $heuredaterdv=$omre->CL_heuredateRDV;
-                   }  
-$heuredaterdv1 = strtotime(substr($heuredaterdv,0,10));
-
-      $heuredaterdv2 = date('d-m-Y',$heuredaterdv1);     ?>
-
-<td style=";"><?php echo $heuredaterdv2; ?></td>
-
-<td style=";"><?php  $heurecrea = strtotime(substr($omre->created_at,0,10));
- $heurecrea1 = date('d-m-Y',$heurecrea); 
-echo $heurecrea1; ?></td>
-                                <?php
-                                $emppos=strpos($omre->emplacement, '/OrdreMissions/');
-                                $empsub=substr($omre->emplacement, $emppos);
-                                $pathomtx = storage_path().$empsub;
-                                //$templatedoc = $doc->template;
-                                ?>
-                                <td>
-                                    <div class="page-toolbar">
-
-                                        <div class="btn-group">
-                                            <?php
-                                            if (stristr($empsub,'annulation')=== FALSE)
-                                            {
-                                            ?>
-                                            <div class="btn-group" style="margin-right: 10px">
-                                                <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,227,214) !important; padding: 6px 6px!important;" id="btnannrempomtomre">
-                                                    <a style="color:black" href="#" id="annrempomtx" onclick="remplaceom(<?php echo $omre->id; ?>,'<?php echo $omre->affectea; ?>','omre');"> <i class="far fa-plus-square"></i> Remplacer</a>
-                                                </button>
-                                            </div>
-
-                                            <div class="btn-group" style="margin-right: 10px">
-                                                <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(247,214,214) !important; padding: 6px 6px!important;" id="btnannomre">
-                                                    <a style="color:black"  onclick="annuleom('<?php echo $omre->titre; ?>',<?php echo $omre->id; ?>);" href="#" > <i class="far fa-window-close"></i> Annuler</a>
-                                                </button>
-                                            </div>
-                                            <?php
-                                            }
-                                            ?>
-                                            <?php
-                                            if (isset($omre->affectea))
-                                            { if ($omre->affectea === "interne") {
-                                            ?>
-                                            <div class="btn-group" style="margin-right: 10px">
-                                                <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(221,221,221) !important; padding: 6px 6px!important;" id="btncomp">
-                                                    <a style="color:black" onclick='completeom("<?php echo $omre->id; ?>","<?php echo $omre->affectea; ?>","omre");'> <i class="fas fa-pen"></i> Compléter</a>
-                                                </button>
-                                            </div>
-                                            <?php
-                                            }}
-                                            ?>
-                                            <div class="btn-group" style="margin-right: 10px">
-                                                <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important; padding: 6px 6px!important;" id="btntele">
-                                                    <a style="color:black" onclick='modalodoc("<?php echo $omre->titre; ?>","{{ URL::asset('storage'.$empsub) }}");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
                     <?php //endif
                             } ?>
                     <?php if (! ($ommi->isEmpty())) { ?>  
