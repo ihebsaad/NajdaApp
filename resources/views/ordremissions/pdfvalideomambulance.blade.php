@@ -278,7 +278,15 @@ if (isset($omparent['clientIMA'])) { ?>
 <span style="font-family:'Times New Roman';margin-left:40px;"><?php if (isset($omparent['dhretbaseprev'])) {$DHsansT =str_replace('T',' ',$omparent['dhretbaseprev']); echo $DHsansT; } ?></span></p>
 		<p style="margin-top:0.05pt; margin-left:3.9pt; margin-bottom:0pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Ambulance: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['lvehicule'])) { echo $omparent['lvehicule']; } ?></span>
-			</p><p style="margin-top:0.05pt; margin-left:3.9pt; margin-bottom:0pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Médecin transporteur: </span>
+			</p>
+
+<p style="margin-top:0pt; margin-left:3.9pt; margin-bottom:0pt;widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Carte carburant: </span>
+<span style="font-family:'Times New Roman'"><?php if (isset($omparent['cartecarburant'])) { echo $omparent['cartecarburant']; } ?></span>
+			</p>
+<p style="margin-top:0pt; margin-left:3.9pt; margin-bottom:0pt;widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Carte Telepeage: </span>
+<span style="font-family:'Times New Roman'"><?php if (isset($omparent['cartetelepeage'])) { echo $omparent['cartetelepeage']; } ?></span>
+			</p>
+<p style="margin-top:0.05pt; margin-left:3.9pt; margin-bottom:0pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Médecin transporteur: </span>
 <span style="font-family:'Times New Roman'"><?php if (isset($omparent['lmedecin'])) { echo $omparent['lmedecin']; } ?></span>
 <span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">REA:</span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold; letter-spacing:-1.45pt"> </span><span style="font-family:'Times New Roman'; font-size:8pt; font-weight:bold">:</span><span style="font-family:'Times New Roman'"><?php if (isset($omparent['CL_rea'])) { echo " oui"; } else {echo " non";} ?></span>
 <p style="margin-top:0.05pt; margin-left:3.9pt; margin-bottom:0pt;  widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Paramédical: </span>
