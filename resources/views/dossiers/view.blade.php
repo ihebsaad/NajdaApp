@@ -64,7 +64,7 @@ function custom_echo($x, $length)
     <div class="col-md-3">
 <?php  // $doss=  DossiersController::DossiersActifs(); echo json_encode($doss) ; ?>
         <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@fiche',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '.  DossiersController::FullnameAbnDossierById($dossier->id);?> </a></h4>
-        <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@details',$dossier->id)}}" >Détails du dossier </a></h4>
+        <h4 ><a style="font-weight:bold;color:#bcdf94!important" href="{{action('DossiersController@details',$dossier->id)}}" >Détails du dossier </a></h4>
     </div>
     <div class="col-md-2">
         <b>Statut:</b>
@@ -2887,6 +2887,8 @@ if(strstr($dossier['reference_medic'],"MI")){
                 </div>
                 <div class="modal-body">
                     <div class="card-body" style="text-align:center;height:200px"><br>
+				<section><center><a target="_blank" href="{{action('DossiersController@fermeture',$dossier->id)}}" >Contrats (type de dossier) </a><br>
+				<br></center></section><br>
 <?php    
 
 app('App\Http\Controllers\MissionController')->verifier_fin_missions($dossier['id']);
@@ -2897,13 +2899,13 @@ $count= Mission::where('dossier_id',$dossier['id'])
 if($count==0) {
 ?>
                         <center><B> Etes vous sûrs de vouloir clôturer ce Dossier ?</B><br> <br> </center>
-                        <center><label  style="width:250px;text-align:center;margin-bottom:50px;" class="check "> Fermer Sans suite
-                            <input type="checkbox" id="sanssuite" class="form-control">
-                            <span class="checkmark"   ></span>
-
-                            </label><br>
-							<a  href="{{action('DossiersController@fermeture',$dossier->id)}}" >Page de fermeture </a><br>
-							</center>
+                       <section><center><label  style="width:250px;text-align:center;;" class="check "> Fermer Sans suite
+                            <input type="checkbox" id="sanssuite" class="form-control"></input>
+                            <span class="checkmark"   ></span>  
+                            </label>
+							 </center></section>
+				
+							
                         <a id="fermerdossier"   class="btn btn  "   style="background-color:#5D9CEC; width:100px;color:#ffffff"   >OUI</a>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:100px">Annuler</button><br>
 
