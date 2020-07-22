@@ -21,7 +21,7 @@
     <div class="uper">
         <div class="portlet box grey">
             <div class="row">
-                <div class="col-lg-3"><h2>Envoi de Emails aux Personnels</h2></div>
+                <div class="col-lg-4"><h2>Envoi des Emails aux Personnels</h2></div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <button type="submit" id="buttModif" class="  btn btn-success  btn-lg"> Envoyer </button>
@@ -33,26 +33,25 @@
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
             <tr id="headtable">
-                <th  class="no-sort" style="width:5%"><label class="check "><b>Tous </b><input type="checkbox" onclick='selectall()' id="casetout" name="casetout" value="">   <span class="checkmark"></span></label></th>
-                 <th style="width:45%">Nom</th>
-                <th style="width:15%">Type</th>
-                <th style="width:15%">Statut</th>
+                <th  class="no-sort"  ><label class="check "><b>Tous </b><input type="checkbox" onclick='selectall()' id="casetout" name="casetout" value="">   <span class="checkmark"></span></label></th>
+                 <th  >Nom</th>
+                <th  >Type</th>
+                <th  >Statut</th>
 				</tr>
             <tr>
                 <th></th>
-                 <th style="width:45%">Nom</th>
-                <th style="width:15%">Type</th>
-                <th style="width:15%">Statut</th>
+                 <th  >Nom</th>
+                <th  >Type</th>
+                <th  >Statut</th>
     
                   </tr>
             </thead>
             <tbody>
-            <?php   $listen=array(0=>'',-1=>'All',1=>'Assistance / Assurance',2=>'Avionneur',3=>'Pétrolier / apparenté',4=>'Clinique',5=>'Agence de voyage / Hôtel',6=>'Autre');
-            ?>
-            @foreach($clients as $client)
+  
+            @foreach($personnes as $personne)
 
                 <tr>                     
-                    <td style="width:5%"><label class="check " style="cursor:pointer">  <input   class="checkbox" type="checkbox" id="cl-<?php echo $client->id;   ?>" name="casedossier" value=" "> <span class="checkmark"></span> <?php echo $client['name']?> </label></td>
+                    <td  ><label class="check " style="cursor:pointer">  <input   class="checkbox" type="checkbox" id="cl-<?php echo $personne->id;   ?>" name="casedossier" value=" "> <span class="checkmark"></span> <?php echo $personne['name'];?> </label></td>
                     <td  ><a href="{{action('PersonnesController@view', $personne['id'])}}" >{{$personne->name}}</a></td>
                     <td  >{{$personne->type}}</td>
                     <td  ><?php if ($personne->annule ==0){echo 'Actif';}else{echo 'Inactif';} ?></td>
@@ -78,50 +77,7 @@
     $iduser=$CurrentUser->id;
 
     ?>
-    <!-- Modal -->
-    <div class="modal fade" id="create"   role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ajouter un nouveau Client</h5>
-
-                </div>
-                <div class="modal-body">
-                    <div class="card-body">
-
-                        <form method="post" >
-                            {{ csrf_field() }}
-
-                            <div class="form-group">
-                                <label for="type">Nom :</label>
-                                <input class="form-control" type="text" id="name" />
-
-                            </div>
-
-                            <div class="form-group">
-                                <label for="type">Pays :</label>
-                                <select class="form-control" id="pays2" class="form-control"    >
-                                    <option></option>
-                                    @foreach($countries as $pays  )
-                                        <option  value="{{$pays->country_name }}">{{$pays->country_name }}</option>
-                                    @endforeach
-
-                                </select>
-                            </div>
-
-                        </form>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                    <button type="button" id="add" class="btn btn-primary">Ajouter</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+    
 
 
 
@@ -151,7 +107,7 @@
 
                             ?>
                             <input type="hidden"   name="from" id="from" value="<?php echo $from; ?>" />
-                            <input type="hidden"   name="destinataire"   value="clients" />
+                            <input type="hidden"   name="destinataire"   value="personnes" />
 
                             <select id="liste" name="liste[]"  multiple  style="display:none; "  >
                             </select>
@@ -347,31 +303,8 @@
 
 
 
-
-
-            $('#add').click(function(){
-                var name = $('#name').val();
-                var pays = $('#pays2').val();
-                if ((name != '')&&(pays != '') )
-                {
-                    var _token = $('input[name="_token"]').val();
-                    $.ajax({
-                        url:"{{ route('clients.saving') }}",
-                        method:"POST",
-                        data:{name:name,pays:pays, _token:_token},
-                        success:function(data){
-
-                             window.location =data;
-                        }
-                    });
-                }else{
-                    // alert('ERROR');
-                }
-            });
-
-        });
-
-
+ 
+ 
 
 
         $('#buttModif').click(function(){
@@ -401,7 +334,7 @@
 
 
             }
-            else{ alert('sélectinnez des clients ! ');}
+            else{ alert('sélectinnez des personnels ! ');}
 
 
          });
@@ -458,5 +391,8 @@
 
 
         }
+		
+  });
+
     </script>
 @stop

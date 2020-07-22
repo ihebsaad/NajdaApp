@@ -19,6 +19,7 @@ use App\Dossier ;
 use App\User ;
 use App\Notif ;
 use App\Attachement ;
+use App\Personne ;
 use Mail;
 use Spatie\PdfToText\Pdf;
 use App;
@@ -6466,7 +6467,18 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                 ->whereIn('parent', $liste)
                 ->pluck('champ');
         }
-
+		 if (trim($to) == 'users') {
+            $dest = 'Liste des Agents';
+            $cci = User::where('boite', '<>', '')
+                ->whereIn('id', $liste)
+                ->pluck('boite');
+        }
+		if (trim($to) == 'personnes') {
+            $dest = 'Liste des Personnels';
+            $cci = Personne::where('email', '<>', '')
+                ->whereIn('id', $liste)
+                ->pluck('email');
+        }	
         //    dd($request->all()) ;
         $user = auth()->user();
         $idu = $user->id;
@@ -6505,7 +6517,14 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         $user = auth()->user();
         $nomuser = $user->name . ' ' . $user->lastname;
 
+		  if (trim($to) == 'users' || trim($to) == 'personnels') {
+        $contenu = $contenu . '<br><br>Cordialement / Best regards <br><br><hr style="float:left;"><br><br>';
+
+		  }else {
         $contenu = $contenu . '<br><br>Cordialement / Best regards<br>' . $nomuser . ' ' . $signatureagent . '<br><br><hr style="float:left;"><br><br>' . $signatureentite;
+			  
+		  }
+		
 
 
         //dd('pk');

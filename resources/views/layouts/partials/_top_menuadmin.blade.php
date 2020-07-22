@@ -168,13 +168,6 @@ $seance =  DB::table('seance')
                 </a>
             </div>
 
-            <div class="col-sm-2">
-                <a href="{{ route('clients.mails') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
-                    <span class="   fas fa-lg fa-mail-bulk"></span>
-                    <br>
-                    Emails Clients
-                </a>
-            </div>
 
             <div class="col-sm-2">
                 <a href="{{ route('factures') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
@@ -195,8 +188,37 @@ $seance =  DB::table('seance')
 
         </div>
 
+        <div class="row">
 
 
+            <div class="col-sm-2">
+                <a href="{{ route('clients.mails') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="   fas fa-lg fa-mail-bulk"></span>
+                    <br>
+                    Emails aux Clients
+                </a>
+            </div>
+
+            <div class="col-sm-2">
+                <a href="{{ route('personnes.mailspersonnes') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="   fas fa-lg fa-mail-bulk"></span>
+                    <br>
+                    Emails aux Personnels
+                </a>
+            </div>
+
+            <div class="col-sm-2">
+                <a href="{{ route('users.mails') }}" class="btn btn-default btn-md btn-responsive  menu-item" role="button">
+                    <span class="   fas fa-lg fa-mail-bulk"></span>
+                    <br>
+                    Emails aux Agents
+                </a>
+            </div>			
+	    </div>
+	
+		
+		
+		
     @endcan
 
 
