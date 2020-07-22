@@ -3513,7 +3513,12 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
    }
    
-   
+     public  function fermeture ($id)
+   {
+	   
+	 return view('dossiers.fermeture', ['id' => $id]);
+
+   } 
     
    // Liste des utilisateurs qui ont travaillé sur un dossier
    

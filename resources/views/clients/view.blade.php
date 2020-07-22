@@ -662,9 +662,16 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                 </div>
                             </div>
 
-
+								
+	<?php							
+	$groupe=$client->groupe;
+	 
+  	 $contratsg=DB::table('contrats_clients')->where('parent',$groupe)->where('type','commun')->count();
+	if($contratsg==0){
+	?>
                             <div class="form-group ">
                                 <h3>Contrats</h3>
+
 
                                 <div class="row">
                                     <select class="form-control  col-lg-12 itemName " style="width:400px" name="contrats"  multiple  id="contrats">
@@ -690,9 +697,15 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                     </select>
 
                                 </div>
+								
+			 		
                             </div>
 
+	  <?php }
+					else{ echo '<center><h2>Client sous Contrats groupe</h2></center>';}
 
+
+				  ?>
                             <div class="row" style="margin-top:40px">
                                 <div class="col-md-8">
                                     <h4><i class="fa fa-lg fa-user"></i>  Responsables Gestion</h4>
@@ -1015,9 +1028,18 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         </div>
 
     @can('isAdmin')
-        <a onclick="return confirm('Êtes-vous sûrs ?')" href="{{action('ClientsController@destroy', $client->id )}}" class="pull-right btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+	<?php 
+ 	$count= \App\Dossier::where('customer_id',$client->id)->count();
+	if ($count>0){
+		echo 'Suppression interdite : Client impliqué dans '.$count.' dossier(s)'; 
+	}else{
+		?>
+   <a onclick="return confirm('Êtes-vous sûrs ?')" href="{{action('ClientsController@destroy', $client->id )}}" class="pull-right btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
             <span class="fa fa-fw fa-trash-alt"></span> Supprimer le client
         </a>
+	<?php 		}
+	
+	?>
     @endcan
 
     <input type="hidden" id="idcl" class="form-control"   value={{ $client->id }}>
@@ -2030,7 +2052,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             var email = $('#emailg').val();
             var fax = $('#faxg').val();
             var observ = $('#remarqueg').val();
-            var nature = $('#nature7nature7').val();
+            var nature = $('#nature7').val();
             if (  (tel!='')  || (email!='')  )
             {
                 var _token = $('input[name="_token"]').val();

@@ -138,7 +138,12 @@ class PrestatairesController extends Controller
 
     public function saving(Request $request)
     {
-            // **** prestataires dossiers dans table intervenant
+    
+		$user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){
+
+	// **** prestataires dossiers dans table intervenant
         if ($request->get('name') !==null ) {$nom=$request->get('name');}else{$nom='nom';}
          $prenom= $request->get('prenom');
         $dossier= $request->get('dossier');
@@ -198,17 +203,13 @@ class PrestatairesController extends Controller
                             ->setFrom([$from => $fromname]);
 
 
-                        /* foreach ($to as $t) {
-                             $message->to($t);
-                         }
-     */
+       
                     });
 
 
 
                     $id = $prestataire->id;
-                    Log::info('03');
-
+ 
                     $prestataire->update($request->all());
 
                     $interv = new Intervenant([
@@ -231,8 +232,7 @@ class PrestatairesController extends Controller
         }else{
         // hors dossier
 
-            Log::info('06');
-
+ 
             $prestataire = new Prestataire([
                 'name' => $nom,
                 'prenom' => $prenom,
@@ -301,12 +301,16 @@ class PrestatairesController extends Controller
 
          Log::info('[Agent: ' . $nomuser . '] Ajout Intervenant: ' . $nom.' '.$prenom);
 
-
+ } // if superviseur
     }
 
     public function saving2(Request $request)
     {
-        if( ($request->get('nom'))!=null) {
+    		$user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){  
+
+	  if( ($request->get('nom'))!=null) {
 
             $prestataire = new Prestataire([
                 'nom' => $request->get('nom'),
@@ -326,20 +330,26 @@ class PrestatairesController extends Controller
 
         }
 
+		
+ }	
+		
+		
     }
     public function show()
     {}
 
     public function updating(Request $request)
     {
-
+$user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
         $id= $request->get('prestataire');
         $champ= strval($request->get('champ'));
        $val= $request->get('val');
       //  $dossier = Dossier::find($id);
        // $dossier->$champ =   $val;
         Prestataire::where('id', $id)->update(array($champ => $val));
-
+ }
       //  $dossier->save();
 
      ///   return redirect('/dossiers')->with('success', 'Entry has been added');
@@ -352,6 +362,12 @@ class PrestatairesController extends Controller
 
         $id= $request->get('prestataire');
         $valeur= $request->get('valeur');
+		
+		$user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ 
+		
+		
          Evaluation::where('prestataire', $id)->update(array('actif' => $valeur));
         if($valeur==1)
         {$statut='Actif';}
@@ -401,7 +417,7 @@ class PrestatairesController extends Controller
         });
 
 
-
+ }
 
 
 
@@ -567,7 +583,10 @@ class PrestatairesController extends Controller
      */
     public function destroy($id)
     {
-        $prestataire = Prestataire::find($id);
+    		$user = auth()->user();
+ $user_type=$user->user_type;
+ if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){
+	 $prestataire = Prestataire::find($id);
         $prestataire->delete();
 
         Evaluation::where('prestataire',$id)->delete();
@@ -575,6 +594,7 @@ class PrestatairesController extends Controller
         Prestation::where('prestataire_id',$id)->update(array('prestataire_id' => 0));
 
         return redirect('/prestataires')->with('success', '  Supprimé ');
+ }
     }
 
     public static function VilleById($id)

@@ -10,13 +10,13 @@
     <form id="updateform">
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Nom *</label>
                                 <input onchange="changing(this)" type="text" class="form-control input" name="nom" id="nom"  value="{{ $contrat->nom }}">
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
 
  						   <div class="form-group">
                                 <label for="type">Type :</label>
@@ -27,13 +27,20 @@
 
                             </div>
                        </div>
-
+					   
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="inputError" class="control-label">Type de dossier</label>
+                                <input onchange="changing(this)" type="text" class="form-control input" name="type_dossier" id="type_dossier"  value="{{ $contrat->type_dossier }}">
+                            </div>
+                        </div>
 
                         <input type="hidden" id="idtp" class="form-control"   value="{{ $contrat->id }}">
              </div>
   <style>
 	  img{cursor:pointer;}td{padding-left:10px;padding-right:10px;}
 	  select{height:40px;margin-bottom:10px;}
+	  input [type="number"],.number{width:100px;height:40px;font-weight:bold;font-size:18px;margin-top:-5px;}
   </style>
 <h2>Règles </h2>
  <?php
@@ -57,13 +64,21 @@
 			<option></option>
 			<option  <?php if ($contrat->operateur1=='='){echo 'selected="selected"';}?> value="=">  =  </option>
 			<option  <?php if ($contrat->operateur1=='>'){echo 'selected="selected"';}?> value=">">  >  </option>
+			<option  <?php if ($contrat->operateur1=='>='){echo 'selected="selected"';}?> value=">=">  >=  </option>
 			<option <?php if ($contrat->operateur1=='<'){echo 'selected="selected"';}?>  value="<" >  <  </option>
+			<option <?php if ($contrat->operateur1=='<='){echo 'selected="selected"';}?>  value="<=" >  <=  </option>
 			</select>
 			</td>
 			<td>
-			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input" name="val1" id="val1"  value="{{ $contrat->val1 }}">
+			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input number" name="val1" id="val1"  value="{{ $contrat->val1 }}">
 			</td>
-			
+			<td>
+			<select onchange="changing(this)"  style="width:90px;font-size:20px;font-weight:bold;height:40px" class="form-control " name="liaison1" id="liaison1"   >
+			<option></option>
+ 			<option  <?php if ($contrat->liaison1=='&&'){echo 'selected="selected"';}?> value="&&">  ET  </option>
+			<option <?php if ($contrat->liaison1=='||'){echo 'selected="selected"';}?>  value="||" >  OU  </option>
+			</select>
+			</td>
 			<td><img style="width:30px" onclick="show('ligne-2')" src="{{ asset('public/img/add.png') }}"></img></td><td></img></td>
 			</tr>
 			
@@ -85,13 +100,21 @@
 			<option></option>
 			<option  <?php if ($contrat->operateur2=='='){echo 'selected="selected"';}?> value="=">  =  </option>
 			<option  <?php if ($contrat->operateur2=='>'){echo 'selected="selected"';}?> value=">">  >  </option>
+			<option  <?php if ($contrat->operateur2=='>='){echo 'selected="selected"';}?> value=">=">  >=  </option>
 			<option <?php if ($contrat->operateur2=='<'){echo 'selected="selected"';}?>  value="<" >  <  </option>
+			<option <?php if ($contrat->operateur2=='<='){echo 'selected="selected"';}?>  value="<=" >  <=  </option>
 			</select>
 			</td>
 			<td>
-			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input" name="val2" id="val2"  value="{{ $contrat->val2 }}">
+			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input number" name="val2" id="val2"  value="{{ $contrat->val2 }}">
 			</td>
-			
+			<td>
+			<select onchange="changing(this)"  style="width:90px;font-size:20px;font-weight:bold;height:40px" class="form-control " name="liaison2" id="liaison2"   >
+			<option></option>
+ 			<option  <?php if ($contrat->liaison2=='&&'){echo 'selected="selected"';}?> value="&&">  ET  </option>
+			<option <?php if ($contrat->liaison2=='||'){echo 'selected="selected"';}?>  value="||" >  OU  </option>
+			</select>
+			</td>			
 			<td><img style="width:30px"  onclick="show('ligne-3')" src="{{ asset('public/img/add.png') }}"></img></td><td><img style="width:30px"  onclick="hide('ligne-2')" src="{{ asset('public/img/remove.png') }}"></img></td>
 			</tr>
 			
@@ -114,13 +137,21 @@
 			<option></option>
 			<option  <?php if ($contrat->operateur3=='='){echo 'selected="selected"';}?> value="=">  =  </option>
 			<option  <?php if ($contrat->operateur3=='>'){echo 'selected="selected"';}?> value=">">  >  </option>
+			<option  <?php if ($contrat->operateur3=='>='){echo 'selected="selected"';}?> value=">=">  >=  </option>
 			<option <?php if ($contrat->operateur3=='<'){echo 'selected="selected"';}?>  value="<" >  <  </option>
+			<option <?php if ($contrat->operateur3=='<='){echo 'selected="selected"';}?>  value="<=" >  <=  </option>
 			</select>
 			</td>
 			<td>
-			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input" name="val3" id="val3"  value="{{ $contrat->val3 }}">
+			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input number" name="val3" id="val3"  value="{{ $contrat->val3 }}">
 			</td>
-			
+			<td>
+			<select onchange="changing(this)"  style="width:90px;font-size:20px;font-weight:bold;height:40px" class="form-control " name="liaison3" id="liaison3"   >
+			<option></option>
+ 			<option  <?php if ($contrat->liaison3=='&&'){echo 'selected="selected"';}?> value="&&">  ET  </option>
+			<option <?php if ($contrat->liaison3=='||'){echo 'selected="selected"';}?>  value="||" >  OU  </option>
+			</select>
+			</td>			
 			<td><img style="width:30px"  onclick="show('ligne-4')" src="{{ asset('public/img/add.png') }}"></img></td><td><img style="width:30px"  onclick="hide('ligne-3')" src="{{ asset('public/img/remove.png') }}"></img></td>
 			</tr>
 	
@@ -142,13 +173,21 @@
 			<option></option>
 			<option  <?php if ($contrat->operateur4=='='){echo 'selected="selected"';}?> value="=">  =  </option>
 			<option  <?php if ($contrat->operateur4=='>'){echo 'selected="selected"';}?> value=">">  >  </option>
+			<option  <?php if ($contrat->operateur4=='>='){echo 'selected="selected"';}?> value=">=">  >=  </option>
 			<option <?php if ($contrat->operateur4=='<'){echo 'selected="selected"';}?>  value="<" >  <  </option>
+			<option <?php if ($contrat->operateur4=='<='){echo 'selected="selected"';}?>  value="<=" >  <=  </option>
 			</select>
 			</td>
 			<td>
-			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input" name="val4" id="val4"  value="{{ $contrat->val4 }}">
+			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input number" name="val4" id="val4"  value="{{ $contrat->val4 }}">
 			</td>
-			
+			<td>
+			<select onchange="changing(this)"  style="width:90px;font-size:20px;font-weight:bold;height:40px" class="form-control " name="liaison4" id="liaison4"   >
+			<option></option>
+ 			<option  <?php if ($contrat->liaison4=='&&'){echo 'selected="selected"';}?> value="&&">  ET  </option>
+			<option <?php if ($contrat->liaison4=='||'){echo 'selected="selected"';}?>  value="||" >  OU  </option>
+			</select>
+			</td>			
 			<td><img style="width:30px"  onclick="show('ligne-5')" src="{{ asset('public/img/add.png') }}"></img></td><td><img style="width:30px"  onclick="hide('ligne-4')" src="{{ asset('public/img/remove.png') }}"></img></td>
 			</tr>
 			
@@ -173,13 +212,22 @@
 			<option></option>
 			<option  <?php if ($contrat->operateur5=='='){echo 'selected="selected"';}?> value="=">  =  </option>
 			<option  <?php if ($contrat->operateur5=='>'){echo 'selected="selected"';}?> value=">">  >  </option>
+			<option  <?php if ($contrat->operateur5=='>='){echo 'selected="selected"';}?> value=">=">  >=  </option>
 			<option <?php if ($contrat->operateur5=='<'){echo 'selected="selected"';}?>  value="<" >  <  </option>
+			<option <?php if ($contrat->operateur5=='<='){echo 'selected="selected"';}?>  value="<=" >  <=  </option>
 			</select>
+
 			</td>
 			<td>
-			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input" name="val5" id="val5"  value="{{ $contrat->val5 }}">
+			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input number" name="val5" id="val5"  value="{{ $contrat->val5 }}">
 			</td>
-			
+			<td>
+			<select onchange="changing(this)"  style="width:90px;font-size:20px;font-weight:bold;height:40px" class="form-control " name="liaison5" id="liaison5"   >
+			<option></option>
+ 			<option  <?php if ($contrat->liaison5=='&&'){echo 'selected="selected"';}?> value="&&">  ET  </option>
+			<option <?php if ($contrat->liaison5=='||'){echo 'selected="selected"';}?>  value="||" >  OU  </option>
+			</select>
+			</td>			
 			<td><img style="width:30px"  onclick="show('ligne-6')" src="{{ asset('public/img/add.png') }}"></img></td><td><img style="width:30px"  onclick="hide('ligne-5')" src="{{ asset('public/img/remove.png') }}"></img></td>
 			</tr>
 
@@ -205,13 +253,22 @@
 			<option></option>
 			<option  <?php if ($contrat->operateur6=='='){echo 'selected="selected"';}?> value="=">  =  </option>
 			<option  <?php if ($contrat->operateur6=='>'){echo 'selected="selected"';}?> value=">">  >  </option>
+			<option  <?php if ($contrat->operateur6=='>='){echo 'selected="selected"';}?> value=">=">  >=  </option>
 			<option <?php if ($contrat->operateur6=='<'){echo 'selected="selected"';}?>  value="<" >  <  </option>
+			<option <?php if ($contrat->operateur6=='<='){echo 'selected="selected"';}?>  value="<=" >  <=  </option>
 			</select>
+
 			</td>
 			<td>
-			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input" name="val6" id="val6"  value="{{ $contrat->val6 }}">
+			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input number" name="val6" id="val6"  value="{{ $contrat->val6 }}">
 			</td>
-			
+			<td>
+			<select onchange="changing(this)"  style="width:90px;font-size:20px;font-weight:bold;height:40px" class="form-control " name="liaison6" id="liaison6"   >
+			<option></option>
+ 			<option  <?php if ($contrat->liaison6=='&&'){echo 'selected="selected"';}?> value="&&">  ET  </option>
+			<option <?php if ($contrat->liaison6=='||'){echo 'selected="selected"';}?>  value="||" >  OU  </option>
+			</select>
+			</td>			
 			<td><img style="width:30px"  onclick="show('ligne-7')" src="{{ asset('public/img/add.png') }}"></img></td><td><img style="width:30px"  onclick="hide('ligne-6')" src="{{ asset('public/img/remove.png') }}"></img></td>
 			</tr>
 
@@ -236,13 +293,22 @@
 			<option></option>
 			<option  <?php if ($contrat->operateur7=='='){echo 'selected="selected"';}?> value="=">  =  </option>
 			<option  <?php if ($contrat->operateur7=='>'){echo 'selected="selected"';}?> value=">">  >  </option>
+			<option  <?php if ($contrat->operateur7=='>='){echo 'selected="selected"';}?> value=">=">  >=  </option>
 			<option <?php if ($contrat->operateur7=='<'){echo 'selected="selected"';}?>  value="<" >  <  </option>
+			<option <?php if ($contrat->operateur7=='<='){echo 'selected="selected"';}?>  value="<=" >  <=  </option>
 			</select>
+
 			</td>
 			<td>
-			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input" name="val7" id="val7"  value="{{ $contrat->val7 }}">
+			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input number" name="val7" id="val7"  value="{{ $contrat->val7 }}">
 			</td>
-			
+			<td>
+			<select onchange="changing(this)"  style="width:90px;font-size:20px;font-weight:bold;height:40px" class="form-control " name="liaison7" id="liaison7"   >
+			<option></option>
+ 			<option  <?php if ($contrat->liaison7=='&&'){echo 'selected="selected"';}?> value="&&">  ET  </option>
+			<option <?php if ($contrat->liaison7=='||'){echo 'selected="selected"';}?>  value="||" >  OU  </option>
+			</select>
+			</td>			
 			<td><img style="width:30px"  onclick="show('ligne-8')" src="{{ asset('public/img/add.png') }}"></img></td><td><img style="width:30px"  onclick="hide('ligne-7')" src="{{ asset('public/img/remove.png') }}"></img></td>
 			</tr>
 
@@ -266,13 +332,22 @@
 			<option></option>
 			<option  <?php if ($contrat->operateur8=='='){echo 'selected="selected"';}?> value="=">  =  </option>
 			<option  <?php if ($contrat->operateur8=='>'){echo 'selected="selected"';}?> value=">">  >  </option>
+			<option  <?php if ($contrat->operateur8=='>='){echo 'selected="selected"';}?> value=">=">  >=  </option>
 			<option <?php if ($contrat->operateur8=='<'){echo 'selected="selected"';}?>  value="<" >  <  </option>
+			<option <?php if ($contrat->operateur8=='<='){echo 'selected="selected"';}?>  value="<=" >  <=  </option>
 			</select>
+
 			</td>
 			<td>
-			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input" name="val8" id="val8"  value="{{ $contrat->val8 }}">
+			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input number" name="val8" id="val8"  value="{{ $contrat->val8 }}">
 			</td>
-			
+			<td>
+			<select onchange="changing(this)"  style="width:90px;font-size:20px;font-weight:bold;height:40px" class="form-control " name="liaison8" id="liaison8"   >
+			<option></option>
+ 			<option  <?php if ($contrat->liaison8=='&&'){echo 'selected="selected"';}?> value="&&">  ET  </option>
+			<option <?php if ($contrat->liaison8=='||'){echo 'selected="selected"';}?>  value="||" >  OU  </option>
+			</select>
+			</td>			
 			<td><img style="width:30px"  onclick="show('ligne-9')" src="{{ asset('public/img/add.png') }}"></img></td><td><img style="width:30px"  onclick="hide('ligne-8')" src="{{ asset('public/img/remove.png') }}"></img></td>
 			</tr>
 
@@ -296,17 +371,26 @@
 			<option></option>
 			<option  <?php if ($contrat->operateur9=='='){echo 'selected="selected"';}?> value="=">  =  </option>
 			<option  <?php if ($contrat->operateur9=='>'){echo 'selected="selected"';}?> value=">">  >  </option>
+			<option  <?php if ($contrat->operateur9=='>='){echo 'selected="selected"';}?> value=">=">  >=  </option>
 			<option <?php if ($contrat->operateur9=='<'){echo 'selected="selected"';}?>  value="<" >  <  </option>
+			<option <?php if ($contrat->operateur9=='<='){echo 'selected="selected"';}?>  value="<=" >  <=  </option>
 			</select>
+
 			</td>
 			<td>
-			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input" name="val9" id="val9"  value="{{ $contrat->val9 }}">
+			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input number" name="val9" id="val9"  value="{{ $contrat->val9 }}">
 			</td>
-			
+			<td>
+			<select onchange="changing(this)"  style="width:90px;font-size:20px;font-weight:bold;height:40px" class="form-control " name="liaison9" id="liaison9"   >
+			<option></option>
+ 			<option  <?php if ($contrat->liaison9=='&&'){echo 'selected="selected"';}?> value="&&">  ET  </option>
+			<option <?php if ($contrat->liaison9=='||'){echo 'selected="selected"';}?>  value="||" >  OU  </option>
+			</select>
+			</td>			
 			<td><img style="width:30px"  onclick="show('ligne-10')" src="{{ asset('public/img/add.png') }}"></img></td><td><img style="width:30px"  onclick="hide('ligne-9')" src="{{ asset('public/img/remove.png') }}"></img></td>
 			</tr>
 
-		<tr id="ligne-10"  <?php if ($contrat->mission3==0){ ?>style="display:none" <?php } ?>  >
+		<tr id="ligne-10"  <?php if ($contrat->mission10==0){ ?>style="display:none" <?php } ?>  >
 			<td>
 			<select onchange="changing(this)"    name="mission10" id="mission10"     class="form control select2"   style="width:650px" >
 			  <option></option>
@@ -324,11 +408,13 @@
 			<option></option>
 			<option  <?php if ($contrat->operateur10=='='){echo 'selected="selected"';}?> value="=">  =  </option>
 			<option  <?php if ($contrat->operateur10=='>'){echo 'selected="selected"';}?> value=">">  >  </option>
+			<option  <?php if ($contrat->operateur10=='>='){echo 'selected="selected"';}?> value=">=">  >=  </option>
 			<option <?php if ($contrat->operateur10=='<'){echo 'selected="selected"';}?>  value="<" >  <  </option>
+			<option <?php if ($contrat->operateur10=='<='){echo 'selected="selected"';}?>  value="<=" >  <=  </option>
 			</select>
 			</td>
 			<td>
-			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input" name="val10" id="val10"  value="{{ $contrat->val10 }}">
+			<input onchange="changing(this)" style="width:100px" type="number" class="form-control input number" name="val10" id="val10"  value="{{ $contrat->val10 }}">
 			</td>
 			
 			<td></td><td><img style="width:30px"  onclick="hide('ligne-10')" src="{{ asset('public/img/remove.png') }}"></img></td>

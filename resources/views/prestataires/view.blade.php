@@ -4,6 +4,8 @@
 <?php
 $param= App\Parametre::find(1);$env=$param->env;
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
+$user = auth()->user();
+ $user_type=$user->user_type;
 ?>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
@@ -18,8 +20,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         <div class="row pull-right">
 
         <div class="col-md-6">
-            <a    href="{{route('prestataires.create',['id'=>0])}}" class="btn btn-md btn-success"   ><b><i class="fas fa-plus"></i> Ajouter un Intervenant</b></a>&nbsp; &nbsp;
-        </div>
+        <?php   if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ ?>
+		  <a    href="{{route('prestataires.create',['id'=>0])}}" class="btn btn-md btn-success"   ><b><i class="fas fa-plus"></i> Ajouter un Intervenant</b></a>&nbsp; &nbsp;
+		<?php } ?>
+		</div>
         <div class="col-md-6">
         <a class="btn btn-default" id="recherchertp" href="{{url('/prestataires')}}"> Liste des intervenants</a>
         </div>

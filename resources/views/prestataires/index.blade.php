@@ -11,7 +11,8 @@
 
 @section('content')
     <?php use \App\Http\Controllers\PrestatairesController;
-
+$user = auth()->user();
+ $user_type=$user->user_type;
     //echo json_encode($villes);
     //  collect($villes);
 
@@ -29,7 +30,7 @@
             <div class="row">
                 <div class="col-lg-6"><h4>Liste des intervenants</h4></div>
                 <div class="col-lg-6">
-                    <a    href="{{route('prestataires.create',['id'=>0])}}" class="btn btn-md btn-success"   ><b><i class="fas fa-plus"></i> Ajouter un Intervenant</b></a>&nbsp; &nbsp;
+               <?php if($user_type=='admin' || $user_type=='superviseur' || $user_type=='autonome' ){ ?>     <a    href="{{route('prestataires.create',['id'=>0])}}" class="btn btn-md btn-success"   ><b><i class="fas fa-plus"></i> Ajouter un Intervenant</b></a>&nbsp; &nbsp;<?php } ?>
                     <a class="btn btn-default" id="recherchertp" href="{{url('/prestataire/tousprestataires')}}"> Afficher tous les intervenants</a>
                 </div>
             </div>
@@ -200,9 +201,21 @@
                     <td style="font-size:12px;width:15%"><?php   foreach($specs as $sp){echo  PrestatairesController::SpecialiteByid($sp->specialite).',  ';}?></td>
                     <td style="font-size:13px;width:10%">
                         @can('isAdmin')
-                            <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('PrestatairesController@destroy', $prestataire['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+  	<?php 
+ 	$count1= \App\Facture::where('prestataire',$prestataire['id'])->count();
+ 	$count2= \App\Intervenant::where('prestataire_id',$prestataire['id'])->count();
+ 	$count3= \App\Prestation::where('prestataire_id',$prestataire['id'])->count();
+ 	$count4= \App\Evaluation::where('prestataire',$prestataire['id'])->count();
+	$count= $count1+$count2+$count3+$count4;
+	if ($count>0){
+		echo 'Suppression interdite'; 
+	}else{ ?>                         
+
+						   <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('PrestatairesController@destroy', $prestataire['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                                 <span class="fa fa-fw fa-trash-alt"></span> Supp
                             </a>
+	<?php  } ?>				
+							
                         @endcan</td>
 
                 </tr>

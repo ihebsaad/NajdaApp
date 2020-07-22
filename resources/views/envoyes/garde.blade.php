@@ -9,7 +9,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 	?>
 	<div style="width:100%">
 <!--<img src="http://197.14.53.86:3007/najdaapp/public/img/najda.png" style="width:80px;float: right;margin-right:60px;margin-top:40px;margin-bottom:50px;">-->
- </div>
+<font style="font-family: Comic Sans MS;"><font size="4" style="font-size: 20pt"><b> NAJDA </b></font></font> </div>
  <br> <br> <br> <br><br>
 <p style="margin-bottom: 0.08in; text-transform: uppercase; line-height: 100%"><a name="_GoBack"></a>
 <font style="font-family: Comic Sans MS;"><font size="7" style="font-size: 48pt"><b> F A X </b></font></font><br><br><br>
