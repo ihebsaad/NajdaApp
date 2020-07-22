@@ -243,6 +243,7 @@ Route::get('/listeUsersDoss/{iddoss}', 'DossiersController@users_work_on_folder'
 
 
 
+
 /*** Clients **/
 //Route::resource('/clients',  'ClientsController');
 Route::get('/clients', array('as' => 'clients','uses' => 'ClientsController@index'));
@@ -279,6 +280,8 @@ Route::post('/factures/saving','FacturesController@saving')->name('factures.savi
 Route::post('/factures/updating','FacturesController@updating')->name('factures.updating');
 Route::get('/factures/view/{id}', 'FacturesController@view');
 Route::get('/factures/destroy/{id}', 'FacturesController@destroy');
+Route::post('/factures/updatingCheck','FacturesController@updatingCheck')->name('factures.updatingCheck');
+
 
 
 
@@ -320,6 +323,7 @@ Route::post('/personnes/saving','PersonnesController@saving')->name('personnes.s
 Route::post('/personnes/updating','PersonnesController@updating')->name('personnes.updating');
 Route::get('/personnes/view/{id}', 'PersonnesController@view');
 Route::get('/personnes/destroy/{id}', 'PersonnesController@destroy');
+Route::get('/personnes/mails', 'ClientsController@mails')->name('personnes.mails');
 
 
 /*** docs -> documents à signer   **/
@@ -497,6 +501,9 @@ Route::get('dossiers/view/CreerDoc/{id}/{idmiss}', 'MissionController@viewDossie
 Route::post('/Missions/storeMissionLieByAjax','MissionController@storeMissionLieByAjax')->name('Mission.StoreMissionLieByAjax');
 Route::get('/ReporterMission/','MissionController@ReporterMission')->name('Mission.ReporterMission');
 Route::get('/missions/calendrier','MissionController@calendrierMissions')->name('missions.calendriermissions');
+Route::get('/missions/statistiques','MissionController@missionsStatistiques')->name('missions.statistiques');
+Route::get('/missions/actionsstatistiques/{idmiss}','MissionController@actionsStatistiques')->name('actions.statistiques');
+
 
 
 
@@ -584,8 +591,7 @@ Route::get('/prestataire/tousprestataires', 'RechercheController@touslesprestata
 
 Route::get('/Recherchemissions','RechercheController@RechercheMissions')->name('recherchemissions.avancee');
 
- 
-
+  
 
 /*** Users **/
 
@@ -600,6 +606,7 @@ Route::post('/users/createuserrole', 'UsersController@createuserrole')->name('us
 Route::post('/users/removeuserrole', 'UsersController@removeuserrole')->name('users.removeuserrole');
 Route::post('/users/sessionroles', 'UsersController@sessionroles')->name('users.sessionroles');
 Route::post('/changestatut', 'UsersController@changestatut')->name('users.changestatut');
+Route::get('/users/mails', 'UsersController@mails')->name('users.mails');
 
 Route::get('/users/destroy/{id}', 'UsersController@destroy');
 //Route::get('/edit/{id}','UsersController@edit');
