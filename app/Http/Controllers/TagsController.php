@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\User ;
 use App\Entree ;
 use App\Tag ;
 use App\Dossier ;
 use App\Attachement ;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class TagsController extends Controller
 {
@@ -147,11 +148,18 @@ if($type=='email') {
                 ]);
                 if ($tag->save())
                 { 
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+$entree = Entree::where('id','=',$identree)->first();
+Log::info('[Agent: ' . $nomuser . '] Ajout de tag '.$titre.' pour le dossier: ' .$entree["dossier"]);
                     return 'true';
+
                 }
                 else {
                     return 'false';
                 }
+
 }
 if($type=='piecejointe') {
                 $idattach= $request->get('entree');
@@ -281,6 +289,12 @@ if($type=='piecejointe') {
                 ]);
                 if ($tag->save())
                 { 
+$par=Auth::id();
+$user = User::find($par);
+$nomuser = $user->name ." ".$user->lastname ;
+$attach = Attachement::where('id','=',$idattach)->first();
+$entree = Entree::where('id','=',$attach['parent'])->first();
+Log::info('[Agent: ' . $nomuser . '] Ajout de tag '.$titre.' pour le dossier: ' .$entree["dossier"]);
                     return 'true';
                 }
                 else {
