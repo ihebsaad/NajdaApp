@@ -165,14 +165,15 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
                                                                                       ?>
         <div id="emailcontent" class="panel-collapse collapse in" aria-expanded="true" style="min-height:250px">
+
             <div class="panel-body" id="emailnpj">
                 <div class="row">
-                   <ul class="nav nav-pills">
-                        <li class="<?php if($entree['contenu']!=null){echo 'active ';} ?>" >
-                           <?php if ( $entree['type']=='fax') {}else {  if ( $entree['type']!='tel') { ?><a href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps HTML du mail</a><?php } }?>
+                   <ul id="mailpiece" name="mailpiece" class="nav nav-pills">
+                        <li data-type="email" data-identreeattach="<?php echo $entree['id'] ?>" class="<?php if($entree['contenu']!=null){echo 'active ';} ?>" >
+                           <?php if ( $entree['type']=='fax') {}else {  if ( $entree['type']!='tel') { ?><a   href="#mailcorps" data-toggle="tab" aria-expanded="true">Corps HTML du mail</a><?php } }?>
                        </li>
-                       <li class="<?php if($entree['contenu']==null){echo 'active ';} ?> " >
-                           <?php if ( $entree['type']=='fax') {}else {  if ( $entree['type']!='tel') { ?><a href="#mailcorps2" data-toggle="tab" aria-expanded="true">Texte Brute</a><?php } }?>
+                       <li data-type="email" data-identreeattach="<?php echo $entree['id'] ?>" class="<?php if($entree['contenu']==null){echo 'active ';} ?> " >
+                           <?php if ( $entree['type']=='fax') {}else {  if ( $entree['type']!='tel') { ?><a  href="#mailcorps2" data-toggle="tab" aria-expanded="true">Texte Brute</a><?php } }?>
                        </li>
                        <?php /* if ( $entree['type']!='fax') { ?>
                        <li class=" " >
@@ -191,8 +192,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 			 
 			 ?>
-                                <li>
-                                    <a class=" " href="#pj<?php echo $i; ?>" data-toggle="tab" aria-expanded="false">PJ<?php echo $i; ?></a>
+                                <li data-type="piecejointe" data-identreeattach="<?php echo $att['id'] ?>">
+                                    <a  class=" " href="#pj<?php echo $i; ?>" data-toggle="tab" aria-expanded="false">PJ<?php echo $i; ?></a>
                                 </li>
                       
 		 	<?php } //extension
@@ -695,6 +696,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
          }
 
     });
+
 
 </script>
 

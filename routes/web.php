@@ -98,8 +98,9 @@ Route::get('/getNotificationDeleguerMiss/{userConnect}', 'DeleguerMissionControl
 // delegation action
 Route::post('/deleguerAction/','DeleguerActionController@deleguerAction')->name('Deleguer.Action');
 Route::get('/getNotificationDeleguerAct/{userConnect}', 'DeleguerActionController@getNotificationDeleguerAct'); 
+/***attachements***/
 
-
+Route::post('/attachements/savecomment','AttachementsController@savecomment')->name('attachements.savecomment');
 /*** Entrees **/
 /* tous les emails (tous les entrees) dans la base */
 Route::get('/entrees/boite', array('as' => 'boite','uses' => 'EntreesController@boite'));
@@ -620,6 +621,8 @@ Route::get('errors', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@errors')
 /**** TAGS  ****/
 Route::post('/tags/addnew','TagsController@addnew')->name('tags.addnew');
 Route::post('/tags/deletetag','TagsController@deletetag')->name('tags.deletetag');
+Route::post('/tags/entreetags','TagsController@entreetags')->name('tags.entreetags');
+Route::post('/tags/entreetags1','TagsController@entreetags1')->name('tags.entreetags1');
 
 /*** Generate doc ***/
 Route::get('docgen', function () {
