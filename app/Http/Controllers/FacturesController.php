@@ -10,8 +10,11 @@ use App\Entree ;
 use App\Dossier ;
 use App\Prestataire ;
 use App\Prestation ;
-use App\Facture ;
+use App\Facture;
+use App\Adresse;
  use Illuminate\Support\Facades\Auth;
+ use Swift_Mailer;
+ use Mail;
 
 
 class FacturesController extends Controller
@@ -57,7 +60,7 @@ class FacturesController extends Controller
     public function create()
     {
 
-	
+    
         return view('factures.create');
     }
 
@@ -72,7 +75,7 @@ class FacturesController extends Controller
         $factures = new Facture([
              'nom' =>trim( $request->get('nom'))
 
-			 // 'par'=> $request->get('par'),
+             // 'par'=> $request->get('par'),
 
         ]);
 
@@ -84,10 +87,10 @@ class FacturesController extends Controller
 
     public function saving(Request $request)
     {
-		
-		   $userid = Auth::id() ;
+        
+           $userid = Auth::id() ;
           $user = User::find($userid);
-		 
+         
         if( ($request->get('date_arrive') !=null || $request->get('reference') !=null)) {
 
             $facture = new Facture([
@@ -127,6 +130,23 @@ class FacturesController extends Controller
      ///   return redirect('/dossiers')->with('success', 'Entry has been added');
 
     }
+    
+     public function updatingCheck(Request $request)
+    {
+
+        $id= $request->get('facture');
+        $champ= strval($request->get('champ'));
+       $val= $request->get('val');
+      //  $dossier = Dossier::find($id);
+       // $dossier->$champ =   $val;
+        Facture::where('id', $id)->update(array($champ => $val));
+
+      //  $dossier->save();
+
+     ///   return redirect('/dossiers')->with('success', 'Entry has been added');
+
+    }
+
 
     /**
      * Display the specified resource.
@@ -163,7 +183,7 @@ class FacturesController extends Controller
         //
         $factures = Facture::find($id);
 
-		
+        
         return view('factures.edit', compact('factures'));
     }
 
@@ -200,6 +220,242 @@ class FacturesController extends Controller
 
         return redirect('/factures')->with('success', '  Supprimé ');
     }
+
+     public static function checkImmobile3Days($date)
+    {
+
+        $format = "Y-m-d H:i:s";
+     //   $dtc = (new \DateTime())->format('Y-m-d H:i:s');
+
+        $dtc = (new \DateTime())->modify('-3 days')->format($format);
+
+        $dateSys = \DateTime::createFromFormat($format, $dtc);
+
+
+        $dateDoss = (\DateTime::createFromFormat($format, $date) );
+
+
+        if($dateDoss <= $dateSys)
+        {
+            return true;
+        }else{
+            return false ;
+          }
+
+
+    }
+
+
+    public static function envoi_mail($swiftTransport,$adresses, $sujet, $contenu,$from,$fromname)
+    {
+            
+            $cc=array();
+            $destinataires = null;
+            $dests = null;
+             /*if($adresses)
+             {
+              $destinataires=$adresses ;
+              $destinataires = str_replace(array( '(', ')' ), '', $destinataires);
+              $destinataires = str_replace(' ', '', $destinataires);
+              $dests = explode(";", $destinataires); 
+             }*/
+
+             $dests=$adresses ;
+
+             if(count($dests)>0 && $dests[0])
+             {
+
+              $to=$dests[0];
+              
+               if(count($dests)>1)
+               {
+                 // $cc='';
+                  for($i=1 ;$i<count($dests) ; $i++)
+                  {
+                    if($dests[$i])
+                    {
+                      //$cc=$cc.$dests[$i].',';
+                      array_push($cc,$dests[$i]);
+                    }
+  
+                  }
+  
+               }
+  
+             }
+             else
+             {
+               $to=$adresses ; // null;
+               $cc=null; 
+             }
+
+           $swiftMailer = new Swift_Mailer($swiftTransport);
+                Mail::setSwiftMailer($swiftMailer);      
+                Mail::send([], [], function ($message) use ($to, $sujet, $contenu, $cc,$from,$fromname) {
+               $message        
+               ->to($to)
+               ->cc($cc ?: [])
+               ->subject($sujet)
+               ->setBody($contenu, 'text/html')
+               ->setFrom([$from => $fromname]);
+               });
+
+            
+
+
+    }
+
+ public static function envoi_mail_automatique_factures()    
+    {
+
+         
+      $factures=Facture::get();
+
+      $format = "Y-m-d H:i:s";
+      $dtc30=(new \DateTime())->modify('-30 days')->format($format);
+      $dtc45=(new \DateTime())->modify('-45 days')->format($format);
+      $dtc60=(new \DateTime())->modify('-60 days')->format($format);
+      $dateSys30 = \DateTime::createFromFormat($format, $dtc30);
+      $dateSys45 = \DateTime::createFromFormat($format, $dtc45);
+      $dateSys60 = \DateTime::createFromFormat($format, $dtc60);
+
+      $parametres = DB::table('parametres')->where('id','=', 1 )->first();
+      $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+      $swiftTransport->setUsername('24ops@najda-assistance.com');
+      $swiftTransport->setPassword($parametres->pass_N);
+      $fromname="Najda Assistance";
+      $from='24ops@najda-assistance.com';
+
+   
+   if($factures && $factures->count()>0 )
+   {
+      
+      foreach ($factures as $f ) {
+
+        if(!$f->honoraire || $f->honoraire==0 ) // cas prestataire
+        {
+
+            if($f->date_reception==null) // la facture de prestataire n'est pas encore reçue 
+            {
+
+             
+              $dateCreation = (\DateTime::createFromFormat($format, $f->created_at) );
+
+               //dd($dateCreation);
+              // si la date actuelle+30 jours ou la dte actuelle + 45j supérieur à date creation sans la date actuelle +60 jours dépasse la creation alors on envoie la email au prestataire
+             if(($dateSys30>= $dateCreation ||  $dateSys45>= $dateCreation) &&  $dateSys60<= $dateCreation)
+              {
+
+                //extraction d'adresse email
+                if($f->prestataire)
+                {
+                 $adr=Adresse::where('parent', $f->prestataire)->where('nature','emailinterv')->pluck('champ')->toArray();
+
+
+                  $sujet = 'Facture Prestataire';
+                  $contenu = "Bonjour de Najda,<br>
+                Votre facture n'est pas encore reçue<br>
+                (Signé): Mail généré automatiquement";
+               $contenu=$contenu.'<br><br>Cordialement <br> Najda <br><br><hr style="float:left;"><br><br>';
+
+                  if($adr && count($adr)>0)
+                   {
+                    //dd('ok envoi au prestataire ');
+                    //self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
+                     dd('ok envoi au prestataire ');
+
+                   }
+
+                 }
+
+              }
+              else
+              {
+                if($dateSys60>= $dateCreation) // alerte le financier
+                {
+                       dd("envoi alerte au financier cas prestataire");
+                    //adresse financier
+                    //$adr= fianancier
+
+                }
+
+              }
+
+
+
+            }
+
+          
+       
+        }
+        if($f->honoraire == 1) // cas client
+        {
+
+            if($f->regle==0)// facture non réglée
+            {
+                $format = "Y/m/d"; 
+                $dateEmail=str_replace('/','-',$f->date_email) ;
+                 $dateEnvoi= new \DateTime($dateEmail);
+               // dd( date_format(strtotime($f->date_email),"Y/m/d H:i:s"));          
+             // $dateEnvoi = (\date::createFromFormat($format, $f->date_email) );
+              
+              if($dateSys30>= $dateEnvoi  &&  $dateSys45<= $dateEnvoi)
+              {
+               
+                //extraction d'adresse email
+                if($f->iddossier)
+                {
+                $dossier=Dossier::where('id',$f->iddossier)->first(); 
+                 //dd( $dossier->id) ;
+                //$adr=Adresse::where('parent', $dossier->customer_id)->where('nature','gestion')->pluck('mail')->toArray();
+
+                $adr=Adresse::where('parent',87)->where('nature','gestion')->pluck('mail')->toArray();
+
+                 if($adr && count($adr)>0)
+                   {
+                    
+                    $sujet = 'Facture client';
+                     $contenu = "Bonjour de Najda,<br>
+                    Votre facture n'est pas encore réglée<br>
+                     (Signé): Mail généré automatiquement";
+                    $contenu=$contenu.'<br><br>Cordialement <br> Najda <br><br><hr style="float:left;"><br><br>';
+                   // self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
+
+                    dd('ok envoi au gestionnaire client');
+                   }
+
+
+                 }
+
+
+              }
+              else
+              {
+                if($dateSys45>= $dateEnvoi) // alerte le financier
+                {
+
+                    //adresse financier
+                    //$adr= fianancier
+                  dd("envoi alerte au financier cas client");
+
+
+                }
+
+              }
+
+                
+            }
+
+        }
+
+      } // fin foreach ($factures as $f )
+
+   } // fin if  $factures
+      
+
+
+
+    }//fin fonction
 
  
 

@@ -1084,22 +1084,83 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 
 <?php
+
+
+//dd($interval);
+//dd( $interval->format('%R%a hours'));
+
+//$datetime1 = new DateTime('2009-10-11');
+//dd($datetime1);
+
+/*$datetime2 = new DateTime('2009-10-13T12:30:00');
+$diff = $datetime1->diff($datetime2);*/
+//dd($diff);
+/*$hours = $diff->h;
+$hours = $hours + ($diff->days*24);
+
+if($diff->i != 0 )
+{
+$minutes = $diff->i/60;
+$hours = $hours +$minutes ;
+dd($hours);
+}*/
+
+\App\Http\Controllers\FacturesController::envoi_mail_automatique_factures();
+dd("envoi alertes factures exécuté");
+
+
 $heureActuelle=date('H');
 
+$dtc = (new \DateTime())->format('Y-m-d H:i:s');
+$dtc2= (new \DateTime())->format('Y-m-d');
+$format = "Y-m-d H:i:s";
 
-//if($heureActuelle=='08' || $heureActuelle=='15'){
+$dateSys = \DateTime::createFromFormat($format,$dtc);
 
- app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
+$datespe = \DateTime::createFromFormat($format,\App\Http\Controllers\DossierImmobileController::getDatecalcul());
 
- // \App\Http\Controllers\DossierImmobileController::mettreAjourTableDossImmobile();
+if($datespe->format('Y-m-d')!=$dtc2)
+{
+    if(\App\Http\Controllers\DossierImmobileController::getCalculDossImm()==1)
+    {
+       // dd("faire le calcul");
+        app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
+        \App\Http\Controllers\DossierImmobileController::mettreAjourTableDossImmobile();
+        \App\Http\Controllers\DossierImmobileController::setCalculDossImm(false);
+        \App\Http\Controllers\DossierImmobileController::setDatecalcul($dtc);
+
+    }
+}
+else
+{ 
+
+    //dd("meme date ; non  calcul ; mettre à jour  set calculdoss");
+     if(\App\Http\Controllers\DossierImmobileController::getCalculDossImm()==0)
+    {
+    //dd("meme date ; non  calcul ; mettre à jour  set calculdoss");
+     \App\Http\Controllers\DossierImmobileController::setCalculDossImm(true);
+    }
+}
+dd("done");
+//\App\Http\Controllers\DossierImmobileController::setDatecalcul($dtc);
+//dd(\App\Http\Controllers\DossierImmobileController::getDatecalcul());
+//\App\Http\Controllers\DossierImmobileController::setCalculDossImm(true);
+//dd(\App\Http\Controllers\DossierImmobileController::getCalculDossImm()); 
+if($heureActuelle=='10' || $heureActuelle=='15'){
+//dd("kbs");
+ //app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
+
+ //\App\Http\Controllers\DossierImmobileController::mettreAjourTableDossImmobile();
+
  // \App\Http\Controllers\DossierImmobileController::envoi_khaled_mail();
 
 // Inactiver Dossiers
 //App\Http\Controllers\DossiersController::InactiverDossiers();
 
-//Activer Dossier Inactifs
+//Activer Dossier Inacti
+ 
 //App\Http\Controllers\DossiersController::ActiverDossiers();
-       // }
+       }
 
 ?>
 </html>

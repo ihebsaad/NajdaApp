@@ -77,7 +77,7 @@ class RechercheController extends Controller
     }
 
 
-
+// recherhce menu global
       public function rechercheMultiAjax(Request $request)
     {
 
@@ -887,8 +887,16 @@ public function pageRechercheAvancee(Request $request )
                    {
                      //dd('ok');
 
+                     if($request->get('current_status')!= 'ecai') // ecai= en cours (actif + inactif)
+                     {
+                     $data=Dossier::where('current_status',$request->get('current_status'))->orderBy('id','DESC')->get();
+                     }
+                     else
+                     {
 
-                     $data=Dossier::where('current_status',$request->get('current_status'))->get();
+                      $data=Dossier::where('current_status','actif')->orWhere('current_status','inactif')->orderBy('id','DESC')->get();
+
+                     }
 
                      $datasearch=array();
 
@@ -963,9 +971,20 @@ public function pageRechercheAvancee(Request $request )
                    {
                      //dd('okb');
 
+                       if($request->get('current_status')!= 'ecai') // ecai= en cours (actif + inactif)
+                     {
+                     $data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->orderBy('id','DESC')->get();
+                     }
+                     else
+                     {
+                      
+                      $data=Dossier::where(function($q){                             
+                           $q->where('current_status','actif')->orWhere('current_status','inactif'); 
+                           })->where('customer_id',$request->get('customer_id_search'))->orderBy('id','DESC')->get();
 
+                     }
 
-                     $data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();
+                    /* $data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();*/
 
                      $datasearch=array();
 
@@ -1018,7 +1037,20 @@ public function pageRechercheAvancee(Request $request )
                   {
                      // dd('okb');
 
-                   $datasearch=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();
+                   /*$datasearch=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();*/
+
+                   if($request->get('current_status')!= 'ecai') // ecai= en cours (actif + inactif)
+                     {
+                     $datasearch=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->orderBy('id','DESC')->get();
+                     }
+                     else
+                     {
+                      
+                     $datasearch=Dossier::where(function($q){                             
+                           $q->where('current_status','actif')->orWhere('current_status','inactif'); 
+                           })->where('customer_id',$request->get('customer_id_search'))->orderBy('id','DESC')->get();
+
+                     }
 
                   }
               }
@@ -1039,7 +1071,19 @@ public function pageRechercheAvancee(Request $request )
 
 
 
-                     $da=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();
+                     /*$da=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();*/
+                     if($request->get('current_status')!= 'ecai') // ecai= en cours (actif + inactif)
+                     {
+                     $da=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->orderBy('id','DESC')->get();
+                     }
+                     else
+                     {
+                      
+                     $da=Dossier::where(function($q){                             
+                           $q->where('current_status','actif')->orWhere('current_status','inactif'); 
+                           })->where('customer_id',$request->get('customer_id_search'))->orderBy('id','DESC')->get();
+
+                     }
 
                          $data = array();
 
@@ -1108,7 +1152,20 @@ public function pageRechercheAvancee(Request $request )
 
                  //dd('kkk');
 
-                  $data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();
+                  /*$data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->get();*/
+                   if($request->get('current_status')!= 'ecai') // ecai= en cours (actif + inactif)
+                     {
+                     $data=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->orderBy('id','DESC')->get();
+                     }
+                     else
+                     {
+                      
+                     $data=Dossier::where(function($q){                             
+                           $q->where('current_status','actif')->orWhere('current_status','inactif'); 
+                           })->where('customer_id',$request->get('customer_id_search'))->orderBy('id','DESC')->get();
+
+                     }
+
 
                          $datasearch = array();
 
@@ -1144,14 +1201,49 @@ public function pageRechercheAvancee(Request $request )
 
 
 
-                    $da = DB::table('prestations')
+                    /*$da = DB::table('prestations')
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
                       ->where('dossiers.current_status',$request->get('current_status'))
                       ->where('dossiers.customer_id',$request->get('customer_id_search'))
                       ->select('dossiers.*', 'prestataires.name')
+                      ->get();*/
+                      if($request->get('current_status')!= 'ecai') // ecai= en cours (actif + inactif)
+                     {
+                     /*$da=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->orderBy('id','DESC')->get();*/
+                     $da = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where('dossiers.current_status',$request->get('current_status'))
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))
+                      ->orderBy('dossiers.id','DESC')
+                      ->select('dossiers.*', 'prestataires.name')
                       ->get();
+                     }
+                     else
+                     {
+                      
+                     /*$da=Dossier::where(function($q){                             
+                           $q->where('current_status','actif')->orWhere('current_status','inactif'); 
+                           })->where('customer_id',$request->get('customer_id_search'))->orderBy('id','DESC')->get();*/
+
+                      $da = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where(function($q){                             
+                           $q->where('dossiers.current_status','actif')->orWhere('dossiers.current_status','inactif'); 
+                           })
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))
+                      ->orderBy('dossiers.id','DESC')
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+
+
+
+                     }
 
 
                        $data = array();
@@ -1222,14 +1314,49 @@ public function pageRechercheAvancee(Request $request )
 
                     // dd('okkk');
 
-                     $data = DB::table('prestations')
+                     /*$data = DB::table('prestations')
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
                       ->where('dossiers.current_status',$request->get('current_status'))
                       ->where('dossiers.customer_id',$request->get('customer_id_search'))
                       ->select('dossiers.*', 'prestataires.name')
+                      ->get();*/
+                      if($request->get('current_status')!= 'ecai') // ecai= en cours (actif + inactif)
+                     {
+                     /*$da=Dossier::where('current_status',$request->get('current_status'))->where('customer_id',$request->get('customer_id_search'))->orderBy('id','DESC')->get();*/
+                     $data = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where('dossiers.current_status',$request->get('current_status'))
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))
+                      ->orderBy('dossiers.id','DESC')
+                      ->select('dossiers.*', 'prestataires.name')
                       ->get();
+                     }
+                     else
+                     {
+                      
+                     /*$da=Dossier::where(function($q){                             
+                           $q->where('current_status','actif')->orWhere('current_status','inactif'); 
+                           })->where('customer_id',$request->get('customer_id_search'))->orderBy('id','DESC')->get();*/
+
+                      $data = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where(function($q){                             
+                           $q->where('dossiers.current_status','actif')->orWhere('dossiers.current_status','inactif'); 
+                           })
+                      ->where('dossiers.customer_id',$request->get('customer_id_search'))
+                      ->orderBy('dossiers.id','DESC')
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+
+
+
+                     }
 
 
                        $datasearch = array();
@@ -1262,7 +1389,19 @@ public function pageRechercheAvancee(Request $request )
                      //dd('okbr');
 
 
-                      $da=Dossier::where('current_status',$request->get('current_status'))->get();
+                      //$da=Dossier::where('current_status',$request->get('current_status'))->get();
+                      if($request->get('current_status')!= 'ecai') // ecai= en cours (actif + inactif)
+                     {
+                     $da=Dossier::where('current_status',$request->get('current_status'))->orderBy('id','DESC')->get();
+                     }
+                     else
+                     {
+                      
+                     $da=Dossier::where(function($q){                             
+                           $q->where('current_status','actif')->orWhere('current_status','inactif'); 
+                           })->orderBy('id','DESC')->get();
+
+                     }
 
                       $data = array();
 
@@ -1334,7 +1473,19 @@ public function pageRechercheAvancee(Request $request )
                         {
                             //dd('fffff');
 
-                          $data=Dossier::where('current_status',$request->get('current_status'))->get();
+                          //$data=Dossier::where('current_status',$request->get('current_status'))->get();
+                      if($request->get('current_status')!= 'ecai') // ecai= en cours (actif + inactif)
+                     {
+                     $data=Dossier::where('current_status',$request->get('current_status'))->orderBy('id','DESC')->get();
+                     }
+                     else
+                     {
+                      
+                     $data=Dossier::where(function($q){                             
+                           $q->where('current_status','actif')->orWhere('current_status','inactif'); 
+                           })->orderBy('id','DESC')->get();
+
+                     }
 
                                  $datasearch = array();
 
@@ -1375,15 +1526,46 @@ public function pageRechercheAvancee(Request $request )
                      //dd('okbr');
 
 
-                       $data = DB::table('prestations')
+                      /* $data = DB::table('prestations')
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
                       ->where('dossiers.current_status',$request->get('current_status'))
                       ->select('dossiers.*', 'prestataires.name')
+                      ->get();*/
+
+                      if($request->get('current_status')!= 'ecai') // ecai= en cours (actif + inactif)
+                     {
+                    /* $da=Dossier::where('current_status',$request->get('current_status'))->orderBy('id','DESC')->get();*/
+
+                     $data = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where('dossiers.current_status',$request->get('current_status'))
+                      ->orderBy('dossiers.id','DESC')
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+                     }
+                     else
+                     {
+                      
+                     /*$da=Dossier::where(function($q){                             
+                           $q->where('current_status','actif')->orWhere('current_status','inactif'); 
+                           })->orderBy('id','DESC')->get();*/
+
+                     $data = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where(function($q){                             
+                           $q->where('dossiers.current_status','actif')->orWhere('dossiers.current_status','inactif'); 
+                           })
+                      ->orderBy('dossiers.id','DESC')
+                      ->select('dossiers.*', 'prestataires.name')
                       ->get();
 
-
+                     }
 
 
                      $datasearch=array();
@@ -1441,13 +1623,46 @@ public function pageRechercheAvancee(Request $request )
                     else
                     {
 
-                     $datasearch = DB::table('prestations')
+                    /* $datasearch = DB::table('prestations')
                       ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
                       ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
                       ->where('prestataires.id','=', $request->get('pres_id_search'))
                       ->where('dossiers.current_status',$request->get('current_status'))
                       ->select('dossiers.*', 'prestataires.name')
+                      ->get();*/
+
+                             if($request->get('current_status')!= 'ecai') // ecai= en cours (actif + inactif)
+                     {
+                    /* $da=Dossier::where('current_status',$request->get('current_status'))->orderBy('id','DESC')->get();*/
+
+                     $datasearch = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where('dossiers.current_status',$request->get('current_status'))
+                      ->orderBy('dossiers.id','DESC')
+                      ->select('dossiers.*', 'prestataires.name')
                       ->get();
+                     }
+                     else
+                     {
+                      
+                     /*$da=Dossier::where(function($q){                             
+                           $q->where('current_status','actif')->orWhere('current_status','inactif'); 
+                           })->orderBy('id','DESC')->get();*/
+
+                     $datasearch = DB::table('prestations')
+                      ->join('dossiers', 'dossiers.id', '=', 'prestations.dossier_id')
+                      ->join('prestataires', 'prestataires.id', '=', 'prestations.prestataire_id')
+                      ->where('prestataires.id','=', $request->get('pres_id_search'))
+                      ->where(function($q){                             
+                           $q->where('dossiers.current_status','actif')->orWhere('dossiers.current_status','inactif'); 
+                           })
+                      ->orderBy('dossiers.id','DESC')
+                      ->select('dossiers.*', 'prestataires.name')
+                      ->get();
+
+                     }
 
                     }
                  // dd( $datasearch);
