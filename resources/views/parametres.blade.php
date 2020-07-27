@@ -61,7 +61,7 @@
 
 
     ?>
-
+<link href="{{ asset('public/js/select2/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css"/>
                     <h3 class="card-title">Tableau de bord</h3><br>
                          <!-- Tabs -->
                         <ul class="nav  nav-tabs">
@@ -98,6 +98,11 @@
                                 <li class="nav-item">
                                     <a class="nav-link " href="#tab5" data-toggle="tab" onclick="showinfos5();hideinfos();hideinfos2();hideinfos4();hideinfos3()">
                                         <i class="fa-lg fas fa-gears"></i>  Paramètres Type Missions
+                                    </a>
+                                </li>
+                                 <li class="nav-item">
+                                    <a class="nav-link " href="#tab6" data-toggle="tab" onclick="showinfos6();hideinfos();hideinfos2();hideinfos4();hideinfos3();hideinfos5()">
+                                        <i class="fa-lg fas fa-gears"></i>  Statistiques Missions
                                     </a>
                                 </li>
                                 <?php }?>
@@ -473,7 +478,7 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
                     </div>
     <?php  }
 ?>
-
+ 
 <div id="tab5" class="tab-pane fade   " style="display:block">
 <div class="padding:20px 20px 20px 20px"><br>
 
@@ -508,6 +513,7 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
 
     </div>
     </div><!--  Tab 5  -->
+ 
 
  <?php   if( ($user_type=='financier')  || ( ($user_type=='admin')) ) {
 
@@ -551,7 +557,71 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
 
     <?php } ?>
 
+<?php   if( $user_type=='admin' ) {
 
+    ?>
+
+    <div id="tab6" class="tab-pane fade   " style="display:block">
+
+        <form id="idstatistiquesMissions" action="javascript:void(0)" onSubmit=""  method="get">
+
+             {{ csrf_field() }}
+
+
+         <div class="form-group">
+
+    <div  class="row">
+        <br><br>
+        <div class="col-md-6">
+            <label  style=" ;  text-align: left; width: 75px;">Date début:</label>
+   <input id="date_d" type="datetime-local" class="form-control" style="width:95%;  text-align: left !important;" name="date_d"/></div>
+  
+    <div class="col-md-6">
+    <label  style=" ;  text-align: left; width: 55px;">Date fin:</label>
+   <input id="date_f" type="datetime-local" class="form-control" style="width:95%;  text-align: left !important;" name="date_f"/></div>
+
+</div>
+</div>
+
+ <div class="form-group">
+
+<div  class="row">
+        <br><br>
+
+    
+
+        <label  style="text-align: left; width: 85px;margin-left: 17px;">Type mission:</label>
+        <select id="typeMissauto" name="typeMissauto" class="form-control select2" style="margin-left: 17px ;width:70%; border: 1px solid #ccc; height: 32px">
+          <option value="">Sélectionner</option>
+          <?php
+          $typesMissions = TypeMission::get();
+          ?>
+             @foreach( $typesMissions as $c) 
+
+              <option value="{{$c->id}}">{{$c->nom_type_Mission}} </option>
+
+             @endforeach
+        </select>
+
+    
+
+</div>
+</div>
+
+<div  class="row">
+<br><br>
+    <center> <button id="idstatMissAff" type="submit" class="btn btn-success"  onClick="this.disabled=true; chargerMissionStatistiques();" >Afficher</button></center>
+    <br>
+ </div>
+
+</form>
+
+<div id="contenuStatMiss">
+
+</div><!-- fin div contenuStatMiss -->
+</div>
+
+ <?php } ?>
     <!-- Modal   -->
     <div class="modal fade" id="act_description" role="dialog" aria-labelledby="description" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -582,9 +652,40 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
         </div>
     </div>
 
+    <div class="modal fade" id="myworkflow" role="dialog" >
+    <div class="modal-dialog modal-lg" >
+    
+      <!-- Modal content-->
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 id="titleworkflowmodal" class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+         
+
+  <div id="contenumodalworkflow" style="background-color: #ABF8F8;padding:5px 5px 5px 5px" >
+
+               
+  </div>
+
+
+       
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
  @endsection
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="{{ asset('public/js/select2/js/select2.js') }}"></script>
+
+
 
 <script>
 
@@ -621,6 +722,9 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
     function hideinfos4() {
         $('#tab4').css('display','none');
     }
+    function hideinfos5() {
+        $('#tab5').css('display','none');
+    }
     function showinfos() {
         $('#tab1').css('display','block');
     }
@@ -635,6 +739,9 @@ if( ($user_type=='superviseur')  || ( ($user_type=='admin')) ) {
     }
     function showinfos5() {
         $('#tab5').css('display','block');
+    }
+    function showinfos6() {
+        $('#tab6').css('display','block');
     }
 
     function changing(elm) {
@@ -776,6 +883,100 @@ document.getElementById('descrip_act').value=description;
          $('#act_description').modal({show:true});
 
     }
+
+
+    function chargerMissionStatistiques()
+    {
+
+     var en=true;
+
+   if(!$('#idstatistiquesMissions #typeMissauto').val())
+     {
+
+      alert('vous devez sélectionner le type de mission');
+      en=false;
+
+     }
+
+   
+ 
+
+   if(en==true)
+   {
+    var donnees = $('#idstatistiquesMissions').serialize(); // On créer une variable content le formulaire sérialisé
+    var _token = $('input[name="_token"]').val();
+    $.ajax({
+
+           url:"{{ route('missions.statistiques') }}",
+           method:"get",
+           data:donnees,
+           success:function(data){
+         
+               // alert("Mission créée");
+                alert(data);
+                
+                $('#contenuStatMiss').html(data);
+                 //$('#idFormCreationMission #typeMissauto').val('');
+                 //$('#idFormCreationMission #typeMissauto option:eq(1)').prop('selected', true);
+                //$('#idFormCreationMission #typeMissauto').text('Sélectionner');
+               // $('#idFormCreationMission #titre').val('');
+                //$('#typeMissauto option[value=selectkbs]').attr("selected", "selected");
+                $("#idstatistiquesMissions #typeMissauto").select2("val", "Sélectionner");
+
+                 //$('#idFormCreationMission #datedeb').val(data);
+
+                 // $('#idFormCreationMission #commentaire').val('');
+
+                },
+            error: function(jqXHR, textStatus, errorThrown) {
+
+              alert('erreur lors de chargement de statistiques missions');
+
+
+            }
+
+   
+    });
+  }
+
+  //$("#idAjoutMiss").attr("disabled",false);
+   document.getElementById('idstatMissAff').disabled=false;
+
+
+
+    }
+
+
+    $(document).on('click','.actionstatmiss', function() {
+   var idwg=$(this).attr("id");
+    alert(idwg);
+   //var nomact=$('#workflowh'+idwg).attr("value");
+   //var typemiss=$('#workflowht'+idwg).attr("value");
+    //$("#titleworkflowmodal").empty().append('<b>Mission: '+nomact+' (type de Mission: '+typemiss+')</b>');//ou la methode html
+
+           $.ajax({
+
+               url: "{{ url('/') }}/missions/actionsstatistiques/"+idwg,
+               type : 'get',
+              // data : 'idw=' + idw,
+               success: function(data){
+               
+              //alert(data);
+
+               //alert(JSON.stringify(data));
+
+                $('#contenumodalworkflow').html(data);
+
+              $('#myworkflow').modal('show');
+
+                  //alert(JSON.stringify(retour))   ;
+                 // location.reload();
+            }
+
+             
+           });
+
+  });
 
 
 </script>

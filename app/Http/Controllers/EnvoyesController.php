@@ -285,7 +285,7 @@ class EnvoyesController extends Controller
 
     public static function getLastEmailClient($idc)
     {
-        $env = Envoye::where('client',$idc)->orderBy('id','desc')->first();
+        $env = Envoye::where('client',$idc)->where('type','email')->orderBy('id','desc')->first();
         if (isset($env['destinataire'])) {
            if($env['destinataire']>0){ return $env['destinataire'] ;  }else{return '';}
         }else{return '';}
@@ -294,7 +294,7 @@ class EnvoyesController extends Controller
 	
   public static function getLastEmailCc_Client($idc)
     {
-        $env = Envoye::where('client',$idc)->orderBy('id','desc')->first();
+        $env = Envoye::where('client',$idc)->where('type','email')->orderBy('id','desc')->first();
         if (isset($env['cc'])) {
            if($env['cc']!=''){ return $env['cc'] ;  }else{return '';}
         }else{return '';}

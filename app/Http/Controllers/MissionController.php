@@ -3597,8 +3597,9 @@ public function getAjaxDeleguerMission($idmiss)
                       <th>comment. 1</th>
                       <th>comment. 2</th>
                       <th>comment. 3</th>
-
+                      <th>durée eff. Act.(heures)</th>
                       <th>Statut</th>
+                      
 
                     </tr>
                   </thead>
@@ -3663,6 +3664,8 @@ public function getAjaxDeleguerMission($idmiss)
                         $output.='<td style="overflow: auto;" title="'.$sactions->comment1.'"><span style="font-weight : none;">'.$sactions->comment1.'</span></td>' ;
                         $output.='<td style="overflow: auto;" title="'.$sactions->comment2.'"><span style="font-weight : none;">'.$sactions->comment2.'</span></td>' ;
                         $output.='<td style="overflow: auto;" title="'.$sactions->comment3.'"><span style="font-weight : none;">'.$sactions->comment3.'</span></td>' ;
+
+                        $output.='<td style="overflow: auto;" title="'.$sactions->duree_eff.'"><span style="font-weight : none;">'.number_format($sactions->duree_eff, 2, ',', ' ').'</span></td>' ;
 
                          if ($sactions->statut!='rfaite')
                           {
@@ -3739,6 +3742,8 @@ public function getAjaxDeleguerMission($idmiss)
 
 
                         }
+
+
                    
 
                     }
@@ -3750,6 +3755,8 @@ public function getAjaxDeleguerMission($idmiss)
 
 
                    $output.=' </tbody> </table>';
+
+                    $output.='<br><div><text style="color:red; align:right"> Durée effective de mission: '.number_format($actk->duree_eff, 2, ',', ' ').' heures</text></div>';
 
 
          }
@@ -4265,15 +4272,487 @@ public function getAjaxDeleguerMission($idmiss)
     }
 
 
+    public function missionsStatistiques(Request $req)
+    {
+
+       $moy=0;
+       $max=0;
+       $min=0;
+       $nbtot=0;
+       $med1=null;
+       $med2=null;
+
+
+     // dd($req->get('date_d').' '.$req->get('date_f').' '.$req->get('typeMissauto'));
+
+      if($req->get('date_d') &&  $req->get('date_f'))
+      {
+
+        $miss=MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_deb','>=', $req->get('date_d'))->where('date_fin','<=', $req->get('date_f'))->get();
+
+         $nbtot = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_deb','>=', $req->get('date_d'))->where('date_fin','<=', $req->get('date_f'))->count();
+
+           $moy = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_deb','>=', $req->get('date_d'))->where('date_fin','<=', $req->get('date_f'))->avg('duree_eff');
+
+           $max = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_deb','>=', $req->get('date_d'))->where('date_fin','<=', $req->get('date_f'))->max('duree_eff');
+
+           $min = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_deb','>=', $req->get('date_d'))->where('date_fin','<=', $req->get('date_f'))->min('duree_eff');
+
+            $med=MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_deb','>=', $req->get('date_d'))->where('date_fin','<=', $req->get('date_f'))->orderBy('duree_eff','asc')->pluck('duree_eff')->toArray();
+
+                if(count($med)%2==0 && count($med)>1  )
+              {
+                $med1=$med[count($med)/2];
+                $med1=number_format($med1, 2, ',', ' ');
+                $med2=$med[(count($med)/2)-1];
+                $med2=number_format($med2, 2, ',', ' ');
+                $med= $med1.' | '.$med2;
+
+              }
+              else
+              {
+
+              if(count($med)%2 !=0 && count($med)>1 )
+              {
+               $med=$med[floor(count($med)/2)];
+               $med=number_format($med, 2, ',', ' ');
+
+              }
+              else
+              {
+
+                 if(count($med)==1 )
+                  {
+                $med=$med[0];
+                $med=number_format($med, 2, ',', ' ');
+
+
+                 }
+               }
+            }
+
+
+       // return("les deux");
+
+      }
+      else
+        {
+          if($req->get('date_d'))
+          {
+
+            $miss=MissionHis::where('duree_eff','!=',0)->where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_deb','>=', $req->get('date_d'))->get();
+
+            $nbtot = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_deb','>=', $req->get('date_d'))->count();
+
+           $moy = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_deb','>=', $req->get('date_d'))->avg('duree_eff');
+
+           $max = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_deb','>=', $req->get('date_d'))->max('duree_eff');
+
+           $min = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_deb','>=', $req->get('date_d'))->min('duree_eff');
+
+            $med=MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_deb','<=', $req->get('date_d'))->orderBy('duree_eff','asc')->pluck('duree_eff')->toArray();
+
+               if(count($med)%2==0 && count($med)>1  )
+              {
+                $med1=$med[count($med)/2];
+                $med1=number_format($med1, 2, ',', ' ');
+                $med2=$med[(count($med)/2)-1];
+                $med2=number_format($med2, 2, ',', ' ');
+                $med= $med1.' | '.$med2;
+
+              }
+              else
+              {
+
+              if(count($med)%2 !=0 && count($med)>1 )
+              {
+               $med=$med[floor(count($med)/2)];
+               $med=number_format($med, 2, ',', ' ');
+
+              }
+              else
+              {
+
+                 if(count($med)==1 )
+                  {
+                $med=$med[0];
+                $med=number_format($med, 2, ',', ' ');
+
+
+                 }
+               }
+            }
+
+
+          }
+          else
+          {
+            if($req->get('date_f'))
+            {
+              $miss=MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_fin','<=', $req->get('date_f'))->get();
+
+            $nbtot = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_fin','<=', $req->get('date_f'))->count();
+            $moy = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_fin','<=', $req->get('date_f'))->avg('duree_eff');
+           $max = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_fin','<=', $req->get('date_f'))->max('duree_eff');
+           $min = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_fin','<=', $req->get('date_f'))->min('duree_eff');
+             $med=MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->where('date_fin','<=', $req->get('date_f'))->orderBy('duree_eff','asc')->pluck('duree_eff')->toArray();
+       
+
+           if(count($med)%2==0 && count($med)>1  )
+              {
+                $med1=$med[count($med)/2];
+                $med1=number_format($med1, 2, ',', ' ');
+                $med2=$med[(count($med)/2)-1];
+                $med2=number_format($med2, 2, ',', ' ');
+                $med= $med1.' | '.$med2;
+
+              }
+              else
+              {
+
+              if(count($med)%2 !=0 && count($med)>1 )
+              {
+               $med=$med[floor(count($med)/2)];
+               $med=number_format($med, 2, ',', ' ');
+
+              }
+              else
+              {
+
+                 if(count($med)==1 )
+                  {
+                $med=$med[0];
+                $med=number_format($med, 2, ',', ' ');
+
+
+                 }
+               }
+            }
+
+            }
+            else
+            {// les deux dates null
+
+
+             $miss=MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->get();
+
+                $nbtot = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->count();
+           $moy = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->avg('duree_eff');
+           $max = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->max('duree_eff');
+           $min = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->min('duree_eff');
+
+           $med=MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->orderBy('duree_eff','asc')->pluck('duree_eff')->toArray();
+
+               if(count($med)%2==0 && count($med)>1  )
+              {
+                $med1=$med[count($med)/2];
+                $med1=number_format($med1, 2, ',', ' ');
+                $med2=$med[(count($med)/2)-1];
+                $med2=number_format($med2, 2, ',', ' ');
+                $med= $med1.' | '.$med2;
+
+              }
+              else
+              {
+
+              if(count($med)%2 !=0 && count($med)>1 )
+              {
+               $med=$med[floor(count($med)/2)];
+               $med=number_format($med, 2, ',', ' ');
+
+              }
+              else
+              {
+
+                 if(count($med)==1 )
+                  {
+                $med=$med[0];
+                $med=number_format($med, 2, ',', ' ');
+
+
+                 }
+               }
+            }
+
+
+
+            }
+
+
+          }
+
+        }
+
+
+         /* $nbtot = MissionHis::where('type_Mission',$req->get('typeMissauto'))->count();
+          $moy = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->avg('duree_eff');
+          $max = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->max('duree_eff');
+          $min = MissionHis::where('duree_eff','!=',0)->where('type_Mission',$req->get('typeMissauto'))->min('duree_eff');*/
+       
+
+
+    $output='';
+
+      $output='';
+          $output='<div class="row"><br><br>
+        <div class="col-md-2">
+            
+            <label  style="text-align: left; width: 85px;">Nombre Total:</label>
+   <input id="nb_tot" type="text" class="form-control" style="width:95%;  text-align: left !important;" name="nb_tot" value="'.$nbtot.'" /></div>
+  
+    <div class="col-md-2">
+    <label  style=" ;  text-align: left; width: 75px;">Durée min:</label>
+   <input id="duree_min" type="text" class="form-control" style="width:95%;  text-align: left !important;" name="duree_min" value="'. number_format($min, 2, ',', ' ').'" /></div>
+
+   <div class="col-md-2">
+    <label  style=" ;  text-align: left; width: 75px;">Durée max:</label>
+   <input id="duree_max" type="text" class="form-control" style="width:95%;  text-align: left !important;" name="duree_max" value="'. number_format($max, 2, ',', ' ').'" /></div>
+
+   <div class="col-md-2">
+    <label  style=" ;  text-align: left; width: 100px;">Durée moyenne:</label>
+   <input id="duree_moy" type="text" class="form-control" style="width:95%;  text-align: left !important;" name="duree_moy" value="'. number_format($moy, 2, ',', ' ').'" /></div> 
+
+   <div class="col-md-2">
+    <label  style=" ;  text-align: left; width: 100px;">Durée médiane:</label>
+   <input id="duree_moy" type="text" class="form-control" style="width:95%;  text-align: left !important;" name="duree_moy" value="'. $med.'" /></div>
+
+   </div>';
+
+     $output.='<div class="row"><br><br><br><center>';
+
+     $output.='<table style="width:50%" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Mission</th>
+        <th>Dossier</th>
+        <th>Durée effective</th>
+        <th>Détails mission</th>
+      </tr>
+    </thead>
+    <tbody>';
+
+
+    foreach ($miss as $m) {
+
+      $output.=' <tr>
+        <th>'.$m->nom_type_miss.'</th>
+        <th>'.$m->dossier->reference_medic.'</th>
+        <th>'.number_format($m->duree_eff, 2, ',', ' ').'</th>
+        <th><button id="'.$m->id_origin_miss.'" class="actionstatmiss"></button></th>
+      </tr>';
+     
+    }
+
+$output.='</tbody></table></center></div>';
+ 
+
+
+return $output;
+    }
+
+
+
+    public function actionsStatistiques($idmiss)
+    {
+
+       $actk=MissionHis::find($idmiss);
+
+      $output='';
+
+                
+                $output='<h4><b>Etat des actions</b></h4><br>';
+
+                $dateRapp = null;
+                $dateRep = null;
+                $report=0;
+                $rappel=0;
+                $i = 0;
+                //$len = count($actk->Actions);
+                //$actko=$actk->Actions->orderBy('ordre','DESC')->get();
+                $actko=Action::where('mission_id',$idmiss)->orderBy('ordre','ASC')->orderBy('num_rappel','ASC')->orderBy('num_report','ASC')->get();
+                   $output.='<input id="InputetatActionMission" style="float:right" type="text" placeholder="Recherche.." autocomplete="off"> <br><br>';
+                   $output.='<table class="table table-striped">
+                  <thead>
+                    <tr>
+
+                      <th>Action</th>
+                      <th>Date début</th>
+                      <th>Date fin</th>
+                      <th>Utilisateur</th>
+                      <th>Num rappel /report</th>
+                    
+                      <th>comment. 1</th>
+                      <th>comment. 2</th>
+                      <th>comment. 3</th>
+                      <th>durée eff. Act.(heures)</th>
+                      <th>Statut</th>
+                      
+
+                    </tr>
+                  </thead>
+                  
+                  <tbody id="tabetatActionMission">';
+
+                  foreach ($actko as $sactions)
+                     { 
+
+                           $i++;      
+                   
+                     //$output.='<div class="row">' ;
+                        if ($i!=0)
+                        {
+
+
+                        $output.='<tr><td style="overflow: auto;" title="'.$sactions->titre.'"><span style="font-weight : none;">'.$sactions->titre.'</span></td>';
+
+                          $output.='<td style="overflow: auto;" title="'.$sactions->date_deb.'"><span style="font-weight : none;">'.$sactions->date_deb.'</span></td>';
+
+
+                        $output.='<td style="overflow: auto;" title="'.$sactions->date_fin.'"><span style="font-weight : none;">'.$sactions->date_fin.'</span></td>';
+
+                        if($sactions->user_id!=null)
+                        {
+
+                        $output.='<td style="overflow: auto;" title="'.$sactions->agent->name.' '.$sactions->agent->lastname.'"><span style="font-weight : none;">'.$sactions->agent->name.' '.$sactions->agent->lastname.'</span></td>';
+                        }
+                        else
+                        {
+
+                         $output.='<td style="overflow: auto;" title=""><span style="font-weight : none;"> </span></td>';
+
+                        }
+
+                        if($sactions->statut=='active' || $sactions->statut=='inactive' || $sactions->statut=='deleguee' || $sactions->statut=='ignoree' || $sactions->statut=='faite')
+                        {
+
+                          $output.='<td style="overflow: auto;" title=" "><span style="font-weight : none;"> </span></td>' ;
+                             
+                        }
+                        else
+                        {
+
+                        if($sactions->rapl_ou_non==1 && $sactions->report_ou_non==0)
+                        {
+                        $output.='<td style="overflow: auto;" title="'.$sactions->num_rappel.'"><span style="font-weight : none;">'.$sactions->num_rappel.'</span></td>' ;
+                        }
+                         if($sactions->rapl_ou_non==0 && $sactions->report_ou_non==1)
+                        {
+                        $output.='<td style="overflow: auto;" title="'.$sactions->num_report.'"><span style="font-weight : none;">'.$sactions->num_report.'</span></td>' ;
+                        }
+                         if($sactions->rapl_ou_non==0 && $sactions->report_ou_non==0)
+                        {
+
+                           $output.='<td style="overflow: auto;" title="'.$sactions->num_report.'"><span style="font-weight : none;">0</span></td>' ;
+
+                        }
+                       }
+
+
+                        $output.='<td style="overflow: auto;" title="'.$sactions->comment1.'"><span style="font-weight : none;">'.$sactions->comment1.'</span></td>' ;
+                        $output.='<td style="overflow: auto;" title="'.$sactions->comment2.'"><span style="font-weight : none;">'.$sactions->comment2.'</span></td>' ;
+                        $output.='<td style="overflow: auto;" title="'.$sactions->comment3.'"><span style="font-weight : none;">'.$sactions->comment3.'</span></td>' ;
+
+                        $output.='<td style="overflow: auto;" title="'.$sactions->duree_eff.'"><span style="font-weight : none;">'.number_format($sactions->duree_eff, 2, ',', ' ').'</span></td>' ;
+
+                         if ($sactions->statut!='rfaite')
+                          {
+                            if($sactions->statut=='deleguee')
+                            {
+                            $output.='<td style="overflow: auto;" title="déléguée à '.$sactions->assistant->name.' '.$sactions->assistant->lastname.'"><span style="font-weight : none; color:red"> déléguée à '.$sactions->assistant->name.' '.$sactions->assistant->lastname.'</span></td></tr>' ;
+                            }
+                            else{
+                                  if($sactions->statut=='reportee')
+                                  {
+                                  $output.='<td style="overflow: auto;" title="reportée"><span style="font-weight : none;"> Report </span></td></tr>' ;
+                                  }
+                                  else
+                                  {
+
+                                      if($sactions->statut=='rappelee')
+                                      {
+                                      $output.='<td style="overflow: auto;" title="mise en attente"><span style="font-weight : none;"> Rappel </span></td></tr>' ;
+                                      }
+                                      else
+                                      {// cas pour active
+
+                                            if($sactions->statut=='active')
+                                          {
+                                          $output.='<td style="overflow: auto;" title="en cours (active)"><span style="font-weight : none;"> en cours (active) </span></td></tr>' ;
+                                          }
+                                          else
+                                          {
+
+                                            if($sactions->statut=='ignoree')
+                                              {
+                                              $output.='<td style="overflow: auto;" title="ignorée"><span style="font-weight : none;"> ignorée </span></td></tr>' ;
+                                              }
+                                              else
+                                              {
+
+                                               $output.='<td style="overflow: auto;" title="'.$sactions->statut.'"><span style="font-weight : none;"> '.$sactions->statut.' </span></td></tr>' ;
+                                              }
+
+                                          }
+
+
+
+                                      }
+
+
+
+                                  }
+
+                                }
+
+
+                          }
+                          else // si rfaite
+                          {
+
+                            if($sactions->rapl_ou_non==1 && $sactions->report_ou_non==0)
+                            {
+                               $output.='<td style="overflow: auto;" title=" Rappel"><span style="font-weight : none;"> Rappel </span></td></tr>' ;
+                            }
+
+                              if($sactions->rapl_ou_non==0 && $sactions->report_ou_non==1)
+                            {
+                               $output.='<td style="overflow: auto;" title=" reportée"><span style="font-weight : none;"> Report </span></td></tr>' ;
+
+                            }
+
+                          }
+                        }
+                        else
+                        {
 
 
 
 
+                        }
+
+
+                   
+
+                    }
+                    if($i==0)
+                    {
+                       $output.='<tr><td><span style="font-weight : bold;">Pas d\'actions</span></td></tr>' ;
+
+                    }
+
+
+                   $output.=' </tbody> </table>';
+
+                  
+
+
+         
+
+   return $output;
 
 
 
-
-
+    }// fin  function actionsStatistiques
 
 
 
