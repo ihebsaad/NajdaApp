@@ -1,6 +1,7 @@
  <!-- Content -->
 <?php 
 use App\Http\Controllers\TagsController;
+use App\Tag;
  ?>
 <!--select css-->
     
@@ -725,48 +726,40 @@ use App\Http\Controllers\TagsController;
                           <!-- affichage des tags -->
                           <label for="accordiontags" class="control-label" >TAGs</label>
                           <div class="accordion panel-group" id="accordiontags">
-                            @php
-                              {{$tags=TagsController::entreetags($entree['id']);}}
-                            @endphp
-                                 @if (!$tags->isEmpty())
-                                      @foreach ($tags as $tag)
-                                      <div class="row" style="padding-bottom: 3px;">
-                                      <div class="col-md-10">
-                                      <div class="panel panel-default">
+  
+     <?php $tags = Tag::where('entree','=', $entree['id'] )->get();   ?> 
+                 
+<table   bordercolor="#FD9883" class="table table-striped" id="tabletags" style="width:20%;margin-top:15px;">
+                            <thead  style=" background-color: #FD9883;">
+                            <tr id="headtable" style=" background-color: #FD9883;">
+                                <th style="">Titre</th>
+                                <th style="">contenu</th>
+                                <th style="">Montant</th>
+                               
+                             </tr>
 
-                                        <div class="panel-heading" >
+                            </thead>
+                            <tbody>
 
-                                         
-                                           <h4 class="panel-title">
-                                              <a data-toggle="collapse" href="#collapse{{$tag->id}}">{{$tag->titre}}   </a>
-                                           </h4>
-                                        </div>
+ @foreach( $tags as $tag)
+                                  <tr>
+                                <td style="">{{$tag->titre}}  </td>
 
-                                       <div id="collapse{{$tag->id}}" class="panel-collapse collapse">
-                                            <ul class="list-group">
-                                              <?php if ((isset($tag->montant)) && (! empty($tag->montant))) { 
+                                <td style="">{{$tag->contenu}} </td>
+ <?php if ((isset($tag->montant)) && (! empty($tag->montant))) { 
                                                     if ($tag->montant !== null){
                                                 ?>
-                                              <li class="list-group-item"><b style="color: #c1c1b7">Montant: </b>{{$tag->montant}} </li>
-                                              <?php }} ?>
-                                              <li class="list-group-item"><b style="color: #c1c1b7">Contenu: </b>{{$tag->contenu}} </li>
-                                            </ul>
+                                <td style="">{{$tag->montant}}</td>
+ <?php }}else { ?>
+                            
+ <td style=""></td>
+   <?php }?>
 
-                                        </div>
+                             </tr>
+ @endforeach
+                            </tbody>
+                    </table>
 
-
-                                        <!-- /.panel-heading -->
-
-
-                                      </div>
-                                    </div>
-                                    <!--<div class="col-md-2" >
-                                     btn supprimer tag
-                                    </div>-->
-                                    </div>
-
-                                     @endforeach
-                                  @endif
                                     </div>
                       </div>                                       
                     </div>
@@ -1071,12 +1064,92 @@ use App\Http\Controllers\TagsController;
       $('#btn-atag').toggleClass("default-hovered");
       $('#btn-cmttag').removeClass("default-hovered");
     });  
-    $('#btn-cmttag').click(function(){
+ $('#btn-cmttag').click(function(){
       $("#ajouttag").hide();
       $("#cmttag").show();
+
+
       $('#btn-cmttag').toggleClass("default-hovered");
       $('#btn-atag').removeClass("default-hovered");
-    }); 
+var entree = $('ul#mailpiece').find('li.active').data('identreeattach');
+var type = $('ul#mailpiece').find('li.active').data('type');
+  // alert(entree);
+//alert(type);
+
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('tags.entreetags') }}",
+                    method:"POST",
+
+                    data:{entree:entree,type:type, _token:_token},
+                    success:function(data){
+
+
+                  
+
+                    var tags = JSON.parse(data);
+                    // vider le contenu du table 
+                    $("#tabletags tbody").empty();
+                    var items = [];
+                    $.each(tags, function(i, field){
+                      items.push([ i,field ]);
+                    });
+                    // affichage template dans iframe
+                    $.each(items, function(index, val) {
+
+                    //titre du document
+                    if (val[0]==0)
+                    {
+                        $("#tags").text(val[1]['titre']);
+                    }
+
+
+                if (val[1]['montant']==null)   
+{montant="";} 
+else   
+{montant=val[1]['montant'];}  
+                    $("#tabletags tbody").append("<tr><td>"+val[1]['titre']+"</td><td>"+val[1]['contenu']+"</td><td>"+montant+"</td></tr>");
+                    
+                    });
+
+                   
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oups...',
+                        text: 'Erreur lors de recuperation de tags',
+
+                    });
+                    console.log('jqXHR:');
+                    console.log(jqXHR);
+                    console.log('textStatus:');
+                    console.log(textStatus);
+                    console.log('errorThrown:');
+                    console.log(errorThrown);
+                }
+            });
+var entree = $('ul#mailpiece').find('li.active').data('identreeattach');
+var type = $('ul#mailpiece').find('li.active').data('type');
+   //alert(entree);
+//alert(type);
+var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('tags.entreetags1') }}",
+                    method:"POST",
+
+                    data:{entree:entree,type:type, _token:_token},
+                    success:function(data){
+
+
+                  
+
+                    var comment = JSON.parse(data);
+document.getElementById('commentuser').value=comment;}
+}); 
+                }); 
 $("#tagname").select2();
 $('#tagname').change(function(e){
 
@@ -1119,6 +1192,13 @@ if($('#tagname option:selected').val().match(/^(Franchise|Plafond|GOPmed|Plafond
 
 
 $('#editbtn').click(function(){
+var type = $('ul#mailpiece').find('li.active').data('type');
+
+   // alert(type);
+if(type=="email"){
+url="{{ route('entrees.savecomment') }}";}
+if(type=="piecejointe"){
+url="{{ route('attachements.savecomment') }}";}
     if ($('textarea#commentuser').is('[readonly]') )
       { $('textarea#commentuser').attr('readonly',false);}
     else
@@ -1126,7 +1206,12 @@ $('#editbtn').click(function(){
 });
 
 $('#btn-addtag').click(function(e){
-      var entree = $('input[name="entree"]').val();
+
+var entree = $('ul#mailpiece').find('li.active').data('identreeattach');
+    //alert(entree);
+var type = $('ul#mailpiece').find('li.active').data('type');
+   // alert(type);
+      
       var dossier = $('input[name="dossieridtag"]').val();
       var tag = $('select[name=tagname]').val();
       var tagtxt = $('select[name=tagname] option:selected').text();
@@ -1136,27 +1221,29 @@ $('#btn-addtag').click(function(e){
       var montant= null;
       var devise = null;
       var limontant='';
-      if (document.getElementById("montanttag")!=null)
+if (document.getElementById("montanttag")!=null)
       {
         montant = $('input[name="montanttag"]').val();
 
         devise = $('select[name=devise] option:selected').text();
-        limontant = '<li class="list-group-item"><b style="color: #c1c1b7">Montant: </b>'+montant+' '+devise+'</li>';
+      
       }
+      
             if (entree != '')
             {
 
                 $.ajax({
                     url:urladdtag,
                     method:"POST",
-                    data:{entree:entree,dossier:dossier,titre:tag,contenu:tagcontent,montant:montant,devise:devise, _token:_token},
+                    data:{entree:entree,type:type,dossier:dossier,titre:tag,contenu:tagcontent,montant:montant,devise:devise, _token:_token},
                     success:function(data){
 
                         $("#addedsuccess").fadeIn(1500);
                         $("#addedsuccess").fadeOut(1500);
 
+
                         // ajouter la nouvelle tag dans la section cmttags
-                        $('#accordiontags').append('<div class="row"><div class="col-md-10"><div class="panel panel-default"><div class="panel-heading" ><h4 class="panel-title"><a data-toggle="collapse" href="#collapse'+tag+'">'+tagtxt+'</a></h4></div><div id="collapse'+tag+'" class="panel-collapse collapse"><ul class="list-group">'+limontant+'<li class="list-group-item"><b style="color: #c1c1b7">Contenu: </b>'+tagcontent+'</li></ul></div></div></div></div>');
+                        
 
                         $('input#contenutag').val('');
                         //document.getElementById('tagname').selectedIndex = -1;
@@ -1183,13 +1270,25 @@ $('#btn-addtag').click(function(e){
 
     // auto enregistrement de commentaire
     var timeoutId;  
+
+
     $('#commentuser').keypress(function () {
+var type = $('ul#mailpiece').find('li.active').data('type');
+
+    //alert(type);
+if(type=="email"){
+url="{{ route('entrees.savecomment') }}";}
+if(type=="piecejointe"){
+url="{{ route('attachements.savecomment') }}";}
         if (timeoutId) clearTimeout(timeoutId);
+
         var _token = $('input[name="_token"]').val();
-        var entree = $('input[name="entree"]').val();
+        var entree = $('ul#mailpiece').find('li.active').data('identreeattach');
+ 
+
         timeoutId = setTimeout(function () {
             $.ajax({
-                url: "{{ route('entrees.savecomment') }}",
+                url: url,
                 method:"POST",
                 data: { entree: entree, commentaire: $('textarea#commentuser').val(), _token:_token },
                 success:function(data){
@@ -1203,7 +1302,6 @@ $('#btn-addtag').click(function(e){
             });
         }, 550);
     });
-
 });
 </script>
 

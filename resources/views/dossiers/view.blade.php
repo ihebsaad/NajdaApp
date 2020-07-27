@@ -1050,7 +1050,7 @@ array_push($listepr,$pr['prestataire_id']);
                 </div>
                 <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
                     <thead>
-                    <tr id="headtable">
+                    <tr id="headtable" style="font-size:13px;">
                         <th style="">Document</th>
                         <!--<th style="">Description</th>-->
                         <th style="">Historique</th>
@@ -1058,7 +1058,7 @@ array_push($listepr,$pr['prestataire_id']);
                      </tr>
 
                     </thead>
-                    <tbody>
+                    <tbody style="font-size:13px;">
                     @foreach($documents as $doc)
                         <tr>
                             <td style=";"><?php echo $doc->titre; 

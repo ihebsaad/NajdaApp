@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Attachement extends Model
 {
     //
-    protected $fillable = ['id','nom','type','entree_id','path', 'path_org','facturation','envoye_id','parent','boite','dossier','description','filesize','fullpath','user','created_at'];
+    protected $fillable = ['id','nom','type','entree_id','path','path_org','facturation','envoye_id','parent','boite','dossier','description','filesize','fullpath','user','created_at','commentaire'];
 
   /*  protected $dateFormat = 'Y-m-d H:i';
 
