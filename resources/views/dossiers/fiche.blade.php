@@ -8,10 +8,10 @@ use \App\Http\Controllers\UsersController;
 use App\Http\Controllers\DossiersController;
 
 
-use App\Dossier ;
-use App\Attachement ;
-  use \App\Http\Controllers\PrestationsController;
-use  \App\Http\Controllers\PrestatairesController;
+ use App\Dossier ;
+ use App\Attachement ;
+ use \App\Http\Controllers\PrestationsController;
+ use  \App\Http\Controllers\PrestatairesController;
  use  \App\Http\Controllers\DocsController;
 ?>
 <link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
@@ -1126,7 +1126,7 @@ use  \App\Http\Controllers\PrestatairesController;
 
                                     <div class="col-md-12">
 
-                                        <div class="panel panel-success" id="medical" style=" <?php if (trim($dossier->type_dossier) =='Technique' || trim($dossier->type_dossier) =='Transport' ){echo 'display:none';}?>;">
+                                        <div class="panel panel-success" id="medical" style=" <?php if (trim($dossier->type_dossier) =='Technique'  ){echo 'display:none';}?>;">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title">
                                                     <a class="accordion-toggle" data-toggle="collapse">

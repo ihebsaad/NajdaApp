@@ -170,7 +170,11 @@
 
                             <input id="envoye" type="hidden" class="form-control" name="envoye"  value="" />
                             <input id="brsaved" type="hidden" class="form-control" name="brsaved"  value="0" />
-
+							 <label for="type">Cible:</label>
+							<select class="form-control"   name="type"   style=" "  >
+							<option value="plateau">Plateau</option>
+							<option value="gestion">Gestion</option>
+                            </select>
 
                             <?php  $from='24ops@najda-assistance.com';
 

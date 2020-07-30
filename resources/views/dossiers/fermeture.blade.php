@@ -567,8 +567,9 @@ if($regle!=null){
 	if($regle)
 	{
 		echo '<h2 style="color:#a0d468">Type de dossier : '.$contrat->type_dossier. '   </h2>';
+		break;
 	}else{
-		echo '<h6 style="color:#fd9883">Type de dossier :'.$contrat->type_dossier. ' =>   Non Valide</h6>';
+	//	echo '<h6 style="color:#fd9883">Type de dossier :'.$contrat->type_dossier. ' =>   Non Valide</h6>';
 
 	}
 	

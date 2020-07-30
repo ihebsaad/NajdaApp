@@ -64,7 +64,7 @@ function custom_echo($x, $length)
     <div class="col-md-3">
 <?php  // $doss=  DossiersController::DossiersActifs(); echo json_encode($doss) ; ?>
         <h4 style="font-weight:bold;"><a  href="{{action('DossiersController@fiche',$dossier->id)}}" ><?php echo   $dossier->reference_medic .' - '.  DossiersController::FullnameAbnDossierById($dossier->id);?> </a></h4>
-        <h4 ><a style="font-weight:bold;color:#bcdf94!important" href="{{action('DossiersController@details',$dossier->id)}}" >Détails du dossier </a></h4>
+       <!-- <h4 ><a style="font-weight:bold;color:#bcdf94!important" href="{{action('DossiersController@details',$dossier->id)}}" >Détails du dossier </a></h4>-->
     </div>
     <div class="col-md-2">
         <b>Statut:</b>

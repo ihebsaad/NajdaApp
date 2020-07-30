@@ -6448,10 +6448,19 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         $cci = array();
          if (trim($to) == 'clients') {
             $dest = 'Liste des Clients';
-            $cci = Adresse::where('nature', 'email')
+			 $type = $request->get('type');
+			if($type=="gestion"){
+			 $cci = Adresse::where('nature', 'gestion')
+                ->where('mail', '<>', '')
+                ->whereIn('parent', $liste)
+                ->pluck('mail');	
+			}else{
+			 $cci = Adresse::where('nature', 'email')
                 ->where('champ', '<>', '')
                 ->whereIn('parent', $liste)
-                ->pluck('champ');
+                ->pluck('champ');	
+			}
+           
         }
         if (trim($to) == 'assures') {
             $dest = 'Liste des Assurés';
