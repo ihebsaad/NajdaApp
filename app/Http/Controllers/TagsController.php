@@ -312,13 +312,13 @@ Log::info('[Agent: ' . $nomuser . '] Ajout de tag '.$titre.' pour le dossier: ' 
 $entree=$request->get('entree');
 if($type=="email")
 {
-$tags1 = Tag::where('entree','=',$entree)->get();
+$tags1 = Tag::where('entree','=',$entree)->orderBy('created_at','desc')->get();
 
 
 }
 if($type=="piecejointe")
 {
-$tags1 = Tag::where('entree','=',$entree)->get();
+$tags1 = Tag::where('entree','=',$entree)->orderBy('created_at','desc')->get();
 
 
 }

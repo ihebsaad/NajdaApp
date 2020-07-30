@@ -58,7 +58,7 @@
                                
                                         <select id="reference_medic1" name="reference_medic1" class="form-control select2" >
                                             <option value="">Sélectionner</option>
-                                             @foreach(App\Dossier::get() as $c)
+                                             @foreach(App\Dossier::orderBy('id','DESC')->get() as $c)
 
                                                 <option value="{{$c->reference_medic}}">{{$c->reference_medic}}</option>
 
@@ -78,6 +78,7 @@
                                     <option value="Cloture">Clos</option>
                                     <option value="actif">actif</option>
                                     <option value="inactif">inactif</option>
+                                    <option value="ecai">en cours (actif + inactif)</option>
                                     <!--<option value="En cours transport">En cours transport</option>-->
                                 </select>
                             </div>
@@ -88,7 +89,7 @@
                                 <label>Client </label>
                                 <select id="customer_id_search" name="customer_id_search" class="form-control js-example-placeholder-single select2" >
                                     <option value="">Tous</option>
-                                      @foreach(App\Client::get() as $c)
+                                      @foreach(App\Client::orderBy('name')->get() as $c)
 
                                          <option value="{{$c->id}}">{{$c->name}}</option>
 
@@ -105,7 +106,7 @@
 
                             <select id="nom_benef_search" name="nom_benef_search" class="form-control select2" >
                                             <option value="">Sélectionner</option>
-                                    @foreach(App\Dossier::distinct()->whereNotNull('subscriber_name')->get(['subscriber_name' , 'subscriber_lastname' , 'vehicule_immatriculation' ]) as $c) 
+                                    @foreach(App\Dossier::distinct()->whereNotNull('subscriber_name')->orderBy('subscriber_name')->get(['subscriber_name' , 'subscriber_lastname' , 'vehicule_immatriculation' ]) as $c) 
 
                                                 <option value="{{$c->subscriber_name}} {{$c->subscriber_lastname}} {{$c->vehicule_immatriculation}}">{{$c->subscriber_name}} {{$c->subscriber_lastname}}  {{$c->vehicule_immatriculation}} </option>
 
@@ -118,7 +119,7 @@
                             <select class="form-control select2" name="pres_id_search" id="pres_id_search">
                                 <option value="">sélectionner</option>
 
-                                @foreach(App\Prestataire::get() as $p)
+                                @foreach(App\Prestataire::orderBy('name')->get() as $p)
 
                                  <option value="{{$p->id}}">{{$p->name}}</option>  
 
@@ -183,7 +184,7 @@
                         <?php $customer_id= $do->customer_id ; echo '<small>'. DossiersController::ClientById($customer_id).'</small>';?>
                     </td>
                     <td style="width:20%"> <?php if($statut=='Cloture'){echo 'Clôturé';} else {
-                    if($affecte==0 or ($affecte=='') ){echo '<span style="color:red">Non Affecté !</span>';}else {
+                    if($affecte==0 or ($affecte=='') ){echo '<span style="color:red">en cours – Affectation automatique </span>';}else {
                         echo 'En cours <br> Affecté à : '. app('App\Http\Controllers\UsersController')->ChampById('name', $affecte);
                     }
                     }
@@ -231,7 +232,7 @@
                         <?php $customer_id= $dossier['customer_id']; echo '<small>'. DossiersController::ClientById($customer_id).'</small>';?>
                     </td>
                     <td style="width:20%"> <?php if($statut=='Cloture'){echo 'Clôturé';} else {
-                    if($affecte==0 or ($affecte=='') ){echo '<span style="color:red">Non Affecté !</span>';}else {
+                    if($affecte==0 or ($affecte=='') ){echo '<span style="color:red">en cours – Affectation automatique </span>';}else {
                         echo 'En cours <br> Affecté à : '. app('App\Http\Controllers\UsersController')->ChampById('name', $affecte);
                     }
                     }

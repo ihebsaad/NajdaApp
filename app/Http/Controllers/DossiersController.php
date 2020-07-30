@@ -2883,7 +2883,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
            }
 
-           if($Miss->statut_courant=="active" || $Miss->statut_courant=="deleguee")
+           if($Miss->statut_courant=="active" || $Miss->statut_courant=="deleguee" || $Miss->statut_courant=="delendormie")
            {
              $dossiersactifsparmissions[]=$Miss->dossier_id;
 
@@ -3495,6 +3495,25 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
    return $output;
 
+
+   }
+
+   public static function users_work_on_folder( $iddoss)
+   {
+
+    $usersFolder=AffectDossHis::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
+         //dd($hisaffec);
+
+     
+      if($usersFolder->count()>0)
+      {
+        $usersFolder=array_unique($usersFolder);
+
+        dd($usersFolder);
+      }
+      
+        dd('pas des utilisateurs pour ce dossier');
+      
 
    }
 

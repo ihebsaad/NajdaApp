@@ -153,7 +153,9 @@ class NotesController extends Controller
         'date_rappel'=>trim($request->get('daterappelNote')),
         'user_id'=>$user_destin,
         'emetteur_id'=> auth::user()->id,
-        'originUser_id'=>auth::user()->id
+        'originUser_id'=>auth::user()->id,
+        'nommission'=>trim($request->get('nommission')),
+        'villemission'=>trim($request->get('villemission')),
 
       ]);
 

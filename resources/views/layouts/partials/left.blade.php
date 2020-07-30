@@ -2,6 +2,8 @@
 
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/alertify.css') }}">
 <link rel="stylesheet" href="{{ URL::asset('resources/assets/css/alertify-bootstrap.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
+
 <style>
     .dropbtn {
         background-color: #4CAF50;
@@ -543,6 +545,41 @@ if (isset($dossier))
                   </div>
               </div>
 
+               <div class="form-group">
+                  <div class="row">
+                      <div class="col-md-4" style="padding-top:5px">   
+                        <label for="nommission" style="display: inline-block;  text-align: right; width: 40px;">Mission</label>
+                      </div>
+                      <div class="col-md-8">
+                      <select name="nommission" id="nommission" style="width:80%;  text-align: left;" name="descripNote">
+                        <option value=""></option>
+                        <option value="taxi">Taxi</option>
+                        <option value="ambulance">Ambulance</option>
+                        <option value="remorquage">Remorquage</option>
+                       </select>
+                    </div>
+                  </div>
+              </div>
+        
+        <div class="form-group">
+                  <div class="row">
+                      <div class="col-md-4" style="padding-top:5px">   
+                        <label for="descrip" style="display: inline-block;  text-align: left; width: 150px;">Ville mission</label>
+                      </div>
+                      <div class="col-md-8">
+                      <input type="text" class="form-control input" name="villemission" id="villemission" style="width:80%;  text-align: left !important;" >
+
+                                <script>
+                                    var placesAutocomplete = places({
+                                        appId: 'plCFMZRCP0KR',
+                                        apiKey: 'aafa6174d8fa956cd4789056c04735e1',
+                                        container: document.querySelector('#villemission')
+                                    });
+                                </script>
+                        </div>
+                  </div>
+              </div>
+
              <div class="form-group">
 
               <div class="row">
@@ -1027,8 +1064,8 @@ if (isset($dossier))
 
         <?php  if (($view_name != 'supervision') && ($view_name != 'affectation') && ($view_name != 'notifs') && ($view_name != 'missions') && ($view_name != 'transport') && ($view_name != 'transportsemaine') && ($view_name != 'dossiers-create') && ($view_name != 'entrees-dispatching') && ($view_name != 'entrees-showdisp') ) { ?>
         <?php // if($iduser == $seance->dispatcheur)
-			 if( $user_type!='financier' && $user_type!='bureau')
-			 { ?>
+       if( $user_type!='financier' && $user_type!='bureau')
+       { ?>
         // count notif dispatcheur
         console.log('count notif dispatcheur: ');
         $.ajax({

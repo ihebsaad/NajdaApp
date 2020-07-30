@@ -727,7 +727,7 @@ use App\Tag;
                           <label for="accordiontags" class="control-label" >TAGs</label>
                           <div class="accordion panel-group" id="accordiontags">
   
-     <?php $tags = Tag::where('entree','=', $entree['id'] )->get();   ?> 
+     <?php $tags = Tag::where('entree','=', $entree['id'] )->orderBy('created_at','desc')->get();   ?> 
                  
 <table   bordercolor="#FD9883" class="table table-striped" id="tabletags" style="width:20%;margin-top:15px;">
                             <thead  style=" background-color: #FD9883;">

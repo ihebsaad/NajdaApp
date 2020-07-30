@@ -22,7 +22,7 @@ class MissionHis extends Model
         'arr_av_ou_bat','act_arr_av_ou_bat','h_arr_av_ou_bat',
         'retour_base','act_retour_base','h_retour_base','deb_sejour','h_deb_sejour','act_deb_sejour','fin_sejour',
         'h_fin_sejour','act_fin_sejour','deb_location_voit',
-        'h_deb_location_voit','act_deb_location_voit','fin_location_voit','h_fin_location_voit','act_fin_location_voit'
+        'h_deb_location_voit','act_deb_location_voit','fin_location_voit','h_fin_location_voit','act_fin_location_voit','duree_eff'
     ];
 
    /* protected $dateFormat = 'Y-m-d H:i';

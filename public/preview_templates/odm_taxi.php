@@ -799,7 +799,7 @@ foreach ($array_prestap as $prestap) {
 			<p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Date/heure retour base prévisible:</span></p>
 <input type="datetime-local" name="dhretbaseprev" id="dhretbaseprev" <?php if (isset($detailom['dhretbaseprev'])) { if (!empty($detailom['dhretbaseprev'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['dhretbaseprev']))."'";}} ?> style=" margin-left: 27px; "/>
 			<p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Véhicule: </span> <button id="refdispv"><img src="refresh.png" width="10" height="10" alt="" /></button>
-<select id="lvehicule" name="lvehicule" autocomplete="off"  >
+<select id="lvehicule" name="lvehicule" autocomplete="off" onclick="verifdates()"  >
 <option></option>
 <?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) 
 {echo "<option value='".$detailom['lvehicule']."' selected >".$detailom['lvehicule']."</option>";}}
@@ -815,7 +815,7 @@ foreach ($array_prestap as $prestap) {
 
 			<p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Chauffeur : </span> <button id="refdispp"><img src="refresh.png" width="10" height="10" alt="" /></button>
 <!-- affiche pour le moment toute la liste des personnels -->				
-<select id="lchauff" name="lchauff" autocomplete="off"  >
+<select id="lchauff" name="lchauff" autocomplete="off" onclick="verifdates()" >
 <option></option>
 <?php if (isset($detailom['lchauff'])) { if (!empty($detailom['lchauff'])) 
 {echo "<option value='".$detailom['lchauff']."' selected >".$detailom['lchauff']."</option>";}}?>
@@ -886,7 +886,7 @@ foreach ($array_prestap as $prestap) {
 			<p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0.05pt; margin-left:6.9pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Date/heure retour base prévisible:</span></p>
 <input type="datetime-local" name="dhretbaseprev" id="dhretbaseprev" <?php if (isset($detailom['dhretbaseprev'])) { if (!empty($detailom['dhretbaseprev'])) {echo "value='".date('Y-m-d\TH:i',strtotime($detailom['dhretbaseprev']))."'";}} ?> style=" margin-left: 27px; "/>
 			<p style="margin-top:0pt; margin-bottom:0pt; text-indent:14.4pt; widows:0; orphans:0; font-size:8pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">&nbsp;</span></p><p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Véhicule: </span><button id="refdispv"><img src="refresh.png" width="10" height="10" alt="" /></button>
-<select id="lvehicule" name="lvehicule" autocomplete="off"  >
+<select id="lvehicule" name="lvehicule" autocomplete="off" onclick="verifdates()"  >
 <option></option>
 <?php if (isset($detailom['lvehicule'])) { if (!empty($detailom['lvehicule'])) 
 {echo "<option value='".$detailom['lvehicule']."' selected >".$detailom['lvehicule']."</option>";}}
@@ -901,7 +901,7 @@ foreach ($array_prestap as $prestap) {
 
 			<p style="margin-top:0pt; margin-left:20.9pt; margin-bottom:0pt; line-height:195%; widows:0; orphans:0; font-size:9pt"><span style="font-family:&#39;Times New Roman&#39;; font-weight:bold">Chauffeur : </span> <button id="refdispp"><img src="refresh.png" width="10" height="10" alt="" /></button>
 <!-- affiche pour le moment toute la liste des personnels -->				
-<select id="lchauff" name="lchauff" autocomplete="off"  >
+<select id="lchauff" name="lchauff" autocomplete="off" onclick="verifdates()"  >
 <option></option>
 <?php if (isset($detailom['lchauff'])) { if (!empty($detailom['lchauff'])) 
 {echo "<option value='".$detailom['lchauff']."' selected >".$detailom['lchauff']."</option>";}}?>
@@ -968,6 +968,7 @@ if (isset($signaturetype))
     var date1 = $("#dateheuredep").val();
     var date2 = $("#dateheuredispprev").val();
     var parent = $("#parent").val(); 
+
 
     $.ajax({url: 'VoituresDispoParDate.php',
              data: {DB_HOST: '<?php echo $dbHost; ?>',
@@ -1282,6 +1283,7 @@ $("#dateheuredispprev").change(function() {
 		document.getElementById("idchauff").value = optionSelected.attr("idperso");
 	});
     $('#lvehicule').on('change', function (e) {
+
 	    var optionSelected = $("option:selected", this);
 		document.getElementById("idvehic").value = optionSelected.attr("idv");
 	 });
@@ -1298,5 +1300,13 @@ $("#refdispp").click(function(e) {
    verifdisppersonnel();
  }
 });
+function verifdates()
+{ var date1 = $("#dateheuredep").val();
+    var date2 = $("#dateheuredispprev").val();
+    
+if(date1=="" )
+{alert("il faut écrire la date de départ mission");}
+if(date2=="" )
+{alert("il faut écrire la date de dispo prévisible");}}
 </script>
 				</body></html>

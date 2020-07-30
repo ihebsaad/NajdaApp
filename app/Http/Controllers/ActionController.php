@@ -678,7 +678,7 @@ class ActionController extends Controller
                                              $action6->update(['statut'=>"active"]);
                                              $action6->update(['date_deb' => $dateSys]); 
                                              $action6->update(['user_id'=>Auth::user()->id]);
-                                             //$miss->update(['date_spec_affect'=>0]);
+                                             $miss->update(['date_spec_affect'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action6->titre.' | Mission :'. $action6->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action6->Mission->dossier->reference_medic.' - '.$action6->Mission->dossier->subscriber_name.' '.$action6->Mission->dossier->subscriber_lastname .'<input type="hidden" id="idactActive" value="'. $action6->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action6->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action6->Mission->dossier->id.'"/> ';
@@ -733,7 +733,7 @@ class ActionController extends Controller
                                              $action7->update(['statut'=>"active"]);
                                              $action7->update(['date_deb' => $dateSys]); 
                                               $action7->update(['user_id'=>Auth::user()->id]);
-                                            // $miss->update(['date_spec_affect2'=>0]);
+                                             $miss->update(['date_spec_affect2'=>0]);
                                              $miss->update(['statut_courant'=>'active']);
 
                                               $output='Activation de l\'action :'. $action7->titre.' | Mission :'. $action7->Mission->typeMission->nom_type_Mission.' | Dossier : '. $action7->Mission->dossier->reference_medic.' - '.$action7->Mission->dossier->subscriber_name.' '.$action7->Mission->dossier->subscriber_lastname.'<input type="hidden" id="idactActive" value="'. $action7->id.'"/> <input type="hidden" id="idactMissActive" value="'. $action7->Mission->id.'"/> <input type="hidden" id="idactDossActive" value="'. $action7->Mission->dossier->id.'"/> ';
@@ -2749,6 +2749,33 @@ class ActionController extends Controller
            $action->update(['date_fin' => $dateSys]);
            $action->update(['user_id'=>auth::user()->id]);
 
+           // calcul duree effective de cette action en heures
+
+            // $datetime1 = new DateTime('2009-10-11');
+            //$datetime2 = new DateTime('2009-10-13T12:30:00');
+            if($action->date_deb && $action->date_fin)
+               {
+                $ff='Y-m-d H:i:s';
+                //dd($action->date_deb);
+                $datetime1 =\DateTime::createFromFormat($ff,$action->date_deb);
+                $datetime2 =\DateTime::createFromFormat($ff,$dtc);
+              
+
+                $diff = $datetime1->diff($datetime2);
+                //dd($diff);
+                $hours = $diff->h;
+                $hours = $hours + ($diff->days*24);
+
+                if($diff->i != 0 )
+                {
+                $minutes = $diff->i/60;
+                $hours = $hours +$minutes ;
+                //dd($hours);
+                }
+                $action->update(['duree_eff' => $hours]);
+                $mm->update(['duree_eff' => (floatval($mm->duree_eff)+floatval($hours))]);
+               }
+
           
 //---------------------traitement de boucle--------------------------------///
     
@@ -2911,6 +2938,28 @@ class ActionController extends Controller
                       $action->update(['statut'=>"ignoree"]);
                       $action->update(['user_id'=>auth::user()->id]); 
                       $action->update(['date_fin' => $dateSys]);
+                       // calcul duree effective de cette action en heures
+                        if($action->date_deb && $action->date_fin )
+                        {
+                        $ff='Y-m-d H:i:s';
+                        $datetime1 =\DateTime::createFromFormat($ff,($action->date_deb));
+                        $datetime2 =\DateTime::createFromFormat($ff,$dtc);
+
+                        $diff = $datetime1->diff($datetime2);
+                        //dd($diff);
+                        $hours = $diff->h;
+                        $hours = $hours + ($diff->days*24);
+
+                        if($diff->i != 0 )
+                        {
+                        $minutes = $diff->i/60;
+                        $hours = $hours +$minutes ;
+                        //dd($hours);
+                        }
+                        $action->update(['duree_eff' => $hours]);
+                        $mm->update(['duree_eff' => (floatval($mm->duree_eff)+floatval($hours))]);
+
+                       }
 
                    }  
                    else{
@@ -2943,6 +2992,29 @@ class ActionController extends Controller
                                  $NNaction->update(['date_report'=> $dateRepAct]);
                                  $NNaction->update(['date_deb'=> $dateRepAct]);
                                  $action->update(['date_fin'=> $dateSys]);
+
+                                 // calcul duree effective de cette action en heures
+                                  if($action->date_deb && $action->date_fin )
+                                  {
+                                  $ff='Y-m-d H:i:s';
+                                  $datetime1 =\DateTime::createFromFormat($ff,($action->date_deb));
+                                  $datetime2 =\DateTime::createFromFormat($ff,$dtc);
+
+                                  $diff = $datetime1->diff($datetime2);
+                                  //dd($diff);
+                                  $hours = $diff->h;
+                                  $hours = $hours + ($diff->days*24);
+
+                                  if($diff->i != 0 )
+                                  {
+                                  $minutes = $diff->i/60;
+                                  $hours = $hours +$minutes ;
+                                  //dd($hours);
+                                  }
+                                  $action->update(['duree_eff' => $hours]);
+                                  $mm->update(['duree_eff' => (floatval($mm->duree_eff)+floatval($hours))]);
+
+                                 }
 
                                 
                                 }
@@ -2982,6 +3054,29 @@ class ActionController extends Controller
                                  $NNaction->update(['date_deb'=> $dateRapAct]);
                                 // $NNaction->update(['date_fin'=> $dateRapAct]);
                                  $action->update(['date_fin'=> $dateSys]);
+
+                                 // calcul duree effective de cette action en heures
+                                        if($action->date_deb && $action->date_fin )
+                                        {
+                                       $ff='Y-m-d H:i:s';
+                                       $datetime1 =\DateTime::createFromFormat($ff,($action->date_deb));
+                                        $datetime2 =\DateTime::createFromFormat($ff,$dtc);
+
+                                        $diff = $datetime1->diff($datetime2);
+                                        //dd($diff);
+                                        $hours = $diff->h;
+                                        $hours = $hours + ($diff->days*24);
+
+                                        if($diff->i != 0 )
+                                        {
+                                        $minutes = $diff->i/60;
+                                        $hours = $hours +$minutes ;
+                                        //dd($hours);
+                                        }
+                                        $action->update(['duree_eff' => $hours]);
+                                        $mm->update(['duree_eff' => (floatval($mm->duree_eff)+floatval($hours))]);
+
+                                       }
 
                                 }
 
