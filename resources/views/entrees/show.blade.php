@@ -180,28 +180,28 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                               <a href="#txtcorps" data-toggle="tab" aria-expanded="true"> Texte Brut</a>
                        </li>
                        <?php } */
-					   $i=0;
+             $i=0;
                        if ( $entree['type']!='tel') { 
-					     if ( $nbattachs   > 0)
-						{
-					   foreach ($attachs as $att)
-					   {
+               if ( $nbattachs   > 0)
+            {
+             foreach ($attachs as $att)
+             {
                       
                  if ( ($att->type =="pdf") ||($att->type =="png") ||($att->type =="jpg") || ($att->type =="jpeg") || ($att->type =="gif")||($att->type =="bmp")        )
-				 { 			 $i++;
+         {       $i++;
 
-			 
-			 ?>
+       
+       ?>
                                 <li data-type="piecejointe" data-identreeattach="<?php echo $att['id'] ?>">
                                     <a  class=" " href="#pj<?php echo $i; ?>" data-toggle="tab" aria-expanded="false">PJ<?php echo $i; ?></a>
                                 </li>
                       
-		 	<?php } //extension
-												
-					   }  //foreach 
- 					   }/// nb attach
- 					   } //tel
-					   ?>
+      <?php } //extension
+                        
+             }  //foreach 
+             }/// nb attach
+             } //tel
+             ?>
                     </ul>
                     
                     <div id="myTabContent" class="tab-content" style="background: #ffffff">
@@ -270,9 +270,9 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                             <?php $i=1; ?>
                                             @foreach ($attachs as $att)
                                             <?php if ( ($att->type =="pdf") ||($att->type =="png") ||($att->type =="jpg") || ($att->type =="jpeg") || ($att->type =="gif")||($att->type =="bmp")        )
-											{ ?>
+                      { ?>
 
-												<div class="tab-pane fade in <?php  if ( ($entree['type']=='fax')&&($i==1)) {echo 'active';}?>" id="pj<?php echo $i; ?>">
+                        <div class="tab-pane fade in <?php  if ( ($entree['type']=='fax')&&($i==1)) {echo 'active';}?>" id="pj<?php echo $i; ?>">
 
                                                     <h4><b style="font-size: 13px;">{{ $att->nom }}</b> (<a style="font-size: 13px;" href="<?php if($att->type =="pdf"){if($att->path_org){ echo URL::asset('storage'.$att->path_org);}else{echo URL::asset('storage'.$att->path);} }else{ echo URL::asset('storage'.$att->path); }?>" download>Télécharger</a>)</h4>
 
@@ -377,8 +377,8 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                                     
                                                 </div>
                                                 <?php $i++; 
-											}
-												?>
+                      }
+                        ?>
                                             @endforeach
 
                                             @endif

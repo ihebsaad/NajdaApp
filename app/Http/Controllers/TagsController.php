@@ -8,6 +8,7 @@ use App\Entree ;
 use App\Tag ;
 use App\Dossier ;
 use App\Attachement ;
+use App\Parametre;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -15,12 +16,80 @@ class TagsController extends Controller
 {
     
     public static function addnew(Request $request)
-    {$type= $request['type'];
+    {
+
+        // verification si plafond dépassé
+        if ($request->has('dossier'))
+        {
+            if (! empty($request->get('dossier'))) {
+                $plfdossier = Dossier::where('id', $request->get('dossier'))->first();
+            }
+            else
+            {return 'id dossier nn existant';}
+            if ($plfdossier->is_plafond == 1)
+            {
+                // recuperation devise du plafond
+                $deviseplf = $plfdossier->devise_plafond;
+
+                $paramdev=Parametre::select('euro_achat','dollar_achat')->first();
+
+                // CONVERSION MONTANT plafond
+                    if ( $deviseplf === "EUR")
+                        $montantplf = $plfdossier->plafond * floatval($paramdev['euro_achat']);
+                    if ( $deviseplf === "USD")
+                        $montantplf = $plfdossier->plafond * floatval($paramdev['dollar_achat']);
+                    if ( $deviseplf === "TND")
+                        $montantplf = $plfdossier->plafond;
+                // CONVERSION MONTANT gop en TND
+                if ( $request->get('devise') === "EUR")
+                        $mgoptnd = $request->get('montant') * floatval($paramdev['euro_achat']);
+                if ( $request->get('devise') === "USD")
+                        $mgoptnd = $request->get('montant') * floatval($paramdev['dollar_achat']);
+                if ( $request->get('devise') === "TND")
+                        $mgoptnd = $request->get('montant');
+                
+                // Somme des montants des TAgs du dossier
+                    // recuperation liste des entrees de dossier
+                    $entreesdos=Entree::where("dossier",$plfdossier->reference_medic)->get();
+                    $smtag = $mgoptnd;
+                    foreach ($entreesdos as $entr) {
+                        //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
+                        $coltags = Tag::where("entree","=",$entr['id'])->get();
+                        if (!empty($coltags))
+                        {
+
+                            foreach ($coltags as $ltag) {
+                                if ((strpos( $ltag['abbrev'], "GOPtn") !== FALSE) || (strpos( $ltag['abbrev'], "GOPmed") !== FALSE))
+                                {
+                                    // VERIFICATION DEVISE GOP
+                                        if ($ltag['devise'] == "TND")
+                                            $Montanttag = $ltag['montant'];
+                                        if ($ltag['devise'] == "EUR")
+                                            $Montanttag = $ltag['montant'] * floatval($paramdev['euro_achat']);
+                                        if ($ltag['devise'] == "USD")
+                                            $Montanttag = $ltag['montant'] * floatval($paramdev['dollar_achat']);
+                                    
+                                    
+                                    $smtag+= $Montanttag;
+                                 
+                                }
+                            }
+                        }
+                    }
+
+                if ($smtag > $montantplf)
+                    { $diffmnt = $smtag-$montantplf;
+                        return 'par: '.$diffmnt; }
+
+            }
+
+
+        $type= $request['type'];
         // ajout dune tag pour une entree 
        
         if ($request->get('titre') != null)
         {      
-if($type=='email') {
+            if($type=='email') {
                 $identree = $request->get('entree');
                 $abbrev =$request->get('titre');
                 switch ($abbrev) {
@@ -135,7 +204,8 @@ if($type=='email') {
                     {
                         $contenutag = "";
                     }
-                
+                /*if ($smtag > $montantplf)
+                    { $titre =$titre."KBS"; }*/
                 $tag = new Tag([
                     'abbrev' => $abbrev,
                     'titre' => $titre,
@@ -157,7 +227,7 @@ Log::info('[Agent: ' . $nomuser . '] Ajout de tag '.$titre.' pour le dossier: ' 
 
                 }
                 else {
-                    return 'false';
+                    return 'tag nn enregistré';
                 }
 
 }
@@ -298,13 +368,16 @@ Log::info('[Agent: ' . $nomuser . '] Ajout de tag '.$titre.' pour le dossier: ' 
                     return 'true';
                 }
                 else {
-                    return 'false';
+                    return 'tag nn enregistré';
                 }
 }
 
 
 
         }
+        }
+        else
+        {return 'false';}
     }
     public  function entreetags(Request $request)
     {
