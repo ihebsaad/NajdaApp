@@ -1241,8 +1241,8 @@ if (document.getElementById("montanttag")!=null)
                       {
                         Swal.fire({
                           type: 'error',
-                          title: 'Plafond du dossier est dépassé',
-                          text: 'le plafond du dossier est dépassé '+data+' TND',
+                          title: 'le plafond du dossier est dépassé '+data+' TND',
+                          text: '',
 
                         });
                         return false;

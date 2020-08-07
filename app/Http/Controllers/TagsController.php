@@ -40,12 +40,16 @@ class TagsController extends Controller
                         $montantplf = $plfdossier->plafond * floatval($paramdev['dollar_achat']);
                     if ( $deviseplf === "TND")
                         $montantplf = $plfdossier->plafond;
+                    if (( $deviseplf === "") || ( is_null($deviseplf)))
+                        $montantplf = $plfdossier->plafond;
                 // CONVERSION MONTANT gop en TND
                 if ( $request->get('devise') === "EUR")
                         $mgoptnd = $request->get('montant') * floatval($paramdev['euro_achat']);
                 if ( $request->get('devise') === "USD")
                         $mgoptnd = $request->get('montant') * floatval($paramdev['dollar_achat']);
                 if ( $request->get('devise') === "TND")
+                        $mgoptnd = $request->get('montant');
+                if (( $request->get('devise') === "") || ( is_null($request->get('devise'))))
                         $mgoptnd = $request->get('montant');
                 
                 // Somme des montants des TAgs du dossier
@@ -54,7 +58,8 @@ class TagsController extends Controller
                     $smtag = $mgoptnd;
                     foreach ($entreesdos as $entr) {
                         //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-                        $coltags = Tag::where("entree","=",$entr['id'])->get();
+                        $coltags = Tag::get()->where('entree', '=', $entr['id'] )->where('type', '=', 'email');
+
                         if (!empty($coltags))
                         {
 
@@ -75,8 +80,40 @@ class TagsController extends Controller
                                 }
                             }
                         }
-                    }
 
+                      // recuperation liste des attachements de l'entree
+                        // http://197.14.53.86:3007/najdatest/entrees/show/1474
+                        //http://197.14.53.86:3007/najdatest/dossiers/fiche/40693
+                        $colattachs = Attachement::where("parent","=",$entr['id'])->get();
+                        if (!empty($colattachs))
+                        {
+                            foreach ($colattachs as $lattach) {
+                                $coltagsattach = Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe');
+
+                                if (!empty($coltagsattach))
+                                {
+
+                                    foreach ($coltagsattach as $ltagatt) {
+                                        if ((strpos( $ltagatt['abbrev'], "GOPtn") !== FALSE) || (strpos( $ltagatt['abbrev'], "GOPmed") !== FALSE))
+                                        {
+                                            // VERIFICATION DEVISE GOP
+                                                if ($ltagatt['devise'] == "TND")
+                                                    $Montanttagatt = $ltagatt['montant'];
+                                                if ($ltagatt['devise'] == "EUR")
+                                                    $Montanttagatt = $ltagatt['montant'] * floatval($paramdev['euro_achat']);
+                                                if ($ltagatt['devise'] == "USD")
+                                                    $Montanttagatt = $ltagatt['montant'] * floatval($paramdev['dollar_achat']);
+                                            
+                                            
+                                            $smtag+= $Montanttagatt;
+                                         
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                    }
                 if ($smtag > $montantplf)
                     { $diffmnt = $smtag-$montantplf;
                         return 'par: '.$diffmnt; }
