@@ -24,7 +24,11 @@ class Prestation extends Model
 'effectue',
 'ville',
 'oms_docs',
-'facture'
+'facture',
+'parvenu',
+'mail_30_env',
+'mail_45_env',
+'mail_60_env'
 
 ];
 

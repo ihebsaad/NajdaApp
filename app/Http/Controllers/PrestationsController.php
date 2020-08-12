@@ -48,6 +48,22 @@ class PrestationsController extends Controller
     public function show()
     {
     }
+    
+     public function updatingParvenu(Request $request)
+    {
+
+        $id= $request->get('prest');
+        $champ= strval($request->get('champ'));
+       $val= $request->get('val');
+      //  $dossier = Dossier::find($id);
+       // $dossier->$champ =   $val;
+        Prestation::where('id', $id)->update(array($champ => $val));
+
+      //  $dossier->save();
+
+     ///   return redirect('/dossiers')->with('success', 'Entry has been added');
+
+    }
 
     /**
      * Show the form for creating a new resource.

@@ -759,6 +759,17 @@ return redirect('roles');
 
     }
 
+      public function Calendriermissions7 ()
+      {
+
+        if(\Gate::allows('isAdmin') || \Gate::allows('isSupervisor')  ) {
+            $users = User::get();
+
+            return view('calendriermissions7', ['users' => $users]);
+        }else{ return back();}
+
+      }
+
     public function index()
     {
         $user = auth()->user();
