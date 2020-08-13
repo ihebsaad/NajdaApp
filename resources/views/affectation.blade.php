@@ -50,6 +50,11 @@
                             <i class="fas fa-lg  fa-user-cog"></i>  Missions
                         </a>
                     </li>
+                     <li class="nav-item">
+                          <a class="nav-link" href="{{ route('Calendriermissions7') }}"  >
+                            <i class="fas fa-lg  fa-user-cog"></i>  Calendrier Missions
+                           </a>
+                     </li>
 
                     <li class="nav-item ">
                         <a class="nav-link " href="{{ route('notifs') }}"  >

@@ -1105,10 +1105,6 @@ $hours = $hours +$minutes ;
 dd($hours);
 }*/
 
-\App\Http\Controllers\FacturesController::envoi_mail_automatique_factures();
-dd("envoi alertes factures exécuté");
-
-
 $heureActuelle=date('H');
 
 $dtc = (new \DateTime())->format('Y-m-d H:i:s');
@@ -1117,6 +1113,126 @@ $format = "Y-m-d H:i:s";
 
 $dateSys = \DateTime::createFromFormat($format,$dtc);
 
+
+        $deb_seance_1=(new \DateTime())->format('Y-m-d 08:00:00');
+        $fin_seance_1=(new \DateTime())->format('Y-m-d 15:00:00');
+
+        $deb_seance_2=(new \DateTime())->format('Y-m-d 15:00:00');
+        $fin_seance_2=(new \DateTime())->format('Y-m-d 23:00:00');
+
+        $deb_seance_3=(new \DateTime())->format('Y-m-d 23:00:00');
+        $fin_seance_3=(new \DateTime())->modify('+1 day')->format('Y-m-d 08:00:00');
+
+         
+      
+        $format = "Y-m-d H:i:s";
+        $deb_seance_1 = \DateTime::createFromFormat($format, $deb_seance_1);
+        $fin_seance_1 = \DateTime::createFromFormat($format, $fin_seance_1);
+        
+        $deb_seance_2 = \DateTime::createFromFormat($format, $deb_seance_2);
+        $fin_seance_2 = \DateTime::createFromFormat($format, $fin_seance_2);
+
+        $deb_seance_3 = \DateTime::createFromFormat($format, $deb_seance_3);
+        $fin_seance_3 = \DateTime::createFromFormat($format, $fin_seance_3);
+
+        $datespe1 = \DateTime::createFromFormat($format,\App\Http\Controllers\DossierController::set_date_seance1());
+        $datespe2 = \DateTime::createFromFormat($format,\App\Http\Controllers\DossierController::set_date_seance2());
+        $datespe3 = \DateTime::createFromFormat($format,\App\Http\Controllers\DossierController::set_date_seance3());
+
+        if($dateSys>= $deb_seance_1 && $dateSys<= $fin_seance_1)
+        {
+           if($datespe1->format('Y-m-d')!=$dtc2)
+           {
+                if(\App\Http\Controllers\DossierController::get_calcul_doss_seance1()==0)
+                {
+
+                   app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiersSeance1();
+                   \App\Http\Controllers\DossierController::set_calcul_doss_seance1(1);
+                   \App\Http\Controllers\DossierController::set_date_seance1($dtc);
+
+                }
+           } 
+           else
+           {
+
+            if(\App\Http\Controllers\DossierController::get_calcul_doss_seance1()==1)
+                {
+
+                 \App\Http\Controllers\DossierController::set_calcul_doss_seance1(0);
+
+                }
+
+           }     
+
+        }
+
+        if($dateSys>= $deb_seance_2 && $dateSys<= $fin_seance_2)
+        {
+           if($datespe2->format('Y-m-d')!=$dtc2)
+           {
+                if(\App\Http\Controllers\DossierController::get_calcul_doss_seance2()==0)
+                {
+
+                   app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiersSeance2();
+                   \App\Http\Controllers\DossierController::set_calcul_doss_seance2(1);
+                   \App\Http\Controllers\DossierController::set_date_seance2($dtc);
+
+                }
+           } 
+           else
+           {
+
+            if(\App\Http\Controllers\DossierController::get_calcul_doss_seance2()==1)
+                {
+
+                 \App\Http\Controllers\DossierController::set_calcul_doss_seance2(0);
+
+                }
+
+           }        
+        }
+
+         if($dateSys>= $deb_seance_3 && $dateSys<= $fin_seance_3)
+        {
+              if($datespe3->format('Y-m-d')!=$dtc2)
+           {
+                if(\App\Http\Controllers\DossierController::get_calcul_doss_seance()==0)
+                {
+
+                   app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiersSeance3();
+                   \App\Http\Controllers\DossierController::set_calcul_doss_seance3(1);
+                   \App\Http\Controllers\DossierController::set_date_seance3($dtc);
+
+                }
+           } 
+           else
+           {
+
+            if(\App\Http\Controllers\DossierController::get_calcul_doss_seance3()==1)
+                {
+
+                 \App\Http\Controllers\DossierController::set_calcul_doss_seance3(0);
+
+                }
+
+           } 
+            
+        }
+
+    
+// exécution calcul dossiers actifs , dormant et immobile 
+
+// seance 1
+
+
+
+
+\App\Http\Controllers\FacturesController::envoi_mail_automatique_factures();
+dd("envoi alertes factures exécuté");
+
+
+
+
 $datespe = \DateTime::createFromFormat($format,\App\Http\Controllers\DossierImmobileController::getDatecalcul());
 
 if($datespe->format('Y-m-d')!=$dtc2)
@@ -1124,7 +1240,7 @@ if($datespe->format('Y-m-d')!=$dtc2)
     if(\App\Http\Controllers\DossierImmobileController::getCalculDossImm()==1)
     {
        // dd("faire le calcul");
-        app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
+        //app('App\Http\Controllers\DossiersController')->Gerer_etat_dossiers();
         \App\Http\Controllers\DossierImmobileController::mettreAjourTableDossImmobile();
         \App\Http\Controllers\DossierImmobileController::setCalculDossImm(false);
         \App\Http\Controllers\DossierImmobileController::setDatecalcul($dtc);

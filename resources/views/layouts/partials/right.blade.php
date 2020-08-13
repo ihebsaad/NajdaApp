@@ -1237,7 +1237,16 @@ if (document.getElementById("montanttag")!=null)
                     method:"POST",
                     data:{entree:entree,type:type,dossier:dossier,titre:tag,contenu:tagcontent,montant:montant,devise:devise, _token:_token},
                     success:function(data){
+                      if (data.indexOf("par: ") >= 0)
+                      {
+                        Swal.fire({
+                          type: 'error',
+                          title: 'le plafond du dossier est dépassé '+data+' TND',
+                          text: '',
 
+                        });
+                        return false;
+                      }
                         $("#addedsuccess").fadeIn(1500);
                         $("#addedsuccess").fadeOut(1500);
 

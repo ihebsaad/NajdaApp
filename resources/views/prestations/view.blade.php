@@ -94,6 +94,11 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                      <textarea  onchange="changing(this)"   class="form-control" name="details" id="details" >{{$prestation->details}}</textarea>
                  </div>
 
+                 <div class="form-group">
+                  <text id="textregle" style="font-weight: bold;font-size: large; float: left;">Parvenu  : &nbsp;</text>
+                 <input onchange="changingParvenu(this);" type="checkbox" name="parvenu" id="parvenu" value="" style="font-weight: bold;font-size: medium; float: left;" <?php if($prestation->parvenu==1) {echo "checked" ; }?> > &nbsp;&nbsp;      
+                  <br>
+                 </div>
 
                  <div class="form-group">
                      <B>Facture :  </B>
@@ -136,6 +141,45 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         });
 
     });
+
+        function changingParvenu(elm) {
+        var champ=elm.id;
+        var val =null;
+        if($('#'+champ).is(":checked"))
+        {
+          // alert('checked');
+          val=1;
+        }
+        else
+        {
+           // alert('is not checked');
+           val=0;
+
+        }
+
+
+        //  var type = $('#type').val();
+        var prest = $('#idprestation').val();
+         //if ( (val != '')) {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: "{{ route('Prestation.updatingParvenu') }}",
+            method: "POST",
+            data: {prest: prest , champ:champ ,val:val, _token: _token},
+            success: function (data) {
+                $('#textregle').animate({
+                    opacity: '0.3',
+                });
+                $('#textregle').animate({
+                    opacity: '1',
+                });
+              
+            }
+        });
+
+        
+    }
+
 
 
     function changing(elm) {

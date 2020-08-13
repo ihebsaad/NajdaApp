@@ -39,7 +39,6 @@ class DossierImmobileController extends Controller
     {
         Parametre::where('id', 1)->update(array('date_calcul' => $da));
 
-
     }
 
     public static function getCalculDossImm()

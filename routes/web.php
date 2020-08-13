@@ -24,6 +24,7 @@ Route::get('/affectations', 'HomeController@affectation')->name('affectation');
 Route::get('/affectations2', 'HomeController@affectation2')->name('affectation2');
 Route::get('/affectations3', 'HomeController@affectation3')->name('affectation3');
 Route::get('/missions', 'HomeController@missions')->name('missions');
+Route::get('/Calendriermissions7', 'HomeController@Calendriermissions7')->name('Calendriermissions7');
 Route::get('/notifs', 'HomeController@notifs')->name('notifs');
 Route::get('/transport', 'HomeController@transport')->name('transport');
 Route::get('/transport2', 'HomeController@transport2')->name('transport2');
@@ -418,6 +419,8 @@ Route::get('/prestations/destroy/{id}', 'PrestationsController@destroy');
 Route::get('/prestations/deleteeval/{id}', 'PrestationsController@deleteeval');
 Route::post('/prestations/updatepriorite', 'PrestationsController@updatepriorite')->name('prestations.updatepriorite');
 Route::post('/prestations/updateevaluation', 'PrestationsController@updateevaluation')->name('prestations.updateevaluation');
+Route::post('/prestation/updatingParvenu','PrestationsController@updatingParvenu')->name('Prestation.updatingParvenu');
+
 
 
 
