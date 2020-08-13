@@ -240,8 +240,9 @@
 					   
 					 $missions=  $user->activeMissions;$c=0;
 					foreach($missions as $m)
-					{$c++;
- 						echo  '<h4 style=";text-align:center;background-color:#D0ECE7;color:black;padding-top:10px;padding-bottom:10px;border:2px solid grey">Mission '.$c.' : ('.$m->typeMission->nom_type_Mission .')  '.$m->titre.'</h4>';
+					{ $c++; $doss_id=$m->dossier_id;$Dossier=\App\Dossier::where('id',$doss_id)->first();
+					$ref=$Dossier->reference_medic;
+ 						echo  '<h4 style=";text-align:center;background-color:#D0ECE7;color:black;padding-top:10px;padding-bottom:10px;border:2px solid grey">Mission '.$c.' : ('.$m->typeMission->nom_type_Mission .')  '.$m->titre.' - <b>'.$ref.' </b></h4>';
 
 					 echo '<ul>';
                         $statut='';
