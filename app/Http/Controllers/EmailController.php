@@ -5813,8 +5813,11 @@ $id=0;
         $from = trim($request->get('from'));
         $description= $request->get('description');
         $attachs = $request->get('attachs');
+        $libre = $request->get('libre');
 
-
+		if($libre!='' && $to !=''){array_push($to,$libre);}else{
+		 if($libre!='' && $to ==''){ $to[0]= $libre  ;}
+		}
 
 
        //    dd($request->all()) ;

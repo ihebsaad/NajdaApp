@@ -151,10 +151,12 @@ $(document).ready(function()
                         <?php }
                         ?>
                     </div>
+                    <label for="destinataire">Adresse Libre:</label>
+					  <input type="text"  class="form-control"  name="libre" id="libre"   />
                     <label for="destinataire">Adresse(s):</label>
                     <div class="row">
                         <div class="col-md-10">
-                            <select id="destinataire" required  class="form-control" name="destinataire[]"  multiple >
+                            <select id="destinataire"    class="form-control" name="destinataire[]"  multiple >
                                 @foreach($listeemails as  $mail)
                                     <option   value="<?php echo $mail ;?>"> <?php echo $mail ;?>  <small style="font-size:11px">(<?php echo PrestatairesController::NomByEmail( $mail);?>) - '<?php echo PrestatairesController::QualiteByEmail($mail);?>' ('<?php echo PrestatairesController::TypeEmail($mail);?>' , '<?php echo PrestatairesController::RemarqueByEmail($mail);?>)' </small> </option>
                                 @endforeach
