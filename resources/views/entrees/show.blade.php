@@ -19,6 +19,7 @@ Use App\Common;
 {{-- page level styles --}}
 @section('header_styles')
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/custom_css/layout_responsive.css') }}">
+    <link href="{{ asset('public/css/summernote.css') }}" rel="stylesheet" media="screen" />
 
 @stop
 @section('content')
@@ -87,6 +88,12 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                                         <span class="fa fa-fw fa-check"></span> Traité
                                     </a>
                                 <?php } ?>
+								 <?php if ($entree['accuse']!=1 ) { ?>
+                                    <a    class="btn btn-info btn-sm btn-responsive " role="button"  data-toggle="modal" data-target="#sendmail" >
+                                        <span class="fa fa-fw fa-envelope"></span> Accusé
+                                    </a>
+                                <?php } ?>
+								
                                 <?php if ($entree->dossierid >0 ){ ?>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -434,6 +441,177 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
     color: #FFF;
 }
 </style>
+
+
+
+    <!-- Modal Envoi Mail -->
+    <div class="modal fade" id="sendmail"   role="dialog" aria-labelledby="exampleModal8" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal7">Accusé de réception d’un mail de demande de prestations/services  </h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+    <form  enctype="multipart/form-data" id="theform" method="POST" action="{{action('EmailController@send')}}"    onsubmit="return checkForm(this);"  >
+        {{ csrf_field() }}
+
+        <input id="dossier" type="hidden" class="form-control" name="dossier"  value="0" />
+        <input id="envoye" type="hidden" class="form-control" name="envoye"  value="" />
+        <input id="brsaved" type="hidden" class="form-control" name="brsaved"  value="0" />
+        <input id="accuse" type="hidden" class="form-control" name="accuse"  value="1" />
+        <input id="identree" type="hidden" class="form-control" name="entree"  value="<?php echo $entree['id'] ; ?>" />
+
+
+        <?php
+		 $langue='francais' ;
+        $from='24ops@najda-assistance.com';
+		if($iddossier>0){
+			$clientid = app('App\Http\Controllers\DossiersController')->ClientDossierById($iddossier);
+        $langue = app('App\Http\Controllers\ClientsController')->ClientChampById('langue1',$clientid);
+		}
+
+        ?>
+        <input type="hidden"   name="from" id="from" value="<?php echo $from; ?>" />
+
+
+        <div class="row">
+
+            <label for="destinataire">Adresse:</label>
+            <div class="row">
+                <div class="col-md-10">
+                    <input type="email" id="libre" required  class="form-control" name="libre"  value="<?php echo $entree['emetteur'];?>" /> 
+
+                </div>
+                <div class="col-md-2">
+                    <i id="emailso" onclick="visibilite('autres')" class="fa fa-lg fa-arrow-circle-down" style="margin-right:10px"></i> (cc,cci)
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top:10px;">
+            <div id="autres" class="row"  style="display:none " >
+                <div  class="row"  style="margin-bottom:10px" >
+                    <div class="col-md-2">
+                        <label for="cc">CC:</label>
+                    </div>
+                    <div class="col-md-10">
+                        <select id="cc" style="width:100%"   class="itemName form-control" name="cc[]" multiple   >
+                            <option></option>
+                            <option value="vat@medicmultiservices.com">vat@medicmultiservices.com</option>
+                            <option value="fact.vat-groupe@najda-assistance.com">fact.vat-groupe@najda-assistance.com</option>
+                            <option value="finances@medicmultiservices.com">finances@medicmultiservices.com</option>
+                            <option value="dirops@najda-assistance.com">dirops@najda-assistance.com</option>
+                            <option value="controle1@medicmultiservices.com">controle1@medicmultiservices.com</option>
+                            <option value="smq@medicmultiservices.com">smq@medicmultiservices.com</option>
+                            <option value="chef.plateau@najda-assistance.com">chef.plateau@najda-assistance.com</option>
+                            <option value="mohsalah.harzallah@gmail.com">mohsalah.harzallah@gmail.com</option>
+                            <option value="mahmoud.helali@gmail.com">mahmoud.helali@gmail.com</option>
+                        </select>
+                    </div>
+                </div>
+                <div  class="row"  style="margin-bottom:10px" >
+                    <div class="col-md-2">
+                        <label for="cci">CCI:</label>
+                    </div>
+                    <div class="col-md-10">
+                        <select id="cci"  style="width:100%"   class="itemName form-control " name="cci[]" multiple  >
+                            <option></option>
+                            <option value="vat@medicmultiservices.com">vat@medicmultiservices.com</option>
+                            <option value="voyages.assistance.tunisie@gmail.com">voyages.assistance.tunisie@gmail.com</option>
+                            <option value="fact.vat-groupe@najda-assistance.com">fact.vat-groupe@najda-assistance.com</option>
+                            <option value="finances@medicmultiservices.com">finances@medicmultiservices.com</option>
+                            <option value="dirops@najda-assistance.com">dirops@najda-assistance.com</option>
+                            <option value="controle1@medicmultiservices.com">controle1@medicmultiservices.com</option>
+                            <option value="smq@medicmultiservices.com">smq@medicmultiservices.com</option>
+                            <option value="chef.plateau@najda-assistance.com">chef.plateau@najda-assistance.com</option>
+                            <option value="nejib.karoui@gmail.com">nejib.karoui@gmail.com </option>
+                            <option value="mohsalah.harzallah@gmail.com">mohsalah.harzallah@gmail.com</option>
+                            <option value="mahmoud.helali@gmail.com">mahmoud.helali@gmail.com</option>
+                            <option value="facturation.vat@medicmultiservices.com">facturation.vat@medicmultiservices.com</option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <?php   ?>
+        <div class="form-group">
+            <label for="sujet">Sujet :</label>
+            <input id="sujet" type="text" class="form-control" name="sujet" required value=" "/>
+
+        </div>
+
+
+        <div class="form-group">
+            <label for="description">Description :</label>
+            <input id="description" type="text" class="form-control" name="description" id="description" required/>
+        </div>
+
+
+
+        <div class="form-group ">
+            <label for="contenu">Contenu:</label>
+            <div class="editor" >
+                <textarea style="min-height: 280px;" id="contenu" type="text"  class="textarea tex-com" placeholder="Contenu de l'email ici" name="contenu" required  >
+			<?php if ($langue=='francais'){  ?>
+				Bonjour de Najda<br>
+				Nous accusons bonne réception de votre dernier mail demandant le(s) service(s) suivants(s) :<br>
+			<?php	
+			
+			}else{ ?>
+				Hello from Najda<br>
+				We acknowledge receipt of your last email requesting the following service(s)<br>	
+					
+			<?php	}
+
+			$missions=\App\Mission::where('id_entree',$entree['id'] )->get();
+			 echo '<ul>' ;
+			foreach($missions as $miss){
+				echo  '<li><b>' .$miss->nom_type_miss.'</b></li>' ;
+			}
+		  echo '</ul>' ;
+
+			?>
+				
+				</textarea>
+            </div>
+        </div>
+        <div class="form-group form-group-default">
+            <label>Attachements Externes <span style="color:red;">(la taille totale de fichiers ne doit pas dépasser 25 Mo)</span></label>
+            <!--<input  class="btn btn-danger fileinput-button" id="file" type="file" name="files[]"   multiple   >-->
+            <input type="file" class="btn btn-danger fileinput-button kfile" name="vasplus_multiple_files[]" id="vasplus_multiple_files" multiple="multiple" style="padding:5px;"/>
+
+            <table class="table table-striped table-bordered" style="width:60%; border: none;" id="add_files">
+
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button onclick=" resetForm(this.form);" id="SendBtn" type="submit"  name="myButton" class="btn btn-md  btn-primary btn_margin_top"><i class="fa fa-paper-plane" aria-hidden="true"></i> Envoyer</button>
+                    </div>
+                </div>
+            </div>
+			    </form>
+   </div>
+   </div>
+
+
+
+
+
+
   <!-- modal annuler attente de réponse -->
 <div class="modal fade" id="annulerAttenteReponse" role="dialog">
     <div class="modal-dialog">
@@ -485,7 +663,286 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
     <?php }?>
 
        <script type="text/javascript">
-        
+	    
+
+    function checkForm(form) // Submit button clicked
+    {
+
+        form.myButton.disabled = true;
+        form.myButton.value = "Please wait...";
+        return true;
+    }
+
+    function resetForm(form) // Reset button clicked
+    {
+        form.myButton.disabled = false;
+        form.myButton.value = "Submit";
+    }
+
+    function visibilite(divId)
+    {
+        //divPrecedent.style.display='none';
+        divPrecedent=document.getElementById(divId);
+        if(divPrecedent.style.display==='none')
+        {divPrecedent.style.display='block';	 }
+        else
+        {divPrecedent.style.display='none';     }
+    }
+
+    $(document).ready(function(){
+
+        $('#theform').submit(function(){
+            $(this).children('input[type=submit]').prop('disabled', true);
+        });
+
+
+
+
+        fileInputk = document.querySelector('#vasplus_multiple_files');
+        fileInputk.addEventListener('change', function(event) {
+            var inputk = event.target;
+
+            if (inputk.files.length != khaled.length && inputk.files.length==0 )
+            {
+                // alert ('ddd');
+                fileInputk.value="";
+                fileInputk.files= new FileListItem(khaled);
+
+            }
+        });
+
+        // ajax save as draft
+        $('#description').change(function(){
+            var destinataire = $('#destinataire').val();
+            var cc = $('#cc').val();
+            var cci = $('#cci').val();
+            var sujet = $('#sujet').val();
+            var contenu = $('#contenu').val();
+            var description = $('#description').val();
+            var brsaved = $('#brsaved').val();
+
+            if ( (brsaved==0) )
+            { //alert('create br');
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('envoyes.savingbr') }}",
+                    method:"POST",
+                    data:{description:description,destinataire:destinataire,sujet:sujet,contenu:contenu,cc:cc,cci:cci, _token:_token},
+                    success:function(data){
+                        //   alert('Brouillon enregistré ');
+
+                        document.getElementById('envoye').value=data;
+                        document.getElementById('brsaved').value=1;
+                        document.getElementById('SendBtn').disabled=false;
+                    }
+                });
+            }else{
+
+                if ( description!='' )
+                {             var envoye = $('#envoye').val();
+
+                    //  alert('update br');
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('envoyes.updatingbr') }}",
+                        method:"POST",
+                        data:{envoye:envoye,description:description,destinataire:destinataire,contenu:contenu,cc:cc,cci:cci, _token:_token},
+                        success:function(data){
+                            //     alert('Brouillon enregistré ');
+
+                            document.getElementById('envoye').value=data;
+                            document.getElementById('brsaved').value=1;
+                            document.getElementById('SendBtn').disabled=false;
+
+
+                        }
+                    });
+
+                }
+
+            }
+        });
+
+
+
+        // ajax save as draft
+        $('#sujet').change(function(){
+            var destinataire = $('#destinataire').val();
+            var cc = $('#cc').val();
+            var cci = $('#cci').val();
+            var sujet = $('#sujet').val();
+            var contenu = $('#contenu').val();
+            var description = $('#description').val();
+            var brsaved = $('#brsaved').val();
+
+            if ( (brsaved==0) )
+            { //alert('create br');
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('envoyes.savingbr') }}",
+                    method:"POST",
+                    data:{description:description,destinataire:destinataire,sujet:sujet,contenu:contenu,cc:cc,cci:cci, _token:_token},
+                    success:function(data){
+                        //   alert('Brouillon enregistré ');
+
+                        document.getElementById('envoye').value=data;
+                        document.getElementById('brsaved').value=1;
+                        document.getElementById('SendBtn').disabled=false;
+
+                    }
+                });
+            }else{
+
+                if ( description!='' )
+                {             var envoye = $('#envoye').val();
+
+                    //  alert('update br');
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('envoyes.updatingbr') }}",
+                        method:"POST",
+                        data:{envoye:envoye,description:description,destinataire:destinataire,contenu:contenu,cc:cc,cci:cci, _token:_token},
+                        success:function(data){
+                            alert('Brouillon enregistré ');
+
+                            document.getElementById('envoye').value=data;
+                            document.getElementById('brsaved').value=1;
+                            document.getElementById('SendBtn').disabled=false;
+
+                        }
+                    });
+
+                }
+
+            }
+        });
+
+
+        objTextBox = document.getElementById("contenu");
+        oldValue = objTextBox.value;
+        var somethingChanged = false;
+
+        function track_change()
+        {
+            if(objTextBox.value != oldValue)
+            {
+                oldValue = objTextBox.value;
+                somethingChanged = true;
+                changeeditor();
+            };
+
+            setTimeout(function() { track_change()}, 5000);
+
+        }
+
+
+        // setTimeout(function() { track_change()}, 15000);
+        track_change();
+        function setcontenu(myValue) {
+            $('#contenu').val(myValue)
+                .trigger('change');
+        }
+
+
+        function changeeditor()
+        {    var destinataire = $('#destinataire').val();
+            var cc = $('#cc').val();
+            var cci = $('#cci').val();
+            var sujet = $('#sujet').val();
+            var contenu = $('#contenu').val();
+            var description = $('#description').val();
+            var brsaved = $('#brsaved').val();
+
+            if ((brsaved == 0)) {
+                //  alert('content changed');
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: "{{ route('envoyes.savingbr') }}",
+                    method: "POST",
+                    data: {
+                        description: description,
+                        destinataire: destinataire,
+                        sujet: sujet,
+                        contenu: contenu,
+                        cc: cc,
+                        cci: cci,
+                        _token: _token
+                    },
+                    success: function (data) {
+                        //       alert('Brouillon enregistré ');
+
+                        document.getElementById('envoye').value = data;
+                        document.getElementById('brsaved').value = 1;
+                        document.getElementById('SendBtn').disabled=false;
+
+                    }
+                });
+            } else {
+
+                //if ( description!='' )
+                //{
+                var envoye = $('#envoye').val();
+                // alert('updating br');
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: "{{ route('envoyes.updatingbr') }}",
+                    method: "POST",
+                    data: {
+                        description: description,
+                        envoye: envoye,
+                        destinataire: destinataire,
+                        contenu: contenu,
+                        cc: cc,
+                        cci: cci,
+                        _token: _token
+                    },
+                    success: function (data) {
+                        //     alert('Brouillon enregistré ');
+                        document.getElementById('envoye').value = data;
+                        document.getElementById('brsaved').value = 1;
+                        document.getElementById('SendBtn').disabled=false;
+
+                    }
+                });
+
+                //  }
+
+            }
+
+        }
+
+
+        $('#attachs').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+        });
+
+        $('#cc').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+        });
+
+        $('#cci').select2({
+            filter: true,
+            language: {
+                noResults: function () {
+                    return 'Pas de résultats';
+                }
+            }
+        });
+
+    });
+ 
+	
+	
       $("#tabkkk tr").click(function(){
          $(this).addClass('selected').siblings().removeClass('selected');    
          var value=$(this).find('td:first').html();
@@ -728,6 +1185,6 @@ padding: 5px;
 
 
 </script>
-
+ 
 
 @endsection

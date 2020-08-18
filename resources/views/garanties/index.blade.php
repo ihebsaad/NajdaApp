@@ -62,7 +62,7 @@
 
                 <tr>
                     <td  ><a href="{{action('GarantiesController@view', $garantie['id'])}}" ><?php echo sprintf("%04d",$garantie->id);?></a></td>
-                     <td  ><?php echo $garantie->id_assure.' ('.$dossier->reference_medic.' '. $dossier->subscriber_name.' '.$dossier->subscriber_lastname.') ';?></td>
+                     <td  ><?php echo $garantie->id_assure.' (  '. $dossier->subscriber_name.' '.$dossier->subscriber_lastname.') ';?></td>
 					<td>{{$garantie->val1}}</td>
 					<td>{{$garantie->val2}}</td>
 					<td>{{$garantie->val3}}</td>
@@ -113,7 +113,7 @@
 								{
 									$doss=\App\Dossier::where('ID_assure',trim($assure))->first();
 									if (! in_array(trim($assure),$assuresG))
-									{echo '<option value="'.$assure.'"> '.$assure.' ('.$doss->reference_medic.' '. $doss->subscriber_name.' '.$doss->subscriber_lastname.') </option>';}
+									{echo '<option value="'.$assure.'"> '.$assure.' (  '. $doss->subscriber_name.' '.$doss->subscriber_lastname.') </option>';}
 								}
 								 
 								?>

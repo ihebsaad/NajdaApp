@@ -1207,8 +1207,8 @@ use App\Http\Controllers\DossiersController;
                                                                             <?php
 
                                                                             foreach($traitants as $tr)
-                                                                            { if (trim($dossier->medecin_traitant) == trim(PrestatairesController::ChampById('name',$tr->prestataire_id))){ $selected='selected="selected"'; }else{ $selected=''; }
-                                                                                if (PrestatairesController::ChampById('name',$tr->prestataire_id)!='') {echo '<option title="'.$tr->prestataire_id.'" '.$selected.' value="'. PrestatairesController::ChampById('name',$tr->prestataire_id).'">'. PrestatairesController::ChampById('name',$tr->prestataire_id).' Fixe: '. PrestatairesController::ChampById('phone_home',$tr->prestataire_id) .' Tel: '.PrestatairesController::ChampById('phone_cell',$tr->prestataire_id) .'</option>';}
+                                                                            { if (trim($dossier->medecin_traitant) == trim(PrestatairesController::ChampById('name',$tr->prestataire_id))){ $selected='selected="selected"'; }else{ $selected=''; } $Tel=\App\Adresse::where('parent',$tr->prestataire_id)->where('nature','telinterv')->first(); if(isset($Tel)){$tel=$Tel->champ;}else{$tel='';}
+                                                                                if (PrestatairesController::ChampById('name',$tr->prestataire_id)!='') {echo '<option title="'.$tr->prestataire_id.'" '.$selected.' value="'. PrestatairesController::ChampById('name',$tr->prestataire_id).'">'. PrestatairesController::ChampById('prenom',$tr->prestataire_id).' '.PrestatairesController::ChampById('name',$tr->prestataire_id).' - Fixe: '. PrestatairesController::ChampById('phone_home',$tr->prestataire_id) .' - Tel: './*PrestatairesController::ChampById('phone_cell',$tr->prestataire_id).*/' ' . $tel .'</option>';}
                                                                             }
 
                                                                             ?>
@@ -1369,54 +1369,166 @@ use App\Http\Controllers\DossiersController;
 
                                                                 <select onchange="changing(this)" type="text" id="vehicule_marque" name="vehicule_marque" class="form-control"   value="{{ $dossier->vehicule_marque }}"     >
                                                                     <option>Choisir la marque</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="AUTRE"){echo 'selected="selected"';}?> value="AUTRE">AUTRE**</option>
-                                                                    <option  <?php if($dossier->vehicule_marque=="ABARTH"){echo 'selected="selected"';}?> value="ABARTH">ABARTH</option>
-                                                                    <option  <?php if($dossier->vehicule_marque=="ALFA ROMEO"){echo 'selected="selected"';}?> value="ALFA ROMEO">ALFA ROMEO</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="ASTON MARTIN"){echo 'selected="selected"';}?> value="ASTON MARTIN">ASTON MARTIN</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="AUDI"){echo 'selected="selected"';}?> value="AUDI">AUDI</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="BENTLEY"){echo 'selected="selected"';}?> value="BENTLEY">BENTLEY</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="BMW"){echo 'selected="selected"';}?> value="BMW">BMW</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="CITROEN"){echo 'selected="selected"';}?> value="CITROEN">CITROEN</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="DACIA"){echo 'selected="selected"';}?> value="DACIA">DACIA</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="DS"){echo 'selected="selected"';}?> value="DS">DS</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="FERRARI"){echo 'selected="selected"';}?> value="FERRARI">FERRARI</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="FIAT"){echo 'selected="selected"';}?> value="FIAT">FIAT</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="FORD"){echo 'selected="selected"';}?> value="FORD">FORD</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="HONDA"){echo 'selected="selected"';}?> value="HONDA">HONDA</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="HYUNDAI"){echo 'selected="selected"';}?> value="HYUNDAI">HYUNDAI</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="IINFINITI"){echo 'selected="selected"';}?> value="IINFINITI">IINFINITI</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="IVECO"){echo 'selected="selected"';}?> value="IVECO">IVECO</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="JAGUAR"){echo 'selected="selected"';}?> value="JAGUAR">JAGUAR</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="JEEP"){echo 'selected="selected"';}?> value="JEEP">JEEP</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="KIA"){echo 'selected="selected"';}?> value="KIA">KIA</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="LADA"){echo 'selected="selected"';}?> value="LADA">LADA</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="LAMBORGHINI"){echo 'selected="selected"';}?> value="LAMBORGHINI">LAMBORGHINI</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="LAND ROVER"){echo 'selected="selected"';}?> value="LAND ROVER">LAND ROVER</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="LEXUS"){echo 'selected="selected"';}?> value="LEXUS">LEXUS</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="LOTUS"){echo 'selected="selected"';}?> value="LOTUS">LOTUS</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="MASERATI"){echo 'selected="selected"';}?> value="MASERATI">MASERATI</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="MAZDA"){echo 'selected="selected"';}?> value="MAZDA">MAZDA</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="MCLAREN"){echo 'selected="selected"';}?> value="MCLAREN">MCLAREN</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="MERCEDES-BENZ"){echo 'selected="selected"';}?> value="MERCEDES-BENZ">MERCEDES-BENZ</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="MINI"){echo 'selected="selected"';}?> value="MINI">MINI</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="MITSUBISHI"){echo 'selected="selected"';}?> value="MITSUBISHI">MITSUBISHI</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="NISSAN"){echo 'selected="selected"';}?> value="NISSAN">NISSAN</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="OPEL"){echo 'selected="selected"';}?> value="OPEL">OPEL</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="PEUGEOT"){echo 'selected="selected"';}?> value="PEUGEOT">PEUGEOT</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="PORSCHE"){echo 'selected="selected"';}?>  value="PORSCHE">PORSCHE</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="RENAULT"){echo 'selected="selected"';}?> value="RENAULT">RENAULT</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="ROLLS ROYCE"){echo 'selected="selected"';}?> value="ROLLS ROYCE">ROLLS ROYCE</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="SEAT"){echo 'selected="selected"';}?> value="SEAT">SEAT</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="SKODA"){echo 'selected="selected"';}?> value="SKODA">SKODA</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="SMART"){echo 'selected="selected"';}?> value="SMART">SMART</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="SSANGYONG"){echo 'selected="selected"';}?> value="SSANGYONG">SSANGYONG</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="SUBARU"){echo 'selected="selected"';}?> value="SUBARU">SUBARU</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="SUZUKI"){echo 'selected="selected"';}?> value="SUZUKI">SUZUKI</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="TESLA"){echo 'selected="selected"';}?> value="TESLA">TESLA</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="TOYOTA"){echo 'selected="selected"';}?> value="TOYOTA" >TOYOTA</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="VOLKSWAGEN"){echo 'selected="selected"';}?> value="VOLKSWAGEN">VOLKSWAGEN</option>
-                                                                    <option <?php if($dossier->vehicule_marque=="VOLVO"){echo 'selected="selected"';}?> value="VOLVO">VOLVO</option>
-                                                                </select>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ABARTH"){echo 'selected="selected"';}?> value="Abarth">Abarth</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="AC"){echo 'selected="selected"';}?> value="Ac">Ac</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ACURA"){echo 'selected="selected"';}?> value="Acura">Acura</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="AIXAM"){echo 'selected="selected"';}?> value="Aixam">Aixam</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ALFA ROMEO"){echo 'selected="selected"';}?> value="Alfa Romeo">Alfa Romeo</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ALKE"){echo 'selected="selected"';}?> value="Alke">Alke</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ALLARD"){echo 'selected="selected"';}?> value="Allard">Allard</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ALPINA"){echo 'selected="selected"';}?> value="Alpina">Alpina</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ALPINE"){echo 'selected="selected"';}?> value="Alpine">Alpine</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ALVIS"){echo 'selected="selected"';}?> value="Alvis">Alvis</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="AMC"){echo 'selected="selected"';}?> value="AMC">AMC</option>AMC
+<option <?php if(strtoupper($dossier->vehicule_marque)=="AMILCAR"){echo 'selected="selected"';}?> value="Amilcar">Amilcar</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ARIEL"){echo 'selected="selected"';}?> value="Ariel">Ariel</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ARO"){echo 'selected="selected"';}?> value="ARO">ARO</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ASHOK LEYLAND"){echo 'selected="selected"';}?> value="Ashok Leyland">Ashok Leyland</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ASTON MARTIN"){echo 'selected="selected"';}?> value="Aston Martin">Aston Martin</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="AUBURN"){echo 'selected="selected"';}?> value="Auburn">Auburn</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="AUDI"){echo 'selected="selected"';}?> value="Audi">Audi</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="AUSTIN"){echo 'selected="selected"';}?> value="Austin">Austin</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="AUSTIN HEALEY"){echo 'selected="selected"';}?> value="Austin Healey">Austin Healey</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="AUTO UNION"){echo 'selected="selected"';}?> value="Auto Union">Auto Union</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="AUTOBIANCHI"){echo 'selected="selected"';}?> value="Autobianchi">Autobianchi</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="AVTOGAZ"){echo 'selected="selected"';}?> value="AvtoGAZ">AvtoGAZ</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="AVTOVAZ"){echo 'selected="selected"';}?> value="AvtoVAZ">AvtoVAZ</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="BELLIER"){echo 'selected="selected"';}?> value="Bellier">Bellier</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="BENTLEY"){echo 'selected="selected"';}?> value="Bentley">Bentley</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="BMW"){echo 'selected="selected"';}?> value="BMW">BMW</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="BOLLORE"){echo 'selected="selected"';}?> value="Bolloré">Bollore</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="BRISTOL"){echo 'selected="selected"';}?> value="Bristol">Bristol</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="BUGATTI"){echo 'selected="selected"';}?> value="Bugatti">Bugatti</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="BUICK"){echo 'selected="selected"';}?> value="Buick">Buick</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="CADILLAC"){echo 'selected="selected"';}?> value="Cadillac">Cadillac</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="CASALINI"){echo 'selected="selected"';}?> value="Casalini">Casalini</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="CATERHAM"){echo 'selected="selected"';}?> value="Caterham">Caterham</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="CHATENET"){echo 'selected="selected"';}?> value="Chatenet">Chatenet</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="CHAUSSON"){echo 'selected="selected"';}?> value="Chausson">Chausson</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="CHENARD ET WALCKER"){echo 'selected="selected"';}?> value="Chenard et Walcker">Chenard et Walcker</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="CHEVROLET"){echo 'selected="selected"';}?> value="Chevrolet">Chevrolet</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="CHRYSLER"){echo 'selected="selected"';}?> value="Chrysler">Chrysler</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="CITROEN"){echo 'selected="selected"';}?> value="Citroën">Citroen</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="DACIA"){echo 'selected="selected"';}?> value="Dacia">Dacia</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="DAEWOO"){echo 'selected="selected"';}?> value="Daewoo">Daewoo</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="DAIHATSU"){echo 'selected="selected"';}?> value="Daihatsu">Daihatsu</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="DATSUN"){echo 'selected="selected"';}?> value="Datsun">Datsun</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="DE DION-BOUTON"){echo 'selected="selected"';}?> value="De Dion-Bouton">De Dion-Bouton</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="DE TOMASO"){echo 'selected="selected"';}?> value="De Tomaso">De Tomaso</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="DELAGE"){echo 'selected="selected"';}?> value="Delage">Delage</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="Delahaye"){echo 'selected="selected"';}?> value="Delahaye">Delahaye</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="DELOREAN"){echo 'selected="selected"';}?> value="DeLorean">DeLorean</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="DODGE"){echo 'selected="selected"';}?> value="Dodge">Dodge</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="DONKERVOORT"){echo 'selected="selected"';}?> value="Donkervoort">Donkervoort</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="DS"){echo 'selected="selected"';}?> value="DS">DS</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="DUE"){echo 'selected="selected"';}?> value="Dué">DUE</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="EAGLE"){echo 'selected="selected"';}?> value="Eagle">Eagle</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="EXAGON"){echo 'selected="selected"';}?> value="Exagon">Exagon</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="EXCALIBUR"){echo 'selected="selected"';}?> value="Excalibur">Excalibur</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="FACEL VEGA"){echo 'selected="selected"';}?> value="Facel Vega">Facel Vega</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="FERRARI"){echo 'selected="selected"';}?> value="Ferrari">Ferrari</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="FIAT"){echo 'selected="selected"';}?> value="FIAT">FIAT</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="FISKER"){echo 'selected="selected"';}?> value="Fisker">Fisker</option> 
+<option <?php if(strtoupper($dossier->vehicule_marque)=="FORD"){echo 'selected="selected"';}?> value="Ford">Ford</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="FORD MUSTANG"){echo 'selected="selected"';}?> value="Ford Mustang">Ford Mustang</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="FUSO"){echo 'selected="selected"';}?> value="Fuso">Fuso</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="GAZ"){echo 'selected="selected"';}?> value="GAZ">GAZ</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="GINETTA"){echo 'selected="selected"';}?> value="Ginetta">Ginetta</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="GMC"){echo 'selected="selected"';}?> value="GMC">GMC</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="GRECAV"){echo 'selected="selected"';}?> value="Grecav">Grecav</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="GUMPERT"){echo 'selected="selected"';}?> value="Gumpert">Gumpert</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="HOMMELL"){echo 'selected="selected"';}?> value="Hommell">Hommell</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="HONDA"){echo 'selected="selected"';}?> value="Honda">Honda</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="HORCH"){echo 'selected="selected"';}?> value="Horch">Horch</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="HUMMER"){echo 'selected="selected"';}?> value="Hummer">Hummer</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="HYUNDAI"){echo 'selected="selected"';}?> value="Hyundai">Hyundai</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="INFINITI"){echo 'selected="selected"';}?> value="Infiniti">Infiniti</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="INNOCENTI"){echo 'selected="selected"';}?> value="Innocenti">Innocenti</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ISUZU"){echo 'selected="selected"';}?> value="Isuzu">Isuzu</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="IVECO"){echo 'selected="selected"';}?> value="Iveco">Iveco</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="JAGUAR"){echo 'selected="selected"';}?> value="Jaguar">Jaguar</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="JDM SIMPA"){echo 'selected="selected"';}?> value="JDM Simpa">JDM Simpa</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="JEEP"){echo 'selected="selected"';}?> value="Jeep">Jeep</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="KIA"){echo 'selected="selected"';}?> value="Kia">Kia</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="KOENIGSEGG"){echo 'selected="selected"';}?> value="Koenigsegg">Koenigsegg</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="KTM"){echo 'selected="selected"';}?> value="KTM">KTM</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="LADA"){echo 'selected="selected"';}?> value="Lada">Lada</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="LAMBORGHINI"){echo 'selected="selected"';}?> value="Lamborghini">Lamborghini</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="LANCIA"){echo 'selected="selected"';}?> value="Lancia">Lancia</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="LAND ROVER"){echo 'selected="selected"';}?> value="Land Rover">Land Rover</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="LEXUC"){echo 'selected="selected"';}?> value="Lexus">Lexus</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="LIGIER"){echo 'selected="selected"';}?> value="Ligier">Ligier</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="LINCOLN"){echo 'selected="selected"';}?> value="Lincoln">Lincoln</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="LOTUS"){echo 'selected="selected"';}?> value="Lotus">Lotus</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="MASERATI"){echo 'selected="selected"';}?> value="Maserati">Maserati</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="MATRA"){echo 'selected="selected"';}?> value="Matra">Matra</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="MAYBACH"){echo 'selected="selected"';}?> value="Maybach">Maybach</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="MAZDA"){echo 'selected="selected"';}?> value="Mazda">Mazda</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="MCLAREN"){echo 'selected="selected"';}?> value="McLaren">McLaren</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="MEGA"){echo 'selected="selected"';}?> value="Mega">Mega</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="MERCEDES-BENZ"){echo 'selected="selected"';}?> value="Mercedes-Benz">Mercedes-Benz</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="MG"){echo 'selected="selected"';}?> value="MG">MG</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="MAI ELECTRIC"){echo 'selected="selected"';}?> value="Mia electric">Mia electric</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="MINI"){echo 'selected="selected"';}?> value="Mini">Mini</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="MITSUBISHI"){echo 'selected="selected"';}?> value="Mitsubishi">Mitsubishi</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="MITSUOKA"){echo 'selected="selected"';}?> value="Mitsuoka">Mitsuoka</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="MORGAN"){echo 'selected="selected"';}?> value="Morgan">Morgan</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="MORRIS"){echo 'selected="selected"';}?> value="Morris">Morris</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="NASH"){echo 'selected="selected"';}?> value="Nash">Nash</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="NECKAR"){echo 'selected="selected"';}?> value="Neckar">Neckar</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="NISSAN"){echo 'selected="selected"';}?> value="Nissan">Nissan</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="NOBLE"){echo 'selected="selected"';}?> value="Noble">Noble</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="NSU"){echo 'selected="selected"';}?> value="NSU">NSU</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="OLDSMOBILE"){echo 'selected="selected"';}?> value="Oldsmobile">Oldsmobile</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="OPEL"){echo 'selected="selected"';}?> value="Opel">Opel</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="PACKARD"){echo 'selected="selected"';}?> value="Packard">Packard</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="PAGANI"){echo 'selected="selected"';}?> value="Pagani">Pagani</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="PANHARD"){echo 'selected="selected"';}?> value="Panhard">Panhard</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="PANOZ"){echo 'selected="selected"';}?> value="Panoz">Panoz</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="PANTHER"){echo 'selected="selected"';}?> value="Panther">Panther</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="PEUGEOT"){echo 'selected="selected"';}?> value="Peugeot">Peugeot</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="PGO"){echo 'selected="selected"';}?> value="PGO">PGO</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="PLYMOUTH"){echo 'selected="selected"';}?> value="Plymouth">Plymouth</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="PONTIAC"){echo 'selected="selected"';}?> value="Pontiac">Pontiac</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="PORSCHE"){echo 'selected="selected"';}?> value="Porsche">Porsche</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="RADICAL"){echo 'selected="selected"';}?> value="Radical">Radical</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="RENAULT"){echo 'selected="selected"';}?> value="Renault">Renault</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="RILEY"){echo 'selected="selected"';}?> value="Riley">Riley</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ROLLS-ROYCE"){echo 'selected="selected"';}?> value="Rolls-Royce">Rolls-Royce</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ROVER"){echo 'selected="selected"';}?> value="Rover">Rover</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="SAAB"){echo 'selected="selected"';}?> value="Saab">Saab</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="SALEEN"){echo 'selected="selected"';}?> value="Saleen">Saleen</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="SANTANA"){echo 'selected="selected"';}?> value="Santana">Santana</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="SEAT"){echo 'selected="selected"';}?> value="Seat">Seat</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="SECMA"){echo 'selected="selected"';}?> value="Secma">Secma</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="SHELBY"){echo 'selected="selected"';}?> value="Shelby">Shelby</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="SIMCA"){echo 'selected="selected"';}?> value="Simca">Simca</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="SKODA"){echo 'selected="selected"';}?> value="Skoda">Skoda</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="SMART"){echo 'selected="selected"';}?> value="Smart">Smart</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="SSANGYONG"){echo 'selected="selected"';}?> value="SsangYong">SsangYong</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="STUDEBAKER"){echo 'selected="selected"';}?> value="Studebaker">Studebaker</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="SUBARU"){echo 'selected="selected"';}?> value="Subaru">Subaru</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="SUZUKI"){echo 'selected="selected"';}?> value="Suzuki">Suzuki</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="TALBOT"){echo 'selected="selected"';}?> value="Talbot">Talbot</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="TAZZARI"){echo 'selected="selected"';}?> value="Tazzari">Tazzari</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="TESLA MOTORS"){echo 'selected="selected"';}?> value="Tesla Motors">Tesla Motors</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="TOYOTA"){echo 'selected="selected"';}?> value="Toyota">Toyota</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="TRIUMPH"){echo 'selected="selected"';}?> value="Triumph">Triumph</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="TVR"){echo 'selected="selected"';}?> value="Tvr">Tvr</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ULTIMA"){echo 'selected="selected"';}?> value="Ultima">Ultima</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="VAZ"){echo 'selected="selected"';}?> value="VAZ">VAZ</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="VECTOR"){echo 'selected="selected"';}?> value="Vector">Vector</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="VENTURI"){echo 'selected="selected"';}?> value="Venturi">Venturi</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="VOLKSWAGEN"){echo 'selected="selected"';}?> value="Volkswagen">Volkswagen</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="VOLVO"){echo 'selected="selected"';}?> value="Volvo">Volvo</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="WEBER"){echo 'selected="selected"';}?> value="Weber">Weber</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="WIESMANN"){echo 'selected="selected"';}?> value="Wiesmann">Wiesmann</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ZASTAVA"){echo 'selected="selected"';}?> value="Zastava">Zastava</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="ZENVO"){echo 'selected="selected"';}?> value="Zenvo">Zenvo</option>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="AUTRE"){echo 'selected="selected"';}?> value="AUTRE">AUTRE</option></select>
+																
+																
+																
                                                                 </div>
                                                             </div>
 

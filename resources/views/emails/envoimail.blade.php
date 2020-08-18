@@ -179,6 +179,8 @@ $(document).ready(function()
                                     <option value="chef.plateau@najda-assistance.com">chef.plateau@najda-assistance.com</option>
                                     <option value="mohsalah.harzallah@gmail.com">mohsalah.harzallah@gmail.com</option>
                                     <option value="mahmoud.helali@gmail.com">mahmoud.helali@gmail.com</option>
+                                    <option value="ihebsaad@gmail.com">ihebsaad@gmail.com</option>
+                                    <option value="ihebs001@gmail.com">ihebs001@gmail.com</option>
                                  </select>
                             </div>
                         </div>

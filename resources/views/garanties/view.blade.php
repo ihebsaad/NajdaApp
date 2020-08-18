@@ -22,7 +22,7 @@
 						     <div class="col-md-3">
                             <div class="form-group">
                                 <label for="inputError" class="control-label">Assuré</label>
-                                <input readonly onchange="changing(this)" type="text" class="form-control input"   value="<?php echo  $dossier->reference_medic.' '. $dossier->subscriber_name.' '.$dossier->subscriber_lastname ;?>">
+                                <input readonly onchange="changing(this)" type="text" class="form-control input"   value="<?php echo   $dossier->subscriber_name.' '.$dossier->subscriber_lastname ;?>">
                             </div>
                         </div>
 						

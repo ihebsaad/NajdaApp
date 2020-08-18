@@ -1703,7 +1703,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         </div>
 
 
-    </form>
+    
 
                     </div>
                     <div class="modal-footer">
@@ -1712,6 +1712,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                     </div>
                 </div>
             </div>
+			</form>
    </div>
    </div>
 
@@ -2053,6 +2054,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             var fax = $('#faxg').val();
             var observ = $('#remarqueg').val();
             var nature = $('#nature7').val();
+			
             if (  (tel!='')  || (email!='')  )
             {
                 var _token = $('input[name="_token"]').val();

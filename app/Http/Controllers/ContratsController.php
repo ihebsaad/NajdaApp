@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
  use App\Dossier ;
+ use App\Nature ;
 use App\Prestataire ;
 use App\Prestation ;
 use App\Contrat ;
@@ -52,6 +53,12 @@ class ContratsController extends Controller
     }
 	
 	
+	public function nature($id)
+    {
+		$nature=Nature::where('id',$id)->first();
+        return view('contrats.nature',['nature'=>$nature]);
+
+    }
 	
      public function create()
     {
@@ -123,11 +130,10 @@ class ContratsController extends Controller
      */
     public function view($id)
     {
-        $dossiers = Dossier::all();
-        $villes = DB::table('cities')->select('id', 'name')->get();
-
+         
         $contrat = Contrat::find($id);
-        return view('contrats.view',['dossiers' => $dossiers,'villes'=>$villes], compact('contrat'));
+		$natures= Nature::where('contrat',$id)->get();
+        return view('contrats.view',['natures'=>$natures ], compact('contrat'));
 
     }
 
@@ -227,5 +233,46 @@ class ContratsController extends Controller
     }
 
 
+	/********   Natures             ************/
+	
+	    public function adding(Request $request)
+    {
+        if( ($request->get('nom'))!=null) {
+
+            $nature = new Nature([
+                'nom' => $request->get('nom'),
+                'contrat' => $request->get('contrat')
+
+            ]);
+            if ($nature->save())
+            { $id=$nature->id;
+
+                return url('/contrats/nature/'.$id);
+            }
+
+            else {
+                return url('/contrats');
+            }
+        }
+
+    }
+	
+	
+    public function changing(Request $request)
+    {
+
+        $id= $request->get('nature');
+        $champ= strval($request->get('champ'));
+       $val= $request->get('val');
+      //  $dossier = Dossier::find($id);
+       // $dossier->$champ =   $val;
+        Nature::where('id', $id)->update(array($champ => $val));
+
+      //  $dossier->save();
+
+     ///   return redirect('/dossiers')->with('success', 'Entry has been added');
+
+    }	
+	
 }
 

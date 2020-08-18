@@ -40,7 +40,7 @@ use App\Dossier ;
 		*/	
  			$c=0;
 			foreach($dossiers as $dossier)
-			{$immarticul=$dossier->vehicule_immatriculation;
+			{$immarticul=$dossier->vehicule_immatriculation; $immarticul = str_replace ('-','',$immarticul );
 			    $c++; if($dossier->affecte==''){$styled=';color:red;';}else{$styled=';color:black;';}
 			if(($c % 2 )==0){$bg='background-color:#EDEDE9';}else{$bg='background-color:#F9F9F8';} $idd=$dossier['id'];$ref=$dossier['reference_medic'];$abn=$dossier['subscriber_lastname'].' '.$dossier['subscriber_name'];$idclient=$dossier['customer_id'];  $client= $dossier['reference_customer'];/* $client=   ClientsController::ClientChampById('name',$idclient) ;*/
         echo '<li  class="overme" style=";padding-left:6px;margin-bottom:15px;'.$bg.'" >';
@@ -131,12 +131,13 @@ use App\Dossier ;
         var input, filter, ul, li, label, i, txtValue;
         input = document.getElementById("myInput4");
         filter = input.value.toUpperCase();
+        filter = filter.replace("-", "")
         ul = document.getElementById("myUL");
         li = ul.getElementsByTagName("li");
         for (i = 0; i < li.length; i++) {
             label = li[i].getElementsByTagName("small")[2];
             txtValue = label.textContent || label.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+             if (txtValue.toUpperCase().indexOf(filter) > -1) {
                 li[i].style.display = "";
             } else {
                 li[i].style.display = "none";

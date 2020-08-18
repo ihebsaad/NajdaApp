@@ -725,14 +725,14 @@ function custom_echo($x, $length)
                              <div class="row">
                                  <div class="col-md-4">
 
-                                     <button style="display:none;margin-botom:10px;margin-top:20px" type="button" id="add2" class="btn btn-lg btn-primary"><i class="far fa-save"></i> Enregister la prestation</button>
+                                     <button style="display:none;margin-botom:10px;margin-top:20px;font-size:14px" type="button" id="add2" class="btn btn-lg btn-primary"><i class="far fa-save"></i> Enregister la prestation</button>
                                  </div>
                                  <div class="col-md-4"  id="add2prest" style="display:none" >
                                      <label>Prestataire sélectionné :</label><br>
-                                     <select style="width:350px;margin-top:10px;margin-bottom:10px;" disabled id="selectedprest"  class="form-control col-lg-9 " value=" ">
+                                     <select style="width:300px;margin-top:10px;margin-bottom:10px;margin-left:10px" disabled id="selectedprest"  class="form-control col-lg-9 " value=" ">
                                          <option></option>
                                          @foreach($prestataires as $prest)
-                                             <option    value="<?php echo $prest->id;?>"> <?php echo $prest->name;?></option>
+                                             <option    value="<?php echo $prest->id;?>"> <?php echo $prest->name;?> <?php echo $prest->prenom;?></option>
                                          @endforeach
                                      </select>
                                  </div>
@@ -742,9 +742,9 @@ function custom_echo($x, $length)
                              <div class="row">
                                  <div class="  form-group"  id="prestation"   >
                                    <div class="col-md-4">
-                                       <button style="display:none;margin-botom:10px" type="button" id="valide" class="btn btn-lg btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
+                                       <button style="display:none;margin-bottom:10px;font-size:14px" type="button" id="valide" class="btn btn-lg btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
                                    </div>
-                                     <div class="col-md-4"  style="display:none;"  id="validation" >
+                                     <div class="col-md-4"  style="display:none;padding-left:15px;"  id="validation" >
                                          <label>ou bien Prestation non effectuée ? Raison:</label>
 
                                          <select class="form-control" id="statutprest" >
@@ -2883,10 +2883,12 @@ if(strstr($dossier['reference_medic'],"MI")){
                 </div>
                 <div class="modal-body">
                     <div class="card-body" style="text-align:center;height:200px"><br>
-				<section><center><a target="_blank" href="{{action('DossiersController@fermeture',$dossier->id)}}" >Contrats (type de dossier) </a><br>
+<?php  if($type=='admin' || $type=='bureau' ||$type=='financier' ){ ?>			
+			<section><center><a target="_blank" href="{{action('DossiersController@fermeture',$dossier->id)}}" >Contrats (type de dossier) </a><br>
 				<br></center></section><br>
+				
 <?php    
-
+			}
 app('App\Http\Controllers\MissionController')->verifier_fin_missions($dossier['id']);
 $count= Mission::where('dossier_id',$dossier['id'])
                         ->where('statut_courant','!=','annulee')

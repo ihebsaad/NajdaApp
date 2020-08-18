@@ -1163,7 +1163,7 @@ $id=0;
                         $immatr = 'nonvehicule';
                     }
 
-                    $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
+                    $sujetPreg =  preg_replace('|[*#_-")\'.(:/,;?=]|', '',$sujet);
                     $sujetPreg =  strtoupper ( $sujetPreg);
                     //$sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
 
@@ -1553,7 +1553,7 @@ $id=0;
                        $immatr = 'nonvehicule';
                    }
 
-                   $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
+                    $sujetPreg =  preg_replace('|[*#_-")\'.(:/,;?=]|', '',$sujet);
                     $sujetPreg =  strtoupper ( $sujetPreg);
 
 
@@ -1926,7 +1926,7 @@ $id=0;
                       $immatr = 'nonvehicule';
                   }
 
-                  $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
+                    $sujetPreg =  preg_replace('|[*#_-")\'.(:/,;?=]|', '',$sujet);
                    $sujetPreg =  strtoupper ( $sujetPreg);
 
 
@@ -2279,7 +2279,7 @@ $id=0;
                       $immatr = 'nonvehicule';
                   }
 
-                  $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
+                    $sujetPreg =  preg_replace('|[*#_-")\'.(:/,;?=]|', '',$sujet);
                  $sujetPreg =  strtoupper ( $sujetPreg);
 
 
@@ -2648,7 +2648,7 @@ $id=0;
                         $immatr = 'nonvehicule';
                     }
 
-                    $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
+                    $sujetPreg =  preg_replace('|[*#_-")\'.(:/,;?=]|', '',$sujet);
                      $sujetPreg =  strtoupper ( $sujetPreg);
 
 
@@ -5814,6 +5814,9 @@ $id=0;
         $description= $request->get('description');
         $attachs = $request->get('attachs');
         $libre = $request->get('libre');
+		// pour l'accusé
+	    $accuse = $request->get('accuse');
+        $entree = $request->get('entree');
 
 		if($libre!='' && $to !=''){array_push($to,$libre);}else{
 		 if($libre!='' && $to ==''){ $to[0]= $libre  ;}
@@ -5832,7 +5835,14 @@ $id=0;
 
             }
             }
+        $ccmails=array();
 
+			  if(isset($cc  )) {
+            foreach($cc  as $ccmail) {
+                array_push($ccmails,$ccmail );
+
+            }
+            }
        // ajout de l'adresse de Mr Nejib en cci
         array_push($ccimails,'medic.multiservices@topnet.tn' );
 
@@ -5936,7 +5946,7 @@ if ($from=='najdassist@gmail.com')
             $swiftTransport =  new \Swift_SmtpTransport( 'smtp.tunet.tn', '25','');
             $swiftTransport->setUsername('ambulance.transp@medicmultiservices.com');
             $swiftTransport->setPassword($pass_TM);
-            $fromname="Transport MEDIC";
+            $fromname="TRANSPORT MEDIC";
             $signatureentite= $parametres->signature4 ;
 
         }
@@ -5975,13 +5985,13 @@ if ($from=='najdassist@gmail.com')
 
 
     ////    try{
-            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$cc,$cci,$attachs,$doss,$envoyeid,$ccimails,$description,$from,$fromname,$client ) {
+            Mail::send([], [], function ($message) use ($to,$sujet,$contenu,$files,$cc,$cci,$attachs,$doss,$envoyeid,$ccmails,$ccimails,$description,$from,$fromname,$client ) {
             $message
 
               //  ->to('saadiheb@gmail.com')
              // ->to()
 
-                ->cc($cc  ?: [])
+                ->cc($ccmails  ?: [])
                 ->bcc($ccimails ?: [])
                 ->subject($sujet)
          ->setBody($contenu, 'text/html')
@@ -6174,10 +6184,16 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
         }
 
+		if($accuse==1){
+			Entree::where('id',$entree)->update(array( 'accuse'=>1));
+		}
+		 
+		
+		return redirect($urlsending.'/view/'.$envoyeid)->with('success', '  Envoyé ! ');
+	
+		 
 
-
-
-        return redirect($urlsending.'/view/'.$envoyeid)->with('success', '  Envoyé ! ');
+	
 
         ///  var_dump( Mail:: failures());
  
