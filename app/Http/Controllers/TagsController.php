@@ -241,17 +241,66 @@ class TagsController extends Controller
                     {
                         $contenutag = "";
                     }
-                /*if ($smtag > $montantplf)
-                    { $titre =$titre."KBS"; }*/
+
+                // initialisation montant restant du nouveau tag
+                $mrestantntag = $request->get('montant');   
+                if (! is_null($request->get('parent'))) 
+                {
+                    // recupere info du tag parent
+                    $prttag = Tag::where('id', $request->get('parent'))->first();
+                    $titre = $prttag['titre'];
+                    $abbrev = $prttag['abbrev'];
+                    // changement montant restant de nouveau tag si le precedent est utilisé
+                    if ($prttag['montant'] !==  $prttag['mrestant'])
+                    {
+                        $paramdevg=Parametre::select('euro_achat','dollar_achat')->first();
+                        $mutilise = intval($prttag['montant']) - intval($prttag['mrestant']);
+                        if ($request->get('devise') !== $prttag['devise'])
+                        {
+                            // cnvertir devise montant utilise du tag pére
+                            if ($prttag['devise'] == "TND")
+                                $Montantprt = $mutilise;
+                            if ($prttag['devise'] == "EUR")
+                                $Montantprt = $mutilise * floatval($paramdevg['euro_achat']);
+                            if ($prttag['devise'] == "USD")
+                                $Montantprt = $mutilise * floatval($paramdevg['dollar_achat']);
+
+                            // cnvertir devise tagremp
+                            if ($request->get('devise') == "TND")
+                                $Montantctag = $request->get('montant');
+                            if ($request->get('devise') == "EUR")
+                                $Montantctag = $request->get('montant') * floatval($paramdevg['euro_achat']);
+                            if ($request->get('devise') == "USD")
+                                $Montantctag = $request->get('montant') * floatval($paramdevg['dollar_achat']);
+
+                            // montant restant du nouveau tag
+                            $mrestantntag = $Montantctag - $Montantprt;
+                            // reconvertir en devise le montant restant
+                            if ($request->get('devise') == "EUR")
+                                $mrestantntag = round($mrestantntag / floatval($paramdevg['euro_achat']) , 3);
+                            if ($request->get('devise') == "USD")
+                                $mrestantntag = round($mrestantntag / floatval($paramdevg['dollar_achat']) , 3);
+                        }
+                        else
+                        {
+                            // montant restant du nouveau tag
+                            $mrestantntag = $mrestantntag - $mutilise;
+                        }
+                    }
+                    //marque le TAG precedent comme non dernier
+                    Tag::where('id', $request->get('parent'))->update(['dernier' => 0]);
+                }    
                 $tag = new Tag([
                     'abbrev' => $abbrev,
                     'titre' => $titre,
                     'entree' => $identree,
                     'contenu' => $contenutag,
                     'montant' => $request->get('montant'),
-                    'mrestant' => $request->get('montant'),
+                    'mrestant' => $mrestantntag,
                     'devise' => $request->get('devise'),
-                    'type'=> $type
+                    'type'=> $type,
+                    'parent' => $request->get('parent'),
+                    'dernier'=> 1
                 ]);
                 if ($tag->save())
                 { 
@@ -383,16 +432,68 @@ if($type=='piecejointe') {
                     {
                         $contenutag = "";
                     }
-                
+
+
+                // initialisation montant restant du nouveau tag
+                $mrestantntag = $request->get('montant');   
+                if (! is_null($request->get('parent'))) 
+                {
+                    // recupere info du tag parent
+                    $prttag = Tag::where('id', $request->get('parent'))->first();
+                    $titre = $prttag['titre'];
+                    $abbrev = $prttag['abbrev'];
+                    // changement montant restant de nouveau tag si le precedent est utilisé
+                    if ($prttag['montant'] !==  $prttag['mrestant'])
+                    {
+                        $paramdevg=Parametre::select('euro_achat','dollar_achat')->first();
+                        $mutilise = intval($prttag['montant']) - intval($prttag['mrestant']);
+                        if ($request->get('devise') !== $prttag['devise'])
+                        {
+                            // cnvertir devise montant utilise du tag pére
+                            if ($prttag['devise'] == "TND")
+                                $Montantprt = $mutilise;
+                            if ($prttag['devise'] == "EUR")
+                                $Montantprt = $mutilise * floatval($paramdevg['euro_achat']);
+                            if ($prttag['devise'] == "USD")
+                                $Montantprt = $mutilise * floatval($paramdevg['dollar_achat']);
+
+                            // cnvertir devise tagremp
+                            if ($request->get('devise') == "TND")
+                                $Montantctag = $request->get('montant');
+                            if ($request->get('devise') == "EUR")
+                                $Montantctag = $request->get('montant') * floatval($paramdevg['euro_achat']);
+                            if ($request->get('devise') == "USD")
+                                $Montantctag = $request->get('montant') * floatval($paramdevg['dollar_achat']);
+
+                            // montant restant du nouveau tag
+                            $mrestantntag = $Montantctag - $Montantprt;
+                            // reconvertir en devise le montant restant
+                            if ($request->get('devise') == "EUR")
+                                $mrestantntag = $mrestantntag / floatval($paramdevg['euro_achat']);
+                            if ($request->get('devise') == "USD")
+                                $mrestantntag = $mrestantntag / floatval($paramdevg['dollar_achat']);
+                        }
+                        else
+                        {
+                            // montant restant du nouveau tag
+                            $mrestantntag = $mrestantntag - $mutilise;
+                        }
+                    }
+                    //marque le TAG precedent comme non dernier
+                    Tag::where('id', $request->get('parent'))->update(['dernier' => 0]);
+                }
+
                 $tag = new Tag([
                     'abbrev' => $abbrev,
                     'titre' => $titre,
                     'entree' => $idattach,
                     'contenu' => $contenutag,
                     'montant' => $request->get('montant'),
-                    'mrestant' => $request->get('montant'),
+                    'mrestant' => $mrestantntag,
                     'devise' => $request->get('devise'),
-                    'type'=> $type
+                    'type'=> $type,
+                    'parent' => $request->get('parent'),
+                    'dernier'=> 1
                 ]);
                 if ($tag->save())
                 { 
@@ -422,13 +523,12 @@ Log::info('[Agent: ' . $nomuser . '] Ajout de tag '.$titre.' pour le dossier: ' 
 $entree=$request->get('entree');
 if($type=="email")
 {
-$tags1 = Tag::where('entree','=',$entree)->orderBy('created_at','desc')->get();
-
+$tags1 = Tag::where(['entree' => $entree, 'dernier' => 1])->orderBy('created_at','desc')->get();
 
 }
 if($type=="piecejointe")
 {
-$tags1 = Tag::where('entree','=',$entree)->orderBy('created_at','desc')->get();
+$tags1 = Tag::where(['entree' => $entree, 'dernier' => 1])->orderBy('created_at','desc')->get();
 
 
 }

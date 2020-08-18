@@ -763,6 +763,7 @@ use App\Tag;
                             <tbody>
 
  @foreach( $tags as $tag)
+<?php if ((isset($tag->dernier)) && ($tag->dernier == 1)) {                  ?>
                                   <tr>
                                 <td style="">{{$tag->titre}}  </td>
 
@@ -777,6 +778,7 @@ use App\Tag;
    <?php }?>
 
                              </tr>
+ <?php }?>                         
  @endforeach
                             </tbody>
                     </table>
@@ -1319,24 +1321,26 @@ var type = $('ul#mailpiece').find('li.active').data('type');
       var limontant='';
       var tparent = null;
       var tremplace = false;
-      <?php if (count($tags) > 0) { ?>
+      <?php if (\Request::is('entrees/show/*')) { 
+            if (count($tags) > 0) { ?>
             var remplaceouajout = $('input[type=radio][name=ajout_remplace]:checked').val();    
             //alert(remplaceouajout);  
+            // CAS REMPLACE: recuperer parent et titre du TAG
             if (remplaceouajout=="remplacetag")
             {
               var tagparent = $('select[name=tagslist]').val();
               tremplace = true;
               tparent = tagparent;
-              alert(tagparent);
+              //alert(tagparent);
 
               var prttitre = $('select[name=tagslist] option:selected').text();
               var titretag = prttitre.substring(0, prttitre.indexOf(" | "));
-              tag =titretag;
+              tag =String(titretag);
               
-              alert(titretag);
+              //alert(titretag);
             }
 
-      <?php } ?>
+      <?php }} ?>
 if (document.getElementById("montanttag")!=null)
       {
         montant = $('input[name="montanttag"]').val();
