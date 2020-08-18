@@ -671,8 +671,18 @@ use App\Tag;
                           <button id="btn-cmttag" class="btn btn-default default-hovered">TAG & Commentaire</button>
                         </div>
                       </div>    
+                      <?php $tags = Tag::where('entree','=', $entree['id'] )->orderBy('created_at','desc')->get(); ?>  
                       <div id="ajouttag" style="display:none;margin-top: 30px">
                         <input type="hidden" name="dossieridtag" id="dossieridtag" value="<?php echo $dosscourant; ?>">
+                        <?php if (count($tags) > 0) { ?>
+                           <div id="norrtags" class="form-group mar-20">
+                                <input id="cajout" type="radio" name="ajout_remplace" value="ajouttag" checked >
+                                <label for="cajout">Nouveau</label>
+
+                                <input id="cremplace" type="radio" name="ajout_remplace" value="remplacetag" style="margin-left: 30px">
+                                <label for="cremplace">Remplacer</label>
+                           </div>
+                        <?php } ?>
                            <div class="form-group mar-20">
                                 <label for="tagname" class="control-label" style="padding-right: 20px">TAG</label>
                                 <select id="tagname" name="tagname" class="form-control select2" style="width: 230px">
@@ -702,6 +712,17 @@ use App\Tag;
                                         <option value="PF">Patient form</option>
                                         <option value="CF">Consent form</option>
                                 </select>
+                                <select id="tagslist" name="tagslist" class="form-control select2" style="width: 230px;display:none">
+                                    
+                                     @foreach( $tags as $tag)
+                                        <option value={{$tag->id}}>{{$tag->titre}} | {{$tag->contenu}} | 
+                                        <?php if ((isset($tag->montant)) && (! empty($tag->montant))) { 
+                                                  if ($tag->montant !== null){
+                                              ?> {{$tag->montant}} {{$tag->devise}}
+                                        <?php }} ?>
+                                        </option>
+                                     @endforeach
+                                </select>
                             </div>
                             <div id="champstags" class="form-group mar-20"></div>
                             <input id="contenutag" name="contenutag" class="form-control resize_vertical" placeholder="Entrer la description de TAG" data-bv-field="message" style="width: 280px"></input></br>
@@ -727,7 +748,7 @@ use App\Tag;
                           <label for="accordiontags" class="control-label" >TAGs</label>
                           <div class="accordion panel-group" id="accordiontags">
   
-     <?php $tags = Tag::where('entree','=', $entree['id'] )->orderBy('created_at','desc')->get();   ?> 
+    
                  
 <table   bordercolor="#FD9883" class="table table-striped" id="tabletags" style="width:20%;margin-top:15px;">
                             <thead  style=" background-color: #FD9883;">
@@ -742,6 +763,7 @@ use App\Tag;
                             <tbody>
 
  @foreach( $tags as $tag)
+<?php if ((isset($tag->dernier)) && ($tag->dernier == 1)) {                  ?>
                                   <tr>
                                 <td style="">{{$tag->titre}}  </td>
 
@@ -756,6 +778,7 @@ use App\Tag;
    <?php }?>
 
                              </tr>
+ <?php }?>                         
  @endforeach
                             </tbody>
                     </table>
@@ -1151,6 +1174,81 @@ document.getElementById('commentuser').value=comment;}
 }); 
                 }); 
 $("#tagname").select2();
+$("#tagslist").select2();
+$('input[type=radio][name=ajout_remplace]').change(function() {
+    if (this.value == 'ajouttag') {
+        $("#tagname").next(".select2-container").show();
+        if($('#tagname option:selected').val().match(/^(Franchise|Plafond|GOPmed|PlafondRem|GOPtn)$/))
+        { //posséde champs montant
+          if ($('#champstags').html() === "")
+          {
+            
+            $('#champstags').html("<div class='row'><div class='col-md-7' style='padding-left: 0px;'><input type='text' id='montanttag'  name='montanttag' class='form-control' style='width: 150px' placeholder='Entrer le montant' required></div><div class='col-md-3'><select name='devise'><option value='TND'>TND</option><option value='USD'>USD</option><option value='EUR'>EUR</option></select></div></div>");
+            // verifier valeur montant si entier
+            $('#montanttag').keyup(function() {
+                var val = $(this).val(), error ="";
+                $('#lblIntegerError').remove();
+                $('#btn-addtag').removeAttr('disabled');
+                if (isNaN(val)) {
+                  error = "le montant doit être numérique";
+                  $('#btn-addtag').prop("disabled",true);
+                }
+                else if (parseInt(val,10) != val || val<= 0) {
+                  error = "le montant doit être supérieure à zero";
+                  $('#btn-addtag').prop("disabled",true);
+                }
+                else {return true;  }
+                $('#montanttag').after('<label style="color:red"  id="lblIntegerError"><br/>'+error+'</label>');
+                return false;
+            });
+          }
+        }
+      else
+        {
+          if ($('#champstags').html() !== "")
+          {
+            $('#champstags').html("");
+          }
+        }
+        $("#tagslist").next(".select2-container").hide();
+    }
+    else if (this.value == 'remplacetag') {
+        $("#tagname").next(".select2-container").hide();
+        var tname = $('select[name=tagslist] option:selected').text();
+
+        if ((tname.indexOf("GOP") != -1) || (tname.indexOf("Plafond") != -1) || (tname.indexOf("Franchise") != -1))
+                { //posséde champs montant
+                  if ($('#champstags').html() === "")
+                  {
+                    
+                    $('#champstags').html("<div class='row'><div class='col-md-7' style='padding-left: 0px;'><input type='text' id='montanttag'  name='montanttag' class='form-control' style='width: 150px' placeholder='Entrer le montant' required></div><div class='col-md-3'><select name='devise'><option value='TND'>TND</option><option value='USD'>USD</option><option value='EUR'>EUR</option></select></div></div>");
+                }}else
+                {
+                  if ($('#champstags').html() !== "")
+                  {
+                    $('#champstags').html("");
+                  }
+                }
+        $("#tagslist").next(".select2-container").show();
+    }
+});
+$('#tagslist').change(function(e){
+var tname = $('select[name=tagslist] option:selected').text();
+
+if ((tname.indexOf("GOP") != -1) || (tname.indexOf("Plafond") != -1) || (tname.indexOf("Franchise") != -1))
+        { //posséde champs montant
+          if ($('#champstags').html() === "")
+          {
+            
+            $('#champstags').html("<div class='row'><div class='col-md-7' style='padding-left: 0px;'><input type='text' id='montanttag'  name='montanttag' class='form-control' style='width: 150px' placeholder='Entrer le montant' required></div><div class='col-md-3'><select name='devise'><option value='TND'>TND</option><option value='USD'>USD</option><option value='EUR'>EUR</option></select></div></div>");
+        }}else
+        {
+          if ($('#champstags').html() !== "")
+          {
+            $('#champstags').html("");
+          }
+        }
+});
 $('#tagname').change(function(e){
 
   if ($('#tagname option:selected').val() != null)
@@ -1211,7 +1309,7 @@ var entree = $('ul#mailpiece').find('li.active').data('identreeattach');
     //alert(entree);
 var type = $('ul#mailpiece').find('li.active').data('type');
    // alert(type);
-      
+
       var dossier = $('input[name="dossieridtag"]').val();
       var tag = $('select[name=tagname]').val();
       var tagtxt = $('select[name=tagname] option:selected').text();
@@ -1221,6 +1319,28 @@ var type = $('ul#mailpiece').find('li.active').data('type');
       var montant= null;
       var devise = null;
       var limontant='';
+      var tparent = null;
+      var tremplace = false;
+      <?php if (\Request::is('entrees/show/*')) { 
+            if (count($tags) > 0) { ?>
+            var remplaceouajout = $('input[type=radio][name=ajout_remplace]:checked').val();    
+            //alert(remplaceouajout);  
+            // CAS REMPLACE: recuperer parent et titre du TAG
+            if (remplaceouajout=="remplacetag")
+            {
+              var tagparent = $('select[name=tagslist]').val();
+              tremplace = true;
+              tparent = tagparent;
+              //alert(tagparent);
+
+              var prttitre = $('select[name=tagslist] option:selected').text();
+              var titretag = prttitre.substring(0, prttitre.indexOf(" | "));
+              tag =String(titretag);
+              
+              //alert(titretag);
+            }
+
+      <?php }} ?>
 if (document.getElementById("montanttag")!=null)
       {
         montant = $('input[name="montanttag"]').val();
@@ -1232,10 +1352,11 @@ if (document.getElementById("montanttag")!=null)
             if (entree != '')
             {
 
+
                 $.ajax({
                     url:urladdtag,
                     method:"POST",
-                    data:{entree:entree,type:type,dossier:dossier,titre:tag,contenu:tagcontent,montant:montant,devise:devise, _token:_token},
+                      data:{entree:entree,type:type,dossier:dossier,titre:tag,contenu:tagcontent,montant:montant,devise:devise,parent:tparent, _token:_token},
                     success:function(data){
                       if (data.indexOf("par: ") >= 0)
                       {
@@ -1359,7 +1480,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 <script>
 
 $(document).ready(function() {
-
+  $("#tagslist").next(".select2-container").hide();
   $('.workflowkbs').on('click', function() {
 
 

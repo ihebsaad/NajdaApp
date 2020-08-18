@@ -623,7 +623,7 @@ $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_
                 $arr_gopmed = array();
                 foreach ($entreesdos as $entr) {
                     //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-                    $coltags = Tag::where("entree","=",$entr['id'])->get();
+                    $coltags = Tag::where(["entree" => $entr['id'], "dernier" => 1])->get();
                     if (!empty($coltags))
                     {
 
@@ -684,7 +684,7 @@ $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_
                     $arr_gopmed = array();
                     foreach ($entreesdos as $entr) {
                         //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-                        $coltags = Tag::where("entree","=",$entr['id'])->get();
+                        $coltags = Tag::where(["entree" => $entr['id'], "dernier" => 1])->get();
                         if (!empty($coltags))
                         {
 
@@ -734,7 +734,7 @@ $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_
                     $arr_gopmtn = array();
                     foreach ($entreesdos as $entr) {
                         //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-                        $coltags = Tag::where("entree","=",$entr['id'])->get();
+                        $coltags = Tag::where(["entree" => $entr['id'], "dernier" => 1])->get();
                         if (!empty($coltags))
                         {
 
@@ -794,7 +794,7 @@ $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_
                 $arr_gopmtn = array();
                 foreach ($entreesdos as $entr) {
                     //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
-                    $coltags = Tag::where("entree","=",$entr['id'])->get();
+                    $coltags = Tag::where(["entree" => $entr['id'], "dernier" => 1])->get();
                     if (!empty($coltags))
                     {
 
