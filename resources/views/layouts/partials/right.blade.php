@@ -671,7 +671,7 @@ use App\Tag;
                           <button id="btn-cmttag" class="btn btn-default default-hovered">TAG & Commentaire</button>
                         </div>
                       </div>    
-                      <?php $tags = Tag::where('entree','=', $entree['id'] )->orderBy('created_at','desc')->get(); ?>  
+                      <?php $tags = Tag::where(['entree' => $entree['id'], 'dernier' => 1 ])->orderBy('created_at','desc')->get(); ?>  
                       <div id="ajouttag" style="display:none;margin-top: 30px">
                         <input type="hidden" name="dossieridtag" id="dossieridtag" value="<?php echo $dosscourant; ?>">
                         <?php if (count($tags) > 0) { ?>
@@ -763,7 +763,6 @@ use App\Tag;
                             <tbody>
 
  @foreach( $tags as $tag)
-<?php if ((isset($tag->dernier)) && ($tag->dernier == 1)) {                  ?>
                                   <tr>
                                 <td style="">{{$tag->titre}}  </td>
 
@@ -778,7 +777,6 @@ use App\Tag;
    <?php }?>
 
                              </tr>
- <?php }?>                         
  @endforeach
                             </tbody>
                     </table>
@@ -1371,18 +1369,17 @@ if (document.getElementById("montanttag")!=null)
                         $("#addedsuccess").fadeIn(1500);
                         $("#addedsuccess").fadeOut(1500);
 
-
+                        // recharger la page
+                        location.reload();
                         // ajouter la nouvelle tag dans la section cmttags
                         
 
-                        $('input#contenutag').val('');
-                        //document.getElementById('tagname').selectedIndex = -1;
-                        //$("#tagname").select2("val", "");
+                        /*$('input#contenutag').val('');
                         $('#tagname').val(null).trigger('change');
                         if (document.getElementById("montanttag")!=null)
                         {
                           $('#champstags').html("");
-                        }
+                        }*/
                     
                     }
                     ,
