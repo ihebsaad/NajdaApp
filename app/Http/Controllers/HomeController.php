@@ -720,10 +720,10 @@ return redirect('roles');
     }
 
 
-    public function transport2()
+    public function transporth()
     {
 
-        return view('transport2' );
+        return view('transporth' );
 
     }
     public function transportsemaine()

@@ -3598,28 +3598,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
    }
 
-   public static function users_work_on_folder( $iddoss)
-   {
-
-    $usersFolder=AffectDossHis::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
-         //dd($hisaffec);
-
-     
-      if($usersFolder->count()>0)
-      {
-        $usersFolder=array_unique($usersFolder);
-
-        dd($usersFolder);
-      }
-      
-        dd('pas des utilisateurs pour ce dossier');
-      
-
-   }
-
-
-   
-   
+ 
    
    
    public  function details ($id)
@@ -3642,9 +3621,13 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
    {
 	$usersFolder = array();
 	
-    $usersFolder=\App\AffectDossHis::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
+    $usersFolderh=\App\AffectDossHis::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
+    $usersFolders=\App\AffectDoss::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
          //dd($hisaffec);
 	//$countU=count($usersFolder);
+	  $usersFolder = array_merge($usersFolderh,$usersFolders);
+
+			
      $usersFolder=array_unique($usersFolder);
      $usersFolder=array_values($usersFolder);
  

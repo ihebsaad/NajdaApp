@@ -27,7 +27,7 @@ $seance =  DB::table('seance')
             </div>
 		<?php } ?>	
 			<div class="col-sm-2">
-            <a href="{{ route('transport') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
+            <a href="{{ route('transporth') }}" class="btn btn-default btn-md btn-responsive menu-item" role="button">
                 <span class="fas fa-lg  fa-calendar-alt"></span>
                 <br>
                 Missions Transport

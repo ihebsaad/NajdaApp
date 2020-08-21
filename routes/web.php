@@ -27,7 +27,7 @@ Route::get('/missions', 'HomeController@missions')->name('missions');
 Route::get('/Calendriermissions7', 'HomeController@Calendriermissions7')->name('Calendriermissions7');
 Route::get('/notifs', 'HomeController@notifs')->name('notifs');
 Route::get('/transport', 'HomeController@transport')->name('transport');
-Route::get('/transport2', 'HomeController@transport2')->name('transport2');
+Route::get('/transporth', 'HomeController@transporth')->name('transporth');
 Route::get('/transporttous', 'HomeController@transporttous')->name('transporttous');
 Route::get('/transportsemaine', 'HomeController@transportsemaine')->name('transportsemaine');
 Route::post('/parametring', 'HomeController@parametring')->name('home.parametring');

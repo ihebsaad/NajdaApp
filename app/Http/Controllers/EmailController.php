@@ -4408,8 +4408,8 @@ $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
-     //   $aMessage = $oFolder->messages()->all()->get();
-       $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
+       $aMessage = $oFolder->messages()->all()->get();
+     //  $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
 
             /** @var \Webklex\IMAP\Message $oMessage */
         foreach ($aMessage as $oMessage) {
@@ -5843,6 +5843,8 @@ $id=0;
 
             }
             }
+			
+			 
        // ajout de l'adresse de Mr Nejib en cci
         array_push($ccimails,'medic.multiservices@topnet.tn' );
 
@@ -6023,7 +6025,7 @@ if ($from=='najdassist@gmail.com')
                    $tos.= app('App\Http\Controllers\PrestatairesController')->NomByEmail( $to[0]) .' ('.$to[0].'); ';
 
                }
-
+	 
                 $user = auth()->user();
                 $nomuser=$user->name.' '.$user->lastname;
 
@@ -6031,22 +6033,7 @@ if ($from=='najdassist@gmail.com')
 
                 $count=0;
 
-                $ccsadd='';
-
-                if (isset($cc)) {
-                    foreach ($cc as $ccadress) {
-                        $ccsadd .= $ccadress . '; ';
-                    }
-                }
-
-                $ccisadd='';
-                if (isset($cci)) {
-
-                    foreach ($cci as $cciadress) {
-                        $ccisadd .= $cciadress . '; ';
-                    }
-                }
-
+                
                 if(isset($files )) {
                 // if($tot)
              //   {
@@ -6160,20 +6147,22 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                'contenu'=> $contenu,
                'description'=> $description,
                'nb_attach'=> $count,
-               'cc'=> $ccsadd,
-             'cci'=> $ccisadd,
+               'cc'=> '',
+              'cci'=> '',
                'statut'=> 1,
                'type'=> 'email',
                'dossier'=> $dossier
  
            ));
-
+ 
           
      });
+	 
+	
   $param= App\Parametre::find(1);$env=$param->env;
 $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         $urlsending=$urlapp.'/envoyes';
-        if($envoyeid>0){
+         if($envoyeid>0){
 		  if ($from!='finances@najda-assistance.com'){
 		$this->export_pdf_send($envoyeid,$from,$fromname,$to,$contenu,$files,$attachs);
 		  }
@@ -6183,13 +6172,15 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
             Log::info('PB Attachement Envoi mail ');
 
         }
-
+ 
 		if($accuse==1){
 			Entree::where('id',$entree)->update(array( 'accuse'=>1));
 		}
 		 
 		
-		return redirect($urlsending.'/view/'.$envoyeid)->with('success', '  Envoyé ! ');
+	 	return redirect($urlsending.'/view/'.$envoyeid)->with('success', '  Envoyé ! '); 
+		 
+		//return redirect($urlsending  )->with('success', '  Envoyé ! ');
 	
 		 
 
