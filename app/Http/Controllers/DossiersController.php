@@ -35,6 +35,7 @@ use App\OMAmbulance;
 use App\OMRemorquage;
 use App\OMMedicInternational;
 use App\Attachement;
+use App\Tag;
 
 use WordTemplate;
 use Mail;
@@ -1578,9 +1579,11 @@ class DossiersController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
         //  $entrees =   Entree::all();
-        $documents = Document::where(['dossier' => $id,'dernier' => 1])->orderBy('created_at','desc')->get();
-$ommi = OMMedicInternational::where(['dossier' => $id,'dernier' => 1])->orderBy('created_at','desc')->get();
-
+        $documents = Document::where(['dossier' => $id,'dernier' => 1])->get();
+        $omtaxis = OMTaxi::where(['dossier' => $id,'dernier' => 1])->get();
+        $omambs = OMAmbulance::where(['dossier' => $id,'dernier' => 1])->get();
+        $omrem = OMRemorquage::where(['dossier' => $id,'dernier' => 1])->get();
+        $ommi = OMMedicInternational::where(['dossier' => $id,'dernier' => 1])->get();
         $dossiers = $this->ListeDossiersAffecte();
 
         $evaluations=DB::table('evaluations')->get();
@@ -1599,13 +1602,13 @@ $ommi = OMMedicInternational::where(['dossier' => $id,'dernier' => 1])->orderBy(
             ->whereIn('id', $specialitesIds)
             ->get();
 */
+         $tagdossier = $this->DossierTags($id,$ref);
          $specialites =DB::table('specialites')
              ->orderBy('nom', 'asc')
-
              ->get();
 
 
-        return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents,  'ommi'=>$ommi], compact('dossier'));
+        return view('dossiers.view',['phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis, 'omambs'=>$omambs, 'omrem'=>$omrem,'ommi'=>$ommi,'ftags'=>$tagdossier], compact('dossier'));
 
 
 
@@ -2406,7 +2409,6 @@ $ommi = OMMedicInternational::where(['dossier' => $id,'dernier' => 1])->orderBy(
                 ->where('type_prest',$typeprest )
                 ->where('specialite',$specialite )
                 ->where('ville',$ville )
-                ->where('effectue',1 )
                 ->orderBy('priorite','asc')
                 ->orderBy('derniere_prestation','asc')
                 ->get();
@@ -2529,18 +2531,19 @@ $ommi = OMMedicInternational::where(['dossier' => $id,'dernier' => 1])->orderBy(
             ->orderBy('created_at', 'desc')
             ->get();
         //  $entrees =   Entree::all();
-        $documents = Document::where(['dossier' => $id,'dernier' => 1])->orderBy('created_at','desc')->get();
-     
-
-   $ommi= OMMedicInternational::where (['dossier' => $id,'dernier' => 1])->orderBy('created_at','desc')->get();
+        $documents = Document::where(['dossier' => $id,'dernier' => 1])->get();
+        $omtaxis = OMTaxi::where(['dossier' => $id,'dernier' => 1])->get();
+        $omambs = OMAmbulance::where(['dossier' => $id,'dernier' => 1])->get();
+        $omrem = OMRemorquage::where(['dossier' => $id,'dernier' => 1])->get();
+        $ommi= OMMedicInternational::where (['dossier' => $id,'dernier' => 1])->get();
         $dossiers = $this->ListeDossiersAffecte();
 
         $evaluations=DB::table('evaluations')->get();
 
 return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'phonesCl'=>$phonesCl,'phonesDossier'=>$phonesDossier,'evaluations'=>$evaluations,'intervenants'=>$intervenants,'prestataires'=>$prestataires,'gouvernorats'=>$gouvernorats,'specialites'=>$specialites,'client'=>$cl,
 'entite'=>$entite,'adresse'=>$adresse,   'emailads'=>$emailads,'dossiers'=>$dossiers,'entrees1'=>$entrees1,'envoyes1'=>$envoyes1,'communins'=>$communins,'typesprestations'=>$typesprestations,
-'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents,  
-'ommi'=>$ommi], compact('dossier'));
+'attachements'=>$attachements,'entrees'=>$entrees,'prestations'=>$prestations,'typesMissions'=>$typesMissions,'Missions'=>$Missions,'envoyes'=>$envoyes,'documents'=>$documents, 'omtaxis'=>$omtaxis, 'omambs'=>$omambs, 
+'omrem'=>$omrem,'ommi'=>$ommi], compact('dossier'));
 
 
     }
@@ -2883,7 +2886,7 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
            }
 
-           if($Miss->statut_courant=="active" || $Miss->statut_courant=="deleguee" || $Miss->statut_courant=="delendormie")
+           if($Miss->statut_courant=="active" || $Miss->statut_courant=="deleguee")
            {
              $dossiersactifsparmissions[]=$Miss->dossier_id;
 
@@ -2897,7 +2900,48 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
         return($dossiersactifs);
 
-  
+      /*$dossiersdb= Dossier::where('current_status','actif')->pluck('id');
+
+
+        $dossiersactifs = array_merge($dossiersactifsparmissions,$dossiersdb->toArray());
+      $dossiersactifs =array_unique ($dossiersactifs);
+
+          return ($dossiersactifs);*/
+/* rendre les anciens dosiiers actifs inactif*/
+
+         /* $dossiersdb= Dossier::get(['id','current_status']);
+          $dossiersactifs =array_unique($dossiersactifsparmissions);
+          //dd($dossiersactifs);
+          foreach ($dossiersdb as $value) {
+
+            if(in_array($value->id, $dossiersactifs))
+            {
+                echo "je_suis_actif   ";
+            }
+            else
+            {
+                if($value->current_status=='actif' || $value->current_status=='En cours' )
+                {
+                    Dossier::where('id',$value->id)->update(['current_status'=>'inactif']);
+                    echo "maj_inactif   ";
+                }
+                else
+                {
+                    //echo $value->current_status.' ';
+                }
+            }
+          }*/
+
+/* rendre les anciens dosiiers actifs inactif*/
+
+          /*foreach ($dossiersactifs as $key => $value) {
+              echo  $key;
+          }*/
+         //dd('ok');
+         // return ($dossiersactifs);
+
+       // return array_unique($dossiersactifsparmissions);
+
 
 
     }
@@ -2953,123 +2997,6 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
           $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
 
           $dossiersactifsparmissions=$this->DossiersActifs();
-          $dossiersactifs =array_unique($dossiersactifsparmissions);
-          //dd($dossiersactifs);
-          foreach ($dossiersdb as $value) {
-
-            if(in_array($value->id, $dossiersactifs))
-            {
-                //echo "je_suis_actif   ";
-
-                Dossier::where('id',$value->id)->update(['current_status'=>'actif', 'sub_status'=>null]);
-
-
-            }
-            else
-            {
-                if($value->current_status=='actif' || $value->current_status=='En cours' )
-                {
-                    Dossier::where('id',$value->id)->update(['current_status'=>'inactif','sub_status'=>null]);
-                   // echo "maj_inactif   ";
-                }
-                else
-                {
-                    //echo $value->current_status.' ';
-                }
-            }
-          }
-
-/* rendre les anciens dosiiers actifs inactif*/
-
-
-    }
-     function RendreEtatDossiersActifsSeance1()
-    {
-
-
-        /* rendre les anciens dosiiers actifs inactif*/
-
-          $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
-
-          $dossiersactifsparmissions=$this->DossiersActifsSeance1();
-          $dossiersactifs =array_unique($dossiersactifsparmissions);
-          //dd($dossiersactifs);
-          foreach ($dossiersdb as $value) {
-
-            if(in_array($value->id, $dossiersactifs))
-            {
-                //echo "je_suis_actif   ";
-
-                Dossier::where('id',$value->id)->update(['current_status'=>'actif', 'sub_status'=>null]);
-
-
-            }
-            else
-            {
-                if($value->current_status=='actif' || $value->current_status=='En cours' )
-                {
-                    Dossier::where('id',$value->id)->update(['current_status'=>'inactif','sub_status'=>null]);
-                   // echo "maj_inactif   ";
-                }
-                else
-                {
-                    //echo $value->current_status.' ';
-                }
-            }
-          }
-
-/* rendre les anciens dosiiers actifs inactif*/
-
-
-    }
-     function RendreEtatDossiersActifsSeance2()
-    {
-
-
-        /* rendre les anciens dosiiers actifs inactif*/
-
-          $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
-
-          $dossiersactifsparmissions=$this->DossiersActifsSeance2();
-          $dossiersactifs =array_unique($dossiersactifsparmissions);
-          //dd($dossiersactifs);
-          foreach ($dossiersdb as $value) {
-
-            if(in_array($value->id, $dossiersactifs))
-            {
-                //echo "je_suis_actif   ";
-
-                Dossier::where('id',$value->id)->update(['current_status'=>'actif', 'sub_status'=>null]);
-
-
-            }
-            else
-            {
-                if($value->current_status=='actif' || $value->current_status=='En cours' )
-                {
-                    Dossier::where('id',$value->id)->update(['current_status'=>'inactif','sub_status'=>null]);
-                   // echo "maj_inactif   ";
-                }
-                else
-                {
-                    //echo $value->current_status.' ';
-                }
-            }
-          }
-
-/* rendre les anciens dosiiers actifs inactif*/
-
-
-    }
-     function RendreEtatDossiersActifsSeance3()
-    {
-
-
-        /* rendre les anciens dosiiers actifs inactif*/
-
-          $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
-
-          $dossiersactifsparmissions=$this->DossiersActifsSeance3();
           $dossiersactifs =array_unique($dossiersactifsparmissions);
           //dd($dossiersactifs);
           foreach ($dossiersdb as $value) {
@@ -3175,30 +3102,6 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
     {
 
         $this->RendreEtatDossiersActifs();
-        $this->RendreEtatDossiersDormants();
-        $this->RendreEtatDossiersImmobiles();
-
-    }
-     function Gerer_etat_dossiersSeance1 ()
-    {
-
-        $this->RendreEtatDossiersActifsSeance1();
-        $this->RendreEtatDossiersDormants();
-        $this->RendreEtatDossiersImmobiles();
-
-    }
-     function Gerer_etat_dossiersSeance2 ()
-    {
-
-        $this->RendreEtatDossiersActifsSeance2();
-        $this->RendreEtatDossiersDormants();
-        $this->RendreEtatDossiersImmobiles();
-
-    }
-     function Gerer_etat_dossiersSeance3 ()
-    {
-
-        $this->RendreEtatDossiersActifsSeance3();
         $this->RendreEtatDossiersDormants();
         $this->RendreEtatDossiersImmobiles();
 
@@ -3598,166 +3501,56 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
    }
 
- 
-   
-   
-   public  function details ($id)
-   {
-	   
-	 return view('dossiers.details', ['id' => $id]);
+      public static function DossierTags($id,$ref)
+    {
+        if (($id != null) || ($ref != null))
+        {       
+                if (($id != null) && ($ref != null))
+                $entreesdossier = Entree::where(["dossier" => $ref, "dossierid" => $id])->get();
+                if ($id == null)
+                $entreesdossier = Entree::where("dossier",$ref)->get();
+                if ($ref == null)
+                $entreesdossier = Entree::where("dossierid",$id)->get();
 
-   }
-   
-     public  function fermeture ($id)
-   {
-	   
-	 return view('dossiers.fermeture', ['id' => $id]);
+            $listetags = array();
 
-   } 
-    
-   // Liste des utilisateurs qui ont travaillé sur un dossier
-   
-   public static function users_work_on_folder( $iddoss)
-   {
-	$usersFolder = array();
-	
-    $usersFolderh=\App\AffectDossHis::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
-    $usersFolders=\App\AffectDoss::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
-         //dd($hisaffec);
-	//$countU=count($usersFolder);
-	  $usersFolder = array_merge($usersFolderh,$usersFolders);
+            foreach ($entreesdossier as $entr) {
+                //$coltags = app('App\Http\Controllers\TagsController')->entreetags($entr['id']);
+                $coltags = Tag::get()->where('entree', '=', $entr['id'] )->where('type', '=', 'email');
 
-			
-     $usersFolder=array_unique($usersFolder);
-     $usersFolder=array_values($usersFolder);
- 
-	return $usersFolder ;
-   }
+                if (!empty($coltags))
+                {
 
-   
-   
-   
-   // nombre de factures
-      public  static function countFactures ($id)
-	  {
-		 $count= \App\Facture::where('iddossier',$id)->count();
-		  return $count;
-	  }
+                    foreach ($coltags as $ltag) {
+                        array_push($listetags, $ltag);
+                    }
+                }
 
-   // nombre de prestations
-       public  static function countPrestations ($id)
-	  {
-		 $count= \App\Prestation::where('dossier_id',$id)->count();
-		  return $count;
-	  }
-   // nombre des emails recus
-        public  static function countEmailsDoss ($id)
-	  {
-		 $count= \App\Entree::where('dossierid',$id)->where('type','email')->count();
-		  return $count;
-	  }
-   
-   // nombre de Fax reçus
-           public  static function countFaxs ($id)
-	  {
-		 $count= \App\Entree::where('dossierid',$id)->where('type','fax')->count();
-		  return $count;
-	  }
-   // nombre des sms reçus
-           public  static function countSms ($id)
-	  {
-		 $count= \App\Entree::where('dossierid',$id)->where('type','sms')->count();
-		  return $count;
-	  }
-   // nombre des emails envoyés
-           public  static function countEmailsSent ($id)
-	  {
-		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;
-		 $count= \App\Envoye::where('dossier',$ref)->where('type','email')->count();
-		  return $count;
-	  }
-   // nombre des emails envoyés par un agent
-       public  static function countEmailsSentUser ($id,$user)
-	  { 
-	  		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;
-		 $count= \App\Envoye::where('dossier',$ref)->where('type','email')->where('par',$user)->count();
-		  return $count;
-	  }
-   // nombre des fax envoyés
-          public  static function countFaxsSent ($id)
-	  {
-	  		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;		  
-		 $count= \App\Envoye::where('dossier',$ref)->where('type','fax')->count();
-		  return $count;
-	  }
-   // nombre des fax envoyés par un agent
-      public  static function countFaxsSentUser ($id,$user)
-	  {
-	  		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;		  
-		 $count= \App\Envoye::where('dossier',$ref)->where('type','fax')->where('par',$user)->count();
-		  return $count;
-	  }
-   // nombre des sms envoyés
-         public  static function countSmsSent ($id)
-	  {
-	  		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;	  
-		 $count= \App\Envoye::where('dossier',$ref)->where('type','sms')->count();
-		  return $count;
-	  }
-   // nombre des sms envoyés par un agent
-      public static  function countSmsSentUser ($id,$user)
-	  {
-	  	  $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;		  
-		 $count= \App\Envoye::where('dossier',$ref)->where('type','sms')->where('par',$user)->count();
-		  return $count;
-	  }
-   
-        // nombre des  comptes rendus
-      public static  function countRendus  ($id)
-	  {
- 		 $count= \App\Entree::where('dossierid',$id)->where('type','tel')->count();
-		  return $count;
-	  } 
-	  
-     // nombre des compte rendu   par un agent
-      public static  function countRendusUser ($id,$user)
-	  {
- 		 $count= \App\Entree::where('dossierid',$id)->where('type','tel')->where('par',$user)->count();
-		  return $count;
-	  } 
-   
-        // nombre des missions en cours
-      public static  function countMissions  ($id)
-	  {
- 		 $count= \App\Mission::where('dossier_id',$id)->count();
-		  return $count;
-	  } 
-	  
-	  // nombre des missions
-      public static  function countMissionsT  ($id)
-	  {
- 		 $count= \App\MissionHis::where('dossier_id',$id)->count();
-		  return $count;
-	  } 
-	  
-   
-        // nombre des missions  encours  par un agent
-      public static  function countMissionsUser ($id,$user)
-	  {
- 		 $count= \App\Mission::where('dossier_id',$id)->where('user_id',$user)->count();
-		  return $count;
-	  } 
-   
-   
-           // nombre des missions  terminées  par un agent
-      public static  function countMissionsUserT ($id,$user)
-	  {
- 		 $count= \App\MissionHis::where('dossier_id',$id)->where('user_id',$user)->count();
-		  return $count;
-	  } 
+              // recuperation liste des attachements de l'entree
+                $colattachs = Attachement::where("parent","=",$entr['id'])->get();
+                if (!empty($colattachs))
+                {
+                    foreach ($colattachs as $lattach) {
+                        $coltagsattach = Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe');
 
+                        if (!empty($coltagsattach))
+                        {
 
-    public static function DossiersActifsSeance1( )
+                            foreach ($coltagsattach as $ltagatt) {
+                                array_push($listetags, $ltagatt);
+                            }
+                        }
+
+                    }
+                }
+            }
+                
+        }
+
+        return $listetags;
+    }
+
+ public static function DossiersActifsSeance1( )
     {
 
         $deb_seance_1=(new \DateTime())->format('Y-m-d 08:00:00');
@@ -4585,7 +4378,6 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
        // Parametre::where('id',1)->update(array('date_seances' => $val));
         return Parametre::first()->date_seance3;
     }
-
 
 }
 
