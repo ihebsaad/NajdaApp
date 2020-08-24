@@ -9,6 +9,7 @@ use App\ClientGroupe;
 use App\Adresse;
 use App\Mission;
 use App\Facture;
+use App\Tag;
 
 ?>
 <?php use \App\Http\Controllers\PrestationsController;
@@ -18,6 +19,7 @@ use  \App\Http\Controllers\DossiersController ;
 use  \App\Http\Controllers\EnvoyesController ;
 use  \App\Http\Controllers\EntreesController ;
 use \App\Http\Controllers\UsersController;
+use \App\Http\Controllers\TagsController;
 
 
 function formatBytes($size){
@@ -272,7 +274,11 @@ function custom_echo($x, $length)
                                 <i class="fas  fa-lg fa-file-archive"></i>  Attachements
                             </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tabtags" data-toggle="tab">
+                                <i class="fas fa-tags"></i>  TAG
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#tab6" data-toggle="tab">
                                 <i class="fas fa-lg fa-file-word"></i>  Docs
@@ -1042,6 +1048,35 @@ array_push($listepr,$pr['prestataire_id']);
                     </table>
 
                 </div>
+            <!-- Tab TAGs -->    
+            <div id="tabtags" class="tab-pane fade">
+                <table class="table table-striped" id="tabletags" style="width:100%;margin-top:15px;">
+                    <thead>
+                    <tr id="headtable" style="font-size:13px;">
+                        <th style="">Type</th>
+                        <th style="">Description</th>
+                        <th style="">Montant</th>
+                        <th style="">Reste</th>
+                        <th style="">Historique</th>
+                        <th style="">Source</th>
+                     </tr>
+
+                    </thead>
+                    <tbody style="font-size:13px;">
+                    @foreach($ftags as $dtag)
+                        <tr>
+                            <td style=";"><?php echo $dtag->titre; ?> </td>
+                            <td style=";"><?php echo $dtag->contenu; ?> </td>
+                            <td style=";"><?php echo $dtag->montant; ?> <?php echo $dtag->devise; ?></td>
+                            <td style=";"><?php echo $dtag->mrestant; ?> <?php echo $dtag->devise; ?></td>
+                            <td style=";"> </td>
+                            <td style=";"> </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+
+            </div> 
             <div id="tab6" class="tab-pane fade">
                 <div style="">
                     <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="adddoc" class="btn btn-md btn-success"   data-toggle="modal" data-target="#generatedoc"><b><i class="fas fa-plus"></i> Générer un document</b></button>
