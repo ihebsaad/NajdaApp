@@ -387,6 +387,7 @@ Route::get('/prestataires/mails','PrestatairesController@mails')->name('prestata
 Route::post('/prestataires/saving','PrestatairesController@saving')->name('prestataires.saving');
 Route::post('/prestataires/saving2','PrestatairesController@saving2')->name('prestataires.saving2');
 Route::post('/prestataires/updating','PrestatairesController@updating')->name('prestataires.updating');
+Route::post('/prestataires/updaterating','PrestatairesController@updaterating')->name('prestataires.updaterating');
 Route::post('/prestataires/removetypeprest','PrestatairesController@removetypeprest')->name('prestataires.removetypeprest');
 Route::post('/prestataires/createtypeprest','PrestatairesController@createtypeprest')->name('prestataires.createtypeprest');
 Route::post('/prestataires/removecitieprest','PrestatairesController@removecitieprest')->name('prestataires.removecitieprest');
@@ -394,6 +395,7 @@ Route::post('/prestataires/createcitieprest','PrestatairesController@createcitie
 Route::post('/prestataires/removespec','PrestatairesController@removespec')->name('prestataires.removespec');
 Route::post('/prestataires/createspec','PrestatairesController@createspec')->name('prestataires.createspec');
 Route::get('/prestataires/view/{id}', 'PrestatairesController@view');
+Route::get('/ratings/view/{id}', 'PrestatairesController@view_rating');
 Route::post('/prestataires/addeval','PrestatairesController@addeval')->name('prestataires.addeval');
 Route::post('/prestataires/addemail','PrestatairesController@addemail')->name('prestataires.addemail');
 Route::post('/prestataires/addressadd','PrestatairesController@addressadd')->name('prestataires.addressadd');

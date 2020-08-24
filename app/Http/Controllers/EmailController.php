@@ -1084,8 +1084,8 @@ $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
-      //  $aMessage = $oFolder->messages()->all()->get();
-        $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
+         $aMessage = $oFolder->messages()->all()->get();
+      //   $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
 
         /** @var \Webklex\IMAP\Message $oMessage */
         foreach ($aMessage as $oMessage) {
@@ -1163,7 +1163,7 @@ $id=0;
                         $immatr = 'nonvehicule';
                     }
 
-                    $sujetPreg =  preg_replace('|[*#_-")\'.(:/,;?=]|', '',$sujet);
+                    $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
                     $sujetPreg =  strtoupper ( $sujetPreg);
                     //$sujetPreg = preg_replace('/[^A-Za-z0-9 ]/', '', $sujet);
 
@@ -1479,8 +1479,8 @@ $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
-      //  $aMessage = $oFolder->messages()->all()->get();
-        $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
+          $aMessage = $oFolder->messages()->all()->get();
+       //  $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
 
         /** @var \Webklex\IMAP\Message $oMessage */
         foreach ($aMessage as $oMessage) {
@@ -1553,7 +1553,7 @@ $id=0;
                        $immatr = 'nonvehicule';
                    }
 
-                    $sujetPreg =  preg_replace('|[*#_-")\'.(:/,;?=]|', '',$sujet);
+                    $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
                     $sujetPreg =  strtoupper ( $sujetPreg);
 
 
@@ -1852,8 +1852,8 @@ $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
-        //$aMessage = $oFolder->messages()->all()->get();
-        $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
+        $aMessage = $oFolder->messages()->all()->get();
+       // $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
 
         /** @var \Webklex\IMAP\Message $oMessage */
         foreach ($aMessage as $oMessage) {
@@ -1926,7 +1926,7 @@ $id=0;
                       $immatr = 'nonvehicule';
                   }
 
-                    $sujetPreg =  preg_replace('|[*#_-")\'.(:/,;?=]|', '',$sujet);
+                    $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
                    $sujetPreg =  strtoupper ( $sujetPreg);
 
 
@@ -2222,8 +2222,8 @@ $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
-       //  $aMessage = $oFolder->messages()->all()->get();
-        $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
+        $aMessage = $oFolder->messages()->all()->get();
+      //  $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
 
         /** @var \Webklex\IMAP\Message $oMessage */
         foreach ($aMessage as $oMessage) {
@@ -2279,7 +2279,7 @@ $id=0;
                       $immatr = 'nonvehicule';
                   }
 
-                    $sujetPreg =  preg_replace('|[*#_-")\'.(:/,;?=]|', '',$sujet);
+                    $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
                  $sujetPreg =  strtoupper ( $sujetPreg);
 
 
@@ -2572,8 +2572,8 @@ $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
-     //   $aMessage = $oFolder->messages()->all()->get();
-        $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
+         $aMessage = $oFolder->messages()->all()->get();
+      //  $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
 
         /** @var \Webklex\IMAP\Message $oMessage */
         foreach ($aMessage as $oMessage) {
@@ -2648,7 +2648,7 @@ $id=0;
                         $immatr = 'nonvehicule';
                     }
 
-                    $sujetPreg =  preg_replace('|[*#_-")\'.(:/,;?=]|', '',$sujet);
+                    $sujetPreg =  preg_replace('|[*#_")\'.(:/,;?=]|', '',$sujet);
                      $sujetPreg =  strtoupper ( $sujetPreg);
 
 
@@ -2938,8 +2938,8 @@ $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
-       // $aMessage = $oFolder->messages()->all()->get();
-        $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
+         $aMessage = $oFolder->messages()->all()->get();
+      //   $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
 
         /** @var \Webklex\IMAP\Message $oMessage */
         foreach ($aMessage as $oMessage) {
@@ -3303,8 +3303,8 @@ $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
-        //$aMessage = $oFolder->messages()->all()->get();
-        $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
+         $aMessage = $oFolder->messages()->all()->get();
+       // $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
 
         /** @var \Webklex\IMAP\Message $oMessage */
         foreach ($aMessage as $oMessage) {
@@ -3669,8 +3669,8 @@ $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
-      //  $aMessage = $oFolder->messages()->all()->get();
-        $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
+         $aMessage = $oFolder->messages()->all()->get();
+      //  $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
 
         /** @var \Webklex\IMAP\Message $oMessage */
         foreach ($aMessage as $oMessage) {
@@ -4042,8 +4042,8 @@ $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
-     //   $aMessage = $oFolder->messages()->all()->get();
-        $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
+        $aMessage = $oFolder->messages()->all()->get();
+      //  $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
 
         /** @var \Webklex\IMAP\Message $oMessage */
         foreach ($aMessage as $oMessage) {
@@ -4408,8 +4408,8 @@ $id=0;
         //Get all Messages of the current Mailbox $oFolder
         /** @var \Webklex\IMAP\Support\MessageCollection $aMessage */
         $oFolder = $oClient->getFolder('INBOX');
-       $aMessage = $oFolder->messages()->all()->get();
-     //  $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
+     //  $aMessage = $oFolder->messages()->all()->get();
+       $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-20 days')->format('Y-m-d\TH:i')  )->get();
 
             /** @var \Webklex\IMAP\Message $oMessage */
         foreach ($aMessage as $oMessage) {
@@ -4726,8 +4726,8 @@ $id=0;
         $id=0;
 
             $oFolder = $oClient->getFolder('INBOX');
-          //  $aMessage = $oFolder->messages()->all()->get();
-        $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
+            $aMessage = $oFolder->messages()->all()->get();
+       // $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
 
             foreach ($aMessage as $oMessage) {
 
@@ -4958,8 +4958,8 @@ $id=0;
         $id=0;
 
         $oFolder = $oClient->getFolder('INBOX');
-       // $aMessage = $oFolder->messages()->all()->get();
-        $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
+        $aMessage = $oFolder->messages()->all()->get();
+      //  $aMessage = $oFolder->query()->since(  (new \DateTime())->modify('-5 days')->format('Y-m-d\TH:i')  )->get();
 
 
         /** @var \Webklex\IMAP\Message $oMessage */

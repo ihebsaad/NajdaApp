@@ -658,9 +658,23 @@ $urlnotif=$urlapp.'/entrees/show/' ;
 
         }
 
+	checkNotifs();
+    checkdemandes();
+	// checkboite();
+		
+<?php
+$user = auth()->user();
+ $iduser=$user->id;
+$user_type=$user->user_type;
 
-        checkNotifs();
-          checkemails();	//test
+$seance =  DB::table('seance')
+    ->where('id','=', 1 )->first();
+	
+// vérifier si l'utilisateur actuel est un superviseur ou veilleur pour reduire les appels sur le serveur :
+  if( ($seance->superviseurmedic==$iduser)  || ($seance->superviseurtech==$iduser) || ($seance->veilleur==$iduser)  ) {  
+
+?>
+           checkemails();	//test
           checkfinances();	//Finances
      /*   checkemails1();  // 24ops
         checkemails2();  // VAT
@@ -672,8 +686,12 @@ $urlnotif=$urlapp.'/entrees/show/' ;
         checkemails8();   //TN
         checkemails9();  //XPRESS
         checksms();
-        checkboite();
-        checkfax();*/
-        checkdemandes();
+         checkfax();*/
+ 		
+<?php
+
+	}
+?>		
+		
     });
 </script>

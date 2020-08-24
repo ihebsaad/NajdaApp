@@ -35,26 +35,32 @@ $user = auth()->user();
         <div class="col-lg-12">
             <ul id="tabs" class="nav  nav-tabs"  data-tabs="tabs">
                 <li class=" nav-item active">
-                    <a class="nav-link active   " href="#tab01" data-toggle="tab" onclick="showinfos();hideinfos2();hideinfos3();hideinfos4();" >
+                    <a class="nav-link active   " href="#tab01" data-toggle="tab" onclick="showinfos();hideinfos2();hideinfos3();hideinfos4();hideinfos5();" >
                         <i class="fas fa-lg fa-user-md"></i>  Détails de l'intervenant
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#tab02" data-toggle="tab"  onclick=";showinfos2();hideinfos();hideinfos3();hideinfos4();;">
+                    <a class="nav-link" href="#tab02" data-toggle="tab"  onclick=";showinfos2();hideinfos();hideinfos3();hideinfos4();hideinfos5();">
                         <i class="fas fa-lg fa-ambulance"></i>  Prestations
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#tab03" data-toggle="tab"  onclick="showinfos3();hideinfos();hideinfos2();hideinfos4();">
+                    <a class="nav-link" href="#tab03" data-toggle="tab"  onclick="showinfos3();hideinfos();hideinfos2();hideinfos4();hideinfos5();">
                         <i class="fas fa-lg fa-sort-amount-down"></i>  Priorités
                     </a>
                 </li>
 
                      <li class="nav-item ">
-                            <a class="nav-link  " href="#tab04" data-toggle="tab"  onclick="showinfos4();hideinfos();hideinfos2();hideinfos3();">
+                            <a class="nav-link  " href="#tab04" data-toggle="tab"  onclick="showinfos4();hideinfos();hideinfos2();hideinfos3();hideinfos5();">
                                 <i class="fas a-lg fa-file-invoice"></i>  Factures
                             </a>
                         </li>
+						
+					  <li class="nav-item ">
+                            <a class="nav-link  " href="#tab05" data-toggle="tab"  onclick="showinfos5();hideinfos();hideinfos2();hideinfos3();hideinfos4();">
+                                <i class="fas a-lg fa-star"></i>  Evaluations
+                            </a>
+                        </li>	
             </ul>
 
         </div>
@@ -613,6 +619,61 @@ $user = auth()->user();
 				 
 			</div>
 
+			
+            <div id="tab05" class="tab-pane fade    " style="padding-top:30px">
+					
+			      <table class="table table-striped" id="mytable3" style="width:100%;margin-top:15px;">
+                        <thead>
+                        <tr id="headtable">
+                            <th style="width:10%;text-align:center">ID</th>
+                            <th style="width:10%;text-align:center">Prestation</th>
+                            <th style="width:20%;text-align:center">Prestataire</th>
+                            <th style="width:10%;text-align:center">Disponibilité</th>
+                            <th style="width:20%;text-align:center">Ponctualité</th>
+                            <th style="width:10%;text-align:center">Réactivité</th>
+                            <th style="width:10%;text-align:center">Retour</th>
+                           </tr>
+
+                        </thead>
+                        <tbody>
+                        <?php 
+						$ratings= \App\Rating::where('prestataire',$prestataire->id)->get() ;  ?>
+                        @foreach($ratings as $rating)
+						   <?php     ?>
+                            <tr  >
+                                <td style="width:10%;text-align:center">
+                                    <a href="{{action('PrestatairesController@view_rating', $rating->id)}}" ><?php echo sprintf("%05d",$rating->id);?></a>
+                                    </td>
+                                <td style="width:10%;text-align:center">
+                                    <a href="{{action('PrestationsController@view', $rating->prestation)}}" ><?php echo sprintf("%05d",$rating->prestation);?></a>
+                                 </td>
+                                <td style="width:10%;text-align:center">
+                                    <a href="{{action('PrestatairesController@view', $rating->prestataire)}}" ><?php echo PrestationsController::PrestataireById($rating->prestataire); ?></a>
+                                 </td>								 
+                                <td style="width:10%;text-align:center">
+                                    <?php if ($rating->disponibilite==1){  echo '<b class="text-success">OUI</b>' ;}else{echo '<b class="text-danger">NON</b>';} ?>
+                                    </td>
+									 <td style="width:20%;text-align:center">
+									  <?php echo $rating->ponctualite ; ?>
+									</td> 
+                                <td style="width:10%;text-align:center">
+                                    <?php if ($rating->reactivite==1){  echo '<b class="text-success">OUI</b>' ;}else{echo '<b class="text-danger">NON</b>';} ?>
+                                </td>
+                                   <td style="width:10%;text-align:center">
+                                    <?php if ($rating->retour==1){  echo '<b class="text-success">OUI</b>' ;}else{echo '<b class="text-danger">NON</b>';} ?>
+                                </td>           
+
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>			
+			
+			
+			
+			</div>
+			
+			
+			
             </div>
 
     </section>
@@ -1266,6 +1327,9 @@ $user = auth()->user();
 	  function hideinfos4() {
         $('#tab04').css('display','none');
     }
+	  function hideinfos5() {
+        $('#tab05').css('display','none');
+    }	
     function showinfos() {
         $('#tab01').css('display','block');
     }
@@ -1279,7 +1343,9 @@ $user = auth()->user();
 	  function showinfos4() {
         $('#tab04').css('display','block');
     }
-
+	  function showinfos5() {
+        $('#tab05').css('display','block');
+    }
 
 
     function activer(valeur) {
