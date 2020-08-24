@@ -759,13 +759,1880 @@ return redirect('roles');
 
     }
 
+      public function comparerDates($missdate , $date1 , $date2)
+      {
+
+
+
+      }
+
+
+
       public function Calendriermissions7 ()
       {
 
-        if(\Gate::allows('isAdmin') || \Gate::allows('isSupervisor')  ) {
+        if(\Gate::allows('isAdmin') || \Gate::allows('isSupervisor')) {
             $users = User::get();
+              
+            $dseance1='08:00:00';
+            $fseance1='15:00:00';
+            $dseance2='15:00:00';
+            $fseance2='23:00:00';
+            $dseance3='23:00:00';
+            $fseance3='08:00:00';
 
-            return view('calendriermissions7', ['users' => $users]);
+           $format = "Y-m-d H:i:s";
+
+           // day1
+           $deb_seance_1_jour1=(new \DateTime())->format('Y-m-d'.$dseance1);
+           $fin_seance_1_jour1=(new \DateTime())->format('Y-m-d'.$fseance1);             
+           $deb_seance_1_jour1 = \DateTime::createFromFormat($format, $deb_seance_1_jour1);
+           $fin_seance_1_jour1 = \DateTime::createFromFormat($format, $fin_seance_1_jour1);
+           $jour1_seance1=array();
+
+           $deb_seance_2_jour1=(new \DateTime())->format('Y-m-d'.$dseance2);
+           $fin_seance_2_jour1=(new \DateTime())->format('Y-m-d'.$fseance2);         
+           $deb_seance_2_jour1 = \DateTime::createFromFormat($format,  $deb_seance_2_jour1);
+           $fin_seance_2_jour1 = \DateTime::createFromFormat($format,  $fin_seance_2_jour1);
+           $jour1_seance2=array();
+
+          $deb_seance_3_jour1=(new \DateTime())->format('Y-m-d'.$dseance3);
+          $fin_seance_3_jour1=(new \DateTime())->modify('+1 day')->format('Y-m-d'.$fseance3);
+          $deb_seance_3_jour1 = \DateTime::createFromFormat($format, $deb_seance_3_jour1);
+          $fin_seance_3_jour1= \DateTime::createFromFormat($format, $fin_seance_3_jour1);
+          $jour1_seance3=array();
+
+            // day2
+           $deb_seance_1_jour2=(new \DateTime())->modify('+1 day')->format('Y-m-d'.$dseance1);
+           $fin_seance_1_jour2=(new \DateTime())->modify('+1 day')->format('Y-m-d'.$fseance1);             
+           $deb_seance_1_jour2 = \DateTime::createFromFormat($format,  $deb_seance_1_jour2);
+           $fin_seance_1_jour2 = \DateTime::createFromFormat($format, $fin_seance_1_jour2);
+           $jour2_seance1=array();
+
+           $deb_seance_2_jour2=(new \DateTime())->modify('+1 day')->format('Y-m-d'.$dseance2);
+           $fin_seance_2_jour2=(new \DateTime())->modify('+1 day')->format('Y-m-d'.$fseance2);         
+           $deb_seance_2_jour2 = \DateTime::createFromFormat($format,$deb_seance_2_jour2);
+           $fin_seance_2_jour2 = \DateTime::createFromFormat($format,  $fin_seance_2_jour2);
+           $jour2_seance2=array();
+
+          $deb_seance_3_jour2=(new \DateTime())->modify('+1 day')->format('Y-m-d'.$dseance3);
+          $fin_seance_3_jour2=(new \DateTime())->modify('+2 days')->format('Y-m-d'.$fseance3);
+          $deb_seance_3_jour2 = \DateTime::createFromFormat($format, $deb_seance_3_jour2);
+          $fin_seance_3_jour2 = \DateTime::createFromFormat($format, $fin_seance_3_jour2 );
+          $jour2_seance3=array();
+
+          // day3
+           $deb_seance_1_jour3=(new \DateTime())->modify('+2 days')->format('Y-m-d'.$dseance1);
+           $fin_seance_1_jour3=(new \DateTime())->modify('+2 days')->format('Y-m-d'.$fseance1);             
+           $deb_seance_1_jour3 = \DateTime::createFromFormat($format,  $deb_seance_1_jour3);
+           $fin_seance_1_jour3 = \DateTime::createFromFormat($format, $fin_seance_1_jour3);
+           $jour3_seance1=array();
+
+           $deb_seance_2_jour3=(new \DateTime())->modify('+2 days')->format('Y-m-d'.$dseance2);
+           $fin_seance_2_jour3=(new \DateTime())->modify('+2 days')->format('Y-m-d'.$fseance2);         
+           $deb_seance_2_jour3 = \DateTime::createFromFormat($format,$deb_seance_2_jour3);
+           $fin_seance_2_jour3 = \DateTime::createFromFormat($format,  $fin_seance_2_jour3);
+           $jour3_seance2=array();
+
+          $deb_seance_3_jour3=(new \DateTime())->modify('+2 days')->format('Y-m-d'.$dseance3);
+          $fin_seance_3_jour3=(new \DateTime())->modify('+3 days')->format('Y-m-d'.$fseance3);
+          $deb_seance_3_jour3 = \DateTime::createFromFormat($format, $deb_seance_3_jour3);
+          $fin_seance_3_jour3 = \DateTime::createFromFormat($format, $fin_seance_3_jour3);
+          $jour3_seance3=array();
+
+          // day4
+           $deb_seance_1_jour4=(new \DateTime())->modify('+3 days')->format('Y-m-d'.$dseance1);
+           $fin_seance_1_jour4=(new \DateTime())->modify('+3 days')->format('Y-m-d'.$fseance1);             
+           $deb_seance_1_jour4 = \DateTime::createFromFormat($format,  $deb_seance_1_jour4);
+           $fin_seance_1_jour4 = \DateTime::createFromFormat($format, $fin_seance_1_jour4);
+           $jour4_seance1=array();
+
+           $deb_seance_2_jour4=(new \DateTime())->modify('+3 days')->format('Y-m-d'.$dseance2);
+           $fin_seance_2_jour4=(new \DateTime())->modify('+3 days')->format('Y-m-d'.$fseance2);         
+           $deb_seance_2_jour4 = \DateTime::createFromFormat($format,$deb_seance_2_jour4);
+           $fin_seance_2_jour4 = \DateTime::createFromFormat($format,  $fin_seance_2_jour4);
+           $jour4_seance2=array();
+
+          $deb_seance_3_jour4=(new \DateTime())->modify('+3 days')->format('Y-m-d'.$dseance3);
+          $fin_seance_3_jour4=(new \DateTime())->modify('+4 days')->format('Y-m-d'.$fseance3);
+          $deb_seance_3_jour4 = \DateTime::createFromFormat($format, $deb_seance_3_jour4);
+          $fin_seance_3_jour4 = \DateTime::createFromFormat($format, $fin_seance_3_jour4 );
+          $jour4_seance3=array();
+
+          // day5
+           $deb_seance_1_jour5=(new \DateTime())->modify('+4 days')->format('Y-m-d'.$dseance1);
+           $fin_seance_1_jour5=(new \DateTime())->modify('+4 days')->format('Y-m-d'.$fseance1);             
+           $deb_seance_1_jour5 = \DateTime::createFromFormat($format,  $deb_seance_1_jour5);
+           $fin_seance_1_jour5 = \DateTime::createFromFormat($format, $fin_seance_1_jour5);
+           $jour5_seance1=array();
+
+           $deb_seance_2_jour5=(new \DateTime())->modify('+4 days')->format('Y-m-d'.$dseance2);
+           $fin_seance_2_jour5=(new \DateTime())->modify('+4 days')->format('Y-m-d'.$fseance2);         
+           $deb_seance_2_jour5= \DateTime::createFromFormat($format,$deb_seance_2_jour5);
+           $fin_seance_2_jour5= \DateTime::createFromFormat($format,  $fin_seance_2_jour5);
+           $jour5_seance2=array();
+
+          $deb_seance_3_jour5=(new \DateTime())->modify('+4 days')->format('Y-m-d'.$dseance3);
+          $fin_seance_3_jour5=(new \DateTime())->modify('+5 days')->format('Y-m-d'.$fseance3);
+          $deb_seance_3_jour5 = \DateTime::createFromFormat($format, $deb_seance_3_jour5);
+          $fin_seance_3_jour5 = \DateTime::createFromFormat($format, $fin_seance_3_jour5);
+          $jour5_seance3=array();
+
+            // day6
+           $deb_seance_1_jour6=(new \DateTime())->modify('+5 days')->format('Y-m-d'.$dseance1);
+           $fin_seance_1_jour6=(new \DateTime())->modify('+5 days')->format('Y-m-d'.$fseance1);             
+           $deb_seance_1_jour6 = \DateTime::createFromFormat($format,  $deb_seance_1_jour6);
+           $fin_seance_1_jour6 = \DateTime::createFromFormat($format, $fin_seance_1_jour6);
+           $jour6_seance1=array();
+
+           $deb_seance_2_jour6=(new \DateTime())->modify('+5 days')->format('Y-m-d'.$dseance2);
+           $fin_seance_2_jour6=(new \DateTime())->modify('+5 days')->format('Y-m-d'.$fseance2);         
+           $deb_seance_2_jour6= \DateTime::createFromFormat($format,$deb_seance_2_jour6);
+           $fin_seance_2_jour6= \DateTime::createFromFormat($format,  $fin_seance_2_jour6);
+           $jour6_seance2=array();
+
+          $deb_seance_3_jour6=(new \DateTime())->modify('+5 days')->format('Y-m-d'.$dseance3);
+          $fin_seance_3_jour6=(new \DateTime())->modify('+6 days')->format('Y-m-d'.$fseance3);
+          $deb_seance_3_jour6 = \DateTime::createFromFormat($format, $deb_seance_3_jour6);
+          $fin_seance_3_jour6 = \DateTime::createFromFormat($format, $fin_seance_3_jour6);
+          $jour6_seance3=array();
+
+           // day7
+           $deb_seance_1_jour7=(new \DateTime())->modify('+6 days')->format('Y-m-d'.$dseance1);
+           $fin_seance_1_jour7=(new \DateTime())->modify('+6 days')->format('Y-m-d'.$fseance1);             
+           $deb_seance_1_jour7 = \DateTime::createFromFormat($format,  $deb_seance_1_jour7);
+           $fin_seance_1_jour7 = \DateTime::createFromFormat($format, $fin_seance_1_jour7);
+           $jour7_seance1=array();
+
+           $deb_seance_2_jour7=(new \DateTime())->modify('+6 days')->format('Y-m-d'.$dseance2);
+           $fin_seance_2_jour7=(new \DateTime())->modify('+6 days')->format('Y-m-d'.$fseance2);         
+           $deb_seance_2_jour7= \DateTime::createFromFormat($format,$deb_seance_2_jour7);
+           $fin_seance_2_jour7= \DateTime::createFromFormat($format,  $fin_seance_2_jour7);
+           $jour7_seance2=array();
+
+          $deb_seance_3_jour7=(new \DateTime())->modify('+6 days')->format('Y-m-d'.$dseance3);
+          $fin_seance_3_jour7=(new \DateTime())->modify('+7 days')->format('Y-m-d'.$fseance3);
+          $deb_seance_3_jour7 = \DateTime::createFromFormat($format, $deb_seance_3_jour7);
+          $fin_seance_3_jour7 = \DateTime::createFromFormat($format, $fin_seance_3_jour7);
+          $jour7_seance3=array();
+
+
+
+
+       // deb traitement
+
+
+           $missions=Mission::orderBy('created_at', 'desc')->get(); 
+           if($missions)
+           {
+
+            foreach($missions as $do)
+            {
+
+            if($do->statut_courant!="endormie")
+             {               
+
+                $dateMiss = \DateTime::createFromFormat($format,$do->date_deb); 
+            
+                if($do->statut_courant=="reportee")
+                 {
+
+                      // jour1
+                    if($dateMiss>=$deb_seance_1_jour1 &&  $dateMiss < $fin_seance_1_jour1 ) 
+                     { 
+                        $jour1_seance1[]=$do;
+                     }
+                      if($dateMiss>=$deb_seance_2_jour1 &&  $dateMiss < $fin_seance_2_jour1 ) 
+                     { 
+                         $jour1_seance2[]=$do;
+                     }
+                     if($dateMiss>=$deb_seance_3_jour1 &&  $dateMiss < $fin_seance_3_jour1 ) 
+                     { 
+                         $jour1_seance3[]=$do;
+                     }
+
+
+                     // jour2
+                    if($dateMiss>=$deb_seance_1_jour2 &&  $dateMiss < $fin_seance_1_jour2 ) 
+                     { 
+                        $jour2_seance1[]=$do;
+                     }
+                      if($dateMiss>=$deb_seance_2_jour2 &&  $dateMiss < $fin_seance_2_jour2 ) 
+                     { 
+                         $jour2_seance2[]=$do;
+                     }
+                     if($dateMiss>=$deb_seance_3_jour2 &&  $dateMiss < $fin_seance_3_jour2 ) 
+                     { 
+                         $jour2_seance3[]=$do;
+                     }
+
+
+                     // jour3
+                    if($dateMiss>=$deb_seance_1_jour3 &&  $dateMiss < $fin_seance_1_jour3 ) 
+                     { 
+                        $jour3_seance1[]=$do;
+                     }
+                      if($dateMiss>=$deb_seance_2_jour3 &&  $dateMiss < $fin_seance_2_jour3 ) 
+                     { 
+                         $jour3_seance2[]=$do;
+                     }
+                     if($dateMiss>=$deb_seance_3_jour3 &&  $dateMiss < $fin_seance_3_jour3 ) 
+                     { 
+                         $jour3_seance3[]=$do;
+                     }
+                     // jour 4
+
+                    if($dateMiss>=$deb_seance_1_jour4 &&  $dateMiss < $fin_seance_1_jour4 ) 
+                     { 
+                        $jour4_seance1[]=$do;
+                     }
+                      if($dateMiss>=$deb_seance_2_jour4 &&  $dateMiss < $fin_seance_2_jour4 ) 
+                     { 
+                         $jour4_seance2[]=$do;
+                     }
+                     if($dateMiss>=$deb_seance_3_jour4 &&  $dateMiss < $fin_seance_3_jour4 ) 
+                     { 
+                         $jour4_seance3[]=$do;
+                     }
+
+                    // jour 5
+
+                    if($dateMiss>=$deb_seance_1_jour5 &&  $dateMiss < $fin_seance_1_jour5 ) 
+                     { 
+                        $jour5_seance1[]=$do;
+                     }
+                      if($dateMiss>=$deb_seance_2_jour5 &&  $dateMiss < $fin_seance_2_jour5 ) 
+                     { 
+                         $jour5_seance2[]=$do;
+                     }
+                     if($dateMiss>=$deb_seance_3_jour5 &&  $dateMiss < $fin_seance_3_jour5 ) 
+                     { 
+                         $jour5_seance3[]=$do;
+                     }
+
+                        // jour 6
+
+                    if($dateMiss>=$deb_seance_1_jour6 &&  $dateMiss < $fin_seance_1_jour6 ) 
+                     { 
+                        $jour6_seance1[]=$do;
+                     }
+                      if($dateMiss>=$deb_seance_2_jour6 &&  $dateMiss < $fin_seance_2_jour6 ) 
+                     { 
+                         $jour6_seance2[]=$do;
+                     }
+                     if($dateMiss>=$deb_seance_3_jour6 &&  $dateMiss < $fin_seance_3_jour6 ) 
+                     { 
+                         $jour6_seance3[]=$do;
+                     }
+
+                      // jour 7
+
+                    if($dateMiss>=$deb_seance_1_jour7 &&  $dateMiss < $fin_seance_1_jour7 ) 
+                     { 
+                        $jour7_seance1[]=$do;
+                     }
+                      if($dateMiss>=$deb_seance_2_jour6 &&  $dateMiss < $fin_seance_2_jour7 ) 
+                     { 
+                         $jour7_seance2[]=$do;
+                     }
+                     if($dateMiss>=$deb_seance_3_jour6 &&  $dateMiss < $fin_seance_3_jour7 ) 
+                     { 
+                         $jour7_seance3[]=$do;
+                     }
+
+                }
+                else // active ou deleguee ou deleguee-endormie
+                {
+                       $jour1_seance1[]=$do;
+                }
+
+               }
+               else// Cas endormie
+               {
+
+                 // les dates spécifiques : 
+
+                if($do->date_spec_affect==1 || $do->date_spec_affect2==1 || $do->date_spec_affect3==1 )
+                   {
+                    if($do->h_rdv )
+                    {
+                        $date_spe = \DateTime::createFromFormat($format,$do->h_rdv);
+                                  
+                                  // jour1
+                                 if($date_spe >= $deb_seance_1_jour1 && $date_spe < $fin_seance_1_jour1)
+                                    {
+                                       $jour1_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour1 && $date_spe < $fin_seance_2_jour1)
+                                    {
+                                       $jour1_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour1 && $date_spe < $fin_seance_3_jour1)
+                                    {
+                                       $jour1_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 2
+                                    if($date_spe >= $deb_seance_1_jour2 && $date_spe < $fin_seance_1_jour2)
+                                    {
+                                       $jour2_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour2 && $date_spe < $fin_seance_2_jour2)
+                                    {
+                                       $jour2_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour2 && $date_spe < $fin_seance_3_jour2)
+                                    {
+                                       $jour2_seance3[]=$do;                                 
+
+                                    }
+                                     // jour 3
+                                    if($date_spe >= $deb_seance_1_jour3 && $date_spe < $fin_seance_1_jour3)
+                                    {
+                                       $jour3_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour3 && $date_spe < $fin_seance_2_jour3)
+                                    {
+                                       $jour3_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour3 && $date_spe < $fin_seance_3_jour3)
+                                    {
+                                       $jour3_seance3[]=$do;                                 
+
+                                    }
+
+                                     // jour 4
+                                    if($date_spe >= $deb_seance_1_jour4 && $date_spe < $fin_seance_1_jour4)
+                                    {
+                                       $jour4_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour4 && $date_spe < $fin_seance_2_jour4)
+                                    {
+                                       $jour4_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour4 && $date_spe < $fin_seance_3_jour4)
+                                    {
+                                       $jour4_seance3[]=$do;                                 
+
+                                    }
+                                    // jour 5
+
+                                    if($date_spe >= $deb_seance_1_jour5 && $date_spe < $fin_seance_1_jour5)
+                                    {
+                                       $jour5_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour5 && $date_spe < $fin_seance_2_jour5)
+                                    {
+                                       $jour5_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour5 && $date_spe < $fin_seance_3_jour5)
+                                    {
+                                       $jour5_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 6
+
+                                    if($date_spe >= $deb_seance_1_jour6 && $date_spe < $fin_seance_1_jour6)
+                                    {
+                                       $jour6_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour6 && $date_spe < $fin_seance_2_jour6)
+                                    {
+                                       $jour6_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour6 && $date_spe < $fin_seance_3_jour6)
+                                    {
+                                       $jour6_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 7
+
+                                    if($date_spe >= $deb_seance_1_jour7 && $date_spe < $fin_seance_1_jour7)
+                                    {
+                                       $jour7_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour7 && $date_spe < $fin_seance_2_jour7)
+                                    {
+                                       $jour7_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour7 && $date_spe < $fin_seance_3_jour7)
+                                    {
+                                       $jour7_seance3[]=$do;                                 
+
+                                    }
+
+
+                    }
+
+
+                    if($do->h_dep_pour_miss)
+                    {
+
+                        $date_spe = \DateTime::createFromFormat($format,$do->h_dep_pour_miss);
+                      // dd($deb_seance_3);
+                         // jour1
+                                 if($date_spe >= $deb_seance_1_jour1 && $date_spe < $fin_seance_1_jour1)
+                                    {
+                                       $jour1_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour1 && $date_spe < $fin_seance_2_jour1)
+                                    {
+                                       $jour1_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour1 && $date_spe < $fin_seance_3_jour1)
+                                    {
+                                       $jour1_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 2
+                                    if($date_spe >= $deb_seance_1_jour2 && $date_spe < $fin_seance_1_jour2)
+                                    {
+                                       $jour2_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour2 && $date_spe < $fin_seance_2_jour2)
+                                    {
+                                       $jour2_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour2 && $date_spe < $fin_seance_3_jour2)
+                                    {
+                                       $jour2_seance3[]=$do;                                 
+
+                                    }
+                                     // jour 3
+                                    if($date_spe >= $deb_seance_1_jour3 && $date_spe < $fin_seance_1_jour3)
+                                    {
+                                       $jour3_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour3 && $date_spe < $fin_seance_2_jour3)
+                                    {
+                                       $jour3_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour3 && $date_spe < $fin_seance_3_jour3)
+                                    {
+                                       $jour3_seance3[]=$do;                                 
+
+                                    }
+
+                                     // jour 4
+                                    if($date_spe >= $deb_seance_1_jour4 && $date_spe < $fin_seance_1_jour4)
+                                    {
+                                       $jour4_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour4 && $date_spe < $fin_seance_2_jour4)
+                                    {
+                                       $jour4_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour4 && $date_spe < $fin_seance_3_jour4)
+                                    {
+                                       $jour4_seance3[]=$do;                                 
+
+                                    }
+                                    // jour 5
+
+                                    if($date_spe >= $deb_seance_1_jour5 && $date_spe < $fin_seance_1_jour5)
+                                    {
+                                       $jour5_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour5 && $date_spe < $fin_seance_2_jour5)
+                                    {
+                                       $jour5_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour5 && $date_spe < $fin_seance_3_jour5)
+                                    {
+                                       $jour5_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 6
+
+                                    if($date_spe >= $deb_seance_1_jour6 && $date_spe < $fin_seance_1_jour6)
+                                    {
+                                       $jour6_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour6 && $date_spe < $fin_seance_2_jour6)
+                                    {
+                                       $jour6_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour6 && $date_spe < $fin_seance_3_jour6)
+                                    {
+                                       $jour6_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 7
+
+                                    if($date_spe >= $deb_seance_1_jour7 && $date_spe < $fin_seance_1_jour7)
+                                    {
+                                       $jour7_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour7 && $date_spe < $fin_seance_2_jour7)
+                                    {
+                                       $jour7_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour7 && $date_spe < $fin_seance_3_jour7)
+                                    {
+                                       $jour7_seance3[]=$do;                                 
+
+                                    }
+
+
+
+                    }
+
+                    if($do->h_dep_charge_dest )
+                    {
+                        $date_spe = \DateTime::createFromFormat($format,$do->h_dep_charge_dest);
+
+                         // jour1
+                                 if($date_spe >= $deb_seance_1_jour1 && $date_spe < $fin_seance_1_jour1)
+                                    {
+                                       $jour1_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour1 && $date_spe < $fin_seance_2_jour1)
+                                    {
+                                       $jour1_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour1 && $date_spe < $fin_seance_3_jour1)
+                                    {
+                                       $jour1_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 2
+                                    if($date_spe >= $deb_seance_1_jour2 && $date_spe < $fin_seance_1_jour2)
+                                    {
+                                       $jour2_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour2 && $date_spe < $fin_seance_2_jour2)
+                                    {
+                                       $jour2_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour2 && $date_spe < $fin_seance_3_jour2)
+                                    {
+                                       $jour2_seance3[]=$do;                                 
+
+                                    }
+                                     // jour 3
+                                    if($date_spe >= $deb_seance_1_jour3 && $date_spe < $fin_seance_1_jour3)
+                                    {
+                                       $jour3_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour3 && $date_spe < $fin_seance_2_jour3)
+                                    {
+                                       $jour3_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour3 && $date_spe < $fin_seance_3_jour3)
+                                    {
+                                       $jour3_seance3[]=$do;                                 
+
+                                    }
+
+                                     // jour 4
+                                    if($date_spe >= $deb_seance_1_jour4 && $date_spe < $fin_seance_1_jour4)
+                                    {
+                                       $jour4_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour4 && $date_spe < $fin_seance_2_jour4)
+                                    {
+                                       $jour4_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour4 && $date_spe < $fin_seance_3_jour4)
+                                    {
+                                       $jour4_seance3[]=$do;                                 
+
+                                    }
+                                    // jour 5
+
+                                    if($date_spe >= $deb_seance_1_jour5 && $date_spe < $fin_seance_1_jour5)
+                                    {
+                                       $jour5_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour5 && $date_spe < $fin_seance_2_jour5)
+                                    {
+                                       $jour5_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour5 && $date_spe < $fin_seance_3_jour5)
+                                    {
+                                       $jour5_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 6
+
+                                    if($date_spe >= $deb_seance_1_jour6 && $date_spe < $fin_seance_1_jour6)
+                                    {
+                                       $jour6_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour6 && $date_spe < $fin_seance_2_jour6)
+                                    {
+                                       $jour6_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour6 && $date_spe < $fin_seance_3_jour6)
+                                    {
+                                       $jour6_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 7
+
+                                    if($date_spe >= $deb_seance_1_jour7 && $date_spe < $fin_seance_1_jour7)
+                                    {
+                                       $jour7_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour7 && $date_spe < $fin_seance_2_jour7)
+                                    {
+                                       $jour7_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour7 && $date_spe < $fin_seance_3_jour7)
+                                    {
+                                       $jour7_seance3[]=$do;                                 
+
+                                    }
+
+
+
+                    }
+                    if($do->h_arr_prev_dest )
+                    {
+                        $date_spe = \DateTime::createFromFormat($format,$do->h_arr_prev_dest);
+
+                          // jour1
+                                 if($date_spe >= $deb_seance_1_jour1 && $date_spe < $fin_seance_1_jour1)
+                                    {
+                                       $jour1_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour1 && $date_spe < $fin_seance_2_jour1)
+                                    {
+                                       $jour1_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour1 && $date_spe < $fin_seance_3_jour1)
+                                    {
+                                       $jour1_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 2
+                                    if($date_spe >= $deb_seance_1_jour2 && $date_spe < $fin_seance_1_jour2)
+                                    {
+                                       $jour2_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour2 && $date_spe < $fin_seance_2_jour2)
+                                    {
+                                       $jour2_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour2 && $date_spe < $fin_seance_3_jour2)
+                                    {
+                                       $jour2_seance3[]=$do;                                 
+
+                                    }
+                                     // jour 3
+                                    if($date_spe >= $deb_seance_1_jour3 && $date_spe < $fin_seance_1_jour3)
+                                    {
+                                       $jour3_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour3 && $date_spe < $fin_seance_2_jour3)
+                                    {
+                                       $jour3_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour3 && $date_spe < $fin_seance_3_jour3)
+                                    {
+                                       $jour3_seance3[]=$do;                                 
+
+                                    }
+
+                                     // jour 4
+                                    if($date_spe >= $deb_seance_1_jour4 && $date_spe < $fin_seance_1_jour4)
+                                    {
+                                       $jour4_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour4 && $date_spe < $fin_seance_2_jour4)
+                                    {
+                                       $jour4_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour4 && $date_spe < $fin_seance_3_jour4)
+                                    {
+                                       $jour4_seance3[]=$do;                                 
+
+                                    }
+                                    // jour 5
+
+                                    if($date_spe >= $deb_seance_1_jour5 && $date_spe < $fin_seance_1_jour5)
+                                    {
+                                       $jour5_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour5 && $date_spe < $fin_seance_2_jour5)
+                                    {
+                                       $jour5_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour5 && $date_spe < $fin_seance_3_jour5)
+                                    {
+                                       $jour5_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 6
+
+                                    if($date_spe >= $deb_seance_1_jour6 && $date_spe < $fin_seance_1_jour6)
+                                    {
+                                       $jour6_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour6 && $date_spe < $fin_seance_2_jour6)
+                                    {
+                                       $jour6_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour6 && $date_spe < $fin_seance_3_jour6)
+                                    {
+                                       $jour6_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 7
+
+                                    if($date_spe >= $deb_seance_1_jour7 && $date_spe < $fin_seance_1_jour7)
+                                    {
+                                       $jour7_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour7 && $date_spe < $fin_seance_2_jour7)
+                                    {
+                                       $jour7_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour7 && $date_spe < $fin_seance_3_jour7)
+                                    {
+                                       $jour7_seance3[]=$do;                                 
+
+                                    }
+
+
+                    }
+                      if($do->h_decoll_ou_dep_bat)
+                    {
+                        $date_spe = \DateTime::createFromFormat($format,$do->h_decoll_ou_dep_bat);
+
+                        // jour1
+                                 if($date_spe >= $deb_seance_1_jour1 && $date_spe < $fin_seance_1_jour1)
+                                    {
+                                       $jour1_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour1 && $date_spe < $fin_seance_2_jour1)
+                                    {
+                                       $jour1_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour1 && $date_spe < $fin_seance_3_jour1)
+                                    {
+                                       $jour1_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 2
+                                    if($date_spe >= $deb_seance_1_jour2 && $date_spe < $fin_seance_1_jour2)
+                                    {
+                                       $jour2_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour2 && $date_spe < $fin_seance_2_jour2)
+                                    {
+                                       $jour2_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour2 && $date_spe < $fin_seance_3_jour2)
+                                    {
+                                       $jour2_seance3[]=$do;                                 
+
+                                    }
+                                     // jour 3
+                                    if($date_spe >= $deb_seance_1_jour3 && $date_spe < $fin_seance_1_jour3)
+                                    {
+                                       $jour3_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour3 && $date_spe < $fin_seance_2_jour3)
+                                    {
+                                       $jour3_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour3 && $date_spe < $fin_seance_3_jour3)
+                                    {
+                                       $jour3_seance3[]=$do;                                 
+
+                                    }
+
+                                     // jour 4
+                                    if($date_spe >= $deb_seance_1_jour4 && $date_spe < $fin_seance_1_jour4)
+                                    {
+                                       $jour4_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour4 && $date_spe < $fin_seance_2_jour4)
+                                    {
+                                       $jour4_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour4 && $date_spe < $fin_seance_3_jour4)
+                                    {
+                                       $jour4_seance3[]=$do;                                 
+
+                                    }
+                                    // jour 5
+
+                                    if($date_spe >= $deb_seance_1_jour5 && $date_spe < $fin_seance_1_jour5)
+                                    {
+                                       $jour5_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour5 && $date_spe < $fin_seance_2_jour5)
+                                    {
+                                       $jour5_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour5 && $date_spe < $fin_seance_3_jour5)
+                                    {
+                                       $jour5_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 6
+
+                                    if($date_spe >= $deb_seance_1_jour6 && $date_spe < $fin_seance_1_jour6)
+                                    {
+                                       $jour6_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour6 && $date_spe < $fin_seance_2_jour6)
+                                    {
+                                       $jour6_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour6 && $date_spe < $fin_seance_3_jour6)
+                                    {
+                                       $jour6_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 7
+
+                                    if($date_spe >= $deb_seance_1_jour7 && $date_spe < $fin_seance_1_jour7)
+                                    {
+                                       $jour7_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour7 && $date_spe < $fin_seance_2_jour7)
+                                    {
+                                       $jour7_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour7 && $date_spe < $fin_seance_3_jour7)
+                                    {
+                                       $jour7_seance3[]=$do;                                 
+
+                                    }
+
+
+                    }
+                    if($do->h_arr_av_ou_bat)
+                    {
+                        $date_spe = \DateTime::createFromFormat($format,$do->h_arr_av_ou_bat);
+
+                           // jour1
+                                 if($date_spe >= $deb_seance_1_jour1 && $date_spe < $fin_seance_1_jour1)
+                                    {
+                                       $jour1_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour1 && $date_spe < $fin_seance_2_jour1)
+                                    {
+                                       $jour1_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour1 && $date_spe < $fin_seance_3_jour1)
+                                    {
+                                       $jour1_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 2
+                                    if($date_spe >= $deb_seance_1_jour2 && $date_spe < $fin_seance_1_jour2)
+                                    {
+                                       $jour2_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour2 && $date_spe < $fin_seance_2_jour2)
+                                    {
+                                       $jour2_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour2 && $date_spe < $fin_seance_3_jour2)
+                                    {
+                                       $jour2_seance3[]=$do;                                 
+
+                                    }
+                                     // jour 3
+                                    if($date_spe >= $deb_seance_1_jour3 && $date_spe < $fin_seance_1_jour3)
+                                    {
+                                       $jour3_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour3 && $date_spe < $fin_seance_2_jour3)
+                                    {
+                                       $jour3_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour3 && $date_spe < $fin_seance_3_jour3)
+                                    {
+                                       $jour3_seance3[]=$do;                                 
+
+                                    }
+
+                                     // jour 4
+                                    if($date_spe >= $deb_seance_1_jour4 && $date_spe < $fin_seance_1_jour4)
+                                    {
+                                       $jour4_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour4 && $date_spe < $fin_seance_2_jour4)
+                                    {
+                                       $jour4_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour4 && $date_spe < $fin_seance_3_jour4)
+                                    {
+                                       $jour4_seance3[]=$do;                                 
+
+                                    }
+                                    // jour 5
+
+                                    if($date_spe >= $deb_seance_1_jour5 && $date_spe < $fin_seance_1_jour5)
+                                    {
+                                       $jour5_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour5 && $date_spe < $fin_seance_2_jour5)
+                                    {
+                                       $jour5_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour5 && $date_spe < $fin_seance_3_jour5)
+                                    {
+                                       $jour5_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 6
+
+                                    if($date_spe >= $deb_seance_1_jour6 && $date_spe < $fin_seance_1_jour6)
+                                    {
+                                       $jour6_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour6 && $date_spe < $fin_seance_2_jour6)
+                                    {
+                                       $jour6_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour6 && $date_spe < $fin_seance_3_jour6)
+                                    {
+                                       $jour6_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 7
+
+                                    if($date_spe >= $deb_seance_1_jour7 && $date_spe < $fin_seance_1_jour7)
+                                    {
+                                       $jour7_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour7 && $date_spe < $fin_seance_2_jour7)
+                                    {
+                                       $jour7_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour7 && $date_spe < $fin_seance_3_jour7)
+                                    {
+                                       $jour7_seance3[]=$do;                                 
+
+                                    }
+
+
+                    }
+
+                      if($do->h_retour_base)
+                    {
+                        $date_spe = \DateTime::createFromFormat($format,$do->h_retour_base);
+
+                          // jour1
+                                 if($date_spe >= $deb_seance_1_jour1 && $date_spe < $fin_seance_1_jour1)
+                                    {
+                                       $jour1_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour1 && $date_spe < $fin_seance_2_jour1)
+                                    {
+                                       $jour1_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour1 && $date_spe < $fin_seance_3_jour1)
+                                    {
+                                       $jour1_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 2
+                                    if($date_spe >= $deb_seance_1_jour2 && $date_spe < $fin_seance_1_jour2)
+                                    {
+                                       $jour2_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour2 && $date_spe < $fin_seance_2_jour2)
+                                    {
+                                       $jour2_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour2 && $date_spe < $fin_seance_3_jour2)
+                                    {
+                                       $jour2_seance3[]=$do;                                 
+
+                                    }
+                                     // jour 3
+                                    if($date_spe >= $deb_seance_1_jour3 && $date_spe < $fin_seance_1_jour3)
+                                    {
+                                       $jour3_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour3 && $date_spe < $fin_seance_2_jour3)
+                                    {
+                                       $jour3_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour3 && $date_spe < $fin_seance_3_jour3)
+                                    {
+                                       $jour3_seance3[]=$do;                                 
+
+                                    }
+
+                                     // jour 4
+                                    if($date_spe >= $deb_seance_1_jour4 && $date_spe < $fin_seance_1_jour4)
+                                    {
+                                       $jour4_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour4 && $date_spe < $fin_seance_2_jour4)
+                                    {
+                                       $jour4_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour4 && $date_spe < $fin_seance_3_jour4)
+                                    {
+                                       $jour4_seance3[]=$do;                                 
+
+                                    }
+                                    // jour 5
+
+                                    if($date_spe >= $deb_seance_1_jour5 && $date_spe < $fin_seance_1_jour5)
+                                    {
+                                       $jour5_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour5 && $date_spe < $fin_seance_2_jour5)
+                                    {
+                                       $jour5_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour5 && $date_spe < $fin_seance_3_jour5)
+                                    {
+                                       $jour5_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 6
+
+                                    if($date_spe >= $deb_seance_1_jour6 && $date_spe < $fin_seance_1_jour6)
+                                    {
+                                       $jour6_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour6 && $date_spe < $fin_seance_2_jour6)
+                                    {
+                                       $jour6_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour6 && $date_spe < $fin_seance_3_jour6)
+                                    {
+                                       $jour6_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 7
+
+                                    if($date_spe >= $deb_seance_1_jour7 && $date_spe < $fin_seance_1_jour7)
+                                    {
+                                       $jour7_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour7 && $date_spe < $fin_seance_2_jour7)
+                                    {
+                                       $jour7_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour7 && $date_spe < $fin_seance_3_jour7)
+                                    {
+                                       $jour7_seance3[]=$do;                                 
+
+                                    }
+
+                    }
+
+                     if($do->h_deb_sejour)
+                    {
+                        $date_spe = \DateTime::createFromFormat($format,$do->h_deb_sejour);
+
+                          // jour1
+                                 if($date_spe >= $deb_seance_1_jour1 && $date_spe < $fin_seance_1_jour1)
+                                    {
+                                       $jour1_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour1 && $date_spe < $fin_seance_2_jour1)
+                                    {
+                                       $jour1_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour1 && $date_spe < $fin_seance_3_jour1)
+                                    {
+                                       $jour1_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 2
+                                    if($date_spe >= $deb_seance_1_jour2 && $date_spe < $fin_seance_1_jour2)
+                                    {
+                                       $jour2_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour2 && $date_spe < $fin_seance_2_jour2)
+                                    {
+                                       $jour2_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour2 && $date_spe < $fin_seance_3_jour2)
+                                    {
+                                       $jour2_seance3[]=$do;                                 
+
+                                    }
+                                     // jour 3
+                                    if($date_spe >= $deb_seance_1_jour3 && $date_spe < $fin_seance_1_jour3)
+                                    {
+                                       $jour3_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour3 && $date_spe < $fin_seance_2_jour3)
+                                    {
+                                       $jour3_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour3 && $date_spe < $fin_seance_3_jour3)
+                                    {
+                                       $jour3_seance3[]=$do;                                 
+
+                                    }
+
+                                     // jour 4
+                                    if($date_spe >= $deb_seance_1_jour4 && $date_spe < $fin_seance_1_jour4)
+                                    {
+                                       $jour4_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour4 && $date_spe < $fin_seance_2_jour4)
+                                    {
+                                       $jour4_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour4 && $date_spe < $fin_seance_3_jour4)
+                                    {
+                                       $jour4_seance3[]=$do;                                 
+
+                                    }
+                                    // jour 5
+
+                                    if($date_spe >= $deb_seance_1_jour5 && $date_spe < $fin_seance_1_jour5)
+                                    {
+                                       $jour5_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour5 && $date_spe < $fin_seance_2_jour5)
+                                    {
+                                       $jour5_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour5 && $date_spe < $fin_seance_3_jour5)
+                                    {
+                                       $jour5_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 6
+
+                                    if($date_spe >= $deb_seance_1_jour6 && $date_spe < $fin_seance_1_jour6)
+                                    {
+                                       $jour6_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour6 && $date_spe < $fin_seance_2_jour6)
+                                    {
+                                       $jour6_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour6 && $date_spe < $fin_seance_3_jour6)
+                                    {
+                                       $jour6_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 7
+
+                                    if($date_spe >= $deb_seance_1_jour7 && $date_spe < $fin_seance_1_jour7)
+                                    {
+                                       $jour7_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour7 && $date_spe < $fin_seance_2_jour7)
+                                    {
+                                       $jour7_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour7 && $date_spe < $fin_seance_3_jour7)
+                                    {
+                                       $jour7_seance3[]=$do;                                 
+
+                                    }
+
+
+                    }
+
+                    if($do->h_fin_sejour)
+                    {
+                        $date_spe = \DateTime::createFromFormat($format,$do->h_fin_sejour);
+
+                        // jour1
+                                 if($date_spe >= $deb_seance_1_jour1 && $date_spe < $fin_seance_1_jour1)
+                                    {
+                                       $jour1_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour1 && $date_spe < $fin_seance_2_jour1)
+                                    {
+                                       $jour1_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour1 && $date_spe < $fin_seance_3_jour1)
+                                    {
+                                       $jour1_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 2
+                                    if($date_spe >= $deb_seance_1_jour2 && $date_spe < $fin_seance_1_jour2)
+                                    {
+                                       $jour2_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour2 && $date_spe < $fin_seance_2_jour2)
+                                    {
+                                       $jour2_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour2 && $date_spe < $fin_seance_3_jour2)
+                                    {
+                                       $jour2_seance3[]=$do;                                 
+
+                                    }
+                                     // jour 3
+                                    if($date_spe >= $deb_seance_1_jour3 && $date_spe < $fin_seance_1_jour3)
+                                    {
+                                       $jour3_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour3 && $date_spe < $fin_seance_2_jour3)
+                                    {
+                                       $jour3_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour3 && $date_spe < $fin_seance_3_jour3)
+                                    {
+                                       $jour3_seance3[]=$do;                                 
+
+                                    }
+
+                                     // jour 4
+                                    if($date_spe >= $deb_seance_1_jour4 && $date_spe < $fin_seance_1_jour4)
+                                    {
+                                       $jour4_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour4 && $date_spe < $fin_seance_2_jour4)
+                                    {
+                                       $jour4_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour4 && $date_spe < $fin_seance_3_jour4)
+                                    {
+                                       $jour4_seance3[]=$do;                                 
+
+                                    }
+                                    // jour 5
+
+                                    if($date_spe >= $deb_seance_1_jour5 && $date_spe < $fin_seance_1_jour5)
+                                    {
+                                       $jour5_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour5 && $date_spe < $fin_seance_2_jour5)
+                                    {
+                                       $jour5_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour5 && $date_spe < $fin_seance_3_jour5)
+                                    {
+                                       $jour5_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 6
+
+                                    if($date_spe >= $deb_seance_1_jour6 && $date_spe < $fin_seance_1_jour6)
+                                    {
+                                       $jour6_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour6 && $date_spe < $fin_seance_2_jour6)
+                                    {
+                                       $jour6_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour6 && $date_spe < $fin_seance_3_jour6)
+                                    {
+                                       $jour6_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 7
+
+                                    if($date_spe >= $deb_seance_1_jour7 && $date_spe < $fin_seance_1_jour7)
+                                    {
+                                       $jour7_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour7 && $date_spe < $fin_seance_2_jour7)
+                                    {
+                                       $jour7_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour7 && $date_spe < $fin_seance_3_jour7)
+                                    {
+                                       $jour7_seance3[]=$do;                                 
+
+                                    }
+
+
+                    }
+                     if($do->h_deb_location_voit)
+                    {
+                        $date_spe = \DateTime::createFromFormat($format,$do->h_deb_location_voit);
+
+                       // jour1
+                                 if($date_spe >= $deb_seance_1_jour1 && $date_spe < $fin_seance_1_jour1)
+                                    {
+                                       $jour1_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour1 && $date_spe < $fin_seance_2_jour1)
+                                    {
+                                       $jour1_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour1 && $date_spe < $fin_seance_3_jour1)
+                                    {
+                                       $jour1_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 2
+                                    if($date_spe >= $deb_seance_1_jour2 && $date_spe < $fin_seance_1_jour2)
+                                    {
+                                       $jour2_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour2 && $date_spe < $fin_seance_2_jour2)
+                                    {
+                                       $jour2_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour2 && $date_spe < $fin_seance_3_jour2)
+                                    {
+                                       $jour2_seance3[]=$do;                                 
+
+                                    }
+                                     // jour 3
+                                    if($date_spe >= $deb_seance_1_jour3 && $date_spe < $fin_seance_1_jour3)
+                                    {
+                                       $jour3_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour3 && $date_spe < $fin_seance_2_jour3)
+                                    {
+                                       $jour3_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour3 && $date_spe < $fin_seance_3_jour3)
+                                    {
+                                       $jour3_seance3[]=$do;                                 
+
+                                    }
+
+                                     // jour 4
+                                    if($date_spe >= $deb_seance_1_jour4 && $date_spe < $fin_seance_1_jour4)
+                                    {
+                                       $jour4_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour4 && $date_spe < $fin_seance_2_jour4)
+                                    {
+                                       $jour4_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour4 && $date_spe < $fin_seance_3_jour4)
+                                    {
+                                       $jour4_seance3[]=$do;                                 
+
+                                    }
+                                    // jour 5
+
+                                    if($date_spe >= $deb_seance_1_jour5 && $date_spe < $fin_seance_1_jour5)
+                                    {
+                                       $jour5_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour5 && $date_spe < $fin_seance_2_jour5)
+                                    {
+                                       $jour5_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour5 && $date_spe < $fin_seance_3_jour5)
+                                    {
+                                       $jour5_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 6
+
+                                    if($date_spe >= $deb_seance_1_jour6 && $date_spe < $fin_seance_1_jour6)
+                                    {
+                                       $jour6_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour6 && $date_spe < $fin_seance_2_jour6)
+                                    {
+                                       $jour6_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour6 && $date_spe < $fin_seance_3_jour6)
+                                    {
+                                       $jour6_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 7
+
+                                    if($date_spe >= $deb_seance_1_jour7 && $date_spe < $fin_seance_1_jour7)
+                                    {
+                                       $jour7_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour7 && $date_spe < $fin_seance_2_jour7)
+                                    {
+                                       $jour7_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour7 && $date_spe < $fin_seance_3_jour7)
+                                    {
+                                       $jour7_seance3[]=$do;                                 
+
+                                    }
+
+
+                    }
+
+                    if($do->h_fin_location_voit)
+                    {
+                        $date_spe = \DateTime::createFromFormat($format,$do->h_fin_location_voit);
+
+                       // jour1
+                                 if($date_spe >= $deb_seance_1_jour1 && $date_spe < $fin_seance_1_jour1)
+                                    {
+                                       $jour1_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour1 && $date_spe < $fin_seance_2_jour1)
+                                    {
+                                       $jour1_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour1 && $date_spe < $fin_seance_3_jour1)
+                                    {
+                                       $jour1_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 2
+                                    if($date_spe >= $deb_seance_1_jour2 && $date_spe < $fin_seance_1_jour2)
+                                    {
+                                       $jour2_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour2 && $date_spe < $fin_seance_2_jour2)
+                                    {
+                                       $jour2_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour2 && $date_spe < $fin_seance_3_jour2)
+                                    {
+                                       $jour2_seance3[]=$do;                                 
+
+                                    }
+                                     // jour 3
+                                    if($date_spe >= $deb_seance_1_jour3 && $date_spe < $fin_seance_1_jour3)
+                                    {
+                                       $jour3_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour3 && $date_spe < $fin_seance_2_jour3)
+                                    {
+                                       $jour3_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour3 && $date_spe < $fin_seance_3_jour3)
+                                    {
+                                       $jour3_seance3[]=$do;                                 
+
+                                    }
+
+                                     // jour 4
+                                    if($date_spe >= $deb_seance_1_jour4 && $date_spe < $fin_seance_1_jour4)
+                                    {
+                                       $jour4_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour4 && $date_spe < $fin_seance_2_jour4)
+                                    {
+                                       $jour4_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour4 && $date_spe < $fin_seance_3_jour4)
+                                    {
+                                       $jour4_seance3[]=$do;                                 
+
+                                    }
+                                    // jour 5
+
+                                    if($date_spe >= $deb_seance_1_jour5 && $date_spe < $fin_seance_1_jour5)
+                                    {
+                                       $jour5_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour5 && $date_spe < $fin_seance_2_jour5)
+                                    {
+                                       $jour5_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour5 && $date_spe < $fin_seance_3_jour5)
+                                    {
+                                       $jour5_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 6
+
+                                    if($date_spe >= $deb_seance_1_jour6 && $date_spe < $fin_seance_1_jour6)
+                                    {
+                                       $jour6_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour6 && $date_spe < $fin_seance_2_jour6)
+                                    {
+                                       $jour6_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour6 && $date_spe < $fin_seance_3_jour6)
+                                    {
+                                       $jour6_seance3[]=$do;                                 
+
+                                    }
+
+                                    // jour 7
+
+                                    if($date_spe >= $deb_seance_1_jour7 && $date_spe < $fin_seance_1_jour7)
+                                    {
+                                       $jour7_seance1[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_2_jour7 && $date_spe < $fin_seance_2_jour7)
+                                    {
+                                       $jour7_seance2[]=$do;                                 
+
+                                    }
+                                    if($date_spe >= $deb_seance_3_jour7 && $date_spe < $fin_seance_3_jour7)
+                                    {
+                                       $jour7_seance3[]=$do;                                 
+
+                                    }
+
+
+                    }
+
+              
+                                      
+                   }
+
+
+                 // cas des dates report et rappel
+                $actions=ActionEC::where('mission_id',$do->id)->where('statut','reportee')->orWhere('statut','rappelee')->get();
+                 foreach($actions as $aa)    //  debut action--}}
+                 {     
+              
+                   if($aa->statut=="reportee")
+                        {$tt=$aa->date_report ;}
+                    else{if($aa->statut=="rappelee")
+                        {$tt=$aa->date_rappel ;}}
+                    $dateMiss = \DateTime::createFromFormat($format,$tt); 
+
+                     //$dateMiss =\Date("H:i:s",strtotime($tt));
+                     //$dateMiss=strtotime($dateMiss);
+                     // dd($dateMiss);
+
+                    // jour1
+                    if($dateMiss>=$deb_seance_1_jour1 &&  $dateMiss < $fin_seance_1_jour1 ) 
+                     { 
+                        $jour1_seance1[]=$do;
+                     }
+                      if($dateMiss>=$deb_seance_2_jour1 &&  $dateMiss < $fin_seance_2_jour1 ) 
+                     { 
+                         $jour1_seance2[]=$do;
+                     }
+                     if($dateMiss>=$deb_seance_3_jour1 &&  $dateMiss < $fin_seance_3_jour1 ) 
+                     { 
+                         $jour1_seance3[]=$do;
+                     }
+
+
+                     // jour2
+                    if($dateMiss>=$deb_seance_1_jour2 &&  $dateMiss < $fin_seance_1_jour2 ) 
+                     { 
+                        $jour2_seance1[]=$do;
+                     }
+                      if($dateMiss>=$deb_seance_2_jour2 &&  $dateMiss < $fin_seance_2_jour2 ) 
+                     { 
+                         $jour2_seance2[]=$do;
+                     }
+                     if($dateMiss>=$deb_seance_3_jour2 &&  $dateMiss < $fin_seance_3_jour2 ) 
+                     { 
+                         $jour2_seance3[]=$do;
+                     }
+
+
+                     // jour3
+                    if($dateMiss>=$deb_seance_1_jour3 &&  $dateMiss < $fin_seance_1_jour3 ) 
+                     { 
+                        $jour3_seance1[]=$do;
+                     }
+                      if($dateMiss>=$deb_seance_2_jour3 &&  $dateMiss < $fin_seance_2_jour3 ) 
+                     { 
+                         $jour3_seance2[]=$do;
+                     }
+                     if($dateMiss>=$deb_seance_3_jour3 &&  $dateMiss < $fin_seance_3_jour3 ) 
+                     { 
+                         $jour3_seance3[]=$do;
+                     }
+                     // jour 4
+
+                    if($dateMiss>=$deb_seance_1_jour4 &&  $dateMiss < $fin_seance_1_jour4 ) 
+                     { 
+                        $jour4_seance1[]=$do;
+                     }
+                      if($dateMiss>=$deb_seance_2_jour4 &&  $dateMiss < $fin_seance_2_jour4 ) 
+                     { 
+                         $jour4_seance2[]=$do;
+                     }
+                     if($dateMiss>=$deb_seance_3_jour4 &&  $dateMiss < $fin_seance_3_jour4 ) 
+                     { 
+                         $jour4_seance3[]=$do;
+                     }
+
+                    // jour 5
+
+                    if($dateMiss>=$deb_seance_1_jour5 &&  $dateMiss < $fin_seance_1_jour5 ) 
+                     { 
+                        $jour5_seance1[]=$do;
+                     }
+                      if($dateMiss>=$deb_seance_2_jour5 &&  $dateMiss < $fin_seance_2_jour5 ) 
+                     { 
+                         $jour5_seance2[]=$do;
+                     }
+                     if($dateMiss>=$deb_seance_3_jour5 &&  $dateMiss < $fin_seance_3_jour5 ) 
+                     { 
+                         $jour5_seance3[]=$do;
+                     }
+
+                        // jour 6
+
+                    if($dateMiss>=$deb_seance_1_jour6 &&  $dateMiss < $fin_seance_1_jour6 ) 
+                     { 
+                        $jour6_seance1[]=$do;
+                     }
+                      if($dateMiss>=$deb_seance_2_jour6 &&  $dateMiss < $fin_seance_2_jour6 ) 
+                     { 
+                         $jour6_seance2[]=$do;
+                     }
+                     if($dateMiss>=$deb_seance_3_jour6 &&  $dateMiss < $fin_seance_3_jour6 ) 
+                     { 
+                         $jour6_seance3[]=$do;
+                     }
+
+                      // jour 7
+
+                    if($dateMiss>=$deb_seance_1_jour7 &&  $dateMiss < $fin_seance_1_jour7 ) 
+                     { 
+                        $jour7_seance1[]=$do;
+                     }
+                      if($dateMiss>=$deb_seance_2_jour6 &&  $dateMiss < $fin_seance_2_jour7 ) 
+                     { 
+                         $jour7_seance2[]=$do;
+                     }
+                     if($dateMiss>=$deb_seance_3_jour6 &&  $dateMiss < $fin_seance_3_jour7 ) 
+                     { 
+                         $jour7_seance3[]=$do;
+                     }
+
+
+               }// fin action
+              }
+             }
+            }
+
+            $jour1_seance1=array_unique($jour1_seance1);
+            $jour1_seance2=array_unique($jour1_seance2);
+            $jour1_seance3=array_unique($jour1_seance3);
+
+            $jour2_seance1=array_unique($jour2_seance1);
+            $jour2_seance2=array_unique($jour2_seance2);
+            $jour2_seance3=array_unique($jour2_seance3);
+
+            $jour3_seance1=array_unique($jour3_seance1);
+            $jour3_seance2=array_unique($jour3_seance2);
+            $jour3_seance3=array_unique($jour3_seance3);
+
+            $jour4_seance1=array_unique($jour4_seance1);
+            $jour4_seance2=array_unique($jour4_seance2);
+            $jour4_seance3=array_unique($jour4_seance3);
+
+            $jour5_seance1=array_unique($jour5_seance1);
+            $jour5_seance2=array_unique($jour5_seance2);
+            $jour5_seance3=array_unique($jour5_seance3);
+
+            $jour6_seance1=array_unique($jour6_seance1);
+            $jour6_seance2=array_unique($jour6_seance2);
+            $jour6_seance3=array_unique($jour6_seance3);
+
+            $jour7_seance1=array_unique($jour7_seance1);
+            $jour7_seance2=array_unique($jour7_seance2);
+            $jour7_seance3=array_unique($jour7_seance3);
+
+
+        // fin traitement
+            return view('calendriermissions7', ['users' => $users,
+                'jour1_seance1'=> $jour1_seance1,
+                'jour1_seance2'=> $jour1_seance2,
+                'jour1_seance3'=> $jour1_seance3,
+                'jour2_seance1'=> $jour2_seance1,
+                'jour2_seance2'=> $jour2_seance2,
+                'jour2_seance3'=> $jour2_seance3,
+                'jour3_seance1'=> $jour3_seance1,
+                'jour3_seance2'=> $jour3_seance2,
+                'jour3_seance3'=> $jour3_seance3,
+                'jour4_seance1'=> $jour4_seance1,
+                'jour4_seance2'=> $jour4_seance2,
+                'jour4_seance3'=> $jour4_seance3,
+                'jour5_seance1'=> $jour5_seance1,
+                'jour5_seance2'=> $jour5_seance2,
+                'jour5_seance3'=> $jour5_seance3,
+                'jour6_seance1'=> $jour6_seance1,
+                'jour6_seance2'=> $jour6_seance2,
+                'jour6_seance3'=> $jour6_seance3,
+                'jour7_seance1'=> $jour7_seance1,
+                'jour7_seance2'=> $jour7_seance2,
+                'jour7_seance3'=> $jour7_seance3
+
+            ]);
         }else{ return back();}
 
       }
