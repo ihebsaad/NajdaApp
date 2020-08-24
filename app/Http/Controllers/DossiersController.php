@@ -3028,6 +3028,125 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
 
     }
 
+
+
+
+    function RendreEtatDossiersActifsSeance1()
+    {
+
+
+        /* rendre les anciens dosiiers actifs inactif*/
+
+          $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
+
+          $dossiersactifsparmissions=$this->DossiersActifsSeance1();
+          $dossiersactifs =array_unique($dossiersactifsparmissions);
+          //dd($dossiersactifs);
+          foreach ($dossiersdb as $value) {
+
+            if(in_array($value->id, $dossiersactifs))
+            {
+                //echo "je_suis_actif   ";
+
+                Dossier::where('id',$value->id)->update(['current_status'=>'actif', 'sub_status'=>null]);
+
+
+            }
+            else
+            {
+                if($value->current_status=='actif' || $value->current_status=='En cours' )
+                {
+                    Dossier::where('id',$value->id)->update(['current_status'=>'inactif','sub_status'=>null]);
+                   // echo "maj_inactif   ";
+                }
+                else
+                {
+                    //echo $value->current_status.' ';
+                }
+            }
+          }
+
+/* rendre les anciens dosiiers actifs inactif*/
+
+
+    }
+     function RendreEtatDossiersActifsSeance2()
+    {
+
+
+        /* rendre les anciens dosiiers actifs inactif*/
+
+          $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
+
+          $dossiersactifsparmissions=$this->DossiersActifsSeance2();
+          $dossiersactifs =array_unique($dossiersactifsparmissions);
+          //dd($dossiersactifs);
+          foreach ($dossiersdb as $value) {
+
+            if(in_array($value->id, $dossiersactifs))
+            {
+                //echo "je_suis_actif   ";
+
+                Dossier::where('id',$value->id)->update(['current_status'=>'actif', 'sub_status'=>null]);
+
+
+            }
+            else
+            {
+                if($value->current_status=='actif' || $value->current_status=='En cours' )
+                {
+                    Dossier::where('id',$value->id)->update(['current_status'=>'inactif','sub_status'=>null]);
+                   // echo "maj_inactif   ";
+                }
+                else
+                {
+                    //echo $value->current_status.' ';
+                }
+            }
+          }
+
+/* rendre les anciens dosiiers actifs inactif*/
+
+
+    }
+     function RendreEtatDossiersActifsSeance3()
+    {
+
+
+        /* rendre les anciens dosiiers actifs inactif*/
+
+          $dossiersdb= Dossier::where('current_status','!=','Cloture')->get(['id','current_status']);
+
+          $dossiersactifsparmissions=$this->DossiersActifsSeance3();
+          $dossiersactifs =array_unique($dossiersactifsparmissions);
+          //dd($dossiersactifs);
+          foreach ($dossiersdb as $value) {
+
+            if(in_array($value->id, $dossiersactifs))
+            {
+                //echo "je_suis_actif   ";
+
+                Dossier::where('id',$value->id)->update(['current_status'=>'actif', 'sub_status'=>null]);
+
+
+            }
+            else
+            {
+                if($value->current_status=='actif' || $value->current_status=='En cours' )
+                {
+                    Dossier::where('id',$value->id)->update(['current_status'=>'inactif','sub_status'=>null]);
+                   // echo "maj_inactif   ";
+                }
+                else
+                {
+                    //echo $value->current_status.' ';
+                }
+            }
+          }
+
+/* rendre les anciens dosiiers actifs inactif*/
+}
+
     function RendreEtatDossiersImmobiles()
     {
 
@@ -3102,6 +3221,31 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
     {
 
         $this->RendreEtatDossiersActifs();
+        $this->RendreEtatDossiersDormants();
+        $this->RendreEtatDossiersImmobiles();
+
+    }
+
+    function Gerer_etat_dossiersSeance1 ()
+    {
+
+        $this->RendreEtatDossiersActifsSeance1();
+        $this->RendreEtatDossiersDormants();
+        $this->RendreEtatDossiersImmobiles();
+
+    }
+     function Gerer_etat_dossiersSeance2 ()
+    {
+
+        $this->RendreEtatDossiersActifsSeance2();
+        $this->RendreEtatDossiersDormants();
+        $this->RendreEtatDossiersImmobiles();
+
+    }
+     function Gerer_etat_dossiersSeance3 ()
+    {
+
+        $this->RendreEtatDossiersActifsSeance3();
         $this->RendreEtatDossiersDormants();
         $this->RendreEtatDossiersImmobiles();
 
