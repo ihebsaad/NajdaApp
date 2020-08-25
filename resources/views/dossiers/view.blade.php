@@ -1069,7 +1069,18 @@ array_push($listepr,$pr['prestataire_id']);
                             <td style=";"><?php echo $dtag->contenu; ?> </td>
                             <td style=";"><?php echo $dtag->montant; ?> <?php echo $dtag->devise; ?></td>
                             <td style=";"><?php echo $dtag->mrestant; ?> <?php echo $dtag->devise; ?></td>
-                            <td style=";"> </td>
+                            <td style=";">
+                            <?php
+                                if ($dtag->parent !== null)
+                                {
+                                    echo '<button type="button" class="btn btn-primary panelciel" style="color:black;background-color: rgb(214,239,247) !important;" id="btnhistotag" onclick="historiquetag('.$dtag->parent.',\''.$dtag->contenu.'\');"><i class="far fa-eye"></i> Voir</button>';
+                                   
+                                }
+                                else
+                                {
+                                    echo "Aucun";
+                                }
+                            ?></td>
                             <td style=";"> </td>
                         </tr>
                     @endforeach
@@ -2161,6 +2172,41 @@ if(strstr($dossier['reference_medic'],"MI")){
                         <button type="button" id="genomhtml" onclick="document.getElementById('genomhtml').disabled=true" class="btn btn-primary">Générer</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal historique TAG-->
+<div class="modal fade" id="modalhistotag"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog" role="document" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModal2">Historique du TAG</h4>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <h5 style="font-size: 20px; font-weight: 900; color: slategrey;" id="taghistoname"></h5>
+                    <table class="table table-striped" id="tabletagshisto" style="width:100%;margin-top:15px;font-size: 12px!important;">
+                            <thead>
+                            <tr id="headtable">
+                                <th style="">Type</th>
+                                <th style="">Description</th>
+                                <th style="">Date</th>
+                                <th style="">Montant</th>
+                                <th style="">Reste</th>
+                             </tr>
+
+                            </thead>
+                            <tbody>
+                            </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="fermerhis"type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>
@@ -3552,6 +3598,58 @@ aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\
                     });
 
                     $("#modalhistodoc").modal('show');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+                     Swal.fire({
+                        type: 'error',
+                        title: 'Oups...',
+                        text: 'Erreur lors de recuperation de l historique du document',
+
+                    });
+                    console.log('jqXHR:');
+                    console.log(jqXHR);
+                    console.log('textStatus:');
+                    console.log(textStatus);
+                    console.log('errorThrown:');
+                    console.log(errorThrown);
+                }
+            });
+    }
+// affichage de lhistorique du TAG
+    
+    function historiquetag(tag,titretag){
+        //$("#gendocfromhtml").submit();
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+                url:"{{ route('tags.historique') }}",
+                method:"POST",
+                //'&_token='+_token
+                data:'_token='+_token+'&tag='+tag,
+                success:function(data){
+
+                    var histtag = JSON.parse(data);
+                    // vider le contenu du table historique
+                    $("#tabletagshisto tbody").empty();
+                    var items = [];
+                    $.each(histtag, function(i, field){
+                      items.push([ i,field ]);
+                    });
+                    // affichage template dans iframe
+                    $.each(items, function(index, val) {
+
+                    //titre du tag
+                    if (val[0]==0)
+                    {
+                        $("#taghistoname").text(val[1]['titre']+" | "+titretag);
+                    }
+
+
+                    $("#tabletagshisto tbody").append("<tr><td>"+val[1]['titre']+"</td><td>"+val[1]['contenu']+"</td><td>"+val[1]['created_at']+"</td><td>"+val[1]['montant']+" "+val[1]['devise']+"</td><td>"+val[1]['mrestant']+" "+val[1]['devise']+"</td></tr>");
+
+                    });
+
+                    $("#modalhistotag").modal('show');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
 

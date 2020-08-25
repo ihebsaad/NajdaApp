@@ -629,6 +629,7 @@ Route::get('errors', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@errors')
 /**** TAGS  ****/
 Route::post('/tags/addnew','TagsController@addnew')->name('tags.addnew');
 Route::post('/tags/deletetag','TagsController@deletetag')->name('tags.deletetag');
+Route::post('/tags/historique','TagsController@historique')->name('tags.historique');
 Route::post('/tags/entreetags','TagsController@entreetags')->name('tags.entreetags');
 Route::post('/tags/entreetags1','TagsController@entreetags1')->name('tags.entreetags1');
 
