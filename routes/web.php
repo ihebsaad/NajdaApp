@@ -397,6 +397,7 @@ Route::post('/prestataires/createspec','PrestatairesController@createspec')->nam
 Route::get('/prestataires/view/{id}', 'PrestatairesController@view');
 Route::get('/ratings/view/{id}', 'PrestatairesController@view_rating');
 Route::post('/prestataires/addeval','PrestatairesController@addeval')->name('prestataires.addeval');
+Route::post('/prestataires/addrating','PrestatairesController@addrating')->name('prestataires.addrating');
 Route::post('/prestataires/addemail','PrestatairesController@addemail')->name('prestataires.addemail');
 Route::post('/prestataires/addressadd','PrestatairesController@addressadd')->name('prestataires.addressadd');
 Route::post('/prestataires/NomPrestatireById','PrestatairesController@NomPrestatireById')->name('prestataires.NomPrestatireById');

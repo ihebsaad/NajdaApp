@@ -35,32 +35,38 @@ $user = auth()->user();
         <div class="col-lg-12">
             <ul id="tabs" class="nav  nav-tabs"  data-tabs="tabs">
                 <li class=" nav-item active">
-                    <a class="nav-link active   " href="#tab01" data-toggle="tab" onclick="showinfos();hideinfos2();hideinfos3();hideinfos4();hideinfos5();" >
+                    <a class="nav-link active   " href="#tab01" data-toggle="tab" onclick="showinfos();hideinfos2();hideinfos3();hideinfos4();hideinfos5();hideinfos6();" >
                         <i class="fas fa-lg fa-user-md"></i>  Détails de l'intervenant
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#tab02" data-toggle="tab"  onclick=";showinfos2();hideinfos();hideinfos3();hideinfos4();hideinfos5();">
+                    <a class="nav-link" href="#tab02" data-toggle="tab"  onclick=";showinfos2();hideinfos();hideinfos3();hideinfos4();hideinfos5();hideinfos6();">
                         <i class="fas fa-lg fa-ambulance"></i>  Prestations
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#tab03" data-toggle="tab"  onclick="showinfos3();hideinfos();hideinfos2();hideinfos4();hideinfos5();">
+                    <a class="nav-link" href="#tab03" data-toggle="tab"  onclick="showinfos3();hideinfos();hideinfos2();hideinfos4();hideinfos5();hideinfos6();">
                         <i class="fas fa-lg fa-sort-amount-down"></i>  Priorités
                     </a>
                 </li>
 
                      <li class="nav-item ">
-                            <a class="nav-link  " href="#tab04" data-toggle="tab"  onclick="showinfos4();hideinfos();hideinfos2();hideinfos3();hideinfos5();">
+                            <a class="nav-link  " href="#tab04" data-toggle="tab"  onclick="showinfos4();hideinfos();hideinfos2();hideinfos3();hideinfos5();hideinfos6();">
                                 <i class="fas a-lg fa-file-invoice"></i>  Factures
                             </a>
                         </li>
 						
 					  <li class="nav-item ">
-                            <a class="nav-link  " href="#tab05" data-toggle="tab"  onclick="showinfos5();hideinfos();hideinfos2();hideinfos3();hideinfos4();">
+                            <a class="nav-link  " href="#tab05" data-toggle="tab"  onclick="showinfos5();hideinfos();hideinfos2();hideinfos3();hideinfos4();hideinfos6();">
                                 <i class="fas a-lg fa-star"></i>  Evaluations
                             </a>
                         </li>	
+					  <li class="nav-item ">
+                            <a class="nav-link  " href="#tab06" data-toggle="tab"  onclick="showinfos6();hideinfos();hideinfos2();hideinfos3();hideinfos4();hideinfos5();">
+                                <i class="fas a-lg fa-bar-chart"></i>  Statistiques
+                            </a>
+                        </li>	
+						
             </ul>
 
         </div>
@@ -671,6 +677,144 @@ $user = auth()->user();
 			
 			
 			</div>
+			
+			
+            <div id="tab06" class="tab-pane fade    " style="padding-top:30px">
+<?php		
+$count_disponibilite_oui=\App\Rating::where('prestataire',$prestataire->id)->where('disponibilite',1)->count(); 
+$count_disponibilite_non=\App\Rating::where('prestataire',$prestataire->id)->where('disponibilite',0)->count(); 
+
+$count_ponctualite_heure=\App\Rating::where('prestataire',$prestataire->id)->where('ponctualite','heure')->count(); 
+$count_ponctualite_avant=\App\Rating::where('prestataire',$prestataire->id)->where('ponctualite','avant')->count(); 
+$count_ponctualite_apres=\App\Rating::where('prestataire',$prestataire->id)->where('ponctualite','apres')->count();
+ 
+$count_reactivite_oui=\App\Rating::where('prestataire',$prestataire->id)->where('reactivite',1)->count(); 
+$count_reactivite_non=\App\Rating::where('prestataire',$prestataire->id)->where('reactivite',0)->count(); 
+
+$count_retour_oui=\App\Rating::where('prestataire',$prestataire->id)->where('retour',1)->count(); 
+$count_retour_non=\App\Rating::where('prestataire',$prestataire->id)->where('retour',0)->count(); 
+
+?>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+      google.charts.setOnLoadCallback(drawChart2);
+      google.charts.setOnLoadCallback(drawChart3);
+      google.charts.setOnLoadCallback(drawChart4);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Disponibilité', 'Nombre'],
+		   
+<?php
+ 
+echo "['Oui',    ".$count_disponibilite_oui."] , ";	 
+echo "['Non ',    ".$count_disponibilite_non."] ";	 
+ 
+?>		 
+        ]);
+
+        var options = {
+          title: 'Pourcentage de disponibilité',
+		  is3D: true,
+		    colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
+ 	  
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+	  
+      function drawChart2() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Ponctualité', 'Nombre'],
+		   
+<?php
+ 
+echo "['Avant RDV',    ".$count_ponctualite_avant."] , ";	 
+echo "['A l`heure ',    ".$count_ponctualite_heure."], ";	 
+echo "['Après RDV ',    ".$count_ponctualite_apres."] ";	 
+ 
+?>		 
+        ]);
+
+        var options = {
+          title: 'Pourcentage de ponctualité',
+		  is3D: true,
+		    colors: [ '#fd9883','#dcdcdc','#f3b49f']
+ 	  
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
+
+        chart.draw(data, options);
+      }
+
+      function drawChart3() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Réactivité', 'Nombre'],
+		   
+<?php
+ 
+echo "['Oui',    ".$count_reactivite_oui."] , ";	 
+echo "['Non ',    ".$count_reactivite_non."] ";	 
+ 
+?>		 
+        ]);
+
+        var options = {
+          title: 'Pourcentage de réactivité',
+		  is3D: true,
+		    colors: [ '#4fc1e9', '#dcdcdc' ]
+ 	  
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart3'));
+
+        chart.draw(data, options);
+      }
+
+
+      function drawChart4() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Disponibilité', 'Nombre'],
+		   
+<?php
+ 
+echo "['Oui',    ".$count_retour_oui."] , ";	 
+echo "['Non ',    ".$count_retour_non."] ";	 
+ 
+?>		 
+        ]);
+
+        var options = {
+          title: "Pourcentage de retour d'informations",
+		  is3D: true //,
+		  //  colors: ['#a0d468','#4fc1e9','#fd9883','#dcdcdc','#f3b49f']
+ 	  
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart4'));
+
+        chart.draw(data, options);
+      }	  
+    </script>
+ 
+ 
+    <div id="piechart" style="width: 600px; height: 400px;"></div><br><br>
+    <div id="piechart2" style="width: 600px; height: 400px;"></div><br><br>
+    <div id="piechart3" style="width: 600px; height: 400px;"></div><br><br>
+    <div id="piechart4" style="width: 600px; height: 400px;"></div>
+	
+    </div>
+			
 			
 			
 			
@@ -1329,7 +1473,10 @@ $user = auth()->user();
     }
 	  function hideinfos5() {
         $('#tab05').css('display','none');
-    }	
+    }
+	  function hideinfos6() {
+        $('#tab06').css('display','none');
+    }		
     function showinfos() {
         $('#tab01').css('display','block');
     }
@@ -1346,7 +1493,9 @@ $user = auth()->user();
 	  function showinfos5() {
         $('#tab05').css('display','block');
     }
-
+	  function showinfos6() {
+        $('#tab06').css('display','block');
+    }
 
     function activer(valeur) {
     //  var type = $('#type').val();

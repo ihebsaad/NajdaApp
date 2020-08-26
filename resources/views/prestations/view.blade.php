@@ -12,6 +12,7 @@
              <div id="addpresform" novalidate="novalidate">
 
                 <input id="idprestation" name="idprestation" type="hidden" value="{{$prestation->id}}">
+                <input id="idprestataire" name="idprestataire" type="hidden" value="{{$prestation->prestataire_id}}">
                  <div class="row" >
                  <div class="form-group col-md-6  ">
                      <h3>Prestation</h3>
@@ -26,6 +27,21 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 ?>
                   </div>
+				   <div class="form-group col-md-6  ">
+				   <?php 
+				  $ratings = \App\Rating::where('prestation',$prestation->id)->count();
+				   if($ratings>0){
+					   $rating  = \App\Rating::where('prestation',$prestation->id)->first();
+?>
+					 Évaluation : <a href="{{action('PrestatairesController@view_rating', $rating->id)}}" ><?php echo sprintf("%05d",$rating->id);?></a>
+   
+				 <?php  }else{ ?>
+					  <button style="float:right;margin-top:10px;margin-bottom: 15px;margin-right: 20px" id="addev" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createeval"><b><i class="fas fa-plus"></i> Ajouter une Évaluation</b></button>
+   
+				 <?php   }
+				   ?>
+				   
+					</div>
                 </div>
 
                          <div class="row" style="margin-top:10px;margin-bottom: 20px">
@@ -33,7 +49,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                             </div>
                             <div class="prestataire form-group">
                                 <div class="row" style=";margin-bottom: 5px">
-                                    <div class="col-md-8"><span style="color:grey" class="fa  fa-user-md"></span> <b>  <?php echo PrestatairesController::ChampById('civilite',$prestation->prestataire_id).' '. PrestatairesController::ChampById('name',$prestation->prestataire_id).' '.PrestatairesController::ChampById('prenom',$prestation->prestataire_id) ;?></b></div>
+                                    <div class="col-md-8"><span style="color:grey" class="fa  fa-user-md"></span><a href="{{action('PrestatairesController@view', $prestation->prestataire_id)}}" > <b>  <?php echo PrestatairesController::ChampById('civilite',$prestation->prestataire_id).' '. PrestatairesController::ChampById('name',$prestation->prestataire_id).' '.PrestatairesController::ChampById('prenom',$prestation->prestataire_id) ;?></b></a></div>
                                     <div class="col-md-8"><span style="color:grey" class="fa  fa-map-marker"></span>  Adresse : <?php echo  PrestatairesController::ChampById('adresse',$prestation->prestataire_id).' '. PrestatairesController::ChampById('ville',$prestation->prestataire_id);?></div>
                                 </div>
                                 <div class="row">
@@ -109,6 +125,172 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                 </div>
 
     </div>
+	
+	
+ <!-- Modal Evaluation-->
+    <div class="modal fade" id="createeval"    role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal2">Ajouter une Évaluation </h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+                        <div class="form-group">
+                            {{ csrf_field() }}
+
+                            <form id="addevalform" novalidate="novalidate"   >
+
+           
+                 <div class="form-group">
+                            <div class="row">
+                                     <label style="padding-top:10px">Disponibilité</label>
+                                 <div class="radio-list">
+                                    <div class="col-md-3">
+                                        <label for="disponibilite" class="">
+ 											<span class="checked">
+                                                <input  onclick="hiding()" type="radio" name="disponibilite" id="disponibilite" value="1"  checked >  Oui  </span>  
+                                        </label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="nondisponible" class="">
+                                           <span>
+                                                <input onclick="showing()" type="radio" name="disponibilite" id="nondisponible" value="0"  >  Non  </span>  
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                 </div>
+				 
+                 <div class="form-group"  id="divraison"   style="display:none"  >
+                     <label>Raison  </label>
+                     <textarea    class="form-control" name="raison" id="raison" ></textarea>
+                 </div>
+				 
+				  <div class="form-group"    >
+                     <label>Ponctualité  </label>
+                     <select  onchange="changing(this)"   class="form-control" name="ponctualite" id="ponctualite" >
+					 <option value=""></option>
+					 <option value="avant"      >Avant RDV</option>
+					 <option value="heure"    >A l'heure</option>
+					 <option value="apres"   >Après RDV</option>
+					 </select>
+                 </div>
+				 
+				  <div class="form-group">
+                            <div class="row">
+                                     <label style="padding-top:10px">Réactivité</label>
+                                 <div class="radio-list">
+                                    <div class="col-md-3">
+                                        <label for="reactivite" class="">
+ 											<span class="checked">
+                                                <input   type="radio" name="reactivite" id="reactivite" value="1"   checked >  Oui  </span>  
+                                        </label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="nonreactivite" class="">
+                                           <span>
+                                                <input   type="radio" name="reactivite" id="nonreactivite" value="0"     >  Non  </span>  
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                 </div>
+
+				 <div class="form-group">
+                     <label>Commentaire  </label>
+                     <textarea     class="form-control" name="commentaire" id="commentaire" ></textarea>
+                 </div>
+
+				  <div class="form-group">
+                            <div class="row">
+                                     <label style="padding-top:10px">Retour d'information</label>
+                                 <div class="radio-list">
+                                    <div class="col-md-3">
+                                        <label for="retour" class="">
+ 											<span class="checked">
+                                                <input    type="radio" name="retour" id="retour" value="1"    checked >  Oui  </span>  
+                                        </label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="nonretour" class="">
+                                           <span>
+                                                <input   type="radio" name="retour" id="nonretour" value="0"   >  Non  </span>  
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                 </div>               
+
+                              
+
+ 
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" id="evaladd" class="btn btn-primary">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>	
+	
+	
+	<script>
+	
+
+  $('#evaladd').click(function(){
+            var prestation = $('#idprestation').val();
+            var prestataire = $('#idprestataire').val();
+            var raison = $('#raison').val();
+            var ponctualite = $('#ponctualite').val();
+            var commentaire = $('#commentaire').val();
+			var disponibilite = reactivite = retour =  0 ;
+		  var disp =document.getElementById('disponibilite').checked==1;
+		  var react =document.getElementById('reactivite').checked==1;
+		  var ret =document.getElementById('retour').checked==1;
+
+        if (disp==true){disponibilite=1;}
+        if (disp==false){disponibilite=0;}
+		
+		 if (react==true){reactivite=1;}
+        if (react==false){reactivite=0;}
+		
+		 if (ret==true){retour=1;}
+        if (ret==false){retour=0;}
+		
+			 
+             
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('prestataires.addrating') }}",
+                    method:"POST",
+                    data:{prestation:prestation,prestataire:prestataire, raison:raison,ponctualite:ponctualite,disponibilite:disponibilite,reactivite:reactivite,retour:retour ,commentaire:commentaire, _token:_token},
+                    success:function(data){
+                     //   alert('Added successfully');
+                     window.location =data;
+
+
+                    }
+                }).fail(function() {
+                alert("erreur lors de l'ajout d evaluation ");
+            });
+                ;
+            
+        })
+	
+	
+	
+	</script>
+	
+	
+	
 @endsection
 
 <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
@@ -239,5 +421,15 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         // }
     }
 
+function showing() {
+	$('#divraison').fadeIn('slow') ;
+}
 
+function hiding() {
+	$('#divraison').fadeOut('slow') ;
+}
+
+
+
+		
 </script>

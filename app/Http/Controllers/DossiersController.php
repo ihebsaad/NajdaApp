@@ -2241,8 +2241,8 @@ class DossiersController extends Controller
                             </div>
                             <div class="row">
                                 <div class="col-md-8"><span style="color:grey" class="fas  fa-clipboard"></span> ' . $observ . '</div>
-                                <div class="col-md-8"><span style="color:grey" class="fas  fa fa-star"></span>Évaluation : ' . $eval . '</div>
-                            </div>
+
+								</div>
                         </div>                       
                         <table style="padding-left:5px">';
 

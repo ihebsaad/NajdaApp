@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Adresse;
+use App\Rating;
 use App\Email;
 use App\Evaluation;
 use App\Intervenant;
@@ -115,7 +116,36 @@ class PrestatairesController extends Controller
        }
     }
 
+public function addrating(Request $request)
+    {
+	   $prestataire  =  $request->get('prestataire');
+	   $prestation  =  $request->get('prestation');
+	   $ponctualite  =  $request->get('ponctualite');
+	   $raison  =  $request->get('raison');
+	   $disponibilite  =  $request->get('disponibilite');
+	   $reactivite  =  $request->get('reactivite');
+	   $retour  =  $request->get('retour');
+   
+        $rating = new Rating([
+            'prestataire' => $prestataire,
+            'prestation' =>$prestation ,
+            'ponctualite' => $ponctualite,
+            'raison' => $raison,
+            'disponibilite' => $disponibilite,
+            'reactivite' => $reactivite,
+            'retour' => $retour,
+          
 
+        ]);
+       if ($rating->save()){
+		$id=$rating->id;
+	 return url('/ratings/view/'.$id ) ;
+	   }
+	   else{
+		   return url('/prestations/view/'.$prestation );
+	   }
+	}
+	
     /**
      * Store a newly created resource in storage.
      *
@@ -336,7 +366,9 @@ class PrestatairesController extends Controller
 		
     }
     public function show()
-    {}
+    {
+		
+	}
 
     public function updating(Request $request)
     {
@@ -356,7 +388,15 @@ $user = auth()->user();
 
     }
 
-
+   public function updaterating(Request $request)
+    {
+		 $id= $request->get('rating');
+        $champ= strval($request->get('champ'));
+       $val= $request->get('val');
+         Rating::where('id', $id)->update(array($champ => $val));
+	}
+	
+	
     public function activer(Request $request)
     {
 
@@ -504,8 +544,11 @@ $user = auth()->user();
     }
 
 
-
-
+  public function view_rating($id)
+    {
+		$rating=Rating::where('id', $id)->first();
+		 return view('ratings.view',['rating'=>$rating]);
+	}
 
     public function addressadd(Request $request)
     {
