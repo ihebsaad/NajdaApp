@@ -582,4 +582,23 @@ header('Content-type: application/json');
                     }
         }
     }
+
+    public function historique(Request $request)
+    {
+        $tagparent= $_POST['tag'] ;
+        $histotag = array();
+        while ($tagparent !== null) {
+            $arrtag = Tag::select('id','titre','contenu','montant','mrestant','devise','dernier','parent','created_at')->where('id', $tagparent)->first();
+            $histotag[]=$arrtag;
+            $tagparent = $arrtag['parent'];
+        }
+
+        //return $histodoc;
+        header('Content-type: application/json');    
+        return json_encode($histotag);
+
+    }
+
+ 
+
 }
