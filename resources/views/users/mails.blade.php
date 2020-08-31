@@ -222,6 +222,26 @@
 
 
     <script type="text/javascript">
+	
+	       function selectall(){
+            var elements = document.getElementsByClassName('checkbox');
+            var cas=document.getElementById('casetout');
+            //test si on a plusieur ligne
+            if(elements.length>0){
+                if (cas.checked){
+                    for (var i=0; i<elements.length;i++){
+                        elements[i].checked=true;
+                    }
+                }
+                else{
+                    for (var i=0; i<elements.length;i++){
+                        elements[i].checked=false;
+                    }
+                }
+            }
+
+
+        }
         $(document).ready(function() {
 
 
@@ -372,28 +392,7 @@
             return(dossid);
         }
 
-
-        function selectall(){
-            var elements = document.getElementsByClassName('checkbox');
-            var cas=document.getElementById('casetout');
-            //test si on a plusieur ligne
-            if(elements.length>0){
-                if (cas.checked){
-                    for (var i=0; i<elements.length;i++){
-                        elements[i].checked=true;
-                    }
-                }
-                else{
-                    for (var i=0; i<elements.length;i++){
-                        elements[i].checked=false;
-                    }
-                }
-            }
-
-
-        }
-		
-		
+ 
 		
         });
     </script>

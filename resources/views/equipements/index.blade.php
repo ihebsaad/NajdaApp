@@ -40,7 +40,7 @@
                 <th style="width:30%">Nom</th>
                 <th style="width:30%">Référence</th>
                 <th style="width:20%">Numéro</th>
-                 <th class="no-sort" style="width:10%">Actions</th>
+                 <th class="no-sort" style="width:10%"> </th>
             </tr>
             </thead>
             <tbody>
@@ -54,9 +54,9 @@
 					<td    > {{$equipement->numero}}</td>
 
                    <td> @can('isAdmin')
-                        <a  href="{{action('EquipementsController@destroy', $equipement['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                      <!--  <a  href="{{action('EquipementsController@destroy', $equipement['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                             <span class="fa fa-fw fa-trash-alt"></span> Supprimer
-                        </a>
+                        </a>  -->
                        @endcan
                    </td>
                 </tr>

@@ -348,7 +348,7 @@ Route::get('/contrats/add','ContratsController@add')->name('contrats.add');
 Route::post('/contrats/saving','ContratsController@saving')->name('contrats.saving');
 Route::post('/contrats/adding','ContratsController@adding')->name('contrats.adding');
 Route::post('/contrats/updating','ContratsController@updating')->name('contrats.updating');
-Route::post('/contrats/updating','ContratsController@changing')->name('contrats.changing');
+Route::post('/contrats/changing','ContratsController@changing')->name('contrats.changing');
 Route::get('/contrats/view/{id}', 'ContratsController@view');
 Route::get('/contrats/nature/{id}', 'ContratsController@nature');
 Route::post('/contrats/removespec','ContratsController@removespec')->name('contrats.removespec');

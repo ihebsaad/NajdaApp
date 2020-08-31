@@ -25,7 +25,7 @@
     <div class="uper">
          <div class="portlet box grey">
             <div class="row">
-                <div class="col-lg-6"><h2>Table de garanties</h2></div>
+                <div class="col-lg-6"><h2>Tables de garanties</h2></div>
                 <div class="col-lg-6">
                     <button id="addgr" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une garantie</b></button>
                 </div>
@@ -35,20 +35,12 @@
             <thead>
             <tr id="headtable">
                 <th style="width:10%">ID</th>
-                <th style="width:30%">ID Assuré</th>
-                <th style="width:10%">val1</th>
-                <th style="width:10%">val2</th>
-                <th style="width:10%">val3</th>
-                <th style="width:10%">val4</th>
+ 
                  <th style="width:10%">Actions</th>
               </tr>
             <tr>
                 <th style="width:10%">ID</th>
-                <th style="width:30%">ID Assuré</th>
-                <th style="width:10%">val1</th>
-                <th style="width:10%">val2</th>
-                <th style="width:10%">val3</th>
-                <th style="width:10%">val4</th>
+
               <th class="no-sort" style="width:10%">Actions</th>
             </tr>
             </thead>
@@ -62,11 +54,9 @@
 
                 <tr>
                     <td  ><a href="{{action('GarantiesController@view', $garantie['id'])}}" ><?php echo sprintf("%04d",$garantie->id);?></a></td>
-                     <td  ><?php echo $garantie->id_assure.' (  '. $dossier->subscriber_name.' '.$dossier->subscriber_lastname.') ';?></td>
-					<td>{{$garantie->val1}}</td>
-					<td>{{$garantie->val2}}</td>
-					<td>{{$garantie->val3}}</td>
-					<td>{{$garantie->val4}}</td>
+                     <td  > </td>
+					<td><?php echo $garantie->nom ; ?></td>
+					<td><?php echo $garantie->description ; ?></td>
                       <td    >
                           @can('isAdmin')
                               <a onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('GarantiesController@destroy', $garantie['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >

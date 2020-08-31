@@ -106,7 +106,7 @@ class PrestationsController extends Controller
         $prestation = intval($request->get('prestation'));
 
         Prestation::where('id', $prestation)->update(array('effectue' => 1));
-
+			return redirect('/prestations/view/'.$prestation) ;
     }
 
     public function saving(Request $request)
@@ -592,8 +592,8 @@ class PrestationsController extends Controller
         $user = auth()->user();
         $nomuser = $user->name . ' ' . $user->lastname;
 
-       //  $to=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
-         $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
+         $to=array( 'nejib.karoui@medicmultiservices.com', 'smq@medicmultiservices.com ');
+       // $to=array( 'ihebsaad@gmail.com', 'saadiheb@gmail.com ');
         $sujet= 'Modification de la priorité d\'un prestataire';
         $contenu= 'Bonjour de Najda,<br>l\'agent '.$nomuser.' a modifié la priorité du prestataire '.$nomprest.'<br>
         Priorité : '.$priorite.' - Type de prestation : '.$TypePrest. ' - Spécialité :  '.$Specialite.' -  Gouvernorat : '.$gouvernorat. ' - Ville: '.$ville.'  

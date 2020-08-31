@@ -144,8 +144,10 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
                     </td>
                       <td style="width:15%">
                         <?php
-                            $client =   $Folder['customer_id'] ;
-                            echo   ClientsController::ClientChampById('name',$client);?>
+                       if(isset($facture->iddossier)){   $client =   $Folder['customer_id'] ;
+						  echo   ClientsController::ClientChampById('name',$client);
+						  }
+						  ?>  
                     </td>
                       <td style="width:15%">
                         <?php $prest=  $facture->prestataire; ?>
@@ -387,7 +389,7 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
                 var date_arrive = $('#date_arrive').val();
                 var reference = $('#reference').val();
                 var dossier = $('#iddossier').val();
-                if ((date_arrive != '' ) || (reference != '' )   )
+                if ((date_arrive != '' ) && (dossier != '' )   )
                 {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
@@ -401,7 +403,7 @@ $createdat=  date('d/m/Y H:i', strtotime($facture->created_at ));
                         }
                     });
                 }else{
-                    // alert('ERROR');
+                    alert('insérer la date et le dossier ');
                 }
             });
 

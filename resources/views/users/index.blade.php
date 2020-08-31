@@ -39,9 +39,9 @@
                     <td><?php echo $qual;?></td>
                     <td><?php if ($user->isOnline() && $user->statut!= -1 ){  if(  $user->statut == 1) {echo '<span class="label label-success">Connecté</span> ';} else{ if ($user->statut==2){echo '<span class="label label-warning">En Pause</span> ';  }  }    } else{echo '<span class="label label-danger">Hors ligne</span>';}  ?></td>
                   <td>  @can('isAdmin')
-                        <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('UsersController@destroy', $user['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
+                    <!--    <a  onclick="return confirm('Êtes-vous sûrs ?')"  href="{{action('UsersController@destroy', $user['id'])}}" class="btn btn-danger btn-sm btn-responsive " role="button" data-toggle="tooltip" data-tooltip="tooltip" data-placement="bottom" data-original-title="Supprimer" >
                             <span class="fa fa-fw fa-trash-alt"></span> Supprimer
-                        </a>
+                        </a> -->
                       @endcan</td>
                 </tr>
             @endforeach

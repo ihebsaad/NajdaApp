@@ -749,7 +749,9 @@ function custom_echo($x, $length)
                                  <div class="  form-group"  id="prestation"   >
                                    <div class="col-md-4">
                                        <button style="display:none;margin-bottom:10px;font-size:14px" type="button" id="valide" class="btn btn-lg btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
-                                   </div>
+                                   
+								   <input type="hidden" value="0" id="firstsaved" />
+								   </div>
                                      <div class="col-md-4"  style="display:none;padding-left:15px;"  id="validation" >
                                          <label>ou bien Prestation non effectuée ? Raison:</label>
 
@@ -807,6 +809,8 @@ function custom_echo($x, $length)
                                 <td style="width:10%; <?php echo $style;?> ">
                                     <a href="{{action('PrestationsController@view', $prestation['id'])}}" >
                                         <?php  echo $prestation['id']  ; ?>
+								<?php $facture= \App\Facture::where('prestation',$prestation['id'] )->first();  ?>
+                        <?php   if(isset($facture)) { ?> Facture: <a href="{{action('FacturesController@view', $facture->id)}}"    ><?php if(isset($facture) ){echo $facture->reference   ;}   ?> </a> <?php } ?>
                                     </a></td>
 
                                 <td style="width:10%">
@@ -1773,7 +1777,11 @@ echo $heurecrea1; ?></td>
                 if($type=='admin' || $type=='bureau' ||$type=='financier' ){
 ?>
                 <div id="tab9" class="tab-pane fade">
-
+				
+		   <div class="col-sm-2  ">
+		    <button id="addgr" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfacture"><b><i class="fas fa-plus"></i> Ajouter une facture </b></button>
+			</div><br>
+			
                     <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
                         <thead>
                         <tr id="headtable">
@@ -1830,6 +1838,11 @@ echo $heurecrea1; ?></td>
     </section>
 
 
+	
+	
+	
+	
+	
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
@@ -2515,6 +2528,57 @@ if(strstr($dossier['reference_medic'],"MI")){
 
 
 
+    <!-- Modal -->
+    <div class="modal fade" id="createfacture"    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ajouter une facture</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+
+                        <form method="post" >
+                            {{ csrf_field() }}
+
+                            <div class="form-group">
+                                <label for="type">Date d'arrivée :</label>
+                                <input   id="date_arrive"   value='<?php echo date('d/m/Y'); ?>' class="form-control datepicker-default "  />
+
+                            </div>
+
+
+							<div class="form-group">
+                                <label for="type">N° de Facture :</label>
+                                <input class="form-control"  id="reference"  type="text" class="form-control input"   />
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="type"> Dossier : </label>
+                                     <?php         $dossiers = \App\Dossier::orderBy('created_at', 'desc')->get(); ?>
+                                    <select id ="iddossier"  class="form-control " style="width: 100%;color:black!important;">
+                                        <option></option>
+                                        <?php foreach($dossiers as $ds)
+
+                                        {
+											if($ds->id== $dossier->id){$selected='selected="selected"';}else{$selected='';}
+                                            echo '<option   '.$selected.' style="color:black!important" title="'.$ds->id.'" value="'.$ds->id.'"> '.$ds->reference_medic.' | '.$ds->subscriber_name .' '.$ds->subscriber_lastname .' </option>';}     ?>
+                                    </select>
+                             </div>
+                        </form>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" id="addfacture" class="btn btn-primary">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
     <!-- Modal -->
@@ -3178,6 +3242,32 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 
  $(document).ready(function() {
+
+ 
+ 
+             $('#addfacture').click(function(){
+                var date_arrive = $('#date_arrive').val();
+                var reference = $('#reference').val();
+                var dossier = $('#iddossier').val();
+                if ((date_arrive != '' ) || (reference != '' )   )
+                {
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('factures.saving') }}",
+                        method:"POST",
+                        data:{reference:reference,date_arrive:date_arrive,dossier:dossier, _token:_token},
+                        success:function(data){
+                            //   alert('Added successfully');
+                            window.location =data;
+
+                        }
+                    });
+                }else{
+                    // alert('ERROR');
+                }
+            });
+			
+			
 
                      var urllocale=top.location.href;
                      var posit=urllocale.indexOf("/dossiers/view/CreerOM/");
@@ -4655,6 +4745,47 @@ function toggle(className, displayState){
             var prestation=  document.getElementById('idprestation').value;
             var _token = $('input[name="_token"]').val();
 
+			
+			// creation prestation  si ce n'est pas la premiere
+			
+			
+				  var prestataire = $('#selectedprest').val();
+			  var nomprestataire = $('#selectedprest option:selected').text();
+                 var dossier_id = $('#dossier').val();
+alert(nomprestataire);
+                var typeprest = $('#typeprest').val();
+                var gouvernorat = $('#gouvcouv').val();
+                var specialite = $('#specialite').val();
+                var date = $('#pres_date').val();
+
+                //   gouvcouv
+                if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
+                {
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('prestations.saving') }}",
+                        method:"POST",
+                        data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
+                        success:function(data){
+                            var prestation=parseInt(data);
+                            // window.location =data;
+							document.getElementById('idprestation').value=prestation;
+ 
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+
+
+                        }
+
+                    });
+                }else{
+
+                }
+				
+			
+			// validation
+			prestation= document.getElementById('idprestation').value;
+			alert(prestation);
             $.ajax({
                 url:"{{ route('prestations.valide') }}",
                 method:"POST",
@@ -4718,7 +4849,7 @@ function toggle(className, displayState){
 
 
         $('#add2').click(function(){
-
+			document.getElementById('firstsaved').value=1;
             selected=   document.getElementById('selected').value;
             document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
 
@@ -5264,7 +5395,7 @@ document.getElementById('add2').style.display = 'block';
 
    $("#showNext").click(function() {
 	var start=  document.getElementById('start').value ;
-	  var  prest =document.getElementById('selectedprest').value;
+	 var  prest =document.getElementById('selectedprest').value;
     ///// Enregistrement prestation
  if(    start==1  &&       document.getElementById('showNext').firstChild.data =='Commencer' )
 {
@@ -5347,6 +5478,78 @@ $('#showNext').prop('disabled', true);
                 document.getElementById('showNext').firstChild.data  ='Suivant';
 
                 var shownext=false;var infos=false;
+				
+				if( document.getElementById('firstsaved').value==0)
+				{
+				  var prestataire = $('#selectedprest').val();
+			  var nomprestataire = $('#selectedprest option:selected').text();
+ 			//  alert(nomprestataire);
+                var dossier_id = $('#dossier').val();
+
+                var typeprest = $('#typeprest').val();
+                var gouvernorat = $('#gouvcouv').val();
+                var specialite = $('#specialite').val();
+                var date = $('#pres_date').val();
+
+                //   gouvcouv
+                if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
+                {
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('prestations.saving') }}",
+                        method:"POST",
+                        data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
+                        success:function(data){
+                            var prestation=parseInt(data);
+                            // window.location =data;
+							document.getElementById('idprestation').value=prestation;
+
+                        //    document.getElementById('prestation').style.display='block';
+                        //    document.getElementById('valide').style.display='block';
+                        //    document.getElementById('idprestation').value =prestation;
+
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+
+
+                        }
+
+                    });
+                }else{
+
+                }
+				
+				 }
+				 document.getElementById('firstsaved').value=0;
+				
+// 				
+ var _token = $('input[name="_token"]').val(); 
+                var  prestation =document.getElementById('idprestation').value; 
+                var  prestataire =document.getElementById('selectedprest').value;
+            //    var  statut =document.getElementById('statutprest').value;
+            //    var  details =document.getElementById('detailsprest').value;
+  var nomprestataire = $('#selectedprest option:selected').text();
+ 			  alert(nomprestataire);
+ 			  alert(prestation);
+			  
+                $.ajax({
+                    url:"{{ route('prestations.updatestatut') }}",
+                    method:"POST",
+                    data:{prestation:prestation,prestataire:prest,statut:statut,details:details, _token:_token},
+                    success:function(data){
+
+                // reinitialiser le champs de statut
+                    ///    if(document.getElementById('selectedprest').value ==0) {
+                    ///        document.getElementById('statutprest').value ='';
+                    ///        document.getElementById('detailsprest').value ='';}
+
+                    }
+                });				
+				
+				
+				
+				
+				
             // reinitialiser le champs de statut
             /*if(document.getElementById('selectedprest').value ==0) {
                 document.getElementById('statutprest').value ='';
@@ -5494,63 +5697,7 @@ $('#showNext').prop('disabled', true);
             }
 */
 			
-			  var prestataire = $('#selectedprest').val();
-                var dossier_id = $('#dossier').val();
-
-                var typeprest = $('#typeprest').val();
-                var gouvernorat = $('#gouvcouv').val();
-                var specialite = $('#specialite').val();
-                var date = $('#pres_date').val();
-
-                //   gouvcouv
-                if ((parseInt(prestataire) >0)&&(parseInt(dossier_id) >0)&&(parseInt(typeprest) >0))
-                {
-                    var _token = $('input[name="_token"]').val();
-                    $.ajax({
-                        url:"{{ route('prestations.saving') }}",
-                        method:"POST",
-                        data:{date:date,prestataire:prestataire,dossier_id:dossier_id,specialite:specialite,gouvernorat:gouvernorat,typeprest:typeprest, _token:_token},
-                        success:function(data){
-                            var prestation=parseInt(data);
-                            /// window.location =data;
-
-                        //    document.getElementById('prestation').style.display='block';
-                        //    document.getElementById('valide').style.display='block';
-                        //    document.getElementById('idprestation').value =prestation;
-
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-
-
-                        }
-
-                    });
-                }else{
-
-                }
-				
-				 
-				
-// 				
- var _token = $('input[name="_token"]').val(); 
-               /* var  prestation =document.getElementById('idprestation').value;
-                var  prestataire =document.getElementById('selectedprest').value;
-                var  statut =document.getElementById('statutprest').value;
-                var  details =document.getElementById('detailsprest').value;
-*/
-                $.ajax({
-                    url:"{{ route('prestations.updatestatut') }}",
-                    method:"POST",
-                    data:{prestation:prestation,prestataire:prest,statut:statut,details:details, _token:_token},
-                    success:function(data){
-
-                // reinitialiser le champs de statut
-                    ///    if(document.getElementById('selectedprest').value ==0) {
-                    ///        document.getElementById('statutprest').value ='';
-                    ///        document.getElementById('detailsprest').value ='';}
-
-                    }
-                });				
+			
 				
 				
 				
