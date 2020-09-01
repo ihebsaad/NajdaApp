@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="portlet box grey">
-        <div class="modal-header">Nature du Contrat Client</div>
+        <div class="modal-header">Type du Contrat Client</div>
     </div><div class="form-group">
      {{ csrf_field() }}
 
@@ -41,7 +41,7 @@
   </style>
 <h2>Règles </h2>
  <?php
-    $type_missions = \App\TypeMission::get(); ?>
+    $type_missions = \App\TypeMission::orderBy('nom_type_Mission','asc')->get(); ?>
 			<table style="width:850px"> 
 			<tr id="ligne-1"  >
 			<td>

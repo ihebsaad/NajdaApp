@@ -29,13 +29,13 @@
             <tr id="headtable">
                 <th style="width:10%">ID</th>
                 <th style="width:45%">Nom</th>
-                <th style="width:45%">Type</th>
+                <th style="width:45%">Genre</th>
                  <th style="width:10%">Actions</th>
               </tr>
             <tr>
                 <th style="width:10%">ID</th>
                 <th style="width:45%">Nom</th>
-                <th style="width:45%">Type</th>
+                <th style="width:45%">Genre</th>
                  <th class="no-sort" style="width:10%">Actions</th>
             </tr>
             </thead>
@@ -94,7 +94,7 @@
                             </div>
 							
 						   <div class="form-group">
-                                <label for="type">Type :</label>
+                                <label for="type">Genre :</label>
                                 <select class="form-control"  name="type" id="type" >
 								<option value="commun">Commun</option>
 								<option value="particulier">Particulier</option>

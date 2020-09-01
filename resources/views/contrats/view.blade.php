@@ -33,7 +33,7 @@
        <input type="hidden" id="idtp" class="form-control"   value="{{ $contrat->id }}">
              </div>
 	  <div class="row" style="padding:20px 20px 20px 20px">
- <h2 class="pull-left" >Natures des contrats</h2><span  class="btn btn-md btn-success pull-right"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une nature</b></span>
+ <h2 class="pull-left" >Types des contrats</h2><span  class="btn btn-md btn-success pull-right"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter un type</b></span>
 	  </div>
         <table class="table table-striped" id="mytable" style="width:100%">
             <thead>
@@ -89,7 +89,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ajouter une nature de contrat</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Ajouter un type de contrat</h5>
 
                 </div>
                 <div class="modal-body">
