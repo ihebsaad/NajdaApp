@@ -749,9 +749,8 @@ function custom_echo($x, $length)
                                  <div class="  form-group"  id="prestation"   >
                                    <div class="col-md-4">
                                        <button style="display:none;margin-bottom:10px;font-size:14px" type="button" id="valide" class="btn btn-lg btn-success"><i class="fa fa-check"></i> Valider la prestation</button>
-                                   
-								   <input type="hidden" value="0" id="firstsaved" />
-								   </div>
+                                       <input type="hidden" value="0" id="firstsaved" />
+                                   </div>
                                      <div class="col-md-4"  style="display:none;padding-left:15px;"  id="validation" >
                                          <label>ou bien Prestation non effectuée ? Raison:</label>
 
@@ -809,8 +808,6 @@ function custom_echo($x, $length)
                                 <td style="width:10%; <?php echo $style;?> ">
                                     <a href="{{action('PrestationsController@view', $prestation['id'])}}" >
                                         <?php  echo $prestation['id']  ; ?>
-								<?php $facture= \App\Facture::where('prestation',$prestation['id'] )->first();  ?>
-                        <?php   if(isset($facture)) { ?> Facture: <a href="{{action('FacturesController@view', $facture->id)}}"    ><?php if(isset($facture) ){echo $facture->reference   ;}   ?> </a> <?php } ?>
                                     </a></td>
 
                                 <td style="width:10%">
@@ -1085,7 +1082,27 @@ array_push($listepr,$pr['prestataire_id']);
                                     echo "Aucun";
                                 }
                             ?></td>
-                            <td style=";"> </td>
+                            <td style=";">
+                                <?php if ($dtag->type == "email") { ?>
+                                    <div class="btn-group" style="margin-right: 10px">
+                                            <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important;" id="btnsrctag">
+                                                <a style="color:black" href='{{action('EnvoyesController@view', $dtag->entree)}}' ><i class="fas fa-external-link-alt"></i> Accéder</a>
+                                            </button>
+                                        </div>
+                             <?php   } ?>
+                             <!-- add block when the tag is for attachement  -->
+                             <?php if ($dtag->type == "piecejointe") { 
+
+                                $entreeattach = DB::table('attachements')->where('id',$dtag->entree)->first();
+                                
+                                ?>
+                                    <div class="btn-group" style="margin-right: 10px">
+                                        <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important;" id="btnsrctag">
+                                            <a style="color:black" href='{{action('EnvoyesController@view', $entreeattach->entree_id)}}' ><i class="fas fa-external-link-alt"></i> Accéder</a>
+                                        </button>
+                                    </div>
+                             <?php   } ?>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -1777,11 +1794,11 @@ echo $heurecrea1; ?></td>
                 if($type=='admin' || $type=='bureau' ||$type=='financier' ){
 ?>
                 <div id="tab9" class="tab-pane fade">
-				
-		   <div class="col-sm-2  ">
-		    <button id="addgr" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfacture"><b><i class="fas fa-plus"></i> Ajouter une facture </b></button>
-			</div><br>
-			
+
+                	<div class="col-sm-2  ">
+					    <button id="addgr" class="btn btn-md btn-success"   data-toggle="modal" data-target="#createfacture"><b><i class="fas fa-plus"></i> Ajouter une facture </b></button>
+						</div><br>
+
                     <table class="table table-striped" id="mytable2" style="width:100%;margin-top:15px;">
                         <thead>
                         <tr id="headtable">
@@ -1838,11 +1855,6 @@ echo $heurecrea1; ?></td>
     </section>
 
 
-	
-	
-	
-	
-	
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
@@ -2527,8 +2539,7 @@ if(strstr($dossier['reference_medic'],"MI")){
 
 
 
-
-    <!-- Modal -->
+<!-- Modal -->
     <div class="modal fade" id="createfacture"    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -3242,7 +3253,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
 
  $(document).ready(function() {
-
  
  
              $('#addfacture').click(function(){
@@ -4744,9 +4754,7 @@ function toggle(className, displayState){
         $('#valide').click(function(){
             var prestation=  document.getElementById('idprestation').value;
             var _token = $('input[name="_token"]').val();
-
-			
-			// creation prestation  si ce n'est pas la premiere
+// creation prestation  si ce n'est pas la premiere
 			
 			
 				  var prestataire = $('#selectedprest').val();
@@ -4849,7 +4857,7 @@ alert(nomprestataire);
 
 
         $('#add2').click(function(){
-			document.getElementById('firstsaved').value=1;
+
             selected=   document.getElementById('selected').value;
             document.getElementById('selectedprest').value = document.getElementById('prestataire_id_'+selected).value ;
 
@@ -5395,7 +5403,7 @@ document.getElementById('add2').style.display = 'block';
 
    $("#showNext").click(function() {
 	var start=  document.getElementById('start').value ;
-	 var  prest =document.getElementById('selectedprest').value;
+	  var  prest =document.getElementById('selectedprest').value;
     ///// Enregistrement prestation
  if(    start==1  &&       document.getElementById('showNext').firstChild.data =='Commencer' )
 {
@@ -5478,7 +5486,7 @@ $('#showNext').prop('disabled', true);
                 document.getElementById('showNext').firstChild.data  ='Suivant';
 
                 var shownext=false;var infos=false;
-				
+
 				if( document.getElementById('firstsaved').value==0)
 				{
 				  var prestataire = $('#selectedprest').val();
@@ -5549,7 +5557,7 @@ $('#showNext').prop('disabled', true);
 				
 				
 				
-				
+
             // reinitialiser le champs de statut
             /*if(document.getElementById('selectedprest').value ==0) {
                 document.getElementById('statutprest').value ='';
@@ -5697,12 +5705,6 @@ $('#showNext').prop('disabled', true);
             }
 */
 			
-			
-				
-				
-				
-				
-				
 				
 				
 				
