@@ -1086,7 +1086,7 @@ array_push($listepr,$pr['prestataire_id']);
                                 <?php if ($dtag->type == "email") { ?>
                                     <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important;" id="btnsrctag">
-                                                <a style="color:black" href='{{action('EntreesController@view', $dtag->entree)}}' ><i class="fas fa-external-link-alt"></i> Accéder</a>
+                                                <a style="color:black" href='{{action('EntreesController@show', $dtag->entree)}}' ><i class="fas fa-external-link-alt"></i> Accéder</a>
                                             </button>
                                         </div>
                              <?php   } ?>
@@ -1098,7 +1098,7 @@ array_push($listepr,$pr['prestataire_id']);
                                 ?>
                                     <div class="btn-group" style="margin-right: 10px">
                                         <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important;" id="btnsrctag">
-                                            <a style="color:black" href='{{action('EntreesController@view', $entreeattach->entree_id)}}' ><i class="fas fa-external-link-alt"></i> Accéder</a>
+                                            <a style="color:black" href='{{action('EntreesController@show', $entreeattach->entree_id)}}' ><i class="fas fa-external-link-alt"></i> Accéder</a>
                                         </button>
                                     </div>
                              <?php   } ?>
