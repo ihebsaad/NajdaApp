@@ -2,6 +2,7 @@
 <?php 
 use App\Http\Controllers\TagsController;
 use App\Tag;
+use App\Attachement ;
  ?>
 <!--select css-->
     
@@ -671,7 +672,23 @@ use App\Tag;
                           <button id="btn-cmttag" class="btn btn-default default-hovered">TAG & Commentaire</button>
                         </div>
                       </div>    
-                      <?php $tags = Tag::where(['entree' => $entree['id'], 'dernier' => 1 ])->orderBy('created_at','desc')->get(); ?>  
+                      <?php 
+                      
+                      $tags = array();
+                      // recuperer tag des attachements de l'entree
+                      $colattachs = Attachement::where("parent","=",$entree['id'])->get();
+                        if (!empty($colattachs))
+                        {
+                            foreach ($colattachs as $lattach) {
+                                $coltagsattach = Tag::get()->where('entree', '=', $lattach['id'] )->where('type', '=', 'piecejointe');
+                                $tags = array_merge($tags,$coltagsattach->toArray());
+                            }
+                        }
+
+                      $tagsentree = Tag::where(['entree' => $entree['id'], 'dernier' => 1 ])->orderBy('created_at','desc')->get();
+                      $tags = array_merge($tags,$tagsentree->toArray());
+                      
+                       ?>  
                       <div id="ajouttag" style="display:none;margin-top: 30px">
                         <input type="hidden" name="dossieridtag" id="dossieridtag" value="<?php echo $dosscourant; ?>">
                         <?php if (count($tags) > 0) { ?>
@@ -715,10 +732,10 @@ use App\Tag;
                                 <select id="tagslist" name="tagslist" class="form-control select2" style="width: 230px;display:none">
                                     
                                      @foreach( $tags as $tag)
-                                        <option value={{$tag->id}}>{{$tag->titre}} | {{$tag->contenu}} | 
-                                        <?php if ((isset($tag->montant)) && (! empty($tag->montant))) { 
-                                                  if ($tag->montant !== null){
-                                              ?> {{$tag->montant}} {{$tag->devise}}
+                                        <option value={{$tag['id']}}>{{$tag['titre']}} | {{$tag['contenu']}} | 
+                                        <?php if ((isset($tag['montant'])) && (! empty($tag['montant']))) { 
+                                                  if ($tag['montant'] !== null){
+                                              ?> {{$tag['montant']}} {{$tag['devise']}}
                                         <?php }} ?>
                                         </option>
                                      @endforeach
@@ -764,13 +781,13 @@ use App\Tag;
 
  @foreach( $tags as $tag)
                                   <tr>
-                                <td style="">{{$tag->titre}}  </td>
+                                <td style="">{{$tag['titre']}}  </td>
 
-                                <td style="">{{$tag->contenu}} </td>
- <?php if ((isset($tag->montant)) && (! empty($tag->montant))) { 
-                                                    if ($tag->montant !== null){
+                                <td style="">{{$tag['contenu']}} </td>
+ <?php if ((isset($tag['montant'])) && (! empty($tag['montant']))) { 
+                                                    if ($tag['montant'] !== null){
                                                 ?>
-                                <td style="">{{$tag->montant}}</td>
+                                <td style="">{{$tag['montant']}}</td>
  <?php }}else { ?>
                             
  <td style=""></td>

@@ -766,6 +766,14 @@ return redirect('roles');
 
       }
 
+      public function actionsactives30min()
+      {
+
+
+           return view('actionsactives30min');
+
+      }
+
 
 
       public function Calendriermissions7 ()

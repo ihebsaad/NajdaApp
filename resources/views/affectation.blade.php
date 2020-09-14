@@ -55,6 +55,11 @@
                             <i class="fas fa-lg  fa-user-cog"></i>  Calendrier Missions
                            </a>
                      </li>
+                       <li class="nav-item">
+                    <a class="nav-link" href="{{ route('actionsactives30min') }}"  >
+                        <i class="fas fa-lg  fa-user-cog"></i> Actions actives depuis 30 minutes
+                    </a>
+                    </li>
 
                     <li class="nav-item ">
                         <a class="nav-link " href="{{ route('notifs') }}"  >
