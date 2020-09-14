@@ -56,9 +56,16 @@ $envoyeC = Envoye::get();
                             <a   href="{{ route('envoyes') }}">
                                 <span class="badge pull-right"><?php  echo EnvoyesController::countenvoyes(); ?></span>
                                 <i class="fa fa-paper-plane fa-fw mrs"></i>
-                                Envoyées
+                                Mes Envoyées
                             </a>
                         </li>
+                        <li class="">
+                            <a   href="{{ route('envoyes.tous') }}" style="cursor:default">
+                            <span class="badge pull-right"></span>
+                                <i class="fa fa-paper-plane fa-fw mrs"></i>
+                               Tous Envoyées
+                            </a>
+                         </li>
                         <li class="">
                             <a   href="{{ route('envoyes.brouillons') }}">
                                 <span class="badge badge-orange pull-right"><?php echo EnvoyesController::countbrouillons(); ?></span>

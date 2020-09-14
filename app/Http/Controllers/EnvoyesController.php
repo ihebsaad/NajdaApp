@@ -35,6 +35,20 @@ class EnvoyesController extends Controller
 
         return view('envoyes.index', compact('envoyes'),['dossiers' => $dossiers,'TotBr'=>$count]);
     }
+	
+	
+	    public function tous()
+    {        $par=Auth::id();
+
+        $envoyes = Envoye::orderBy('created_at', 'desc')->where('statut','=',1)->paginate(5);
+
+        $dossiers = Dossier::all();
+        $count= $this->countbrouillons();
+
+        return view('envoyes.tous', compact('envoyes'),['dossiers' => $dossiers,'TotBr'=>$count]);
+    }
+	
+	
 
     public function brouillons()
     {        $par=Auth::id();

@@ -2293,6 +2293,7 @@ class DossiersController extends Controller
                 ->where('type_prest',$type )
                 ->where('specialite',$spec )
                 ->where('ville',$ville )
+                ->where('actif','<>',0 )				
                 ->orderBy('priorite','asc')
                 ->orderBy('derniere_prestation','asc')
                 ->get();
@@ -2302,6 +2303,7 @@ class DossiersController extends Controller
                 ->where('type_prest',$type )
                 ->where('specialite',$spec )
                 ->where('postal',1 )
+                ->where('actif','<>',0 )				
                 ->orderBy('priorite','asc')
                 ->orderBy('derniere_prestation','asc')
                 ->get();

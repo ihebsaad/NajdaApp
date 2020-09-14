@@ -986,7 +986,7 @@ class LoginController extends Controller
             if ($seance->dispatcheurtel == Auth::id()) {
                 $seance->dispatcheurtel = NULL;
             }
-            if ($seance->dispatcheurte2 == Auth::id()) {
+            if ($seance->dispatcheurtel2 == Auth::id()) {
                 $seance->dispatcheurtel2 = NULL;
             }
             if ($seance->dispatcheurtel3 == Auth::id()) {

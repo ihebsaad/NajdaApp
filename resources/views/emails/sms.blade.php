@@ -72,10 +72,16 @@
 
 
     </div>
-
+<?php
+$ref="";
+if (isset($doss)){
+$dossier= \App\Dossier::where('id',$doss)->first();
+$ref  =  $dossier->reference_medic ;
+}
+?>
     <div class="form-group">
         <label for="contenu">Message:</label>
-        <textarea  type="text" class="form-control" name="message"></textarea>
+        <textarea  type="text" class="form-control" name="message" style="height:150px"><?php if ($ref!=""){echo $ref; ?>(ref à inclure dans votre réponse SVP)<?php }?></textarea>
     </div>
       {{--  {!! NoCaptcha::renderJs() !!}     --}}
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>

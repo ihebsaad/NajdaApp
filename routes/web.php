@@ -202,6 +202,7 @@ Route::get('/envoyes/view/{id}', 'EnvoyesController@view');
 Route::get('/envoyes/show/{id}', 'EnvoyesController@show');
 Route::get('/envoyes/destroy/{id}', 'EnvoyesController@destroy');
 Route::get('/envoyes/brouillons', 'EnvoyesController@brouillons')->name('envoyes.brouillons');
+Route::get('/envoyes/tous', 'EnvoyesController@tous')->name('envoyes.tous');
 
 
 /*** Dossiers **/

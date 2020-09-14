@@ -7355,7 +7355,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         Log::info('[Agent: '.$nomuser.'] Envoi de SMS à '.$num);
 
 
-
         $urlapp="http://$_SERVER[HTTP_HOST]/najdaapp";
 
         $urlsending=$urlapp.'/envoyes';

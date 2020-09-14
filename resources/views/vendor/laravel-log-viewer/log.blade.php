@@ -41,7 +41,6 @@
     <div class="col-lg-9 ">
         <h3 style="margin-left:30px;margin-bottom:30px"><i class="fa fa-calendar" aria-hidden="true"></i> Historique des opérations</h3>
 
-
     @if ($logs === null)
         <div>
           Document > 50 Mo, SVP Télécharger le.

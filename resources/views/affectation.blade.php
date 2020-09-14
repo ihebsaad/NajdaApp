@@ -274,12 +274,13 @@
                 if($user->id==$supmedic){$role.='(Superviseur Médical) ';}
                 if($user->id==$suptech){$role.='(Superviseur Technique) ';}
                 if($user->id==$charge){$role.='(Chargé de transport) ';}
-
+				$adminon= 0;
+				if ( ( $user->user_type== 'admin' && $iduser==$supmedic ) || ( $user->user_type== 'admin' && $iduser==$suptech ) ){$adminon= 1;}
+				
                 $style='';
 
-                if($user->id!=1){
-
-                if($user->statut== 1 &&  $user->user_type!= 'financier' &&  $user->user_type!= 'admin' && $user->user_type!= 'bureau' && $user->id!= 2 ) {
+ 
+                if( $user->statut== 1 &&  $user->user_type!= 'financier'  && $user->user_type!= 'bureau' && $user->id!= 2 && $user->user_type!= 'admin'  ) {
                 $c++;
                 $folders = Dossier::where('affecte','=',$user->id)->where('statut',5)->get();
 
@@ -307,9 +308,41 @@
                 <?php	}
 
                 echo '</div>' ;}
+				
+				
+                if( $adminon==1  ) {
+                $c++;
+                $folders = Dossier::where('affecte','=',$user->id)->where('statut',5)->get();
+
+                $countF=count($folders);
+                $taille='400px;';
+                if($countF < 20 || $countF == 20 ){$taille='400px';}
+                if($countF > 20 && ( $countF < 40 || $countF == 40) ){$taille='600px';}
+                if($countF > 40 && $countF < 80){$taille='1000px';}
+                if($countF > 80 || $countF == 80){$taille='1400px';}
+                if($countF >120 || $countF == 120){$taille='1800px';}
+                if($countF >160){$taille='2300px';}
+                echo '<h3 onclick="showUser('.$iduser.')" style="cursor:pointer;text-align:left;background-color:#a0d468;color:white;padding:10px 10px 10px 10px">'.$user->name.'  '.$user->lastname.' <small style="color:black;">'.$role.'</small> </h3>';
+                echo  '<div class="userdiv" id="user-'.$iduser.'" style="display:none;margin-bottom:30px;'.$bg.';height:'.$taille.'"  >';
+
+                foreach($folders as $folder)
+                { $type=$folder['type_dossier']; $style=""; if($type=='Mixte'){$style="--my-color-var:#F39C12;";}if($type=='Medical'){$style="--my-color-var:#52BE80";} if($type=='Technique' || $type=='Transport'){$style="--my-color-var:#3498DB;";}
+                $statut=$folder['statut']; $idd=$folder['id'];$ref=$folder['reference_medic'];$abn=$folder['subscriber_name'].' '.$folder['subscriber_lastname'];$idclient=$folder['customer_id'];$client= $folder['reference_customer'] /*  ClientsController::ClientChampById('name',$idclient)*/ ;?>
+                <div  id="dossier-<?php echo $idd;?>" class="dossier dossier-<?php echo $type;?>"  style="margin-top:5px;<?php echo $style; if($statut==5){ echo';border:2px solid black';}?>" >
+                    <label style="font-size: 18px;"><?php echo $ref ;?></label>
+                    <div class="infos">  <small class="assure" style="font-size:11px"><?php custom_echo($abn,13);?></small>
+                        <br><small style="font-size:10px"><?php echo custom_echo($client,18);?></small>
+
+                        <i style="float:left;color:;margin-top:10px" class="delete fa fa-trash" onclick="Delete('<?php echo $idd;?>')"></i></div>
+                </div>
+                <?php	}
+
+                echo '</div>' ;}				
+				
+				
+				
                 }
-                }
-                ?>
+                 ?>
 
 
             </div>
