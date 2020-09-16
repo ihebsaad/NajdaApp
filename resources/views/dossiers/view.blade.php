@@ -2105,7 +2105,7 @@ if(strstr($dossier['reference_medic'],"MI")){
 
             </div>
             <div class="modal-body">
-                <div class="card-body">
+                <div class="card-body" style="padding-bottom: 0px!important">
 
 
                     <div class="form-group">
@@ -2127,6 +2127,7 @@ if(strstr($dossier['reference_medic'],"MI")){
                 </div>
 
             </div>
+                <textarea name="doccomment" id="doccomment" placeholder="Commentaire..." style="margin-left: 2%;margin-right: 2.5%;margin-bottom: 1%;width: 95%; background: #efefef;"></textarea>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 <button type="button" id="gendochtml" class="btn btn-primary">Générer</button>
@@ -4361,6 +4362,7 @@ $("#templateom").val("Select").change();
         var _token = $('input[name="_token"]').val();
         var dossier = $('#dossdoc').val();
         var tempdoc = $("#templatedocument").val();
+        var comdoc = $("#doccomment").val();
         var idparent = '';
         var idgop = '';
         var idMissionDoc=$("#idMissionDoc").val();
@@ -4385,7 +4387,7 @@ $("#templateom").val("Select").change();
                 url:"{{ route('documents.adddocument') }}",
                 method:"post",
                 //'&_token='+_token
-                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent+'&idtaggop='+idgop+'&idMissionDoc='+idMissionDoc,
+                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent+'&comdoc='+comdoc+'&idtaggop='+idgop+'&idMissionDoc='+idMissionDoc,
                 success:function(data){
 
                    // alert(data);
