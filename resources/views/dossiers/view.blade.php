@@ -3532,9 +3532,11 @@ function completeom(id,affectea,verifc)
         
         $("#templatehtmlom").modal('show');
  }
-function modalodoc(titre,emplacement,commentaire)
+function modalodoc(titre,emplacement,commentaire=null)
 {
      $("#doctitle").text(titre);
+     if (commentaire != null)
+     {$("#apercucomment").text(commentaire);}
     // cas OM fichier PDF
     /*if (emplacement.indexOf("/OrdreMissions/") !== -1 )
     {*/
