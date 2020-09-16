@@ -1180,7 +1180,7 @@ array_push($listepr,$pr['prestataire_id']);
                                         ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important;" id="btntele">
-                                                <a style="color:black" onclick='modalodoc("<?php echo $doc->titre; ?>","{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
+                                                <a style="color:black" onclick='modalodoc("<?php echo $doc->titre; ?>","{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}","<?php echo $doc->comment; ?>");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
                                             </button>
                                         </div>
                                     </div>
@@ -1370,6 +1370,7 @@ array_push($listepr,$pr['prestataire_id']);
                 </div>
 
             </div>
+            <textarea name="apercucomment" id="apercucomment" placeholder="Commentaire..." style="margin-left: 2%;margin-right: 2.5%;margin-bottom: 1%;width: 95%; background: #efefef;" readonly></textarea>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
@@ -3531,7 +3532,7 @@ function completeom(id,affectea,verifc)
         
         $("#templatehtmlom").modal('show');
  }
-function modalodoc(titre,emplacement)
+function modalodoc(titre,emplacement,commentaire)
 {
      $("#doctitle").text(titre);
     // cas OM fichier PDF
@@ -3691,7 +3692,7 @@ function annuleom(titre,iddoc)
 
 
                     urlf="{{ URL::asset('storage'.'/app/') }}";
-aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\",\""+urlf+"/"+val[1]['emplacement']+"\");'><i class='fas fa-external-link-alt'></i>Aperçu</a>";
+aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\",\""+urlf+"/"+val[1]['emplacement']+"\",\""+val[1]['comment']+"\");'><i class='fas fa-external-link-alt'></i>Aperçu</a>";
 
                   // aurlf="<a style='color:black' href='"+urlf+"/"+val[1]['emplacement']+"' ><i class='fa fa-download'></i> Télécharger</a>";
                     $("#tabledocshisto tbody").append("<tr><td>"+val[1]['created_at']+"</td><td>"+aurlf+"</td></tr>");
