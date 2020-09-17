@@ -3536,7 +3536,12 @@ function modalodoc(titre,emplacement,commentaire=null)
 {
      $("#doctitle").text(titre);
      if (commentaire != null)
-     {$("#apercucomment").text(commentaire);}
+     {$("#apercucomment").text(commentaire);
+        document.getElementById('apercucomment').style.display = 'block';
+      } else
+      {
+        document.getElementById('apercucomment').style.display = 'none';
+      }
     // cas OM fichier PDF
     /*if (emplacement.indexOf("/OrdreMissions/") !== -1 )
     {*/
