@@ -4543,7 +4543,8 @@ if((affectea==="mmentite" && tempdoc==="remplace")|| (affectea==="interne" && te
                     if (!$.trim(data))
                     {location.reload();}
                     else
-                        {alert(data);}
+                        {alert(data);
+                        location.reload();}
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                       Swal.fire({
