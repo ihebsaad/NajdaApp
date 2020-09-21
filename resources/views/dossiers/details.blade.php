@@ -114,7 +114,11 @@ foreach ($listeusers as $user)
 	<div class="col-lg-6">
 <?php
  	  $theuser= \App\User::where('id',$user)->first();
-	  $nom=$theuser->name.' '.$theuser->lastname ;
+	  $nom="";
+	  if(isset($theuser)){
+		 $nom=$theuser->name.' '.$theuser->lastname ;
+
+	  }
 	// echo '<h5>'.$nom.'</h5><br>' ;
    // nombre des emails envoyés par un agent
     $EmailsSentUser=   DossiersController::countEmailsSentUser ($id,$user);	 
@@ -170,9 +174,13 @@ $c=0;
 $tot=count($listeusers);
 foreach ($listeusers as $user)
 {  $c++;
- 	  $theuser= \App\User::where('id',$user)->first();
-	  $nom=$theuser->name.' '.$theuser->lastname ;
-	  $missionsUser=DossiersController::countMissionsUser($id,$user);
+	  $nom="";
+	  if(isset($theuser)){
+		 $nom=$theuser->name.' '.$theuser->lastname ;
+
+	  }
+	  
+ 	  $missionsUser=DossiersController::countMissionsUser($id,$user);
 	 $missionsUserT=DossiersController::countMissionsUserT($id,$user);
  if($c!=$tot) {echo "['".$nom."',    ".$missionsUserT."],";}else{
 echo "['".$nom."',    ".$missionsUserT."] ";	 
@@ -211,10 +219,7 @@ echo "['".$nom."',    ".$missionsUserT."] ";
 
 
 
-
-		
-		
-		
+ 
 		
 		
 		

@@ -28,6 +28,7 @@ Route::get('/Calendriermissions7', 'HomeController@Calendriermissions7')->name('
 Route::get('/actionsactives30min', 'HomeController@actionsactives30min')->name('actionsactives30min');
 Route::get('/notifs', 'HomeController@notifs')->name('notifs');
 Route::get('/transport', 'HomeController@transport')->name('transport');
+Route::get('/transport2', 'HomeController@transport2')->name('transport2');
 Route::get('/transporth', 'HomeController@transporth')->name('transporth');
 Route::get('/transporttous', 'HomeController@transporttous')->name('transporttous');
 Route::get('/transportsemaine', 'HomeController@transportsemaine')->name('transportsemaine');
@@ -375,9 +376,14 @@ Route::get('/clientgroupes/destroy/{id}', 'ClientGroupesController@destroy');
 /*** Garanties  **/
  Route::get('/garanties', array('as' => 'garanties','uses' => 'GarantiesController@index'));
 Route::post('/garanties/saving','GarantiesController@saving')->name('garanties.saving');
+Route::post('/garanties/savingRB','GarantiesController@savingRB')->name('garanties.savingRB');
 Route::post('/garanties/updating','GarantiesController@updating')->name('garanties.updating');
+Route::post('/garanties/updaterubrique','GarantiesController@updaterubrique')->name('garanties.updaterubrique');
 Route::get('/garanties/view/{id}', 'GarantiesController@view');
 Route::get('/garanties/destroy/{id}', 'GarantiesController@destroy');
+Route::get('/garanties/deleterubrique/{id}', 'GarantiesController@deleterubrique');
+Route::post('/garanties/addgr', 'GarantiesController@addgr')->name('garanties.addgr');
+Route::post('/garanties/removegr', 'GarantiesController@removegr')->name('garanties.removegr');
 
 
 

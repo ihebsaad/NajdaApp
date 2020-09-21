@@ -476,8 +476,8 @@ $user = auth()->user();
         <thead>
         <tr id="headtable">
             <th style="width:10%">ID</th>
-            <th style="width:10%">Dossier</th>
-            <th style="width:20%">Prestataire</th>
+            <th style="width:10%">Date</th>
+            <th style="width:10%">Dossier</th>			
             <th style="width:15%">Type</th>
             <th style="width:15%">Spécialité</th>
             <th style="width:15%">Gouvernorat</th>
@@ -496,18 +496,18 @@ $user = auth()->user();
             if($effectue ==0){$style='background-color:#fcdcd5;';}else{$style='';}
             ?>
 
-            <tr > <td style="width:35%; <?php echo $style;?> ">
+            <tr ><td style="width:35%; <?php echo $style;?> ">
                     <a href="{{action('PrestationsController@view', $prestation['id'])}}" >
                         <?php  echo $prestation['id']  ; ?>
                     </a></td>
+                <td style="width:20%">
+                    <?php $date = $prestation['date_prestation'];
+                    echo $date;  ?>
+                </td>
                 <td style="width:10%;   ">
                <a href="{{action('PrestationsController@view', $prestation['id'])}}" >
                         <?php  echo PrestationsController::DossierById($dossid);  ?>
-                    </a></td>
-                <td style="width:20%">
-                    <?php $prest= $prestation['prestataire_id'];
-                    echo PrestationsController::PrestataireById($prest);  ?>
-                </td>
+                    </a></td>				
                 <td style="width:15%;">
                     <?php $typeprest= $prestation['type_prestations_id'];
                     echo PrestationsController::TypePrestationById($typeprest);  ?>

@@ -674,49 +674,29 @@ use App\Http\Controllers\DossiersController;
 
                                                                 </div>
                                                                 <div class="row">
-																<?php $val1=$val2=$val3=$val4='';
-																$garantie=\App\Garantie::where('id_assure',$dossier->ID_assure)->first();
-																		if (isset($garantie)){$val1=$garantie->val1; $val2=$garantie->val2; $val3=$garantie->val3; $val4=$garantie->val4  ;  }
+																<h3>Tables de garanties</h3>
+																<?php  
+																$garanties=\App\Garantie::get();
+																$garanties_assure= \DB::table('garanties_assure')->where('id_assure',$dossier->ID_assure)->pluck('garantie');
+																  $garanties_assure=$garanties_assure->toArray();
 																?>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label for="val1" class="control-label"> val1 </label>
+                     				 <div class="row">
+                                    <select class="form-control  col-lg-12   " style="width:400px" name="garanties"  multiple  id="garanties">
 
-                                                                            <div class="input-group-control">
-                                                                                <input   type="number"  readonly  class="form-control" value="<?php echo $val1;?>" >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
 
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label for="val1" class="control-label"> val2 </label>
+                                        <option></option>
+                              
+                                        <?php foreach($garanties as $gr){ 
+									if (in_array($gr->id, $garanties_assure)) {$selected="selected='selected'";}else{$selected="";}
+										?>
+										 
+                                            <option  onclick="addgarantie(<?php echo $gr->id;?>,this)" {{$selected}}  value="<?php echo $gr->id;?>"    value="<?php echo $gr->id;?>">  <?php echo $gr->nom;?></option>
+										 <?php }?>
 
-                                                                            <div class="input-group-control">
-                                                                                <input   type="number"  readonly  class="form-control" value="<?php echo $val2;?>" >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>																	
+ 
+                                    </select>
 
-																<div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label for="val1" class="control-label"> val3 </label>
-
-                                                                            <div class="input-group-control">
-                                                                                <input   type="number"  readonly  class="form-control" value="<?php echo $val3;?>" >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-																	
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label for="val1" class="control-label"> val4 </label>
-
-                                                                            <div class="input-group-control">
-                                                                                <input   type="number"  readonly  class="form-control" value="<?php echo $val4;?>" >
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>																	
+                                </div>			
 																	
                                                                 </div>
 
@@ -1525,7 +1505,9 @@ use App\Http\Controllers\DossiersController;
 <option <?php if(strtoupper($dossier->vehicule_marque)=="WIESMANN"){echo 'selected="selected"';}?> value="Wiesmann">Wiesmann</option>
 <option <?php if(strtoupper($dossier->vehicule_marque)=="ZASTAVA"){echo 'selected="selected"';}?> value="Zastava">Zastava</option>
 <option <?php if(strtoupper($dossier->vehicule_marque)=="ZENVO"){echo 'selected="selected"';}?> value="Zenvo">Zenvo</option>
-<option <?php if(strtoupper($dossier->vehicule_marque)=="AUTRE"){echo 'selected="selected"';}?> value="AUTRE">AUTRE</option></select>
+<option <?php if(strtoupper($dossier->vehicule_marque)=="AUTRE"){echo 'selected="selected"';}?> value="AUTRE">AUTRE</option>
+
+</select>
 																
 																
 																
@@ -3140,6 +3122,7 @@ function disabling(elm) {
         $("#hotel").select2();
         $("#vehicule_marque").select2();
         $("#empalcement").select2();
+      //  $("#garanties").select2();
 
         $('#phoneicon').click(function() {
 
@@ -3411,7 +3394,51 @@ function disabling(elm) {
    /* $('#addtel').click(function () {
         $('#adding6').modal({show : true});
     });*/
+        function addgarantie(garantie,elm){
+			
+            var assure = $('#ID_assure').val();
+            var _token = $('input[name="_token"]').val();
+			alert('checked : '+elm.checked);
+			alert('selected : '+elm.selected);
+			if(elm.checked)
+			{/*	
+            $.ajax({
+                url:"{{ route('garanties.addgr') }}",
+                method:"POST",
+                data:{assure:assure,garantie:garantie, _token:_token},
+                success:function(data){
 
+                    //   console.log(data);
+                   // alert('data : '+data);
+                        window.location =data;
+
+                } 
+
+            });*/
+			}else{ // suppression
+				/*
+				// confirmation
+				  var r = confirm("Êtes-vous sûrs de supprimer cette table de garanties ?");
+				if (r == true) {				
+			   $.ajax({
+                url:"{{ route('garanties.removegr') }}",
+                method:"POST",
+                data:{assure:assure,garantie:garantie, _token:_token},
+                success:function(data){
+
+                    //   console.log(data);
+                   // alert('data : '+data);
+                        window.location =data;
+
+                } 
+
+            });	
+				*/
+				} // confirmation	
+			} // suppression
+ 
+        }
+		
     function changingAddress(id,champ,elm) {
         var champid=elm.id;
         var val =document.getElementById(champid).value;
@@ -3553,6 +3580,12 @@ function disabling(elm) {
         });
 
 
+		
+
+
+
+		
+		
         $('#add2').click(function(){
              var prestataire = $('#selectedprest').val();
             var dossier_id = $('#iddossupdate').val();
@@ -4016,6 +4049,8 @@ function disabling(elm) {
         } // updating
 
 
+		
+		 
 
     }); // $ function
 

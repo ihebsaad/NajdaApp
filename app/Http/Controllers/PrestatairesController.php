@@ -505,7 +505,7 @@ $user = auth()->user();
             ->pluck('type_prestation_id');
 
         $prestataire = Prestataire::find($id);
-        $prestations =   Prestation::where('prestataire_id', $id)->get();
+        $prestations =   Prestation::where('prestataire_id', $id)->orderBy('id','desc')->get();
 
         $evaluations =   Evaluation::where('prestataire', $id)->orderBy('priorite','asc')->get();
 

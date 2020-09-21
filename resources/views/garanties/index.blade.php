@@ -8,12 +8,7 @@
 
 @section('content')
 <?php
- $assures=\App\Dossier::where('ID_assure','<>','')->pluck('ID_assure')->toArray();;
- $assures=array_unique($assures);
- $assures=array_values($assures);
-	 
- $assuresG=\App\Garantie::pluck('ID_assure')->toArray();
-   
+  
 								 
 ?>
     <style>
@@ -27,7 +22,7 @@
             <div class="row">
                 <div class="col-lg-6"><h2>Tables de garanties</h2></div>
                 <div class="col-lg-6">
-                    <button id="addgr" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une garantie</b></button>
+                    <button id="addgr" class="btn btn-md btn-success"   data-toggle="modal" data-target="#create"><b><i class="fas fa-plus"></i> Ajouter une table de garantie</b></button>
                 </div>
             </div>
         </div>
@@ -35,26 +30,26 @@
             <thead>
             <tr id="headtable">
                 <th style="width:10%">ID</th>
+                <th style="width:30%">Nom</th>
+                <th style="width:40%">Description</th>
  
                  <th style="width:10%">Actions</th>
               </tr>
             <tr>
                 <th style="width:10%">ID</th>
-
+				<th style="width:30%">Nom</th>
+                <th style="width:40%">Description</th>
               <th class="no-sort" style="width:10%">Actions</th>
             </tr>
             </thead>
             <tbody>
             @foreach($garanties as $garantie)
                 <?php
-          	 	$dossier=\App\Dossier::where('ID_assure',trim($garantie->id_assure))->first();
-
-
+ 
                 ?>
 
                 <tr>
                     <td  ><a href="{{action('GarantiesController@view', $garantie['id'])}}" ><?php echo sprintf("%04d",$garantie->id);?></a></td>
-                     <td  > </td>
 					<td><?php echo $garantie->nom ; ?></td>
 					<td><?php echo $garantie->description ; ?></td>
                       <td    >
@@ -85,7 +80,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ajouter une Garantie </h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Ajouter une table de garantie </h5>
 
                 </div>
                 <div class="modal-body">
@@ -94,43 +89,19 @@
                         <form method="post" >
                             {{ csrf_field() }}
 
-                            <div class="form-group">
-                                <label for="type">Assuré :</label>
-                                <select class="form-control select2"  required id="id_assure" style="width:100%" >
-								<option></option>
-								<?php
-								 foreach($assures as $assure)
-								{
-									$doss=\App\Dossier::where('ID_assure',trim($assure))->first();
-									if (! in_array(trim($assure),$assuresG))
-									{echo '<option value="'.$assure.'"> '.$assure.' (  '. $doss->subscriber_name.' '.$doss->subscriber_lastname.') </option>';}
-								}
-								 
-								?>
-								</select>
 
-                            </div>
+							
 							
 						   <div class="form-group">
-                                <label for="type">Val1 :</label>
-                                 <input class="form-control" type="number" id="val2" />
+                                <label for="nom">Nom :</label>
+                                 <input class="form-control" type="text" id="nom" />
 
                             </div>
 						   <div class="form-group">
-                                <label for="type">Val2 :</label>
-                                 <input class="form-control" type="number" id="val3" />
+                                <label for="description">Description :</label>
+                                 <textarea class="form-control"  id="description"  ></textarea>
 
-                            </div>
-						   <div class="form-group">
-                                <label for="type">Val3 :</label>
-                                 <input class="form-control" type="number" id="val4" />
-
-                            </div>
-							<div class="form-group">
-                                <label for="type">Val4 :</label>
-                                 <input class="form-control" type="number" id="val1" />
-
-                            </div>
+                            </div> 
 							
                         </form>
                     </div>
@@ -255,22 +226,19 @@
 
 
             $('#add').click(function(){
-                var id_assure = $('#id_assure').val();
-                var val1 = $('#val1').val();
-                var val2 = $('#val2').val();
-                var val3 = $('#val3').val();
-                var val4 = $('#val4').val();
-                if ((id_assure != '')  )
+                var nom = $('#nom').val();
+                var description = $('#description').val();
+                 if ((nom != '')  )
                 {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
                         url:"{{ route('garanties.saving') }}",
                         method:"POST",
-                        data:{id_assure:id_assure,val1:val1,val2:val2,val3:val3,val4:val4, _token:_token},
+                        data:{nom:nom,description:description , _token:_token},
                         success:function(data){
 
                             //   alert('Added successfully');
-                            window.location =data;
+                         window.location =data;
 
 
                         }
