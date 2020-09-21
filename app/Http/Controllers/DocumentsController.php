@@ -1506,7 +1506,7 @@ public function historique(Request $request)
         $docparent= $_POST['doc'] ;
         $histodoc = array();
         while ($docparent !== null) {
-            $arrdoc = Document::select('id','titre','emplacement','comment','dernier','parent','created_at')->where('id', $docparent)->first();
+            $arrdoc = Document::select('id','titre','emplacement','comment','dernier','parent','idtaggop','created_at')->where('id', $docparent)->first();
             $histodoc[]=$arrdoc;
             $docparent = $arrdoc['parent'];
         }
