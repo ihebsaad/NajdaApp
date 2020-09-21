@@ -2087,11 +2087,11 @@ class ActionController extends Controller
 
    }
 
-   public function validerDateSpecMission($actt)
+   public function validerDateSpecMission($acttid)
    {
 
        // $miss=Mission::where('id',$request->idmissionDateSpec)->first();
-
+          $actt=ActionEC::where("id",$acttid)->first();
              if($actt->id_type_miss==7)// ambulance
             {
 
@@ -2159,7 +2159,7 @@ class ActionController extends Controller
               if($actt->ordre==16)
               {
                $miss=Mission::where('id',$actt->mission_id)->first();
-                $miss->update(['date_spec_affect'=>1]); 
+                $miss->update(['date_spec_affect'=>0]); 
 
                 
               }  
@@ -2926,7 +2926,7 @@ class ActionController extends Controller
 
                }
 
-               $this->validerDateSpecMission($action); 
+               $this->validerDateSpecMission($action->id); 
                      
 
            }  // fin bouton fait
@@ -2934,7 +2934,7 @@ class ActionController extends Controller
            {
              if($bouton==2)  //bouton ignorer
                    {
-                      $this->validerDateSpecMission($action);
+                      $this->validerDateSpecMission($action->id);
                       $action->update(['statut'=>"ignoree"]);
                       $action->update(['user_id'=>auth::user()->id]); 
                       $action->update(['date_fin' => $dateSys]);

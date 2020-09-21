@@ -27,6 +27,7 @@ use App\Client; //modification nouveau dossier
 use App\Prestation;
 use App\Personne;
 use App\Envoye;
+use App\Note;
 
 
 class OrdreMissionsController extends Controller
@@ -312,7 +313,36 @@ if($affectea=='mmentite')
 {
 Log::info('[Agent : '.$nomuser.' ] Remplacement Ordre de mission: '.$titreparent. ' par: '.$name. ' affecté à même entité: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
 }
+  // début recherche note
+  /* $notes=Note::where('date_rappel','>=',$omtaxi->dateheuredep)->where('nommission','Taxi')->get();
 
+   $resultatNote='';
+   $input=null;
+   $output=null;
+
+    if($notes)
+    {
+        $input=$omtaxi->CL_lieudecharge_dec;
+        preg_match('[]', $input, $output);
+
+       foreach ($notes as $nt) {
+       if($output && !empty($output))
+       {
+        if(stripos($output[0], $nt->villemission) !== false)
+         {
+           $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a ,une mission taxi dans la zone ou ville'.$nt->villemission.'avec la date de rappel suivante '.$nt->date_rappel.'; ' ;
+         }
+       }
+       else
+       {
+
+    
+       }
+       }
+    }
+   
+    return($resultatNote);*/
+    // fin recherhce note;
 }
 
 $date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
@@ -321,8 +351,11 @@ $newformat = date('d/m/Y',$date);
 $idprestation=$omparent['idprestation'];
  Prestation::where('id', $idprestation)->update(['date_prestation' => $newformat,'oms_docs'=> $filename]);
 
+                // cas exit 1
+                $resultatNote=$this->retourner_notes_om_taxi($omtaxi);            
+             
+                return($resultatNote);
 
-                // end bloc test
                 exit();}
         		    //exit();
         		}
@@ -490,6 +523,37 @@ $par=Auth::id();
 $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 Log::info('[Agent : '.$nomuser.' ] Accomplissement Ordre de mission: '.$omparent['titre'].' par: '.$name.' affecté à entité soeur: '.$presttaxi.' dans le dossier: '.$omparent["reference_medic"] );
+
+// début recherche note
+   /*$notes=Note::where('date_rappel','>=',$omtaxi->dateheuredep)->where('nommission','Taxi')->get();
+
+   $resultatNote='';
+   $input=null;
+   $output=null;
+
+    if($notes)
+    {
+        $input=$omtaxi->CL_lieudecharge_dec;
+        preg_match('[]', $input, $output);
+
+       foreach ($notes as $nt) {
+       if($output && !empty($output))
+       {
+        if(stripos($output[0], $nt->villemission) !== false)
+         {
+           $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a ,une mission taxi dans la zone ou ville'.$nt->villemission.'avec la date de rappel suivante '.$nt->date_rappel.'; ' ;
+         }
+       }
+       else
+       {
+
+    
+       }
+       }
+    }
+   
+    return($resultatNote);*/
+    // fin recherhce note;
  }
         			//return 'complete action '.$result;
 /*if(isset($omparent['km_distance']) && isset($_POST['km_distance']) && isset($_POST['vehicID']))
@@ -603,6 +667,10 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['i
                      $miss->update(['h_arr_prev_dest'=>  $dateFM,'date_spec_affect2'=> true]);*/
                  }
 
+              // cas exit 2
+                $resultatNote=$this->retourner_notes_om_taxi($omtaxi);             
+             
+                return($resultatNote);
 
                     exit();
         		}
@@ -711,6 +779,37 @@ $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à même entité: '.$dossierom["type_affectation"].' dans le dossier: '.$dossieromref["reference_medic"] );
 
+// début recherche note
+  /* $notes=Note::where('date_rappel','>=',$omtaxi->dateheuredep)->where('nommission','Taxi')->get();
+
+   $resultatNote='';
+   $input=null;
+   $output=null;
+
+    if($notes)
+    {
+        $input=$omtaxi->CL_lieudecharge_dec;
+        preg_match('[]', $input, $output);
+
+       foreach ($notes as $nt) {
+       if($output && !empty($output))
+       {
+        if(stripos($output[0], $nt->villemission) !== false)
+         {
+           $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a ,une mission taxi dans la zone ou ville'.$nt->villemission.'avec la date de rappel suivante '.$nt->date_rappel.'; ' ;
+         }
+       }
+       else
+       {
+
+    
+       }
+       }
+    }
+   
+    return($resultatNote);*/
+    // fin recherhce note;
+
 }
 
 			    $pdf2 = PDFomme::loadView('ordremissions.pdfodmtaxi',['prestataire_taxi' => $prestataireom,'idprestation' => $idprestation])->setPaper('a4', '');
@@ -722,6 +821,11 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossom,
 		        ]);
 		        $attachement->save();
+
+                // cas exit 3
+                $resultatNote=$this->retourner_notes_om_taxi($omtaxi);              
+             
+                return($resultatNote);
 		        exit();
         	}
 
@@ -749,6 +853,44 @@ $user = User::find($par);
 $nomuser = $user->name ." ".$user->lastname ;
 $dossieromref= Dossier::where('id', $iddoss)->select('reference_medic')->first();
 Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à prestataire externe: '.$prestataireom.' dans le dossier: '.$dossieromref["reference_medic"] );
+// début recherche note
+
+  /*if($omtaxi->dateheuredep)
+  {
+   $notes=Note::where('date_rappel','>=',$omtaxi->dateheuredep)->where('nommission','Taxi')->get();
+  }
+  else
+  {
+    return ("hello");
+  }
+
+   $resultatNote='';
+   $input=null;
+   $output=null;
+
+    if($notes)
+    {
+        $input=$omtaxi->CL_lieudecharge_dec;
+        preg_match('[]', $input, $output);
+
+       foreach ($notes as $nt) {
+       if($output && !empty($output))
+       {
+        if(stripos($output[0], $nt->villemission) !== false)
+         {
+           $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a ,une mission taxi dans la zone ou ville'.$nt->villemission.'avec la date de rappel suivante '.$nt->date_rappel.'; ' ;
+         }
+       }
+       else
+       {
+
+    
+       }
+       }
+    }
+   
+    return($resultatNote);*/
+    // fin recherhce note;
 
 }
 Prestation::where('id', $idprestation)->update(['oms_docs'=> $filename]);
@@ -1000,6 +1142,44 @@ else
 Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$prestomtx.' dans le dossier: '.$dossieromref["reference_medic"] );
 }
 
+   //return("hello");
+// début recherche note
+   /* if($omtaxi->dateheuredep)
+    {
+     $notes=Note::where('date_rappel','>=',$omtaxi->dateheuredep)->where('nommission','Taxi')->get();
+    }
+    else
+    {
+     return("hello");
+    }
+
+   $resultatNote='';
+   $input=null;
+   $output=null;
+
+    if($notes)
+    {
+        $input=$omtaxi->CL_lieudecharge_dec;
+        preg_match('[]', $input, $output);
+
+       foreach ($notes as $nt) {
+       if($output && !empty($output))
+       {
+        if(stripos($output[0], $nt->villemission) !== false)
+         {
+           $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a ,une mission taxi dans la zone ou ville'.$nt->villemission.'avec la date de rappel suivante '.$nt->date_rappel.'; ' ;
+         }
+       }
+       else
+       {
+
+    
+       }
+       }
+    }
+   
+    return($resultatNote);*/
+    // fin recherhce note;
 
 
 }
@@ -1500,6 +1680,37 @@ $nomuser = $user->name ." ".$user->lastname ;
 
 Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affecté à entité soeur: '.$typeaffect.' dans le dossier: '.$dossnouveau1["reference_medic"] );
 
+// début recherche note
+ /*  $notes=Note::where('date_rappel','>=',$omtaxi->dateheuredep)->where('nommission','Taxi')->get();
+
+   $resultatNote='';
+   $input=null;
+   $output=null;
+
+    if($notes)
+    {
+        $input=$omtaxi->CL_lieudecharge_dec;
+        preg_match('[]', $input, $output);
+
+       foreach ($notes as $nt) {
+       if($output && !empty($output))
+       {
+        if(stripos($output[0], $nt->villemission) !== false)
+         {
+           $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a ,une mission taxi dans la zone ou ville'.$nt->villemission.'avec la date de rappel suivante '.$nt->date_rappel.'; ' ;
+         }
+       }
+       else
+       {
+
+    
+       }
+       }
+    }
+   
+    return($resultatNote);*/
+    // fin recherhce note;
+
 }
 
         	}
@@ -1580,6 +1791,135 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 
 					}
                 }*/
+
+               // return ("khaled");
+
+    }
+
+    public function retourner_notes_om_taxi($omtaxi)
+    {
+
+                $notes=Note::where('nommission','taxi')->get();
+                $string = $omtaxi->CL_lieudecharge_dec;
+                $output='';
+                $First = '[';
+                $Second = ']';
+                $posFirst = stripos($string, $First);
+                $posSecond = stripos($string, $Second); 
+                $resultatNote='';
+
+              if($posFirst !== false && $posSecond !== false && $posFirst < $posSecond)
+                {
+                   $output = substr($string, ($posFirst+1), ($posSecond-($posFirst+1)));
+                }
+                else
+                {
+                    $output= explode(" ",$string);
+                    $output= $output[sizeof($output)-1];
+                }
+
+                if($notes && count($notes)>0)
+                {
+
+                foreach ($notes as $nt) {
+                 if($output && !empty($output))
+                   {
+                    if(stripos(substr($nt->villemission,0,11),$output) !== false )
+                     {
+
+                       $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a une mission taxi dans la zone ou ville '.$nt->villemission.' avec la date de rappel suivante '.$nt->date_rappel.' et dont le contenu est le suivant  ('.$nt->contenu.');*************************************; ' ;
+                     }
+                   }
+
+                 }
+               }
+
+               return($resultatNote);
+
+
+    }
+
+     public function retourner_notes_om_ambulance($omambulance)
+    {
+
+                $notes=Note::where('nommission','ambulance')->get();
+                $string = $omambulance->CL_lieudecharge_dec;
+                $output='';
+                $First = '[';
+                $Second = ']';
+                $posFirst = stripos($string, $First);
+                $posSecond = stripos($string, $Second); 
+                $resultatNote='';
+
+              if($posFirst !== false && $posSecond !== false && $posFirst < $posSecond)
+                {
+                   $output = substr($string, ($posFirst+1), ($posSecond-($posFirst+1)));
+                }
+                else
+                {
+                    $output= explode(" ",$string);
+                    $output= $output[sizeof($output)-1];
+                }
+
+                if($notes && count($notes)>0)
+                {
+
+                foreach ($notes as $nt) {
+                 if($output && !empty($output))
+                   {
+                    if(stripos(substr($nt->villemission,0,11),$output) !== false)
+                     {
+                       $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a une mission ambulance dans la zone ou ville '.$nt->villemission.' avec la date de rappel suivante '.$nt->date_rappel.' et dont le contenu est le suivant  ('.$nt->contenu.');******************************; ' ;
+                     }
+                   }
+
+                 }
+               }
+
+               return($resultatNote);
+
+
+    }
+
+     public function retourner_notes_om_remorquage($omremorquage)
+    {
+
+                $notes=Note::where('nommission','remorquage')->get();
+                $string = $omremorquage->CL_lieudecharge_dec;
+                $output='';
+                $First = '[';
+                $Second = ']';
+                $posFirst = stripos($string, $First);
+                $posSecond = stripos($string, $Second); 
+                $resultatNote='';
+
+              if($posFirst !== false && $posSecond !== false && $posFirst < $posSecond)
+                {
+                   $output = substr($string, ($posFirst+1), ($posSecond-($posFirst+1)));
+                }
+                else
+                {
+                    $output= explode(" ",$string);
+                    $output= $output[sizeof($output)-1];
+                }
+
+                if($notes && count($notes)>0)
+                {
+
+                foreach ($notes as $nt) {
+                 if($output && !empty($output))
+                   {
+                    if(stripos(substr($nt->villemission,0,11),$output) !== false)
+                     {
+                       $resultatNote.= $resultatNote.'Il y a une note indiquant qu\'il y a une mission remorquage dans la zone ou ville '.$nt->villemission.' avec la date de rappel suivante '.$nt->date_rappel.' et dont le contenu est le suivant  ('.$nt->contenu.');*************************; ' ;
+                     }
+                   }
+
+                 }
+               }
+
+               return($resultatNote);
+
 
     }
 
@@ -2110,6 +2450,10 @@ $newformat = date('d/m/Y',$date);
 $idprestation=$omparent['idprestation'];
  Prestation::where('id', $idprestation)->update(['date_prestation' => $newformat,'oms_docs'=> $filename]);
 
+                 // cas 1exit ambulance
+                 $resultatNote=$this->retourner_notes_om_ambulance($omambulance);             
+             
+                 return($resultatNote);
                 exit();}
         		// end remplace
         	   }
@@ -2628,7 +2972,11 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['v
 		                 }
                     }
                  }
-
+                
+                 // cas 2 exit ambulance
+                 $resultatNote=$this->retourner_notes_om_ambulance($omambulance);             
+             
+                 return($resultatNote);
 
                     exit();
         		}
@@ -2744,6 +3092,11 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossom,
 		        ]);
 		        $attachement->save();
+
+                  // cas 3 exit ambulance
+                 $resultatNote=$this->retourner_notes_om_ambulance($omambulance);             
+             
+                 return($resultatNote);
 		        exit();
         	}
         	// affectation en externe
@@ -4230,7 +4583,13 @@ $date = strtotime(substr($_POST['CL_heuredateRDV'],0,10));
 $newformat = date('d/m/Y',$date);
 $idprestation=$omparent['idprestation'];
  Prestation::where('id', $idprestation)->update(['date_prestation' => $newformat,'oms_docs'=> $filename]);
-	                exit();}
+	              
+                    // cas 1 exit remorquage
+                 $resultatNote=$this->retourner_notes_om_remorquage($omremorquage);             
+             
+                 return($resultatNote);
+
+                    exit();}
                     //exit();
                 }
                 if ($_POST['templatedocument'] === "complete")
@@ -4512,7 +4871,10 @@ if( isset($_POST['km_arrive']) && !empty($_POST['km_arrive']) && isset($_POST['i
                         $miss->update(['h_retour_base'=>  $datedebMiss,'date_spec_affect2'=> true]);*/
                     }
 
-
+                 // cas 2 exit remorquage
+                 $resultatNote=$this->retourner_notes_om_remorquage($omremorquage);             
+             
+                 return($resultatNote);
                     exit();
                 }
             }
@@ -4632,6 +4994,10 @@ Log::info('[Agent : '.$nomuser.' ] Generation Ordre de mission: '.$name.' affect
 		            'type'=>'pdf','path' => $path2, 'nom' => $name.'.pdf','boite'=>3,'dossier'=>$iddossom,
 		        ]);
 		        $attachement->save();
+                 // cas 3 exit remorquage
+                 $resultatNote=$this->retourner_notes_om_remorquage($omremorquage);             
+             
+                 return($resultatNote);
 		        exit();
         	}
 

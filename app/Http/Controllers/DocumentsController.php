@@ -25,6 +25,7 @@ class DocumentsController extends Controller
     {
         $dossier= $_POST['dossdoc'] ;
         $templateid = $_POST['templatedocument'] ;
+        $comment= $_POST['comdoc'] ;
         $parent =null;
         $valchamps="";
 
@@ -516,6 +517,7 @@ $Arrayd= mb_convert_encoding($Arrayn,'Windows-1252','utf-8');
             'parent' => $parent,
             'dernier' => 1,
             'valchamps' => $valchamps,
+            'comment' => $comment,
             'idtaggop' => $idgop,
             'montantgop' => $montantgp
 
@@ -529,6 +531,7 @@ $Arrayd= mb_convert_encoding($Arrayn,'Windows-1252','utf-8');
             'parent' => $parent,
             'dernier' => 1,
             'valchamps' => $valchamps,
+            'comment' => $comment,
             'idtaggop' => $idgop
 
         ]);}
@@ -1503,7 +1506,7 @@ public function historique(Request $request)
         $docparent= $_POST['doc'] ;
         $histodoc = array();
         while ($docparent !== null) {
-            $arrdoc = Document::select('id','titre','emplacement','dernier','parent','created_at')->where('id', $docparent)->first();
+            $arrdoc = Document::select('id','titre','emplacement','comment','dernier','parent','created_at')->where('id', $docparent)->first();
             $histodoc[]=$arrdoc;
             $docparent = $arrdoc['parent'];
         }

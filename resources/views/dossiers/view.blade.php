@@ -1180,7 +1180,7 @@ array_push($listepr,$pr['prestataire_id']);
                                         ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important;" id="btntele">
-                                                <a style="color:black" onclick='modalodoc("<?php echo $doc->titre; ?>","{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
+                                                <a style="color:black" onclick='modalodoc("<?php echo $doc->titre; ?>","{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}","<?php echo $doc->comment; ?>");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
                                             </button>
                                         </div>
                                     </div>
@@ -1361,6 +1361,7 @@ array_push($listepr,$pr['prestataire_id']);
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="doctitle"></h5>
+                <div class="float-right" style="text-align: right!important;"><button type="button" class="btn btn-default btn-xs" readonly disabled id="tagudoc"><i class="fas fa-tag"></i> Tag</button></div>
             </div>
             <div class="modal-body">
                 <div class="card-body">
@@ -1370,6 +1371,7 @@ array_push($listepr,$pr['prestataire_id']);
                 </div>
 
             </div>
+            <textarea name="apercucomment" id="apercucomment" placeholder="Commentaire..." style="margin-left: 2%;margin-right: 2.5%;margin-bottom: 1%;width: 95%; background: #efefef;" readonly></textarea>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
@@ -2105,7 +2107,7 @@ if(strstr($dossier['reference_medic'],"MI")){
 
             </div>
             <div class="modal-body">
-                <div class="card-body">
+                <div class="card-body" style="padding-bottom: 0px!important">
 
 
                     <div class="form-group">
@@ -2127,6 +2129,7 @@ if(strstr($dossier['reference_medic'],"MI")){
                 </div>
 
             </div>
+                <textarea name="doccomment" id="doccomment" placeholder="Commentaire..." style="margin-left: 2%;margin-right: 2.5%;margin-bottom: 1%;width: 95%; background: #efefef;"></textarea>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 <button type="button" id="gendochtml" class="btn btn-primary">Générer</button>
@@ -3530,9 +3533,53 @@ function completeom(id,affectea,verifc)
         
         $("#templatehtmlom").modal('show');
  }
-function modalodoc(titre,emplacement)
+function modalodoc(titre,emplacement,commentaire=null,idutag=null)
 {
      $("#doctitle").text(titre);
+     if (commentaire != null)
+     {$("#apercucomment").text(commentaire);
+        document.getElementById('apercucomment').style.display = 'block';
+      } else
+      {
+        document.getElementById('apercucomment').style.display = 'none';
+      }
+      //<i class="fas fa-tag"></i> 
+      if (idutag != null)
+     {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+                url:"{{ route('tags.infotag') }}",
+                method:"POST",
+                //'&_token='+_token
+                data:'_token='+_token+'&tag='+idutag,
+                success:function(data){
+
+                    var infotag = JSON.parse(data);
+                    // vider le contenu du table historique
+                    var items = [];
+                    $.each(infotag, function(i, field){
+                      items.push([ i,field ]);
+                    });
+                    // affichage template dans iframe
+                    $.each(items, function(index, val) {
+
+                    //titre du tag
+                    if (val[0]==0)
+                    {
+                        $("#tagudoc").text(val[1]['titre']+" : "+val[1]['contenu']);
+                    }
+
+                    });
+
+                }
+            });
+
+
+        document.getElementById('tagudoc').style.display = 'block';
+      } else
+      {
+        document.getElementById('tagudoc').style.display = 'none';
+      }
     // cas OM fichier PDF
     /*if (emplacement.indexOf("/OrdreMissions/") !== -1 )
     {*/
@@ -3690,7 +3737,7 @@ function annuleom(titre,iddoc)
 
 
                     urlf="{{ URL::asset('storage'.'/app/') }}";
-aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\",\""+urlf+"/"+val[1]['emplacement']+"\");'><i class='fas fa-external-link-alt'></i>Aperçu</a>";
+aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\",\""+urlf+"/"+val[1]['emplacement']+"\",\""+val[1]['comment']+"\");'><i class='fas fa-external-link-alt'></i>Aperçu</a>";
 
                   // aurlf="<a style='color:black' href='"+urlf+"/"+val[1]['emplacement']+"' ><i class='fa fa-download'></i> Télécharger</a>";
                     $("#tabledocshisto tbody").append("<tr><td>"+val[1]['created_at']+"</td><td>"+aurlf+"</td></tr>");
@@ -4361,6 +4408,7 @@ $("#templateom").val("Select").change();
         var _token = $('input[name="_token"]').val();
         var dossier = $('#dossdoc').val();
         var tempdoc = $("#templatedocument").val();
+        var comdoc = $("#doccomment").val();
         var idparent = '';
         var idgop = '';
         var idMissionDoc=$("#idMissionDoc").val();
@@ -4385,7 +4433,7 @@ $("#templateom").val("Select").change();
                 url:"{{ route('documents.adddocument') }}",
                 method:"post",
                 //'&_token='+_token
-                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent+'&idtaggop='+idgop+'&idMissionDoc='+idMissionDoc,
+                data:$("#templatefilled").contents().find('form').serialize()+'&_token='+_token+'&dossdoc='+dossier+'&templatedocument='+tempdoc+'&parent='+idparent+'&comdoc='+comdoc+'&idtaggop='+idgop+'&idMissionDoc='+idMissionDoc,
                 success:function(data){
 
                    // alert(data);
@@ -4533,7 +4581,8 @@ if((affectea==="mmentite" && tempdoc==="remplace")|| (affectea==="interne" && te
                     if (!$.trim(data))
                     {location.reload();}
                     else
-                        {alert(data);}
+                        {alert(data);
+                        location.reload();}
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                       Swal.fire({

@@ -56,9 +56,9 @@ $user = auth()->user();
                             <select class="form-control select2" name="pres_id_search" id="pres_id_search">
                                 <option value="">sélectionner</option>
 
-                                @foreach(App\Prestataire::get() as $p)
+                                @foreach(App\Prestataire::orderBy('name','ASC')->get(["id","name","prenom"]) as $p)
 
-                                 <option value="{{$p->id}}">{{$p->name}}</option>  
+                                 <option value="{{$p->id}}">{{$p->name}} {{$p->prenom}}</option>  
 
                                 @endforeach
                             </select>

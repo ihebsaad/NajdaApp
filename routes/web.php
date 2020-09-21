@@ -641,6 +641,7 @@ Route::post('/tags/deletetag','TagsController@deletetag')->name('tags.deletetag'
 Route::post('/tags/historique','TagsController@historique')->name('tags.historique');
 Route::post('/tags/entreetags','TagsController@entreetags')->name('tags.entreetags');
 Route::post('/tags/entreetags1','TagsController@entreetags1')->name('tags.entreetags1');
+Route::post('/tags/infotag','TagsController@infotag')->name('tags.infotag');
 
 /*** Generate doc ***/
 Route::get('docgen', function () {
