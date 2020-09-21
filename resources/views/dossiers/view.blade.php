@@ -1361,6 +1361,7 @@ array_push($listepr,$pr['prestataire_id']);
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="doctitle"></h5>
+                <div class="float-right" style="text-align: right!important;"><button type="button" class="btn btn-default btn-xs" readonly disabled id="tagudoc"><i class="fas fa-tag"></i> Tag</button></div>
             </div>
             <div class="modal-body">
                 <div class="card-body">
@@ -3532,7 +3533,7 @@ function completeom(id,affectea,verifc)
         
         $("#templatehtmlom").modal('show');
  }
-function modalodoc(titre,emplacement,commentaire=null)
+function modalodoc(titre,emplacement,commentaire=null,idutag=null)
 {
      $("#doctitle").text(titre);
      if (commentaire != null)
@@ -3541,6 +3542,43 @@ function modalodoc(titre,emplacement,commentaire=null)
       } else
       {
         document.getElementById('apercucomment').style.display = 'none';
+      }
+      //<i class="fas fa-tag"></i> 
+      if (idutag != null)
+     {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+                url:"{{ route('tags.infotag') }}",
+                method:"POST",
+                //'&_token='+_token
+                data:'_token='+_token+'&tag='+idutag,
+                success:function(data){
+
+                    var infotag = JSON.parse(data);
+                    // vider le contenu du table historique
+                    var items = [];
+                    $.each(infotag, function(i, field){
+                      items.push([ i,field ]);
+                    });
+                    // affichage template dans iframe
+                    $.each(items, function(index, val) {
+
+                    //titre du tag
+                    if (val[0]==0)
+                    {
+                        $("#tagudoc").text(val[1]['titre']+" : "+val[1]['contenu']);
+                    }
+
+                    });
+
+                }
+            });
+
+
+        document.getElementById('tagudoc').style.display = 'block';
+      } else
+      {
+        document.getElementById('tagudoc').style.display = 'none';
       }
     // cas OM fichier PDF
     /*if (emplacement.indexOf("/OrdreMissions/") !== -1 )
