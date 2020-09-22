@@ -881,6 +881,10 @@ $prestation = Prestation::where(['dossier_id' => $dossier,'prestataire_id' => $_
                     {
                         date_default_timezone_set('Africa/Tunis');
                         setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
+                        if ($arrfile['nom'] == "RM_anglais")
+                        {//en_US.UTF-8
+                            setlocale (LC_TIME, 'en_US.UTF-8', 'eng'); 
+                        }
                         $datees = strftime("%d %B %Y".", "."%H:%M"); 
                     }
                 $champsArray = explode(',', $arrfile['champs']);
