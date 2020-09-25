@@ -4544,8 +4544,8 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
    {
     $usersFolder = array();
     
-    $usersFolderh=\App\AffectDossHis::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
-    $usersFolders=\App\AffectDoss::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
+    $usersFolderh=\App\AffectDossHis::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->where('util_affecte','!=',0)->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
+    $usersFolders=\App\AffectDoss::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->where('util_affecte','!=',0)->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
          //dd($hisaffec);
     //$countU=count($usersFolder);
       $usersFolder = array_merge($usersFolderh,$usersFolders);
