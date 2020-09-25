@@ -1234,9 +1234,13 @@ $dateSys = \DateTime::createFromFormat($format,$dtc);
 
 //dd("fin gestion dossiers par séances");
 
-
-//\App\Http\Controllers\FacturesController::envoi_mail_automatique_factures();
-        dd("");
+try {
+\App\Http\Controllers\FacturesController::envoi_mail_automatique_factures();
+}
+catch (Exception $e) {
+    echo 'Erreur lors de l envoi des emails automatique de factures : ',  $e->getMessage(), "\n";
+}
+        //dd("");
 dd("envoi alertes factures exécuté");
 
 

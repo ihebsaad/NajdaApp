@@ -450,25 +450,57 @@ class RechercheController extends Controller
   "ville_id_search" => null
   "spec_id_search" => null
 ]*/
-
-     if($request->get('pres_id_search'))
+     // dd($request->all());
+     // dd($request->get('pres_id_search').' / hidden : '.$request->get('pres_id_search_hidden'));
+     if($request->get('pres_id_search_hidden'))
        {
-           $prests=Prestataire::where('id',$request->get('pres_id_search'))->get(); 
-           //dd($prests);
+
+          if(is_numeric($request->get('pres_id_search_hidden')))
+          {
+           $prests=Prestataire::where('id',$request->get('pres_id_search_hidden'))->get();
+           //dd( $prests) ;
+          }
+         /* else
+          {
+            $prests=Prestataire::where('name','like', '%'.$request->get('pres_id_search').'%')
+            ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%')->get(); 
+           
+          }*/
 
        }
        else
        {
+        if($request->get('pres_id_search') && $request->get('typepres_id_search') == null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')== null && $request->get('spec_id_search')==null)
+        {
+           $prests=Prestataire::where('name','like', '%'.$request->get('pres_id_search').'%')
+            ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%')->get(); 
+           
+        }
+        else
+          {       // dd();
           // début cas 1----------------------------------------------------------------------------
         // si prstataire non identifié 1 0 0 0------------
         if ($request->get('typepres_id_search') != null && $request->get('gouv_id_search')== null && $request->get('ville_id_search')== null && $request->get('spec_id_search')==null )
             {
-              $idprestataire = DB::table('prestataires_type_prestations')->where('type_prestation_id','=',$request->get('typepres_id_search'))->pluck('prestataire_id')->toArray();
+
+             $idprestataire = DB::table('prestataires_type_prestations')->where('type_prestation_id','=',$request->get('typepres_id_search'))->pluck('prestataire_id')->toArray();
+              
             // $val=41; 
             //  dd(in_array($val,array_values($idprestataire)));
 
-           $idprestataire=array_unique($idprestataire);
-           $prests=Prestataire::whereIn('id',array_values($idprestataire))->get(['id','name','civilite','prenom','ville','ville_id']);
+             $idprestataire=array_unique($idprestataire);
+
+           if($request->get('pres_id_search'))
+               {
+          $prests=Prestataire::whereIn('id',array_values($idprestataire))->where(function($q) use($request)                   {                             
+                               $q->where('name','like', '%'.$request->get('pres_id_search').'%')
+                              ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
+              }
+              else
+              {
+                $prests=Prestataire::whereIn('id',array_values($idprestataire))->get(['id','name','civilite','prenom','ville','ville_id']);
+              }
 
             }
 
@@ -487,7 +519,19 @@ class RechercheController extends Controller
             //  dd(in_array($val,array_values($idprestataire)));
 
            $result=array_unique($result);
-           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+            if($request->get('pres_id_search'))
+               {
+           $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
+                               $q->where('name','like', '%'.$request->get('pres_id_search').'%')
+                              ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
+              else
+              {
+               $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+              }
+
 
             }
 
@@ -506,7 +550,17 @@ class RechercheController extends Controller
             //  dd(in_array($val,array_values($idprestataire)));
 
            $result=array_unique($result);
-           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+           if($request->get('pres_id_search'))
+               {
+               $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
+                               $q->where('name','like', '%'.$request->get('pres_id_search').'%')
+                              ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
+               else
+               {
+                $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
 
             }
 
@@ -524,7 +578,18 @@ class RechercheController extends Controller
             //  dd(in_array($val,array_values($idprestataire)));
 
            $result=array_unique($result);
-           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+            if($request->get('pres_id_search'))
+               {
+           $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
+                               $q->where('name','like', '%'.$request->get('pres_id_search').'%')
+                              ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
+               else
+               {
+                $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+                }
 
             }
 
@@ -546,7 +611,18 @@ class RechercheController extends Controller
             //  dd(in_array($val,array_values($idprestataire)));
 
            $result=array_unique($result);
-           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+           if($request->get('pres_id_search'))
+               {
+           $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
+                               $q->where('name','like', '%'.$request->get('pres_id_search').'%')
+                              ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
+               else
+               {
+
+                $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
 
             }
 
@@ -569,7 +645,17 @@ class RechercheController extends Controller
             //  dd(in_array($val,array_values($idprestataire)));
 
            $result=array_unique($result);
-           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+             if($request->get('pres_id_search'))
+               {
+                $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
+                               $q->where('name','like', '%'.$request->get('pres_id_search').'%')
+                              ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
+               else
+               {
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+                }
 
             }
 
@@ -593,7 +679,17 @@ class RechercheController extends Controller
             //  dd(in_array($val,array_values($idprestataire)));
 
            $result=array_unique($result);
-           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+           if($request->get('pres_id_search'))
+               {
+                $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
+                               $q->where('name','like', '%'.$request->get('pres_id_search').'%')
+                              ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
+               else
+               {
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+                }
 
             }
 
@@ -618,7 +714,17 @@ class RechercheController extends Controller
             //  dd(in_array($val,array_values($idprestataire)));
 
            $result=array_unique($result);
-           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+           if($request->get('pres_id_search'))
+               {
+                $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
+                               $q->where('name','like', '%'.$request->get('pres_id_search').'%')
+                              ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
+               else
+               {
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+                }
 
             }
 
@@ -635,7 +741,19 @@ class RechercheController extends Controller
             //  dd(in_array($val,array_values($idprestataire)));
 
            $idprestatairegouv=array_unique($idprestatairegouv);
-           $prests=Prestataire::whereIn('id',array_values( $idprestatairegouv))->get(['id','name','civilite','prenom','ville','ville_id']);
+           //$prests=Prestataire::whereIn('id',array_values( $idprestatairegouv))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+              if($request->get('pres_id_search'))
+               {
+                $prests=Prestataire::whereIn('id',array_values( $idprestatairegouv))->where(function($q) use($request)                   {                             
+                               $q->where('name','like', '%'.$request->get('pres_id_search').'%')
+                              ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
+               else
+               {
+                 $prests=Prestataire::whereIn('id',array_values( $idprestatairegouv))->get(['id','name','civilite','prenom','ville','ville_id']);
+                }
 
             }
 
@@ -655,7 +773,18 @@ class RechercheController extends Controller
     
 
            $result=array_unique($result);
-           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+           //$prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+           if($request->get('pres_id_search'))
+               {
+                $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
+                               $q->where('name','like', '%'.$request->get('pres_id_search').'%')
+                              ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
+               else
+               {
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+                }
 
             }
 
@@ -675,7 +804,19 @@ class RechercheController extends Controller
     
        
            $result=array_unique($result);
-           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+           //$prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+           if($request->get('pres_id_search'))
+               {
+                $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
+                               $q->where('name','like', '%'.$request->get('pres_id_search').'%')
+                              ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
+               else
+               {
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+                }
 
             }
 
@@ -697,7 +838,19 @@ class RechercheController extends Controller
     
 
            $result=array_unique($result);
-           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+           //$prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+           if($request->get('pres_id_search'))
+               {
+                $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
+                               $q->where('name','like', '%'.$request->get('pres_id_search').'%')
+                              ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
+               else
+               {
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+                }
 
             }
 
@@ -714,7 +867,19 @@ class RechercheController extends Controller
                  $prestatairesville=Prestataire::where('ville_id',$ville->id)->orWhere('ville','like',$ville->name)->pluck('id')->toArray();        
     
            $result=array_unique($prestatairesville);
-           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+          // $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+
+           if($request->get('pres_id_search'))
+               {
+                $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
+                               $q->where('name','like', '%'.$request->get('pres_id_search').'%')
+                              ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
+               else
+               {
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+                }
 
             }
 
@@ -731,7 +896,18 @@ class RechercheController extends Controller
                  $result=array_intersect($prestatairesville, $idprestatairespec);             
           
            $result=array_unique($result);
-           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+           //$prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+           if($request->get('pres_id_search'))
+               {
+                $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
+                               $q->where('name','like', '%'.$request->get('pres_id_search').'%')
+                              ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
+               else
+               {
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+                }
 
             }
 
@@ -745,13 +921,24 @@ class RechercheController extends Controller
              
                  $idprestatairespec= DB::table('specialites_prestataires')->where('specialite',$request->get('spec_id_search'))->pluck('prestataire_id')->toArray();                                             
            $result=array_unique($idprestatairespec);
-           $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+          // $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+           if($request->get('pres_id_search'))
+               {
+                $prests=Prestataire::whereIn('id',array_values($result))->where(function($q) use($request)                   {                             
+                               $q->where('name','like', '%'.$request->get('pres_id_search').'%')
+                              ->orWhere('prenom','like', '%'.$request->get('pres_id_search').'%');
+                                })->get(['id','name','civilite','prenom','ville','ville_id']);
+               }
+               else
+               {
+                 $prests=Prestataire::whereIn('id',array_values($result))->get(['id','name','civilite','prenom','ville','ville_id']);
+                }
 
             }
 
 
-
-       }
+        }// fin else 2
+       }// fin else 1
 
 
       return view('prestataires.index', compact('prests'));  

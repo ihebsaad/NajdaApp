@@ -52,8 +52,22 @@ $user = auth()->user();
                 <form accept-charset="utf-8" id="searchDossierform" action="{{route('recherchePrestataire.avancee')}}">
                     <div class="row">
                         <div class="col-md-4">
+                            <div class="row">
                             <label>Prestataire </label>
-                            <select class="form-control select2" name="pres_id_search" id="pres_id_search">
+                             </div>
+                             <div class="row">
+                            <input type="text" list="pres_search" name="pres_id_search" value="" class="form-control select2"/>
+                                <datalist id="pres_search">
+                                @foreach(App\Prestataire::orderBy('name','ASC')->get(["id","name","prenom"]) as $p)
+
+                                 <option ido="{{$p->id}}"> {{$p->name}} {{$p->prenom}} </option>  
+
+                                @endforeach
+                                </datalist>
+                                <input type="hidden" value="" id="pres_id_search_hidden" name="pres_id_search_hidden" />
+                                 </div>
+
+                            {{--<select class="form-control select2" name="pres_id_search" id="pres_id_search">
                                 <option value="">sélectionner</option>
 
                                 @foreach(App\Prestataire::orderBy('name','ASC')->get(["id","name","prenom"]) as $p)
@@ -61,7 +75,7 @@ $user = auth()->user();
                                  <option value="{{$p->id}}">{{$p->name}} {{$p->prenom}}</option>  
 
                                 @endforeach
-                            </select>
+                            </select>--}}
                         </div>
 
                         <div class="col-md-4">
@@ -469,8 +483,38 @@ $user = auth()->user();
 
 
 
+    /// fill phone number on select prest Prise en charge
+    document.querySelector('input[list="pres_search"]').addEventListener('input', onInput);
+
+    function onInput(e) {
+
+       var input = e.target,
+           val = input.value;
+           list = input.getAttribute('list'),
+           options = document.getElementById(list).childNodes;
+           //alert(options);
+      for(var i = 0; i < options.length; i++) {
+          //alert(options[i].innerText);
+          if(options[i].innerText)
+          {
+            //alert(val);
+            //alert(options[i].innerText);
+        if(String(options[i].innerText).trim() === String(val).trim()) {
+            //alert(val);
+          // An item was selected from the list
+          document.getElementById("pres_id_search_hidden").value = options[i].getAttribute("ido");
+          break;
+        }
+       }
+      }
+    }
+
+
+
 
  });
+
+ 
 
  </script>
 

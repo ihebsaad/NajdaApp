@@ -334,12 +334,21 @@ class FacturesController extends Controller
       $dateSys60 = \DateTime::createFromFormat($format, $dtc60);
 
       $parametres = DB::table('parametres')->where('id','=', 1 )->first();
-      $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
-      $swiftTransport->setUsername('24ops@najda-assistance.com');
-      $swiftTransport->setPassword($parametres->pass_N);
+      $swiftTransport2 =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '465', 'ssl');
+      $swiftTransport2->setUsername('24ops@najda-assistance.com');
+      $swiftTransport2->setPassword($parametres->pass_N);
       $fromname="Najda Assistance";
       $from='24ops@najda-assistance.com';
 
+      // instancier swift for fiances
+
+      $swiftTransport =  new \Swift_SmtpTransport( 'ssl0.ovh.net', '587', '');
+      $swiftTransport->setUsername('finances@najda-assistance.com');
+      $swiftTransport->setPassword($parametres->pass_Finances);
+      $fromname="Najda Assistance";
+      $from='24ops@najda-assistance.com';
+
+      $x=1/0;
    
    if($prestations && $prestations->count()>0 )
    {
@@ -437,7 +446,7 @@ class FacturesController extends Controller
                     (Signé): Mail généré automatiquement";
                     
                     $email_prestataires[]=$adr[0];
-                    /*self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
+                    /*self::envoi_mail($swiftTransport2,$adr,$sujet,$contenu,$from, $fromname);
                     Prestation::where('id', $p->id)->update(['mail_60_env'=>1]);*/
                     //adresse financier
                     //$adr= fianancier
@@ -559,7 +568,7 @@ class FacturesController extends Controller
 
                  // dd("envoi alerte au financier cas client");
                         $email_client[]=$adr[0];
-                       // self::envoi_mail($swiftTransport,$adr,$sujet,$contenu,$from, $fromname);
+                       // self::envoi_mail($swiftTransport2,$adr,$sujet,$contenu,$from, $fromname);
                            // Facture::where('id', $f->id)->update(['mail_45_env'=>1]);
                       
 
