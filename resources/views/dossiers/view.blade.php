@@ -1186,7 +1186,7 @@ array_push($listepr,$pr['prestataire_id']);
                                         ?>
                                         <div class="btn-group" style="margin-right: 10px">
                                             <button type="button" class="btn btn-primary panelciel" style="background-color: rgb(214,247,218) !important;" id="btntele">
-                                                <a style="color:black" onclick='modalodoc("<?php echo $doc->titre; ?>","{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}","<?php echo $doc->comment; ?>");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
+                                                <a style="color:black" onclick='modalodoc("<?php echo $doc->titre; ?>","{{ URL::asset('storage'.'/app/'.$doc->emplacement) }}","<?php echo $doc->comment; ?>","<?php echo $doc->idtaggop; ?>");' ><i class="fas fa-external-link-alt"></i> Aperçu</a>
                                             </button>
                                         </div>
                                     </div>
@@ -1366,8 +1366,8 @@ array_push($listepr,$pr['prestataire_id']);
     <div class="modal-dialog" role="document" style="width:900px;height: 450px">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="doctitle"></h5>
-                <div class="float-right" style="text-align: right!important;"><button type="button" class="btn btn-default btn-xs" readonly disabled id="tagudoc"><i class="fas fa-tag"></i> Tag</button></div>
+                <h5 class="modal-title" id="doctitle" style="font-weight: bold"></h5>
+                <div style="position: absolute; right: 15px; top: 15px;"><button type="button" class="btn btn-default btn-xs" readonly disabled id="tagudoc"><i class="fas fa-tag"></i> Tag</button></div>
             </div>
             <div class="modal-body">
                 <div class="card-body">
@@ -3550,7 +3550,7 @@ function modalodoc(titre,emplacement,commentaire=null,idutag=null)
         document.getElementById('apercucomment').style.display = 'none';
       }
       //<i class="fas fa-tag"></i> 
-      if (idutag != null)
+      if (idutag)
      {
         var _token = $('input[name="_token"]').val();
         $.ajax({
@@ -3558,25 +3558,11 @@ function modalodoc(titre,emplacement,commentaire=null,idutag=null)
                 method:"POST",
                 //'&_token='+_token
                 data:'_token='+_token+'&tag='+idutag,
+                dataType: 'json',
                 success:function(data){
-
-                    var infotag = JSON.parse(data);
-                    // vider le contenu du table historique
-                    var items = [];
-                    $.each(infotag, function(i, field){
-                      items.push([ i,field ]);
-                    });
-                    // affichage template dans iframe
-                    $.each(items, function(index, val) {
-
-                    //titre du tag
-                    if (val[0]==0)
-                    {
-                        $("#tagudoc").text(val[1]['titre']+" : "+val[1]['contenu']);
+                    if ($.trim(data)){ 
+                        $("#tagudoc").html("<i class='fas fa-tag'></i> "+data['titre']+" : "+data['contenu']+" | "+data['created_at']);
                     }
-
-                    });
-
                 }
             });
 
@@ -3743,7 +3729,7 @@ function annuleom(titre,iddoc)
 
 
                     urlf="{{ URL::asset('storage'.'/app/') }}";
-aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\",\""+urlf+"/"+val[1]['emplacement']+"\",\""+val[1]['comment']+"\");'><i class='fas fa-external-link-alt'></i>Aperçu</a>";
+aurlf="<a style='color:black' href='#' onclick='modalodoc(\""+val[1]['titre']+"\",\""+urlf+"/"+val[1]['emplacement']+"\",\""+val[1]['comment']+"\",\""+val[1]['idtaggop']+"\");'><i class='fas fa-external-link-alt'></i>Aperçu</a>";
 
                   // aurlf="<a style='color:black' href='"+urlf+"/"+val[1]['emplacement']+"' ><i class='fa fa-download'></i> Télécharger</a>";
                     $("#tabledocshisto tbody").append("<tr><td>"+val[1]['created_at']+"</td><td>"+aurlf+"</td></tr>");

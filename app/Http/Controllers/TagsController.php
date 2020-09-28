@@ -602,7 +602,7 @@ header('Content-type: application/json');
     public function infotag (Request $request)
     {
         $idtag = $request->get('tag');
-        $arrtag = Tag::select('id','titre','contenu')->where('id', $idtag)->first();
+        $arrtag = Tag::select('id','titre','contenu','created_at')->where('id', $idtag)->first();
         header('Content-type: application/json');    
         return json_encode($arrtag);
     }
