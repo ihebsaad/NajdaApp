@@ -94,11 +94,11 @@ class GarantiesController extends Controller
     ['id_assure' => $assure , 'garantie' => $garantie]);
 	
 	$rubriques= Rubrique::where('garantie', $garantie)->get();
-	
+	$annee=date('Y');
 	foreach($rubriques as $rb){
 	
 	DB::table('rubriques_assure')->insert(
-    ['id_assure' => $assure , 'rubrique' => $rb->id]);	
+    ['id_assure' => $assure , 'rubrique' => $rb->id, 'annee' => $annee]);	
 		
 	}
 	

@@ -376,8 +376,8 @@ class PrestationsController extends Controller
        //  $cc2=array( 'nejib.karoui@medicmultiservices.com');
         Mail::send([], [], function ($message) use ( $sujet,$cc2, $contenu2,$from,$fromname) {
             $message
-                 ->to('ihebsaad@gmail.com')
-               //  ->to('smq@medicmultiservices.com')
+               //  ->to('ihebsaad@gmail.com')
+                 ->to('smq@medicmultiservices.com')
                 // ->to()
 
                 ->cc($cc2 ?: [])

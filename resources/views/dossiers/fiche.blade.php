@@ -686,17 +686,42 @@ use App\Http\Controllers\DossiersController;
 
                                         <option></option>
                               
-                                        <?php foreach($garanties as $gr){ 
+                                        <?php $c=0; foreach($garanties as $gr){ $c++;
 									if (in_array($gr->id, $garanties_assure)) {$selected="selected='selected'";}else{$selected="";}
 										?>
-										 
-                                            <option  onclick="addgarantie(<?php echo $gr->id;?>,this)" {{$selected}}  value="<?php echo $gr->id;?>"    value="<?php echo $gr->id;?>">  <?php echo $gr->nom;?></option>
+									  <option  id="gr-<?php echo $c; ?>"   {{$selected}}  value="<?php echo $gr->id;?>"    value="<?php echo $gr->id;?>">  <?php echo $gr->nom;?></option>
 										 <?php }?>
 
  
                                     </select>
 
-                                </div>			
+                                </div>	
+                     				 <div class="row">
+									 <h3> Rubriques</h3>
+									 <?php 
+									 $annee=date('Y');
+									 $rubriques_assure= \DB::table('rubriques_assure')->where('id_assure',$dossier->ID_assure)->where('annee',$annee)->get();
+										if(count($rubriques_assure)>0){ ?>
+										<table class="table table-striped" id="tabgr">
+										<tr>
+										<th>Garantie</th><th>Rubrique</th><th>Plafond</th><th>Montant</th>
+										</tr>
+									<?php	
+									foreach($rubriques_assure as $rb)
+										 { 
+										 $rubrique = \App\Rubrique::where('id',$rb->rubrique)->first();
+										 $garantie = \App\Garantie::where('id',$rubrique->garantie)->first();
+										 
+								 	echo '<tr><td> '.$garantie->nom.'</td><td>'.$rubrique->nom.'</td><td> '.$rubrique->montant.' '.$rubrique->devise.'</td><td> '.$rb->montant.'</td></tr>';
+										 }
+										} // count
+										 ?>
+										</table>
+									<style>
+									#tabgr td{min-width:150px;padding:5px 5px 5px 5px;}
+									</style>
+								  </div>	
+
 																	
                                                                 </div>
 
@@ -3122,7 +3147,7 @@ function disabling(elm) {
         $("#hotel").select2();
         $("#vehicule_marque").select2();
         $("#empalcement").select2();
-      //  $("#garanties").select2();
+        $("#garanties").select2();
 
         $('#phoneicon').click(function() {
 
@@ -3394,12 +3419,24 @@ function disabling(elm) {
    /* $('#addtel').click(function () {
         $('#adding6').modal({show : true});
     });*/
-        function addgarantie(garantie,elm){
-			
+	
+ 
+
+        function addgarantie(garantie,elm,num){
+
+		
+	
+  var sel = document.getElementById('garanties');
+
+  var opt = sel.options[num];
+	//   alert(opt.selected);
+ 
+
+ 
             var assure = $('#ID_assure').val();
             var _token = $('input[name="_token"]').val();
-			alert('checked : '+elm.checked);
-			alert('selected : '+elm.selected);
+			//alert('Previous : '+previous);
+
 			if(elm.checked)
 			{/*	
             $.ajax({
@@ -3433,8 +3470,9 @@ function disabling(elm) {
                 } 
 
             });	
-				*/
+			
 				} // confirmation	
+					*/
 			} // suppression
  
         }
@@ -4049,6 +4087,98 @@ function disabling(elm) {
         } // updating
 
 
+		
+		
+		
+	
+        var $topo2 = $('#garanties');
+
+        var valArray2 = ($topo2.val()) ? $topo2.val() : [];
+
+        $topo2.change(function() {
+            var val0 = $(this).val(),
+                numVals = (val0) ? val0.length : 0,
+                changes;
+            if (numVals != valArray2.length) {
+                var longerSet, shortSet;
+                (numVals > valArray2.length) ? longerSet = val0 : longerSet = valArray2;
+                (numVals > valArray2.length) ? shortSet = valArray2 : shortSet = val0;
+                //create array of values that changed - either added or removed
+                changes = $.grep(longerSet, function(n) {
+                    return $.inArray(n, shortSet) == -1;
+                });
+
+                UpdatingG(changes, (numVals > valArray2.length) ? 'selected' : 'removed');
+
+            }else{
+                // if change event occurs and previous array length same as new value array : items are removed and added at same time
+                UpdatingG( valArray2, 'removed');
+                UpdatingG( val0, 'selected');
+            }
+            valArray2 = (val0) ? val0 : [];
+        });
+
+
+
+        function UpdatingG(array, type) {
+            $.each(array, function(i, item) {
+
+			
+            var assure = $('#ID_assure').val();
+            var _token = $('input[name="_token"]').val();
+			
+				
+  var sel = document.getElementById('garanties');
+
+ // var opt = sel.options[item].value;
+  
+                if (type=="selected"){
+				//	alert("added : "+item);
+
+           $.ajax({
+                url:"{{ route('garanties.addgr') }}",
+                method:"POST",
+                data:{assure:assure,garantie:item, _token:_token},
+                success:function(data){
+
+                    //   console.log(data);
+                   // alert('data : '+data);
+                        window.location =data;
+
+                } 
+
+            });  
+                }
+
+                if (type=="removed"){
+			// alert("removed "+item);
+
+ 
+				// confirmation
+				  var r = confirm("Êtes-vous sûrs de supprimer cette table de garanties ?");
+				if (r == true) {				
+			   $.ajax({
+                url:"{{ route('garanties.removegr') }}",
+                method:"POST",
+                data:{assure:assure,garantie:item, _token:_token},
+                success:function(data){
+
+                    //   console.log(data);
+                   // alert('data : '+data);
+                        window.location =data;
+
+                } 
+
+            });	
+			
+				} // confirmation	
+                }
+
+            });
+        } // updating
+
+	
+		
 		
 		 
 

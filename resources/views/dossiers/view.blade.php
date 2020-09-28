@@ -301,7 +301,13 @@ function custom_echo($x, $length)
                                 <i class="fas a-lg fa-file-invoice"></i>  Factures
                             </a>
                         </li>
-
+					<?php  if(Gate::check('isAdmin') || Gate::check('isFinancier') ) {  ?>
+						  <li class="nav-item ">
+							 <a class="nav-link  " target="_blank" href="{{action('DossiersController@fermeture',$dossier->id)}}" >
+                             <i class="fas a-lg fa-file-invoice"></i>  Contrats 
+							</a>
+                        </li>
+					<?php } ?>
                     </ul>
 
                 </div>
@@ -4809,7 +4815,8 @@ function toggle(className, displayState){
 				  var prestataire = $('#selectedprest').val();
 			  var nomprestataire = $('#selectedprest option:selected').text();
                  var dossier_id = $('#dossier').val();
-alert(nomprestataire);
+//alert(nomprestataire);
+//alert(prestataire);
                 var typeprest = $('#typeprest').val();
                 var gouvernorat = $('#gouvcouv').val();
                 var specialite = $('#specialite').val();
@@ -4826,7 +4833,25 @@ alert(nomprestataire);
                         success:function(data){
                             var prestation=parseInt(data);
                             // window.location =data;
-							document.getElementById('idprestation').value=prestation;
+						//	document.getElementById('idprestation').value=prestation;
+							
+							
+							
+			   $.ajax({
+                url:"{{ route('prestations.valide') }}",
+                method:"POST",
+                data:{prestation:prestation, _token:_token},
+                success:function(data){
+                 //   var prestation=parseInt(data);
+                    /// window.location =data;
+                    window.location = '<?php echo $urlapp; ?>/prestations/view/'+prestation;
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+                }
+
+            });
  
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
@@ -4839,10 +4864,10 @@ alert(nomprestataire);
 
                 }
 				
-			
+			/*
 			// validation
 			prestation= document.getElementById('idprestation').value;
-			alert(prestation);
+			alert('prestation '+prestation);
             $.ajax({
                 url:"{{ route('prestations.valide') }}",
                 method:"POST",
@@ -4858,6 +4883,8 @@ alert(nomprestataire);
                 }
 
             });
+			
+			*/
         });
 
         $('#valide-m').click(function(){
@@ -5586,8 +5613,8 @@ $('#showNext').prop('disabled', true);
             //    var  statut =document.getElementById('statutprest').value;
             //    var  details =document.getElementById('detailsprest').value;
   var nomprestataire = $('#selectedprest option:selected').text();
- 			  alert(nomprestataire);
- 			  alert(prestation);
+ 		//	  alert(nomprestataire);
+ 		//	  alert(prestation);
 			  
                 $.ajax({
                     url:"{{ route('prestations.updatestatut') }}",

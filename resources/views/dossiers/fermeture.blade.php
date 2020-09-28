@@ -11,15 +11,16 @@ use App\Mission;
 use App\Facture;
 
  $dossier=\App\Dossier::where('id',$id)->first();
+ $statut = $dossier->is_hospitalized;
+ if($statut==0){$patient="<div   class='text-danger' >  (Inpatient)</div>";}else{$patient="<div    >  (Outpatient)</div>";}
 
 ?>
  							 
 @section('content')
 
 <div class="row">
-<h1 style="color:#4fc1e9"><?php echo $dossier->reference_medic .' - '.$dossier->subscriber_name .' '.$dossier->subscriber_lastname  ;?> </h1>
-   
- 		
+<h1 style="color:#4fc1e9"><?php echo $dossier->reference_medic .' - '.$dossier->subscriber_name .' '.$dossier->subscriber_lastname  ;?> <?php echo $patient; ?> </h1>
+    	
  <h2 style="color:#4fc1e9"><u> Liste des contrats : </u></h2>
 	<?php
 	$clientid=$dossier->customer_id;
