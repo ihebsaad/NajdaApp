@@ -77,23 +77,29 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 
             </div>
 
-
+	  <?php 
+	  $debut="jj-mm-aaaa";
+	  $fin="jj-mm-aaaa";
+	  if (isset($debut) && isset($fin)) {
+		$debut=$_GET['debut'];
+		$fin=$_GET['fin'];
+ 		
+	  ?>
 			
-			
-	
  <form    action="{{action('ClientsController@view2')}}" >
 	<div class="row">
+	<h2> Statistiques par période :</h2>
     <input id="id"   type="hidden" name="id"   value="<?php echo $client['id'] ;?>"   />
 
- 
+	
   <div class="form-group col-xs-12 col-md-3">
 <label for="debut">Début:</label>
-    <input id="debut"  autocomplete="off" placeholder="jj-mm-aaaa" class="form-control datepicker" name="debut" required value="" format='jj-mm-aaaa' />
+    <input id="debut"  autocomplete="off" placeholder="<?php echo $debut; ?>" class="form-control" name="debut" required value="" format='jj-mm-aaaa' />
   </div>
 
   <div class="form-group col-xs-12 col-md-3">
 <label for="fin">Fin:</label>
-    <input id="fin"  autocomplete="off" placeholder="jj-mm-aaaa" class="form-control datepicker" name="fin" required value="" format='jj-mm-aaaa' />
+    <input id="fin"  autocomplete="off" placeholder="<?php echo $fin; ?>" class="form-control" name="fin" required value="" format='jj-mm-aaaa' />
   </div>
 	
 	
@@ -104,15 +110,10 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
 	 
 </div>
 	  </form>
-	  <?php if (isset($debut) && isset($fin)) {
-		$debut=$_GET['debut'];
-		$fin=$_GET['fin'];
-		echo 'Debut : ' .$debut;
-		
-	  ?>
+
 	            <div class="row"  style="margin-bottom:30px">
             <div class="col-md-2">
-                <a href="{{action('ClientsController@dossiers', $client['id'])}}" >Total Dossiers Par date  : <?php echo ClientsController::CountDossCLDate( $client['id'],$debut,$fin); ?> </a> | (<a href="{{action('ClientsController@ouverts', $client['id'])}}" > Ouverts : <?php echo ClientsController::CountDossCLouvertsDate( $client['id'],$debut,$fin); ?> </a>)
+               Total de Dossiers    : <?php echo ClientsController::CountDossCLDate( $client['id'],$debut,$fin); ?>  | (Ouverts : <?php echo ClientsController::CountDossCLouvertsDate( $client['id'],$debut,$fin); ?>)
             </div>
                 <div class="col-md-2">
                    Mixtes : <?php echo ClientsController::CountDossCLMixteDate( $client['id'],$debut,$fin); ?>
@@ -127,7 +128,7 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
                     Transport : <?php echo ClientsController::CountDossCLTranspDate( $client['id'],$debut,$fin); ?>
                 </div>
 
-            </div>		
+            </div><br>		
 			
 	  <?php } ?>	
             <div class="row">
@@ -2809,28 +2810,6 @@ $urlapp="http://$_SERVER[HTTP_HOST]/".$env;
         verrou=false;
         //alert(values);
     })
-	
-	
-	        $( ".datepicker" ).datepicker({
-
-            altField: "#datepicker",
-            closeText: 'Fermer',
-            prevText: 'Précédent',
-            nextText: 'Suivant',
-            currentText: 'Aujourd\'hui',
-            monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-            monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
-            dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
-            dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
-            dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-            weekHeader: 'Sem.',
-            buttonImage: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAATCAYAAAB2pebxAAABGUlEQVQ4jc2UP06EQBjFfyCN3ZR2yxHwBGBCYUIhN1hqGrWj03KsiM3Y7p7AI8CeQI/ATbBgiE+gMlvsS8jM+97jy5s/mQCFszFQAQN1c2AJZzMgA3rqpgcYx5FQDAb4Ah6AFmdfNxp0QAp0OJvMUii2BDDUzS3w7s2KOcGd5+UsRDhbAo+AWfyU4GwnPAYG4XucTYOPt1PkG2SsYTbq2iT2X3ZFkVeeTChyA9wDN5uNi/x62TzaMD5t1DTdy7rsbPfnJNan0i24ejOcHUPOgLM0CSTuyY+pzAH2wFG46jugupw9mZczSORl/BZ4Fq56ArTzPYn5vUA6h/XNVX03DZe0J59Maxsk7iCeBPgWrroB4sA/LiX/R/8DOHhi5y8Apx4AAAAASUVORK5CYII=",
-
-            firstDay: 1,
-            dateFormat: "dd-mm-yyyy"
-
-        });
-		
 </script>
 <style>.headtable{background-color: grey!important;color:white;}
     table{margin-bottom:40px;}

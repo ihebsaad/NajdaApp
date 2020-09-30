@@ -267,7 +267,7 @@ class ClientsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function view($id)
+    public function view($id   )
     {
         $dossiers = Dossier::all();
         $docs = DB::table('docs')->select('id', 'nom')->get();
@@ -320,10 +320,80 @@ class ClientsController extends Controller
             ->get();
 
         $client = Client::find($id);
-        return view('clients.view',['relaContr'=>$relaContr,'contrats'=>$contrats,'docs'=>$docs,'relations2'=>$relations2 ,'dossiers' => $dossiers,'groupes'=>$groupes,'countries'=>$countries,'emails'=>$emails,'tels'=>$tels,'faxs'=>$faxs,'entites'=>$entites,'qualites'=>$qualites ,'reseaux'=>$reseaux,'gestions'=>$gestions], compact('client'));
+		 
+		// $debut = Request->get('debut');
+		// $fin = Request->get('fin');
+ 
+        return view('clients.view',['relaContr'=>$relaContr,'contrats'=>$contrats,'docs'=>$docs,'relations2'=>$relations2 ,'dossiers' => $dossiers,'groupes'=>$groupes,'countries'=>$countries,'emails'=>$emails,'tels'=>$tels,'faxs'=>$faxs,'entites'=>$entites,'qualites'=>$qualites ,'reseaux'=>$reseaux,'gestions'=>$gestions  ], compact('client'));
 
     }
 
+	
+	
+	    public function view2(Request $request)
+    {
+		 $id = $request->get('id');
+		 $debut = $request->get('debut');
+		 $fin = $request->get('fin');
+
+         $dossiers = Dossier::all();
+        $docs = DB::table('docs')->select('id', 'nom')->get();
+        $relations2 = DB::table('clients_docs')
+            ->select('client', 'doc')
+            ->where('client',$id)->get();
+
+
+        $contrats = DB::table('contrats')
+            ->select('id', 'nom')
+            ->where('type','particulier')
+            ->get();
+
+        $relaContr = DB::table('contrats_clients')->select('parent', 'contrat')
+            ->where('parent',$id)
+            ->where('type','particulier')
+            ->get();
+
+
+        $groupes = DB::table('client_groupes')->select('id', 'label')->get();
+
+        $countries = DB::table('apps_countries')->select('id', 'country_name')->get();
+
+        $emails =   Adresse::where('nature', 'email')
+            ->where('parent',$id)
+            ->get();
+
+        $tels =   Adresse::where('nature', 'tel')
+            ->where('parent',$id)
+            ->get();
+
+        $faxs =   Adresse::where('nature', 'fax')
+            ->where('parent',$id)
+            ->get();
+
+        $entites =   Adresse::where('nature', 'facturation')
+            ->where('parent',$id)
+            ->get();
+
+        $qualites =   Adresse::where('nature', 'qualite')
+            ->where('parent',$id)
+            ->get();
+
+        $reseaux =   Adresse::where('nature', 'reseau')
+            ->where('parent',$id)
+            ->get();
+
+        $gestions =   Adresse::where('nature', 'gestion')
+            ->where('parent',$id)
+            ->get();
+
+        $client = Client::find($id);
+		 
+		// $debut = Request->get('debut');
+		// $fin = Request->get('fin');
+ 
+        return view('clients.view2',['relaContr'=>$relaContr,'contrats'=>$contrats,'docs'=>$docs,'relations2'=>$relations2 ,'dossiers' => $dossiers,'groupes'=>$groupes,'countries'=>$countries,'emails'=>$emails,'tels'=>$tels,'faxs'=>$faxs,'entites'=>$entites,'qualites'=>$qualites ,'reseaux'=>$reseaux,'gestions'=>$gestions ,'debut'=>$debut,'fin'=>$fin ], compact('client'));
+
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -545,5 +615,123 @@ return $Cdossiers;
     }
 
 
+	
+	
+	/****** stats par date ******/ 
+	
+	    public static function CountDossCLouvertsDate ($idcl,$debut,$fin)
+    {
+ 				$debut= new \DateTime($debut);
+				$fin= new \DateTime($fin);
+		        $debut = ($debut )->format('Y-m-d\TH:i');
+		        $fin = ($fin )->format('Y-m-d\TH:i');
+         $Cdossiers = Dossier::where('customer_id',$idcl)
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		//	->where('created_at', '=< STR_TO_DATE('.$fin.',"%d/%m/%Y")')
+         	  ->where('current_status','<>','Cloture')
+            ->count();
+        return $Cdossiers;
+		
+		
+		 
+    }
+
+ 
+	
+public static function CountDossCLDate ($idcl,$debut,$fin)
+{
+	   $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+				
+    $Cdossiers = Dossier::where('customer_id',$idcl)
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+      ->count();
+return $Cdossiers;
+}
+
+    public static function CountDossCLMedicDate ($idcl,$debut,$fin)
+    {
+			   $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	   
+        $Cdossiers = Dossier::where('customer_id',$idcl)
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+        //   ->where('current_status','<>','Cloture')
+            ->where('type_dossier','Medical')
+            ->count();
+        return $Cdossiers;
+    }
+
+    public static function CountDossCLTechniqueDate ($idcl,$debut,$fin)
+    {
+			   $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	   
+        $Cdossiers = Dossier::where('customer_id',$idcl)
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+        //   ->where('current_status','<>','Cloture')
+            ->where('type_dossier','Technique')
+            ->count();
+        return $Cdossiers;
+    }
+
+
+    public static function CountDossCLMixteDate ($idcl,$debut,$fin)
+    {
+	   $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	   
+        $Cdossiers = Dossier::where('customer_id',$idcl)
+        //    ->where('current_status','<>','Cloture')
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+            ->where('type_dossier','Mixte')
+            ->count();
+        return $Cdossiers;
+    }
+
+
+    public static function CountDossCLTranspDate ($idcl,$debut,$fin)
+    {
+		
+	   $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	   
+        $Cdossiers = Dossier::where('customer_id',$idcl)
+        //    ->where('current_status','<>','Cloture')
+            ->where('type_dossier','Transport')
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+         			
+					
+	/* 'created_at >= '=>' STR_TO_DATE('.$debut.',"%d/%m/%Y")'
+	 , 'STR_TO_DATE("'.$fin.'","%d/%m/%Y") >= '=>'created_at' 
+*/
+	 
+					
+					
+            ->count();
+
+        return $Cdossiers;
+    }
+	
+	
+	
+	
+	
 }
 

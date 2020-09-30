@@ -260,6 +260,8 @@ Route::post('/clients/addressadd2','ClientsController@addressadd2')->name('clien
 Route::post('/clients/addressadd3','ClientsController@addressadd3')->name('clients.addressadd3');
 Route::post('/clients/updatingnature','ClientsController@updatingnature')->name('clients.updatingnature');
 Route::post('/clients/removenature','ClientsController@removenature')->name('clients.removenature');
+//Route::get('/clients/view/{id}', 'ClientsController@view');
+Route::get('/clients/view2', 'ClientsController@view2');
 Route::get('/clients/view/{id}', 'ClientsController@view');
 Route::get('/clients/destroy/{id}', 'ClientsController@destroy');
 Route::get('/clients/deleteaddress/{id}', 'ClientsController@deleteaddress')->name('clients.deleteaddress');
