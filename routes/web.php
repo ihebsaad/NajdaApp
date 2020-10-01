@@ -243,6 +243,7 @@ Route::get('/dossiers/affectclassique','DossiersController@affectclassique')->na
 Route::post('/ExternefileUpload/upload', 'DossiersController@uploadExterneFile')->name('Upload.ExterneFile');
 Route::get('/Dossier/historiqueaffectation/{id}', 'DossiersController@historiqueAffectation')->name('historique.affectation');
 Route::get('/dossiers/details/{id}', 'DossiersController@details')->name('dossiers.details');
+Route::get('/dossiers/details2', 'DossiersController@details2')->name('dossiers.details2');
 Route::get('/dossiers/fermeture/{id}', 'DossiersController@fermeture')->name('dossiers.fermeture');
 Route::get('/listeUsersDoss/{iddoss}', 'DossiersController@users_work_on_folder');
 

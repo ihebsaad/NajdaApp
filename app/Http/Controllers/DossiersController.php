@@ -4533,12 +4533,23 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
    } 
 
    
-        public  function details ($id)
+        public  function details2(Request $request)
+    {
+		 $id = $request->get('id');
+		 $debut = $request->get('debut');
+		 $fin = $request->get('fin');
+
+       
+     return view('dossiers.details2', ['id' => $id,'debut'=>$debut,'fin'=>$fin]);
+
+   } 
+   
+           public  function details ($id)
    {
        
      return view('dossiers.details', ['id' => $id]);
 
-   } 
+   }
    
       public static function users_work_on_folder( $iddoss)
    {
@@ -4675,6 +4686,292 @@ return view('dossiers.view',['datasearch'=>$datasearch,'phonesInt'=>$phonesInt,'
           $count= \App\MissionHis::where('dossier_id',$id)->where('user_id',$user)->count();
           return $count;
       } 
+
+
+	  
+	  
+	  
+	  
+/**************  Stats par date **********************/
+
+ 
+
+      public static function users_work_on_folderDate( $iddoss ,$debut,$fin)
+   {
+	     $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	  
+    $usersFolder = array();
+    
+    $usersFolderh=\App\AffectDossHis::where('id_dossier',$iddoss)
+			   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+	->whereNotNull('util_affecte')->where('util_affecte','!=',0)
+			   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+	->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
+    $usersFolders=\App\AffectDoss::where('id_dossier',$iddoss)->whereNotNull('util_affecte')->where('util_affecte','!=',0)->orderBy('date_affectation','DESC')->pluck('util_affecte')->toArray();
+         //dd($hisaffec);
+    //$countU=count($usersFolder);
+      $usersFolder = array_merge($usersFolderh,$usersFolders);
+
+            
+     $usersFolder=array_unique($usersFolder);
+     $usersFolder=array_values($usersFolder);
+ 
+    return $usersFolder ;
+   }
+
+      // nombre de factures
+      public  static function countFacturesDate ($id,$debut,$fin)
+      {
+		    $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	  
+         $count= \App\Facture::where('iddossier',$id)
+		  ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		 ->count();
+          return $count;
+      }
+
+   // nombre de prestations
+       public  static function countPrestationsDate ($id,$debut,$fin)
+      {
+		    $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	  
+         $count= \App\Prestation::where('dossier_id',$id)
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		 ->count();
+          return $count;
+      }
+   // nombre des emails recus
+        public  static function countEmailsDossDate ($id,$debut,$fin)
+      {   
+	  $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	  
+         $count= \App\Entree::where('dossierid',$id)
+		  ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		 ->where('type','email')->count();
+          return $count;
+      }
+   
+   // nombre de Fax reçus
+           public  static function countFaxsDate ($id,$debut,$fin)
+      {
+		    $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	  
+         $count= \App\Entree::where('dossierid',$id)
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		 ->where('type','fax')->count();
+          return $count;
+      }
+	  
+   // nombre des sms reçus
+           public  static function countSmsDate ($id,$debut,$fin)
+      {
+		    $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	  
+         $count= \App\Entree::where('dossierid',$id)
+		 	  ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		 ->where('type','sms')->count();
+          return $count;
+      }
+   // nombre des emails envoyés
+           public  static function countEmailsSentDate ($id,$debut,$fin)
+      {
+		    $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	  
+         $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;
+         $count= \App\Envoye::where('dossier',$ref)
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		 ->where('type','email')->count();
+          return $count;
+      }
+   // nombre des emails envoyés par un agent
+       public  static function countEmailsSentUserDate ($id,$user,$debut,$fin)
+      { 
+	    $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	  
+         $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;
+         $count= \App\Envoye::where('dossier',$ref)
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		 ->where('type','email')->where('par',$user)->count();
+          return $count;
+      }
+   // nombre des fax envoyés
+          public  static function countFaxsSentDate ($id,$debut,$fin)
+      {
+		    $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	  
+         $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;          
+         $count= \App\Envoye::where('dossier',$ref)
+		 	  ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		 ->where('type','fax')->count();
+          return $count;
+      }
+   // nombre des fax envoyés par un agent
+      public  static function countFaxsSentUserDate ($id,$user,$debut,$fin)
+      {
+               $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;          
+         $count= \App\Envoye::where('dossier',$ref)
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		 ->where('type','fax')->where('par',$user)->count();
+          return $count;
+      }
+   // nombre des sms envoyés
+         public  static function countSmsSentDate ($id,$debut,$fin)
+      {
+           $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	  
+		 $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;      
+         $count= \App\Envoye::where('dossier',$ref)
+		 	  ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		 ->where('type','sms')->count();
+          return $count;
+      }
+   // nombre des sms envoyés par un agent
+      public static  function countSmsSentUserDate ($id,$user,$debut,$fin)
+      {
+		    $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	  $ref= app('App\Http\Controllers\DossiersController')->RefDossierById($id)  ;          
+         $count= \App\Envoye::where('dossier',$ref)
+		  ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		 ->where('type','sms')->where('par',$user)->count();
+          return $count;
+      }
+   
+        // nombre des  comptes rendus
+      public static  function countRendusDate  ($id,$debut,$fin)
+      {
+          $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	    $count= \App\Entree::where('dossierid',$id)
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		->where('type','tel')->count();
+          return $count;
+      } 
+      
+     // nombre des compte rendu   par un agent
+      public static  function countRendusUserDate ($id,$user,$debut,$fin)
+      {
+          $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	    $count= \App\Entree::where('dossierid',$id)
+		 ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		->where('type','tel')->where('par',$user)->count();
+          return $count;
+      } 
+   
+        // nombre des missions en cours
+      public static  function countMissionsDate  ($id,$debut,$fin)
+      {
+          $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	    $count= \App\Mission::where('dossier_id',$id)
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		->count();
+          return $count;
+      } 
+      
+      // nombre des missions
+      public static  function countMissionsTDate  ($id,$debut,$fin)
+      {
+          $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	    $count= \App\MissionHis::where('dossier_id',$id)
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		->count();
+          return $count;
+      } 
+      
+   
+        // nombre des missions  encours  par un agent
+      public static  function countMissionsUserDate ($id,$user,$debut,$fin)
+      {
+          $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	    $count= \App\Mission::where('dossier_id',$id)
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)		
+		->where('user_id',$user)->count();
+          return $count;
+      } 
+   
+   
+           // nombre des missions  terminées  par un agent
+      public static  function countMissionsUserTDate ($id,$user,$debut,$fin)
+      {
+          $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	    $count= \App\MissionHis::where('dossier_id',$id)
+		   ->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		   ->where('user_id',$user)->count();
+          return $count;
+      } 
+
+
+
+
+
 
 
 

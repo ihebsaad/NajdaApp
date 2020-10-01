@@ -798,7 +798,28 @@ class UsersController extends Controller
 
     }
 
+    public static function countactionsDossierDate($id,$debut,$fin)
+    {
+	   $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	  
+	  
+        $dossier=Dossier::find($id);
 
+        $missions=  $dossier->Missions;
+        $somme=0;
+        foreach($missions as $m)
+        {
+            $somme+= $m->ActionECs
+			->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+			->count();
+        }
+        return $somme;
+
+    }
 /*
     public static function countactionsactivesDossier($id)
     {
@@ -822,5 +843,20 @@ class UsersController extends Controller
         return $number;
     }
 
+    public static function countnotifsDossierDate($id,$debut,$fin)
+    {
+	   $debut= new \DateTime($debut);
+	   $fin= new \DateTime($fin);
+	   $debut = ($debut )->format('Y-m-d\TH:i');
+	   $fin = ($fin )->format('Y-m-d\TH:i');
+	  
+       // $number = Notification::whereRaw('JSON_CONTAINS(data, \'{"Entree":{"dossier": "'.$ref.'"}}\')')->count(['id']);
+        $number = Notif::where('dossierid',$id)
+		->where('created_at', '>=', $debut)
+		   ->where('created_at', '<=', $fin)
+		->where('affiche',0)->count();
+
+        return $number;
+    }
 
  }
