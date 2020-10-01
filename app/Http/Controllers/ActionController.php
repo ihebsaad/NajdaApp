@@ -19,6 +19,8 @@ use Illuminate\Routing\UrlGenerator;
 use Redirect;
 use URL;
 use Session;
+use Illuminate\Support\Facades\Log;
+
 
 class ActionController extends Controller
 {
@@ -2749,6 +2751,10 @@ class ActionController extends Controller
            $action->update(['date_fin' => $dateSys]);
            $action->update(['user_id'=>auth::user()->id]);
 
+           $nomuser = auth::user()->name . ' ' . auth::user()->lastname;
+            Log::info('[Agent: ' . $nomuser . '] clique bouton fait de l action : ' . $action->titre .' de la mission '. $action->type_Mission.' du dossier '.$mm->dossier->reference_medic);
+
+
            // calcul duree effective de cette action en heures
 
             // $datetime1 = new DateTime('2009-10-11');
@@ -2961,6 +2967,10 @@ class ActionController extends Controller
 
                        }
 
+                        $nomuser = auth::user()->name . ' ' . auth::user()->lastname;
+                       Log::info('[Agent: ' . $nomuser . '] clique bouton ignorer de l action : ' . $action->titre .' de la mission '. $action->type_Mission.' du dossier '.$mm->dossier->reference_medic);
+
+
                    }  
                    else{
 
@@ -3016,7 +3026,9 @@ class ActionController extends Controller
 
                                  }
 
-                                
+                                $nomuser = auth::user()->name . ' ' . auth::user()->lastname;
+                              Log::info('[Agent: ' . $nomuser . '] clique le bouton reporter de l action : ' . $action->titre .' de la mission '. $action->type_Mission.' du dossier '.$mm->dossier->reference_medic);
+
                                 }
                             }
                          
@@ -3077,6 +3089,10 @@ class ActionController extends Controller
                                         $mm->update(['duree_eff' => (floatval($mm->duree_eff)+floatval($hours))]);
 
                                        }
+
+                                       $nomuser = auth::user()->name . ' ' . auth::user()->lastname;
+            Log::info('[Agent: ' . $nomuser . '] clique bouton mise en attente de l action : ' . $action->titre .' de la mission '. $action->type_Mission.' du dossier '.$mm->dossier->reference_medic);
+
 
                                 }
 

@@ -687,6 +687,10 @@ class MissionController extends Controller
 
         }
 
+        $nomuser = auth::user()->name . ' ' . auth::user()->lastname;
+          Log::info('[Agent: ' . $nomuser . '] créé la mission: ' . $typeMiss->nom_type_Mission .' dans le dossier '. $dos->reference_medic);
+
+
          $da = (new \DateTime())->format('Y-m-d\TH:i');
 
       return $da ;
